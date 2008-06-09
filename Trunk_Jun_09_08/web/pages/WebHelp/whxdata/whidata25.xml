@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="passenger’s" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  <key name="Enter" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+    <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+    <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+    <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+    <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+    <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+    <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+    <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+    <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  </key>
+  <key name="segment" >
+    <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  </key>
+</key>
+<key name="Passenger’s Name" >
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+</key>
+<key name="Password" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+</key>
+<key name="Payment Summary" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Payments" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <key name="add" >
+    <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  </key>
+</key>
+<key name="PDF" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="How Do I Print a Passenger Receipt" url="how_do_i/print_a_passenger_receipt.htm" />
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+</key>
+<key name="PDF file" >
+  <topic name="How Do I Print a Passenger Receipt" url="how_do_i/print_a_passenger_receipt.htm" />
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+</key>
+<key name="Pending" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+</key>
+<key name="Per" >
+  <topic name="Analytical Reports Summary" url="analytical_reports/analytical_reports_summary.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+</key>
+<key name="Permissions" >
+  <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+</key>
+<key name="Photos" >
+  <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+  <key name="jump" >
+    <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+  </key>
+</key>
+<key name="pointing" >
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <key name="Minor" >
+    <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  </key>
+</key>
+<key name="pointing to Minor" >
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+</key>
+<key name="Practice" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+</key>
+<key name="print" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  <topic name="How Do I Print a Passenger Receipt" url="how_do_i/print_a_passenger_receipt.htm" />
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+  <key name="Help" >
+    <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  </key>
+  <key name="Passenger Receipt" >
+    <topic name="How Do I Print a Passenger Receipt" url="how_do_i/print_a_passenger_receipt.htm" />
+  </key>
+  <key name="Prorate Notice" >
+    <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  </key>
+</key>
+<key name="print a Help" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+</key>
+<key name="Print a Passenger Receipt" >
+  <topic name="How Do I Print a Passenger Receipt" url="how_do_i/print_a_passenger_receipt.htm" />
+</key>
+<key name="Print a Prorate Notice" >
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+</key>
+<key name="Print Prorate Notice" >
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+</key>
+<key name="Print Topic" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+</key>
+<key name="Priority" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <key name="Select" >
+    <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  </key>
+</key>
+<key name="Processed" >
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+</key>
+<key name="Profile" >
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="Maintain Agents" url="administration/administration.htm" />
+  <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+</key>
+<key name="Progress" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+<key name="Prorate" >
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="Prorate Notice" >
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  <key name="Print" >
+    <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  </key>
+</key>
+<key name="Prorate Officer" >
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+</key>
+<key name="Purposes" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="Range" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+</key>
+<key name="Reason" >
+  <topic name="Add Loss Codes" url="administration/add_loss_codes.htm" />
+  <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <key name="Change" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+  <key name="Denial" >
+    <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  </key>
+  <key name="Enter" >
+    <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  </key>
+  <key name="lists" >
+    <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  </key>
+  <key name="Loss" >
+    <topic name="Add Loss Codes" url="administration/add_loss_codes.htm" />
+    <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  </key>
+  <key name="Loss Codes" >
+    <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  </key>
+  <key name="Request" >
+    <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  </key>
+</key>
+
+</indexdata>

@@ -1,0 +1,93 @@
+package com.bagnet.nettracer.tracing.forms.audit;
+
+import org.apache.struts.validator.ValidatorForm;
+
+/**
+ * @author Matt
+ * 
+ * TODO To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Style - Code Templates
+ */
+public final class AuditLosscodeForm extends ValidatorForm {
+
+	private String report_type = "";
+	private String loss_code = "";
+	private String s_createtime = "";
+	private String e_createtime = "";
+	private String agent; // create agent username
+
+	/**
+	 * @return Returns the loss_code.
+	 */
+	public String getLoss_code() {
+		return loss_code;
+	}
+
+	/**
+	 * @param loss_code
+	 *          The loss_code to set.
+	 */
+	public void setLoss_code(String loss_code) {
+		this.loss_code = loss_code;
+	}
+
+	/**
+	 * @return Returns the report_type.
+	 */
+	public String getReport_type() {
+		return report_type;
+	}
+
+	/**
+	 * @param report_type
+	 *          The report_type to set.
+	 */
+	public void setReport_type(String report_type) {
+		this.report_type = report_type;
+	}
+
+	/**
+	 * @return Returns the agent.
+	 */
+	public String getAgent() {
+		return agent;
+	}
+
+	/**
+	 * @param agent
+	 *          The agent to set.
+	 */
+	public void setAgent(String agent) {
+		this.agent = agent;
+	}
+
+	/**
+	 * @return Returns the e_createtime.
+	 */
+	public String getE_createtime() {
+		return e_createtime;
+	}
+
+	/**
+	 * @param e_createtime
+	 *          The e_createtime to set.
+	 */
+	public void setE_createtime(String e_createtime) {
+		this.e_createtime = e_createtime;
+	}
+
+	/**
+	 * @return Returns the s_createtime.
+	 */
+	public String getS_createtime() {
+		return s_createtime;
+	}
+
+	/**
+	 * @param s_createtime
+	 *          The s_createtime to set.
+	 */
+	public void setS_createtime(String s_createtime) {
+		this.s_createtime = s_createtime;
+	}
+}

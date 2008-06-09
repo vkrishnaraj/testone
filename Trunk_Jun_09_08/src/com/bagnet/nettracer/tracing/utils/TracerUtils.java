@@ -1,0 +1,1303 @@
+/*
+ * Created on Jul 15, 2004
+ *
+ * Administrator
+ */
+package com.bagnet.nettracer.tracing.utils;
+
+import java.io.FileInputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+import org.apache.struts.util.LabelValueBean;
+import org.apache.struts.util.MessageResources;
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.ClaimProrate;
+import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.ControlLog;
+import com.bagnet.nettracer.tracing.db.CountryCode;
+import com.bagnet.nettracer.tracing.db.DbLocale;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.ItemType;
+import com.bagnet.nettracer.tracing.db.Manufacturer;
+import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
+import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
+import com.bagnet.nettracer.tracing.db.Remark;
+import com.bagnet.nettracer.tracing.db.State;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.XDescElement;
+import com.bagnet.nettracer.tracing.forms.OnHandForm;
+import com.bagnet.nettracer.tracing.forms.ClaimForm;
+import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
+
+/**
+ * @author Administrator
+ * 
+ * create date - Jul 15, 2004
+ */
+public class TracerUtils {
+	private static Logger logger = Logger.getLogger(TracerUtils.class);
+
+	private static MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+
+	public static void populateLostItem(LostFoundIncidentForm theform, Agent user, HttpServletRequest request) {
+		theform = new LostFoundIncidentForm();
+		HttpSession session = request.getSession();
+		
+		
+		session.setAttribute("LostAndFoundForm", theform);
+
+		theform.set_DATEFORMAT(user.getDateformat().getFormat());
+		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		theform.setCreate_date(TracerDateTime.getGMTDate());
+
+		theform.setFiling_agent(user);
+		theform.setCreate_station(user.getStation());
+		Status s = new Status();
+		s.setStatus_ID(TracingConstants.LOST_FOUND_OPEN);
+		theform.setReport_status(s);
+
+		theform.setDateFoundLost(theform.getCreate_date());
+		theform.setReport_type(TracingConstants.LOST_REPORT);
+		theform.setCustomer_countrycode_ID(TracingConstants.DEFAULT_COUNTRY);
+	}
+
+	public static void populateFoundItem(LostFoundIncidentForm theform, Agent user, HttpServletRequest request) {
+		theform = new LostFoundIncidentForm();
+		HttpSession session = request.getSession();
+		session.setAttribute("LostAndFoundForm", theform);
+
+		theform.set_DATEFORMAT(user.getDateformat().getFormat());
+		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		theform.setCreate_date(TracerDateTime.getGMTDate());
+
+		theform.setFiling_agent(user);
+		theform.setCreate_station(user.getStation());
+		Status s = new Status();
+		s.setStatus_ID(TracingConstants.LOST_FOUND_OPEN);
+		theform.setReport_status(s);
+
+		theform.setDateFoundLost(theform.getCreate_date());
+		theform.setReport_type(TracingConstants.FOUND_REPORT);
+		theform.setCustomer_countrycode_ID(TracingConstants.DEFAULT_COUNTRY);
+	}
+
+	public static void populateIncident(IncidentForm theform, HttpServletRequest request, int itemtype) {
+		
+		HttpSession session = request.getSession();
+		Agent user = (Agent) session.getAttribute("user");
+		theform = new IncidentForm();
+
+		//theform = new IncidentForm();
+		IncidentBMO iBMO = new IncidentBMO();
+
+		theform.set_DATEFORMAT(user.getDateformat().getFormat());
+		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		session.setAttribute("incidentForm", theform);
+
+		// session
+		// set create time
+		theform.setCreatedate(TracerDateTime.getGMTDate());
+		theform.setCreatetime(TracerDateTime.getGMTDate());
+		// set station
+		theform.setStationcreated_ID(user.getStation().getStation_ID());
+		theform.setStationcreated(user.getStation());
+		theform.setStationassigned_ID(user.getStation().getStation_ID());
+		List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
+		request.setAttribute("agentassignedlist", agentassignedlist);
+
+		//theform.setFaultstation(new Station());
+		// set agent
+		theform.setAgent(user);
+
+		// set status as temp to start off
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.MBR_STATUS_TEMP);
+		theform.setStatus(status);
+
+		// set report method
+		theform.setReportmethod(user.getStation().getCompany().getVariable().getReport_method());
+
+		// create new fields
+		theform.getPassenger(0);
+
+		// set new remark with current time and current agent
+		Remark r = theform.getRemark(theform.getRemarklist().size());
+		r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+		r.setAgent(user);
+		r.set_DATEFORMAT(user.getDateformat().getFormat());
+		r.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		// create new itinerary
+		theform.getItinerary(0, TracingConstants.PASSENGER_ROUTING); // passenger
+		theform.getItinerary(1, TracingConstants.BAGGAGE_ROUTING); // bag route
+
+		// set new item
+		Item i = theform.getItem(0, itemtype);
+		i.set_DATEFORMAT(user.getDateformat().getFormat());
+		i.setCurrency_ID(user.getDefaultcurrency());
+		i.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+		i.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+		i.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
+		i.setBagnumber(0);
+		i.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+
+		// set new claimcheck
+		Incident_Claimcheck ic = theform.getClaimcheck(0);
+
+		// create new article
+		if (itemtype == TracingConstants.MISSING_ARTICLES) {
+			Articles a = theform.getArticle(0);
+			a.set_DATEFORMAT(user.getDateformat().getFormat());
+			a.setCurrency_ID(user.getDefaultcurrency());
+		}
+
+		//set some default parameters
+		theform.setNumbagchecked(1);
+		theform.setNumpassengers(1);
+
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
+		theform.setEmail_customer(csv.getEmail_customer());
+
+	}
+	
+
+	public static void populateOnHand(OnHandForm theform, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Agent user = (Agent) session.getAttribute("user");
+
+
+		theform = new OnHandForm();
+
+		session.setAttribute("OnHandForm", theform);
+
+		OhdBMO bmo = new OhdBMO();
+		//theform.setOhd_id(bmo.getOHD_ID(user.getStation()));
+
+		Date x = TracerDateTime.getGMTDate();
+		String date = new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(x);
+
+		//Add a new control log entry in the db as the station is to be used.
+		ControlLog log = new ControlLog();
+		log.setStart_date(date);
+		log.setControlling_station(user.getStation());
+		theform.getControlList().add(log);
+
+		theform.setAgent(user);
+		theform.set_DATEFORMAT(user.getDateformat().getFormat());
+		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		// session
+		theform.setFound_company(user.getStation().getCompany().getCompanyCode_ID());
+		theform.setFound_station(user.getStation().getStationcode());
+
+		theform.setHolding_company(theform.getHolding_company());
+		theform.setHolding_station(theform.getHolding_station());
+
+		/*
+		 * Status status = new Status();
+		 * status.setStatus_ID(TracingConstants.OHD_STATUS_TEMP);
+		 * theform.setStatus(status);
+		 */
+
+		// set new remark with current time and current agent
+		Remark r = theform.getRemark(theform.getRemarklist().size());
+		r.setCreatetime(date);
+		r.setAgent(user);
+		r.set_DATEFORMAT(user.getDateformat().getFormat());
+		r.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+		theform.setAgent_initials(user.getUsername());
+		theform.setFound_station(user.getStation().getStationcode());
+		theform.setFoundTime(x);
+		theform.setFoundDate(x);
+		theform.getPassenger(theform.getPassengerList().size());
+		theform.getItinerary(theform.getItinerarylist().size());
+		theform.getItem(theform.getItemlist().size());
+
+		theform.setXDesc1(TracingConstants.XDESC_TYPE_X);
+		theform.setXDesc2(TracingConstants.XDESC_TYPE_X);
+		theform.setXDesc3(TracingConstants.XDESC_TYPE_X);
+	}
+
+	public static void populateLists(HttpSession session) throws HibernateException {
+		Agent user = (Agent) session.getAttribute("user");
+		String locale = user.getCurrentlocale();
+		Company company = user.getStation().getCompany();
+		// set mbr report types
+		session.setAttribute("mbrreporttypes", session.getAttribute("mbrreporttypes") != null ? session.getAttribute("mbrreporttypes") : retrieveRecords(
+				locale, "com.bagnet.nettracer.tracing.db.ItemType", "itemtype", "locale", null));
+
+		session.setAttribute("statelist", session.getAttribute("statelist") != null ? session.getAttribute("statelist") : getStatelist(user
+				.getCurrentlocale()));
+
+		session.setAttribute("localelist", session.getAttribute("localelist") != null ? session.getAttribute("localelist") : getLocaleList());
+
+		// set country
+		session.setAttribute("countrylist", session.getAttribute("countrylist") != null ? session.getAttribute("countrylist") : getCountryList(user
+				.getCurrentlocale()));
+		// set color
+		session.setAttribute("colorlist", session.getAttribute("colorlist") != null ? session.getAttribute("colorlist") : getColorList(false));
+		//	 set color for search
+		session.setAttribute("colorlistforsearch", session.getAttribute("colorlistforsearch") != null ? session.getAttribute("colorlistforsearch")
+				: getColorList(true));
+		// set bag type
+		session.setAttribute("typelist", session.getAttribute("typelist") != null ? session.getAttribute("typelist") : getTypeList());
+		// set xdescelementlist
+		session.setAttribute("xdescelementlist", session.getAttribute("xdescelementlist") != null ? session.getAttribute("xdescelementlist")
+				: retrieveRecords(locale, "com.bagnet.nettracer.tracing.db.XDescElement", "xdescelement", "locale", "description"));
+		// set manufacturer
+		session.setAttribute("manufacturerlist", session.getAttribute("manufacturerlist") != null ? session.getAttribute("manufacturerlist")
+				: retrieveRecords(locale, "com.bagnet.nettracer.tracing.db.Manufacturer", "manufacturer", "locale", "description"));
+		// set currency
+		session.setAttribute("currencylist", session.getAttribute("currencylist") != null ? session.getAttribute("currencylist") : retrieveRecords(
+				locale, "com.bagnet.nettracer.tracing.db.Currency", "currency", "locale", "description"));
+
+		session.setAttribute("categorylist", session.getAttribute("categorylist") != null ? session.getAttribute("categorylist")
+				: getCategoryList(locale));
+
+		session.setAttribute("airportlist", session.getAttribute("airportlist") != null ? session.getAttribute("airportlist") : getAirportList(locale,
+				user.getCompanycode_ID()));
+
+		// set ohd_itemtypes (photoalum,etc....)
+		/*
+		 * session.setAttribute("itemtypelist", session
+		 * .getAttribute("itemtypelist") != null ? session
+		 * .getAttribute("itemtypelist") : getItemTypeList(locale));
+		 */
+
+		// set status list for mbr reports
+		session.setAttribute("statuslist", session.getAttribute("statuslist") != null ? session.getAttribute("statuslist") : getStatusList(locale,
+				TracingConstants.TABLE_INCIDENT));
+		
+	// set status list for mbr reports
+		session.setAttribute("dStatusList", session.getAttribute("dStatusList") != null ? session.getAttribute("dStatusList") : getStatusList(locale,
+				TracingConstants.TABLE_DISPOSAL_LOST_FOUND));
+		
+		// set station list
+		session.setAttribute("stationlist", session.getAttribute("stationlist") != null ? session.getAttribute("stationlist") : getStationList(locale,
+				company.getCompanyCode_ID()));
+		session.setAttribute("allstationlist", session.getAttribute("allstationlist") != null ? session.getAttribute("allstationlist") : getStationList(
+				locale, null));
+		session.setAttribute("airlineallstationlist", session.getAttribute("airlineallstationlist") != null ? session.getAttribute("airlineallstationlist") : getStationList(
+				locale, company.getCompanyCode_ID(), TracingConstants.ActiveStatus.ALL));
+		
+
+		// set company list
+		session.setAttribute("companylist", session.getAttribute("companylist") != null ? session.getAttribute("companylist") : getCompanyList());
+		// set expense type list
+		session.setAttribute("expensetypelist", session.getAttribute("expensetypelist") != null ? session.getAttribute("expensetypelist")
+				: retrieveRecords(locale, "com.bagnet.nettracer.tracing.db.ExpenseType", "expensetype", "locale", "description"));
+
+		session.setAttribute("prioritylist", session.getAttribute("prioritylist") != null ? session.getAttribute("prioritylist")
+				: getPriorityList(locale));
+
+		// set expense location list
+		/*
+		session.setAttribute("expenselocationlist", session.getAttribute("expenselocationlist") != null ? session.getAttribute("expenselocationlist")
+				: retrieveRecords(locale, "com.bagnet.nettracer.tracing.db.ExpenseLocation", "expenselocation", "locale", "description"));
+		*/
+	}
+
+	public static ClaimForm populateClaim(ClaimForm cform, IncidentForm theform, HttpServletRequest request) {
+		try {
+			Claim claim = null;
+			
+			HttpSession session = request.getSession();
+			
+			cform = new ClaimForm();
+			session.setAttribute("claimForm", cform);
+			
+			Agent user = (Agent) session.getAttribute("user");
+
+			session.setAttribute("claimstatuslist", session.getAttribute("claimstatuslist") != null ? session.getAttribute("claimstatuslist")
+					: getStatusList(user.getCurrentlocale(), TracingConstants.TABLE_CLAIM));
+
+			if ((claim = theform.getClaim(0)) != null) {
+				BeanUtils.copyProperties(cform, claim);
+
+				Passenger pa = (Passenger) theform.getPassenger(0);
+				String passengername = pa.getFirstname() + " " + pa.getLastname();
+				cform.setPassengername(passengername);
+
+				if (claim.getExpenses() != null)
+					cform.setExpenselist(new ArrayList(claim.getExpenses()));
+
+				ExpensePayout ep = null;
+				for (int i = 0; i < cform.getExpenselist().size(); i++) {
+					ep = (ExpensePayout) cform.getExpenselist().get(i);
+					if (ep.getStatus() == null) {
+						Status st = new Status();
+						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
+						ep.setStatus(st);
+					}
+					if (ep.getAgent() == null)
+						ep.setAgent(theform.getAgent());
+					if (ep.getStation() == null)
+						ep.setStation(theform.getStationcreated());
+
+					ep.set_DATEFORMAT(user.getDateformat().getFormat());
+					ep.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				}
+
+				cform.set_DATEFORMAT(user.getDateformat().getFormat());
+				cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				cform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+				if (cform.getClaimcurrency_ID() == null)
+					cform.setClaimcurrency_ID(user.getDefaultcurrency());
+
+				session.setAttribute("claimForm", cform);
+
+			}
+
+			if (cform.getStatus() == null) {
+				Status status = new Status();
+				status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+				cform.setStatus(status);
+			}
+
+			return cform;
+
+		} catch (Exception e) {
+			logger.error("bean copy claim form error on populateClaim: " + e);
+			e.printStackTrace();
+			return cform;
+		}
+	}
+
+	public static void populateClaimProrate(ClaimProrateForm cpform, IncidentForm theform, HttpServletRequest request) {
+		try {
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+			Claim claim = null;
+			//cpform = new ClaimProrateForm();
+			//session.setAttribute("claimForm", cpform);
+			boolean createnewprorate = false;
+			if ((claim = theform.getClaim(0)) != null) {
+				ClaimProrate cp = claim.getClaimprorate();
+				if (cp == null) { // no previous prorate
+					cpform = new ClaimProrateForm();
+					// create new itinerary list
+					ArrayList al = new ArrayList();
+					for (int i = 0; i < 4; i++) {
+						Prorate_Itinerary pi = new Prorate_Itinerary();
+						pi.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
+						pi.set_DATEFORMAT(user.getDateformat().getFormat());
+						pi.setAirline(user.getStation().getCompany().getCompanyCode_ID());
+						al.add(pi);
+
+					}
+					cpform.setItinerarylist(al);
+					cpform.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
+					createnewprorate = true;
+				} else {
+					// copy itinerarylist from existing prorate
+					BeanUtils.copyProperties(cpform, cp);
+					ArrayList al = new ArrayList(cp.getProrate_itineraries());
+					// add dateformat to the list
+					for (int i = 0; i < al.size(); i++) {
+						Prorate_Itinerary pi = (Prorate_Itinerary) al.get(i);
+						pi.set_DATEFORMAT(user.getDateformat().getFormat());
+					}
+					cpform.setItinerarylist(al);
+				}
+			} else {
+				createnewprorate = true;
+			}
+			if (createnewprorate) {
+				// create airline
+				Company c = user.getStation().getCompany();
+				cpform.setCompanycode_ID(c.getCompanyCode_ID());
+				// set create date
+				cpform.setCreatedate(TracerDateTime.getGMTDate());
+
+			}
+
+			/** do the following regardless if prorate is new or not * */
+
+			cpform.set_DATEFORMAT(user.getDateformat().getFormat());
+			cpform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			cpform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+			// file reference number
+			cpform.setFile_reference(theform.getIncident_ID());
+
+			// set passenger
+			Passenger pa = (Passenger) theform.getPassenger(0);
+			cpform.setPassname(pa.getFirstname() + " " + pa.getLastname());
+			// set incidenttype
+			String locale = user.getCurrentlocale();
+			Company company = user.getStation().getCompany();
+			ArrayList al = retrieveRecords(locale, "com.bagnet.nettracer.tracing.db.ItemType", "itemtype", "locale", "description");
+			for (int i = 0; i < al.size(); i++) {
+				ItemType it = (ItemType) al.get(i);
+				if (it.getItemType_ID() == theform.getItem(0, 0).getItemtype_ID()) {
+					cpform.setClaimtype_ID(it.getItemType_ID());
+					cpform.setClaimtype(it.getDescription());
+				}
+
+			}
+			// set ticket number
+			cpform.setTicketnumber(theform.getTicketnumber());
+			// set baggage tag numbers
+
+			// for lost delay, use the incident_claimcheck list
+			if (cpform.getClaimtype_ID() == TracingConstants.LOST_DELAY) {
+				cpform.setClaimchecknumlist(theform.getClaimchecklist());
+
+			} else {
+				// otherwise, use the item list
+				al = new ArrayList();
+				for (int i = 0; i < theform.getItemlist().size(); i++) {
+					al.add(theform.getItem(0, 0));
+				}
+				cpform.setClaimchecknumlist(al);
+			}
+
+			session.setAttribute("claimProrateForm", cpform);
+		} catch (Exception e) {
+			logger.error("bean copy claimprorate form error on populateClaimProrate: " + e);
+			e.printStackTrace();
+		}
+	}
+
+	public static ArrayList getStationList(String locale, String company, TracingConstants.ActiveStatus status) throws HibernateException {
+
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			// when company is null, return all distinct stationscodes, for itinerary
+			// dropdown
+
+			String sql = "";
+			if (company != null) {
+				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where "
+						+ "station.locale = :locale and station.company.companyCode_ID = :company ";
+				if (status != TracingConstants.ActiveStatus.ALL)
+					 sql += " and station.active = :active ";
+				sql += " order by stationcode";
+					
+			} else {
+				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where station.locale = :locale ";
+				if (status != TracingConstants.ActiveStatus.ALL)
+					 sql += " and station.active = :active ";
+				sql += " order by stationcode";
+			}
+			Query q = sess.createQuery(sql);
+			q.setParameter("locale", locale);
+			if (status != TracingConstants.ActiveStatus.ALL)
+				if (status == TracingConstants.ActiveStatus.ACTIVE)
+					q.setParameter("active", true);
+				if (status == TracingConstants.ActiveStatus.INACTIVE)
+					q.setParameter("active", false);
+			if (company != null)
+				q.setParameter("company", company);
+
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find station");
+				return null;
+			}
+
+			Station station = null;
+			ArrayList al = new ArrayList();
+			Object[] o = null;
+			for (int i = 0; i < list.size(); i++) {
+				o = (Object[]) list.get(i);
+				station = new Station();
+				station.setStation_ID(((Integer) o[0]).intValue());
+				station.setStationcode((String) o[1]);
+				al.add(station);
+			}
+			return al;
+
+		} catch (Exception e) {
+			logger.error("unable to retrieve station from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+	
+	public static ArrayList getStationList(String locale, String company) throws HibernateException {
+		return getStationList(locale, company, TracingConstants.ActiveStatus.ACTIVE);
+	}
+
+	public static ArrayList getCompanyList() throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			// when company is null, return all distinct stationscodes, for itinerary
+			// dropdown
+
+			String sql = "select distinct company.companyCode_ID,company.companydesc from com.bagnet.nettracer.tracing.db.Company company order by companyCode_ID";
+		
+			Query q = sess.createQuery(sql);
+
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find company");
+				return null;
+			}
+
+			Company company = null;
+			ArrayList al = new ArrayList();
+			Object[] o = null;
+			for (int i = 0; i < list.size(); i++) {
+				o = (Object[]) list.get(i);
+				company = new Company();
+				company.setCompanyCode_ID((String) o[0]);
+				company.setCompanydesc((String) o[1]);
+				al.add(company);
+			}
+			return al;
+
+		} catch (Exception e) {
+			logger.error("unable to retrieve company from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+	
+	public static ArrayList retrieveRecords(String instr, String obj, String tablename, String colname, String orderColumn) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			Query q = null;
+
+			if (colname == null) {
+
+				String sql = "from " + obj + " " + tablename + " where 1=1 ";
+				if (orderColumn != null && !orderColumn.equals("")) {
+					sql += " order by " + orderColumn + " asc";
+				}
+
+				q = sess.createQuery(sql);
+			} else {
+
+				String sql = "from " + obj + " " + tablename + " where " + tablename + "." + colname + " = :" + colname;
+				if (orderColumn != null && !orderColumn.equals("")) {
+					sql += " order by " + orderColumn + " asc";
+				}
+
+				q = sess.createQuery(sql);
+				q.setParameter(colname, instr);
+			}
+			List list = q.list();
+
+			if (list == null || list.size() == 0) {
+				logger.debug("unable to find " + tablename);
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve " + tablename + " from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	public static ArrayList getStatusList(String locale, int table_ID) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("locale", locale)).add(
+					Expression.eq("table_ID", new Integer(table_ID)));
+			List list = cri.list();
+
+			if (list == null || list.size() == 0) {
+				logger.debug("unable to find status");
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve status list from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	public static ArrayList getTypeList() {
+		ArrayList al = new ArrayList();
+		al.add(new LabelValueBean(messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "select.please_select"), ""));
+		al.add(new LabelValueBean("Non-Zippered type bags (01-12)", "-1"));
+		for (int i = 1; i < 10; i++) {
+			al.add(new LabelValueBean("0" + i, "0" + i));
+		}
+		al.add(new LabelValueBean("10", "10"));
+		al.add(new LabelValueBean("11", "11"));
+		al.add(new LabelValueBean("12", "12"));
+		al.add(new LabelValueBean("Zippered type bags (20-29)", "-2"));
+		for (int i = 20; i <= 29; i++) {
+			al.add(new LabelValueBean(Integer.toString(i), Integer.toString(i)));
+		}
+		al.add(new LabelValueBean("Miscellaneous Articles (50-99)", "-3"));
+		for (int i = 50; i <= 99; i++) {
+			al.add(new LabelValueBean(Integer.toString(i), Integer.toString(i)));
+		}
+		return al;
+	}
+
+	public static ArrayList getColorList(boolean forsearch) {
+		ArrayList al = new ArrayList();
+
+		if (forsearch)
+			al.add(new LabelValueBean(messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "select.all"), ""));
+		else
+			al.add(new LabelValueBean(messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "select.please_select"), ""));
+
+		al.add(new LabelValueBean("WT = white/clear", "WT"));
+		al.add(new LabelValueBean("BK = black", "BK"));
+		al.add(new LabelValueBean("GY = grey", "GY"));
+		al.add(new LabelValueBean("BU = blue", "BU"));
+		al.add(new LabelValueBean("BE = beige", "BE"));
+		al.add(new LabelValueBean("RD = red", "RD"));
+		al.add(new LabelValueBean("YW = yellow", "YW"));
+		al.add(new LabelValueBean("BN = brown", "BN"));
+		al.add(new LabelValueBean("GN = green", "GN"));
+		al.add(new LabelValueBean("PU = Purple", "PU"));
+		al.add(new LabelValueBean("MC = multi colors, 2 or more solid colors", "MC"));
+		al.add(new LabelValueBean("TD = tweed", "TD"));
+		al.add(new LabelValueBean("PR = pattern", "PR"));
+		
+		return al;
+	}
+
+	public static ArrayList getCategoryList(String locale) {
+
+		Session sess = null;
+		try {
+			String query = "select ohd_categorytype from com.bagnet.nettracer.tracing.db.OHD_CategoryType ohd_categorytype where "
+					+ "ohd_categorytype.locale = :locale order by ohd_categorytype.categorytype";
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			q.setString("locale", locale);
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find category type");
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve station from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (sess != null)
+					sess.close();
+			} catch (Exception e) {
+				logger.error("unable to close session: " + e);
+				e.printStackTrace();
+			}
+		}
+		/*
+		 * ArrayList al = new ArrayList(); al.add(new LabelValueBean("Please
+		 * Select", "")); al.add(new LabelValueBean("Photo", "1")); return al;
+		 */
+	}
+
+	public static ArrayList getAirportList(String locale, String companycode) {
+
+		Session sess = null;
+		try {
+
+			String sql = "select airport from " + "com.bagnet.nettracer.tracing.db.Airport airport where 1=1 ";
+
+			sql += " and airport.locale = :locale";
+			sql += " and airport.companyCode_ID = :companycode";
+
+			sql += " order by airport.country,airport.airport_desc";
+
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setString("locale", locale);
+			q.setString("companycode", companycode);
+
+			List list = q.list();
+
+			if (list.size() == 0) {
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve airports from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (sess != null)
+					sess.close();
+			} catch (Exception e) {
+				logger.error("unable to close session: " + e);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static ArrayList getPriorityList(String locale) {
+
+		Session sess = null;
+		try {
+			String query = "select priority from com.bagnet.nettracer.tracing.db.Priority priority where " + "priority.locale = :locale";
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			q.setString("locale", locale);
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find priority");
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve priority from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (sess != null)
+					sess.close();
+			} catch (Exception e) {
+				logger.error("unable to close session: " + e);
+				e.printStackTrace();
+			}
+		}
+
+		/*
+		 * ArrayList al = new ArrayList(); al.add(new LabelValueBean("Please
+		 * Select", "")); al.add(new LabelValueBean("Photo Album", "1")); return al;
+		 */
+	}
+
+	public static ArrayList getItemTypeList(String locale) {
+
+		Session sess = null;
+		try {
+			String query = "select ohd_itemtype from com.bagnet.nettracer.tracing.db.OHD_ItemType ohd_itemtype where "
+					+ "ohd_itemtype.locale = :locale";
+			sess = HibernateWrapper.getSession().openSession();
+
+			Query q = sess.createQuery(query);
+			q.setString("locale", locale);
+			List list = q.list();
+			if (list.size() == 0) {
+				logger.debug("unable to find item type");
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve station from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (sess != null)
+					sess.close();
+			} catch (Exception e) {
+				logger.error("unable to close session: " + e);
+				e.printStackTrace();
+			}
+		}
+
+		/*
+		 * ArrayList al = new ArrayList(); al.add(new LabelValueBean("Please
+		 * Select", "")); al.add(new LabelValueBean("Photo Album", "1")); return al;
+		 */
+	}
+
+	/**
+	 * @return Returns the localelist.
+	 */
+	public static ArrayList getLocaleList() {
+		ArrayList al = new ArrayList();
+
+		List localeList = HibernateUtils.retrieveAll(DbLocale.class);
+
+		for (Iterator i = localeList.iterator(); i.hasNext();) {
+			DbLocale loc = (DbLocale) i.next();
+			al.add(new LabelValueBean(loc.getLocale_description(), loc.getLocale_id()));
+		}
+		return al;
+	}
+
+	/**
+	 * @return Returns the statelist.
+	 */
+	public static ArrayList getStatelist(String locale) {
+
+		ArrayList al = new ArrayList();
+		List retrieval = null;
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(State.class).add(Expression.eq("locale", locale));
+			cri.addOrder(Order.asc("state"));
+			retrieval = cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (retrieval != null) {
+			for (Iterator i = retrieval.iterator(); i.hasNext();) {
+				State state = (State) i.next();
+				al.add(new LabelValueBean(state.getState(), state.getState_ID()));
+			}
+		}
+		return al;
+	}
+
+	public static ArrayList getCountryList(String locale) {
+		ArrayList al = new ArrayList();
+		List retrieval = null;
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(CountryCode.class).add(Expression.eq("locale", locale));
+			cri.addOrder(Order.asc("country"));
+			retrieval = cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (retrieval != null) {
+			for (Iterator i = retrieval.iterator(); i.hasNext();) {
+				CountryCode country = (CountryCode) i.next();
+				al.add(new LabelValueBean(country.getCountry(), country.getCountryCode_ID()));
+			}
+		}
+		return al;
+	}
+
+	public static String format(double number, String f) {
+		String ret = "";
+		DecimalFormat format = (DecimalFormat) NumberFormat.getInstance();
+		if (f.equals("%")) {
+			format.applyPattern("#0.00");
+			format.setMinimumFractionDigits(2);
+			ret = "" + format.format(number);
+		} else if (f.equals("$")) {
+			format.applyPattern("#,##0.00");
+			format.setMinimumFractionDigits(2);
+			ret = "" + format.format(number);
+		}
+
+		return ret;
+	}
+
+	public static double convertToDouble(String s) {
+		try {
+			return Double.parseDouble(s);
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
+	public static String removeSpaces(String s) {
+		StringBuffer sb = new StringBuffer(20);
+		StringTokenizer st = new StringTokenizer(s, " ");
+		while (st.hasMoreTokens()) {
+			sb.append(st.nextToken().trim());
+		}
+		return sb.toString();
+	}
+
+	public static void checkSession(HttpSession session) {
+		if (session == null || session.getAttribute("lastupdate") == null || session.getAttribute("user") == null) {
+			session.removeAttribute("user");
+			return;
+		}
+
+		Date lastupdate = (Date) session.getAttribute("lastupdate");
+		Agent user = (Agent) session.getAttribute("user");
+		int timeout = user.getTimeout() * 60000;
+		Date now = new Date();
+		long start = lastupdate.getTime();
+		long end = now.getTime();
+		if (end - start > timeout) {
+			session.removeAttribute("user");
+			user.setIs_online(0);
+			SecurityUtils.updateAgentLogin(user, TracerDateTime.getGMTDate());
+		} else {
+			session.setAttribute("lastupdate", now);
+		}
+	}
+
+
+	public static Manufacturer getManufacturer(int code) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Manufacturer.class).add(Expression.eq("manufacturer_ID", new Integer(code)));
+			return (Manufacturer) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static XDescElement getXdescelement(int id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(XDescElement.class).add(Expression.eq("XDesc_ID", new Integer(id)));
+			return (XDescElement) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static String getXdescelementcode(int id) {
+		Session sess = null;
+		try {
+			if (id == 0) return "X";
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(XDescElement.class).add(Expression.eq("XDesc_ID", new Integer(id)));
+			XDescElement xe = (XDescElement) cri.list().get(0);
+			return xe.getCode();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static int getXdescelementid(String code) {
+		Session sess = null;
+		try {
+			if (code == null || code.length() == 0) return 7;
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(XDescElement.class).add(Expression.eq("code", code));
+			return (Integer) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 7;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static CountryCode getCountry(String code, String locale) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(CountryCode.class).add(Expression.eq("countryCode_ID", code)).add(Expression.eq("locale", locale));
+			return (CountryCode) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static OHD_CategoryType getCategory(String code, String locale) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(Expression.eq("OHD_CategoryType_ID", new Integer(code))).add(
+					Expression.eq("locale", locale));
+			return (OHD_CategoryType) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static State getState(String code, String locale) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(State.class).add(Expression.eq("state_ID", code)).add(Expression.eq("locale", locale));
+			return (State) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static Station getStation(int station_ID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class).add(Expression.eq("station_ID", new Integer(station_ID)));
+			return (Station) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static Station getStationByCode(String stationcode,String companycode_id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			
+			String sql = "select station from com.bagnet.nettracer.tracing.db.Station station where "
+					+ "station.stationcode = :stationcode and station.company.companyCode_ID = :companycode_id";
+			
+			Query q = sess.createQuery(sql);
+			q.setParameter("stationcode", stationcode);
+			q.setParameter("companycode_id", companycode_id);
+
+			List list = q.list();
+			if (list != null && list.size() > 0) return (Station) list.get(0);
+			else return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static String getStationcode(int station_ID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			
+			String query = "select station.stationcode from com.bagnet.nettracer.tracing.db.Station station where "
+				+ "station.station_ID = :station_ID";
+
+			Query q = sess.createQuery(query);
+			q.setInteger("station_ID", station_ID);
+	
+			return (String)q.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static Status getStatus(int status_ID, String locale) {
+		Session sess = null;
+		if (locale == null)
+			locale = TracingConstants.DEFAULT_LOCALE;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("status_ID", new Integer(status_ID))).add(Expression.eq("locale", locale));
+			return (Status) cri.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static List getAgentlist(int station_ID) {
+		Session sess = null;
+		if (station_ID == 0) return new ArrayList();
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Agent.class);
+			cri.createCriteria("station").add(Expression.eq("station_ID", new Integer(station_ID)));
+			cri.add(Expression.eq("active",true));
+			return cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Retrieve an agent based on its username and company code
+	 * 
+	 * @param username
+	 * @param companyCode
+	 * @return agent; null if not found or exception
+	 */
+	public static Agent getAgent(String username, String companyCode) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Agent.class);
+			cri.add(Expression.eq("username", username));
+			cri.add(Expression.eq("companycode_ID", companyCode));
+			return (Agent) cri.list().get(0);
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+
+	
+	public static String getTracerProperty(String theprop) {
+		try {
+			Properties properties = new Properties();
+		
+			properties.load(new FileInputStream(HibernateWrapper.class.getResource("/tracer.properties").getPath()));
+			
+			return properties.getProperty(theprop);
+		} catch (Exception e) {
+			logger.error("Exception during getTracerProperty: " + e.getMessage());
+			
+		}
+		return "";
+	}
+
+}

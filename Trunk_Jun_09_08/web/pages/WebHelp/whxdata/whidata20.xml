@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Missing" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Itineraries" url="missing_articles_reports/work_with_baggage_itineraries_(ma).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="missing_articles_reports/work_with_claim_resolutions_(ma).htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Missing Articles" url="missing_articles_reports/work_with_missing_articles.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  <topic name="Work with Remarks" url="missing_articles_reports/work_with_remarks_(ma).htm" />
+  <key name="Articles Fields" >
+    <topic name="Work with Missing Articles" url="missing_articles_reports/work_with_missing_articles.htm" />
+  </key>
+  <key name="Articles Reports" >
+    <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+    <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  </key>
+</key>
+<key name="Missing Article" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Itineraries" url="missing_articles_reports/work_with_baggage_itineraries_(ma).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="missing_articles_reports/work_with_claim_resolutions_(ma).htm" />
+  <topic name="Work with Missing Articles" url="missing_articles_reports/work_with_missing_articles.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  <topic name="Work with Remarks" url="missing_articles_reports/work_with_remarks_(ma).htm" />
+  <key name="address" >
+    <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  </key>
+  <key name="bag" >
+    <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  </key>
+  <key name="Baggage Itinerary" >
+    <topic name="Work with Baggage Itineraries" url="missing_articles_reports/work_with_baggage_itineraries_(ma).htm" />
+  </key>
+  <key name="bags" >
+    <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  </key>
+  <key name="close" >
+    <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+    <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  </key>
+  <key name="creating" >
+    <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  </key>
+  <key name="jump" >
+    <topic name="Work with Missing Articles" url="missing_articles_reports/work_with_missing_articles.htm" />
+  </key>
+  <key name="locate" >
+    <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  </key>
+  <key name="Passenger Itinerary" >
+    <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  </key>
+  <key name="Remark" >
+    <topic name="Work with Remarks" url="missing_articles_reports/work_with_remarks_(ma).htm" />
+  </key>
+  <key name="selecting" >
+    <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+  </key>
+  <key name="submit" >
+    <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  </key>
+</key>
+<key name="Missing Articles Fields" >
+  <topic name="Work with Missing Articles" url="missing_articles_reports/work_with_missing_articles.htm" />
+</key>
+<key name="Missing Articles menu" >
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+</key>
+<key name="Missing Articles Report" >
+  <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <key name="assign" >
+    <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  </key>
+  <key name="Close" >
+    <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  </key>
+</key>
+<key name="Mobile" >
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+</key>
+<key name="modify" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <key name="Claim Payment" >
+    <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  </key>
+  <key name="Help viewerYou" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+</key>
+<key name="modify a Claim Payment" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Modifying the Help viewerYou" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Move" >
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+
+</indexdata>

@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Lost/Delayed" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="On-hand Summary" url="on-hand_reports/on-hand_summary.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="lost_delayed_bag_reports/work_with_claim_resolutions_(ld).htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Information" url="lost_delayed_bag_reports/work_with_passenger_information_(ld).htm" />
+  <topic name="Work with Passenger Itineraries" url="lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm" />
+  <topic name="Work with Remarks" url="lost_delayed_bag_reports/work_with_remarks_(ld).htm" />
+  <key name="selecting" >
+    <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  </key>
+</key>
+<key name="Lost/Delayed Bag" >
+  <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  <topic name="Work with Baggage Check Information" url="lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="lost_delayed_bag_reports/work_with_claim_resolutions_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Passenger Information" url="lost_delayed_bag_reports/work_with_passenger_information_(ld).htm" />
+  <topic name="Work with Passenger Itineraries" url="lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm" />
+  <topic name="Work with Remarks" url="lost_delayed_bag_reports/work_with_remarks_(ld).htm" />
+  <key name="address" >
+    <topic name="Work with Passenger Information" url="lost_delayed_bag_reports/work_with_passenger_information_(ld).htm" />
+  </key>
+  <key name="bag" >
+    <topic name="Work with Baggage Check Information" url="lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm" />
+    <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  </key>
+  <key name="Baggage Itinerary" >
+    <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  </key>
+  <key name="check" >
+    <topic name="Work with Baggage Check Information" url="lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm" />
+  </key>
+  <key name="close" >
+    <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+    <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  </key>
+  <key name="creating" >
+    <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  </key>
+  <key name="locate" >
+    <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  </key>
+  <key name="Passenger Itinerary" >
+    <topic name="Work with Passenger Itineraries" url="lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm" />
+  </key>
+  <key name="Remark" >
+    <topic name="Work with Remarks" url="lost_delayed_bag_reports/work_with_remarks_(ld).htm" />
+  </key>
+</key>
+<key name="Lost/Delayed Bag Information" >
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+</key>
+<key name="Lost/Delayed Bag Information Fields" >
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+</key>
+<key name="Lost/Delayed Bag Report" >
+  <topic name="Close Reports" url="lost_delayed_bag_reports/close_reports_(ld).htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <key name="Close" >
+    <topic name="Close Reports" url="lost_delayed_bag_reports/close_reports_(ld).htm" />
+  </key>
+</key>
+<key name="Lost/Delayed Baggage" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <key name="matches" >
+    <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  </key>
+</key>
+<key name="Lost/Delayed Baggage Report" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <key name="close" >
+    <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  </key>
+  <key name="matching" >
+    <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  </key>
+</key>
+<key name="Lost/Delayed menu" >
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+</key>
+<key name="Lost/Delayed Reports" >
+  <topic name="Close Reports" url="lost_delayed_bag_reports/close_reports_(ld).htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <key name="assign" >
+    <topic name="Close Reports" url="lost_delayed_bag_reports/close_reports_(ld).htm" />
+  </key>
+</key>
+<key name="LZ" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <key name="bag" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+  <key name="bags" >
+    <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+  </key>
+  <key name="Forward" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+  <key name="Forward Bags" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+    <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+    <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+    <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  </key>
+  <key name="forwarded" >
+    <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+  </key>
+  <key name="Select Forward Bags" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+</key>
+<key name="Mail" >
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+</key>
+
+</indexdata>

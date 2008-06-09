@@ -1,0 +1,913 @@
+/*
+ * Created on Oct 28, 2004
+ *
+ * Administrator
+ */
+package com.bagnet.nettracer.tracing.utils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Address;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
+import com.bagnet.nettracer.tracing.db.DeliverCompany;
+import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OHD_Address;
+import com.bagnet.nettracer.tracing.db.OHD_Passenger;
+import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.forms.BDOForm;
+import com.bagnet.nettracer.tracing.forms.SearchBDOForm;
+
+/**
+ * @author Administrator
+ * 
+ * bdo utils handling all BDO actions.
+ * 
+ * create date - Oct 28, 2004
+ */
+public class BDOUtils {
+
+	private static Logger logger = Logger.getLogger(BDOUtils.class);
+
+	public static boolean createNewBDO(String ohd_ID, String incident_ID, BDOForm theform, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		
+		Agent user = (Agent) session.getAttribute("user");
+
+		IncidentBMO iBMO = new IncidentBMO();
+		OhdBMO oBMO = new OhdBMO();
+		BDO bdo = null;
+
+		theform = new BDOForm();
+		session.setAttribute("BDOForm", theform);
+
+		request.setAttribute("servicelevels", new ArrayList());
+
+		/** *** create bdo for the first time ***** */
+
+		theform.setCreatedate(TracerDateTime.getGMTDate());
+		theform.setCreatetime(TracerDateTime.getGMTDate());
+		theform.set_DATEFORMAT(user.getDateformat().getFormat());
+		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		if (user.getDefaulttimezone() != null)
+			theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		BDO_Passenger bp = null;
+		if (ohd_ID != null) {
+			// create bdo from ohd
+			OHD oDTO = oBMO.findOHDByID(ohd_ID);
+			if (oDTO == null)
+				return false;
+
+			if (user.getStation().getStation_ID() != oDTO.getHoldingStation().getStation_ID()) {
+				return false;
+			}
+
+			theform.setOhd(oDTO);
+			theform.setAgent(user);
+			theform.setCompanycode_ID(oDTO.getHoldingStation().getCompany().getCompanyCode_ID());
+			theform.setStation(oDTO.getHoldingStation());
+
+			// loop through ohd passenger and put all info into passengerlist
+			OHD_Passenger op = null;
+			OHD_Address oa = null;
+			
+			for (int i = 0; i < oDTO.getPassengers().size(); i++) {
+				op = (OHD_Passenger) oDTO.getPassengers().iterator().next();
+				bp = new BDO_Passenger();
+				bp.set_DATEFORMAT(user.getDateformat().getFormat());
+				BeanUtils.copyProperties(bp, op);
+				oa = (OHD_Address) op.getAddress(0);
+				BeanUtils.copyProperties(bp, oa);
+				theform.getPassengerlist().add(bp);
+			}
+			// if no passenger then create
+			if (oDTO.getPassengers() == null || oDTO.getPassengers().size() == 0) {
+				bp = new BDO_Passenger();
+				bp.set_DATEFORMAT(user.getDateformat().getFormat());
+				theform.getPassengerlist().add(bp);
+			}
+			
+			// if no passenger then create
+			if (oDTO.getPassengers() == null || oDTO.getPassengers().size() == 0) {
+				bp = new BDO_Passenger();
+				bp.set_DATEFORMAT(user.getDateformat().getFormat());
+				theform.getPassengerlist().add(bp);
+			}
+
+		} else if (incident_ID != null) {
+			// create bdo from incident
+			Incident iDTO = iBMO.findIncidentByID(incident_ID);
+			if (iDTO == null)
+				return false;
+			// if not lost/delayed, return false
+			if (iDTO.getItemtype_ID() != TracingConstants.LOST_DELAY)
+				return false;
+
+			theform.setIncident(iDTO);
+			theform.setAgent(user);
+			theform.setCompanycode_ID(iDTO.getStationassigned().getCompany().getCompanyCode_ID());
+			theform.setStation(iDTO.getStationassigned());
+
+			// loop through passenger and put all info into passengerlist
+			Passenger p = null;
+			Address a = null;
+
+			for (int i = 0; i < iDTO.getPassenger_list().size(); i++) {
+				p = (Passenger) iDTO.getPassenger_list().get(i);
+				bp = new BDO_Passenger();
+				bp.set_DATEFORMAT(user.getDateformat().getFormat());
+				BeanUtils.copyProperties(bp, p);
+				a = (Address) p.getAddress(0);
+				BeanUtils.copyProperties(bp, a);
+				theform.getPassengerlist().add(bp);
+			}
+			// if no passenger then create
+			if (iDTO.getPassenger_list() == null || iDTO.getPassenger_list().size() == 0) {
+				bp = new BDO_Passenger();
+				bp.set_DATEFORMAT(user.getDateformat().getFormat());
+				theform.getPassengerlist().add(bp);
+			}
+
+			// choose only bags that are not delivered
+			Item item = null;
+			OHD ohd_obj = null;
+			for (int i = 0; i < iDTO.getItemlist().size(); i++) {
+				item = (Item) iDTO.getItemlist().get(i);
+				if (item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY) {
+					theform.getItemlist().add(item);
+					// find out if this l/d bag is matched to ohd
+					ohd_obj = oBMO.findOHDByID(item.getOHD_ID());
+					if (ohd_obj != null && ohd_obj.getHoldingStation().getStation_ID() == iDTO.getStationassigned().getStation_ID()) {
+						// bag matched and in station
+						item.setIs_in_station(1);
+					} else {
+						// bag not in station
+						item.setIs_in_station(0);
+					}
+				}
+			}
+
+			theform.setChoosebags(1);
+
+			// don't need to choose bag if there is only one bag
+			if (theform.getItemlist().size() <= 1) {
+				theform.setChoosebags(0);
+			}
+
+		}
+		
+		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
+		if (list != null)
+			request.setAttribute("delivercompanies", list);
+
+
+
+
+		return true;
+	}
+
+	public static boolean findBDO(int bdo_ID, BDOForm theform, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		Agent user = (Agent) session.getAttribute("user");
+
+		BDO bdo = getBDOFromDB(bdo_ID);
+		
+
+		if (bdo != null) {
+			// bdo found, populate form
+			
+			bdo.set_DATEFORMAT(user.getDateformat().getFormat());
+			bdo.set_TIMEFORMAT(user.getTimeformat().getFormat());
+
+			if (user.getDefaulttimezone() != null)
+				bdo.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			
+			
+			theform = new BDOForm();
+			session.setAttribute("BDOForm", theform);
+
+			theform.setChoosebags(0);
+			BeanUtils.copyProperties(theform, bdo);
+			
+			
+
+			theform.setPassengerlist(new ArrayList(bdo.getPassengers()));
+			theform.setItemlist(new ArrayList(bdo.getItems()));
+
+			// loop through and check to see if bag is in station or not
+			Item item = null;
+			OHD ohd_obj = null;
+			OhdBMO oBMO = new OhdBMO();
+			for (int i = 0; i < theform.getItemlist().size(); i++) {
+				item = (Item) theform.getItemlist().get(i);
+				// find out if this l/d bag is matched to ohd
+				ohd_obj = oBMO.findOHDByID(item.getOHD_ID());
+				if (ohd_obj != null && ohd_obj.getHoldingStation().getStation_ID() == theform.getIncident().getStationassigned().getStation_ID()) {
+					// bag matched and in station
+					item.setIs_in_station(1);
+				} else {
+					// bag not in station
+					item.setIs_in_station(0);
+				}
+			}
+
+			BDO_Passenger bp = null;
+			for (int i = 0; i < theform.getPassengerlist().size(); i++) {
+				bp = (BDO_Passenger) theform.getPassenger(i);
+				bp.set_DATEFORMAT(user.getDateformat().getFormat());
+			}
+
+			if (bdo.getDelivercompany() != null) {
+				theform.setDelivercompany_ID(bdo.getDelivercompany().getDelivercompany_ID());
+			}
+			if (bdo.getServicelevel() != null) {
+				theform.setServicelevel_ID(bdo.getServicelevel().getServicelevel_ID());
+			}
+
+			
+			if (theform.getOhd() == null)
+				theform.setOhd(new OHD());
+			if (theform.getIncident() == null)
+				theform.setIncident(new Incident());
+			
+			List list = new ArrayList(getDeliveryCompanies(theform.getStation().getStation_ID(), bdo.getDelivercompany()));
+			
+			if (list != null)
+				request.setAttribute("delivercompanies", list);
+
+
+			if (theform.getDelivercompany_ID() > 0) {
+				List servicelevels = BDOUtils.getServiceLevels(theform.getDelivercompany_ID(), bdo.getServicelevel());
+				request.setAttribute("servicelevels", servicelevels);
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public static boolean findBDOList(String ohd_ID, String incident_ID, BDOForm theform, HttpServletRequest request) throws Exception {
+
+		HttpSession session = request.getSession();
+		Agent user = (Agent) session.getAttribute("user");
+
+		IncidentBMO iBMO = new IncidentBMO();
+		OhdBMO oBMO = new OhdBMO();
+		OHD ohd = null;
+		Incident incident = null;
+		List list = null;
+		if (ohd_ID != null) {
+			// verifty ohd
+			ohd = oBMO.findOHDByID(ohd_ID);
+			if (ohd == null)
+				return false;
+
+			// first try to see if bdo has been created already
+			list = oBMO.findBDOList(ohd_ID);
+		} else {
+			// verify incident
+			incident = iBMO.findIncidentByID(incident_ID);
+			if (incident == null)
+				return false;
+
+			// first try to see if bdo has been created already
+			list = iBMO.findBDOList(incident_ID);
+		}
+
+		theform = new BDOForm();
+		request.setAttribute("BDOForm", theform);
+		theform.setOhd(ohd != null ? ohd : new OHD());
+		theform.setIncident(incident != null ? incident : new Incident());
+
+		if (list != null) {
+			BDO bdo = null;
+			for (int i = 0; i < list.size(); i++) {
+				bdo = (BDO) list.get(i);
+				bdo.set_DATEFORMAT(user.getDateformat().getFormat());
+				bdo.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				bdo.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			}
+			request.setAttribute("bdo_list", list);
+
+		}
+		return true;
+	}
+
+	public static ActionMessage insertBDO(BDOForm theform, String[] bagchosen) {
+		try {
+			OhdBMO oBMO = new OhdBMO();
+			BDO bdo = new BDO();
+			BeanUtils.copyProperties(bdo, theform);
+
+			if (theform.getPassengerlist() != null) {
+				for (int i = 0; i < theform.getPassengerlist().size(); i++) {
+					BDO_Passenger bp = (BDO_Passenger) theform.getPassenger(i);
+					bp.setBdo(bdo);
+				}
+				bdo.setPassengers(new HashSet(theform.getPassengerlist()));
+			}
+
+			if (theform.getDelivercompany_ID() > 0) {
+				DeliverCompany dc = new DeliverCompany();
+				dc.setDelivercompany_ID(theform.getDelivercompany_ID());
+				bdo.setDelivercompany(dc);
+			}
+
+			if (theform.getServicelevel_ID() > 0) {
+				Deliver_ServiceLevel dsl = new Deliver_ServiceLevel();
+				dsl.setServicelevel_ID(theform.getServicelevel_ID());
+				bdo.setServicelevel(dsl);
+			}
+
+			if (theform.getIncident().getIncident_ID() != null) {
+				// prevent hibernate from erroring out
+				bdo.setOhd(null);
+
+				// if it is lost delayed, change status to to be delivered
+				Item item = null;
+				int bagnumber;
+				OHD ohd_obj = null;
+
+				for (int i = theform.getItemlist().size() - 1; i >= 0; i--) {
+					item = (Item) theform.getItemlist().get(i);
+					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
+					item.setBdo(bdo);
+
+					// find out if this l/d bag is matched to ohd
+					ohd_obj = oBMO.findOHDByID(item.getOHD_ID());
+					if (ohd_obj != null && ohd_obj.getHoldingStation().getStation_ID() == theform.getIncident().getStationassigned().getStation_ID()) {
+						// bag matched and in station so change bag status to process as
+						// well
+						ohd_obj.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+						oBMO.insertOHD(ohd_obj, theform.getAgent());
+						bdo.setOhd(ohd_obj);
+					}
+
+					// do the following if it is mbr and has more than one bag
+					if (bagchosen != null) {
+						boolean b = false;
+						for (int j = 0; j < bagchosen.length; j++) {
+
+							// remove the item that is not selected
+							bagnumber = Integer.parseInt(bagchosen[j]);
+							if (bagnumber == i) {
+								// selected, keep the bag
+								b = true;
+								break;
+							}
+						}
+						if (!b) {
+							// remove bag
+							theform.getItemlist().remove(i);
+						}
+					}
+				}
+
+				bdo.setItems(new HashSet(theform.getItemlist()));
+
+			} else if (theform.getOhd().getOHD_ID() != null) {
+				// first check to see if this ohd is matched to a l/d item
+				Item item = findOHDfromMatchedLD(theform.getOhd().getOHD_ID());
+				if (item != null) {
+					// matched so insert incident id into bdo
+					bdo.setIncident(item.getIncident());
+					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
+					item.setBdo(bdo);
+					theform.getItemlist().add(item);
+					bdo.setItems(new HashSet(theform.getItemlist()));
+				} else {
+					bdo.setIncident(null);
+				}
+				theform.getOhd().setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+				oBMO.insertOHD(theform.getOhd(), theform.getAgent());
+				
+			}
+
+			if (!insertBDOtoDB(bdo))
+				return new ActionMessage("error.unable_to_insert_bdo");
+
+			return null;
+
+		} catch (Exception e) {
+			return new ActionMessage("error.unable_to_insert_bdo");
+		}
+	}
+
+	public static List getDeliverCompanies(int station_ID) {
+		// populate delivery service
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class);
+
+			cri.add(Expression.eq("station_ID", new Integer(station_ID)));
+			cri.addOrder(Order.asc("description"));
+
+			List list = cri.list();
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	public static BDO getBDOFromDB(int bdo_ID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(BDO.class).add(Expression.eq("BDO_ID", new Integer(bdo_ID)));
+			List list = cri.list();
+
+			if (list.size() == 0) {
+				return null;
+			}
+			BDO bdo = (BDO) list.get(0);
+			return bdo;
+		} catch (Exception e) {
+			logger.error("unable to retrieve bdo: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+
+	public static List getServiceLevels(int delivercompany_ID) {
+		return getServiceLevels(delivercompany_ID, null);
+	}
+	
+	public static List getServiceLevels(int delivercompany_ID, Deliver_ServiceLevel dsl) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(DeliverCompany.class).add(Expression.eq("delivercompany_ID", new Integer(delivercompany_ID)));
+			List list = cri.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find bdo from delivercompany: " + delivercompany_ID);
+				return null;
+			}
+			DeliverCompany dc = (DeliverCompany) list.get(0);
+			ArrayList<Deliver_ServiceLevel> al = new ArrayList(dc.getServicelevels());
+			List<Deliver_ServiceLevel> nl = new ArrayList();
+			
+			if (al.size() == 0 && dsl != null) {
+				nl.add(dsl);
+			}
+			
+			for (int x=0; x<al.size(); ++x) {
+				Deliver_ServiceLevel sl = al.get(x);
+				if (sl.isActive() == true || (dsl != null && dsl.getServicelevel_ID() == sl.getServicelevel_ID() )) {
+					nl.add(sl);	
+				}
+			}
+			
+			return nl;
+
+		} catch (Exception e) {
+			logger.error("unable to retrieve delivercompany: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+	
+	public static Deliver_ServiceLevel getServiceLevel(String serviceLevel_id) {
+		// populate delivery service
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Deliver_ServiceLevel.class);
+
+			cri.add(Expression.eq("servicelevel_ID", new Integer(serviceLevel_id)));
+
+			List list = cri.list();
+			if (list != null)
+				return (Deliver_ServiceLevel) list.get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	public static DeliverCo_Station getDeliverCo_Station(String stationId, DeliverCompany deliverCo) {
+		// populate delivery service
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(DeliverCo_Station.class);
+
+			cri.add(Expression.eq("station_ID", new Integer(stationId)));
+			cri.add(Expression.eq("delivercompany", deliverCo));
+
+			List list = cri.list();
+			if (list != null)
+				return (DeliverCo_Station) list.get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static List getStationsByDeliveryCompany(DeliverCompany delivercompany) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(DeliverCo_Station.class);
+			cri.add(Expression.eq("delivercompany", delivercompany));
+			List<DeliverCo_Station> delivercoStations = cri.list();
+			
+			List<Integer> stationIdList = new ArrayList();
+			
+			for (int x=0; x <delivercoStations.size(); x++) {
+				stationIdList.add(new Integer(delivercoStations.get(x).getStation_ID()));
+			}
+			
+			if (stationIdList.size() > 0) {
+				cri = sess.createCriteria(Station.class);		
+				cri.add(Expression.in("station_ID", stationIdList));
+				cri.add(Expression.eq("active", true));
+				cri.addOrder(Order.asc("stationcode"));
+			} else {
+				return null;
+			}
+			
+			return cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static List getDeliveryCompanies(int station_ID) {
+		return getDeliveryCompanies(station_ID, null);
+	}
+	
+	
+	public static List getDeliveryCompanies(int station_ID, DeliverCompany dc) {
+		Session sess = null;
+		try {
+			
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(DeliverCo_Station.class);
+			cri.add(Expression.eq("station_ID", new Integer(station_ID)));
+			List<DeliverCo_Station> ol = cri.list();
+			List nl = new ArrayList();
+			
+			for (int x=0; x<ol.size(); ++x) {
+				DeliverCo_Station tmp = ol.get(x);
+				if ((tmp.getDelivercompany().isActive()) || (  dc != null && dc.equals(tmp.getDelivercompany()))) {
+					nl.add(tmp);
+				}
+			}
+			return nl; 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static boolean insertBDOtoDB(BDO bdo) {
+		Transaction t = null;
+		Session sess = null;
+		try {
+			boolean isnew = false;
+			if (bdo.getBDO_ID() == 0)
+				isnew = true;
+
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(bdo);
+			t.commit();
+
+			String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DB_DATETIMEFORMAT, null, bdo.get_TIMEZONE());
+
+			if (isnew && MBRActionUtils.updateCommentOn()) {
+				MBRActionUtils.updateComment("Baggage Claim (" + bdo.getIncident().getIncident_ID() + ") has been scheduled for delivery on "
+						+ formateddatetime, bdo.getIncident().getRecordlocator());
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("unable to insert bdo into database: " + e);
+			try {
+				t.rollback();
+			} catch (Exception e1) {
+			}
+			return false;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * this method is used by search bdo action
+	 * 
+	 * @param theform
+	 * @return @throws
+	 *         Exception
+	 */
+	public static ArrayList searchBDOs(SearchBDOForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		Query q = null;
+		try {
+			StringBuffer s = new StringBuffer(512);
+			
+			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+
+			
+			if (iscount)
+				s.append("select count(bdo.BDO_ID) from com.bagnet.nettracer.tracing.db.BDO bdo ");
+			else
+				s.append("select distinct bdo from com.bagnet.nettracer.tracing.db.BDO bdo ");
+
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0)
+				s.append(" join bdo.passengers passenger ");
+
+			s.append(" where 1=1 ");
+
+			if (siDTO.getIncident_ID().length() > 0)
+				s.append(" and bdo.incident.incident_ID like :incident_ID ");
+			if (siDTO.getOhd_ID().length() > 0)
+				s.append(" and bdo.ohd.OHD_ID like :ohd_ID ");
+
+			if (siDTO.getAgent().length() > 0)
+				s.append(" and bdo.agent.username like :agent ");
+
+			
+			Date sdate = null, edate = null;
+			Date sdate1 = null, edate1 = null; // add one for timezone
+			Date stime = null; // time to compare (04:00 if eastern, for example)
+			String dateq = "";
+			
+			ArrayList dateal = null;
+			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(),siDTO.getE_createtime(),tz,user)) == null) {
+				return null;
+			} 
+			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
+			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
+			stime = (Date)dateal.get(4);
+			
+			
+			if (sdate != null) {
+				if (edate != null && sdate != edate) {
+					s.append(" and ((bdo.createdate= :startdate and bdo.createtime >= :starttime) "
+						+ " or (bdo.createdate= :enddate1 and bdo.createtime <= :starttime)"
+						+ " or (bdo.createdate > :startdate and bdo.createdate <= :enddate))");
+
+				} else {
+					s.append(" and ((bdo.createdate= :startdate and bdo.createtime >= :starttime) "
+							+ " or (bdo.createdate= :startdate1 and bdo.createtime <= :starttime))");
+				}
+			}
+
+
+
+			if (siDTO.getCompanycreated_ID().length() > 0)
+				s.append(" and bdo.companycode_ID = :companycreated_ID");
+			if (siDTO.getStationcreated_ID() > 0)
+				s.append(" and bdo.station.station_ID = :stationcreated_ID");
+
+			if (siDTO.getDelivercompany_ID() > 0)
+				s.append(" and bdo.delivercompany.delivercompany_ID = :delivercompany");
+			if (siDTO.getServicelevel_ID() > 0)
+				s.append(" and bdo.servicelevel.servicelevel_ID = :service");
+
+			Date deliverydate = null;
+			if (siDTO.getDeliverydate().length() > 0) {
+				deliverydate = DateUtils.convertToDate(siDTO.getDeliverydate(), user.getDateformat().getFormat(), null);
+				if (deliverydate != null)
+					s.append(" and bdo.deliverydate = :deliverydate");
+			}
+
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0) {
+				s.append(" and passenger.firstname like :firstname");
+				s.append(" and passenger.middlename like :middlename");
+				s.append(" and passenger.lastname like :lastname");
+			}
+
+			if (!iscount)
+				s.append(" order by bdo.BDO_ID");
+
+			q = sess.createQuery(s.toString());
+
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				q.setFirstResult(startnum);
+				q.setMaxResults(rowsperpage);
+			}
+
+			if (siDTO.getIncident_ID().length() > 0)
+				q.setString("incident_ID", siDTO.getIncident_ID());
+			if (siDTO.getOhd_ID().length() > 0)
+				q.setString("ohd_ID", siDTO.getOhd_ID());
+
+			
+			if (sdate != null) {
+				if (edate != null && sdate != edate) {
+					q.setDate("startdate", sdate);
+					q.setTime("starttime", stime);
+					q.setDate("enddate", edate);
+					q.setDate("enddate1", edate1);
+					
+				} else {
+					q.setDate("startdate", sdate);
+					q.setDate("startdate1", sdate1);
+					q.setTime("starttime", stime);
+				}
+			}
+
+
+
+			if (siDTO.getCompanycreated_ID().length() > 0)
+				q.setString("companycreated_ID", siDTO.getCompanycreated_ID());
+			if (siDTO.getStationcreated_ID() > 0)
+				q.setInteger("stationcreated_ID", siDTO.getStationcreated_ID());
+
+			if (siDTO.getDelivercompany_ID() > 0)
+				q.setInteger("delivercompany", siDTO.getDelivercompany_ID());
+			if (siDTO.getServicelevel_ID() > 0)
+				q.setInteger("service", siDTO.getServicelevel_ID());
+
+			if (deliverydate != null)
+				q.setDate("deliverydate", deliverydate);
+
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0) {
+
+				String a = siDTO.getFirstname().length() == 0 ? "%" : siDTO.getFirstname();
+				String b = siDTO.getMiddlename().length() == 0 ? "%" : siDTO.getMiddlename();
+				String c = siDTO.getLastname().length() == 0 ? "%" : siDTO.getLastname();
+
+				q.setString("firstname", a);
+				q.setString("middlename", b);
+				q.setString("lastname", c);
+			}
+
+			if (siDTO.getAgent().length() > 0)
+				q.setString("agent", siDTO.getAgent());
+
+			ArrayList results = (ArrayList) q.list();
+			return results;
+		} catch (Exception e) {
+			logger.error("unable to retrieve bdo in searchBDOs: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	public static DeliverCompany getDeliverCompany(int delivercompany_id) {
+		// populate delivery service
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(DeliverCompany.class);
+
+			cri.add(Expression.eq("delivercompany_ID", new Integer(delivercompany_id)));
+
+			List list = cri.list();
+			if (list != null)
+				return (DeliverCompany) list.get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * this method will return an incident item that has this ohd_ID matched to combine bdos
+	 * @param ohd_id
+	 */
+	public static Item findOHDfromMatchedLD(String ohd_id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Item.class);
+			cri.add(Expression.eq("OHD_ID", ohd_id));
+			List result = cri.list();
+			if (result != null && result.size() > 0)
+				return (Item)result.get(0);
+			
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,605 @@
+<html>
+<head>
+<title>NetTracer</title>
+
+<meta name="generator" content="RoboHelp by eHelp Corporation   www.ehelp.com">
+<meta name="description" content="WebHelp 5.50">
+</head>
+<body>
+<script language="JavaScript">
+<!--
+
+var gArrayCsh = new Array();
+
+var gstrWindowOption = "";
+var gstrURL = "";
+var gbWithNavPane = false;
+
+function CshEntityItem(strAliasId, nTopicNum, strUrl) 
+{
+    this.strAliasId = strAliasId;
+    this.nTopicNum = nTopicNum;
+    this.strUrl = strUrl;
+}
+
+
+//Try to get to topic number from hash string
+function GetTopicNumberAuto(strMayBeNumber)
+{
+   var nNum = -1;
+   if (strMayBeNumber.length >= 1)
+   {
+		var strTmp = strMayBeNumber;
+		var iEnd = strTmp.length;
+		for (var i=0; i<iEnd; i++)
+		{
+			  var ch = strTmp.charAt(i);
+			  if (!((ch == "0") || (ch == "1") ||
+			        (ch == "2") || (ch == "3") ||
+			        (ch == "4") || (ch == "5") ||
+			        (ch == "6") || (ch == "7") ||
+			        (ch == "8") || (ch == "9")))
+			      return GetTopicNumberById(strTmp);
+		}
+		nNum = parseInt(strTmp);
+   }
+   return nNum;
+}
+
+function GetTopicNumber(strHashString)
+{
+	var nTopicEndPos = strHashString.indexOf(',')
+	if (nTopicEndPos == -1) { // no window option.
+		return GetTopicNumberOnly(strHashString);
+	}
+	else {
+		var strWindowOption = strHashString.substring(nTopicEndPos + 1, strHashString.length);
+		var strWithNavPane = 'withnavpane=true';
+		if (strWindowOption.toLowerCase().indexOf(strWithNavPane) == 0)
+		{
+			if (strWindowOption.length > strWithNavPane.length)
+				gstrWindowOption = strWindowOption.substring(strWithNavPane.length + 1);
+			else
+				gstrWindowOption = "";
+			gbWithNavPane = true;
+		}
+		else
+			gstrWindowOption = strWindowOption;
+		return GetTopicNumberOnly(strHashString.substring(0, nTopicEndPos));		
+	}
+}
+
+function GetTopicNumberOnly(strTopicString)
+{
+	var nEqualPos = strTopicString.indexOf('=');
+	if (nEqualPos == -1) {
+		return GetTopicNumberAuto(strTopicString);
+	}
+	else {
+		var strValue=strTopicString.substring(nEqualPos + 1, strTopicString.length);
+		if (strTopicString.toLowerCase().indexOf("topicnumber") == 0) {
+			return parseInt(strValue);
+		} else if (strTopicString.toLowerCase().indexOf("topicid") == 0) {
+			return GetTopicNumberById(strValue);
+		} else if (strTopicString.toLowerCase().indexOf("remoteurl") == 0) {
+			gstrURL = strValue;
+			return -1;
+		}
+
+	}
+}
+
+//Find HomePage of the WebHelp system
+// we try to get the topic from remote project if it exists.
+function RedirectToHomePage()
+{
+	if (parent && parent != this && parent.goNext)
+	{
+		var sHome = parent.goNext();
+		if (sHome != "")
+			RedirectTo(sHome);
+	}
+}
+
+function getHomePage()
+{
+	if (parent && parent != this && parent.getRelHomePage)
+	{
+		return parent.getRelHomePage(document.location.href);
+	}
+	return "";
+}
+
+function addRemoteProject(strPath)
+{
+	if (parent && parent != this && parent.addProject)
+	{
+		parent.addProject(strPath);
+	}
+}
+
+//Redirect page to...
+function RedirectTo(strUrl)
+{
+   if (gstrWindowOption.length != 0) {
+		var wnd = window.open(strUrl, "HelpStub", gstrWindowOption);
+		// close current window and rename the stub window to current window.
+		wnd.focus();
+		if (parent)
+			parent.close();
+   }
+   else {
+	parent.document.location.href = strUrl;
+	window.focus();
+  }
+}
+
+//Prompt the user that we can not find...
+function FailToFind(strMsg)
+{
+    RedirectToHomePage();
+}
+
+//Find topic by topic number (defined in h file)
+function FindTopicByTopicNum(nTopicNum)
+{
+	var i = 0;
+	var iEnd = gArrayCsh.length;
+	for (i=0; i<iEnd; i++)
+	{
+		if (gArrayCsh[i].nTopicNum == nTopicNum)
+		{
+			var strURL = gArrayCsh[i].strUrl;
+			if (gbWithNavPane)
+			{
+				var strHomePage = getHomePage();
+				if (strHomePage.length != 0)
+					strURL = strHomePage + strURL;
+			}	
+			RedirectTo(strURL);
+			return true;
+		}
+	}
+	FailToFind("Fail to find topic assocaite with topic number: " + nTopicNum);
+	return false;
+}
+
+//Find topic by topic id (alias id defined in ali file)
+function GetTopicNumberById(strTopicId)
+{
+   var i = 0;
+   var iEnd = gArrayCsh.length;
+   for (i=0; i<iEnd; i++)
+   {
+	if (gArrayCsh[i].strAliasId == strTopicId)
+	{
+	    return gArrayCsh[i].nTopicNum;
+	 }
+   }
+   gstrURL = "";
+   return -1;
+}
+
+//Set Context-sensitive help entity...
+function SetCsh(n, strAliasId, nTopicNum, strUrl)
+{
+   gArrayCsh[n] = new CshEntityItem(strAliasId,nTopicNum,strUrl);
+}
+
+
+function getHash()
+{
+	if (parent && parent != this)
+		return parent.location.hash;
+	else
+		return "";
+}
+//-->
+</script>
+<script language="javascript">
+<!--
+  SetCsh(0,"Work_with_Passenger_Itineraries_Delete_passenger_itinerary2",322,"missing_articles_reports/work_with_passenger_itineraries_(ma).htm#Delete passenger itinerary");
+  SetCsh(1,"Work_with_Passenger_Itineraries_Add_passenger_itinerary2",319,"missing_articles_reports/work_with_passenger_itineraries_(ma).htm#Add passenger itinerary");
+  SetCsh(2,"Work_with_Passenger_Information_edit_passenger_info",302,"damaged_bag_reports/work_passenger_info.htm#edit passenger info");
+  SetCsh(3,"Work_with_On_hand_Bag_Reports_Top",289,"on-hand_reports/work_with_on-hand_bag_reports.htm#Top");
+  SetCsh(4,"Work_with_On_hand_Bag_Reports_Locate_On_hand_Bag_Report",288,"on-hand_reports/work_with_on-hand_bag_reports.htm#Locate_On_hand_Bag_Report");
+  SetCsh(5,"Work_with_Missing_Articles_Reports_Report_Info_Fields",278,"missing_articles_reports/work_with_missing_articles_reports.htm#Report Info Fields");
+  SetCsh(6,"Work_with_Lost_Delayed_Bag_Information_edit_lost_delayed_bag",266,"lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm#edit_lost/delayed bag");
+  SetCsh(7,"Work_with_Express_Lost_Delayed_Bag_Reports_Top",247,"lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm#Top");
+  SetCsh(8,"Work_with_Claim_Resolutions_Top2",226,"damaged_bag_reports/work_with_claim_resolutions_(dam).htm#Top");
+  SetCsh(9,"Work_with_Claim_Prorate_Notices2",214,"missing_articles_reports/work_with_claim_prorate_notices_(ma).htm");
+  SetCsh(10,"Work_with_Claim_Payment_Top1",210,"missing_articles_reports/work_with_claim_payment_(ma).htm#Top");
+  SetCsh(11,"Work_with_Claim_Payment_Modify_Claim_Payment1",207,"missing_articles_reports/work_with_claim_payment_(ma).htm#Modify Claim Payment");
+  SetCsh(12,"Work_with_Baggage_Itineraries_Top1",194,"lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm#Top");
+  SetCsh(13,"Work_with_Baggage_Itineraries_Edit_baggage_itinerary3",192,"on-hand_reports/work_with_baggage_itineraries_(oh).htm#Edit baggage itinerary");
+  SetCsh(14,"Work_with_Baggage_Information_Bag_Info_Fields",165,"missing_articles_reports/work_with_baggage_information_(ma).htm#Bag_Info_Fields");
+  SetCsh(15,"Work_with_Baggage_Check_Information_add_claim_check",155,"lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#add claim check");
+  SetCsh(16,"Welcome_to_NetTracer",143,"welcome_to_nettracer.htm");
+  SetCsh(17,"View_Reports_View_report_details",130,"task_manager/view_reports.htm#View report details");
+  SetCsh(18,"Maintain_Shifts",85,"administration/maintain_shifts.htm");
+  SetCsh(19,"Inbox",69,"task_manager/inbox.htm");
+  SetCsh(20,"How_Do_I_Manage_Incoming_Requests",61,"how_do_i/how_do_i_manage_incoming_requests.htm");
+  SetCsh(21,"Creating_On_hand_Bag_Reports",39,"on-hand_reports/creating_on-hand_bag.htm");
+  SetCsh(22,"Close_Reports_Close_Report_Fields1",27,"missing_articles_reports/close_reports_(ma).htm#Close Report_Fields");
+  SetCsh(23,"By_Passenger_Boarding_reports_Top",22,"analytical_reports/by_passenger_boarding.htm#Top");
+  SetCsh(24,"Administration_Summary",18,"administration/administration_summary.htm");
+  SetCsh(25,"Work_with_Stations_Delete_Station",353,"administration/work_with_stations.htm#Delete Station");
+  SetCsh(26,"Work_with_Remarks_delete_remarks",337,"damaged_bag_reports/remarks.htm#delete remarks");
+  SetCsh(27,"Work_with_Passenger_Information_edit_passenger_info1",303,"lost_delayed_bag_reports/work_with_passenger_information_(ld).htm#edit passenger info");
+  SetCsh(28,"Work_with_Missing_Articles_Add_Missing_Article",280,"missing_articles_reports/work_with_missing_articles.htm#Add_Missing_Article");
+  SetCsh(29,"Work_with_Missing_Articles_Reports_Add_Missing_Articles_Report",276,"missing_articles_reports/work_with_missing_articles_reports.htm#Add_Missing_Articles_Report");
+  SetCsh(30,"Work_with_Lost_Delayed_Bag_Information_Lost_Delayed_Bag_Info_Fields",267,"lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm#Lost/Delayed Bag_Info_Fields");
+  SetCsh(31,"Work_with_Express_Damaged_Bag_Reports_Add_Express_Damaged_Bag_Report",241,"damaged_bag_reports/express_damaged_bag_reports.htm#Add_Express_Damaged_Bag_Report");
+  SetCsh(32,"Work_with_Damaged_Bag_Information_edit_damaged_bag",232,"damaged_bag_reports/work_damaged_bag_information.htm#edit_damaged_bag");
+  SetCsh(33,"Work_with_Claim_Payment_Top2",211,"damaged_bag_reports/work_with_claim_payment_(dam).htm#Top");
+  SetCsh(34,"Work_with_Claim_Payment_Modify_Claim_Payment2",208,"damaged_bag_reports/work_with_claim_payment_(dam).htm#Modify Claim Payment");
+  SetCsh(35,"Work_with_Claim_Payment_Claim_Payment_Fields",203,"lost_delayed_bag_reports/work_with_claim_payment.htm#Claim_Payment_Fields");
+  SetCsh(36,"Work_with_Baggage_Itineraries_Top2",195,"missing_articles_reports/work_with_baggage_itineraries_(ma).htm#Top");
+  SetCsh(37,"Work_with_Baggage_Itineraries_edit_baggage_itinerary",189,"damaged_bag_reports/work_baggage_itinerary.htm#edit baggage itinerary");
+  SetCsh(38,"What_s_new_in_this_release",144,"what_s_new_in_this_release.htm");
+  SetCsh(39,"Mass_On_hand_Bag_Add_Mass_On_hand",88,"on-hand_reports/mass_on-hand_bag.htm#Add_Mass_On_hand");
+  SetCsh(40,"Maintain_Groups",83,"administration/maintain_groups.htm");
+  SetCsh(41,"Inbox_Reply_message",73,"task_manager/inbox.htm#Reply message");
+  SetCsh(42,"Close_Reports_Close_Report_Fields2",28,"damaged_bag_reports/close_reports.htm#Close Report_Fields");
+  SetCsh(43,"Close_Reports1",24,"missing_articles_reports/close_reports_(ma).htm");
+  SetCsh(44,"Work_with_Passenger_Information_Passenger_Info_Fields",306,"lost_delayed_bag_reports/work_with_passenger_information_(ld).htm#Passenger Info Fields");
+  SetCsh(45,"Work_with_Passenger_Information_Edit_passenger_info2",304,"missing_articles_reports/work_with_passenger_information_(ma).htm#Edit passenger info");
+  SetCsh(46,"Work_with_Passenger_Information1",291,"lost_delayed_bag_reports/work_with_passenger_information_(ld).htm");
+  SetCsh(47,"Work_with_Damaged_Bag_Information_delete_damaged_bag",231,"damaged_bag_reports/work_damaged_bag_information.htm#delete_damaged_bag");
+  SetCsh(48,"Work_with_Claim_Resolutions_Top",224,"lost_delayed_bag_reports/work_with_claim_resolutions_(ld).htm#Top");
+  SetCsh(49,"Work_with_Claim_Resolutions_Claim_Amount_Fields",221,"lost_delayed_bag_reports/work_with_claim_resolutions_(ld).htm#Claim_Amount Fields");
+  SetCsh(50,"Work_with_Claim_Prorate_Notices",212,"lost_delayed_bag_reports/work_with_claim_prorate_noticess.htm");
+  SetCsh(51,"Work_with_Claim_Payment_Add_Claim_Payment1",201,"missing_articles_reports/work_with_claim_payment_(ma).htm#Add Claim Payment");
+  SetCsh(52,"Work_with_Baggage_Itineraries_Top3",196,"on-hand_reports/work_with_baggage_itineraries_(oh).htm#Top");
+  SetCsh(53,"Work_with_Baggage_Itineraries_delete_baggage_itinerary1",186,"lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm#delete baggage itinerary");
+  SetCsh(54,"Work_with_Baggage_Itineraries_add_baggage_itinerary1",182,"lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm#add_baggage_itinerary");
+  SetCsh(55,"Work_with_Baggage_Inventory_Upload_Photos",176,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Upload Photos");
+  SetCsh(56,"View_Trace_Results",134,"task_manager/view_trace_results.htm");
+  SetCsh(57,"View_Reports",127,"task_manager/view_reports.htm");
+  SetCsh(58,"Other_Tasks_Task_form_fields",103,"task_manager/other_tasks.htm#Task form fields");
+  SetCsh(59,"On_hand_Summary",97,"on-hand_reports/on-hand_summary.htm");
+  SetCsh(60,"How_Do_I_Manage_Incoming_Bags",60,"how_do_i/how_do_i_manage_incoming_bags.htm");
+  SetCsh(61,"How_Do_I_Log_in_to_Net_Tracer_Log_in",56,"how_do_i/log_in.htm#Log in");
+  SetCsh(62,"Creating_Express_On_hand_Bag_Reports",36,"on-hand_reports/creating_express_on-hand_bag_reports.htm");
+  SetCsh(63,"Close_Reports2",25,"damaged_bag_reports/close_reports.htm");
+  SetCsh(64,"Add_Loss_Codes_Loss_Code_Fields",8,"administration/add_loss_codes.htm#Loss_Code_Fields");
+  SetCsh(65,"Work_with_Stations",352,"administration/work_with_stations.htm");
+  SetCsh(66,"Work_with_Remarks_Top1",346,"lost_delayed_bag_reports/work_with_remarks_(ld).htm#Top");
+  SetCsh(67,"Work_with_Remarks_delete_remarks1",338,"lost_delayed_bag_reports/work_with_remarks_(ld).htm#delete remarks");
+  SetCsh(68,"Work_with_Passenger_Itineraries_Top",326,"damaged_bag_reports/work_passenger_itineraries.htm#Top");
+  SetCsh(69,"Work_with_Passenger_Information_Edit_passenger_info3",305,"on-hand_reports/work_with_passenger_information_(oh).htm#Edit passenger info");
+  SetCsh(70,"Work_with_Passenger_Information_delete_passenger_info",298,"damaged_bag_reports/work_passenger_info.htm#delete passenger info");
+  SetCsh(71,"Work_with_Passenger_Information2",292,"missing_articles_reports/work_with_passenger_information_(ma).htm");
+  SetCsh(72,"Work_with_Missing_Articles_Top",284,"missing_articles_reports/work_with_missing_articles.htm#Top");
+  SetCsh(73,"Work_with_Express_Missing_Articles_Reports",248,"missing_articles_reports/work_with_express_missing_articles_reports.htm");
+  SetCsh(74,"Work_with_Express_Lost_Delayed_Bag_Reports_Add_Express_Lost_Delayed",245,"lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm#Add_Express_Lost_Delayed");
+  SetCsh(75,"Work_with_Damaged_Bag_Information_Top",233,"damaged_bag_reports/work_damaged_bag_information.htm#Top");
+  SetCsh(76,"Work_with_Claim_Payment_Add_Claim_Payment2",202,"damaged_bag_reports/work_with_claim_payment_(dam).htm#Add Claim Payment");
+  SetCsh(77,"Work_with_Baggage_Itineraries_Delete_baggage_itinerary2",187,"missing_articles_reports/work_with_baggage_itineraries_(ma).htm#Delete baggage itinerary");
+  SetCsh(78,"Work_with_Baggage_Itineraries_Add_baggage_itinerary2",183,"missing_articles_reports/work_with_baggage_itineraries_(ma).htm#Add_baggage_itinerary");
+  SetCsh(79,"Work_with_Baggage_Itineraries_add_baggage_itinerary",181,"damaged_bag_reports/work_baggage_itinerary.htm#add_baggage_itinerary");
+  SetCsh(80,"Work_with_Agent_Profiles_Edit_Agent",147,"administration/work_with_agent_profiles.htm#Edit Agent");
+  SetCsh(81,"View_Trace_Results_Trace_filter_fields",140,"task_manager/view_trace_results.htm#Trace filter fields");
+  SetCsh(82,"View_Incoming_Requests_View_incoming_request_details",126,"task_manager/view_incoming_requests.htm#View incoming request details");
+  SetCsh(83,"View_Incoming_Requests_Forward_requested_bag",124,"task_manager/view_incoming_requests.htm#Forward_requested_bag");
+  SetCsh(84,"Station_reports_Top",111,"analytical_reports/station_reports.htm#Top");
+  SetCsh(85,"Maintain_Stations",86,"administration/maintain_stations.htm");
+  SetCsh(86,"Incoming_Bags_Receive_on_hand_bag",77,"task_manager/incoming_bags.htm#Receive_on_hand_bag");
+  SetCsh(87,"Forward_Bags_to_LZ_Top",49,"task_manager/forward_to_lz.htm#Top");
+  SetCsh(88,"Work_with_Remarks_Top2",347,"missing_articles_reports/work_with_remarks_(ma).htm#Top");
+  SetCsh(89,"Work_with_Remarks_Top",345,"damaged_bag_reports/remarks.htm#Top");
+  SetCsh(90,"Work_with_Remarks_delete_remarks2",339,"on-hand_reports/work_with_remarks_(oh).htm#delete remarks");
+  SetCsh(91,"Work_with_Passenger_Information3",293,"on-hand_reports/work_with_passenger_information_(oh).htm");
+  SetCsh(92,"Work_with_On_hand_Bag_Reports",285,"on-hand_reports/work_with_on-hand_bag_reports.htm");
+  SetCsh(93,"Work_with_Express_Missing_Articles_Reports_Add_Express_Missing_Article",249,"missing_articles_reports/work_with_express_missing_articles_reports.htm#Add Express Missing Article");
+  SetCsh(94,"Work_with_Damaged_Bag_Reports_Locate_Damaged_Bag_Report",237,"damaged_bag_reports/damaged_bag_reports.htm#Locate_Damaged_Bag_Report");
+  SetCsh(95,"Work_with_Baggage_Itineraries_Top",193,"damaged_bag_reports/work_baggage_itinerary.htm#Top");
+  SetCsh(96,"Work_with_Baggage_Itineraries_Delete_baggage_itinerary3",188,"on-hand_reports/work_with_baggage_itineraries_(oh).htm#Delete baggage itinerary");
+  SetCsh(97,"Work_with_Baggage_Itineraries_Add_baggage_itinerary3",184,"on-hand_reports/work_with_baggage_itineraries_(oh).htm#Add_baggage_itinerary");
+  SetCsh(98,"Work_with_Baggage_Check_Information",149,"damaged_bag_reports/work_baggage_check_info.htm");
+  SetCsh(99,"View_Trace_Results_Create_transfer_request",136,"task_manager/view_trace_results.htm#Create transfer request");
+  SetCsh(100,"Other_Tasks_Mark_a_task_completed",100,"task_manager/other_tasks.htm#Mark a task completed");
+  SetCsh(101,"Incoming_Bags_Top",78,"task_manager/incoming_bags.htm#Top");
+  SetCsh(102,"How_Do_I_Log_in_to_Net_Tracer_Log_in_fields",57,"how_do_i/log_in.htm#Log in fields");
+  SetCsh(103,"How_Do_I_Forward_Bags_to_LZ",54,"how_do_i/how_do_i_forward_bags_to_lz.htm");
+  SetCsh(104,"Edit_Agent_Screen",44,"administration/screen_pop-ups/edit_agent_screen.htm");
+  SetCsh(105,"Close_Reports_Top1",30,"missing_articles_reports/close_reports_(ma).htm#Top");
+  SetCsh(106,"Close_Reports",23,"lost_delayed_bag_reports/close_reports_(ld).htm");
+  SetCsh(107,"Add_Shifts_Shift_Fields",11,"administration/add_shifts.htm#Shift_Fields");
+  SetCsh(108,"Add_Groups_Top",6,"administration/add_groups.htm#Top");
+  SetCsh(109,"Work_with_Remarks_Top3",348,"on-hand_reports/work_with_remarks_(oh).htm#Top");
+  SetCsh(110,"Work_with_Remarks_Delete_remarks3",340,"missing_articles_reports/work_with_remarks_(ma).htm#Delete remarks");
+  SetCsh(111,"Work_with_Passenger_Information_Top1",311,"lost_delayed_bag_reports/work_with_passenger_information_(ld).htm#Top");
+  SetCsh(112,"Work_with_Passenger_Information_Top",310,"damaged_bag_reports/work_passenger_info.htm#Top");
+  SetCsh(113,"Work_with_Passenger_Information_Passenger_Info_Fields1",308,"damaged_bag_reports/work_passenger_info.htm#Passenger_Info_Fields");
+  SetCsh(114,"Work_with_Missing_Articles_Reports",275,"missing_articles_reports/work_with_missing_articles_reports.htm");
+  SetCsh(115,"Work_with_Missing_Articles",274,"missing_articles_reports/work_with_missing_articles.htm");
+  SetCsh(116,"Work_with_Lost_Delayed_Bag_Reports_Locate_Lost_Delayed_Bag",271,"lost_delayed_bag_reports/work_with_lost_delayed_reports.htm#Locate_Lost_Delayed_Bag");
+  SetCsh(117,"Work_with_Express_Lost_Delayed_Bag_Reports_Express_Report_Info_Fields",246,"lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm#Express_Report_Info_Fields");
+  SetCsh(118,"Work_with_Claim_Resolutions",218,"lost_delayed_bag_reports/work_with_claim_resolutions_(ld).htm");
+  SetCsh(119,"Work_with_Claim_Payment",197,"lost_delayed_bag_reports/work_with_claim_payment.htm");
+  SetCsh(120,"Work_with_Baggage_Inventory_Baggage_Inventory_Fields",171,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Baggage_Inventory_Fields");
+  SetCsh(121,"Work_with_Baggage_Check_Information_add_baggage_check_info1",153,"lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#add baggage check info");
+  SetCsh(122,"View_Created_Requests_Top",120,"task_manager/view_created_requests.htm#Top");
+  SetCsh(123,"Using_the_Help_Viewer_keyboard_shortcuts",116,"using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm");
+  SetCsh(124,"Modifying_the_Help_Viewer",90,"using_the_help_viewer/modifying_the_help_viewer.htm");
+  SetCsh(125,"Inbox_Delete_message",70,"task_manager/inbox.htm#Delete message");
+  SetCsh(126,"Creating_Missing_Article_Reports",38,"missing_articles_reports/creating_missing_article_reports.htm");
+  SetCsh(127,"Close_Reports_Top2",31,"damaged_bag_reports/close_reports.htm#Top");
+  SetCsh(128,"Close_Reports_Close_Report_Fields",26,"lost_delayed_bag_reports/close_reports_(ld).htm#Close Report_Fields");
+  SetCsh(129,"Work_with_Passenger_Information_Top2",312,"missing_articles_reports/work_with_passenger_information_(ma).htm#Top");
+  SetCsh(130,"Work_with_Passenger_Information_Passenger_Info_Fields2",309,"missing_articles_reports/work_with_passenger_information_(ma).htm#Passenger_Info_Fields");
+  SetCsh(131,"Work_with_Passenger_Information_delete_passenger_info1",299,"lost_delayed_bag_reports/work_with_passenger_information_(ld).htm#delete passenger info");
+  SetCsh(132,"Work_with_Express_Damaged_Bag_Reports_Express_Report_Info_Fields",242,"damaged_bag_reports/express_damaged_bag_reports.htm#Express_Report_Info_Fields");
+  SetCsh(133,"Work_with_Damaged_Bag_Information_Damaged_Bag_Info_Fields",229,"damaged_bag_reports/work_damaged_bag_information.htm#Damaged_Bag_Info_Fields");
+  SetCsh(134,"Work_with_Claim_Payment_Claim_Payment_Fields1",204,"missing_articles_reports/work_with_claim_payment_(ma).htm#Claim_Payment_Fields");
+  SetCsh(135,"Work_with_Baggage_Inventory_Top",175,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Top");
+  SetCsh(136,"Work_with_Baggage_Inventory_Edit_content",174,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Edit content");
+  SetCsh(137,"Work_with_Baggage_Inventory_Add_content",170,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Add content");
+  SetCsh(138,"Work_with_Baggage_Check_Information_Add_baggage_check_info2",154,"missing_articles_reports/work_with_baggage_check_information_(ma).htm#Add baggage check info");
+  SetCsh(139,"View_Incoming_Requests_Top",125,"task_manager/view_incoming_requests.htm#Top");
+  SetCsh(140,"View_Created_Requests_View_request_details",121,"task_manager/view_created_requests.htm#View_request_details");
+  SetCsh(141,"Task_Manager_home",112,"task_manager/screen_pop-ups/task_manager_home.htm");
+  SetCsh(142,"Other_Tasks",98,"task_manager/other_tasks.htm");
+  SetCsh(143,"Incoming_Bags_View_forwarding_message_details",79,"task_manager/incoming_bags.htm#View_forwarding_message_details");
+  SetCsh(144,"Inbox_Send_new_message",74,"task_manager/inbox.htm#Send new message");
+  SetCsh(145,"How_Do_I_Manage_Trace_Results",65,"how_do_i/how_do_i_manage_trace_results.htm");
+  SetCsh(146,"How_Do_I_Manage_Other_Tasks",62,"how_do_i/how_do_i_manage_other_tasks.htm");
+  SetCsh(147,"Forward_Bags_to_LZ_View_bag_details",50,"task_manager/forward_to_lz.htm#View bag details");
+  SetCsh(148,"Disbursements_reports_Top",43,"analytical_reports/disbursements_report.htm#Top");
+  SetCsh(149,"Work_with_Passenger_Information_Top3",313,"on-hand_reports/work_with_passenger_information_(oh).htm#Top");
+  SetCsh(150,"Work_with_Passenger_Information_Delete_passenger_info2",300,"missing_articles_reports/work_with_passenger_information_(ma).htm#Delete passenger info");
+  SetCsh(151,"Work_with_Passenger_Information_add_passenger_info",294,"damaged_bag_reports/work_passenger_info.htm#add passenger info");
+  SetCsh(152,"Work_with_Express_On_hand_Bag_Reports",252,"on-hand_reports/work_with_express_on-hand_bag_reports.htm");
+  SetCsh(153,"Work_with_Damaged_Bag_Reports_Add_Damaged_Bag_Report",236,"damaged_bag_reports/damaged_bag_reports.htm#Add Damaged Bag Report");
+  SetCsh(154,"Work_with_Claim_Prorate_Notices_Top1",216,"damaged_bag_reports/work_with_claim_prorate_notices_(dam).htm#Top");
+  SetCsh(155,"Work_with_Claim_Payment_Claim_Payment_Fields2",205,"damaged_bag_reports/work_with_claim_payment_(dam).htm#Claim_Payment_Fields");
+  SetCsh(156,"Work_with_Baggage_Information_Top",168,"missing_articles_reports/work_with_baggage_information_(ma).htm#Top");
+  SetCsh(157,"Work_with_Baggage_Information_Edit_bag_Missing_Article",167,"missing_articles_reports/work_with_baggage_information_(ma).htm#Edit bag Missing Article");
+  SetCsh(158,"Work_with_Baggage_Check_Information_add_baggage_check_info",152,"damaged_bag_reports/work_baggage_check_info.htm#add baggage check info");
+  SetCsh(159,"View_Reports_View_temp_reports",132,"task_manager/view_reports.htm#View temp reports");
+  SetCsh(160,"Task_Manager_Summary",114,"task_manager/task_manager_summary.htm");
+  SetCsh(161,"Station_reports_Station_Fields",110,"analytical_reports/station_reports.htm#Station_Fields");
+  SetCsh(162,"Other_Tasks_View_other_task_details",105,"task_manager/other_tasks.htm#View other task details");
+  SetCsh(163,"Occurrences_reports_Occurrences_Fields",95,"analytical_reports/occurrences_report.htm#Occurrences_Fields");
+  SetCsh(164,"Occurrences_Per_Flight_reports_Occurrences_Per_Flight_Fields",92,"analytical_reports/occurrences_per_flight.htm#Occurrences_Per_Flight_Fields");
+  SetCsh(165,"Maintain_Loss_Codes",84,"administration/maintain_loss_codes.htm");
+  SetCsh(166,"How_Do_I_Print_a_Passenger_Receipt",66,"how_do_i/print_a_passenger_receipt.htm");
+  SetCsh(167,"Help_Viewer_Overview",53,"using_the_help_viewer/help_viewer_overview.htm");
+  SetCsh(168,"Getting_Help_Top",52,"using_the_help_viewer/getting_help.htm#Top");
+  SetCsh(169,"Getting_Help",51,"using_the_help_viewer/getting_help.htm");
+  SetCsh(170,"Creating_Express_Missing_Articles_Reports",35,"missing_articles_reports/creating_express_missing_articles_reports.htm");
+  SetCsh(171,"Creating_Damaged_Bag_Reports",32,"damaged_bag_reports/creating_damage_bag_reports.htm");
+  SetCsh(172,"Admin_Menu",16,"administration/screen_pop-ups/admin_menu.htm");
+  SetCsh(173,"Add_Stations_Top",15,"administration/add_stations.htm#Top");
+  SetCsh(174,"Add_Agents_Agent_Fields",2,"administration/add_agents.htm#Agent_Fields");
+  SetCsh(175,"Work_with_Shifts_Delete_Shift",350,"administration/work_with_shifts.htm#Delete Shift");
+  SetCsh(176,"Work_with_Remarks_edit_remarks",341,"damaged_bag_reports/remarks.htm#edit remarks");
+  SetCsh(177,"Work_with_Remarks_Add_remarks1",334,"lost_delayed_bag_reports/work_with_remarks_(ld).htm#Add remarks");
+  SetCsh(178,"Work_with_Remarks1",330,"lost_delayed_bag_reports/work_with_remarks_(ld).htm");
+  SetCsh(179,"Work_with_Passenger_Itineraries_Top1",327,"lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm#Top");
+  SetCsh(180,"Work_with_Passenger_Itineraries",314,"damaged_bag_reports/work_passenger_itineraries.htm");
+  SetCsh(181,"Work_with_Passenger_Information_Delete_passenger_info3",301,"on-hand_reports/work_with_passenger_information_(oh).htm#Delete passenger info");
+  SetCsh(182,"Work_with_Lost_Delayed_Bag_Information_Top",268,"lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm#Top");
+  SetCsh(183,"Work_with_Loss_Codes_Edit_Loss_Codes",262,"administration/work_with_loss_codes.htm#Edit Loss Codes");
+  SetCsh(184,"Work_with_Groups_Maintain_Permissions",259,"administration/work_with_groups.htm#Maintain Permissions");
+  SetCsh(185,"Work_with_Groups_Edit_Groups",258,"administration/work_with_groups.htm#Edit Groups");
+  SetCsh(186,"Work_with_Express_On_hand_Bag_Reports_Express_Baggage_Info_Fields",254,"on-hand_reports/work_with_express_on-hand_bag_reports.htm#Express Baggage_Info_Fields");
+  SetCsh(187,"Work_with_Express_On_hand_Bag_Reports_Add_Express_On_hand_Bag_Report",253,"on-hand_reports/work_with_express_on-hand_bag_reports.htm#Add_Express_On_hand_Bag_Report");
+  SetCsh(188,"Work_with_Claim_Prorate_Notices_Top2",217,"missing_articles_reports/work_with_claim_prorate_notices_(ma).htm#Top");
+  SetCsh(189,"Work_with_Baggage_Inventory_Delete_content",172,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Delete content");
+  SetCsh(190,"Work_with_Baggage_Information_Delete_bag_Missing_Article",166,"missing_articles_reports/work_with_baggage_information_(ma).htm#Delete bag Missing Article");
+  SetCsh(191,"View_Trace_Results_Undo_a_rejected_match",141,"task_manager/view_trace_results.htm#Undo a rejected match");
+  SetCsh(192,"View_Trace_Results_Top",139,"task_manager/view_trace_results.htm#Top");
+  SetCsh(193,"View_Reports_View_temp_on_hands",131,"task_manager/view_reports.htm#View temp on-hands");
+  SetCsh(194,"View_Created_Requests",117,"task_manager/view_created_requests.htm");
+  SetCsh(195,"Other_Tasks_Other_task_search_fields",101,"task_manager/other_tasks.htm#Other_task_search_fields");
+  SetCsh(196,"Disbursements_reports",41,"analytical_reports/disbursements_report.htm");
+  SetCsh(197,"Damaged_Bag_Reports_Summary",40,"damaged_bag_reports/damaged_bag_reports_summary.htm");
+  SetCsh(198,"Work_with_Remarks_edit_remarks1",342,"lost_delayed_bag_reports/work_with_remarks_(ld).htm#edit remarks");
+  SetCsh(199,"Work_with_Remarks_Add_remarks2",335,"missing_articles_reports/work_with_remarks_(ma).htm#Add remarks");
+  SetCsh(200,"Work_with_Remarks_Add_remarks",333,"damaged_bag_reports/remarks.htm#Add remarks");
+  SetCsh(201,"Work_with_Remarks2",331,"missing_articles_reports/work_with_remarks_(ma).htm");
+  SetCsh(202,"Work_with_Remarks",329,"damaged_bag_reports/remarks.htm");
+  SetCsh(203,"Work_with_Passenger_Itineraries_Top2",328,"missing_articles_reports/work_with_passenger_itineraries_(ma).htm#Top");
+  SetCsh(204,"Work_with_Passenger_Itineraries_delete_passenger_itinerary",320,"damaged_bag_reports/work_passenger_itineraries.htm#delete passenger itinerary");
+  SetCsh(205,"Work_with_Passenger_Information",290,"damaged_bag_reports/work_passenger_info.htm");
+  SetCsh(206,"Work_with_Loss_Codes",260,"administration/work_with_loss_codes.htm");
+  SetCsh(207,"Work_with_Express_Lost_Delayed_Bag_Reports",244,"lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm");
+  SetCsh(208,"Work_with_Express_Damaged_Bag_Reports_Top",243,"damaged_bag_reports/express_damaged_bag_reports.htm#Top");
+  SetCsh(209,"Work_with_Damaged_Bag_Information",227,"damaged_bag_reports/work_damaged_bag_information.htm");
+  SetCsh(210,"Work_with_Claim_Resolutions1",219,"missing_articles_reports/work_with_claim_resolutions_(ma).htm");
+  SetCsh(211,"Work_with_Baggage_Check_Information1",150,"lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm");
+  SetCsh(212,"View_Incoming_Requests",122,"task_manager/view_incoming_requests.htm");
+  SetCsh(213,"Recovery_reports_Top",108,"analytical_reports/recovery.htm#Top");
+  SetCsh(214,"Occurrences_reports_Top",96,"analytical_reports/occurrences_report.htm#Top");
+  SetCsh(215,"Close_Reports_Top",29,"lost_delayed_bag_reports/close_reports_(ld).htm#Top");
+  SetCsh(216,"Add_Loss_Codes_Top",9,"administration/add_loss_codes.htm#Top");
+  SetCsh(217,"Work_with_Remarks_edit_remarks2",343,"on-hand_reports/work_with_remarks_(oh).htm#edit remarks");
+  SetCsh(218,"Work_with_Remarks_Add_remarks3",336,"on-hand_reports/work_with_remarks_(oh).htm#Add remarks");
+  SetCsh(219,"Work_with_Remarks3",332,"on-hand_reports/work_with_remarks_(oh).htm");
+  SetCsh(220,"Work_with_On_hand_Bag_Reports_Baggage_Info_Fields",287,"on-hand_reports/work_with_on-hand_bag_reports.htm#Baggage_Info_Fields");
+  SetCsh(221,"Work_with_Missing_Articles_Reports_Locate_Missing_Articles_Report",277,"missing_articles_reports/work_with_missing_articles_reports.htm#Locate_Missing_Articles_Report");
+  SetCsh(222,"Work_with_Lost_Delayed_Bag_Reports_Report_Info_Fields",272,"lost_delayed_bag_reports/work_with_lost_delayed_reports.htm#Report Info Fields");
+  SetCsh(223,"Work_with_Groups_Delete_Groups",257,"administration/work_with_groups.htm#Delete Groups");
+  SetCsh(224,"Work_with_Damaged_Bag_Reports_Top",239,"damaged_bag_reports/damaged_bag_reports.htm#Top");
+  SetCsh(225,"Work_with_Claim_Resolutions2",220,"damaged_bag_reports/work_with_claim_resolutions_(dam).htm");
+  SetCsh(226,"Work_with_Claim_Payment_Top",209,"lost_delayed_bag_reports/work_with_claim_payment.htm#Top");
+  SetCsh(227,"Work_with_Baggage_Check_Information2",151,"missing_articles_reports/work_with_baggage_check_information_(ma).htm");
+  SetCsh(228,"View_requests_menu",133,"task_manager/screen_pop-ups/view_requests_menu.htm");
+  SetCsh(229,"View_Created_Requests_Search_requests",119,"task_manager/view_created_requests.htm#Search requests");
+  SetCsh(230,"Station_reports",109,"analytical_reports/station_reports.htm");
+  SetCsh(231,"Recovery_reports",106,"analytical_reports/recovery.htm");
+  SetCsh(232,"Occurrences_Per_Flight_reports",91,"analytical_reports/occurrences_per_flight.htm");
+  SetCsh(233,"Missing_Articles_Report_Summary",89,"missing_articles_reports/missing_articles_report_summary.htm");
+  SetCsh(234,"Mass_On_hand_Bag",87,"on-hand_reports/mass_on-hand_bag.htm");
+  SetCsh(235,"How_Do_I_Summary",68,"how_do_i/how_do_i_summary.htm");
+  SetCsh(236,"How_Do_I_Print_a_Prorate_Notice",67,"how_do_i/print_a_prorate_notice.htm");
+  SetCsh(237,"How_Do_I_Manage_the_Inbox",64,"how_do_i/how_do_i_manage_the_inbox.htm");
+  SetCsh(238,"How_Do_I_Manage_Reports",63,"how_do_i/how_do_i_manage_reports.htm");
+  SetCsh(239,"Creating_Lost_Delayed_Bag_Reports",37,"lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm");
+  SetCsh(240,"Creating_Express_Damaged_Bag_Reports",33,"damaged_bag_reports/creating_exdamage_bag_report.htm");
+  SetCsh(241,"Add_Stations",13,"administration/add_stations.htm");
+  SetCsh(242,"Add_Agents",1,"administration/add_agents.htm");
+  SetCsh(243,"Work_with_Remarks_Edit_remarks3",344,"missing_articles_reports/work_with_remarks_(ma).htm#Edit remarks");
+  SetCsh(244,"Work_with_Lost_Delayed_Bag_Reports_Add_Lost_Delayed_Bag_Report",270,"lost_delayed_bag_reports/work_with_lost_delayed_reports.htm#Add Lost/Delayed Bag Report");
+  SetCsh(245,"Work_with_Lost_Delayed_Bag_Reports",269,"lost_delayed_bag_reports/work_with_lost_delayed_reports.htm");
+  SetCsh(246,"Work_with_Loss_Codes_Delete_Loss_Codes",261,"administration/work_with_loss_codes.htm#Delete Loss Codes");
+  SetCsh(247,"Work_with_Express_Missing_Articles_Reports_Express_Report_Info_Fields",250,"missing_articles_reports/work_with_express_missing_articles_reports.htm#Express Report Info Fields");
+  SetCsh(248,"Work_with_Damaged_Bag_Reports",235,"damaged_bag_reports/damaged_bag_reports.htm");
+  SetCsh(249,"Work_with_Damaged_Bag_Information_add_damaged_bag",228,"damaged_bag_reports/work_damaged_bag_information.htm#add_damaged_bag");
+  SetCsh(250,"View_Trace_Results_Reject_a_match",137,"task_manager/view_trace_results.htm#Reject a match");
+  SetCsh(251,"Task_Manager_Home1",113,"task_manager/task_manager_home.htm");
+  SetCsh(252,"Other_Tasks_Top",104,"task_manager/other_tasks.htm#Top");
+  SetCsh(253,"Disbursements_reports_Disbursements_Fields",42,"analytical_reports/disbursements_report.htm#Disbursements_Fields");
+  SetCsh(254,"Add_Loss_Codes",7,"administration/add_loss_codes.htm");
+  SetCsh(255,"Add_Agents_Top",3,"administration/add_agents.htm#Top");
+  SetCsh(256,"Work_with_Passenger_Itineraries_edit_passenger_itinerary1",324,"lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm#edit passenger itinerary");
+  SetCsh(257,"Work_with_Passenger_Itineraries_add_passenger_itinerary",317,"damaged_bag_reports/work_passenger_itineraries.htm#add passenger itinerary");
+  SetCsh(258,"Work_with_Passenger_Information_Passenger_Info",307,"on-hand_reports/work_with_passenger_information_(oh).htm#Passenger_Info");
+  SetCsh(259,"Work_with_Missing_Articles_Delete_Missing_Article",281,"missing_articles_reports/work_with_missing_articles.htm#Delete Missing Article");
+  SetCsh(260,"Work_with_Damaged_Bag_Information_Delete_Photos",230,"damaged_bag_reports/work_damaged_bag_information.htm#Delete Photos");
+  SetCsh(261,"Work_with_Claim_Resolutions_Claim_Amount_Fields1",222,"missing_articles_reports/work_with_claim_resolutions_(ma).htm#Claim_Amount Fields");
+  SetCsh(262,"Work_with_Claim_Payment1",198,"missing_articles_reports/work_with_claim_payment_(ma).htm");
+  SetCsh(263,"Work_with_Baggage_Itineraries1",178,"lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm");
+  SetCsh(264,"Work_with_Baggage_Check_Information_Top1",161,"lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#Top");
+  SetCsh(265,"Work_with_Baggage_Check_Information_Top",160,"damaged_bag_reports/work_baggage_check_info.htm#Top");
+  SetCsh(266,"Work_with_Baggage_Check_Information_delete_claim_check",159,"lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#delete_claim_check");
+  SetCsh(267,"View_Trace_Results_View_trace_details",142,"task_manager/view_trace_results.htm#View trace details");
+  SetCsh(268,"View_Trace_Results_Confirm_match",135,"task_manager/view_trace_results.htm#Confirm_match");
+  SetCsh(269,"View_Created_Requests_Search_request_fields",118,"task_manager/view_created_requests.htm#Search request fields");
+  SetCsh(270,"Timezone_Menu",115,"administration/screen_pop-ups/timezone_menu.htm");
+  SetCsh(271,"Maintain_Agents",82,"administration/administration.htm");
+  SetCsh(272,"Incoming_Bags",76,"task_manager/incoming_bags.htm");
+  SetCsh(273,"How_Do_I_Log_in_to_Net_Tracer_Top",58,"how_do_i/log_in.htm#Top");
+  SetCsh(274,"How_Do_I_Log_in_to_Net_Tracer",55,"how_do_i/log_in.htm");
+  SetCsh(275,"Forward_Bags_to_LZ",46,"task_manager/forward_to_lz.htm");
+  SetCsh(276,"By_Passenger_Boarding_reports",20,"analytical_reports/by_passenger_boarding.htm");
+  SetCsh(277,"Work_with_Stations_Edit_Station",354,"administration/work_with_stations.htm#Edit Station");
+  SetCsh(278,"Work_with_Passenger_Itineraries_Edit_passenger_itinerary2",325,"missing_articles_reports/work_with_passenger_itineraries_(ma).htm#Edit passenger itinerary");
+  SetCsh(279,"Work_with_Missing_Articles_Reports_Top",279,"missing_articles_reports/work_with_missing_articles_reports.htm#Top");
+  SetCsh(280,"Work_with_Lost_Delayed_Bag_Information_delete_lost_delayed_bag",265,"lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm#delete_lost/delayed bag");
+  SetCsh(281,"Work_with_Claim_Resolutions_Claim_Amount_Fields2",223,"damaged_bag_reports/work_with_claim_resolutions_(dam).htm#Claim_Amount Fields");
+  SetCsh(282,"Work_with_Claim_Payment_Modify_Claim_Payment",206,"lost_delayed_bag_reports/work_with_claim_payment.htm#Modify Claim Payment");
+  SetCsh(283,"Work_with_Claim_Payment2",199,"damaged_bag_reports/work_with_claim_payment_(dam).htm");
+  SetCsh(284,"Work_with_Baggage_Itineraries2",179,"missing_articles_reports/work_with_baggage_itineraries_(ma).htm");
+  SetCsh(285,"Work_with_Baggage_Inventory",169,"on-hand_reports/work_with_baggage_inventory_(oh).htm");
+  SetCsh(286,"Work_with_Baggage_Check_Information_Top2",162,"missing_articles_reports/work_with_baggage_check_information_(ma).htm#Top");
+  SetCsh(287,"Work_with_Baggage_Check_Information_Baggage_Check_Info_Fields",158,"lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#Baggage_Check_Info_Fields");
+  SetCsh(288,"Work_with_Agent_Profiles_Maintain_User_Profile",148,"administration/work_with_agent_profiles.htm#Maintain User Profile");
+  SetCsh(289,"Work_with_Agent_Profiles",145,"administration/work_with_agent_profiles.htm");
+  SetCsh(290,"View_Trace_Results_Sort_trace_results",138,"task_manager/view_trace_results.htm#Sort trace results");
+  SetCsh(291,"View_Reports_Top",128,"task_manager/view_reports.htm#Top");
+  SetCsh(292,"Occurrences_reports",94,"analytical_reports/occurrences_report.htm");
+  SetCsh(293,"Inbox_Locate_message",71,"task_manager/inbox.htm#Locate message");
+  SetCsh(294,"Forward_Bags_to_LZ_Batch_forward_to_LZ",47,"task_manager/forward_to_lz.htm#Batch_forward_to_LZ");
+  SetCsh(295,"Creating_Express_Lost_Delayed_Bag_Reports",34,"lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm");
+  SetCsh(296,"Add_Groups_Group_Fields",5,"administration/add_groups.htm#Group_Fields");
+  SetCsh(297,"Work_with_Shifts_Edit_Shift",351,"administration/work_with_shifts.htm#Edit Shift");
+  SetCsh(298,"Work_with_Shifts",349,"administration/work_with_shifts.htm");
+  SetCsh(299,"Work_with_Passenger_Itineraries_edit_passenger_itinerary",323,"damaged_bag_reports/work_passenger_itineraries.htm#edit passenger itinerary");
+  SetCsh(300,"Work_with_Passenger_Itineraries1",315,"lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm");
+  SetCsh(301,"Work_with_Passenger_Information_add_passenger_info1",295,"lost_delayed_bag_reports/work_with_passenger_information_(ld).htm#add passenger info");
+  SetCsh(302,"Work_with_Express_Damaged_Bag_Reports",240,"damaged_bag_reports/express_damaged_bag_reports.htm");
+  SetCsh(303,"Work_with_Baggage_Itineraries3",180,"on-hand_reports/work_with_baggage_itineraries_(oh).htm");
+  SetCsh(304,"Work_with_Baggage_Itineraries",177,"damaged_bag_reports/work_baggage_itinerary.htm");
+  SetCsh(305,"Work_with_Baggage_Information",163,"missing_articles_reports/work_with_baggage_information_(ma).htm");
+  SetCsh(306,"View_Incoming_Requests_Deny_incoming_request",123,"task_manager/view_incoming_requests.htm#Deny incoming request");
+  SetCsh(307,"Recovery_reports_Recovery_Fields",107,"analytical_reports/recovery.htm#Recovery_Fields");
+  SetCsh(308,"Other_Tasks_Search_other_tasks",102,"task_manager/other_tasks.htm#Search other tasks");
+  SetCsh(309,"Inbox_Top",75,"task_manager/inbox.htm#Top");
+  SetCsh(310,"Inbox_Open_message",72,"task_manager/inbox.htm#Open message");
+  SetCsh(311,"By_Passenger_Boarding_reports_By_Passenger_Boarding_Fields",21,"analytical_reports/by_passenger_boarding.htm#By_Passenger_Boarding_Fields");
+  SetCsh(312,"Analytical_Reports_Summary",19,"analytical_reports/analytical_reports_summary.htm");
+  SetCsh(313,"Add_Stations_Station_Fields",14,"administration/add_stations.htm#Station_Fields");
+  SetCsh(314,"Add_Shifts_Top",12,"administration/add_shifts.htm#Top");
+  SetCsh(315,"Work_with_Passenger_Itineraries2",316,"missing_articles_reports/work_with_passenger_itineraries_(ma).htm");
+  SetCsh(316,"Work_with_Passenger_Information_Add_passenger_info2",296,"missing_articles_reports/work_with_passenger_information_(ma).htm#Add passenger info");
+  SetCsh(317,"Work_with_Missing_Articles_Missing_Article_Fields",283,"missing_articles_reports/work_with_missing_articles.htm#Missing Article Fields");
+  SetCsh(318,"Work_with_Lost_Delayed_Bag_Reports_Top",273,"lost_delayed_bag_reports/work_with_lost_delayed_reports.htm#Top");
+  SetCsh(319,"Work_with_Lost_Delayed_Bag_Information",263,"lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm");
+  SetCsh(320,"Work_with_Groups",256,"administration/work_with_groups.htm");
+  SetCsh(321,"Work_with_Express_Missing_Articles_Reports_Top",251,"missing_articles_reports/work_with_express_missing_articles_reports.htm#Top");
+  SetCsh(322,"Work_with_Damaged_Bag_Reports_Report_Info_Fields",238,"damaged_bag_reports/damaged_bag_reports.htm#Report Info Fields");
+  SetCsh(323,"Work_with_Claim_Payment_Add_Claim_Payment",200,"lost_delayed_bag_reports/work_with_claim_payment.htm#Add Claim Payment");
+  SetCsh(324,"Work_with_Baggage_Itineraries_edit_baggage_itinerary1",190,"lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm#edit baggage itinerary");
+  SetCsh(325,"Work_with_Baggage_Itineraries_delete_baggage_itinerary",185,"damaged_bag_reports/work_baggage_itinerary.htm#delete baggage itinerary");
+  SetCsh(326,"Work_with_Baggage_Inventory_Delete_Photos",173,"on-hand_reports/work_with_baggage_inventory_(oh).htm#Delete Photos");
+  SetCsh(327,"Work_with_Baggage_Information_Add_bag_to_Missing_Article",164,"missing_articles_reports/work_with_baggage_information_(ma).htm#Add_bag_to_Missing_Article");
+  SetCsh(328,"Work_with_Agent_Profiles_Delete_Agent",146,"administration/work_with_agent_profiles.htm#Delete Agent");
+  SetCsh(329,"Other_Tasks_Create_a_new_task",99,"task_manager/other_tasks.htm#Create a new task");
+  SetCsh(330,"Incoming_Bags_View_incoming_bag_details",80,"task_manager/incoming_bags.htm#View_incoming_bag_details");
+  SetCsh(331,"How_Do_I_Manage_Created_Requests",59,"how_do_i/how_do_i_manage_created_requests.htm");
+  SetCsh(332,"Admin_Menu_Agents",17,"administration/screen_pop-ups/admin_menu_agents.htm");
+  SetCsh(333,"Add_Shifts",10,"administration/add_shifts.htm");
+  SetCsh(334,"Work_with_Passenger_Itineraries_delete_passenger_itinerary1",321,"lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm#delete passenger itinerary");
+  SetCsh(335,"Work_with_Passenger_Itineraries_add_passenger_itinerary1",318,"lost_delayed_bag_reports/work_with_passenger_itineraries_(ld).htm#add passenger itinerary");
+  SetCsh(336,"Work_with_Passenger_Information_Add_passenger_info3",297,"on-hand_reports/work_with_passenger_information_(oh).htm#Add passenger info");
+  SetCsh(337,"Work_with_On_hand_Bag_Reports_Add_On_hand_Bag_Report",286,"on-hand_reports/work_with_on-hand_bag_reports.htm#Add_On_hand_Bag_Report");
+  SetCsh(338,"Work_with_Missing_Articles_Edit_Missing_Article",282,"missing_articles_reports/work_with_missing_articles.htm#Edit Missing Article");
+  SetCsh(339,"Work_with_Lost_Delayed_Bag_Information_add_lost_delayed_bag",264,"lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm#add_lost/delayed bag");
+  SetCsh(340,"Work_with_Express_On_hand_Bag_Reports_Top",255,"on-hand_reports/work_with_express_on-hand_bag_reports.htm#Top");
+  SetCsh(341,"Work_with_Damaged_Bag_Information_Upload_Photos",234,"damaged_bag_reports/work_damaged_bag_information.htm#Upload Photos");
+  SetCsh(342,"Work_with_Claim_Resolutions_Top1",225,"missing_articles_reports/work_with_claim_resolutions_(ma).htm#Top");
+  SetCsh(343,"Work_with_Claim_Prorate_Notices_Top",215,"lost_delayed_bag_reports/work_with_claim_prorate_noticess.htm#Top");
+  SetCsh(344,"Work_with_Claim_Prorate_Notices1",213,"damaged_bag_reports/work_with_claim_prorate_notices_(dam).htm");
+  SetCsh(345,"Work_with_Baggage_Itineraries_Edit_baggage_itinerary2",191,"missing_articles_reports/work_with_baggage_itineraries_(ma).htm#Edit baggage itinerary");
+  SetCsh(346,"Work_with_Baggage_Check_Information_Baggage_Check_Info1",157,"missing_articles_reports/work_with_baggage_check_information_(ma).htm#Baggage Check Info");
+  SetCsh(347,"Work_with_Baggage_Check_Information_Baggage_Check_Info",156,"damaged_bag_reports/work_baggage_check_info.htm#Baggage Check Info");
+  SetCsh(348,"View_Reports_View_mass_on_hands",129,"task_manager/view_reports.htm#View mass on-hands");
+  SetCsh(349,"Occurrences_Per_Flight_reports_Top",93,"analytical_reports/occurrences_per_flight.htm#Top");
+  SetCsh(350,"Lost_Delayed_Bag_Reports_Summary",81,"lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm");
+  SetCsh(351,"Forward_Bags_to_LZ_Forward_bag_to_LZ",48,"task_manager/forward_to_lz.htm#Forward bag to LZ");
+  SetCsh(352,"FAQ",45,"faq.htm");
+  SetCsh(353,"Add_Groups",4,"administration/add_groups.htm");
+
+
+//-->
+</script>
+<script language="javascript">
+<!--
+//Find CSH according to hash string after this page
+if (getHash().length > 0)
+{
+   // VH 05/16/00 now support 
+   // TopicID=
+   // TopicNumber=
+   // RemoteURL=   
+   // and WindowsOptions
+   // with the format #a=xxx,b=xxx,c=xxx...
+   var strHashString = getHash().toString();
+   // change ? to : for remote URL. because java applet have some problem to pass a URL with two : inside the URL so we changed it. 
+   // so here need to change it back.
+   strHashString = strHashString.substring(1,strHashString.length);
+   strHashString = strHashString.replace("%072%057%057", "://");
+   var nTopicNum = GetTopicNumber(strHashString);
+
+   if (nTopicNum != -1)
+   {
+      FindTopicByTopicNum(nTopicNum);
+   }
+   else
+   {
+      if (gstrURL.length > 0) 
+	RedirectTo(gstrURL);
+      else
+      	RedirectToHomePage();
+   }
+}
+else
+{
+   RedirectToHomePage();
+}
+//-->
+</script>
+<noscript>
+ <p> Your browser does not support JavaScript. WebHelp Context-Sensitive Help requires JavaScript support to run.</p>
+</noscript>
+</body>
+</html>
+
+
+
+
+
+

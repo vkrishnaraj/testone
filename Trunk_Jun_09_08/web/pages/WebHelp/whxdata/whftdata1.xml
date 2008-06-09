@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<ftstdata>
+<topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+<topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+<topic name="View Reports" url="task_manager/view_reports.htm" />
+<topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+<topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+<topic name="Help Viewer Overview" url="using_the_help_viewer/help_viewer_overview.htm" />
+<topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+<topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+<topic name="Welcome to NetTracer" url="welcome_to_nettracer.htm" />
+<topic name="What's new in this release" url="what_s_new_in_this_release.htm" />
+
+</ftstdata>  

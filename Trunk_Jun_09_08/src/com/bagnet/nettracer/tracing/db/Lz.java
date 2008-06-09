@@ -1,0 +1,98 @@
+package com.bagnet.nettracer.tracing.db;
+
+import java.io.Serializable;
+
+/**
+ * @author Administrator
+ * 
+ * @hibernate.class table="Lz"
+ */
+public class Lz implements Serializable {
+	private int lz_id;
+	private boolean is_default;
+	private double percent;
+	private Station station;
+	private boolean isUsed;
+	
+	/**
+	 * @return Returns the lz_ID.
+	 * 
+	 * @hibernate.id generator-class = "native" type="integer" column="lz_ID"
+	 * @hibernate.generator-param name="sequence" value="Lz_0"
+	 */
+	
+	
+	
+	public int getLz_ID() {
+		return lz_id;
+	}
+
+	/**
+	 * @param lz_ID
+	 *          The deliverco_station_ID to set.
+	 */
+	public void setLz_ID(int lz_ID) {
+		this.lz_id = lz_ID;
+
+	}
+	
+	/**
+	 * @return Returns the percent.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public double getPercent() {
+		return percent;
+	}
+
+	/**
+	 * @param percent
+	 *          The percent to set.
+	 */
+	public void setPercent(double percent) {
+		this.percent = percent;
+	}
+	
+	/**
+	 * @return Returns the station.
+	 * 
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Station"
+	 *                        column="station_ID" foreign-key="station_ID"
+	 */
+	public Station getStation() {
+		return station;
+	}
+
+	/**
+	 * @param station
+	 *          The station to set.
+	 */
+	public void setStation(Station station) {
+		this.station = station;
+	}
+
+
+
+	/**
+	 * @return Returns whether the station is the default incident LZ.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isIs_default() {
+		return is_default;
+	}
+	/**
+	 * @param is_default The is_default to set.
+	 */
+	public void setIs_default(boolean is_default) {
+		this.is_default = is_default;
+	}
+	
+	public void setIsUsed(boolean isUsed) {
+		this.isUsed = isUsed;
+	}
+	
+	public boolean isUsed() {
+		return isUsed;
+	}
+}

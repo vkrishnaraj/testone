@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+  "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+  
+<web-app>
+
+  <display-name>NetTracer</display-name>
+
+  <!-- Action Servlet Configuration -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class> 
+
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+    
+    <init-param>
+      <param-name>validate</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>detail</param-name>
+      <param-value>2</param-value>
+    </init-param>
+      <!-- Added as a trick for a bug in Struts -->
+    <init-param>
+      <param-name>application</param-name>
+      <param-value>com.bagnet.nettracer.tracing.resources.ApplicationResources</param-value>
+    </init-param>  
+	
+	<load-on-startup>2</load-on-startup>
+  
+  </servlet>
+  
+   <!-- report servlet Configuration -->
+  <servlet>
+	<servlet-name>reporting servlet</servlet-name>
+	<servlet-class>com.bagnet.nettracer.reporting.ReportOutputServlet</servlet-class> 
+  </servlet>
+  <servlet>
+	<servlet-name>ImageServlet</servlet-name>
+	<display-name>ImageServlet</display-name>
+	<servlet-class>com.bagnet.nettracer.reporting.ImageServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ViewLog</servlet-name>
+    <display-name>view log</display-name>
+    <description>view log</description>
+    <servlet-class>com.bagnet.nettracer.logging.ViewLog</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>WTTest</servlet-name>
+    <display-name>Test WT</display-name>
+    <description>WT test</description>
+    <servlet-class>com.bagnet.nettracer.wt.WorldTracerIntegrationWrapper</servlet-class>
+  </servlet>
+  <!-- end of report servlet -->
+
+
+
+
+
+  
+    <!-- AJAX Servlet to retrieve messages -->
+  <servlet>
+ 	<servlet-name>checkmessages</servlet-name>
+    <servlet-class>com.bagnet.nettracer.servlets.ajax.CheckMessages</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>checkmessages</servlet-name>
+    <url-pattern>/checkMessages.view</url-pattern>
+  </servlet-mapping> 
+ 
+  <servlet>
+    <servlet-name>showImage</servlet-name>
+    <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>log4j-init</servlet-name>
+    <servlet-class>com.bagnet.nettracer.logging.Log4jInit</servlet-class>
+
+    <init-param>
+      <param-name>log4j-init-file</param-name>
+      <param-value>WEB-INF/classes/log4j.properties</param-value>
+    </init-param>
+
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <!-- web services -->
+  <servlet>
+        <servlet-name>AxisServlet</servlet-name>
+        <display-name>Apache-Axis Servlet</display-name>
+        <servlet-class>
+            org.apache.axis2.transport.http.AxisServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AxisServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+  
+  <!-- web service client for testing -->
+  <servlet>
+        <servlet-name>PassengerViewTest</servlet-name>
+        <display-name>PassengerView Test Servlet</display-name>
+        <servlet-class>
+            com.bagnet.nettracer.ws.passengerview.PVTestServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PassengerViewTest</servlet-name>
+    <url-pattern>/passengerviewtest</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  <!-- Action Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- report Servlet Mapping -->
+  <servlet-mapping>
+    <servlet-name>reporting servlet</servlet-name>
+    <url-pattern>/reporting</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+	<servlet-name>ImageServlet</servlet-name>
+	<url-pattern>/image</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>showImage</servlet-name>
+    <url-pattern>/showImage</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet-mapping>
+    <servlet-name>ViewLog</servlet-name>
+    <url-pattern>/ViewLog</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet-mapping>
+    <servlet-name>WTTest</servlet-name>
+    <url-pattern>/WTTest</url-pattern>
+  </servlet-mapping>
+ 
+  
+  
+    <!-- currently the W3C havent settled on a media type for WSDL;
+    http://www.w3.org/TR/2003/WD-wsdl12-20030303/#ietf-draft
+    for now we go with the basic 'it's XML' response -->
+  <mime-mapping>
+    <extension>wsdl</extension>
+     <mime-type>text/xml</mime-type>
+  </mime-mapping>
+  
+
+  <mime-mapping>
+    <extension>xsd</extension>
+    <mime-type>text/xml</mime-type>
+  </mime-mapping>
+  
+  
+  <!-- The Welcome File List -->
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- Struts Tag Library Descriptor -->
+  <taglib>
+    <taglib-uri>/tags/struts-bean</taglib-uri>
+    <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-html</taglib-uri>
+    <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-logic</taglib-uri>
+    <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-nested</taglib-uri>
+    <taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-tiles</taglib-uri>
+    <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+  </taglib>
+  
+  
+  <!-- error pages -->
+  <error-page>
+    <error-code>400</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
+  
+  <error-page>
+    <error-code>403</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
+  
+  <error-page>
+    <error-code>404</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
+     
+</web-app>

@@ -1,0 +1,554 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>View Trace Results</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="stylesheet" href="../nettracer_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../nettracer.css'>");}
+//-->
+</script>
+<style>
+<!--
+body { margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; }
+-->
+</style><style type="text/css">
+<!--
+table.whs1 { width:100%; border-spacing:0px; }
+tr.whs2 { background-color:#2551A7; height:27px; }
+td.whs3 { width:10px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+div.whs4 { text-align:left; }
+img_whs5 { border:none; width:40px; height:34px; float:none; border-style:none; }
+td.whs6 { background-color:#2551A7; width:98%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+col.whs7 { width:20px; }
+tr.whs8 { height:47px; }
+td.whs9 { width:20px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+td.whs10 { padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+table.whs11 { width:98%; background-color:#ffff99; border-spacing:0px; }
+col.whs12 { width:3%; }
+tr.whs13 { height:23px; }
+td.whs14 { width:3%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+p.whs15 { text-align:center; }
+img_whs16 { border:none; width:11px; height:11px; border-style:none; }
+td.whs17 { padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+img_whs18 { border:none; margin-left:0px; margin-right:0px; margin-top:0px; width:51px; height:20px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs19 { border:none; width:20px; height:20px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs20 { border:none; width:34px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+table.whs21 { background-color:#ffff99; width:98%; border-spacing:0px; }
+img_whs22 { width:10px; height:10px; float:none; border-style:none; }
+td.whs23 { width:98%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+img_whs24 { border:none; width:110px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs25 { border:none; width:60px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+table.whs26 { x-cell-content-align:top; width:98%; border-spacing:0px; }
+col.whs27 { width:20%; }
+col.whs28 { width:83.442%; }
+tr.whs29 { x-cell-content-align:top; height:22px; }
+td.whs30 { width:20%; padding-right:10px; padding-left:10px; background-color:#ccccff; border-top-color:#9999ff; border-top-style:Double; border-bottom-style:Double; border-bottom-color:#9999ff; border-top-width:3px; border-bottom-width:3px; padding-top:3px; padding-bottom:3px; }
+td.whs31 { width:83.442%; padding-right:10px; padding-left:10px; background-color:#ccccff; border-top-color:#9999ff; border-top-style:Double; border-bottom-style:Double; border-bottom-color:#9999ff; border-top-width:3px; border-bottom-width:3px; padding-top:3px; padding-bottom:3px; }
+tr.whs32 { x-cell-content-align:top; height:43px; }
+td.whs33 { width:20%; padding-right:10px; padding-left:10px; border-bottom-width:2px; border-bottom-color:#ccccff; border-bottom-style:Solid; }
+td.whs34 { width:83.442%; padding-right:10px; padding-left:10px; border-bottom-width:2px; border-bottom-color:#ccccff; border-bottom-style:Solid; }
+td.whs35 { width:20%; padding-right:10px; padding-left:10px; border-bottom-style:Solid; border-bottom-color:#ccccff; border-bottom-width:2px; }
+td.whs36 { width:83.442%; padding-right:10px; padding-left:10px; border-bottom-style:Solid; border-bottom-color:#ccccff; border-bottom-width:2px; }
+img_whs37 { border:none; width:7px; height:9px; float:none; border-style:none; }
+div.whs38 { width:100%; }
+col.whs39 { width:922px; }
+tr.whs40 { height:10px; }
+td.whs41 { width:922px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "td.whs14 {background-color:white; }";
+  strNSS += "td.whs17 {background-color:white; }";
+  strNSS += "img_whs18 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs19 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs20 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "td.whs23 {background-color:white; }";
+  strNSS += "img_whs24 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs25 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Task Manager\nView Trace Results");
+addAvenueInfo("Task Manager","task_manager/view_incoming_requests.htm","task_manager/view_reports.htm");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../nettracerhelp.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+//-->
+</script><script type="text/javascript" language="JavaScript1.2" src="../ehlpdhtm.js" x-save-method="compute-relative" name="EHELP_DHTM"></script>
+<script type="text/javascript"
+		language=JavaScript1.2>
+<!-- 
+if( typeof( kadovInitEffects ) != 'function' ) kadovInitEffects = new Function();if( typeof( kadovInitTrigger ) != 'function' ) kadovInitTrigger = new Function();if( typeof( kadovFilePopupInit ) != 'function' ) kadovFilePopupInit = new Function();if( typeof( kadovTextPopupInit ) != 'function' ) kadovTextPopupInit = new Function();
+ //-->
+</script>
+
+
+<table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+
+<tr bgcolor="#2551A7" class="whs2">
+<td width="10px" class="whs3">
+<div align="left" class="whs4">
+<a name=Top></a><img src="../logos/topmenu-search.gif" x-maintain-ratio="TRUE" width="40px" height="34px" border="0" class="img_whs5"> 
+</div></td>
+<td bgcolor="#2551A7" width="98%" class="whs6">
+<h2>View Trace Results</td></tr>
+</table>
+
+<p>&nbsp;</p>
+
+<table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+<col class="whs7">
+<col>
+
+<tr class="whs8">
+<td width="20px" class="whs9">&nbsp;</td>
+<td class="whs10">
+<p>The View Trace Results screen displays a list of all Net-Tracer system 
+ matches for On-hand bags matching a Lost/Delayed Baggage Report that is 
+ under your station’s control.</p>
+<p>&nbsp;</p>
+<p>Passive tracing has 2 categories in Task Manager for match message delivery. 
+ Messages will be color coded within each category based on the percentage 
+ of the match:</p>
+<ul>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets><span class=Bold>Category 
+ 1</span> matches on primary items (claim check, frequent flyer ID, email, 
+ or record locator) and are 85% or higher.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets><span class=Bold>Category 
+ 2</span> includes matches between 20% - 85%. However if none of the primary 
+ items match, then the minimum percentage will be 60%.</p></li>
+</ul>
+<p>Net-Tracer will automatically stop tracing on a specified Claim Check 
+ and corresponding On-hand ID in a Lost/Delayed Report when a match has 
+ been accepted via Match Details. The Lost/Delayed Report will be updated 
+ with the matching On-hand Report number and a hyperlink to the file.</p>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" bgcolor="#FFFF99" width="98%" class="whs11">
+<col class="whs12">
+<col>
+
+<tr class="whs13">
+<td colspan="1" rowspan="1" width="3%" class="whs14">
+<p align="center" class="whs15"><img src="../image2.gif" width="11px" height="11px" border="0" class="img_whs16"></td>
+<td colspan="1" rowspan="1" class="whs17">
+<p class=Note>Tip</td></tr>
+
+<tr class="whs13">
+<td colspan="1" rowspan="1" width="3%" class="whs14">
+<p>&nbsp;</td>
+<td colspan="1" rowspan="1" class="whs17">
+<p class=NoteText>The number of rows per page option appears at the bottom 
+ of the screen. The number of match messages to view per page can be adjusted 
+ by entering the number of rows (1-99) desired per page and clicking the 
+ <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_update.png' x-maintain-ratio='TRUE' width='51px' height='20px' border='0' class='img_whs18'>");}
+else
+{   document.write("<img src='../screens_caps/button_update.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='51px' height='20px' border='0' class='img_whs18'>");}
+//--></script><noscript><img src='../screens_caps/button_update.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='51px' height='20px' border='0' class='img_whs18'></noscript> button. </td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name="Sort trace results"></a>To sort or filter matches 
+ for Lost/Delayed Baggage reports by match status:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="../how_do_i/log_in.htm">Log 
+ in</a> to the Net-Tracer application.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Select <span class=Bold>View 
+ Trace Results</span> from the Task Manager menu.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Select the <span class=Bold>View Trace Results</span> link on the <a href="javascript:void(0);" id="a1" onMouseOver="if (parseInt(navigator.appVersion) >= 4 && typeof(BSPSPopupOnMouseOver) == 'function') BSPSPopupOnMouseOver(event);" class="BSSCPopup" onclick="BSSCPopup('screen_pop-ups/task_manager_home.htm');return false;"><span class=Olive>Task Manager Home screen</span></a><script 
+ type="text/javascript"
+	language=JavaScript1.2><!--
+kadovFilePopupInit('a1');
+//--></script>.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Select the sort criteria 
+ by clicking the check box (<script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_checkbox.png' x-maintain-ratio='TRUE' width='20px' height='20px' border='0' class='img_whs19'>");}
+else
+{   document.write("<img src='../screens_caps/button_checkbox.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='20px' height='20px' border='0' class='img_whs19'>");}
+//--></script><noscript><img src='../screens_caps/button_checkbox.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='20px' height='20px' border='0' class='img_whs19'></noscript>) in front of each desired option.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_filter.png' x-maintain-ratio='TRUE' width='34px' height='19px' border='0' class='img_whs20'>");}
+else
+{   document.write("<img src='../screens_caps/button_filter.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='34px' height='19px' border='0' class='img_whs20'>");}
+//--></script><noscript><img src='../screens_caps/button_filter.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='34px' height='19px' border='0' class='img_whs20'></noscript> to 
+ sort the list based on the new Criteria.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs21">
+<col class="whs12">
+<col>
+
+<tr class="whs13">
+<td width="3%" class="whs14">
+<p align="center" class="whs15"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs22"></td>
+<td width="98%" class="whs23">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs14">
+<p>&nbsp;</td>
+<td class="whs17">
+<p class=NoteText>The available match status options are Open, Matched, 
+ Rejected and Closed.</td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" bgcolor="#FFFF99" width="98%" class="whs11">
+<col class="whs12">
+<col>
+
+<tr class="whs13">
+<td colspan="1" rowspan="1" width="3%" class="whs14">
+<p align="center" class="whs15"><img src="../image2.gif" width="11px" height="11px" border="0" class="img_whs16"></td>
+<td colspan="1" rowspan="1" class="whs17">
+<p class=Note>Tip</td></tr>
+
+<tr class="whs13">
+<td colspan="1" rowspan="1" width="3%" class="whs14">
+<p>&nbsp;</td>
+<td colspan="1" rowspan="1" class="whs17">
+<p class=NoteText>You can use the <span class=Bold>%</span> character for 
+ wildcard searches. Examples for using wildcards to search by Report Number 
+ are:</p>
+<p class=NoteText
+	style="margin-left: 0px;"><font
+face="Wingdings">&#167;</font> &nbsp;A<span 
+ class=Red>%</span> to retrieve reports with city codes beginning with 
+ the letter A</p>
+<p class=NoteText
+	style="margin-left: 0px;"><font
+face="Wingdings">&#167;</font> &nbsp;<span 
+ class=Red>%</span>2<span class=Red>%</span> 
+ to retrieve reports with the number 2 anywhere in the report number</p>
+<p class=NoteText
+	style="margin-left: 0px;"><font
+face="Wingdings">&#167;</font> &nbsp;<span 
+ class=Red>%</span>2 to retrieve reports with 
+ report numbers ending with the number 2</td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name="View trace details"></a>To view any of the details 
+ for a trace result listing:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered>
+	<p class=Numbered><a href="#Sort trace results">Sort</a> the Trace 
+ Results list by the Open status.</p>
+	
+	<p class=Numbered>&nbsp;</p>
+	</li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Locate the desired result 
+ in the Trace Results list.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the link shown 
+ in the On-hand Bag column to display the associated On-hand bag report.<span 
+ class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click the link shown in the Report Number column to display the associated 
+ Lost/Delayed report.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click the <span class=Bold>Details</span> link shown in the Match column 
+ to display the specifics if the request is due to a match.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click the <span class=Bold>Details</span> link shown in the Request 
+ column to display the details of the request for the On-hand bag.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs21">
+<col class="whs12">
+<col>
+
+<tr class="whs13">
+<td width="3%" class="whs14">
+<p align="center" class="whs15"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs22"></td>
+<td width="98%" class="whs23">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs14">
+<p>&nbsp;</td>
+<td class="whs17">
+<p class=NoteText>The percentage column will show the probability percentage 
+ of the On-hand Report match to the Lost/Delayed Baggage Report based on 
+ Net-Tracer matching parameters.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name=Confirm_match></a>To confirm a match based on a trace 
+ result:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered>
+	<p class=Numbered><a href="#Sort trace results">Sort</a> the Trace 
+ Results list by the Open status.</p>
+	
+	<p class=Numbered>&nbsp;</p>
+	</li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Locate the desired result 
+ in the Trace Results list.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <span class=Bold>Details</span> 
+ link shown in the Details column to display the View Trace Result Details 
+ screen.<span class=Bold><br>
+	&nbsp;</span></p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_confirm_match.png' x-maintain-ratio='TRUE' width='110px' height='19px' border='0' class='img_whs24'>");}
+else
+{   document.write("<img src='../screens_caps/button_confirm_match.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='110px' height='19px' border='0' class='img_whs24'>");}
+//--></script><noscript><img src='../screens_caps/button_confirm_match.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='110px' height='19px' border='0' class='img_whs24'></noscript> to 
+ display the match options.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Choose a claim check 
+ for the bag match or a bag for the claim check match.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_confirm_match.png' x-maintain-ratio='TRUE' width='110px' height='19px' border='0' class='img_whs24'>");}
+else
+{   document.write("<img src='../screens_caps/button_confirm_match.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='110px' height='19px' border='0' class='img_whs24'>");}
+//--></script><noscript><img src='../screens_caps/button_confirm_match.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='110px' height='19px' border='0' class='img_whs24'></noscript> again 
+ to verify and complete the match process.<br>&nbsp;</p></li>
+</ol>
+<p class=Note><a name="Create transfer request"></a>To create a request 
+ for an On-hand bag:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered>
+	<p class=Numbered><a href="#Sort trace results">Sort</a> the Trace 
+ Results list by the Open status.</p>
+	
+	<p class=Numbered>&nbsp;</p>
+	</li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Locate the desired result 
+ in the Trace Results list.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <span class=Bold>Initiate 
+ Request On-hand </span>link shown in the Action column to create a transfer 
+ request for an On-hand bag.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>When the Request On-hand 
+ Baggage screen displays, enter a reason for the request.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_request.png' x-maintain-ratio='TRUE' width='60px' height='19px' border='0' class='img_whs25'>");}
+else
+{   document.write("<img src='../screens_caps/button_request.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='60px' height='19px' border='0' class='img_whs25'>");}
+//--></script><noscript><img src='../screens_caps/button_request.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='60px' height='19px' border='0' class='img_whs25'></noscript> to 
+ submit the transfer request.<br>&nbsp;</p></li>
+</ol>
+<p class=Note><a name="Reject a match"></a>To reject a match that is invalid:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered>
+	<p class=Numbered><a href="#Sort trace results">Sort</a> the Trace 
+ Results list by the Open status.</p>
+	
+	<p class=Numbered>&nbsp;</p>
+	</li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Locate the desired result 
+ in the Trace Results list.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Review the details of 
+ the match.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <span class=Bold>Reject 
+ </span>link shown in the Action column to reject the trace result.<span 
+ class=Bold><br>
+	&nbsp;</span></p></li>
+</ol>
+<p class=Note><a name="Undo a rejected match"></a>To undo a rejected match:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered>
+	<p class=Numbered><a href="#Sort trace results">Sort</a> the Trace 
+ Results list by the Rejected status.</p>
+	
+	<p class=Numbered>&nbsp;</p>
+	</li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Locate the desired result 
+ in the Trace Results list.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <span class=Bold>Undo</span> 
+ <span class=Bold>Reject </span>link shown in the Action column to reopen 
+ the match status.<span class=Bold><br>
+	&nbsp;</span></p></li>
+</ol>
+<h1><a name="Trace filter fields"></a>Trace Results Filter Fields</h1>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs21">
+<col class="whs12">
+<col>
+
+<tr class="whs13">
+<td width="3%" class="whs14">
+<p align="center" class="whs15"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs22"></td>
+<td width="98%" class="whs23">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs14">
+<p>&nbsp;</td>
+<td class="whs17">
+<p class=NoteText>An asterisk (<span class=Red>*</span>) indicates the 
+ field is a required field.</td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" bgcolor="#FFFF99" width="98%" class="whs11">
+<col class="whs12">
+<col>
+
+<tr class="whs13">
+<td colspan="1" rowspan="1" width="3%" class="whs14">
+<p align="center" class="whs15"><img src="../image2.gif" width="11px" height="11px" border="0" class="img_whs16"></td>
+<td colspan="1" rowspan="1" class="whs17">
+<p class=Note>Tip</td></tr>
+
+<tr class="whs13">
+<td colspan="1" rowspan="1" width="3%" class="whs14">
+<p>&nbsp;</td>
+<td colspan="1" rowspan="1" class="whs17">
+<p class=NoteText><span class=Bold>Text box fields</span> can be edited 
+ by typing over the existing data with new data. <span class=Bold>Dropdown 
+ list fields</span> can be changed by moving your cursor over the new option 
+ to highlight it and clicking to enter the new data in the field. </td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" width="98%" class="whs26">
+<col class="whs27">
+<col class="whs28">
+
+<tr valign="top" class="whs29">
+<td colspan="1" rowspan="1" bgcolor="#CCCCFF" width="20%" class="whs30">
+<p class=TableHeader>Field Name</td>
+<td colspan="1" rowspan="1" bgcolor="#CCCCFF" width="83.442%" class="whs31">
+<p class=TableHeader>Field Description</td></tr>
+
+<tr valign="top" class="whs32">
+<td colspan="1" rowspan="1" width="20%" class="whs33">
+<p class=FieldNames>Report Number</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs34">
+<p class=TableText>Enter a valid Net-Tracer report number. &nbsp;If 
+ the task is not associated with a specific report the field should be 
+ left blank.</td></tr>
+
+<tr valign="top" class="whs32">
+<td colspan="1" rowspan="1" width="20%" class="whs35">
+<p class=FieldNames>On-hand Report Number</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs36">
+<p class=TableText>You have the option to search for requests for On-hand 
+ bags by the On-hand Report Number. &nbsp;Net-Tracer 
+ will search all On-hand Reports for matching report numbers. &nbsp;Add 
+ additional search criteria or click on the Search button to search by 
+ On-hand Report Number only.</td></tr>
+
+<tr valign="top" class="whs32">
+<td colspan="1" rowspan="1" width="20%" class="whs33">
+<p class=FieldNames>Match Status</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs34">
+<p class=TableText>Open, Confirmed, Rejected and/or Closed check boxes.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p><img src="../logos/arrow_px_up.gif" x-maintain-ratio="TRUE" width="7px" height="9px" border="0" class="img_whs37"> <a href="#Top">Top</a></td></tr>
+</table>
+
+<p>&nbsp;</p>
+
+<div placeholder id="footer" class="whs38"><table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+  <col class="whs7">
+  <col class="whs39">
+  <tr class="whs40">
+  <td width="20px" class="whs9">&nbsp;</td>
+  <td width="922px" class="whs41">
+  <p class=Copyright>Copyright ©2005 Owens Technologies Incorporated<br>All rights reserved.</td></tr>
+ </table>
+ <p>&nbsp;</p>
+</div>
+<script type="text/javascript" language="javascript1.2">
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+//-->
+</script>
+</body>
+</html>

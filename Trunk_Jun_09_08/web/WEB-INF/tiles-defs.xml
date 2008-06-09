@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+       
+<!-- Definitions for Tiles  -->
+<!-- 
+  This file contains definitions common to all struts module.
+  In particular, it contains the main layout and the common menus.
+  There is also the main page as a portal.
+-->
+
+<tiles-definitions>
+
+  <!-- =======================================================  -->
+  <!-- Master definition  									-->
+  <!-- =======================================================  -->
+
+  <!-- Doc index page description  -->
+	<definition name="homepage" path="/deployment/main/layouts/main_layout.jsp">
+        <put name="center"   value="/pages/login/center.jsp"/>
+    </definition>
+    
+    <definition name="pass_reset" path="/deployment/main/layouts/main_layout.jsp">
+        <put name="center"   value="/pages/login/resetpassword.jsp"/>
+    </definition>
+    
+    <definition name="user_menu" extends="homepage">
+        <put name="center"   value="/pages/taskmanager/center.jsp"/>
+    </definition>
+
+    <definition name="error_page" extends="user_menu">
+        <put name="center"   value="/pages/others/error.jsp"/>
+    </definition>
+    
+    <definition name="insert_success" extends="user_menu">
+        <put name="center"   value="/pages/others/insertsuccess.jsp"/>
+    </definition>
+    
+    <definition name="search_incident" extends="user_menu">
+        <put name="center"   value="/pages/others/searchincident.jsp"/>
+    </definition>
+
+    <definition name="custom_query" extends="user_menu">
+        <put name="center"   value="/pages/others/customquery.jsp"/>
+    </definition>
+        
+    <definition name="search_onhand" extends="user_menu">
+        <put name="center"   value="/pages/onhand/searchonhand.jsp"/>
+    </definition>
+ 
+    <definition name="active_tracing" extends="user_menu">
+        <put name="center"   value="/pages/onhand/activetracing.jsp"/>
+    </definition>
+
+    <definition name="lost_found" extends="user_menu">
+        <put name="center"   value="/pages/lostfound/center.jsp"/>
+    </definition>
+         
+    <definition name="search_lostfound" extends="user_menu">
+        <put name="center"   value="/pages/lostfound/searchlostfound.jsp"/>
+    </definition>
+    
+    <definition name="lost_found_success" extends="user_menu">
+        <put name="center"   value="/pages/lostfound/lostfound_success.jsp"/>
+    </definition>
+    
+    <definition name="lostdelay" extends="user_menu">
+        <put name="center"   value="/pages/lostdelay/center.jsp"/>
+    </definition>
+
+    <definition name="ld_close" extends="user_menu">
+        <put name="center"   value="/pages/lostdelay/ldclose.jsp"/>
+    </definition>
+    
+    <definition name="close_onhandsuccess" extends="user_menu">
+        <put name="center"   value="/pages/onhand/close_on_hand_success.jsp"/>
+    </definition>
+
+    <definition name="missing_articles" extends="user_menu">
+        <put name="center"   value="/pages/missingarticles/center.jsp"/>
+    </definition>
+
+    <definition name="ma_close" extends="user_menu">
+        <put name="center"   value="/pages/missingarticles/maclose.jsp"/>
+    </definition>
+    
+    <definition name="damagedbag" extends="user_menu">
+        <put name="center"   value="/pages/damagedbag/center.jsp"/>
+    </definition>
+
+    <definition name="damaged_close" extends="user_menu">
+        <put name="center"   value="/pages/damagedbag/damagedclose.jsp"/>
+    </definition>
+        
+    <definition name="onhandbag" extends="user_menu">
+        <put name="center"   value="/pages/onhand/ohd_center.jsp"/>
+    </definition>
+    
+   	<definition name="ma_historical" extends="user_menu">
+        <put name="center"   value="/pages/lostdelay/ma_historicalview.jsp"/>
+    </definition>
+
+   	<definition name="ld_historical" extends="user_menu">
+        <put name="center"   value="/pages/lostdelay/ld_historicalview.jsp"/>
+    </definition>
+
+   	<definition name="damaged_historical" extends="user_menu">
+        <put name="center"   value="/pages/lostdelay/damaged_historicalview.jsp"/>
+    </definition>
+
+   	<definition name="ohd_historical" extends="user_menu">
+        <put name="center"   value="/pages/onhand/historicalview.jsp"/>
+    </definition>
+
+   	<definition name="found_historical" extends="user_menu">
+        <put name="center"   value="/pages/lostfound/historicalview_found.jsp"/>
+    </definition>
+
+	<definition name="lost_historical" extends="user_menu">
+        <put name="center"   value="/pages/lostfound/historicalview_lost.jsp"/>
+    </definition>
+
+    <definition name="viewonhandbag" extends="user_menu">
+        <put name="center"   value="/pages/onhand/view_ohd_center.jsp"/>
+    </definition>
+    
+ 	<definition name="ohd_mass_main" extends="user_menu">
+        <put name="center"   value="/pages/onhand/mass_ohd_center.jsp"/>
+    </definition>
+    
+    <definition name="ohd_quick_main" extends="user_menu">
+        <put name="center"   value="/pages/onhand/quick_ohd_center.jsp"/>
+    </definition>
+    
+    <definition name="receipt_params" path="/pages/reports/receiptparams.jsp">
+        <put name="center"   value="/pages/reports/receiptparams.jsp"/>
+    </definition>
+    
+    <definition name="insert_onhand_success" extends="user_menu">
+        <put name="center"   value="/pages/onhand/insert_on_hand_success.jsp"/>
+    </definition>
+
+    <definition name="mass_onhand_success" extends="user_menu">
+        <put name="center"   value="/pages/onhand/mass_on_hand_success.jsp"/>
+    </definition>
+
+
+    <definition name="claim_resolution" extends="user_menu">
+        <put name="center"   value="/pages/claims/claim.jsp"/>
+    </definition>
+
+    <definition name="claim_prorate" extends="user_menu">
+        <put name="center"   value="/pages/claims/claim_prorate.jsp"/>
+    </definition>
+
+    <definition name="forward_onhandsuccess" extends="user_menu">
+        <put name="center" value="/pages/onhand/forward_on_hand_success.jsp"/>
+    </definition>
+
+     <definition name="enter_forwardonhand" extends="user_menu">
+        <put name="center" value="/pages/onhand/ohd_forward_center.jsp"/>
+    </definition>        
+    
+     <definition name="enter_forwardmessage" extends="user_menu">
+        <put name="center" value="/pages/onhand/forward_center.jsp"/>
+    </definition>        
+
+     <definition name="error_forwardonhand" extends="user_menu">
+        <put name="center" value="/pages/onhand/forward_error_center.jsp"/>
+    </definition>    
+
+     <definition name="enter_requestonhand" extends="user_menu">
+        <put name="center" value="/pages/onhand/request_center.jsp"/>
+    </definition>        
+
+     <definition name="request_onhandsuccess" extends="user_menu">
+        <put name="center" value="/pages/onhand/request_on_hand_success.jsp"/>
+    </definition>
+    
+    <definition name="report_options" extends="user_menu">
+        <put name="center"   value="/pages/reports/report_options.jsp"/>
+    </definition>
+    
+    <definition name="view_task" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/view_task.jsp"/>
+    </definition>
+   
+   	<definition name="view_matches" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/match_list.jsp"/>
+    </definition>
+
+   	<definition name="view_match" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/match_view.jsp"/>
+    </definition>
+
+   	<definition name="view_requests" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/view_request.jsp"/>
+    </definition>
+    
+    <definition name="view_created_requests" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/view_created_request.jsp"/>
+    </definition>
+    
+    <definition name="deny_roh" extends="user_menu">
+    	<put name="center" value="/pages/onhand/deny_request_center.jsp"/>
+    </definition>
+    
+    <definition name="view_incoming_bags" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_incoming_bags.jsp"/>
+    </definition>
+    
+    <definition name="view_incoming_incidents" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_incoming_incidents.jsp"/>
+    </definition>
+    
+    <definition name="view_worldtraceractionfiles" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_viewaf_main.jsp"/>
+    </definition>
+    
+    <definition name="view_worldtracerafviewraw" path="/pages/worldtracer/worldtracer_viewaf_rawinc.jsp">
+    </definition>
+    
+    <definition name="view_worldtracerfwd" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_fwd_main.jsp"/>
+    </definition>
+    
+    <definition name="view_worldtracerroh" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_roh_main.jsp"/>
+    </definition>
+    
+    <definition name="view_worldtracertty" extends="user_menu">
+        <put name="center" value="/pages/worldtracer/worldtracer_tty_main.jsp"/>
+    </definition>
+    
+    <definition name="forward_wt_bag_success" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/forward_wt_bag_success.jsp"/>
+    </definition>
+    <definition name="send_wt_tty_success" extends="user_menu">
+        <put name="center" value="/pages/worldtracer/send_wt_tty_success.jsp"/>
+    </definition>
+    <definition name="claims_list" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/claims.jsp"/>
+    </definition>
+    
+    <definition name="view_ohdlzed" extends="user_menu">
+    	<put name="center" value="/pages/onhand/view_ohd_lzed.jsp"/>
+    </definition>
+    
+     <definition name="view_components" extends="user_menu">
+    	<put name="center" value="/pages/admin/component_group.jsp"/>
+    </definition>
+    
+    <definition name="view_companies" extends="user_menu">
+    	<put name="center" value="/pages/admin/companies.jsp"/>
+    </definition>
+    
+ 	<definition name="edit_company" extends="user_menu">
+    	<put name="center" value="/pages/admin/company_edit.jsp"/>
+    </definition>
+        
+    <definition name="view_station" extends="user_menu">
+    	<put name="center" value="/pages/admin/station.jsp"/>
+    </definition>
+
+ 	<definition name="edit_station" extends="user_menu">
+    	<put name="center" value="/pages/admin/station_edit.jsp"/>
+    </definition>
+    
+    <definition name="view_deliverycompany" extends="user_menu">
+    	<put name="center" value="/pages/admin/deliverycompany.jsp"/>
+    </definition>
+
+ 	<definition name="edit_deliverycompany" extends="user_menu">
+    	<put name="center" value="/pages/admin/deliverycompany_edit.jsp"/>
+    </definition>
+
+ 	<definition name="edit_servicelevel" extends="user_menu">
+    	<put name="center" value="/pages/admin/servicelevel_edit.jsp"/>
+    </definition>
+ 	
+ 	<definition name="edit_component" extends="user_menu">
+    	<put name="center" value="/pages/admin/component_edit.jsp"/>
+    </definition>
+
+ 	<definition name="edit_shift" extends="user_menu">
+    	<put name="center" value="/pages/admin/shift_edit.jsp"/>
+    </definition>
+
+ 	<definition name="edit_airport" extends="user_menu">
+    	<put name="center" value="/pages/admin/airport_edit.jsp"/>
+    </definition>
+
+ 	<definition name="edit_agent" extends="user_menu">
+    	<put name="center" value="/pages/admin/agent_edit.jsp"/>
+    </definition>
+
+ 	<definition name="edit_code" extends="user_menu">
+    	<put name="center" value="/pages/admin/code_edit.jsp"/>
+    </definition>
+		
+	<definition name="view_codes" extends="user_menu">
+    	<put name="center" value="/pages/admin/codes.jsp"/>
+    </definition>
+	
+ 	<definition name="edit_self" extends="user_menu">
+    	<put name="center" value="/pages/admin/self_edit.jsp"/>
+    </definition>
+    
+    <definition name="selfupdate_success" extends="user_menu">
+    	<put name="center" value="/pages/admin/self_edit_success.jsp"/>
+    </definition>
+    
+    <definition name="view_shift" extends="user_menu">
+    	<put name="center" value="/pages/admin/shift.jsp"/>
+    </definition>    
+
+   	<definition name="view_airport" extends="user_menu">
+    	<put name="center" value="/pages/admin/airports.jsp"/>
+    </definition>    
+    
+    <definition name="view_system_component" extends="user_menu">
+    	<put name="center" value="/pages/admin/component.jsp"/>
+    </definition>
+    
+    <definition name="view_agents" extends="user_menu">
+    	<put name="center" value="/pages/admin/agents.jsp"/>
+    </definition>
+    
+    <definition name="agent_success" extends="user_menu">
+    	<put name="center" value="/pages/admin/agent_success.jsp"/>
+    </definition>
+    
+     <definition name="view_tasks" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/tasks.jsp"/>
+    </definition>
+    
+    <definition name="forward_error" extends="user_menu">
+    	<put name="center" value="/pages/onhand/forward_error.jsp"/>
+    </definition>
+
+    <definition name="compose_message" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/compose.jsp"/>
+    </definition>
+        
+    <definition name="view_messages" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/messages.jsp"/>
+    </definition>
+    
+    <definition name="view_message" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_message.jsp"/>
+    </definition>
+
+     <definition name="view_rqst_details" extends="user_menu">
+    	<put name="center" value="/pages/onhand/view_request_details.jsp"/>
+    </definition>
+
+    <definition name="view_fwd_details" extends="user_menu">
+    	<put name="center" value="/pages/onhand/forward_details.jsp"/>
+    </definition>
+    
+  	<definition name="delivery_list" extends="user_menu">
+    	<put name="center" value="/pages/onhand/deliveries.jsp"/>
+    </definition>
+
+  	<definition name="edit_agent_group" extends="user_menu">
+    	<put name="center" value="/pages/admin/agent_group.jsp"/>
+    </definition>
+
+    <definition name="edit_agent_station" extends="user_menu">
+    	<put name="center" value="/pages/admin/agent_station.jsp"/>
+    </definition>
+            
+    
+    <definition name="viewtemp_ohd" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/viewtemp_ohd.jsp"/>
+    </definition> 
+    
+    <definition name="viewtemp_reports" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/viewtemp_reports.jsp"/>
+    </definition>             
+
+    <definition name="viewmass_ohd" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/viewmass_ohd.jsp"/>
+    </definition>    
+
+    <definition name="bdo_page" extends="user_menu">
+        <put name="center"   value="/pages/bdo/bdo_page.jsp"/>
+    </definition>
+
+    <definition name="search_bdo" extends="user_menu">
+        <put name="center"   value="/pages/bdo/search_bdo_page.jsp"/>
+    </definition>
+        
+    <definition name="no_permission" extends="user_menu">
+        <put name="center"   value="/pages/customerrpages/error_noperm.jsp"/>
+    </definition>      
+
+    <definition name="view_loggedagents" extends="homepage">
+    	<put name="center" value="/pages/admin/useractivity.jsp"/>
+    </definition>  
+
+    <definition name="audit_OnHand" extends="homepage">
+    	<put name="center" value="/pages/audit/ohd/audit_ohd.jsp"/>
+    </definition>  
+
+    <definition name="audit_OnHandDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/ohd/audit_ohd_detail.jsp"/>
+    </definition>  
+    
+      <definition name="audit_OnHandCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/ohd/audit_ohd_compare.jsp"/>
+    </definition>  
+    
+    <definition name="audit_LostFound" extends="homepage">
+    	<put name="center" value="/pages/audit/lostfound/audit_lostfound.jsp"/>
+    </definition>  
+
+    <definition name="audit_LostFoundDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/lostfound/audit_lostfound_detail.jsp"/>
+    </definition>  
+    
+      <definition name="audit_LostFoundCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/lostfound/audit_lostfound_compare.jsp"/>
+    </definition>  
+    
+    <definition name="audit_Agent" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/agent/audit_agent.jsp"/>
+    </definition>  
+
+    <definition name="audit_AgentDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/agent/audit_agent_detail.jsp"/>
+    </definition>  
+    
+   	<definition name="audit_AgentCompareDetail" extends="homepage">
+   		<put name="center" value="/pages/audit/admin/agent/audit_agent_compare.jsp"/>
+    </definition>  
+
+
+    <definition name="audit_Group" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/groups/audit_groups.jsp"/>
+    </definition>  
+
+    <definition name="audit_GroupDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/groups/audit_groups_detail.jsp"/>
+    </definition>  
+    
+   	<definition name="audit_GroupCompareDetail" extends="homepage">
+   		<put name="center" value="/pages/audit/admin/groups/audit_groups_compare.jsp"/>
+    </definition>  
+
+    <definition name="audit_Company" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/company/audit_company.jsp"/>
+    </definition>  
+
+    <definition name="audit_CompanyDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/company/audit_company_detail.jsp"/>
+    </definition>  
+    
+   	<definition name="audit_CompanyCompareDetail" extends="homepage">
+   		<put name="center" value="/pages/audit/admin/company/audit_company_compare.jsp"/>
+    </definition>  
+
+    <definition name="audit_Losscode" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/losscodes/audit_losscodes.jsp"/>
+    </definition>  
+
+    <definition name="audit_LosscodeDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/losscodes/audit_losscodes_detail.jsp"/>
+    </definition>  
+    
+   	<definition name="audit_LosscodeCompareDetail" extends="homepage">
+   		<put name="center" value="/pages/audit/admin/losscodes/audit_losscodes_compare.jsp"/>
+    </definition>  
+
+ 	<definition name="audit_Workshift" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/workshift/audit_workshift.jsp"/>
+    </definition>  
+
+    <definition name="audit_WorkshiftDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/workshift/audit_workshift_detail.jsp"/>
+    </definition>  
+    
+   	<definition name="audit_WorkshiftCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/workshift/audit_workshift_compare.jsp"/>
+    </definition>  
+
+    <definition name="audit_Station" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/station/audit_station.jsp"/>
+    </definition>  
+
+    <definition name="audit_StationDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/station/audit_station_detail.jsp"/>
+    </definition>  
+    
+      <definition name="audit_StationCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/station/audit_station_compare.jsp"/>
+    </definition>  
+
+  	<definition name="audit_Airport" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/airport/audit_airport.jsp"/>
+    </definition>  
+
+    <definition name="audit_AirportDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/airport/audit_airport_detail.jsp"/>
+    </definition>  
+    
+      <definition name="audit_AirportCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/admin/airport/audit_airport_compare.jsp"/>
+    </definition> 
+
+    <definition name="audit_MBR" extends="homepage">
+    	<put name="center" value="/pages/audit/mbr/audit_mbr.jsp"/>
+    </definition>  
+    
+    <definition name="audit_Options" extends="homepage">
+    	<put name="center" value="/pages/audit/audit_options.jsp"/>
+    </definition>  
+
+    <definition name="audit_MBRDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/mbr/audit_mbr_detail.jsp"/>
+    </definition>  
+    
+      <definition name="audit_MBRCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/mbr/audit_mbr_compare.jsp"/>
+    </definition>  
+
+    <definition name="audit_Claims" extends="homepage">
+    	<put name="center" value="/pages/audit/claims/audit_claims.jsp"/>
+    </definition>  
+
+    <definition name="audit_ClaimsDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/claims/audit_claims_detail.jsp"/>
+    </definition>  
+    
+    <definition name="audit_ClaimsCompareDetail" extends="homepage">
+    	<put name="center" value="/pages/audit/claims/audit_claims_compare.jsp"/>
+    </definition> 
+    
+    <definition name="interim_expenserequest" extends="homepage">
+    	<put name="center" value="/pages/interimexpense/interim_expense_request.jsp"/>
+    </definition> 
+    
+    <definition name="created_interimexpenserequest" extends="homepage">
+    	<put name="center" value="/pages/interimexpense/created_interim_expense_request.jsp"/>
+    </definition> 
+  
+     <definition name="expense_payoutapprovedsuccess" extends="homepage">
+    	<put name="center" value="/pages/interimexpense/approve_expense_payout_success.jsp"/>
+    </definition> 
+    
+     <definition name="expense_payoutdeniedsuccess" extends="homepage">
+    	<put name="center" value="/pages/interimexpense/deny_expense_payout_success.jsp"/>
+    </definition> 
+    
+     <definition name="billing_Report" extends="homepage">
+    	<put name="center" value="/pages/billing/billing_report.jsp"/>
+    </definition>
+    
+    <definition name="ajax_agentassigned" path="/pages/ajax_divs/agentassigned.jsp">
+    </definition>
+    <definition name="ajax_faultstation" path="/pages/ajax_divs/faultstation.jsp">
+    </definition>
+    <definition name="ajax_servicelevel" path="/pages/ajax_divs/servicelevel.jsp">
+	</definition>
+	<definition name="ajax_statuses" path="/pages/ajax_divs/statuses.jsp">
+	</definition>
+	
+	<definition name="pass_view_only" path="/pages/passengerview/passengerview.jsp">
+    </definition> 
+	
+ </tiles-definitions>

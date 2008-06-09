@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Task Manager Home" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <key name="view" >
+    <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  </key>
+</key>
+<key name="Task Manager Home Page" >
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+</key>
+<key name="Task Manager list" >
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+</key>
+<key name="Task Manager menu" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <key name="Net-Tracer" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+    <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  </key>
+</key>
+<key name="Task Manager menu on the Net-Tracer" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+</key>
+<key name="Task Manager Summary" >
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+</key>
+<key name="Tasks" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  <topic name="How Do I Manage Other Tasks" url="how_do_i/how_do_i_manage_other_tasks.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <key name="selecting" >
+    <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  </key>
+</key>
+<key name="Tasks list" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+<key name="Temporary" >
+  <topic name="How Do I Manage Reports" url="how_do_i/how_do_i_manage_reports.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+</key>
+<key name="Text" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Time" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+</key>
+<key name="Time Format" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Timeout" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Timezone" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Timezone dropdown list" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Title" >
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <key name="subfolder" >
+    <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+  </key>
+</key>
+<key name="title of the subfolder" >
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+</key>
+<key name="To Be Processed" >
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+</key>
+<key name="Top" >
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <key name="showing" >
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  </key>
+  <key name="view" >
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  </key>
+</key>
+<key name="Top 10" >
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+</key>
+<key name="Topics" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+</key>
+<key name="Trace Results Filter Fields" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+</key>
+<key name="Trace Results list" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <key name="Sort" >
+    <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  </key>
+</key>
+<key name="Tracing" >
+  <topic name="How Do I Manage Trace Results" url="how_do_i/how_do_i_manage_trace_results.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Welcome to NetTracer" url="welcome_to_nettracer.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <key name="Submit" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+</key>
+<key name="Transit" >
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+</key>
+<key name="Transportation" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+</key>
+<key name="Transportation Security Administration" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+</key>
+<key name="TSA" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+</key>
+<key name="TSA Inspection" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+</key>
+<key name="Type" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <key name="Agent’s" >
+    <topic name="Add Agents" url="administration/add_agents.htm" />
+  </key>
+</key>
+<key name="Type the Agent’s" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Unchecked" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Unchecked Lost" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Undo" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+</key>
+<key name="Undo Reject" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+</key>
+<key name="UP" >
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="UP ARROW" >
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="UP ARROW Move" >
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="Use" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Use Windows" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <key name="clear" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+</key>
+<key name="User" >
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="Maintain Agents" url="administration/administration.htm" />
+  <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+  <key name="delete" >
+    <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  </key>
+</key>
+
+</indexdata>

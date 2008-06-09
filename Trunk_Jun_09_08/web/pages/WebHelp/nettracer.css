@@ -1,0 +1,156 @@
+P.Copyright { 
+             font-weight:normal; 
+             font-style:normal; 
+             font-size:6pt; 
+             color:#000000; 
+             font-family:Verdana, sans-serif; 
+             letter-spacing:0.2pt;  }
+LI.kadov-P-CCopyright { 
+                       font-weight:normal; 
+                       font-style:normal; 
+                       font-size:6pt; 
+                       color:#000000; 
+                       font-family:Verdana, sans-serif; 
+                       letter-spacing:0.2pt;  }
+P { 
+   font-family:Verdana, sans-serif; 
+   font-size:8pt; 
+   margin-top:0pt; 
+   margin-bottom:0pt;  }
+LI.kadov-P { 
+            font-family:Verdana, sans-serif; 
+            font-size:8pt;  }
+H1 { 
+    font-family:Arial, sans-serif; 
+    font-size:11pt; 
+    color:#cb0000; 
+    margin-top:0pt; 
+    margin-bottom:5pt;  }
+LI.kadov-H1 { 
+             font-family:Arial, sans-serif; 
+             font-size:11pt; 
+             color:#cb0000;  }
+OL { 
+    font-size:8pt; 
+    font-family:Verdana, sans-serif;  }
+UL { 
+    font-size:8pt; 
+    font-family:Verdana, sans-serif;  }
+A:active { 
+          font-size:8pt; 
+          font-family:Verdana, sans-serif; 
+          color:#cb0000; 
+          x-text-underline:Off; 
+          text-decoration:none;  }
+A:hover { 
+         font-size:8pt; 
+         font-family:Verdana, sans-serif; 
+         color:#cb0000; 
+         font-weight:normal; 
+         font-style:normal; 
+         x-text-underline:Normal; 
+         text-decoration:underline;  }
+A:link { 
+        font-size:8pt; 
+        font-family:Verdana, sans-serif; 
+        color:#cb0000; 
+        x-text-underline:Normal; 
+        text-decoration:underline;  }
+A:visited { 
+           font-size:8pt; 
+           font-family:Verdana, sans-serif; 
+           x-text-underline:Normal; 
+           color:#cb0000; 
+           text-decoration:underline;  }
+SPAN.BoldItalic { 
+                 font-weight:bold; 
+                 font-style:italic;  }
+H2 { 
+    font-family:Arial, sans-serif; 
+    color:#ffffff; 
+    margin-top:0pt; 
+    font-size:11pt; 
+    margin-bottom:1pt;  }
+LI.kadov-H2 { 
+             font-family:Arial, sans-serif; 
+             color:#ffffff; 
+             font-size:11pt;  }
+P.Note { 
+        font-weight:bold; 
+        font-style:normal; 
+        margin-bottom:3pt; 
+        color:#cb0000;  }
+LI.kadov-P-CNote { 
+                  font-weight:bold; 
+                  font-style:normal; 
+                  color:#cb0000;  }
+P.TableHeader { 
+               font-weight:bold; 
+               font-style:normal; 
+               font-family:Arial, sans-serif; 
+               font-variant:normal; 
+               font-size:8pt; 
+               letter-spacing:0.2pt; 
+               margin-top:6pt; 
+               margin-bottom:6pt;  }
+LI.kadov-P-CTableHeader { 
+                         font-weight:bold; 
+                         font-style:normal; 
+                         font-family:Arial, sans-serif; 
+                         font-variant:normal; 
+                         font-size:8pt; 
+                         letter-spacing:0.2pt;  }
+P.Bullets { 
+           list-style:url("logos/arrow_bl.jpg"); 
+           margin-top:0pt; 
+           margin-bottom:3pt; 
+           line-height:Normal;  }
+LI.kadov-P-CBullets { 
+                     list-style:url("logos/arrow_bl.jpg"); 
+                     line-height:Normal;  }
+SPAN.Bold { 
+           font-weight:bold; 
+           font-style:normal;  }
+SPAN.Red { 
+          font-weight:bold; 
+          font-style:normal; 
+          color:#cb0000;  }
+P.TableText { 
+             x-next-type:P; 
+             margin-bottom:6pt; 
+             margin-top:5pt;  }
+LI.kadov-P-CTableText {  }
+P.FieldNames { 
+              font-weight:bold; 
+              font-style:italic; 
+              margin-top:5pt;  }
+LI.kadov-P-CFieldNames { 
+                        font-weight:bold; 
+                        font-style:italic;  }
+P.Numbered { 
+            list-style:decimal; 
+            margin-top:0pt; 
+            margin-left:-5px; 
+            line-height:Normal; 
+            margin-bottom:0pt;  }
+LI.kadov-P-CNumbered { 
+                      list-style:decimal; 
+                      line-height:Normal;  }
+P.NoteText { 
+            margin-bottom:6pt;  }
+LI.kadov-P-CNoteText {  }
+P.Sub-Bullets { 
+               list-style:url("logos/bullet1.gif"); 
+               margin-bottom:2pt; 
+               margin-left:0pt;  }
+LI.kadov-P-CSub-Bullets { 
+                         list-style:url("logos/bullet1.gif");  }
+H1.Heading1Blue { 
+                 color:#0000a0; 
+                 margin-bottom:4pt;  }
+LI.kadov-H1-CHeading1Blue { 
+                           color:#0000a0;  }
+SPAN.Olive { 
+            color:#808000; 
+            x-text-underline:Off; 
+            text-decoration:none;  }

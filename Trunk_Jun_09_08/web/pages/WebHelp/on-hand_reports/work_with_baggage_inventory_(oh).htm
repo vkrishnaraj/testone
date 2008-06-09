@@ -1,0 +1,544 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>Work with Baggage Inventory</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="stylesheet" href="../nettracer_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../nettracer.css'>");}
+//-->
+</script>
+<style>
+<!--
+body { margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; }
+-->
+</style><style type="text/css">
+<!--
+table.whs1 { width:100%; border-spacing:0px; }
+tr.whs2 { background-color:#2551A7; height:27px; }
+td.whs3 { width:10px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+div.whs4 { text-align:left; }
+img_whs5 { border:none; width:40px; height:34px; float:none; border-style:none; }
+td.whs6 { background-color:#2551A7; width:98%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+col.whs7 { width:20px; }
+tr.whs8 { height:47px; }
+td.whs9 { width:20px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+td.whs10 { padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+img_whs11 { border:none; width:58px; height:24px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-7px; float:none; border-style:none; }
+img_whs12 { border:none; width:92px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs13 { border:none; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; width:146px; height:19px; float:none; border-style:none; }
+img_whs14 { border:none; width:144px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+table.whs15 { background-color:#ffff99; width:98%; border-spacing:0px; }
+col.whs16 { width:3%; }
+tr.whs17 { height:23px; }
+td.whs18 { width:3%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+p.whs19 { text-align:center; }
+img_whs20 { width:10px; height:10px; float:none; border-style:none; }
+td.whs21 { width:98%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+td.whs22 { padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+img_whs23 { border:none; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; width:31px; height:19px; float:none; border-style:none; }
+img_whs24 { border:none; width:112px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs25 { border:none; width:10px; height:10px; border-style:none; }
+img_whs26 { border:none; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-7px; width:50px; height:24px; float:none; border-style:none; }
+img_whs27 { border:none; width:79px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs28 { border:none; width:62px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs29 { border:none; width:97px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+table.whs30 { width:98%; background-color:#ffff99; border-spacing:0px; }
+img_whs31 { border:none; width:11px; height:11px; border-style:none; }
+tr.whs32 { height:13px; }
+img_whs33 { border:none; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; width:44px; height:19px; float:none; border-style:none; }
+table.whs34 { x-cell-content-align:top; width:98%; border-spacing:0px; }
+col.whs35 { width:20%; }
+col.whs36 { width:83.442%; }
+tr.whs37 { x-cell-content-align:top; height:22px; }
+td.whs38 { width:20%; padding-right:10px; padding-left:10px; background-color:#ccccff; border-top-color:#9999ff; border-top-style:Double; border-bottom-style:Double; border-bottom-color:#9999ff; border-top-width:3px; border-bottom-width:3px; padding-top:3px; padding-bottom:3px; }
+td.whs39 { width:83.442%; padding-right:10px; padding-left:10px; background-color:#ccccff; border-top-color:#9999ff; border-top-style:Double; border-bottom-style:Double; border-bottom-color:#9999ff; border-top-width:3px; border-bottom-width:3px; padding-top:3px; padding-bottom:3px; }
+tr.whs40 { x-cell-content-align:top; height:43px; }
+td.whs41 { width:20%; padding-right:10px; padding-left:10px; border-bottom-style:Solid; border-bottom-color:#ccccff; border-bottom-width:2px; }
+td.whs42 { width:83.442%; padding-right:10px; padding-left:10px; border-bottom-style:Solid; border-bottom-color:#ccccff; border-bottom-width:2px; }
+img_whs43 { border:none; width:7px; height:9px; float:none; border-style:none; }
+div.whs44 { width:100%; }
+col.whs45 { width:922px; }
+tr.whs46 { height:10px; }
+td.whs47 { width:922px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "img_whs11 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs12 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs13 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs14 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "td.whs18 {background-color:white; }";
+  strNSS += "td.whs21 {background-color:white; }";
+  strNSS += "td.whs22 {background-color:white; }";
+  strNSS += "img_whs23 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs24 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs26 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs27 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs28 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs29 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs33 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("On-Hand Reports\nWork with Baggage Inventory");
+addAvenueInfo("On-Hand Reports","on-hand_reports/mass_on-hand_bag.htm","on-hand_reports/work_with_baggage_itineraries_(oh).htm");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../nettracerhelp.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+//-->
+</script><table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+
+<tr bgcolor="#2551A7" class="whs2">
+<td width="10px" class="whs3">
+<div align="left" class="whs4">
+<a name=Top></a><img src="../logos/topmenu-search.gif" x-maintain-ratio="TRUE" width="40px" height="34px" border="0" class="img_whs5"> 
+</div></td>
+<td bgcolor="#2551A7" width="98%" class="whs6">
+<h2>Work with Baggage Inventory</td></tr>
+</table>
+
+<p>&nbsp;</p>
+
+<table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+<col class="whs7">
+<col>
+
+<tr class="whs8">
+<td width="20px" class="whs9">
+<p>&nbsp;</td>
+<td class="whs10">
+<p>The Baggage Inventory section contains descriptive information about 
+ the contents of each bag on-hand.</p>
+<p>&nbsp;</p>
+<p>Fields within an On-hand Bag Report can be modified by displaying the 
+ file and updating or making changes to the existing information. You also 
+ have the option to add or delete some sections in a file. A Delete button 
+ and Add button are displayed at the end of the section when this option 
+ is available. Click in a field to:</p>
+<ul>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets>Add new information 
+ in a field that is currently blank<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets>Change information 
+ by typing over existing data<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets>Delete information 
+ by clearing the data in a field</p></li>
+</ul>
+<p>Click on your browser back button to ignore all changes that have been 
+ made to a report that has not yet been saved. Or you can navigate to another 
+ Net-Tracer screen prior to saving the changes to ignore the updates.</p>
+<p>&nbsp;</p>
+<p class=Note><a name="Add content"></a>To add additional content to an 
+ On-hand Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_on-hand_bag_reports.htm">Create</a> 
+ a new On-hand Bag report or <a href="work_with_on-hand_bag_reports.htm#Locate_On_hand_Bag_Report">locate 
+ and view</a> an existing one.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' width='58px' height='24px' border='0' class='img_whs11'>");}
+else
+{   document.write("<img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='58px' height='24px' border='0' class='img_whs11'>");}
+//--></script><noscript><img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='58px' height='24px' border='0' class='img_whs11'></noscript> button to jump to the Baggage Inventory section of the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_add_content.png' x-maintain-ratio='TRUE' width='92px' height='19px' border='0' class='img_whs12'>");}
+else
+{   document.write("<img src='../screens_caps/button_add_content.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='92px' height='19px' border='0' class='img_whs12'>");}
+//--></script><noscript><img src='../screens_caps/button_add_content.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='92px' height='19px' border='0' class='img_whs12'></noscript> to 
+ add additional content to the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Enter the <a href="#Baggage_Inventory_Fields">optional 
+ and required information</a> in the appropriate fields.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="#Upload Photos">Attach 
+ digital photos</a> to the report, if available.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' width='146px' height='19px' border='0' class='img_whs13'>");}
+else
+{   document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'>");}
+//--></script><noscript><img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'></noscript> to save the report but not begin 
+ tracing the bag.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' width='144px' height='19px' border='0' class='img_whs14'>");}
+else
+{   document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'>");}
+//--></script><noscript><img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'></noscript> to save the report and begin to match the new 
+ record with all open On-hand bags.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs20"></td>
+<td width="98%" class="whs21">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>There is no limit to the content that can be added to 
+ an On-hand Bag report.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name="Edit content"></a>To edit existing content in an 
+ On-hand Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_on-hand_bag_reports.htm#Locate_On_hand_Bag_Report">Locate 
+ and view</a> an existing On-hand Bag report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' width='58px' height='24px' border='0' class='img_whs11'>");}
+else
+{   document.write("<img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='58px' height='24px' border='0' class='img_whs11'>");}
+//--></script><noscript><img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='58px' height='24px' border='0' class='img_whs11'></noscript> button to jump to the Baggage Inventory section of the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Make the desired changes 
+ to the damaged bag's information fields.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' width='31px' height='19px' border='0' class='img_whs23'>");}
+else
+{   document.write("<img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='31px' height='19px' border='0' class='img_whs23'>");}
+//--></script><noscript><img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='31px' height='19px' border='0' class='img_whs23'></noscript><span class=Bold> </span>to accept 
+ the changes.<br>&nbsp;</p></li>
+</ol>
+<p class=Note><a name="Delete content"></a>To delete content from an On-hand 
+ Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_on-hand_bag_reports.htm#Locate_On_hand_Bag_Report">Locate 
+ and view</a> an existing On-hand Bag report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' width='58px' height='24px' border='0' class='img_whs11'>");}
+else
+{   document.write("<img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='58px' height='24px' border='0' class='img_whs11'>");}
+//--></script><noscript><img src='../screens_caps/button_baggage_inventory.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='58px' height='24px' border='0' class='img_whs11'></noscript> button to jump to the Baggage Inventory section of the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_delete_content.png' x-maintain-ratio='TRUE' width='112px' height='19px' border='0' class='img_whs24'>");}
+else
+{   document.write("<img src='../screens_caps/button_delete_content.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='112px' height='19px' border='0' class='img_whs24'>");}
+//--></script><noscript><img src='../screens_caps/button_delete_content.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='112px' height='19px' border='0' class='img_whs24'></noscript> button that corresponds with the content that is to be deleted.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' width='31px' height='19px' border='0' class='img_whs23'>");}
+else
+{   document.write("<img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='31px' height='19px' border='0' class='img_whs23'>");}
+//--></script><noscript><img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='31px' height='19px' border='0' class='img_whs23'></noscript><span class=Bold> </span>to accept 
+ the changes.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../image3.gif" width="10px" height="10px" border="0" class="img_whs25"></td>
+<td width="98%" class="whs21">
+<p class=Note>Important</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>A minimum of one Damage Bag Information field is required 
+ to complete a report.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name="Upload Photos"></a>To upload a digital photo of 
+ a bag to an On-hand Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_on-hand_bag_reports.htm">Create</a> 
+ a new On-hand Bag report or <a href="work_with_on-hand_bag_reports.htm#Locate_On_hand_Bag_Report">locate 
+ and view</a> an existing one.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_photos.png' x-maintain-ratio='TRUE' width='50px' height='24px' border='0' class='img_whs26'>");}
+else
+{   document.write("<img src='../screens_caps/button_photos.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='50px' height='24px' border='0' class='img_whs26'>");}
+//--></script><noscript><img src='../screens_caps/button_photos.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='50px' height='24px' border='0' class='img_whs26'></noscript> button to jump to the Photos section of the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_browse.png' x-maintain-ratio='TRUE' width='79px' height='19px' border='0' class='img_whs27'>");}
+else
+{   document.write("<img src='../screens_caps/button_browse.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='79px' height='19px' border='0' class='img_whs27'>");}
+//--></script><noscript><img src='../screens_caps/button_browse.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='79px' height='19px' border='0' class='img_whs27'></noscript> to 
+ upload a photo.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Choose the file name 
+ of the photo you want to add and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_open.png' x-maintain-ratio='TRUE' width='62px' height='19px' border='0' class='img_whs28'>");}
+else
+{   document.write("<img src='../screens_caps/button_open.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='62px' height='19px' border='0' class='img_whs28'>");}
+//--></script><noscript><img src='../screens_caps/button_open.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='62px' height='19px' border='0' class='img_whs28'></noscript>.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <span class=Bold><script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_add_photos.png' x-maintain-ratio='TRUE' width='97px' height='19px' border='0' class='img_whs29'>");}
+else
+{   document.write("<img src='../screens_caps/button_add_photos.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='97px' height='19px' border='0' class='img_whs29'>");}
+//--></script><noscript><img src='../screens_caps/button_add_photos.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='97px' height='19px' border='0' class='img_whs29'></noscript></span>to upload the digital photo to the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' width='146px' height='19px' border='0' class='img_whs13'>");}
+else
+{   document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'>");}
+//--></script><noscript><img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'></noscript> to save the report but not begin 
+ tracing the bag.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' width='144px' height='19px' border='0' class='img_whs14'>");}
+else
+{   document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'>");}
+//--></script><noscript><img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'></noscript> to save the report and begin to match the new 
+ record with all open On-hand bags.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs20"></td>
+<td width="98%" class="whs21">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>Repeat steps 3 through 5 to add additional photos.</td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" bgcolor="#FFFF99" width="98%" class="whs30">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td colspan="1" rowspan="1" width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../image2.gif" width="11px" height="11px" border="0" class="img_whs31"></td>
+<td colspan="1" rowspan="1" class="whs22">
+<p class=Note>Tip</td></tr>
+
+<tr class="whs32">
+<td colspan="1" rowspan="1" width="3%" class="whs18">
+<p>&nbsp;</td>
+<td colspan="1" rowspan="1" class="whs22">
+<p class=NoteText>Click on the thumbnail of the photo to enlarge the image. 
+ </td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name="Delete Photos"></a>To delete a digital photo from 
+ an On-hand Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_on-hand_bag_reports.htm#Locate_On_hand_Bag_Report">Locate 
+ and view</a> an existing On-hand Bag report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_photos.png' x-maintain-ratio='TRUE' width='50px' height='24px' border='0' class='img_whs26'>");}
+else
+{   document.write("<img src='../screens_caps/button_photos.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='50px' height='24px' border='0' class='img_whs26'>");}
+//--></script><noscript><img src='../screens_caps/button_photos.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='50px' height='24px' border='0' class='img_whs26'></noscript> button to jump to the Photos section of the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <span class=Bold><script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_delete.png' x-maintain-ratio='TRUE' width='44px' height='19px' border='0' class='img_whs33'>");}
+else
+{   document.write("<img src='../screens_caps/button_delete.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='44px' height='19px' border='0' class='img_whs33'>");}
+//--></script><noscript><img src='../screens_caps/button_delete.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='44px' height='19px' border='0' class='img_whs33'></noscript></span>below the desired image to remove the photo from the 
+ report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' width='31px' height='19px' border='0' class='img_whs23'>");}
+else
+{   document.write("<img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='31px' height='19px' border='0' class='img_whs23'>");}
+//--></script><noscript><img src='../screens_caps/button_save.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='31px' height='19px' border='0' class='img_whs23'></noscript><span class=Bold> </span>to accept 
+ the changes.<br>&nbsp;</p></li>
+</ol>
+<h1><a name=Baggage_Inventory_Fields></a>Baggage Inventory Fields</h1>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs20"></td>
+<td width="98%" class="whs21">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>An asterisk (<span class=Red>*</span>) indicates the 
+ field is a required field.</td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" bgcolor="#FFFF99" width="98%" class="whs30">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td colspan="1" rowspan="1" width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../image2.gif" width="11px" height="11px" border="0" class="img_whs31"></td>
+<td colspan="1" rowspan="1" class="whs22">
+<p class=Note>Tip</td></tr>
+
+<tr class="whs17">
+<td colspan="1" rowspan="1" width="3%" class="whs18">
+<p>&nbsp;</td>
+<td colspan="1" rowspan="1" class="whs22">
+<p class=NoteText><span class=Bold>Text box fields</span> can be edited 
+ by typing over the existing data with new data. <span class=Bold>Dropdown 
+ list fields</span> can be changed by moving your cursor over the new option 
+ to highlight it and clicking to enter the new data in the field. </td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" width="98%" class="whs34">
+<col class="whs35">
+<col class="whs36">
+
+<tr valign="top" class="whs37">
+<td colspan="1" rowspan="1" bgcolor="#CCCCFF" width="20%" class="whs38">
+<p class=TableHeader>Field Name</td>
+<td colspan="1" rowspan="1" bgcolor="#CCCCFF" width="83.442%" class="whs39">
+<p class=TableHeader>Field Description</td></tr>
+
+<tr valign="top" class="whs40">
+<td width="20%" class="whs41">
+<p class=FieldNames>Content Category</td>
+<td width="83.442%" class="whs42">
+<p class=TableText>Select a category for the inventory item by pointing 
+ to the category in the drop-down list and clicking on the selected category.</td></tr>
+
+<tr valign="top" class="whs40">
+<td width="20%" class="whs41">
+<p class=FieldNames>Content Description</td>
+<td width="83.442%" class="whs42">
+<p class=TableText>Each baggage inventory Description may be a maximum 
+ of 1500 characters. The characters still available box will count down 
+ from 1500 to 0 as the inventory is entered.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p><img src="../logos/arrow_px_up.gif" x-maintain-ratio="TRUE" width="7px" height="9px" border="0" class="img_whs43"> <a href="#Top">Top</a></td></tr>
+</table>
+
+<p>&nbsp;</p>
+
+<div placeholder id="footer" class="whs44"><table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+  <col class="whs7">
+  <col class="whs45">
+  <tr class="whs46">
+  <td width="20px" class="whs9">&nbsp;</td>
+  <td width="922px" class="whs47">
+  <p class=Copyright>Copyright ©2005 Owens Technologies Incorporated<br>All rights reserved.</td></tr>
+ </table>
+ <p>&nbsp;</p>
+</div>
+<script type="text/javascript" language="javascript1.2">
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+//-->
+</script>
+</body>
+</html>

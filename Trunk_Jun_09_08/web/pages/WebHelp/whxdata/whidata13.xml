@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Enter" >
+  <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <key name="Claim Amount" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+  <key name="Destination Station" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+  <key name="Expedite Tag Number" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+    <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  </key>
+  <key name="External Descriptive Elements" >
+    <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+    <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+    <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+    <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  </key>
+  <key name="Fault Station" >
+    <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+  </key>
+  <key name="passenger’s" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+    <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+    <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+    <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+    <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+    <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+    <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+    <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+    <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  </key>
+  <key name="Reason" >
+    <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+  </key>
+  <key name="Report Number" >
+    <topic name="Inbox" url="task_manager/inbox.htm" />
+  </key>
+</key>
+<key name="Enter a Report Number" >
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+</key>
+<key name="Enter an Expedite Tag Number" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+</key>
+<key name="ENTER Display" >
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="Enter the Claim Amount" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="Enter the Destination Station" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+</key>
+<key name="Enter the Fault Station" >
+  <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+</key>
+<key name="Enter the passenger’s" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+</key>
+<key name="Enter the Reason" >
+  <topic name="Close Reports" url="missing_articles_reports/close_reports_(ma).htm" />
+</key>
+<key name="entering External Descriptive Elements" >
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="except" >
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  <key name="Description" >
+    <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  </key>
+</key>
+<key name="except for the Description" >
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+</key>
+<key name="Expedite" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+</key>
+<key name="Expedite Tag Number" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <key name="Enter" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+    <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  </key>
+</key>
+<key name="Explorer" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Express" >
+  <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+  <topic name="Creating Express On-hand Bag Reports" url="on-hand_reports/creating_express_on-hand_bag_reports.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+</key>
+<key name="Express Damaged Bag" >
+  <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <key name="close" >
+    <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  </key>
+  <key name="creating" >
+    <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  </key>
+  <key name="submit" >
+    <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  </key>
+</key>
+<key name="Express Damaged Bag Reports" >
+  <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  <topic name="Damaged Bag Reports Summary" url="damaged_bag_reports/damaged_bag_reports_summary.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+</key>
+<key name="Express Lost/Delayed Bag" >
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <key name="close" >
+    <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  </key>
+  <key name="creating" >
+    <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  </key>
+</key>
+<key name="Express Lost/Delayed Bag Reports" >
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+</key>
+
+</indexdata>

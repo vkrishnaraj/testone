@@ -1,0 +1,476 @@
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+
+<html>
+
+<head>
+<title>Work with Lost/Delayed Bag Information</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="generator" content="RoboHelp by eHelp Corporation www.ehelp.com">
+<link rel="stylesheet" href="../nettracer_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
+<!--
+if (navigator.appName !="Netscape")
+{   document.write("<link rel='stylesheet' href='../nettracer.css'>");}
+//-->
+</script>
+<style>
+<!--
+body { margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:10px; }
+-->
+</style><style type="text/css">
+<!--
+table.whs1 { width:100%; border-spacing:0px; }
+tr.whs2 { background-color:#2551A7; height:27px; }
+td.whs3 { width:10px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+div.whs4 { text-align:left; }
+img_whs5 { border:none; width:40px; height:34px; float:none; border-style:none; }
+td.whs6 { background-color:#2551A7; width:98%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+col.whs7 { width:20px; }
+tr.whs8 { height:47px; }
+td.whs9 { width:20px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+td.whs10 { padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+img_whs11 { border:none; width:64px; height:24px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-7px; float:none; border-style:none; }
+img_whs12 { border:none; width:58px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs13 { border:none; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; width:146px; height:19px; float:none; border-style:none; }
+img_whs14 { border:none; width:144px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+table.whs15 { background-color:#ffff99; width:98%; border-spacing:0px; }
+col.whs16 { width:3%; }
+tr.whs17 { height:23px; }
+td.whs18 { width:3%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+p.whs19 { text-align:center; }
+img_whs20 { width:10px; height:10px; float:none; border-style:none; }
+td.whs21 { width:98%; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+td.whs22 { padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; background-color:Transparent; }
+img_whs23 { border:none; width:77px; height:19px; margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:-5px; float:none; border-style:none; }
+img_whs24 { border:none; width:10px; height:10px; border-style:none; }
+table.whs25 { width:98%; background-color:#ffff99; border-spacing:0px; }
+img_whs26 { border:none; width:11px; height:11px; border-style:none; }
+table.whs27 { x-cell-content-align:top; width:98%; border-spacing:0px; }
+col.whs28 { width:20%; }
+col.whs29 { width:83.442%; }
+tr.whs30 { x-cell-content-align:top; height:22px; }
+td.whs31 { width:20%; padding-right:10px; padding-left:10px; background-color:#ccccff; border-top-color:#9999ff; border-top-style:Double; border-bottom-style:Double; border-bottom-color:#9999ff; border-top-width:3px; border-bottom-width:3px; padding-top:3px; padding-bottom:3px; }
+td.whs32 { width:83.442%; padding-right:10px; padding-left:10px; background-color:#ccccff; border-top-color:#9999ff; border-top-style:Double; border-bottom-style:Double; border-bottom-color:#9999ff; border-top-width:3px; border-bottom-width:3px; padding-top:3px; padding-bottom:3px; }
+tr.whs33 { x-cell-content-align:top; height:43px; }
+td.whs34 { width:20%; padding-right:10px; padding-left:10px; border-bottom-style:Solid; border-bottom-color:#ccccff; border-bottom-width:2px; }
+td.whs35 { width:83.442%; padding-right:10px; padding-left:10px; border-bottom-style:Solid; border-bottom-color:#ccccff; border-bottom-width:2px; }
+td.whs36 { width:20%; padding-right:10px; padding-left:10px; border-bottom-width:2px; border-bottom-color:#ccccff; border-bottom-style:Solid; }
+td.whs37 { width:83.442%; padding-right:10px; padding-left:10px; border-bottom-width:2px; border-bottom-color:#ccccff; border-bottom-style:Solid; }
+img_whs38 { border:none; width:7px; height:9px; float:none; border-style:none; }
+div.whs39 { width:100%; }
+col.whs40 { width:922px; }
+tr.whs41 { height:10px; }
+td.whs42 { width:922px; padding-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; }
+-->
+</style><script type="text/javascript" language="JavaScript">
+<!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
+{
+  var strNSS = "<style type='text/css'>";
+  strNSS += "img_whs11 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs12 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs13 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "img_whs14 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS += "td.whs18 {background-color:white; }";
+  strNSS += "td.whs21 {background-color:white; }";
+  strNSS += "td.whs22 {background-color:white; }";
+  strNSS += "img_whs23 {margin-left:1pt;margin-right:1pt;margin-top:1pt;margin-bottom:1pt; }";
+  strNSS +="</style>";
+  document.write(strNSS);
+}
+//-->
+</script>
+<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
+<!--
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//-->
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+-->
+</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+</head>
+<body><script type="text/javascript" language="javascript1.2">
+<!--
+if (window.gbWhTopic)
+{
+	if (window.addTocInfo)
+	{
+	addTocInfo("Lost Delayed Bag Reports\nWork with Lost/Delayed Bag Information");
+addAvenueInfo("Lost Delayed Bag Reports","lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm","lost_delayed_bag_reports/work_with_lost_delayed_reports.htm");
+addButton("show",BTN_TEXT,"Show","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../nettracerhelp.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+//-->
+</script><table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+
+<tr bgcolor="#2551A7" class="whs2">
+<td width="10px" class="whs3">
+<div align="left" class="whs4">
+<a name=Top></a><img src="../logos/topmenu-search.gif" x-maintain-ratio="TRUE" width="40px" height="34px" border="0" class="img_whs5"> 
+</div></td>
+<td bgcolor="#2551A7" width="98%" class="whs6">
+<h2>Work with Lost/Delayed Bag Information</td></tr>
+</table>
+
+<p>&nbsp;</p>
+
+<table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+<col class="whs7">
+<col>
+
+<tr class="whs8">
+<td width="20px" class="whs9">
+<p>&nbsp;</td>
+<td class="whs10">
+<p>Baggage Information is recorded for each bag that a passenger is reporting 
+ as mishandled. Baggage Information contains descriptive information about 
+ each bag which is used in matching it with On-hand bags. It also records 
+ when the bag has been located and received by the station.</p>
+<p>&nbsp;</p>
+<p>Fields within a Lost/Delayed Report can be modified by displaying the 
+ file and updating or making changes to the existing information. You also 
+ have the option to add or delete some sections in a file. A Delete button 
+ and Add button are displayed at the end of the section when this option 
+ is available. Click in a field to:</p>
+<ul>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets>Add new information 
+ in a field that is currently blank<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets>Change information 
+ by typing over existing data<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CSub-Bullets><p class=Sub-Bullets>Delete information 
+ by clearing the data in a field</p></li>
+</ul>
+<p>Click on your browser back button to ignore all changes that have been 
+ made to a report that has not yet been saved. Or you can navigate to another 
+ Net-Tracer screen prior to saving the changes to ignore the updates.</p>
+<p>&nbsp;</p>
+<p class=Note><a name="add_lost_delayed bag"></a>To add an additional bag 
+ to a Lost/Delayed Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_lost_delayed_reports.htm">Create</a> 
+ a new Lost/Delayed Bag report or <a href="work_with_lost_delayed_reports.htm#Locate_Lost_Delayed_Bag">locate 
+ and view</a> an existing one.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' width='64px' height='24px' border='0' class='img_whs11'>");}
+else
+{   document.write("<img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='64px' height='24px' border='0' class='img_whs11'>");}
+//--></script><noscript><img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='64px' height='24px' border='0' class='img_whs11'></noscript> button to jump to the Baggage Information section of the 
+ report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_add_bag.png' x-maintain-ratio='TRUE' width='58px' height='19px' border='0' class='img_whs12'>");}
+else
+{   document.write("<img src='../screens_caps/button_add_bag.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='58px' height='19px' border='0' class='img_whs12'>");}
+//--></script><noscript><img src='../screens_caps/button_add_bag.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='58px' height='19px' border='0' class='img_whs12'></noscript> to 
+ add an additional bag to the report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Enter the optional and 
+ required information in the appropriate fields.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' width='146px' height='19px' border='0' class='img_whs13'>");}
+else
+{   document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'>");}
+//--></script><noscript><img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'></noscript> to save the report but not begin 
+ tracing the bag.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' width='144px' height='19px' border='0' class='img_whs14'>");}
+else
+{   document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'>");}
+//--></script><noscript><img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'></noscript> to save the report and begin to match the new 
+ record with all open On-hand bags.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs20"></td>
+<td width="98%" class="whs21">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>There is no limit to the number of damaged bags that 
+ can be added to a Damaged Bag report.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p class=Note><a name="edit_lost_delayed bag"></a>To edit an existing bag 
+ in a Lost/Delayed Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_lost_delayed_reports.htm#Locate_Lost_Delayed_Bag">Locate 
+ and view</a> an existing Lost/Delayed Bag report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' width='64px' height='24px' border='0' class='img_whs11'>");}
+else
+{   document.write("<img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='64px' height='24px' border='0' class='img_whs11'>");}
+//--></script><noscript><img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='64px' height='24px' border='0' class='img_whs11'></noscript> button to jump to the Baggage Information section of the 
+ report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Make the desired changes 
+ to the damaged bag's information fields.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' width='146px' height='19px' border='0' class='img_whs13'>");}
+else
+{   document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'>");}
+//--></script><noscript><img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'></noscript> to save the report but not begin 
+ tracing the bag.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' width='144px' height='19px' border='0' class='img_whs14'>");}
+else
+{   document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'>");}
+//--></script><noscript><img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'></noscript> to save the report and begin to match the new 
+ record with all open On-hand bags.<br>&nbsp;</p></li>
+</ol>
+<p class=Note><a name="delete_lost_delayed bag"></a>To delete a bag from 
+ a Lost/Delayed Bag report:</p>
+<ol>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered><a href="work_with_lost_delayed_reports.htm#Locate_Lost_Delayed_Bag">Locate 
+ and view</a> an existing Damaged Bag report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' width='64px' height='24px' border='0' class='img_whs11'>");}
+else
+{   document.write("<img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='64px' height='24px' border='0' class='img_whs11'>");}
+//--></script><noscript><img src='../screens_caps/button_baginfo.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-7px;' width='64px' height='24px' border='0' class='img_whs11'></noscript> button to jump to the Baggage Information section of the 
+ report.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Click the <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_delete_bag.png' x-maintain-ratio='TRUE' width='77px' height='19px' border='0' class='img_whs23'>");}
+else
+{   document.write("<img src='../screens_caps/button_delete_bag.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='77px' height='19px' border='0' class='img_whs23'>");}
+//--></script><noscript><img src='../screens_caps/button_delete_bag.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='77px' height='19px' border='0' class='img_whs23'></noscript> button that corresponds with the bag that is to be deleted.<br>&nbsp;</p></li>
+	
+	<li class=kadov-p-CNumbered><p class=Numbered>Scroll to the end of 
+ the report and click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' width='146px' height='19px' border='0' class='img_whs13'>");}
+else
+{   document.write("<img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'>");}
+//--></script><noscript><img src='../screens_caps/button_save_temp.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='146px' height='19px' border='0' class='img_whs13'></noscript> to save the report but not begin 
+ tracing the bag.<span class=Bold><br>
+	<br>
+	- or -</span><br>
+	<br>
+	Click <script type="text/javascript" language="JavaScript"><!--
+if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
+{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' width='144px' height='19px' border='0' class='img_whs14'>");}
+else
+{   document.write("<img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'>");}
+//--></script><noscript><img src='../screens_caps/button_submit_tracing.png' x-maintain-ratio='TRUE' style='margin-left:0px;margin-right:0px;margin-top:0px;margin-bottom:-5px;' width='144px' height='19px' border='0' class='img_whs14'></noscript> to save the report and begin to match the new 
+ record with all open On-hand bags.</p></li>
+</ol>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../image3.gif" width="10px" height="10px" border="0" class="img_whs24"></td>
+<td width="98%" class="whs21">
+<p class=Note>Important</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>A minimum of one Damage Bag Information field is required 
+ to complete a report.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h1><a name="Lost_Delayed Bag_Info_Fields"></a>Lost/Delayed Bag Information 
+ Fields</h1>
+<table x-use-null-cells cellspacing="0" width="98%" bgcolor="#FFFF99" class="whs15">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../logos/image2.gif" x-maintain-ratio="TRUE" width="10px" height="10px" border="0" class="img_whs20"></td>
+<td width="98%" class="whs21">
+<p class=Note>Note</td></tr>
+
+<tr>
+<td width="3%" class="whs18">
+<p>&nbsp;</td>
+<td class="whs22">
+<p class=NoteText>An asterisk (<span class=Red>*</span>) indicates the 
+ field is a required field.</td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" bgcolor="#FFFF99" width="98%" class="whs25">
+<col class="whs16">
+<col>
+
+<tr class="whs17">
+<td colspan="1" rowspan="1" width="3%" class="whs18">
+<p align="center" class="whs19"><img src="../image2.gif" width="11px" height="11px" border="0" class="img_whs26"></td>
+<td colspan="1" rowspan="1" class="whs22">
+<p class=Note>Tip</td></tr>
+
+<tr class="whs17">
+<td colspan="1" rowspan="1" width="3%" class="whs18">
+<p>&nbsp;</td>
+<td colspan="1" rowspan="1" class="whs22">
+<p class=NoteText><span class=Bold>Text box fields</span> can be edited 
+ by typing over the existing data with new data. <span class=Bold>Dropdown 
+ list fields</span> can be changed by moving your cursor over the new option 
+ to highlight it and clicking to enter the new data in the field. </td></tr>
+</table>
+<p>&nbsp;</p>
+<table x-use-null-cells cellspacing="0" width="98%" class="whs27">
+<col class="whs28">
+<col class="whs29">
+
+<tr valign="top" class="whs30">
+<td colspan="1" rowspan="1" bgcolor="#CCCCFF" width="20%" class="whs31">
+<p class=TableHeader>Field Name</td>
+<td colspan="1" rowspan="1" bgcolor="#CCCCFF" width="83.442%" class="whs32">
+<p class=TableHeader>Field Description</td></tr>
+
+<tr valign="top" class="whs33">
+<td width="20%" class="whs34">
+<p class=FieldNames>Name on Bag</p>
+<p class=FieldNames>&nbsp;</td>
+<td width="83.442%" class="whs35">
+<p class=TableText>Enter the name or initials on the bag if it is different 
+ than the passenger’s name.</td></tr>
+
+<tr valign="top" class="whs33">
+<td colspan="1" rowspan="1" width="20%" class="whs36">
+<p class=FieldNames>Color</p>
+<p class=FieldNames>&nbsp;</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs37">
+<p class=TableText>Select the color of the bag by pointing to the color 
+ in the drop-down list and clicking on the selected color. &nbsp;Alternatively, 
+ the color can be selected by placing the cursor in the field and entering 
+ the first letter of the desired color. For example, repeatedly entering 
+ the letter B will in order select Black, Blue, Beige and then Brown.</td></tr>
+
+<tr valign="top" class="whs33">
+<td colspan="1" rowspan="1" width="20%" class="whs34">
+<p class=FieldNames>Type</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs35">
+<p class=TableText>Select the baggage type by pointing to the type in the 
+ drop-down list and clicking on the selected type. Alternatively, the type 
+ can be selected by placing the cursor in the field and entering the first 
+ digit of the desired bag type. For example, repeatedly entering the number 
+ 2 will in order select 20 through 29. For bag types 1-9 select 0 as the 
+ beginning number.</td></tr>
+
+<tr valign="top" class="whs33">
+<td colspan="1" rowspan="1" width="20%" class="whs36">
+<p class=FieldNames>Descriptive Elements</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs37">
+<p class=TableText>Three (3) drop down list are provided for entering External 
+ Descriptive Elements. The selections in each box are identical; W-wheels, 
+ S-straps, P-pockets, H-handle, C-combination lock, B-single item in a 
+ box and X for no external descriptive elements. These may be entered by 
+ pointing to the descriptive element in the drop-down list and clicking 
+ on the selected element or by placing the cursor in the field and entering 
+ the first letter of the descriptive element; W, S, P, H, C, B or X.</td></tr>
+
+<tr valign="top" class="whs33">
+<td colspan="1" rowspan="1" width="20%" class="whs34">
+<p class=FieldNames>Manufacturer</p>
+<p class=FieldNames>&nbsp;</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs35">
+<p class=TableText>Select the name of the luggage manufacturer by pointing 
+ to the name in the drop-down list and clicking on the selected manufacturer.</td></tr>
+
+<tr valign="top" class="whs33">
+<td colspan="1" rowspan="1" width="20%" class="whs36">
+<p class=FieldNames>Contents</p>
+<p class=FieldNames>&nbsp;</td>
+<td colspan="1" rowspan="1" width="83.442%" class="whs37">
+<p class=TableText>Place your cursor in the contents field and enter a 
+ description of the item and the damage for any content items that incurred 
+ damage.</td></tr>
+</table>
+<p>&nbsp;</p>
+<p><img src="../logos/arrow_px_up.gif" x-maintain-ratio="TRUE" width="7px" height="9px" border="0" class="img_whs38"> <a href="#Top">Top</a></td></tr>
+</table>
+
+<p>&nbsp;</p>
+
+<div placeholder id="footer" class="whs39"><table x-use-null-cells cellspacing="0" width="100%" class="whs1">
+  <col class="whs7">
+  <col class="whs40">
+  <tr class="whs41">
+  <td width="20px" class="whs9">&nbsp;</td>
+  <td width="922px" class="whs42">
+  <p class=Copyright>Copyright ©2005 Owens Technologies Incorporated<br>All rights reserved.</td></tr>
+ </table>
+ <p>&nbsp;</p>
+</div>
+<script type="text/javascript" language="javascript1.2">
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+//-->
+</script>
+</body>
+</html>

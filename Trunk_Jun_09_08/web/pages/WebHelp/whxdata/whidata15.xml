@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="forwarded" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <key name="LZ" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+    <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+  </key>
+  <key name="Select" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+</key>
+<key name="forwarded to the LZ" >
+  <topic name="How Do I Forward Bags to LZ" url="how_do_i/how_do_i_forward_bags_to_lz.htm" />
+</key>
+<key name="Found" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="General" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Generally Claim Amount" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="generated" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <key name="ALL" >
+    <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+    <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+    <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+    <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  </key>
+</key>
+<key name="generated for ALL" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+</key>
+<key name="Get Started Using Net-Tracer" >
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+</key>
+<key name="Getting" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  <key name="Help" >
+    <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  </key>
+</key>
+<key name="Getting Help" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+</key>
+<key name="Goodwill" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Group's Permissions" >
+  <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  <key name="Maintain" >
+    <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  </key>
+</key>
+<key name="Group Name" >
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+</key>
+<key name="group’s" >
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+</key>
+<key name="Groups" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="Add Groups" url="administration/add_groups.htm" />
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  <topic name="Welcome to NetTracer" url="welcome_to_nettracer.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  <key name="Add" >
+    <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  </key>
+  <key name="changes" >
+    <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  </key>
+  <key name="clicking" >
+    <topic name="Add Agents" url="administration/add_agents.htm" />
+  </key>
+  <key name="Delete" >
+    <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+    <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  </key>
+  <key name="display" >
+    <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  </key>
+  <key name="Edit" >
+    <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  </key>
+  <key name="row" >
+    <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  </key>
+</key>
+<key name="H-handle" >
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Help" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  <topic name="Help Viewer Overview" url="using_the_help_viewer/help_viewer_overview.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+  <key name="affect" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+  <key name="ALT+F4 Close" >
+    <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+  </key>
+  <key name="corner" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+  <key name="edge" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+  <key name="Getting" >
+    <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  </key>
+  <key name="make" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+  <key name="print" >
+    <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  </key>
+  <key name="SHIFT+F10 Display" >
+    <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+  </key>
+  <key name="show" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+</key>
+<key name="Help toolbar" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Help Topic" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  <key name="Find" >
+    <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+  </key>
+</key>
+<key name="Help Viewer Overview" >
+  <topic name="Help Viewer Overview" url="using_the_help_viewer/help_viewer_overview.htm" />
+</key>
+<key name="Help viewerYou" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <key name="Modifying" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+</key>
+<key name="Help window" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Hide" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="Highlight" >
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="Holding" >
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <key name="change" >
+    <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  </key>
+  <key name="Station" >
+    <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  </key>
+</key>
+<key name="Holding Station" >
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Home" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+</key>
+<key name="hyperlink" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <key name="file" >
+    <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  </key>
+</key>
+<key name="hyperlink to the file" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+</key>
+<key name="IATA" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Maintain Stations" url="administration/maintain_stations.htm" />
+</key>
+<key name="IATA Reason" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <key name="Loss Codes" >
+    <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  </key>
+</key>
+<key name="IATA Reason for Loss Codes" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+</key>
+<key name="IATA Recommended Practice 1743E" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+</key>
+<key name="ID" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+</key>
+<key name="Ignore" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <key name="select" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+</key>
+<key name="In Progress" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+
+</indexdata>

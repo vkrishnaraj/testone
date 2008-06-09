@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Name" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="Add Groups" url="administration/add_groups.htm" />
+  <topic name="Add Loss Codes" url="administration/add_loss_codes.htm" />
+  <topic name="Add Shifts" url="administration/add_shifts.htm" />
+  <topic name="Add Stations" url="administration/add_stations.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles" url="missing_articles_reports/work_with_missing_articles.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <key name="Baggage Service Office" >
+    <topic name="Add Stations" url="administration/add_stations.htm" />
+  </key>
+</key>
+<key name="name for the Baggage Service Office" >
+  <topic name="Add Stations" url="administration/add_stations.htm" />
+</key>
+<key name="Net-Tracer" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="Add Loss Codes" url="administration/add_loss_codes.htm" />
+  <topic name="Add Shifts" url="administration/add_shifts.htm" />
+  <topic name="Add Stations" url="administration/add_stations.htm" />
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Maintain Agents" url="administration/administration.htm" />
+  <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Maintain Shifts" url="administration/maintain_shifts.htm" />
+  <topic name="Maintain Stations" url="administration/maintain_stations.htm" />
+  <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="On-hand Summary" url="on-hand_reports/on-hand_summary.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="Task Manager Home" url="task_manager/task_manager_home.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Welcome to NetTracer" url="welcome_to_nettracer.htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <key name="24" >
+    <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+  </key>
+  <key name="access" >
+    <topic name="Add Agents" url="administration/add_agents.htm" />
+  </key>
+  <key name="release" >
+    <topic name="Welcome to NetTracer" url="welcome_to_nettracer.htm" />
+  </key>
+  <key name="Task Manager menu" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+    <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  </key>
+</key>
+<key name="Net-Tracer Administrators" >
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="Maintain Agents" url="administration/administration.htm" />
+</key>
+<key name="Net-Tracer application" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Net-Tracer for 24" >
+  <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+</key>
+<key name="Net-Tracer Mail" >
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+</key>
+<key name="Net-Tracer Report Numbers" >
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+
+</indexdata>

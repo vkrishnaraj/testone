@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Net-Tracer System Administrator" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="Add Loss Codes" url="administration/add_loss_codes.htm" />
+</key>
+<key name="NetTracer" >
+  <topic name="Help Viewer Overview" url="using_the_help_viewer/help_viewer_overview.htm" />
+  <topic name="How Do I Log in to Net-Tracer" url="how_do_i/log_in.htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="NetTracer Record Number" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="new" >
+  <topic name="Add Groups" url="administration/add_groups.htm" />
+  <topic name="What's new in this release" url="what_s_new_in_this_release.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="New,”" >
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+</key>
+<key name="Non-Revenue" >
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+</key>
+<key name="None" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Not Completed" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+<key name="Not Started" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+<key name="Notices" >
+  <topic name="How Do I Print a Prorate Notice" url="how_do_i/print_a_prorate_notice.htm" />
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+</key>
+<key name="Number" >
+  <topic name="Add Stations" url="administration/add_stations.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+  <topic name="Work with Passenger Information" url="missing_articles_reports/work_with_passenger_information_(ma).htm" />
+  <key name="Baggage Service Office" >
+    <topic name="Add Stations" url="administration/add_stations.htm" />
+  </key>
+  <key name="Bags Checked" >
+    <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  </key>
+  <key name="Loss Code" >
+    <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  </key>
+  <key name="Passengers" >
+    <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  </key>
+  <key name="Passengers Boarded" >
+    <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  </key>
+</key>
+<key name="number for the Baggage Service Office" >
+  <topic name="Add Stations" url="administration/add_stations.htm" />
+</key>
+<key name="Number of Bags Checked" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+</key>
+<key name="Number of Passengers" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+</key>
+<key name="Number of Passengers Boarded" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+</key>
+<key name="number of the Loss Code" >
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+</key>
+<key name="Occurrences" >
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <key name="create" >
+    <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  </key>
+</key>
+<key name="Occurrences Per Flight" >
+  <topic name="Analytical Reports Summary" url="analytical_reports/analytical_reports_summary.htm" />
+  <topic name="How Do I Summary" url="how_do_i/how_do_i_summary.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <key name="create" >
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  </key>
+</key>
+<key name="Occurrences Per Flight Report Fields" >
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+</key>
+<key name="Occurrences Per Flight Reports" >
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <key name="Creating" >
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  </key>
+</key>
+<key name="Occurrences Report Fields" >
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+</key>
+<key name="Occurrences Reports" >
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <key name="Creating" >
+    <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  </key>
+</key>
+<key name="Office" >
+  <topic name="Add Stations" url="administration/add_stations.htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Officer" >
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+</key>
+<key name="OK" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+  <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+</key>
+
+</indexdata>

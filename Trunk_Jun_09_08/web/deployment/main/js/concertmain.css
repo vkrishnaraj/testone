@@ -1,0 +1,518 @@
+A:link {
+	COLOR: #006699
+}
+A:visited {
+	COLOR: #666666
+}
+A:hover {
+	COLOR: #ff6600
+}
+A.bold:link {
+	FONT-WEIGHT: bold; COLOR: #006699
+}
+A.bold:visited {
+	FONT-WEIGHT: bold; COLOR: #666666
+}
+A.bold:hover {
+	FONT-WEIGHT: bold; COLOR: #ff6600
+}
+BODY {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+STRONG {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+TD {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+P {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+UL {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+BR {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.normal {
+	FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.greybody {
+	FONT-SIZE: 9pt; COLOR: #898989; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.smalltext {
+	FONT-SIZE: 7pt; COLOR: #333a8b; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: underline
+}
+.smalltext2 {
+	FONT-SIZE: 8pt; COLOR: #333a8b; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.smallbody {
+	FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.smallbody2 {
+	FONT-SIZE: 8pt; COLOR: white; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.footer {
+	FONT-SIZE: 8pt; COLOR: #7f7f7f; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.text {
+	FONT-SIZE: 10pt; COLOR: #333a8b; FONT-FAMILY: Arial, Helvetica, sans-serif; TEXT-DECORATION: none
+}
+.page-head {
+	FONT-WEIGHT: bold; FONT-SIZE: 19pt; COLOR: #ffffee; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.channel-head {
+	FONT-SIZE: 19pt; COLOR: #f93610; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.channel-subhead {
+	FONT-WEIGHT: bold; FONT-SIZE: 11pt; COLOR: #f93610; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.section-head {
+	FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #0033cc; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.section-head-nobold {
+	FONT-SIZE: 9pt; COLOR: #ff6600; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.section-subhead {
+	FONT-WEIGHT: bold; FONT-SIZE: 7pt; COLOR: #0033cc; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.section-head-red {
+	FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #f93610; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.section-subhead-red {
+	FONT-WEIGHT: bold; FONT-SIZE: 7pt; COLOR: #f93610; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.article-title {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; COLOR: #f93610; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.article-subtitle {
+	FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.article-byline {
+	FONT-SIZE: 8pt; COLOR: #898989; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.sponsor-box {
+	FONT-SIZE: 7pt; COLOR: #666666; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.sponsor-title {
+	FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #2965a4; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.day {
+	FONT-SIZE: 10pt; COLOR: #f93610; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.wmdnew {
+	FONT-SIZE: 10pt; COLOR: #ff6600; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.wmdbullet {
+	MARGIN-TOP: 5px; MARGIN-BOTTOM: 5px; MARGIN-LEFT: 18px; TEXT-INDENT: -12px
+}
+.wmdbullet2 {
+	MARGIN-TOP: 5px; MARGIN-BOTTOM: 5px; MARGIN-LEFT: 18px; TEXT-INDENT: -9px
+}
+.bullet {
+	MARGIN-TOP: 2px; PADDING-LEFT: 18px; LIST-STYLE-IMAGE: url(/images/msn/greysquarebullet.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet2 {
+	MARGIN-TOP: 2px; PADDING-LEFT: 35px; LIST-STYLE-IMAGE: url(/images/msn/greysquarebullet.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet3 {
+	MARGIN-TOP: 2px; PADDING-LEFT: 18px; LIST-STYLE-IMAGE: url(/images/msn/squarebluebullet.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet-smallarrow {
+	MARGIN-TOP: 2px; PADDING-LEFT: 18px; LIST-STYLE-IMAGE: url(/images/msn/bullet_arrows.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet-largearrow {
+	MARGIN-TOP: 2px; PADDING-LEFT: 18px; LIST-STYLE-IMAGE: url(/images/msn/bullet_large_arrow.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet-page {
+	MARGIN-TOP: 2px; PADDING-LEFT: 18px; LIST-STYLE-IMAGE: url(/images/msn/bullet_page.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet-speaker {
+	MARGIN-TOP: 2px; PADDING-LEFT: 18px; LIST-STYLE-IMAGE: url(/images/msn/bullet_speaker.gif); MARGIN-BOTTOM: 0px; MARGIN-LEFT: 0px
+}
+.bullet-item {
+	PADDING-BOTTOM: 4px
+}
+.bullet-item2 {
+	PADDING-BOTTOM: 12px
+}
+.bullet-item3 {
+	PADDING-LEFT: 6px
+}
+.bullet-item4 {
+	PADDING-LEFT: 6px; PADDING-BOTTOM: 12px
+}
+.bullet-sponsor {
+	PADDING-BOTTOM: 2px
+}
+.eyelinks {
+	MARGIN-TOP: 5px; FONT-WEIGHT: bold; FONT-SIZE: 9pt; MARGIN-BOTTOM: 10px; FONT-FAMILY: arial
+}
+.mediumfont {
+	FONT-SIZE: 9pt; FONT-FAMILY: arial
+}
+.graytext {
+	FONT-SIZE: 8pt; COLOR: gray; FONT-FAMILY: arial
+}
+.graytext2 {
+	FONT-SIZE: 9pt; COLOR: #898989; FONT-FAMILY: arial
+}
+.skintable30 {
+	PADDING-RIGHT: 30px; PADDING-LEFT: 30px; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; BACKGROUND-COLOR: #ffffff
+}
+.skintable15 {
+	PADDING-RIGHT: 15px; PADDING-LEFT: 15px; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; BACKGROUND-COLOR: #ffffff
+}
+.orangesmall {
+	FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #db6700
+}
+.skinlinks {
+	MARGIN-TOP: 10px; FONT-WEIGHT: bold; FONT-SIZE: 9pt; MARGIN-BOTTOM: 10px; FONT-FAMILY: arial
+}
+.skinsmall {
+	FONT-SIZE: 8pt; FONT-FAMILY: Tahoma, arial
+}
+.orangehead {
+	FONT-WEIGHT: bold; FONT-SIZE: 7pt; COLOR: #ff6600; FONT-FAMILY: Tahoma
+}
+.section-header {
+	FONT-WEIGHT: bold
+}
+.biotext {
+	FONT-WEIGHT: bold; FONT-SIZE: 11pt; COLOR: #000000; FONT-FAMILY: Tahoma, Arial, Helvetica, sans-serif
+}
+.adbar {
+	MARGIN-BOTTOM: 5px
+}
+.embedded_link {
+	
+}
+.no_embedded_link {
+	DISPLAY: none
+}
+.third_party_links {
+	
+}
+.big7 TD {
+	FONT: 11px Tahoma,sans-serif
+}
+.big7 A {
+	FONT: 11px Tahoma,sans-serif
+}
+.big7 INPUT {
+	FONT: 11px Tahoma,sans-serif
+}
+.sfi {
+	FONT: 11px Tahoma,sans-serif
+}
+.adbar TD {
+	FONT: 11px Tahoma,sans-serif
+}
+.n130 {
+	FONT: 11px Tahoma,sans-serif
+}
+.n130 TD {
+	FONT: 11px Tahoma,sans-serif
+}
+.n130 A {
+	FONT: 11px Tahoma,sans-serif
+}
+.n130 INPUT {
+	FONT: 11px Tahoma,sans-serif
+}
+.n130 BR {
+	FONT: 11px Tahoma,sans-serif
+}
+BODY {
+	MARGIN: 0px
+}
+FORM {
+	MARGIN: 0px
+}
+.n130 H1 {
+	MARGIN: 0px
+}
+.n130 H2 {
+	MARGIN: 0px
+}
+.n130 H3 {
+	MARGIN: 0px
+}
+.n130 H4 {
+	MARGIN: 0px
+}
+.n130 H5 {
+	MARGIN: 0px
+}
+.n130 H3 {
+	MARGIN-LEFT: -1px
+}
+.n130 H4 {
+	MARGIN-LEFT: -1px
+}
+.n130 H5 {
+	MARGIN-LEFT: -1px
+}
+.big7 A {
+	TEXT-DECORATION: none
+}
+.sf A {
+	TEXT-DECORATION: none
+}
+.n130 A {
+	TEXT-DECORATION: none
+}
+.big7 A:hover {
+	TEXT-DECORATION: underline
+}
+.sf A:hover {
+	TEXT-DECORATION: underline
+}
+.n130 A:hover {
+	TEXT-DECORATION: underline
+}
+.n130 .list A {
+	COLOR: black! important
+}
+.n130 .list TD {
+	PADDING-RIGHT: 2px; PADDING-LEFT: 2px; PADDING-BOTTOM: 2px; VERTICAL-ALIGN: top; PADDING-TOP: 2px
+}
+.n130 .list .bullet {
+	PADDING-LEFT: 0px; WIDTH: 10px
+}
+.n130 .list .bullet DIV {
+	MARGIN-TOP: 6px; FONT-SIZE: 1px; WIDTH: 5px; HEIGHT: 5px; BACKGROUND-COLOR: #2965a4
+}
+.n130 H4 {
+	FONT-WEIGHT: bold
+}
+.n130 H5 {
+	FONT-SIZE: 11px
+}
+.n130 A.more {
+	TEXT-DECORATION: underline
+}
+.big7 A {
+	FONT-WEIGHT: bold! important
+}
+.big7 A:hover {
+	TEXT-DECORATION: underline! important
+}
+.sfl A:hover {
+	TEXT-DECORATION: underline! important
+}
+.sfl {
+	FONT: 24px Tahoma,sans-serif; WHITE-SPACE: nowrap
+}
+.sfr {
+	FONT-SIZE: 1px
+}
+.sflb {
+	FONT-SIZE: 1px
+}
+.sfi {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: 1px solid; PADDING-LEFT: 0px; PADDING-BOTTOM: 9px; BORDER-LEFT: medium none; PADDING-TOP: 0px; BORDER-BOTTOM: 1px solid
+}
+.sfl {
+	BORDER-BOTTOM: 1px solid
+}
+.sfm {
+	BORDER-BOTTOM: 1px solid
+}
+.sflb {
+	BORDER-BOTTOM: 1px solid
+}
+.sfi {
+	BORDER-BOTTOM: 1px solid
+}
+.tb {
+	COLOR: white
+}
+.tb A {
+	COLOR: white
+}
+.fhelp A {
+	FONT-WEIGHT: normal
+}
+.terms {
+	BORDER-TOP: 1px solid
+}
+.terms TD {
+	FONT: 10px Tahoma,sans-serif; COLOR: white; TEXT-DECORATION: none
+}
+.terms A {
+	FONT: 10px Tahoma,sans-serif; COLOR: white; TEXT-DECORATION: none
+}
+.terms A:hover {
+	TEXT-DECORATION: underline
+}
+.channel TD {
+	VERTICAL-ALIGN: top
+}
+SELECT{
+	BORDER-TOP-WIDTH: 1px; FONT-WEIGHT: normal; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 10px; BORDER-LEFT-COLOR: #000000; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #000000; BORDER-TOP-COLOR: #000000; FONT-FAMILY: verdana,arial,helvetica,san-serif; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: #000000; 
+}
+
+INPUT{
+	BORDER-TOP-WIDTH: 1px; FONT-WEIGHT: normal; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 10px; BORDER-LEFT-COLOR: #000000; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #000000; BORDER-TOP-COLOR: #000000; FONT-FAMILY: verdana,arial,helvetica,san-serif; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: #000000; 
+}
+INPUT.text {
+	MARGIN-LEFT: -2px; MARGIN-RIGHT: -2px
+}
+INPUT.radio {
+	MARGIN-LEFT: -5px; MARGIN-RIGHT: -2px
+}
+.ArrowInline {
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN: 0px 4px 0px 1px; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none
+}
+.capsuleblue {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid
+}
+.capsulegray {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid
+}
+.capsuleyellow {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid
+}
+.capsuleblue {
+	PADDING-RIGHT: 4px; PADDING-LEFT: 4px
+}
+.page {
+	BACKGROUND-COLOR: #FFFFEE
+}
+.sponsored {
+	FONT: 10px Tahoma; COLOR: #666666
+}
+.n130 .section {
+	MARGIN: 0px 0px 8px 10px
+}
+.n130 .list {
+	MARGIN: 0px 0px 8px 10px
+}
+.n130 .section .list {
+	MARGIN-LEFT: 0px
+}
+.n130 .list TABLE {
+	WIDTH: 120px
+}
+.n130 .list .sponsored {
+	MARGIN-TOP: -2px
+}
+.n130 .vnav {
+	MARGIN-TOP: 4px; MARGIN-BOTTOM: 10px; CURSOR: default; WHITE-SPACE: nowrap
+}
+.n130 .vnav DIV {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; PADDING-TOP: 3px; BORDER-BOTTOM: 1px solid
+}
+.n130 .vnav DIV A {
+	CURSOR: hand; COLOR: black
+}
+.n130 .vnav DIV IMG {
+	MARGIN-RIGHT: 4px
+}
+.n130 .vnav DIV.selected {
+	FONT-WEIGHT: bold; BACKGROUND-COLOR: white
+}
+.n130 .vnav DIV.group DIV.primaryselected {
+	FONT-WEIGHT: bold; BACKGROUND-COLOR: white
+}
+.n130 .vnav DIV.group {
+	BORDER-RIGHT: 0px; PADDING-RIGHT: 0px; BORDER-TOP: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; BORDER-LEFT: 0px; PADDING-TOP: 0px; BORDER-BOTTOM: 0px
+}
+.n130 .vnav DIV.group DIV {
+	PADDING-LEFT: 0px
+}
+.n130 .vnav DIV.group DIV.primary {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; FONT-WEIGHT: bold! important; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+.n130 .vnav DIV.group DIV.primaryselected {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; FONT-WEIGHT: bold! important; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+.n130 .vnav DIV.group DIV.primary A {
+	FONT-WEIGHT: bold! important
+}
+.n130 .vnav DIV.group DIV.primaryselected A {
+	FONT-WEIGHT: bold! important
+}
+.n130 .vnav DIV.group DIV.selected {
+	FONT-WEIGHT: normal
+}
+.n130 .capsuleblue {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 8px; PADDING-BOTTOM: 4px; MARGIN: 0px 2px 2px; PADDING-TOP: 4px
+}
+.n130 A.more {
+	COLOR: #2965a4! important
+}
+.n130 A:hover {
+	COLOR: #2965a4! important
+}
+.n130 H5 {
+	COLOR: #2965a4! important
+}
+.n130 {
+	BACKGROUND: #cccccc
+}
+.n130 .vnav DIV {
+	BORDER-BOTTOM-COLOR: #2965a4
+}
+BODY {
+	BACKGROUND: #1a60a8
+}
+.capsuleblue {
+	BORDER-LEFT-COLOR: #2965a4; BACKGROUND: #b9d3ee; BORDER-BOTTOM-COLOR: #2965a4; BORDER-TOP-COLOR: #2965a4; BORDER-RIGHT-COLOR: #2965a4
+}
+.capsulegray {
+	BORDER-LEFT-COLOR: #bfbfbf; BACKGROUND: #f0f3f8; BORDER-BOTTOM-COLOR: #bfbfbf; BORDER-TOP-COLOR: #bfbfbf; BORDER-RIGHT-COLOR: #bfbfbf
+}
+.n130 .vnav DIV.group {
+	BACKGROUND-COLOR: #fffce5
+}
+.sfl {
+	BORDER-BOTTOM-COLOR: #3e9dda
+}
+.sfm {
+	BORDER-BOTTOM-COLOR: #2a79ba
+}
+.sfi {
+	BORDER-BOTTOM-COLOR: #2a79ba
+}
+.sflb {
+	BORDER-BOTTOM-COLOR: #2a79ba
+}
+.sfi {
+	BACKGROUND-COLOR: #2a79ba
+}
+.sflb {
+	BACKGROUND-COLOR: #2a79ba
+}
+.sfi {
+	BACKGROUND-IMAGE: url(http://a876.g.akamai.net/7/876/1448/v00001/images.webmd.com/images/msn/framework/sfg_mb.gif); BORDER-TOP-COLOR: #3e9dda; BORDER-RIGHT-COLOR: #004e82
+}
+.tb {
+	BACKGROUND: #5aa8da
+}
+.big1 A {
+	COLOR: #deeef8
+}
+.big7 TD {
+	COLOR: white! important
+}
+.big7 A {
+	COLOR: white! important
+}
+.sf {
+	COLOR: white! important
+}
+.sf A {
+	COLOR: white! important
+}
+.adbar {
+	COLOR: white! important
+}
+.terms A {
+	COLOR: white! important
+}
+.terms {
+	BORDER-TOP-COLOR: #5f90c2
+}
+

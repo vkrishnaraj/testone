@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Deferred" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+<key name="delete" >
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+  <topic name="Creating Express On-hand Bag Reports" url="on-hand_reports/creating_express_on-hand_bag_reports.htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+  <topic name="Maintain Agents" url="administration/administration.htm" />
+  <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Maintain Shifts" url="administration/maintain_shifts.htm" />
+  <topic name="Maintain Stations" url="administration/maintain_stations.htm" />
+  <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  <topic name="Work with Remarks" url="lost_delayed_bag_reports/work_with_remarks_(ld).htm" />
+  <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+  <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+  <key name="Agent Profile" >
+    <topic name="Maintain Agents" url="administration/administration.htm" />
+    <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+  </key>
+  <key name="Baggage Itinerary" >
+    <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+    <topic name="Creating Express On-hand Bag Reports" url="on-hand_reports/creating_express_on-hand_bag_reports.htm" />
+    <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+    <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+    <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+    <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  </key>
+  <key name="Group" >
+    <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+    <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  </key>
+  <key name="Loss Code" >
+    <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+    <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  </key>
+  <key name="Passenger" >
+    <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+    <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+    <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+    <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+    <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+    <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+    <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+  </key>
+  <key name="Passenger Itinerary" >
+    <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+    <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+    <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+    <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+    <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+    <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+    <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  </key>
+  <key name="Remark" >
+    <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+    <topic name="Work with Remarks" url="lost_delayed_bag_reports/work_with_remarks_(ld).htm" />
+  </key>
+  <key name="Shift" >
+    <topic name="Maintain Shifts" url="administration/maintain_shifts.htm" />
+    <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+  </key>
+  <key name="Station" >
+    <topic name="Maintain Stations" url="administration/maintain_stations.htm" />
+    <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+  </key>
+  <key name="User" >
+    <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  </key>
+</key>
+<key name="delete a Baggage Itinerary" >
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  <topic name="Creating Express On-hand Bag Reports" url="on-hand_reports/creating_express_on-hand_bag_reports.htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+</key>
+<key name="Delete a Group" >
+  <topic name="Maintain Groups" url="administration/maintain_groups.htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+</key>
+<key name="delete a Loss Code" >
+  <topic name="Maintain Loss Codes" url="administration/maintain_loss_codes.htm" />
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+</key>
+<key name="delete a Passenger" >
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+</key>
+<key name="delete a Passenger Itinerary" >
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  <topic name="Creating Express Damaged Bag Reports" url="damaged_bag_reports/creating_exdamage_bag_report.htm" />
+  <topic name="Creating Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_express_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Express Missing Articles Reports" url="missing_articles_reports/creating_express_missing_articles_reports.htm" />
+  <topic name="Creating Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/creating_lost_delayed_bag_reports.htm" />
+  <topic name="Creating Missing Article Reports" url="missing_articles_reports/creating_missing_article_reports.htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+</key>
+<key name="delete a Remark" >
+  <topic name="Creating On-hand Bag Reports" url="on-hand_reports/creating_on-hand_bag.htm" />
+  <topic name="Work with Remarks" url="lost_delayed_bag_reports/work_with_remarks_(ld).htm" />
+</key>
+<key name="delete a Shift" >
+  <topic name="Maintain Shifts" url="administration/maintain_shifts.htm" />
+  <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+</key>
+<key name="delete a Station" >
+  <topic name="Maintain Stations" url="administration/maintain_stations.htm" />
+  <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+</key>
+<key name="delete a User" >
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+</key>
+<key name="Delete an Agent Profile" >
+  <topic name="Maintain Agents" url="administration/administration.htm" />
+  <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+</key>
+<key name="Delete button" >
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+</key>
+<key name="Delete Code" >
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+</key>
+<key name="Delivery" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+
+</indexdata>

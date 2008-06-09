@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="Search menu" >
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Search Request On-hand" >
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+</key>
+<key name="Search Request On-hand Fields" >
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+</key>
+<key name="Search Task" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <key name="open" >
+    <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  </key>
+</key>
+<key name="Search Tasks let’s" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+</key>
+<key name="Security" >
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="See" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+</key>
+<key name="See Also" >
+  <topic name="Getting Help" url="using_the_help_viewer/getting_help.htm" />
+</key>
+<key name="Seen”" >
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+</key>
+<key name="segment" >
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  <key name="passenger’s" >
+    <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  </key>
+</key>
+<key name="segment of the passenger’s" >
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+</key>
+<key name="Select" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  <topic name="Analytical Reports Summary" url="analytical_reports/analytical_reports_summary.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+  <topic name="Damaged Bag Reports Summary" url="damaged_bag_reports/damaged_bag_reports_summary.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <topic name="Inbox" url="task_manager/inbox.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="On-hand Summary" url="on-hand_reports/on-hand_summary.htm" />
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+  <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  <topic name="View Reports" url="task_manager/view_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <key name="Administrator" >
+    <topic name="Administration Summary" url="administration/administration_summary.htm" />
+  </key>
+  <key name="Agent’s" >
+    <topic name="Add Agents" url="administration/add_agents.htm" />
+  </key>
+  <key name="Analytical Reports" >
+    <topic name="Analytical Reports Summary" url="analytical_reports/analytical_reports_summary.htm" />
+  </key>
+  <key name="Click Here To View The Report" >
+    <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+    <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+    <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+    <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+    <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  </key>
+  <key name="Damaged Bag" >
+    <topic name="Damaged Bag Reports Summary" url="damaged_bag_reports/damaged_bag_reports_summary.htm" />
+    <topic name="On-hand Summary" url="on-hand_reports/on-hand_summary.htm" />
+  </key>
+  <key name="Date" >
+    <topic name="Close Reports" url="lost_delayed_bag_reports/close_reports_(ld).htm" />
+  </key>
+  <key name="Forward" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+  <key name="Forward Bags" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+  <key name="Ignore" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+  <key name="Inbox" >
+    <topic name="Inbox" url="task_manager/inbox.htm" />
+  </key>
+  <key name="Incoming Bags" >
+    <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  </key>
+  <key name="Lost/Delayed" >
+    <topic name="Lost/Delayed Bag Reports Summary" url="lost_delayed_bag_reports/lost_delayed_bag_reports_summary.htm" />
+  </key>
+  <key name="Missing Articles" >
+    <topic name="Missing Articles Report Summary" url="missing_articles_reports/missing_articles_report_summary.htm" />
+  </key>
+  <key name="Other Tasks" >
+    <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  </key>
+  <key name="Priority" >
+    <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  </key>
+  <key name="Report Number" >
+    <topic name="Close Reports" url="damaged_bag_reports/close_reports.htm" />
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+  <key name="Status" >
+    <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+    <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  </key>
+  <key name="Task" >
+    <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  </key>
+  <key name="Task Manager" >
+    <topic name="Task Manager Summary" url="task_manager/task_manager_summary.htm" />
+  </key>
+  <key name="View Created Requests" >
+    <topic name="View Created Requests" url="task_manager/view_created_requests.htm" />
+  </key>
+  <key name="View Incoming Requests" >
+    <topic name="View Incoming Requests" url="task_manager/view_incoming_requests.htm" />
+  </key>
+  <key name="View Temporary On-hand" >
+    <topic name="View Reports" url="task_manager/view_reports.htm" />
+  </key>
+  <key name="View Temporary Report" >
+    <topic name="View Reports" url="task_manager/view_reports.htm" />
+  </key>
+  <key name="View Trace Results" >
+    <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  </key>
+</key>
+<key name="Select Add Damaged Bag" >
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+</key>
+<key name="Select Add Lost/Delayed Bag" >
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+</key>
+<key name="Select Add Missing Articles" >
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+</key>
+<key name="Select Add On-hand Bag" >
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Select By Passenger Boarding" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+</key>
+<key name="Select Express Damaged Bag" >
+  <topic name="Work with Express Damaged Bag Reports" url="damaged_bag_reports/express_damaged_bag_reports.htm" />
+</key>
+<key name="Select Express Lost/Delayed Bag" >
+  <topic name="Work with Express Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/express_lost_delayed_bag_reports.htm" />
+</key>
+<key name="Select Express Missing Articles" >
+  <topic name="Work with Express Missing Articles Reports" url="missing_articles_reports/work_with_express_missing_articles_reports.htm" />
+</key>
+<key name="Select Express On-hand Bag" >
+  <topic name="Work with Express On-hand Bag Reports" url="on-hand_reports/work_with_express_on-hand_bag_reports.htm" />
+</key>
+<key name="Select Forward Bags" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <key name="LZ" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+</key>
+<key name="Select Forward Bags to LZ" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+</key>
+<key name="Select Incoming Bags" >
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+</key>
+<key name="Select Maintain Agents" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Select Maintain User Profile" >
+  <topic name="Work with Agent Profiles" url="administration/work_with_agent_profiles.htm" />
+</key>
+<key name="Select Mass On-hand Bag" >
+  <topic name="Mass On-hand Bag" url="on-hand_reports/mass_on-hand_bag.htm" />
+</key>
+<key name="Select Occurrences Per Flight" >
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+</key>
+<key name="Select Other Tasks" >
+  <topic name="Other Tasks" url="task_manager/other_tasks.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+</key>
+<key name="Select Search Report" >
+  <topic name="Work with Damaged Bag Reports" url="damaged_bag_reports/damaged_bag_reports.htm" />
+  <topic name="Work with Lost/Delayed Bag Reports" url="lost_delayed_bag_reports/work_with_lost_delayed_reports.htm" />
+  <topic name="Work with Missing Articles Reports" url="missing_articles_reports/work_with_missing_articles_reports.htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Select the Agent’s" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+<key name="Select the Click Here To View The Report" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+</key>
+<key name="Select the Date" >
+  <topic name="Close Reports" url="lost_delayed_bag_reports/close_reports_(ld).htm" />
+</key>
+
+</indexdata>

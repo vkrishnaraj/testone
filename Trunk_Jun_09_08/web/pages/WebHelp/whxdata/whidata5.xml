@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='windows-1252' ?>
+<indexdata>
+<key name="By Passenger Boarding Reports" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <key name="Creating" >
+    <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  </key>
+</key>
+<key name="C-combination" >
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <topic name="Work with Lost/Delayed Bag Information" url="lost_delayed_bag_reports/work_with_lost_delayed_information_(ld).htm" />
+  <topic name="Work with On-hand Bag Reports" url="on-hand_reports/work_with_on-hand_bag_reports.htm" />
+</key>
+<key name="Category" >
+  <topic name="Work with Baggage Inventory" url="on-hand_reports/work_with_baggage_inventory_(oh).htm" />
+</key>
+<key name="CBS" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Center" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Using the Help Viewer keyboard shortcuts" url="using_the_help_viewer/using_the_help_viewer_keyboard_shortcuts.htm" />
+</key>
+<key name="Change" >
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+  <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+  <key name="Baggage Itinerary" >
+    <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+  </key>
+  <key name="Damaged Bag" >
+    <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  </key>
+  <key name="Description" >
+    <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+  </key>
+  <key name="Group's" >
+    <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+  </key>
+  <key name="Holding" >
+    <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+  </key>
+  <key name="Passenger Itinerary" >
+    <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+  </key>
+  <key name="Reason" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+  <key name="Shift" >
+    <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+  </key>
+  <key name="Station" >
+    <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+  </key>
+</key>
+<key name="change the Holding" >
+  <topic name="Incoming Bags" url="task_manager/incoming_bags.htm" />
+</key>
+<key name="changes to a Damaged Bag" >
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+</key>
+<key name="changes to the Baggage Itinerary" >
+  <topic name="Work with Baggage Itineraries" url="lost_delayed_bag_reports/work_with_baggage_itineraries_(ld).htm" />
+</key>
+<key name="changes to the Description" >
+  <topic name="Work with Loss Codes" url="administration/work_with_loss_codes.htm" />
+</key>
+<key name="changes to the Group's" >
+  <topic name="Work with Groups" url="administration/work_with_groups.htm" />
+</key>
+<key name="changes to the Passenger Itinerary" >
+  <topic name="Work with Passenger Itineraries" url="missing_articles_reports/work_with_passenger_itineraries_(ma).htm" />
+</key>
+<key name="changes to the Shift" >
+  <topic name="Work with Shifts" url="administration/work_with_shifts.htm" />
+</key>
+<key name="changes to the Station" >
+  <topic name="Work with Stations" url="administration/work_with_stations.htm" />
+</key>
+<key name="Charges" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Check" >
+  <topic name="Creating Damaged Bag Reports" url="damaged_bag_reports/creating_damage_bag_reports.htm" />
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+  <key name="Lost/Delayed Bag" >
+    <topic name="Work with Baggage Check Information" url="lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm" />
+  </key>
+</key>
+<key name="check to a Lost/Delayed Bag" >
+  <topic name="Work with Baggage Check Information" url="lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm" />
+</key>
+<key name="checkbox" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+</key>
+<key name="choose" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  <key name="Destination Station" >
+    <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+  </key>
+</key>
+<key name="choose the Destination Station" >
+  <topic name="Forward Bags to LZ" url="task_manager/forward_to_lz.htm" />
+</key>
+<key name="Claim" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+  <topic name="Welcome to NetTracer" url="welcome_to_nettracer.htm" />
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="Claim Amount" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <key name="displays" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+  <key name="Enter" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+</key>
+<key name="Claim Amount Fields" >
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="Claim Check" >
+  <topic name="View Trace Results" url="task_manager/view_trace_results.htm" />
+</key>
+<key name="Claim Check Number" >
+  <topic name="Work with Baggage Check Information" url="lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm" />
+  <topic name="Work with Baggage Information" url="missing_articles_reports/work_with_baggage_information_(ma).htm" />
+  <topic name="Work with Damaged Bag Information" url="damaged_bag_reports/work_damaged_bag_information.htm" />
+</key>
+<key name="Claim Office" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Claim Payment Fields" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+</key>
+<key name="Claim Payments" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <key name="add" >
+    <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  </key>
+  <key name="modify" >
+    <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  </key>
+</key>
+<key name="Claim Prorate" >
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+</key>
+<key name="Claim Prorate Notices" >
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+</key>
+<key name="Claim Resolutions" >
+  <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+  <topic name="Work with Claim Prorate Notices" url="missing_articles_reports/work_with_claim_prorate_notices_(ma).htm" />
+  <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  <key name="add" >
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+  <key name="display" >
+    <topic name="Work with Claim Payment" url="lost_delayed_bag_reports/work_with_claim_payment.htm" />
+    <topic name="Work with Claim Resolutions" url="damaged_bag_reports/work_with_claim_resolutions_(dam).htm" />
+  </key>
+</key>
+<key name="clear the Use Windows" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+</key>
+<key name="Cleared" >
+  <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  <topic name="Work with Baggage Check Information" url="missing_articles_reports/work_with_baggage_check_information_(ma).htm" />
+  <key name="Use Windows" >
+    <topic name="Modifying the Help Viewer" url="using_the_help_viewer/modifying_the_help_viewer.htm" />
+  </key>
+</key>
+<key name="Click Here To View The Report" >
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+  <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <key name="Select" >
+    <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+    <topic name="Disbursements reports" url="analytical_reports/disbursements_report.htm" />
+    <topic name="Occurrences Per Flight reports" url="analytical_reports/occurrences_per_flight.htm" />
+    <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+    <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+    <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  </key>
+</key>
+<key name="clicking" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+  <topic name="By Passenger Boarding reports" url="analytical_reports/by_passenger_boarding.htm" />
+  <topic name="Occurrences reports" url="analytical_reports/occurrences_report.htm" />
+  <topic name="Recovery reports" url="analytical_reports/recovery.htm" />
+  <topic name="Station reports" url="analytical_reports/station_reports.htm" />
+  <key name="Group" >
+    <topic name="Add Agents" url="administration/add_agents.htm" />
+  </key>
+</key>
+<key name="clicking on the Group" >
+  <topic name="Add Agents" url="administration/add_agents.htm" />
+</key>
+
+</indexdata>

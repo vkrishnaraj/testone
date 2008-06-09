@@ -1,0 +1,25 @@
+
+
+ul.tree, ul.tree ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+ul.tree li {
+	margin: 0;
+	padding: 0px 0px 0px 19px;
+	text-indent: -19px;
+	background-image: url(../images/tree-line-vertical.gif);
+	background-repeat: repeat-y;
+	bakcground-position: left;
+}
+ul.tree li.last {
+	background-image: url(../images/tree-line-last.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+.tree img {
+	border: 0px;
+	vertical-align: middle;
+}
