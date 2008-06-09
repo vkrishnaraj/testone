@@ -270,6 +270,7 @@
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/tracer/header_bg_noconf.gif" />
 		<copy todir="${basedir}/src" file="companies/tracer/custom_ui.properties" />
 		<copy todir="${basedir}/src" file="companies/tracer/report_email.html" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
 		<copy todir="${basedir}/src" file="companies/tracer/integration.properties" />
 		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />

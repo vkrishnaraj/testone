@@ -375,8 +375,6 @@ public class IncidentBMO {
 			}
 			Incident iDTO = (Incident) list.get(0);
 
-			sess.close();
-			
 			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
