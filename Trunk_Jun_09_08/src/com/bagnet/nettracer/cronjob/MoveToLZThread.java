@@ -11,14 +11,38 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Lz;
+import com.bagnet.nettracer.tracing.db.Remark;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.LzUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
 
 /**
  * @author Administrator
@@ -146,8 +170,7 @@ public class MoveToLZThread extends Thread {
 					company = rs.getString("companycode_ID");
 
 					// only move if days is greater than 0
-					if (this.type == MBR && mbr > 0) moveMBRToLZ(mbr, damaged, missing, company);
-					else if (this.type == OHD && ohd > 0) moveOHDToLZ(ohd, company);
+					if (this.type == MBR && mbr > 0) moveMBRToLZ(company);
 				}
 				
 				if (this.type == MBR )
@@ -156,8 +179,8 @@ public class MoveToLZThread extends Thread {
 					logger.info("waiting for 24 hours to move ohd again...");
 				// pause a day
 				
+
 				// fix data corruptions
-				
 				st.executeUpdate("update item set bdo_id = null,status_ID=47 WHERE (BDO_ID NOT IN (SELECT bdo_id FROM bdo))");
 				st.executeUpdate("delete from message_copies where (message_id not in (select message_id from message))");
 				
@@ -184,7 +207,6 @@ public class MoveToLZThread extends Thread {
 			}
 		} catch (Exception e) {
 			logger.fatal("cron thread error: " + e);
-
 		}
 	}
 
@@ -195,203 +217,249 @@ public class MoveToLZThread extends Thread {
 		}
 	}
 
-	public synchronized void moveMBRToLZ(int mbr_move_days, int damaged_move_days, int missing_move_days, String company) throws Exception {
-		Statement stmt = null;
-		Statement stmt2 = null;
-		ResultSet rs = null;
-		ResultSet rs2 = null;
-		
-		String central_station = "LZ";
+	public synchronized void moveMBRToLZ(String company) throws Exception {
 
-		// create connection
-		Connection mbr_conn = DriverManager.getConnection(mbr_dburl, mbr_dbuid, mbr_dbpwd);
+		// Get settings
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
+		int mode = csv.getLz_mode();
+		long ld_days = csv.getMbr_to_lz_days();
+		long dg_days = csv.getDamaged_to_lz_days();
+		long ma_days = csv.getMiss_to_lz_days();
 
-		stmt = mbr_conn.createStatement();
-		stmt2 = mbr_conn.createStatement();
+		// Get LZ Stations
+		List<Lz> lzList = (List<Lz>) LzUtils.getIncidentLzStations();
 
-		String sql = null;
-
-		long ld_datediff = mbr_move_days;
-		long dg_datediff = damaged_move_days;
-		long ma_datediff = missing_move_days;
-
-		// get lz station id for current company
-		sql = "select distinct station_ID,stationcode,is_lz from station where (stationcode = 'CLAIM' or is_lz = 1) and companycode_ID = '"
-				+ company + "'";
-		rs = stmt.executeQuery(sql);
-		int lz = 0, claim = 0;
-		int og_agent = 0;
-
-		while (rs.next()) {
-			if (rs.getInt("is_lz") == 1) {
-				lz = rs.getInt("station_ID");
-				central_station = rs.getString("stationcode");
-			}
-
-			if (rs.getString("stationcode").equals("CLAIM")) claim = rs.getInt("station_ID");
-		}
-		rs.close();
-
-		// find ogadmin agent id
-		sql = "select agent_ID from agent where username = 'ogadmin' and companycode_ID = 'OW'";
-		rs = stmt.executeQuery(sql);
-		if (rs.next()) {
-			og_agent = rs.getInt("agent_ID");
-		}
-
-		if (lz > 0) { 
-			if (ld_datediff > 0) {
-				doMBRMove(TracingConstants.LOST_DELAY, ld_datediff,claim,lz,central_station,rs,stmt,stmt2,og_agent);
+		if (ld_days + dg_days + ma_days > 0) {
+			
+			Session sess = null;
+			try {
 				
-			}
-			if (dg_datediff > 0) {
-				doMBRMove(TracingConstants.DAMAGED_BAG, dg_datediff,claim,lz,central_station,rs,stmt,stmt2,og_agent);
-			}
-			if (ma_datediff > 0) {
-				doMBRMove(TracingConstants.MISSING_ARTICLES, ma_datediff,claim,lz,central_station,rs,stmt,stmt2,og_agent);
+				sess = HibernateWrapper.getSession().openSession();
+				
+				ArrayList<Incident> incidentList = null;
+				incidentList = (ArrayList) getIncidentsToMove(company, ld_days, TracingConstants.LOST_DELAY, sess, lzList);
+				incidentList.addAll(getIncidentsToMove(company, dg_days, TracingConstants.MISSING_ARTICLES, sess, lzList));
+				incidentList.addAll(getIncidentsToMove(company, ma_days, TracingConstants.DAMAGED_BAG, sess, lzList));
+	
+				ArrayList<Bucket> buckets = null;
+
+				if (mode == TracingConstants.MOVETOLZ_MODE_ASSIGNMENT) {
+					buckets = assignmentDistribute(incidentList, lzList);
+					
+				} else if (mode == TracingConstants.MOVETOLZ_MODE_PERCENTAGE) {
+					buckets = percentDistribute(incidentList, lzList);
+				}
+				
+				moveIncidents(buckets, sess);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				sess.close();
 			}
 			
 		}
-		stmt.close();
-		stmt2.close();
-		mbr_conn.close();
-
 	}
 	
-	private synchronized void doMBRMove(int rtype, long datediff,int claim,int lz,String central_station,ResultSet rs,Statement stmt,Statement stmt2,int og_agent) throws Exception {
-//	 calculate dates
+	public List<Incident> getIncidentsToMove(String company, long datediff, int itemtype, Session sess, List<Lz> lzList) {
+		
 		Date now = new Date();
 		long nowl = now.getTime();
 		datediff *= 86400000;
 		nowl = nowl - datediff;
 		Date righttime = new Date(nowl);
-		String dt = DateUtils.formatDate(righttime, TracingConstants.DB_DATEFORMAT, null, null);
+		//String dt = DateUtils.formatDate(righttime, TracingConstants.DB_DATEFORMAT, null, null);
 		
-		// get all incidents need to be moved for this company
-		String sql = "select incident_ID, agentassigned_ID from incident,station " + " where stationassigned_ID <> " + claim
-				+ " and stationassigned_ID <> " + lz + " and createdate < '" + dt
-				+ "' and stationassigned_ID = station_ID and station.companycode_ID = '" + company + "'"
-				+ " and itemtype_ID = " + rtype + " and status_ID <> " + TracingConstants.MBR_STATUS_CLOSED;
-
-		rs = stmt.executeQuery(sql);
-
-		while (rs.next()) {
-			String inc = rs.getString("incident_ID");
-			String agent = rs.getString("agentassigned_ID");
-
-			logger.info("***** update Incident type " + rtype + ": " + inc);
-
-			// move all incidents with dates greater than company assigned and
-			// station not in claim
-			sql = "update incident set stationassigned_ID = " + lz + ", agentassigned_ID = null where incident_ID = '" + inc
-					+ "'";
-			stmt2.execute(sql);
+		String queryStr = "from com.bagnet.nettracer.tracing.db.Incident incident where 1 = 1 "
+			+ "and incident.createdate < :createdate "
+			+ "and incident.status.status_ID <> " + TracingConstants.MBR_STATUS_CLOSED + " "
+			+ "and incident.itemtype.itemType_ID = " + itemtype + " "
+			+ " and incident.stationassigned.company.companyCode_ID = '" + company + "' ";
 			
-			String nowtime = "now()";
-			if (dbtype == MoveToLZThread.MSSQL) nowtime = "getdate()";
-			
-			// update remark
-			if (og_agent == 0) og_agent = 13;
-			
-			if (agent != null) {
-				sql = "insert into remark (agent_ID,createtime,incident_ID,remarktext,remarktype) values (" + og_agent
-				+ "," + nowtime + ",'" + inc + "','" + MBR_MSG + central_station + AGENT_MSG + central_station + "',1)";
-			} else {
-				sql = "insert into remark (agent_ID,createtime,incident_ID,remarktext,remarktype) values (" + og_agent
-				+ "," + nowtime + ",'" + inc + "','" + MBR_MSG + central_station + "',1)";
-			}
-
-			stmt2.execute(sql);
+		for (int i=0; i<lzList.size(); ++i) {
+			queryStr += "and incident.stationassigned.station_ID <> " + lzList.get(i).getLz_ID();
 		}
-
-		rs.close();
 		
+		logger.info("Creating query... ");
+			
+		Query q = sess.createQuery(queryStr);
+		q.setParameter("createdate", righttime);
+		return q.list();
 	}
 	
-	public synchronized void moveOHDToLZ(int ohd_move_days, String company) throws Exception {
-		Statement stmt = null;
-		Statement stmt2 = null;
-		ResultSet rs = null;
-		ResultSet rs2 = null;
-
-		// create connection
-		Connection mbr_conn = DriverManager.getConnection(mbr_dburl, mbr_dbuid, mbr_dbpwd);
-
-		stmt = mbr_conn.createStatement();
-		stmt2 = mbr_conn.createStatement();
-
-		String sql = null;
-
-		long datediff = ohd_move_days;
-
-		// get lz station id for current company
-		sql = "select distinct station_ID,stationcode from station where (is_lz = 1 or stationcode = 'CLAIM') and companycode_ID = '"
-				+ company + "'";
-		rs = stmt.executeQuery(sql);
-		int lz = 0, claim = 0;
-		int og_agent = 0;
-
-		while (rs.next()) {
-			if (rs.getString("stationcode").equals("LZ")) lz = rs.getInt("station_ID");
-
-			if (rs.getString("stationcode").equals("CLAIM")) claim = rs.getInt("station_ID");
-		}
-		rs.close();
-
-		// find ogadmin agent id
-		sql = "select agent_ID from agent where username = 'ogadmin' and firstname = 'system'";
-		rs = stmt.executeQuery(sql);
-		if (rs.next()) {
-			og_agent = rs.getInt("agent_ID");
-		}
-
-		if (lz > 0 && datediff > 0) {
-
-			// calculate dates
-			Date now = new Date();
-			long nowl = now.getTime();
-			datediff *= 86400000;
-			nowl = nowl - datediff;
-			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime, TracingConstants.DB_DATEFORMAT, null, null);
-
-			// get all incidents need to be moved for this company
-			sql = "select OHD_ID from ohd,station " + " where holding_station_ID <> " + claim
-					+ " and holding_station_ID <> " + lz + " and founddate < '" + dt
-					+ "' and holding_station_ID = station_ID and station.companycode_ID = '" + company + "'";
-
-			rs = stmt.executeQuery(sql);
-
-			while (rs.next()) {
-				String inc = rs.getString("OHD_ID");
-
-				logger.info("***** update OHD ID: " + inc);
-
-				// move all incidents with dates greater than company assigned and
-				// station not in claim
-				sql = "update OHD set holding_station_ID = " + lz + " where OHD_ID = '" + inc
-						+ "'";
-				stmt2.execute(sql);
-
-				// update remark
+	
+	private void moveIncidents(ArrayList<Bucket> buckets, Session sess) {
+		
+		Transaction t = null;
+		Agent ogadmin = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		
+		// For each bucket
+		for (int x=0; x<buckets.size(); ++x) {
+			Bucket bucket = buckets.get(x);
+			
+			// Get the station to assign the incidents to
+			Lz lz = (Lz) bucket.getKey();
+			Station assignTo = lz.getStation();
+			
+			
+		  // For each incident
+			for (int y=0; y<bucket.size(); ++y) {
+				// Get incident
+				Incident inc = (Incident) bucket.get(y);
+				Agent assignedAgent = inc.getAgentassigned();
+				String centralStation = assignTo.getStationcode();
 				
-				String nowtime = "now()";
-				if (dbtype == MoveToLZThread.MSSQL) nowtime = "getdate()";
+				// Update the station code
+				inc.setStationassigned(assignTo);
 				
-				// update remark
-				if (og_agent == 0) og_agent = 13;
-				sql = "insert into remark (agent_ID,createtime,OHD_ID,remarktext,remarktype) values (" + og_agent
-						+ "," + nowtime + ",'" + inc + "','" + OHD_MSG + "',1)";
-				stmt2.execute(sql);
+				// Prepare Remark
+				String remarkText = MBR_MSG + centralStation;
+				if (assignedAgent != null) {
+					inc.setAgentassigned(null);
+					remarkText += AGENT_MSG + centralStation;
+				}
+				
+				Remark r = new Remark();
+				r.setAgent(ogadmin);
+				r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+				r.setRemarktext(remarkText);
+				r.setIncident(inc);
+				r.setRemarktype(TracingConstants.REMARK_REGULAR);
+				
+				Set<Remark> remarks = inc.getRemarks();
+				remarks.add(r);
+				
+				// Save the incident
+				t = sess.beginTransaction();
+				sess.saveOrUpdate(inc);
+				t.commit();
+				
+				// Audit the incident
+				if ((inc.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && inc.getAgent().getStation().getCompany().getVariable()
+						.getAudit_lost_delayed() == 1)
+						|| (inc.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && inc.getAgent().getStation().getCompany().getVariable()
+								.getAudit_damaged() == 1)
+						|| (inc.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && inc.getAgent().getStation().getCompany().getVariable()
+								.getAudit_missing_articles() == 1)) {
+					Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(inc, ogadmin);
+
+					if (audit_dto != null) {
+						t = sess.beginTransaction();
+						sess.save(audit_dto);
+						t.commit();
+					}
+				}
 			}
-
-			rs.close();
 		}
-		stmt.close();
-		stmt2.close();
-		mbr_conn.close();
-
 	}
+	
 
+	public static ArrayList<Bucket> assignmentDistribute(ArrayList<Incident> incidentList, List<Lz> lzList) {
+
+		HashMap<Lz, Bucket> buckets = new HashMap();
+		ArrayList<Bucket> retValue= new ArrayList();
+		Lz key = null;
+		
+		// Create buckets
+		Iterator iter = lzList.iterator();
+		while (iter.hasNext()) {
+			key = (Lz) iter.next();
+			Bucket b = new Bucket();
+			b.initialize(key);
+			buckets.put((Lz) b.getKey(), b);
+		}
+
+		for (int x = 0; x < incidentList.size(); ++x) {
+			// Get incident
+			Incident inc = incidentList.get(x);
+			
+			// Look up the station's assigned LZ
+			String stationId = inc.getStation_ID() + "";
+			Station station = AdminUtils.getStation(stationId);
+			Lz stationLz = station.getLz();
+			
+			// Look up the bucket for the assigned LZ and add incident to bucket
+			Bucket bucket = buckets.get(stationLz);
+			bucket.add(inc);
+		}
+
+		Object[] keySet = buckets.keySet().toArray();
+		for (int x=0; x <keySet.length; ++x) {
+			retValue.add(buckets.get((Lz)keySet[x]));
+		}
+
+		return retValue;
+	}
+	
+	public static ArrayList<Bucket> percentDistribute(ArrayList<Incident> toSort, List<Lz> lzList) {
+
+		ArrayList buckets = new ArrayList();
+		Lz key = null;
+		int initialSize = 0;
+		int toSortIndex = 0;
+		
+		double itemPercent = 100 / toSort.size();
+		
+		// Create buckets
+		Iterator iter = lzList.iterator();
+		while (iter.hasNext()) {
+			key = (Lz) iter.next();
+			Bucket b = new Bucket();
+			initialSize = b.initialize(key, toSort.size(), (Double)key.getPercent());
+			buckets.add(b);
+			
+			// Fill bucket by capacity
+			for (int x=0; x<initialSize; ++x) {
+				if (x+toSortIndex < toSort.size())
+					b.add(toSort.get(x+toSortIndex));
+			}
+			toSortIndex += initialSize;
+		}
+		
+		// Top off buckets
+		while (toSortIndex < toSort.size()) {
+			double largestCapacity = 0;
+			Bucket largestBucket = null;
+			for (int i=0; i < buckets.size(); ++i) {
+				Bucket currentBucket = (Bucket) buckets.get(i);
+				double currentCapacity = currentBucket.getRemainingCapacity();
+				if (currentCapacity > largestCapacity || largestBucket == null) {
+					largestBucket = currentBucket;
+					largestCapacity = currentCapacity;
+				}
+			}
+			
+			largestBucket.add(toSort.get(toSortIndex));
+			++toSortIndex;
+		}
+			
+		return buckets;
+	}
 }
 
+class Bucket extends ArrayList {
+	private Object key;
+	private double percentOfWhole;
+	private int totalItems;
+	
+	// For use by assignment algorithm.
+	public void initialize(Object key) {
+		this.key = key;
+	}
+	
+	// For use by percentage algorithm
+	public int initialize (Object key, int totalItems, Double percentOfWhole) {
+		this.key = key;
+		this.totalItems = totalItems;
+		this.percentOfWhole = percentOfWhole.doubleValue();
+		return (int) (percentOfWhole / (100 / totalItems));
+	}
+	
+	public double getRemainingCapacity() {
+		return 100 - (100 / totalItems * this.size());
+	}
+	
+	public Object getKey() {
+		return this.key;
+	}
+}

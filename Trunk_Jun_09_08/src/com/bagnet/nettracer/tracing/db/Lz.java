@@ -95,4 +95,19 @@ public class Lz implements Serializable {
 	public boolean isUsed() {
 		return isUsed;
 	}
+	
+	public boolean equals (Object a) {
+		
+		if (!(a instanceof Lz))
+			return false;
+				
+		Lz b = (Lz) a;
+		if (this.lz_id == b.getLz_ID())
+			return true;
+		return false;
+	}
+	
+	public int hashCode() {
+		return this.lz_id;
+	}
 }
