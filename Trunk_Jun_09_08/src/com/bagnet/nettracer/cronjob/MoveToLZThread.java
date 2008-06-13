@@ -280,7 +280,7 @@ public class MoveToLZThread extends Thread {
 			queryStr += "and incident.stationassigned.station_ID <> " + lzList.get(i).getLz_ID();
 		}
 		
-		logger.info("Creating query... ");
+		// logger.info("Creating query... ");
 			
 		Query q = sess.createQuery(queryStr);
 		q.setParameter("createdate", righttime);
