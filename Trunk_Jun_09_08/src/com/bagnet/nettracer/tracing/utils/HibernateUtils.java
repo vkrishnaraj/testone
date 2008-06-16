@@ -153,7 +153,7 @@ public class HibernateUtils {
 	 * @param obj
 	 * @throws Exception
 	 */
-	public static void saveCompany(Company obj, String pageState) throws Exception {
+	public static void saveCompany(Company obj, String pageState, boolean saveLzList) throws Exception {
 		Session sess = null;
 		Transaction t = null;
 		try {
@@ -297,12 +297,15 @@ public class HibernateUtils {
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
-						c.getVariable().setMbr_to_lz_days(obj.getVariable().getMbr_to_lz_days());
-						c.getVariable().setDamaged_to_lz_days(obj.getVariable().getDamaged_to_lz_days());
-						c.getVariable().setMiss_to_lz_days(obj.getVariable().getMiss_to_lz_days());
-						c.getVariable().setOhd_to_lz_days(obj.getVariable().getOhd_to_lz_days());
-						c.getVariable().setLz_mode(obj.getVariable().getLz_mode());
-						c.getVariable().setOhd_lz(obj.getVariable().getOhd_lz());
+						if (saveLzList) {
+							c.getVariable().setLz_mode(obj.getVariable().getLz_mode());							
+						} else {
+							c.getVariable().setMbr_to_lz_days(obj.getVariable().getMbr_to_lz_days());
+							c.getVariable().setDamaged_to_lz_days(obj.getVariable().getDamaged_to_lz_days());
+							c.getVariable().setMiss_to_lz_days(obj.getVariable().getMiss_to_lz_days());
+							c.getVariable().setOhd_to_lz_days(obj.getVariable().getOhd_to_lz_days());
+							c.getVariable().setOhd_lz(obj.getVariable().getOhd_lz());
+						}
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_SECURITY)) {

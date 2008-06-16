@@ -16,6 +16,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -136,36 +137,85 @@ public class LzUtils {
 		}
 	}
 	
-	public static void updateLzList(MaintainCompanyForm form, HttpServletRequest request) {
+	public static void updateLzList(MaintainCompanyForm form, HttpServletRequest request, Agent user) {
 		Session sess = null;
 		Transaction t = null;
 		List<Lz> lzList = form.getLzStations();
+		ArrayList<Lz> deleteThese = new ArrayList();
+		Lz defaultLz = null;
+		boolean needNewDefault = false;
+		boolean newDefaultAdded = false;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			
+			// Determine if we need to update the default lz
+			for (int i=0; i<lzList.size(); ++i) {
+				Lz lz = lzList.get(i);
+				String deleteString = request.getParameter("lz[" + i + "].delete");
+				
+				if (deleteString != null && deleteString.length() > 0) {
+					deleteThese.add(lz);
+					if (form.getDefaultLz().intValue() == lz.getLz_ID()) {
+						needNewDefault = true;
+						break;
+					}
+				}
+			}
+			
+			// Update LZ Data
 			for (int i=0; i<lzList.size(); ++i) {
 				Lz lz = lzList.get(i);
 				
+				
 				String percentString = request.getParameter("lz[" + i + "].percent");
-				String deleteString = request.getParameter("lz[" + i + "].delete");
 
 				if (percentString != null) {
 					lz.setPercent(new Double(percentString).doubleValue());	
 				}
 				
-				if (deleteString != null && deleteString.length() > 0) {
+				if (needNewDefault) {
+					 if (!deleteThese.contains(lz) && !newDefaultAdded) {
+						lz.setIs_default(true);
+						defaultLz = lz;
+						newDefaultAdded = true;
+					 } else {
+						 lz.setIs_default(false);
+					 }
+				} else {
+					if (form.getDefaultLz().intValue() == lz.getLz_ID()) {
+						lz.setIs_default(true);
+						defaultLz = lz;
+					} else {
+						lz.setIs_default(false);
+					}
+				}
+			}
+			
+			// Update stations assigned to deleted LZs to the new default.
+			// if assigned lz is in delete these
+			// change to new default
+			List<Station> stationList = AdminUtils.getCustomStations(null, form.getCompanyCode(), 0, 0, TracingConstants.ActiveStatus.ALL);
+			for (int i=0; i<stationList.size(); ++i) {
+				Station station = stationList.get(i);
+				Lz lz = station.getLz();
+				if (deleteThese.contains(lz)) {
+					station.setLz(defaultLz);
+					HibernateUtils.saveStation(station, user);
+
+				}
+			}
+			
+			// Save/Delete LZs
+			for (int i=0; i<lzList.size(); ++i) {
+				Lz lz = lzList.get(i);
+				
+				if (deleteThese.contains(lz)) {
 					// Delete LZ
 					t = sess.beginTransaction();
 					sess.delete(lz);
 					t.commit();
 				} else {
-					// Modify & Save LZ
-					if (form.getDefaultLz().intValue() == lz.getLz_ID()) {
-						lz.setIs_default(true);
-					} else {
-						lz.setIs_default(false);
-					}
 					t = sess.beginTransaction();
 					sess.saveOrUpdate(lz);
 					t.commit();
@@ -175,6 +225,7 @@ public class LzUtils {
 			
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
+			e.printStackTrace();
 			return;
 		} finally {
 			if (sess != null) {

@@ -583,7 +583,7 @@ public class WTIncident {
 					
 					c.setVariable(var);
 					
-					HibernateUtils.saveCompany(c, null);
+					HibernateUtils.saveCompany(c, null, false);
 
 				} 
 				

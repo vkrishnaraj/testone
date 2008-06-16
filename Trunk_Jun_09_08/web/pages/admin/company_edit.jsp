@@ -42,8 +42,18 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
       function validateThisForm(form) {
         if (buttonSelected == null) {
         	return validateCompanyForm(this);
-        }
-      	else if (buttonSelected == 'savelzlist') {
+        } else if (buttonSelected == 'savelzlist' && document.getElementsByName("lz_mode")[0].value == 1) {
+        	notDeleted = 0;
+        	for (i=0; i<numberOfLzs; ++i) {
+        		var deleteElement = document.getElementsByName("lz[" + i + "].delete")[0];
+      			if (deleteElement.checked == false) {
+      				notDeleted += 1;
+      			}
+        	}
+        	if (notDeleted > 0) {
+        		return true;
+        	}
+        } else if (buttonSelected == 'savelzlist' && document.getElementsByName("lz_mode")[0].value == 2) {
       		var totalPercent = 0;
       		buttonSelected = null;
       		<% // BELOW JAVASCRIPT VALIDATES LZ LIST  %>
@@ -93,7 +103,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
       			return false;
       		}
       	} else {
-      		  
+      		return true;  
       	}
       }
       

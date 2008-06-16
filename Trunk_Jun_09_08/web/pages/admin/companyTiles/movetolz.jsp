@@ -3,9 +3,96 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="org.apache.struts.action.DynaActionForm" %>
-		  <% int numberOfLzs = 0;%>
-		<input type="hidden" name="pageState" value="<%=request.getAttribute("pageState") %>" />
+<%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<script language="javascript">
+  <!--
+    function goprev() {
+      o = document.companyForm;
+      o.prevpage.value = "1";
+      o.pagination.value="1";
+      o.submit();
+    }
+    
+    function gonext() {
+      o = document.companyForm;
+      o.nextpage.value="1";
+      o.pagination.value="1";
+      o.submit();
+    }
+    
+    function gopage(i) {
+      o = document.companyForm;
+      o.currpage.value = i;
+      o.pagination.value="1";
+      o.submit();
+    }
+    
+  // -->
+</script>
+		  <% 
+
+		  MaintainCompanyForm form = (MaintainCompanyForm) session.getAttribute("companyForm");
+		  int lzMode = new Integer(form.getLz_mode()).intValue();
+		  int numberOfLzs = form.getLzStations().size();
+		  boolean assignment = (lzMode == TracingConstants.MOVETOLZ_MODE_ASSIGNMENT);
+
+		  %>
+
+  <script type="text/javascript">
+      var currentMode = <%=lzMode%>;
+      lzs=<%=numberOfLzs %>;
+      function changeMode(newMode) {
+      	form = document.forms[0];
+      	
+      	// If was assignment and changed to percent
+    	if (currentMode == 1 && newMode == 2) {
+      		currentMode = 2;
+
+			// enable percent fields      		
+      		for (i=0; i<lzs; ++i) {
+      			element = document.getElementsByName("lz[" + i + "].percent")[0];
+      			element.disabled=false;
+      		}
+      		
+      		// Disable defaultLz radio
+      		elements = document.getElementsByName("defaultLz");
+      		for (i=0; i<elements.length; ++i) {
+      			elements[i].disabled=true;
+      		}
+
+			// Enable delete checkboxes
+      		for (i=0; i<lzs; ++i) {
+      			element = document.getElementsByName("lz[" + i + "].delete")[0];
+      			element.disabled=false;
+      		}
+      		
+	     } 
+      	
+      	
+      	// If was percent and changed to assignment
+      	if (currentMode == 2 && newMode == 1) {
+      		currentMode = 1;
+      		
+			// Disable percent fields      		
+      		for (i=0; i<lzs; ++i) {
+      			element = document.getElementsByName("lz[" + i + "].percent")[0];
+      			element.disabled=true;
+      		}
+      		
+      		// Enable defaultLz radio
+      		elements = document.getElementsByName("defaultLz");
+      		for (i=0; i<elements.length; ++i) {
+      			elements[i].disabled=false;
+      		}
+      		
+      	}
+      }
+  </script>
+
+		
+
+<input type="hidden" name="pageState" value="<%=request.getAttribute("pageState") %>" />
 		
 		<html:hidden name="companyForm" property="companyCode" />
 		
@@ -30,24 +117,6 @@
         </logic:messagesPresent>
         
         <table class="form2" cellspacing="0" cellpadding="0">
-
-          
-          	  <tr>
-	            <td>
-	              <bean:message key="movetolz.rowname.mode" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-                  <html:select name="companyForm" property="lz_mode" styleClass="dropdown">
-					<html:option value="1"><bean:message key="movetolz.mode.1" /></html:option>
-					<html:option value="2"><bean:message key="movetolz.mode.2" /></html:option>
-	              </html:select>
-	            </td>
-	          </tr>
-          
           	  <tr>
 	            <td>
 	              <bean:message key="colname.mbr_to_lz_days" />
@@ -141,8 +210,28 @@
         </h1>
         
         <table class="form2" cellspacing="0" cellpadding="0">
-		  <tr>
+        
+         <tr>
             <td colspan="2">
+              <bean:message key="movetolz.rowname.mode" />
+              <font color=red>
+                *
+              </font>
+              :
+            </td>
+            <td colspan="2">
+                 <html:select name="companyForm" property="lz_mode" styleClass="dropdown" onchange="changeMode(this.value)">
+				<html:option value="1"><bean:message key="movetolz.mode.1" /></html:option>
+				<html:option value="2"><bean:message key="movetolz.mode.2" /></html:option>
+              </html:select>
+            </td>
+          </tr>
+          <tr>
+          	<td colspan="4">&nbsp;</td>
+          </tr>
+
+		  <tr>
+            <td>
               <b><bean:message key="movetolz.colname.station" /></b>
             </td>
             <td>
@@ -157,40 +246,35 @@
 	      </tr>
 	      
 		  <logic:iterate id="lz" indexId="i" name="companyForm" property="lzStations" type="com.bagnet.nettracer.tracing.db.Lz">
-		  <% ++numberOfLzs; %>
 		      <tr>
-		        <td colspan="2"><bean:write name="lz" property="station.stationcode"/></td>
+		        <td><bean:write name="lz" property="station.stationcode"/></td>
 		        <td>
-		          <html:text name="lz" property="percent" size="5" styleClass="textfield" indexed="true" />
+		          <% if (assignment) { %>
+		          	<html:text name="lz" property="percent" size="5" styleClass="textfield" indexed="true" value="0.0" disabled="true"/>
+		          <% } else { %>
+		          	<html:text name="lz" property="percent" size="5" styleClass="textfield" indexed="true"/>
+		          <% } %>
 		        </td>
-		        <td><html:radio property="defaultLz" value="<%=new Integer(lz.getLz_ID()).toString() %>" /></td>
 		        <td>
-				  <%
-				  	if (lz.isIs_default()){
-				  %>
-				   <bean:message key="movetolz.delete.default" />
-				  <%	
-				  	} else if (lz.isUsed()) {
-				  %>
-				   	<bean:message key="movetolz.delete.assigned" />
-				  <%
-				  	} else {
-				  %>
-		          	<input type="checkbox" name="lz[<%=i %>].delete"/>
-		          	<%
-				  	}
-				  	%>
+		        	<% if (assignment) { %>
+		        		<html:radio property="defaultLz" value="<%=new Integer(lz.getLz_ID()).toString() %>" />
+		        	<% } else { %>
+		        		<html:radio property="defaultLz" value="<%=new Integer(lz.getLz_ID()).toString() %>" disabled="true"/>
+		        	<% }%>
+		        </td>
+		        <td>
+		          	<input type="checkbox" name="lz[<%=i %>].delete" />
 		        </td>
 		      </tr>
 		  </logic:iterate>
 	      
 	      
 	      <tr>
-	        <td colspan="5">&nbsp;</td>
+	        <td colspan="4">&nbsp;</td>
 	      </tr>
 	      
 	      <tr>
-	        <td colspan="5" align="center">
+	        <td colspan="4" align="center">
               <logic:present name="stationList">
                 <html:select styleClass="dropdown" name="companyForm" property="new_lz">
                   <html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
@@ -205,7 +289,7 @@
 	      </tr>
         </table>
 
-
+		<% if (assignment) { %>
         <h1 class="green">
           <bean:message key="movetolz.header.lzassignments" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -219,7 +303,7 @@
 
 
 		  
-		  <logic:iterate id="station" indexId="i" name="stationList" type="com.bagnet.nettracer.tracing.db.Station">
+		  <logic:iterate id="station" indexId="i" name="stationList" type="com.bagnet.nettracer.tracing.db.Station" scope="request">
 		      <tr>
 		        <td><bean:write name="station" property="stationcode"/></td>
 		        <td>
@@ -246,10 +330,14 @@
 		        </td>
 		      </tr>
 		  </logic:iterate>
-	      
-        
-        
-	       <tr>
+          <tr>
+            <td colspan="2">
+                <!-- pagination -->
+                <jsp:include page="../../../includes/pagination_incl.jsp" />
+                <!-- eof pagination -->
+            </td>
+          </tr>
+	      <tr>
             <td colspan="2">&nbsp;</td>
           </tr>
           <tr>
@@ -261,5 +349,7 @@
               </center>
             </td>
           </tr>
+          
         </table>
+        <% } %>
 

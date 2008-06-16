@@ -779,8 +779,7 @@ public class WTOHD {
 					
 					c.setVariable(var);
 					
-					HibernateUtils.saveCompany(c, null);
-
+					HibernateUtils.saveCompany(c, null, false);
 				} 
 				
 				if (c == null) {

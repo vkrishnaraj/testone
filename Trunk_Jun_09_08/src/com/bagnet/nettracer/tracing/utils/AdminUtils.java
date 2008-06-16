@@ -1197,7 +1197,7 @@ public class AdminUtils {
 	 * @return list of stations
 	 */
 	public static List getStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
-		return getCustomStations(form, companyCode, 0, 0, TracingConstants.ActiveStatus.ACTIVE);
+		return getCustomStations(form, companyCode, rowsperpage, currpage, TracingConstants.ActiveStatus.ACTIVE);
 	}
 	
 	/**

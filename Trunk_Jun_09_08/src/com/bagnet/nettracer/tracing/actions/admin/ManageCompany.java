@@ -78,9 +78,8 @@ public final class ManageCompany extends Action {
 				return null;
 			}
 		}
-		List stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
-				0, 0);
-		request.setAttribute("stationList", stationList);
+		//List stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
+		//request.setAttribute("stationList", stationList);
 		
 		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
 				.getCurrentlocale());
@@ -96,7 +95,7 @@ public final class ManageCompany extends Action {
 	 request.setAttribute("pageState", pageState);
 
 		if (request.getParameter("edit") != null) {
-
+			
 			String companyCode = request.getParameter("companyCode");
 			Company cmpny = AdminUtils.getCompany(companyCode);
 
@@ -141,7 +140,7 @@ public final class ManageCompany extends Action {
 					dForm.setOhd_to_lz_days("" + cmpny.getVariable().getOhd_to_lz_days());
 					dForm.setLz_mode("" + cmpny.getVariable().getLz_mode());
 					dForm.setOhd_lz("" + cmpny.getVariable().getOhd_lz());
-					populateLists(request, dForm, stationList);
+					populateLists(request, dForm);
 					dForm.setBak_nttracer_data_days(""
 					        + cmpny.getVariable().getBak_nttracer_data_days());
 					dForm.setBak_nttracer_ohd_data_days(""
@@ -235,23 +234,26 @@ public final class ManageCompany extends Action {
 		if (request.getParameter("addNewLz") != null) {
 			LzUtils.addNewLz(new Integer(dForm.getNew_lz()).intValue());
 			
-			populateLists(request, dForm, stationList);
+			populateLists(request, dForm);
 			return mapping.findForward(TracingConstants.EDIT_COMPANY);
 		}
 		
-		if (request.getParameter("saveLzList") != null) {
-			LzUtils.updateLzList(dForm, request);
-			populateLists(request, dForm, stationList);
-			return mapping.findForward(TracingConstants.EDIT_COMPANY);
+		boolean saveLzList = request.getParameter("saveLzList") != null;
+		if (saveLzList) {
+			LzUtils.updateLzList(dForm, request, user);
+			populateLists(request, dForm);
+			// Save mode
+			// var.setLz_mode(Integer.parseInt((String) dForm.getLz_mode()));
+			//return mapping.findForward(TracingConstants.EDIT_COMPANY);
 		}
 		
 		if (request.getParameter("saveAssignments") != null) {
 			LzUtils.updateStationAssignments(dForm, request, user);
-			populateLists(request, dForm, stationList);
+			populateLists(request, dForm);
 			return mapping.findForward(TracingConstants.EDIT_COMPANY);
 		}
 		
-		if (request.getParameter("save") != null) {
+		if (request.getParameter("save") != null || saveLzList) {
 			Company c = new Company();
 			c.setCompanyCode_ID((String) dForm.getCompanyCode());
 			c.setCompanydesc((String) dForm.getCompanyDesc());
@@ -310,12 +312,15 @@ public final class ManageCompany extends Action {
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
-					var.setMbr_to_lz_days(Integer.parseInt((String) dForm.getMbr_to_lz_days()));
-					var.setDamaged_to_lz_days(Integer.parseInt((String) dForm.getDamaged_to_lz_days()));
-					var.setMiss_to_lz_days(Integer.parseInt((String) dForm.getMiss_to_lz_days()));
-					var.setOhd_to_lz_days(Integer.parseInt((String) dForm.getOhd_to_lz_days()));
-					var.setOhd_lz(Integer.parseInt((String) dForm.getOhd_lz()));
-					var.setLz_mode(Integer.parseInt((String) dForm.getLz_mode()));
+					if (saveLzList) {
+						var.setLz_mode(Integer.parseInt((String) dForm.getLz_mode()));
+					} else {
+						var.setMbr_to_lz_days(Integer.parseInt((String) dForm.getMbr_to_lz_days()));
+						var.setDamaged_to_lz_days(Integer.parseInt((String) dForm.getDamaged_to_lz_days()));
+						var.setMiss_to_lz_days(Integer.parseInt((String) dForm.getMiss_to_lz_days()));
+						var.setOhd_to_lz_days(Integer.parseInt((String) dForm.getOhd_to_lz_days()));
+						var.setOhd_lz(Integer.parseInt((String) dForm.getOhd_lz()));
+					}
 				}
 				
 				
@@ -355,7 +360,7 @@ public final class ManageCompany extends Action {
 
 			try {
 				c.setVariable(var);
-				HibernateUtils.saveCompany(c, (String) request.getAttribute("pageState"));
+				HibernateUtils.saveCompany(c, (String) request.getAttribute("pageState"), saveLzList);
 
 				Company cmp = AdminUtils.getCompany(c.getCompanyCode_ID());
 
@@ -444,9 +449,51 @@ public final class ManageCompany extends Action {
 		return mapping.findForward(TracingConstants.VIEW_COMPANIES);
 	}
 	
-	public void populateLists(HttpServletRequest request, MaintainCompanyForm dForm, List<Station> stationList){
-		stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
+	public void populateLists(HttpServletRequest request, MaintainCompanyForm dForm){
+		List stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
 				0, 0);
+
+		
+		/** ************ pagination ************* */
+		int rowcount = -1;
+		int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
+				.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
+		if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+		int totalpages = 0;
+
+		int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
+				.getParameter("currpage")) : 0;
+		if (request.getParameter("nextpage") != null && request.getParameter("nextpage").equals("1")) currpage++;
+		if (request.getParameter("prevpage") != null && request.getParameter("prevpage").equals("1")) currpage--;
+
+		request.setAttribute("currpage", Integer.toString(currpage));
+
+		// get row count
+		rowcount = stationList.size();
+
+		// find out total pages
+		totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+
+		if (totalpages <= currpage) {
+			currpage = 0;
+			request.setAttribute("currpage", "0");
+		}
+
+		stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
+				rowsperpage, currpage);
+
+		if (currpage + 1 == totalpages) request.setAttribute("end", "1");
+		if (totalpages > 1) {
+			ArrayList al = new ArrayList();
+			for (int i = 0; i < totalpages; i++) {
+				al.add(Integer.toString(i));
+			}
+			request.setAttribute("pages", al);
+		}
+
+		/** ************ end of pagination ************* */
+
 		List lzList = LzUtils.getIncidentLzStations();
 		HashMap<Integer,String> usedMap = new HashMap();
 		
