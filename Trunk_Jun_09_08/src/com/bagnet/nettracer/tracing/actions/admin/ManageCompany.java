@@ -321,6 +321,7 @@ public final class ManageCompany extends Action {
 						var.setOhd_to_lz_days(Integer.parseInt((String) dForm.getOhd_to_lz_days()));
 						var.setOhd_lz(Integer.parseInt((String) dForm.getOhd_lz()));
 					}
+					populateLists(request, dForm);
 				}
 				
 				
@@ -512,6 +513,7 @@ public final class ManageCompany extends Action {
 		dForm.setLzStations(lzList);
 		dForm.setDefaultLz(LzUtils.getDefaultLz(lzList));
 		request.setAttribute("stationList", stationList);
+		//request.setAttribute("lzMode", new Integer(dForm.getLz_mode()).intValue());
 	}
 }
 
