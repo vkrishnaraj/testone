@@ -90,10 +90,7 @@
       }
   </script>
 
-		
-
-<input type="hidden" name="pageState" value="<%=request.getAttribute("pageState") %>" />
-		
+		<input type="hidden" name="pageState" value="<%=request.getAttribute("pageState") %>" />
 		<html:hidden name="companyForm" property="companyCode" />
 		
         <h1 class="green">
@@ -102,13 +99,11 @@
           
         </h1>
         
-        
         <logic:present name="saved" scope="request">
 			<p align="center">
             	<font color="green"><bean:message key="prompt.company_saved" /></font>
   			</p>
         </logic:present>
-          
         
         <logic:messagesPresent message="true">
           <font color=red>
@@ -181,9 +176,9 @@
 	              :
 	            </td>
 	            <td>
-	          	  <logic:notEmpty name="stationList" scope="request">
+	          	  <logic:notEmpty name="fullStationList" scope="request">
                     <html:select name="companyForm" property="ohd_lz" styleClass="dropdown">
-	                  <html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
+	                  <html:options collection="fullStationList" property="station_ID" labelProperty="stationcode" />
 	                </html:select>
 	              </logic:notEmpty>
 	            </td>
@@ -277,7 +272,7 @@
 	        <td colspan="4" align="center">
               <logic:present name="stationList">
                 <html:select styleClass="dropdown" name="companyForm" property="new_lz">
-                  <html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
+                  <html:options collection="fullStationList" property="station_ID" labelProperty="stationcode" />
                 </html:select>
                 <html:submit styleId="button" property="addNewLz">
                   <bean:message key="movetolz.button.addnewlz" />

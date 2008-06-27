@@ -220,7 +220,7 @@
 	              <html:text styleClass="textfield" name="companyForm" property="min_interim_approval_miles" size="4" maxlength="4" />
 	            </td>
 	          </tr>
-	                    <tr>
+		    <tr>
             <td colspan="2">
               &nbsp;
             </td>
@@ -234,41 +234,6 @@
               </html:submit></center>
             </td>
           </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.bak_nttracer_data_days" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="bak_nttracer_data_days" size="4" maxlength="4" />
-	            </td>
-	          </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.bak_nttracer_ohd_data_days" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="bak_nttracer_ohd_data_days" size="4" maxlength="4" />
-	            </td>
-	          </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.bak_nttracer_lostfound_data_days" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="bak_nttracer_lostfound_data_days" size="4" maxlength="4" />
-	            </td>
-	          </tr>
+
         </table>
 	          

@@ -73,13 +73,14 @@ public final class ManageCompany extends Action {
 					&& request.getParameter("addNewLz") == null
 					&& request.getParameter("saveLzList") == null
 					&& request.getParameter("saveAssignments") == null
+					&& request.getParameter("pagination") == null
 					) || request.getParameter("companyCode") == null || !request.getParameter("companyCode").equals(user.getStation().getCompany().getCompanyCode_ID())) {
 				response.sendRedirect("companyAdmin.do?edit=1&companyCode=" + user.getStation().getCompany().getCompanyCode_ID());
 				return null;
 			}
 		}
-		//List stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
-		//request.setAttribute("stationList", stationList);
+		List fullStationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
+	  request.setAttribute("fullStationList", fullStationList);
 		
 		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
 				.getCurrentlocale());
@@ -94,7 +95,8 @@ public final class ManageCompany extends Action {
    }
 	 request.setAttribute("pageState", pageState);
 
-		if (request.getParameter("edit") != null) {
+		if (request.getParameter("edit") != null || pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ) &&
+				request.getParameter("pagination")!= null && !request.getParameter("pagination").equals("")) {
 			
 			String companyCode = request.getParameter("companyCode");
 			Company cmpny = AdminUtils.getCompany(companyCode);
@@ -240,14 +242,21 @@ public final class ManageCompany extends Action {
 		
 		boolean saveLzList = request.getParameter("saveLzList") != null;
 		if (saveLzList) {
-			LzUtils.updateLzList(dForm, request, user);
+			
+			if (!LzUtils.updateLzList(dForm, request, user)) {
+				ActionMessage error = null;
+				error = new ActionMessage("error.deleting.lz");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+				populateLists(request, dForm);
+				return mapping.findForward(TracingConstants.EDIT_COMPANY);
+			}
+			
 			populateLists(request, dForm);
-			// Save mode
-			// var.setLz_mode(Integer.parseInt((String) dForm.getLz_mode()));
-			//return mapping.findForward(TracingConstants.EDIT_COMPANY);
 		}
 		
 		if (request.getParameter("saveAssignments") != null) {
+			getStationList(request, dForm);
 			LzUtils.updateStationAssignments(dForm, request, user);
 			populateLists(request, dForm);
 			return mapping.findForward(TracingConstants.EDIT_COMPANY);
@@ -304,9 +313,11 @@ public final class ManageCompany extends Action {
 					var.setMin_interim_approval_miles(Double.parseDouble((String) dForm
 							.getMin_interim_approval_miles()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
+					/*
 					var.setBak_nttracer_data_days(Integer.parseInt((String) dForm.getBak_nttracer_data_days()));
 					var.setBak_nttracer_ohd_data_days(Integer.parseInt((String) dForm.getBak_nttracer_ohd_data_days()));
 					var.setBak_nttracer_lostfound_data_days(Integer.parseInt((String) dForm.getBak_nttracer_lostfound_data_days()));
+					*/
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
 					
 				}
@@ -328,6 +339,7 @@ public final class ManageCompany extends Action {
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_SECURITY)) {
 					var.setPass_expire_days(Integer.parseInt((String) dForm.getPass_expire_days()));
 					var.setMax_failed_logins(Integer.parseInt((String) dForm.getAccount_lockout()));
+					var.setSecure_password(Integer.parseInt((String) dForm.getSecure_password()));
 				}
 				
 				
@@ -350,10 +362,12 @@ public final class ManageCompany extends Action {
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER)) {
+					/*
 					var.setMbr_to_wt_days(Integer.parseInt((String) dForm.getMbr_to_wt_days()));
 					var.setOhd_to_wt_days(Integer.parseInt((String) dForm.getOhd_to_wt_days()));
 					var.setWt_pass((String)dForm.getWt_user());
 					var.setWt_user((String)dForm.getWt_pass());
+					*/
 				}
 
 			} catch (Exception e) {
@@ -451,6 +465,29 @@ public final class ManageCompany extends Action {
 	}
 	
 	public void populateLists(HttpServletRequest request, MaintainCompanyForm dForm){
+		List stationList = getStationList(request, dForm);
+
+		List lzList = LzUtils.getIncidentLzStations();
+		HashMap<Integer,String> usedMap = new HashMap();
+		
+		for (Iterator<Station> i = stationList.iterator(); i.hasNext();) {
+			usedMap.put(new Integer(i.next().getLz().getLz_ID()), "");
+		}
+		
+		for (Iterator<Lz> j = lzList.iterator(); j.hasNext();) {
+			Lz lz = j.next();
+			int lzId = lz.getLz_ID();
+			if (usedMap.containsKey(new Integer(lzId))) {
+				lz.setIsUsed(true);	
+			}
+		}
+		
+		dForm.setLzStations(lzList);
+		dForm.setDefaultLz(LzUtils.getDefaultLz(lzList));
+	}
+	
+	public static List<Station> getStationList(HttpServletRequest request, MaintainCompanyForm dForm) {
+		
 		List stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
 				0, 0);
 
@@ -493,27 +530,9 @@ public final class ManageCompany extends Action {
 			request.setAttribute("pages", al);
 		}
 
-		/** ************ end of pagination ************* */
-
-		List lzList = LzUtils.getIncidentLzStations();
-		HashMap<Integer,String> usedMap = new HashMap();
-		
-		for (Iterator<Station> i = stationList.iterator(); i.hasNext();) {
-			usedMap.put(new Integer(i.next().getLz().getLz_ID()), "");
-		}
-		
-		for (Iterator<Lz> j = lzList.iterator(); j.hasNext();) {
-			Lz lz = j.next();
-			int lzId = lz.getLz_ID();
-			if (usedMap.containsKey(new Integer(lzId))) {
-				lz.setIsUsed(true);	
-			}
-		}
-		
-		dForm.setLzStations(lzList);
-		dForm.setDefaultLz(LzUtils.getDefaultLz(lzList));
+		/** ************ end of pagination **************/
 		request.setAttribute("stationList", stationList);
-		//request.setAttribute("lzMode", new Integer(dForm.getLz_mode()).intValue());
+		return stationList;
 	}
 }
 

@@ -137,7 +137,7 @@ public class LzUtils {
 		}
 	}
 	
-	public static void updateLzList(MaintainCompanyForm form, HttpServletRequest request, Agent user) {
+	public static boolean updateLzList(MaintainCompanyForm form, HttpServletRequest request, Agent user) {
 		Session sess = null;
 		Transaction t = null;
 		List<Lz> lzList = form.getLzStations();
@@ -145,6 +145,7 @@ public class LzUtils {
 		Lz defaultLz = null;
 		boolean needNewDefault = false;
 		boolean newDefaultAdded = false;
+		boolean deletingAllLz = true;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -158,9 +159,14 @@ public class LzUtils {
 					deleteThese.add(lz);
 					if (form.getDefaultLz().intValue() == lz.getLz_ID()) {
 						needNewDefault = true;
-						break;
 					}
+				} else {
+					deletingAllLz = false;
 				}
+			}
+			
+			if (deletingAllLz) {
+				return false;
 			}
 			
 			// Update LZ Data
@@ -226,16 +232,18 @@ public class LzUtils {
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			e.printStackTrace();
-			return;
+			return true;
 		} finally {
 			if (sess != null) {
 				try {
 					sess.close();
 				} catch (Exception e) {
 					logger.fatal(e.getMessage());
+					return false;
 				}
 			}
 		}
+		return true;
 	}
 	
 	public static List getIncidentLzStations() {

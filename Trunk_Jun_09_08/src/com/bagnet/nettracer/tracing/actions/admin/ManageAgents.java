@@ -228,30 +228,28 @@ public final class ManageAgents extends Action {
 					&& ((String) dForm.get("password")).equals((String) dForm.get("password2"))) {
 				Agent agent = null;
 				boolean isNew = false;
-				if (request.getParameter("self") != null) {
-					agent = user;
-				} else {
-					if (username != null) {
-						agent = AdminUtils.getAgentBasedOnUsername(username, companyCode);
-						if (request.getParameter("aNew") != null && agent != null) {
-							request.setAttribute("aNew", "1");
-							//dForm.set("username", "");
 
-							ActionMessage error = new ActionMessage("error.username.exists");
-							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-							saveMessages(request, errors);
-							if (request.getParameter("self") != null) {
-								return mapping.findForward(TracingConstants.EDIT_SELF);
-							} else {
-								return mapping.findForward(TracingConstants.EDIT_AGENT);
-							}
-						}
-						if (request.getParameter("aNew") != null) {
-							agent = new Agent();
-							isNew = true;
+			if (username != null) {
+					agent = AdminUtils.getAgentBasedOnUsername(username, companyCode);
+					if (request.getParameter("aNew") != null && agent != null) {
+						request.setAttribute("aNew", "1");
+						//dForm.set("username", "");
+
+						ActionMessage error = new ActionMessage("error.username.exists");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						if (request.getParameter("self") != null) {
+							return mapping.findForward(TracingConstants.EDIT_SELF);
+						} else {
+							return mapping.findForward(TracingConstants.EDIT_AGENT);
 						}
 					}
+					if (request.getParameter("aNew") != null) {
+						agent = new Agent();
+						isNew = true;
+					}
 				}
+					
 				Station s = new Station();
 				if (request.getParameter("self") == null) {
 					s.setStation_ID(Integer.parseInt(((String) dForm.get("station_id"))));
@@ -304,6 +302,12 @@ public final class ManageAgents extends Action {
 						TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS, user)) {
 					agent.setWeb_enabled(((String) dForm.get("web_enabled")).equals("true"));
 					agent.setWs_enabled(((String) dForm.get("ws_enabled")).equals("true"));
+					if (!agent.isWeb_enabled() && !agent.isWs_enabled()) {
+						ActionMessage error = new ActionMessage("error.agents.mustbeweborws");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						return mapping.findForward(TracingConstants.EDIT_AGENT);
+					}
 				} else {
 					agent.setWeb_enabled(true);
 					agent.setWs_enabled(false);
@@ -318,6 +322,8 @@ public final class ManageAgents extends Action {
 						if (request.getParameter("self") != null) {
 							return mapping.findForward(TracingConstants.EDIT_SELF);
 						} else {
+							if (request.getParameter("aNew") != null)
+								request.setAttribute("aNew", "1");
 							return mapping.findForward(TracingConstants.EDIT_AGENT);
 						}
 					}
@@ -325,6 +331,8 @@ public final class ManageAgents extends Action {
 				
 				if (isNew) {
 					HibernateUtils.saveNew(agent);
+					if (request.getParameter("self") != null)
+						user = agent;
 				} else {
 					//Find the mail config xml for this agent.
 					HibernateUtils.save(agent);

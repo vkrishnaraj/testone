@@ -44,7 +44,7 @@ public class WorldTracerUtils {
 	//private static String wt_pass = "Tran$615J";
 	private static String wt_http = "www.worldtracer.aero";
 	public static String wt_url = "http://www.worldtracer.aero/";
-	public static String wt_suffix_airline = "fl";
+	public static String wt_suffix_airline = "us";
 	
 	private static String nt_user = "ogadmin";
 	private static String nt_comp = "OW";
