@@ -3,10 +3,7 @@ function createShims() {
 	for (j=0; j<ieULs.length; j++) {
 		if (ieULs[j].id == "menubuilder0" || ieULs[j].id == "menubuilder7" || ieULs[j].id == "menubuilder8") {
 			var ieMat=document.createElement('iframe');
-			if(document.location.protocol == "https:")
-				ieMat.src="//0";
-			else
-				ieMat.src="javascript:false";
+			ieMat.src="javascript:false";
 	
 			ieMat.style.width=ieULs[j].offsetWidth+"px";
 			ieMat.style.height=ieULs[j].offsetHeight+"px";

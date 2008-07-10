@@ -290,7 +290,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <logic:present name="user" scope="session">
 <DIV ID="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></DIV>
 
-<iframe id="DivShim" src="about:blank" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
+<iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
 
 <script language="javascript">
 <!--
