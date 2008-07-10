@@ -103,7 +103,8 @@ public class ManageMessage extends Action {
 			theForm.setAgentName(message.getAgent().getUsername());
 			//update the \n with "<br>" so that it could be displayed correctly as
 			// html.
-			theForm.setBody(theForm.getBody().replaceAll("\n", "<br>"));
+			//theForm.setBody(StringEscapeUtils.escapeHtml(theForm.getBody()));
+			//theForm.setBody(theForm.getBody().replaceAll("\n", "<br>"));
 			theForm.setSubject(message.getSubject());
 			theForm.setCompanyCode(message.getParent_message().getSend_station().getCompany()
 					.getCompanyCode_ID());
