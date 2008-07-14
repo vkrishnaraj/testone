@@ -358,13 +358,20 @@ function gotoHistoricalReport() {
                 </html:submit>
 <%
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
+					if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
+						if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
+					
 %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-                <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
+				<logic:equal name="incidentForm" property="wt_id" value="">
+                <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqincidentForm(this.form);">
                   <bean:message key="button.savetoWT" />
                 </html:submit>
+                </logic:equal>
 <%
-				}
+						}
+                }     
+		}
 %>
               </logic:notEqual>
               <logic:equal name="incidentForm" property="incident_ID" value="">

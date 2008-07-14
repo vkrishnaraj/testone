@@ -9,15 +9,25 @@ import java.io.File;
 import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.hibernate.cfg.Configuration;
 
+import com.bagnet.nettracer.cronjob.archive.DataToBakThread;
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.wt.WorldTracerUtils;
+import org.hibernate.Session; 
 /**
  * @author Administrator
  * 
  * create date - Nov 8, 2004
  */
 public class NettracerCron {
+	private static Configuration cfg = new Configuration();
+	private static String hibernate_main_path = HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath();
 	public static void main(String[] args) {
-
+/*
 		if (args.length <= 0)
 			return;
 		String path = args[0];
@@ -28,28 +38,45 @@ public class NettracerCron {
 		File lf = new File(path + "log4j.properties");
 		if (lf.exists())
 			PropertyConfigurator.configure(path + "log4j.properties");
-
+*/
 		//MoveToLZThread mbrthread = new MoveToLZThread(path, MoveToLZThread.MBR,company);
 		//mbrthread.start();
 		//MoveToLZThread ohdthread = new MoveToLZThread(path, MoveToLZThread.OHD,company);
 		//ohdthread.start();
-
-	}
+        //HibernateCronWrapper.runCron();
 	
-	public void runCron(String path, String company) {
-//	 move mbr to lz thread
-		MoveToLZThread mbrthread = new MoveToLZThread(path, MoveToLZThread.MBR,company);
-		mbrthread.start();
 
-		//RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(path,company);
-		//rwtthread.start();
+		HibernateWrapper Hav = new HibernateWrapper();
+		cfg.configure(new File(hibernate_main_path)).buildSessionFactory();
+        runCron(cfg.getProperties());
+
+		//WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline("DA") + "/", "DA");
+		//System.out.println(WorldTracerUtils.getWt_suffix_airline("DA"));
 	}
+
 
 	/*** called by hibernate starter **/
-	public void runCron(Properties properties) {
+	public static void runCron(Properties properties) {
+
+		MoveToWTThread wtthread = new MoveToWTThread(properties);
+		DataToBakThread ntarchive = new DataToBakThread(properties);
+		RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
+		WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(properties.getProperty("company.code"));
+		if (csv != null) {
+			System.out.println(properties.getProperty("company.code"));
+		if (csv.getWt_enabled() == 1){
+		//rwtthread.start();
+		//wtthread.start();
+		//ntarchive.run();
+		//wtactionqueue.start();
+		}
+		else 
+		System.out.println("no worldtracer");
+		}
 //	 move mbr to lz thread
-		MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
-		mbrthread.start();
+		//MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
+		//mbrthread.start();
 		//MoveToLZThread ohdthread = new MoveToLZThread(properties, MoveToLZThread.OHD,company);
 		//ohdthread.start();
 		//RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
@@ -57,5 +84,9 @@ public class NettracerCron {
 		
 		//MoveToWTThread wtthread = new MoveToWTThread(properties);
 		//wtthread.start();
+		
+		//WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
+		//wtactionqueue.start();
 	}
+
 }

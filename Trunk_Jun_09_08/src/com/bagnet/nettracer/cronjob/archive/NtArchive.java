@@ -19,6 +19,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
+
+import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -133,7 +135,6 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Work_Shift;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.test;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.WT_TTY;
@@ -141,11 +142,11 @@ public class NtArchive {
 
 	
 	public static void  main(String args[]){
-		HibernateArchiveWrapper Hav = new HibernateArchiveWrapper();
+		HibernateCronWrapper Hav = new HibernateCronWrapper();
 		//Session sess = HibernateArchiveWrapper.getNtSession().openSession();
-		//
-		DataToBakThread ntarchive = new DataToBakThread(Hav.getNtConfig().getProperties());
-		System.out.println(ntarchive);
-		ntarchive.run();
+		System.out.println(Hav.getNtConfig().getProperties());
+		//DataToBakThread ntarchive = new DataToBakThread(Hav.getNtConfig().getProperties());
+		//System.out.println(ntarchive);
+		//ntarchive.run();
 	}
 }

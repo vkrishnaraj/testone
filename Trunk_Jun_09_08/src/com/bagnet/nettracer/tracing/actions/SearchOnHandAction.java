@@ -65,7 +65,7 @@ public class SearchOnHandAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
 			if (foundohd == null) {
-				HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
+				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
 				String result = WorldTracerUtils.getROF(client, request.getParameter("wt_id"));
 				WTOHD wi = new WTOHD();
 				// for now show all as active
@@ -80,6 +80,7 @@ public class SearchOnHandAction extends Action {
 				
 			} else {
 				response.sendRedirect("addOnHandBag.do?ohd_ID=" + foundohd.getOHD_ID());
+				
 			}
 		}
 		

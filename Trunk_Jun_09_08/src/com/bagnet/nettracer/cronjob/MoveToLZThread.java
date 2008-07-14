@@ -13,21 +13,17 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -39,7 +35,6 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.LzUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
@@ -76,7 +71,7 @@ public class MoveToLZThread extends Thread {
 	private final static String OHD_MSG = "OHD MOVED TO ";
 
 	private String company;
-
+	int retrieve;
 	public MoveToLZThread(Properties properties,int type) {
 		try {
 			Connection conn = null;
@@ -168,6 +163,7 @@ public class MoveToLZThread extends Thread {
 					missing = rs.getInt("miss_to_lz_days");
 					ohd = rs.getInt("ohd_to_lz_days");
 					company = rs.getString("companycode_ID");
+					retrieve = rs.getInt("retrieve_actionfile_interval");
 
 					// only move if days is greater than 0
 					if (this.type == MBR && mbr > 0) moveMBRToLZ(company);
@@ -202,7 +198,7 @@ public class MoveToLZThread extends Thread {
 					}
 				}
 
-				pause(86400);
+				pause(retrieve * 60 * 1000);
 
 			}
 		} catch (Exception e) {

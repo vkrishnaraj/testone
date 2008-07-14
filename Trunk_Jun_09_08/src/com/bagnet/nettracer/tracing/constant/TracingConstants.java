@@ -90,6 +90,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_ROH = "WorldTracer ROH";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_TTY = "WorldTracer TTY";
 	
+	
 	public final static String SYSTEM_COMPONENT_NAME_BDO = "Baggage Delivery Order";
 
 	public final static String SYSTEM_COMPONENT_NAME_SEARCH_BDO = "Search Baggage Delivery Order";
@@ -395,6 +396,9 @@ public class TracingConstants {
 
 	//success wt tty
 	public final static String SEND_WT_TTY_SUCCESS = "sendwtttysuccess";
+	
+	//success wt roh
+	public final static String SEND_WT_ROH_SUCCESS = "sendwtrohsuccess";
 	//enter forward
 	public final static String ENTER_FORWARD_ON_HAND = "enterforwardonhand";
 

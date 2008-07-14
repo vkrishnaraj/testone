@@ -39,7 +39,9 @@ public class UserPermissions {
 			 * 
 			 * List list = cri.list();
 			 */
+			
 			StringBuffer sql = new StringBuffer(1024);
+		
 			sql
 					.append("select distinct policy,policy.component.sort_order from com.bagnet.nettracer.tracing.db.GroupComponentPolicy policy ");
 			sql.append(" where 1=1 ");
@@ -59,9 +61,34 @@ public class UserPermissions {
 				o = (Object[]) i.next();
 
 				GroupComponentPolicy plicy = (GroupComponentPolicy) o[0];
-
+				if (agent.getStation().getCompany().getVariable().getWt_enabled() == 1){
+					
 				if (plicy.getComponent().getDisplay() != 0) {
 					LinkedHashMap childMap = new LinkedHashMap();
+	
+					
+					permissionMap.put(plicy.getComponent().getComponent_Name(), childMap);
+					List childList = getChildLinks(plicy.getComponent().getComponent_ID(), agent.getGroup()
+							.getUserGroup_ID());
+					for (Iterator j = childList.iterator(); j.hasNext();) {
+						/*
+						GroupComponentPolicy plicy2 = (GroupComponentPolicy) j.next();
+						if (plicy2.getComponent().getDisplay() != 0) {
+							childMap.put(plicy2.getComponent().getComponent_Name(), plicy2.getComponent()
+									.getComponent_action_link());
+						}
+						*/
+						SystemComponent sc = (SystemComponent) j.next();
+						if (sc.getDisplay() != 0) {
+							childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
+						}
+					}
+				  }			
+				}
+				else if (plicy.getComponent().getDisplay() != 0 && plicy.getComponent().getComponent_Name().indexOf("WorldTracer") == -1) {
+					LinkedHashMap childMap = new LinkedHashMap();
+	
+					
 					permissionMap.put(plicy.getComponent().getComponent_Name(), childMap);
 					List childList = getChildLinks(plicy.getComponent().getComponent_ID(), agent.getGroup()
 							.getUserGroup_ID());

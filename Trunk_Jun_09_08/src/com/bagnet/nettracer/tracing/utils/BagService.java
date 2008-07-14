@@ -72,6 +72,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
@@ -92,6 +93,7 @@ import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
 import com.bagnet.nettracer.tracing.forms.SearchOnHandForm;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
@@ -533,7 +535,7 @@ public class BagService {
 			
 			// everytime when user update mbr, reset the ohd lasttraced date so tracer
 			// will pick it up.
-			iDTO.setOhd_lasttraced("");
+			iDTO.setOhd_lasttraced(null);
 			
 			int result = -1;
 			// if it is readonly and update remark then only update remark
@@ -547,7 +549,7 @@ public class BagService {
 				} else {
 					result = iBMO.insertIncident(iDTO, theform.getAssoc_ID(), mod_agent, false);
 				}
-				
+				/*
 				// if insert to wt is true, then insert into wt
 				if (toWT) {
 					WTIncident wt = new WTIncident();
@@ -557,6 +559,18 @@ public class BagService {
 					else {
 						logger.info("inserted into wt: mbr: " + result);
 					}
+				}
+				*/
+				if (toWT &&  mod_agent.getStation().getCompany().getVariable().getWt_enabled() == 1) {
+					WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
+					WT_Queue wtq = new WT_Queue();
+					wtq.setAgent(mod_agent);
+					wtq.setCreatedate(TracerDateTime.getGMTDate());
+					wtq.setType_id(iDTO.getIncident_ID());
+					wtq.setStationcode(mod_agent.getStation().getStationcode());
+					wtq.setType("closeIncident");
+					wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
+					wq.saveWtobj(iDTO, theform, wtq, mod_agent);
 				}
 			}
 			
@@ -1303,6 +1317,7 @@ public class BagService {
 					
 					// if insert to wt is true, then insert into wt
 					if (toWT) {
+						/*
 						HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",mod_agent.getCompanycode_ID());
 						
 						WTOHD wt = new WTOHD();
@@ -1319,7 +1334,7 @@ public class BagService {
 						  }
 						  if (closewtresult == null) wtresult = wt.getError();
 						}
-						
+						*/
 					}
 				}
 				

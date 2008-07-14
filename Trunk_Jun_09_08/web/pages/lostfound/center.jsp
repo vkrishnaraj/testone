@@ -392,7 +392,6 @@ function gotoHistoricalReport() {
               
 <%
   }
-
 %>             
               <tr>
                 <td colspan="4">

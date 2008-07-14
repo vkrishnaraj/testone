@@ -60,7 +60,7 @@ public class Incident implements Serializable {
 	private String ohd_lasttraced;
 	
 	private String wt_id;	//world tracer id
-
+    private String type_id;
 	private Set passengers;
 
 	private List itemlist;

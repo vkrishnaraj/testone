@@ -51,6 +51,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String ohd_to_wt_days;
 	private String wt_user;
 	private String wt_pass;
+	private String retrieve_actionfile_interval;
 	private String audit_ohd;
 	private String audit_lost_found;
 	private String audit_lost_delayed;
@@ -74,6 +75,47 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String bak_nttracer_data_days;
 	private String bak_nttracer_ohd_data_days;
 	private String bak_nttracer_lostfound_data_days;
+    private String wt_url;
+    private String wt_airlinecode;
+    private String wt_enabled;
+    private String wt_write_enabled;
+
+
+	public String getWt_write_enabled() {
+		return wt_write_enabled;
+	}
+
+	public void setWt_write_enabled(String wt_write_enabled) {
+		this.wt_write_enabled = wt_write_enabled;
+	}
+
+
+	public String getWt_url() {
+		return wt_url;
+	}
+
+
+	public void setWt_url(String wt_url) {
+		this.wt_url = wt_url;
+	}
+
+	public String getWt_airlinecode() {
+		return wt_airlinecode;
+	}
+
+	public void setWt_airlinecode(String wt_airlinecode) {
+		this.wt_airlinecode = wt_airlinecode;
+	}
+
+
+	public String getWt_enabled() {
+		return wt_enabled;
+	}
+
+
+	public void setWt_enabled(String wt_enabled) {
+		this.wt_enabled = wt_enabled;
+	}
 
 	public void setBak_nttracer_lostfound_data_days(String days) {
 		this.bak_nttracer_lostfound_data_days = days;
@@ -179,7 +221,9 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public String getAudit_delivery_companies() { return this.audit_delivery_companies;}
 	public String getSecure_password() { return this.secure_password;}
 	public String getWs_enabled() { return this.ws_enabled;}
-
+	public String getRetrieve_actionfile_interval() {
+		return this.retrieve_actionfile_interval;
+	}
 	public void setPageState ( String  pageState ) { this.pageState  =  pageState ; }
 	public void setCompanySearchName ( String  companySearchName ) { this.companySearchName  =  companySearchName ; }
 	public void setCompanyCode ( String  companyCode ) { this.companyCode  =  companyCode ; }
@@ -236,6 +280,12 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setAudit_delivery_companies ( String  audit_delivery_companies ) { this.audit_delivery_companies  =  audit_delivery_companies ; }
 	public void setSecure_password ( String  secure_password ) { this.secure_password  =  secure_password ; }
 	public void setWs_enabled ( String  ws_enabled ) { this.ws_enabled  =  ws_enabled ; }
+
+
+
+	public void setRetrieve_actionfile_interval(String retrieve_actionfile_interval) {
+		this.retrieve_actionfile_interval = retrieve_actionfile_interval;
+	}
 
 
 

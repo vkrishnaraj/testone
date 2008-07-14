@@ -881,6 +881,7 @@ function gotoHistoricalReport() {
               <tr>
                 <td valign="top" colspan=3>
 <%
+                  
                   if (a.getGroup().getDescription().equalsIgnoreCase("Admin") || remark.getRemark_ID() == 0) {
 %>
 <%
@@ -890,7 +891,8 @@ function gotoHistoricalReport() {
 %>
                     <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"
                     <logic:equal name="OnHandForm" property="readonly" value="1"><% if (remark.getRemark_ID() > 0) {%> readonly="readonly"<% } %></logic:equal>
-                    ><%= remark.getRemarktext() %></textarea>
+                    ><%= remark.getRemarktext() %> </textarea>
+                    
                     <input name="<%= remarkDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
                     <br>
                     <logic:notEqual name="OnHandForm" property="readonly" value="1">
@@ -902,6 +904,7 @@ function gotoHistoricalReport() {
                   } else {
 %>
                     <bean:write name="remark" property="remarktext" />
+
 <%
                   }
 %>
@@ -932,6 +935,8 @@ function gotoHistoricalReport() {
 
 <%
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
+					if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
+						if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
 %>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <logic:notEmpty name="OnHandForm" property="wt_id">
@@ -949,6 +954,8 @@ function gotoHistoricalReport() {
                  </logic:notEqual>
                 </logic:equal>
 <%
+						}
+					}
 				}
 %>
               </logic:notEmpty>

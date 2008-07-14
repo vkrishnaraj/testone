@@ -25,7 +25,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		HttpSession session = req.getSession(true);
 		user = (Agent) session.getAttribute("user");
-		HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
+		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
 		String method = req.getParameter("method");
 
 		res.setContentType("text/html");

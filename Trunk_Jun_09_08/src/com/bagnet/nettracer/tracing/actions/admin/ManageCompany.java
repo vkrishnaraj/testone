@@ -183,6 +183,11 @@ public final class ManageCompany extends Action {
 					dForm.setOhd_to_wt_days("" + cmpny.getVariable().getOhd_to_wt_days());
 					dForm.setWt_user("" + cmpny.getVariable().getWt_user());
 					dForm.setWt_pass("" + cmpny.getVariable().getWt_pass());
+					dForm.setRetrieve_actionfile_interval("" + cmpny.getVariable().getRetrieve_actionfile_interval());
+					dForm.setWt_url("" + cmpny.getVariable().getWt_url());
+					dForm.setWt_airlinecode("" + cmpny.getVariable().getWt_airlinecode());
+					dForm.setWt_enabled("" + cmpny.getVariable().getWt_enabled());
+					dForm.setWt_write_enabled("" + cmpny.getVariable().getWt_write_enabled());
 				}
 				
 			}
@@ -313,11 +318,9 @@ public final class ManageCompany extends Action {
 					var.setMin_interim_approval_miles(Double.parseDouble((String) dForm
 							.getMin_interim_approval_miles()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
-					/*
 					var.setBak_nttracer_data_days(Integer.parseInt((String) dForm.getBak_nttracer_data_days()));
 					var.setBak_nttracer_ohd_data_days(Integer.parseInt((String) dForm.getBak_nttracer_ohd_data_days()));
 					var.setBak_nttracer_lostfound_data_days(Integer.parseInt((String) dForm.getBak_nttracer_lostfound_data_days()));
-					*/
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
 					
 				}
@@ -360,14 +363,21 @@ public final class ManageCompany extends Action {
 					var.setAudit_airport(Integer.parseInt((String) dForm.getAudit_airport()));
 					var.setAudit_delivery_companies(Integer.parseInt((String) dForm.getAudit_delivery_companies()));
 				}
-				
+				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WEB_SERVICES)){
+					var.setWs_enabled(Integer.parseInt(dForm.getWs_enabled()));
+					System.out.println(dForm.getWs_enabled());
+				}
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER)) {
-					/*
 					var.setMbr_to_wt_days(Integer.parseInt((String) dForm.getMbr_to_wt_days()));
 					var.setOhd_to_wt_days(Integer.parseInt((String) dForm.getOhd_to_wt_days()));
-					var.setWt_pass((String)dForm.getWt_user());
-					var.setWt_user((String)dForm.getWt_pass());
-					*/
+					var.setWt_user((String)dForm.getWt_user());
+					var.setWt_pass((String)dForm.getWt_pass());
+					var.setRetrieve_actionfile_interval(Integer.parseInt((String)dForm.getRetrieve_actionfile_interval()));
+					var.setWt_url((String)dForm.getWt_url());
+					var.setWt_airlinecode((String)dForm.getWt_airlinecode());
+					var.setWt_enabled(Integer.parseInt(dForm.getWt_enabled()));
+					var.setWt_write_enabled(Integer.parseInt(dForm.getWt_write_enabled()));
+					
 				}
 
 			} catch (Exception e) {
@@ -404,6 +414,8 @@ public final class ManageCompany extends Action {
 			}
 			
 			return mapping.findForward(TracingConstants.EDIT_COMPANY);
+			//session.invalidate();
+			//return mapping.findForward(TracingConstants.LOGON);
 		}
 
 		List companyList = AdminUtils.getCompanies(dForm, 0, 0);

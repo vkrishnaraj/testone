@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.cronjob.archive;
+package com.bagnet.nettracer.cronjob;
 
 import java.io.File;
 
@@ -79,6 +79,7 @@ import com.bagnet.nettracer.tracing.db.SystemComponent;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.TimeZone;
 import com.bagnet.nettracer.tracing.db.UserGroup;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.Webservice_Session;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -121,53 +122,114 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Work_Shift;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.test;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.WT_TTY;
+import com.bagnet.nettracer.tracing.db.Lz;
+
 /**
  * @author 
  * edit at 2008.5.22 12:55
  * This class provides helper routine to obtain hibernate sessions.
  */
-public class HibernateArchiveWrapper {
+public class HibernateCronWrapper {
 
-	private static Logger logger = Logger.getLogger(HibernateArchiveWrapper.class);
+	private static Logger logger = Logger.getLogger(HibernateCronWrapper.class);
 
 	private static Configuration cfg_ntbak = new Configuration();
 	private static Configuration cfg_nt = new Configuration();
-
+	private static Configuration cfg_prod = new Configuration();
+	private static Configuration cfg_demo = new Configuration();
+	private static Configuration cfg_qa = new Configuration();
 
 
 	private static SessionFactory sf_ntbak;
 	private static SessionFactory sf_nt;
+	private static SessionFactory sf_prod;
+	private static SessionFactory sf_demo;
+	private static SessionFactory sf_qa;
+	private static String hibernate_main_path = HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath();
 
 
-	//private static String hibernate_main_path = HibernateArchiveWrapper.class.getResource("/hibernate_main.cfg.xml").getPath();
-	//private static String hibernate_main_bak_path = HibernateArchiveWrapper.class.getResource("/hibernate_main_bak.cfg.xml").getPath();
-	/*
-	static {
-		try {
-
-			DataToBakThread cron = new DataToBakThread();
-			cron.run();
-		} catch (Exception e) {
-			logger.fatal("Unable to run bak: " + e);
-		}
-	}
-	
-   */
 	/**
 	 * Retrieve the session from the session factory
 	 * 
 	 * @return session factory
 	 */
+	public static void runCron(){
+		try {
+			// start the move to lz cron
+			//NettracerCron cron = new NettracerCron();
+			
+			
+			if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
+				addClasses(cfg_qa);
+				String hibernate_qa_path = HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml").getPath();
+				sf_qa = cfg_qa.configure(new File(hibernate_qa_path)).buildSessionFactory();
+			
+				//cron.runCron(cfg_qa.getProperties());
+				MoveToLZThread mbrthread = new MoveToLZThread(cfg_qa.getProperties(), MoveToLZThread.MBR);
+				mbrthread.start();
+			} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
+				addClasses(cfg_demo);
+				String hibernate_demo_path = HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml").getPath();
+				sf_demo = cfg_demo.configure(new File(hibernate_demo_path)).buildSessionFactory();
+				MoveToLZThread mbrthread = new MoveToLZThread(cfg_demo.getProperties(), MoveToLZThread.MBR);
+				mbrthread.start();
+				//cron.runCron(cfg_demo.getProperties());
+			} else {
+				addClasses(cfg_prod);
+				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
+				MoveToLZThread mbrthread = new MoveToLZThread(cfg_prod.getProperties(), MoveToLZThread.MBR);
+				mbrthread.start();
+				//cron.runCron(cfg_prod.getProperties());
+			}
+
+			
+
+		} catch (Exception e) {
+			logger.fatal("Unable to initiate hibernate: " + e);
+		}
+	}
+	public static SessionFactory getSession() {
+		try {
+			// Obtain the correct session factory.
+			
+
+			
+			if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
+				if (sf_qa == null) {
+					addClasses(cfg_qa);
+					String hibernate_qa_path = HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml").getPath();
+					sf_qa = cfg_qa.configure(new File(hibernate_qa_path)).buildSessionFactory();
+				}
+				return sf_qa;
+			} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
+				if (sf_demo == null) {
+					addClasses(cfg_demo);
+					String hibernate_demo_path = HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml").getPath();
+					sf_demo = cfg_demo.configure(new File(hibernate_demo_path)).buildSessionFactory();
+				}
+				return sf_demo;
+			} else {
+				if (sf_prod == null) {
+					addClasses(cfg_prod);
+					sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
+				}
+				return sf_prod;
+			}
+		} catch (Exception e) {
+			logger.fatal("unable to initiate hibernate: " + e);
+			return null;
+		}
+		
+	}
 	public static SessionFactory getNtSession() {
 		try {
 			// Obtain the correct session factory.	
 			        if (sf_nt==null){
 					addClasses(cfg_nt);			
-					sf_nt = cfg_nt.configure(new File(HibernateArchiveWrapper.class.getResource("/hibernate_main.cfg.xml").getPath())).buildSessionFactory();
+					sf_nt = cfg_nt.configure(new File(HibernateCronWrapper.class.getResource("/hibernate_main.cfg.xml").getPath())).buildSessionFactory();
 			        }
 				    return sf_nt;
 		} catch (Exception e) {
@@ -180,7 +242,7 @@ public class HibernateArchiveWrapper {
 			// Obtain the correct session factory.	
 			        if(sf_ntbak==null){
 					addClasses(cfg_ntbak);			
-					sf_ntbak = cfg_ntbak.configure(new File(HibernateArchiveWrapper.class.getResource("/hibernate_main_bak.cfg.xml").getPath())).buildSessionFactory();
+					sf_ntbak = cfg_ntbak.configure(new File(HibernateCronWrapper.class.getResource("/hibernate_main_bak.cfg.xml").getPath())).buildSessionFactory();
 			        }
 				    return sf_ntbak;
 		} catch (Exception e) {
@@ -195,63 +257,26 @@ public class HibernateArchiveWrapper {
 	public static Configuration getNtBakConfig() {
 		    return cfg_ntbak;
     }
-	
+	public static Configuration getConfig() {
+		if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
+			return cfg_qa;
+		} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
+			return cfg_demo;
+		} else {
+			return cfg_prod;
+		}
+	}
 	public static void addClasses(Configuration cfg) throws Exception {
 
-		cfg.addClass(Audit_Work_Shift.class);
-		cfg.addClass(Audit_Company.class);
-		cfg.addClass(Audit_Company_Specific_Variable.class);
-		cfg.addClass(Audit_Company_specific_irregularity_code.class);
-		cfg.addClass(Audit_Airport.class);
 	
-		cfg.addClass(Audit_Deliver_ServiceLevel.class);
-		cfg.addClass(Audit_DeliverCo_Station.class);
-		cfg.addClass(Audit_DeliverCompany.class);
-		
-		cfg.addClass(Audit_Agent.class);
-		cfg.addClass(Audit_Station.class);
-		cfg.addClass(Audit_UserGroup.class);
-		cfg.addClass(Audit_GroupComponentPolicy.class);
 
-		cfg.addClass(Audit_Remark.class);
-		cfg.addClass(Audit_OHD_Remark.class);
-		cfg.addClass(Audit_AirlineMembership.class);
 
-		// Audit OHD's
-		cfg.addClass(Audit_OHD.class);
-		cfg.addClass(Audit_OHD_Passenger.class);
-		cfg.addClass(Audit_OHD_Address.class);
-		cfg.addClass(Audit_OHD_Inventory.class);
-		cfg.addClass(Audit_OHD_Photo.class);
-		cfg.addClass(Audit_OHD_Itinerary.class);
-		cfg.addClass(Audit_ControlLog.class);
         
-		//test
-		cfg.addClass(test.class);
+
 		// WT FWD
 		cfg.addClass(WT_FWD_Log.class);
 		cfg.addClass(WT_FWD_Log_Itinerary.class);
-		// Audit Unchecked property
-		cfg.addClass(Audit_LostAndFoundIncident.class);
-		cfg.addClass(Audit_LostAndFound_Photo.class);
-		// Audit Claims
-
-		cfg.addClass(Audit_Claim.class);
-		cfg.addClass(Audit_ExpensePayout.class);
-		cfg.addClass(Audit_ClaimProrate.class);
-		cfg.addClass(Audit_Prorate_Itinerary.class);
-
-		// Audit Incidents
-		cfg.addClass(Audit_Address.class);
-		cfg.addClass(Audit_Articles.class);
-		cfg.addClass(Audit_Incident_Claimcheck.class);
-		cfg.addClass(Audit_Incident.class);
-		cfg.addClass(Audit_Item_Photo.class);
-		cfg.addClass(Audit_Item_Inventory.class);
-		cfg.addClass(Audit_Item.class);
-		cfg.addClass(Audit_Itinerary.class);
-		cfg.addClass(Audit_Passenger.class);
-
+	
 		cfg.addClass(SystemComponent.class);
 		cfg.addClass(Airport.class);
 		cfg.addClass(LostAndFound_Range.class);
@@ -329,9 +354,11 @@ public class HibernateArchiveWrapper {
 		
 		cfg.addClass(Webservice_Session.class);
 		cfg.addClass(Worldtracer_Actionfiles.class);
-		
+		cfg.addClass(Lz.class);
+	
 		//TTY
 		cfg.addClass(WT_TTY.class);
+		cfg.addClass(WT_Queue.class);
 	}
 }
 

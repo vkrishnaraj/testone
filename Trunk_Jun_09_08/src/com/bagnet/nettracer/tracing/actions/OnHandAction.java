@@ -46,6 +46,8 @@ import com.bagnet.nettracer.tracing.db.OHD_Photo;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -58,6 +60,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WTOHD;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
@@ -72,7 +75,8 @@ public class OnHandAction extends Action {
 			throws Exception {
 
 		HttpSession session = request.getSession(); // check session/user validity
-		
+		boolean towt = false;
+		boolean rohd = false;
 		TracerUtils.checkSession(session);
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -89,12 +93,14 @@ public class OnHandAction extends Action {
 		ActionMessages errors = new ActionMessages();
 		BagService bs = new BagService();
 		OnHandForm theform = (OnHandForm) form;
+		
 
 		// Status pertaining to the on hand file
 		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
 		request.setAttribute("oStatusList", oStatusList);
 		request.setAttribute("onhand", "1");
 
+		
 		if (request.getParameter("historical_report") != null
 				&& request.getParameter("historical_report").length() > 0) {
 			request.setAttribute("outputtype", "0");
@@ -230,18 +236,72 @@ public class OnHandAction extends Action {
 			
 			
 			//Close wt ohd
-			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
+			//HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
 			if (request.getParameter("closetowt") !=null){			
-				WTOHD wt = new WTOHD();
-				wt.closeOHD(client, user.getCompanycode_ID(), oDTO);
+				//WTOHD wt = new WTOHD();
+				//wt.closeOHD(client, user.getCompanycode_ID(), oDTO);
+				rohd = true;
+				WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
+				WT_Queue wtq = new WT_Queue();
+				wtq.setAgent(user);
+				wtq.setCreatedate(TracerDateTime.getGMTDate());
+				wtq.setType_id(oDTO.getOHD_ID());
+				wtq.setStationcode(user.getStation().getStationcode());
+				wtq.setType("closeOHD");
+				wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
+				wq.saveOhdobj(oDTO, theform, wtq, user);
 			}
 			
 			
 			// Update the on hand information with updated form information.
-			boolean towt = false;
-			if (request.getParameter("savetowt") != null) towt = true;
-			
-			if (bs.insertOnHand(oDTO, theform, list, user, towt)) {
+		
+			if (request.getParameter("savetowt") != null) 
+			{	
+				if(theform.getStatus().getStatus_ID()== TracingConstants.OHD_STATUS_OPEN){
+			//towt = true;
+			rohd = true;
+			WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
+			WT_Queue wtq = new WT_Queue();
+			wtq.setAgent(user);
+			wtq.setCreatedate(TracerDateTime.getGMTDate());
+			wtq.setType_id(oDTO.getOHD_ID());
+			wtq.setStationcode(user.getStation().getStationcode());
+			wtq.setType("OHD");
+			wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
+			wq.saveOhdobj(oDTO, theform, wtq, user);
+			}
+				if(theform.getStatus().getStatus_ID()== TracingConstants.OHD_STATUS_CLOSED){
+					ActionMessage error = new ActionMessage("error.no_wt_id");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}	
+			}
+			//System.out.println(rohd);
+			/*
+			if ((request.getParameter("savetracing") != null )){
+				
+				//rohd = bs.insertOnHand(oDTO, theform, list, user, towt);
+				WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
+				WT_Queue wtq = new WT_Queue();
+				wtq.setAgent(user);
+				wtq.setCreatedate(TracerDateTime.getGMTDate());
+				wtq.setType_id(oDTO.getOHD_ID());
+				wtq.setStationcode(user.getStation().getStationcode());
+				if(theform.getStatus().getStatus_ID()== TracingConstants.OHD_STATUS_CLOSED)
+				wtq.setType("closeOHD");
+				if(theform.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN)
+				wtq.setType("OHD");
+				wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
+				wq.saveOhdobj(oDTO, theform, wtq, user);
+				
+	
+			}
+			*/
+			if ((request.getParameter("savetracing") != null)){
+				rohd = bs.insertOnHand(oDTO, theform, list, user, towt);
+			}
+			if (rohd) {
+				
 				request.setAttribute("ohd_ID", oDTO.getOHD_ID());
 				if (request.getParameter("mass") != null) {
 					request.setAttribute("ohdidlist", list);
@@ -382,6 +442,7 @@ public class OnHandAction extends Action {
 				} else {
 					// Create a new on-hand entry
 					TracerUtils.populateOnHand(addform, request);
+	
 				}
 
 				if (request.getParameter("express") != null) {

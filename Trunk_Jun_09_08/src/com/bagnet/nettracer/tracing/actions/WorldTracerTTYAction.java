@@ -133,7 +133,7 @@ public class WorldTracerTTYAction extends Action {
 		wttty.setSend_time(TracerDateTime.getGMTDate());
 		wttty.setTty_agent(user);
 		wttty.setText(theform.getText());
-		wttty.setTty_status(TracingConstants.LOG_RECEIVED);
+		wttty.setTty_status(TracingConstants.LOG_NOT_RECEIVED);
         
 		HibernateUtils.save(wttty);
 		return true;
@@ -178,7 +178,7 @@ public class WorldTracerTTYAction extends Action {
         ttylist.add(fref4);
         ttylist.add(ttytxt);
         		
-		HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",company);
+		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
 		String test = WorldTracerUtils.SendTty(client,company,ttylist);
 		
 		// for now return ohd_string

@@ -106,6 +106,7 @@
 				<form-property name="goal" type="java.lang.String"/>
 				<form-property name="lz_id"				type="java.lang.String"/>
 				<form-property name="active"			type="java.lang.String"/>
+				<form-property name="wt_stationcode"    type="java.lang.String"/>
 			</form-bean>
 			<form-bean name="shiftForm" 								type="org.apache.struts.validator.DynaValidatorForm">
 				<form-property name="shiftSearchName"		type="java.lang.String"/>
@@ -205,6 +206,7 @@
 		<forward 	name="forwardonhandsuccess" 				path="forward_onhandsuccess"/>
 		<forward 	name="forwardwtbagsuccess" 				    path="forward_wt_bag_success"/>
 		<forward    name="sendwtttysuccess"                     path="send_wt_tty_success"/>
+		<forward    name="sendwtrohsuccess"                     path="send_wt_roh_success"/>
 		<forward 	name="requestonhandsuccess" 				path="request_onhandsuccess"/>
 		<forward 	name="denyrequestonhand" 						path="deny_roh"/>
 		<forward 	name="enterforwardonhand"						path="enter_forwardonhand"/>

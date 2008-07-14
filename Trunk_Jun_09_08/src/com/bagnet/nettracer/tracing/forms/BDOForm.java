@@ -50,6 +50,20 @@ public final class BDOForm extends ValidatorForm {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+    private String wt_id;
+	/**
+	 * @return the wt_id
+	 */
+	public String getWt_id() {
+		return wt_id;
+	}
+
+	/**
+	 * @param wt_id the wt_id to set
+	 */
+	public void setWt_id(String wt_id) {
+		this.wt_id = wt_id;
+	}
 
 	/**
 	 * @return Returns the choosebags.

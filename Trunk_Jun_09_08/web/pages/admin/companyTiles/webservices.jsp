@@ -22,9 +22,8 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
-          	          <tr>
+          	  <tr>
 	            <td>
-	            	<html:hidden name="companyForm" property="companyCode" />
 	              <bean:message key="colname.ws_enabled" />
 	              <font color=red>
 	                *
@@ -32,23 +31,17 @@
 	              :
 	            </td>
 	            <td>
-	              <select name="ws_enabled" style="dropdown">
-	                <option value="1"
-	                <logic:equal name="companyForm" property="ws_enabled" value="1">
-	                  selected="selected"
-	                </logic:equal>
-	                >
-	                <bean:message key="select.yes" />
-	                <option value="0"
-	                <logic:equal name="companyForm" property="ws_enabled" value="0">
-	                  selected="selected"
-	                </logic:equal>
-	                >
-	                <bean:message key="select.no" />
-	              </select>
+	              <html:select name="companyForm" property="ws_enabled" style="dropdown">
+                  <html:option value="1">
+                  	<bean:message key="select.yes" />
+                  </html:option>
+                  <html:option value="0">
+                  	<bean:message key="select.no" />
+                  </html:option>
+	              </html:select>
 	            </td>
 	          </tr>
-	                    <tr>
+	      <tr>
             <td colspan="2">
               &nbsp;
             </td>

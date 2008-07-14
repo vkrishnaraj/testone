@@ -39,7 +39,7 @@ public class Company_Specific_Variable implements Serializable {
 	private int ohd_to_wt_days;
 	private String wt_user;
 	private String wt_pass;
-	
+	private int retrieve_actionfile_interval;
 	private int audit_ohd;
 	private int audit_lost_found;
 	private int audit_lost_delayed;
@@ -63,8 +63,64 @@ public class Company_Specific_Variable implements Serializable {
 	private int max_failed_logins;
 	private int ws_enabled;
 	private int secure_password;
+	private String wt_url;
+	private String wt_airlinecode;
+	private int wt_enabled;
+	private int wt_write_enabled;
 	
 
+	/**
+	 * @return the wt_write_enabled
+	 * @hibernate.property type="integer"
+	 */
+	public int getWt_write_enabled() {
+		return wt_write_enabled;
+	}
+	/**
+	 * @param wt_write_enabled the wt_write_enabled to set
+	 */
+	public void setWt_write_enabled(int wt_write_enabled) {
+		this.wt_write_enabled = wt_write_enabled;
+	}
+	/**
+	 * @return the wt_url
+	 * @hibernate.property type="string"
+	 */
+	public String getWt_url() {
+		return wt_url;
+	}
+	/**
+	 * @param wt_url the wt_url to set
+	 */
+	public void setWt_url(String wt_url) {
+		this.wt_url = wt_url;
+	}
+	/**
+	 * @return the wt_airlinecode
+	 * @hibernate.property type="string"
+	 */
+	public String getWt_airlinecode() {
+		return wt_airlinecode;
+	}
+	/**
+	 * @param wt_airlinecode the wt_airlinecode to set
+	 */
+	public void setWt_airlinecode(String wt_airlinecode) {
+		this.wt_airlinecode = wt_airlinecode;
+	}
+	/**
+	 * @return the wt_enabled
+	 * @hibernate.property type="integer"
+	 */
+	public int getWt_enabled() {
+		return wt_enabled;
+	}
+	/**
+	 * @param wt_enabled the wt_enabled to set
+	 */
+	public void setWt_enabled(int wt_enabled) {
+		this.wt_enabled = wt_enabled;
+	}
 	/**
 	 * @return Returns the default_loss_code.
 	 * 
@@ -814,5 +870,18 @@ public class Company_Specific_Variable implements Serializable {
 	public void setBak_nttracer_lostfound_data_days(
 			int bak_nttracer_lostfound_data_days) {
 		this.bak_nttracer_lostfound_data_days = bak_nttracer_lostfound_data_days;
+	}
+	/**
+	 * @return the retrieve_actionfile_interval
+	 * @hibernate.property type="integer"
+	 */
+	public int getRetrieve_actionfile_interval() {
+		return retrieve_actionfile_interval;
+	}
+	/**
+	 * @param retrieve_actionfile_interval the retrieve_actionfile_interval to set
+	 */
+	public void setRetrieve_actionfile_interval(int retrieve_actionfile_interval) {
+		this.retrieve_actionfile_interval = retrieve_actionfile_interval;
 	}
 }

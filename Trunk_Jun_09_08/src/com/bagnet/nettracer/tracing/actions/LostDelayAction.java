@@ -38,6 +38,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -51,7 +52,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
-
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 public class LostDelayAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -73,6 +75,7 @@ public class LostDelayAction extends Action {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
 		BagService bs = new BagService();
+		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 		IncidentForm theform = (IncidentForm) form;
 
 		//the company specific codes..
@@ -189,7 +192,7 @@ public class LostDelayAction extends Action {
 		
 
 		// save incident
-		if (request.getParameter("save") != null || request.getParameter("doclose") != null || request.getParameter("doclosewt") != null || request.getParameter("savetemp") != null
+		if (request.getParameter("save") != null || request.getParameter("close") != null || request.getParameter("doclose") != null || request.getParameter("doclosewt") != null || request.getParameter("savetemp") != null
 				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null) {
 			Incident iDTO = new Incident();
 
@@ -210,25 +213,53 @@ public class LostDelayAction extends Action {
 
 			
 			String test = "";
-			if (request.getParameter("savetowt") != null) {
-				error = bs.insertIncidenttoWT(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user);
-			} else {
-				if ((request.getParameter("close") != null && request.getParameter("close").equals("1"))) {
-					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user);
+			
+			if (request.getParameter("savetowt") != null ) {
+				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN){
+				WT_Queue wtq = new WT_Queue();
+				wtq.setAgent(user);
+                 
+				wtq.setCreatedate(TracerDateTime.getGMTDate());
+				wtq.setType_id(theform.getIncident_ID());
+				wtq.setStationcode(user.getStation().getStationcode());
+				
+				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN)
+				wtq.setType("Incident");
+				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED)
+				wtq.setType("closeIncident");
+				wtq.setQueue_status(TracingConstants.LOG_NOT_RECEIVED);
+				wq.saveWtobj(iDTO,theform,wtq, user);
+				}
+				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED){
+					error = new ActionMessage("error.no_wt_id");
+					//errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			
+				}
+				//error = bs.insertIncidenttoWT(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user);
+			} else if (request.getParameter("close") != null && request.getParameter("close").equals("1") && request.getParameter("doclose") != null) {
+					error = bs.insertIncidenttoWT(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user);
 
-				} else {
-					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true, false);
-				    
-				}
+			} else if (request.getParameter("doclosewt") !=null){	
+				
+				WT_Queue wtq = new WT_Queue();
+				wtq.setAgent(user);
+				wtq.setCreatedate(TracerDateTime.getGMTDate());
+				wtq.setType_id(theform.getIncident_ID());
+				System.out.println(theform.getIncident_ID());
+				wtq.setStationcode(user.getStation().getStationcode());
+				wtq.setType("closeIncident");
+				wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
+				wq.saveWtobj(iDTO, theform, wtq, user);
+				//HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/");
+				//WTOHD wt = new WTOHD();
+				//wt.closeIncident(client, user.getCompanycode_ID(), iDTO);
+				
+			} else {
+				error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true, false);
 			}
-			if (error == null) {
-				//Close wt incident
-				if (request.getParameter("doclosewt") !=null){	
-					//HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/");
-					//WTOHD wt = new WTOHD();
-					//wt.closeIncident(client, user.getCompanycode_ID(), iDTO);
-				}
-			}
+		
+
+			
 			
 
 

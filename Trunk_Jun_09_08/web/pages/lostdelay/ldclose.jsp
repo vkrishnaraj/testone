@@ -146,10 +146,19 @@
                   <html:submit property="doclose" styleId="button" onclick="doCheck = 1;">
                     <bean:message key="button.closereport" />
                   </html:submit>
-                  &nbsp
+                  &nbsp;
+                  <%	
+                   if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
+                	   if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
+                  %>
+                  
                   <html:submit property="doclosewt" styleId="button">
                     <bean:message key="button.closetoWT" />
                   </html:submit>
+                  <%
+                	   }
+                   }
+                  %>
                 </td>
               </tr>
             </table>

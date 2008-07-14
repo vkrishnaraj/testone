@@ -68,7 +68,7 @@ public class SearchIncidentAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
 			if (foundinc == null) {
-				HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
+				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
 				String result = WorldTracerUtils.getRAF(client, request.getParameter("wt_id"));
 				WTIncident wi = new WTIncident();
 				// for now show all as active

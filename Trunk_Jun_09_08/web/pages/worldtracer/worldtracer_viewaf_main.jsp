@@ -139,6 +139,14 @@ function gopage(i) {
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
            </font>
+
+           <logic:equal name="afdeleted" value="1" scope="request">
+           	<p align="center">
+            	<font color="green"><bean:message key="colname.af_del" /></font>
+  			</p>
+           </logic:equal>
+           
+           
            
            <logic:notEqual name="wt_id_specific" value="1" scope="request">
 	            <table class="form2" cellspacing="0" cellpadding="0">
@@ -178,27 +186,42 @@ function gopage(i) {
                   <td><b><bean:message key="colname.wt_ahl_id" /></b></td>
                   <td><b><bean:message key="colname.wt_ohd_id" /></b></td>
                   <td><b><bean:message key="colname.actionfiles" /></b></td>
+                  <td><b><bean:message key="colname.deleteaf" /></b></td>
                 </tr>
                 <logic:iterate id="results" name="resultlist" type="com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles">
                   <tr>
+                        <%
+                    	String res = results.getAction_file_text();
+                    	res = res.replace("\n","<br>");
+                    	%>
                  	<td>
+                 	    <logic:notEqual name="results" property="wt_incident_id" value="">
                  		<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="results" property="wt_incident_id" />','wtrawtext',500,600);return false;"><bean:write name="results" property="wt_incident_id" /></a>
 						&nbsp;
+						</logic:notEqual>
+						<logic:equal name="results" property="wt_incident_id" value="">
+						<a href="lostDelay.do?wt_af_id=<bean:write name="results" property="id" />">No_AHL_ID</a>
+						</logic:equal>
                     </td>
+      
                     <td>
+                        <logic:notEqual name="results" property="wt_ohd_id" value="">
                     	<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ohd_id=<bean:write name="results" property="wt_ohd_id" />','wtrawtext',500,600);return false;"><bean:write name="results" property="wt_ohd_id" /></a>
                     	&nbsp;
+                    	</logic:notEqual>
+                    	<logic:equal name="results" property="wt_ohd_id" value="">
+						<a href="addOnHandBag.do?wt_af_id=<bean:write name="results" property="id" />">No_OHD_ID</a>
+						</logic:equal>
                     </td>
                     
                     <td>
                     	<%
-                    	String res = results.getAction_file_text();
-                    	res = res.replace("\n","<br>");
                     	out.println(res);
                     	// <bean:write name="results" property="action_file_text" />
                     	%>
                     	
                     </td>
+                    <td><a href="worldtraceraf.do?viewaction=<%=header_text %>&d=<%=request.getParameter("d")%>&delete=<bean:write name="results" property="id"/>">Delete</a></td>
          
                   </tr>
                 </logic:iterate>

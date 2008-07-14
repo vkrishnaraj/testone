@@ -31,6 +31,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 
+import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -81,44 +82,82 @@ public class DataToBakThread extends Thread {
     private static Incident arginc= null;
 
 	
-
+	// db
+	public int dbtype;
+	private static String dbdrivername;
+	private static String bak_dburl;
+	private static String bak_dbuid;
+	private static String bak_dbpwd;
 
 	private String company;
+	int retrieve;
 
-	public DataToBakThread(Properties properties) {
-		try {
-			this.company = properties.getProperty("company.code");
-		} catch (Exception e) {
-			logger.fatal("unable to read the properties." + e);
-			return;
-		}
-	}
 	public DataToBakThread(){
 		
 	}
+	public DataToBakThread(Properties properties) {
+		try {
+			Connection conn = null;
+			
+			
+			try {
+				dbdrivername = properties.getProperty("connection.driver_class");
+				bak_dburl = properties.getProperty("connection.url");
+				bak_dbuid = properties.getProperty("connection.username");
+				bak_dbpwd = properties.getProperty("connection.password");
+				this.company = properties.getProperty("company.code");
+				
 
+			} catch (Exception e) {
+				logger.fatal("unable to read the properties." + e);
+				return;
+			}
+
+			Class.forName(dbdrivername).newInstance();
+
+		} catch (Exception e) {
+			logger.fatal("unable to start move to bak thread: " + e);
+		}
+
+	}
+	public String getcompany(){
+		return company;
+	}
 	public void run() {
 		try {
 
 			while (true) {
 				
 				try {
-					//Company_Specific_Variable csv = this.getArchiveCompVariable(company);
+					Company_Specific_Variable csv = this.getArchiveCompVariable(company);
 					
-					//if (csv != null) {
-					//	int mbr = csv.getBak_nttracer_data_days();
-					//	int ohd = csv.getOhd_to_wt_days();
+					if (csv != null) {
+						int bakohddays = csv.getBak_nttracer_ohd_data_days();
+						int baklostdays = csv.getBak_nttracer_lostfound_data_days();
+						int bakincidentdays = csv.getBak_nttracer_data_days();
+						retrieve = csv.getRetrieve_actionfile_interval();
+			
 						
 						//if (mbr > 0) 
-						//	moveIncidentToBak(5);
+							//moveIncidentToBak(5);
 					 
 					
-                    System.out.println("here");
-                    this.moveLostandFound(5);
-                    this.delLostandFoundToBak(5);
-					//this.delIncidentToBak(5);
-					//this.moveOHDToBak(5);
-					//}
+                    //System.out.println("here");
+					if(bakohddays>0)
+					//this.moveOHDToBak(bakohddays);
+					if(baklostdays>0){
+                    this.moveLostandFound(baklostdays);
+                    //this.delLostandFoundToBak(baklostdays);
+					}
+                    if(bakincidentdays>0){
+					 this.moveIncidentToBak(bakincidentdays);
+					//this.delIncidentToBak(bakincidentdays);
+                    }
+				    //System.out.println(baklostdays);
+                    //this.delLostandFoundToBak(baklostdays);
+					//this.delIncidentToBak(bakincidentdays);
+					
+					}
 				} catch (Exception e) {
 					logger.fatal("move to bak thread error: " + e);
 				}
@@ -126,7 +165,7 @@ public class DataToBakThread extends Thread {
 				logger.info("waiting for 24 hours to send incident to Bak again...");
 
 
-				pause(86400);
+				pause(retrieve * 60 * 1000);
 
 			}
 		} catch (Exception e) {
@@ -134,7 +173,11 @@ public class DataToBakThread extends Thread {
 
 		}
 	}
-
+    public int getretrieve(){
+    	Company_Specific_Variable csv = this.getArchiveCompVariable(company);
+    	retrieve = csv.getRetrieve_actionfile_interval();
+    	return retrieve;
+    }
 	private void pause(double seconds) {
 		try {
 			Thread.sleep(Math.round(1000.0 * seconds));
@@ -146,10 +189,10 @@ public class DataToBakThread extends Thread {
 		Session Asess = null;
 		Transaction t = null;
 		try {
-			Asess = HibernateArchiveWrapper.getNtBakSession().openSession();
+			Asess = HibernateCronWrapper.getNtBakSession().openSession();
 			t = Asess.beginTransaction();
 			
-			Asess.save(obj);
+			Asess.saveOrUpdate(obj);
 			t.commit();
 			
 		} catch (Exception e) {
@@ -173,7 +216,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 		Transaction t = null;
 		try {
-			sess = HibernateArchiveWrapper.getNtSession().openSession();
+			sess = HibernateCronWrapper.getNtSession().openSession();
 			t = sess.beginTransaction();
             sess.delete(obj);
             t.commit();       
@@ -206,13 +249,13 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 		try {
 			
-			sess = HibernateArchiveWrapper.getNtSession().openSession();				
+			sess = HibernateCronWrapper.getNtSession().openSession();				
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateArchiveWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.LostAndFoundIncident lostandfound where lostandfound.dateFoundLost < :dt";
@@ -225,11 +268,11 @@ public class DataToBakThread extends Thread {
 
 			List list = q.list();
 			
-			if (sess.isOpen() == true)
+			//if (sess.isOpen() == true)
 			sess.close();
 			
 			LostAndFoundIncident inc = null;
-
+            System.out.println("begin bak LostAndFoundIncident....");
 			if (list != null && list.size() > 0) {
 				for (int i=0;i<list.size();i++) {
 					
@@ -248,6 +291,7 @@ public class DataToBakThread extends Thread {
 				}
 			
 			}
+			System.out.println("end bak LostAndFoundIncident....");
 		  }	
 		} catch (Exception e) {
 			logger.fatal("error lostandfoundincident into bak: " + e);
@@ -259,13 +303,13 @@ public class DataToBakThread extends Thread {
 		Incident inc = new Incident();
 		List list = null;
 		try {			
-			sess = HibernateArchiveWrapper.getNtSession().openSession();					
+			sess = HibernateCronWrapper.getNtSession().openSession();					
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateArchiveWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.Incident incident where incident.createdate > :dt";
@@ -288,13 +332,13 @@ public class DataToBakThread extends Thread {
 		OHD inc = new OHD();
 		List list = null;
 		try {			
-			sess = HibernateArchiveWrapper.getNtSession().openSession();					
+			sess = HibernateCronWrapper.getNtSession().openSession();					
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateArchiveWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.close_date < :dt";
@@ -317,13 +361,13 @@ public class DataToBakThread extends Thread {
 		LostAndFoundIncident inc = new LostAndFoundIncident();
 		List list = null;
 		try {			
-			sess = HibernateArchiveWrapper.getNtSession().openSession();					
+			sess = HibernateCronWrapper.getNtSession().openSession();					
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateArchiveWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.LostAndFoundIncident lostandfoundincident where lostandfoundincident.dateFoundLost < :dt";
@@ -345,44 +389,48 @@ public class DataToBakThread extends Thread {
 
         
         Session sess = null;       
-		Incident inc = new Incident();
-		List list = null;
+		
+
 		
 		try {
-			sess = HibernateArchiveWrapper.getNtSession().openSession();	
+			sess = HibernateCronWrapper.getNtSession().openSession();	
 			
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateArchiveWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
-			String sql = "from com.bagnet.nettracer.tracing.db.Incident incident where incident.createdate < :dt";
+			String sql = "from com.bagnet.nettracer.tracing.db.Incident incident where incident.createdate > :dt";
 			
 		    if(sess.isOpen())
 		    {
 			Query q = sess.createQuery(sql);		    
 			q.setParameter("dt", righttime);	     
-			list = q.list();           
+			List list = q.list();           
 			sess.close();	
-			
+			Incident inc = null;
 			if (list != null && list.size() > 0) {
 
 				
 				for (int i=0;i<list.size();i++) {
-					
-					inc = (Incident) list.get(i);		       
 					this.clearIncidentIds(inc);
+					inc = (Incident) list.get(i);		       
+					
 
 				    if(findIncidentByID(inc.getIncident_ID()) == null){
 					    DataToBakThread.save(inc);
+					    
 
                     }				   
 			    }
 
 		    }
+			
+			System.out.println("begin bak Incident....");
+			System.out.println("end bak Incident....");
 		   } 
 		} catch (Exception e) {
 			logger.fatal("error incident into bak: " + e);
@@ -473,7 +521,7 @@ public class DataToBakThread extends Thread {
 
 		try {
 			
-			sess = HibernateArchiveWrapper.getNtSession().openSession();
+			sess = HibernateCronWrapper.getNtSession().openSession();
 	
 			
 			Date now = new Date();
@@ -481,7 +529,7 @@ public class DataToBakThread extends Thread {
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateArchiveWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 
 
 			String sql = "from com.bagnet.nettracer.tracing.db.OHD  ohd where ohd.close_date < :dt";
@@ -497,7 +545,7 @@ public class DataToBakThread extends Thread {
 			//OHD inc = null;
 			
 			
-
+			System.out.println("begin bak OHD....");
 			if (list != null && list.size() > 0) {
 				for (int i=0;i<list.size();i++) {
 					
@@ -510,7 +558,7 @@ public class DataToBakThread extends Thread {
 				}
 		
 			}
-			
+			System.out.println("end bak OHD....");
 		} catch (Exception e) {
 			logger.fatal("error incident into bak: " + e);
 		}
@@ -590,7 +638,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 
 		try {
-			sess = HibernateArchiveWrapper.getNtBakSession().openSession();
+			sess = HibernateCronWrapper.getNtBakSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
@@ -687,7 +735,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 
 		try {
-			sess = HibernateArchiveWrapper.getNtBakSession().openSession();
+			sess = HibernateCronWrapper.getNtBakSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.OHD_ID= :ohd_ID");
 			q.setParameter("ohd_ID", ohd_ID);
 			List list = q.list();
@@ -717,7 +765,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 
 		try {
-			sess = HibernateArchiveWrapper.getNtBakSession().openSession();
+			sess = HibernateCronWrapper.getNtBakSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.LostAndFoundIncident lostandfoundincident where lostandfoundincident.file_ref_number = :LostandFound_ID");
 			q.setParameter("LostandFound_ID", LostandFound_ID);
 			List list = q.list();
@@ -746,7 +794,7 @@ public class DataToBakThread extends Thread {
 	public static Company_Specific_Variable getArchiveCompVariable(String companycode) {
 		Session sess = null;
 		try {
-			sess = HibernateArchiveWrapper.getNtSession().openSession();
+			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_Specific_Variable.class).add(Expression.eq("companyCode_ID", companycode));
 			return (Company_Specific_Variable) cri.list().get(0);
 		} catch (Exception e) {

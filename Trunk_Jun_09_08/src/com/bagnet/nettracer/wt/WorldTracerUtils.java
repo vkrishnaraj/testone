@@ -19,6 +19,7 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -33,18 +34,27 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
+import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 
 public class WorldTracerUtils {
 	//private static String wt_user = "Air@18maR";
 	//private static String wt_pass = "Tran$615J";
+
+
+	//public static String wt_suffix_airline;
+
 	private static String wt_http = "www.worldtracer.aero";
-	public static String wt_url = "http://www.worldtracer.aero/";
+	public static String wt_url = "http://" + wt_http + "/";
 	public static String wt_suffix_airline = "us";
+
 	
 	private static String nt_user = "ogadmin";
 	private static String nt_comp = "OW";
@@ -55,7 +65,8 @@ public class WorldTracerUtils {
 	public static String status_extended = "D";
 	public static String status_handled = "H";
 	public static String status_qoh = "Q";
-	
+	private String error;
+	private static Logger logger = Logger.getLogger(WorldTracerUtils.class);
 	public static String  SendTty(HttpClient client, String companycode,ArrayList ttylist){
 		String responseBody = null;	
 		String getstring = wt_url + "cgi-bin/bagTTY.exe";
@@ -177,9 +188,15 @@ public class WorldTracerUtils {
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
 		String wt_user = comsv.getWt_user();
 		String wt_pass = comsv.getWt_pass();
+		if (wt_http != null){
+		wt_http = comsv.getWt_url();
+		}
+		else
+		wt_http = "www.worldtracer.aero";
+		wt_url = "http://"+wt_http+"/";
 		Credentials defaultcreds = new UsernamePasswordCredentials(wt_user, wt_pass);
 		client.getState().setCredentials(new AuthScope(wt_http, 80, AuthScope.ANY_REALM), defaultcreds);
-
+        System.out.println(wt_url);
 		GetMethod method = new GetMethod(wt_url + urlext);
 		method.setDoAuthentication(true);
 
@@ -188,12 +205,13 @@ public class WorldTracerUtils {
 
 		try {
 			// Execute the method.
+			
 			int statusCode = client.executeMethod(method);
 
 			if (statusCode != HttpStatus.SC_OK) {
 				System.err.println("Method failed: " + method.getStatusLine());
 			}
-
+            
 			// Read the response body.
 			String responseBody = method.getResponseBodyAsString();
 
@@ -492,11 +510,11 @@ public class WorldTracerUtils {
 		try {
 			// Execute the method.
 			// temporarily disable
-			//int statusCode = client.executeMethod(method);
+			int statusCode = client.executeMethod(method);
 
-			//if (statusCode != HttpStatus.SC_OK) {
-			//	System.err.println("Method failed: " + method.getStatusLine());
-			//}
+			if (statusCode != HttpStatus.SC_OK) {
+				System.err.println("Method failed: " + method.getStatusLine());
+			}
 			
 			// Read the response body.
 			responseBody = method.getResponseBodyAsString();
@@ -519,8 +537,7 @@ public class WorldTracerUtils {
 	
 	
 	
-	
-	
+
 	
 	
 
@@ -622,7 +639,81 @@ public class WorldTracerUtils {
 	
 	
 	}
+	public static Worldtracer_Actionfiles findActionFileByID(int ID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
+			cri.add(Expression.eq("id", ID));
+			List list = cri.list();
+			if (list != null && list.size() > 0) {
+				return (Worldtracer_Actionfiles) list.get(0);
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	
+	
+	}
+	public static Worldtracer_Actionfiles findActionFileByID(String wt_id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
+			cri.add(Expression.eq("wt_ohd_id", wt_id));
+			List list = cri.list();
+			if (list != null && list.size() > 0) {
+				return (Worldtracer_Actionfiles) list.get(0);
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+		public static Worldtracer_Actionfiles findActionFileByIncidentID(String wt_incident_id) {
+			Session sess = null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+				Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
+				cri.add(Expression.eq("wt_incident_id", wt_incident_id));
+				List list = cri.list();
+				if (list != null && list.size() > 0) {
+					return (Worldtracer_Actionfiles) list.get(0);
+				}
+				return null;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+	
+	}
 	/**
 	 * find action files from db based on type, day, airline, and station
 	 * @param wt_type
@@ -651,6 +742,57 @@ public class WorldTracerUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param af_id
+	 * @return
+	 */
+	public static boolean deleteActionFiles(String af_id_str) {
+		// delete from db first
+		Session sess = null;
+		
+		try {
+			int af_id = Integer.parseInt(af_id_str);
+			if (af_id == 0) return false;
+			sess = HibernateWrapper.getSession().openSession();
+
+			Query q = sess
+			.createQuery("from com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles wa where wa.id = :af_id");
+			q.setInteger("af_id", af_id);
+			List list = q.list();
+		
+			if (list.size() == 0) {
+				return false;
+			}
+			Worldtracer_Actionfiles af = (Worldtracer_Actionfiles) list.get(0);
+			if (af != null) {
+				String text = af.getAction_file_text();
+				// find worldtracer action file and delete it
+				
+				
+				// delete from database
+				HibernateUtils.delete(af);
+				
+				
+				
+			}
+			
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		} finally {
 			if (sess != null) {
 				try {
@@ -700,6 +842,42 @@ public class WorldTracerUtils {
 				}
 			}
 		}
+	}
+	public WT_FWD_Log findFWDByID(int wt_fwd_log_id) {
+		Session sess = null;
+		try {
+			String query = "select wtfwd from com.bagnet.nettracer.tracing.db.WT_FWD_Log wtfwd "
+					+ "where wtfwd.wt_fwd_log_id=:wt_fwd_log_id";
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			q.setInteger("wt_fwd_log_id", wt_fwd_log_id);
+			List list = q.list();
+			if (list.size() == 0) {
+				logger.debug("unable to find wt_fwd_log: " + wt_fwd_log_id);
+				return null;
+			}
+			WT_FWD_Log wDTO = (WT_FWD_Log) list.get(0);
+			return wDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve FWD: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+	public static String getWt_suffix_airline(String companycode){
+		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
+		String wt_suffix_airline = comsv.getWt_airlinecode();
+		return wt_suffix_airline;
+	}
+	public void setError(String error) {
+		this.error = error;
 	}
 
 }

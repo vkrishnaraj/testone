@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.wt;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
 
@@ -24,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -31,9 +34,12 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
+import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -75,8 +81,10 @@ public class WTIncident {
 
 		sb.append("STNARL" + _t);
 		sb.append(incident.getStationassigned().getStationcode());
+		//System.out.println(incident.getStationassigned().getStationcode());
 		//sb.append("CBS");
 		sb.append(incident.getStationassigned().getCompany().getCompanyCode_ID());
+		//System.out.println(incident.getStationassigned().getCompany().getCompanyCode_ID());
 		sb.append(_n);
 
 		// passengers last name
@@ -88,8 +96,10 @@ public class WTIncident {
 				temp = op.getLastname();
 				if (c == 0) {
 					if (temp.trim().length() > 0) sb.append("NM" + _t + temp);
+					System.out.println(temp);
 				} else {
 					if (temp.trim().length() > 0) sb.append(_h + temp);
+					System.out.println(temp);
 				}
 				if (temp.trim().length() > 0) c++;
 				if (c >= 3) break;
@@ -106,8 +116,10 @@ public class WTIncident {
 				temp = op.getMiddlename();
 				if (c == 0) {
 					if (temp.trim().length() > 0) sb.append("IT" + _t + temp);
+					System.out.println(temp);
 				} else {
 					if (temp.trim().length() > 0) sb.append(_h + temp);
+					
 				}
 				if (temp.trim().length() > 0) c++;
 				if (c >= 3) break;
@@ -121,8 +133,10 @@ public class WTIncident {
 			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
 				Passenger op = (Passenger) i.next();
 				temp = op.getSalutationdesc();
-				if (temp.trim().length() > 0) {
+				//System.out.println(temp.trim().length());
+				if (temp != null && temp.trim().length() > 0) {
 					sb.append("PT" + _t + temp + _n);
+					
 					
 				}
 				// membership status
@@ -443,13 +457,14 @@ public class WTIncident {
 		try {
 			tempstring = URLEncoder.encode(tempstring,"UTF-8");
 		} catch (Exception e) {}
-		//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
-		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagAHL.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&AHL=" + encodedstring;
-		getstring = getstring.replace(" ", "+");
+		
+		//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagAHL.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&AHL=" + encodedstring;
+		//getstring = getstring.replace(" ", "+");
+		
 		GetMethod method = null;
 		try {
 			
-			method = new GetMethod(getstring);
+			//method = new GetMethod(getstring);
 
 
 			method.setDoAuthentication(true);
@@ -459,8 +474,9 @@ public class WTIncident {
 
 		
 			// Execute the method.
-			int statusCode = 0;
-			//int statusCode = client.executeMethod(method);
+
+			int statusCode = client.executeMethod(method);
+
 
 			if (statusCode != HttpStatus.SC_OK) {
 				System.err.println("Method failed: " + method.getStatusLine());
@@ -486,6 +502,7 @@ public class WTIncident {
 			
 			// get the worldtracer id
 			String wt_id = StringUtils.ParseWTString2(responseBody, "<td>WM DAH ", "     /-ACCEPTED");
+			wt_id = "ATLDA00000017";
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
 				responseBody = "got worldtracer id: " + wt_id;
@@ -499,7 +516,75 @@ public class WTIncident {
 		}
 		return responseBody;
 	}
-	
+    public String closeIncident(HttpClient client, String companycode,Incident idto){
+		String responseBody = null;	
+		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagCAH.exe";
+		getstring = getstring.replace(" ", "+");
+		String snm = new String();
+
+		
+		// passengers last name
+		if (idto.getPassengers() != null && idto.getPassengers().size() > 0) {
+			String temp = "";
+			OHD_Passenger op = null;
+			int c = 0;
+			for (Iterator i = idto.getPassengers().iterator(); i.hasNext();) {
+			
+				op = (OHD_Passenger) i.next();
+				if(op != null)
+				temp = op.getLastname();
+				if (c == 0) { 
+					if (temp != null && temp.trim().length() > 0) snm =  temp;
+				} else if(snm != null && snm.trim().length() <= 0){
+					if (snm != null && temp.trim().length() > 0) snm =  temp;
+				}
+				if (temp != null && temp.trim().length() > 0) c++;
+				if (c >= 3) break;
+			}
+		}
+		
+		PostMethod method = new PostMethod(getstring);		
+		method.setDoAuthentication(true);
+		method.addParameter("A1", companycode.toLowerCase());
+		method.addParameter("A2", "WM");
+        method.addParameter("T1",idto.getWt_id());
+        method.addParameter("NM",snm);
+        method.addParameter("FS",idto.getStationcode());
+        method.addParameter("RL",Integer.toString(idto.getLoss_code()));
+        Company_specific_irregularity_code csic = AdminUtils.getLossCode(idto.getLoss_code(), TracingConstants.LOST_DELAY, TracingConstants.DEFAULT_LOCALE, AdminUtils.getCompany(companycode));
+        method.addParameter("RC",csic.getDescription());
+        method.addParameter("AG",idto.getAgent().getUsername() + "/" + idto.getAgent().getCompanycode_ID());
+
+		// Provide custom retry handler is necessary
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+		try {
+			// Execute the method.
+			int statusCode = client.executeMethod(method);
+
+			if (statusCode != HttpStatus.SC_OK) {
+				System.err.println("Method failed: " + method.getStatusLine());
+			}
+
+			// Read the response body.
+			responseBody = method.getResponseBodyAsString();
+			int start = responseBody.indexOf("---- TYPE A ACCESS - CRT ----");
+			int end = responseBody.indexOf("---- TYPE B ACCESS - TTY ----");
+			if (start > 0 && end > 0) {
+				responseBody = responseBody.substring(start + "---- TYPE A ACCESS - CRT ----".length(), end);
+			}
+
+		} catch (HttpException e) {
+			System.err.println("Fatal protocol violation: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Fatal transport error: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			// Release the connection.
+			method.releaseConnection();
+		}
+		return responseBody;
+    }
 	/**
 	 * return an arraylist of worldtracer ohd ids from a list of ids
 	 * @param wtdata
@@ -617,6 +702,7 @@ public class WTIncident {
 			incident.setStationcreated(s);
 			incident.setStationassigned(s);
 			
+
 			// itemtype
 			ItemType itype = new ItemType();
 			itype.setItemType_ID(TracingConstants.LOST_DELAY);
@@ -631,6 +717,20 @@ public class WTIncident {
 			}
 			incident.setAgent(ntuser);
 			
+			// remarks
+			Remark  rm = new Remark();			
+			HashSet<Remark> remark_set = new HashSet<Remark>();		
+			if (wt_id != null) {
+				Worldtracer_Actionfiles Action_file = null;
+				Action_file = WorldTracerUtils.findActionFileByIncidentID((wt_id));
+				String remarktext = Action_file.getAction_file_text();
+				rm.setAgent(ntuser);
+				rm.setRemarktype(1);
+				rm.setIncident(incident);
+				rm.setRemarktext(remarktext);
+				remark_set.add(rm);
+				incident.setRemarks(remark_set);
+			}
 			// date
 			String datetimestr = StringUtils.ParseWTString2(wtdata, "BAG CREATED ", "/ HDQ CONTROL");
 			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "BAGS CREATED ", "/ HDQ CONTROL");

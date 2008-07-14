@@ -104,6 +104,7 @@ public class OhdBMO {
 
 			//check if audit is enabled for this company....
 			if (iDTO.getAgent().getStation().getCompany().getVariable().getAudit_ohd() == 1) {
+				System.out.println(iDTO.getAgent().getStation().getCompany().getVariable().getAudit_ohd());
 				Audit_OHD audit_dto = AuditOHDUtils.getAuditOHD(iDTO, mod_agent);
 				if (audit_dto != null) {
 					t = sess.beginTransaction();

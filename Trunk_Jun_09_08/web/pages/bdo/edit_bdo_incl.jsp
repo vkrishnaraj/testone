@@ -77,6 +77,11 @@ function toggledc(o) {
           <bean:message key="header.bdo_general" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#bdo/bdo.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
+        <logic:present name="wt_id" scope="request">
+        <p align="right">
+        	WorldTracer ID: <bean:write     name="wt_id"/> 
+        </p>
+        </logic:present>
         <span class="reqfield">*</span>
         <bean:message key="message.required" />
         <font color=red>
@@ -475,6 +480,11 @@ function toggledc(o) {
         &nbsp;&nbsp;
         <input id="button" type="button" name="print" value="<bean:message key="button.bdo_sendprint" />" onclick="openReportWindow('bdo.do?receipt=1&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','BDOReceipt',800,600);return false;">
         </logic:present>
+         <logic:present name="wt_id" scope="request">
+             <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqBDOForm(this.form);">
+                 <bean:message key="button.savetoWT" />
+             </html:submit>
+         </logic:present>
       </td>
     </tr>
   </table>

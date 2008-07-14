@@ -26,8 +26,8 @@ import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.db.test;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WTOHD;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -210,8 +211,9 @@ public class WorldTracerFWDAction extends Action {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				} else {
-					// Do the insert wt forward
-					if (this.InsertWtFwd(theform, user)){
+					// Do the insert wt forward and wt_queue into database
+
+					if (this.InsertWtFwd(theform, user) ){
 						return (mapping
 								.findForward(TracingConstants.FORWARD_WT_BAG_SUCCESS));
 					}
@@ -287,12 +289,7 @@ public class WorldTracerFWDAction extends Action {
 
 	}
 
-	// insert into test
-	private void InsertTest(WorldTracerFWDForm theform) {
-		test t = new test();
-		t.setName(theform.getFault_station());
-		HibernateUtils.save(t);
-	}
+
 
 	// Insert worldtracer forward to database
 	private boolean InsertWtFwd(WorldTracerFWDForm theform, Agent user) {
@@ -300,7 +297,9 @@ public class WorldTracerFWDAction extends Action {
 		wtfwdlog.setOhd(OHDUtils.getOHD(theform.getOhd_ID()));
 		wtfwdlog.setPlace_in_file(theform.getPlaced_in_file());
 		wtfwdlog.setBagtag(theform.getBagtag());
+		System.out.println(theform.getBagtag());
 		wtfwdlog.setEbagtag(theform.getEbagtag());
+		System.out.println(theform.getEbagtag());
 		wtfwdlog.setExpeditenum(theform.getExpeditenum());
 		wtfwdlog.setPassenger1(theform.getPassenger1());
 		wtfwdlog.setPassenger2(theform.getPassenger2());
@@ -327,7 +326,7 @@ public class WorldTracerFWDAction extends Action {
 		wtfwdlog.setForwarding_agent(user);
 		wtfwdlog.setForward_date(TracerDateTime.getGMTDate());
 
-		wtfwdlog.setFwd_status(TracingConstants.WTFWD_LOG_RECEIVED);
+		wtfwdlog.setFwd_status(TracingConstants.WTFWD_LOG_NOT_RECEIVED);
 
 		HibernateUtils.save(wtfwdlog);
 		return true;

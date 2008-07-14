@@ -154,7 +154,7 @@ public class WT_FWD_Log implements Serializable {
 
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
-	 *                        column="fwd_agent_id"
+	 *                        column="fwd_agent_id" foreign-key="fwd_agent_id"
 	 * @return Returns the forwarding_agent.
 	 */
 	public Agent getForwarding_agent() {

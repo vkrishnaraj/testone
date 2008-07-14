@@ -17,6 +17,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -49,11 +51,13 @@ public class WorldTracerAFAction extends Action {
 			return null;
 		}
 
+		ActionMessages errors = new ActionMessages();
+
 		Agent user = (Agent) session.getAttribute("user");
+
+		//if (!user.getStation().getCompany().getVariable().isWTEnabled()) return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES, user))
-			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES, user)) return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
@@ -62,11 +66,11 @@ public class WorldTracerAFAction extends Action {
 			agent_station = user.getStation();
 		}
 
-		/*********** view raw ahl / ohd text **************/
+		/** ********* view raw ahl / ohd text ************* */
 		if (request.getParameter("ahl_id") != null && request.getParameter("rawtext") != null) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("ahl_id"));
 			if (foundinc == null) {
-				HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
+				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/", user.getCompanycode_ID());
 				String result = WorldTracerUtils.getRAF(client, request.getParameter("ahl_id"));
 				request.setAttribute("wt_raw", result);
 			} else {
@@ -74,22 +78,27 @@ public class WorldTracerAFAction extends Action {
 			}
 			request.setAttribute("wt_raw_incident", request.getParameter("ahl_id"));
 			return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_AF_VIEW_RAW_INC));
-			
+
 		} else if (request.getParameter("ohd_id") != null && request.getParameter("rawtext") != null) {
 			OHD foundinc = WorldTracerUtils.findOHDByWTID(request.getParameter("ohd_id"));
+			/*
+			 * if(request.getParameter("id") != null){ Worldtracer_Actionfiles
+			 * Action_file = null; Action_file =
+			 * WorldTracerUtils.findActionFileByID(Integer.parseInt(request.getParameter("id")));
+			 * String remark = Action_file.getAction_file_text();
+			 * request.setAttribute("remark",remark); }
+			 */
 			if (foundinc == null) {
-				HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",user.getCompanycode_ID());
+				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/", user.getCompanycode_ID());
 				String result = WorldTracerUtils.getROF(client, request.getParameter("ohd_id"));
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
 			}
-			
+
 			request.setAttribute("wt_raw_ohd", request.getParameter("ohd_id"));
 			return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_AF_VIEW_RAW_INC));
 		}
-		
-			
 
 		// if got here and still no action, default to viewaction
 		/** ***** view action files ********* */
@@ -101,14 +110,27 @@ public class WorldTracerAFAction extends Action {
 		if (wt_type == null || wt_type.equals("")) wt_type = "FW";
 		request.setAttribute("wt_type", wt_type.toUpperCase());
 
+		// check if deleting action file
+		if (request.getParameter("delete") != null && request.getParameter("delete").length() > 0) {
+			boolean deleted = WorldTracerUtils.deleteActionFiles(request.getParameter("delete"));
+			if (!deleted) {
+				ActionMessage error = new ActionMessage("message.nodata");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			} else {
+				request.setAttribute("afdeleted", "1");
+			}
+		}
+
 		int rowcount = -1;
 		ArrayList<Worldtracer_Actionfiles> resultlist = null;
+
 		// get action file by type and date or by id
 		if ((request.getParameter("ahl_id") != null && request.getParameter("ahl_id").length() > 9) || (request.getParameter("ohd_id") != null && request.getParameter("ohd_id").length() > 9)) {
-			resultlist = WorldTracerUtils.findActionFilesbyWTId(request.getParameter("ahl_id"), request.getParameter("ohd_id"),wt_type,0,0);
+			resultlist = WorldTracerUtils.findActionFilesbyWTId(request.getParameter("ahl_id"), request.getParameter("ohd_id"), wt_type, 0, 0);
 			request.setAttribute("wt_id_specific", "1");
 		} else {
-			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, "BA", "LHR",0,0);
+			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user.getCompanycode_ID(), user.getStation().getStationcode(), 0, 0);
 		}
 		rowcount = resultlist.size();
 
@@ -140,14 +162,13 @@ public class WorldTracerAFAction extends Action {
 			}
 			request.setAttribute("pages", al);
 		}
-		
+
 		if ((request.getParameter("ahl_id") != null && request.getParameter("ahl_id").length() > 9) || (request.getParameter("ohd_id") != null && request.getParameter("ohd_id").length() > 9)) {
-			resultlist = WorldTracerUtils.findActionFilesbyWTId(request.getParameter("ahl_id"), request.getParameter("ohd_id"),wt_type, rowsperpage, currpage);
+			resultlist = WorldTracerUtils.findActionFilesbyWTId(request.getParameter("ahl_id"), request.getParameter("ohd_id"), wt_type, rowsperpage, currpage);
 			request.setAttribute("wt_id_specific", "1");
 		} else {
-			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, "BA", "LHR", rowsperpage, currpage);
+			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user.getCompanycode_ID(), user.getStation().getStationcode(), rowsperpage, currpage);
 		}
-		
 
 		request.setAttribute("resultlist", resultlist);
 

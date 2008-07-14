@@ -15,9 +15,9 @@ public class Lz implements Serializable {
 	private boolean isUsed;
 	
 	/**
-	 * @return Returns the lz_ID.
+	 * @return Returns the lz_id.
 	 * 
-	 * @hibernate.id generator-class = "native" type="integer" column="lz_ID"
+	 * @hibernate.id generator-class = "native" type="integer" column="lz_id"
 	 * @hibernate.generator-param name="sequence" value="Lz_0"
 	 */
 	
@@ -28,7 +28,7 @@ public class Lz implements Serializable {
 	}
 
 	/**
-	 * @param lz_ID
+	 * @param lz_id
 	 *          The deliverco_station_ID to set.
 	 */
 	public void setLz_ID(int lz_ID) {

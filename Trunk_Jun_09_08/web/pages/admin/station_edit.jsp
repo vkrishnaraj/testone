@@ -286,7 +286,7 @@
                   <html:text styleClass="textfield" name="stationForm" property="goal" size="10" maxlength="10" />
                 </td>
               </tr>
-                  <tr>
+              <tr>
 	            <td>
 	              <bean:message key="active" />
 	              <font color=red>
@@ -305,6 +305,15 @@
 	              </html:select>
 	            </td>
 	          </tr>
+	          <tr>
+                <td>
+                  <bean:message key="colname.wt_station" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" name="stationForm" property="wt_stationcode" size="10" maxlength="10" />
+                </td>
+              </tr>
               <tr>
                 <td colspan="2" align="center">
                   &nbsp;

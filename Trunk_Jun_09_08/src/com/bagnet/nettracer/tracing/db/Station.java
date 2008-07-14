@@ -34,6 +34,22 @@ public class Station implements Serializable {
 	private double goal;
 	
 	private boolean active;
+	private String wt_stationcode;
+
+	/**
+	 * @hibernate.property type="string"
+	 * @return the wt_stationcode
+	 */
+	public String getWt_stationcode() {
+		return wt_stationcode;
+	}
+
+	/**
+	 * @param wt_stationcode the wt_stationcode to set
+	 */
+	public void setWt_stationcode(String wt_stationcode) {
+		this.wt_stationcode = wt_stationcode;
+	}
 
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Lz"

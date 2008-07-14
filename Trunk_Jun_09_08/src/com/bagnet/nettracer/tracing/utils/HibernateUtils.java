@@ -338,8 +338,13 @@ public class HibernateUtils {
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER))  {
 						c.getVariable().setWt_user(obj.getVariable().getWt_user());
 						c.getVariable().setWt_pass(obj.getVariable().getWt_pass());
+						c.getVariable().setRetrieve_actionfile_interval(obj.getVariable().getRetrieve_actionfile_interval());
 						c.getVariable().setMbr_to_wt_days(obj.getVariable().getMbr_to_wt_days());
 						c.getVariable().setOhd_to_wt_days(obj.getVariable().getOhd_to_wt_days());
+						c.getVariable().setWt_url(obj.getVariable().getWt_url());
+						c.getVariable().setWt_airlinecode(obj.getVariable().getWt_airlinecode());
+						c.getVariable().setWt_enabled(obj.getVariable().getWt_enabled());
+						c.getVariable().setWt_write_enabled(obj.getVariable().getWt_write_enabled());
 					}
 				}
 				sess.saveOrUpdate(c);

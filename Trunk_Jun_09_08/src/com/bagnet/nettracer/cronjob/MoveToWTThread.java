@@ -14,16 +14,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.wt.WTIncident;
@@ -58,8 +61,9 @@ public class MoveToWTThread extends Thread {
 	private final static String MBR_MSG = "REPORT SENT TO ";
 	private final static String OHD_MSG = "OHD SENT TO ";
 
+	private Agent user;
 	private String company;
-
+	int retrieve;
 	public MoveToWTThread(Properties properties) {
 		try {
 			this.company = properties.getProperty("company.code");
@@ -81,9 +85,12 @@ public class MoveToWTThread extends Thread {
 					if (csv != null) {
 						int mbr = csv.getMbr_to_wt_days();	
 						int ohd = csv.getOhd_to_wt_days();
-						
+						int wt_write_enabled = csv.getWt_enabled();
+						int retrieve = csv.getRetrieve_actionfile_interval();
+						if (wt_write_enabled == 1){
 						if (mbr > 0) moveMBRToWT(mbr);
 						if (ohd > 0) moveOHDToWT(ohd);
+						}
 					}
 				} catch (Exception e) {
 					logger.fatal("cron move to wt thread error: " + e);
@@ -92,7 +99,7 @@ public class MoveToWTThread extends Thread {
 				logger.info("waiting for 24 hours to send mbr/ohd to WT again...");
 
 
-				pause(86400);
+				pause(retrieve * 60 * 1000);
 
 			}
 		} catch (Exception e) {
@@ -112,7 +119,7 @@ public class MoveToWTThread extends Thread {
 
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateCronWrapper.getNtSession().openSession();
 			// get mbrs without wt_id after x days
 			
 			Date now = new Date();
@@ -120,7 +127,7 @@ public class MoveToWTThread extends Thread {
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "select incident from com.bagnet.nettracer.tracing.db.Incident incident where "
@@ -138,7 +145,9 @@ public class MoveToWTThread extends Thread {
 			List list = q.list();
 			WTIncident wt = null;
 			Incident inc = null;
-			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",company);
+			
+			
+			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
 			
 			if (list != null && list.size() > 0) {
 				for (int i=0;i<list.size();i++) {
@@ -162,7 +171,7 @@ public class MoveToWTThread extends Thread {
 
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateCronWrapper.getNtSession().openSession();
 			// get mbrs without wt_id after x days
 			
 			Date now = new Date();
@@ -170,7 +179,7 @@ public class MoveToWTThread extends Thread {
 			ohd_move_days *= 86400000;
 			nowl = nowl - ohd_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where "
@@ -186,7 +195,7 @@ public class MoveToWTThread extends Thread {
 			List list = q.list();
 			WTOHD wt = null;
 			OHD inc = null;
-			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",company);
+			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
 			
 			if (list != null && list.size() > 0) {
 				for (int i=0;i<list.size();i++) {

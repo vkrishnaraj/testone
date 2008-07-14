@@ -97,6 +97,7 @@ public final class ManageStation extends Action {
 			dForm.set("goal", Double.toString(station.getGoal()));
 			dForm.set("lz_id", Integer.toString(station.getLz().getLz_ID()));
 			dForm.set("active", "" + station.isActive());
+			dForm.set("wt_stationcode", station.getWt_stationcode());
 			
 			if (station.getCompany().getVariable().getLz_mode() == 
 				TracingConstants.MOVETOLZ_MODE_ASSIGNMENT) {
@@ -370,6 +371,7 @@ public final class ManageStation extends Action {
 					dForm.set("station_region_mgr", station.getStation_region_mgr());
 					dForm.set("goal", Double.toString(station.getGoal()));
 					dForm.set("lz_id", Integer.toString(station.getLz().getStation().getStation_ID()));
+					dForm.set("wt_stationcode", station.getWt_stationcode());
 				}
 
 			}
@@ -434,6 +436,7 @@ public final class ManageStation extends Action {
 			s.setStation_region((String) dForm.get("station_region"));
 			s.setStation_region_mgr((String) dForm.get("station_region_mgr"));
 			s.setLz(LzUtils.getLz(Integer.parseInt((String) dForm.get("lz_id"))));
+			s.setWt_stationcode((String) dForm.get("wt_stationcode"));
 			
 			try {
 				double thegoal = Double.parseDouble((String)dForm.get("goal"));

@@ -92,5 +92,7 @@
 	<classpathentry kind="lib" path="lib/jars/navitaire_newskies.jar"/>
 	<classpathentry kind="lib" path="lib/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/servlet-api-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/build-client/dom4j-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/jars/jta.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

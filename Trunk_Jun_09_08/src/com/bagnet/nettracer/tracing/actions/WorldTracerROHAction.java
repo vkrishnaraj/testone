@@ -17,8 +17,10 @@ import org.apache.struts.validator.DynaValidatorForm;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.WT_ROH;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
@@ -77,8 +79,10 @@ public class WorldTracerROHAction extends Action {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 					} else {
-						String result = postWTROH(dForm, user);
-						request.setAttribute("result", result);
+						boolean result = this.InsertWtRoh(dForm, user);
+						//String result = postWTROH(dForm, user);
+						//request.setAttribute("result", result);
+						return (mapping.findForward(TracingConstants.SEND_WT_ROH_SUCCESS));
 					}
 					
 				}
@@ -100,7 +104,25 @@ public class WorldTracerROHAction extends Action {
 		//Allow modifications to the forward.
 		return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_ROH);
 	}
-	
+	private boolean InsertWtRoh(DynaValidatorForm theform,Agent user){
+		WT_ROH wtroh = new WT_ROH();
+		wtroh.setWt_ahl_id(theform.getString("wt_ahl_id"));
+		wtroh.setWt_ohd_id(theform.getString("wt_ohd_id"));
+		wtroh.setFi(theform.getString("fi"));
+		wtroh.setAg(theform.getString("ag"));
+		wtroh.setTeletype_address1(theform.getString("teletype_address1"));
+		wtroh.setTeletype_address2(theform.getString("teletype_address2"));
+		wtroh.setTeletype_address3(theform.getString("teletype_address3"));
+		wtroh.setTeletype_address4(theform.getString("teletype_address4"));
+		wtroh.setLname(theform.getString("lname"));
+		wtroh.setRoh_agent(user);
+		wtroh.setRoh_station_id(user.getStation().getStation_ID());
+		wtroh.setRoh_status(TracingConstants.LOG_NOT_RECEIVED);
+		
+		HibernateUtils.save(wtroh);
+		
+		return true;
+	}
 	public String postWTROH(DynaValidatorForm dForm, Agent user) {
 		// make the request
 		String company = user.getCompanycode_ID();
@@ -125,7 +147,7 @@ public class WorldTracerROHAction extends Action {
 		if (tx4.length() > 0) ohd_string.append(".TX " + tx4);
 		if (name.length() > 0) ohd_string.append(".NM " + name);
 		
-		HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",company);
+		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
 		String test = WorldTracerUtils.postROH(client, company, ahl_id,ohd_string.toString());
 		
 		// for now return ohd_string

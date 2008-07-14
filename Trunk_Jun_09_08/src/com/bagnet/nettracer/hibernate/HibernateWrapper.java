@@ -121,10 +121,11 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Work_Shift;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.test;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.WT_TTY;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.WT_ROH;
 /**
  * @author Ankur Gupta
  * 
@@ -255,8 +256,7 @@ public class HibernateWrapper {
 		cfg.addClass(Audit_OHD_Itinerary.class);
 		cfg.addClass(Audit_ControlLog.class);
         
-		//test
-		cfg.addClass(test.class);
+
 		// WT FWD
 		cfg.addClass(WT_FWD_Log.class);
 		cfg.addClass(WT_FWD_Log_Itinerary.class);
@@ -363,6 +363,8 @@ public class HibernateWrapper {
 		cfg.addClass(WT_TTY.class);
 		
 		cfg.addClass(Lz.class);
+		cfg.addClass(WT_Queue.class);
+		cfg.addClass(WT_ROH.class);
 	}
 
 

@@ -34,14 +34,7 @@
         <font color=red>
           <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
         </font>
-          <br>
-          	<logic:present name="result" scope="request">
-	          <br>
-	          <center><font color=green>
-	            <bean:write name="result" scope="request"/>
-	          </font></center>
-	        </logic:present>
-        	<br>
+
         	
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>

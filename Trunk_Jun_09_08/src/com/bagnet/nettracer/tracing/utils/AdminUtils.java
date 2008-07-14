@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.validator.DynaValidatorForm;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.cronjob.archive.HibernateArchiveWrapper;
+import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Airport;

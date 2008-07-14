@@ -34,6 +34,9 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
+import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -53,169 +56,8 @@ public class WTOHD {
 	 * @param companycode
 	 * @return
 	 */
-	public String  forwardOHD(HttpClient client, String companycode,WorldTracerFWDForm wtfwd, Agent user){
-		String _n = ".";
-		String _t = "";
-		String _h = "/";
-		String responseBody = null;
-		
-
-        //retrieve ohd
-		OhdBMO obmo = new OhdBMO();
-		OHD ohd = obmo.findOHDByID(wtfwd.getOhd_ID());
-		if (ohd == null) {
-			setError("invalid ohd filenum");
-			return null;
-		}
-		// generate post string _s
-		StringBuffer sb = new StringBuffer();
-
-		sb.append("STNARL" + _t);
-		sb.append(ohd.getHoldingStation().getStationcode());
-		sb.append(ohd.getFoundAtStation().getCompany().getCompanyCode_ID());
-		sb.append(_n);
-		// passengers last name
-		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
-			String temp;
-			int c = 0;
-			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
-				OHD_Passenger op = (OHD_Passenger) i.next();
-				temp = op.getLastname();
-				if (c == 0) {
-					if (temp.trim().length() > 0) sb.append("NM" + _t + temp);
-				} else {
-					if (temp.trim().length() > 0) sb.append(_h + temp);
-				}
-				if (temp.trim().length() > 0) c++;
-				if (c >= 3) break;
-			}
-		}
-		sb.append(_n);
-		// flight date
-		boolean hasflight = false;
-		if (ohd.getItinerary() != null && ohd.getItinerary().size() > 0) {
-			String temp;
-			int c = 0;
-			
-			for (Iterator i = ohd.getItinerary().iterator(); i.hasNext();) {
-				OHD_Itinerary op = (OHD_Itinerary) i.next();
-				temp = op.getAirline() + op.getFlightnum() + "/";
-				if (DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null) != null) temp += DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null);
-				if (c == 0) {
-					if (temp.trim().length() > 1) sb.append("FD" + _t + temp.toUpperCase());
-				} else {
-					if (temp.trim().length() > 1) sb.append(_h + temp.toUpperCase());
-				}
-				if (temp.trim().length() > 1) {hasflight=true;c++;}
-				if (c >= 4) break;
-			}
-		}
-		sb.append(_n);
-		if (!hasflight) {
-			error = "Please enter a valid flight/date itinerary";
-			return null;
-		}
-		//Tag Number
-		if(ohd.getClaimnum() != null){
-			sb.append("TN"+_t+ohd.getClaimnum()+_n);
-		}
-		//Expedite Number
-		
-		//Forward Bags
-		sb.append("FB"+_t+"1"+_n);
-		//Reason For Loss
-		if(wtfwd.getReason_for_loss()!=null){
-		  sb.append("RF"+_t+wtfwd.getReason_for_loss()+_n);
-		}
-		//Reason Comments
-		if(wtfwd.getComments()!=null){
-		  sb.append("RC"+_t+wtfwd.getComments()+_n);
-		}
-		//Fault Station
-		if(wtfwd.getFault_station()!=null){
-		  sb.append("FS"+_t+wtfwd.getFault_station()+_n);
-		}
-		//Fault Terminal
-		if(wtfwd.getFault_terminal()!=null){
-		  sb.append("FT"+_t+wtfwd.getFault_terminal()+_n);
-		}
-		//Handled Airline Copy
-		  sb.append("HC"+_t+"Y"+_n);
-		//Supplementary Information
-		//Teletype Address
-		if(wtfwd.getTeletype_address1()!=null){
-		  sb.append("TX"+_t+wtfwd.getTeletype_address1()+_n);
-		}
-		if(wtfwd.getTeletype_address2()!=null){
-		  sb.append(wtfwd.getTeletype_address2()+_n);
-		}
-		if(wtfwd.getTeletype_address3()!=null){
-		  sb.append(wtfwd.getTeletype_address3()+_n);
-		}
-		if(wtfwd.getTeletype_address4()!=null){
-		  sb.append(wtfwd.getTeletype_address4()+_n);
-		}
-		  
-	    // agent
-		  sb.append("AG" + _t + user.getUsername() + "/" + user.getCompanycode_ID() + _n);
-		// replace string
-			String wtstring = sb.toString();
-			wtstring = wtstring.replace("\n", "");
-			wtstring = wtstring.replace("\r", "");
-			wtstring = wtstring.replace("STN", "");
-			wtstring = wtstring.replace("ARL", "");
-			wtstring = wtstring.toUpperCase();	
-			if (wtstring.substring(wtstring.length()-2).equals("..")) wtstring = wtstring.substring(0,wtstring.length()-2);
-			String encodedstring = wtstring.substring(5);
-			String tempstring = encodedstring;
-			try {
-				tempstring = URLEncoder.encode(tempstring,"UTF-8");
-			} catch (Exception e) {}
-			//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
-			String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagFWD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&FWD=" + tempstring;
-			getstring = getstring.replace(" ", "+");
-			GetMethod method = null;
-			try {
-				
-				method = new GetMethod(getstring);
-
-
-				method.setDoAuthentication(true);
-		
-				// Provide custom retry handler is necessary
-				method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
-
-			
-				// Execute the method.
-				int statusCode = 0;
-				//int statusCode = client.executeMethod(method);
-
-				if (statusCode != HttpStatus.SC_OK) {
-					System.err.println("Method failed: " + method.getStatusLine());
-				}
-
-				// Read the response body.
-				responseBody = method.getResponseBodyAsString();
-				
-		
-			} catch (HttpException e) {
-				System.err.println("Fatal protocol violation: " + e.getMessage());
-				e.printStackTrace();
-				error = "fatal protocal violation" + e.toString();
-				return null;
-			} catch (Exception e) {
-				System.err.println("Fatal error: " + e.getMessage());
-				e.printStackTrace();
-				error = "fatal error" + e.toString();
-				return null;
-			} finally {
-				// Release the connection.
-				if (method != null) method.releaseConnection();
-				
-					
-			}
-		return responseBody;
-	}
+	
+	
 	public String insertOHD(HttpClient client, String companycode, String filenum) {
 		String _n = ".";
 		String _t = "";
@@ -519,8 +361,9 @@ public class WTOHD {
 
 		
 			// Execute the method.
-			int statusCode = 0;
-			//int statusCode = client.executeMethod(method);
+
+			int statusCode = client.executeMethod(method);
+
 
 			if (statusCode != HttpStatus.SC_OK) {
 				System.err.println("Method failed: " + method.getStatusLine());
@@ -623,6 +466,7 @@ public class WTOHD {
 		return responseBody;
     }
     
+
     public String closeIncident(HttpClient client, String companycode,Incident idto){
 		String responseBody = null;	
 		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagCAH.exe";
@@ -689,6 +533,7 @@ public class WTOHD {
 		}
 		return responseBody;
     }
+
 	/**
 	 * return an arraylist of worldtracer ohd ids from a list of ids
 	 * @param wtdata
@@ -1106,7 +951,7 @@ public class WTOHD {
 			ohd.setItinerary(oi_set);
 			
 			// remarks
-			Remark rm = null;
+			Remark  rm = new Remark();
 			boolean hasmorerem = true;
 			String rmtxt;
 			HashSet<Remark> remark_set = new HashSet<Remark>();
@@ -1114,13 +959,25 @@ public class WTOHD {
 			i = 1;
 			String start;
 			
+			
+			if (wt_id != null) {
+				Worldtracer_Actionfiles Action_file = null;
+				Action_file = WorldTracerUtils.findActionFileByID((wt_id));
+				String remarktext = Action_file.getAction_file_text();
+//System.out.println(remarktext);
+				rm.setAgent(ntuser);
+				rm.setRemarktype(1);
+				rm.setOhd(ohd);
+				rm.setRemarktext(remarktext);
+				remark_set.add(rm);
+			}
 			if (ntuser != null) {
 				while (hasmorerem) {
 					if (i < 10) start = "0" + i;
 					else start = Integer.toString(i);
 					rmtxt = StringUtils.ParseWTString2(wtdata, "FF" + start + " ", "\n");
 					if (rmtxt != null) {
-						rm = new Remark();
+						
 						rm.setAgent(ntuser);
 						rm.setRemarktext(rmtxt);
 						rm.setRemarktype(1);
@@ -1131,6 +988,7 @@ public class WTOHD {
 					
 				}
 			}
+			
 			ohd.setRemarks(remark_set);
 			
 			
