@@ -379,6 +379,10 @@ public final class ManageCompany extends Action {
 					var.setWt_write_enabled(Integer.parseInt(dForm.getWt_write_enabled()));
 					
 				}
+				
+				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WEB_SERVICES)) {
+					var.setWs_enabled(Integer.parseInt(dForm.getWs_enabled()));
+				}
 
 			} catch (Exception e) {
 			}
