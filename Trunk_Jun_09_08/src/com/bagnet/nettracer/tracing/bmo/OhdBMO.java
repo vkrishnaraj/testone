@@ -709,8 +709,8 @@ public class OhdBMO {
 					.append(" join ohd.items item");
 
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
-					|| siDTO.getLastname().length() > 0 || siDTO.getAddress().length() > 0
-					|| siDTO.getCity().length() > 0 || siDTO.getState_ID().length() > 0
+					|| siDTO.getLastname().length() > 0 || siDTO.getAddress1().length() > 0 || siDTO.getAddress2().length() > 0
+					|| siDTO.getCity().length() > 0 || (siDTO.getState_ID() != null && siDTO.getState_ID().length() > 0) || (siDTO.getProvince() != null && siDTO.getProvince().length() > 0) || siDTO.getCountrycode_ID().length() > 0
 					|| siDTO.getZip().length() > 0 || siDTO.getPhone().length() > 0
 					|| siDTO.getEmail().length() > 0) {
 				s.append(" join ohd.passengers passenger ");
@@ -765,10 +765,17 @@ public class OhdBMO {
 
 			// addresses
 
-			if (siDTO.getAddress().length() > 0) s
-					.append(" and (address.address1 like :addr or address.address2 like :addr)");
+			if (siDTO.getAddress1().length() > 0)
+				s.append(" and (address.address1 like :addr1)");
+			if (siDTO.getAddress2().length() > 0)
+				s.append(" and (address.address2 like :addr2)");
 			if (siDTO.getCity().length() > 0) s.append(" and address.city like :city");
-			if (siDTO.getState_ID().length() > 0) s.append(" and address.state_ID like :state_ID");
+			if (siDTO.getState_ID() != null && siDTO.getState_ID().length() > 0) s.append(" and address.state_ID like :state_ID");
+			if (siDTO.getProvince() != null && siDTO.getProvince().length() > 0)
+				s.append(" and (address.province like :province)");
+			if (siDTO.getCountrycode_ID().length() > 0) {
+				s.append(" and (address.countrycode_ID like :countrycode_ID");
+			}
 			if (siDTO.getZip().length() > 0) s.append(" and address.zip like :zip");
 			if (siDTO.getPhone().length() > 0) s
 					.append(" and (address.homephone like :phone or address.workphone like :phone "
@@ -858,10 +865,20 @@ public class OhdBMO {
 				q.setString("middlename", b);
 				q.setString("lastname", c);
 			}
-			if (siDTO.getAddress().length() > 0) q.setString("addr", siDTO.getAddress().toUpperCase());
+			if (siDTO.getAddress1().length() > 0)
+				q.setString("addr1", siDTO.getAddress1().toUpperCase());
+			if (siDTO.getAddress2().length() > 0)
+				q.setString("addr2", siDTO.getAddress2().toUpperCase());
 			if (siDTO.getCity().length() > 0) q.setString("city", siDTO.getCity().toUpperCase());
-			if (siDTO.getState_ID().length() > 0) q.setString("state_ID", siDTO.getState_ID()
-					.toUpperCase());
+			if (siDTO.getState_ID() != null && siDTO.getState_ID().length() > 0) {
+				q.setString("state_ID", siDTO.getState_ID().toUpperCase());
+			}
+			if (siDTO.getProvince() != null && siDTO.getProvince().length() > 0) {
+				q.setString("province", siDTO.getProvince().toUpperCase());
+			}
+			if (siDTO.getCountrycode_ID().length() > 0) {
+				q.setString("countrycode_ID", siDTO.getCountrycode_ID().toUpperCase());
+			}
 			if (siDTO.getZip().length() > 0) q.setString("zip", siDTO.getZip().toUpperCase());
 			if (siDTO.getPhone().length() > 0) q.setString("phone", siDTO.getPhone().toUpperCase());
 			if (siDTO.getEmail().length() > 0) q.setString("email", siDTO.getEmail().toUpperCase());

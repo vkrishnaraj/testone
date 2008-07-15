@@ -34,12 +34,14 @@ public final class SearchIncidentForm extends ValidatorForm {
 	// custom query on top of search incident
 	private String recordlocator;
 	private String email;
-	private String address;
+	private String address1;
+	private String address2;
 	private String city;
 	private String state_ID;
 	private String zip;
 	private String province;
 	private String phone;
+	private String countrycode_ID;
 
 	private int manufacturer_ID;
 	private String manufacturer_other;
@@ -336,22 +338,7 @@ public final class SearchIncidentForm extends ValidatorForm {
 		this.companycreated_ID = companycreated_ID;
 	}
 
-	/** ************* custom query only **************** */
 
-	/**
-	 * @return Returns the address.
-	 */
-	public String getAddress() {
-		return address;
-	}
-
-	/**
-	 * @param address
-	 *          The address to set.
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
 
 	/**
 	 * @return Returns the phone.
@@ -620,5 +607,29 @@ public final class SearchIncidentForm extends ValidatorForm {
 	 */
 	public void setNoAssignedAgent(int noAssignedAgent) {
 		this.noAssignedAgent = noAssignedAgent;
+	}
+
+	public String getAddress1() {
+		return address1;
+	}
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	public String getAddress2() {
+		return address2;
+	}
+
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	public String getCountrycode_ID() {
+		return countrycode_ID;
+	}
+
+	public void setCountrycode_ID(String countrycode_ID) {
+		this.countrycode_ID = countrycode_ID;
 	}
 }
