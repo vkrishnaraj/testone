@@ -51,17 +51,15 @@
 	<target name="all" depends="clean,package-web" />
 
 	<target name="fast_all" depends="package-web2">
-		<!--
         <copy todir="${app.deploy.dir}">
               <fileset dir="${build.dir}/dist/web">
                     <include name="*.war" />
-              < ileset>
+              </fileset>
         </copy>
-        -->
-        <delete dir="${app.deploy.dir}/tracer.war" />
+        <!-- <delete dir="${app.deploy.dir}/tracer.war" />
         <mkdir dir="${app.deploy.dir}/tracer.war" />
         <unwar src="${build.dir}/dist/web/tracer.war" dest="${app.deploy.dir}/tracer.war">
-        </unwar>
+        </unwar>-->
 	</target>
 
 	<target name="build" depends="init,compile" />
