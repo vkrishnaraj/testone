@@ -34,6 +34,8 @@
 		}
 	}
 	
+
+	
 	<logic:present name="incident" scope="request">
 		var currentStatusId = "<%=TracingConstants.AJAX_STATUS_INC %>";
 	</logic:present>
@@ -241,7 +243,7 @@ function gopage(i) {
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                   &nbsp;
                   <html:text property="flightnum" size="4" maxlength="4" styleClass="textfield" />
@@ -271,46 +273,99 @@ function gopage(i) {
                   <br>
                   <html:text property="firstname" size="20" maxlength="20" styleClass="textfield" />
                 </td>
-                <td>
+                <td colspan="3">
                   <bean:message key="colname.mid_initial" />
                   <br>
                   <html:text property="middlename" size="20" maxlength="1" styleClass="textfield" />
                 </td>
               </tr>
+			<tr>
+                    <td colspan=2>
+                      <bean:message key="colname.street_addr1" />
+                      <br>
+                      <html:text property="address1" size="45" maxlength="50" styleClass="textfield" />
+                    </td>
+                    <td colspan=3>
+                      <bean:message key="colname.street_addr2" />
+                      <br>
+                      <html:text property="address2" size="45" maxlength="50" styleClass="textfield" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <bean:message key="colname.city" />
+                      <br>
+                      <html:text property="city" size="15" maxlength="50" styleClass="textfield" />
+                    </td>
+                    <td>
+                      <bean:message key="colname.state" />
+                      <br>
+                      <logic:equal name="searchIncidentForm" property="countrycode_ID" value="US">
+                        <html:select property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
+                          <html:option value="">
+                            <bean:message key="select.none" />
+                          </html:option>
+                          <html:options collection="statelist" property="value" labelProperty="label" />
+                        </html:select>
+                      </logic:equal>
+                      <logic:equal name="searchIncidentForm" property="countrycode_ID" value="">
+                        <html:select property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
+                          <html:option value="">
+                            <bean:message key="select.none" />
+                          </html:option>
+                          <html:options collection="statelist" property="value" labelProperty="label" />
+                        </html:select>
+                      </logic:equal>
+                      <logic:notEqual name="searchIncidentForm" property="countrycode_ID" value="">
+                        <logic:notEqual name="searchIncidentForm" property="countrycode_ID" value="US">
+                          <html:select property="state_ID" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
+                            <html:option value="">
+                              <bean:message key="select.none" />
+                            </html:option>
+                            <html:options collection="statelist" property="value" labelProperty="label" />
+                          </html:select>
+                        </logic:notEqual>
+                      </logic:notEqual>
+                    </td>
+                    <td>
+                      <bean:message key="colname.province" />
+                      <br>
+                      <logic:equal name="searchIncidentForm" property="countrycode_ID" value="US">
+                      	<html:text property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                      </logic:equal>
+                      <logic:equal name="searchIncidentForm" property="countrycode_ID" value="">
+                      	<html:text property="province" size="15" maxlength="100" styleClass="textfield" disabled="false" />
+                      </logic:equal>
+                      <logic:notEqual name="searchIncidentForm" property="countrycode_ID" value="">
+                        <logic:notEqual name="searchIncidentForm" property="countrycode_ID" value="US">
+                        	<html:text property="province" size="15" maxlength="100" styleClass="textfield" disabled="false" />
+                         </logic:notEqual>
+                      </logic:notEqual>
+                      
+                    </td>
+                    <td>
+                      <bean:message key="colname.zip" />
+                      <br>
+                      <html:text property="zip" size="13" maxlength="11" styleClass="textfield" />
+                    </td>
+                    <td>
+                      <bean:message key="colname.country" />
+                      <br>
+                      <html:select property="countrycode_ID" styleClass="dropdown" onchange="checkstate(this, this.form, 'state_ID', 'province');">
+                        <html:option value="">
+                          <bean:message key="select.none" />
+                        </html:option>
+                        <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+                      </html:select>
+                    </td>
+                  </tr>
               <tr>
-                <td>
-                  <bean:message key="colname.street_addr" />
-                  <br>
-                  <html:text property='address' size="40" maxlength="50" styleClass="textfield" />
-                </td>
-                <td>
-                  <bean:message key="colname.city" />
-                  <br>
-                  <html:text property='city' size="20" maxlength="50" styleClass="textfield" />
-                </td>
-                <td>
-                  <bean:message key="colname.state" />
-                  <br>
-                  <html:select property='state_ID' styleClass="dropdown">
-                    <html:option value="">
-                      <bean:message key="select.none" />
-                    </html:option>
-                    <html:options collection="statelist" property="value" labelProperty="label" />
-                  </html:select>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <bean:message key="colname.zip" />
-                  <br>
-                  <html:text property='zip' size="20" maxlength="11" styleClass="textfield" />
-                </td>
                 <td>
                   <bean:message key="colname.phone" />
                   <br>
                   <html:text property='phone' size="20" maxlength="25" styleClass="textfield" />
                 </td>
-                <td>
+                <td colspan="4">
                   <bean:message key="colname.email" />
                   <br>
                   <html:text property="email" size="40" maxlength="50" styleClass="textfield" />
@@ -324,10 +379,10 @@ function gopage(i) {
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companydesc" />
+                    <html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
                   </html:select>
                 </td>
-                <td>
+                <td colspan="4">
                   <bean:message key="colname.membership_number" />
                   <br>
                   <html:text property="membershipnum" size="20" maxlength="20" styleClass="textfield" />
@@ -350,7 +405,7 @@ function gopage(i) {
                 </td>
               </tr>
               <tr>
-                <td valign=top>
+                <td valign="top">
                   <bean:message key="colname.color" />
                   <br>
                   <html:select property="color" styleClass="dropdown">
@@ -366,7 +421,7 @@ function gopage(i) {
                     <html:options collection="typelist" property="value" labelProperty="label" />
                   </html:select>
                 </td>
-                <td valign=top>
+                <td valign="top">
                   <bean:message key="colname.x_desc" />
                   <br>
                   <html:select property="xdescelement_ID1" styleClass="dropdown">
@@ -390,7 +445,7 @@ function gopage(i) {
                     <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                   </html:select>
                 </td>
-                <td valign=top>
+                <td valign="top">
                   <bean:message key="colname.manufacturer" />
                   <br>
                   <html:select property="manufacturer_ID" styleClass="dropdown" onchange='showmanu(this);return true;'>

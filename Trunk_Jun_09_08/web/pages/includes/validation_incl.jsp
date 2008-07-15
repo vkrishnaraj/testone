@@ -17,20 +17,47 @@
   <script language="javascript">
     <!--
 	// non us countries don't get state drop down
-	function checkstate(var1,o,statefield) {
+	function checkstate(var1,o,statefield, province_field) {
 	
 		pos = var1.name.indexOf(".");
 		if (pos <=0) addr = "";
 		else addr = var1.name.substring(0,pos+1);
 		state = addr + statefield;
+		province = addr + province_field;
 			
-		if (var1.value!='US') {
-			// disable state
-			o.elements[state].disabled = true;
-		} else {
+		if (!var1.value) {
+			//no country, both state and province enabled
+			o.elements[province].className = 'textfield';
+			o.elements[province].disabled = false;
+			
 			o.elements[state].disabled = false;
+			
+		} else if (var1.value == 'US') {
+			//US - enable state, disable province
+			o.elements[state].disabled = false;
+			o.elements[province].disabled = true;
+			o.elements[province].className = 'disabledtextfield';
+		} else {
+			//International - disable state, enable province
+			o.elements[state].disabled = true;
+			o.elements[province].className = 'textfield';
+			o.elements[province].disabled = false;
 		}
 	
+	}
+	
+	function updateCountryUS(var1, myform, countryField, provinceField) {
+		if (var1.value) {
+			pos = var1.name.indexOf(".");
+			if (pos <=0) addr = "";
+			else addr = var1.name.substring(0,pos+1);
+			country = addr + countryField;
+			province = addr + provinceField;
+		
+			myform.elements[province].disabled = true;
+			myform.elements[province].className = 'disabledtextfield';
+			myform.elements[country].value = 'US';
+		}
 	}
 	
 	function validateMessageForm (form)

@@ -196,7 +196,7 @@
                       <bean:message key="colname.state" />
                       <br>
                       <logic:equal name="addresses" property="countrycode_ID" value="US">
-                        <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown">
+                        <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
                           <html:option value="">
                             <bean:message key="select.none" />
                           </html:option>
@@ -204,7 +204,7 @@
                         </html:select>
                       </logic:equal>
                       <logic:equal name="addresses" property="countrycode_ID" value="">
-                        <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown">
+                        <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
                           <html:option value="">
                             <bean:message key="select.none" />
                           </html:option>
@@ -213,7 +213,7 @@
                       </logic:equal>
                       <logic:notEqual name="addresses" property="countrycode_ID" value="">
                         <logic:notEqual name="addresses" property="countrycode_ID" value="US">
-                          <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown" disabled="true">
+                          <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
                             <html:option value="">
                               <bean:message key="select.none" />
                             </html:option>
@@ -225,7 +225,18 @@
                     <td>
                       <bean:message key="colname.province" />
                       <br>
+                      <logic:equal name="addresses" property="countrycode_ID" value="US">
+                      	<html:text property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+		<html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].province" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                      </logic:equal>
+                      <logic:equal name="addresses" property="countrycode_ID" value="">
                       <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].province" %>' size="15" maxlength="100" styleClass="textfield" />
+                      </logic:equal>
+                      <logic:notEqual name="addresses" property="countrycode_ID" value="">
+                        <logic:notEqual name="addresses" property="countrycode_ID" value="US">
+                      <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].province" %>' size="15" maxlength="100" styleClass="textfield" />
+                         </logic:notEqual>
+                      </logic:notEqual>
                     </td>
                     <td>
                       <bean:message key="colname.zip" />
@@ -235,7 +246,7 @@
                     <td>
                       <bean:message key="colname.country" />
                       <br>
-                      <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].countrycode_ID" %>' styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID');">
+                      <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].countrycode_ID" %>' styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID', 'province');">
                         <html:option value="">
                           <bean:message key="select.none" />
                         </html:option>
@@ -313,7 +324,7 @@
                     <html:option value="">
                       <bean:message key="select.please_select" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                   &nbsp;
                   <html:text name="itinerarylist" property="flightnum" size="4" maxlength="4" styleClass="textfield" indexed="true" />

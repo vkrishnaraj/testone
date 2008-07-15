@@ -219,7 +219,7 @@ function gotoHistoricalReport() {
                   <bean:message key="colname.state" />
                   <br>
                   <logic:equal name="LostAndFoundForm" property="customer_countrycode_ID" value="US">
-                    <html:select name="LostAndFoundForm" property="customer_state_ID" styleClass="dropdown">
+                    <html:select name="LostAndFoundForm" property="customer_state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'customer_countrycode_ID', 'customer_province');">
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -227,7 +227,7 @@ function gotoHistoricalReport() {
                     </html:select>
                   </logic:equal>
                   <logic:equal name="LostAndFoundForm" property="customer_countrycode_ID" value="">
-                    <html:select name="LostAndFoundForm" property="customer_state_ID" styleClass="dropdown">
+                    <html:select name="LostAndFoundForm" property="customer_state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'customer_countrycode_ID', 'customer_province');">
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -236,7 +236,7 @@ function gotoHistoricalReport() {
                   </logic:equal>
                   <logic:notEqual name="LostAndFoundForm" property="customer_countrycode_ID" value="">
                     <logic:notEqual name="LostAndFoundForm" property="customer_countrycode_ID" value="US">
-                      <html:select name="LostAndFoundForm" property="customer_state_ID" styleClass="dropdown" disabled="true">
+                      <html:select name="LostAndFoundForm" property="customer_state_ID" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'customer_countrycode_ID', 'customer_province');">
                         <html:option value="">
                           <bean:message key="select.none" />
                         </html:option>
@@ -248,7 +248,17 @@ function gotoHistoricalReport() {
                 <td>
                   <bean:message key="colname.province" />
                   <br>
+                      <logic:equal name="LostAndFoundForm" property="customer_countrycode_ID" value="US">
+                  <html:text name="LostAndFoundForm" property="customer_province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                      </logic:equal>
+                      <logic:equal name="LostAndFoundForm" property="customer_countrycode_ID" value="">
                   <html:text name="LostAndFoundForm" property="customer_province" size="15" maxlength="100" styleClass="textfield" />
+                      </logic:equal>
+                      <logic:notEqual name="LostAndFoundForm" property="customer_countrycode_ID" value="">
+                        <logic:notEqual name="LostAndFoundForm" property="customer_countrycode_ID" value="US">
+                  <html:text name="LostAndFoundForm" property="customer_province" size="15" maxlength="100" styleClass="textfield" />
+                         </logic:notEqual>
+                      </logic:notEqual>
                 </td>
                 <td>
                   <bean:message key="colname.zip" />
@@ -260,7 +270,7 @@ function gotoHistoricalReport() {
                 <td>
                   <bean:message key="colname.country" />
                   <br>
-                  <html:select name="LostAndFoundForm" property="customer_countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'customer_state_ID');">
+                  <html:select name="LostAndFoundForm" property="customer_countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'customer_state_ID', 'customer_province');">
                     <html:option value="">
                       <bean:message key="select.none" />
                     </html:option>
