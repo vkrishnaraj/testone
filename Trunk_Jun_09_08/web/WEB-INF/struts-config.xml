@@ -171,6 +171,17 @@
 	  	    <form-bean name="worldTracerTTYForm"                type="com.bagnet.nettracer.tracing.forms.WorldTracerTTYForm"/>
 	  	
 		</form-beans>
+    <!-- global exception -->
+  <global-exceptions>
+  	<exception
+    handler="com.bagnet.nettracer.tracing.actions.CustomizedExceptionHandler"
+    key="timeout.error.message"
+    path="/index.jsp"
+    scope="request"
+    type="java.lang.IllegalArgumentException"/>
+    
+    
+  </global-exceptions>
   
   <!-- ========== Global Forward Definitions ============================== -->
   <global-forwards>
@@ -871,16 +882,5 @@
     <set-property property="moduleAware" value="true" />
   </plug-in>
   
-  <!-- global exception -->
-  <global-exceptions>
-  	<exception
-    handler="com.bagnet.nettracer.tracing.actions.CustomizedExceptionHandler"
-    key="timeout.error.message"
-    path="/index.jsp"
-    scope="request"
-    type="java.lang.IllegalArgumentException"/>
-    
-    
-  </global-exceptions>
-  
+
 </struts-config>

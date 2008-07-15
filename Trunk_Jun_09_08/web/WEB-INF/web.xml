@@ -76,12 +76,16 @@
     <servlet-class>com.bagnet.nettracer.servlets.ajax.CheckMessages</servlet-class>
     <load-on-startup>2</load-on-startup>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>checkmessages</servlet-name>
-    <url-pattern>/checkMessages.view</url-pattern>
-  </servlet-mapping> 
  
+  <!-- web service client for testing -->
+  <servlet>
+        <servlet-name>PassengerViewTest</servlet-name>
+        <display-name>PassengerView Test Servlet</display-name>
+        <servlet-class>
+            com.bagnet.nettracer.ws.passengerview.PVTestServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+  </servlet>
+  
   <servlet>
     <servlet-name>showImage</servlet-name>
     <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
@@ -111,15 +115,12 @@
     <servlet-name>AxisServlet</servlet-name>
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
+
   
-  <!-- web service client for testing -->
-  <servlet>
-        <servlet-name>PassengerViewTest</servlet-name>
-        <display-name>PassengerView Test Servlet</display-name>
-        <servlet-class>
-            com.bagnet.nettracer.ws.passengerview.PVTestServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-  </servlet>
+  <servlet-mapping>
+    <servlet-name>checkmessages</servlet-name>
+    <url-pattern>/checkMessages.view</url-pattern>
+  </servlet-mapping> 
   <servlet-mapping>
     <servlet-name>PassengerViewTest</servlet-name>
     <url-pattern>/passengerviewtest</url-pattern>
@@ -182,7 +183,28 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  
+  
+  <!-- error pages -->
+  <error-page>
+    <error-code>400</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
+  
+  <error-page>
+    <error-code>403</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
+  
+  <error-page>
+    <error-code>404</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
 
+  <error-page>
+    <error-code>500</error-code>
+    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+  </error-page>
   <!-- Struts Tag Library Descriptor -->
   <taglib>
     <taglib-uri>/tags/struts-bean</taglib-uri>
@@ -208,27 +230,6 @@
     <taglib-uri>/tags/struts-tiles</taglib-uri>
     <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
   </taglib>
-  
-  
-  <!-- error pages -->
-  <error-page>
-    <error-code>400</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
-  
-  <error-page>
-    <error-code>403</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
-  
-  <error-page>
-    <error-code>404</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
 
-  <error-page>
-    <error-code>500</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
      
 </web-app>
