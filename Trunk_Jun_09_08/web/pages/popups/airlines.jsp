@@ -147,7 +147,7 @@ document.oncontextmenu = returnFalse;
                                 <a href="#USZ">Z</a>
                                 <hr height="1" color="black">
                                 <p>
-                                  <logic:iterate id="airlines" name="companylist" scope="session" type="com.bagnet.nettracer.tracing.db.Company">
+                                  <logic:iterate id="airlines" name="companylistByName" scope="session" type="com.bagnet.nettracer.tracing.db.Company">
 <%
                                     String air = airlines.getCompanydesc().substring(0, 1).toUpperCase();
 

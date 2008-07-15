@@ -116,7 +116,7 @@ function getreason(choose){
                 </td>
                 <td colspan="3">
                 	<html:select name="worldTracerFWDForm" property="companyCode" styleClass="dropdown" onchange="submit()" >
-                    	<html:options collection="companylist"  property="companyCode_ID" labelProperty="companyCode_ID" />
+                    	<html:options collection="companylistById"  property="companyCode_ID" labelProperty="companyCode_ID" />
                   	</html:select>&nbsp;
                     <logic:present name="stationList" scope="request">
                       <html:select name="worldTracerFWDForm" styleClass="dropdown" property="destStation">
@@ -173,7 +173,7 @@ function getreason(choose){
 								<html:option value="">
 									<bean:message key="select.please_select" />
 								</html:option>
-								<html:options collection="companylist" property="companyCode_ID"
+								<html:options collection="companylistById" property="companyCode_ID"
 									labelProperty="companyCode_ID" />
 							</html:select> &nbsp; 
 							<html:text styleClass="textfield" name="itinerary"

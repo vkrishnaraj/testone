@@ -117,7 +117,7 @@ function gopage(i) {
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                   &nbsp;
                   <html:text property="flightnum" size="20" maxlength="4" styleClass="textfield" />
@@ -149,7 +149,7 @@ function gopage(i) {
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                 </td>
                 <td>
@@ -169,7 +169,7 @@ function gopage(i) {
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                 </td>
                 <td>

@@ -53,7 +53,7 @@
                     <html:option value="0">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                 </td>
               </tr>

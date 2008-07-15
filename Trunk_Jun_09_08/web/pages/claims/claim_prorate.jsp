@@ -244,7 +244,7 @@
                           <html:option value="">
                             <bean:message key="select.please_select" />
                           </html:option>
-                          <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                          <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                         </html:select>
                         &nbsp;
                         <html:text name="itinerarylist" property="flightnum" size="8" maxlength="7" styleClass="textfield" indexed="true" />

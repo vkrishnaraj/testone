@@ -137,7 +137,7 @@ function gopage(i) {
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="companylist" property="companyCode_ID" labelProperty="companyCode_ID" />
+                    <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                 </td>
                 <td>

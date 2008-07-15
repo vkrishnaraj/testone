@@ -53,7 +53,7 @@
       <%
       	} else {
       %>
-      <html:options collection="companylist" property="companyCode_ID" labelProperty="companydesc" />
+      <html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
       <% } %>
       
     </html:select>
