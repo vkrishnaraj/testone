@@ -128,7 +128,7 @@
 	              :
 	            </td>
 	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="wt_user" size="15" maxlength="15" />
+	              <html:password styleClass="textfield" name="companyForm" property="wt_user" size="15" maxlength="15" />
 	            </td>  
 	          </tr>
 	          <tr>
@@ -140,7 +140,7 @@
 	              :
 	            </td>
 	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="wt_pass" size="15" maxlength="15" />
+	              <html:password styleClass="textfield" name="companyForm" property="wt_pass" size="15" maxlength="15" />
 	            </td>  
 	          </tr>
 	          <tr>
