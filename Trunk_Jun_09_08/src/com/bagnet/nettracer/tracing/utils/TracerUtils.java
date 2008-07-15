@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -67,12 +68,17 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 /**
  * @author Administrator
  * 
  * create date - Jul 15, 2004
  */
 public class TracerUtils {
+	public static final int COMPANY_LIST_BY_NAME_INDEX = 0;
+	public static final int COMPANY_LIST_BY_ID_INDEX = 1;
+
 	private static Logger logger = Logger.getLogger(TracerUtils.class);
 
 	private static MessageResources messages = MessageResources
@@ -405,10 +411,13 @@ public class TracerUtils {
 										.getCompanyCode_ID(),
 										TracingConstants.ActiveStatus.ALL));
 
-		// set company list
-		session.setAttribute("companylist",
-				session.getAttribute("companylist") != null ? session
-						.getAttribute("companylist") : getCompanyList());
+		// set company lists
+		if(session.getAttribute("companylistByName") == null || session.getAttribute("companylistById") == null) {
+			ArrayList<ArrayList<Company>> result = getCompanyLists();
+			session.setAttribute("companylistByName", result.get(COMPANY_LIST_BY_NAME_INDEX));
+			session.setAttribute("companylistById", result.get(COMPANY_LIST_BY_ID_INDEX));
+		}
+		
 		// set expense type list
 		session.setAttribute("expensetypelist", session
 				.getAttribute("expensetypelist") != null ? session
@@ -677,14 +686,15 @@ public class TracerUtils {
 				TracingConstants.ActiveStatus.ACTIVE);
 	}
 
-	public static ArrayList getCompanyList() throws HibernateException {
+	public static ArrayList<ArrayList<Company>> getCompanyLists() throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
+			
 			// when company is null, return all distinct stationscodes, for
 			// itinerary
 			// dropdown
-
-			String sql = "select distinct company.companyCode_ID,company.companydesc from com.bagnet.nettracer.tracing.db.Company company order by companyCode_ID";
+			ArrayList<ArrayList<Company>> result = new ArrayList<ArrayList<Company>>();
+			String sql = "select distinct company.companyCode_ID,company.companydesc from com.bagnet.nettracer.tracing.db.Company company order by companydesc";
 
 			Query q = sess.createQuery(sql);
 
@@ -692,20 +702,35 @@ public class TracerUtils {
 
 			if (list.size() == 0) {
 				logger.debug("unable to find company");
-				return null;
+				result.add(null);
+				result.add(null);
+				return result;
 			}
 
 			Company company = null;
-			ArrayList al = new ArrayList();
+			ArrayList<Company> companyByName = new ArrayList<Company>();
+			ArrayList<Company> companyById = new ArrayList<Company>();
 			Object[] o = null;
 			for (int i = 0; i < list.size(); i++) {
 				o = (Object[]) list.get(i);
 				company = new Company();
 				company.setCompanyCode_ID((String) o[0]);
 				company.setCompanydesc((String) o[1]);
-				al.add(company);
+				companyByName.add(company);
+				companyById.add(company);
 			}
-			return al;
+			//Collections.sort(companyById, companyById.new CompanyIdComparator<Company>());
+			Collections.sort(companyById, new Comparator<Company>() {
+				
+				public int compare(Company o1, Company o2) {
+					return o1.getCompanyCode_ID().compareTo(o2.getCompanyCode_ID());
+				}
+				
+				
+			});
+			result.add(companyByName);
+			result.add(companyById);
+			return result;
 
 		} catch (Exception e) {
 			logger.error("unable to retrieve company from database: " + e);
