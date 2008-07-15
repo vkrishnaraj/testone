@@ -58,32 +58,36 @@ public class NettracerCron {
 	/*** called by hibernate starter **/
 	public static void runCron(Properties properties) {
 
-		MoveToWTThread wtthread = new MoveToWTThread(properties);
-		DataToBakThread ntarchive = new DataToBakThread(properties);
-		RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
-		WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
-		Company_Specific_Variable csv = AdminUtils.getCompVariable(properties.getProperty("company.code"));
-		if (csv != null) {
-			System.out.println(properties.getProperty("company.code"));
-		if (csv.getWt_enabled() == 1){
-		//rwtthread.start();
-		//wtthread.start();
+		
+		//DataToBakThread ntarchive = new DataToBakThread(properties);
 		//ntarchive.run();
-		//wtactionqueue.start();
+		
+		MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
+		mbrthread.start();
+		
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(properties.getProperty("company.code"));
+		if ((csv != null) && (csv.getWt_enabled() == 1)) {
+			RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
+			rwtthread.start();
+			
+			//MoveToWTThread wtthread = new MoveToWTThread(properties);
+			//wtthread.start();
+			
+			//WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
+			//wtactionqueue.start();
 		}
-		else 
-		System.out.println("no worldtracer");
+		else {
+			System.out.println("no worldtracer");
 		}
 //	 move mbr to lz thread
-		//MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
-		//mbrthread.start();
+//		
 		//MoveToLZThread ohdthread = new MoveToLZThread(properties, MoveToLZThread.OHD,company);
 		//ohdthread.start();
 		//RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
 		//rwtthread.start();
 		
-		//MoveToWTThread wtthread = new MoveToWTThread(properties);
-		//wtthread.start();
+//		MoveToWTThread wtthread = new MoveToWTThread(properties);
+//		wtthread.start();
 		
 		//WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
 		//wtactionqueue.start();
