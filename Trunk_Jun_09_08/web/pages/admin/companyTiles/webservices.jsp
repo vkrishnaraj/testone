@@ -24,6 +24,7 @@
           </font>
           	  <tr>
 	            <td>
+	            	<html:hidden name="companyForm" property="companyCode" />
 	              <bean:message key="colname.ws_enabled" />
 	              <font color=red>
 	                *
