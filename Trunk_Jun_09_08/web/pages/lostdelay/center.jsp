@@ -360,6 +360,7 @@ function gotoHistoricalReport() {
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
 					if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
 						if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
+							if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)){
 					
 %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
@@ -368,7 +369,9 @@ function gotoHistoricalReport() {
                   <bean:message key="button.savetoWT" />
                 </html:submit>
                 </logic:equal>
+                
 <%
+							}
 						}
                 }     
 		}

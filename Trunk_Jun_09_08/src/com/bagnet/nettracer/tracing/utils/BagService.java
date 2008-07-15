@@ -561,7 +561,7 @@ public class BagService {
 					}
 				}
 				*/
-				if (toWT &&  mod_agent.getStation().getCompany().getVariable().getWt_enabled() == 1) {
+				if (toWT &&  mod_agent.getStation().getCompany().getVariable().getWt_enabled() == 1 && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, mod_agent)) {
 					WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 					WT_Queue wtq = new WT_Queue();
 					wtq.setAgent(mod_agent);

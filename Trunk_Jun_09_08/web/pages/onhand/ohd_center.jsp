@@ -937,6 +937,7 @@ function gotoHistoricalReport() {
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
 					if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
 						if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
+							if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD, a)){
 %>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <logic:notEmpty name="OnHandForm" property="wt_id">
@@ -954,6 +955,7 @@ function gotoHistoricalReport() {
                  </logic:notEqual>
                 </logic:equal>
 <%
+							}
 						}
 					}
 				}
