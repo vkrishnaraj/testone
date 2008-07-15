@@ -518,7 +518,9 @@ public class WTIncident {
 	}
     public String closeIncident(HttpClient client, String companycode,Incident idto){
 		String responseBody = null;	
-		String getstring = WorldTracerUtils.getWt_url(companycode) + "cgi-bin/bagCAH.exe";
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring = wt_url + "cgi-bin/bagCAH.exe";
 		getstring = getstring.replace(" ", "+");
 		String snm = new String();
 

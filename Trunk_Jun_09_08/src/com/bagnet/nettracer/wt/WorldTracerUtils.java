@@ -69,7 +69,8 @@ public class WorldTracerUtils {
 	private  static Logger logger = Logger.getLogger(WorldTracerUtils.class);
 	public  static String  SendTty(HttpClient client, String companycode,ArrayList ttylist){
 		String responseBody = null;	
-		wt_url = WorldTracerUtils.getWt_url(companycode);
+		wt_http = WorldTracerUtils.getWt_url(companycode);
+		wt_url = "http://" + wt_http + "/";
 		String getstring = wt_url + "cgi-bin/bagTTY.exe";
 		getstring = getstring.replace(" ", "+");
 		
@@ -237,7 +238,8 @@ public class WorldTracerUtils {
 
 	public static String getActiveStations(HttpClient client, String companycode) {
 		String responseBody = null;
-		wt_url = WorldTracerUtils.getWt_url(companycode);
+		wt_http = WorldTracerUtils.getWt_url(companycode);
+		wt_url = "http://" + wt_http + "/";
 		PostMethod method = new PostMethod(wt_url + "cgi-bin/bagDSL.exe");
 		method.setDoAuthentication(true);
 		method.addParameter("OPT", "ACTIVE");
@@ -283,7 +285,8 @@ public class WorldTracerUtils {
 
 		if (dt != null && dt.length() > 0) dt = ".DT+" + dt;
 		else dt = "";
-		wt_url = WorldTracerUtils.getWt_url(companycode);
+		wt_http = WorldTracerUtils.getWt_url(companycode);
+		wt_url = "http://" + wt_http + "/";
 		GetMethod method = new GetMethod(wt_url + "cgi-bin/bagRAF.exe?STN=" + stationcode.toUpperCase() + "&ARL=" + companycode.toUpperCase() + "&OPT=" + status + "&SEARCH=" + dt);
 		method.setDoAuthentication(true);
 		// method.setQueryString("OPT=A");
@@ -363,7 +366,8 @@ public class WorldTracerUtils {
 		String responseBody = null;
 		if (dt != null && dt.length() > 0) dt = ".DT+" + dt;
 		else dt = "";
-		wt_url = WorldTracerUtils.getWt_url(companycode);
+		wt_http = WorldTracerUtils.getWt_url(companycode);
+		wt_url = "http://" + wt_http + "/";
 		GetMethod method = new GetMethod(wt_url + "cgi-bin/bagROF.exe?STN=" + stationcode.toUpperCase() + "&ARL=" + companycode.toUpperCase() + "&OPT=" + status + "&SEARCH=" + dt);
 		method.setDoAuthentication(true);
 
@@ -438,7 +442,8 @@ public class WorldTracerUtils {
 	 */
 	public  static String getActionFiles(HttpClient client, String companycode, String stationcode, String wt_type, String day) {
 		String responseBody = null;
-		wt_url = WorldTracerUtils.getWt_url(companycode);
+		wt_http = WorldTracerUtils.getWt_url(companycode);
+		wt_url = "http://" + wt_http + "/";
 		PostMethod method = new PostMethod(wt_url + "cgi-bin/bagDXF.exe?A1=xsL1=en");
 		method.setDoAuthentication(true);
 		method.addParameter("STN",stationcode.toUpperCase());
@@ -496,7 +501,8 @@ public class WorldTracerUtils {
 		try {
 			ohd_string = URLEncoder.encode(ohd_string,"UTF-8");
 		} catch (Exception e) {}
-		wt_url = WorldTracerUtils.getWt_url(companycode);
+		wt_http = WorldTracerUtils.getWt_url(companycode);
+		wt_url = "http://" + wt_http + "/";
 		String getstring = wt_url + "cgi-bin/bagResponseROH.exe?A1=" + companycode.toUpperCase() +
 		"&T1=" + ahl_id + "&ROH=" + ohd_string;
 		getstring = getstring.replace(" ", "+");

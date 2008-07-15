@@ -346,7 +346,9 @@ public class WTOHD {
 			tempstring = URLEncoder.encode(tempstring,"UTF-8");
 		} catch (Exception e) {}
 		//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
-		String getstring = WorldTracerUtils.getWt_url(companycode) + "cgi-bin/bagOHD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&OHD=" + tempstring;
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring = wt_url + "cgi-bin/bagOHD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&OHD=" + tempstring;
 		getstring = getstring.replace(" ", "+");
 		GetMethod method = null;
 		try {
@@ -404,7 +406,9 @@ public class WTOHD {
 	}
     public String closeOHD(HttpClient client, String companycode,OHD odto){
 		String responseBody = null;	
-		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagCOH.exe";
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring =  wt_url + "cgi-bin/bagCOH.exe";
 		getstring = getstring.replace(" ", "+");
 		String snm = new String();
 		String _t = "";
@@ -469,7 +473,9 @@ public class WTOHD {
 
     public String closeIncident(HttpClient client, String companycode,Incident idto){
 		String responseBody = null;	
-		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagCAH.exe";
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring = wt_url + "cgi-bin/bagCAH.exe";
 		getstring = getstring.replace(" ", "+");
 		String snm = new String();
 

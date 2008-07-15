@@ -67,7 +67,8 @@ public class SearchOnHandAction extends Action {
 			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
 			if (foundohd == null) {
 				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
-				String wt_url = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
+				String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
+				String wt_url = "http://" + wt_http + "/";
 				String result = WorldTracerUtils.getROF(client, request.getParameter("wt_id"),wt_url);
 				WTOHD wi = new WTOHD();
 				// for now show all as active

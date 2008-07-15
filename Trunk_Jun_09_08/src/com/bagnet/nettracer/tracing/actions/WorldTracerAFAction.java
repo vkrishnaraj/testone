@@ -54,7 +54,8 @@ public class WorldTracerAFAction extends Action {
 		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
-		String wt_url = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
+		String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
+        String wt_url = "http://" + wt_http + "/";
 		//if (!user.getStation().getCompany().getVariable().isWTEnabled()) return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES, user)) return (mapping.findForward(TracingConstants.NO_PERMISSION));
