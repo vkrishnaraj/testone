@@ -177,7 +177,7 @@ public class WorldTracerTTYAction extends Action {
         ttylist.add(fref3);
         ttylist.add(fref4);
         ttylist.add(ttytxt);
-        		
+  
 		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
 		String test = WorldTracerUtils.SendTty(client,company,ttylist);
 		

@@ -54,7 +54,7 @@ public class WorldTracerAFAction extends Action {
 		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
-
+		String wt_url = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
 		//if (!user.getStation().getCompany().getVariable().isWTEnabled()) return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES, user)) return (mapping.findForward(TracingConstants.NO_PERMISSION));
@@ -71,7 +71,8 @@ public class WorldTracerAFAction extends Action {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("ahl_id"));
 			if (foundinc == null) {
 				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/", user.getCompanycode_ID());
-				String result = WorldTracerUtils.getRAF(client, request.getParameter("ahl_id"));
+				
+				String result = WorldTracerUtils.getRAF(client, request.getParameter("ahl_id"),wt_url);
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
@@ -90,7 +91,7 @@ public class WorldTracerAFAction extends Action {
 			 */
 			if (foundinc == null) {
 				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/", user.getCompanycode_ID());
-				String result = WorldTracerUtils.getROF(client, request.getParameter("ohd_id"));
+				String result = WorldTracerUtils.getROF(client, request.getParameter("ohd_id"),wt_url);
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");

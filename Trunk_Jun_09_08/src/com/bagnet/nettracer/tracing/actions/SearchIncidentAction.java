@@ -69,7 +69,8 @@ public class SearchIncidentAction extends Action {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
 			if (foundinc == null) {
 				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
-				String result = WorldTracerUtils.getRAF(client, request.getParameter("wt_id"));
+				String wt_url = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
+				String result = WorldTracerUtils.getRAF(client, request.getParameter("wt_id"),wt_url);
 				WTIncident wi = new WTIncident();
 				// for now show all as active
 				foundinc = wi.parseWTIncident(result,true,WorldTracerUtils.status_active);

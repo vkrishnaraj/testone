@@ -53,7 +53,6 @@ public class WorldTracerActionQueue extends Thread {
 
 
 
-
 	public static void main(String args[]) {
 
 		try {
@@ -64,7 +63,7 @@ public class WorldTracerActionQueue extends Thread {
 			wtaction = new WorldTracerActionQueue(cfg.getProperties());
 		
 			client =
-				 WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) +
+				WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) +
 				 "/",company);
 			wtaction.run();
 			Company_Specific_Variable csv = AdminUtils.getCompVariable(company);

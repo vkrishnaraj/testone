@@ -307,8 +307,8 @@ public class WorldTracerQueueUtils {
 		
 
         //retrieve fwd
-		WorldTracerUtils wtutil = new WorldTracerUtils();
-		WT_FWD_Log fwd = wtutil.findFWDByID(wtfwd.getWt_fwd_log_id());
+		
+		WT_FWD_Log fwd = WorldTracerUtils.findFWDByID(wtfwd.getWt_fwd_log_id());
 		if (fwd == null) {
 			setError("invalid wt_fwd_log filenum");
 			return null;
@@ -410,7 +410,8 @@ public class WorldTracerQueueUtils {
 				tempstring = URLEncoder.encode(tempstring,"UTF-8");
 			} catch (Exception e) {}
 			//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
-			String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagFWD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&FWD=" + tempstring;
+
+			String getstring = WorldTracerUtils.getWt_url(companycode) + "cgi-bin/bagFWD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&FWD=" + tempstring;
 			getstring = getstring.replace(" ", "+");
 			GetMethod method = null;
 			try {

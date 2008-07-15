@@ -48,7 +48,7 @@ import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
 public class WTOHD {
 	private String error;
 	private static Logger logger = Logger.getLogger(WTOHD.class);
-	
+
 	/**
 	 * insert ohd into WT
 	 * 
@@ -346,7 +346,7 @@ public class WTOHD {
 			tempstring = URLEncoder.encode(tempstring,"UTF-8");
 		} catch (Exception e) {}
 		//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
-		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&OHD=" + tempstring;
+		String getstring = WorldTracerUtils.getWt_url(companycode) + "cgi-bin/bagOHD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&OHD=" + tempstring;
 		getstring = getstring.replace(" ", "+");
 		GetMethod method = null;
 		try {

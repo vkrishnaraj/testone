@@ -64,6 +64,7 @@ public class MoveToWTThread extends Thread {
 	private Agent user;
 	private String company;
 	int retrieve;
+	
 	public MoveToWTThread(Properties properties) {
 		try {
 			this.company = properties.getProperty("company.code");

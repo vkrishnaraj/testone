@@ -31,12 +31,13 @@ import com.bagnet.nettracer.wt.WorldTracerUtils;
  * 
  * @author Ankur Gupta
  */
+
 public class WorldTracerROHAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
-
+		
 		// check session and user validity
 		TracerUtils.checkSession(session);
 		Agent user = (Agent) session.getAttribute("user");

@@ -53,7 +53,7 @@ import com.bagnet.nettracer.ws.core.WSCoreUtil;
 public class WTIncident {
 	private String error;
 	private static Logger logger = Logger.getLogger(WTIncident.class);
-
+	
 	/**
 	 * insert incident into WT
 	 * 
@@ -518,7 +518,7 @@ public class WTIncident {
 	}
     public String closeIncident(HttpClient client, String companycode,Incident idto){
 		String responseBody = null;	
-		String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagCAH.exe";
+		String getstring = WorldTracerUtils.getWt_url(companycode) + "cgi-bin/bagCAH.exe";
 		getstring = getstring.replace(" ", "+");
 		String snm = new String();
 

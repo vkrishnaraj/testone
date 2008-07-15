@@ -17,7 +17,9 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 
 public class WorldTracerIntegrationWrapper extends HttpServlet  {
+
 	static Agent user;
+	String wt_url = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		doPost(req, res);
 	}
@@ -79,7 +81,8 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 				out.println("status input wrong, you can only use the following statuses: <p>" +
 						"A - Active<br>C - Closed<br>Suspended - S<br>Extended - D<br>Handled - H<p>");
 			} else {
-				String result = WorldTracerUtils.getRAF(client, filenum);
+				
+				String result = WorldTracerUtils.getRAF(client, filenum, wt_url);
 				WTIncident wi = new WTIncident();
 				Incident incident = wi.parseWTIncident(result,true,status);
 				if (incident == null) out.println("unable to insert WT incident into NT incident DB, error: " + wi.getError());
@@ -112,7 +115,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 						out.println("no wt data");
 					} else {
 						for (int i=0;i<al.size();i++) {
-							result = WorldTracerUtils.getROF(client, al.get(i));
+							result = WorldTracerUtils.getROF(client, al.get(i),wt_url);
 							Incident incident = wi.parseWTIncident(result,true,status);
 							if (incident == null) notparsed += al.get(i) + ",";
 							else parsed += incident.getIncident_ID() + ",";
@@ -167,7 +170,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 				out.println("status input wrong, you can only use the following statuses: <p>" +
 						"A - Active<br>C - Closed<br>Suspended - S<br>Extended - D<br>QOH File - Q<p>");
 			} else {
-				String result = WorldTracerUtils.getROF(client, filenum);
+				String result = WorldTracerUtils.getROF(client, filenum, wt_url);
 				WTOHD wi = new WTOHD();
 				OHD ohd = wi.parseWTOHD(result,true,status);
 				if (ohd == null) out.println("unable to insert WT OHD into NT OHD DB, error: " + wi.getError());
@@ -199,7 +202,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 						out.println("no wt data");
 					} else {
 						for (int i=0;i<al.size();i++) {
-							result = WorldTracerUtils.getROF(client, al.get(i));
+							result = WorldTracerUtils.getROF(client, al.get(i), wt_url);
 							OHD ohd = wi.parseWTOHD(result,true,status);
 							if (ohd == null) notparsed += al.get(i) + ",";
 							else parsed += ohd.getOHD_ID() + ",";
@@ -235,7 +238,8 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 	}
 	
 	public static void main(String[] args) {
-		HttpClient client = WorldTracerUtils.connectWT("fl/",user.getCompanycode_ID());
+		WorldTracerUtils wtutil = new WorldTracerUtils();
+		HttpClient client = wtutil.connectWT("fl/",user.getCompanycode_ID());
 		// String stations = getActiveStations(client,"aa");
 		// System.out.println("###\n" + stations + "\n###");
 
@@ -256,7 +260,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 		//OHD ohd = wi.parseWTOHD(result,true);
 		
 		// retrieve all raf
-		String result = WorldTracerUtils.getAllRAF(client, airline, station, "A","");
+		String result = wtutil.getAllRAF(client, airline, station, "A","");
 		
 	
 		System.out.println("###\n" + result + "\n###");

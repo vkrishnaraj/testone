@@ -46,6 +46,7 @@ public class SearchOnHandAction extends Action {
 			HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
+
 		// check session and user validity
 		TracerUtils.checkSession(session);
 
@@ -66,7 +67,8 @@ public class SearchOnHandAction extends Action {
 			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
 			if (foundohd == null) {
 				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
-				String result = WorldTracerUtils.getROF(client, request.getParameter("wt_id"));
+				String wt_url = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
+				String result = WorldTracerUtils.getROF(client, request.getParameter("wt_id"),wt_url);
 				WTOHD wi = new WTOHD();
 				// for now show all as active
 				foundohd = wi.parseWTOHD(result,true,WorldTracerUtils.status_active);
