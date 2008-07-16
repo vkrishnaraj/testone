@@ -458,13 +458,15 @@ public class WTIncident {
 			tempstring = URLEncoder.encode(tempstring,"UTF-8");
 		} catch (Exception e) {}
 		
-		//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagAHL.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&AHL=" + encodedstring;
-		//getstring = getstring.replace(" ", "+");
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring = wt_url + "cgi-bin/bagAHL.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&AHL=" + encodedstring;
+		getstring = getstring.replace(" ", "+");
 		
 		GetMethod method = null;
 		try {
 			
-			//method = new GetMethod(getstring);
+			method = new GetMethod(getstring);
 
 
 			method.setDoAuthentication(true);
