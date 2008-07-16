@@ -155,7 +155,9 @@
 				<exclude name="**/web.xml" />
 			</fileset>
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
-			<lib dir="${lib.jar.dir}" />
+			<lib dir="${lib.jar.dir}" >
+				<exclude name="log4j*.*"/>
+			</lib>
 		</war>
 	</target>
 
@@ -168,9 +170,12 @@
 		<war destfile="${build.dir}/dist/web/${ant_project_name}.war" webxml="${basedir}/web/WEB-INF/web.xml">
 			<fileset dir="${basedir}/web">
 				<exclude name="**/web.xml" />
+				<exclude name="WEB-INF/classes/**/*.*"/>
 			</fileset>
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
-			<lib dir="${lib.jar.dir}" />
+			<lib dir="${lib.jar.dir}" >
+				<exclude name="log4j*.*"/>
+			</lib>
 		</war>
 	</target>
 
@@ -236,6 +241,7 @@
 
 
 	<target name="build-dev" depends="delete">
+		<property name="ant_project_name" value="tracer" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
