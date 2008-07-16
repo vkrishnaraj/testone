@@ -31,7 +31,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 
-import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -150,7 +150,7 @@ public class DataToBakThread extends Thread {
                     //this.delLostandFoundToBak(baklostdays);
 					}
                     if(bakincidentdays>0){
-					 this.moveIncidentToBak(bakincidentdays);
+					// this.moveIncidentToBak(bakincidentdays);
 					//this.delIncidentToBak(bakincidentdays);
                     }
 				    //System.out.println(baklostdays);
@@ -189,7 +189,7 @@ public class DataToBakThread extends Thread {
 		Session Asess = null;
 		Transaction t = null;
 		try {
-			Asess = HibernateCronWrapper.getNtBakSession().openSession();
+			Asess = HibernateWrapper.getNtBakSession().openSession();
 			t = Asess.beginTransaction();
 			
 			Asess.saveOrUpdate(obj);
@@ -216,7 +216,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 		Transaction t = null;
 		try {
-			sess = HibernateCronWrapper.getNtSession().openSession();
+			sess = HibernateWrapper.getNtSession().openSession();
 			t = sess.beginTransaction();
             sess.delete(obj);
             t.commit();       
@@ -249,13 +249,13 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 		try {
 			
-			sess = HibernateCronWrapper.getNtSession().openSession();				
+			sess = HibernateWrapper.getNtSession().openSession();				
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.LostAndFoundIncident lostandfound where lostandfound.dateFoundLost < :dt";
@@ -303,13 +303,13 @@ public class DataToBakThread extends Thread {
 		Incident inc = new Incident();
 		List list = null;
 		try {			
-			sess = HibernateCronWrapper.getNtSession().openSession();					
+			sess = HibernateWrapper.getNtSession().openSession();					
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.Incident incident where incident.createdate > :dt";
@@ -332,13 +332,13 @@ public class DataToBakThread extends Thread {
 		OHD inc = new OHD();
 		List list = null;
 		try {			
-			sess = HibernateCronWrapper.getNtSession().openSession();					
+			sess = HibernateWrapper.getNtSession().openSession();					
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.close_date < :dt";
@@ -361,13 +361,13 @@ public class DataToBakThread extends Thread {
 		LostAndFoundIncident inc = new LostAndFoundIncident();
 		List list = null;
 		try {			
-			sess = HibernateCronWrapper.getNtSession().openSession();					
+			sess = HibernateWrapper.getNtSession().openSession();					
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.LostAndFoundIncident lostandfoundincident where lostandfoundincident.dateFoundLost < :dt";
@@ -393,14 +393,14 @@ public class DataToBakThread extends Thread {
 
 		
 		try {
-			sess = HibernateCronWrapper.getNtSession().openSession();	
+			sess = HibernateWrapper.getNtSession().openSession();	
 			
 			Date now = new Date();
 			long nowl = now.getTime();
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "from com.bagnet.nettracer.tracing.db.Incident incident where incident.createdate > :dt";
@@ -521,7 +521,7 @@ public class DataToBakThread extends Thread {
 
 		try {
 			
-			sess = HibernateCronWrapper.getNtSession().openSession();
+			sess = HibernateWrapper.getNtSession().openSession();
 	
 			
 			Date now = new Date();
@@ -529,7 +529,7 @@ public class DataToBakThread extends Thread {
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 
 
 			String sql = "from com.bagnet.nettracer.tracing.db.OHD  ohd where ohd.close_date < :dt";
@@ -638,7 +638,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 
 		try {
-			sess = HibernateCronWrapper.getNtBakSession().openSession();
+			sess = HibernateWrapper.getNtBakSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
@@ -735,7 +735,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 
 		try {
-			sess = HibernateCronWrapper.getNtBakSession().openSession();
+			sess = HibernateWrapper.getNtBakSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.OHD_ID= :ohd_ID");
 			q.setParameter("ohd_ID", ohd_ID);
 			List list = q.list();
@@ -765,7 +765,7 @@ public class DataToBakThread extends Thread {
 		Session sess = null;
 
 		try {
-			sess = HibernateCronWrapper.getNtBakSession().openSession();
+			sess = HibernateWrapper.getNtBakSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.LostAndFoundIncident lostandfoundincident where lostandfoundincident.file_ref_number = :LostandFound_ID");
 			q.setParameter("LostandFound_ID", LostandFound_ID);
 			List list = q.list();

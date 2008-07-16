@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -120,7 +120,7 @@ public class MoveToWTThread extends Thread {
 
 		Session sess = null;
 		try {
-			sess = HibernateCronWrapper.getNtSession().openSession();
+			sess = HibernateWrapper.getNtSession().openSession();
 			// get mbrs without wt_id after x days
 			
 			Date now = new Date();
@@ -128,7 +128,7 @@ public class MoveToWTThread extends Thread {
 			mbr_move_days *= 86400000;
 			nowl = nowl - mbr_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "select incident from com.bagnet.nettracer.tracing.db.Incident incident where "
@@ -172,7 +172,7 @@ public class MoveToWTThread extends Thread {
 
 		Session sess = null;
 		try {
-			sess = HibernateCronWrapper.getNtSession().openSession();
+			sess = HibernateWrapper.getNtSession().openSession();
 			// get mbrs without wt_id after x days
 			
 			Date now = new Date();
@@ -180,7 +180,7 @@ public class MoveToWTThread extends Thread {
 			ohd_move_days *= 86400000;
 			nowl = nowl - ohd_move_days;
 			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateCronWrapper.getNtConfig().getProperties()),null,null);
+			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
 			
 	
 			String sql = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where "

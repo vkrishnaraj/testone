@@ -20,7 +20,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 
-import com.bagnet.nettracer.cronjob.HibernateCronWrapper;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -142,7 +142,7 @@ public class NtArchive {
 
 	
 	public static void  main(String args[]){
-		HibernateCronWrapper Hav = new HibernateCronWrapper();
+		HibernateWrapper Hav = new HibernateWrapper();
 		//Session sess = HibernateArchiveWrapper.getNtSession().openSession();
 		System.out.println(Hav.getNtConfig().getProperties());
 		//DataToBakThread ntarchive = new DataToBakThread(Hav.getNtConfig().getProperties());

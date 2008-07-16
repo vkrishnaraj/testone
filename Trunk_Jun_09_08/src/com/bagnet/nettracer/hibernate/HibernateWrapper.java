@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+
 import com.bagnet.nettracer.cronjob.NettracerCron;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -137,14 +138,19 @@ public class HibernateWrapper {
 	private static Configuration cfg_prod = new Configuration();
 	private static Configuration cfg_demo = new Configuration();
 	private static Configuration cfg_qa = new Configuration();
+	
+	private static Configuration cfg_ntbak = new Configuration();
+	private static Configuration cfg_nt = new Configuration();
 
 	private static SessionFactory sf_prod;
 	private static SessionFactory sf_demo;
 	private static SessionFactory sf_qa;
-
+	
+	private static SessionFactory sf_ntbak;
+	private static SessionFactory sf_nt;
 	private static String hibernate_main_path = HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath();
 	
-
+/*
 	static {
 		try {
 			// start the move to lz cron
@@ -176,7 +182,7 @@ public class HibernateWrapper {
 			logger.fatal("Unable to initiate hibernate: " + e);
 		}
 	}
-
+*/
 	/**
 	 * Retrieve the session from the session factory
 	 * 
@@ -225,7 +231,38 @@ public class HibernateWrapper {
 			return cfg_prod;
 		}
 	}
-
+	public static SessionFactory getNtSession() {
+		try {
+			// Obtain the correct session factory.	
+			        if (sf_nt==null){
+					addClasses(cfg_nt);			
+					sf_nt = cfg_nt.configure(new File(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath())).buildSessionFactory();
+			        }
+				    return sf_nt;
+		} catch (Exception e) {
+			logger.fatal("unable to initiate nt hibernate: " + e);
+			return null;
+		}		
+	}
+	public static SessionFactory getNtBakSession() {
+		try {
+			// Obtain the correct session factory.	
+			        if(sf_ntbak==null){
+					addClasses(cfg_ntbak);			
+					sf_ntbak = cfg_ntbak.configure(new File(HibernateWrapper.class.getResource("/hibernate_main_bak.cfg.xml").getPath())).buildSessionFactory();
+			        }
+				    return sf_ntbak;
+		} catch (Exception e) {
+			logger.fatal("unable to initiate nt bak hibernate: " + e);
+			return null;
+		}		
+	}
+	public static Configuration getNtConfig() {
+		return cfg_nt;
+}
+public static Configuration getNtBakConfig() {
+	    return cfg_ntbak;
+}
 	private static void addClasses(Configuration cfg) throws Exception {
 
 		cfg.addClass(Audit_Work_Shift.class);

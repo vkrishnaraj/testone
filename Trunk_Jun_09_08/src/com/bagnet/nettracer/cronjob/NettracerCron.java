@@ -30,11 +30,12 @@ public class NettracerCron {
 			.getResource("/hibernate_main.cfg.xml").getPath();
     private static String company;
 	public static void main(String[] args) {
-
+		cfg.configure(new File(hibernate_main_path)).buildSessionFactory();
         company = cfg.getProperties().getProperty("company.code");
 		HibernateWrapper Hav = new HibernateWrapper();
-		cfg.configure(new File(hibernate_main_path)).buildSessionFactory();
+		
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
+		
 		if ((csv.getWt_enabled() == 1)) {
 			NettracerCron.runCron(cfg.getProperties());
 		}
@@ -43,14 +44,14 @@ public class NettracerCron {
 	/** * called by hibernate starter * */
 	public static void runCron(Properties properties) {
 
-		// DataToBakThread ntarchive = new DataToBakThread(properties);
-		// ntarchive.run();
+		 DataToBakThread ntarchive = new DataToBakThread(properties);
+		 ntarchive.run();
 
 		// MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
 		// mbrthread.start();
 
-		RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
-		rwtthread.start();
+		//RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
+		//rwtthread.start();
 
 		// MoveToWTThread wtthread = new MoveToWTThread(properties);
 		// wtthread.start();
@@ -62,6 +63,7 @@ public class NettracerCron {
 		
 		// MoveToLZThread ohdthread = new MoveToLZThread(properties,MoveToLZThread.OHD);
 		// ohdthread.start();
+        
 
 
 
