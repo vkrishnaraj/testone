@@ -289,7 +289,7 @@ document.oncontextmenu = returnFalse;
                                         }
                                         firstletter = air;
 %>
-                                        <b><a name="US<%= firstletter %>"><%= firstletter %></a></b>
+                                        <b><a name="CA<%= firstletter %>"><%= firstletter %></a></b>
                                         <P>
 <%
                                         }
@@ -384,7 +384,7 @@ document.oncontextmenu = returnFalse;
                                         }
                                         firstletter = air;
 %>
-                                        <b><a name="US<%= firstletter %>"><%= firstletter %></a></b>
+                                        <b><a name="IN<%= firstletter %>"><%= firstletter %></a></b>
                                         <P>
 <%
                                         }
