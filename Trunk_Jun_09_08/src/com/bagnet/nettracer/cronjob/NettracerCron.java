@@ -48,7 +48,7 @@ public class NettracerCron {
 
 		HibernateWrapper Hav = new HibernateWrapper();
 		cfg.configure(new File(hibernate_main_path)).buildSessionFactory();
-        runCron(cfg.getProperties());
+        NettracerCron.runCron(cfg.getProperties());
 
 		//WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline("DA") + "/", "DA");
 		//System.out.println(WorldTracerUtils.getWt_suffix_airline("DA"));
