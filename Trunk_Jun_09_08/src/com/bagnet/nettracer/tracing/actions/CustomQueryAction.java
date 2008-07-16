@@ -61,9 +61,11 @@ public class CustomQueryAction extends Action {
 		
 		if (searchtype != null && (searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4"))) {
 			request.setAttribute("incident", searchtype);
+			request.removeAttribute("ohd");
 		}
 		
 		if (searchtype != null && searchtype.equals("5")) {
+			request.removeAttribute("incident");
 			request.setAttribute("ohd", "1");
 		}
 		

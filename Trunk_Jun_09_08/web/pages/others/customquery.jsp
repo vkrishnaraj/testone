@@ -137,8 +137,8 @@ function gopage(i) {
                   <logic:present name="incident" scope="request">
                   	<logic:equal name="incident" scope="request" value="1">
                     checked
-                    </logic:equal> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
-                  </logic:present>
+                    </logic:equal> 
+                  </logic:present> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
                   >
                   <bean:message key="header.lostdelay" />
                   &nbsp;&nbsp;
@@ -147,8 +147,8 @@ function gopage(i) {
                   <logic:present name="incident" scope="request">
                   	<logic:equal name="incident" scope="request" value="2">
                     checked
-                    </logic:equal> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
-                  </logic:present>
+                    </logic:equal>
+                  </logic:present> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
                   >
                   <bean:message key="header.damaged" />
                   &nbsp;&nbsp;
@@ -157,8 +157,8 @@ function gopage(i) {
                   <logic:present name="incident" scope="request">
                   	<logic:equal name="incident" scope="request" value="3">
                     checked
-                    </logic:equal> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
-                  </logic:present>
+                    </logic:equal>
+                  </logic:present> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
                   >
                   <bean:message key="header.missing_articles" />
                   &nbsp;&nbsp;
@@ -167,8 +167,8 @@ function gopage(i) {
                   <logic:present name="incident" scope="request">
                   	<logic:equal name="incident" scope="request" value="4">
                     checked
-                    </logic:equal> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
-                  </logic:present>
+                    </logic:equal>
+                  </logic:present> onclick="getStatusIds('<%=TracingConstants.AJAX_STATUS_INC %>');"
                   >
                   <bean:message key="header.allincidents" />
                   &nbsp;&nbsp;
@@ -191,7 +191,7 @@ function gopage(i) {
                   <span id="statusSpan">
 <%
 	ArrayList ar = null;
-	if (request.getParameter("ohd") != null) {
+	if (request.getAttribute("ohd") != null) {
 		ar = (ArrayList)request.getAttribute("oStatusList");
 		%>
 		<bean:message key="colname.bag_status" />
