@@ -28,34 +28,16 @@ public class NettracerCron {
 	private static Configuration cfg = new Configuration();
 	private static String hibernate_main_path = HibernateWrapper.class
 			.getResource("/hibernate_main.cfg.xml").getPath();
-
+    private static String company;
 	public static void main(String[] args) {
-		/*
-		 * if (args.length <= 0) return; String path = args[0]; String company =
-		 * ""; if (args.length >= 2) company = args[1];
-		 * 
-		 * File lf = new File(path + "log4j.properties"); if (lf.exists())
-		 * PropertyConfigurator.configure(path + "log4j.properties");
-		 */
-		// MoveToLZThread mbrthread = new MoveToLZThread(path,
-		// MoveToLZThread.MBR,company);
-		// mbrthread.start();
-		// MoveToLZThread ohdthread = new MoveToLZThread(path,
-		// MoveToLZThread.OHD,company);
-		// ohdthread.start();
-		// HibernateCronWrapper.runCron();
 
+        company = cfg.getProperties().getProperty("company.code");
 		HibernateWrapper Hav = new HibernateWrapper();
 		cfg.configure(new File(hibernate_main_path)).buildSessionFactory();
-		Company_Specific_Variable csv = AdminUtils.getCompVariable(cfg
-				.getProperties().getProperty("company.code"));
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
 		if ((csv.getWt_enabled() == 1)) {
 			NettracerCron.runCron(cfg.getProperties());
 		}
-
-		// WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline("DA")
-		// + "/", "DA");
-		// System.out.println(WorldTracerUtils.getWt_suffix_airline("DA"));
 	}
 
 	/** * called by hibernate starter * */
@@ -64,8 +46,7 @@ public class NettracerCron {
 		// DataToBakThread ntarchive = new DataToBakThread(properties);
 		// ntarchive.run();
 
-		// MoveToLZThread mbrthread = new MoveToLZThread(properties,
-		// MoveToLZThread.MBR);
+		// MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
 		// mbrthread.start();
 
 		RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
@@ -74,25 +55,17 @@ public class NettracerCron {
 		// MoveToWTThread wtthread = new MoveToWTThread(properties);
 		// wtthread.start();
 
-		// WorldTracerActionQueue wtactionqueue = new
-		// WorldTracerActionQueue(properties);
+		// WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
 		// wtactionqueue.start();
 
 		// move mbr to lz thread
-		//		
-		// MoveToLZThread ohdthread = new MoveToLZThread(properties,
-		// MoveToLZThread.OHD,company);
+		
+		// MoveToLZThread ohdthread = new MoveToLZThread(properties,MoveToLZThread.OHD);
 		// ohdthread.start();
-		// RetrieveWTActionFiles rwtthread = new
-		// RetrieveWTActionFiles(properties);
-		// rwtthread.start();
 
-		// MoveToWTThread wtthread = new MoveToWTThread(properties);
-		// wtthread.start();
 
-		// WorldTracerActionQueue wtactionqueue = new
-		// WorldTracerActionQueue(properties);
-		// wtactionqueue.start();
+
+
 	}
 
 }
