@@ -155,9 +155,16 @@ public class OHDTraceThread extends Thread {
 						+ " ORDER BY lastupdated, OHD_ID ";
 				} else {
 					// get the next ohd to trace
+					String tttt;
+					if (getOhd_lupd() == null) {
+						tttt = "lastupdated is not NULL";
+					}
+					else {
+						tttt = "lastupdated >= '" + getOhd_lupd() + "'";
+					}
 					sql = "select OHD_ID,record_locator,claimnum,lastupdated,membership_ID, "
 							+ "manufacturer_ID,color,type,xdescelement_ID_1,xdescelement_ID_2,xdescelement_ID_3"
-							+ " from ohd" + extrafrom + " where lastupdated >= '" + getOhd_lupd() + "' "
+							+ " from ohd" + extrafrom + " where " + tttt
 							+ " and DATEDIFF('" + datestring + "',founddate) <= 5 " + sb.toString()
 							+ " and (status_ID = " + TracingConstants.OHD_STATUS_OPEN + " or status_ID = "
 							+ TracingConstants.OHD_STATUS_IN_TRANSIT + ") "
