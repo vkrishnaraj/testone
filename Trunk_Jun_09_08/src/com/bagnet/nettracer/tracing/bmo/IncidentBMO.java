@@ -232,7 +232,18 @@ public class IncidentBMO {
 				MatchUtils.closeMatches(iDTO.getIncident_ID(), null);
 			}
 
-	
+			Incident_Assoc ia = new Incident_Assoc();
+			ia.setAssoc_ID(iDTO.getIncident_ID());
+			ia.setIncident_ID(iDTO.getIncident_ID());
+			ia.setItemtype_ID(iDTO.getItemtype().getItemType_ID());
+
+			List list = sess.createCriteria(Incident_Assoc.class).add(Example.create(ia)).list();
+
+			if (list == null || list.size() == 0) {
+				t = sess.beginTransaction();
+				sess.save(ia);
+				t.commit();
+			}
 
 			//check if audit is enabled for this company....
 			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation().getCompany().getVariable()

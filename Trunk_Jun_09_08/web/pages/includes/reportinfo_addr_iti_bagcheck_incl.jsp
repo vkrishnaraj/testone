@@ -146,6 +146,9 @@
                     <logic:notEqual name="incidentForm" property="readonly" value="1">
                       <a href="lostDelay.do?add_assoc_report=1"><bean:message key="colname.add_ld" /></a>
                     </logic:notEqual>
+                    <logic:equal name="incidentForm" property="readonly" value="1">
+                    	<bean:message key="colname.no_assoc_ld" />
+                    </logic:equal>
                   </logic:equal>
                   &nbsp;&nbsp;|&nbsp;&nbsp;
                 </logic:notPresent>
@@ -161,6 +164,9 @@
                     <logic:notEqual name="incidentForm" property="readonly" value="1">
                       <a href="damaged.do?add_assoc_report=3"><bean:message key="colname.add_damage" /></a>
                     </logic:notEqual>
+                    <logic:equal name="incidentForm" property="readonly" value="1">
+                    	<bean:message key="colname.no_assoc_damage" />
+                    </logic:equal>
                   </logic:equal>
                   <logic:notPresent name="missing" scope="request">
                     &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -171,13 +177,16 @@
                     <a href="missing.do?incident_ID=<bean:write name="incidentForm" property="ma_inc_ID"/>"><bean:message key="header.missing_articles" />
                       (
                       <bean:write name="incidentForm" property="ma_inc_ID" />
-                      )
+                      )</a>
                       
                     </logic:notEqual>
                     <logic:equal name="incidentForm" property="ma_inc_ID" value="">
                       <logic:notEqual name="incidentForm" property="readonly" value="1">
                         <a href="missing.do?add_assoc_report=2"><bean:message key="colname.add_ma" /></a>
                       </logic:notEqual>
+                      <logic:equal name="incidentForm" property="readonly" value="1">
+                    	<bean:message key="colname.no_assoc_ma" />
+                   		</logic:equal>
                     </logic:equal>
                   </logic:notPresent>
                 </td>
