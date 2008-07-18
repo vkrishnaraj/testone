@@ -32,14 +32,20 @@
 	              :
 	            </td>
 	            <td>
-	              <html:select name="companyForm" property="ws_enabled" style="dropdown">
-                  <html:option value="1">
-                  	<bean:message key="select.yes" />
-                  </html:option>
-                  <html:option value="0">
-                  	<bean:message key="select.no" />
-                  </html:option>
-	              </html:select>
+	              <select name="webs_enabled" style="dropdown">
+	                <option value="1"
+	                <logic:equal name="companyForm" property="webs_enabled" value="1">
+	                  selected="selected"
+	                </logic:equal>
+	                >
+	                <bean:message key="select.yes" />
+	                <option value="0"
+	                <logic:equal name="companyForm" property="webs_enabled" value="0">
+	                  selected="selected"
+	                </logic:equal>
+	                >
+	                <bean:message key="select.no" />
+	              </select>
 	            </td>
 	          </tr>
 	      <tr>

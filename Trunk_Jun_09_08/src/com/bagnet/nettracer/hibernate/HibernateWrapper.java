@@ -259,10 +259,10 @@ public class HibernateWrapper {
 	}
 	public static Configuration getNtConfig() {
 		return cfg_nt;
-}
-public static Configuration getNtBakConfig() {
+    }
+    public static Configuration getNtBakConfig() {
 	    return cfg_ntbak;
-}
+    }
 	private static void addClasses(Configuration cfg) throws Exception {
 
 		cfg.addClass(Audit_Work_Shift.class);

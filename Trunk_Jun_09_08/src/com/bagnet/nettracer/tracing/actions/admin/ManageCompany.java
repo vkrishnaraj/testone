@@ -175,7 +175,7 @@ public final class ManageCompany extends Action {
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WEB_SERVICES)) {
-					dForm.setWs_enabled("" + cmpny.getVariable().getWs_enabled());
+					dForm.setWebs_enabled("" + cmpny.getVariable().getWebs_enabled());
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER)) {
@@ -364,7 +364,11 @@ public final class ManageCompany extends Action {
 					var.setAudit_delivery_companies(Integer.parseInt((String) dForm.getAudit_delivery_companies()));
 				}
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WEB_SERVICES)){
-					var.setWs_enabled(Integer.parseInt(dForm.getWs_enabled()));
+
+					var.setWebs_enabled(Integer.parseInt((String) dForm.getWebs_enabled()));
+
+					var.setWebs_enabled(Integer.parseInt(dForm.getWebs_enabled()));
+
 				}
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER)) {
 					var.setMbr_to_wt_days(Integer.parseInt((String) dForm.getMbr_to_wt_days()));

@@ -69,8 +69,19 @@ public class BDOAction extends Action {
 			request.setAttribute("onhand", "1");
 		} else {
 			request.setAttribute("show_word_for", "1"); // show "BDO for" in header
-			theform.setWt_id(theform.getIncident().getWt_id());
-			request.setAttribute("wt_id", theform.getIncident().getWt_id());
+			String wt_id = "";
+			
+			if (theform.getOhd().getWt_id() != null){
+				wt_id = theform.getOhd().getWt_id();
+				
+				request.setAttribute("wt_id", "a");
+			}
+			if (theform.getIncident().getWt_id() != null){
+				wt_id = theform.getIncident().getWt_id();
+				
+				request.setAttribute("wt_id", "b");
+			}
+			
 		}
 
 		if (theform.getDelivercompany_ID() > 0) {

@@ -30,6 +30,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
@@ -884,12 +885,48 @@ public class WorldTracerUtils {
 		return wt_suffix_airline;
 	}
 	public static String getWt_url(String companycode){
+		String wt_url = null ;
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
-		String wt_url = comsv.getWt_url();
+		
+		if (comsv.getWt_url() != null){
+		 wt_url = comsv.getWt_url();
+		}
+		else 
+		 wt_url = "www.worldtracer.aero";
+		 
 		return wt_url;
 	}
 	public void setError(String error) {
 		this.error = error;
 	}
+	public static BDO findBDOByID(String BDO_ID) {
+		Session sess = null;
 
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.BDO bdo where bdo.BDO_ID= :BDO_ID");
+			q.setParameter("BDO_ID", BDO_ID);
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find bdo: " + BDO_ID);
+				return null;
+			}
+			BDO iDTO = (BDO) list.get(0);
+
+			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve bdo: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
 }

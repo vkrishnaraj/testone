@@ -68,7 +68,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String audit_airport;
 	private String audit_delivery_companies;
 	private String secure_password;
-	private String ws_enabled;
+	private String webs_enabled;
 	private List lzStations = new ArrayList();
 	private List stations = new ArrayList();
 	private Integer defaultLz = 0;
@@ -220,7 +220,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public String getAudit_airport() { return this.audit_airport;}
 	public String getAudit_delivery_companies() { return this.audit_delivery_companies;}
 	public String getSecure_password() { return this.secure_password;}
-	public String getWs_enabled() { return this.ws_enabled;}
+	public String getWebs_enabled() { return this.webs_enabled;}
 	public String getRetrieve_actionfile_interval() {
 		return this.retrieve_actionfile_interval;
 	}
@@ -279,7 +279,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setAudit_airport ( String  audit_airport ) { this.audit_airport  =  audit_airport ; }
 	public void setAudit_delivery_companies ( String  audit_delivery_companies ) { this.audit_delivery_companies  =  audit_delivery_companies ; }
 	public void setSecure_password ( String  secure_password ) { this.secure_password  =  secure_password ; }
-	public void setWs_enabled ( String  ws_enabled ) { this.ws_enabled  =  ws_enabled ; }
+	public void setWebs_enabled ( String  webs_enabled ) { this.webs_enabled  =  webs_enabled ; }
 
 
 

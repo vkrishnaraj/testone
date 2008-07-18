@@ -77,11 +77,13 @@ function toggledc(o) {
           <bean:message key="header.bdo_general" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#bdo/bdo.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
+        
         <logic:present name="wt_id" scope="request">
         <p align="right">
-        	WorldTracer ID: <bean:write     name="wt_id"/> 
+        	WorldTracer ID: <bean:write  name="wt_id" scope="request"/> 
         </p>
         </logic:present>
+        
         <span class="reqfield">*</span>
         <bean:message key="message.required" />
         <font color=red>

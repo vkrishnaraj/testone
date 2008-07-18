@@ -202,7 +202,7 @@ public class SecurityUtils {
 			cri.add(Expression.eq("companyCode_ID", companycode_id));
 			Company_Specific_Variable csv = (Company_Specific_Variable)cri.list().get(0);
 			if (csv != null) {
-				return csv.getWs_enabled() == 1 ? true : false;
+				return csv.getWebs_enabled() == 1 ? true : false;
 			}
 			if (sess != null) sess.close();
 		} catch (Exception e) {

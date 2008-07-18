@@ -332,7 +332,7 @@ public class HibernateUtils {
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WEB_SERVICES)) {
-						c.getVariable().setWs_enabled(obj.getVariable().getWs_enabled());
+						c.getVariable().setWebs_enabled(obj.getVariable().getWebs_enabled());
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER))  {

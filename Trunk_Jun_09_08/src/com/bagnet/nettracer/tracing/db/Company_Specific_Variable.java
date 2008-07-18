@@ -61,7 +61,7 @@ public class Company_Specific_Variable implements Serializable {
 	private String email_to;
 	private int pass_expire_days;
 	private int max_failed_logins;
-	private int ws_enabled;
+	private int webs_enabled;
 	private int secure_password;
 	private String wt_url;
 	private String wt_airlinecode;
@@ -698,18 +698,18 @@ public class Company_Specific_Variable implements Serializable {
 	}
 	
 	/**
-	 * @return the ws_enabled
+	 * @return the webs_enabled
 	 * 
 	 * @hibernate.property type="integer"
 	 */
-	public int getWs_enabled() {
-		return ws_enabled;
+	public int getWebs_enabled() {
+		return webs_enabled;
 	}
 	/**
 	 * @param ws_enabled the ws_enabled to set
 	 */
-	public void setWs_enabled(int ws_enabled) {
-		this.ws_enabled = ws_enabled;
+	public void setWebs_enabled(int webs_enabled) {
+		this.webs_enabled = webs_enabled;
 	}
 	
 	/**
