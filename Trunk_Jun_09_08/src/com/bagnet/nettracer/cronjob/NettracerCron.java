@@ -44,12 +44,13 @@ public class NettracerCron {
 	/** * called by hibernate starter * */
 	public static void runCron(Properties properties) {
 
-		 //DataToBakThread ntarchive = new DataToBakThread(properties);
-		 //ntarchive.run();
+		// Archiving Thread
+		//DataToBakThread ntarchive = new DataToBakThread(properties);
+		//ntarchive.run();
 
-
-		// MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
-		// mbrthread.start();
+		// Move to LZ Thread
+		MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
+		mbrthread.start();
 
 		RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
 		rwtthread.start();
@@ -60,15 +61,5 @@ public class NettracerCron {
 		// WorldTracerActionQueue wtactionqueue = new WorldTracerActionQueue(properties);
 		// wtactionqueue.start();
 
-		// move mbr to lz thread
-		
-		// MoveToLZThread ohdthread = new MoveToLZThread(properties,MoveToLZThread.OHD);
-		// ohdthread.start();
-        
-
-
-
-
 	}
-
 }
