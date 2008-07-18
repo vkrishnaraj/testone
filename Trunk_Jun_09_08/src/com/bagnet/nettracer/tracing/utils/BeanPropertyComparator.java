@@ -25,20 +25,42 @@ public class BeanPropertyComparator implements Comparator {
 	private String property;
 	private Comparator comparator;
 
+  public BeanPropertyComparator(String property) {
+    this(property,null);
+  }
+
+ 
 	public BeanPropertyComparator(String property, Comparator comparator) {
 		this.property = property;
 		this.comparator = comparator;
 	}
 
-	public int compare(Object bean1, Object bean2) {
-		// Get the value of the properties
-		try {
-			Object value1 = BeanUtils.getProperty(bean1,property);
-			Object value2 = BeanUtils.getProperty(bean2,property);
-			return comparator.compare(value1, value2);
-		} catch (Exception e) {}
-		return 0;
-	}
+	
+  public int compare(Object o1, Object o2) throws IllegalArgumentException {
+    // Get the value of the properties
+  	try {
+	  	Object p1 = BeanUtils.getProperty(o1,property);
+			Object p2 = BeanUtils.getProperty(o2,property);
+	    if (comparator == null) {
+	      // try to find p1 or p2 that implements Comparator
+	      if (p1 instanceof Comparable) {
+	        return ((Comparable)p1).compareTo(p2);
+	      } else if (p2 instanceof Comparable) {
+	        return ((Comparable)p2).compareTo(p1);
+	      } else {
+	        // we have no comparables; try String comparison
+	        String s1 = String.valueOf(p1); // calls toString safely
+	        String s2 = String.valueOf(p2); 
+	        return s1.compareTo(s2); // String implements comparable
+	      }
+	    } else {
+	      return comparator.compare(p1,p2);
+	    }
+  	} catch (Exception e) {
+  	}
+  	return 0;
+  }
+  
 
 }
 
