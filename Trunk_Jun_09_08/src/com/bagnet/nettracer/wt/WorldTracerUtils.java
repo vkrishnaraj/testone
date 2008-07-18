@@ -888,7 +888,7 @@ public class WorldTracerUtils {
 		String wt_url = null ;
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
 		
-		if (comsv.getWt_url() != null){
+		if (comsv.getWt_url() != null && !comsv.getWt_url().equals("")){
 		 wt_url = comsv.getWt_url();
 		}
 		else 
