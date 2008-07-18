@@ -13,6 +13,10 @@ import org.apache.commons.beanutils.BeanUtils;
  *  Comparator field2 = new BeanPropertyComparator("field2");
  *  Comparator f12 = new CompositeComparator(field1,field2);	// sort by field1 first, and then sort by field2
  *  
+ *  sort normal:
+ *  ArrayList al = Collections.sort(al,fl2);
+ *  sort reverse:
+ *  ArrayList al = Collections.sort(al,Collections.reverseOrder(fl2));
  * @author matt
  *
  */
