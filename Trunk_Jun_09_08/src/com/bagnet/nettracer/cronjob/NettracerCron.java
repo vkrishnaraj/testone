@@ -44,8 +44,9 @@ public class NettracerCron {
 	/** * called by hibernate starter * */
 	public static void runCron(Properties properties) {
 
-		// DataToBakThread ntarchive = new DataToBakThread(properties);
-		// ntarchive.run();
+		 //DataToBakThread ntarchive = new DataToBakThread(properties);
+		 //ntarchive.run();
+
 
 		// MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
 		// mbrthread.start();
