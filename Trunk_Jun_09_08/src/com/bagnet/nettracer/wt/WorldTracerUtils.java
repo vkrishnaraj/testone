@@ -3,11 +3,7 @@ package com.bagnet.nettracer.wt;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.HashSet;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -25,25 +21,18 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.BDO;
-import com.bagnet.nettracer.tracing.db.ItemType;
+import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
-import com.bagnet.nettracer.tracing.db.OHD_Passenger;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
-import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 
 public class WorldTracerUtils {
 	//private static String wt_user = "Air@18maR";
@@ -735,10 +724,14 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
+			cri.addOrder(Order.desc("percent"));
 			cri.add(Expression.eq("action_file_type", wt_type.toUpperCase()));
 			cri.add(Expression.eq("day", new Integer(day)));
+			//System.out.println(day);
 			cri.add(Expression.eq("airline", airline));
+			//System.out.println(airline);
 			cri.add(Expression.eq("station", station));
+			//System.out.println(station);
 			
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
@@ -826,8 +819,9 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
+			cri.addOrder(Order.desc("percent"));
 			cri.add(Expression.eq("action_file_type", wt_type.toUpperCase()));
-			
+			//cri.add(Expression.eq("action_file_type","WM"));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -882,7 +876,7 @@ public class WorldTracerUtils {
 	public static String getWt_suffix_airline(String companycode){
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
 		String wt_suffix_airline = comsv.getWt_airlinecode();
-		return wt_suffix_airline;
+		return wt_suffix_airline.toLowerCase();
 	}
 	public static String getWt_url(String companycode){
 		String wt_url = null ;

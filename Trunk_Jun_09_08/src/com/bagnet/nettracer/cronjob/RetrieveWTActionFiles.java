@@ -67,9 +67,7 @@ public class RetrieveWTActionFiles extends Thread {
 			email_from = csv.getEmail_from();
 			email_port = csv.getEmail_port();
 			email_to = csv.getEmail_to();
-
 			min_to_retrieve = csv.getRetrieve_actionfile_interval();
-
 		} catch (Exception e) {
 			logger.fatal("unable to start move to lz thread: " + e);
 		}
@@ -172,7 +170,7 @@ public class RetrieveWTActionFiles extends Thread {
 
 			String wt_ahl_id = "";
 			String wt_ohd_id = "";
-			double percent = 0.0;
+			double percent = 0;
 			// sql = "delete from worldtracer_actionfiles where day = '" + day +
 			// "' and station = '" + station + "' and airline = '" + airline +
 			// "' and action_file_type = '" + wt_type + "'";
@@ -235,43 +233,95 @@ public class RetrieveWTActionFiles extends Thread {
 									+ rs.getInt("id") + "'");
 
 				} else {
-					if (wt_type != null && wt_type.equals("wm")) {
-						if (parsed.indexOf("score") != -1) {
+					if (wt_type != null && wt_type.equalsIgnoreCase("wm")) {
+					//judging the action_file_type is or not "WM" 
+						if (parsed.indexOf("SCORE") != -1) {
+							//judging the action_file_text have the "score" substring
 							int i = parsed.lastIndexOf("-");
 							try {
+								//catch the score and insert it into table worldtracer_actionfiles
 								StringBuffer br = new StringBuffer();
 								for (int j = 0; j <= 4; j++) {
-									if (!parsed.substring(i +j+ 2, i + j + 3).equals(
-											" ")) {
-										br.append(parsed
-												.substring(i + j + 2, i + j + 3));
-									}
-									else{
+									if (!parsed.substring(i + j + 2, i + j + 3)
+											.equals(" ")) {
+										br.append(parsed.substring(i + j + 2, i
+												+ j + 3));
+										System.out.println(br.toString());
+									} else {
 										break;
 									}
 								}
 								percent = Double.parseDouble(br.toString());
+								sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
+										+ "('"
+										+ wt_type.toUpperCase()
+										+ "','"
+										+ parsed.replace("'", "''")
+										+ "','"
+										+ day
+										+ "','"
+										+ station
+										+ "','"
+										+ airline
+										+ "','"
+										+ wt_ahl_id
+										+ "','"
+										+ wt_ohd_id + "',0,'" + percent + "')";
+								stmt.executeUpdate(sql);
+								System.out
+										.println("File inserted............................");
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
+						} else {
+							//action_file_text have not the score substring,insert 0 into table worldtracer_actionfiles 
+							percent=0;
+							sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
+									+ "('"
+									+ wt_type.toUpperCase()
+									+ "','"
+									+ parsed.replace("'", "''")
+									+ "','"
+									+ day
+									+ "','"
+									+ station
+									+ "','"
+									+ airline
+									+ "','"
+									+ wt_ahl_id
+									+ "','"
+									+ wt_ohd_id
+									+ "',0,'"
+									+ percent + "')";
+							stmt.executeUpdate(sql);
+							System.out
+									.println("File inserted............................");
 						}
+					} else {
+						//action_file_type is not the WM,insert 0 into table worldtracer_actionfiles
+						percent=0;
+						sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
+								+ "('"
+								+ wt_type.toUpperCase()
+								+ "','"
+								+ parsed.replace("'", "''")
+								+ "','"
+								+ day
+								+ "','"
+								+ station
+								+ "','"
+								+ airline
+								+ "','"
+								+ wt_ahl_id
+								+ "','"
+								+ wt_ohd_id
+								+ "',0,'"
+								+ 0
+								+ "')";
+						stmt.executeUpdate(sql);
+						System.out
+								.println("File inserted............................");
 					}
-					sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
-							+ "('"
-							+ wt_type.toUpperCase()
-							+ "','"
-							+ parsed.replace("'", "''")
-							+ "','"
-							+ day
-							+ "','"
-							+ station
-							+ "','"
-							+ airline
-							+ "','"
-							+ wt_ahl_id
-							+ "','" + wt_ohd_id + "',0,'" + percent + "')";
-					stmt.executeUpdate(sql);
-					System.out.println("File inserted...");
 				}
 
 				int loc = result
