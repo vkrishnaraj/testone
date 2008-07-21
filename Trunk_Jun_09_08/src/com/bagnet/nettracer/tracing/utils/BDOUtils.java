@@ -8,23 +8,24 @@ package com.bagnet.nettracer.tracing.utils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -909,5 +910,25 @@ public class BDOUtils {
 				}
 			}
 		}
+	}
+	/**
+	 * this method will return an Iterator that has BDO object
+	 * @param bdo_id
+	 */
+	public static Iterator findWt_id(int bdo_id){
+		
+		SessionFactory sessionFactory = HibernateWrapper.getSession();
+
+		Session hibernateSession = sessionFactory.openSession();
+
+		Query query = hibernateSession.createQuery("from BDO as b where b.BDO_ID=?");
+
+		query.setInteger(0, bdo_id);
+
+		List list2 = query.list();
+
+		Iterator it = list2.iterator();
+		
+		return it;
 	}
 }

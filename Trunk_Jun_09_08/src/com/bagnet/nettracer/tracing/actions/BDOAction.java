@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -35,9 +40,10 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * Preferences - Java - Code Style - Code Templates
  */
 public class BDOAction extends Action {
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		HttpSession session = request.getSession();
 
 		// check session
@@ -47,14 +53,14 @@ public class BDOAction extends Action {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		
+
 		Agent user = (Agent) session.getAttribute("user");
 
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) return (mapping
-				.findForward(TracingConstants.LOGON));
-		
-		BDOForm theform = (BDOForm) form;
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
+				+ ".do", user))
+			return (mapping.findForward(TracingConstants.LOGON));
 
+		BDOForm theform = (BDOForm) form;
 
 		ActionMessages errors = new ActionMessages();
 
@@ -68,55 +74,111 @@ public class BDOAction extends Action {
 		} else if (request.getParameter("onhand") != null) {
 			request.setAttribute("onhand", "1");
 		} else {
-			request.setAttribute("show_word_for", "1"); // show "BDO for" in header
-			String wt_id = "";
-			
-			if (theform.getOhd().getWt_id() != null){
-				wt_id = theform.getOhd().getWt_id();
-				
-				request.setAttribute("wt_id", "a");
+			// System.out.println("wwwwwwwwwwwwwwwwwwwwww");
+			request.setAttribute("show_word_for", "1"); // show "BDO for" in
+			// header
+			// String wt_id = "";
+			// -------------------------------------------------------------------------
+			/**
+			 * if (theform.getOhd().getWt_id() != null){ wt_id =
+			 * theform.getOhd().getWt_id();
+			 * 
+			 * request.setAttribute("wt_id", "a"); } if
+			 * (theform.getIncident().getWt_id() != null){ wt_id =
+			 * theform.getIncident().getWt_id();
+			 * 
+			 * request.setAttribute("wt_id", "b"); }
+			 */
+			// List list=new ArrayList();
+			int bdo_id = Integer.parseInt(request.getParameter("bdo_id"));
+			// BDOForm theform2 = (BDOForm) form;
+
+			Iterator it = BDOUtils.findWt_id(bdo_id);
+
+			while (it.hasNext()) {
+
+				BDO bdo = (BDO) it.next();
+
+				if (null != bdo.getIncident()&& !bdo.getIncident().toString().equals("")) 
+				{
+					if(null!=bdo.getIncident().getWt_id()&&!"".equals(bdo.getIncident().getWt_id()))
+					{
+						request.setAttribute("wt_id", bdo.getIncident().getWt_id());
+					}
+				} 
+				else {
+					if (null != bdo.getOhd()
+							&& !"".equals(bdo.getOhd().toString().trim())) {
+						if(null!=bdo.getOhd().getWt_id()&&!"".equals(bdo.getOhd().getWt_id().trim())){
+							request.setAttribute("wt_id", bdo.getOhd().getWt_id());
+						}
+					} 
+				}
 			}
-			if (theform.getIncident().getWt_id() != null){
-				wt_id = theform.getIncident().getWt_id();
-				
-				request.setAttribute("wt_id", "b");
-			}
-			
+			// System.out.println(wt_id);
+			// Query queryincident=hibernateSession.createQuery("from Incident
+			// as incident where incident.Incident_ID=?");
+			// Query query=HibernateWrapper.getSession()
+			// String incident_wt_id=
+			// System.out.println("-------------"+theform.getIncident().getWt_id());
+			// System.out.println("+++++++++++++"+theform.getOhd().getWt_id());
+			/**
+			 * if
+			 * (null!=theform.getIncident().getWt_id()&&!theform.getIncident().getWt_id().trim().equals("")){
+			 * request.setAttribute("wt_id", null);
+			 * System.out.println("wwwwwwwwwwwwwwwwwwwwwwwww"); String wt_id =
+			 * theform.getIncident().getWt_id(); request.setAttribute("wt_id",
+			 * wt_id); } else
+			 * if(null!=theform.getOhd().getWt_id()&&!theform.getOhd().getWt_id().equals("")){
+			 * request.setAttribute("wt_id", null); String wt_id =
+			 * theform.getOhd().getWt_id();
+			 * System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzz");
+			 * request.setAttribute("wt_id", wt_id); } else{
+			 * request.setAttribute("wt_id", null);
+			 * System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqq"); }
+			 */
 		}
 
 		if (theform.getDelivercompany_ID() > 0) {
-			
+
 			List servicelevels = null;
 
 			if (request.getParameter("changeservice") != null
-					&& request.getParameter("changeservice").equals("1") &&
-					request.getParameter("bdo_id") != null) {
-				BDO bdo = BDOUtils.getBDOFromDB(new Integer(request.getParameter("bdo_id")));
-				if (bdo.getDelivercompany().getDelivercompany_ID() == theform.getDelivercompany_ID()) {
-					servicelevels = BDOUtils.getServiceLevels(theform.getDelivercompany_ID(), bdo.getServicelevel());
+					&& request.getParameter("changeservice").equals("1")
+					&& request.getParameter("bdo_id") != null) {
+				BDO bdo = BDOUtils.getBDOFromDB(new Integer(request
+						.getParameter("bdo_id")));
+				if (bdo.getDelivercompany().getDelivercompany_ID() == theform
+						.getDelivercompany_ID()) {
+					servicelevels = BDOUtils.getServiceLevels(theform
+							.getDelivercompany_ID(), bdo.getServicelevel());
 				} else {
-					servicelevels = BDOUtils.getServiceLevels(theform.getDelivercompany_ID());
+					servicelevels = BDOUtils.getServiceLevels(theform
+							.getDelivercompany_ID());
 				}
 			} else {
-				servicelevels = BDOUtils.getServiceLevels(theform.getDelivercompany_ID());
+				servicelevels = BDOUtils.getServiceLevels(theform
+						.getDelivercompany_ID());
 			}
 			// AJAX CALL
 			request.setAttribute("servicelevels", servicelevels);
 		}
-		
+
 		// change up service level
 		if (request.getParameter("changeservice") != null
 				&& request.getParameter("changeservice").equals("1")) {
 
 			return (mapping.findForward(TracingConstants.AJAX_SERVICELEVEL));
 		}
-		
-		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
+
+		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform
+				.getStation().getStation_ID()));
 		if (list != null)
 			request.setAttribute("delivercompanies", list);
 
-		if (request.getParameter("receipt") != null && request.getParameter("bdo_id") != null) {
-			request.setAttribute("bdo_id",request.getParameter("bdo_id"));
+		if (request.getParameter("receipt") != null
+				&& request.getParameter("bdo_id") != null) {
+			request.setAttribute("bdo_id", request.getParameter("bdo_id"));
 			return (mapping.findForward(TracingConstants.RECEIPT_PARAMS));
 		}
 
@@ -126,7 +188,8 @@ public class BDOAction extends Action {
 			request.setAttribute("showbdo", "1");
 
 			// if there are no bags, then don't deliver, unless it is ohd
-			if (theform.getItemlist().size() == 0 && theform.getIncident_ID() != null) {
+			if (theform.getItemlist().size() == 0
+					&& theform.getIncident_ID() != null) {
 				ActionMessage error = new ActionMessage("error.bdo_no_bag");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
@@ -140,7 +203,8 @@ public class BDOAction extends Action {
 				// need to select
 				bagchosen = request.getParameterValues("bagchosen");
 				if (bagchosen == null) {
-					ActionMessage error = new ActionMessage("error.bdo_choose_bag");
+					ActionMessage error = new ActionMessage(
+							"error.bdo_choose_bag");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 					return (mapping.findForward(TracingConstants.BDO_MAIN));
@@ -158,7 +222,7 @@ public class BDOAction extends Action {
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
 			} else {
 				request.setAttribute("inserted", "1");
-				request.setAttribute("showprint","1");
+				request.setAttribute("showprint", "1");
 			}
 		}
 
@@ -166,19 +230,20 @@ public class BDOAction extends Action {
 		if (request.getParameter("createnewbdo") != null) {
 			BDOUtils.createNewBDO(ohd, incident, theform, request);
 			request.setAttribute("showbdo", "1");
-			
+
 			return (mapping.findForward(TracingConstants.BDO_MAIN));
 		}
 
 		// user wants to update bdo
 		if (request.getParameter("bdo_id") != null) {
-			if (!BDOUtils.findBDO(Integer.parseInt(request.getParameter("bdo_id")), theform, request)) {
+			if (!BDOUtils.findBDO(Integer.parseInt(request
+					.getParameter("bdo_id")), theform, request)) {
 				ActionMessage error = new ActionMessage("error.bdo_not_found");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			} else {
 				request.setAttribute("showbdo", "1");
-				request.setAttribute("showprint","1");
+				request.setAttribute("showprint", "1");
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
 			}
 

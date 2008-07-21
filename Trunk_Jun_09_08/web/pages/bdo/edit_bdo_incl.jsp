@@ -79,9 +79,14 @@ function toggledc(o) {
         </h1>
         
         <logic:present name="wt_id" scope="request">
+         
         <p align="right">
-        	WorldTracer ID: <bean:write  name="wt_id" scope="request"/> 
+        <% if(request.getAttribute("wt_id")!=null&&!request.getAttribute("wt_id").equals(""))
+        	out.println("WorldTracer ID:");
+        	out.println(request.getAttribute("wt_id"));
+        %>	
         </p>
+        
         </logic:present>
         
         <span class="reqfield">*</span>
