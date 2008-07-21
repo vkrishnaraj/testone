@@ -20,14 +20,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -90,53 +87,43 @@ public class BDOAction extends Action {
 			 * request.setAttribute("wt_id", "b"); }
 			 */
 			// List list=new ArrayList();
-			int bdo_id = Integer.parseInt(request.getParameter("bdo_id"));
-			// BDOForm theform2 = (BDOForm) form;
+			
+			String bdo_id2 = request.getParameter("bdo_id");
 
-			Iterator it = BDOUtils.findWt_id(bdo_id);
+			int bdo_id = 0;
 
-			while (it.hasNext()) {
+			if (bdo_id2 != null && !"".equals(bdo_id2)) {
 
-				BDO bdo = (BDO) it.next();
+				bdo_id = Integer.parseInt(bdo_id2);
 
-				if (null != bdo.getIncident()&& !bdo.getIncident().toString().equals("")) 
-				{
-					if(null!=bdo.getIncident().getWt_id()&&!"".equals(bdo.getIncident().getWt_id()))
-					{
-						request.setAttribute("wt_id", bdo.getIncident().getWt_id());
-					}
-				} 
-				else {
-					if (null != bdo.getOhd()
-							&& !"".equals(bdo.getOhd().toString().trim())) {
-						if(null!=bdo.getOhd().getWt_id()&&!"".equals(bdo.getOhd().getWt_id().trim())){
-							request.setAttribute("wt_id", bdo.getOhd().getWt_id());
+				Iterator it = BDOUtils.findWt_id(bdo_id);
+
+				while (it.hasNext()) {
+
+					BDO bdo = (BDO) it.next();
+
+					if (null != bdo.getIncident()
+							&& !bdo.getIncident().toString().equals("")) {
+						if (null != bdo.getIncident().getWt_id()
+								&& !"".equals(bdo.getIncident().getWt_id())) {
+							request.setAttribute("wt_id", bdo.getIncident()
+									.getWt_id());
 						}
-					} 
+					} else {
+						if (null != bdo.getOhd()
+								&& !"".equals(bdo.getOhd().toString().trim())) {
+							if (null != bdo.getOhd().getWt_id()
+									&& !"".equals(bdo.getOhd().getWt_id()
+											.trim())) {
+								request.setAttribute("wt_id", bdo.getOhd()
+										.getWt_id());
+							}
+						}
+					}
+
 				}
-			}
-			// System.out.println(wt_id);
-			// Query queryincident=hibernateSession.createQuery("from Incident
-			// as incident where incident.Incident_ID=?");
-			// Query query=HibernateWrapper.getSession()
-			// String incident_wt_id=
-			// System.out.println("-------------"+theform.getIncident().getWt_id());
-			// System.out.println("+++++++++++++"+theform.getOhd().getWt_id());
-			/**
-			 * if
-			 * (null!=theform.getIncident().getWt_id()&&!theform.getIncident().getWt_id().trim().equals("")){
-			 * request.setAttribute("wt_id", null);
-			 * System.out.println("wwwwwwwwwwwwwwwwwwwwwwwww"); String wt_id =
-			 * theform.getIncident().getWt_id(); request.setAttribute("wt_id",
-			 * wt_id); } else
-			 * if(null!=theform.getOhd().getWt_id()&&!theform.getOhd().getWt_id().equals("")){
-			 * request.setAttribute("wt_id", null); String wt_id =
-			 * theform.getOhd().getWt_id();
-			 * System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzz");
-			 * request.setAttribute("wt_id", wt_id); } else{
-			 * request.setAttribute("wt_id", null);
-			 * System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqq"); }
-			 */
+				// BDOForm theform2 = (BDOForm) form;
+			} 
 		}
 
 		if (theform.getDelivercompany_ID() > 0) {
