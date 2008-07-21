@@ -64,7 +64,7 @@ public class BDOAction extends Action {
 		// ohd id or mbr id present in the request parameter
 		String ohd = request.getParameter("ohd_id");
 		String incident = request.getParameter("mbr_id");
-
+		
 		// if no ids, a input box will show to enter the mbr or ohd id
 		if (request.getParameter("mbr") != null) {
 			request.setAttribute("mbr", "1");
