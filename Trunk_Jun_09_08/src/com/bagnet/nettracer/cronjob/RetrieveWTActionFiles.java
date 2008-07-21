@@ -5,10 +5,7 @@
  */
 package com.bagnet.nettracer.cronjob;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -353,8 +350,7 @@ public class RetrieveWTActionFiles extends Thread {
 				al.add(new InternetAddress(email_to));
 				he.setTo(al);
 				String msg = "please restart NT cronjob thread for environment indicated by sending email address.";
-				msg += "\n\nError with retrieve wt action file in RetrieveWTActionFiles thread: \n"
-						+ e.toString();
+				msg += "\n\nError with retrieve wt action file in RetrieveWTActionFiles thread: \n" + e.toString();
 
 				he.setHtmlMsg(msg);
 
