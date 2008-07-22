@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
@@ -35,6 +36,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
+import com.bagnet.nettracer.wt.WTBDO;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -640,7 +642,69 @@ public class WorldTracerActionQueue extends Thread {
 			logger.fatal("error tty into wt: " + e);
 		}
 	}
+	public void ForwardBDOtoWT() throws Exception {
 
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.queue_status <3 and wtqueue.type = 'bdo')";
+			String sql = "select bdo from com.bagnet.nettracer.tracing.db.BDO   bdo where "
+					+ "bdo.BDO_ID = :type_id";
+
+			Query q = sess.createQuery(sql);
+			Query wtq = sess.createQuery(wtsql);
+			wtq.setFirstResult(0);
+			wtq.setMaxResults(5);
+			List wtlist = wtq.list();
+
+			WTBDO wt = null;
+			WT_Queue wtqueue = null;
+			BDO inc = null;
+			
+
+
+			if (wtlist != null && wtlist.size() > 0) {
+				for (int i = 0; i < wtlist.size(); i++) {
+
+					wtqueue = (WT_Queue) wtlist.get(i);
+					String type_id = wtqueue.getType_id();
+					
+					q.setParameter("type_id", wtqueue.getType_id());
+					List list = q.list();
+					for (int j = 0; j < list.size(); j++) {
+						inc = (BDO) list.get(j);
+
+						wt = new WTBDO();
+						if (inc != null) {
+							//this.sendmessage(inc.getStation(), "bdo",
+							//		inc.getAgent(), "ok", inc.getBDO_ID(),
+							//		"");
+				
+	                        /*
+							for (int k = 0; k < 3; k++) {
+								String result = "failincident";
+								
+								wtaciton.updatequeue((wtqueue.getType_id()), wtqueue.getType(),result);
+							}
+							*/
+							
+							  String result = wt.insertBDO(client, company,inc.getBDO_ID()); 
+							  if (result == null) 
+								  result =wt.getError(); 
+							  else { 
+								  logger.info("inserted into wt: mbr: " + result); 
+								  } 
+							  logger.error("insert bdo into wt: " +result);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.fatal("error incident into wt: " + e);
+		}
+	}
+	
 	public void sendmessage(Station station, String subject, Agent user,
 			String message, String incident_id, String ohd_id) {
 		Message msg = new Message();

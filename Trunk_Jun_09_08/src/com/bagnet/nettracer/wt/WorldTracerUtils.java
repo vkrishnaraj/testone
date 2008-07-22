@@ -893,7 +893,7 @@ public class WorldTracerUtils {
 	public void setError(String error) {
 		this.error = error;
 	}
-	public static BDO findBDOByID(String BDO_ID) {
+	public static BDO findBDOByID(int BDO_ID) {
 		Session sess = null;
 
 		try {

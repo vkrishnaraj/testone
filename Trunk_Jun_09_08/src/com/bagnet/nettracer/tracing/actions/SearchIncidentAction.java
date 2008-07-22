@@ -57,7 +57,6 @@ public class SearchIncidentAction extends Action {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-
 		// user clicked on a incident after search result has returned
 		String incident = request.getParameter("incident");
 		BagService bs = new BagService();

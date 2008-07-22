@@ -69,6 +69,7 @@
             <bean:message key="prompt.bdo_insert_success" />
           </font></center>
         </logic:present>
+
         <br>
         <logic:present name="bdo_list" scope="request">
           <table class="form2" cellspacing="0" cellpadding="0">
