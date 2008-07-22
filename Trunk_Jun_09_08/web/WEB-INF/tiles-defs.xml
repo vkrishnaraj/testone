@@ -573,5 +573,7 @@
 	
 	<definition name="pass_view_only" path="/pages/passengerview/passengerview.jsp">
     </definition> 
+    <definition name="suspend_rit" path="/pages/worldtracer/worldtracer_sus_rit.jsp">
+    </definition> 
 	
  </tiles-definitions>
