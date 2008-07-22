@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.NTDateFormat;
@@ -293,7 +294,7 @@ public final class ManageAgents extends Action {
 						agent
 							.setShift(AdminUtils.getShift((String) dForm.get("shift_id")));
 				}
-				agent.setCompanycode_ID(AdminUtils.getStation("" + agent.getStation().getStation_ID())
+				agent.setCompanycode_ID(StationBMO.getStation("" + agent.getStation().getStation_ID())
 						.getCompany().getCompanyCode_ID());
 				agent.setDefaulttimezone((String) dForm.get("defaultTimezone"));
 				agent.setCurrenttimezone((String) dForm.get("currentTimezone"));

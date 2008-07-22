@@ -482,11 +482,11 @@ public final class ManageCompany extends Action {
 	public void populateLists(HttpServletRequest request, MaintainCompanyForm dForm){
 		List stationList = getStationList(request, dForm);
 
-		List lzList = LzUtils.getIncidentLzStations();
+		List lzList = LzUtils.getIncidentLzStations(dForm.getCompanyCode());
 		HashMap<Integer,String> usedMap = new HashMap();
 		
 		for (Iterator<Station> i = stationList.iterator(); i.hasNext();) {
-			usedMap.put(new Integer(i.next().getLz().getLz_ID()), "");
+			usedMap.put(new Integer(i.next().getLz_ID()), "");
 		}
 		
 		for (Iterator<Lz> j = lzList.iterator(); j.hasNext();) {

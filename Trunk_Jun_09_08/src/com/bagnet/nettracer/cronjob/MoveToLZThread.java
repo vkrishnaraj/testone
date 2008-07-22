@@ -26,6 +26,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
@@ -49,7 +50,6 @@ public class MoveToLZThread extends Thread {
 	public final static int MBR = 0;
 	public final static int OHD = 1;
 
-	private static ArrayList threads;
 	private static Logger logger = Logger.getLogger(MoveToLZThread.class);
 
 	// db
@@ -68,7 +68,6 @@ public class MoveToLZThread extends Thread {
 
 	private final static String MBR_MSG = "REPORT MOVED TO ";
 	private final static String AGENT_MSG = "; ASSIGNED AGENT REMOVED FOR RE-ASSIGNMENT AT ";
-	private final static String OHD_MSG = "OHD MOVED TO ";
 
 	private String company;
 	int retrieve;
@@ -107,6 +106,7 @@ public class MoveToLZThread extends Thread {
 			Connection conn = null;
 			this.type = type;
 			this.company = company;
+			logger.info("Starting move to lz...");
 			
 			Properties properties = new Properties();
 			try {
@@ -213,17 +213,17 @@ public class MoveToLZThread extends Thread {
 		}
 	}
 
-	public synchronized void moveMBRToLZ(String company) throws Exception {
+	public synchronized void moveMBRToLZ(String companyCode) throws Exception {
 
 		// Get settings
-		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(companyCode);
 		int mode = csv.getLz_mode();
 		long ld_days = csv.getMbr_to_lz_days();
 		long dg_days = csv.getDamaged_to_lz_days();
 		long ma_days = csv.getMiss_to_lz_days();
 
 		// Get LZ Stations
-		List<Lz> lzList = (List<Lz>) LzUtils.getIncidentLzStations();
+		List<Lz> lzList = (List<Lz>) LzUtils.getIncidentLzStations(companyCode);
 
 		if (ld_days + dg_days + ma_days > 0) {
 			
@@ -297,7 +297,6 @@ public class MoveToLZThread extends Thread {
 			Lz lz = (Lz) bucket.getKey();
 			Station assignTo = lz.getStation();
 			
-			
 		  // For each incident
 			for (int y=0; y<bucket.size(); ++y) {
 				// Get incident
@@ -357,22 +356,20 @@ public class MoveToLZThread extends Thread {
 		Lz key = null;
 		
 		// Create buckets
-		Iterator iter = lzList.iterator();
-		while (iter.hasNext()) {
-			key = (Lz) iter.next();
+		for (Lz lz: lzList) {
+			key = lz;
 			Bucket b = new Bucket();
 			b.initialize(key);
 			buckets.put((Lz) b.getKey(), b);
 		}
 
-		for (int x = 0; x < incidentList.size(); ++x) {
-			// Get incident
-			Incident inc = incidentList.get(x);
-			
+		// Populate buckets
+		for (Incident inc: incidentList) {
+
 			// Look up the station's assigned LZ
 			String stationId = inc.getStation_ID() + "";
-			Station station = AdminUtils.getStation(stationId);
-			Lz stationLz = station.getLz();
+			Station station = StationBMO.getStation(stationId);
+			Lz stationLz = LzUtils.getLz(station);
 			
 			// Look up the bucket for the assigned LZ and add incident to bucket
 			Bucket bucket = buckets.get(stationLz);

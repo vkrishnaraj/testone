@@ -20,6 +20,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -457,7 +458,7 @@ public class OHDUtils {
 
 	public static List getBagsToLZed(int station_id, int rowsperpage, int currpage) {
 		Session sess = null;
-		Station s = AdminUtils.getStation("" + station_id);
+		Station s = StationBMO.getStation("" + station_id);
 		if (s.getCompany().getVariable().getOhd_to_lz_days() <= 0) {
 			return new ArrayList();
 		}
@@ -496,7 +497,7 @@ public class OHDUtils {
 	public static int getBagsToLZedCount(int station_id) {
 		Session sess = null;
 
-		Station s = AdminUtils.getStation("" + station_id);
+		Station s = StationBMO.getStation("" + station_id);
 		if (s.getCompany().getVariable().getOhd_to_lz_days() <= 0) {
 			return 0;
 		}

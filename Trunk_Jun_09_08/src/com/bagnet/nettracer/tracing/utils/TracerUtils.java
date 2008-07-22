@@ -1306,27 +1306,6 @@ public class TracerUtils {
 		}
 	}
 
-	public static Station getStation(int station_ID) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Station.class).add(
-					Expression.eq("station_ID", new Integer(station_ID)));
-			return (Station) cri.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	public static Station getStationByCode(String stationcode,
 			String companycode_id) {
 		Session sess = null;

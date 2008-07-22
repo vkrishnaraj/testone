@@ -346,26 +346,6 @@ public class CustomReportBMO {
 		}
 	}
 
-	public Station getStation(int station_ID) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Station status where station_ID= :station_ID");
-			q.setInteger("station_ID", station_ID);
-			List list = q.list();
-			if (list == null || list.size() == 0) {
-				logger.debug("unable to find station");
-				return null;
-			}
-			return (Station) list.get(0);
-		} catch (Exception e) {
-			logger.error("unable to retrieve station from database: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			sess.close();
-		}
-	}
-
 	public static JasperReport getCompiledReport(String reportname, String rootpath) throws Exception {
 		/** look for compiled reports, if can't find it, compile xml report * */
 		File reportFile = new File(rootpath + "/reports/" + reportname + ".jasper");

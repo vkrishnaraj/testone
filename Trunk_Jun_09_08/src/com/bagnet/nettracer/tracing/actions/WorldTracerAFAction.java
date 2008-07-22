@@ -6,9 +6,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,13 +20,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
@@ -37,8 +34,6 @@ import com.bagnet.nettracer.wt.WorldTracerUtils;
 /**
  * @author matt
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class WorldTracerAFAction extends Action {
 	private static Logger logger = Logger.getLogger(WorldTracerAFAction.class);
@@ -73,7 +68,7 @@ public class WorldTracerAFAction extends Action {
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
-			agent_station = AdminUtils.getStation((String) session
+			agent_station = StationBMO.getStation((String) session
 					.getAttribute("cbroStationID"));
 		} else {
 			agent_station = user.getStation();

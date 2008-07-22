@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -97,13 +97,13 @@ public class OHD_Log implements Serializable {
 	}
 
 	public String getDestCompany() {
-		if (destStationCode != 0 && destStationCode > 0) return AdminUtils.getStation(
+		if (destStationCode != 0 && destStationCode > 0) return StationBMO.getStation(
 				"" + destStationCode).getCompany().getCompanyCode_ID();
 		else return "";
 	}
 
 	public String getDestStation() {
-		if (destStationCode != 0 && destStationCode > 0) return AdminUtils.getStation(
+		if (destStationCode != 0 && destStationCode > 0) return StationBMO.getStation(
 				"" + destStationCode).getStationcode();
 		else return "";
 	}

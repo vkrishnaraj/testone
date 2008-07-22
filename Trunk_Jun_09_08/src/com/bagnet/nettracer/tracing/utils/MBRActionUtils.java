@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -378,7 +379,7 @@ public class MBRActionUtils {
 				if (csv.getDefault_station_code() == 0)
 					theform.setFaultstation(theform.getStationassigned());
 				else {
-					Station st = AdminUtils.getStation(Integer.toString(csv.getDefault_station_code()));
+					Station st = StationBMO.getStation(Integer.toString(csv.getDefault_station_code()));
 					theform.setFaultstation(st);
 				}
 			}

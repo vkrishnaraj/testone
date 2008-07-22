@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -445,7 +446,7 @@ public class LostDelayAction extends Action {
 			report_info.put("stationcreatedcode", form.getStationcreated().getStationcode());
 			report_info.put("dispclosedate", form.getDispclosedate());
 			report_info.put("status", form.getStatus().getDescription());
-			report_info.put("stationassigned", AdminUtils.getStation("" + form.getStationassigned_ID()).getStationcode());
+			report_info.put("stationassigned", StationBMO.getStation("" + form.getStationassigned_ID()).getStationcode());
 			report_info.put("nonrevenue", form.getNonrevenue() == 0 ? "no" : "yes");
 
 			if (form.getReportmethod() == 0)

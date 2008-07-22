@@ -10,9 +10,10 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
  * @hibernate.class table="Station"
  */
 public class Station implements Serializable {
+
 	private int Station_ID;
 	private Company company;
-	private Lz lz;
+	private int lz;
 	private String stationcode;
 	private String stationdesc;
 	private String locale;
@@ -52,19 +53,18 @@ public class Station implements Serializable {
 	}
 
 	/**
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Lz"
-	 *                        column="lz_ID"  foreign-key="lz_ID"
-	 *                        
+	 * @hibernate.property type="integer"
+	 *                         
 	 * @return Returns the station's incident LZ station.
 	 */
-	public Lz getLz() {
+	public int getLz_ID() {
 		return lz;
 	}
 	
 	/**
 	 * @param lz The lz to set.
 	 */
-	public void setLz(Lz lz) {
+	public void setLz_ID(int lz) {
 		this.lz = lz;
 	}
 	

@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -73,7 +74,7 @@ public class ManageTask extends Action {
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
-			agent_station = AdminUtils.getStation((String) session.getAttribute("cbroStationID"));
+			agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 		} else {
 			agent_station = user.getStation();
 		}

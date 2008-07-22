@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
@@ -34,7 +35,6 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -77,7 +77,7 @@ public class InterimExpenseAction extends Action {
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
-			agent_station = AdminUtils.getStation((String) session.getAttribute("cbroStationID"));
+			agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 		} else {
 			agent_station = user.getStation();
 		}

@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -36,7 +37,6 @@ import com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
@@ -207,7 +207,7 @@ public class LogonAction extends Action {
 			ArrayList list = new ArrayList();
 			Station s = null;
 			if (session.getAttribute("cbroStationID") != null) {
-				s = AdminUtils.getStation((String) session.getAttribute("cbroStationID"));
+				s = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 			} else {
 				s = agent.getStation();
 			}

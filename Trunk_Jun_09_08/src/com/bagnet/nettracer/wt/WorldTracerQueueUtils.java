@@ -28,6 +28,7 @@ import org.hibernate.Transaction;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -347,8 +348,8 @@ public class WorldTracerQueueUtils {
 
 		sb.append("STNARL" + _t);
 		//sb.append(fwd.gegetHoldingStation().getStationcode());
-		sb.append(TracerUtils.getStation(fwd.getFwd_station_id()));
-		sb.append(TracerUtils.getStation(fwd.getFwd_station_id()).getStationcode());
+		sb.append(StationBMO.getStation(fwd.getFwd_station_id()));
+		sb.append(StationBMO.getStation(fwd.getFwd_station_id()).getStationcode());
 		sb.append(_n);
 		// passengers last name
 

@@ -13,22 +13,25 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Lz;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.forms.MaintainCompanyForm;
 
 public class LzUtils {
 	
 	private static Logger logger = Logger.getLogger(LzUtils.class);
 
+
+	public static Lz getLz(Station station) {
+		return getLz(station.getLz_ID());
+	}
+	
 	public static Lz getLz(int key) {
 		Session sess = null;
 		try {
@@ -50,14 +53,15 @@ public class LzUtils {
 		}
 	}
 	
-	public static ArrayList getIncidentLzStationsBeans() {
+	public static ArrayList getIncidentLzStationsBeans(String companyCode) {
 		ArrayList al = new ArrayList();
 
-		List tmpList = getIncidentLzStations();
+		List tmpList = getIncidentLzStations(companyCode);
 
 		for (Iterator i = tmpList.iterator(); i.hasNext();) {
 			Lz lz = (Lz) i.next();
-			al.add(new LabelValueBean(lz.getStation().getStationcode(), new Integer(lz.getLz_ID()).toString()));
+			String label = lz.getStation().getStationcode();
+			al.add(new LabelValueBean(label, new Integer(lz.getLz_ID()).toString()));
 		}
 		return al;
 	}
@@ -81,8 +85,9 @@ public class LzUtils {
 			}
 			
 			Lz lz = new Lz();
-			Station station = TracerUtils.getStation(stationId);
+			Station station = StationBMO.getStation(stationId);
 			lz.setStation(station);
+			lz.setCompanyCode_ID(station.getCompany().getCompanyCode_ID());
 			lz.setPercent(0);
 			lz.setIs_default(false);
 			
@@ -112,12 +117,11 @@ public class LzUtils {
 			List<Station> stationList = (List)request.getAttribute("stationList");
 			for (int i=0; i<stationList.size(); ++i) {
 				Station station = stationList.get(i);
-				Lz lz = station.getLz();
+				Lz lz = LzUtils.getLz(station);
 				int formLz = new Integer(request.getParameter("station[" + i + "].lz")).intValue();
 				if (lz.getLz_ID() != formLz) {
 					// Check to see if the station has changed.
-					Lz newLz = getLz(formLz);
-					station.setLz(newLz);
+					station.setLz_ID(formLz);
 					HibernateUtils.saveStation(station, user);
 				}
 			}
@@ -204,9 +208,9 @@ public class LzUtils {
 			List<Station> stationList = AdminUtils.getCustomStations(null, form.getCompanyCode(), 0, 0, TracingConstants.ActiveStatus.ALL);
 			for (int i=0; i<stationList.size(); ++i) {
 				Station station = stationList.get(i);
-				Lz lz = station.getLz();
+				Lz lz = LzUtils.getLz(station);
 				if (deleteThese.contains(lz)) {
-					station.setLz(defaultLz);
+					station.setLz_ID(defaultLz.getLz_ID());
 					HibernateUtils.saveStation(station, user);
 
 				}
@@ -246,11 +250,12 @@ public class LzUtils {
 		return true;
 	}
 	
-	public static List getIncidentLzStations() {
+	public static List getIncidentLzStations(String companyCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Lz.class);
+			cri.add(Expression.eq("companyCode_ID", companyCode));
 			return cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());

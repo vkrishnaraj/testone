@@ -150,7 +150,7 @@ public class HibernateWrapper {
 	private static SessionFactory sf_nt;
 	private static String hibernate_main_path = HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath();
 	
-/*
+
 	static {
 		try {
 			// start the move to lz cron
@@ -182,7 +182,7 @@ public class HibernateWrapper {
 			logger.fatal("Unable to initiate hibernate: " + e);
 		}
 	}
-*/
+
 	/**
 	 * Retrieve the session from the session factory
 	 * 

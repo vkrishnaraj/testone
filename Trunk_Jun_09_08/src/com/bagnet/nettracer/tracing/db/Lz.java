@@ -13,6 +13,7 @@ public class Lz implements Serializable {
 	private double percent;
 	private Station station;
 	private boolean isUsed;
+	private String companyCode_ID;
 	
 	/**
 	 * @return Returns the lz_id.
@@ -71,7 +72,23 @@ public class Lz implements Serializable {
 		this.station = station;
 	}
 
+	
+	/**
+	 * @return Returns the companyCode_ID.
+	 * 
+	 * @hibernate.property type="string" length="3"
+	 */
+	public String getCompanyCode_ID() {
+		return companyCode_ID;
+	}
 
+	/**
+	 * @param companyCode_ID
+	 *          The companyCode_ID to set.
+	 */
+	public void setCompanyCode_ID(String companyCode_ID) {
+		this.companyCode_ID = companyCode_ID;
+	}
 
 	/**
 	 * @return Returns whether the station is the default incident LZ.

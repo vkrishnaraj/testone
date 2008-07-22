@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -169,7 +170,7 @@ public class BagService {
 			Remark r = new Remark();
 			r.setAgent(user);
 			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-			Station station = AdminUtils.getStation("" + log.getDestStationCode());
+			Station station = StationBMO.getStation("" + log.getDestStationCode());
 			r.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
 					+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
 			r.setOhd(ohd);

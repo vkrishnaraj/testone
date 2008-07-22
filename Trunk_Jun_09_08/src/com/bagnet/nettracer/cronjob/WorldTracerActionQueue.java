@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
@@ -505,7 +506,7 @@ public class WorldTracerActionQueue extends Thread {
 						//System.out.println(TracerUtils.getStation(wtfwd
 						//		.getFwd_station_id()));
                        
-						this.sendmessage(TracerUtils.getStation(wtfwd
+						this.sendmessage(StationBMO.getStation(wtfwd
 								.getFwd_station_id()), "fwd", wtfwd
 								.getForwarding_agent(), "ok", "", "");
 
@@ -571,7 +572,7 @@ public class WorldTracerActionQueue extends Thread {
 								.getRoh_station_id()));
 						*/
 						tx = sess.beginTransaction();
-						this.sendmessage(TracerUtils.getStation(wtroh
+						this.sendmessage(StationBMO.getStation(wtroh
 								.getRoh_station_id()), "roh", wtroh
 								.getRoh_agent(), "ok", "", "");
 						/*
@@ -621,7 +622,7 @@ public class WorldTracerActionQueue extends Thread {
 					if (wttty != null) {
 
 						tx = sess.beginTransaction();
-						this.sendmessage(TracerUtils.getStation(wttty
+						this.sendmessage(StationBMO.getStation(wttty
 								.getTty_station_id()), "tty", wttty
 								.getTty_agent(), "ok", "", "");
 						/*

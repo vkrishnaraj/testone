@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -70,7 +71,7 @@ public class ManageMessage extends Action {
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
-			agent_station = AdminUtils.getStation((String) session.getAttribute("cbroStationID"));
+			agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 		} else {
 			agent_station = user.getStation();
 		}
@@ -244,7 +245,7 @@ public class ManageMessage extends Action {
 					Recipient recp = (Recipient) i.next();
 					recp.setMessage(msg);
 					if (recp.getStation_id() > 0) {
-						recp.setStation(AdminUtils.getStation("" + recp.getStation_id()));
+						recp.setStation(StationBMO.getStation("" + recp.getStation_id()));
 						newRecpList.add(recp);
 					} else {
 						if (recp.getStation_id() == -1) {

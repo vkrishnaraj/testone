@@ -5,6 +5,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.LzUtils"%>
 <script language="javascript">
   <!--
     function goprev() {
@@ -310,7 +311,7 @@
 		        		<% 
 		        			String value = "" + lz.getLz_ID();
 		        			String text = lz.getStation().getStationcode();
-		        			if (station.getLz().getLz_ID() == lz.getLz_ID()) {
+		        			if (station.getLz_ID() == lz.getLz_ID()) {
 		        		%>
 		        			<option value="<%=value %>" selected="selected"><%=text %></option>
 		        		<%

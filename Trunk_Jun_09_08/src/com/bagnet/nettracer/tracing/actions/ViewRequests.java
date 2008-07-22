@@ -18,11 +18,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -52,7 +52,7 @@ public class ViewRequests extends Action {
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
-			agent_station = AdminUtils.getStation((String) session.getAttribute("cbroStationID"));
+			agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 		} else {
 			agent_station = user.getStation();
 		}

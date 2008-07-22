@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -972,7 +972,7 @@ public class Incident implements Serializable {
 		Station ret = null;
 
 		if (this.getStationassigned() != null)
-			ret = AdminUtils.getStation("" + this.getStationassigned().getStation_ID());
+			ret = StationBMO.getStation("" + this.getStationassigned().getStation_ID());
 
 		return ret;
 	}

@@ -731,6 +731,7 @@
 				<include name="**/**/**/tracing/db/*.xml" />
 				<include name="**/**/**/tracing/resources/*.properties" />
 				<include name="**/**/**/tracing/utils/*.class" />
+				<include name="**/**/**/tracing/bmo/*.class" />
 			</fileset>
 		</copy>
 

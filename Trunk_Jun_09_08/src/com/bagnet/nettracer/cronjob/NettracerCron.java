@@ -8,16 +8,11 @@ package com.bagnet.nettracer.cronjob;
 import java.io.File;
 import java.util.Properties;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.hibernate.cfg.Configuration;
 
-import com.bagnet.nettracer.cronjob.archive.DataToBakThread;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
-import org.hibernate.Session;
 
 /**
  * @author Administrator
@@ -52,8 +47,8 @@ public class NettracerCron {
 		MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
 		mbrthread.start();
 
-		RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
-		rwtthread.start();
+		//RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
+		//rwtthread.start();
 
 		// MoveToWTThread wtthread = new MoveToWTThread(properties);
 		// wtthread.start();

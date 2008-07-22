@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -75,7 +76,7 @@ public final class ManageStation extends Action {
 
 		if ((request.getParameter("edit") != null &&  !request.getParameter("edit").equals(""))|| request.getParameter("addAgents") != null) {
 			String stationId = request.getParameter("stationId");
-			Station station = AdminUtils.getStation(stationId);
+			Station station = StationBMO.getStation(stationId);
 			dForm.set("stationId", "" + station.getStation_ID());
 			dForm.set("stationCode", station.getStationcode());
 			dForm.set("companyCode", station.getCompany().getCompanyCode_ID());
@@ -95,13 +96,13 @@ public final class ManageStation extends Action {
 			dForm.set("station_region", station.getStation_region());
 			dForm.set("station_region_mgr", station.getStation_region_mgr());
 			dForm.set("goal", Double.toString(station.getGoal()));
-			dForm.set("lz_id", Integer.toString(station.getLz().getLz_ID()));
+			dForm.set("lz_id", Integer.toString(station.getLz_ID()));
 			dForm.set("active", "" + station.isActive());
 			dForm.set("wt_stationcode", station.getWt_stationcode());
 			
 			if (station.getCompany().getVariable().getLz_mode() == 
 				TracingConstants.MOVETOLZ_MODE_ASSIGNMENT) {
-				request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans());
+				request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(station.getStationcode()));
 			}
 
 			//check if adding agents to this group
@@ -240,14 +241,14 @@ public final class ManageStation extends Action {
 		dForm.set("companyCode", companyCode);
 
 		if (request.getParameter("addNew") != null) {
-			List lzList = LzUtils.getIncidentLzStations();
+			List lzList = LzUtils.getIncidentLzStations(companyCode);
 			dForm.set("lz_id", "" + LzUtils.getDefaultLz(lzList));		
-			request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans());
+			request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(companyCode));
 			return mapping.findForward(TracingConstants.EDIT_STATION);
 		}
 
 		if (request.getParameter("addNewAgent") != null) {
-			Station station = AdminUtils.getStation(request.getParameter("stationId"));
+			Station station = StationBMO.getStation(request.getParameter("stationId"));
 
 			//Get the station List for the company.
 			List stationList = AdminUtils.getStations(dForm, station.getCompany().getCompanyCode_ID(), 0,
@@ -370,7 +371,7 @@ public final class ManageStation extends Action {
 					dForm.set("station_region", station.getStation_region());
 					dForm.set("station_region_mgr", station.getStation_region_mgr());
 					dForm.set("goal", Double.toString(station.getGoal()));
-					dForm.set("lz_id", Integer.toString(station.getLz().getStation().getStation_ID()));
+					dForm.set("lz_id", station.getLz_ID());
 					dForm.set("wt_stationcode", station.getWt_stationcode());
 				}
 
@@ -380,7 +381,7 @@ public final class ManageStation extends Action {
 
 		if (request.getParameter("delete1") != null && !request.getParameter("delete1").equals("")) {
 			String stationId = request.getParameter("stationId");
-			Station station = AdminUtils.getStation(stationId);
+			Station station = StationBMO.getStation(stationId);
 
 			ActionMessage error = null;
 			if (TracerUtils.getAgentlist(station.getStation_ID()).size() > 0) error = new ActionMessage("error.deleting.station.agent");
@@ -415,7 +416,7 @@ public final class ManageStation extends Action {
 			String stationId = request.getParameter("stationId");
 			Station s;
 			if (stationId != null && !stationId.equals("")) {
-				s = AdminUtils.getStation(stationId);
+				s = StationBMO.getStation(stationId);
 			} else {
 				s = new Station();	
 			}
@@ -435,7 +436,7 @@ public final class ManageStation extends Action {
 			s.setAssociated_airport((String) dForm.get("associated_airport"));
 			s.setStation_region((String) dForm.get("station_region"));
 			s.setStation_region_mgr((String) dForm.get("station_region_mgr"));
-			s.setLz(LzUtils.getLz(Integer.parseInt((String) dForm.get("lz_id"))));
+			s.setLz_ID(Integer.parseInt((String) dForm.get("lz_id")));
 			s.setWt_stationcode((String) dForm.get("wt_stationcode"));
 			
 			try {
