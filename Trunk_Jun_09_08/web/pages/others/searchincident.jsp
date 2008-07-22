@@ -317,11 +317,17 @@ function gopage(i) {
                       <bean:message key="colname.pass_name" />
                     </b>
                   </td>
+                  <%
+                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                 %>
                   <td>
                   	<b>
                   		<bean:message key="colname.worldtracer_id"/>
                   	</b>
                   </td>
+                  <%
+                	}
+                  %>
                 </tr>
                 <logic:iterate id="results" name="resultlist" type="com.bagnet.nettracer.tracing.db.Incident">
                   <bean:define id="items" name="results" property="itemlist" />
@@ -411,6 +417,9 @@ function gopage(i) {
                       </logic:iterate>
                       &nbsp;
                     </td>
+                    <%
+                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                    %>
                     <td>
                      	<logic:empty name="results" property="wt_id">
                             &nbsp;
@@ -419,6 +428,9 @@ function gopage(i) {
                         	 <bean:write name="results" property="wt_id" />
                         </logic:notEmpty>
                     </td>
+                    <%
+                	}
+                    %>
                   </tr>
                 </logic:iterate>
                 <tr>

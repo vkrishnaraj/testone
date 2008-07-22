@@ -268,11 +268,17 @@ function gopage(i) {
                     <bean:message key="colname.name" />
                   </strong>
                 </td>
+                <%
+                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                %>
                 <td>
                 	<strong>
                 		<bean:message key="colname.worldtracer_id"/>
                 	</strong>
                 </td>
+                <%
+                	}
+                %>
                 <td>
                   <strong>
                     <bean:message key="colname.requestOhd" />
@@ -338,6 +344,9 @@ function gopage(i) {
                       &nbsp;
                     </logic:empty>
                   </td>
+                   <%
+                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                   %>
                   <td>
                   	<logic:empty name="ohd" property="wt_id">
                   		&nbsp;
@@ -346,6 +355,9 @@ function gopage(i) {
                   		<bean:write name="ohd" property="wt_id"/>
                   	</logic:notEmpty>
                   </td>
+                  <%
+                	}
+                  %>
                   <logic:equal name="ohd" property="status.status_ID" value="<%= "" + TracingConstants.OHD_STATUS_OPEN %>">
                     <td>
 <%
