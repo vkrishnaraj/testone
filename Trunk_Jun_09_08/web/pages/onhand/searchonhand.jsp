@@ -269,6 +269,11 @@ function gopage(i) {
                   </strong>
                 </td>
                 <td>
+                	<strong>
+                		<bean:message key="colname.worldtracer_id"/>
+                	</strong>
+                </td>
+                <td>
                   <strong>
                     <bean:message key="colname.requestOhd" />
                   </strong>
@@ -332,6 +337,14 @@ function gopage(i) {
                     <logic:empty name="ohd" property="passenger">
                       &nbsp;
                     </logic:empty>
+                  </td>
+                  <td>
+                  	<logic:empty name="ohd" property="wt_id">
+                  		&nbsp;
+                  	</logic:empty>
+                  	<logic:notEmpty name="ohd" property="wt_id">
+                  		<bean:write name="ohd" property="wt_id"/>
+                  	</logic:notEmpty>
                   </td>
                   <logic:equal name="ohd" property="status.status_ID" value="<%= "" + TracingConstants.OHD_STATUS_OPEN %>">
                     <td>
