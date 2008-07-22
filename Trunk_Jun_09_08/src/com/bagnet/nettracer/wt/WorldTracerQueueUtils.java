@@ -55,6 +55,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
 import com.bagnet.nettracer.tracing.forms.WorldTracerTTYForm;
+import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.BillingUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -161,7 +162,35 @@ public class WorldTracerQueueUtils {
 			if (sess != null) sess.close();
 		}
 	}
-	
+	public static boolean saveBdoobj(BDOForm theform,WT_Queue obj, Agent user) throws Exception {
+		
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			//Figure out if new or old.
+			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
+			if (isNew) {
+				sess.save(obj);
+			} else {
+				sess.saveOrUpdate(obj);
+			}
+
+
+
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+				return false;
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
 	public  boolean saveWtobj(WT_Queue obj, Agent user) throws Exception {
 		
 		Session sess = null;
