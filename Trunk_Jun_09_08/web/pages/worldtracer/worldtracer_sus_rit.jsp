@@ -73,8 +73,6 @@ function filePartSuspend()
 		<div id="maincontent">
 		<h1 class="green"><bean:message key="colname.worldtracer_sus_rit" />
 	    </h1>
-		
-	
 	<table class="form2" cellspacing="0" cellpadding="0">
 
 		<tr>

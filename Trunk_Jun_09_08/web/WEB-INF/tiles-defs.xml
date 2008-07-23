@@ -235,6 +235,9 @@
         <put name="center" value="/pages/worldtracer/worldtracer_tty_main.jsp"/>
     </definition>
     
+    <definition name="view_worldtracer_sus_rit" extends="user_menu">
+        <put name="center" value="/pages/worldtracer/worldtracer_sus_rit.jsp"/>
+    </definition>
     <definition name="forward_wt_bag_success" extends="user_menu">
     	<put name="center" value="/pages/worldtracer/forward_wt_bag_success.jsp"/>
     </definition>
@@ -573,7 +576,6 @@
 	
 	<definition name="pass_view_only" path="/pages/passengerview/passengerview.jsp">
     </definition> 
-    <definition name="suspend_rit" path="/pages/worldtracer/worldtracer_sus_rit.jsp">
-    </definition> 
+
 	
  </tiles-definitions>
