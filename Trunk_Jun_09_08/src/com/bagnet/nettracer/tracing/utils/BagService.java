@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.MessageResources;
@@ -35,7 +34,6 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -92,10 +90,7 @@ import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
 import com.bagnet.nettracer.tracing.forms.SearchOnHandForm;
-import com.bagnet.nettracer.wt.WTIncident;
-import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
  * @author Matt
@@ -170,7 +165,7 @@ public class BagService {
 			Remark r = new Remark();
 			r.setAgent(user);
 			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-			Station station = StationBMO.getStation("" + log.getDestStationCode());
+			Station station = AdminUtils.getStation("" + log.getDestStationCode());
 			r.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
 					+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
 			r.setOhd(ohd);

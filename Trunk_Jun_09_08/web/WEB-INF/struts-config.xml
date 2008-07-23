@@ -4,883 +4,877 @@
           "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
           "http://struts.apache.org/dtds/struts-config_1_2.dtd">
 <struts-config>
-  <!-- ========== Form Bean Definitions =================================== -->
-  <form-beans>
-	    <form-bean name="logonForm" 								type="org.apache.struts.validator.DynaValidatorForm">
-	    	<form-property name="username" 	type="java.lang.String"/>
-	    	<form-property name="password" 	type="java.lang.String"/>
-	  	</form-bean>
-	  	<form-bean name="passresetForm" 								type="org.apache.struts.validator.DynaValidatorForm">
-	    	<form-property name="password1" 	type="java.lang.String"/>
-	    	<form-property name="password2" 	type="java.lang.String"/>
-	  	</form-bean>
-		 	<form-bean name="incidentForm" 							type="com.bagnet.nettracer.tracing.forms.IncidentForm"/> 
-		 	<form-bean name="forwardOnHandForm" 				type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm"/> 
-		 	<form-bean name="forwardMessageForm" 				type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm"/>	
-			<form-bean name="searchIncidentForm" 				type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"/>
-		  <form-bean name="searchOnHandForm" 					type="com.bagnet.nettracer.tracing.forms.SearchOnHandForm"/>
-			<form-bean name="activeTracingForm" 				type="com.bagnet.nettracer.tracing.forms.ActiveTracingForm"/>
-		 	<form-bean name="OnHandForm" 						type="com.bagnet.nettracer.tracing.forms.OnHandForm"/> 
-			<form-bean name="requestOnHandForm"  				type="com.bagnet.nettracer.tracing.forms.RequestOnHandForm"/>
-			<form-bean name="composeForm"  							type="com.bagnet.nettracer.tracing.forms.ComposeForm"/>
-			<form-bean name="taskForm" 		 							type="com.bagnet.nettracer.tracing.forms.TaskForm"/>
-			<form-bean name="viewMatchForm"  						type="com.bagnet.nettracer.tracing.forms.ViewMatchForm"/>
-			<form-bean name="viewRequestForm"  					type="com.bagnet.nettracer.tracing.forms.ViewRequestForm"/>	
-			<form-bean name="viewCreatedRequestForm"  	type="com.bagnet.nettracer.tracing.forms.ViewCreatedRequestForm"/>
-			<form-bean name="viewIncomingRequestForm" 	type="com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm"/>	
-			<form-bean name="viewOHDLZedForm"  					type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm"/>	
-			<form-bean name="claimForm" 								type="com.bagnet.nettracer.tracing.forms.ClaimForm"/>
-			<form-bean name="claimToBeProcessedForm" 		type="com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm"/> 
-			<form-bean name="claimProrateForm" 					type="com.bagnet.nettracer.tracing.forms.ClaimProrateForm"/> 
-		 	<form-bean name="statReportForm" 						type="com.bagnet.nettracer.tracing.forms.StatReportForm"/>
-		 	<form-bean name="deliverForm" 							type="com.bagnet.nettracer.tracing.forms.DeliverForm"/>
-		  <form-bean name="viewMassOnHandsForm" 			type="com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm"/>
-		  <form-bean name="viewTemporaryOnHandsForm" 	type="com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm"/>
-		  <form-bean name="viewTemporaryReportsForm"	type="com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm"/>
-		  <form-bean name="LostAndFoundForm"					type="com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm"/>
-		  <form-bean name="searchLostAndFoundForm"		type="com.bagnet.nettracer.tracing.forms.SearchLostFoundForm"/>
-			<form-bean name="UserActivityForm"					type="com.bagnet.nettracer.tracing.forms.UserActivityForm"/>
-			<form-bean name="BDOForm"										type="com.bagnet.nettracer.tracing.forms.BDOForm"/>
-			<form-bean name="MaintainDeliveryCompanyForm"	type="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm"/>
-			<form-bean name="companyForm"	type="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"/>
-			<form-bean name="agentForm" 								type="org.apache.struts.validator.DynaValidatorForm">
-				<form-property name="agentSearchName"		type="java.lang.String"/>
-				<form-property name="agentSearchFName"		type="java.lang.String"/>
-				<form-property name="agentSearchLName"		type="java.lang.String"/>
-				<form-property name="agent_id"					type="java.lang.String"/>
-				<form-property name="station_id"				type="java.lang.String"/>
-				<form-property name="group_id"					type="java.lang.String"/>
-				<form-property name="shift_id"					type="java.lang.String"/>
-				<form-property name="companyCode"				type="java.lang.String"/>
-				<form-property name="fname"							type="java.lang.String"/>
-				<form-property name="mname"							type="java.lang.String"/>
-				<form-property name="lname"							type="java.lang.String"/>
-				<form-property name="timeout"						type="java.lang.String"/>
-				<form-property name="username"					type="java.lang.String"/>
-				<form-property name="password"					type="java.lang.String"/>
-				<form-property name="password2"					type="java.lang.String"/>
-				<form-property name="passwordChanged"			type="java.lang.String"/>
-				<form-property name="resetPassword"				type="java.lang.String"/>
-				<form-property name="accountLocked"				type="java.lang.String"/>
-				<form-property name="active"						type="java.lang.String"/>
-				<form-property name="defLocale"					type="java.lang.String"/>
-				<form-property name="currLocale"				type="java.lang.String"/>
-				<form-property name="defCurrency" 			type="java.lang.String"/>
-				<form-property name="dateFormat"				type="java.lang.String"/>
-				<form-property name="timeFormat"				type="java.lang.String"/>
-			  	<form-property name="currentTimezone"		type="java.lang.String"/>
-			  	<form-property name="defaultTimezone"		type="java.lang.String"/>	
-				<form-property name="agentType"				type="java.lang.String"/>
-				<form-property name="web_enabled"			type="java.lang.String"/>
-				<form-property name="ws_enabled"			type="java.lang.String"/>
-			</form-bean>
-		 	<form-bean name="groupForm" 					type="org.apache.struts.validator.DynaValidatorForm">
-		 		<form-property name="groupSearchName"			type="java.lang.String"/> 
-				<form-property name="station_id"			type="java.lang.String"/>    
-				<form-property name="groupID"					type="java.lang.String"/>    
-				<form-property name="groupName"				type="java.lang.String"/>    
-				<form-property name="groupDesc"				type="java.lang.String"/>    
-				<form-property name="companyCode"			type="java.lang.String"/>
-		 	</form-bean>
-			<form-bean name="componentForm" 			type="org.apache.struts.validator.DynaValidatorForm"/>
-			<form-bean name="stationForm" 				type="org.apache.struts.validator.DynaValidatorForm">
-				<form-property name="stationSearchName"	type="java.lang.String"/>
-				<form-property name="station_id"				type="java.lang.String"/>
-				<form-property name="stationId"					type="java.lang.String"/>
-				<form-property name="companyCode"				type="java.lang.String"/>
-				<form-property name="stationCode"				type="java.lang.String"/>
-				<form-property name="stationDesc"				type="java.lang.String"/>
-				<form-property name="locale"						type="java.lang.String"/>
-				<form-property name="addr1"							type="java.lang.String"/>
-				<form-property name="addr2"							type="java.lang.String"/>
-				<form-property name="city"							type="java.lang.String"/>
-				<form-property name="state_ID"					type="java.lang.String"/>
-				<form-property name="countrycode_ID" 		type="java.lang.String"/>
-				<form-property name="zip" 							type="java.lang.String"/>
-				<form-property name="phone" 						type="java.lang.String"/>
-				<form-property name="operation_hours" 	type="java.lang.String"/>
-				<form-property name="airport_location" 	type="java.lang.String"/>
-				<form-property name="associated_airport" type="java.lang.String"/>
-				<form-property name="station_region" type="java.lang.String"/>
-				<form-property name="station_region_mgr" type="java.lang.String"/>
-				<form-property name="goal" type="java.lang.String"/>
-				<form-property name="lz_id"				type="java.lang.String"/>
-				<form-property name="active"			type="java.lang.String"/>
-				<form-property name="wt_stationcode"    type="java.lang.String"/>
-			</form-bean>
-			<form-bean name="shiftForm" 								type="org.apache.struts.validator.DynaValidatorForm">
-				<form-property name="shiftSearchName"		type="java.lang.String"/>
-				<form-property name="shift_code"				type="java.lang.String"/>
-				<form-property name="shift_description"	type="java.lang.String"/>
-				<form-property name="companycode_ID"		type="java.lang.String"/>
-				<form-property name="locale"						type="java.lang.String"/>
-			</form-bean>
-			<form-bean name="airportForm" 					type="org.apache.struts.validator.DynaValidatorForm">
-				<form-property name="airport_ID"			type="java.lang.String"/>
-				<form-property name="airportSearchName"		type="java.lang.String"/>
-				<form-property name="airport_code"			type="java.lang.String"/>
-				<form-property name="airport_description"	type="java.lang.String"/>
-				<form-property name="companycode_ID"		type="java.lang.String"/>
-				<form-property name="locale"				type="java.lang.String"/>
-				<form-property name="airport_country"		type="java.lang.String"/>
-			</form-bean>
-			<form-bean name="codeForm" 						type="org.apache.struts.validator.DynaValidatorForm">
-				<form-property name="codeSearchName"	type="java.lang.String"/>
-				<form-property name="code_id"					type="java.lang.String"/>
-				<form-property name="report_type"			type="java.lang.String"/>
-				<form-property name="loss_code"				type="java.lang.String"/>
-				<form-property name="description"			type="java.lang.String"/>
-				<form-property name="companycode_ID"	type="java.lang.String"/>
-				<form-property name="locale"					type="java.lang.String"/>
-			</form-bean>
-			<form-bean name="searchBDOForm" 				type="com.bagnet.nettracer.tracing.forms.SearchBDOForm"/>
-			<form-bean name="auditOHDForm" 					type="com.bagnet.nettracer.tracing.forms.audit.AuditOnHandForm"/>
-			<form-bean name="auditLostFoundForm" 		type="com.bagnet.nettracer.tracing.forms.audit.AuditLostFoundForm"/>
-			<form-bean name="auditAgentForm" 				type="com.bagnet.nettracer.tracing.forms.audit.AuditAgentForm"/>
-			<form-bean name="auditGroupForm" 				type="com.bagnet.nettracer.tracing.forms.audit.AuditGroupForm"/>
-			<form-bean name="auditLosscodeForm" 		type="com.bagnet.nettracer.tracing.forms.audit.AuditLosscodeForm"/>
-			<form-bean name="auditCompanyForm" 			type="com.bagnet.nettracer.tracing.forms.audit.AuditCompanyForm"/>
-			<form-bean name="auditStationForm" 			type="com.bagnet.nettracer.tracing.forms.audit.AuditStationForm"/>
-			<form-bean name="auditWorkShiftForm" 		type="com.bagnet.nettracer.tracing.forms.audit.AuditWorkShiftForm"/>
-			<form-bean name="auditAirportForm" 			type="com.bagnet.nettracer.tracing.forms.audit.AuditAirportForm"/>
-			<form-bean name="auditMBRForm" 					type="com.bagnet.nettracer.tracing.forms.audit.AuditMBRForm"/>
-			<form-bean name="auditForm" 						type="com.bagnet.nettracer.tracing.forms.audit.AuditForm"/>
-			<form-bean name="interimExpenseRequestForm" type="com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm"/>
-			<form-bean name="createdInterimExpenseForm" type="com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm"/>
-			<form-bean name="billingForm" 					type="com.bagnet.nettracer.tracing.forms.BillingForm"/>
-			
+	<!-- ========== Form Bean Definitions =================================== -->
+	<form-beans>
+		<form-bean name="logonForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="username" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="passresetForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="password1" type="java.lang.String" />
+			<form-property name="password2" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="incidentForm"
+			type="com.bagnet.nettracer.tracing.forms.IncidentForm" />
+		<form-bean name="forwardOnHandForm"
+			type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
+		<form-bean name="forwardMessageForm"
+			type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
+		<form-bean name="searchIncidentForm"
+			type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm" />
+		<form-bean name="searchOnHandForm"
+			type="com.bagnet.nettracer.tracing.forms.SearchOnHandForm" />
+		<form-bean name="activeTracingForm"
+			type="com.bagnet.nettracer.tracing.forms.ActiveTracingForm" />
+		<form-bean name="OnHandForm"
+			type="com.bagnet.nettracer.tracing.forms.OnHandForm" />
+		<form-bean name="requestOnHandForm"
+			type="com.bagnet.nettracer.tracing.forms.RequestOnHandForm" />
+		<form-bean name="composeForm"
+			type="com.bagnet.nettracer.tracing.forms.ComposeForm" />
+		<form-bean name="taskForm"
+			type="com.bagnet.nettracer.tracing.forms.TaskForm" />
+		<form-bean name="viewMatchForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewMatchForm" />
+		<form-bean name="viewRequestForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewRequestForm" />
+		<form-bean name="viewCreatedRequestForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewCreatedRequestForm" />
+		<form-bean name="viewIncomingRequestForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm" />
+		<form-bean name="viewOHDLZedForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm" />
+		<form-bean name="claimForm"
+			type="com.bagnet.nettracer.tracing.forms.ClaimForm" />
+		<form-bean name="claimToBeProcessedForm"
+			type="com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm" />
+		<form-bean name="claimProrateForm"
+			type="com.bagnet.nettracer.tracing.forms.ClaimProrateForm" />
+		<form-bean name="statReportForm"
+			type="com.bagnet.nettracer.tracing.forms.StatReportForm" />
+		<form-bean name="deliverForm"
+			type="com.bagnet.nettracer.tracing.forms.DeliverForm" />
+		<form-bean name="viewMassOnHandsForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm" />
+		<form-bean name="viewTemporaryOnHandsForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm" />
+		<form-bean name="viewTemporaryReportsForm"
+			type="com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm" />
+		<form-bean name="LostAndFoundForm"
+			type="com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm" />
+		<form-bean name="searchLostAndFoundForm"
+			type="com.bagnet.nettracer.tracing.forms.SearchLostFoundForm" />
+		<form-bean name="UserActivityForm"
+			type="com.bagnet.nettracer.tracing.forms.UserActivityForm" />
+		<form-bean name="BDOForm"
+			type="com.bagnet.nettracer.tracing.forms.BDOForm" />
+		<form-bean name="MaintainDeliveryCompanyForm"
+			type="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm" />
+		<form-bean name="companyForm"
+			type="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm" />
+		<form-bean name="agentForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="agentSearchName"
+				type="java.lang.String" />
+			<form-property name="agentSearchFName"
+				type="java.lang.String" />
+			<form-property name="agentSearchLName"
+				type="java.lang.String" />
+			<form-property name="agent_id" type="java.lang.String" />
+			<form-property name="station_id" type="java.lang.String" />
+			<form-property name="group_id" type="java.lang.String" />
+			<form-property name="shift_id" type="java.lang.String" />
+			<form-property name="companyCode" type="java.lang.String" />
+			<form-property name="fname" type="java.lang.String" />
+			<form-property name="mname" type="java.lang.String" />
+			<form-property name="lname" type="java.lang.String" />
+			<form-property name="timeout" type="java.lang.String" />
+			<form-property name="username" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+			<form-property name="password2" type="java.lang.String" />
+			<form-property name="passwordChanged"
+				type="java.lang.String" />
+			<form-property name="resetPassword" type="java.lang.String" />
+			<form-property name="accountLocked" type="java.lang.String" />
+			<form-property name="active" type="java.lang.String" />
+			<form-property name="defLocale" type="java.lang.String" />
+			<form-property name="currLocale" type="java.lang.String" />
+			<form-property name="defCurrency" type="java.lang.String" />
+			<form-property name="dateFormat" type="java.lang.String" />
+			<form-property name="timeFormat" type="java.lang.String" />
+			<form-property name="currentTimezone"
+				type="java.lang.String" />
+			<form-property name="defaultTimezone"
+				type="java.lang.String" />
+			<form-property name="agentType" type="java.lang.String" />
+			<form-property name="web_enabled" type="java.lang.String" />
+			<form-property name="ws_enabled" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="groupForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="groupSearchName"
+				type="java.lang.String" />
+			<form-property name="station_id" type="java.lang.String" />
+			<form-property name="groupID" type="java.lang.String" />
+			<form-property name="groupName" type="java.lang.String" />
+			<form-property name="groupDesc" type="java.lang.String" />
+			<form-property name="companyCode" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="componentForm"
+			type="org.apache.struts.validator.DynaValidatorForm" />
+		<form-bean name="stationForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="stationSearchName"
+				type="java.lang.String" />
+			<form-property name="station_id" type="java.lang.String" />
+			<form-property name="stationId" type="java.lang.String" />
+			<form-property name="companyCode" type="java.lang.String" />
+			<form-property name="stationCode" type="java.lang.String" />
+			<form-property name="stationDesc" type="java.lang.String" />
+			<form-property name="locale" type="java.lang.String" />
+			<form-property name="addr1" type="java.lang.String" />
+			<form-property name="addr2" type="java.lang.String" />
+			<form-property name="city" type="java.lang.String" />
+			<form-property name="state_ID" type="java.lang.String" />
+			<form-property name="countrycode_ID"
+				type="java.lang.String" />
+			<form-property name="zip" type="java.lang.String" />
+			<form-property name="phone" type="java.lang.String" />
+			<form-property name="operation_hours"
+				type="java.lang.String" />
+			<form-property name="airport_location"
+				type="java.lang.String" />
+			<form-property name="associated_airport"
+				type="java.lang.String" />
+			<form-property name="station_region"
+				type="java.lang.String" />
+			<form-property name="station_region_mgr"
+				type="java.lang.String" />
+			<form-property name="goal" type="java.lang.String" />
+			<form-property name="lz_id" type="java.lang.String" />
+			<form-property name="active" type="java.lang.String" />
+			<form-property name="wt_stationcode"
+				type="java.lang.String" />
+		</form-bean>
+		<form-bean name="shiftForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="shiftSearchName"
+				type="java.lang.String" />
+			<form-property name="shift_code" type="java.lang.String" />
+			<form-property name="shift_description"
+				type="java.lang.String" />
+			<form-property name="companycode_ID"
+				type="java.lang.String" />
+			<form-property name="locale" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="airportForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="airport_ID" type="java.lang.String" />
+			<form-property name="airportSearchName"
+				type="java.lang.String" />
+			<form-property name="airport_code" type="java.lang.String" />
+			<form-property name="airport_description"
+				type="java.lang.String" />
+			<form-property name="companycode_ID"
+				type="java.lang.String" />
+			<form-property name="locale" type="java.lang.String" />
+			<form-property name="airport_country"
+				type="java.lang.String" />
+		</form-bean>
+		<form-bean name="codeForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="codeSearchName"
+				type="java.lang.String" />
+			<form-property name="code_id" type="java.lang.String" />
+			<form-property name="report_type" type="java.lang.String" />
+			<form-property name="loss_code" type="java.lang.String" />
+			<form-property name="description" type="java.lang.String" />
+			<form-property name="companycode_ID"
+				type="java.lang.String" />
+			<form-property name="locale" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="searchBDOForm"
+			type="com.bagnet.nettracer.tracing.forms.SearchBDOForm" />
+		<form-bean name="auditOHDForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditOnHandForm" />
+		<form-bean name="auditLostFoundForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditLostFoundForm" />
+		<form-bean name="auditAgentForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditAgentForm" />
+		<form-bean name="auditGroupForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditGroupForm" />
+		<form-bean name="auditLosscodeForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditLosscodeForm" />
+		<form-bean name="auditCompanyForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditCompanyForm" />
+		<form-bean name="auditStationForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditStationForm" />
+		<form-bean name="auditWorkShiftForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditWorkShiftForm" />
+		<form-bean name="auditAirportForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditAirportForm" />
+		<form-bean name="auditMBRForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditMBRForm" />
+		<form-bean name="auditForm"
+			type="com.bagnet.nettracer.tracing.forms.audit.AuditForm" />
+		<form-bean name="interimExpenseRequestForm"
+			type="com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm" />
+		<form-bean name="createdInterimExpenseForm"
+			type="com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm" />
+		<form-bean name="billingForm"
+			type="com.bagnet.nettracer.tracing.forms.BillingForm" />
 
-			<form-bean name="worldtracerafForm" type="org.apache.struts.validator.DynaValidatorForm">
-	    		<form-property name="username" 	type="java.lang.String"/>
-	    		<form-property name="password" 	type="java.lang.String"/>
-	  		</form-bean>
-	  		
-	  		<form-bean name="worldTracerFWDForm" 				type="com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm"/> 
-	  		<form-bean name="worldTracerROHForm" 				type="org.apache.struts.validator.DynaValidatorForm"> 
-	  			<form-property name="wt_ahl_id" 	type="java.lang.String"/>
-	  			<form-property name="wt_ohd_id" 	type="java.lang.String"/>
-	  			<form-property name="fi" 	type="java.lang.String"/>
-		  		<form-property name="ag" 	type="java.lang.String"/>
-		  		<form-property name="teletype_address1" 	type="java.lang.String"/>
-	  			<form-property name="teletype_address2" 	type="java.lang.String"/>
-	  			<form-property name="teletype_address3" 	type="java.lang.String"/>
-		  		<form-property name="teletype_address4" 	type="java.lang.String"/>
-		  		<form-property name="lname" 	type="java.lang.String"/>
-	  		</form-bean>
-	  	
-	  	    <form-bean name="worldTracerTTYForm"                type="com.bagnet.nettracer.tracing.forms.WorldTracerTTYForm"/>
-	  	
-		</form-beans>
-    <!-- global exception -->
-  <global-exceptions>
-  	<exception
-    handler="com.bagnet.nettracer.tracing.actions.CustomizedExceptionHandler"
-    key="timeout.error.message"
-    path="/index.jsp"
-    scope="request"
-    type="java.lang.IllegalArgumentException"/>
-    
-    
-  </global-exceptions>
-  
-  <!-- ========== Global Forward Definitions ============================== -->
-  <global-forwards>
-    <forward	name="logoff"												path="/logoff.do"/>
-    <forward	name="logon"												path="homepage"/>
-    <forward	name="passreset"											path="pass_reset"/>
-    <forward	name="success"											path="user_menu"/>
-    <forward	name="error"												path="error_page"/>
-    <forward	name="insertsuccess"								path="insert_success"/>
-    <forward	name="searchincident"								path="search_incident"/>
-    <forward	name="searchOnHand"									path="search_onhand"/>
-    <forward	name="customquery"									path="custom_query"/>
-    <forward	name="activetracing"								path="active_tracing"/>
-    <forward	name="ldmain"												path="lostdelay"/>
-    <forward	name="missingmain"									path="missing_articles"/>
-    <forward	name="damagedmain"									path="damagedbag"/>
-    <forward	name="ldclose"											path="ld_close"/>
-    <forward	name="maclose"											path="ma_close"/>
-    <forward	name="damagedclose"									path="damaged_close"/>
-    <forward	name="viewohdmain"									path="viewonhandbag"/>    
-    <forward	name="ohdmain"											path="onhandbag"/>    
-    <forward	name="ohdhistorical"								path="ohd_historical"/>
-    <forward	name="foundhistorical"							path="found_historical"/>
-    <forward	name="losthistorical"								path="lost_historical"/>
-    <forward	name="mahistorical"									path="ma_historical"/>
-    <forward	name="ldhistorical"									path="ld_historical"/>
-    <forward	name="damagedhistorical"						path="damaged_historical"/>    
-    <forward	name="insertonhandsuccess" 					path="insert_onhand_success"/>
-    <forward	name="massonhandsuccess"						path="mass_onhand_success"/>
-		<forward	name="claimmain"										path="claim_resolution"/>
-		<forward	name="claimprorate"									path="claim_prorate"/>
-		<forward	name="claimactivity"								path="claim_activity"/>
-		<forward 	name="forwardonhandsuccess" 				path="forward_onhandsuccess"/>
-		<forward 	name="forwardwtbagsuccess" 				    path="forward_wt_bag_success"/>
-		<forward    name="sendwtttysuccess"                     path="send_wt_tty_success"/>
-		<forward    name="sendwtrohsuccess"                     path="send_wt_roh_success"/>
-		<forward 	name="requestonhandsuccess" 				path="request_onhandsuccess"/>
-		<forward 	name="denyrequestonhand" 						path="deny_roh"/>
-		<forward 	name="enterforwardonhand"						path="enter_forwardonhand"/>
-		<forward 	name="enterforwardmessage" 					path="enter_forwardmessage"/>
-		<forward 	name="enterrequestonhand" 					path="enter_requestonhand"/>
-		<forward	name="errorforwardonhand"						path="error_forwardonhand"/>
-		<forward 	name="inbox"												path="user_mailbox"/>
-		<forward	name="reportmain"										path="report_options"/>
-		<forward	name="viewtasks"										path="view_tasks"/>
-		<forward 	name="viewmatches"									path="view_matches"/>
-		<forward 	name="viewmatch"										path="view_match"/>
-		<forward 	name="receiptparams"								path="receipt_params"/>
-		<forward 	name="viewrequests"									path="view_requests"/>
-		<forward 	name="viewcreatedrequests"					path="view_created_requests"/>
-		<forward 	name="viewincomingbags"							path="view_incoming_bags"/>
-		<forward 	name="viewincomingincidents"				path="view_incoming_incidents"/>
-		
-		<forward 	name="viewworldtraceractionfiles"			path="view_worldtraceractionfiles"/>
-		<forward 	name="viewworldtracerafviewraw"			    path="view_worldtracerafviewraw"/>
-		<forward 	name="viewworldtracerfwd"					path="view_worldtracerfwd"/>
-		<forward 	name="viewworldtracerroh"					path="view_worldtracerroh"/>
-		<forward    name="viewworldtracertty"                   path="view_worldtracertty"/>
-		
-		<forward 	name="viewohdlzed"									path="view_ohdlzed"/>
-		<forward 	name="editcomponent"								path="edit_component"/>	
-		<forward 	name="viewComponent"								path="view_components"/>
-		<forward 	name="editcompany"									path="edit_company"/>
-		<forward 	name="editself"											path="edit_self"/>
-		<forward 	name="viewcompanies"								path="view_companies"/>
-		<forward 	name="editshift"										path="edit_shift"/>
-		<forward 	name="editairport"									path="edit_airport"/>
-		<forward 	name="editcode"											path="edit_code"/>
-		<forward 	name="viewcodes"										path="view_codes"/>
-		<forward 	name="viewshifts"										path="view_shift"/>
-		<forward 	name="viewairports"									path="view_airport"/>
-		<forward 	name="editstation"									path="edit_station"/>
-		<forward 	name="viewstations"									path="view_station"/>
-		<forward 	name="viewSystemComponents"					path="view_system_component"/>
-		<forward 	name="editagent"										path="edit_agent"/>
-		<forward 	name="viewagents"										path="view_agents"/>
-		<forward 	name="viewdeliverycompanies"							path="view_deliverycompany"/>
-		<forward 	name="editdeliverycompany"							path="edit_deliverycompany"/>	
-		<forward 	name="editservicelevels"							path="edit_servicelevel"/>
-		<forward 	name="viewtask"											path="view_task"/>
-		<forward 	name="forwarderror"									path="forward_error"/>
-		<forward 	name="composemessage"								path="compose_message"/>
-		<forward 	name="viewmessages"									path="view_messages"/>	
-		<forward 	name="viewmessage"									path="view_message"/>
-		<forward 	name="view_request_details"					path="view_rqst_details"/>
-		<forward 	name="view_forward_details"					path="view_fwd_details"/>
-		<forward 	name="editagentgroup"								path="edit_agent_group"/>
-		<forward 	name="editagentstation"							path="edit_agent_station"/>
-		<forward 	name="ohdquickmain"									path="ohd_quick_main"/>
-		<forward 	name="ohdmassmain"									path="ohd_mass_main"/>
-		<forward 	name="claimslist"										path="claims_list"/>
-		<forward 	name="selfupdatesuccess"						path="selfupdate_success"/>
-		<forward 	name="deliveryList"									path="delivery_list"/>
-		<forward 	name="viewtempohd"									path="viewtemp_ohd"/>
-		<forward 	name="viewtempreports"							path="viewtemp_reports"/>
-		<forward 	name="viewmassohd"									path="viewmass_ohd"/>
-		<forward	name="lostfound"										path="lost_found"/>
-		<forward	name="lostfound_success"						path="lost_found_success"/>
-		<forward	name="searchlostfound"							path="search_lostfound"/>
-		<forward	name="passview"											path="pass_view_only"/>
-		<forward	name="closeonhandsuccess"						path="close_onhandsuccess"/>
-		<forward	name="expensepayoutapprovedsuccess"	path="expense_payoutapprovedsuccess"/>
-		<forward	name="expensepayoutdeniedsuccess"		path="expense_payoutdeniedsuccess"/>
-		<forward	name="bdo"													path="bdo_page"/>
-		<forward	name="searchbdo"										path="search_bdo"/>
-		<forward	name="nopermission"									path="no_permission"/>
-		<forward	name="viewloggedagents"							path="view_loggedagents"/>
-		
-		<forward	name="interimexpenserequest"				path="interim_expenserequest"/>
-		<forward	name="createdinterimexpenserequest"	path="created_interimexpenserequest"/>
 
-		<forward	name="auditOnHand"									path="audit_OnHand"/>
-		<forward	name="auditOnHandDetail"						path="audit_OnHandDetail"/>
-		<forward	name="auditOnHandCompareDetail"			path="audit_OnHandCompareDetail"/>
-		
-		<forward	name="auditLostFound"								path="audit_LostFound"/>
-		<forward	name="auditLostFoundDetail"					path="audit_LostFoundDetail"/>
-		<forward	name="auditLostFoundCompareDetail"	path="audit_LostFoundCompareDetail"/>
-	
-		<forward	name="auditOptions"										path="audit_Options"/>
+		<form-bean name="worldtracerafForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="username" type="java.lang.String" />
+			<form-property name="password" type="java.lang.String" />
+		</form-bean>
 
-		<forward	name="auditAgent"										path="audit_Agent"/>
-		<forward	name="auditAgentDetail"							path="audit_AgentDetail"/>
-		<forward	name="auditAgentCompareDetail"			path="audit_AgentCompareDetail"/>
-	
-		<forward	name="auditGroup"										path="audit_Group"/>
-		<forward	name="auditGroupDetail"							path="audit_GroupDetail"/>
-		<forward	name="auditGroupCompareDetail"			path="audit_GroupCompareDetail"/>
-	
-		<forward	name="auditLosscode"								path="audit_Losscode"/>
-		<forward	name="auditLosscodeDetail"					path="audit_LosscodeDetail"/>
-		<forward	name="auditLosscodeCompareDetail"		path="audit_LosscodeCompareDetail"/>
-	
-		<forward	name="auditCompany"									path="audit_Company"/>
-		<forward	name="auditCompanyDetail"						path="audit_CompanyDetail"/>
-		<forward	name="auditCompanyCompareDetail"		path="audit_CompanyCompareDetail"/>
-	
-		<forward	name="auditGroup"										path="audit_Group"/>
-		<forward	name="auditGroupDetail"							path="audit_GroupDetail"/>
-		<forward	name="auditGroupCompareDetail"			path="audit_GroupCompareDetail"/>
-	
-		<forward	name="auditAirport"									path="audit_Airport"/>
-		<forward	name="auditAirportDetail"						path="audit_AirportDetail"/>
-		<forward	name="auditAirportCompareDetail"		path="audit_AirportCompareDetail"/>
-	
-		<forward	name="auditStation"									path="audit_Station"/>
-		<forward	name="auditStationDetail"						path="audit_StationDetail"/>
-		<forward	name="auditStationCompareDetail"		path="audit_StationCompareDetail"/>
-	
-		<forward	name="auditWorkshift"								path="audit_Workshift"/>
-		<forward	name="auditWorkshiftDetail"					path="audit_WorkshiftDetail"/>
-		<forward	name="auditWorkshiftCompareDetail"	path="audit_WorkshiftCompareDetail"/>
-	
-		<forward	name="auditMBR"											path="audit_MBR"/>
-		<forward	name="auditMBRDetail"								path="audit_MBRDetail"/>
-		<forward	name="auditMBRCompareDetail"				path="audit_MBRCompareDetail"/>
+		<form-bean name="worldTracerFWDForm"
+			type="com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm" />
+		<form-bean name="worldTracerROHForm"
+			type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="wt_ahl_id" type="java.lang.String" />
+			<form-property name="wt_ohd_id" type="java.lang.String" />
+			<form-property name="fi" type="java.lang.String" />
+			<form-property name="ag" type="java.lang.String" />
+			<form-property name="teletype_address1"
+				type="java.lang.String" />
+			<form-property name="teletype_address2"
+				type="java.lang.String" />
+			<form-property name="teletype_address3"
+				type="java.lang.String" />
+			<form-property name="teletype_address4"
+				type="java.lang.String" />
+			<form-property name="lname" type="java.lang.String" />
+		</form-bean>
 
-		<forward	name="auditClaims"									path="audit_Claims"/>
-		<forward	name="auditClaimsDetail"						path="audit_ClaimsDetail"/>
-		<forward	name="auditClaimsCompareDetail"			path="audit_ClaimsCompareDetail"/>
+		<form-bean name="worldTracerTTYForm"
+			type="com.bagnet.nettracer.tracing.forms.WorldTracerTTYForm" />
+		<form-bean name="worldTracerSusRihForm"
+			type="om.bagnet.nettracer.tracing.forms.WorldTracerSusRihForm">
+		</form-bean>
+	</form-beans>
+	<!-- global exception -->
+	<global-exceptions>
+		<exception
+			handler="com.bagnet.nettracer.tracing.actions.CustomizedExceptionHandler"
+			key="timeout.error.message" path="/index.jsp" scope="request"
+			type="java.lang.IllegalArgumentException" />
 
-		<forward	name="billingReport"								path="billing_Report"/>
-		
-		<forward	name="ajax_agentassigned"				path="ajax_agentassigned"/>
-		<forward	name="ajax_faultstation"				path="ajax_faultstation"/>
-		<forward	name="ajax_servicelevel"				path="ajax_servicelevel"/>
-		<forward	name="ajax_statuses"					path="ajax_statuses"/>
+
+	</global-exceptions>
+
+	<!-- ========== Global Forward Definitions ============================== -->
+	<global-forwards>
+		<forward name="logoff" path="/logoff.do" />
+		<forward name="logon" path="homepage" />
+		<forward name="passreset" path="pass_reset" />
+		<forward name="success" path="user_menu" />
+		<forward name="error" path="error_page" />
+		<forward name="insertsuccess" path="insert_success" />
+		<forward name="searchincident" path="search_incident" />
+		<forward name="searchOnHand" path="search_onhand" />
+		<forward name="customquery" path="custom_query" />
+		<forward name="activetracing" path="active_tracing" />
+		<forward name="ldmain" path="lostdelay" />
+		<forward name="missingmain" path="missing_articles" />
+		<forward name="damagedmain" path="damagedbag" />
+		<forward name="ldclose" path="ld_close" />
+		<forward name="maclose" path="ma_close" />
+		<forward name="damagedclose" path="damaged_close" />
+		<forward name="viewohdmain" path="viewonhandbag" />
+		<forward name="ohdmain" path="onhandbag" />
+		<forward name="ohdhistorical" path="ohd_historical" />
+		<forward name="foundhistorical" path="found_historical" />
+		<forward name="losthistorical" path="lost_historical" />
+		<forward name="mahistorical" path="ma_historical" />
+		<forward name="ldhistorical" path="ld_historical" />
+		<forward name="damagedhistorical" path="damaged_historical" />
+		<forward name="insertonhandsuccess"
+			path="insert_onhand_success" />
+		<forward name="massonhandsuccess" path="mass_onhand_success" />
+		<forward name="claimmain" path="claim_resolution" />
+		<forward name="claimprorate" path="claim_prorate" />
+		<forward name="claimactivity" path="claim_activity" />
+		<forward name="forwardonhandsuccess"
+			path="forward_onhandsuccess" />
+		<forward name="forwardwtbagsuccess"
+			path="forward_wt_bag_success" />
+		<forward name="sendwtttysuccess" path="send_wt_tty_success" />
+		<forward name="sendwtrohsuccess" path="send_wt_roh_success" />
+		<forward name="suspendrit" path="suspend_rit" />
+		<forward name="requestonhandsuccess"
+			path="request_onhandsuccess" />
+		<forward name="denyrequestonhand" path="deny_roh" />
+		<forward name="enterforwardonhand" path="enter_forwardonhand" />
+		<forward name="enterforwardmessage" path="enter_forwardmessage" />
+		<forward name="enterrequestonhand" path="enter_requestonhand" />
+		<forward name="errorforwardonhand" path="error_forwardonhand" />
+		<forward name="inbox" path="user_mailbox" />
+		<forward name="reportmain" path="report_options" />
+		<forward name="viewtasks" path="view_tasks" />
+		<forward name="viewmatches" path="view_matches" />
+		<forward name="viewmatch" path="view_match" />
+		<forward name="receiptparams" path="receipt_params" />
+		<forward name="viewrequests" path="view_requests" />
+		<forward name="viewcreatedrequests"
+			path="view_created_requests" />
+		<forward name="viewincomingbags" path="view_incoming_bags" />
+		<forward name="viewincomingincidents"
+			path="view_incoming_incidents" />
+
+		<forward name="viewworldtraceractionfiles"
+			path="view_worldtraceractionfiles" />
+		<forward name="viewworldtracerafviewraw"
+			path="view_worldtracerafviewraw" />
+		<forward name="viewworldtracerfwd" path="view_worldtracerfwd" />
+		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
+		<forward name="viewworldtracertty" path="view_worldtracertty" />
+
+		<forward name="viewohdlzed" path="view_ohdlzed" />
+		<forward name="editcomponent" path="edit_component" />
+		<forward name="viewComponent" path="view_components" />
+		<forward name="editcompany" path="edit_company" />
+		<forward name="editself" path="edit_self" />
+		<forward name="viewcompanies" path="view_companies" />
+		<forward name="editshift" path="edit_shift" />
+		<forward name="editairport" path="edit_airport" />
+		<forward name="editcode" path="edit_code" />
+		<forward name="viewcodes" path="view_codes" />
+		<forward name="viewshifts" path="view_shift" />
+		<forward name="viewairports" path="view_airport" />
+		<forward name="editstation" path="edit_station" />
+		<forward name="viewstations" path="view_station" />
+		<forward name="viewSystemComponents"
+			path="view_system_component" />
+		<forward name="editagent" path="edit_agent" />
+		<forward name="viewagents" path="view_agents" />
+		<forward name="viewdeliverycompanies"
+			path="view_deliverycompany" />
+		<forward name="editdeliverycompany" path="edit_deliverycompany" />
+		<forward name="editservicelevels" path="edit_servicelevel" />
+		<forward name="viewtask" path="view_task" />
+		<forward name="forwarderror" path="forward_error" />
+		<forward name="composemessage" path="compose_message" />
+		<forward name="viewmessages" path="view_messages" />
+		<forward name="viewmessage" path="view_message" />
+		<forward name="view_request_details" path="view_rqst_details" />
+		<forward name="view_forward_details" path="view_fwd_details" />
+		<forward name="editagentgroup" path="edit_agent_group" />
+		<forward name="editagentstation" path="edit_agent_station" />
+		<forward name="ohdquickmain" path="ohd_quick_main" />
+		<forward name="ohdmassmain" path="ohd_mass_main" />
+		<forward name="claimslist" path="claims_list" />
+		<forward name="selfupdatesuccess" path="selfupdate_success" />
+		<forward name="deliveryList" path="delivery_list" />
+		<forward name="viewtempohd" path="viewtemp_ohd" />
+		<forward name="viewtempreports" path="viewtemp_reports" />
+		<forward name="viewmassohd" path="viewmass_ohd" />
+		<forward name="lostfound" path="lost_found" />
+		<forward name="lostfound_success" path="lost_found_success" />
+		<forward name="searchlostfound" path="search_lostfound" />
+		<forward name="passview" path="pass_view_only" />
+		<forward name="closeonhandsuccess" path="close_onhandsuccess" />
+		<forward name="expensepayoutapprovedsuccess"
+			path="expense_payoutapprovedsuccess" />
+		<forward name="expensepayoutdeniedsuccess"
+			path="expense_payoutdeniedsuccess" />
+		<forward name="bdo" path="bdo_page" />
+		<forward name="searchbdo" path="search_bdo" />
+		<forward name="nopermission" path="no_permission" />
+		<forward name="viewloggedagents" path="view_loggedagents" />
+
+		<forward name="interimexpenserequest"
+			path="interim_expenserequest" />
+		<forward name="createdinterimexpenserequest"
+			path="created_interimexpenserequest" />
+
+		<forward name="auditOnHand" path="audit_OnHand" />
+		<forward name="auditOnHandDetail" path="audit_OnHandDetail" />
+		<forward name="auditOnHandCompareDetail"
+			path="audit_OnHandCompareDetail" />
+
+		<forward name="auditLostFound" path="audit_LostFound" />
+		<forward name="auditLostFoundDetail"
+			path="audit_LostFoundDetail" />
+		<forward name="auditLostFoundCompareDetail"
+			path="audit_LostFoundCompareDetail" />
+
+		<forward name="auditOptions" path="audit_Options" />
+
+		<forward name="auditAgent" path="audit_Agent" />
+		<forward name="auditAgentDetail" path="audit_AgentDetail" />
+		<forward name="auditAgentCompareDetail"
+			path="audit_AgentCompareDetail" />
+
+		<forward name="auditGroup" path="audit_Group" />
+		<forward name="auditGroupDetail" path="audit_GroupDetail" />
+		<forward name="auditGroupCompareDetail"
+			path="audit_GroupCompareDetail" />
+
+		<forward name="auditLosscode" path="audit_Losscode" />
+		<forward name="auditLosscodeDetail" path="audit_LosscodeDetail" />
+		<forward name="auditLosscodeCompareDetail"
+			path="audit_LosscodeCompareDetail" />
+
+		<forward name="auditCompany" path="audit_Company" />
+		<forward name="auditCompanyDetail" path="audit_CompanyDetail" />
+		<forward name="auditCompanyCompareDetail"
+			path="audit_CompanyCompareDetail" />
+
+		<forward name="auditGroup" path="audit_Group" />
+		<forward name="auditGroupDetail" path="audit_GroupDetail" />
+		<forward name="auditGroupCompareDetail"
+			path="audit_GroupCompareDetail" />
+
+		<forward name="auditAirport" path="audit_Airport" />
+		<forward name="auditAirportDetail" path="audit_AirportDetail" />
+		<forward name="auditAirportCompareDetail"
+			path="audit_AirportCompareDetail" />
+
+		<forward name="auditStation" path="audit_Station" />
+		<forward name="auditStationDetail" path="audit_StationDetail" />
+		<forward name="auditStationCompareDetail"
+			path="audit_StationCompareDetail" />
+
+		<forward name="auditWorkshift" path="audit_Workshift" />
+		<forward name="auditWorkshiftDetail"
+			path="audit_WorkshiftDetail" />
+		<forward name="auditWorkshiftCompareDetail"
+			path="audit_WorkshiftCompareDetail" />
+
+		<forward name="auditMBR" path="audit_MBR" />
+		<forward name="auditMBRDetail" path="audit_MBRDetail" />
+		<forward name="auditMBRCompareDetail"
+			path="audit_MBRCompareDetail" />
+
+		<forward name="auditClaims" path="audit_Claims" />
+		<forward name="auditClaimsDetail" path="audit_ClaimsDetail" />
+		<forward name="auditClaimsCompareDetail"
+			path="audit_ClaimsCompareDetail" />
+
+		<forward name="billingReport" path="billing_Report" />
+
+		<forward name="ajax_agentassigned" path="ajax_agentassigned" />
+		<forward name="ajax_faultstation" path="ajax_faultstation" />
+		<forward name="ajax_servicelevel" path="ajax_servicelevel" />
+		<forward name="ajax_statuses" path="ajax_statuses" />
 	</global-forwards>
 
-  <!-- ========== Action Mapping Definitions ============================== -->
-  <action-mappings>
+	<!-- ========== Action Mapping Definitions ============================== -->
+	<action-mappings>
 
-    <!-- Process a user logoff -->
-    <action  path="/logoff" type="com.bagnet.nettracer.tracing.actions.LogoffAction">
-      <forward name="success" path="/index.jsp"/>
-    </action>
-
-    <!-- Process a user logon -->
-    <action path="/logon" 
-    		type="com.bagnet.nettracer.tracing.actions.LogonAction"
-            name="logonForm"
-            scope="request"
-            validate="false" />
-  
-  	
-  	<action path="/passreset" 
-    		type="com.bagnet.nettracer.tracing.actions.ResetPasswordAction"
-            name="passresetForm"
-            scope="request"
-            validate="false" />
-            
-    <!-- search incidents -->
-    <action path="/searchIncident"
-			type="com.bagnet.nettracer.tracing.actions.SearchIncidentAction"
-			name="searchIncidentForm"
-			scope="request"
-			validate="false">
+		<!-- Process a user logoff -->
+		<action path="/logoff"
+			type="com.bagnet.nettracer.tracing.actions.LogoffAction">
+			<forward name="success" path="/index.jsp" />
 		</action>
-	
+
+		<!-- Process a user logon -->
+		<action path="/logon"
+			type="com.bagnet.nettracer.tracing.actions.LogonAction"
+			name="logonForm" scope="request" validate="false" />
+
+
+		<action path="/passreset"
+			type="com.bagnet.nettracer.tracing.actions.ResetPasswordAction"
+			name="passresetForm" scope="request" validate="false" />
+
+		<!-- search incidents -->
+		<action path="/searchIncident"
+			type="com.bagnet.nettracer.tracing.actions.SearchIncidentAction"
+			name="searchIncidentForm" scope="request" validate="false">
+		</action>
+
 		<!-- search on-hands forms -->
 		<action path="/searchOnHand"
 			type="com.bagnet.nettracer.tracing.actions.SearchOnHandAction"
-			name="searchOnHandForm"
-			scope="request"
-			validate="false">
+			name="searchOnHandForm" scope="request" validate="false">
 		</action>
-	
-	 	<action path="/customQuery"
+
+		<action path="/customQuery"
 			type="com.bagnet.nettracer.tracing.actions.CustomQueryAction"
-			name="searchIncidentForm"
-			scope="request"
-			validate="false">
+			name="searchIncidentForm" scope="request" validate="false">
 		</action>
-		
+
 		<!-- activetracing forms -->
 		<action path="/activeTracing"
 			type="com.bagnet.nettracer.tracing.actions.ActiveTracingAction"
-			name="activeTracingForm"
-			scope="request"
-			validate="false">
+			name="activeTracingForm" scope="request" validate="false">
 		</action>
-					
+
 		<!-- lost delay -->
 		<action path="/lostDelay"
 			type="com.bagnet.nettracer.tracing.actions.LostDelayAction"
-			name="incidentForm"
-			scope="session"
-			validate="false">
+			name="incidentForm" scope="session" validate="false">
 		</action>
-	
+
 		<!-- missing articles -->
 		<action path="/missing"
 			type="com.bagnet.nettracer.tracing.actions.MissingAction"
-			name="incidentForm"
-			scope="session"
-			validate="false">
+			name="incidentForm" scope="session" validate="false">
 		</action>
-			
+
 		<!-- damaged bag -->
 		<action path="/damaged"
 			type="com.bagnet.nettracer.tracing.actions.DamagedAction"
-			name="incidentForm"
-			scope="session"
-			validate="false">
+			name="incidentForm" scope="session" validate="false">
 		</action>
-	
+
 		<!-- on hang bag -->
 		<action path="/addOnHandBag"
-				type="com.bagnet.nettracer.tracing.actions.OnHandAction"
-				name="OnHandForm"
-				scope="session"
-				validate="false">
+			type="com.bagnet.nettracer.tracing.actions.OnHandAction"
+			name="OnHandForm" scope="session" validate="false">
 		</action>
-		
+
 		<action path="/expressOnHandBag"
-				type="com.bagnet.nettracer.tracing.actions.OnHandAction"
-				name="OnHandForm"
-				scope="session"
-				validate="false">
+			type="com.bagnet.nettracer.tracing.actions.OnHandAction"
+			name="OnHandForm" scope="session" validate="false">
 		</action>
-		
+
 		<action path="/massOnHandBag"
-				type="com.bagnet.nettracer.tracing.actions.OnHandAction"
-				name="OnHandForm"
-				scope="session"
-				validate="false">
+			type="com.bagnet.nettracer.tracing.actions.OnHandAction"
+			name="OnHandForm" scope="session" validate="false">
 		</action>
-		
+
 		<!-- claims -->
 		<action path="/claims"
 			type="com.bagnet.nettracer.tracing.actions.ClaimsTask"
-			name="claimToBeProcessedForm"
-			scope="session"
-			validate="false">
-		</action>
-		
-		<action path="/claim_resolution"
-			type="com.bagnet.nettracer.tracing.actions.ClaimAction"
-			name="claimForm"
-			scope="session"
-			validate="false">
-		</action>
-		
-		<action path="/claim_prorate"
-			type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction"
-			name="claimProrateForm"
-			scope="session"
-			validate="false">
+			name="claimToBeProcessedForm" scope="session" validate="false">
 		</action>
 
-		<!-- Forwarding bags -->	
+		<action path="/claim_resolution"
+			type="com.bagnet.nettracer.tracing.actions.ClaimAction"
+			name="claimForm" scope="session" validate="false">
+		</action>
+
+		<action path="/claim_prorate"
+			type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction"
+			name="claimProrateForm" scope="session" validate="false">
+		</action>
+
+		<!-- Forwarding bags -->
 		<action path="/forward_on_hand"
 			type="com.bagnet.nettracer.tracing.actions.ForwardOnHandAction"
-			name="forwardOnHandForm"
-			scope="session"
-			validate="false">
+			name="forwardOnHandForm" scope="session" validate="false">
 		</action>
-	
+
 		<action path="/forward_message"
 			type="com.bagnet.nettracer.tracing.actions.ForwardMessageAction"
-			name="forwardMessageForm"
-			scope="session"
-			validate="false">
+			name="forwardMessageForm" scope="session" validate="false">
 		</action>
-		
+
 		<action path="/forwardBag"
 			type="com.bagnet.nettracer.tracing.actions.ViewOHDToLZed"
-			name="viewOHDLZedForm"
-			scope="request"
-			validate="false">
+			name="viewOHDLZedForm" scope="request" validate="false">
 		</action>
-		
+
 		<!-- Requesting Bags -->
 		<action path="/request_on_hand"
 			type="com.bagnet.nettracer.tracing.actions.RequestOnHandAction"
-			name="requestOnHandForm"
-			scope="request"
-			validate="false">
+			name="requestOnHandForm" scope="request" validate="false">
 		</action>
-		
+
 		<!-- reporting -->
 		<action path="/statReport"
 			type="com.bagnet.nettracer.tracing.actions.StatReportAction"
-			name="statReportForm"
-			scope="request"
-			validate="false">
+			name="statReportForm" scope="request" validate="false">
 		</action>
-	
+
 		<!-- View Matches -->
 		<action path="/viewMatches"
 			type="com.bagnet.nettracer.tracing.actions.match.ViewMatch"
-			name="viewMatchForm"
-			scope="request"
-			validate="false">
+			name="viewMatchForm" scope="request" validate="false">
 		</action>
-		
+
 		<!-- View Incoming Requests -->
 		<action path="/viewROH"
 			type="com.bagnet.nettracer.tracing.actions.ViewRequests"
-			name="viewRequestForm"
-			scope="request"
-			validate="false">
+			name="viewRequestForm" scope="request" validate="false">
 		</action>
-	
+
 		<!-- View Created Requests -->
 		<action path="/viewCreatedROH"
 			type="com.bagnet.nettracer.tracing.actions.ViewCreatedRequests"
-			name="viewCreatedRequestForm"
-			scope="request"
-			validate="false">
+			name="viewCreatedRequestForm" scope="request" validate="false">
 		</action>
-	
+
 		<!-- View Incoming Bags -->
 		<action path="/incomingBags"
 			type="com.bagnet.nettracer.tracing.actions.ViewIncomingBags"
-			name="viewIncomingRequestForm"
-			scope="request"
-			validate="false">
+			name="viewIncomingRequestForm" scope="request" validate="false">
 		</action>
-		
+
 		<!-- View Incoming Incidents -->
 		<action path="/incomingReports"
 			type="com.bagnet.nettracer.tracing.actions.ViewIncomingIncidents"
-			name="searchIncidentForm"
-			scope="request"
-			validate="false">
+			name="searchIncidentForm" scope="request" validate="false">
 		</action>
-		
+
 		<!-- View World Tracer Integration functions -->
 		<action path="/worldtraceraf"
 			type="com.bagnet.nettracer.tracing.actions.WorldTracerAFAction"
-			name="worldtracerafForm"
-			scope="request"
-			validate="false">
+			name="worldtracerafForm" scope="request" validate="false">
 		</action>
-		
+
 		<action path="/worldtracerfwd"
 			type="com.bagnet.nettracer.tracing.actions.WorldTracerFWDAction"
-			name="worldTracerFWDForm"
-			scope="session"
-			validate="false">
+			name="worldTracerFWDForm" scope="session" validate="false">
 		</action>
-		
+
 		<action path="/worldtracerroh"
 			type="com.bagnet.nettracer.tracing.actions.WorldTracerROHAction"
-			name="worldTracerROHForm"
-			scope="request"
-			validate="false">
+			name="worldTracerROHForm" scope="request" validate="false">
 		</action>
-		
+
 		<action path="/worldtracertty"
-		    type="com.bagnet.nettracer.tracing.actions.WorldTracerTTYAction"
-		    name="worldTracerTTYForm"
-		    scope="request"
-		    validate="false">
-		 </action>
-		
+			type="com.bagnet.nettracer.tracing.actions.WorldTracerTTYAction"
+			name="worldTracerTTYForm" scope="request" validate="false">
+		</action>
+
 		<!-- Administer Groups -->
 		<action path="/createGroup"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageGroups"
-			name="groupForm"
-			scope="request"
-			validate="false">
-		</action>	
-		
+			name="groupForm" scope="request" validate="false">
+		</action>
+
 		<!-- Administer Companies -->
 		<action path="/companyAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageCompany"
-			name="companyForm"
-			scope="session"
-			validate="false">
+			name="companyForm" scope="session" validate="false">
 		</action>
-		
+
 		<!-- Administer Stations -->
 		<action path="/stationAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageStation"
-			name="stationForm"
-			scope="request"
-			validate="false">
+			name="stationForm" scope="request" validate="false">
 		</action>
-		
+
 		<action path="/bdoAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageDeliveryCompanies"
-			name="MaintainDeliveryCompanyForm"
-			scope="request"
+			name="MaintainDeliveryCompanyForm" scope="request"
 			validate="false">
 		</action>
-	
+
 		<!-- Administer Shifts -->
 		<action path="/shiftAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageShift"
-			name="shiftForm"
-			scope="request"
-			validate="false">
+			name="shiftForm" scope="request" validate="false">
 		</action>
-		
+
 		<action path="/airportAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageAirport"
-			name="airportForm"
-			scope="request"
-			validate="false">
+			name="airportForm" scope="request" validate="false">
 		</action>
-	
+
 		<!-- Administer Loss Codes -->
 		<action path="/codeAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageCodes"
-			name="codeForm"
-			scope="request"
-			validate="false">
-		</action>	
-	
+			name="codeForm" scope="request" validate="false">
+		</action>
+
 		<!-- Administer Permissions -->
 		<action path="/componentAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManagePermissions"
-			name="componentForm"
-			scope="request"
-			validate="false">
-		</action>	
-		
+			name="componentForm" scope="request" validate="false">
+		</action>
+
 		<!-- Administer Agents -->
 		<action path="/agentAdmin"
 			type="com.bagnet.nettracer.tracing.actions.admin.ManageAgents"
-			name="agentForm"
-			scope="request"
-			validate="false">
-		</action>	
+			name="agentForm" scope="request" validate="false">
+		</action>
 
 		<!-- Administer Tasks -->
 		<action path="/otherTasks"
 			type="com.bagnet.nettracer.tracing.actions.ManageTask"
-			name="taskForm"
-			scope="request"
-			validate="false">
-		</action>	
+			name="taskForm" scope="request" validate="false">
+		</action>
 
 		<!-- Inbox -->
 		<action path="/message"
 			type="com.bagnet.nettracer.tracing.actions.ManageMessage"
-			name="composeForm"
-			scope="session"
-			validate="false">
-		</action>	
+			name="composeForm" scope="session" validate="false">
+		</action>
 
-    	
-    <action  path="/deliver" 
-    	type="com.bagnet.nettracer.tracing.actions.ViewDeliveryLog"
-    	name="deliverForm"
-    	scope="request"
-    	validate="false">
-    </action>
-		
+
+		<action path="/deliver"
+			type="com.bagnet.nettracer.tracing.actions.ViewDeliveryLog"
+			name="deliverForm" scope="request" validate="false">
+		</action>
+
 		<!-- Mass on hand task manager -->
-    <action  path="/massOnhands" 
-    	type="com.bagnet.nettracer.tracing.actions.ViewMassOnHand"
-    	name="viewMassOnHandsForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<action path="/massOnhands"
+			type="com.bagnet.nettracer.tracing.actions.ViewMassOnHand"
+			name="viewMassOnHandsForm" scope="request" validate="false">
+		</action>
 
 		<!-- Temporary on hand task manager -->
-    <action  path="/temporaryOnhands" 
-    	type="com.bagnet.nettracer.tracing.actions.ViewTemporaryOnHand"
-    	name="viewTemporaryOnHandsForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<action path="/temporaryOnhands"
+			type="com.bagnet.nettracer.tracing.actions.ViewTemporaryOnHand"
+			name="viewTemporaryOnHandsForm" scope="request" validate="false">
+		</action>
 
 		<!-- Temporary reports task manager -->
-    <action  path="/temporaryReports" 
-    	type="com.bagnet.nettracer.tracing.actions.ViewTemporaryReports"
-    	name="viewTemporaryReportsForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-    <!-- Search Lost/Found reports -->
-    <action  path="/retrieveLostFound" 
-    	type="com.bagnet.nettracer.tracing.actions.SearchLostFoundAction"
-    	name="searchLostAndFoundForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-    
-    <!-- Lost reports -->
-    <action  path="/addLost" 
-    	type="com.bagnet.nettracer.tracing.actions.AddLostItem"
-    	name="LostAndFoundForm"
-    	scope="session"
-    	validate="false">
-    </action>
+		<action path="/temporaryReports"
+			type="com.bagnet.nettracer.tracing.actions.ViewTemporaryReports"
+			name="viewTemporaryReportsForm" scope="request" validate="false">
+		</action>
 
-    <!-- User Activity -->
- 		<action  path="/useractivity" 
-    	type="com.bagnet.nettracer.tracing.actions.admin.ManageLoggedUsers"
-    	name="UserActivityForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<!-- Search Lost/Found reports -->
+		<action path="/retrieveLostFound"
+			type="com.bagnet.nettracer.tracing.actions.SearchLostFoundAction"
+			name="searchLostAndFoundForm" scope="request" validate="false">
+		</action>
 
-    <!-- Found reports -->
-    <action  path="/addFound" 
-    	type="com.bagnet.nettracer.tracing.actions.AddFoundItem"
-    	name="LostAndFoundForm"
-    	scope="session"
-    	validate="false">
-    </action>
 
-    <!-- customer view only page -->
-    <action  path="/passengerview/passengerviewonly" 
-    	type="com.bagnet.nettracer.tracing.actions.PassengerViewOnly"
-    	name="incidentForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<!-- Lost reports -->
+		<action path="/addLost"
+			type="com.bagnet.nettracer.tracing.actions.AddLostItem"
+			name="LostAndFoundForm" scope="session" validate="false">
+		</action>
 
-    <!-- BDO -->
-    <action  path="/bdo" 
-    	type="com.bagnet.nettracer.tracing.actions.BDOAction"
-    	name="BDOForm"
-    	scope="session"
-    	validate="false">
-    </action>
+		<!-- User Activity -->
+		<action path="/useractivity"
+			type="com.bagnet.nettracer.tracing.actions.admin.ManageLoggedUsers"
+			name="UserActivityForm" scope="request" validate="false">
+		</action>
 
-    <action  path="/searchbdo" 
-    	type="com.bagnet.nettracer.tracing.actions.SearchBDOAction"
-    	name="searchBDOForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-    <!-- AUDIT -->
-     <action  path="/audit_ohd" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditOnHandAction"
-    	name="auditOHDForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<!-- Found reports -->
+		<action path="/addFound"
+			type="com.bagnet.nettracer.tracing.actions.AddFoundItem"
+			name="LostAndFoundForm" scope="session" validate="false">
+		</action>
 
-   	<action  path="/audit_unchecked" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditLostFoundAction"
-    	name="auditLostFoundForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-    <action  path="/audit_agent" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditAgentAction"
-    	name="auditAgentForm"
-    	scope="request"
-    	validate="false">
-    </action>
- 
- 		<action  path="/audit_station" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditStationAction"
-    	name="auditStationForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-  	<action  path="/audit_shift" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditShiftAction"
-    	name="auditWorkShiftForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<!-- customer view only page -->
+		<action path="/passengerview/passengerviewonly"
+			type="com.bagnet.nettracer.tracing.actions.PassengerViewOnly"
+			name="incidentForm" scope="request" validate="false">
+		</action>
 
-		<action  path="/audit_company" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditCompanyAction"
-    	name="auditCompanyForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-    <action  path="/audit_airport" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditAirportAction"
-    	name="auditAirportForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<!-- BDO -->
+		<action path="/bdo"
+			type="com.bagnet.nettracer.tracing.actions.BDOAction" name="BDOForm"
+			scope="session" validate="false">
+		</action>
 
-    <action  path="/audit_group" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditGroupAction"
-    	name="auditGroupForm"
-    	scope="request"
-    	validate="false">
-    </action>
-    
-  	<action  path="/audit_losscode" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditLosscodesAction"
-    	name="auditLosscodeForm"
-    	scope="request"
-    	validate="false">
-    </action>
+		<action path="/searchbdo"
+			type="com.bagnet.nettracer.tracing.actions.SearchBDOAction"
+			name="searchBDOForm" scope="request" validate="false">
+		</action>
 
-    <action  path="/audit_mbr" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditMBRAction"
-    	name="auditMBRForm"
-    	scope="request"
-    	validate="false">
-    </action>   
+		<!-- AUDIT -->
+		<action path="/audit_ohd"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditOnHandAction"
+			name="auditOHDForm" scope="request" validate="false">
+		</action>
 
-    <action  path="/audit_claims" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditClaimsAction"
-    	name="auditMBRForm"
-    	scope="request"
-    	validate="false">
-    </action>       
-            		
-    <action  path="/audit" 
-    	type="com.bagnet.nettracer.tracing.actions.audit.AuditAction"
-    	name="auditForm"
-    	scope="request"
-    	validate="false">
-    </action>       
-    
-  	<action  path="/expenseRequests" 
-    	type="com.bagnet.nettracer.tracing.actions.InterimExpenseAction"
-    	name="interimExpenseRequestForm"
-    	scope="request"
-    	validate="false">
-    </action>       
-    
-  	<action  path="/createdExpenseRequests" 
-    	type="com.bagnet.nettracer.tracing.actions.ViewCreatedInterimExpenseRequests"
-    	name="createdInterimExpenseForm"
-    	scope="request"
-    	validate="false">
-    </action>      
-    
-    <action  path="/billing" 
-    	type="com.bagnet.nettracer.tracing.actions.BillingAction"
-    	name="billingForm"
-    	scope="request"
-    	validate="false">
-    </action>       
-    
-  </action-mappings>
- 
-  <!-- ========== Controller Configuration ================================ -->
-  <controller>
-    <!-- The "input" parameter on "action" elements is the name of a
-         local or global "forward" rather than a module-relative path -->
-    <set-property property="inputForward" value="true"/>
-  </controller>
+		<action path="/audit_unchecked"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditLostFoundAction"
+			name="auditLostFoundForm" scope="request" validate="false">
+		</action>
 
-  <!-- ========== Message Resources Definitions =========================== -->
-  <message-resources parameter="com.bagnet.nettracer.tracing.resources.ApplicationResources_es" null="false" />
-  <message-resources parameter="com.bagnet.nettracer.tracing.resources.ApplicationResources"  null="false" />
-	
+		<action path="/audit_agent"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditAgentAction"
+			name="auditAgentForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_station"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditStationAction"
+			name="auditStationForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_shift"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditShiftAction"
+			name="auditWorkShiftForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_company"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditCompanyAction"
+			name="auditCompanyForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_airport"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditAirportAction"
+			name="auditAirportForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_group"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditGroupAction"
+			name="auditGroupForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_losscode"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditLosscodesAction"
+			name="auditLosscodeForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_mbr"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditMBRAction"
+			name="auditMBRForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit_claims"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditClaimsAction"
+			name="auditMBRForm" scope="request" validate="false">
+		</action>
+
+		<action path="/audit"
+			type="com.bagnet.nettracer.tracing.actions.audit.AuditAction"
+			name="auditForm" scope="request" validate="false">
+		</action>
+
+		<action path="/expenseRequests"
+			type="com.bagnet.nettracer.tracing.actions.InterimExpenseAction"
+			name="interimExpenseRequestForm" scope="request" validate="false">
+		</action>
+
+		<action path="/createdExpenseRequests"
+			type="com.bagnet.nettracer.tracing.actions.ViewCreatedInterimExpenseRequests"
+			name="createdInterimExpenseForm" scope="request" validate="false">
+		</action>
+
+		<action path="/billing"
+			type="com.bagnet.nettracer.tracing.actions.BillingAction"
+			name="billingForm" scope="request" validate="false">
+		</action>
+		<action path="/worldtracersusrih"
+			type="com.bagnet.nettracer.tracing.actions.WorldTracerSusRihAction"
+			name="worldTracerSusRihForm" scope="request" validate="false">
+		</action>
+
+	</action-mappings>
+
+	<!-- ========== Controller Configuration ================================ -->
+	<controller>
+		<!-- The "input" parameter on "action" elements is the name of a
+			local or global "forward" rather than a module-relative path -->
+		<set-property property="inputForward" value="true" />
+	</controller>
+
+	<!-- ========== Message Resources Definitions =========================== -->
+	<message-resources
+		parameter="com.bagnet.nettracer.tracing.resources.ApplicationResources_es"
+		null="false" />
+	<message-resources
+		parameter="com.bagnet.nettracer.tracing.resources.ApplicationResources"
+		null="false" />
+
 	<!-- ========== Plug-ins Configuration ================================== -->
-  <plug-in className="org.apache.struts.plugins.ModuleConfigVerifier"/>
-  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
-  	<set-property property="pathnames"	value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
-  </plug-in>
-  <plug-in className="org.apache.struts.tiles.TilesPlugin" >
- 		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
-    <set-property property="moduleAware" value="true" />
-  </plug-in>
-  
+	<plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property property="pathnames"
+			value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml" />
+	</plug-in>
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config"
+			value="/WEB-INF/tiles-defs.xml" />
+		<set-property property="moduleAware" value="true" />
+	</plug-in>
+
 
 </struts-config>

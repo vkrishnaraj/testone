@@ -517,6 +517,32 @@ public class AdminUtils {
 		}
 	}
 
+	/**
+	 * Retrieves the station associated with this station id
+	 * 
+	 * @param stationId
+	 *          the id of the station
+	 * @return station or null if not found or exception
+	 */
+	public static Station getStation(String stationId) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class).add(Expression.eq("station_ID", new Integer(stationId)));
+			return (Station) cri.list().get(0);
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
 
 	/**
 	 * Get a list of stations based on passed in criteria
