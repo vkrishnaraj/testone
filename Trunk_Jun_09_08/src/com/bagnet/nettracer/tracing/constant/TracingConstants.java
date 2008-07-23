@@ -588,6 +588,9 @@ public class TracingConstants {
 	public final static String CMT_DENIED_INTERIM = "Interim expense denied on ";
 	public final static String CMT_CREATE_EXPENSE = "Baggage expense created on ";
 	
+	//suspend and RIT
+	public final static String SUSPEND_RIH="suspendrit";
+	
 	//wt ohd
 	public final static int WTFWD_LOG_NOT_RECEIVED = 0;
 	public final static int WTFWD_LOG_RECEIVED = 1;
