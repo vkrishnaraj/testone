@@ -385,6 +385,7 @@ public class TracingConstants {
 	public final static String VIEW_WORLDTRACER_FWD = "viewworldtracerfwd";
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
 	public final static String VIEW_WORLDTRACER_TTY = "viewworldtracertty";
+	public final static String WORLDTRACER_SUS_RIT="viewworldtracersusrit";
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";
 	public final static String MASS_ON_HAND_SUCCESS = "massonhandsuccess";
@@ -589,7 +590,7 @@ public class TracingConstants {
 	public final static String CMT_CREATE_EXPENSE = "Baggage expense created on ";
 	
 	//suspend and RIT
-	public final static String SUSPEND_RIH="suspendrit";
+
 	
 	//wt ohd
 	public final static int WTFWD_LOG_NOT_RECEIVED = 0;
