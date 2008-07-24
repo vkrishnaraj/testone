@@ -376,7 +376,13 @@ public final class ManageCompany extends Action {
 					var.setWt_user((String)dForm.getWt_user());
 					var.setWt_pass((String)dForm.getWt_pass());
 					var.setRetrieve_actionfile_interval(Integer.parseInt((String)dForm.getRetrieve_actionfile_interval()));
-					var.setWt_url((String)dForm.getWt_url());
+					// let them save a blank url if wt is being disabled.
+					// otherwise store the default instead of blank
+					String wt_url = dForm.getWt_url();
+					if (Integer.parseInt(dForm.getWt_enabled()) == 1 && (wt_url == null || wt_url.trim().length() == 0)) {
+						wt_url = TracingConstants.DEFAULT_WT_URL;
+					}
+					var.setWt_url(wt_url);
 					var.setWt_airlinecode((String)dForm.getWt_airlinecode());
 					var.setWt_enabled(Integer.parseInt(dForm.getWt_enabled()));
 					var.setWt_write_enabled(Integer.parseInt(dForm.getWt_write_enabled()));

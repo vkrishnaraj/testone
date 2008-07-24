@@ -4,6 +4,7 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 
         <h1 class="green">
           <bean:message key="Company" />
@@ -73,7 +74,7 @@
 	            <td>
 	              <html:text styleClass="textfield" name="companyForm" property="wt_url" size="30"  />
 	              </br>
-	                   (Default: www.worldtracer.aero)
+	                   (Default: <%= TracingConstants.DEFAULT_WT_URL %>)
 	            </td>
 	          </tr>
 	          <tr>

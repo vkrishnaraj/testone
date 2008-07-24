@@ -24,6 +24,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
@@ -184,7 +185,7 @@ public class WorldTracerUtils {
 		wt_http = comsv.getWt_url();
 		}
 		else
-		wt_http = "www.worldtracer.aero";
+		wt_http = TracingConstants.DEFAULT_WT_URL;
 		wt_url = "http://"+wt_http+"/";
 		Credentials defaultcreds = new UsernamePasswordCredentials(wt_user, wt_pass);
 		client.getState().setCredentials(new AuthScope(wt_http, 80, AuthScope.ANY_REALM), defaultcreds);
@@ -886,7 +887,7 @@ public class WorldTracerUtils {
 		 wt_url = comsv.getWt_url();
 		}
 		else 
-		 wt_url = "www.worldtracer.aero";
+		 wt_url = TracingConstants.DEFAULT_WT_URL;
 		 
 		return wt_url;
 	}
