@@ -92,7 +92,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT = "WorldTracer Insert Incident";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD = "WorldTracer Insert OHD";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO = "WorldTracer Insert BDO";
-	
+
 	public final static String SYSTEM_COMPONENT_NAME_BDO = "Baggage Delivery Order";
 
 	public final static String SYSTEM_COMPONENT_NAME_SEARCH_BDO = "Search Baggage Delivery Order";
@@ -385,7 +385,8 @@ public class TracingConstants {
 	public final static String VIEW_WORLDTRACER_FWD = "viewworldtracerfwd";
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
 	public final static String VIEW_WORLDTRACER_TTY = "viewworldtracertty";
-	public final static String WORLDTRACER_SUS_RIT="viewworldtracersusrit";
+	public final static String VIEW_WORLDTRACER_SUSRIT = "viewworldtracersusrit";
+
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";
 	public final static String MASS_ON_HAND_SUCCESS = "massonhandsuccess";
