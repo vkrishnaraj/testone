@@ -261,16 +261,15 @@ public class WSCoreIncidentUtil {
 		
 		c = 0;
 		Item item = null;
-		if (iDTO.getItinerary() != null) {
+		if (iDTO.getItemlist() != null) {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSItem itemarr = null;
 			for (Iterator i = iDTO.getItemlist().iterator(); i.hasNext();) {
 				itemarr = si.addNewItems();
 				item = (Item) i.next();
-				itemarr.setBagnumber(item.getBagnumber());
 				
 				itemarr.setItemtype(iDTO.getItemtype().getDescription());
 				
-				itemarr.setBagstatus(item.getStatus().getDescription());
+				itemarr.setBagstatus(item.getStatus() != null ? item.getStatus().getDescription() : null);
 				itemarr.setClaimchecknum(item.getClaimchecknum());
 				itemarr.setColor(item.getColor());
 				itemarr.setBagtype(item.getBagtype());
@@ -290,7 +289,7 @@ public class WSCoreIncidentUtil {
 					itemarr.setResolutionstatus(item.getResolution().getStatus());
 				itemarr.setCost(item.getCost());
 				itemarr.setDrafts(item.getDrafts());
-				itemarr.setCurrencyID((item.getCurrency()==null?"":item.getCurrency()));
+				itemarr.setCurrencyID(item.getCurrency_ID());
 				
 				itemarr.setFnameonbag(item.getFnameonbag());
 				itemarr.setMnameonbag(item.getMnameonbag());
@@ -614,7 +613,7 @@ public class WSCoreIncidentUtil {
 					if (thedate != null) item.setArrivedondate(thedate);
 					
 					item.setArrivedonflightnum(wi.getArrivedonflightnum());
-					item.setBagnumber(wi.getBagnumber());
+					item.setBagnumber(i);
 					item.setItemtype_ID(inc.getItemtype_ID());
 					
 					item.setBagtype(wi.getBagtype());
