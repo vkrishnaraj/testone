@@ -254,9 +254,12 @@
 
 		<form-bean name="worldTracerTTYForm"
 			type="com.bagnet.nettracer.tracing.forms.WorldTracerTTYForm" />
+
+			
 		<form-bean name="worldTracerSusRitForm"
-			type="com.bagnet.nettracer.tracing.forms.WorldTracerSusRitForm">
-		</form-bean>
+			type="com.bagnet.nettracer.tracing.forms.WorldTracerSusRitForm" />
+
+
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -306,6 +309,9 @@
 			path="forward_wt_bag_success" />
 		<forward name="sendwtttysuccess" path="send_wt_tty_success" />
 		<forward name="sendwtrohsuccess" path="send_wt_roh_success" />
+		<forward name="sendwtsusritsuccess" path="send_wt_sus_rit_success" />
+		
+
 		<forward name="requestonhandsuccess"
 			path="request_onhandsuccess" />
 		<forward name="denyrequestonhand" path="deny_roh" />
@@ -333,7 +339,11 @@
 		<forward name="viewworldtracerfwd" path="view_worldtracerfwd" />
 		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
 		<forward name="viewworldtracertty" path="view_worldtracertty" />
+
+
+
 		<forward name="viewworldtracersusrit" path="view_worldtracer_sus_rit" />
+
 
 		<forward name="viewohdlzed" path="view_ohdlzed" />
 		<forward name="editcomponent" path="edit_component" />
@@ -635,6 +645,10 @@
 			type="com.bagnet.nettracer.tracing.actions.WorldTracerTTYAction"
 			name="worldTracerTTYForm" scope="request" validate="false">
 		</action>
+		<action path="/worldtracersusrit"
+			type="com.bagnet.nettracer.tracing.actions.WorldTracerSUSRITAction"
+			name="worldTracerSusRitForm" scope="request" validate="false">
+		</action>
 
 		<!-- Administer Groups -->
 		<action path="/createGroup"
@@ -842,10 +856,9 @@
 			type="com.bagnet.nettracer.tracing.actions.BillingAction"
 			name="billingForm" scope="request" validate="false">
 		</action>
-		<action path="/worldtracersusrit"
-			type="com.bagnet.nettracer.tracing.actions.WorldTracerSUSRITAction"
-			name="worldTracerSusRitForm" scope="request" validate="false">
-		</action>
+
+
+
 
 	</action-mappings>
 
