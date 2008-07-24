@@ -19,6 +19,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 		HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 	// TODO Auto-generated method stub
-	return mapping.findForward(VIEW_WORLDTRACER_SUSRIT);
+	return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_SUSRIT);
 }
 }
