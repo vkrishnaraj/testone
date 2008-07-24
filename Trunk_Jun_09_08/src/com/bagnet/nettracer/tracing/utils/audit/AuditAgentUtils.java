@@ -248,6 +248,7 @@ public class AuditAgentUtils {
 		audit_agent.setAccount_locked(agent.isAccount_locked());
 		audit_agent.setWeb_enabled(agent.isWs_enabled());
 		audit_agent.setWs_enabled(agent.isWs_enabled());
+		audit_agent.setMax_ws_sessions(agent.getMax_ws_sessions());
 		
 
 		return audit_agent;

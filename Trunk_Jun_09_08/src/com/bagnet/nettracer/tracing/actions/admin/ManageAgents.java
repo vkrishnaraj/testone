@@ -119,7 +119,8 @@ public final class ManageAgents extends Action {
 			dForm.set("defaultTimezone", a.getDefaulttimezone());
 			dForm.set("web_enabled", "" + a.isWeb_enabled());
 			dForm.set("ws_enabled", "" + a.isWs_enabled());
-			
+			dForm.set("max_ws_sessions", "" + a.getMax_ws_sessions());
+					
 			if (a.isAccount_locked()) {
 				ActionMessage error = new ActionMessage("error.user.admin.lockedout");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -303,6 +304,7 @@ public final class ManageAgents extends Action {
 						TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS, user)) {
 					agent.setWeb_enabled(((String) dForm.get("web_enabled")).equals("true"));
 					agent.setWs_enabled(((String) dForm.get("ws_enabled")).equals("true"));
+					agent.setMax_ws_sessions(Integer.parseInt((String)dForm.get("max_ws_sessions")));
 					if (!agent.isWeb_enabled() && !agent.isWs_enabled()) {
 						ActionMessage error = new ActionMessage("error.agents.mustbeweborws");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);

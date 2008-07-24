@@ -341,7 +341,17 @@ function gopage(i) {
                 </td>
               </logic:iterate>
             </tr>
-
+			<tr>
+              <td>
+                <bean:message key="header.agentMaxWsSessions" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="max_ws_sessions" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
             <tr>
               <td>
                 <bean:message key="header.agentDefaultTimezone" />

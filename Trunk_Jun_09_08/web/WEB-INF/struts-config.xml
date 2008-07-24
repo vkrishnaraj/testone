@@ -111,6 +111,7 @@
 			<form-property name="agentType" type="java.lang.String" />
 			<form-property name="web_enabled" type="java.lang.String" />
 			<form-property name="ws_enabled" type="java.lang.String" />
+			<form-property name="max_ws_sessions" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="groupForm"
 			type="org.apache.struts.validator.DynaValidatorForm">
@@ -436,10 +437,6 @@
 		<forward name="auditCompanyCompareDetail"
 			path="audit_CompanyCompareDetail" />
 
-		<forward name="auditGroup" path="audit_Group" />
-		<forward name="auditGroupDetail" path="audit_GroupDetail" />
-		<forward name="auditGroupCompareDetail"
-			path="audit_GroupCompareDetail" />
 
 		<forward name="auditAirport" path="audit_Airport" />
 		<forward name="auditAirportDetail" path="audit_AirportDetail" />

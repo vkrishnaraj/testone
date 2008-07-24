@@ -290,6 +290,18 @@
               </html:select>
             </td>
           </tr>
+          <tr>
+            <td>
+              <bean:message key="header.agentMaxWsSessions" />
+              <font color=red>
+                *
+              </font>
+              :
+            </td>
+            <td>
+              <html:text name="agentForm" property="max_ws_sessions" size="4" maxlength="3" styleClass="textfield" />
+            </td>
+          </tr>
 <%
           }
 %>          
