@@ -125,10 +125,25 @@ public class Item implements Serializable {
 		return ret;
 	}
 
+	/**
+	 * @deprecated Items shouldn't know about a locale. that is dependent on who the item info
+	 * 	is being displaye to.
+	 * @see Item#getCurrency(String)
+	 */
 	public String getCurrency() {
+		return this.getCurrency(this.locale);
+	}
+	
+	/**
+	 * Gets the locale specific description of this items currency code.
+	 * 
+	 * @param locale
+	 * @return
+	 */
+	public String getCurrency(String locale) {
 		String ret = "";
 
-		if (currency_ID != null && currency_ID.length() > 0 && !currency_ID.equals("0")) {
+		if (currency_ID != null && currency_ID.length() > 0 && !currency_ID.equals("0") && locale != null && locale.trim().length() > 0) {
 			ret = CurrencyUtils.getCurrency(currency_ID, locale).getDescription();
 		}
 
