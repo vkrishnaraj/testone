@@ -22,17 +22,17 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Order;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -48,10 +48,12 @@ import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
@@ -61,11 +63,11 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.XDescElement;
-import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
+import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -285,7 +287,8 @@ public class TracerUtils {
 		r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
 				user.getDefaulttimezone()).getTimezone()));
 
-		// if pass in action file id then store action text in the remark text field
+		// if pass in action file id then store action text in the remark text
+		// field
 		if (request.getParameter("wt_af_id") != null) {
 			Worldtracer_Actionfiles Action_file = null;
 			Action_file = WorldTracerUtils.findActionFileByID(Integer
@@ -412,12 +415,15 @@ public class TracerUtils {
 										TracingConstants.ActiveStatus.ALL));
 
 		// set company lists
-		if(session.getAttribute("companylistByName") == null || session.getAttribute("companylistById") == null) {
+		if (session.getAttribute("companylistByName") == null
+				|| session.getAttribute("companylistById") == null) {
 			ArrayList<ArrayList<Company>> result = getCompanyLists();
-			session.setAttribute("companylistByName", result.get(COMPANY_LIST_BY_NAME_INDEX));
-			session.setAttribute("companylistById", result.get(COMPANY_LIST_BY_ID_INDEX));
+			session.setAttribute("companylistByName", result
+					.get(COMPANY_LIST_BY_NAME_INDEX));
+			session.setAttribute("companylistById", result
+					.get(COMPANY_LIST_BY_ID_INDEX));
 		}
-		
+
 		// set expense type list
 		session.setAttribute("expensetypelist", session
 				.getAttribute("expensetypelist") != null ? session
@@ -686,10 +692,11 @@ public class TracerUtils {
 				TracingConstants.ActiveStatus.ACTIVE);
 	}
 
-	public static ArrayList<ArrayList<Company>> getCompanyLists() throws HibernateException {
+	public static ArrayList<ArrayList<Company>> getCompanyLists()
+			throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			
+
 			// when company is null, return all distinct stationscodes, for
 			// itinerary
 			// dropdown
@@ -719,14 +726,15 @@ public class TracerUtils {
 				companyByName.add(company);
 				companyById.add(company);
 			}
-			//Collections.sort(companyById, companyById.new CompanyIdComparator<Company>());
+			// Collections.sort(companyById, companyById.new
+			// CompanyIdComparator<Company>());
 			Collections.sort(companyById, new Comparator<Company>() {
-				
+
 				public int compare(Company o1, Company o2) {
-					return o1.getCompanyCode_ID().compareTo(o2.getCompanyCode_ID());
+					return o1.getCompanyCode_ID().compareTo(
+							o2.getCompanyCode_ID());
 				}
-				
-				
+
 			});
 			result.add(companyByName);
 			result.add(companyById);
@@ -1457,5 +1465,64 @@ public class TracerUtils {
 		}
 		return "";
 	}
-
+	
+	
+	//-------------------------------------------------------
+	public static Incident incidentFileReference(String fileReference)
+	{
+		IncidentBMO incidentBMO=new IncidentBMO();
+		Incident incident=incidentBMO.findIncidentByID(fileReference);
+		return incident;
+	}
+	public static OHD ohdFileReference(String fileReference)
+	{
+		OhdBMO ohdBMO=new OhdBMO();
+		OHD ohd=ohdBMO.findOHDByID(fileReference);
+		return ohd;
+	}
+	public static void madeSuspendWT_BAG_SELECTED(List list){
+		Session session=HibernateWrapper.getSession().openSession();
+		Transaction tx=session.beginTransaction();
+		Iterator it=list.iterator();
+		while(it.hasNext()){
+			Item item=(Item)it.next();
+			item.setWt_bag_selected(1);
+			session.update(item);
+			if(tx.isActive()){
+				tx.commit();
+			}
+			else{
+				tx=session.beginTransaction();
+				tx.commit();
+			}
+		}
+		session.close();
+	}
+	public static Item findItemByItemID(int itemID){
+		Session session=HibernateWrapper.getSession().openSession();
+		Query query=session.createQuery("from com.bagnet.nettracer.tracing.db.Item as item where item.item_ID=?");
+		query.setParameter(0, itemID);
+		List list=query.list();
+		Item item=(Item)list.get(0);
+		session.close();
+		return item;
+	}
+	public static void madePartSuspendWT_BAG_SELECTED(String[] checkbox)
+	{
+		Session session = HibernateWrapper.getSession().openSession();
+		Transaction tx=session.beginTransaction();
+		for(int i=0;i<checkbox.length;i++){
+			Item item=TracerUtils.findItemByItemID(Integer.parseInt(checkbox[i]));
+			item.setWt_bag_selected(1);
+			session.update(item);
+			if(tx.isActive()){
+				tx.commit();
+			}
+			else{
+				tx=session.beginTransaction();
+				tx.commit();
+			}
+		}
+		session.close();
+	}
 }

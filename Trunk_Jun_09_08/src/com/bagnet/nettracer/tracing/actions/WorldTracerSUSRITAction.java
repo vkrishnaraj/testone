@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,26 +53,41 @@ public class WorldTracerSUSRITAction extends Action {
 		String checkbox[]=request.getParameterValues("judgepartsuspend");
 		if(checkbox!=null){
 			TracerUtils.madePartSuspendWT_BAG_SELECTED(checkbox);
+			request.setAttribute("completeSuccess","1");
 		}
 		String suspend = request.getParameter("suspend");
-		System.out.println("==============" + suspend);
 		String fileReference = request.getParameter("fileReference");
 		String ahlORohd = request.getParameter("ahlORohd");
+		String hidden = request.getParameter("hidden");
 		List list3 = new ArrayList();
 		List list4 = new ArrayList();
 		request.setAttribute("radio", "completeSUS");
+		request.setAttribute("span", "");
+		request.setAttribute("ahlOrohd","ahl");
+		if(null==suspend||suspend.equals("completeSUS")||suspend.equals("")){
+			request.setAttribute("span", "completeSUS");
+		}
+		else if(suspend.equals("partSUS")){
+			request.setAttribute("span","partSUS");
+		}
 		// fileReference.trim()
 		if (null == fileReference || "".equals(fileReference.trim())) {
-			ActionMessage error = new ActionMessage("error.noincident");
-			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-			saveMessages(request, errors);
 			request.setAttribute("filereference","");
+			if(hidden!=null&&!hidden.trim().equals("")){
+				ActionMessage error = new ActionMessage("error.noincident");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}
 		} else {
-			// 判断item表中是否存在该fileReference
 			request.setAttribute("filereference",fileReference);
-			if (suspend.equals("completeSUS")) {// 如果是:complete类型的suspend
+			if (suspend.equals("completeSUS")) {
 				request.setAttribute("radio", "completeSUS");
-				if (ahlORohd.equals("ahl")) {
+				if(null==ahlORohd||ahlORohd.trim().equals("")){
+					//System.out.println("---------------");
+					ahlORohd="ahl";
+				}
+				if (null!=ahlORohd&&ahlORohd.equals("ahl")) {
+					//System.out.println("fffffffffffffffffffffff");
 					Incident incident = TracerUtils
 							.incidentFileReference(fileReference);
 					if (null == incident) {
@@ -82,6 +98,7 @@ public class WorldTracerSUSRITAction extends Action {
 					} else {
 						if (incident.getWt_id() == null
 								|| incident.getWt_id().trim().equals("")) {
+							System.out.println("wt_id is null");
 							ActionMessage error = new ActionMessage(
 									"error.nowt_id");
 							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -89,11 +106,11 @@ public class WorldTracerSUSRITAction extends Action {
 						} else {
 							list3 = incident.getItemlist();
 							TracerUtils.madeSuspendWT_BAG_SELECTED(list3);
-							System.out.println("wwwwwwwwwwwwwwwwww"
-									+ list3.size());
+							request.setAttribute("completeSuccess","1");
 						}
 					}
-				} else if (ahlORohd.equals("ohd")) {
+				} else if (null!=ahlORohd&&ahlORohd.equals("ohd")) {
+					request.setAttribute("ahlOrohd","ohd");
 					OHD ohd = TracerUtils.ohdFileReference(fileReference);
 					if (ohd == null) {
 						ActionMessage error = new ActionMessage("error.noohd");
@@ -107,12 +124,12 @@ public class WorldTracerSUSRITAction extends Action {
 							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 							saveMessages(request, errors);
 						} else {
-							list3 = (List) ohd.getItems();
-							TracerUtils.madeSuspendWT_BAG_SELECTED(list3);
+						   // list3 = new ArrayList(ohd.getItems());
+							//TracerUtils.madeSuspendWT_BAG_SELECTED(list3);
 						}
 					}
 				}
-			} else if (suspend.equals("partSUS")) {// 如果是:part类型的suspend
+			} else if (suspend.equals("partSUS")) {
 				request.setAttribute("radio", "partSUS");
 				Incident incident = TracerUtils
 						.incidentFileReference(fileReference);
