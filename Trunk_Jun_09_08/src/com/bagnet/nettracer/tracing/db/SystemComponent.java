@@ -21,6 +21,7 @@ public class SystemComponent implements Serializable {
 	private String component_action_link;
 	private int sort_order;
 	private int display;
+	private int sort_group;
 
 	/**
 	 * @hibernate.property type="integer"
@@ -149,4 +150,21 @@ public class SystemComponent implements Serializable {
 				+ this.getComponent_action_link() + " parent=" + this.getParent().getComponent_ID());
 		return sb.toString();
 	}
+	
+	/**
+	 * @hibernate.property type="integer"
+	 * @return Returns the sort_group.
+	 */
+	public int getSort_group() {
+		return sort_group;
+	}
+
+	/**
+	 * @param sort_group
+	 *          The sort_group to set.
+	 */
+	public void setSort_group(int sort_group) {
+		this.sort_group = sort_group;
+	}
+
 }

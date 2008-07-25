@@ -1,7 +1,10 @@
 package com.bagnet.nettracer.ws.core;
 
+import com.bagnet.nettracer.ws.core.pojo.WS_BEORN;
 import com.bagnet.nettracer.ws.core.pojo.WS_Incident;
 import com.bagnet.nettracer.ws.core.pojo.WS_OHD;
+import com.bagnet.nettracer.ws.core.pojo.WS_OhdResponse;
+import com.bagnet.nettracer.ws.core.pojo.WS_QOHD;
 
 
 public class NTCoreService {
@@ -30,34 +33,17 @@ public class NTCoreService {
 	public boolean logoff(String session_id) {
 		/*
 		WSCoreUtil coreutil = new WSCoreUtil();
-  	return coreutil.logoff(logoff);
+	  	return coreutil.logoff(logoff);
 		*/
 		return true;
 	}
-	
-	/**
-	 * return array of ohds based on company specific variable, 
-	 * 
-	 * this method is used specifically for world tracer to send worldtracer an array of ohds 
-	 * for tracing on other airlines
-	 * @param companycode
-	 * @return
-	 */
-	public WS_OHD[] getOHDsForWT(String companycode, String session_id) {
-		/*
-		 	WSCoreOHDUtil coreutil = new WSCoreOHDUtil();
-    	return coreutil.getOHDsForWT(getOHDsForWT);
-		*/
-		WS_OHD[] wos = null;
-		return wos;
-	}
-	
+		
 	/**
 	 * return a single ohd based on ohd number
 	 * @param ohd_id
 	 * @return
 	 */
-	public WS_OHD getOHD(String ohd_id, String session_id) {
+	public WS_OHD getOHD(String session_id, String ohd_id) {
 		/*
 			WSCoreOHDUtil coreutil = new WSCoreOHDUtil();
     	return coreutil.getOHD(getOHD);
@@ -72,7 +58,7 @@ public class NTCoreService {
 	 * @param incident_id
 	 * @return
 	 */
-	public WS_Incident getIncident(String incident_id, String session_id, String inc_type) {
+	public WS_Incident getIncident(String session_id, String incident_id, String inc_type) {
 		/*
     	WSCoreIncidentUtil coreutil = new WSCoreIncidentUtil();
     	return coreutil.getIncident(getIncident);
@@ -86,7 +72,7 @@ public class NTCoreService {
 	 * @param incident_id
 	 * @return
 	 */
-	public String insertIncident(WS_Incident si) {
+	public String insertIncident(String session_id, WS_Incident si) {
 		/*
     	WSCoreIncidentUtil coreutil = new WSCoreIncidentUtil();
     	return coreutil.insertIncident(insertIncident);
@@ -99,12 +85,39 @@ public class NTCoreService {
 	 * @param incident_id
 	 * @return
 	 */
-	public String insertOHD(WS_OHD so) {
+	public WS_OhdResponse insertOHD(String session_id, WS_OHD si) {
 		/*
-    	WSCoreIncidentUtil coreutil = new WSCoreIncidentUtil();
+    	WSCoreOHDUtil coreutil = new WSCoreOHDUtil();
     	return coreutil.insertOHD(insertOHD);
 		*/
-		return null;
+		WS_OhdResponse so = null;
+		return so;
 	}
 	
+	/**
+	 * insert ohd
+	 * @param incident_id
+	 * @return
+	 */
+	public WS_OhdResponse insertQuickOHD(String session_id, WS_QOHD si) {
+		/*
+    	return new WSCoreOHDUtil().insertQOHD(insertQuickOHD);
+		*/
+		WS_OhdResponse so = null;
+		return so;
+	}
+	
+	/**
+	 * BEORN
+	 * @param sf WS_FWD
+	 * @return
+	 */
+	public WS_OhdResponse beornOHD(String session_id, WS_BEORN si) {
+		/*
+    	WSCoreIncidentUtil coreutil = new WSCoreForwardUtil();
+    	return coreutil.forwardOHD(forwardOHD);
+		*/
+		WS_OhdResponse so = null;
+		return so;
+	}
 }

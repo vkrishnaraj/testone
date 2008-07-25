@@ -99,34 +99,18 @@ public class InsertOHDResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
         /**
          * Gets the "return" element
          */
-        public java.lang.String getReturn() {
+        public com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse getReturn() {
             synchronized (monitor()) {
                 check_orphaned();
 
-                org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(RETURN$0,
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                   .find_element_user(RETURN$0,
                         0);
 
                 if (target == null) {
                     return null;
                 }
-
-                return target.getStringValue();
-            }
-        }
-
-        /**
-         * Gets (as xml) the "return" element
-         */
-        public org.apache.xmlbeans.XmlString xgetReturn() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(RETURN$0,
-                        0);
 
                 return target;
             }
@@ -139,9 +123,9 @@ public class InsertOHDResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
             synchronized (monitor()) {
                 check_orphaned();
 
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(RETURN$0,
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                   .find_element_user(RETURN$0,
                         0);
 
                 if (target == null) {
@@ -166,42 +150,37 @@ public class InsertOHDResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
         /**
          * Sets the "return" element
          */
-        public void setReturn(java.lang.String xreturn) {
+        public void setReturn(
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse xreturn) {
             synchronized (monitor()) {
                 check_orphaned();
 
-                org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(RETURN$0,
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                   .find_element_user(RETURN$0,
                         0);
 
                 if (target == null) {
-                    target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                                   .add_element_user(RETURN$0);
+                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                       .add_element_user(RETURN$0);
                 }
 
-                target.setStringValue(xreturn);
+                target.set(xreturn);
             }
         }
 
         /**
-         * Sets (as xml) the "return" element
+         * Appends and returns a new empty "return" element
          */
-        public void xsetReturn(org.apache.xmlbeans.XmlString xreturn) {
+        public com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse addNewReturn() {
             synchronized (monitor()) {
                 check_orphaned();
 
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(RETURN$0,
-                        0);
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                   .add_element_user(RETURN$0);
 
-                if (target == null) {
-                    target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(RETURN$0);
-                }
-
-                target.set(xreturn);
+                return target;
             }
         }
 
@@ -212,14 +191,14 @@ public class InsertOHDResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
             synchronized (monitor()) {
                 check_orphaned();
 
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(RETURN$0,
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                   .find_element_user(RETURN$0,
                         0);
 
                 if (target == null) {
-                    target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(RETURN$0);
+                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse) get_store()
+                                                                                       .add_element_user(RETURN$0);
                 }
 
                 target.setNil();

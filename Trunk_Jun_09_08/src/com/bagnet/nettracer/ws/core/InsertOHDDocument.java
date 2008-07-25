@@ -8,8 +8,6 @@
  */
 package com.bagnet.nettracer.ws.core;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * A document containing one insertOHD(@http://core.ws.nettracer.bagnet.com) element.
@@ -18,7 +16,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface InsertOHDDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHDDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                            .resolveHandle("insertohd321adoctype");
 
     /**
@@ -44,43 +42,83 @@ public interface InsertOHDDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface InsertOHD extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHD.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+                "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                                .resolveHandle("insertohda8b8elemtype");
 
         /**
-         * Gets the "so" element
+         * Gets the "session_id" element
          */
-        com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD getSo();
+        java.lang.String getSessionId();
 
         /**
-         * Tests for nil "so" element
+         * Gets (as xml) the "session_id" element
          */
-        boolean isNilSo();
+        org.apache.xmlbeans.XmlString xgetSessionId();
 
         /**
-         * True if has "so" element
+         * Tests for nil "session_id" element
          */
-        boolean isSetSo();
+        boolean isNilSessionId();
 
         /**
-         * Sets the "so" element
+         * True if has "session_id" element
          */
-        void setSo(com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD so);
+        boolean isSetSessionId();
 
         /**
-         * Appends and returns a new empty "so" element
+         * Sets the "session_id" element
          */
-        com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD addNewSo();
+        void setSessionId(java.lang.String sessionId);
 
         /**
-         * Nils the "so" element
+         * Sets (as xml) the "session_id" element
          */
-        void setNilSo();
+        void xsetSessionId(org.apache.xmlbeans.XmlString sessionId);
 
         /**
-         * Unsets the "so" element
+         * Nils the "session_id" element
          */
-        void unsetSo();
+        void setNilSessionId();
+
+        /**
+         * Unsets the "session_id" element
+         */
+        void unsetSessionId();
+
+        /**
+         * Gets the "si" element
+         */
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD getSi();
+
+        /**
+         * Tests for nil "si" element
+         */
+        boolean isNilSi();
+
+        /**
+         * True if has "si" element
+         */
+        boolean isSetSi();
+
+        /**
+         * Sets the "si" element
+         */
+        void setSi(com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD si);
+
+        /**
+         * Appends and returns a new empty "si" element
+         */
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD addNewSi();
+
+        /**
+         * Nils the "si" element
+         */
+        void setNilSi();
+
+        /**
+         * Unsets the "si" element
+         */
+        void unsetSi();
 
         /**
          * A factory class with static methods for creating instances

@@ -27,6 +27,9 @@ public final class ForwardMessageForm extends ActionForm {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+	private String lossCode;
+	private String faultStation;
+	
 
 	/**
 	 * @return Returns the bagitinerarylist.
@@ -132,7 +135,37 @@ public final class ForwardMessageForm extends ActionForm {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+	/**
+	 * @return Returns the lossCode.
+	 */
+	public String getLossCode() {
+		return lossCode;
+	}
 
+	/**
+	 * @param lossCode
+	 *          The lossCode to set.
+	 */
+	public void setLossCode(String lossCode) {
+		this.lossCode = lossCode;
+	}
+
+	/**
+	 * @return Returns the faultStation.
+	 */
+	public String getFaultStation() {
+		return faultStation;
+	}
+
+	/**
+	 * @param faultStation
+	 *          The faultStation to set.
+	 */
+	public void setFaultStation(String faultStation) {
+		this.faultStation = faultStation;
+	}
+	
 	public OHD_Itinerary getBagItinerary(int index) {
 		if (this.bagitinerarylist.size() <= index) {
 			OHD_Itinerary i = new OHD_Itinerary();

@@ -3,9 +3,6 @@ package com.bagnet.nettracer.ws.core.pojo;
 
 public class WS_Incident {
 	
-	private String webservice_session_ID;
-	private String username;
-	
 	private String Incident_ID;
 	private String companycode_ID;	// company that holds this claim
 	private String stationcreated;
@@ -69,42 +66,6 @@ public class WS_Incident {
 	}
 
 	
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-
-
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
-
-	/**
-	 * @return the webservice_session_ID
-	 */
-	public String getWebservice_session_ID() {
-		return webservice_session_ID;
-	}
-
-
-
-	/**
-	 * @param webservice_session_ID the webservice_session_ID to set
-	 */
-	public void setWebservice_session_ID(String webservice_session_ID) {
-		this.webservice_session_ID = webservice_session_ID;
-	}
-
-
-
 	/**
 	 * @return the companycode_ID
 	 */

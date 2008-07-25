@@ -411,6 +411,8 @@ public class MissingAction extends Action {
 					bag_check_info.put("checkedlocation", "Plane-side");
 				else if (form.getCheckedlocation().equalsIgnoreCase("6"))
 					bag_check_info.put("checkedlocation", "Unchecked");
+				else if (form.getCheckedlocation().equalsIgnoreCase("7"))
+					bag_check_info.put("checkedlocation", "Kiosk");
 
 				if (form.getCourtesyreport() == 0)
 					bag_check_info.put("courtesyreport", "no");

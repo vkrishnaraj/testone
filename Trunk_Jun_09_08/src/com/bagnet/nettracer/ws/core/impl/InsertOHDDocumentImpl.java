@@ -86,43 +86,61 @@ public class InsertOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
      */
     public static class InsertOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
         implements com.bagnet.nettracer.ws.core.InsertOHDDocument.InsertOHD {
-        private static final javax.xml.namespace.QName SO$0 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
-                "so");
+        private static final javax.xml.namespace.QName SESSIONID$0 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
+                "session_id");
+        private static final javax.xml.namespace.QName SI$2 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
+                "si");
 
         public InsertOHDImpl(org.apache.xmlbeans.SchemaType sType) {
             super(sType);
         }
 
         /**
-         * Gets the "so" element
+         * Gets the "session_id" element
          */
-        public com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD getSo() {
+        public java.lang.String getSessionId() {
             synchronized (monitor()) {
                 check_orphaned();
 
-                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
-                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                           .find_element_user(SO$0,
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     return null;
                 }
 
+                return target.getStringValue();
+            }
+        }
+
+        /**
+         * Gets (as xml) the "session_id" element
+         */
+        public org.apache.xmlbeans.XmlString xgetSessionId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(SESSIONID$0,
+                        0);
+
                 return target;
             }
         }
 
         /**
-         * Tests for nil "so" element
+         * Tests for nil "session_id" element
          */
-        public boolean isNilSo() {
+        public boolean isNilSessionId() {
             synchronized (monitor()) {
                 check_orphaned();
 
-                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
-                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                           .find_element_user(SO$0,
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
@@ -134,67 +152,73 @@ public class InsertOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
         }
 
         /**
-         * True if has "so" element
+         * True if has "session_id" element
          */
-        public boolean isSetSo() {
+        public boolean isSetSessionId() {
             synchronized (monitor()) {
                 check_orphaned();
 
-                return get_store().count_elements(SO$0) != 0;
+                return get_store().count_elements(SESSIONID$0) != 0;
             }
         }
 
         /**
-         * Sets the "so" element
+         * Sets the "session_id" element
          */
-        public void setSo(com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD so) {
+        public void setSessionId(java.lang.String sessionId) {
             synchronized (monitor()) {
                 check_orphaned();
 
-                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
-                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                           .find_element_user(SO$0,
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
-                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                               .add_element_user(SO$0);
+                    target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                                   .add_element_user(SESSIONID$0);
                 }
 
-                target.set(so);
+                target.setStringValue(sessionId);
             }
         }
 
         /**
-         * Appends and returns a new empty "so" element
+         * Sets (as xml) the "session_id" element
          */
-        public com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD addNewSo() {
+        public void xsetSessionId(org.apache.xmlbeans.XmlString sessionId) {
             synchronized (monitor()) {
                 check_orphaned();
 
-                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
-                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                           .add_element_user(SO$0);
-
-                return target;
-            }
-        }
-
-        /**
-         * Nils the "so" element
-         */
-        public void setNilSo() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
-                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                           .find_element_user(SO$0,
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
-                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
-                                                                               .add_element_user(SO$0);
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(SESSIONID$0);
+                }
+
+                target.set(sessionId);
+            }
+        }
+
+        /**
+         * Nils the "session_id" element
+         */
+        public void setNilSessionId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(SESSIONID$0,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(SESSIONID$0);
                 }
 
                 target.setNil();
@@ -202,12 +226,130 @@ public class InsertOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
         }
 
         /**
-         * Unsets the "so" element
+         * Unsets the "session_id" element
          */
-        public void unsetSo() {
+        public void unsetSessionId() {
             synchronized (monitor()) {
                 check_orphaned();
-                get_store().remove_element(SO$0, 0);
+                get_store().remove_element(SESSIONID$0, 0);
+            }
+        }
+
+        /**
+         * Gets the "si" element
+         */
+        public com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD getSi() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                           .find_element_user(SI$2,
+                        0);
+
+                if (target == null) {
+                    return null;
+                }
+
+                return target;
+            }
+        }
+
+        /**
+         * Tests for nil "si" element
+         */
+        public boolean isNilSi() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                           .find_element_user(SI$2,
+                        0);
+
+                if (target == null) {
+                    return false;
+                }
+
+                return target.isNil();
+            }
+        }
+
+        /**
+         * True if has "si" element
+         */
+        public boolean isSetSi() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                return get_store().count_elements(SI$2) != 0;
+            }
+        }
+
+        /**
+         * Sets the "si" element
+         */
+        public void setSi(com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD si) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                           .find_element_user(SI$2,
+                        0);
+
+                if (target == null) {
+                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                               .add_element_user(SI$2);
+                }
+
+                target.set(si);
+            }
+        }
+
+        /**
+         * Appends and returns a new empty "si" element
+         */
+        public com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD addNewSi() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                           .add_element_user(SI$2);
+
+                return target;
+            }
+        }
+
+        /**
+         * Nils the "si" element
+         */
+        public void setNilSi() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                           .find_element_user(SI$2,
+                        0);
+
+                if (target == null) {
+                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD) get_store()
+                                                                               .add_element_user(SI$2);
+                }
+
+                target.setNil();
+            }
+        }
+
+        /**
+         * Unsets the "si" element
+         */
+        public void unsetSi() {
+            synchronized (monitor()) {
+                check_orphaned();
+                get_store().remove_element(SI$2, 0);
             }
         }
     }

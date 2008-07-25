@@ -62,15 +62,11 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
             "storage_location");
     private static final javax.xml.namespace.QName TYPE$46 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "type");
-    private static final javax.xml.namespace.QName USERNAME$48 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
-            "username");
-    private static final javax.xml.namespace.QName WEBSERVICESESSIONID$50 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
-            "webservice_session_ID");
-    private static final javax.xml.namespace.QName XDESCELEMENT1$52 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName XDESCELEMENT1$48 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "xdescelement1");
-    private static final javax.xml.namespace.QName XDESCELEMENT2$54 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName XDESCELEMENT2$50 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "xdescelement2");
-    private static final javax.xml.namespace.QName XDESCELEMENT3$56 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName XDESCELEMENT3$52 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "xdescelement3");
 
     public WSOHDImpl(org.apache.xmlbeans.SchemaType sType) {
@@ -3508,287 +3504,6 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
     }
 
     /**
-     * Gets the "username" element
-     */
-    public java.lang.String getUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(USERNAME$48,
-                    0);
-
-            if (target == null) {
-                return null;
-            }
-
-            return target.getStringValue();
-        }
-    }
-
-    /**
-     * Gets (as xml) the "username" element
-     */
-    public org.apache.xmlbeans.XmlString xgetUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$48,
-                    0);
-
-            return target;
-        }
-    }
-
-    /**
-     * Tests for nil "username" element
-     */
-    public boolean isNilUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$48,
-                    0);
-
-            if (target == null) {
-                return false;
-            }
-
-            return target.isNil();
-        }
-    }
-
-    /**
-     * True if has "username" element
-     */
-    public boolean isSetUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            return get_store().count_elements(USERNAME$48) != 0;
-        }
-    }
-
-    /**
-     * Sets the "username" element
-     */
-    public void setUsername(java.lang.String username) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(USERNAME$48,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(USERNAME$48);
-            }
-
-            target.setStringValue(username);
-        }
-    }
-
-    /**
-     * Sets (as xml) the "username" element
-     */
-    public void xsetUsername(org.apache.xmlbeans.XmlString username) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$48,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(USERNAME$48);
-            }
-
-            target.set(username);
-        }
-    }
-
-    /**
-     * Nils the "username" element
-     */
-    public void setNilUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$48,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(USERNAME$48);
-            }
-
-            target.setNil();
-        }
-    }
-
-    /**
-     * Unsets the "username" element
-     */
-    public void unsetUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-            get_store().remove_element(USERNAME$48, 0);
-        }
-    }
-
-    /**
-     * Gets the "webservice_session_ID" element
-     */
-    public java.lang.String getWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(WEBSERVICESESSIONID$50,
-                    0);
-
-            if (target == null) {
-                return null;
-            }
-
-            return target.getStringValue();
-        }
-    }
-
-    /**
-     * Gets (as xml) the "webservice_session_ID" element
-     */
-    public org.apache.xmlbeans.XmlString xgetWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$50,
-                    0);
-
-            return target;
-        }
-    }
-
-    /**
-     * Tests for nil "webservice_session_ID" element
-     */
-    public boolean isNilWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$50,
-                    0);
-
-            if (target == null) {
-                return false;
-            }
-
-            return target.isNil();
-        }
-    }
-
-    /**
-     * True if has "webservice_session_ID" element
-     */
-    public boolean isSetWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            return get_store().count_elements(WEBSERVICESESSIONID$50) != 0;
-        }
-    }
-
-    /**
-     * Sets the "webservice_session_ID" element
-     */
-    public void setWebserviceSessionID(java.lang.String webserviceSessionID) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(WEBSERVICESESSIONID$50,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(WEBSERVICESESSIONID$50);
-            }
-
-            target.setStringValue(webserviceSessionID);
-        }
-    }
-
-    /**
-     * Sets (as xml) the "webservice_session_ID" element
-     */
-    public void xsetWebserviceSessionID(
-        org.apache.xmlbeans.XmlString webserviceSessionID) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$50,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(WEBSERVICESESSIONID$50);
-            }
-
-            target.set(webserviceSessionID);
-        }
-    }
-
-    /**
-     * Nils the "webservice_session_ID" element
-     */
-    public void setNilWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$50,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(WEBSERVICESESSIONID$50);
-            }
-
-            target.setNil();
-        }
-    }
-
-    /**
-     * Unsets the "webservice_session_ID" element
-     */
-    public void unsetWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-            get_store().remove_element(WEBSERVICESESSIONID$50, 0);
-        }
-    }
-
-    /**
      * Gets the "xdescelement1" element
      */
     public java.lang.String getXdescelement1() {
@@ -3797,7 +3512,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(XDESCELEMENT1$52,
+                                                           .find_element_user(XDESCELEMENT1$48,
                     0);
 
             if (target == null) {
@@ -3817,7 +3532,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT1$52,
+                                                         .find_element_user(XDESCELEMENT1$48,
                     0);
 
             return target;
@@ -3833,7 +3548,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT1$52,
+                                                         .find_element_user(XDESCELEMENT1$48,
                     0);
 
             if (target == null) {
@@ -3851,7 +3566,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(XDESCELEMENT1$52) != 0;
+            return get_store().count_elements(XDESCELEMENT1$48) != 0;
         }
     }
 
@@ -3864,12 +3579,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(XDESCELEMENT1$52,
+                                                           .find_element_user(XDESCELEMENT1$48,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(XDESCELEMENT1$52);
+                                                               .add_element_user(XDESCELEMENT1$48);
             }
 
             target.setStringValue(xdescelement1);
@@ -3885,12 +3600,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT1$52,
+                                                         .find_element_user(XDESCELEMENT1$48,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(XDESCELEMENT1$52);
+                                                             .add_element_user(XDESCELEMENT1$48);
             }
 
             target.set(xdescelement1);
@@ -3906,12 +3621,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT1$52,
+                                                         .find_element_user(XDESCELEMENT1$48,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(XDESCELEMENT1$52);
+                                                             .add_element_user(XDESCELEMENT1$48);
             }
 
             target.setNil();
@@ -3924,7 +3639,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
     public void unsetXdescelement1() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(XDESCELEMENT1$52, 0);
+            get_store().remove_element(XDESCELEMENT1$48, 0);
         }
     }
 
@@ -3937,7 +3652,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(XDESCELEMENT2$54,
+                                                           .find_element_user(XDESCELEMENT2$50,
                     0);
 
             if (target == null) {
@@ -3957,7 +3672,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT2$54,
+                                                         .find_element_user(XDESCELEMENT2$50,
                     0);
 
             return target;
@@ -3973,7 +3688,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT2$54,
+                                                         .find_element_user(XDESCELEMENT2$50,
                     0);
 
             if (target == null) {
@@ -3991,7 +3706,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(XDESCELEMENT2$54) != 0;
+            return get_store().count_elements(XDESCELEMENT2$50) != 0;
         }
     }
 
@@ -4004,12 +3719,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(XDESCELEMENT2$54,
+                                                           .find_element_user(XDESCELEMENT2$50,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(XDESCELEMENT2$54);
+                                                               .add_element_user(XDESCELEMENT2$50);
             }
 
             target.setStringValue(xdescelement2);
@@ -4025,12 +3740,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT2$54,
+                                                         .find_element_user(XDESCELEMENT2$50,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(XDESCELEMENT2$54);
+                                                             .add_element_user(XDESCELEMENT2$50);
             }
 
             target.set(xdescelement2);
@@ -4046,12 +3761,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT2$54,
+                                                         .find_element_user(XDESCELEMENT2$50,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(XDESCELEMENT2$54);
+                                                             .add_element_user(XDESCELEMENT2$50);
             }
 
             target.setNil();
@@ -4064,7 +3779,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
     public void unsetXdescelement2() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(XDESCELEMENT2$54, 0);
+            get_store().remove_element(XDESCELEMENT2$50, 0);
         }
     }
 
@@ -4077,7 +3792,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(XDESCELEMENT3$56,
+                                                           .find_element_user(XDESCELEMENT3$52,
                     0);
 
             if (target == null) {
@@ -4097,7 +3812,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT3$56,
+                                                         .find_element_user(XDESCELEMENT3$52,
                     0);
 
             return target;
@@ -4113,7 +3828,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT3$56,
+                                                         .find_element_user(XDESCELEMENT3$52,
                     0);
 
             if (target == null) {
@@ -4131,7 +3846,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(XDESCELEMENT3$56) != 0;
+            return get_store().count_elements(XDESCELEMENT3$52) != 0;
         }
     }
 
@@ -4144,12 +3859,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(XDESCELEMENT3$56,
+                                                           .find_element_user(XDESCELEMENT3$52,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(XDESCELEMENT3$56);
+                                                               .add_element_user(XDESCELEMENT3$52);
             }
 
             target.setStringValue(xdescelement3);
@@ -4165,12 +3880,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT3$56,
+                                                         .find_element_user(XDESCELEMENT3$52,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(XDESCELEMENT3$56);
+                                                             .add_element_user(XDESCELEMENT3$52);
             }
 
             target.set(xdescelement3);
@@ -4186,12 +3901,12 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(XDESCELEMENT3$56,
+                                                         .find_element_user(XDESCELEMENT3$52,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(XDESCELEMENT3$56);
+                                                             .add_element_user(XDESCELEMENT3$52);
             }
 
             target.setNil();
@@ -4204,7 +3919,7 @@ public class WSOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
     public void unsetXdescelement3() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(XDESCELEMENT3$56, 0);
+            get_store().remove_element(XDESCELEMENT3$52, 0);
         }
     }
 }

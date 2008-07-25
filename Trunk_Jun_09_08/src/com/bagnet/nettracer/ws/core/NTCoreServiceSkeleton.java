@@ -12,46 +12,24 @@ package com.bagnet.nettracer.ws.core;
 public class NTCoreServiceSkeleton {
     /**
      * Auto generated method signature
-     * @param authenticate
+     * @param insertIncident
      */
-    public com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate) {
+    public com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument insertIncident(
+        com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident) {
         //TODO : fill this with the necessary business logic
-    	WSCoreUtil coreutil = new WSCoreUtil();
-  		return coreutil.authenticate(authenticate);
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#insertIncident");
     }
 
     /**
      * Auto generated method signature
-     * @param getOHDsForWT
+     * @param insertQuickOHD
      */
-    public com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument getOHDsForWT(
-        com.bagnet.nettracer.ws.core.GetOHDsForWTDocument getOHDsForWT) {
+    public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHD(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD) {
         //TODO : fill this with the necessary business logic
-    	WSCoreOHDUtil coreutil = new WSCoreOHDUtil();
-    	return coreutil.getOHDsForWT(getOHDsForWT);
-    }
-
-    /**
-     * Auto generated method signature
-     * @param getOHD
-     */
-    public com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHD(
-        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD) {
-        //TODO : fill this with the necessary business logic
-    	WSCoreOHDUtil coreutil = new WSCoreOHDUtil();
-    	return coreutil.getOHD(getOHD);
-    }
-
-    /**
-     * Auto generated method signature
-     * @param insertOHD
-     */
-    public com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHD(
-        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD) {
-        //TODO : fill this with the necessary business logic
-    	WSCoreOHDUtil coreutil = new WSCoreOHDUtil();
-    	return coreutil.insertOHD(insertOHD);
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#insertQuickOHD");
     }
 
     /**
@@ -61,8 +39,19 @@ public class NTCoreServiceSkeleton {
     public com.bagnet.nettracer.ws.core.GetIncidentResponseDocument getIncident(
         com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident) {
         //TODO : fill this with the necessary business logic
-    	WSCoreIncidentUtil coreutil = new WSCoreIncidentUtil();
-    	return coreutil.getIncident(getIncident);
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#getIncident");
+    }
+
+    /**
+     * Auto generated method signature
+     * @param getOHD
+     */
+    public com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHD(
+        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD) {
+        //TODO : fill this with the necessary business logic
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#getOHD");
     }
 
     /**
@@ -72,18 +61,40 @@ public class NTCoreServiceSkeleton {
     public com.bagnet.nettracer.ws.core.LogoffResponseDocument logoff(
         com.bagnet.nettracer.ws.core.LogoffDocument logoff) {
         //TODO : fill this with the necessary business logic
-    	WSCoreUtil coreutil = new WSCoreUtil();
-  		return coreutil.logoff(logoff);
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#logoff");
     }
 
     /**
      * Auto generated method signature
-     * @param insertIncident
+     * @param authenticate
      */
-    public com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument insertIncident(
-        com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident) {
+    public com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticate(
+        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate) {
         //TODO : fill this with the necessary business logic
-    	WSCoreIncidentUtil coreutil = new WSCoreIncidentUtil();
-    	return coreutil.insertIncident(insertIncident);
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#authenticate");
+    }
+
+    /**
+     * Auto generated method signature
+     * @param insertOHD
+     */
+    public com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHD(
+        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD) {
+        //TODO : fill this with the necessary business logic
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#insertOHD");
+    }
+
+    /**
+     * Auto generated method signature
+     * @param beornOHD
+     */
+    public com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHD(
+        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD) {
+        //TODO : fill this with the necessary business logic
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#beornOHD");
     }
 }

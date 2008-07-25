@@ -181,6 +181,7 @@ public final class ManageAgents extends Action {
 			dForm.set("currentTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
 			dForm.set("defaultTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
 			dForm.set("defCurrency", "" + TracingConstants.DEFAULT_AGENT_CURRENCY);
+			dForm.set("max_ws_sessions", "0");
 
 			return mapping.findForward(TracingConstants.EDIT_AGENT);
 		}

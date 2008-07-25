@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
@@ -189,9 +190,10 @@ public class LogonAction extends Action {
 
 	//Task manager stuff
 	private void taskManagerSetup(HttpSession session, HttpServletRequest request) {
-		LinkedHashMap map = (LinkedHashMap) session.getAttribute("menu_links");
-		LinkedHashMap taskMap = (LinkedHashMap) map.get("Task Manager");
+
 		Agent agent = (Agent) session.getAttribute("user");
+		ArrayList<GroupComponentPolicy> taskList = UserPermissions.getTaskManagerComponents(agent);
+		
 
 		//	check if the cbro agent
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_VIEW, agent)) {
@@ -199,26 +201,24 @@ public class LogonAction extends Action {
 				session.setAttribute("cbroStationID", request.getParameter("cbroStation"));
 		}
 
-		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIMS_TO_BE_PROCESSED, agent)) {
-			taskMap.put(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIMS_TO_BE_PROCESSED, TracingConstants.SYSTEM_COMPONENT_CLAIMS_TO_BE_PROCESSED_ACTION);
-		}
-
-		if (taskMap != null && agent != null) {
+		if (taskList != null && agent != null) {
 			ArrayList list = new ArrayList();
+			
 			Station s = null;
 			if (session.getAttribute("cbroStationID") != null) {
 				s = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 			} else {
 				s = agent.getStation();
 			}
-			for (Iterator i = taskMap.keySet().iterator(); i.hasNext();) {
-				String key = (String) i.next();
+			for (int i=0; i<taskList.size(); ++i) {
+				GroupComponentPolicy policy = (GroupComponentPolicy) taskList.get(i);
 				ActivityDTO dto = new ActivityDTO();
 
-
+				String key = policy.getComponent().getComponent_Name();
 				dto.setActivityinfo(key);
-				dto.setActivityloc((String) taskMap.get(key));
+				dto.setActivityloc(policy.getComponent().getComponent_action_link());
 				dto.setActivityinfomenu(key);
+				dto.setGroup(policy.getComponent().getSort_group());
 
 				int entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
@@ -280,39 +280,50 @@ public class LogonAction extends Action {
 															daform.setStatus_ID("" + TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 															daform.setHeldCompany(s.getCompany().getCompanyCode_ID());
 															daform.setHeldStation(s.getStationcode());
-															List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true);
+															List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false);
 															if (resultlist != null && resultlist.size() > 0)
 																entries = ((Long) resultlist.get(0)).intValue();
 														} else {
-															if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TEMPORARY_REPORTS)) {
-																int x = ((Long) IncidentUtils.getIncidents(agent, "", new ViewTemporaryReportsForm(),
-																		"" + TracingConstants.MBR_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
-																;
-																if (x != -1)
-																	entries = x;
+															if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_BAGS_IN_STATION)) {
+																BagService bs = new BagService();
+																SearchOnHandForm daform = new SearchOnHandForm();
+																daform.setHeldCompany(s.getCompany().getCompanyCode_ID());
+																daform.setHeldStation(s.getStationcode());
+																List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true);
+																if (resultlist != null && resultlist.size() > 0)
+																	entries = ((Long) resultlist.get(0)).intValue();
+	
 															} else {
-																if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MASS_ON_HANDS)) {
-																	int x = ((Long) OHDUtils.getOHDsByType(agent, "", "" + TracingConstants.MASS_OHD_TYPE,
-																			new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
+																if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TEMPORARY_REPORTS)) {
+																	int x = ((Long) IncidentUtils.getIncidents(agent, "", new ViewTemporaryReportsForm(),
+																			"" + TracingConstants.MBR_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
 																	;
 																	if (x != -1)
 																		entries = x;
 																} else {
-																	if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INTERIM_EXPENSE_REQUESTS)) {
-																		int x = ((Long) ExpenseUtils.getPendingInterimExpenses(true,
-																				s.getCompany().getCompanyCode_ID(), new InterimExpenseRequestForm(), "", 0, 0).get(0))
-																				.intValue();
+																	if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MASS_ON_HANDS)) {
+																		int x = ((Long) OHDUtils.getOHDsByType(agent, "", "" + TracingConstants.MASS_OHD_TYPE,
+																				new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
 																		;
 																		if (x != -1)
 																			entries = x;
 																	} else {
-																		if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CREATED_INTERIM_EXPENSE_REQUESTS)) {
-																			int x = ((Long) ExpenseUtils.getCreateInterimExpenses(true,
-																					s.getStation_ID(), new CreatedInterimExpenseRequestForm(), "", 0, 0).get(
-																					0)).intValue();
+																		if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INTERIM_EXPENSE_REQUESTS)) {
+																			int x = ((Long) ExpenseUtils.getPendingInterimExpenses(true,
+																					s.getCompany().getCompanyCode_ID(), new InterimExpenseRequestForm(), "", 0, 0).get(0))
+																					.intValue();
 																			;
 																			if (x != -1)
 																				entries = x;
+																		} else {
+																			if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CREATED_INTERIM_EXPENSE_REQUESTS)) {
+																				int x = ((Long) ExpenseUtils.getCreateInterimExpenses(true,
+																						s.getStation_ID(), new CreatedInterimExpenseRequestForm(), "", 0, 0).get(
+																						0)).intValue();
+																				;
+																				if (x != -1)
+																					entries = x;
+																			}
 																		}
 																	}
 																}

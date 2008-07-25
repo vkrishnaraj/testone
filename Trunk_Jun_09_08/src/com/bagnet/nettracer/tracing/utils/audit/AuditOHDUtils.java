@@ -249,6 +249,8 @@ public class AuditOHDUtils {
 		audit_ohd.setFounddate(ohd.getFounddate());
 		audit_ohd.setFoundtime(ohd.getFoundtime());
 		audit_ohd.setTime_modified(TracerDateTime.getGMTDate());
+		audit_ohd.setFaultstation_ID(ohd.getFaultstation_ID());
+		audit_ohd.setLoss_code(ohd.getLoss_code());
 
 		if (ohd.getControlLog() != null) {
 			Set aControlLog = new HashSet();

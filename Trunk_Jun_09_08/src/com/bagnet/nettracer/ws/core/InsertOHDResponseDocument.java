@@ -8,8 +8,6 @@
  */
 package com.bagnet.nettracer.ws.core;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * A document containing one insertOHDResponse(@http://core.ws.nettracer.bagnet.com) element.
@@ -18,7 +16,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface InsertOHDResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHDResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                            .resolveHandle("insertohdresponse64fbdoctype");
 
     /**
@@ -44,18 +42,13 @@ public interface InsertOHDResponseDocument extends org.apache.xmlbeans.XmlObject
      */
     public interface InsertOHDResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHDResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+                "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                                .resolveHandle("insertohdresponse04faelemtype");
 
         /**
          * Gets the "return" element
          */
-        java.lang.String getReturn();
-
-        /**
-         * Gets (as xml) the "return" element
-         */
-        org.apache.xmlbeans.XmlString xgetReturn();
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse getReturn();
 
         /**
          * Tests for nil "return" element
@@ -70,12 +63,13 @@ public interface InsertOHDResponseDocument extends org.apache.xmlbeans.XmlObject
         /**
          * Sets the "return" element
          */
-        void setReturn(java.lang.String xreturn);
+        void setReturn(
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse xreturn);
 
         /**
-         * Sets (as xml) the "return" element
+         * Appends and returns a new empty "return" element
          */
-        void xsetReturn(org.apache.xmlbeans.XmlString xreturn);
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse addNewReturn();
 
         /**
          * Nils the "return" element

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,8 +17,6 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Expression;
-
-import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -39,7 +38,6 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
@@ -55,14 +53,32 @@ public class OhdBMO {
 
 	private static Logger logger = Logger.getLogger(OhdBMO.class);
 
+
 	/**
 	 * Perform the insert based on passed in object
 	 * 
 	 * @param iDTO
 	 *          the ohd data to be inserted
+	 * @param mod_agent
+	 *          agent creating the OHD.
 	 * @return true if succesful; false otherwise
 	 */
 	public boolean insertOHD(OHD iDTO, Agent mod_agent) {
+		return insertOHD(iDTO, mod_agent, null);
+	}
+	
+	/**
+	 * Perform the insert based on passed in object
+	 * 
+	 * @param iDTO
+	 *          the ohd data to be inserted
+	 * @param mod_agent
+	 *          agent creating the OHD.
+	 * @param createStation
+	 *          Station that we would like object associated with in ID(???DA00001)
+	 * @return true if succesful; false otherwise
+	 */
+	public boolean insertOHD(OHD iDTO, Agent mod_agent, Station createStation) {
 		Transaction t = null;
 		Session sess = null;
 		try {
@@ -74,7 +90,10 @@ public class OhdBMO {
 			boolean isnew = false;
 			if (incident_id == null || incident_id.length() <= 0) {
 				isnew = true;
-				iDTO.setOHD_ID(getOHD_ID(iDTO.getAgent().getStation()));
+				if (createStation != null) 
+					iDTO.setOHD_ID(getOHD_ID(createStation));
+				else
+					iDTO.setOHD_ID(getOHD_ID(iDTO.getAgent().getStation()));
 			} else {
 				oldinc = findOHDByID(incident_id);
 				if (oldinc == null) isnew = true;
@@ -459,7 +478,7 @@ public class OhdBMO {
 	 * @return list of on hands, null if none found.
 	 */
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
-			int currpage, boolean iscount) {
+			int currpage, boolean iscount, boolean notClosed) {
 
 		Session sess = null;
 
@@ -547,7 +566,11 @@ public class OhdBMO {
 
 			if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
 				sql.append(" and ohd.status.status_ID = :status_ID ");
+			} else if (notClosed == true) {
+				sql.append(" and ohd.status.status_ID != :status_ID ");
 			}
+			
+			
 			
 			if (oDTO.getAirline() != null && oDTO.getAirline().length() > 0) {
 				sql.append(" and itinerary.airline like :airline");
@@ -659,6 +682,8 @@ public class OhdBMO {
 
 			if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
 				q.setInteger("status_ID", Integer.parseInt(oDTO.getStatus_ID()));
+			} else if (notClosed) {
+				q.setInteger("status_ID", TracingConstants.OHD_STATUS_CLOSED);
 			}
 			
 			if (oDTO.getAirline() != null && oDTO.getAirline().length() > 0) {

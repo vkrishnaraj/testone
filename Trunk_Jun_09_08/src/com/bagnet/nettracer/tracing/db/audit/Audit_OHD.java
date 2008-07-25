@@ -72,6 +72,9 @@ public class Audit_OHD implements Serializable {
 	private Agent modifying_agent;
 	private String reason_modified;
 	private Date time_modified;
+	
+	private int faultStation;
+	private int loss_code;
 
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
@@ -828,5 +831,38 @@ public class Audit_OHD implements Serializable {
 	public List getItineraryList() {
 		return new ArrayList(this.itinerary);
 	}
+	
+	/**
+	 * @return Returns the faultstation.
+	 * @hibernate.property type="integer"
+	 */
+	public int getFaultstation_ID() {
+		return faultStation;
+	}
+
+	/**
+	 * @param faultstation
+	 *          The faultstation to set.
+	 */
+	public void setFaultstation_ID(int faultStation) {
+		this.faultStation = faultStation;
+	}
+
+	/**
+	 * @hibernate.property type="integer"
+	 * @return Returns the loss_code.
+	 */
+	public int getLoss_code() {
+		return loss_code;
+	}
+
+	/**
+	 * @param loss_code
+	 *          The loss_code to set.
+	 */
+	public void setLoss_code(int loss_code) {
+		this.loss_code = loss_code;
+	}
+
 
 }

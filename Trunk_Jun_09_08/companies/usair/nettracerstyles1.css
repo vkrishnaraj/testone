@@ -94,6 +94,15 @@ form {
 }
 
 /***** HEADER AND MENU *****/
+div.headerleft {
+	float:left;
+}
+
+div.headerright {
+	float:right;
+	text-align:right;
+}
+
 td#header {
 	height: 78px;
 }
@@ -163,6 +172,7 @@ td#pageheadercell {
 	vertical-align:middle;
 	height: 33px;
 }
+
 div#pageheaderleft {
 	float:left;
 	margin-left:5px;
@@ -171,6 +181,7 @@ div#pageheaderright {
 	float:right;
 	text-align:right;
 }
+
 table#pageheaderright td {
 	padding:0px;
 	text-align:left;
@@ -323,6 +334,17 @@ div#maincontent table.form{
 div#maincontent table.form2{
 	background-color:#D1E4F1;
 }
+
+td.white{
+	background-color:#fff;
+	height:10px;
+}
+
+td.header{
+	background-color:#306790;
+	color:#fff;
+}
+
 div#maincontent table.form2_inc{
 	background-color:#D1E4F1;
 }

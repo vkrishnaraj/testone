@@ -7,8 +7,6 @@
  */
 package com.bagnet.nettracer.ws.core.pojo.xsd;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * An XML WS_PVItem(@http://pojo.core.ws.nettracer.bagnet.com/xsd).
@@ -17,7 +15,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface WSPVItem extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVItem.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sFCF83C07F38D90F929612B12CC8E2D04")
+            "schemaorg_apache_xmlbeans.system.sB921E33D1C5CB9EF7DAD6CC23620D701")
                                                                                                                            .resolveHandle("wspvitem0b6etype");
 
     /**

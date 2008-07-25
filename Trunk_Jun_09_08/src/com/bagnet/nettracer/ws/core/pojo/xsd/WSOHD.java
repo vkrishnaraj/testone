@@ -7,8 +7,6 @@
  */
 package com.bagnet.nettracer.ws.core.pojo.xsd;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * An XML WS_OHD(@http://pojo.core.ws.nettracer.bagnet.com/xsd).
@@ -17,7 +15,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface WSOHD extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSOHD.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                            .resolveHandle("wsohd6390type");
 
     /**
@@ -1017,87 +1015,6 @@ public interface WSOHD extends org.apache.xmlbeans.XmlObject {
      * Unsets the "type" element
      */
     void unsetType();
-
-    /**
-     * Gets the "username" element
-     */
-    java.lang.String getUsername();
-
-    /**
-     * Gets (as xml) the "username" element
-     */
-    org.apache.xmlbeans.XmlString xgetUsername();
-
-    /**
-     * Tests for nil "username" element
-     */
-    boolean isNilUsername();
-
-    /**
-     * True if has "username" element
-     */
-    boolean isSetUsername();
-
-    /**
-     * Sets the "username" element
-     */
-    void setUsername(java.lang.String username);
-
-    /**
-     * Sets (as xml) the "username" element
-     */
-    void xsetUsername(org.apache.xmlbeans.XmlString username);
-
-    /**
-     * Nils the "username" element
-     */
-    void setNilUsername();
-
-    /**
-     * Unsets the "username" element
-     */
-    void unsetUsername();
-
-    /**
-     * Gets the "webservice_session_ID" element
-     */
-    java.lang.String getWebserviceSessionID();
-
-    /**
-     * Gets (as xml) the "webservice_session_ID" element
-     */
-    org.apache.xmlbeans.XmlString xgetWebserviceSessionID();
-
-    /**
-     * Tests for nil "webservice_session_ID" element
-     */
-    boolean isNilWebserviceSessionID();
-
-    /**
-     * True if has "webservice_session_ID" element
-     */
-    boolean isSetWebserviceSessionID();
-
-    /**
-     * Sets the "webservice_session_ID" element
-     */
-    void setWebserviceSessionID(java.lang.String webserviceSessionID);
-
-    /**
-     * Sets (as xml) the "webservice_session_ID" element
-     */
-    void xsetWebserviceSessionID(
-        org.apache.xmlbeans.XmlString webserviceSessionID);
-
-    /**
-     * Nils the "webservice_session_ID" element
-     */
-    void setNilWebserviceSessionID();
-
-    /**
-     * Unsets the "webservice_session_ID" element
-     */
-    void unsetWebserviceSessionID();
 
     /**
      * Gets the "xdescelement1" element

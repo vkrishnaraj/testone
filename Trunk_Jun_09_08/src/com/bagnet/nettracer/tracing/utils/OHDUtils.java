@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -1256,4 +1257,55 @@ public class OHDUtils {
 			}
 		}
 	}
+	
+	public static OHD getExistingOnhandWithin24HoursAtStation(String bagTagNumber, Station foundAtStation) {
+
+		List<OHD> list = null;
+		Session sess = null;
+		try {
+			
+			sess = HibernateWrapper.getSession().openSession();
+			StringBuffer sql = new StringBuffer(512);
+
+			GregorianCalendar nowDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+			nowDate.add(GregorianCalendar.DATE, -1);
+			
+			sql.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd where 1=1 ");
+			sql.append(" and ohd.holdingStation.station_ID = :stationID ");
+			sql.append(" and ohd.founddate >= :foundDate ");
+			sql.append(" and ohd.claimnum = :claimnum ");
+			sql.append(" and ohd.status.status_ID <> :closedStatus ");
+			
+			
+			Query q = sess.createQuery(sql.toString());
+
+			q.setInteger("stationID", foundAtStation.getStation_ID());
+			q.setCalendar("foundDate", nowDate);
+			q.setString("claimnum", bagTagNumber);
+			q.setInteger("closedStatus", TracingConstants.OHD_STATUS_CLOSED);
+
+			list = q.list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (list.size() < 1)
+			return null;
+		else if (list.size() == 1)
+			return list.get(0);
+		else
+			return null;
+	}
+	
+	
+	
 }

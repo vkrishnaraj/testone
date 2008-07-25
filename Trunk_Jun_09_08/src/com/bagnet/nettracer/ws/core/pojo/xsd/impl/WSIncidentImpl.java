@@ -76,12 +76,8 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
             "ticketnumber");
     private static final javax.xml.namespace.QName TSACHECKED$60 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "tsachecked");
-    private static final javax.xml.namespace.QName USERNAME$62 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
-            "username");
-    private static final javax.xml.namespace.QName VOLUNTARYSEPARATION$64 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName VOLUNTARYSEPARATION$62 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "voluntaryseparation");
-    private static final javax.xml.namespace.QName WEBSERVICESESSIONID$66 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
-            "webservice_session_ID");
 
     public WSIncidentImpl(org.apache.xmlbeans.SchemaType sType) {
         super(sType);
@@ -4215,146 +4211,6 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     }
 
     /**
-     * Gets the "username" element
-     */
-    public java.lang.String getUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(USERNAME$62,
-                    0);
-
-            if (target == null) {
-                return null;
-            }
-
-            return target.getStringValue();
-        }
-    }
-
-    /**
-     * Gets (as xml) the "username" element
-     */
-    public org.apache.xmlbeans.XmlString xgetUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$62,
-                    0);
-
-            return target;
-        }
-    }
-
-    /**
-     * Tests for nil "username" element
-     */
-    public boolean isNilUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$62,
-                    0);
-
-            if (target == null) {
-                return false;
-            }
-
-            return target.isNil();
-        }
-    }
-
-    /**
-     * True if has "username" element
-     */
-    public boolean isSetUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            return get_store().count_elements(USERNAME$62) != 0;
-        }
-    }
-
-    /**
-     * Sets the "username" element
-     */
-    public void setUsername(java.lang.String username) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(USERNAME$62,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(USERNAME$62);
-            }
-
-            target.setStringValue(username);
-        }
-    }
-
-    /**
-     * Sets (as xml) the "username" element
-     */
-    public void xsetUsername(org.apache.xmlbeans.XmlString username) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$62,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(USERNAME$62);
-            }
-
-            target.set(username);
-        }
-    }
-
-    /**
-     * Nils the "username" element
-     */
-    public void setNilUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(USERNAME$62,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(USERNAME$62);
-            }
-
-            target.setNil();
-        }
-    }
-
-    /**
-     * Unsets the "username" element
-     */
-    public void unsetUsername() {
-        synchronized (monitor()) {
-            check_orphaned();
-            get_store().remove_element(USERNAME$62, 0);
-        }
-    }
-
-    /**
      * Gets the "voluntaryseparation" element
      */
     public int getVoluntaryseparation() {
@@ -4363,7 +4219,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(VOLUNTARYSEPARATION$64,
+                                                           .find_element_user(VOLUNTARYSEPARATION$62,
                     0);
 
             if (target == null) {
@@ -4383,7 +4239,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(VOLUNTARYSEPARATION$64,
+                                                      .find_element_user(VOLUNTARYSEPARATION$62,
                     0);
 
             return target;
@@ -4397,7 +4253,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(VOLUNTARYSEPARATION$64) != 0;
+            return get_store().count_elements(VOLUNTARYSEPARATION$62) != 0;
         }
     }
 
@@ -4410,12 +4266,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(VOLUNTARYSEPARATION$64,
+                                                           .find_element_user(VOLUNTARYSEPARATION$62,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(VOLUNTARYSEPARATION$64);
+                                                               .add_element_user(VOLUNTARYSEPARATION$62);
             }
 
             target.setIntValue(voluntaryseparation);
@@ -4432,12 +4288,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(VOLUNTARYSEPARATION$64,
+                                                      .find_element_user(VOLUNTARYSEPARATION$62,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(VOLUNTARYSEPARATION$64);
+                                                          .add_element_user(VOLUNTARYSEPARATION$62);
             }
 
             target.set(voluntaryseparation);
@@ -4450,148 +4306,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetVoluntaryseparation() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(VOLUNTARYSEPARATION$64, 0);
-        }
-    }
-
-    /**
-     * Gets the "webservice_session_ID" element
-     */
-    public java.lang.String getWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(WEBSERVICESESSIONID$66,
-                    0);
-
-            if (target == null) {
-                return null;
-            }
-
-            return target.getStringValue();
-        }
-    }
-
-    /**
-     * Gets (as xml) the "webservice_session_ID" element
-     */
-    public org.apache.xmlbeans.XmlString xgetWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$66,
-                    0);
-
-            return target;
-        }
-    }
-
-    /**
-     * Tests for nil "webservice_session_ID" element
-     */
-    public boolean isNilWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$66,
-                    0);
-
-            if (target == null) {
-                return false;
-            }
-
-            return target.isNil();
-        }
-    }
-
-    /**
-     * True if has "webservice_session_ID" element
-     */
-    public boolean isSetWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            return get_store().count_elements(WEBSERVICESESSIONID$66) != 0;
-        }
-    }
-
-    /**
-     * Sets the "webservice_session_ID" element
-     */
-    public void setWebserviceSessionID(java.lang.String webserviceSessionID) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(WEBSERVICESESSIONID$66,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(WEBSERVICESESSIONID$66);
-            }
-
-            target.setStringValue(webserviceSessionID);
-        }
-    }
-
-    /**
-     * Sets (as xml) the "webservice_session_ID" element
-     */
-    public void xsetWebserviceSessionID(
-        org.apache.xmlbeans.XmlString webserviceSessionID) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$66,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(WEBSERVICESESSIONID$66);
-            }
-
-            target.set(webserviceSessionID);
-        }
-    }
-
-    /**
-     * Nils the "webservice_session_ID" element
-     */
-    public void setNilWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WEBSERVICESESSIONID$66,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(WEBSERVICESESSIONID$66);
-            }
-
-            target.setNil();
-        }
-    }
-
-    /**
-     * Unsets the "webservice_session_ID" element
-     */
-    public void unsetWebserviceSessionID() {
-        synchronized (monitor()) {
-            check_orphaned();
-            get_store().remove_element(WEBSERVICESESSIONID$66, 0);
+            get_store().remove_element(VOLUNTARYSEPARATION$62, 0);
         }
     }
 }

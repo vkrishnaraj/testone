@@ -11,8 +11,6 @@ import java.io.Serializable;
 /**
  * @author Ankur Gupta
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class ActivityDTO implements Serializable {
 
@@ -21,6 +19,7 @@ public class ActivityDTO implements Serializable {
 	private String activityinfo;
 	private String activityinfomenu;
 	private String entries;
+	private int group;
 
 	/**
 	 * @return Returns the component_id.
@@ -95,5 +94,20 @@ public class ActivityDTO implements Serializable {
 	 */
 	public void setEntries(String entries) {
 		this.entries = entries;
+	}
+	
+	/**
+	 * @return Returns the component_id.
+	 */
+	public int getGroup() {
+		return group;
+	}
+
+	/**
+	 * @param group
+	 *          The group to set.
+	 */
+	public void setGroup(int group) {
+		this.group = group;
 	}
 }

@@ -8,8 +8,6 @@
  */
 package com.bagnet.nettracer.ws.core;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * A document containing one getOHD(@http://core.ws.nettracer.bagnet.com) element.
@@ -18,7 +16,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface GetOHDDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetOHDDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                            .resolveHandle("getohd17efdoctype");
 
     /**
@@ -43,48 +41,8 @@ public interface GetOHDDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface GetOHD extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetOHD.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+                "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                                .resolveHandle("getohd8e7eelemtype");
-
-        /**
-         * Gets the "ohd_id" element
-         */
-        java.lang.String getOhdId();
-
-        /**
-         * Gets (as xml) the "ohd_id" element
-         */
-        org.apache.xmlbeans.XmlString xgetOhdId();
-
-        /**
-         * Tests for nil "ohd_id" element
-         */
-        boolean isNilOhdId();
-
-        /**
-         * True if has "ohd_id" element
-         */
-        boolean isSetOhdId();
-
-        /**
-         * Sets the "ohd_id" element
-         */
-        void setOhdId(java.lang.String ohdId);
-
-        /**
-         * Sets (as xml) the "ohd_id" element
-         */
-        void xsetOhdId(org.apache.xmlbeans.XmlString ohdId);
-
-        /**
-         * Nils the "ohd_id" element
-         */
-        void setNilOhdId();
-
-        /**
-         * Unsets the "ohd_id" element
-         */
-        void unsetOhdId();
 
         /**
          * Gets the "session_id" element
@@ -125,6 +83,46 @@ public interface GetOHDDocument extends org.apache.xmlbeans.XmlObject {
          * Unsets the "session_id" element
          */
         void unsetSessionId();
+
+        /**
+         * Gets the "ohd_id" element
+         */
+        java.lang.String getOhdId();
+
+        /**
+         * Gets (as xml) the "ohd_id" element
+         */
+        org.apache.xmlbeans.XmlString xgetOhdId();
+
+        /**
+         * Tests for nil "ohd_id" element
+         */
+        boolean isNilOhdId();
+
+        /**
+         * True if has "ohd_id" element
+         */
+        boolean isSetOhdId();
+
+        /**
+         * Sets the "ohd_id" element
+         */
+        void setOhdId(java.lang.String ohdId);
+
+        /**
+         * Sets (as xml) the "ohd_id" element
+         */
+        void xsetOhdId(org.apache.xmlbeans.XmlString ohdId);
+
+        /**
+         * Nils the "ohd_id" element
+         */
+        void setNilOhdId();
+
+        /**
+         * Unsets the "ohd_id" element
+         */
+        void unsetOhdId();
 
         /**
          * A factory class with static methods for creating instances

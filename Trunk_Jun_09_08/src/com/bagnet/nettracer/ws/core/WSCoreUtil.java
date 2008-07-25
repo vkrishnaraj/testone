@@ -25,6 +25,7 @@ import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.TEA;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 /**
@@ -151,9 +152,41 @@ public class WSCoreUtil {
 		} else {
 			returnstr = "ERROR: WEBSERVICE DISABLED";
 		}
-		res.setReturn("");
+		res.setReturn(returnstr);
 		return resDoc;
 
+	}
+	
+	/**
+	 *  Get the agent from the session.
+	 */
+	public static Agent getAgent(String sessionId) {
+		Session sess = null;
+		
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Webservice_Session.class);
+			cri.add(Expression.eq("session_id", sessionId));
+			ArrayList thelist = (ArrayList) cri.list();
+			if (thelist != null && thelist.size() > 0) {
+				Webservice_Session ws = (Webservice_Session) thelist.get(0);
+				String username = ws.getUsername();
+				String companyCode = ws.getCompanycode_id();
+				return TracerUtils.getAgent(username, companyCode);				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -179,7 +212,7 @@ public class WSCoreUtil {
 				long milsec = nowdate.getTime() - authdate.getTime();
 				long hourdiff = milsec / (1000 * 60 * 60);
 				if (hourdiff > HOURS_BEFORE_EXPIRATION) {
-					return "User session expired, please retrieve a new session id using authenticate call";
+					return "User session expired, please retrieve a new session id using authenticate call.";
 				} else {
 					// check to see if webservice is enabled or not
 					if (SecurityUtils.isWebServiceEnabled(ws.getCompanycode_id().toUpperCase())) {

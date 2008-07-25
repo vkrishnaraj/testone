@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,12 +44,13 @@ public class UserPermissions {
 			StringBuffer sql = new StringBuffer(1024);
 		
 			sql
-					.append("select distinct policy,policy.component.sort_order from com.bagnet.nettracer.tracing.db.GroupComponentPolicy policy ");
+					.append("select distinct policy,policy.component.sort_order, " +
+							"policy.component.sort_group from com.bagnet.nettracer.tracing.db.GroupComponentPolicy policy ");
 			sql.append(" where 1=1 ");
 
 			sql.append(" and policy.component.component_ID = policy.component.parent.component_ID");
 			sql.append(" and policy.usergroup.userGroup_ID = :groupId ");
-			sql.append(" order by policy.component.sort_order ");
+			sql.append(" order by policy.component.sort_group, policy.component.sort_order ");
 
 			Query q = sess.createQuery(sql.toString());
 			q.setInteger("groupId", agent.getGroup().getUserGroup_ID());
@@ -121,6 +123,53 @@ public class UserPermissions {
 		}
 		return permissionMap;
 	}
+
+
+	public static ArrayList<GroupComponentPolicy> getTaskManagerComponents(Agent agent) {
+		
+		List list = null;
+		
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			
+			
+			StringBuffer sql = new StringBuffer(1024);
+			sql
+					.append("select distinct policy,policy.component.sort_order, policy.component.sort_group from com.bagnet.nettracer.tracing.db.GroupComponentPolicy policy ");
+			sql.append(" where 1=1 ");
+
+			sql.append(" and ((policy.component.parent.component_ID = 15");
+			sql.append(" and policy.component.component_ID != 15) or policy.component.component_ID = 18)");
+			sql.append(" and policy.usergroup.userGroup_ID = :groupId ");
+			sql.append(" order by policy.component.sort_group, policy.component.sort_order ");
+
+			Query q = sess.createQuery(sql.toString());
+			q.setInteger("groupId", agent.getGroup().getUserGroup_ID());
+
+			list = q.list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		ArrayList retList = new ArrayList();
+		for (int i=0; i<list.size(); ++i)
+			retList.add(((Object[])(list.get(i)))[0]);
+			
+		return retList;
+	}
+	
 
 	public static List getChildLinks(int parent_id, int groupId) {
 		Session sess = null;

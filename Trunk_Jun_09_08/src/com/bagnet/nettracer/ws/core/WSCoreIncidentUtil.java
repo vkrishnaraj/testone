@@ -94,8 +94,7 @@ public class WSCoreIncidentUtil {
   	InsertIncidentResponseDocument resDoc = InsertIncidentResponseDocument.Factory.newInstance();
   	InsertIncidentResponseDocument.InsertIncidentResponse res = resDoc.addNewInsertIncidentResponse();
     
-  	
-  	String session_id = ws.getWebserviceSessionID();
+  	String session_id = insertIncident.getInsertIncident().getSessionId();
   	
   	// get the item type
   	String comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG;

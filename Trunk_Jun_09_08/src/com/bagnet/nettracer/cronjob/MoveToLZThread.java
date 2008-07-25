@@ -398,7 +398,7 @@ public class MoveToLZThread extends Thread {
 		while (iter.hasNext()) {
 			key = (Lz) iter.next();
 			Bucket b = new Bucket();
-			initialSize = b.initialize(key, toSort.size(), (Double)key.getPercent());
+			initialSize = b.initialize(key, toSort.size(), (Double)key.getPercent_load());
 			buckets.add(b);
 			
 			// Fill bucket by capacity

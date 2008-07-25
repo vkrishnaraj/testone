@@ -88,7 +88,7 @@ public class LzUtils {
 			Station station = StationBMO.getStation(stationId);
 			lz.setStation(station);
 			lz.setCompanyCode_ID(station.getCompany().getCompanyCode_ID());
-			lz.setPercent(0);
+			lz.setPercent_load(0);
 			lz.setIs_default(false);
 			
 			sess.save(lz);
@@ -181,7 +181,7 @@ public class LzUtils {
 				String percentString = request.getParameter("lz[" + i + "].percent");
 
 				if (percentString != null) {
-					lz.setPercent(new Double(percentString).doubleValue());	
+					lz.setPercent_load(new Double(percentString).doubleValue());	
 				}
 				
 				if (needNewDefault) {

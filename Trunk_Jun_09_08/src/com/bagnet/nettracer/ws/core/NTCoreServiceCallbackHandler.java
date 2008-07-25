@@ -39,63 +39,33 @@ public abstract class NTCoreServiceCallbackHandler {
     }
 
     /**
-     * auto generated Axis2 call back method for authenticate method
-     * override this method for handling normal response from authenticate operation
+     * auto generated Axis2 call back method for insertIncident method
+     * override this method for handling normal response from insertIncident operation
      */
-    public void receiveResultauthenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateResponseDocument result) {
+    public void receiveResultinsertIncident(
+        com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument result) {
     }
 
     /**
      * auto generated Axis2 Error handler
-     * override this method for handling error response from authenticate operation
+     * override this method for handling error response from insertIncident operation
      */
-    public void receiveErrorauthenticate(java.lang.Exception e) {
+    public void receiveErrorinsertIncident(java.lang.Exception e) {
     }
 
     /**
-     * auto generated Axis2 call back method for getOHDsForWT method
-     * override this method for handling normal response from getOHDsForWT operation
+     * auto generated Axis2 call back method for insertQuickOHD method
+     * override this method for handling normal response from insertQuickOHD operation
      */
-    public void receiveResultgetOHDsForWT(
-        com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument result) {
-    }
-
-    /**
-     * auto generated Axis2 Error handler
-     * override this method for handling error response from getOHDsForWT operation
-     */
-    public void receiveErrorgetOHDsForWT(java.lang.Exception e) {
-    }
-
-    /**
-     * auto generated Axis2 call back method for getOHD method
-     * override this method for handling normal response from getOHD operation
-     */
-    public void receiveResultgetOHD(
-        com.bagnet.nettracer.ws.core.GetOHDResponseDocument result) {
+    public void receiveResultinsertQuickOHD(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument result) {
     }
 
     /**
      * auto generated Axis2 Error handler
-     * override this method for handling error response from getOHD operation
+     * override this method for handling error response from insertQuickOHD operation
      */
-    public void receiveErrorgetOHD(java.lang.Exception e) {
-    }
-
-    /**
-     * auto generated Axis2 call back method for insertOHD method
-     * override this method for handling normal response from insertOHD operation
-     */
-    public void receiveResultinsertOHD(
-        com.bagnet.nettracer.ws.core.InsertOHDResponseDocument result) {
-    }
-
-    /**
-     * auto generated Axis2 Error handler
-     * override this method for handling error response from insertOHD operation
-     */
-    public void receiveErrorinsertOHD(java.lang.Exception e) {
+    public void receiveErrorinsertQuickOHD(java.lang.Exception e) {
     }
 
     /**
@@ -114,6 +84,21 @@ public abstract class NTCoreServiceCallbackHandler {
     }
 
     /**
+     * auto generated Axis2 call back method for getOHD method
+     * override this method for handling normal response from getOHD operation
+     */
+    public void receiveResultgetOHD(
+        com.bagnet.nettracer.ws.core.GetOHDResponseDocument result) {
+    }
+
+    /**
+     * auto generated Axis2 Error handler
+     * override this method for handling error response from getOHD operation
+     */
+    public void receiveErrorgetOHD(java.lang.Exception e) {
+    }
+
+    /**
      * auto generated Axis2 call back method for logoff method
      * override this method for handling normal response from logoff operation
      */
@@ -129,17 +114,47 @@ public abstract class NTCoreServiceCallbackHandler {
     }
 
     /**
-     * auto generated Axis2 call back method for insertIncident method
-     * override this method for handling normal response from insertIncident operation
+     * auto generated Axis2 call back method for authenticate method
+     * override this method for handling normal response from authenticate operation
      */
-    public void receiveResultinsertIncident(
-        com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument result) {
+    public void receiveResultauthenticate(
+        com.bagnet.nettracer.ws.core.AuthenticateResponseDocument result) {
     }
 
     /**
      * auto generated Axis2 Error handler
-     * override this method for handling error response from insertIncident operation
+     * override this method for handling error response from authenticate operation
      */
-    public void receiveErrorinsertIncident(java.lang.Exception e) {
+    public void receiveErrorauthenticate(java.lang.Exception e) {
+    }
+
+    /**
+     * auto generated Axis2 call back method for insertOHD method
+     * override this method for handling normal response from insertOHD operation
+     */
+    public void receiveResultinsertOHD(
+        com.bagnet.nettracer.ws.core.InsertOHDResponseDocument result) {
+    }
+
+    /**
+     * auto generated Axis2 Error handler
+     * override this method for handling error response from insertOHD operation
+     */
+    public void receiveErrorinsertOHD(java.lang.Exception e) {
+    }
+
+    /**
+     * auto generated Axis2 call back method for beornOHD method
+     * override this method for handling normal response from beornOHD operation
+     */
+    public void receiveResultbeornOHD(
+        com.bagnet.nettracer.ws.core.BeornOHDResponseDocument result) {
+    }
+
+    /**
+     * auto generated Axis2 Error handler
+     * override this method for handling error response from beornOHD operation
+     */
+    public void receiveErrorbeornOHD(java.lang.Exception e) {
     }
 }

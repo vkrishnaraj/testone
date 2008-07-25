@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Lz implements Serializable {
 	private int lz_id;
 	private boolean is_default;
-	private double percent;
+	private double percent_load;
 	private Station station;
 	private boolean isUsed;
 	private String companyCode_ID;
@@ -42,16 +42,16 @@ public class Lz implements Serializable {
 	 * 
 	 * @hibernate.property type="double"
 	 */
-	public double getPercent() {
-		return percent;
+	public double getPercent_load() {
+		return percent_load;
 	}
 
 	/**
 	 * @param percent
 	 *          The percent to set.
 	 */
-	public void setPercent(double percent) {
-		this.percent = percent;
+	public void setPercent_load(double percent) {
+		this.percent_load = percent;
 	}
 	
 	/**

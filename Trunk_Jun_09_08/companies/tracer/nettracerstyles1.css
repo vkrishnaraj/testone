@@ -323,6 +323,15 @@ div#maincontent table.form{
 div#maincontent table.form2{
 	background-color:#D1E4F1;
 }
+
+td.white{
+	background-color:#fff;
+}
+
+td.header{
+	background-color:#717471;
+}
+
 div#maincontent table.form2_inc{
 	background-color:#D1E4F1;
 }

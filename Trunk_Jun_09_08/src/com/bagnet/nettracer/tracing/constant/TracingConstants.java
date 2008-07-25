@@ -76,6 +76,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_BY_PASSENGER_BOARDINGS = "By Passenger Boardings";
 	public final static String SYSTEM_COMPONENT_NAME_CUSTOM_REPORTS = "Custom Reports";
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_TO_BE_DELIVERED = "Bags To Be Delivered";
+	public final static String SYSTEM_COMPONENT_NAME_BAGS_IN_STATION = "On-hand Bags";
+	
 	public final static String SYSTEM_COMPONENT_NAME_ANALYTICAL_REPORTS = "Analytical Reports";
 	public final static String SYSTEM_COMPONENT_NAME_ADMINISTRATION = "Administration";
 	public final static String SYSTEM_COMPONENT_NAME_ADD_ON_HAND_BAG = "Add On-hand Bag";
@@ -296,6 +298,8 @@ public class TracingConstants {
 
 	// search
 	public final static String DELIVERY_LIST = "deliveryList";
+	public final static String ONHAND_LIST = "onhandList";
+	
 
 	// integration prepopulate page
 	public final static String PREPOPULATE_INCIDENT = "prepopulateincident";

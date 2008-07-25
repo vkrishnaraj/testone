@@ -86,155 +86,15 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
      */
     public static class GetIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
         implements com.bagnet.nettracer.ws.core.GetIncidentDocument.GetIncident {
-        private static final javax.xml.namespace.QName INCIDENTID$0 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
-                "incident_id");
-        private static final javax.xml.namespace.QName SESSIONID$2 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
+        private static final javax.xml.namespace.QName SESSIONID$0 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
                 "session_id");
+        private static final javax.xml.namespace.QName INCIDENTID$2 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
+                "incident_id");
         private static final javax.xml.namespace.QName INCTYPE$4 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
                 "inc_type");
 
         public GetIncidentImpl(org.apache.xmlbeans.SchemaType sType) {
             super(sType);
-        }
-
-        /**
-         * Gets the "incident_id" element
-         */
-        public java.lang.String getIncidentId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(INCIDENTID$0,
-                        0);
-
-                if (target == null) {
-                    return null;
-                }
-
-                return target.getStringValue();
-            }
-        }
-
-        /**
-         * Gets (as xml) the "incident_id" element
-         */
-        public org.apache.xmlbeans.XmlString xgetIncidentId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(INCIDENTID$0,
-                        0);
-
-                return target;
-            }
-        }
-
-        /**
-         * Tests for nil "incident_id" element
-         */
-        public boolean isNilIncidentId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(INCIDENTID$0,
-                        0);
-
-                if (target == null) {
-                    return false;
-                }
-
-                return target.isNil();
-            }
-        }
-
-        /**
-         * True if has "incident_id" element
-         */
-        public boolean isSetIncidentId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                return get_store().count_elements(INCIDENTID$0) != 0;
-            }
-        }
-
-        /**
-         * Sets the "incident_id" element
-         */
-        public void setIncidentId(java.lang.String incidentId) {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(INCIDENTID$0,
-                        0);
-
-                if (target == null) {
-                    target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                                   .add_element_user(INCIDENTID$0);
-                }
-
-                target.setStringValue(incidentId);
-            }
-        }
-
-        /**
-         * Sets (as xml) the "incident_id" element
-         */
-        public void xsetIncidentId(org.apache.xmlbeans.XmlString incidentId) {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(INCIDENTID$0,
-                        0);
-
-                if (target == null) {
-                    target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(INCIDENTID$0);
-                }
-
-                target.set(incidentId);
-            }
-        }
-
-        /**
-         * Nils the "incident_id" element
-         */
-        public void setNilIncidentId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(INCIDENTID$0,
-                        0);
-
-                if (target == null) {
-                    target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(INCIDENTID$0);
-                }
-
-                target.setNil();
-            }
-        }
-
-        /**
-         * Unsets the "incident_id" element
-         */
-        public void unsetIncidentId() {
-            synchronized (monitor()) {
-                check_orphaned();
-                get_store().remove_element(INCIDENTID$0, 0);
-            }
         }
 
         /**
@@ -246,7 +106,7 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
 
                 org.apache.xmlbeans.SimpleValue target = null;
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(SESSIONID$2,
+                                                               .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
@@ -266,7 +126,7 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 return target;
@@ -282,7 +142,7 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
@@ -300,7 +160,7 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
             synchronized (monitor()) {
                 check_orphaned();
 
-                return get_store().count_elements(SESSIONID$2) != 0;
+                return get_store().count_elements(SESSIONID$0) != 0;
             }
         }
 
@@ -313,12 +173,12 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
 
                 org.apache.xmlbeans.SimpleValue target = null;
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(SESSIONID$2,
+                                                               .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                                   .add_element_user(SESSIONID$2);
+                                                                   .add_element_user(SESSIONID$0);
                 }
 
                 target.setStringValue(sessionId);
@@ -334,12 +194,12 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(SESSIONID$2);
+                                                                 .add_element_user(SESSIONID$0);
                 }
 
                 target.set(sessionId);
@@ -355,12 +215,12 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(SESSIONID$2);
+                                                                 .add_element_user(SESSIONID$0);
                 }
 
                 target.setNil();
@@ -373,7 +233,147 @@ public class GetIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
         public void unsetSessionId() {
             synchronized (monitor()) {
                 check_orphaned();
-                get_store().remove_element(SESSIONID$2, 0);
+                get_store().remove_element(SESSIONID$0, 0);
+            }
+        }
+
+        /**
+         * Gets the "incident_id" element
+         */
+        public java.lang.String getIncidentId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(INCIDENTID$2,
+                        0);
+
+                if (target == null) {
+                    return null;
+                }
+
+                return target.getStringValue();
+            }
+        }
+
+        /**
+         * Gets (as xml) the "incident_id" element
+         */
+        public org.apache.xmlbeans.XmlString xgetIncidentId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(INCIDENTID$2,
+                        0);
+
+                return target;
+            }
+        }
+
+        /**
+         * Tests for nil "incident_id" element
+         */
+        public boolean isNilIncidentId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(INCIDENTID$2,
+                        0);
+
+                if (target == null) {
+                    return false;
+                }
+
+                return target.isNil();
+            }
+        }
+
+        /**
+         * True if has "incident_id" element
+         */
+        public boolean isSetIncidentId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                return get_store().count_elements(INCIDENTID$2) != 0;
+            }
+        }
+
+        /**
+         * Sets the "incident_id" element
+         */
+        public void setIncidentId(java.lang.String incidentId) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(INCIDENTID$2,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                                   .add_element_user(INCIDENTID$2);
+                }
+
+                target.setStringValue(incidentId);
+            }
+        }
+
+        /**
+         * Sets (as xml) the "incident_id" element
+         */
+        public void xsetIncidentId(org.apache.xmlbeans.XmlString incidentId) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(INCIDENTID$2,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(INCIDENTID$2);
+                }
+
+                target.set(incidentId);
+            }
+        }
+
+        /**
+         * Nils the "incident_id" element
+         */
+        public void setNilIncidentId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(INCIDENTID$2,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(INCIDENTID$2);
+                }
+
+                target.setNil();
+            }
+        }
+
+        /**
+         * Unsets the "incident_id" element
+         */
+        public void unsetIncidentId() {
+            synchronized (monitor()) {
+                check_orphaned();
+                get_store().remove_element(INCIDENTID$2, 0);
             }
         }
 

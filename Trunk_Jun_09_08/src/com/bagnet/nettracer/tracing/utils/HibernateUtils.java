@@ -227,11 +227,14 @@ public class HibernateUtils {
 				s.setStationdesc("Default LZ station for " + obj.getCompanyCode_ID());
 				s.setLocale("en");
 				s.setCompany(obj);
+				s.setActive(true);
 				
 				Lz lz = new Lz();
-				lz.setPercent(100);
+				lz.setPercent_load(100);
 				lz.setStation(s);
 				lz.setIs_default(true);
+				lz.setCompanyCode_ID(obj.getCompanyCode_ID());
+				
 				
 
 				Station s1 = new Station();
@@ -239,6 +242,7 @@ public class HibernateUtils {
 				s1.setStationdesc("Default CLAIM station for " + obj.getCompanyCode_ID());
 				s1.setLocale("en");
 				s1.setCompany(obj);
+				s1.setActive(true);
 
 				sess.save(obj.getVariable());
 				

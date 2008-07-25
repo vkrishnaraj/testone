@@ -262,6 +262,11 @@ public class BagService {
 		return true;
 	}
 
+
+	/**
+	 * This function performs the BEORN functionality by creating an
+	 * on-hand object and then forwarding it.
+	 */
 	public String forwardMessage(ForwardMessageForm form, Agent user, MessageResources messages) {
 
 		//create an on-hand entry
@@ -281,6 +286,15 @@ public class BagService {
 		oDTO.setFoundAtStation(oDTO.getAgent().getStation());
 		oDTO.setHoldingStation(oDTO.getAgent().getStation());
 		oDTO.setItinerary(new HashSet(form.getBagitinerarylist()));
+		
+		if (!form.getFaultStation().equals("0")) {
+			Station faultStation = AdminUtils.getStation(form.getFaultStation());
+			oDTO.setFaultstation_ID(faultStation.getStation_ID());
+		}
+		
+		if (!form.getLossCode().equals("0")) {
+			oDTO.setLoss_code(new Integer(form.getLossCode()).intValue());
+		}
 		
 		for (Iterator i = oDTO.getItinerary().iterator(); i.hasNext();) {
 			OHD_Itinerary oo = (OHD_Itinerary) i.next();
@@ -1355,12 +1369,12 @@ public class BagService {
 		}
 	}
 
-	public List findOnHandBagsBySearchCriteria(SearchOnHandForm daform, Agent user, int rowsperpage, int currpage, boolean isCount) {
+	public List findOnHandBagsBySearchCriteria(SearchOnHandForm daform, Agent user, int rowsperpage, int currpage, boolean isCount, boolean notClosed) {
 		try {
 			OhdBMO oBMO = new OhdBMO();
 			Ohd_DTO oDTO = new Ohd_DTO();
 			BeanUtils.copyProperties(oDTO, daform);
-			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount);
+			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed);
 
 		} catch (Exception e) {
 			logger.error("unable to find on-hands due to bean copyproperties error: " + e);

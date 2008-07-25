@@ -8,8 +8,6 @@
  */
 package com.bagnet.nettracer.ws.core;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * A document containing one getIncident(@http://core.ws.nettracer.bagnet.com) element.
@@ -18,7 +16,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface GetIncidentDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                            .resolveHandle("getincident2b70doctype");
 
     /**
@@ -44,48 +42,8 @@ public interface GetIncidentDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface GetIncident extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncident.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+                "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                                .resolveHandle("getincident4124elemtype");
-
-        /**
-         * Gets the "incident_id" element
-         */
-        java.lang.String getIncidentId();
-
-        /**
-         * Gets (as xml) the "incident_id" element
-         */
-        org.apache.xmlbeans.XmlString xgetIncidentId();
-
-        /**
-         * Tests for nil "incident_id" element
-         */
-        boolean isNilIncidentId();
-
-        /**
-         * True if has "incident_id" element
-         */
-        boolean isSetIncidentId();
-
-        /**
-         * Sets the "incident_id" element
-         */
-        void setIncidentId(java.lang.String incidentId);
-
-        /**
-         * Sets (as xml) the "incident_id" element
-         */
-        void xsetIncidentId(org.apache.xmlbeans.XmlString incidentId);
-
-        /**
-         * Nils the "incident_id" element
-         */
-        void setNilIncidentId();
-
-        /**
-         * Unsets the "incident_id" element
-         */
-        void unsetIncidentId();
 
         /**
          * Gets the "session_id" element
@@ -126,6 +84,46 @@ public interface GetIncidentDocument extends org.apache.xmlbeans.XmlObject {
          * Unsets the "session_id" element
          */
         void unsetSessionId();
+
+        /**
+         * Gets the "incident_id" element
+         */
+        java.lang.String getIncidentId();
+
+        /**
+         * Gets (as xml) the "incident_id" element
+         */
+        org.apache.xmlbeans.XmlString xgetIncidentId();
+
+        /**
+         * Tests for nil "incident_id" element
+         */
+        boolean isNilIncidentId();
+
+        /**
+         * True if has "incident_id" element
+         */
+        boolean isSetIncidentId();
+
+        /**
+         * Sets the "incident_id" element
+         */
+        void setIncidentId(java.lang.String incidentId);
+
+        /**
+         * Sets (as xml) the "incident_id" element
+         */
+        void xsetIncidentId(org.apache.xmlbeans.XmlString incidentId);
+
+        /**
+         * Nils the "incident_id" element
+         */
+        void setNilIncidentId();
+
+        /**
+         * Unsets the "incident_id" element
+         */
+        void unsetIncidentId();
 
         /**
          * Gets the "inc_type" element

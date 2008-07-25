@@ -20,6 +20,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.forms.ForwardMessageForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -67,6 +68,15 @@ public class ForwardMessageAction extends Action {
 			theform.setDestStation("");
 		}
 		request.setAttribute("stationList", stationList);
+		
+		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
+				.getCurrentlocale());
+		//add to the loss codes
+		request.setAttribute("losscodes", codes);
+		
+		List faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
+		request.setAttribute("faultstationlist", faultstationlist);
+
 
 		if (request.getParameter("additinerary") != null) {
 			OHD_Log_Itinerary itinerary = theform.getItinerary(theform.getForwarditinerarylist().size());

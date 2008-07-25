@@ -88,55 +88,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //creating the operations
         org.apache.axis2.description.AxisOperation __operation;
 
-        _operations = new org.apache.axis2.description.AxisOperation[7];
-
-        __operation = new org.apache.axis2.description.OutInAxisOperation();
-
-        __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "authenticate"));
-        _service.addOperation(__operation);
-
-        _operations[0] = __operation;
-
-        __operation = new org.apache.axis2.description.OutInAxisOperation();
-
-        __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "getOHDsForWT"));
-        _service.addOperation(__operation);
-
-        _operations[1] = __operation;
-
-        __operation = new org.apache.axis2.description.OutInAxisOperation();
-
-        __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "getOHD"));
-        _service.addOperation(__operation);
-
-        _operations[2] = __operation;
-
-        __operation = new org.apache.axis2.description.OutInAxisOperation();
-
-        __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "insertOHD"));
-        _service.addOperation(__operation);
-
-        _operations[3] = __operation;
-
-        __operation = new org.apache.axis2.description.OutInAxisOperation();
-
-        __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "getIncident"));
-        _service.addOperation(__operation);
-
-        _operations[4] = __operation;
-
-        __operation = new org.apache.axis2.description.OutInAxisOperation();
-
-        __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "logoff"));
-        _service.addOperation(__operation);
-
-        _operations[5] = __operation;
+        _operations = new org.apache.axis2.description.AxisOperation[8];
 
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
@@ -144,1429 +96,67 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
                 "http://core.ws.nettracer.bagnet.com", "insertIncident"));
         _service.addOperation(__operation);
 
+        _operations[0] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "insertQuickOHD"));
+        _service.addOperation(__operation);
+
+        _operations[1] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "getIncident"));
+        _service.addOperation(__operation);
+
+        _operations[2] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "getOHD"));
+        _service.addOperation(__operation);
+
+        _operations[3] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "logoff"));
+        _service.addOperation(__operation);
+
+        _operations[4] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "authenticate"));
+        _service.addOperation(__operation);
+
+        _operations[5] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "insertOHD"));
+        _service.addOperation(__operation);
+
         _operations[6] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "beornOHD"));
+        _service.addOperation(__operation);
+
+        _operations[7] = __operation;
     }
 
     //populates the faults
     private void populateFaults() {
-    }
-
-    /**
-     * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#authenticate
-     * @param authenticate84
-     */
-    public com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate84)
-        throws java.rmi.RemoteException {
-        try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
-            _operationClient.getOptions().setAction("urn:authenticate");
-            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-            addPropertyToOperationClient(_operationClient,
-                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-                "&");
-
-            // create a message context
-            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-            // create SOAP envelope with that payload
-            org.apache.axiom.soap.SOAPEnvelope env = null;
-
-            env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                        .getSoapVersionURI()),
-                    authenticate84,
-                    optimizeContent(
-                        new javax.xml.namespace.QName(
-                            "http://core.ws.nettracer.bagnet.com",
-                            "authenticate")));
-
-            //adding SOAP soap_headers
-            _serviceClient.addHeadersToEnvelope(env);
-            // set the message context with that soap envelope
-            _messageContext.setEnvelope(env);
-
-            // add the message contxt to the operation client
-            _operationClient.addMessageContext(_messageContext);
-
-            //execute the operation client
-            _operationClient.execute(true);
-
-            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
-            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-            java.lang.Object object = fromOM(_returnEnv.getBody()
-                                                       .getFirstElement(),
-                    com.bagnet.nettracer.ws.core.AuthenticateResponseDocument.class,
-                    getEnvelopeNamespaces(_returnEnv));
-            _messageContext.getTransportOut().getSender()
-                           .cleanup(_messageContext);
-
-            return (com.bagnet.nettracer.ws.core.AuthenticateResponseDocument) object;
-        } catch (org.apache.axis2.AxisFault f) {
-            org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-            if (faultElt != null) {
-                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
-                    //make the fault by reflection
-                    try {
-                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                        //message class
-                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                        java.lang.Object messageObject = fromOM(faultElt,
-                                messageClass, null);
-                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                new java.lang.Class[] { messageClass });
-                        m.invoke(ex, new java.lang.Object[] { messageObject });
-
-                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
-                    } catch (java.lang.ClassCastException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.ClassNotFoundException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.NoSuchMethodException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.IllegalAccessException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.InstantiationException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    }
-                } else {
-                    throw f;
-                }
-            } else {
-                throw f;
-            }
-        }
-    }
-
-    /**
-     * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#startauthenticate
-     * @param authenticate84
-     */
-    public void startauthenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate84,
-        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
-        throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
-        _operationClient.getOptions().setAction("urn:authenticate");
-        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-        addPropertyToOperationClient(_operationClient,
-            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-            "&");
-
-        // create SOAP envelope with that payload
-        org.apache.axiom.soap.SOAPEnvelope env = null;
-        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-        //Style is Doc.
-        env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                    .getSoapVersionURI()),
-                authenticate84,
-                optimizeContent(
-                    new javax.xml.namespace.QName(
-                        "http://core.ws.nettracer.bagnet.com", "authenticate")));
-
-        // adding SOAP soap_headers
-        _serviceClient.addHeadersToEnvelope(env);
-        // create message context with that soap envelope
-        _messageContext.setEnvelope(env);
-
-        // add the message context to the operation client
-        _operationClient.addMessageContext(_messageContext);
-
-        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
-                public void onMessage(
-                    org.apache.axis2.context.MessageContext resultContext) {
-                    try {
-                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
-
-                        java.lang.Object object = fromOM(resultEnv.getBody()
-                                                                  .getFirstElement(),
-                                com.bagnet.nettracer.ws.core.AuthenticateResponseDocument.class,
-                                getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultauthenticate((com.bagnet.nettracer.ws.core.AuthenticateResponseDocument) object);
-                    } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorauthenticate(e);
-                    }
-                }
-
-                public void onError(java.lang.Exception error) {
-                    if (error instanceof org.apache.axis2.AxisFault) {
-                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
-                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-                        if (faultElt != null) {
-                            if (faultExceptionNameMap.containsKey(
-                                        faultElt.getQName())) {
-                                //make the fault by reflection
-                                try {
-                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                                    //message class
-                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                                    java.lang.Object messageObject = fromOM(faultElt,
-                                            messageClass, null);
-                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                            new java.lang.Class[] { messageClass });
-                                    m.invoke(ex,
-                                        new java.lang.Object[] { messageObject });
-
-                                    callback.receiveErrorauthenticate(new java.rmi.RemoteException(
-                                            ex.getMessage(), ex));
-                                } catch (java.lang.ClassCastException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                } catch (java.lang.ClassNotFoundException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                } catch (java.lang.NoSuchMethodException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                } catch (java.lang.reflect.InvocationTargetException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                } catch (java.lang.IllegalAccessException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                } catch (java.lang.InstantiationException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                } catch (org.apache.axis2.AxisFault e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorauthenticate(f);
-                                }
-                            } else {
-                                callback.receiveErrorauthenticate(f);
-                            }
-                        } else {
-                            callback.receiveErrorauthenticate(f);
-                        }
-                    } else {
-                        callback.receiveErrorauthenticate(error);
-                    }
-                }
-
-                public void onFault(
-                    org.apache.axis2.context.MessageContext faultContext) {
-                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
-                    onError(fault);
-                }
-
-                public void onComplete() {
-                    // Do nothing by default
-                }
-            });
-
-        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-
-        if ((_operations[0].getMessageReceiver() == null) &&
-                _operationClient.getOptions().isUseSeparateListener()) {
-            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[0].setMessageReceiver(_callbackReceiver);
-        }
-
-        //execute the operation client
-        _operationClient.execute(false);
-    }
-
-    /**
-     * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#getOHDsForWT
-     * @param getOHDsForWT86
-     */
-    public com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument getOHDsForWT(
-        com.bagnet.nettracer.ws.core.GetOHDsForWTDocument getOHDsForWT86)
-        throws java.rmi.RemoteException {
-        try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
-            _operationClient.getOptions().setAction("urn:getOHDsForWT");
-            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-            addPropertyToOperationClient(_operationClient,
-                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-                "&");
-
-            // create a message context
-            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-            // create SOAP envelope with that payload
-            org.apache.axiom.soap.SOAPEnvelope env = null;
-
-            env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                        .getSoapVersionURI()),
-                    getOHDsForWT86,
-                    optimizeContent(
-                        new javax.xml.namespace.QName(
-                            "http://core.ws.nettracer.bagnet.com",
-                            "getOHDsForWT")));
-
-            //adding SOAP soap_headers
-            _serviceClient.addHeadersToEnvelope(env);
-            // set the message context with that soap envelope
-            _messageContext.setEnvelope(env);
-
-            // add the message contxt to the operation client
-            _operationClient.addMessageContext(_messageContext);
-
-            //execute the operation client
-            _operationClient.execute(true);
-
-            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
-            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-            java.lang.Object object = fromOM(_returnEnv.getBody()
-                                                       .getFirstElement(),
-                    com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument.class,
-                    getEnvelopeNamespaces(_returnEnv));
-            _messageContext.getTransportOut().getSender()
-                           .cleanup(_messageContext);
-
-            return (com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument) object;
-        } catch (org.apache.axis2.AxisFault f) {
-            org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-            if (faultElt != null) {
-                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
-                    //make the fault by reflection
-                    try {
-                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                        //message class
-                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                        java.lang.Object messageObject = fromOM(faultElt,
-                                messageClass, null);
-                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                new java.lang.Class[] { messageClass });
-                        m.invoke(ex, new java.lang.Object[] { messageObject });
-
-                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
-                    } catch (java.lang.ClassCastException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.ClassNotFoundException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.NoSuchMethodException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.IllegalAccessException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.InstantiationException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    }
-                } else {
-                    throw f;
-                }
-            } else {
-                throw f;
-            }
-        }
-    }
-
-    /**
-     * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetOHDsForWT
-     * @param getOHDsForWT86
-     */
-    public void startgetOHDsForWT(
-        com.bagnet.nettracer.ws.core.GetOHDsForWTDocument getOHDsForWT86,
-        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
-        throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
-        _operationClient.getOptions().setAction("urn:getOHDsForWT");
-        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-        addPropertyToOperationClient(_operationClient,
-            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-            "&");
-
-        // create SOAP envelope with that payload
-        org.apache.axiom.soap.SOAPEnvelope env = null;
-        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-        //Style is Doc.
-        env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                    .getSoapVersionURI()),
-                getOHDsForWT86,
-                optimizeContent(
-                    new javax.xml.namespace.QName(
-                        "http://core.ws.nettracer.bagnet.com", "getOHDsForWT")));
-
-        // adding SOAP soap_headers
-        _serviceClient.addHeadersToEnvelope(env);
-        // create message context with that soap envelope
-        _messageContext.setEnvelope(env);
-
-        // add the message context to the operation client
-        _operationClient.addMessageContext(_messageContext);
-
-        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
-                public void onMessage(
-                    org.apache.axis2.context.MessageContext resultContext) {
-                    try {
-                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
-
-                        java.lang.Object object = fromOM(resultEnv.getBody()
-                                                                  .getFirstElement(),
-                                com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument.class,
-                                getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultgetOHDsForWT((com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument) object);
-                    } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorgetOHDsForWT(e);
-                    }
-                }
-
-                public void onError(java.lang.Exception error) {
-                    if (error instanceof org.apache.axis2.AxisFault) {
-                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
-                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-                        if (faultElt != null) {
-                            if (faultExceptionNameMap.containsKey(
-                                        faultElt.getQName())) {
-                                //make the fault by reflection
-                                try {
-                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                                    //message class
-                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                                    java.lang.Object messageObject = fromOM(faultElt,
-                                            messageClass, null);
-                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                            new java.lang.Class[] { messageClass });
-                                    m.invoke(ex,
-                                        new java.lang.Object[] { messageObject });
-
-                                    callback.receiveErrorgetOHDsForWT(new java.rmi.RemoteException(
-                                            ex.getMessage(), ex));
-                                } catch (java.lang.ClassCastException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                } catch (java.lang.ClassNotFoundException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                } catch (java.lang.NoSuchMethodException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                } catch (java.lang.reflect.InvocationTargetException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                } catch (java.lang.IllegalAccessException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                } catch (java.lang.InstantiationException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                } catch (org.apache.axis2.AxisFault e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHDsForWT(f);
-                                }
-                            } else {
-                                callback.receiveErrorgetOHDsForWT(f);
-                            }
-                        } else {
-                            callback.receiveErrorgetOHDsForWT(f);
-                        }
-                    } else {
-                        callback.receiveErrorgetOHDsForWT(error);
-                    }
-                }
-
-                public void onFault(
-                    org.apache.axis2.context.MessageContext faultContext) {
-                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
-                    onError(fault);
-                }
-
-                public void onComplete() {
-                    // Do nothing by default
-                }
-            });
-
-        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-
-        if ((_operations[1].getMessageReceiver() == null) &&
-                _operationClient.getOptions().isUseSeparateListener()) {
-            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[1].setMessageReceiver(_callbackReceiver);
-        }
-
-        //execute the operation client
-        _operationClient.execute(false);
-    }
-
-    /**
-     * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#getOHD
-     * @param getOHD88
-     */
-    public com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHD(
-        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD88)
-        throws java.rmi.RemoteException {
-        try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
-            _operationClient.getOptions().setAction("urn:getOHD");
-            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-            addPropertyToOperationClient(_operationClient,
-                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-                "&");
-
-            // create a message context
-            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-            // create SOAP envelope with that payload
-            org.apache.axiom.soap.SOAPEnvelope env = null;
-
-            env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                        .getSoapVersionURI()),
-                    getOHD88,
-                    optimizeContent(
-                        new javax.xml.namespace.QName(
-                            "http://core.ws.nettracer.bagnet.com", "getOHD")));
-
-            //adding SOAP soap_headers
-            _serviceClient.addHeadersToEnvelope(env);
-            // set the message context with that soap envelope
-            _messageContext.setEnvelope(env);
-
-            // add the message contxt to the operation client
-            _operationClient.addMessageContext(_messageContext);
-
-            //execute the operation client
-            _operationClient.execute(true);
-
-            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
-            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-            java.lang.Object object = fromOM(_returnEnv.getBody()
-                                                       .getFirstElement(),
-                    com.bagnet.nettracer.ws.core.GetOHDResponseDocument.class,
-                    getEnvelopeNamespaces(_returnEnv));
-            _messageContext.getTransportOut().getSender()
-                           .cleanup(_messageContext);
-
-            return (com.bagnet.nettracer.ws.core.GetOHDResponseDocument) object;
-        } catch (org.apache.axis2.AxisFault f) {
-            org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-            if (faultElt != null) {
-                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
-                    //make the fault by reflection
-                    try {
-                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                        //message class
-                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                        java.lang.Object messageObject = fromOM(faultElt,
-                                messageClass, null);
-                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                new java.lang.Class[] { messageClass });
-                        m.invoke(ex, new java.lang.Object[] { messageObject });
-
-                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
-                    } catch (java.lang.ClassCastException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.ClassNotFoundException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.NoSuchMethodException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.IllegalAccessException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.InstantiationException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    }
-                } else {
-                    throw f;
-                }
-            } else {
-                throw f;
-            }
-        }
-    }
-
-    /**
-     * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetOHD
-     * @param getOHD88
-     */
-    public void startgetOHD(
-        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD88,
-        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
-        throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
-        _operationClient.getOptions().setAction("urn:getOHD");
-        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-        addPropertyToOperationClient(_operationClient,
-            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-            "&");
-
-        // create SOAP envelope with that payload
-        org.apache.axiom.soap.SOAPEnvelope env = null;
-        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-        //Style is Doc.
-        env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                    .getSoapVersionURI()),
-                getOHD88,
-                optimizeContent(
-                    new javax.xml.namespace.QName(
-                        "http://core.ws.nettracer.bagnet.com", "getOHD")));
-
-        // adding SOAP soap_headers
-        _serviceClient.addHeadersToEnvelope(env);
-        // create message context with that soap envelope
-        _messageContext.setEnvelope(env);
-
-        // add the message context to the operation client
-        _operationClient.addMessageContext(_messageContext);
-
-        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
-                public void onMessage(
-                    org.apache.axis2.context.MessageContext resultContext) {
-                    try {
-                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
-
-                        java.lang.Object object = fromOM(resultEnv.getBody()
-                                                                  .getFirstElement(),
-                                com.bagnet.nettracer.ws.core.GetOHDResponseDocument.class,
-                                getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultgetOHD((com.bagnet.nettracer.ws.core.GetOHDResponseDocument) object);
-                    } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorgetOHD(e);
-                    }
-                }
-
-                public void onError(java.lang.Exception error) {
-                    if (error instanceof org.apache.axis2.AxisFault) {
-                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
-                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-                        if (faultElt != null) {
-                            if (faultExceptionNameMap.containsKey(
-                                        faultElt.getQName())) {
-                                //make the fault by reflection
-                                try {
-                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                                    //message class
-                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                                    java.lang.Object messageObject = fromOM(faultElt,
-                                            messageClass, null);
-                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                            new java.lang.Class[] { messageClass });
-                                    m.invoke(ex,
-                                        new java.lang.Object[] { messageObject });
-
-                                    callback.receiveErrorgetOHD(new java.rmi.RemoteException(
-                                            ex.getMessage(), ex));
-                                } catch (java.lang.ClassCastException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                } catch (java.lang.ClassNotFoundException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                } catch (java.lang.NoSuchMethodException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                } catch (java.lang.reflect.InvocationTargetException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                } catch (java.lang.IllegalAccessException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                } catch (java.lang.InstantiationException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                } catch (org.apache.axis2.AxisFault e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetOHD(f);
-                                }
-                            } else {
-                                callback.receiveErrorgetOHD(f);
-                            }
-                        } else {
-                            callback.receiveErrorgetOHD(f);
-                        }
-                    } else {
-                        callback.receiveErrorgetOHD(error);
-                    }
-                }
-
-                public void onFault(
-                    org.apache.axis2.context.MessageContext faultContext) {
-                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
-                    onError(fault);
-                }
-
-                public void onComplete() {
-                    // Do nothing by default
-                }
-            });
-
-        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-
-        if ((_operations[2].getMessageReceiver() == null) &&
-                _operationClient.getOptions().isUseSeparateListener()) {
-            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[2].setMessageReceiver(_callbackReceiver);
-        }
-
-        //execute the operation client
-        _operationClient.execute(false);
-    }
-
-    /**
-     * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#insertOHD
-     * @param insertOHD90
-     */
-    public com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHD(
-        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD90)
-        throws java.rmi.RemoteException {
-        try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
-            _operationClient.getOptions().setAction("urn:insertOHD");
-            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-            addPropertyToOperationClient(_operationClient,
-                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-                "&");
-
-            // create a message context
-            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-            // create SOAP envelope with that payload
-            org.apache.axiom.soap.SOAPEnvelope env = null;
-
-            env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                        .getSoapVersionURI()),
-                    insertOHD90,
-                    optimizeContent(
-                        new javax.xml.namespace.QName(
-                            "http://core.ws.nettracer.bagnet.com", "insertOHD")));
-
-            //adding SOAP soap_headers
-            _serviceClient.addHeadersToEnvelope(env);
-            // set the message context with that soap envelope
-            _messageContext.setEnvelope(env);
-
-            // add the message contxt to the operation client
-            _operationClient.addMessageContext(_messageContext);
-
-            //execute the operation client
-            _operationClient.execute(true);
-
-            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
-            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-            java.lang.Object object = fromOM(_returnEnv.getBody()
-                                                       .getFirstElement(),
-                    com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.class,
-                    getEnvelopeNamespaces(_returnEnv));
-            _messageContext.getTransportOut().getSender()
-                           .cleanup(_messageContext);
-
-            return (com.bagnet.nettracer.ws.core.InsertOHDResponseDocument) object;
-        } catch (org.apache.axis2.AxisFault f) {
-            org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-            if (faultElt != null) {
-                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
-                    //make the fault by reflection
-                    try {
-                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                        //message class
-                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                        java.lang.Object messageObject = fromOM(faultElt,
-                                messageClass, null);
-                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                new java.lang.Class[] { messageClass });
-                        m.invoke(ex, new java.lang.Object[] { messageObject });
-
-                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
-                    } catch (java.lang.ClassCastException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.ClassNotFoundException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.NoSuchMethodException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.IllegalAccessException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.InstantiationException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    }
-                } else {
-                    throw f;
-                }
-            } else {
-                throw f;
-            }
-        }
-    }
-
-    /**
-     * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#startinsertOHD
-     * @param insertOHD90
-     */
-    public void startinsertOHD(
-        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD90,
-        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
-        throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
-        _operationClient.getOptions().setAction("urn:insertOHD");
-        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-        addPropertyToOperationClient(_operationClient,
-            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-            "&");
-
-        // create SOAP envelope with that payload
-        org.apache.axiom.soap.SOAPEnvelope env = null;
-        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-        //Style is Doc.
-        env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                    .getSoapVersionURI()),
-                insertOHD90,
-                optimizeContent(
-                    new javax.xml.namespace.QName(
-                        "http://core.ws.nettracer.bagnet.com", "insertOHD")));
-
-        // adding SOAP soap_headers
-        _serviceClient.addHeadersToEnvelope(env);
-        // create message context with that soap envelope
-        _messageContext.setEnvelope(env);
-
-        // add the message context to the operation client
-        _operationClient.addMessageContext(_messageContext);
-
-        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
-                public void onMessage(
-                    org.apache.axis2.context.MessageContext resultContext) {
-                    try {
-                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
-
-                        java.lang.Object object = fromOM(resultEnv.getBody()
-                                                                  .getFirstElement(),
-                                com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.class,
-                                getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultinsertOHD((com.bagnet.nettracer.ws.core.InsertOHDResponseDocument) object);
-                    } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorinsertOHD(e);
-                    }
-                }
-
-                public void onError(java.lang.Exception error) {
-                    if (error instanceof org.apache.axis2.AxisFault) {
-                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
-                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-                        if (faultElt != null) {
-                            if (faultExceptionNameMap.containsKey(
-                                        faultElt.getQName())) {
-                                //make the fault by reflection
-                                try {
-                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                                    //message class
-                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                                    java.lang.Object messageObject = fromOM(faultElt,
-                                            messageClass, null);
-                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                            new java.lang.Class[] { messageClass });
-                                    m.invoke(ex,
-                                        new java.lang.Object[] { messageObject });
-
-                                    callback.receiveErrorinsertOHD(new java.rmi.RemoteException(
-                                            ex.getMessage(), ex));
-                                } catch (java.lang.ClassCastException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                } catch (java.lang.ClassNotFoundException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                } catch (java.lang.NoSuchMethodException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                } catch (java.lang.reflect.InvocationTargetException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                } catch (java.lang.IllegalAccessException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                } catch (java.lang.InstantiationException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                } catch (org.apache.axis2.AxisFault e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorinsertOHD(f);
-                                }
-                            } else {
-                                callback.receiveErrorinsertOHD(f);
-                            }
-                        } else {
-                            callback.receiveErrorinsertOHD(f);
-                        }
-                    } else {
-                        callback.receiveErrorinsertOHD(error);
-                    }
-                }
-
-                public void onFault(
-                    org.apache.axis2.context.MessageContext faultContext) {
-                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
-                    onError(fault);
-                }
-
-                public void onComplete() {
-                    // Do nothing by default
-                }
-            });
-
-        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-
-        if ((_operations[3].getMessageReceiver() == null) &&
-                _operationClient.getOptions().isUseSeparateListener()) {
-            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[3].setMessageReceiver(_callbackReceiver);
-        }
-
-        //execute the operation client
-        _operationClient.execute(false);
-    }
-
-    /**
-     * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#getIncident
-     * @param getIncident92
-     */
-    public com.bagnet.nettracer.ws.core.GetIncidentResponseDocument getIncident(
-        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident92)
-        throws java.rmi.RemoteException {
-        try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
-            _operationClient.getOptions().setAction("urn:getIncident");
-            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-            addPropertyToOperationClient(_operationClient,
-                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-                "&");
-
-            // create a message context
-            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-            // create SOAP envelope with that payload
-            org.apache.axiom.soap.SOAPEnvelope env = null;
-
-            env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                        .getSoapVersionURI()),
-                    getIncident92,
-                    optimizeContent(
-                        new javax.xml.namespace.QName(
-                            "http://core.ws.nettracer.bagnet.com", "getIncident")));
-
-            //adding SOAP soap_headers
-            _serviceClient.addHeadersToEnvelope(env);
-            // set the message context with that soap envelope
-            _messageContext.setEnvelope(env);
-
-            // add the message contxt to the operation client
-            _operationClient.addMessageContext(_messageContext);
-
-            //execute the operation client
-            _operationClient.execute(true);
-
-            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
-            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-            java.lang.Object object = fromOM(_returnEnv.getBody()
-                                                       .getFirstElement(),
-                    com.bagnet.nettracer.ws.core.GetIncidentResponseDocument.class,
-                    getEnvelopeNamespaces(_returnEnv));
-            _messageContext.getTransportOut().getSender()
-                           .cleanup(_messageContext);
-
-            return (com.bagnet.nettracer.ws.core.GetIncidentResponseDocument) object;
-        } catch (org.apache.axis2.AxisFault f) {
-            org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-            if (faultElt != null) {
-                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
-                    //make the fault by reflection
-                    try {
-                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                        //message class
-                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                        java.lang.Object messageObject = fromOM(faultElt,
-                                messageClass, null);
-                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                new java.lang.Class[] { messageClass });
-                        m.invoke(ex, new java.lang.Object[] { messageObject });
-
-                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
-                    } catch (java.lang.ClassCastException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.ClassNotFoundException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.NoSuchMethodException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.IllegalAccessException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.InstantiationException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    }
-                } else {
-                    throw f;
-                }
-            } else {
-                throw f;
-            }
-        }
-    }
-
-    /**
-     * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetIncident
-     * @param getIncident92
-     */
-    public void startgetIncident(
-        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident92,
-        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
-        throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
-        _operationClient.getOptions().setAction("urn:getIncident");
-        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-        addPropertyToOperationClient(_operationClient,
-            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-            "&");
-
-        // create SOAP envelope with that payload
-        org.apache.axiom.soap.SOAPEnvelope env = null;
-        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-        //Style is Doc.
-        env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                    .getSoapVersionURI()),
-                getIncident92,
-                optimizeContent(
-                    new javax.xml.namespace.QName(
-                        "http://core.ws.nettracer.bagnet.com", "getIncident")));
-
-        // adding SOAP soap_headers
-        _serviceClient.addHeadersToEnvelope(env);
-        // create message context with that soap envelope
-        _messageContext.setEnvelope(env);
-
-        // add the message context to the operation client
-        _operationClient.addMessageContext(_messageContext);
-
-        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
-                public void onMessage(
-                    org.apache.axis2.context.MessageContext resultContext) {
-                    try {
-                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
-
-                        java.lang.Object object = fromOM(resultEnv.getBody()
-                                                                  .getFirstElement(),
-                                com.bagnet.nettracer.ws.core.GetIncidentResponseDocument.class,
-                                getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultgetIncident((com.bagnet.nettracer.ws.core.GetIncidentResponseDocument) object);
-                    } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorgetIncident(e);
-                    }
-                }
-
-                public void onError(java.lang.Exception error) {
-                    if (error instanceof org.apache.axis2.AxisFault) {
-                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
-                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-                        if (faultElt != null) {
-                            if (faultExceptionNameMap.containsKey(
-                                        faultElt.getQName())) {
-                                //make the fault by reflection
-                                try {
-                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                                    //message class
-                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                                    java.lang.Object messageObject = fromOM(faultElt,
-                                            messageClass, null);
-                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                            new java.lang.Class[] { messageClass });
-                                    m.invoke(ex,
-                                        new java.lang.Object[] { messageObject });
-
-                                    callback.receiveErrorgetIncident(new java.rmi.RemoteException(
-                                            ex.getMessage(), ex));
-                                } catch (java.lang.ClassCastException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                } catch (java.lang.ClassNotFoundException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                } catch (java.lang.NoSuchMethodException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                } catch (java.lang.reflect.InvocationTargetException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                } catch (java.lang.IllegalAccessException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                } catch (java.lang.InstantiationException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                } catch (org.apache.axis2.AxisFault e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncident(f);
-                                }
-                            } else {
-                                callback.receiveErrorgetIncident(f);
-                            }
-                        } else {
-                            callback.receiveErrorgetIncident(f);
-                        }
-                    } else {
-                        callback.receiveErrorgetIncident(error);
-                    }
-                }
-
-                public void onFault(
-                    org.apache.axis2.context.MessageContext faultContext) {
-                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
-                    onError(fault);
-                }
-
-                public void onComplete() {
-                    // Do nothing by default
-                }
-            });
-
-        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-
-        if ((_operations[4].getMessageReceiver() == null) &&
-                _operationClient.getOptions().isUseSeparateListener()) {
-            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[4].setMessageReceiver(_callbackReceiver);
-        }
-
-        //execute the operation client
-        _operationClient.execute(false);
-    }
-
-    /**
-     * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#logoff
-     * @param logoff94
-     */
-    public com.bagnet.nettracer.ws.core.LogoffResponseDocument logoff(
-        com.bagnet.nettracer.ws.core.LogoffDocument logoff94)
-        throws java.rmi.RemoteException {
-        try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
-            _operationClient.getOptions().setAction("urn:logoff");
-            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-            addPropertyToOperationClient(_operationClient,
-                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-                "&");
-
-            // create a message context
-            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-            // create SOAP envelope with that payload
-            org.apache.axiom.soap.SOAPEnvelope env = null;
-
-            env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                        .getSoapVersionURI()),
-                    logoff94,
-                    optimizeContent(
-                        new javax.xml.namespace.QName(
-                            "http://core.ws.nettracer.bagnet.com", "logoff")));
-
-            //adding SOAP soap_headers
-            _serviceClient.addHeadersToEnvelope(env);
-            // set the message context with that soap envelope
-            _messageContext.setEnvelope(env);
-
-            // add the message contxt to the operation client
-            _operationClient.addMessageContext(_messageContext);
-
-            //execute the operation client
-            _operationClient.execute(true);
-
-            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
-            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-            java.lang.Object object = fromOM(_returnEnv.getBody()
-                                                       .getFirstElement(),
-                    com.bagnet.nettracer.ws.core.LogoffResponseDocument.class,
-                    getEnvelopeNamespaces(_returnEnv));
-            _messageContext.getTransportOut().getSender()
-                           .cleanup(_messageContext);
-
-            return (com.bagnet.nettracer.ws.core.LogoffResponseDocument) object;
-        } catch (org.apache.axis2.AxisFault f) {
-            org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-            if (faultElt != null) {
-                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
-                    //make the fault by reflection
-                    try {
-                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                        //message class
-                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                        java.lang.Object messageObject = fromOM(faultElt,
-                                messageClass, null);
-                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                new java.lang.Class[] { messageClass });
-                        m.invoke(ex, new java.lang.Object[] { messageObject });
-
-                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
-                    } catch (java.lang.ClassCastException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.ClassNotFoundException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.NoSuchMethodException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.IllegalAccessException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    } catch (java.lang.InstantiationException e) {
-                        // we cannot intantiate the class - throw the original Axis fault
-                        throw f;
-                    }
-                } else {
-                    throw f;
-                }
-            } else {
-                throw f;
-            }
-        }
-    }
-
-    /**
-     * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#startlogoff
-     * @param logoff94
-     */
-    public void startlogoff(
-        com.bagnet.nettracer.ws.core.LogoffDocument logoff94,
-        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
-        throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
-        _operationClient.getOptions().setAction("urn:logoff");
-        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-        addPropertyToOperationClient(_operationClient,
-            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
-            "&");
-
-        // create SOAP envelope with that payload
-        org.apache.axiom.soap.SOAPEnvelope env = null;
-        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
-
-        //Style is Doc.
-        env = toEnvelope(getFactory(_operationClient.getOptions()
-                                                    .getSoapVersionURI()),
-                logoff94,
-                optimizeContent(
-                    new javax.xml.namespace.QName(
-                        "http://core.ws.nettracer.bagnet.com", "logoff")));
-
-        // adding SOAP soap_headers
-        _serviceClient.addHeadersToEnvelope(env);
-        // create message context with that soap envelope
-        _messageContext.setEnvelope(env);
-
-        // add the message context to the operation client
-        _operationClient.addMessageContext(_messageContext);
-
-        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
-                public void onMessage(
-                    org.apache.axis2.context.MessageContext resultContext) {
-                    try {
-                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
-
-                        java.lang.Object object = fromOM(resultEnv.getBody()
-                                                                  .getFirstElement(),
-                                com.bagnet.nettracer.ws.core.LogoffResponseDocument.class,
-                                getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultlogoff((com.bagnet.nettracer.ws.core.LogoffResponseDocument) object);
-                    } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorlogoff(e);
-                    }
-                }
-
-                public void onError(java.lang.Exception error) {
-                    if (error instanceof org.apache.axis2.AxisFault) {
-                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
-                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
-
-                        if (faultElt != null) {
-                            if (faultExceptionNameMap.containsKey(
-                                        faultElt.getQName())) {
-                                //make the fault by reflection
-                                try {
-                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
-                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
-                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
-
-                                    //message class
-                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
-                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
-                                    java.lang.Object messageObject = fromOM(faultElt,
-                                            messageClass, null);
-                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
-                                            new java.lang.Class[] { messageClass });
-                                    m.invoke(ex,
-                                        new java.lang.Object[] { messageObject });
-
-                                    callback.receiveErrorlogoff(new java.rmi.RemoteException(
-                                            ex.getMessage(), ex));
-                                } catch (java.lang.ClassCastException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                } catch (java.lang.ClassNotFoundException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                } catch (java.lang.NoSuchMethodException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                } catch (java.lang.reflect.InvocationTargetException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                } catch (java.lang.IllegalAccessException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                } catch (java.lang.InstantiationException e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                } catch (org.apache.axis2.AxisFault e) {
-                                    // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorlogoff(f);
-                                }
-                            } else {
-                                callback.receiveErrorlogoff(f);
-                            }
-                        } else {
-                            callback.receiveErrorlogoff(f);
-                        }
-                    } else {
-                        callback.receiveErrorlogoff(error);
-                    }
-                }
-
-                public void onFault(
-                    org.apache.axis2.context.MessageContext faultContext) {
-                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
-                    onError(fault);
-                }
-
-                public void onComplete() {
-                    // Do nothing by default
-                }
-            });
-
-        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-
-        if ((_operations[5].getMessageReceiver() == null) &&
-                _operationClient.getOptions().isUseSeparateListener()) {
-            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[5].setMessageReceiver(_callbackReceiver);
-        }
-
-        //execute the operation client
-        _operationClient.execute(false);
     }
 
     /**
@@ -1578,7 +168,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident96)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
             _operationClient.getOptions().setAction("urn:insertIncident");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1680,7 +270,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident96,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
         _operationClient.getOptions().setAction("urn:insertIncident");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1796,10 +386,1664 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
+        if ((_operations[0].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[0].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#insertQuickOHD
+     * @param insertQuickOHD98
+     */
+    public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHD(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD98)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
+            _operationClient.getOptions().setAction("urn:insertQuickOHD");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    insertQuickOHD98,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com",
+                            "insertQuickOHD")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startinsertQuickOHD
+     * @param insertQuickOHD98
+     */
+    public void startinsertQuickOHD(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD98,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
+        _operationClient.getOptions().setAction("urn:insertQuickOHD");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                insertQuickOHD98,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "insertQuickOHD")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultinsertQuickOHD((com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorinsertQuickOHD(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorinsertQuickOHD(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertQuickOHD(f);
+                                }
+                            } else {
+                                callback.receiveErrorinsertQuickOHD(f);
+                            }
+                        } else {
+                            callback.receiveErrorinsertQuickOHD(f);
+                        }
+                    } else {
+                        callback.receiveErrorinsertQuickOHD(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[1].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[1].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#getIncident
+     * @param getIncident100
+     */
+    public com.bagnet.nettracer.ws.core.GetIncidentResponseDocument getIncident(
+        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident100)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+            _operationClient.getOptions().setAction("urn:getIncident");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    getIncident100,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com", "getIncident")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.GetIncidentResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.GetIncidentResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetIncident
+     * @param getIncident100
+     */
+    public void startgetIncident(
+        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident100,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+        _operationClient.getOptions().setAction("urn:getIncident");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                getIncident100,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "getIncident")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.GetIncidentResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultgetIncident((com.bagnet.nettracer.ws.core.GetIncidentResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorgetIncident(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorgetIncident(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetIncident(f);
+                                }
+                            } else {
+                                callback.receiveErrorgetIncident(f);
+                            }
+                        } else {
+                            callback.receiveErrorgetIncident(f);
+                        }
+                    } else {
+                        callback.receiveErrorgetIncident(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[2].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[2].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#getOHD
+     * @param getOHD102
+     */
+    public com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHD(
+        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD102)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
+            _operationClient.getOptions().setAction("urn:getOHD");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    getOHD102,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com", "getOHD")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.GetOHDResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.GetOHDResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetOHD
+     * @param getOHD102
+     */
+    public void startgetOHD(
+        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD102,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
+        _operationClient.getOptions().setAction("urn:getOHD");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                getOHD102,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "getOHD")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.GetOHDResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultgetOHD((com.bagnet.nettracer.ws.core.GetOHDResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorgetOHD(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorgetOHD(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorgetOHD(f);
+                                }
+                            } else {
+                                callback.receiveErrorgetOHD(f);
+                            }
+                        } else {
+                            callback.receiveErrorgetOHD(f);
+                        }
+                    } else {
+                        callback.receiveErrorgetOHD(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[3].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[3].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#logoff
+     * @param logoff104
+     */
+    public com.bagnet.nettracer.ws.core.LogoffResponseDocument logoff(
+        com.bagnet.nettracer.ws.core.LogoffDocument logoff104)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
+            _operationClient.getOptions().setAction("urn:logoff");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    logoff104,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com", "logoff")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.LogoffResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.LogoffResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startlogoff
+     * @param logoff104
+     */
+    public void startlogoff(
+        com.bagnet.nettracer.ws.core.LogoffDocument logoff104,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
+        _operationClient.getOptions().setAction("urn:logoff");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                logoff104,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "logoff")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.LogoffResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultlogoff((com.bagnet.nettracer.ws.core.LogoffResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorlogoff(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorlogoff(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorlogoff(f);
+                                }
+                            } else {
+                                callback.receiveErrorlogoff(f);
+                            }
+                        } else {
+                            callback.receiveErrorlogoff(f);
+                        }
+                    } else {
+                        callback.receiveErrorlogoff(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[4].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[4].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#authenticate
+     * @param authenticate106
+     */
+    public com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticate(
+        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate106)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
+            _operationClient.getOptions().setAction("urn:authenticate");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    authenticate106,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com",
+                            "authenticate")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.AuthenticateResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.AuthenticateResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startauthenticate
+     * @param authenticate106
+     */
+    public void startauthenticate(
+        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate106,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
+        _operationClient.getOptions().setAction("urn:authenticate");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                authenticate106,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "authenticate")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.AuthenticateResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultauthenticate((com.bagnet.nettracer.ws.core.AuthenticateResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorauthenticate(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorauthenticate(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorauthenticate(f);
+                                }
+                            } else {
+                                callback.receiveErrorauthenticate(f);
+                            }
+                        } else {
+                            callback.receiveErrorauthenticate(f);
+                        }
+                    } else {
+                        callback.receiveErrorauthenticate(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[5].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[5].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#insertOHD
+     * @param insertOHD108
+     */
+    public com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHD(
+        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD108)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
+            _operationClient.getOptions().setAction("urn:insertOHD");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    insertOHD108,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com", "insertOHD")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.InsertOHDResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startinsertOHD
+     * @param insertOHD108
+     */
+    public void startinsertOHD(
+        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD108,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
+        _operationClient.getOptions().setAction("urn:insertOHD");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                insertOHD108,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "insertOHD")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultinsertOHD((com.bagnet.nettracer.ws.core.InsertOHDResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorinsertOHD(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorinsertOHD(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorinsertOHD(f);
+                                }
+                            } else {
+                                callback.receiveErrorinsertOHD(f);
+                            }
+                        } else {
+                            callback.receiveErrorinsertOHD(f);
+                        }
+                    } else {
+                        callback.receiveErrorinsertOHD(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
         if ((_operations[6].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
             _operations[6].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#beornOHD
+     * @param beornOHD110
+     */
+    public com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHD(
+        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD110)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[7].getName());
+            _operationClient.getOptions().setAction("urn:beornOHD");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    beornOHD110,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com", "beornOHD")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.BeornOHDResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.BeornOHDResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startbeornOHD
+     * @param beornOHD110
+     */
+    public void startbeornOHD(
+        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD110,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[7].getName());
+        _operationClient.getOptions().setAction("urn:beornOHD");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                beornOHD110,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "beornOHD")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.BeornOHDResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultbeornOHD((com.bagnet.nettracer.ws.core.BeornOHDResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorbeornOHD(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorbeornOHD(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbeornOHD(f);
+                                }
+                            } else {
+                                callback.receiveErrorbeornOHD(f);
+                            }
+                        } else {
+                            callback.receiveErrorbeornOHD(f);
+                        }
+                    } else {
+                        callback.receiveErrorbeornOHD(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[7].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[7].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -1838,6 +2082,30 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
     //http://localhost:8080/axis2/services/NTCoreService
     private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.core.AuthenticateDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
@@ -1851,6 +2119,54 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
     private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.core.AuthenticateResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.InsertIncidentDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.InsertOHDDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.InsertOHDResponseDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
                 new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
@@ -1886,7 +2202,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     }
 
     private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.core.GetOHDsForWTDocument param,
+        com.bagnet.nettracer.ws.core.BeornOHDDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
                 new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
@@ -1898,31 +2214,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     }
 
     private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
-        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
-
-        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
-
-        return documentElement;
-    }
-
-    private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.core.InsertOHDDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
-        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
-
-        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
-
-        return documentElement;
-    }
-
-    private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.core.InsertOHDResponseDocument param,
+        com.bagnet.nettracer.ws.core.BeornOHDResponseDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
                 new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
@@ -1981,33 +2273,48 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         return documentElement;
     }
 
-    private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.core.InsertIncidentDocument param,
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
-        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
 
-        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
 
-        return documentElement;
-    }
-
-    private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
-        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
-
-        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
-
-        return documentElement;
+        return envelope;
     }
 
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
         com.bagnet.nettracer.ws.core.AuthenticateDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
+
+        return envelope;
+    }
+
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.core.InsertIncidentDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
+
+        return envelope;
+    }
+
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.core.InsertOHDDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
 
@@ -2033,20 +2340,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
-        com.bagnet.nettracer.ws.core.GetOHDsForWTDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
-
-        if (param != null) {
-            envelope.getBody().addChild(toOM(param, optimizeContent));
-        }
-
-        return envelope;
-    }
-
-    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
-        org.apache.axiom.soap.SOAPFactory factory,
-        com.bagnet.nettracer.ws.core.InsertOHDDocument param,
+        com.bagnet.nettracer.ws.core.BeornOHDDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
 
@@ -2083,19 +2377,6 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         return envelope;
     }
 
-    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
-        org.apache.axiom.soap.SOAPFactory factory,
-        com.bagnet.nettracer.ws.core.InsertIncidentDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
-
-        if (param != null) {
-            envelope.getBody().addChild(toOM(param, optimizeContent));
-        }
-
-        return envelope;
-    }
-
     /**
      *  get the default envelope
      */
@@ -2108,6 +2389,28 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         org.apache.axiom.om.OMElement param, java.lang.Class type,
         java.util.Map extraNamespaces) throws org.apache.axis2.AxisFault {
         try {
+            if (com.bagnet.nettracer.ws.core.InsertQuickOHDDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.InsertQuickOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.InsertQuickOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
             if (com.bagnet.nettracer.ws.core.AuthenticateDocument.class.equals(
                         type)) {
                 if (extraNamespaces != null) {
@@ -2127,6 +2430,50 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
                             extraNamespaces));
                 } else {
                     return com.bagnet.nettracer.ws.core.AuthenticateResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.InsertIncidentDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.InsertIncidentDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.InsertIncidentDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.InsertOHDDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.InsertOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.InsertOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
 
@@ -2151,47 +2498,24 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
                 }
             }
 
-            if (com.bagnet.nettracer.ws.core.GetOHDsForWTDocument.class.equals(
-                        type)) {
+            if (com.bagnet.nettracer.ws.core.BeornOHDDocument.class.equals(type)) {
                 if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.core.GetOHDsForWTDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                    return com.bagnet.nettracer.ws.core.BeornOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
                         new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
                             extraNamespaces));
                 } else {
-                    return com.bagnet.nettracer.ws.core.GetOHDsForWTDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    return com.bagnet.nettracer.ws.core.BeornOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
 
-            if (com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument.class.equals(
+            if (com.bagnet.nettracer.ws.core.BeornOHDResponseDocument.class.equals(
                         type)) {
                 if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                    return com.bagnet.nettracer.ws.core.BeornOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
                         new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
                             extraNamespaces));
                 } else {
-                    return com.bagnet.nettracer.ws.core.GetOHDsForWTResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
-                }
-            }
-
-            if (com.bagnet.nettracer.ws.core.InsertOHDDocument.class.equals(
-                        type)) {
-                if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.core.InsertOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
-                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
-                            extraNamespaces));
-                } else {
-                    return com.bagnet.nettracer.ws.core.InsertOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
-                }
-            }
-
-            if (com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.class.equals(
-                        type)) {
-                if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
-                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
-                            extraNamespaces));
-                } else {
-                    return com.bagnet.nettracer.ws.core.InsertOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                    return com.bagnet.nettracer.ws.core.BeornOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
 
@@ -2235,28 +2559,6 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
                             extraNamespaces));
                 } else {
                     return com.bagnet.nettracer.ws.core.LogoffResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
-                }
-            }
-
-            if (com.bagnet.nettracer.ws.core.InsertIncidentDocument.class.equals(
-                        type)) {
-                if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.core.InsertIncidentDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
-                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
-                            extraNamespaces));
-                } else {
-                    return com.bagnet.nettracer.ws.core.InsertIncidentDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
-                }
-            }
-
-            if (com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument.class.equals(
-                        type)) {
-                if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
-                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
-                            extraNamespaces));
-                } else {
-                    return com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
         } catch (java.lang.Exception e) {

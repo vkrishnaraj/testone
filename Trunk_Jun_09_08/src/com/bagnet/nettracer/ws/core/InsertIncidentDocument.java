@@ -8,8 +8,6 @@
  */
 package com.bagnet.nettracer.ws.core;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * A document containing one insertIncident(@http://core.ws.nettracer.bagnet.com) element.
@@ -18,7 +16,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface InsertIncidentDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertIncidentDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                            .resolveHandle("insertincidentb425doctype");
 
     /**
@@ -44,8 +42,48 @@ public interface InsertIncidentDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface InsertIncident extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertIncident.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s51D0044A072EEB5AF0F7D86C8EBC33B8")
+                "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
                                                                                                                                .resolveHandle("insertincidentb13eelemtype");
+
+        /**
+         * Gets the "session_id" element
+         */
+        java.lang.String getSessionId();
+
+        /**
+         * Gets (as xml) the "session_id" element
+         */
+        org.apache.xmlbeans.XmlString xgetSessionId();
+
+        /**
+         * Tests for nil "session_id" element
+         */
+        boolean isNilSessionId();
+
+        /**
+         * True if has "session_id" element
+         */
+        boolean isSetSessionId();
+
+        /**
+         * Sets the "session_id" element
+         */
+        void setSessionId(java.lang.String sessionId);
+
+        /**
+         * Sets (as xml) the "session_id" element
+         */
+        void xsetSessionId(org.apache.xmlbeans.XmlString sessionId);
+
+        /**
+         * Nils the "session_id" element
+         */
+        void setNilSessionId();
+
+        /**
+         * Unsets the "session_id" element
+         */
+        void unsetSessionId();
 
         /**
          * Gets the "si" element

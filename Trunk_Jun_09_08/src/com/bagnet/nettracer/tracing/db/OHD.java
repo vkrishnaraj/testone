@@ -64,7 +64,10 @@ public class OHD implements Serializable {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
-
+	
+	private int faultStation;
+	private int loss_code;
+	
 	public String getDisplaydate() {
 		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
 				+ this.getFoundtime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
@@ -738,7 +741,37 @@ public class OHD implements Serializable {
 	public void setWt_id(String wt_id) {
 		this.wt_id = wt_id;
 	}
+	
+	/**
+	 * @return Returns the faultStation.
+	 */
+	public int getFaultstation_ID() {
+		return faultStation;
+	}
 
+	/**
+	 * @param faultstation
+	 *          The faultstation to set.
+	 */
+	public void setFaultstation_ID(int faultStation) {
+		this.faultStation = faultStation;
+	}
+
+	/**
+	 * @hibernate.property type="integer"
+	 * @return Returns the loss_code.
+	 */
+	public int getLoss_code() {
+		return loss_code;
+	}
+
+	/**
+	 * @param loss_code
+	 *          The loss_code to set.
+	 */
+	public void setLoss_code(int loss_code) {
+		this.loss_code = loss_code;
+	}
 
 	public String getText() {
 		StringBuffer ret = new StringBuffer(1096);

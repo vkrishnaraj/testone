@@ -2,6 +2,7 @@ package com.bagnet.nettracer.ws.core;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncident;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse;
 
 
 public class WSCoreTestClient  {
@@ -39,26 +40,26 @@ public class WSCoreTestClient  {
 		}
 	}
 
-	public static void getOHDsForWTTest() {
-		try {
-			NTCoreServiceStub stub = new NTCoreServiceStub(
-					"http://localhost:8080/tracer/services/NTCoreService");
-
-			GetOHDsForWTDocument ohd = GetOHDsForWTDocument.Factory.newInstance();
-			GetOHDsForWTDocument.GetOHDsForWT ohd2 = ohd.addNewGetOHDsForWT();
-
-			ohd2.setCompanycode("DA");
-			ohd.setGetOHDsForWT(ohd2);
-
-			GetOHDsForWTResponseDocument resOHD = stub.getOHDsForWT(ohd);
-			com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD[] so = resOHD
-					.getGetOHDsForWTResponse().getReturnArray();
-			System.out.println(resOHD);
-		} catch (Exception e) {
-			e.printStackTrace();
-
-		}
-	}
+//	public static void getOHDsForWTTest() {
+//		try {
+//			NTCoreServiceStub stub = new NTCoreServiceStub(
+//					"http://localhost:8080/tracer/services/NTCoreService");
+//
+//			GetOHDsForWTDocument ohd = GetOHDsForWTDocument.Factory.newInstance();
+//			GetOHDsForWTDocument.GetOHDsForWT ohd2 = ohd.addNewGetOHDsForWT();
+//
+//			ohd2.setCompanycode("DA");
+//			ohd.setGetOHDsForWT(ohd2);
+//
+//			GetOHDsForWTResponseDocument resOHD = stub.getOHDsForWT(ohd);
+//			com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD[] so = resOHD
+//					.getGetOHDsForWTResponse().getReturnArray();
+//			System.out.println(resOHD);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//
+//		}
+//	}
 	
 	
 	public static void insertOHDTest() {
@@ -74,6 +75,8 @@ public class WSCoreTestClient  {
 			AuthenticateResponseDocument resauth = stub.authenticate(auth);
 			String session_id = resauth.getAuthenticateResponse().getReturn();
 			
+			System.out.println("Session ID Returned is: " + session_id);
+			
 			if (session_id != null) {
 				if (session_id.substring(0, "success: ".length()).equals("SUCCESS: ")) {
 					session_id = session_id.substring("success: ".length());
@@ -87,9 +90,10 @@ public class WSCoreTestClient  {
 			
 				InsertOHDDocument ohd = InsertOHDDocument.Factory.newInstance();
 				InsertOHDDocument.InsertOHD ohd2 = ohd.addNewInsertOHD();
-				WSOHD so = ohd2.addNewSo();
+				WSOHD so = ohd2.addNewSi();
 				
-				so.setWebserviceSessionID(session_id);
+				ohd2.setSessionId(session_id);
+				
 				so.setColor("BK");
 				so.setAgent("admin");
 				so.setCompanycodeId("DA");
@@ -99,13 +103,12 @@ public class WSCoreTestClient  {
 				so.setFounddatetime("2008-03-03 13:20:00");
 				
 				
-				ohd2.setSo(so);
+				ohd2.setSi(so);
 	
 				InsertOHDResponseDocument resOHD = stub.insertOHD(ohd);
-	
-				String result = resOHD.getInsertOHDResponse().getReturn();
+				WSOhdResponse result = resOHD.getInsertOHDResponse().getReturn();
 				
-				System.out.println(resOHD);
+				System.out.println("ID: " + result.getOhdId() + "   " + result.getErrorResponse());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,7 +144,8 @@ public class WSCoreTestClient  {
 				InsertIncidentDocument.InsertIncident inc2 = inc.addNewInsertIncident();
 				WSIncident si = inc2.addNewSi();
 				
-				si.setWebserviceSessionID(session_id);
+				inc2.setSessionId(session_id);
+				
 				si.setAgent("admin");
 				si.setCompanycodeID("DA");
 				si.setStatus("Open");

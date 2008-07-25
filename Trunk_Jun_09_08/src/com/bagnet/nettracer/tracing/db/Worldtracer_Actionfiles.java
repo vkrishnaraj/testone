@@ -17,7 +17,7 @@ public class Worldtracer_Actionfiles {
 	private String airline;
 	private String wt_incident_id;
 	private String wt_ohd_id;
-	private double percent;
+	private double percent_match;
 	
 	/**
 	 * @return the id
@@ -140,11 +140,11 @@ public class Worldtracer_Actionfiles {
 	 * 
 	 * @hibernate.property type="double"
 	 */
-	public double getPercent() {
-		return percent;
+	public double getPercent_match() {
+		return percent_match;
 	}
-	public void setPercent(double percent) {
-		this.percent = percent;
+	public void setPercent_match(double percent) {
+		this.percent_match = percent;
 	}
 	
 	

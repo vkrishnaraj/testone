@@ -86,153 +86,13 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
      */
     public static class GetOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
         implements com.bagnet.nettracer.ws.core.GetOHDDocument.GetOHD {
-        private static final javax.xml.namespace.QName OHDID$0 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
-                "ohd_id");
-        private static final javax.xml.namespace.QName SESSIONID$2 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
+        private static final javax.xml.namespace.QName SESSIONID$0 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
                 "session_id");
+        private static final javax.xml.namespace.QName OHDID$2 = new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com",
+                "ohd_id");
 
         public GetOHDImpl(org.apache.xmlbeans.SchemaType sType) {
             super(sType);
-        }
-
-        /**
-         * Gets the "ohd_id" element
-         */
-        public java.lang.String getOhdId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(OHDID$0,
-                        0);
-
-                if (target == null) {
-                    return null;
-                }
-
-                return target.getStringValue();
-            }
-        }
-
-        /**
-         * Gets (as xml) the "ohd_id" element
-         */
-        public org.apache.xmlbeans.XmlString xgetOhdId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(OHDID$0,
-                        0);
-
-                return target;
-            }
-        }
-
-        /**
-         * Tests for nil "ohd_id" element
-         */
-        public boolean isNilOhdId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(OHDID$0,
-                        0);
-
-                if (target == null) {
-                    return false;
-                }
-
-                return target.isNil();
-            }
-        }
-
-        /**
-         * True if has "ohd_id" element
-         */
-        public boolean isSetOhdId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                return get_store().count_elements(OHDID$0) != 0;
-            }
-        }
-
-        /**
-         * Sets the "ohd_id" element
-         */
-        public void setOhdId(java.lang.String ohdId) {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(OHDID$0,
-                        0);
-
-                if (target == null) {
-                    target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                                   .add_element_user(OHDID$0);
-                }
-
-                target.setStringValue(ohdId);
-            }
-        }
-
-        /**
-         * Sets (as xml) the "ohd_id" element
-         */
-        public void xsetOhdId(org.apache.xmlbeans.XmlString ohdId) {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(OHDID$0,
-                        0);
-
-                if (target == null) {
-                    target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(OHDID$0);
-                }
-
-                target.set(ohdId);
-            }
-        }
-
-        /**
-         * Nils the "ohd_id" element
-         */
-        public void setNilOhdId() {
-            synchronized (monitor()) {
-                check_orphaned();
-
-                org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(OHDID$0,
-                        0);
-
-                if (target == null) {
-                    target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(OHDID$0);
-                }
-
-                target.setNil();
-            }
-        }
-
-        /**
-         * Unsets the "ohd_id" element
-         */
-        public void unsetOhdId() {
-            synchronized (monitor()) {
-                check_orphaned();
-                get_store().remove_element(OHDID$0, 0);
-            }
         }
 
         /**
@@ -244,7 +104,7 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
 
                 org.apache.xmlbeans.SimpleValue target = null;
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(SESSIONID$2,
+                                                               .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
@@ -264,7 +124,7 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 return target;
@@ -280,7 +140,7 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
@@ -298,7 +158,7 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
             synchronized (monitor()) {
                 check_orphaned();
 
-                return get_store().count_elements(SESSIONID$2) != 0;
+                return get_store().count_elements(SESSIONID$0) != 0;
             }
         }
 
@@ -311,12 +171,12 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
 
                 org.apache.xmlbeans.SimpleValue target = null;
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .find_element_user(SESSIONID$2,
+                                                               .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                                   .add_element_user(SESSIONID$2);
+                                                                   .add_element_user(SESSIONID$0);
                 }
 
                 target.setStringValue(sessionId);
@@ -332,12 +192,12 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(SESSIONID$2);
+                                                                 .add_element_user(SESSIONID$0);
                 }
 
                 target.set(sessionId);
@@ -353,12 +213,12 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
 
                 org.apache.xmlbeans.XmlString target = null;
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .find_element_user(SESSIONID$2,
+                                                             .find_element_user(SESSIONID$0,
                         0);
 
                 if (target == null) {
                     target = (org.apache.xmlbeans.XmlString) get_store()
-                                                                 .add_element_user(SESSIONID$2);
+                                                                 .add_element_user(SESSIONID$0);
                 }
 
                 target.setNil();
@@ -371,7 +231,147 @@ public class GetOHDDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCompl
         public void unsetSessionId() {
             synchronized (monitor()) {
                 check_orphaned();
-                get_store().remove_element(SESSIONID$2, 0);
+                get_store().remove_element(SESSIONID$0, 0);
+            }
+        }
+
+        /**
+         * Gets the "ohd_id" element
+         */
+        public java.lang.String getOhdId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(OHDID$2,
+                        0);
+
+                if (target == null) {
+                    return null;
+                }
+
+                return target.getStringValue();
+            }
+        }
+
+        /**
+         * Gets (as xml) the "ohd_id" element
+         */
+        public org.apache.xmlbeans.XmlString xgetOhdId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(OHDID$2,
+                        0);
+
+                return target;
+            }
+        }
+
+        /**
+         * Tests for nil "ohd_id" element
+         */
+        public boolean isNilOhdId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(OHDID$2,
+                        0);
+
+                if (target == null) {
+                    return false;
+                }
+
+                return target.isNil();
+            }
+        }
+
+        /**
+         * True if has "ohd_id" element
+         */
+        public boolean isSetOhdId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                return get_store().count_elements(OHDID$2) != 0;
+            }
+        }
+
+        /**
+         * Sets the "ohd_id" element
+         */
+        public void setOhdId(java.lang.String ohdId) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(OHDID$2,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                                   .add_element_user(OHDID$2);
+                }
+
+                target.setStringValue(ohdId);
+            }
+        }
+
+        /**
+         * Sets (as xml) the "ohd_id" element
+         */
+        public void xsetOhdId(org.apache.xmlbeans.XmlString ohdId) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(OHDID$2,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(OHDID$2);
+                }
+
+                target.set(ohdId);
+            }
+        }
+
+        /**
+         * Nils the "ohd_id" element
+         */
+        public void setNilOhdId() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(OHDID$2,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(OHDID$2);
+                }
+
+                target.setNil();
+            }
+        }
+
+        /**
+         * Unsets the "ohd_id" element
+         */
+        public void unsetOhdId() {
+            synchronized (monitor()) {
+                check_orphaned();
+                get_store().remove_element(OHDID$2, 0);
             }
         }
     }

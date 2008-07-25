@@ -371,7 +371,7 @@ public final class ManageStation extends Action {
 					dForm.set("station_region", station.getStation_region());
 					dForm.set("station_region_mgr", station.getStation_region_mgr());
 					dForm.set("goal", Double.toString(station.getGoal()));
-					dForm.set("lz_id", station.getLz_ID());
+					dForm.set("lz_id", "" + station.getLz_ID());
 					dForm.set("wt_stationcode", station.getWt_stationcode());
 				}
 

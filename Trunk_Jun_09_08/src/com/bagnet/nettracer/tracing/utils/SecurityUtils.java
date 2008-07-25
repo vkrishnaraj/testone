@@ -63,7 +63,10 @@ public class SecurityUtils {
 		Session sess = null;
 		Agent agent = null;
 		try {
+			
+			
 			sess = HibernateWrapper.getSession().openSession();
+			
 			Criteria criteria = sess.createCriteria(Agent.class);
 			criteria.add(Expression.eq("username", username));
 			criteria.add(Expression.eq("password", TEA.encryptTEA(password)));
