@@ -504,7 +504,7 @@ public class WTIncident {
 			
 			// get the worldtracer id
 			String wt_id = StringUtils.ParseWTString2(responseBody, "<td>WM DAH ", "     /-ACCEPTED");
-			wt_id = "ATLDA00000017";
+			
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
 				responseBody = "got worldtracer id: " + wt_id;

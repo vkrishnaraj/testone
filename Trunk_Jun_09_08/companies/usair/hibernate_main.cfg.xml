@@ -16,7 +16,7 @@
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="company.code">US</property>
 		
     	<!-- sql server 2000 -->

@@ -157,6 +157,6 @@ public class WorldTracerSUSRITAction extends Action {
 				}
 			}
 		}
-		return mapping.findForward(TracingConstants.WORLDTRACER_SUS_RIT);
+		return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_SUSRIT);
 	}
 }

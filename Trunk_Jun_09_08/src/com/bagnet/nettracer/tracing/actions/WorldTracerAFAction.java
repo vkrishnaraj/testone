@@ -163,7 +163,7 @@ public class WorldTracerAFAction extends Action {
 			request.setAttribute("wt_id_specific", "1");
 		} else {
 			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user
-					.getCompanycode_ID(), user.getStation().getStationcode(),
+					.getCompanycode_ID(), agent_station.getStationcode(),
 					0, 0);
 		}
 		rowcount = resultlist.size();
@@ -216,26 +216,10 @@ public class WorldTracerAFAction extends Action {
 			request.setAttribute("wt_id_specific", "1");
 		} else {
 			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user
-					.getCompanycode_ID(), user.getStation().getStationcode(),
+					.getCompanycode_ID(), agent_station.getStationcode(),
 					rowsperpage, currpage);
 		}
-		/**
-		 * Iterator it = resultlist.iterator(); while (it.hasNext()) {
-		 * Worldtracer_Actionfiles worldtracer_actionfiles =
-		 * (Worldtracer_Actionfiles) it .next(); }
-		 */
-		/**
-		 * Iterator it=resultlist.iterator();
-		 * System.out.print(resultlist.size()+"h111111111111111111111111"); List
-		 * list=new ArrayList(); while(it.hasNext()) { Worldtracer_Actionfiles
-		 * worldtracer_actionfiles=(Worldtracer_Actionfiles)it.next();
-		 * if(worldtracer_actionfiles.getAction_file_type().equalsIgnoreCase("WM")){
-		 * list.add(worldtracer_actionfiles); } }
-		 * System.out.print(list.size()+"h3333333333333333333333333");
-		 */
-		
-		
-		
+
 		
 		request.setAttribute("resultlist", resultlist);
 
