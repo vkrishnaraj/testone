@@ -50,15 +50,21 @@ function fileCompleteSuspend()
 	"</option>"+"<option value='ohd'><font color='red' style='font-size: 14px'><b>OHD</b></font>"+
 	"</option>"+"</select>"+"&nbsp;&nbsp;"+"<font color='red' style='font-size:14px'>"+"<b>"+"File Reference"+"<b>"+"</font>"
 	+"<input type='text' name='fileReference' value=''/>";
+	
+	fileref=document.getElementById("fileReference");
+	fileref.innerHTML = "";
 }
 function filePartSuspend()
 {
 	var span=document.getElementById("span");
+	span.innerHTML="";
 	span.innerHTML="<font color='red' style='font-size: 14px'>"+"<b>"+"FILE TYPE-"+"<b>"+"</font>"
 	+"<font  color='black' style='font-size:14px'>AHL</font>"
 	+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"<font color='red' style='font-size:14px'>"+"<b>"+"File Reference"+"<b>"+"</font>"
 	+"<input type='text' name='fileReference' value=''/>";
-
+	
+	fileref=document.getElementById("fileReference");
+	fileref.innerHTML = "";
 }
 function fileReferenceHaveOrNot()
 {
