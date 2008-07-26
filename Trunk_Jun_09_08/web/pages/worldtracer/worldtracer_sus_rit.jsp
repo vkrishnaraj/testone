@@ -125,7 +125,7 @@ function fileReferenceHaveOrNot()
 			<td><input type="radio" name="suspend" value="completeSUS"
 				onclick="fileCompleteSuspend();" 
 				<%
-					if(request.getAttribute("radio").equals("completeSUS"))
+					if(null!=request.getAttribute("radio")&&request.getAttribute("radio").equals("completeSUS"))
 					{
 				%>
 					checked="checked" />
@@ -141,7 +141,7 @@ function fileReferenceHaveOrNot()
 			<td><input type="radio" name="suspend" value="partSUS"
 				onclick="filePartSuspend();" 
 				<%
-					if(request.getAttribute("radio").equals("partSUS"))
+					if(null!=request.getAttribute("radio")&&request.getAttribute("radio").equals("partSUS"))
 					{
 				%>
 					checked="checked" />
@@ -156,14 +156,14 @@ function fileReferenceHaveOrNot()
 		<center>
 			<span id="span"> 
 			<%
-			if(request.getAttribute("span").equals("completeSUS"))
+			if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("completeSUS"))
 			{
 			%>
 				<font color=red style='font-size: 14px'><b>FILE TYPE<b></font> 
 					<select name='ahlORohd'>
 						<option value='ahl' 
 			<%
-			if(request.getAttribute("ahlOrohd").equals("ahl"))
+			if(null!=request.getAttribute("ahlOrohd")&&request.getAttribute("ahlOrohd").equals("ahl"))
 			{
 			%>
 			selected>
@@ -174,7 +174,7 @@ function fileReferenceHaveOrNot()
 						</option>
 						<option value='ohd'
 			<%
-			if(request.getAttribute("ahlOrohd").equals("ohd"))
+			if(null!=request.getAttribute("ahlOrohd")&&request.getAttribute("ahlOrohd").equals("ohd"))
 			{
 			%>
 			selected>
@@ -190,7 +190,7 @@ function fileReferenceHaveOrNot()
 			}
 			%>
 			<%
-			if(request.getAttribute("span").equals("partSUS"))
+			if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("partSUS"))
 			{
 			%>
 			<font color=red style='font-size: 14px'><b>FILE TYPE-<b></font> 
@@ -216,7 +216,7 @@ function fileReferenceHaveOrNot()
 		<div id="maincontent">
 		<h1 class="green">
 		<%
-		if(request.getAttribute("span").equals("completeSUS"))
+		if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("completeSUS"))
 		{
 		%>
 		<bean:message key="colname.worldtracer_sus_rit_completeSUS" />
@@ -224,7 +224,7 @@ function fileReferenceHaveOrNot()
 		}
 		%>
 		<%
-		if(request.getAttribute("span").equals("partSUS"))
+		if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("partSUS"))
 		{
 		%>
 		<bean:message key="colname.worldtracer_sus_rit_partialSUS" />

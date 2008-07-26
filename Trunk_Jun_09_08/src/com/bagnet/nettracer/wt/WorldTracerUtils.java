@@ -725,7 +725,7 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
-			cri.addOrder(Order.desc("percent"));
+			cri.addOrder(Order.desc("percent_match"));
 			cri.add(Expression.eq("action_file_type", wt_type.toUpperCase()));
 			cri.add(Expression.eq("day", new Integer(day)));
 			//System.out.println(day);
@@ -820,7 +820,7 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
-			cri.addOrder(Order.desc("percent"));
+			cri.addOrder(Order.desc("percent_match"));
 			cri.add(Expression.eq("action_file_type", wt_type.toUpperCase()));
 			//cri.add(Expression.eq("action_file_type","WM"));
 			if (rowsperpage > 0) {
