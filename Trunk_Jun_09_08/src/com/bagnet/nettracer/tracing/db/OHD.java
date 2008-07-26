@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -49,6 +50,7 @@ public class OHD implements Serializable {
 	private String manufacturer_other;
 	private Status status;
 	private Status disposal_status;
+
 	private Set items;
 	private Set remarks;
 	private Set passengers;
@@ -64,10 +66,12 @@ public class OHD implements Serializable {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+
 	
 	private int faultStation;
 	private int loss_code;
 	
+
 	public String getDisplaydate() {
 		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
 				+ this.getFoundtime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);

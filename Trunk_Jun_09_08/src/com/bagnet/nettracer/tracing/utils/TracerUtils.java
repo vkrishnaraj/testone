@@ -1480,23 +1480,31 @@ public class TracerUtils {
 		OHD ohd=ohdBMO.findOHDByID(fileReference);
 		return ohd;
 	}
-	public static void madeSuspendWT_BAG_SELECTED(List list){
-		Session session=HibernateWrapper.getSession().openSession();
-		Transaction tx=session.beginTransaction();
-		Iterator it=list.iterator();
-		while(it.hasNext()){
-			Item item=(Item)it.next();
-			item.setWt_bag_selected(1);
-			session.update(item);
-			if(tx.isActive()){
-				tx.commit();
+	public static boolean madeSuspendWT_BAG_SELECTED(List list){
+		boolean flag=true;
+		try {
+			Session session=HibernateWrapper.getSession().openSession();
+			Transaction tx=session.beginTransaction();
+			Iterator it=list.iterator();
+			while(it.hasNext()){
+				Item item=(Item)it.next();
+				item.setWt_bag_selected(1);
+				session.update(item);
+				if(tx.isActive()){
+					tx.commit();
+				}
+				else{
+					tx=session.beginTransaction();
+					tx.commit();
+				}
 			}
-			else{
-				tx=session.beginTransaction();
-				tx.commit();
-			}
+			session.close();
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			flag=false;
+			e.printStackTrace();
 		}
-		session.close();
+		return flag;
 	}
 	public static Item findItemByItemID(int itemID){
 		Session session=HibernateWrapper.getSession().openSession();
@@ -1507,22 +1515,30 @@ public class TracerUtils {
 		session.close();
 		return item;
 	}
-	public static void madePartSuspendWT_BAG_SELECTED(String[] checkbox)
+	public static Boolean madePartSuspendWT_BAG_SELECTED(String[] checkbox)
 	{
-		Session session = HibernateWrapper.getSession().openSession();
-		Transaction tx=session.beginTransaction();
-		for(int i=0;i<checkbox.length;i++){
-			Item item=TracerUtils.findItemByItemID(Integer.parseInt(checkbox[i]));
-			item.setWt_bag_selected(1);
-			session.update(item);
-			if(tx.isActive()){
-				tx.commit();
+		Boolean flag=true;
+		try {
+			Session session = HibernateWrapper.getSession().openSession();
+			Transaction tx=session.beginTransaction();
+			for(int i=0;i<checkbox.length;i++){
+				Item item=TracerUtils.findItemByItemID(Integer.parseInt(checkbox[i]));
+				item.setWt_bag_selected(1);
+				session.update(item);
+				if(tx.isActive()){
+					tx.commit();
+				}
+				else{
+					tx=session.beginTransaction();
+					tx.commit();
+				}
 			}
-			else{
-				tx=session.beginTransaction();
-				tx.commit();
-			}
-		}
-		session.close();
+			session.close();
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			flag=false;
+			e.printStackTrace();
+		} 
+		return flag;
 	}
 }

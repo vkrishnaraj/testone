@@ -52,8 +52,12 @@ public class WorldTracerSUSRITAction extends Action {
 				.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 		String checkbox[]=request.getParameterValues("judgepartsuspend");
 		if(checkbox!=null){
-			TracerUtils.madePartSuspendWT_BAG_SELECTED(checkbox);
-			request.setAttribute("completeSuccess","1");
+			Boolean flag=TracerUtils.madePartSuspendWT_BAG_SELECTED(checkbox);
+			if(flag){
+				request.setAttribute("completeSuccess","1");
+			}else{
+				request.setAttribute("completeSuccess", "2");
+			}
 		}
 		String suspend = request.getParameter("suspend");
 		String fileReference = request.getParameter("fileReference");
@@ -105,8 +109,12 @@ public class WorldTracerSUSRITAction extends Action {
 							saveMessages(request, errors);
 						} else {
 							list3 = incident.getItemlist();
-							TracerUtils.madeSuspendWT_BAG_SELECTED(list3);
-							request.setAttribute("completeSuccess","1");
+							Boolean flag=TracerUtils.madeSuspendWT_BAG_SELECTED(list3);
+							if(flag){
+								request.setAttribute("completeSuccess","1");
+							}else{
+								request.setAttribute("completeSuccess","2");
+							}
 						}
 					}
 				} else if (null!=ahlORohd&&ahlORohd.equals("ohd")) {

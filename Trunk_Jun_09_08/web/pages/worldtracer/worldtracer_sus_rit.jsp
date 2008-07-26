@@ -97,10 +97,18 @@ function fileReferenceHaveOrNot()
             		</html:messages>
             </logic:messagesPresent>
             <%
-            if(null!=request.getAttribute("completeSuccess")&&!"".equals(request.getAttribute("completeSuccess")))
+            if(null!=request.getAttribute("completeSuccess")&&!"".equals(request.getAttribute("completeSuccess"))&&request.getAttribute("completeSuccess").equals("1"))
             {
             %>
             <font color="green"><bean:message key="update.suspend.successful"/></font>
+            <%
+            }
+            %>
+             <%
+            if(null!=request.getAttribute("completeSuccess")&&!"".equals(request.getAttribute("completeSuccess"))&&request.getAttribute("completeSuccess").equals("2"))
+            {
+            %>
+            <font color="red"><bean:message key="update.suspend.fail"/></font>
             <%
             }
             %>
