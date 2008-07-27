@@ -3,7 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="org.apache.struts.action.DynaActionForm" %>
+<%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 
         <h1 class="green">

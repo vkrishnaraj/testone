@@ -5,7 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="org.apache.struts.action.DynaActionForm" %>
+<%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
 
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>

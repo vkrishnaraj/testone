@@ -382,6 +382,7 @@
 		<forward name="claimslist" path="claims_list" />
 		<forward name="selfupdatesuccess" path="selfupdate_success" />
 		<forward name="deliveryList" path="delivery_list" />
+		<forward name="onhandList" path="onhand_list"/>
 		<forward name="viewtempohd" path="viewtemp_ohd" />
 		<forward name="viewtempreports" path="viewtemp_reports" />
 		<forward name="viewmassohd" path="viewmass_ohd" />
@@ -717,6 +718,13 @@
 			type="com.bagnet.nettracer.tracing.actions.ViewDeliveryLog"
 			name="deliverForm" scope="request" validate="false">
 		</action>
+		
+    <action path="/onhands" 
+    	type="com.bagnet.nettracer.tracing.actions.ViewOnhands"
+    	name="deliverForm"
+    	scope="request"
+    	validate="false">
+    </action>
 
 		<!-- Mass on hand task manager -->
 		<action path="/massOnhands"

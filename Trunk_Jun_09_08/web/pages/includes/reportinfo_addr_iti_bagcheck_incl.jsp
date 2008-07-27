@@ -557,6 +557,9 @@
                               <html:option value="6">
                                 <bean:message key="select.unchecked" />
                               </html:option>
+                              <html:option value="7">
+                                <bean:message key="select.kiosk" />
+                              </html:option>
                             </html:select>
                           </td>
                           <td>

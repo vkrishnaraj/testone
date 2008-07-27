@@ -55,7 +55,7 @@
                   <tr>
                     <td colspan="6">
                       <strong>
-                        <bean:message key="header.bag_itinerary" />
+                        <bean:message key="header.forward_itinerary" />
                       </strong>
                     </td>
                   </tr>

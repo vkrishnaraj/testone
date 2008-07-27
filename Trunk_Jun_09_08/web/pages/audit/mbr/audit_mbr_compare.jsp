@@ -413,6 +413,9 @@ function gopage(i) {
                 <logic:equal name="audit_incident" property="checkedlocation" value="6">
                   <bean:message key="select.unchecked" />
                 </logic:equal>
+                <logic:equal name="audit_incident" property="checkedlocation" value="7">
+                  <bean:message key="select.kiosk" />
+                </logic:equal>
                 <br>
                 <bean:message key="colname.courtesy_report" />
                 :

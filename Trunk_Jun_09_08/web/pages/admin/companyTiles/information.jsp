@@ -3,7 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="org.apache.struts.action.DynaActionForm" %>
+<%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
 
         <h1 class="green">
           <bean:message key="Company" />

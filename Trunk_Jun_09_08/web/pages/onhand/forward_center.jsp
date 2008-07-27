@@ -10,7 +10,25 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <SCRIPT LANGUAGE="JavaScript">
+
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
+<script langugage="javascript">
+  <!--
+	function getstations() {
+		o = document.incidentForm;
+		o.getstation.value="1";
+		document.getElementById("faultstationdiv").innerHTML = "<td nowrap><bean:message key="ajax.please_wait" /></td>";
+			postForm("incidentForm", true, function (req) { 
+				o.getstation.value = "0";
+				document.getElementById("faultstationdiv").innerHTML = req.responseText; 
+		});
+	}
+	
     function textCounter(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
         field.value = field.value.substring(0, maxlimit);
@@ -18,27 +36,15 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
-    // End -->
-  </SCRIPT>
-  <!-- Calendar includes -->
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
-    <!--
-	
-	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
 
- 	function setExpediteNum(form)
-  { 
- 		return true;
- 	}
- 	
-// -->
-  </SCRIPT>
-  <!-- calendar stuff ends here -->
+	var cal1xx = new CalendarPopup();	
+
+ 	function setExpediteNum(form) { return true; }
+
+//-->
+</script>
+
+
   <jsp:include page="../includes/validation_incl.jsp" />
   <html:form action="forward_message.do" method="post" onsubmit="return (validateMessageForm(this) && setExpediteNum(this)); ">
     <jsp:include page="../includes/taskmanager_header.jsp" />
@@ -98,6 +104,33 @@
 
                 </td>
               </tr>
+                          
+			<tr>
+			  <td>
+			    <bean:message key="colname.losscode" />
+			  </td>
+			  <td>
+			    <html:select property="lossCode" styleClass="dropdown">
+			      <html:option value="0">
+			        <bean:message key="select.please_select" />
+			      </html:option>
+				  <html:options collection="losscodes" property="loss_code" labelProperty="combination"/>
+			    </html:select>
+			  </td>
+			</tr>
+
+              <tr>
+              	<td><bean:message key="colname.faultstation" /></td>
+              	<td>
+					<html:select property="faultStation" styleClass="dropdown">
+					  <html:option value="">
+					    <bean:message key="select.please_select" />
+					  </html:option>
+					  <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+					</html:select>
+              	</td>
+              </tr>
+              
               <tr>
                 <td colspan="2">
                   <table class="form2" cellspacing="0" cellpadding="0">

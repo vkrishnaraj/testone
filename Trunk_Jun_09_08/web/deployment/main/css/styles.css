@@ -244,9 +244,12 @@ div#maincontent {
 	background-color:#fff;
 	border:1px solid #92431D;
 }
-div#maincontent h1.green{
+
+
+div#maincontent .green{
 	color:#5C7524;
 }
+
 div#maincontent table {
 	width:100%;
 	margin:10px 0px;

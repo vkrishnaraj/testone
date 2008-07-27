@@ -209,7 +209,7 @@
 	       	<field property="defaultTimezone" depends="required">
 				<arg key="header.agentDefaultTimezone"/>
 	       	</field>
-	       	<field property="max_ws_sessions" depends="intRange">
+	       	<field property="max_ws_sessions" depends="required,intRange">
 	       		<arg key="header.agentMaxWsSessions"/>
 	       		<arg name="intRange" key="${var:min}" resource="false"/>
          	     <arg name="intRange" key="${var:max}" resource="false"/>

@@ -7,24 +7,18 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <script langugage="javascript">
   <!--
 	function getstations() {
 		o = document.incidentForm;
 		o.getstation.value="1";
-		//o.faultcompany_id.value = o.faultcompany_id.options[o.faultcompany_id.selectedIndex].value;
 		document.getElementById("faultstationdiv").innerHTML = "<td nowrap><bean:message key="ajax.please_wait" /></td>";
 			postForm("incidentForm", true, function (req) { 
 				o.getstation.value = "0";
-				//alert(req.responseText);
 				document.getElementById("faultstationdiv").innerHTML = req.responseText; 
-
 		});
-		
-		//o = document.incidentForm;
-		//o.getstation.value="1";
-		//o.submit();
 	}
 
 //-->

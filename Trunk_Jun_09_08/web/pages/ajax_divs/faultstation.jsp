@@ -13,7 +13,7 @@
       <bean:message key="colname.faultstation" />
       <br>
       <select name="faultstation_id" class="dropdown">
-      	<option value=""><bean:message key="select.please_select" /></option>
+      	<option value="0"><bean:message key="select.please_select" /></option>
       <%
       Station st = null;
       for (int i =0; i<ar.size();i++) {

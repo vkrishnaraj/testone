@@ -6,36 +6,40 @@
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.bagnet.nettracer.ws.core.NTCoreServiceMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter name="ServiceClass">com.bagnet.nettracer.ws.core.NTCoreServiceSkeleton</parameter>
+        <parameter name="ServiceClass">com.bagnet.nettracer.ws.core.NTCoreServiceImplementation</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
-        <operation name="authenticate" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:authenticate</actionMapping>
-            <outputActionMapping>urn:authenticateResponse</outputActionMapping>
+        <operation name="insertIncident" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:insertIncident</actionMapping>
+            <outputActionMapping>urn:insertIncidentResponse</outputActionMapping>
         </operation>
-        <operation name="getOHDsForWT" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getOHDsForWT</actionMapping>
-            <outputActionMapping>urn:getOHDsForWTResponse</outputActionMapping>
-        </operation>
-        <operation name="getOHD" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getOHD</actionMapping>
-            <outputActionMapping>urn:getOHDResponse</outputActionMapping>
-        </operation>
-        <operation name="insertOHD" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:insertOHD</actionMapping>
-            <outputActionMapping>urn:insertOHDResponse</outputActionMapping>
+        <operation name="insertQuickOHD" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:insertQuickOHD</actionMapping>
+            <outputActionMapping>urn:insertQuickOHDResponse</outputActionMapping>
         </operation>
         <operation name="getIncident" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:getIncident</actionMapping>
             <outputActionMapping>urn:getIncidentResponse</outputActionMapping>
         </operation>
+        <operation name="getOHD" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:getOHD</actionMapping>
+            <outputActionMapping>urn:getOHDResponse</outputActionMapping>
+        </operation>
         <operation name="logoff" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:logoff</actionMapping>
             <outputActionMapping>urn:logoffResponse</outputActionMapping>
         </operation>
-        <operation name="insertIncident" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:insertIncident</actionMapping>
-            <outputActionMapping>urn:insertIncidentResponse</outputActionMapping>
+        <operation name="authenticate" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:authenticate</actionMapping>
+            <outputActionMapping>urn:authenticateResponse</outputActionMapping>
+        </operation>
+        <operation name="insertOHD" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:insertOHD</actionMapping>
+            <outputActionMapping>urn:insertOHDResponse</outputActionMapping>
+        </operation>
+        <operation name="beornOHD" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:beornOHD</actionMapping>
+            <outputActionMapping>urn:beornOHDResponse</outputActionMapping>
         </operation>
     </service>
 </serviceGroup>

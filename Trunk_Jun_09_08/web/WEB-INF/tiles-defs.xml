@@ -372,6 +372,10 @@
   	<definition name="delivery_list" extends="user_menu">
     	<put name="center" value="/pages/onhand/deliveries.jsp"/>
     </definition>
+    
+  	<definition name="onhand_list" extends="user_menu">
+    	<put name="center" value="/pages/onhand/stationOnhands.jsp"/>
+    </definition>
 
   	<definition name="edit_agent_group" extends="user_menu">
     	<put name="center" value="/pages/admin/agent_group.jsp"/>
@@ -380,7 +384,6 @@
     <definition name="edit_agent_station" extends="user_menu">
     	<put name="center" value="/pages/admin/agent_station.jsp"/>
     </definition>
-            
     
     <definition name="viewtemp_ohd" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/viewtemp_ohd.jsp"/>
