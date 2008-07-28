@@ -173,7 +173,11 @@ public final class ManageAgents extends Action {
 		if (request.getParameter("self_edit") != null) {
 			return mapping.findForward(TracingConstants.EDIT_SELF);
 		} else if (request.getParameter("addNew") != null || request.getParameter("edit") != null) {
-			if (request.getParameter("addNew") != null) request.setAttribute("aNew", "1");
+			if (request.getParameter("addNew") != null) {
+				request.setAttribute("aNew", "1");
+				dForm.set("max_ws_sessions", "0");
+			}
+
 
 			//set the default values.
 
@@ -181,7 +185,6 @@ public final class ManageAgents extends Action {
 			dForm.set("currentTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
 			dForm.set("defaultTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
 			dForm.set("defCurrency", "" + TracingConstants.DEFAULT_AGENT_CURRENCY);
-			dForm.set("max_ws_sessions", "0");
 
 			return mapping.findForward(TracingConstants.EDIT_AGENT);
 		}
@@ -305,7 +308,16 @@ public final class ManageAgents extends Action {
 						TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS, user)) {
 					agent.setWeb_enabled(((String) dForm.get("web_enabled")).equals("true"));
 					agent.setWs_enabled(((String) dForm.get("ws_enabled")).equals("true"));
-					agent.setMax_ws_sessions(Integer.parseInt((String)dForm.get("max_ws_sessions")));
+					try {
+						agent.setMax_ws_sessions(Integer.parseInt((String)dForm.get("max_ws_sessions")));
+					}
+					catch (NumberFormatException ex) {
+						ActionMessage error = new ActionMessage("error.invalid_max_ws_sessions");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						return mapping.findForward(TracingConstants.EDIT_AGENT);
+					}
+
 					if (!agent.isWeb_enabled() && !agent.isWs_enabled()) {
 						ActionMessage error = new ActionMessage("error.agents.mustbeweborws");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);

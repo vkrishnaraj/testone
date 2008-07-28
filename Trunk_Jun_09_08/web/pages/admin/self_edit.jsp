@@ -48,6 +48,7 @@
             </logic:present>
           </font>
           <input type="hidden" name="self" value="1">
+          <html:hidden name="agentForm" property="max_ws_sessions" />
           <tr>
             <td>
               <bean:message key="header.agentUsername" />

@@ -304,7 +304,13 @@
           </tr>
 <%
           }
+          else {
+          	
 %>          
+		<html:hidden name="agentForm" property="max_ws_sessions"/>
+<%
+		}
+%>
           <tr>
             <td>
               <bean:message key="header.agentDefaultTimezone" />
