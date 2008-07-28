@@ -249,7 +249,7 @@ public class RetrieveWTActionFiles extends Thread {
 									}
 								}
 								percent = Double.parseDouble(br.toString());
-								sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
+								sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent_match) values "
 										+ "('"
 										+ wt_type.toUpperCase()
 										+ "','"
@@ -273,7 +273,7 @@ public class RetrieveWTActionFiles extends Thread {
 						} else {
 							//action_file_text have not the score substring,insert 0 into table worldtracer_actionfiles 
 							percent=0;
-							sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
+							sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent_match) values "
 									+ "('"
 									+ wt_type.toUpperCase()
 									+ "','"
@@ -297,7 +297,7 @@ public class RetrieveWTActionFiles extends Thread {
 					} else {
 						//action_file_type is not the WM,insert 0 into table worldtracer_actionfiles
 						percent=0;
-						sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent) values "
+						sql = "insert into worldtracer_actionfiles (action_file_type,action_file_text,day,station,airline,wt_incident_id,wt_ohd_id,delete_trigger,percent_match) values "
 								+ "('"
 								+ wt_type.toUpperCase()
 								+ "','"
