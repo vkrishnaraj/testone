@@ -226,8 +226,7 @@
                       <bean:message key="colname.province" />
                       <br>
                       <logic:equal name="addresses" property="countrycode_ID" value="US">
-                      	<html:text property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
-		<html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].province" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+						<html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].province" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
                       </logic:equal>
                       <logic:equal name="addresses" property="countrycode_ID" value="">
                       <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].province" %>' size="15" maxlength="100" styleClass="textfield" />
