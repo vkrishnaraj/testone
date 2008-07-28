@@ -173,8 +173,8 @@ public class RetrieveWTActionFiles extends Thread {
 			// "' and action_file_type = '" + wt_type + "'";
 			// stmt.executeUpdate(sql);
 			// first set all items to be deleted
-			stmt
-					.executeUpdate("update worldtracer_actionfiles set delete_trigger = 1");
+			stmt.executeUpdate("update worldtracer_actionfiles set delete_trigger = 1 where station = '" + station + "' and airline = '" + airline + "' and day = '" + day + "' and action_file_type = '" + wt_type + "'");
+
 
 			while ((parsed = StringUtils.ParseWTString2(result, ac_start,
 					ac_end)) != null) {
