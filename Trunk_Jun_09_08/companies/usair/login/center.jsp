@@ -51,7 +51,7 @@
               :
             </td>
             <td>
-              <html:text property="username" size="16" maxlength="18" styleClass="textfield" value="admin" />
+              <html:text property="username" size="16" maxlength="18" styleClass="textfield" />
             </td>
           </tr>
           <tr>
@@ -60,7 +60,7 @@
               :
             </td>
             <td>
-              <html:password property="password" size="16" maxlength="25" redisplay="false" styleClass="textfield" value="admin"/>
+              <html:password property="password" size="16" maxlength="25" redisplay="false" styleClass="textfield"/>
             </td>
           </tr>
           <tr>
