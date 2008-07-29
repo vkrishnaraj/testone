@@ -246,9 +246,9 @@
 		        <td><bean:write name="lz" property="station.stationcode"/></td>
 		        <td>
 		          <% if (assignment) { %>
-		          	<html:text name="lz" property="percent" size="5" styleClass="textfield" indexed="true" value="0.0" disabled="true"/>
+		          	<html:text name="lz" property="percent_load" size="5" styleClass="textfield" indexed="true" value="0.0" disabled="true"/>
 		          <% } else { %>
-		          	<html:text name="lz" property="percent" size="5" styleClass="textfield" indexed="true"/>
+		          	<html:text name="lz" property="percent_load" size="5" styleClass="textfield" indexed="true"/>
 		          <% } %>
 		        </td>
 		        <td>
