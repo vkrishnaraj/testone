@@ -102,7 +102,7 @@ public final class ManageStation extends Action {
 			
 			if (station.getCompany().getVariable().getLz_mode() == 
 				TracingConstants.MOVETOLZ_MODE_ASSIGNMENT) {
-				request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(station.getStationcode()));
+				request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(station.getCompany().getCompanyCode_ID()));
 			}
 
 			//check if adding agents to this group
