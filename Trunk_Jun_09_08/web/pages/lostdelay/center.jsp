@@ -365,7 +365,7 @@ function gotoHistoricalReport() {
 %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<logic:equal name="incidentForm" property="wt_id" value="">
-                <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqincidentForm(this.form);">
+                <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
                   <bean:message key="button.savetoWT" />
                 </html:submit>
                 </logic:equal>

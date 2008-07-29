@@ -5,7 +5,9 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
@@ -177,5 +179,25 @@ public class StringUtils {
 
 		return result;
 	}
+	
+    public static <T extends Appendable> T join(Iterable<? extends CharSequence> src, CharSequence pattern, T dst) throws IOException {
+        Iterator<? extends CharSequence> it = src.iterator();
+        if (it.hasNext()) {
+            dst.append(it.next());
+        }
+        while (it.hasNext()) {
+            dst.append(pattern).append(it.next());
+        }
+        return dst;
+    }
+    
+    public static String join(Iterable<? extends CharSequence> src, CharSequence pattern) {
+        try {
+            return join(src, pattern, new StringBuilder()).toString();
+        } catch (IOException excpt) {
+            throw new Error("StringBuilder should not throw IOExceptions!");
+        }
+    }
+
 
 }

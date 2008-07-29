@@ -174,6 +174,8 @@ public class WorldTracerActionQueue extends Thread {
 					      System.out.println("begin forward tty to wt in 10s:");
 					      pause(10); 
 					  }
+					
+					 
 					 
 				} catch (Exception e) {
 					logger.fatal("cron move to wtthread error: " + e);
@@ -239,30 +241,22 @@ public class WorldTracerActionQueue extends Thread {
 							//System.out.println(inc.getStationcode());
 							this.sendmessage(inc.getStationcreated(), "incident",
 									inc.getAgent(), "ok", inc.getIncident_ID(),
-									"");
-				
-	                        /*
-							for (int k = 0; k < 3; k++) {
-								String result = "failincident";
-								
-								wtaciton.updatequeue((wtqueue.getType_id()), wtqueue.getType(),result);
+							"");
+
+							String result = wt.insertIncident(client, company, inc.getIncident_ID()); 
+							if (result == null) {
+								result =wt.getError();
+								logger.error(String.format("unable to input WT incident %s with following response:\n%s", inc.getIncident_ID(), result));
 							}
-							*/
-							
-							  String result = wt.insertIncident(client, company,inc.getIncident_ID()); 
-							  if (result == null) 
-								  result =wt.getError(); 
-							  else { 
-								  logger.info("inserted into wt: mbr: " + result); 
-								  } 
-							  logger.error("insert incident into wt: " +result);
+							else {
+								Transaction tx = sess.beginTransaction();
+								wtqueue.setQueue_status(-1);
+								sess.update(wtqueue);
+								tx.commit();
+								logger.info(String.format("inserted NT Incident: %s into WT as DAH: %s", inc.getIncident_ID(), result)); 
+							} 
 						}
 					}
-				
-					
-
-					 
-
 				}
 			}
 		} catch (Exception e) {
@@ -392,11 +386,14 @@ public class WorldTracerActionQueue extends Thread {
 							*/
 							 String result = wtohd.insertOHD(client, company,ohd.getOHD_ID()); 
 							 if (result == null) 
-								 result = wtohd.getError(); 
-							 else { 
-								logger.info("inserted into wt:mbr: " + result); 
+								 result = wtohd.getError();
+							 else {
+								 Transaction tx = sess.beginTransaction();
+								 wtqueue.setQueue_status(-1);
+								 sess.update(wtqueue);
+								 tx.commit();
+								 logger.info(String.format("inserted NT OHD: %s into WT as DOH: %s", ohd.getOHD_ID(), result));  
 							 } 
-							 logger.error("insert ohd into wt: " +result);
 						}
 					}
 					

@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -62,9 +65,9 @@ public class WTIncident {
 	 * @return
 	 */
 	public String insertIncident(HttpClient client, String companycode, String filenum) {
-		String _n = ".";
+		String fieldSep = ".";
 		String _t = "";
-		String _h = "/";
+		String entrySep = "/";
 
 		String responseBody = null;
 		
@@ -85,111 +88,72 @@ public class WTIncident {
 		//sb.append("CBS");
 		sb.append(incident.getStationassigned().getCompany().getCompanyCode_ID());
 		//System.out.println(incident.getStationassigned().getCompany().getCompanyCode_ID());
-		sb.append(_n);
+		sb.append(fieldSep);
+		
+		ArrayList<String> allFields = new ArrayList<String>();
 
-		// passengers last name
+		// passengers last name and initials
 		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
-			String temp;
 			int c = 0;
-			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
-				Passenger op = (Passenger) i.next();
-				temp = op.getLastname();
-				if (c == 0) {
-					if (temp.trim().length() > 0) sb.append("NM" + _t + temp);
-					System.out.println(temp);
-				} else {
-					if (temp.trim().length() > 0) sb.append(_h + temp);
-					System.out.println(temp);
+			ArrayList<String> names = new ArrayList<String>();
+			ArrayList<String> initials = new ArrayList<String>();
+			for (Passenger p : (Set<Passenger>) incident.getPassengers()) {
+				if(p.getLastname() != null && p.getLastname().trim().length() > 0) {
+					names.add(p.getLastname().trim());
+					if(p.getFirstname() != null && p.getFirstname().trim().length() > 0) {
+						initials.add(p.getFirstname().substring(0, 1) + p.getLastname().substring(0, 1));
+					}
+					else {
+						initials.add(p.getLastname().substring(0, 1));
+					}
+					c++;
 				}
-				if (temp.trim().length() > 0) c++;
-				if (c >= 3) break;
+				if(c >= 3) break;
+			}
+			if (names.size() > 0) {
+				allFields.add("NM" + StringUtils.join(names, entrySep));
+				allFields.add("IT" + StringUtils.join(initials, entrySep));
 			}
 		}
-		sb.append(_n);
-
-		// middle initial
-		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
-			String temp;
-			int c = 0;
-			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
-				Passenger op = (Passenger) i.next();
-				temp = op.getMiddlename();
-				if (c == 0) {
-					if (temp.trim().length() > 0) sb.append("IT" + _t + temp);
-					System.out.println(temp);
-				} else {
-					if (temp.trim().length() > 0) sb.append(_h + temp);
-					
-				}
-				if (temp.trim().length() > 0) c++;
-				if (c >= 3) break;
-			}
-		}
-		sb.append(_n);
 
 		// passenger title
 		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
-			String temp;
-			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
-				Passenger op = (Passenger) i.next();
-				temp = op.getSalutationdesc();
-				//System.out.println(temp.trim().length());
-				if (temp != null && temp.trim().length() > 0) {
-					sb.append("PT" + _t + temp + _n);
-					
-					
-				}
-				// membership status
-				if (op.getAirlinememstatus() != null && op.getAirlinememstatus().length() > 0) {
-					sb.append("PS" + _t + op.getAirlinememstatus() + _n);
-				}
-				
-				// membership num
-				if (op.getAirlinememnumber() != null && op.getAirlinememnumber().length() > 0) {
-					sb.append("FL" + _t + op.getAirlinememnumber() + _n);
-				}
-				
-				break;
+			Passenger p = (Passenger) incident.getPassengers().iterator().next();
+			if (p.getSalutationdesc() != null && p.getSalutationdesc().trim().length() > 0) {
+				allFields.add("PT" + p.getSalutationdesc().trim());
 			}
-
-		}
-		
-		// address, email, and country
-		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
-			String temp;
-			int c = 0;
-			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
-				Passenger op = (Passenger) i.next();
-				Address or = op.getAddress(0);
-				if (or.getAddress1().length() > 0 || or.getCity().length() > 0 || or.getState().length() > 0 || or.getZip().length() > 0) {
-					sb.append("PA" + _t + (or.getAddress1() + " " + or.getCity() + " " + or.getState() + " " + or.getZip()).trim() + _n);
-
-				}
-				
-				if (or.getEmail().length() > 0) {
-					sb.append("EA" + _t + or.getEmail() + _n);
-				}
-
-				if (or.getCountrycode_ID().length() > 0) {
-					sb.append("CO" + _t + or.getCountrycode_ID() + _n);
-				}
-				break;
+			if (p.getAirlinememstatus() != null && p.getAirlinememstatus().length() > 0) {
+				allFields.add("PS" + p.getAirlinememstatus());
+			}
+			if (p.getAirlinememnumber() != null && p.getAirlinememnumber().length() > 0) {
+				allFields.add("FL" + p.getAirlinememnumber());
+			}
+			Address or = p.getAddress(0);
+			if (or.getAddress1().length() > 0 || or.getCity().length() > 0 || or.getState().length() > 0 || or.getZip().length() > 0) {
+				allFields.add("PA" + (or.getAddress1() + " " + or.getCity() + " " + or.getState() + " " + or.getZip()).trim());
+			}
+			if (or.getEmail() != null && or.getEmail().length() > 0) {
+				String temp = or.getEmail();
+				temp = temp.replaceAll("@", "/A/").replaceAll("\\.", "/D/").replaceAll("_", "/U/").replaceAll("\\+", "/P/").replaceAll("~", "/T/");
+				allFields.add("EA" + temp.trim());
+			}
+			if (or.getCountrycode_ID().length() > 0) {
+				allFields.add("CO" + or.getCountrycode_ID().trim());
 			}
 		}
-
 
 		// homephone
 		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
-			String temp;
 			int c = 0;
-			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
-				Passenger op = (Passenger) i.next();
-				Address or = op.getAddress(0);
-				if (or.getHomephone().length() > 0) {
-					sb.append("PN" + _t + or.getHomephone() + _n);
+			for (Passenger p : (Set<Passenger>) incident.getPassengers()) {
+				Address or = p.getAddress(0);
+				if(or != null && or.getHomephone() != null && or.getHomephone().trim().length() > 0) {
+					allFields.add("PN" + or.getHomephone().trim());
 					c++;
 				}
-				if (c >= 2) break;
+				if( c >= 2) {
+					break;
+				}
 			}
 		}
 		
@@ -201,7 +165,7 @@ public class WTIncident {
 				Passenger op = (Passenger) i.next();
 				Address or = op.getAddress(0);
 				if (or.getWorkphone().length() > 0) {
-					sb.append("TP" + _t + or.getWorkphone() + _n);
+					allFields.add("TP" + _t + or.getWorkphone());
 					c++;
 				}
 				if (c >= 2) break;
@@ -216,7 +180,7 @@ public class WTIncident {
 				Passenger op = (Passenger) i.next();
 				Address or = op.getAddress(0);
 				if (or.getMobile().length() > 0) {
-					sb.append("CP" + _t + or.getMobile() + _n);
+					allFields.add("CP" + _t + or.getMobile());
 					c++;
 				}
 				if (c >= 2) break;
@@ -232,7 +196,7 @@ public class WTIncident {
 				Passenger op = (Passenger) i.next();
 				Address or = op.getAddress(0);
 				if (or.getAltphone().length() > 0) {
-					sb.append("FX" + _t + or.getAltphone() + _n);
+					allFields.add("FX" + _t + or.getAltphone());
 					c++;
 				}
 				if (c >= 2) break;
@@ -242,64 +206,83 @@ public class WTIncident {
 		// local delivery method
 		
 		// number of passengers
-		sb.append("NP" + _t + incident.getNumpassengers() + _n);
+		allFields.add("NP" + _t + incident.getNumpassengers());
 		
 
 		// flight date
 		boolean hasflight = false;
 		if (incident.getItinerary() != null && incident.getItinerary().size() > 0) {
 			String temp;
-			int c = 0;
+			int pc = 0;
+			int bc = 0;
+			
+			ArrayList<String> pFlights = new ArrayList<String>();
+			ArrayList<String> bFlights = new ArrayList<String>();
 			
 			for (Iterator i = incident.getItinerary().iterator(); i.hasNext();) {
 				Itinerary op = (Itinerary) i.next();
-				temp = op.getAirline() + op.getFlightnum() + "/";
-				if (DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null) != null) temp += DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null);
-				if (c == 0) {
-					if (temp.trim().length() > 1) sb.append("FD" + _t + temp.toUpperCase());
-				} else {
-					if (temp.trim().length() > 1) sb.append(_h + temp.toUpperCase());
-				}
-				if (temp.trim().length() > 1) {hasflight=true;c++;}
-				if (c >= 4) break;
+				
+					temp = op.getAirline() + op.getFlightnum() + "/";
+					if (DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null) != null) temp += DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null);
+					if (temp.trim().length() > 1) {
+						if(op.getItinerarytype() == TracingConstants.PASSENGER_ROUTING && pc < 4) {
+							pc++;
+							pFlights.add(temp.trim().toUpperCase());
+						}
+						else if (op.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING && bc < 4) {
+							bc++;
+							bFlights.add(temp.trim().toUpperCase());
+						}
+					}
+
+				if (pc >= 4 && bc >= 4) break;
+			}
+			if( pc > 0 && bc > 0 ) {
+				allFields.add("FD" + StringUtils.join(pFlights, entrySep));
+				allFields.add("BR" + StringUtils.join(bFlights, entrySep));
+			}
+			else {
+				error = "Please enter a valid flight/date itinerary for both passenger and bags";
+				return null;
 			}
 		}
-		sb.append(_n);
-		if (!hasflight) {
-			error = "Please enter a valid flight/date itinerary";
-			return null;
-		}
+		
 		// baggage routing
 		boolean hasrouting = false;
 		if (incident.getItinerary() != null && incident.getItinerary().size() > 0) {
 			String temp,temp2;
 			int c = 0;
+			ArrayList<String> routes = new ArrayList<String>();
+			
 			for (Iterator i = incident.getItinerary().iterator(); i.hasNext();) {
 				Itinerary op = (Itinerary) i.next();
 				if (op.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING) {
 					temp = op.getLegfrom();
 					temp2 = op.getLegto();
-					if (c == 0) {
-						if (temp.trim().length() > 0) {
-							sb.append("BR" + _t + temp.toUpperCase());
-							c++;
-							sb.append(_h + temp2.toUpperCase());
+					if (temp.trim().length() > 0 || temp2.trim().length() > 0) {
+						if (c == 0 && temp.trim().length() > 0) {
+							routes.add(temp.toUpperCase());
 						}
-					} else {
-						if (temp2.trim().length() > 0) sb.append(_h + temp2.toUpperCase());
+						if (temp2.trim().length() > 0) {
+							routes.add(temp2.toUpperCase());
+						}
+						c ++;
+						hasrouting = true;
 					}
-					if (temp.trim().length() > 0) {hasrouting=true;c++;}
-					if (c >= 4) break;
 				}
+				if (c >= 14) break;
+			}
+			if (c > 0) {
+				allFields.add("RT" + StringUtils.join(routes, entrySep));
 			}
 		}
 		if (!hasrouting) {
 			error = "Please enter valid bag routings stations";
 			return null;
-		} else {
-			sb.append(_n);
 		}
 
+		// the BR is different than the RT and is not required see flights above
+		/*
 		hasrouting = false;
 		if (incident.getItinerary() != null && incident.getItinerary().size() > 0) {
 			String temp,temp2;
@@ -311,12 +294,12 @@ public class WTIncident {
 					temp2 = op.getLegto();
 					if (c == 0) {
 						if (temp.trim().length() > 0) {
-							sb.append("RT" + _t + temp.toUpperCase());
+							sb.append("BR" + _t + temp.toUpperCase());
 							c++;
-							sb.append(_h + temp2.toUpperCase());
+							sb.append(entrySep + temp2.toUpperCase());
 						}
 					} else {
-						if (temp2.trim().length() > 0) sb.append(_h + temp2.toUpperCase());
+						if (temp2.trim().length() > 0) sb.append(entrySep + temp2.toUpperCase());
 					}
 					if (temp.trim().length() > 0) {hasrouting=true;c++;}
 					if (c >= 14) break;
@@ -327,12 +310,12 @@ public class WTIncident {
 			error = "Please enter valid passenger routings stations";
 			return null;
 		}
-		sb.append(_n);
+		sb.append(fieldSep);
+		*/
 
 		
 		// bags 1-10
 		if (incident.getItemlist() != null && incident.getItemlist().size() > 0) {
-			String temp,temp2;
 			int c = 0;
 			String xdesc1, xdesc2, xdesc3;
 			for (c = 0;c<incident.getItemlist().size();c++) {
@@ -345,7 +328,7 @@ public class WTIncident {
 						if (bt.length() > 6) {
 							bt = bt.substring(bt.length()-6);
 						}
-						sb.append("TN" + _t + incident.getStationassigned().getCompany().getCompanyCode_ID().toUpperCase() + bt.toUpperCase() + _n);
+						allFields.add("TN" + incident.getStationassigned().getCompany().getCompanyCode_ID().toUpperCase() + bt.toUpperCase());
 					}
 				}
 			
@@ -361,16 +344,12 @@ public class WTIncident {
 				}
 				
 				// color, type, descelements
-				sb.append("CT" + _t + item.getColor());
-				sb.append(item.getBagtype());
-				sb.append(xdesc1);
-				sb.append(xdesc2);
-				sb.append(xdesc3);
-				sb.append(_n);
+				allFields.add("CT" + item.getColor() + item.getBagtype() + xdesc1 + xdesc2 + xdesc3);
+
 				
 				// manu
 				if (item.getManufacturer().length() > 0 ) 
-					sb.append("BI" + _t + item.getManufacturer().toUpperCase() + _n);
+					allFields.add("BI" + _t + item.getManufacturer().toUpperCase());
 				
 				// lockcode ??
 				
@@ -382,11 +361,13 @@ public class WTIncident {
 						if (cc == 0) {
 							sbcn.append(iinv.getCategory() + "/" + iinv.getDescription());
 						} else {
-							sbcn.append("-    " + iinv.getCategory() + "/" + iinv.getDescription());
+							sbcn.append(fieldSep + "-    " + iinv.getCategory() + "/" + iinv.getDescription());
 						}
 
 					}
-					sb.append("CN" + _t + sbcn.toString() + _n);
+
+					allFields.add(String.format("CC%02d%s", c+1, sbcn.toString()));
+
 				}
 				
 				// date bag received
@@ -412,7 +393,8 @@ public class WTIncident {
 		// date questionaire (DQ)
 			
 		//hc and si supplemental information
-		sb.append("HC" + _t + "Y" + _n);
+		//sb.append("HC" + _t + "Y" + fieldSep);
+		allFields.add("HCY");
 		
 		// insurance (IN)
 		// keys collected (KK)
@@ -425,25 +407,37 @@ public class WTIncident {
 		
 		// fault station
 		if (incident.getFaultstationcode().length() > 0) {
-			sb.append("FS" + _t + incident.getFaultstationcode().toUpperCase() + _n);
+			allFields.add("FS" + incident.getFaultstationcode().toUpperCase());
+			//sb.append("FS" + _t + incident.getFaultstationcode().toUpperCase() + fieldSep);
 		}
 		
 		// reason for loss
 		if (incident.getLoss_code() > 0) {
-			sb.append("RL" + _t + incident.getLoss_code() + _n);
+			allFields.add("RL" + incident.getLoss_code());
+			//sb.append("RL" + _t + incident.getLoss_code() + fieldSep);
 		}
 		
 		// ticket number
 		if (incident.getTicketnumber().length() > 0) {
-			sb.append("TK" + _t + incident.getTicketnumber() + _n);
+			allFields.add("TK" + incident.getTicketnumber());
+//			sb.append("TK" + _t + incident.getTicketnumber() + fieldSep);
+			//we need a PB field, but I don't know what that is yet (pooled ticket number identifier)
+			allFields.add("PB"+ incident.getTicketnumber());
+		}
+		else {
+			allFields.add("PB0000");
 		}
 		
 		
-		sb.append(_n);
+		
+		
+		//sb.append(fieldSep);
 
 		// agent
-		sb.append("AG" + _t + incident.getAgent().getUsername() + "/" + incident.getAgent().getCompanycode_ID() + _n);
+		allFields.add("AG" + incident.getAgent().getUsername() + "/" + incident.getAgent().getCompanycode_ID());
+//		sb.append("AG" + _t + incident.getAgent().getUsername() + "/" + incident.getAgent().getCompanycode_ID() + fieldSep);
 		
+		sb.append(StringUtils.join(allFields, fieldSep));
 		// replace string
 		String wtstring = sb.toString();
 		wtstring = wtstring.replace("\n", "");
@@ -451,7 +445,6 @@ public class WTIncident {
 		wtstring = wtstring.replace("STN", "");
 		wtstring = wtstring.replace("ARL", "");
 		wtstring = wtstring.toUpperCase();
-		if (wtstring.substring(wtstring.length()-2).equals("..")) wtstring = wtstring.substring(0,wtstring.length()-2);
 		String encodedstring = wtstring.substring(5);
 		String tempstring = encodedstring;
 		try {
@@ -461,7 +454,7 @@ public class WTIncident {
 		String wt_http = WorldTracerUtils.getWt_url(companycode);
 		String wt_url = "http://" + wt_http + "/";
 		String getstring = wt_url + "cgi-bin/bagAHL.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&AHL=" + encodedstring;
-		getstring = getstring.replace(" ", "+");
+		getstring = getstring.replaceAll("\\s+", "%20");
 		
 		GetMethod method = null;
 		try {
@@ -503,7 +496,14 @@ public class WTIncident {
 			if (method != null) method.releaseConnection();
 			
 			// get the worldtracer id
-			String wt_id = StringUtils.ParseWTString2(responseBody, "<td>WM DAH ", "     /-ACCEPTED");
+
+			String wt_id = null;
+			Pattern p = Pattern.compile("AHL\\s+(\\w{3}\\w{2}\\d{5})");
+			Matcher m = p.matcher(responseBody);
+			if (m.find()) {
+				wt_id = m.group(1);
+			}
+			//String wt_id = StringUtils.ParseWTString2(responseBody, "<td>WM DAH ", "     /-ACCEPTED");
 			
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
