@@ -246,7 +246,9 @@ public class MoveToLZThread extends Thread {
 					buckets = percentDistribute(incidentList, lzList);
 				}
 				
-				moveIncidents(buckets, sess);
+				if (buckets != null) {
+					moveIncidents(buckets, sess);
+				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
