@@ -70,7 +70,6 @@ public class MoveToLZThread extends Thread {
 	private final static String AGENT_MSG = "; ASSIGNED AGENT REMOVED FOR RE-ASSIGNMENT AT ";
 
 	private String company;
-	int retrieve;
 	public MoveToLZThread(Properties properties,int type) {
 		try {
 			Connection conn = null;
@@ -163,7 +162,7 @@ public class MoveToLZThread extends Thread {
 					missing = rs.getInt("miss_to_lz_days");
 					ohd = rs.getInt("ohd_to_lz_days");
 					company = rs.getString("companycode_ID");
-					retrieve = rs.getInt("retrieve_actionfile_interval");
+					
 
 					// only move if days is greater than 0
 					if (this.type == MBR && mbr > 0) moveMBRToLZ(company);
@@ -198,7 +197,7 @@ public class MoveToLZThread extends Thread {
 					}
 				}
 
-				pause(retrieve * 60 * 1000);
+				pause(1 * 60 * 1000);
 
 			}
 		} catch (Exception e) {
@@ -239,11 +238,13 @@ public class MoveToLZThread extends Thread {
 	
 				ArrayList<Bucket> buckets = null;
 
-				if (mode == TracingConstants.MOVETOLZ_MODE_ASSIGNMENT) {
-					buckets = assignmentDistribute(incidentList, lzList);
-					
-				} else if (mode == TracingConstants.MOVETOLZ_MODE_PERCENTAGE) {
-					buckets = percentDistribute(incidentList, lzList);
+				if (incidentList.size() > 0) {
+					if (mode == TracingConstants.MOVETOLZ_MODE_ASSIGNMENT) {
+						buckets = assignmentDistribute(incidentList, lzList);
+						
+					} else if (mode == TracingConstants.MOVETOLZ_MODE_PERCENTAGE) {
+						buckets = percentDistribute(incidentList, lzList);
+					}
 				}
 				
 				if (buckets != null) {
