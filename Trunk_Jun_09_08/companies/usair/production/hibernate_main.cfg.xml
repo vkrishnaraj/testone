@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>	
+    
+		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod</property>
+		<property name="connection.username">nettracer</property>
+		<property name="connection.password">nettracer</property>
+		<property name="jdbc.fetch_size">50</property> 
+		<property name="jdbc.batch_size">25</property> 
+		<property name="jdbc.use_scrollable_resultset">false</property> 
+		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+		<property name="company.code">US</property>
+		
+    	<!-- sql server 2000 -->
+ 		<!--
+ 		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+ 		
+		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
+		<property name="hibernate .connection.url">jdbc:jtds:sqlserver://srvnttracetst01/nettracer</property>
+		<property name="connection.username">nettracer</property>
+		<property name="connection.password">N3tTr4c3r</property>
+		<property name="show_sql">false</property>
+		<property name="jdbc.fetch_size">50</property> 
+		<property name="jdbc.batch_size">25</property> 
+		<property name="jdbc.use_scrollable_resultset">false</property> 
+		<property name="dialect">net.sf.hibernate.dialect.SQLServerDialect</property>
+		<property name="company.code">DA</property>
+		
+		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
+		<property name="connection.url">jdbc:jtds:sqlserver://server02/nettracer_airtran</property>
+		<property name="connection.username">nettracer</property>
+		<property name="connection.password">nettracer</property>
+		<property name="show_sql">false</property>
+		<property name="jdbc.fetch_size">50</property> 
+		<property name="jdbc.batch_size">25</property> 
+		<property name="jdbc.use_scrollable_resultset">false</property> 
+		<property name="dialect">net.sf.hibernate.dialect.SQLServerDialect</property>
+		<property name="company.code">DA</property>
+		-->
+		
+        <!-- mysql -->
+        <!--
+        
+		<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
+		<property name="connection.url">jdbc:mysql://localhost/nettracer_main</property>
+		<property name="connection.username">nettracer</property>
+		<property name="connection.password">nettracer</property>
+		<property name="show_sql">false</property>
+		<property name="jdbc.fetch_size">50</property> 
+		<property name="jdbc.batch_size">25</property> 
+		<property name="jdbc.use_scrollable_resultset">false</property> 
+		<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>
+		<property name="company.code">DA</property>
+		-->
+		
+		<!-- oracle -->
+		<!--
+		<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<property name="connection.url">jdbc:oracle:thin:@server02:1521:nettracer</property>
+		<property name="connection.username">nettracer</property>
+		<property name="connection.password">nettracer</property>
+		<property name="show_sql">false</property>
+		<property name="jdbc.fetch_size">50</property> 
+		<property name="jdbc.batch_size">25</property> 
+		<property name="jdbc.use_scrollable_resultset">false</property> 
+		<property name="dialect">net.sf.hibernate.dialect.OracleDialect</property>
+		<property name="company.code">DA</property>
+		-->
+		
+			
+		<!-- c3p0 -->
+		<property name="c3p0.acquire_increment">1</property> 
+		<property name="c3p0.idle_test_period">100</property> <!-- seconds --> 
+		<property name="c3p0.max_size">100</property> 
+		<property name="c3p0.max_statements">100</property> 
+		<property name="c3p0.min_size">10</property> 
+		<property name="c3p0.timeout">5000</property> <!-- seconds --> 
+		
+		
+
+	
+			
+		<!-- mappings -->
+		<mapping resource="com/bagnet/nettracer/tracing/db/SystemPermission.hbm.xml"/>
+
+    </session-factory>
+
+</hibernate-configuration>

@@ -44,11 +44,11 @@ public class NettracerCron {
 		//ntarchive.run();
 
 		// Move to LZ Thread
-		// MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
-		// mbrthread.start();
+		MoveToLZThread mbrthread = new MoveToLZThread(properties, MoveToLZThread.MBR);
+		mbrthread.start();
 
-		//RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
-		//rwtthread.start();
+		// RetrieveWTActionFiles rwtthread = new RetrieveWTActionFiles(properties);
+		// rwtthread.start();
 
 		// MoveToWTThread wtthread = new MoveToWTThread(properties);
 		// wtthread.start();
