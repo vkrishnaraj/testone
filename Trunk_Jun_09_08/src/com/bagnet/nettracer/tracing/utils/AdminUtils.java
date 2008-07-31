@@ -1894,7 +1894,7 @@ public class AdminUtils {
 			q.setInteger("agent_ID", user.getAgent_ID());
 			List list = q.list();
 			if (list.size() > 0) {
-				return ((Integer) list.get(0)).intValue();
+				return ((Long) list.get(0)).intValue();
 			} else {
 				return 0;
 			}
