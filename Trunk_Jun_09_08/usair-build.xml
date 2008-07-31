@@ -466,7 +466,7 @@
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/required_fields_incl.jsp" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/analytics.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/web/WEB-INF" file="companies/usair/context.xml" />
 
 		<antcall target="fast_all">
