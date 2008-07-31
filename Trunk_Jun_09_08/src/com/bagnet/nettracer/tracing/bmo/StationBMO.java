@@ -26,7 +26,10 @@ public class StationBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class).add(
 					Expression.eq("station_ID", new Integer(station_ID)));
-			return (Station) cri.list().get(0);
+			if (cri.list().size() > 0)
+				return (Station) cri.list().get(0);
+			else
+				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
