@@ -436,7 +436,8 @@ public final class ManageStation extends Action {
 			s.setAssociated_airport((String) dForm.get("associated_airport"));
 			s.setStation_region((String) dForm.get("station_region"));
 			s.setStation_region_mgr((String) dForm.get("station_region_mgr"));
-			s.setLz_ID(Integer.parseInt((String) dForm.get("lz_id")));
+			if ((String) dForm.get("lz_id") != null && ((String) dForm.get("lz_id")).trim().length() > 0)
+				s.setLz_ID(Integer.parseInt((String) dForm.get("lz_id")));
 			s.setWt_stationcode((String) dForm.get("wt_stationcode"));
 			
 			try {
