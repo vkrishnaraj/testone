@@ -7,7 +7,6 @@
                     <xs:sequence>
                         <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="doNotAuthorize" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -15,6 +14,22 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="ns1:WS_PVIncident"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getIncidentPV2">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="doNotAuthorize" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getIncidentPV2Response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:WS_PVIncident2"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -49,6 +64,29 @@
                     <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="WS_PVIncident2">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="dispcreatetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_status" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax21:WS_PVItem"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:WS_PVPassenger"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_PVPassenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="email" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homephone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="hotel" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobile" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="workphone" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="getIncidentPVRequest">
@@ -57,16 +95,35 @@
     <wsdl:message name="getIncidentPVResponse">
         <wsdl:part name="parameters" element="ns0:getIncidentPVResponse"/>
     </wsdl:message>
+    <wsdl:message name="getIncidentPV2Request">
+        <wsdl:part name="parameters" element="ns0:getIncidentPV2"/>
+    </wsdl:message>
+    <wsdl:message name="getIncidentPV2Response">
+        <wsdl:part name="parameters" element="ns0:getIncidentPV2Response"/>
+    </wsdl:message>
     <wsdl:portType name="NTPassengerViewServicePortType">
         <wsdl:operation name="getIncidentPV">
             <wsdl:input message="ns0:getIncidentPVRequest" wsaw:Action="urn:getIncidentPV"/>
             <wsdl:output message="ns0:getIncidentPVResponse" wsaw:Action="urn:getIncidentPVResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getIncidentPV2">
+            <wsdl:input message="ns0:getIncidentPV2Request" wsaw:Action="urn:getIncidentPV2"/>
+            <wsdl:output message="ns0:getIncidentPV2Response" wsaw:Action="urn:getIncidentPV2Response"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="NTPassengerViewServiceSOAP11Binding" type="ns0:NTPassengerViewServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="getIncidentPV">
             <soap:operation soapAction="urn:getIncidentPV" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getIncidentPV2">
+            <soap:operation soapAction="urn:getIncidentPV2" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -86,6 +143,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="getIncidentPV2">
+            <soap12:operation soapAction="urn:getIncidentPV2" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:binding name="NTPassengerViewServiceHttpBinding" type="ns0:NTPassengerViewServicePortType">
         <http:binding verb="POST"/>
@@ -96,6 +162,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="getIncidentPV"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getIncidentPV2">
+            <http:operation location="NTPassengerViewService/getIncidentPV2"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getIncidentPV2"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getIncidentPV2"/>
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>

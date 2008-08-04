@@ -1113,6 +1113,11 @@
 
 		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/passengerview/passengerview_schemas.jar" />
 
+		<replace file="${basedir}/web/WEB-INF/services/NTPassengerViewService/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceImplementation]]></replacevalue>
+		</replace>
+
 		<!-- clean up -->
 
 		<delete dir="${build.dir}/webservices/passengerview/temp" />

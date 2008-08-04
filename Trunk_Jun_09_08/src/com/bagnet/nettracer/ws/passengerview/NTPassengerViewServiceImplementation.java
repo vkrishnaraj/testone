@@ -12,7 +12,9 @@ import com.bagnet.nettracer.ws.core.NTCoreServiceSkeleton;
  *  NTPassengerViewServiceSkeleton java skeleton for the axisService
  */
 public class NTPassengerViewServiceImplementation extends NTPassengerViewServiceSkeleton {
-    /**
+  
+	@Deprecated
+	/**
      * Auto generated method signature
      * @param getIncidentPV
      */
@@ -20,4 +22,14 @@ public class NTPassengerViewServiceImplementation extends NTPassengerViewService
         com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument getIncidentPV) {
       return new PassengerViewUtil().getIncidentPV(getIncidentPV);
     }
+    
+    /**
+     * Auto generated method signature
+     * @param getIncidentPV2
+     */
+    public com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument getIncidentPV2(
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document getIncidentPV2) {
+      return new PassengerViewUtil().getIncidentPV2(getIncidentPV2);
+    }
+
 }

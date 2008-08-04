@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.passengerview;
  */
 public interface GetIncidentPVDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentPVDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s6D50815D2FC9979A5153D40C3A37E0A7")
+            "schemaorg_apache_xmlbeans.system.s1E8397785CFE6E375EB3DD72EBE6EB5F")
                                                                                                                            .resolveHandle("getincidentpv57a8doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface GetIncidentPVDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface GetIncidentPV extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentPV.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s6D50815D2FC9979A5153D40C3A37E0A7")
+                "schemaorg_apache_xmlbeans.system.s1E8397785CFE6E375EB3DD72EBE6EB5F")
                                                                                                                                .resolveHandle("getincidentpva92eelemtype");
 
         /**
@@ -124,36 +124,6 @@ public interface GetIncidentPVDocument extends org.apache.xmlbeans.XmlObject {
          * Unsets the "lastname" element
          */
         void unsetLastname();
-
-        /**
-         * Gets the "doNotAuthorize" element
-         */
-        boolean getDoNotAuthorize();
-
-        /**
-         * Gets (as xml) the "doNotAuthorize" element
-         */
-        org.apache.xmlbeans.XmlBoolean xgetDoNotAuthorize();
-
-        /**
-         * True if has "doNotAuthorize" element
-         */
-        boolean isSetDoNotAuthorize();
-
-        /**
-         * Sets the "doNotAuthorize" element
-         */
-        void setDoNotAuthorize(boolean doNotAuthorize);
-
-        /**
-         * Sets (as xml) the "doNotAuthorize" element
-         */
-        void xsetDoNotAuthorize(org.apache.xmlbeans.XmlBoolean doNotAuthorize);
-
-        /**
-         * Unsets the "doNotAuthorize" element
-         */
-        void unsetDoNotAuthorize();
 
         /**
          * A factory class with static methods for creating instances

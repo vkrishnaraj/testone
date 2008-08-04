@@ -39,7 +39,7 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
                     ((methodName = org.apache.axis2.util.JavaUtils.xmlNameToJava(
                             op.getName().getLocalPart())) != null)) {
                 if ("getIncidentPV".equals(methodName)) {
-                    com.bagnet.nettracer.ws.passengerview.GetIncidentPVResponseDocument getIncidentPVResponse3 =
+                    com.bagnet.nettracer.ws.passengerview.GetIncidentPVResponseDocument getIncidentPVResponse5 =
                         null;
                     com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument wrappedParam =
                         (com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument) fromOM(msgContext.getEnvelope()
@@ -48,10 +48,25 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
                             com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    getIncidentPVResponse3 = skel.getIncidentPV(wrappedParam);
+                    getIncidentPVResponse5 = skel.getIncidentPV(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            getIncidentPVResponse3, false);
+                            getIncidentPVResponse5, false);
+                } else
+                 if ("getIncidentPV2".equals(methodName)) {
+                    com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument getIncidentPV2Response7 =
+                        null;
+                    com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document wrappedParam =
+                        (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document) fromOM(msgContext.getEnvelope()
+                                                                                                        .getBody()
+                                                                                                        .getFirstElement(),
+                            com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.class,
+                            getEnvelopeNamespaces(msgContext.getEnvelope()));
+
+                    getIncidentPV2Response7 = skel.getIncidentPV2(wrappedParam);
+
+                    envelope = toEnvelope(getSOAPFactory(msgContext),
+                            getIncidentPV2Response7, false);
                 } else {
                     throw new java.lang.RuntimeException("method not found");
                 }
@@ -64,6 +79,30 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
     }
 
     //
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
     private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
@@ -86,6 +125,19 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
         ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
 
         return documentElement;
+    }
+
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
+
+        return envelope;
     }
 
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
@@ -113,6 +165,28 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
         org.apache.axiom.om.OMElement param, java.lang.Class type,
         java.util.Map extraNamespaces) throws org.apache.axis2.AxisFault {
         try {
+            if (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
             if (com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument.class.equals(
                         type)) {
                 if (extraNamespaces != null) {
