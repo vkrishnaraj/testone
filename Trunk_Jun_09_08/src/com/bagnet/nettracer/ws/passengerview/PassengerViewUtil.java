@@ -230,7 +230,8 @@ public class PassengerViewUtil {
 
 					item = (Item) iDTO.getItemlist().get(i);
 					siarr.setBagstatus(item.getStatus().getDescription());
-					siarr.setClaimchecknum(item.getClaimchecknum());
+					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0)
+						siarr.setClaimchecknum(item.getClaimchecknum());
 
 					bdo = item.getBdo();
 					if (bdo != null)
