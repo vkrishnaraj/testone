@@ -8,8 +8,6 @@
  */
 package com.bagnet.nettracer.ws.passengerview;
 
-import org.apache.xmlbeans.xml.stream.XMLInputStream;
-
 
 /**
  * A document containing one getIncidentPVResponse(@http://passengerview.ws.nettracer.bagnet.com) element.
@@ -18,7 +16,7 @@ import org.apache.xmlbeans.xml.stream.XMLInputStream;
  */
 public interface GetIncidentPVResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentPVResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sFCF83C07F38D90F929612B12CC8E2D04")
+            "schemaorg_apache_xmlbeans.system.s6D50815D2FC9979A5153D40C3A37E0A7")
                                                                                                                            .resolveHandle("getincidentpvresponseade7doctype");
 
     /**
@@ -44,7 +42,7 @@ public interface GetIncidentPVResponseDocument extends org.apache.xmlbeans.XmlOb
      */
     public interface GetIncidentPVResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentPVResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.sFCF83C07F38D90F929612B12CC8E2D04")
+                "schemaorg_apache_xmlbeans.system.s6D50815D2FC9979A5153D40C3A37E0A7")
                                                                                                                                .resolveHandle("getincidentpvresponse93acelemtype");
 
         /**

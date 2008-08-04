@@ -93,6 +93,8 @@ public class GetIncidentPVDocumentImpl extends org.apache.xmlbeans.impl.values.X
                 "incident_id");
         private static final javax.xml.namespace.QName LASTNAME$2 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
                 "lastname");
+        private static final javax.xml.namespace.QName DONOTAUTHORIZE$4 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
+                "doNotAuthorize");
 
         public GetIncidentPVImpl(org.apache.xmlbeans.SchemaType sType) {
             super(sType);
@@ -375,6 +377,106 @@ public class GetIncidentPVDocumentImpl extends org.apache.xmlbeans.impl.values.X
             synchronized (monitor()) {
                 check_orphaned();
                 get_store().remove_element(LASTNAME$2, 0);
+            }
+        }
+
+        /**
+         * Gets the "doNotAuthorize" element
+         */
+        public boolean getDoNotAuthorize() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(DONOTAUTHORIZE$4,
+                        0);
+
+                if (target == null) {
+                    return false;
+                }
+
+                return target.getBooleanValue();
+            }
+        }
+
+        /**
+         * Gets (as xml) the "doNotAuthorize" element
+         */
+        public org.apache.xmlbeans.XmlBoolean xgetDoNotAuthorize() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlBoolean target = null;
+                target = (org.apache.xmlbeans.XmlBoolean) get_store()
+                                                              .find_element_user(DONOTAUTHORIZE$4,
+                        0);
+
+                return target;
+            }
+        }
+
+        /**
+         * True if has "doNotAuthorize" element
+         */
+        public boolean isSetDoNotAuthorize() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                return get_store().count_elements(DONOTAUTHORIZE$4) != 0;
+            }
+        }
+
+        /**
+         * Sets the "doNotAuthorize" element
+         */
+        public void setDoNotAuthorize(boolean doNotAuthorize) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(DONOTAUTHORIZE$4,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                                   .add_element_user(DONOTAUTHORIZE$4);
+                }
+
+                target.setBooleanValue(doNotAuthorize);
+            }
+        }
+
+        /**
+         * Sets (as xml) the "doNotAuthorize" element
+         */
+        public void xsetDoNotAuthorize(
+            org.apache.xmlbeans.XmlBoolean doNotAuthorize) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlBoolean target = null;
+                target = (org.apache.xmlbeans.XmlBoolean) get_store()
+                                                              .find_element_user(DONOTAUTHORIZE$4,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlBoolean) get_store()
+                                                                  .add_element_user(DONOTAUTHORIZE$4);
+                }
+
+                target.set(doNotAuthorize);
+            }
+        }
+
+        /**
+         * Unsets the "doNotAuthorize" element
+         */
+        public void unsetDoNotAuthorize() {
+            synchronized (monitor()) {
+                check_orphaned();
+                get_store().remove_element(DONOTAUTHORIZE$4, 0);
             }
         }
     }

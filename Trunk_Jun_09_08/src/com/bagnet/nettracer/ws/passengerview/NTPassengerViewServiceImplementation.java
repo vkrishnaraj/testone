@@ -6,18 +6,18 @@
  */
 package com.bagnet.nettracer.ws.passengerview;
 
+import com.bagnet.nettracer.ws.core.NTCoreServiceSkeleton;
+
 /**
  *  NTPassengerViewServiceSkeleton java skeleton for the axisService
  */
-public class NTPassengerViewServiceSkeleton {
+public class NTPassengerViewServiceImplementation extends NTPassengerViewServiceSkeleton {
     /**
      * Auto generated method signature
      * @param getIncidentPV
      */
     public com.bagnet.nettracer.ws.passengerview.GetIncidentPVResponseDocument getIncidentPV(
         com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument getIncidentPV) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getIncidentPV");
+      return new PassengerViewUtil().getIncidentPV(getIncidentPV);
     }
 }

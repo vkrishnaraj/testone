@@ -39,7 +39,7 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
                     ((methodName = org.apache.axis2.util.JavaUtils.xmlNameToJava(
                             op.getName().getLocalPart())) != null)) {
                 if ("getIncidentPV".equals(methodName)) {
-                    com.bagnet.nettracer.ws.passengerview.GetIncidentPVResponseDocument getIncidentPVResponse1 =
+                    com.bagnet.nettracer.ws.passengerview.GetIncidentPVResponseDocument getIncidentPVResponse3 =
                         null;
                     com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument wrappedParam =
                         (com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument) fromOM(msgContext.getEnvelope()
@@ -48,10 +48,10 @@ public class NTPassengerViewServiceMessageReceiverInOut extends org.apache.axis2
                             com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    getIncidentPVResponse1 = skel.getIncidentPV(wrappedParam);
+                    getIncidentPVResponse3 = skel.getIncidentPV(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            getIncidentPVResponse1, false);
+                            getIncidentPVResponse3, false);
                 } else {
                     throw new java.lang.RuntimeException("method not found");
                 }

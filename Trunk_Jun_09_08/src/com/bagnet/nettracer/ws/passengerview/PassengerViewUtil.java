@@ -27,12 +27,17 @@ public class PassengerViewUtil {
       com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument getIncidentPV) {
 		String incident_id = getIncidentPV.getGetIncidentPV().getIncidentId();
 		String name = getIncidentPV.getGetIncidentPV().getLastname();
+		
+		boolean authorizeName = true;
+		if (getIncidentPV.getGetIncidentPV().isSetDoNotAuthorize() == true)
+			authorizeName = !getIncidentPV.getGetIncidentPV().getDoNotAuthorize();
+		
 		GetIncidentPVResponseDocument resDoc = GetIncidentPVResponseDocument.Factory
 				.newInstance();
 		GetIncidentPVResponseDocument.GetIncidentPVResponse res = resDoc
 				.addNewGetIncidentPVResponse();
 
-		si = findIncidentForPVO(incident_id, name);
+		si = findIncidentForPVO(incident_id, name, authorizeName);
 		res.setReturn(si);
 		return resDoc;
   }
@@ -43,19 +48,33 @@ public class PassengerViewUtil {
    * @param name
    * @return
    */
- 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident findIncidentForPVO(String incident_ID, String name) {
+ 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident findIncidentForPVO(String incident_ID, String name, boolean authorizeName) {
+ 		boolean authorized = false;
+ 		if (authorizeName == false)
+ 			authorized = true;
  		
  		try {
-			if (name == null || name.length() == 0 || incident_ID == null
-					|| incident_ID.length() == 0)
-				return null;
-			if (name.indexOf("%") >= 0 || incident_ID.indexOf("%") >= 0)
-				return null;
+ 			
+ 			if (authorizeName == true) {
+				if (name == null || name.length() == 0 || incident_ID == null
+						|| incident_ID.length() == 0)
+					return null;
+				if (name.indexOf("%") >= 0 || incident_ID.indexOf("%") >= 0)
+					return null;
+ 			}
 			
 			incident_ID = StringUtils.fillzero(incident_ID);
 
 			IncidentBMO iBMO = new IncidentBMO();
-			Incident iDTO = iBMO.findIncidentForPVO(incident_ID.trim().toUpperCase(), name);
+			
+			Incident iDTO = null;
+			
+			if (authorizeName == false) {
+				iDTO = iBMO.findIncidentByID(incident_ID);	
+			} else {
+				iDTO = iBMO.findIncidentForPVO(incident_ID.trim().toUpperCase(), name);
+			}
+
 			if (iDTO == null)
 				return null;
 
@@ -68,6 +87,10 @@ public class PassengerViewUtil {
 				si.setFirstname(p.getFirstname());
 				si.setMiddlename(p.getMiddlename());
 				si.setLastname(p.getLastname());
+				
+				if (authorizeName == true && p.getLastname().equals(name))
+					authorized = true;
+				
 				for (int j = 0; j < p.getAddresses().size(); j++) {
 					addr = (Address) p.getAddress(j);
 					si.setHomephone(addr.getHomephone());
@@ -110,6 +133,10 @@ public class PassengerViewUtil {
 					si.setItemsArray(i, siarr);
 				}
 
+			}
+			
+			if (authorized == false && authorizeName == true) {
+				return null;
 			}
 
 			return si;
