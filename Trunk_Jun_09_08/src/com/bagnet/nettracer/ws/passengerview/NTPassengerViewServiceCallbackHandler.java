@@ -54,17 +54,17 @@ public abstract class NTPassengerViewServiceCallbackHandler {
     }
 
     /**
-     * auto generated Axis2 call back method for getIncidentPV2 method
-     * override this method for handling normal response from getIncidentPV2 operation
+     * auto generated Axis2 call back method for getIncidentPVAdvanced method
+     * override this method for handling normal response from getIncidentPVAdvanced operation
      */
-    public void receiveResultgetIncidentPV2(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument result) {
+    public void receiveResultgetIncidentPVAdvanced(
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument result) {
     }
 
     /**
      * auto generated Axis2 Error handler
-     * override this method for handling error response from getIncidentPV2 operation
+     * override this method for handling error response from getIncidentPVAdvanced operation
      */
-    public void receiveErrorgetIncidentPV2(java.lang.Exception e) {
+    public void receiveErrorgetIncidentPVAdvanced(java.lang.Exception e) {
     }
 }

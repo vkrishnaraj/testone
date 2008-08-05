@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.passengerview;
  */
 public interface GetIncidentPVDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentPVDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s1E8397785CFE6E375EB3DD72EBE6EB5F")
+            "schemaorg_apache_xmlbeans.system.sFC8F9E68937D2AB189E65DF85DA86C7B")
                                                                                                                            .resolveHandle("getincidentpv57a8doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface GetIncidentPVDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface GetIncidentPV extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetIncidentPV.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s1E8397785CFE6E375EB3DD72EBE6EB5F")
+                "schemaorg_apache_xmlbeans.system.sFC8F9E68937D2AB189E65DF85DA86C7B")
                                                                                                                                .resolveHandle("getincidentpva92eelemtype");
 
         /**

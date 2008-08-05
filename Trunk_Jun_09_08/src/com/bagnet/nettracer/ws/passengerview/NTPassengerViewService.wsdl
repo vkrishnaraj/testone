@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns0="http://passengerview.ws.nettracer.bagnet.com" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns1="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://passengerview.ws.nettracer.bagnet.com">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://passengerview.ws.nettracer.bagnet.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://passengerview.ws.nettracer.bagnet.com">
     <wsdl:types>
         <xs:schema xmlns:ns="http://passengerview.ws.nettracer.bagnet.com" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://passengerview.ws.nettracer.bagnet.com">
             <xs:element name="getIncidentPV">
@@ -17,7 +17,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="getIncidentPV2">
+            <xs:element name="getIncidentPVAdvanced">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
@@ -26,10 +26,10 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="getIncidentPV2Response">
+            <xs:element name="getIncidentPVAdvancedResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:WS_PVIncident2"/>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:WS_PVAdvancedIncident"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -64,7 +64,7 @@
                     <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="WS_PVIncident2">
+            <xs:complexType name="WS_PVAdvancedIncident">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="dispcreatetime" nillable="true" type="xs:string"/>
@@ -95,20 +95,20 @@
     <wsdl:message name="getIncidentPVResponse">
         <wsdl:part name="parameters" element="ns0:getIncidentPVResponse"/>
     </wsdl:message>
-    <wsdl:message name="getIncidentPV2Request">
-        <wsdl:part name="parameters" element="ns0:getIncidentPV2"/>
+    <wsdl:message name="getIncidentPVAdvancedRequest">
+        <wsdl:part name="parameters" element="ns0:getIncidentPVAdvanced"/>
     </wsdl:message>
-    <wsdl:message name="getIncidentPV2Response">
-        <wsdl:part name="parameters" element="ns0:getIncidentPV2Response"/>
+    <wsdl:message name="getIncidentPVAdvancedResponse">
+        <wsdl:part name="parameters" element="ns0:getIncidentPVAdvancedResponse"/>
     </wsdl:message>
     <wsdl:portType name="NTPassengerViewServicePortType">
         <wsdl:operation name="getIncidentPV">
             <wsdl:input message="ns0:getIncidentPVRequest" wsaw:Action="urn:getIncidentPV"/>
             <wsdl:output message="ns0:getIncidentPVResponse" wsaw:Action="urn:getIncidentPVResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="getIncidentPV2">
-            <wsdl:input message="ns0:getIncidentPV2Request" wsaw:Action="urn:getIncidentPV2"/>
-            <wsdl:output message="ns0:getIncidentPV2Response" wsaw:Action="urn:getIncidentPV2Response"/>
+        <wsdl:operation name="getIncidentPVAdvanced">
+            <wsdl:input message="ns0:getIncidentPVAdvancedRequest" wsaw:Action="urn:getIncidentPVAdvanced"/>
+            <wsdl:output message="ns0:getIncidentPVAdvancedResponse" wsaw:Action="urn:getIncidentPVAdvancedResponse"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="NTPassengerViewServiceSOAP11Binding" type="ns0:NTPassengerViewServicePortType">
@@ -122,8 +122,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getIncidentPV2">
-            <soap:operation soapAction="urn:getIncidentPV2" style="document"/>
+        <wsdl:operation name="getIncidentPVAdvanced">
+            <soap:operation soapAction="urn:getIncidentPVAdvanced" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -143,8 +143,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getIncidentPV2">
-            <soap12:operation soapAction="urn:getIncidentPV2" style="document"/>
+        <wsdl:operation name="getIncidentPVAdvanced">
+            <soap12:operation soapAction="urn:getIncidentPVAdvanced" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -164,13 +164,13 @@
                 <mime:content type="text/xml" part="getIncidentPV"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getIncidentPV2">
-            <http:operation location="NTPassengerViewService/getIncidentPV2"/>
+        <wsdl:operation name="getIncidentPVAdvanced">
+            <http:operation location="NTPassengerViewService/getIncidentPVAdvanced"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="getIncidentPV2"/>
+                <mime:content type="text/xml" part="getIncidentPVAdvanced"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="getIncidentPV2"/>
+                <mime:content type="text/xml" part="getIncidentPVAdvanced"/>
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>

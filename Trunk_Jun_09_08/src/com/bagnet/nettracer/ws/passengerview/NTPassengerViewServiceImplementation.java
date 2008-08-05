@@ -25,11 +25,10 @@ public class NTPassengerViewServiceImplementation extends NTPassengerViewService
     
     /**
      * Auto generated method signature
-     * @param getIncidentPV2
+     * @param getIncidentPVAdvanced
      */
-    public com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument getIncidentPV2(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document getIncidentPV2) {
-      return new PassengerViewUtil().getIncidentPV2(getIncidentPV2);
+    public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument getIncidentPVAdvanced(
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPVAdvanced) {
+    	return new PassengerViewUtil().getIncidentPVAdvanced(getIncidentPVAdvanced);
     }
-
 }

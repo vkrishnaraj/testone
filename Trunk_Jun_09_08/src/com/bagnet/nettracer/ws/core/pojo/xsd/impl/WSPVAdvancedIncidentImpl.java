@@ -1,19 +1,19 @@
 /*
- * XML Type:  WS_PVIncident2
+ * XML Type:  WS_PVAdvancedIncident
  * Namespace: http://pojo.core.ws.nettracer.bagnet.com/xsd
- * Java type: com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident2
+ * Java type: com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident
  *
  * Automatically generated - do not modify.
  */
 package com.bagnet.nettracer.ws.core.pojo.xsd.impl;
 
 /**
- * An XML WS_PVIncident2(@http://pojo.core.ws.nettracer.bagnet.com/xsd).
+ * An XML WS_PVAdvancedIncident(@http://pojo.core.ws.nettracer.bagnet.com/xsd).
  *
  * This is a complex type.
  */
-public class WSPVIncident2Impl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
-    implements com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident2 {
+public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
+    implements com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident {
     private static final javax.xml.namespace.QName COMPANYCODEID$0 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "companycode_id");
     private static final javax.xml.namespace.QName DISPCREATETIME$2 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
@@ -29,7 +29,7 @@ public class WSPVIncident2Impl extends org.apache.xmlbeans.impl.values.XmlComple
     private static final javax.xml.namespace.QName PASSENGERS$12 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "passengers");
 
-    public WSPVIncident2Impl(org.apache.xmlbeans.SchemaType sType) {
+    public WSPVAdvancedIncidentImpl(org.apache.xmlbeans.SchemaType sType) {
         super(sType);
     }
 

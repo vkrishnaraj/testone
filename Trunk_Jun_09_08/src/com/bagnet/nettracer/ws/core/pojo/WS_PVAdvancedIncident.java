@@ -2,7 +2,7 @@ package com.bagnet.nettracer.ws.core.pojo;
 
 
 
-public class WS_PVIncident2 {
+public class WS_PVAdvancedIncident {
 	
 	private String Incident_ID;
 	private String dispcreatetime;

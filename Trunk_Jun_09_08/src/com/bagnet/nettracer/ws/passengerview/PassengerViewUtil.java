@@ -14,9 +14,8 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger;
 
 public class PassengerViewUtil {
 	
-	@Deprecated
 	/**
-   *
+	 *
 	 * @param getIncidentPV
 	 * @return
 	 */
@@ -42,28 +41,27 @@ public class PassengerViewUtil {
 	 * @param getIncidentPV
 	 * @return
 	 */
- public com.bagnet.nettracer.ws.passengerview.GetIncidentPV2ResponseDocument getIncidentPV2(
-     com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document getIncidentPV) {
-		String incident_id = getIncidentPV.getGetIncidentPV2().getIncidentId();
-		String name = getIncidentPV.getGetIncidentPV2().getLastname();
+ public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument getIncidentPVAdvanced(
+     com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPV) {
+		String incident_id = getIncidentPV.getGetIncidentPVAdvanced().getIncidentId();
+		String name = getIncidentPV.getGetIncidentPVAdvanced().getLastname();
 		
 		boolean authorizeName = true;
-		if (getIncidentPV.getGetIncidentPV2().isSetDoNotAuthorize() == true)
-			authorizeName = !getIncidentPV.getGetIncidentPV2().getDoNotAuthorize();
+		if (getIncidentPV.getGetIncidentPVAdvanced().isSetDoNotAuthorize() == true)
+			authorizeName = !getIncidentPV.getGetIncidentPVAdvanced().getDoNotAuthorize();
 
 		
-		GetIncidentPV2ResponseDocument resDoc = GetIncidentPV2ResponseDocument.Factory
+		GetIncidentPVAdvancedResponseDocument resDoc = GetIncidentPVAdvancedResponseDocument.Factory
 				.newInstance();
-		GetIncidentPV2ResponseDocument.GetIncidentPV2Response res = resDoc
-				.addNewGetIncidentPV2Response();
+		GetIncidentPVAdvancedResponseDocument.GetIncidentPVAdvancedResponse res = resDoc
+				.addNewGetIncidentPVAdvancedResponse();
 
 		
-		com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident2 si = findIncidentForPVO2(incident_id, name, authorizeName);
+		com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident si = findAdvancedIncidentForPVO(incident_id, name, authorizeName);
 		res.setReturn(si);
 		return resDoc;
  }
   
-	@Deprecated
  	/**
    * 
    * @param incident_ID
@@ -158,7 +156,7 @@ public class PassengerViewUtil {
    * @param name
    * @return
    */
- 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident2 findIncidentForPVO2(String incident_ID, String name, boolean authorizeName) {
+ 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident findAdvancedIncidentForPVO(String incident_ID, String name, boolean authorizeName) {
 		
  		try {
  			
@@ -184,7 +182,7 @@ public class PassengerViewUtil {
 			if (iDTO == null)
 				return null;
 
-			com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident2 si = com.bagnet.nettracer.ws.core.pojo.xsd.WSPVIncident2.Factory.newInstance();
+			com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident si = com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident.Factory.newInstance();
 
 
 			Address addr = null;
@@ -207,7 +205,7 @@ public class PassengerViewUtil {
 					break;
 				}
 				
-				if (!authorizeName || (authorizeName && wsp.getLastname().equals(name))) {
+				if (!authorizeName || (authorizeName && wsp.getLastname().equalsIgnoreCase(name))) {
 					si.addNewPassengers();
 					si.setPassengersArray(k, wsp);
 					++k;

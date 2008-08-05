@@ -1,38 +1,39 @@
 /*
  * An XML document type.
- * Localname: getIncidentPV2
+ * Localname: getIncidentPVAdvanced
  * Namespace: http://passengerview.ws.nettracer.bagnet.com
- * Java type: com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document
+ * Java type: com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument
  *
  * Automatically generated - do not modify.
  */
 package com.bagnet.nettracer.ws.passengerview.impl;
 
 /**
- * A document containing one getIncidentPV2(@http://passengerview.ws.nettracer.bagnet.com) element.
+ * A document containing one getIncidentPVAdvanced(@http://passengerview.ws.nettracer.bagnet.com) element.
  *
  * This is a complex type.
  */
-public class GetIncidentPV2DocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
-    implements com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document {
-    private static final javax.xml.namespace.QName GETINCIDENTPV2$0 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
-            "getIncidentPV2");
+public class GetIncidentPVAdvancedDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
+    implements com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument {
+    private static final javax.xml.namespace.QName GETINCIDENTPVADVANCED$0 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
+            "getIncidentPVAdvanced");
 
-    public GetIncidentPV2DocumentImpl(org.apache.xmlbeans.SchemaType sType) {
+    public GetIncidentPVAdvancedDocumentImpl(
+        org.apache.xmlbeans.SchemaType sType) {
         super(sType);
     }
 
     /**
-     * Gets the "getIncidentPV2" element
+     * Gets the "getIncidentPVAdvanced" element
      */
-    public com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 getGetIncidentPV2() {
+    public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced getGetIncidentPVAdvanced() {
         synchronized (monitor()) {
             check_orphaned();
 
-            com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 target =
+            com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced target =
                 null;
-            target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2) get_store()
-                                                                                                       .find_element_user(GETINCIDENTPV2$0,
+            target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced) get_store()
+                                                                                                                     .find_element_user(GETINCIDENTPVADVANCED$0,
                     0);
 
             if (target == null) {
@@ -44,51 +45,51 @@ public class GetIncidentPV2DocumentImpl extends org.apache.xmlbeans.impl.values.
     }
 
     /**
-     * Sets the "getIncidentPV2" element
+     * Sets the "getIncidentPVAdvanced" element
      */
-    public void setGetIncidentPV2(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 getIncidentPV2) {
+    public void setGetIncidentPVAdvanced(
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced getIncidentPVAdvanced) {
         synchronized (monitor()) {
             check_orphaned();
 
-            com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 target =
+            com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced target =
                 null;
-            target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2) get_store()
-                                                                                                       .find_element_user(GETINCIDENTPV2$0,
+            target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced) get_store()
+                                                                                                                     .find_element_user(GETINCIDENTPVADVANCED$0,
                     0);
 
             if (target == null) {
-                target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2) get_store()
-                                                                                                           .add_element_user(GETINCIDENTPV2$0);
+                target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced) get_store()
+                                                                                                                         .add_element_user(GETINCIDENTPVADVANCED$0);
             }
 
-            target.set(getIncidentPV2);
+            target.set(getIncidentPVAdvanced);
         }
     }
 
     /**
-     * Appends and returns a new empty "getIncidentPV2" element
+     * Appends and returns a new empty "getIncidentPVAdvanced" element
      */
-    public com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 addNewGetIncidentPV2() {
+    public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced addNewGetIncidentPVAdvanced() {
         synchronized (monitor()) {
             check_orphaned();
 
-            com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 target =
+            com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced target =
                 null;
-            target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2) get_store()
-                                                                                                       .add_element_user(GETINCIDENTPV2$0);
+            target = (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced) get_store()
+                                                                                                                     .add_element_user(GETINCIDENTPVADVANCED$0);
 
             return target;
         }
     }
 
     /**
-     * An XML getIncidentPV2(@http://passengerview.ws.nettracer.bagnet.com).
+     * An XML getIncidentPVAdvanced(@http://passengerview.ws.nettracer.bagnet.com).
      *
      * This is a complex type.
      */
-    public static class GetIncidentPV2Impl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
-        implements com.bagnet.nettracer.ws.passengerview.GetIncidentPV2Document.GetIncidentPV2 {
+    public static class GetIncidentPVAdvancedImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
+        implements com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.GetIncidentPVAdvanced {
         private static final javax.xml.namespace.QName INCIDENTID$0 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
                 "incident_id");
         private static final javax.xml.namespace.QName LASTNAME$2 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
@@ -96,7 +97,7 @@ public class GetIncidentPV2DocumentImpl extends org.apache.xmlbeans.impl.values.
         private static final javax.xml.namespace.QName DONOTAUTHORIZE$4 = new javax.xml.namespace.QName("http://passengerview.ws.nettracer.bagnet.com",
                 "doNotAuthorize");
 
-        public GetIncidentPV2Impl(org.apache.xmlbeans.SchemaType sType) {
+        public GetIncidentPVAdvancedImpl(org.apache.xmlbeans.SchemaType sType) {
             super(sType);
         }
 

@@ -1,13 +1,12 @@
 package com.bagnet.nettracer.ws.passengerview;
 
 import com.bagnet.nettracer.ws.core.pojo.WS_PVIncident;
-import com.bagnet.nettracer.ws.core.pojo.WS_PVIncident2;
+import com.bagnet.nettracer.ws.core.pojo.WS_PVAdvancedIncident;
 
 
 public class NTPassengerViewService {
 
 
-	@Deprecated
 	/*
 	 * getIncidentPV - Only returns first passenger in list.
 	 * @deprecated
@@ -22,8 +21,8 @@ public class NTPassengerViewService {
 	 * allows the user to indicate they do not want any authorization performed
 	 * against the name provided. 
 	 */
-	public WS_PVIncident2 getIncidentPV2(String incident_id, String lastname, boolean doNotAuthorize) {
-		WS_PVIncident2 si = null;
+	public WS_PVAdvancedIncident getAdvancedIncidentPV(String incident_id, String lastname, boolean doNotAuthorize) {
+		WS_PVAdvancedIncident si = null;
 		return si;
 	}
 }
