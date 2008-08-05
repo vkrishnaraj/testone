@@ -95,20 +95,23 @@ public class PassengerViewUtil {
 			Address addr = null;
 			for (Iterator i = iDTO.getPassengers().iterator(); i.hasNext();) {
 				p = (Passenger) i.next();
-				si.setFirstname(p.getFirstname());
-				si.setMiddlename(p.getMiddlename());
-				si.setLastname(p.getLastname());
 				
-				
-				for (int j = 0; j < p.getAddresses().size(); j++) {
-					addr = (Address) p.getAddress(j);
-					si.setHomephone(addr.getHomephone());
-					si.setWorkphone(addr.getWorkphone());
-					si.setMobile(addr.getMobile());
-					si.setHotel(addr.getHotel());
-					si.setEmail(addr.getEmail());
+				if (p.getLastname().equalsIgnoreCase(name)) {
+					si.setFirstname(p.getFirstname());
+					si.setMiddlename(p.getMiddlename());
+					si.setLastname(p.getLastname());
+					
+					
+					for (int j = 0; j < p.getAddresses().size(); j++) {
+						addr = (Address) p.getAddress(j);
+						si.setHomephone(addr.getHomephone());
+						si.setWorkphone(addr.getWorkphone());
+						si.setMobile(addr.getMobile());
+						si.setHotel(addr.getHotel());
+						si.setEmail(addr.getEmail());
+					}
+					break;
 				}
-				break;
 			}
 
 			si.setIncidentID(iDTO.getIncident_ID());
