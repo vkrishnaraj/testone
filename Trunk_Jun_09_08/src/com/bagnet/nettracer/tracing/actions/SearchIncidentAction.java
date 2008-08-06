@@ -63,6 +63,12 @@ public class SearchIncidentAction extends Action {
 		IncidentForm theform = new IncidentForm();
 		
 		
+		if (request.getParameter("report") != null) {
+			//forward to prompt receipt parameters.
+			//return (mapping.findForward(TracingConstants.REPORT_PARAMS));
+			//TODO: Here
+		}
+		
 		// user passed in worldtracer id, so find it in db or retrieve it from worldtracer
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));

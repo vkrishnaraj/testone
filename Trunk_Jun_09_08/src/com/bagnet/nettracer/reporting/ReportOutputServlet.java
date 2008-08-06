@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 
 /**
  * @author Administrator
@@ -84,22 +85,37 @@ public class ReportOutputServlet extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, java.io.IOException {
+		
+		String language = TracingConstants.DEFAULT_LOCALE;
+		int outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+		
 		try {
+			
+			if (request.getParameter("language") != null) {
+				language = (String) request.getParameter("language");
+			}
+			
+			if (request.getParameter("outputtype") != null) {
+				try {
+					outputtype = Integer.parseInt((String) request.getParameter("outputtype"));
+				} catch (Exception e) {
+					// If an error is encountered we are going to ignore it.
+				}
+			}
+
 			HttpSession session = request.getSession(false);
 			Agent user = (Agent) session.getAttribute("user");
 			if (user == null) {
 				response.sendRedirect("logoff.do");
 				return;
 			}
+			
 			byte[] bytes = null;
 			ServletContext sc = getServletContext();
 
 			// file already generated
 			String file = null;
-			int outputtype = TracingConstants.REPORT_OUTPUT_PDF;
-
-			if (request.getParameter("outputtype") != null) outputtype = Integer.parseInt(request
-					.getParameter("outputtype"));
+			
 
 			if ((file = request.getParameter("reportfile")) != null) {
 				bytes = readBytes(file, sc, response);
@@ -121,63 +137,33 @@ public class ReportOutputServlet extends HttpServlet {
 						break;
 					case ReportingConstants.LOST_RECEPIT_RPT:
 						IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
-						if (request.getParameter("outputtype") != null) {
-							try {
-								outputtype = Integer.parseInt((String) request.getParameter("outputtype"));
-							} catch (Exception e) {
-							}
-						}
-						String language = "en";
-						if (request.getParameter("language") != null) {
-							language = (String) request.getParameter("language");
-						}
+						
 						bytes = readBytes(LostDelayReceipt.createReport(theform, sc, request, outputtype,
 								language), sc, response);
 						break;
 					case ReportingConstants.DAMAGE_RECEPIT_RPT:
 						IncidentForm theform2 = (IncidentForm) session.getAttribute("incidentForm");
-						if (request.getParameter("outputtype") != null) {
-							try {
-								outputtype = Integer.parseInt((String) request.getParameter("outputtype"));
-							} catch (Exception e) {
-							}
-						}
-						String language2 = "en";
-						if (request.getParameter("language") != null) {
-							language = (String) request.getParameter("language");
-						}
+						
 						bytes = readBytes(DamageReceipt.createReport(theform2, sc, request, outputtype,
-								language2), sc, response);
+								language), sc, response);
 						break;
 					case ReportingConstants.MISSING_RECEPIT_RPT:
 						IncidentForm theform3 = (IncidentForm) session.getAttribute("incidentForm");
-						if (request.getParameter("outputtype") != null) {
-							try {
-								outputtype = Integer.parseInt((String) request.getParameter("outputtype"));
-							} catch (Exception e) {
-							}
-						}
-						String language3 = "en";
-						if (request.getParameter("language") != null) {
-							language = (String) request.getParameter("language");
-						}
+						
 						bytes = readBytes(MissingReceipt.createReport(theform3, sc, request, outputtype,
-								language3), sc, response);
+								language), sc, response);
 						break;
 					case ReportingConstants.BDO_RECEIPT_RPT:
 						BDOForm bdoform = (BDOForm) session.getAttribute("BDOForm");
-						if (request.getParameter("outputtype") != null) {
-							try {
-								outputtype = Integer.parseInt((String) request.getParameter("outputtype"));
-							} catch (Exception e) {
-							}
-						}
-						String language4 = "en";
-						if (request.getParameter("language") != null) {
-							language2 = (String) request.getParameter("language");
-						}
+						
 						bytes = readBytes(BDOReceipt.createReport(bdoform, sc, request, outputtype,
-								language4), sc, response);
+								language), sc, response);
+						break;
+					case ReportingConstants.SEARCH_INCIDENT_RPT:
+						SearchIncidentForm form = (SearchIncidentForm) session.getAttribute("SearchIncidentForm");
+
+						bytes = readBytes(SearchIncidentReport.createReport(form, sc, request, outputtype,
+								language), sc, response);
 						break;
 					default:
 						break;
