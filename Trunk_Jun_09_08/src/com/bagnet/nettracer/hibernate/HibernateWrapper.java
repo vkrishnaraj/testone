@@ -6,8 +6,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-
-import com.bagnet.nettracer.cronjob.NettracerCron;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Agent_Logger;
@@ -80,6 +78,7 @@ import com.bagnet.nettracer.tracing.db.SystemComponent;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.TimeZone;
 import com.bagnet.nettracer.tracing.db.UserGroup;
+import com.bagnet.nettracer.tracing.db.WT_Info;
 import com.bagnet.nettracer.tracing.db.Webservice_Session;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -153,27 +152,16 @@ public class HibernateWrapper {
 
 	static {
 		try {
-			// start the move to lz cron
-			NettracerCron cron = new NettracerCron();
-			
-			
 			if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
 				addClasses(cfg_qa);
-				String hibernate_qa_path = HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml").getPath();
-				sf_qa = cfg_qa.configure(new File(hibernate_qa_path)).buildSessionFactory();
-			
-				cron.runCron(cfg_qa.getProperties());
+				sf_qa = cfg_qa.configure(HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml")).buildSessionFactory();
 			} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
 				addClasses(cfg_demo);
-				String hibernate_demo_path = HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml").getPath();
-				sf_demo = cfg_demo.configure(new File(hibernate_demo_path)).buildSessionFactory();
-				
-				cron.runCron(cfg_demo.getProperties());
+				sf_demo = cfg_demo.configure(HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml")).buildSessionFactory();
 			} else {
 				addClasses(cfg_prod);
-				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
-				
-				cron.runCron(cfg_prod.getProperties());
+				sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
+//				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
 			}
 
 			
@@ -402,6 +390,7 @@ public class HibernateWrapper {
 		cfg.addClass(Lz.class);
 		cfg.addClass(WT_Queue.class);
 		cfg.addClass(WT_ROH.class);
+		cfg.addClass(WT_Info.class);
 	}
 
 
