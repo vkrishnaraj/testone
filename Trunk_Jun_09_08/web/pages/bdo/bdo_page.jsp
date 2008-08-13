@@ -10,6 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <!-- Calendar includes -->
+<%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -71,10 +72,10 @@
               <logic:notPresent name="showbdolist" scope="request">
                 <logic:present name="showprint" scope="request">
                   <td>
-                    <a href="#" onclick="openReportWindow('bdo.do?receipt=1&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','LostReceipt',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
+                    <a href="#" onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','LostReceipt',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
                   </td>
                   <td>
-                    <a href="#" onclick="openReportWindow('bdo.do?receipt=1&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','LostReceipt',800,600);return false;"><bean:message key="print_bdo" /></a>
+                    <a href="#" onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','LostReceipt',800,600);return false;"><bean:message key="print_bdo" /></a>
                     &nbsp;
                   </td>
                   

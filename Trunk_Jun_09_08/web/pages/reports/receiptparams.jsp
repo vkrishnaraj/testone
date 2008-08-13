@@ -17,18 +17,17 @@
 	
 	function generateReceipt(frm) {
 	
-	var toprint = "<%=ReportingConstants.LOST_RECEPIT_RPT%>";
 	<%
 		if (request.getParameter("toprint") != null) {
 	%>
 		toprint = '<%=request.getParameter("toprint")%>';
 	<%
+		} else {
+	%>
+		toprint = '<%=ReportingConstants.LOST_DELAY_RECEIPT%>';
+	<%
 		}
 	%>
-	
-	<logic:present name="bdo_id" scope="request">		
-		toprint = "<%=ReportingConstants.BDO_RECEIPT_RPT%>";
-	</logic:present>
 		
 		var checked=frm.outputtype[0].checked;
 		
@@ -85,10 +84,19 @@
                     :
                   </td>
                   <td>
-                    <input TYPE="radio" VALUE="0" NAME="outputtype" checked>
-                    <bean:message key="radio.pdf" />
-                    <input TYPE="radio" VALUE="1" NAME="outputtype">
-                    <bean:message key="radio.html" />
+	              	<html:radio property="outputtype" value="0" />
+	                <bean:message key="radio.pdf" />
+	                <html:radio property="outputtype" value="1" />
+	                <bean:message key="radio.html" />
+	                
+	                <logic:present name="advanced" scope="request">
+	                  <html:radio property="outputtype" value="2" />
+	                  <bean:message key="radio.xls" />
+	                  <html:radio property="outputtype" value="3" />
+	                  <bean:message key="radio.csv" />
+	                  <html:radio property="outputtype" value="4" />
+	                  <bean:message key="radio.xml" />
+                    </logic:present>
                   </td>
                 </tr>
                 <tr>

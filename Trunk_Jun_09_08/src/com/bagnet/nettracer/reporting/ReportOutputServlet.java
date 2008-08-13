@@ -135,7 +135,7 @@ public class ReportOutputServlet extends HttpServlet {
 						ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
 						bytes = readBytes(ClaimProrateRpt.createReport(cpform, sc, request), sc, response);
 						break;
-					case ReportingConstants.LOST_RECEPIT_RPT:
+					case ReportingConstants.LOST_RECEIPT_RPT:
 						IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
 						
 						bytes = readBytes(LostDelayReceipt.createReport(theform, sc, request, outputtype,
@@ -159,12 +159,7 @@ public class ReportOutputServlet extends HttpServlet {
 						bytes = readBytes(BDOReceipt.createReport(bdoform, sc, request, outputtype,
 								language), sc, response);
 						break;
-					case ReportingConstants.SEARCH_INCIDENT_RPT:
-						SearchIncidentForm form = (SearchIncidentForm) session.getAttribute("SearchIncidentForm");
-
-						bytes = readBytes(SearchIncidentReport.createReport(form, sc, request, outputtype,
-								language), sc, response);
-						break;
+						
 					default:
 						break;
 				}

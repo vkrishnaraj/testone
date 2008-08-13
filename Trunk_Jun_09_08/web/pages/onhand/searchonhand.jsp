@@ -211,11 +211,33 @@ function gopage(i) {
             </table>
             <logic:present name="onhandlist" scope="request">
             <!-- result -->
-            <h1 class="green">
-              <bean:message key="header.search_result" />
-              <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-            </h1>
-            <a name="result"></a>
+            <div id="pageheaderleft">
+              <h1 class="green">
+                <bean:message key="header.search_result" />
+                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+              </h1>
+              <a name="result"></a>
+            </div>
+           <%
+              if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
+            %>
+            <div id="pageheaderright">
+              <select name="outputtype">
+                <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                <option value="1"><bean:message key="radio.html" /></option>
+              </select>
+              <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
+              <logic:present name="reportfile" scope="request">
+                <script language=javascript>
+                  <!--
+                    openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+                  //-->
+                </script>
+              </logic:present>
+            </div>
+            <%
+              }
+            %>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>

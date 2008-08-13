@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -22,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -42,6 +44,9 @@ import com.bagnet.nettracer.wt.WorldTracerUtils;
  * @author Ankur Gupta
  */
 public class SearchOnHandAction extends Action {
+	
+	private static Logger logger = Logger.getLogger(SearchOnHandAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -88,7 +93,7 @@ public class SearchOnHandAction extends Action {
 		}
 		
 		
-		if (request.getParameter("search") == null) {
+		if (request.getParameter("search") == null && request.getParameter("generateReport") == null) {
 			
 			//daform.setAirline(user.getStation().getCompany().getCompanyCode_ID());
 			daform.setFoundCompany(user.getStation().getCompany().getCompanyCode_ID());
@@ -98,6 +103,25 @@ public class SearchOnHandAction extends Action {
 		}
 
 		BagService bs = new BagService();
+
+		if (request.getParameter("generateReport") != null && 
+				request.getParameter("outputtype") != null) {
+			
+			try {
+				String reportPath = getServlet().getServletContext().getRealPath("/");
+				int outputType = new Integer(request.getParameter("outputtype")).intValue();
+				String reportFile = null;
+				List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, false);			
+				reportFile = ReportBMO.createSearchOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath);
+				
+				request.setAttribute("reportfile", reportFile);
+				request.setAttribute("outputtype", outputType);
+				
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			} 
+		}
+
 		
 
 		List resultlist = null;

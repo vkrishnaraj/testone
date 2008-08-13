@@ -503,12 +503,39 @@ function gopage(i) {
 
 //-->
             </SCRIPT>
+            
+            
             <logic:present name="resultlist" scope="request">
-              <h1 class="green">
-                <bean:message key="header.search_result" />
-                <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-              </h1>
-              <a name="result"></a>
+              <div id="pageheaderleft">
+                <a name="result"></a>
+                <h1 class="green">
+                  <bean:message key="header.search_result" />
+                  <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                </h1>
+              </div>
+              
+              <%
+                if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
+              %>
+              <div id="pageheaderright">
+                  <select name="outputtype">
+                    <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                    <option value="1"><bean:message key="radio.html" /></option>
+                  </select>
+                  <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
+                  <logic:present name="reportfile" scope="request">
+                    <script language=javascript>
+                      <!--
+                        openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+                      //-->
+                    </script>
+                  </logic:present>
+              </div>
+              <%
+                }
+              %>
+              
+              
               <table class="form2" cellspacing="0" cellpadding="0">
                 <logic:present name="incident" scope="request">
                   <tr>
@@ -567,7 +594,6 @@ function gopage(i) {
                   <logic:iterate id="results" name="resultlist" type="com.bagnet.nettracer.tracing.db.Incident">
                     <bean:define id="items" name="results" property="itemlist" />
                     <bean:define id="claimchecks" name="results" property="claimcheck_list" />
-                    <bean:define id="itinerary" name="results" property="itinerary_list" />
                     <bean:define id="passengers" name="results" property="passenger_list" />
                     <tr>
                       <td>

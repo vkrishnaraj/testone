@@ -85,7 +85,7 @@ public class LostDelayAction extends Action {
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
-		request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEPIT_RPT));
+		request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
 		request.setAttribute("lostdelay", "1");
 
 		if (request.getParameter("express") != null)

@@ -5,6 +5,11 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.awt.image.DataBufferUShort;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -439,6 +444,10 @@ public class IncidentBMO {
 		}
 	}
 
+
+
+
+	
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = null;
@@ -454,7 +463,7 @@ public class IncidentBMO {
 				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
 
 			if (siDTO.getClaimchecknum().length() > 0)
-				s.append(" join incident.itemlist item ");
+				s.append(" left outer join incident.itemlist item ");
 			if (siDTO.getAirline().length() > 0 || siDTO.getFlightnum().length() > 0)
 				s.append(" join incident.itinerary itinerary ");
 			if (siDTO.getClaimchecknum().length() > 0)

@@ -19,18 +19,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -47,31 +48,44 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.ItemType;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.dto.SearchIncidentReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_3_DTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_ExpDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_OHD_DTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_RecoveryDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_TopFlightDTO;
+import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.reporting.JRIncidentDataSource;
+import com.bagnet.nettracer.tracing.utils.reporting.JROnhandDataSource;
 
 /**
  * @author Administrator
  * 
  * create date - Jul 15, 2004
  */
+
+
 public class ReportBMO {
 	private static Logger logger = Logger.getLogger(ReportBMO.class);
 	private static String rootpath;
@@ -130,7 +144,6 @@ public class ReportBMO {
 						return creportdata;
 					}
 				}
-
 			default:
 				return null;
 			}
@@ -2513,17 +2526,22 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	}
 
 	public String getReportFile(List list, Map parameters, String reportname, String rootpath, int outputtype) throws Exception {
-		/** look for compiled reports, if can't find it, compile xml report * */
 		JasperReport jasperReport = getCompiledReport(reportname, rootpath);
-		//HibernateResultDS ds = new HibernateResultDS(list);
 		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype);
+	}
 		
+	
+	private String getReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype) throws Exception {
+		/** look for compiled reports, if can't find it, compile xml report * */
+		
+
 		// added virtualizer to reduce memory
 		JRFileVirtualizer virtualizer = new JRFileVirtualizer(2, rootpath + "/reports/tmp");
 		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
-		
+
 		virtualizer.setReadOnly(true);
 		
 		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
@@ -2672,4 +2690,59 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		return al;
 	}
 
+	public static String createSearchIncidentReport(ArrayList incidentArray, HttpServletRequest request, int outputtype, String language, String reportPath) {
+		try {
+			
+			Map parameters = new HashMap();			
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			parameters.put("showdetail", "1");
+			
+			IncidentBMO bmo = new IncidentBMO();
+			BagService bs = new BagService();
+			
+
+			ReportBMO rbmo = new ReportBMO(request);
+			JasperReport jasperReport = getCompiledReport(ReportingConstants.SEARCH_INCIDENT_RPT_NAME, reportPath);
+			JRDataSource ds = new JRIncidentDataSource(jasperReport, incidentArray, (Agent) request.getSession().getAttribute("user"));
+			return rbmo.getReportFile(jasperReport, ds, parameters, ReportingConstants.SEARCH_INCIDENT_RPT_NAME, reportPath, outputtype);
+
+		} catch (Exception e) {
+			logger.error("unable to search incident report: " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String createSearchOnhandReport(List onhandArray, HttpServletRequest request, int outputtype, String language, String reportPath) {
+		try {
+			
+			Map parameters = new HashMap();			
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			parameters.put("showdetail", "1");
+			
+			IncidentBMO bmo = new IncidentBMO();
+			BagService bs = new BagService();
+			
+
+			ReportBMO rbmo = new ReportBMO(request);
+			JasperReport jasperReport = getCompiledReport(ReportingConstants.SEARCH_ONHAND_RPT_NAME, reportPath);
+			JRDataSource ds = new JROnhandDataSource(jasperReport, onhandArray, (Agent) request.getSession().getAttribute("user"));
+			return rbmo.getReportFile(jasperReport, ds, parameters, ReportingConstants.SEARCH_ONHAND_RPT_NAME, reportPath, outputtype);
+
+		} catch (Exception e) {
+			logger.error("unable to search incident report: " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 }

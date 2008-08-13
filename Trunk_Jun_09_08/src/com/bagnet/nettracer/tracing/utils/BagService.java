@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.net.URL;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1082,6 +1083,8 @@ public class BagService {
 		}
 	}
 
+
+	
 	/**
 	 * 
 	 * @param daform
@@ -1089,7 +1092,6 @@ public class BagService {
 	 * used to search incident by different criterias
 	 * @return
 	 */
-
 	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount) {
 		try {
 			IncidentBMO iBMO = new IncidentBMO();

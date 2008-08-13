@@ -10,7 +10,10 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <!-- Calendar includes -->
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -238,25 +241,46 @@ function gopage(i) {
                   </html:submit>
                   &nbsp;
                   
-									<logic:equal name="searchIncidentForm" property="itemType_ID" value="1">
-									<input type="button" name="reset" id="button" value="<bean:message key="button.reset" />" onclick="document.location.href='searchIncident.do?ld=1';">
-									</logic:equal>
-									<logic:equal name="searchIncidentForm" property="itemType_ID" value="2">
-									<input type="button" name="reset" id="button" value="<bean:message key="button.reset" />" onclick="document.location.href='searchIncident.do?missing=1';">
-									</logic:equal>
-									<logic:equal name="searchIncidentForm" property="itemType_ID" value="3">
-									<input type="button" name="reset" id="button" value="<bean:message key="button.reset" />" onclick="document.location.href='searchIncident.do?damage=1';">
-									</logic:equal>
-									
-
+    				<logic:equal name="searchIncidentForm" property="itemType_ID" value="1">
+    				<input type="button" name="reset" id="button" value="<bean:message key="button.reset" />" onclick="document.location.href='searchIncident.do?ld=1';">
+    				</logic:equal>
+    				<logic:equal name="searchIncidentForm" property="itemType_ID" value="2">
+    				<input type="button" name="reset" id="button" value="<bean:message key="button.reset" />" onclick="document.location.href='searchIncident.do?missing=1';">
+    				</logic:equal>
+    				<logic:equal name="searchIncidentForm" property="itemType_ID" value="3">
+    				<input type="button" name="reset" id="button" value="<bean:message key="button.reset" />" onclick="document.location.href='searchIncident.do?damage=1';">
+    				</logic:equal>
                 </td>
               </tr>
             </table>
             <logic:present name="resultlist" scope="request">
-              <h1 class="green">
-                <bean:message key="header.search_result" />
-                <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-              </h1>
+              <div id="pageheaderleft">
+                <h1 class="green">
+                  <bean:message key="header.search_result" />
+                  <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                </h1>
+              </div>
+              <%
+                if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
+              %>
+              <div id="pageheaderright">
+                <select name="outputtype">
+                  <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                  <option value="1"><bean:message key="radio.html" /></option>
+                </select>
+                <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
+                <logic:present name="reportfile" scope="request">
+                  <script language=javascript>
+                    <!--
+                      openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+                    //-->
+                  </script>
+                </logic:present>
+              </div>
+              <%
+                }
+              %>
+
               <a name="result"></a>
               <table class="form2" cellspacing="0" cellpadding="0" width="500">
                 <tr>

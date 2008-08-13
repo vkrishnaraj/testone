@@ -109,6 +109,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_ASSIGNED_LD = "Assigned Station Update LostDelay";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_ASSIGNED_DA = "Assigned Station Update Damaged";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_ASSIGNED_MS = "Assigned Station Update Missing";
+	
+	public final static String SYSTEM_COMPONENT_NAME_QUERY_REPORTS = "Query Reports";
 
 	
 	//Table numbers for status

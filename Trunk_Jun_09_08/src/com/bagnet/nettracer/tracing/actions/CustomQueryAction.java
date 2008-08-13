@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -80,6 +81,7 @@ public class CustomQueryAction extends Action {
 		// if user comes here first, just display the screen
 		// auto set search type if user comes to this page
 		if (request.getParameter("search") == null
+				&& request.getParameter("generateReport") == null
 				&& request.getParameter("update") == null
 				&& (request.getParameter("pagination") == null || !request.getParameter("pagination")
 						.equals("1"))) {
@@ -189,6 +191,30 @@ public class CustomQueryAction extends Action {
 		BagService bs = new BagService();
 		int rowcount = -1;
 		String report_id = null;
+		
+		if (request.getParameter("generateReport") != null && 
+				request.getParameter("outputtype") != null) {
+			
+			try {
+				String reportPath = getServlet().getServletContext().getRealPath("/");
+				int outputType = new Integer(request.getParameter("outputtype")).intValue();
+				String reportFile = null;
+				ArrayList resultArray = bs.customQuery(daform, user, 0, 0, false, searchtype);
+				
+				if (searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4")) {
+					reportFile = ReportBMO.createSearchIncidentReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath);
+				} else {
+					reportFile = ReportBMO.createSearchOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath);
+				}
+				
+				request.setAttribute("reportfile", reportFile);
+				request.setAttribute("outputtype", outputType);
+				
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			} 
+		}
+
 
 		if ((resultlist = bs.customQuery(daform, user, 0, 0, true, searchtype)) == null
 				|| resultlist.size() <= 0) {

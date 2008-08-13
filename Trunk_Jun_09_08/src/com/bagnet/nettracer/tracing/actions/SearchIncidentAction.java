@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -24,10 +26,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -39,9 +43,6 @@ import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
  * @author Matt
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class SearchIncidentAction extends Action {
 	private static Logger logger = Logger.getLogger(SearchIncidentAction.class);
@@ -59,15 +60,9 @@ public class SearchIncidentAction extends Action {
 		}
 		// user clicked on a incident after search result has returned
 		String incident = request.getParameter("incident");
+		
 		BagService bs = new BagService();
 		IncidentForm theform = new IncidentForm();
-		
-		
-		if (request.getParameter("report") != null) {
-			//forward to prompt receipt parameters.
-			//return (mapping.findForward(TracingConstants.REPORT_PARAMS));
-			//TODO: Here
-		}
 		
 		// user passed in worldtracer id, so find it in db or retrieve it from worldtracer
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
@@ -96,7 +91,7 @@ public class SearchIncidentAction extends Action {
 		if (incident == null || incident.length() == 0) {
 			
 
-			if (request.getParameter("search") == null && request.getParameter("update") == null
+			if (request.getParameter("generateReport") == null && request.getParameter("search") == null && request.getParameter("update") == null
 					&& (request.getParameter("pagination") == null || !request.getParameter("pagination").equals("1"))) {
 				SearchIncidentForm newform = new SearchIncidentForm();
 				//newform.setAirline(user.getStation().getCompany().getCompanyCode_ID());
@@ -117,6 +112,24 @@ public class SearchIncidentAction extends Action {
 			// search
 			SearchIncidentForm daform = (SearchIncidentForm) form;
 			ArrayList resultlist = null;
+			
+			// Create report if neccessary
+			if (request.getParameter("generateReport") != null && 
+					request.getParameter("outputtype") != null) {
+				
+				try {			
+					int outputType = new Integer(request.getParameter("outputtype")).intValue();
+					String reportPath = getServlet().getServletContext().getRealPath("/");
+					ArrayList<Incident> incidentArray = bs.findIncident(daform, user, 0, 0, false);
+					String reportFile = ReportBMO.createSearchIncidentReport(incidentArray, request, outputType, user.getCurrentlocale(), reportPath);
+					request.setAttribute("reportfile", reportFile);
+					request.setAttribute("outputtype", outputType);
+				} catch (Exception e) {
+					logger.error(e.getStackTrace());
+				} 
+			}
+
+
 			int rowcount = -1;
 
 			// get number of records found
@@ -215,7 +228,7 @@ public class SearchIncidentAction extends Action {
 					request.setAttribute("cantmatch", "1");
 				}
 
-				request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEPIT_RPT));
+				request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
 
 				Item item = theform.getItem(0, 0);
 
