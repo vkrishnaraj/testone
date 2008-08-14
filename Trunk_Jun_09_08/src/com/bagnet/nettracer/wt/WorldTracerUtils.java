@@ -66,7 +66,8 @@ public class WorldTracerUtils {
 		String responseBody = null;
 		wt_http = WorldTracerUtils.getWt_url(companycode);
 		wt_url = "http://" + wt_http + "/";
-		String getstring = wt_url + "cgi-bin/bagTTY.exe";
+		String cgiexe = "cgi-bin/bagTTY.exe";
+		String getstring = wt_url + cgiexe;
 		getstring = getstring.replace(" ", "+");
 
 		PostMethod method = new PostMethod(getstring);
@@ -93,6 +94,8 @@ public class WorldTracerUtils {
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler(3, false));
 		try {
+			
+			String requestInfo = WorldTracerUtils.getWtRequest(wt_url, cgiexe);
 			// Execute the method.
 			int statusCode = client.executeMethod(method);
 
@@ -108,7 +111,7 @@ public class WorldTracerUtils {
 				responseBody = responseBody.substring(start
 						+ "---- TYPE A ACCESS - CRT ----".length(), end);
 			}
-
+			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
 			e.printStackTrace();
@@ -418,9 +421,10 @@ public class WorldTracerUtils {
 		}
 		wt_http = WorldTracerUtils.getWt_url(companycode);
 		wt_url = "http://" + wt_http + "/";
-		String getstring = wt_url + "cgi-bin/bagResponseROH.exe?A1="
+		String cgiexe = "cgi-bin/bagResponseROH.exe?A1="
 				+ companycode.toUpperCase() + "&T1=" + ahl_id + "&ROH="
 				+ ohd_string;
+		String getstring = wt_url + cgiexe;
 		getstring = getstring.replace(" ", "+");
 
 		GetMethod method = new GetMethod(getstring);
@@ -431,17 +435,19 @@ public class WorldTracerUtils {
 				new DefaultHttpMethodRetryHandler(3, false));
 
 		try {
+			
+			String requestInfo = WorldTracerUtils.getWtRequest(wt_url, cgiexe);
 			// Execute the method.
-			// temporarily disable
+			/*
 			int statusCode = client.executeMethod(method);
 
 			if (statusCode != HttpStatus.SC_OK) {
 				System.err.println("Method failed: " + method.getStatusLine());
 			}
-
+*/
 			// Read the response body.
 			responseBody = method.getResponseBodyAsString();
-
+			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
 			e.printStackTrace();
@@ -948,18 +954,16 @@ public class WorldTracerUtils {
 		String requestinfo = sb.toString();
 		return requestinfo;
 	}
-	public static String getWtRequest(String wtstring,String cgiexe){
+	public static String getWtRequest(String wt_url,String cgiexe){
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("URL: ");
 		sb.append(wt_url + cgiexe);
-		sb.append("|||GET INFO: ");
 
-		sb.append(wtstring);
-	
 		String requestinfo = sb.toString();
 		return requestinfo;
 	}
+	/*
 	public static String getPostWtRequest(GetMethod method,String cgiexe)
 	{
 		StringBuffer sb=new StringBuffer();
@@ -972,4 +976,9 @@ public class WorldTracerUtils {
 		}
 		return sb.toString();
 	}
+	
+	public static void insertAmendWtString(IncidentForm incform,Incident inc){
+		//incform.
+	}
+	*/
 }

@@ -291,12 +291,9 @@ public class WorldTracerQueueUtils {
 		if (name.length() > 0) roh_string.append(".NM " + name);
 		
 		//HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/",company);
-		//String test = WorldTracerUtils.postROH(client, company, ahl_id,roh_string.toString());
+		String result = WorldTracerUtils.postROH(client, company, ahl_id,roh_string.toString());
 		
-		// for now return roh_string
-		//test = roh_string.toString();
-		String test = "ok";
-		return test;
+		return result;
 	}
 	public String postWTTTY(HttpClient client,WT_TTY inc) {
 		// make the request
@@ -337,12 +334,11 @@ public class WorldTracerQueueUtils {
         ttylist.add(ttytxt);
         		
 		
-		//String test = WorldTracerUtils.SendTty(client,company,ttylist);
+		String result = WorldTracerUtils.SendTty(client,company,ttylist);
 		
 		// for now return ohd_string
-		//test = tty_string.toString();
-		String test= "ok";
-		return test;
+	
+		return result;
 	}
 	public String  insertfwd(HttpClient client, String companycode,WT_FWD_Log wtfwd, int filenum){
 		String _n = ".";

@@ -11,10 +11,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -39,6 +41,7 @@ import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WTBDO;
+import com.bagnet.nettracer.wt.WTSusRit;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -53,8 +56,8 @@ public class WorldTracerActionQueue extends Thread {
 	private static String company;
 	private static HttpClient client;
 	private WorldTracerQueueUtils wtqu = new WorldTracerQueueUtils();
-	private static WorldTracerActionQueue wtaction;
-
+	public static WorldTracerActionQueue wtaction;
+    private static int isAmend;
 
 
 	public static void main(String args[]) {
@@ -71,8 +74,11 @@ public class WorldTracerActionQueue extends Thread {
 				 "/",company);
 			wtaction.run();
 			Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
+
+
 			if (csv != null) {
 			int wt_write_enabled = csv.getWt_write_enabled();
+
 			if (wt_write_enabled == 1){
 			WorldTracerActionQueue wtaction = new WorldTracerActionQueue(cfg.getProperties());
 			wtaction.run();
@@ -96,7 +102,8 @@ public class WorldTracerActionQueue extends Thread {
 	}
 
 	public WorldTracerActionQueue() {
-
+		cfg.configure(new File(hibernate_main_path)).buildSessionFactory();
+        company = cfg.getProperties().getProperty("company.code");
 	}
 	
 	public void run() {
@@ -105,14 +112,43 @@ public class WorldTracerActionQueue extends Thread {
 			while (true) {
 
 				try { 
-
+					
+					
 					if (this.existincident()) {
 						System.out.println("begin forward incident to wt in 1s:");
 						this.ForwardIncidenttoWT();
 						pause(1);
 					} else {
 						System.out.println("begin forward incident to wt in 10s:");
-						pause(10);
+		
+					}
+
+					
+					if (this.existsusincident()) {
+						System.out.println("begin forward susincident to wt in 1s:");
+						this.ForwardSusAhltoWT();
+						pause(1);
+					} else {
+						System.out.println("begin forward susincident to wt in 10s:");
+				
+					}
+					
+					if (this.existsusohd()) {
+						System.out.println("begin forward susohd to wt in 1s:");
+						this.ForwardSusOhdtoWT();
+						pause(1);
+					} else {
+						System.out.println("begin forward susohd to wt in 10s:");
+				
+					}
+					
+					if (this.existpartialahl()) {
+						System.out.println("begin forward partialahl to wt in 1s:");
+						this.ForwardParAhltoWT();
+						pause(1);
+					} else {
+						System.out.println("begin forward partialahl to wt in 10s:");
+					
 					}
 					
 					if (this.existohd()) {
@@ -121,7 +157,7 @@ public class WorldTracerActionQueue extends Thread {
 						pause(1);
 					} else {
 						System.out.println("begin forward ohd to wt in 10s:");
-						pause(10);
+				
 					}
 					
 					
@@ -131,7 +167,7 @@ public class WorldTracerActionQueue extends Thread {
 						pause(1);
 					} else {
 						System.out.println("begin forward closeIncident to wt in 10s:");
-						pause(10);
+					
 					}
 					
 					
@@ -141,7 +177,7 @@ public class WorldTracerActionQueue extends Thread {
 						pause(1);
 					} else {
 						System.out.println("begin forward closeOHD to wt in 10s:");
-						pause(10);
+						//pause(10);
 					}
 					
 					  if(this.existroh())
@@ -152,7 +188,7 @@ public class WorldTracerActionQueue extends Thread {
 						  } 
 					  else{
 					      System.out.println("begin forward roh to wt in 10s:");
-					      pause(10); 
+					      
 					  } 
 					  
 					  if(this.existfwd())
@@ -163,7 +199,8 @@ public class WorldTracerActionQueue extends Thread {
 					      }
 					  else{ 
 						  System.out.println("begin forward fwd to wt in 10s:"); 
-						  pause(10); } 
+						  //pause(10); 
+					  } 
 					
 					  if(this.existtty())
 					  {
@@ -173,18 +210,33 @@ public class WorldTracerActionQueue extends Thread {
 					  } 
 					  else{
 					      System.out.println("begin forward tty to wt in 10s:");
-					      pause(10); 
+					      //pause(10); 
 					  }
-					
-					 
-					 
+					  
+               
+    					if (this.existamendaah()) {
+    						System.out.println("begin forward amend incident to wt in 1s:");
+    						this.ForwardAmendAAHtoWT();
+    						pause(1);
+    					} else {
+    						System.out.println("begin forward amend incident to wt in 10s:");
+                      }
+    					if (this.existamendaoh()) {
+    						System.out.println("begin forward amend ohd to wt in 1s:");
+    						this.ForwardAmendAOHtoWT();
+    						pause(1);
+    					} else {
+    						System.out.println("begin forward amend ohd to wt in 10s:");
+                      }
+    				  
+					  pause(10);
 				} catch (Exception e) {
 					logger.fatal("cron move to wtthread error: " + e);
 				}
 
-				logger.info("waiting for 10s to send mbr/ohd to WT again...");
+				logger.info("waiting for  send mbr/ohd to WT again...");
 
-				// pause(1);
+                
 			}
 		} catch (Exception e) {
 			logger.fatal("cron thread error: " + e);
@@ -242,22 +294,92 @@ public class WorldTracerActionQueue extends Thread {
 							//System.out.println(inc.getStationcode());
 							this.sendmessage(inc.getStationcreated(), "incident",
 									inc.getAgent(), "ok", inc.getIncident_ID(),
-							"");
-
-							String result = wt.insertIncident(client, company, inc.getIncident_ID()); 
-							if (result == null) {
-								result =wt.getError();
-								logger.error(String.format("unable to input WT incident %s with following response:\n%s", inc.getIncident_ID(), result));
+									"");
+				
+							/*
+							for (int k = 0; k < 3; k++) {
+								String result = "failincident";
+								
+								this.updatequeue((wtqueue.getType_id()), wtqueue.getType(),result);
 							}
-							else {
-								Transaction tx = sess.beginTransaction();
-								wtqueue.setQueue_status(-1);
-								sess.update(wtqueue);
-								tx.commit();
-								logger.info(String.format("inserted NT Incident: %s into WT as DAH: %s", inc.getIncident_ID(), result)); 
-							} 
+							*/
+							
+							  String result = wt.insertIncident(client, company,inc.getIncident_ID()); 
+							  if (result == null) 
+								  result =wt.getError(); 
+							  else { 
+								  logger.info("inserted into wt: mbr: " + result); 
+								  } 
+							  logger.error("insert incident into wt: " +result);
+							  
 						}
 					}
+
+				}
+			}
+		} catch (Exception e) {
+			logger.fatal("error incident into wt: " + e);
+		}
+	}
+	
+	public void ForwardAmendAAHtoWT() throws Exception {
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.queue_status <3 and wtqueue.type = 'amendIncident')";
+			String sql = "select incident from com.bagnet.nettracer.tracing.db.Incident   incident where "
+					+ "incident.incident_ID = :type_id";
+
+			Query q = sess.createQuery(sql);
+			Query wtq = sess.createQuery(wtsql);
+			wtq.setFirstResult(0);
+			wtq.setMaxResults(5);
+			List wtlist = wtq.list();
+
+			WTIncident wt = null;
+			WT_Queue wtqueue = null;
+			Incident inc = null;
+			
+
+
+			if (wtlist != null && wtlist.size() > 0) {
+				for (int i = 0; i < wtlist.size(); i++) {
+
+					wtqueue = (WT_Queue) wtlist.get(i);
+					String type_id = wtqueue.getType_id();
+					
+					q.setParameter("type_id", wtqueue.getType_id());
+					List list = q.list();
+					for (int j = 0; j < list.size(); j++) {
+						inc = (Incident) list.get(j);
+
+						wt = new WTIncident();
+						if (inc != null) {
+							//System.out.println(inc.getStationcode());
+							this.sendmessage(inc.getStationcreated(), "amendincident",
+									inc.getAgent(), "ok", inc.getIncident_ID(),
+									"");
+				
+							/*
+							for (int k = 0; k < 3; k++) {
+								String result = "failincident";
+								
+								this.updatequeue((wtqueue.getType_id()), wtqueue.getType(),result);
+							}
+							*/
+							
+							  String result = wt.amendAAH(client, company,inc.getIncident_ID()); 
+							  if (result == null) 
+								  result =wt.getError(); 
+							  else { 
+								  logger.info("inserted amendincident into wt: mbr: " + result); 
+								  } 
+							  logger.error("insert amendincident into wt: " +result);
+						}
+					}
+
 				}
 			}
 		} catch (Exception e) {
@@ -311,7 +433,7 @@ public class WorldTracerActionQueue extends Thread {
 							/*
 							for (int k = 0; k < 3; k++) {
 								String result = "failcloseincident";
-								wtaciton.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
+								this.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result,0);
 							}
                             */
 							  String result = wt.closeIncident(client, company,inc); 
@@ -382,19 +504,16 @@ public class WorldTracerActionQueue extends Thread {
 							for (int k = 0; k < 3; k++) {
 								String result = "failohd";
 								
-								wtaciton.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
+								this.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
 							}
 							*/
 							 String result = wtohd.insertOHD(client, company,ohd.getOHD_ID()); 
 							 if (result == null) 
-								 result = wtohd.getError();
-							 else {
-								 Transaction tx = sess.beginTransaction();
-								 wtqueue.setQueue_status(-1);
-								 sess.update(wtqueue);
-								 tx.commit();
-								 logger.info(String.format("inserted NT OHD: %s into WT as DOH: %s", ohd.getOHD_ID(), result));  
+								 result = wtohd.getError(); 
+							 else { 
+								logger.info("inserted into wt:mbr: " + result); 
 							 } 
+							 logger.error("insert ohd into wt: " +result);
 						}
 					}
 					
@@ -407,7 +526,67 @@ public class WorldTracerActionQueue extends Thread {
 			logger.fatal("error ohd into wt: " + e);
 		}
 	}
-	
+	public void ForwardAmendAOHtoWT() throws Exception {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.queue_status <3 and wtqueue.type = 'amendOHD')";
+			String sql = "select ohd from com.bagnet.nettracer.tracing.db.OHD   ohd where "
+					+ "ohd.OHD_ID = :type_id";
+
+			Query q = sess.createQuery(sql);
+			Query wtq = sess.createQuery(wtsql);
+			wtq.setFirstResult(0);
+			wtq.setMaxResults(5);
+			List wtlist = wtq.list();
+
+			WTOHD wtohd = null;
+			WT_Queue wtqueue = null;
+			OHD ohd = null;
+
+			if (wtlist != null && wtlist.size() > 0) {
+				for (int i = 0; i < wtlist.size(); i++) {
+
+					wtqueue = (WT_Queue) wtlist.get(i);
+					String type_id = wtqueue.getType_id();
+					q.setParameter("type_id", wtqueue.getType_id());
+					List list = q.list();
+					for (int j = 0; j < list.size(); j++) {
+						ohd = (OHD) list.get(j);
+
+						wtohd = new WTOHD();
+						if (ohd != null) {
+
+							
+							this.sendmessage(ohd.getFoundAtStation(), "amendohd", ohd
+									.getAgent(), "ok", "", ohd.getOHD_ID());
+			                /*
+							for (int k = 0; k < 3; k++) {
+								String result = "failohd";
+								
+								this.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
+							}
+							*/
+							 String result = wtohd.amendAOH(client, company,ohd.getOHD_ID()); 
+							 if (result == null) 
+								 result = wtohd.getError(); 
+							 else { 
+								logger.info("inserted into wt:mbr: " + result); 
+							 } 
+							 logger.error("insert ohd into wt: " +result);
+						}
+					}
+					
+					
+
+                     
+				}
+			}
+		} catch (Exception e) {
+			logger.fatal("error incident into wt: " + e);
+		}
+	}
 
 	public void ForwardCloseOHDtoWT() throws Exception {
 
@@ -453,7 +632,7 @@ public class WorldTracerActionQueue extends Thread {
 							/*
 							for (int k = 0; k < 3; k++) {
 								String result = "failcloseohd";
-								wtaciton.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
+								this.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
 							}
                             */
 							  String result = wtohd.closeOHD(client, company,ohd); 
@@ -517,14 +696,14 @@ public class WorldTracerActionQueue extends Thread {
 						}
                         */
 						  String result = wtqu.insertfwd(client, company, wtfwd, wtfwd.getWt_fwd_log_id());
-						  /*
+						  
 						  if (result ==null) 
-							  result = wt.getError(); 
+							  result = wtqu.getError(); 
 						  else {
 						  logger.info("inserted into wt: mbr: " + result); 
 						  }
 						  logger.error("insert incident into wt: " + result);
-						  */
+						  
 					}
 					
 
@@ -704,6 +883,196 @@ public class WorldTracerActionQueue extends Thread {
 		}
 	}
 	
+	public void ForwardSusAhltoWT() throws Exception {
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.queue_status <3 and wtqueue.type = 'SUSIncident')";
+			String sql = "select incident from com.bagnet.nettracer.tracing.db.Incident   incident where "
+					+ "incident.incident_ID = :type_id";
+
+			Query q = sess.createQuery(sql);
+			Query wtq = sess.createQuery(wtsql);
+			wtq.setFirstResult(0);
+			wtq.setMaxResults(5);
+			List wtlist = wtq.list();
+
+			WTSusRit wtsr = null;
+			WT_Queue wtqueue = null;
+			Incident inc = null;
+			
+
+
+			if (wtlist != null && wtlist.size() > 0) {
+				for (int i = 0; i < wtlist.size(); i++) {
+
+					wtqueue = (WT_Queue) wtlist.get(i);
+					String type_id = wtqueue.getType_id();
+					String type = wtqueue.getType();
+					System.out.println(type_id);
+					System.out.println(wtqueue.getType());
+					q.setParameter("type_id", wtqueue.getType_id());
+					List list = q.list();
+					for (int j = 0; j < list.size(); j++) {
+						inc = (Incident) list.get(j);
+
+						wtsr = new WTSusRit();
+						if (inc != null) {
+						
+							this.sendmessage(inc.getStationcreated(), "SUSIncident",
+									inc.getAgent(), "ok", inc.getIncident_ID(),
+									"");
+				
+	                        /*
+	                        for (int k = 0; k < 3; k++) {
+								String result = "failsusincident";
+								
+								this.updatequeue(type_id,type,result);
+							}
+							*/
+							
+							  String result = wtsr.insertCAHLSustoWT(client, company, inc.getIncident_ID()); 
+							  if (result == null) 
+								  result =wtsr.getError(); 
+							  else { 
+								  logger.info("suspend into wt: mbr: " + result); 
+								  } 
+							  logger.error("suspend incident into wt: " +result);
+							 
+						}
+					}
+
+				}
+			}
+		} catch (Exception e) {
+			logger.fatal("error suspend incident into wt: " + e);
+		}
+	}
+	public void ForwardSusOhdtoWT() throws Exception {
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.queue_status <3 and wtqueue.type = 'SUSOhd')";
+			String sql = "select ohd from com.bagnet.nettracer.tracing.db.OHD   ohd where "
+					+ "ohd.OHD_ID = :type_id";
+
+			Query q = sess.createQuery(sql);
+			Query wtq = sess.createQuery(wtsql);
+			wtq.setFirstResult(0);
+			wtq.setMaxResults(5);
+			List wtlist = wtq.list();
+
+			WTSusRit wtsr = null;
+			WT_Queue wtqueue = null;
+			OHD ohd = null;
+
+			if (wtlist != null && wtlist.size() > 0) {
+				for (int i = 0; i < wtlist.size(); i++) {
+
+					wtqueue = (WT_Queue) wtlist.get(i);
+					String type_id = wtqueue.getType_id();
+					q.setParameter("type_id", wtqueue.getType_id());
+					List list = q.list();
+					for (int j = 0; j < list.size(); j++) {
+						ohd = (OHD) list.get(j);
+
+						wtsr = new WTSusRit();
+						if (ohd != null) {
+
+							
+							this.sendmessage(ohd.getFoundAtStation(), "susohd", ohd
+									.getAgent(), "ok", "", ohd.getOHD_ID());
+							/*
+							for (int k = 0; k < 3; k++) {
+								String result = "failsusohd";
+								
+								this.updatequeue(wtqueue.getType_id(), wtqueue.getType(), result);
+							}
+							*/
+							 String result = wtsr.insertCOhdSustoWT(client, company,ohd.getOHD_ID()); 
+							 if (result == null) 
+								 result = wtsr.getError(); 
+							 else { 
+								logger.info("complete supend ohd into wt:mbr: " + result); 
+							 } 
+							 logger.error("complete suspend ohd into wt: " +result);
+						    
+						}
+					}
+			}
+			}
+		} catch (Exception e) {
+			logger.fatal("error complete suspend ohd into wt: " + e);
+		}
+	}
+	public void ForwardParAhltoWT() throws Exception {
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.queue_status <3 and wtqueue.type = 'PartialAhl')";
+			String sql = "select * from  incident,item where incident.incident_ID = :type_id and item.wt_bag_selected = 1";
+
+			Query q = sess.createQuery(sql);
+			Query wtq = sess.createQuery(wtsql);
+			wtq.setFirstResult(0);
+			wtq.setMaxResults(5);
+			List wtlist = wtq.list();
+
+			WTSusRit wtsr = null;
+			WT_Queue wtqueue = null;
+			Incident inc = null;
+			
+
+
+			if (wtlist != null && wtlist.size() > 0) {
+				for (int i = 0; i < wtlist.size(); i++) {
+
+					wtqueue = (WT_Queue) wtlist.get(i);
+					String type_id = wtqueue.getType_id();
+					
+					q.setParameter("type_id", wtqueue.getType_id());
+					List list = q.list();
+					for (int j = 0; j < list.size(); j++) {
+						inc = (Incident) list.get(j);
+
+						wtsr = new WTSusRit();
+						if (inc != null) {
+
+							this.sendmessage(inc.getStationcreated(), "PartialAhl",
+									inc.getAgent(), "ok", inc.getIncident_ID(),
+									"");
+				
+							/*
+							for (int k = 0; k < 3; k++) {
+								String result = "failpartialahl";
+								
+								this.updatequeue((wtqueue.getType_id()), wtqueue.getType(),result);
+							}
+							
+							
+							  String result = wtsr.insertPAHLSustoWT(client, company, inc.getIncident_ID()); 
+							  if (result == null) 
+								  result =wtsr.getError(); 
+							  else { 
+								  logger.info("suspend into wt: mbr: " + result); 
+								  } 
+							  logger.error("suspend incident into wt: " +result);
+						    */
+						}
+					}
+
+				}
+			}
+		} catch (Exception e) {
+			logger.fatal("error suspend incident into wt: " + e);
+		}
+	}
 	public void sendmessage(Station station, String subject, Agent user,
 			String message, String incident_id, String ohd_id) {
 		Message msg = new Message();
@@ -744,6 +1113,7 @@ public class WorldTracerActionQueue extends Thread {
 	public void updatequeue(String type_id, String type, String result) {
 		String theresult = result;
 		Session sess = HibernateWrapper.getSession().openSession();
+		
 		if (theresult == ("ok")) {
 			System.out.println("delete queue(incident,ohd,close):");
 			
@@ -752,11 +1122,11 @@ public class WorldTracerActionQueue extends Thread {
 			
 			return;
 		}
-		System.out.println(type_id);
-		System.out.println(type);
+
 		
 		if (this.queryqueuestatus(type_id, type) < 3) {
 			System.out.println("send "+(this.queryqueuestatus(type_id,type)+1));
+			
 			String s = "update wt_queue set queue_status= queue_status+1 where '"+type_id+"' = type_id and type = '"+type+"'";
 
 		    Transaction t = sess.beginTransaction();
@@ -765,7 +1135,7 @@ public class WorldTracerActionQueue extends Thread {
 		    int i = q.executeUpdate();
 
 		    t.commit();
-       
+            
 		}
 		
  
@@ -1106,7 +1476,7 @@ public class WorldTracerActionQueue extends Thread {
 			else
 				return false;
 		} catch (Exception e) {
-			logger.fatal("error incident into wt: " + e);
+			logger.fatal("not exist incident into wt: " + e);
 			return false;
 		}
 
@@ -1129,12 +1499,77 @@ public class WorldTracerActionQueue extends Thread {
 			else
 				return false;
 		} catch (Exception e) {
-			logger.fatal("error ohd into wt: " + e);
+			logger.fatal("not exist ohd into wt: " + e);
 			return false;
 		}
 
 	}
-	
+	public boolean existsusincident() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.type = 'SUSIncident' and wtqueue.queue_status != 3)";
+
+			Query wtq = sess.createQuery(wtsql);
+
+			List wtlist = wtq.list();
+
+			if (wtlist != null && wtlist.size() > 0)// {
+				return true;
+			// }
+			else
+				return false;
+		} catch (Exception e) {
+			logger.fatal("not exist susincident into wt: " + e);
+			return false;
+		}
+
+	}
+	public boolean existsusohd() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.type = 'SUSOhd' and wtqueue.queue_status != 3)";
+
+			Query wtq = sess.createQuery(wtsql);
+
+			List wtlist = wtq.list();
+
+			if (wtlist != null && wtlist.size() > 0)// {
+				return true;
+			// }
+			else
+				return false;
+		} catch (Exception e) {
+			logger.fatal("not exist susohd into wt: " + e);
+			return false;
+		}
+
+	}
+	public boolean existpartialahl() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.type = 'PartialAhl' and wtqueue.queue_status != 3)";
+
+			Query wtq = sess.createQuery(wtsql);
+
+			List wtlist = wtq.list();
+
+			if (wtlist != null && wtlist.size() > 0)// {
+				return true;
+			// }
+			else
+				return false;
+		} catch (Exception e) {
+			logger.fatal("not exist susohd into wt: " + e);
+			return false;
+		}
+
+	}
 	public boolean existfwd() {
 		Session sess = null;
 		try {
@@ -1152,7 +1587,7 @@ public class WorldTracerActionQueue extends Thread {
 			else
 				return false;
 		} catch (Exception e) {
-			logger.fatal("error exist fwd: " + e);
+			logger.fatal("not exist fwd into wt: " + e);
 			return false;
 		}
 
@@ -1175,7 +1610,7 @@ public class WorldTracerActionQueue extends Thread {
 			else
 				return false;
 		} catch (Exception e) {
-			logger.fatal("error exist roh : " + e);
+			logger.fatal("not exist roh into wt: " + e);
 			return false;
 		}
 
@@ -1198,7 +1633,7 @@ public class WorldTracerActionQueue extends Thread {
 			else
 				return false;
 		} catch (Exception e) {
-			logger.fatal("error exist tty: " + e);
+			logger.fatal("not exist tty into wt: " + e);
 			return false;
 		}
 
@@ -1220,6 +1655,50 @@ public class WorldTracerActionQueue extends Thread {
 			logger.fatal("error delete wtqueue: " + e);
 			
 		}
+	}
+	public boolean existamendaah() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.type = 'amendIncident' and wtqueue.queue_status != 3)";
+
+			Query wtq = sess.createQuery(wtsql);
+
+			List wtlist = wtq.list();
+
+			if (wtlist != null && wtlist.size() > 0)// {
+				return true;
+			// }
+			else
+				return false;
+		} catch (Exception e) {
+			logger.fatal("not exist amend incident into wt: " + e);
+			return false;
+		}
+
+	}
+	public boolean existamendaoh() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String wtsql = "select wtqueue from com.bagnet.nettracer.tracing.db.WT_Queue  wtqueue where (wtqueue.queue_status != -1 and wtqueue.type = 'amendOhd' and wtqueue.queue_status != 3)";
+
+			Query wtq = sess.createQuery(wtsql);
+
+			List wtlist = wtq.list();
+
+			if (wtlist != null && wtlist.size() > 0)// {
+				return true;
+			// }
+			else
+				return false;
+		} catch (Exception e) {
+			logger.fatal("not exist amend ohd into wt: " + e);
+			return false;
+		}
+
 	}
 	
 }

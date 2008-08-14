@@ -28,7 +28,6 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
-import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -70,7 +69,7 @@ public class WTIncident {
 
 		String responseBody = null;
 		
-		// retrieve ohd
+		// retrieve incident
 		IncidentBMO obmo = new IncidentBMO();
 		Incident incident = obmo.findIncidentByID(filenum);
 		if (incident == null) {
@@ -99,10 +98,10 @@ public class WTIncident {
 				temp = op.getLastname();
 				if (c == 0) {
 					if (temp.trim().length() > 0) sb.append("NM" + _t + temp);
-					System.out.println(temp);
+					//System.out.println(temp);
 				} else {
 					if (temp.trim().length() > 0) sb.append(_h + temp);
-					System.out.println(temp);
+					//System.out.println(temp);
 				}
 				if (temp.trim().length() > 0) c++;
 				if (c >= 3) break;
@@ -119,7 +118,7 @@ public class WTIncident {
 				temp = op.getMiddlename();
 				if (c == 0) {
 					if (temp.trim().length() > 0) sb.append("IT" + _t + temp);
-					System.out.println(temp);
+					//System.out.println(temp);
 				} else {
 					if (temp.trim().length() > 0) sb.append(_h + temp);
 					
@@ -480,14 +479,14 @@ public class WTIncident {
 
 			String requestInfo = WorldTracerUtils.getWtRequest(wt_url, cgiexe);
 			// Execute the method.
-
+            
 			int statusCode = client.executeMethod(method);
 
 
 			if (statusCode != HttpStatus.SC_OK) {
 				System.err.println("Method failed: " + method.getStatusLine());
 			}
-
+            
 			// Read the response body.
 			responseBody = method.getResponseBodyAsString();
 			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
@@ -522,11 +521,364 @@ public class WTIncident {
 		}
 		return responseBody;
 	}
+	public String amendAAH(HttpClient client,String companycode,String filenum){
+		String responseBody = null;
+		String _n = "\n";
+		String _t = "";
+		String _h = "/";
+		// retrieve incident
+		IncidentBMO obmo = new IncidentBMO();
+		Incident incident = obmo.findIncidentByID(filenum);
+		if (incident == null) {
+			setError("invalid incident filenum");
+			return null;
+		}
+		
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring = wt_url + "cgi-bin/bagAAH.exe";
+		getstring = getstring.replace(" ", "+");
+		PostMethod method = new PostMethod(getstring);		
+		method.setDoAuthentication(true);
+		method.addParameter("A1", companycode.toLowerCase());
+		method.addParameter("A2", "WM");
+		method.addParameter("PAX","PAX");
+		method.addParameter("BAG","BAG");
+		method.addParameter("RTI","RTI");
+		// passengers last name
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				temp = op.getLastname();
+				if (c < 3) {
+					if (temp.trim().length() > 0) 
+						c++;
+						method.addParameter("NM"+"0"+c,_t+temp+_n);				
+				} 
+
+				if (c >= 3) break;
+			}
+		}
+	
+		// middle initial
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				temp = op.getMiddlename();
+				
+					if (temp.trim().length() > 0) 
+					{
+						c++;
+						method.addParameter("IT"+"0"+c , _t + temp+_n);
+					}
+				 
+				    if (c >= 3) break;
+			}
+		}
+		// passenger title
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				temp = op.getSalutationdesc();
+				//System.out.println(temp.trim().length());
+				if (temp != null && temp.trim().length() > 0) {
+					method.addParameter("PT" , _t + temp + _n);
+					
+					
+				}
+				// membership status
+				if (op.getAirlinememstatus() != null && op.getAirlinememstatus().length() > 0) {
+					method.addParameter("PS" , _t + op.getAirlinememstatus() + _n);
+				}
+				
+				// membership num
+				if (op.getAirlinememnumber() != null && op.getAirlinememnumber().length() > 0) {
+					method.addParameter("FL" , _t + op.getAirlinememnumber() + _n);
+				}
+				
+				break;
+			}
+
+		}
+		// address, email, and country
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				Address or = op.getAddress(0);
+				if (or.getAddress1().length() > 0 || or.getCity().length() > 0 || or.getState().length() > 0 || or.getZip().length() > 0) {
+					method.addParameter("PA" , _t + (or.getAddress1() + " " + or.getCity() + " " + or.getState() + " " + or.getZip()).trim() + _n);
+
+				}
+				
+				if (or.getEmail().length() > 0) {
+					method.addParameter("EA" , _t + or.getEmail() + _n);
+				}
+
+				if (or.getCountrycode_ID().length() > 0) {
+					method.addParameter("CO" , _t + or.getCountrycode_ID() + _n);
+				}
+				break;
+			}
+		}
+		// homephone
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				Address or = op.getAddress(0);
+				
+				if (or.getHomephone().length() > 0) {
+					c++;
+					method.addParameter("PN"+"0"+c , _t + or.getHomephone()+_n);					
+
+				}
+				if (c >= 2) break;
+			}
+		}
+		
+		// temp phone
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				Address or = op.getAddress(0);
+				
+				if (or.getWorkphone().length() > 0) {
+					c++;
+					method.addParameter("TP"+"0"+c, _t + or.getWorkphone()+_n);
+					
+				}
+				if (c >= 2) break;
+			}
+		}
+		
+		// cell phone
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				Address or = op.getAddress(0);
+			
+				if (or.getMobile().length() > 0) {
+					c++;
+					method.addParameter("CP"+"0"+c , _t + or.getMobile()+_n);		
+				}
+				if (c >= 2) break;
+			}
+		}
+		
+		
+		// fax
+		if (incident.getPassengers() != null && incident.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = incident.getPassengers().iterator(); i.hasNext();) {
+				Passenger op = (Passenger) i.next();
+				Address or = op.getAddress(0);
+				
+				if (or.getAltphone().length() > 0) {
+					c++;
+					method.addParameter("FX"+"0"+c , _t + or.getAltphone() + _n);				
+					}
+				if (c >= 2) break;
+			}
+		}
+		
+		
+		// flight date
+		boolean hasflight = false;
+		if (incident.getItinerary() != null && incident.getItinerary().size() > 0) {
+			String temp;
+			int c = 0;
+			
+			for (Iterator i = incident.getItinerary().iterator(); i.hasNext();) {
+				Itinerary op = (Itinerary) i.next();
+				temp = op.getAirline() + op.getFlightnum() + "/";
+				if (DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null) != null) temp += DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null);
+				
+					if (temp.trim().length() > 1) {
+						c++;
+						method.addParameter("FD"+"0"+c , _t + temp.toUpperCase()+_n);
+					}	
+				if (temp.trim().length() > 1) {hasflight=true;}
+				if (c >= 4) break;
+			}
+		}
+		
+		// baggage routing
+		boolean hasrouting = false;
+		if (incident.getItinerary() != null && incident.getItinerary().size() > 0) {
+			String temp,temp2;
+			int c = 0;
+			for (Iterator i = incident.getItinerary().iterator(); i.hasNext();) {
+				Itinerary op = (Itinerary) i.next();
+				if (op.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING) {
+					temp = op.getLegfrom();
+					temp2 = op.getLegto();
+				
+						if (temp.trim().length() > 0) {
+							c++;
+							method.addParameter("BR"+"0"+c , _t + temp.toUpperCase()+_h + temp2.toUpperCase()+_n);							
+						}
+				
+					if (temp.trim().length() > 0) {hasrouting=true;}
+					if (c >= 4) break;
+				}
+			}
+		}
+		if (!hasrouting) {
+			error = "Please enter valid bag routings stations";
+			return null;
+		} 
+		
+		hasrouting = false;
+		if (incident.getItinerary() != null && incident.getItinerary().size() > 0) {
+			String temp,temp2;
+			int c = 0;
+			for (Iterator i = incident.getItinerary().iterator(); i.hasNext();) {
+				Itinerary op = (Itinerary) i.next();
+				if (op.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
+					temp = op.getLegfrom();
+					temp2 = op.getLegto();
+				
+						if (temp.trim().length() > 0) {
+							c++;
+							method.addParameter("RT"+"0"+c , _t + temp.toUpperCase()+_h + temp2.toUpperCase()+_n);						
+						}			
+
+					if (temp.trim().length() > 0) {hasrouting=true;}
+					if (c >= 14) break;
+				}
+			}
+		}
+		if (!hasrouting) {
+			error = "Please enter valid passenger routings stations";
+			return null;
+		}
+		
+		
+		// bags 1-10
+		if (incident.getItemlist() != null && incident.getItemlist().size() > 0) {
+			String temp,temp2;
+			int c = 0;
+			String xdesc1, xdesc2, xdesc3;
+			for (c = 0;c<incident.getItemlist().size();c++) {
+				// bag claimcheck
+				if (incident.getClaimchecks() != null && incident.getClaimchecks().size() > c) {
+					Incident_Claimcheck ic = (Incident_Claimcheck) incident.getClaimcheck_list().get(c);
+					
+					if (ic.getClaimchecknum().length() > 0) {
+						String bt = ic.getClaimchecknum();
+						if (bt.length() > 6) {
+							bt = bt.substring(bt.length()-6);
+						}
+						method.addParameter("TN" , _t + incident.getStationassigned().getCompany().getCompanyCode_ID().toUpperCase() + bt.toUpperCase() + _n);
+					}
+				}
+			
+				Item item = (Item) incident.getItemlist().get(c);
+				// color and type
+				xdesc1 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1());
+				xdesc2 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2());
+				xdesc3 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3());
+				// if missing color, type, xdesc, then return null
+				if (item.getColor() == null || item.getColor().length() == 0 || item.getBagtype() == null || item.getBagtype().length() == 0 || xdesc1 == null || xdesc2 == null || xdesc3 == null) {
+					error = "incident needs to have valid color and bag type entered";
+					return null;
+				}
+				
+				// color, type, descelements
+				method.addParameter("CT" , _t + item.getColor()+item.getBagtype()+xdesc1+xdesc2+xdesc3+_n);
+
+				
+				// manu
+				if (item.getManufacturer().length() > 0 ) 
+					method.addParameter("BI" , _t + item.getManufacturer().toUpperCase() + _n);
+				
+				
+				// content
+				if (item.getInventorylist() != null && item.getInventorylist().size() > 0) {
+					StringBuffer sbcn = new StringBuffer();
+					for (int cc = 0;cc<item.getInventorylist().size();cc++) {
+						Item_Inventory iinv = (Item_Inventory) item.getInventorylist().get(cc);
+						if (cc == 0) {
+							sbcn.append(iinv.getCategory() + "/" + iinv.getDescription());
+						} else {
+							sbcn.append("-    " + iinv.getCategory() + "/" + iinv.getDescription());
+						}
+
+					}
+					method.addParameter("CN" , _t + sbcn.toString() + _n);
+				}
+				
+
+			}
+		} else {
+			error = "incident needs to have valid bag information";
+			return null;
+		}
+
+		//hc and si supplemental information
+		method.addParameter("HC" , _t + "Y" + _n);
+		
+		
+		// fault station
+		if (incident.getFaultstationcode().length() > 0) {
+			method.addParameter("FS" , _t + incident.getFaultstationcode().toUpperCase() + _n);
+		}
+		
+		// reason for loss
+		if (incident.getLoss_code() > 0) {
+			method.addParameter("RL" , _t + incident.getLoss_code() + _n);
+		}
+		
+		// ticket number
+		if (incident.getTicketnumber().length() > 0) {
+			method.addParameter("TK" , _t + incident.getTicketnumber() + _n);
+		}
+		
+		// agent
+		method.addParameter("AG" , _t + incident.getAgent().getUsername() + "/" + incident.getAgent().getCompanycode_ID() + _n);
+		
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+		try {
+		
+			// Execute the method.
+			int statusCode = client.executeMethod(method);
+
+			if (statusCode != HttpStatus.SC_OK) {
+				System.err.println("Method failed: " + method.getStatusLine());
+			}
+
+		} catch (HttpException e) {
+			System.err.println("Fatal protocol violation: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Fatal transport error: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			// Release the connection.
+			method.releaseConnection();
+		}
+		return responseBody;
+	}
+	
     public String closeIncident(HttpClient client, String companycode,Incident idto){
 		String responseBody = null;	
 		String wt_http = WorldTracerUtils.getWt_url(companycode);
 		String wt_url = "http://" + wt_http + "/";
-		String getstring = wt_url + "cgi-bin/bagCAH.exe";
+		String cgiexe = "cgi-bin/bagCAH.exe";
+		String getstring = wt_url + cgiexe;
 		getstring = getstring.replace(" ", "+");
 		String snm = new String();
 
@@ -534,11 +886,11 @@ public class WTIncident {
 		// passengers last name
 		if (idto.getPassengers() != null && idto.getPassengers().size() > 0) {
 			String temp = "";
-			OHD_Passenger op = null;
+			Passenger op = null;
 			int c = 0;
 			for (Iterator i = idto.getPassengers().iterator(); i.hasNext();) {
 			
-				op = (OHD_Passenger) i.next();
+				op = (Passenger) i.next();
 				if(op != null)
 				temp = op.getLastname();
 				if (c == 0) { 
@@ -566,7 +918,7 @@ public class WTIncident {
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
 		try {
-			
+			String requestInfo = WorldTracerUtils.getWtRequest(method, cgiexe);
 			
 			// Execute the method.
 			int statusCode = client.executeMethod(method);
@@ -577,12 +929,15 @@ public class WTIncident {
 
 			// Read the response body.
 			responseBody = method.getResponseBodyAsString();
+			
 			int start = responseBody.indexOf("---- TYPE A ACCESS - CRT ----");
 			int end = responseBody.indexOf("---- TYPE B ACCESS - TTY ----");
 			if (start > 0 && end > 0) {
 				responseBody = responseBody.substring(start + "---- TYPE A ACCESS - CRT ----".length(), end);
 			}
-
+			
+			//insert into wt_info
+			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
 			e.printStackTrace();

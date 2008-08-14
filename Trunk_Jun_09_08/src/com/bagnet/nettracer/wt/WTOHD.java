@@ -407,11 +407,290 @@ public class WTOHD {
 		}
 		return responseBody;
 	}
+	
+	//submit ohd amend to WorldTracer
+	public String amendAOH(HttpClient client,String companycode,String filenum){
+		String _n = "\n";
+		String _t = "";
+		String _h = "/";
+		String responseBody = null;
+		// retrieve ohd
+		OhdBMO obmo = new OhdBMO();
+		OHD ohd = obmo.findOHDByID(filenum);
+		if (ohd == null) {
+			setError("invalid ohd filenum");
+			return null;
+		}
+		String wt_http = WorldTracerUtils.getWt_url(companycode);
+		String wt_url = "http://" + wt_http + "/";
+		String getstring = wt_url + "cgi-bin/bagAOH.exe";
+		getstring = getstring.replace(" ", "+");
+		PostMethod method = new PostMethod(getstring);		
+		method.setDoAuthentication(true);
+		method.addParameter("A1", companycode.toLowerCase());
+		method.addParameter("A2", "WM");
+		method.addParameter("PAX","PAX");
+		method.addParameter("BAG","BAG");
+		method.addParameter("RTI","RTI");
+		// passengers last name
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				temp = op.getLastname();
+				
+					if (temp.trim().length() > 0) {
+						c++;
+						method.addParameter("NM"+"0"+c,_t + temp + _n);	
+					}
+				if (c >= 3) break;
+			}
+		}
+	
+
+		// middle initial
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				temp = op.getMiddlename();
+				
+					if (temp.trim().length() > 0) {
+						c++;
+						method.addParameter("IT"+"0"+c , _t + temp + _n);
+					}
+
+				if (c >= 3) break;
+			}
+		}
+
+		if (ohd.getMembership() != null && ohd.getMembership().getMembershipnum().length() > 0) {
+			method.addParameter("FL" , _t + ohd.getMembership().getMembershipnum() + _n);
+		}
+
+	
+		// cellphone
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				OHD_Address or = op.getAddress(0);
+			
+					if (or.getMobile().length() > 0) {
+						c++;
+						method.addParameter("PN"+"0"+c , _t + or.getHomephone()+_n);					
+					}
+			}
+		}
+		
+		// fax
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				OHD_Address or = op.getAddress(0);
+				
+					if (or.getAltphone().length() > 0) {
+						c++;
+						method.addParameter("FX"+"0"+c , _t + or.getAltphone()+_n);
+						
+					}				
+					if (c >= 2) break;
+			}
+		}
+
+		// email
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				OHD_Address or = op.getAddress(0);
+				if (or.getEmail().length() > 0) {
+					method.addParameter("EA" , _t + or.getEmail() + _n);
+					c++;
+				}
+				if (c >= 1) break;
+			}
+		}
+
+		// flight date
+		boolean hasflight = false;
+		if (ohd.getItinerary() != null && ohd.getItinerary().size() > 0) {
+			String temp;
+			int c = 0;
+			
+			for (Iterator i = ohd.getItinerary().iterator(); i.hasNext();) {
+				OHD_Itinerary op = (OHD_Itinerary) i.next();
+				temp = op.getAirline() + op.getFlightnum() + "/";
+				if (DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null) != null) temp += DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null);
+			
+					if (temp.trim().length() > 1) {
+						c++;
+						method.addParameter("FD"+"0"+c , _t + temp.toUpperCase()+_n);
+					}			
+				if (c >= 4) break;
+			}
+		}
+	
+		if (!hasflight) {
+			error = "Please enter a valid flight/date itinerary";
+			return null;
+		}
+		
+		// routing
+		boolean hasrouting = false;
+		if (ohd.getItinerary() != null && ohd.getItinerary().size() > 0) {
+			String temp,temp2;
+			int c = 0;
+			for (Iterator i = ohd.getItinerary().iterator(); i.hasNext();) {
+				OHD_Itinerary op = (OHD_Itinerary) i.next();
+				temp = op.getLegfrom();
+				temp2 = op.getLegto();
+		
+					if (temp.trim().length() > 0) {
+						c++;
+						method.addParameter("RT"+"0"+c , _t + temp.toUpperCase()+_h + temp2.toUpperCase()+_n);
+
+					}
+		
+				if (temp.trim().length() > 0) {hasrouting=true;}
+				if (c >= 5) break;
+			}
+		}
+		if (!hasrouting) {
+			error = "Please enter valid bag routings stations";
+			return null;
+		}
+
+
+		// bag claimcheck
+		
+		if (ohd.getClaimnum().length() > 0) {
+			String bt = ohd.getClaimnum();
+			if (bt.length() > 6) {
+				bt = bt.substring(bt.length()-6);
+			}
+			method.addParameter("TN" , _t + ohd.getFoundAtStation().getCompany().getCompanyCode_ID().toUpperCase() + bt.toUpperCase() + _n);
+		} 
+
+		String xdesc1, xdesc2, xdesc3;
+		xdesc1 = XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1());
+		xdesc2 = XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2());
+		xdesc3 = XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3());
+
+		// if missing color, type, xdesc, then return null
+		if (ohd.getColor() == null || ohd.getColor().length() == 0 || ohd.getType() == null || ohd.getType().length() == 0 || xdesc1 == null || xdesc2 == null || xdesc3 == null) {
+			error = "ohd needs to have valid color and bag type entered";
+			return null;
+		}
+
+		// color, type, descelements
+		method.addParameter("CT" , _t + ohd.getColor()+ohd.getType()+xdesc1+xdesc2+xdesc3+_n);
+	
+		// manu
+		if (ohd.getManufacturer().length() > 0 ) 
+			method.addParameter("BI" , _t + ohd.getManufacturer().toUpperCase() + _n);
+		
+		// storage location
+		if (ohd.getStorage_location().length() > 0 ) 
+			method.addParameter("SL" , _t + ohd.getStorage_location().toUpperCase() + _n);
+		
+		// address on bag
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				OHD_Address or = op.getAddress(0);
+				
+				if (or.getAddress1().length() > 0) {
+					c++;
+					method.addParameter("AB"+"0"+c , _t + or.getAddress1() + " " + or.getAddress2() + " " + or.getCity() + " " + or.getState_ID() + " " + or.getZip()+_n);
+				}
+			
+				if (c >= 2) break;
+			}
+		}
+		
+		// phone on bag
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				OHD_Address or = op.getAddress(0);
+				
+				if (or.getHomephone().length() > 0) {
+					c++;
+					method.addParameter("BP"+"0"+c , _t + or.getHomephone()+_n);
+					
+				}
+				if (c >= 2) break;
+			}
+		}
+		
+
+		// content
+		if (ohd.getItems() != null && ohd.getItems().size() > 0) {
+			String temp;
+			int c = 0;
+			StringBuffer sbcn = new StringBuffer();
+			for (Iterator i = ohd.getItems().iterator(); i.hasNext();) {
+				OHD_Inventory op = (OHD_Inventory) i.next();
+				if (c == 0) {
+					sbcn.append(op.getCategory() + "/" + op.getDescription());
+				} else {
+					sbcn.append("-    " + op.getCategory() + "/" + op.getDescription());
+				}
+				c++;
+			}
+			method.addParameter("CN" , _t + sbcn.toString() + _n);
+		}
+		
+		// hc and si supplemental information
+		method.addParameter("HC" , _t + "Y" + _n);
+		
+		
+		
+		
+		// agent
+		method.addParameter("AG" , _t + ohd.getAgent().getUsername() + "/" + ohd.getAgent().getCompanycode_ID() + _n);
+				
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+		try {
+			
+			
+			// Execute the method.
+			int statusCode = client.executeMethod(method);
+
+			if (statusCode != HttpStatus.SC_OK) {
+				System.err.println("Method failed: " + method.getStatusLine());
+			}
+
+		} catch (HttpException e) {
+			System.err.println("Fatal protocol violation: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Fatal transport error: " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			// Release the connection.
+			method.releaseConnection();
+		}
+		return responseBody;
+	}
+	
     public String closeOHD(HttpClient client, String companycode,OHD odto){
 		String responseBody = null;	
 		String wt_http = WorldTracerUtils.getWt_url(companycode);
 		String wt_url = "http://" + wt_http + "/";
-		String getstring =  wt_url + "cgi-bin/bagCOH.exe";
+		String cgiexe = "cgi-bin/bagCOH.exe";
+		String getstring =  wt_url + cgiexe;
 		getstring = getstring.replace(" ", "+");
 		String snm = new String();
 		String _t = "";
@@ -445,7 +724,9 @@ public class WTOHD {
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
 		try {
+			String requestInfo = WorldTracerUtils.getWtRequest(method, cgiexe);
 			// Execute the method.
+			
 			int statusCode = client.executeMethod(method);
 
 			if (statusCode != HttpStatus.SC_OK) {
@@ -459,7 +740,7 @@ public class WTOHD {
 			if (start > 0 && end > 0) {
 				responseBody = responseBody.substring(start + "---- TYPE A ACCESS - CRT ----".length(), end);
 			}
-
+			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
 			e.printStackTrace();

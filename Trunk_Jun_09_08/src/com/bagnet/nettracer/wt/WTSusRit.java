@@ -276,7 +276,7 @@ public class WTSusRit {
 		}
 		return responseBody; 
 }
-  public String insertPAHLSustoWT(HttpClient client, String companycode, String filenum, String filetype, Item partresultlist){
+  public String insertPAHLSustoWT(HttpClient client, String companycode, String filenum){
 	    String _n = ".";
 		String _t = "";
 		String _h = "/";
