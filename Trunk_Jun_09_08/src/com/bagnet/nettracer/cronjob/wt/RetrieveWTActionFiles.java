@@ -93,7 +93,7 @@ public class RetrieveWTActionFiles {
 
 	public void manageActionFiles() {
 		deleteActionFiles();
-		//retrieveActionFiles();
+		retrieveActionFiles();
 	}
 
 	public void deleteActionFiles() {
