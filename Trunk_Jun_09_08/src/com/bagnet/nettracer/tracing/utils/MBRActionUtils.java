@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -100,7 +101,7 @@ public class MBRActionUtils {
 			item.set_DATEFORMAT(user.getDateformat().getFormat());
 			item.setCurrency_ID(user.getDefaultcurrency());
 			// set item status if it is not being set to open
-			item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+			item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 			request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
 			return true;
 		}
@@ -641,7 +642,7 @@ public class MBRActionUtils {
 				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user)) == null) {
 					// update ohd status to be delivered if it is in this station
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
-						ohd_obj.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user.getDefaultlocale().toString()));
+						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user.getDefaultlocale().toString()));
 						oBMO.insertOHD(ohd_obj, theform.getAgent());
 					}
 				} else {
@@ -697,16 +698,16 @@ public class MBRActionUtils {
 				// change both item and ohd to tobedelivered because they are in the
 				// same station
 				if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user.getDefaultlocale().toString()));
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user.getDefaultlocale().toString()));
 				} else {
 					// change item to matched only
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user.getDefaultlocale().toString()));
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user.getDefaultlocale().toString()));
 				}
 
 				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user)) == null) {
 					// update ohd status to be delivered if it is in this station
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
-						ohd_obj.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user.getDefaultlocale().toString()));
+						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user.getDefaultlocale().toString()));
 						oBMO.insertOHD(ohd_obj, theform.getAgent());
 					}
 				} else {
@@ -756,15 +757,15 @@ public class MBRActionUtils {
 						// again
 
 						if (ohd_obj != null & ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
-							item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
+							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
 							if (bdo == null) {
 								// if no bdo, then change ohd status, otherwise leave it as is
-								ohd_obj.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_OPEN, user.getDefaultlocale().toString()));
+								ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, user.getDefaultlocale().toString()));
 							}
 							oBMO.insertOHD(ohd_obj, theform.getAgent());
 						} else {
 							// change item to open only
-							item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
+							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
 						}
 
 						break;
@@ -814,14 +815,14 @@ public class MBRActionUtils {
 				// if bag is at the report station, change both status to open
 				// again
 				if (ohd_obj != null & ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
 					if (bdo == null) {
-						ohd_obj.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_OPEN, user.getDefaultlocale().toString()));
+						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, user.getDefaultlocale().toString()));
 					}
 					oBMO.insertOHD(ohd_obj, theform.getAgent());
 				} else {
 					// change item to open only
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getDefaultlocale().toString()));
 				}
 
 				// call unmatch to clear out match history

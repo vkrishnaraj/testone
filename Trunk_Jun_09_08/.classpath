@@ -95,5 +95,6 @@
 	<classpathentry kind="lib" path="lib/build-client/dom4j-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jta.jar"/>
 	<classpathentry kind="lib" path="lib/jars/sqljdbc.jar"/>
+	<classpathentry kind="lib" path="lib/cron/spring-2.5.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

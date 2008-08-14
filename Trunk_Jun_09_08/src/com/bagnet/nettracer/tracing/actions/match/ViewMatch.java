@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -175,11 +176,11 @@ public final class ViewMatch extends Action {
 					// delivered
 					if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
 							.getStation_ID()) {
-						item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
+						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
 								.getDefaultlocale().toString()));
 					} else {
 						// change item status to be matched
-						item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
+						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 					}
 				}
@@ -215,11 +216,11 @@ public final class ViewMatch extends Action {
 					// delivered
 					if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
 							.getStation_ID()) {
-						item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
+						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
 								.getDefaultlocale().toString()));
 					} else {
 						// change item status to be matched
-						item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
+						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 					}
 
@@ -233,7 +234,7 @@ public final class ViewMatch extends Action {
 				// match done
 				// update match history database
 				MatchUtils.matchedOHD(Integer.parseInt(match_ID), ohd.getOHD_ID());
-				match.setStatus(TracerUtils.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
+				match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 						.getDefaultlocale().toString()));
 				
 				//if has the wt_id,close wt
@@ -260,7 +261,7 @@ public final class ViewMatch extends Action {
 						has_matched = true;
 						iBMO.updateIncidentNoAudit(incident);
 						MatchUtils.matchedOHD(Integer.parseInt(match_ID), ohd.getOHD_ID());
-						match.setStatus(TracerUtils.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
+						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
 						this.CloseWTInMatch(incident.getWt_id(), ohd.getWt_id(), user, incident.getIncident_ID(), ohd.getOHD_ID());
@@ -283,11 +284,11 @@ public final class ViewMatch extends Action {
 						// delivered
 						if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
 								.getStation_ID()) {
-							item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
+							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
 									.getDefaultlocale().toString()));
 						} else {
 							// change item status to be matched
-							item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
+							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
 									.getDefaultlocale().toString()));
 						}
 
@@ -295,7 +296,7 @@ public final class ViewMatch extends Action {
 						has_matched = true;
 						iBMO.updateIncidentNoAudit(incident);
 						MatchUtils.matchedOHD(Integer.parseInt(match_ID), ohd.getOHD_ID());
-						match.setStatus(TracerUtils.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
+						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
 						this.CloseWTInMatch(incident.getWt_id(), ohd.getWt_id(), user, incident.getIncident_ID(), ohd.getOHD_ID());
@@ -340,11 +341,11 @@ public final class ViewMatch extends Action {
 								// again
 								if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
 										.getStation_ID()) {
-									item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
+									item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
 											.getDefaultlocale().toString()));
 								} else {
 									// change item to open only
-									item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
+									item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
 											.getDefaultlocale().toString()));
 								}
 
@@ -369,7 +370,7 @@ public final class ViewMatch extends Action {
 						has_unmatched = true;
 						iBMO.updateIncidentNoAudit(incident);
 
-						match.setStatus(TracerUtils.getStatus(TracingConstants.MATCH_STATUS_OPEN, user
+						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_OPEN, user
 								.getDefaultlocale().toString()));
 						request.setAttribute("unmatched", "1");
 						break;
@@ -398,13 +399,13 @@ public final class ViewMatch extends Action {
 				// if bag is at the report station, change both status to open again
 				if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
 						.getStation_ID()) {
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
 							.getDefaultlocale().toString()));
-					ohd.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_OPEN, user
+					ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, user
 							.getDefaultlocale().toString()));
 				} else {
 					// change item to open only
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
 							.getDefaultlocale().toString()));
 				}
 
@@ -421,7 +422,7 @@ public final class ViewMatch extends Action {
 				}
 				has_unmatched = true;
 				iBMO.updateIncidentNoAudit(incident);
-				match.setStatus(TracerUtils.getStatus(TracingConstants.MATCH_STATUS_OPEN, user
+				match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_OPEN, user
 						.getDefaultlocale().toString()));
 				request.setAttribute("unmatched", "1");
 			}
@@ -431,11 +432,11 @@ public final class ViewMatch extends Action {
 		if ((ohd != null && incident != null)
 				&& ohd.getHoldingStation().getStation_ID() == incident.getStationassigned().getStation_ID()) {
 			if (has_matched) {
-				ohd.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user
+				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user
 						.getDefaultlocale().toString()));
 				oBMO.insertOHD(ohd, user);
 			} else if (has_unmatched) {
-				ohd.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_OPEN, user
+				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, user
 						.getDefaultlocale().toString()));
 				oBMO.insertOHD(ohd, user);
 			}

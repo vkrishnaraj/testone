@@ -8,7 +8,7 @@ package com.bagnet.nettracer.tracing.db.audit;
 
 import java.io.Serializable;
 
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 
 /**
@@ -65,7 +65,7 @@ public class Audit_OHD_Inventory implements Serializable {
 	public String getCategory() {
 		String category = null;
 		if (OHD_categorytype_ID != 0) {
-			category = TracerUtils.getCategory("" + OHD_categorytype_ID, "en").getCategorytype();
+			category = CategoryBMO.getCategory("" + OHD_categorytype_ID, "en").getCategorytype();
 		}
 
 		if (category == null) category = "";

@@ -15,6 +15,8 @@ import java.util.Set;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -361,9 +363,9 @@ public class WSCoreOHDUtil {
  		}
  		
  		ohd.setRecord_locator(ws.getRecordLocator());
- 		ohd.setXdescelement_ID_1(TracerUtils.getXdescelementid(ws.getXdescelement1()));
- 		ohd.setXdescelement_ID_2(TracerUtils.getXdescelementid(ws.getXdescelement2()));
- 		ohd.setXdescelement_ID_3(TracerUtils.getXdescelementid(ws.getXdescelement3()));
+ 		ohd.setXdescelement_ID_1(XDescElementsBMO.getXdescelementid(ws.getXdescelement1()));
+ 		ohd.setXdescelement_ID_2(XDescElementsBMO.getXdescelementid(ws.getXdescelement2()));
+ 		ohd.setXdescelement_ID_3(XDescElementsBMO.getXdescelementid(ws.getXdescelement3()));
  		
  		ohd.setManufacturer_ID(TracingConstants.MANUFACTURER_OTHER_ID);
  		ohd.setManufacturer_other(ws.getManufacturer());
@@ -851,7 +853,7 @@ public class WSCoreOHDUtil {
 		ohd.setFoundtime(foundDate);
 		ohd.setHoldingStation(foundStation);
 		ohd.setOhd_type(TracingConstants.MASS_OHD_TYPE);
-		ohd.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_OPEN, agent
+		ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, agent
 				.getDefaultlocale().toString()));
 		
 		return ohd;

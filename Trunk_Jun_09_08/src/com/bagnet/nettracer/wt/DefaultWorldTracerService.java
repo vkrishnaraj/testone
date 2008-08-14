@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Claim;
@@ -268,9 +269,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		}
 
 		String colorType = ohd.getColor().trim() + ohd.getType().trim();
-		colorType += TracerUtils.getXdescelementcode(ohd.getXdescelement_ID_1());
-		colorType += TracerUtils.getXdescelementcode(ohd.getXdescelement_ID_2());
-		colorType += TracerUtils.getXdescelementcode(ohd.getXdescelement_ID_3());
+		colorType += XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1());
+		colorType += XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2());
+		colorType += XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3());
 		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
 
 		if (ohd.getClaimnum() != null && ohd.getClaimnum().trim().length() > 0) {
@@ -485,9 +486,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			return;
 		}
 		String colorType = item.getColor().trim() + item.getBagtype().trim();
-		colorType += TracerUtils.getXdescelementcode(item.getXdescelement_ID_1());
-		colorType += TracerUtils.getXdescelementcode(item.getXdescelement_ID_2());
-		colorType += TracerUtils.getXdescelementcode(item.getXdescelement_ID_3());
+		colorType += XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1());
+		colorType += XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2());
+		colorType += XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3());
 		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
 
 		addIncidentFieldEntry(WorldTracerField.BI, item.getManufacturer(), result);

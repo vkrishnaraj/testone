@@ -8,7 +8,7 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 
 /**
  * @author Administrator
@@ -29,7 +29,7 @@ public class Item_Inventory implements Serializable {
 	public String getCategory() {
 		String category = null;
 		if (categorytype_ID != 0) {
-			category = TracerUtils.getCategory("" + categorytype_ID, "en").getCategorytype();
+			category = CategoryBMO.getCategory("" + categorytype_ID, "en").getCategorytype();
 		}
 
 		if (category == null) category = "";

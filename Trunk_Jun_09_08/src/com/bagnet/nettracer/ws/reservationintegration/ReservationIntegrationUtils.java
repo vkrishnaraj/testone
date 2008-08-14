@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -249,7 +250,7 @@ public class ReservationIntegrationUtils {
 							theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 							theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 							theitem.setBagnumber(allindex);
-							theitem.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+							theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 							
 							allindex++;
 						}
@@ -267,7 +268,7 @@ public class ReservationIntegrationUtils {
 			theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 			theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 			theitem.setBagnumber(allindex);
-			theitem.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+			theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 		}
 		
 		// set number of bags checked in

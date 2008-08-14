@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -629,9 +630,9 @@ public class WSCoreIncidentUtil {
 					item.setManufacturer_ID(TracingConstants.MANUFACTURER_OTHER_ID);
 					item.setManufacturer_other(wi.getManufacturer());
 					item.setResolutiondesc(wi.getResolutiondesc());
-					item.setXdescelement_ID_1(TracerUtils.getXdescelementid(wi.getXdescelement1()));
-					item.setXdescelement_ID_2(TracerUtils.getXdescelementid(wi.getXdescelement2()));
-					item.setXdescelement_ID_3(TracerUtils.getXdescelementid(wi.getXdescelement3()));
+					item.setXdescelement_ID_1(XDescElementsBMO.getXdescelementid(wi.getXdescelement1()));
+					item.setXdescelement_ID_2(XDescElementsBMO.getXdescelementid(wi.getXdescelement2()));
+					item.setXdescelement_ID_3(XDescElementsBMO.getXdescelementid(wi.getXdescelement3()));
 
 					// inventories
 					if (wi.getInventoriesArray() != null) {

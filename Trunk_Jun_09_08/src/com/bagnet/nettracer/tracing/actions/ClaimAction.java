@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
@@ -174,7 +175,7 @@ public class ClaimAction extends Action {
 
 			Status st = ep.getStatus();
 			if (st.getDescription() == null || st.getDescription().length() == 0)
-				ep.setStatus(TracerUtils.getStatus(st.getStatus_ID(), st.getLocale()));
+				ep.setStatus(StatusBMO.getStatus(st.getStatus_ID(), st.getLocale()));
 
 			cform.setMod_claim_reason("");
 			cform.setMod_exp_reason("");
@@ -207,7 +208,7 @@ public class ClaimAction extends Action {
 			ep = cform.getExpense(index);
 			Status st = ep.getStatus();
 			if (st.getDescription() == null || st.getDescription().length() == 0)
-				ep.setStatus(TracerUtils.getStatus(st.getStatus_ID(), st.getLocale()));
+				ep.setStatus(StatusBMO.getStatus(st.getStatus_ID(), st.getLocale()));
 			if (ep.getExpensetype().getExpensetype_ID() == TracingConstants.EXPENSEPAYOUT_INTERIM) {
 				request.setAttribute("editinterim", "1");
 			}

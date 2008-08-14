@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -69,9 +70,9 @@ public class WTSusRit {
 			
 				Item item = (Item) incident.getItemlist().get(c);
 				// color and type
-				xdesc1 = TracerUtils.getXdescelementcode(item.getXdescelement_ID_1());
-				xdesc2 = TracerUtils.getXdescelementcode(item.getXdescelement_ID_2());
-				xdesc3 = TracerUtils.getXdescelementcode(item.getXdescelement_ID_3());
+				xdesc1 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1());
+				xdesc2 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2());
+				xdesc3 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3());
 				// if missing color, type, xdesc, then return null
 				if (item.getColor() == null || item.getColor().length() == 0 || item.getBagtype() == null || item.getBagtype().length() == 0 || xdesc1 == null || xdesc2 == null || xdesc3 == null) {
 					error = "incident needs to have valid color and bag type entered";
@@ -182,9 +183,9 @@ public class WTSusRit {
 		// generate post string _s
 		StringBuffer sb = new StringBuffer();
 		String xdesc1, xdesc2, xdesc3;
-		xdesc1 = TracerUtils.getXdescelementcode(ohd.getXdescelement_ID_1());
-		xdesc2 = TracerUtils.getXdescelementcode(ohd.getXdescelement_ID_2());
-		xdesc3 = TracerUtils.getXdescelementcode(ohd.getXdescelement_ID_3());
+		xdesc1 = XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1());
+		xdesc2 = XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2());
+		xdesc3 = XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3());
 		// if missing color, type, xdesc, then return null
 		if (ohd.getColor() == null || ohd.getColor().length() == 0 || ohd.getType() == null || ohd.getType().length() == 0 || xdesc1 == null || xdesc2 == null || xdesc3 == null) {
 			error = "ohd needs to have valid color and bag type entered";
@@ -314,9 +315,9 @@ public class WTSusRit {
 			
 				Item item = (Item) incident.getItemlist().get(c);
 				// color and type
-				xdesc1 = TracerUtils.getXdescelementcode(item.getXdescelement_ID_1());
-				xdesc2 = TracerUtils.getXdescelementcode(item.getXdescelement_ID_2());
-				xdesc3 = TracerUtils.getXdescelementcode(item.getXdescelement_ID_3());
+				xdesc1 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1());
+				xdesc2 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2());
+				xdesc3 = XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3());
 				// if missing color, type, xdesc, then return null
 				if (item.getColor() == null || item.getColor().length() == 0 || item.getBagtype() == null || item.getBagtype().length() == 0 || xdesc1 == null || xdesc2 == null || xdesc3 == null) {
 					error = "incident needs to have valid color and bag type entered";

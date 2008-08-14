@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -785,7 +786,7 @@ public class BagService {
 				item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 				item.set_DATEFORMAT(user.getDateformat().getFormat());
 				item.setCurrency_ID(user.getDefaultcurrency());
-				item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 				Item_Inventory ii = new Item_Inventory();
 				ii.setItem(item);
 				item.getInventorylist().add(ii);
@@ -798,7 +799,7 @@ public class BagService {
 						i--;
 					} else {
 						if (item.getItemtype_ID() <= 0) item.setItemtype_ID(iDTO.getItemtype_ID());
-						if (item.getStatus() == null) item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+						if (item.getStatus() == null) item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 						item.set_DATEFORMAT(user.getDateformat().getFormat());
 						item.setBagnumber(bagnumber);
 						bagnumber++;
@@ -981,7 +982,7 @@ public class BagService {
 				item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 				item.set_DATEFORMAT(user.getDateformat().getFormat());
 				item.setCurrency_ID(user.getDefaultcurrency());
-				item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 				Item_Inventory ii = new Item_Inventory();
 				ii.setItem(item);
 				item.getInventorylist().add(ii);

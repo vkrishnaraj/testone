@@ -30,6 +30,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -363,7 +364,7 @@ public class BDOUtils {
 
 				for (int i = theform.getItemlist().size() - 1; i >= 0; i--) {
 					item = (Item) theform.getItemlist().get(i);
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
 					item.setBdo(bdo);
 
 					// find out if this l/d bag is matched to ohd
@@ -371,7 +372,7 @@ public class BDOUtils {
 					if (ohd_obj != null && ohd_obj.getHoldingStation().getStation_ID() == theform.getIncident().getStationassigned().getStation_ID()) {
 						// bag matched and in station so change bag status to process as
 						// well
-						ohd_obj.setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
 						oBMO.insertOHD(ohd_obj, theform.getAgent());
 						bdo.setOhd(ohd_obj);
 					}
@@ -404,14 +405,14 @@ public class BDOUtils {
 				if (item != null) {
 					// matched so insert incident id into bdo
 					bdo.setIncident(item.getIncident());
-					item.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
 					item.setBdo(bdo);
 					theform.getItemlist().add(item);
 					bdo.setItems(new HashSet(theform.getItemlist()));
 				} else {
 					bdo.setIncident(null);
 				}
-				theform.getOhd().setStatus(TracerUtils.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+				theform.getOhd().setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
 				oBMO.insertOHD(theform.getOhd(), theform.getAgent());
 				
 			}

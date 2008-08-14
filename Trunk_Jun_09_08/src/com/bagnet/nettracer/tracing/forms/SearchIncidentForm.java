@@ -2,6 +2,13 @@ package com.bagnet.nettracer.tracing.forms;
 
 import org.apache.struts.validator.ValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.bmo.ManufacturerBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+
 /**
  * @author Ankur Gupta
  * 
@@ -631,5 +638,70 @@ public final class SearchIncidentForm extends ValidatorForm {
 
 	public void setCountrycode_ID(String countrycode_ID) {
 		this.countrycode_ID = countrycode_ID;
+	}
+	
+	/**
+	 * @return Visual representation of manufacturer information.
+	 */
+	public String getManufacturerString() {
+		if (manufacturer_other != null) {
+			return manufacturer_other;
+		}
+		
+		return ManufacturerBMO.getManufacturerString(this.getManufacturer_ID());
+	}
+	
+	/**
+	 * @return Visual representation of status information.
+	 */
+	public String getStatusString() {
+		return StatusBMO.getStatus(status_ID).getDescription();
+	}
+	
+	/**
+	 * @return Visual representation of create station information.
+	 */
+	public String getStationCreatedString() {
+		return StationBMO.getStation(stationcreated_ID).getStationcode();
+	}
+	
+	/**
+	 * @return Visual representation of assigned station information.
+	 */
+	public String getStationAssignedString() {
+		return StationBMO.getStation(stationassigned_ID).getStationcode();
+	}
+	
+	/**
+	 * @return Visual representation of category information.
+	 */
+	public String getCategoryString() {
+		return CategoryBMO.getCategory(category_ID).getCategorytype();
+	}
+	
+	/**
+	 * @return Visual representation of item type information.
+	 */
+	public String getItemTypeString() {
+		return null;
+	}
+	
+	/**
+	 * @return Visual representation of descriptive elements information.
+	 */
+	public String getDescElementsString() {
+		StringBuffer retValue = new StringBuffer();
+		if (xdescelement_ID1 > 0) {
+			retValue.append(XDescElementsBMO.getXdescelementcode(xdescelement_ID1));
+		}
+		
+		if (xdescelement_ID2 > 0) {
+			retValue.append(XDescElementsBMO.getXdescelementcode(xdescelement_ID2));
+		}
+		
+		if (xdescelement_ID3 > 0) {
+			retValue.append(XDescElementsBMO.getXdescelementcode(xdescelement_ID3));
+		}
+		return retValue.toString();
 	}
 }

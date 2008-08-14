@@ -38,6 +38,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
@@ -56,6 +57,7 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -214,7 +216,7 @@ public class TracerUtils {
 		i.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 		i.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 		i.setBagnumber(0);
-		i.setStatus(TracerUtils.getStatus(TracingConstants.ITEM_STATUS_OPEN,
+		i.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN,
 				user.getCurrentlocale()));
 
 		// set new claimcheck
@@ -1202,53 +1204,6 @@ public class TracerUtils {
 		}
 	}
 
-	public static String getXdescelementcode(int id) {
-		Session sess = null;
-		try {
-			if (id == 0)
-				return "X";
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(XDescElement.class).add(
-					Expression.eq("XDesc_ID", new Integer(id)));
-			XDescElement xe = (XDescElement) cri.list().get(0);
-			return xe.getCode();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public static int getXdescelementid(String code) {
-		Session sess = null;
-		try {
-			if (code == null || code.length() == 0)
-				return 7;
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(XDescElement.class).add(
-					Expression.eq("code", code));
-			return (Integer) cri.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return 7;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	public static CountryCode getCountry(String code, String locale) {
 		Session sess = null;
 		try {
@@ -1257,28 +1212,6 @@ public class TracerUtils {
 					Expression.eq("countryCode_ID", code)).add(
 					Expression.eq("locale", locale));
 			return (CountryCode) cri.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public static OHD_CategoryType getCategory(String code, String locale) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(
-					Expression.eq("OHD_CategoryType_ID", new Integer(code)))
-					.add(Expression.eq("locale", locale));
-			return (OHD_CategoryType) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -1359,30 +1292,6 @@ public class TracerUtils {
 			q.setInteger("station_ID", station_ID);
 
 			return (String) q.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public static Status getStatus(int status_ID, String locale) {
-		Session sess = null;
-		if (locale == null)
-			locale = TracingConstants.DEFAULT_LOCALE;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Status.class).add(
-					Expression.eq("status_ID", new Integer(status_ID))).add(
-					Expression.eq("locale", locale));
-			return (Status) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
