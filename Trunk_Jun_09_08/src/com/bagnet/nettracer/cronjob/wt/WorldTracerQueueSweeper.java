@@ -189,6 +189,7 @@ public class WorldTracerQueueSweeper {
 	
 	public void processForwards(String companyCode, Agent ogadmin) {
 		//proess the queued tasks
+		/*
 		List<WT_FWD_Log> qTasks = wfwdBmo.getPendingFwdsByCompany(companyCode);
 		for (WT_FWD_Log fwd : qTasks) {
 			try {
@@ -203,6 +204,7 @@ public class WorldTracerQueueSweeper {
 			fwd.setFwd_status(-1);
 			wfwdBmo.updateFwd(fwd);
 		}
+		*/
 		
 	}
 
