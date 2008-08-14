@@ -15,6 +15,10 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 	private static final String DELETE_BY_DAY_TYPE = 
 		"delete from Worldtracer_Actionfiles where airline = :airline and station = :station and day = :day and action_file_type = :actionFileType";
 	
+	private static final String DELETE_MARKED = 
+		"delete from Worldtracer_Actionfiles where airline = :airline and station = :station and day = :day and action_file_type = :actionFileType" +
+		" and item_number = :item_number and deleted = true";
+	
 	private static final String FIND_TEXT_FOR_WAF = 
 		"select action_file_text from Worldtracer_Actionfiles where airline = :airline and station = :station and day = :day and action_file_type = :actionFileType and item_number = :item_number";
 
@@ -53,5 +57,19 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 			return result.get(0);
 		}
 		return null;
+	}
+
+	@Transactional
+	public void deleteMarkedActionFile(Worldtracer_Actionfiles waf) {
+		Session sess = getSession(false);
+		Query q = sess.createQuery(DELETE_BY_DAY_TYPE);
+		q.setParameter("station", waf.getStation());
+		q.setParameter("airline", waf.getAirline());
+		q.setInteger("day", waf.getDay());
+		q.setParameter("actionFileType", waf.getAction_file_type());
+		q.setParameter("item_number", waf.getItem_number());
+		
+		q.executeUpdate();
+		
 	}
 }

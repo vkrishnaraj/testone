@@ -25,6 +25,7 @@ public class Worldtracer_Actionfiles {
 	private String wt_ohd_id;
 	private double percent_match;
 	private int item_number;
+	private boolean deleted;
 	
 	private static final String id_pattern = "^\\w{2}-\\w{3}-[A-Z]{2}-\\d+-\\d+$";
 
@@ -197,6 +198,20 @@ public class Worldtracer_Actionfiles {
 
 	public String generateId() {
 		return String.format("%s-%s-%s-%d-%d", airline, this.wt_station, this.action_file_type.name(), this.day, this.item_number);
+	}
+
+	/**
+	 * @return the percent
+	 * 
+	 * @hibernate.property type="boolean"
+	 * @hibernate.column name="delete_trigger"
+	 */
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	

@@ -92,11 +92,11 @@ public class RetrieveWTActionFiles {
 	}
 
 	public void manageActionFiles() {
-		deleteActionFiles();
+		eraseActionFiles();
 		retrieveActionFiles();
 	}
 
-	public void deleteActionFiles() {
+	public void eraseActionFiles() {
 		List<WT_Queue> tasks = wqBmo.getPendingTasksByCompanyType(company, WT_Queue.ERASE_AF_TYPE);
 
 		for (WT_Queue task : tasks) {
@@ -111,6 +111,7 @@ public class RetrieveWTActionFiles {
 					continue;
 				}
 				wtService.eraseActionFile(waf);
+				wafBmo.deleteMarkedActionFile(waf);
 				task.setQueue_status(-1);
 				wqBmo.updateQueue(task);
 			} catch (Exception e) {

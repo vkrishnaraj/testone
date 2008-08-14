@@ -663,6 +663,7 @@ public class WorldTracerUtils {
 			cri.add(Expression.eq("day", new Integer(day)));
 			cri.add(Expression.eq("airline", airline));
 			cri.add(Expression.eq("station", station));
+			cri.add(Expression.eq("deleted", false));
 
 
 			if (rowsperpage > 0) {
@@ -711,9 +712,8 @@ public class WorldTracerUtils {
 			}
 			Worldtracer_Actionfiles af = (Worldtracer_Actionfiles) list.get(0);
 			if (af != null) {
-				af.toString();
-				HibernateUtils.delete(af);
-
+				af.setDeleted(true);
+				HibernateUtils.save(af);
 			}
 
 			return true;
