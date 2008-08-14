@@ -143,9 +143,11 @@
 
 
 	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile-web">
-
 		<jrc srcdir="${basedir}/web/reports">
-			<classpath refid="project.classpath" />
+			<classpath>
+				<path refid="project.classpath" />
+				<path location="${build.dir}/${ant_project_name}_web/classes" />
+			</classpath>
 		</jrc>
 
 	</target>
