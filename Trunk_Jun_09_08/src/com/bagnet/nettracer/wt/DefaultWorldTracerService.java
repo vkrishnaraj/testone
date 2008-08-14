@@ -124,7 +124,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		OHD_FIELD_RULES.put(WorldTracerField.NM, new Object[] { 3, RepeatType.SAME_LINE });
 		OHD_FIELD_RULES.put(WorldTracerField.EA, new Object[] { 1, RepeatType.NONE });
 		OHD_FIELD_RULES.put(WorldTracerField.SL, new Object[] { 1, RepeatType.NONE });
-		INC_FIELD_RULES.put(WorldTracerField.BI, new Object[] { 1, RepeatType.NONE });
+		OHD_FIELD_RULES.put(WorldTracerField.BI, new Object[] { 1, RepeatType.NONE });
 
 		CAH_FIELD_RULES = new EnumMap<WorldTracerField, Object[]>(WorldTracerField.class);
 		CAH_FIELD_RULES.put(WorldTracerField.CS, new Object[] { 5, RepeatType.MULTIPLE });
