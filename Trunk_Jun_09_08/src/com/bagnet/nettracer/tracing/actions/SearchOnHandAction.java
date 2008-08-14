@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
@@ -71,7 +72,7 @@ public class SearchOnHandAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
 			if (foundohd == null) {
-				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
+				HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
 				String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
 				String wt_url = "http://" + wt_http + "/";
 				String result = WorldTracerUtils.getROF(client, request.getParameter("wt_id"),wt_url);

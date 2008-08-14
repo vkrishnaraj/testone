@@ -939,9 +939,15 @@ function gotoHistoricalReport() {
             <td align="center">
               <br>
               <logic:notEmpty name="OnHandForm" property="status">
-                <html:submit styleId="button" property="savetracing" styleId="button" onclick="return validatereqOHDForm(this.form);">
+<% if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){ %>
+                <html:submit styleId="button" property="savetracing" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
                   <bean:message key="button.saveohd" />
                 </html:submit>
+<% } else { %>
+ 				<html:submit styleId="button" property="savetracing" styleId="button" onclick="return validatereqOHDForm(this.form);">
+                  <bean:message key="button.saveohd" />
+                </html:submit>
+<% } %>
 
 <%
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
@@ -959,7 +965,7 @@ function gotoHistoricalReport() {
                 </logic:notEmpty>
                 <logic:equal name="OnHandForm" property="wt_id" value="">
                  <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%= "" + TracingConstants.OHD_STATUS_CLOSED %>">
-                  <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
+                  <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
                    <bean:message key="button.savetoWT" />
                   </html:submit>
                  </logic:notEqual>
@@ -991,9 +997,15 @@ function gotoHistoricalReport() {
             <td align="center" valign="top">
               <br>
               <logic:notEmpty name="OnHandForm" property="status">
+     <% if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){ %>
+                <html:submit styleId="button" property="savetracing" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
+                  <bean:message key="button.saveremark" />
+                </html:submit>
+     <% } else { %>
                 <html:submit styleId="button" property="savetracing" styleId="button" onclick="return validatereqOHDForm(this.form);">
                   <bean:message key="button.saveremark" />
                 </html:submit>
+     <% } %>
               </logic:notEmpty>
             </td>
           </tr>

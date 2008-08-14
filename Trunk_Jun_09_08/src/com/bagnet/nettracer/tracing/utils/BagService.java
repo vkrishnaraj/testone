@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -166,7 +167,7 @@ public class BagService {
 			Remark r = new Remark();
 			r.setAgent(user);
 			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-			Station station = AdminUtils.getStation("" + log.getDestStationCode());
+			Station station = StationBMO.getStation("" + log.getDestStationCode());
 			r.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
 					+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
 			r.setOhd(ohd);
@@ -289,7 +290,7 @@ public class BagService {
 		oDTO.setItinerary(new HashSet(form.getBagitinerarylist()));
 		
 		if (!form.getFaultStation().equals("0")) {
-			Station faultStation = AdminUtils.getStation(form.getFaultStation());
+			Station faultStation = StationBMO.getStation(form.getFaultStation());
 			oDTO.setFaultstation_ID(faultStation.getStation_ID());
 		}
 		
@@ -578,7 +579,7 @@ public class BagService {
 					wtq.setAgent(mod_agent);
 					wtq.setCreatedate(TracerDateTime.getGMTDate());
 					wtq.setType_id(iDTO.getIncident_ID());
-					wtq.setStationcode(mod_agent.getStation().getStationcode());
+					wtq.setWt_stationcode(mod_agent.getStation().getWt_stationcode());
 					wtq.setType("closeIncident");
 					wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
 					wq.saveWtobj(iDTO, theform, wtq, mod_agent);

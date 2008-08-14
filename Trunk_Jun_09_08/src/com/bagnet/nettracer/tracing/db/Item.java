@@ -71,6 +71,22 @@ public class Item implements Serializable {
 	
 	private int wt_bag_selected;
 	/**
+	 * @return Returns the wt_bag_selected;.
+	 * 
+	 * @hibernate.property type="integer"
+	 */
+	public int getWt_bag_selected() {
+		return wt_bag_selected;
+	}
+
+	/**
+	 * @param wt_bag_selected the wt_bag_selected to set
+	 */
+	public void setWt_bag_selected(int wt_bag_selected) {
+		this.wt_bag_selected = wt_bag_selected;
+	}
+
+	/**
 	 * @return Returns the locale.
 	 */
 	public String getLocale() {
@@ -813,19 +829,4 @@ public class Item implements Serializable {
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getDescription();
 	}
-	/**
-	 * @return Returns the wt_bag_selected;.
-	 * 
-	 * @hibernate.property type="integer"
-	 */
-	public int getWt_bag_selected() {
-		return wt_bag_selected;
-	}
-
-	public void setWt_bag_selected(int wt_bag_selected) {
-		this.wt_bag_selected = wt_bag_selected;
-	}
-	
-
-
 }

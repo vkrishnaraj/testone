@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -22,6 +23,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.MessageCopy;
+import com.bagnet.nettracer.tracing.db.Recipient;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 
 /**
@@ -209,6 +212,41 @@ public class MessageUtils {
 				}
 			}
 		}
+	}
+	
+	public static void sendmessage(Station station, String subject, Agent user,
+			String message, String incident_id, String ohd_id) {
+		Message msg = new Message();
+		msg.setSend_date(TracerDateTime.getGMTDate());
+
+		msg.setAgent(user);
+		msg.setSend_station(station);
+
+		String body = message;
+		msg.setMessage(body);
+		msg.setSubject(subject + incident_id);
+		if (incident_id == "" && ohd_id == "") {
+			msg.setFile_type(-1);
+			msg.setFile_ref_number("");
+		}
+
+		if (incident_id != "") {
+			msg.setFile_ref_number(incident_id);
+			msg.setFile_type(1);
+		}
+		if (ohd_id != "") {
+			msg.setFile_type(0);
+			msg.setFile_ref_number(ohd_id);
+		}
+		Recipient rec = new Recipient();
+		rec.setCompany_code(station.getCompany().getCompanyCode_ID());
+		rec.setStation(station);
+		rec.setMessage(msg);
+		List newRecpList = new ArrayList();
+		newRecpList.add(rec);
+
+		msg.setRecipients(new HashSet(newRecpList));
+		HibernateUtils.save(msg);
 	}
 
 	public static int getMessagesCount(String stationId, int status_id, String s_date, String e_date,

@@ -616,7 +616,7 @@ public final class ViewMatch extends Action {
 			wtq.setAgent(user);
 			wtq.setCreatedate(TracerDateTime.getGMTDate());
 			wtq.setType_id(Incident_ID);
-			wtq.setStationcode(user.getStation().getStationcode());
+			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 			wtq.setType("closeIncident");
 			wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
 			wq.saveWtobj(wtq, user);
@@ -627,7 +627,7 @@ public final class ViewMatch extends Action {
 			wtq.setAgent(user);
 			wtq.setCreatedate(TracerDateTime.getGMTDate());
 			wtq.setType_id(OHD_ID);
-			wtq.setStationcode(user.getStation().getStationcode());
+			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 			wtq.setType("closeOHD");
 			wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
 			wq.saveOhdobj(wtq, user);

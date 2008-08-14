@@ -102,22 +102,49 @@ function fileReferenceHaveOrNot()
             		<br/><bean:write name="msg"/><br/>
             		</html:messages>
             </logic:messagesPresent>
-            <%
-            if(null!=request.getAttribute("completeSuccess")&&!"".equals(request.getAttribute("completeSuccess"))&&request.getAttribute("completeSuccess").equals("1"))
-            {
-            %>
-            <font color="green"><bean:message key="update.suspend.successful"/></font>
-            <%
-            }
-            %>
-             <%
-            if(null!=request.getAttribute("completeSuccess")&&!"".equals(request.getAttribute("completeSuccess"))&&request.getAttribute("completeSuccess").equals("2"))
-            {
-            %>
-            <font color="red"><bean:message key="update.suspend.fail"/></font>
-            <%
-            }
-            %>
+            <logic:empty name="partialahlsuccess" scope="request">
+             <logic:empty name="susbaggageall" scope="request">
+            
+            <logic:notEmpty name="completeSuccess" scope="request">
+           		<logic:equal name="completeSuccess" value="1" scope="request">
+            		<font color="green"><bean:message key="update.suspend.successful"/></font>
+            		<br>
+           	    </logic:equal>
+           	    <logic:equal name="completeSuccess" value="2" scope="request">
+            		<font color="red"><bean:message key="update.suspend.fail"/></font>
+            		<br>
+            	</logic:equal>
+         	</logic:notEmpty>
+         	</logic:empty>
+         	</logic:empty>
+         	
+         	<logic:empty name="partialahlsuccess" scope="request">
+         	 <logic:notEmpty name="susbaggageall" scope="request">
+            		<font color="green"><bean:message key="suspend.all.baggage"/></font>
+            		<br>
+         	</logic:notEmpty>
+			</logic:empty>
+           
+           	<logic:notEmpty name="ohdsuccess" scope="request">
+         		<logic:equal name="ohdsuccess" value="1" scope="request">
+            		<font color="green"><bean:message key="insert.ohd.success"/></font>
+            		<br>
+           	    </logic:equal>
+            	<logic:equal name="ohdsuccess" value="2" scope="request">
+            	    <font color="red"><bean:message key="insert.ohd.fail"/></font>
+            	    <br>
+            	</logic:equal>
+            </logic:notEmpty>   
+           		<logic:notEmpty name="partialahlsuccess" scope="request">
+         			<logic:equal name="partialahlsuccess" value="1" scope="request">
+            		<font color="green"><bean:message key="partial.ahl.success"/></font>
+            		<br>
+           	   	    </logic:equal>
+            	<logic:equal name="partialahlsuccess" value="2" scope="request">
+            	     <font color="red"><bean:message key="partial.ahl.fail"/></font>
+            	     <br>
+            	</logic:equal>
+            </logic:notEmpty> 
           </font>
 	    </div>
 	<table class="form2" cellspacing="0" cellpadding="0">
@@ -130,14 +157,12 @@ function fileReferenceHaveOrNot()
 		<tr>
 			<td><input type="radio" name="suspend" value="completeSUS"
 				onclick="fileCompleteSuspend();" 
-				<%
-					if(null!=request.getAttribute("radio")&&request.getAttribute("radio").equals("completeSUS"))
-					{
-				%>
-					checked="checked" />
-				<%
-					}
-				%>
+				<logic:notEmpty name="radio" scope="request">
+         			<logic:equal name="radio" value="completeSUS" scope="request">
+            			checked="checked"
+           	    	</logic:equal>
+           	    </logic:notEmpty>
+				/>
 				</td>
 			<td><bean:message
 				key="colname.worldtracer_complete_file_sus_rit" /></td>
@@ -146,14 +171,12 @@ function fileReferenceHaveOrNot()
 		<tr>
 			<td><input type="radio" name="suspend" value="partSUS"
 				onclick="filePartSuspend();" 
-				<%
-					if(null!=request.getAttribute("radio")&&request.getAttribute("radio").equals("partSUS"))
-					{
-				%>
-					checked="checked" />
-				<%
-					}
-				%>
+				<logic:notEmpty name="radio" scope="request">
+         			<logic:equal name="radio" value="partSUS" scope="request">
+            			checked="checked"
+           	    	</logic:equal>
+           	    </logic:notEmpty>
+				/>
 				</td>
 			<td><bean:message key="colname.worldtracer_part_file_sus_rit" /></td>
 			<td><input type="radio" name="suspend" value="" onclick="filePartSuspend();"/></td>
@@ -161,51 +184,41 @@ function fileReferenceHaveOrNot()
 	</table>
 		<center>
 			<span id="span"> 
-			<%
-			if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("completeSUS"))
-			{
-			%>
-				<font color=red style='font-size: 14px'><b>FILE TYPE<b></font> 
+			<logic:notEmpty name="span" scope="request">
+				<logic:equal name="span" value="completeSUS" scope="request">
+					<font color=red style='font-size: 14px'><b>FILE TYPE<b></font> 
 					<select name='ahlORohd'>
-						<option value='ahl' 
-			<%
-			if(null!=request.getAttribute("ahlOrohd")&&request.getAttribute("ahlOrohd").equals("ahl"))
-			{
-			%>
-			selected>
-			<%
-			}
-			%>
-							<font color='red' style='font-size: 14px'><b>AHL</b></font>
-						</option>
-						<option value='ohd'
-			<%
-			if(null!=request.getAttribute("ahlOrohd")&&request.getAttribute("ahlOrohd").equals("ohd"))
-			{
-			%>
-			selected>
-			<%
-			}
-			%>
-						<font color='red' style='font-size: 14px'><b>OHD</b></font>
-						</option>
+				<logic:notEmpty name="ahlOrohd" scope="request">	
+				<logic:equal name="ahlOrohd" value="ahl" scope="request">
+					<option value='ahl' selected>
+					AHL
+					</option>
+					<option value='ohd'>
+					OHD
+					</option>
+				</logic:equal>
+				<logic:equal name="ahlOrohd" value="ohd" scope="request">
+					<option value='ahl'>
+					AHL
+					</option>
+					<option value='ohd' selected>
+					OHD
+					</option>
+				</logic:equal>
+				</logic:notEmpty>
 					</select> 
 					&nbsp;&nbsp;<font color='red' style='font-size: 14px'><b>File Reference<b></font>
-					<input type="text" name="fileReference" value=<%=request.getAttribute("filereference")%>>
-			<%
-			}
-			%>
-			<%
-			if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("partSUS"))
-			{
-			%>
-			<font color=red style='font-size: 14px'><b>FILE TYPE-<b></font> 
+					<input type="text" name="fileReference" value=<bean:write name='filereference' scope='request'/>>
+				</logic:equal>
+			</logic:notEmpty>
+			<logic:notEmpty name="span" scope="request">
+				<logic:equal name="span" value="partSUS" scope="request">
+					<font color=red style='font-size: 14px'><b>FILE TYPE-<b></font> 
 					<font color='black' style='font-size: 14px'><b>AHL</b></font>
 					&nbsp;&nbsp;<font color='red' style='font-size: 14px'><b>File Reference<b></font>
-					<input type="text" name="fileReference" value=<%=request.getAttribute("filereference")%>>
-			<%
-			}
-			%>
+					<input type="text" name="fileReference" value=<bean:write name='filereference' scope='request'/>>
+				</logic:equal>
+			</logic:notEmpty>
 			 </span>
 			 </center>
 	<br>
@@ -221,22 +234,14 @@ function fileReferenceHaveOrNot()
 		<td id="middlecolumn"><!-- MAIN BODY -->
 		<div id="maincontent">
 		<h1 class="green">
-		<%
-		if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("completeSUS"))
-		{
-		%>
-		<bean:message key="colname.worldtracer_sus_rit_completeSUS" />
-		<%
-		}
-		%>
-		<%
-		if(null!=request.getAttribute("span")&&request.getAttribute("span").equals("partSUS"))
-		{
-		%>
-		<bean:message key="colname.worldtracer_sus_rit_partialSUS" />
-		<%
-		}
-		%>
+			<logic:notEmpty name="span" scope="request">
+         		<logic:equal name="span" value="completeSUS" scope="request">
+            		<bean:message key="colname.worldtracer_sus_rit_completeSUS" />
+           	    </logic:equal>
+            	<logic:equal name="span" value="partSUS" scope="request">
+            	   <bean:message key="colname.worldtracer_sus_rit_partialSUS" />
+            	</logic:equal>
+            </logic:notEmpty>
 	    </h1>
 	<table class="form2" cellspacing="0" cellpadding="0">
 		<logic:present name="partresultlist" scope="request">
@@ -261,6 +266,11 @@ function fileReferenceHaveOrNot()
 						Color/Type<br>
 						<input type="text" value='<bean:write name="resultlist" property="color" />' readonly/>/
 						<input type="text" value='<bean:write name="resultlist" property="bagtype" />' readonly/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="hidden" name="judgecheckboxisornot" value="1"/>
 					</td>
 				</tr>
 		</logic:iterate>

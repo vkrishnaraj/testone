@@ -16,7 +16,7 @@
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="hibernate.dialect">net.sf.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="company.code">NK</property>
 		
     	<!-- sql server 2000 -->
@@ -31,7 +31,7 @@
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="hibernate.dialect">net.sf.hibernate.dialect.SQLServerDialect</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
 		<property name="company.code">DA</property>
 		
 		<property name="hibernate.connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
@@ -42,7 +42,7 @@
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="hibernate.dialect">net.sf.hibernate.dialect.SQLServerDialect</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
 		<property name="company.code">DA</property>
 		-->
 		
@@ -57,7 +57,7 @@
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="hibernate.dialect">net.sf.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="company.code">DA</property>
 		-->
 		
@@ -71,7 +71,7 @@
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="hibernate.dialect">net.sf.hibernate.dialect.OracleDialect</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
 		<property name="company.code">DA</property>
 		-->
 		

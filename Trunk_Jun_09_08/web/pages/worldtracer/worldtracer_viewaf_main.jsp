@@ -97,8 +97,12 @@ function gopage(i) {
  				&& request.getAttribute("wt_type").equals("PR")) {
  			header_text = "pr";
  %> <bean:message key="header.wt_pr" /> <%
+ 	}else if(request.getAttribute("wt_type")!=null&&request.getAttribute("wt_type").equals("CW")){
+ %> <bean:message key="header.wt_cw"/><%
+            header_text="cw";
  	}
- %> <%
+ 	%>
+ <%
  	if (request.getParameter("ahl_id") != null
  				&& request.getParameter("ahl_id").length() > 9) {
  			out.println("&nbsp;&nbsp;( "

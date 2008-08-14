@@ -1,13 +1,15 @@
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 
 public class StationBMO {
 
@@ -46,6 +48,48 @@ public class StationBMO {
 
 	public static Station getStation(String stationID) {
 		return getStation(new Integer(stationID).intValue());
+	}
+	
+	public static Station getStationByCode(String stationCode) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class).add(
+					Expression.eq("stationcode", stationCode));
+			if (cri.list().size() > 0)
+				return (Station) cri.list().get(0);
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static List<String> getWorldTracerStations(String company) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("select distinct wt_stationcode from Station where company.companyCode_ID = :company and active = true and length(wt_stationcode) = 3");
+			q.setString("company", company);
+			return (List<String>) q.list();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.warn("error closing hibernate session", e);
+				}
+			}
+		}
 	}
 	
 }

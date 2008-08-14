@@ -26,9 +26,13 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.BetaWtConnector;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
@@ -80,7 +84,7 @@ public class WorldTracerAFAction extends Action {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request
 					.getParameter("ahl_id"));
 			if (foundinc == null) {
-				HttpClient client = WorldTracerUtils.connectWT(user
+				HttpClient client = BetaWtConnector.connectWT(user
 						.getStation().getCompany().getVariable().getWt_url()
 						+ "/", user.getCompanycode_ID());
 
@@ -107,7 +111,7 @@ public class WorldTracerAFAction extends Action {
 			 * request.setAttribute("remark",remark); }
 			 */
 			if (foundinc == null) {
-				HttpClient client = WorldTracerUtils.connectWT(user
+				HttpClient client = BetaWtConnector.connectWT(user
 						.getStation().getCompany().getVariable().getWt_url()
 						+ "/", user.getCompanycode_ID());
 				String result = WorldTracerUtils.getROF(client, request
@@ -138,8 +142,22 @@ public class WorldTracerAFAction extends Action {
 		// check if deleting action file
 		if (request.getParameter("delete") != null
 				&& request.getParameter("delete").length() > 0) {
-			boolean deleted = WorldTracerUtils.deleteActionFiles(request
-					.getParameter("delete"));
+			Worldtracer_Actionfiles waf = WorldTracerUtils.findActionFileByID(Integer.parseInt(request.getParameter("delete")));
+			boolean deleted = false;
+			if(waf != null) {
+				//queue for WT deletion and delete from our database
+				WT_Queue wq = new WT_Queue();
+				wq.setAgent(user);
+				wq.setCreatedate(TracerDateTime.getGMTDate());
+				wq.setQueue_status(0);
+				wq.setType(WT_Queue.ERASE_AF_TYPE);
+				wq.setType_id(waf.generateId());
+				wq.setWt_stationcode(waf.getStation());
+				WorldTracerQueueUtils.saveWtobj(wq, user);
+				deleted = WorldTracerUtils.deleteActionFiles(request
+						.getParameter("delete"));
+			}
+
 			if (!deleted) {
 				ActionMessage error = new ActionMessage("message.nodata");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);

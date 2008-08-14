@@ -144,9 +144,6 @@ public class WorldTracerFWDAction extends Action {
 			theform.setPassenger1("");
 			theform.setPassenger2("");
 			theform.setPassenger3("");
-			ActionMessage error = new ActionMessage("error.match_noonhand");
-			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-			saveMessages(request, errors);
 		} else {
 			theform.setWt_id("");
 			theform.setBagtag("");

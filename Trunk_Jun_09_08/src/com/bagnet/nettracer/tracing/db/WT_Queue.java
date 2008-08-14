@@ -8,13 +8,37 @@ import java.util.Date;
  * @hibernate.class table="wt_queue"
  */
 public class WT_Queue implements Serializable{
+	
+	public static final String INCIDENT_TYPE = "Incident";
+	public static final String OHD_TYPE = "OHD";
+	public static final String CLOSE_INCIDENT_TYPE = "closeIncident";
+	public static final String CLOSE_OHD_TYPE = "closeOHD";
+	public static final String SUS_INC_TYPE = "SUSIncident";
+	public static final String SUS_OHD_TYPE = "SUSOhd";
+	public static final String PARTIAL_AHL_TYPE = "PartialAhl";
+	public static final String ERASE_AF_TYPE = "EraseActionFile";
+	
 	private int wt_queue_id;
-	private String stationcode;
+	private String wt_stationcode;
 	private Agent agent; 
 	private Date createdate;
 	private String type_id;
 	private String type;
 	private int queue_status;
+	private int sus_rit_item_id;
+	/**
+	 * @return the sus_rit_item_id
+	 * @hibernate.property type="int"
+	 */
+	public int getSus_rit_item_id() {
+		return sus_rit_item_id;
+	}
+	/**
+	 * @param sus_rit_item_id the sus_rit_item_id to set
+	 */
+	public void setSus_rit_item_id(int sus_rit_item_id) {
+		this.sus_rit_item_id = sus_rit_item_id;
+	}
 	/**
 	 * @return the queue_status
 	 * @hibernate.property type="int"
@@ -46,17 +70,17 @@ public class WT_Queue implements Serializable{
 		this.wt_queue_id = wt_queue_id;
 	}
 	/**
-	 * @return the stationcode
+	 * @return the wt_stationcode
 	 * @hibernate.property type="string"
 	 */
-	public String getStationcode() {
-		return stationcode;
+	public String getWt_stationcode() {
+		return wt_stationcode;
 	}
 	/**
-	 * @param stationcode the stationcode to set
+	 * @param wt_stationcode the wt_stationcode to set
 	 */
-	public void setStationcode(String stationcode) {
-		this.stationcode = stationcode;
+	public void setWt_stationcode(String wt_stationcode) {
+		this.wt_stationcode = wt_stationcode;
 	}
 	/**
 	 * @return the agent

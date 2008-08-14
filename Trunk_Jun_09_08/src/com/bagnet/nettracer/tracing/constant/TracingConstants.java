@@ -256,6 +256,8 @@ public class TracingConstants {
 	// remark types
 	public final static int REMARK_REGULAR = 1;
 	public final static int REMARK_CLOSING = 2;
+	public final static int REMARK_WORLDTRACER_REQUEST = 3;
+	public final static int REMARK_WORLDTRACER_RESPONSE = 4;
 
 	// report output type
 	public final static int REPORT_OUTPUT_PDF = 0;
@@ -387,6 +389,7 @@ public class TracingConstants {
 	
 	// world tracer forwards
 	public final static String VIEW_WORLDTRACER_ACTION_FILES = "viewworldtraceractionfiles";
+	public final static String VIEW_WORLDTRACER_ACTION_FILES_COUNT = "viewworldtracercount";
 	public final static String VIEW_WORLDTRACER_AF_VIEW_RAW_INC = "viewworldtracerafviewraw";
 	public final static String VIEW_WORLDTRACER_FWD = "viewworldtracerfwd";
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
@@ -611,9 +614,9 @@ public class TracingConstants {
 	
 	
 	public static String getDBDateFormat(Properties properties) {
-		if (properties.getProperty("hibernate.dialect").equals("net.sf.hibernate.dialect.SQLServerDialect")) {
+		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;
-		} else if (properties.getProperty("hibernate.dialect").equals("net.sf.hibernate.dialect.MySQLDialect")) {
+		} else if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.MySQLDialect")) {
 			return DB_DATEFORMAT;
 		} else {
 			return DB_DATEFORMAT;
@@ -621,18 +624,18 @@ public class TracingConstants {
 	}
 
 	public static String getDBTimeFormat(Properties properties) {
-		if (properties.getProperty("hibernate.dialect").equals("net.sf.hibernate.dialect.SQLServerDialect")) {
+		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_TIMEFORMAT_MSSQL;
-		} else if (properties.getProperty("hibernate.dialect").equals("net.sf.hibernate.dialect.MySQLDialect")) {
+		} else if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.MySQLDialect")) {
 			return DB_TIMEFORMAT;
 		} else {
 			return DB_TIMEFORMAT;
 		}
 	}
 	public static String getDBDateTimeFormat(Properties properties) {
-		if (properties.getProperty("hibernate.dialect").equals("net.sf.hibernate.dialect.SQLServerDialect")) {
+		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATETIMEFORMAT_MSSQL;
-		} else if (properties.getProperty("hibernate.dialect").equals("net.sf.hibernate.dialect.MySQLDialect")) {
+		} else if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.MySQLDialect")) {
 			return DB_DATETIMEFORMAT;
 		} else {
 			return DB_DATETIMEFORMAT;

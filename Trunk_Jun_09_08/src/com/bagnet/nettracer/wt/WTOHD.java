@@ -8,10 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
@@ -62,9 +59,9 @@ public class WTOHD {
 	
 	
 	public String insertOHD(HttpClient client, String companycode, String filenum) {
-		String fieldSep = ".";
+		String _n = ".";
 		String _t = "";
-		String entrySep = "/";
+		String _h = "/";
 
 		String responseBody = null;
 		
@@ -80,64 +77,74 @@ public class WTOHD {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("STNARL" + _t);
-		sb.append(ohd.getHoldingStation().getStationcode());
+		//sb.append(ohd.getHoldingStation().getStationcode());
+		sb.append(ohd.getHoldingStation().getWt_stationcode());
 		//sb.append("CBS");
 		sb.append(ohd.getFoundAtStation().getCompany().getCompanyCode_ID());
-		sb.append(fieldSep);
+		sb.append(_n);
 
-		ArrayList<String> allFields = new ArrayList<String>();
-		
+		// passengers last name
 		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
 			int c = 0;
-			ArrayList<String> names = new ArrayList<String>();
-			ArrayList<String> initials = new ArrayList<String>();
-			for (OHD_Passenger p : (Set<OHD_Passenger>) ohd.getPassengers()) {
-				if(p.getLastname() != null && p.getLastname().trim().length() > 0) {
-					names.add(p.getLastname().trim());
-					if(p.getFirstname() != null && p.getFirstname().trim().length() > 0) {
-						initials.add(p.getFirstname().substring(0, 1) + p.getLastname().substring(0, 1));
-					}
-					else {
-						initials.add(p.getLastname().substring(0, 1));
-					}
-					c++;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				temp = op.getLastname();
+				if (c == 0) {
+					if (temp.trim().length() > 0) sb.append("NM" + _t + temp);
+				} else {
+					if (temp.trim().length() > 0) sb.append(_h + temp);
 				}
-				if(c >= 3) break;
-			}
-			if (names.size() > 0) {
-				allFields.add("NM" + StringUtils.join(names, entrySep));
-				allFields.add("IT" + StringUtils.join(initials, entrySep));
+				if (temp.trim().length() > 0) c++;
+				if (c >= 3) break;
 			}
 		}
+		sb.append(_n);
 
+		// middle initial
+		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
+			int c = 0;
+			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger op = (OHD_Passenger) i.next();
+				temp = op.getMiddlename();
+				if (c == 0) {
+					if (temp.trim().length() > 0) sb.append("IT" + _t + temp);
+				} else {
+					if (temp.trim().length() > 0) sb.append(_h + temp);
+				}
+				if (temp.trim().length() > 0) c++;
+				if (c >= 3) break;
+			}
+		}
+		sb.append(_n);
 		if (ohd.getMembership() != null && ohd.getMembership().getMembershipnum().length() > 0) {
-			allFields.add("FL" + ohd.getMembership().getMembershipnum());
-//			sb.append("FL" + _t + ohd.getMembership().getMembershipnum() + fieldSep);
+			sb.append("FL" + _t + ohd.getMembership().getMembershipnum() + _n);
 		}
 
 		// cellphone
 		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
 			int c = 0;
 			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
 				OHD_Passenger op = (OHD_Passenger) i.next();
 				OHD_Address or = op.getAddress(0);
 				if (or.getMobile().length() > 0) {
-					allFields.add("CP" + or.getMobile());
+					sb.append("CP" + _t + or.getMobile() + _n);
 					c++;
 				}
-				
 				if (c >= 2) break;
 			}
 		}
-		
 		// fax
 		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
+			String temp;
 			int c = 0;
 			for (Iterator i = ohd.getPassengers().iterator(); i.hasNext();) {
 				OHD_Passenger op = (OHD_Passenger) i.next();
 				OHD_Address or = op.getAddress(0);
 				if (or.getAltphone().length() > 0) {
-					allFields.add("FX" + or.getAltphone());
+					sb.append("FX" + _t + or.getAltphone() + _n);
 					c++;
 				}
 
@@ -153,69 +160,65 @@ public class WTOHD {
 				OHD_Passenger op = (OHD_Passenger) i.next();
 				OHD_Address or = op.getAddress(0);
 				if (or.getEmail().length() > 0) {
-					String escapedMail = or.getEmail().replaceAll("@", "/A/").replaceAll("\\.", "/D/").replaceAll("_", "/U/").replaceAll("\\+", "/P/").replaceAll("~", "/T/");
-					allFields.add("EA" + escapedMail);
+					sb.append("EA" + _t + or.getEmail() + _n);
 					c++;
 				}
 				if (c >= 1) break;
 			}
 		}
 
+		// flight date
+		boolean hasflight = false;
 		if (ohd.getItinerary() != null && ohd.getItinerary().size() > 0) {
 			String temp;
 			int c = 0;
-			ArrayList<String> bFlights = new ArrayList<String>();
+			
 			for (Iterator i = ohd.getItinerary().iterator(); i.hasNext();) {
 				OHD_Itinerary op = (OHD_Itinerary) i.next();
-
 				temp = op.getAirline() + op.getFlightnum() + "/";
 				if (DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null) != null) temp += DateUtils.formatDate(op.getDepartdate(), "ddMMM", null, null);
-				if (temp.trim().length() > 1) {
-
-					bFlights.add(temp.trim().toUpperCase());
-					c++;
+				if (c == 0) {
+					if (temp.trim().length() > 1) sb.append("FD" + _t + temp.toUpperCase());
+				} else {
+					if (temp.trim().length() > 1) sb.append(_h + temp.toUpperCase());
 				}
-
+				if (temp.trim().length() > 1) {hasflight=true;c++;}
 				if (c >= 4) break;
 			}
-			if( c > 0 ) {
-				//FD here means baggage itin, but in an incident it is passenger itin
-				allFields.add("FD" + StringUtils.join(bFlights, entrySep));
-			}
-			else {
-				error = "Please enter a valid flight/date itinerary for bags";
-				return null;
-			}
 		}
-
+		sb.append(_n);
+		if (!hasflight) {
+			error = "Please enter a valid flight/date itinerary";
+			return null;
+		}
+		// routing
+		boolean hasrouting = false;
 		if (ohd.getItinerary() != null && ohd.getItinerary().size() > 0) {
 			String temp,temp2;
 			int c = 0;
-			ArrayList<String> routes = new ArrayList<String>();
-
 			for (Iterator i = ohd.getItinerary().iterator(); i.hasNext();) {
 				OHD_Itinerary op = (OHD_Itinerary) i.next();
 				temp = op.getLegfrom();
 				temp2 = op.getLegto();
-				if (temp.trim().length() > 0 || temp2.trim().length() > 0) {
-					if (c == 0 && temp.trim().length() > 0) {
-						routes.add(temp.toUpperCase());
+				if (c == 0) {
+					if (temp.trim().length() > 0) {
+						sb.append("RT" + _t + temp.toUpperCase());
+						c++;
+						sb.append(_h + temp2.toUpperCase());
 					}
-					if (temp2.trim().length() > 0) {
-						routes.add(temp2.toUpperCase());
-					}
-					c ++;
+				} else {
+					if (temp2.trim().length() > 0) sb.append(_h + temp2.toUpperCase());
 				}
+				if (temp.trim().length() > 0) {hasrouting=true;c++;}
 				if (c >= 5) break;
 			}
-			if (c > 0) {
-				allFields.add("RT" + StringUtils.join(routes, entrySep));
-			}
-			else {
-				error = "Please enter valid bag routings stations";
-				return null;
-			}
 		}
+		if (!hasrouting) {
+			error = "Please enter valid bag routings stations";
+			return null;
+		}
+		sb.append(_n);
+
 		// bag claimcheck
 		
 		if (ohd.getClaimnum().length() > 0) {
@@ -223,7 +226,7 @@ public class WTOHD {
 			if (bt.length() > 6) {
 				bt = bt.substring(bt.length()-6);
 			}
-			allFields.add("TN" + ohd.getFoundAtStation().getCompany().getCompanyCode_ID().toUpperCase() + bt.toUpperCase());
+			sb.append("TN" + _t + ohd.getFoundAtStation().getCompany().getCompanyCode_ID().toUpperCase() + bt.toUpperCase() + _n);
 		} 
 
 		String xdesc1, xdesc2, xdesc3;
@@ -238,15 +241,20 @@ public class WTOHD {
 		}
 
 		// color, type, descelements
-		allFields.add("CT" + ohd.getColor() + ohd.getType() + xdesc1 + xdesc2 + xdesc3);
+		sb.append("CT" + _t + ohd.getColor());
+		sb.append(ohd.getType());
+		sb.append(xdesc1);
+		sb.append(xdesc2);
+		sb.append(xdesc3);
+		sb.append(_n);
 		
 		// manu
 		if (ohd.getManufacturer().length() > 0 ) 
-			allFields.add("BI" + ohd.getManufacturer());
+			sb.append("BI" + _t + ohd.getManufacturer().toUpperCase() + _n);
 		
 		// storage location
 		if (ohd.getStorage_location().length() > 0 ) 
-			allFields.add("SL" + ohd.getStorage_location());
+			sb.append("SL" + _t + ohd.getStorage_location().toUpperCase() + _n);
 		
 		// address on bag
 		if (ohd.getPassengers() != null && ohd.getPassengers().size() > 0) {
@@ -256,9 +264,10 @@ public class WTOHD {
 				OHD_Passenger op = (OHD_Passenger) i.next();
 				OHD_Address or = op.getAddress(0);
 				if (or.getAddress1().length() > 0) {
-					allFields.add("AB" + _t + or.getAddress1() + " " + or.getAddress2() + " " + or.getCity() + " " + or.getState_ID() + " " + or.getZip());
+					sb.append("AB" + _t + or.getAddress1() + " " + or.getAddress2() + " " + or.getCity() + " " + or.getState_ID() + " " + or.getZip() + _n);
 					c++;
 				}
+
 				if (c >= 2) break;
 			}
 		}
@@ -271,7 +280,7 @@ public class WTOHD {
 				OHD_Passenger op = (OHD_Passenger) i.next();
 				OHD_Address or = op.getAddress(0);
 				if (or.getHomephone().length() > 0) {
-					allFields.add("BP" + _t + or.getHomephone());
+					sb.append("BP" + _t + or.getHomephone() + _n);
 					c++;
 				}
 
@@ -290,15 +299,19 @@ public class WTOHD {
 				if (c == 0) {
 					sbcn.append(op.getCategory() + "/" + op.getDescription());
 				} else {
-					sbcn.append(fieldSep + "-    " + op.getCategory() + "/" + op.getDescription());
+					sbcn.append("-    " + op.getCategory() + "/" + op.getDescription());
 				}
 				c++;
 			}
-			allFields.add("CC" + sbcn.toString());
+			sb.append("CN" + _t + sbcn.toString() + _n);
 		}
 		
 		// hc and si supplemental information
-		allFields.add("HCY");
+		sb.append("HC" + _t + "Y" + _n);
+		
+		
+		
+		sb.append(_n);
 		
 		// remarks
 		/*
@@ -318,9 +331,8 @@ public class WTOHD {
 		*/
 		
 		// agent
-		allFields.add("AG" + ohd.getAgent().getUsername() + "/" + ohd.getAgent().getCompanycode_ID());
-		
-		sb.append(StringUtils.join(allFields, fieldSep));
+		sb.append("AG" + _t + ohd.getAgent().getUsername() + "/" + ohd.getAgent().getCompanycode_ID() + _n);
+				
 		// replace string
 		String wtstring = sb.toString();
 		wtstring = wtstring.replace("\n", "");
@@ -328,6 +340,7 @@ public class WTOHD {
 		wtstring = wtstring.replace("STN", "");
 		wtstring = wtstring.replace("ARL", "");
 		wtstring = wtstring.toUpperCase();
+		if (wtstring.substring(wtstring.length()-2).equals("..")) wtstring = wtstring.substring(0,wtstring.length()-2);
 		String encodedstring = wtstring.substring(5);
 		String tempstring = encodedstring;
 		try {
@@ -336,8 +349,9 @@ public class WTOHD {
 		//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
 		String wt_http = WorldTracerUtils.getWt_url(companycode);
 		String wt_url = "http://" + wt_http + "/";
-		String getstring = wt_url + "cgi-bin/bagOHD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&OHD=" + encodedstring;
-		getstring = getstring.replaceAll("\\s+", "%20");
+		String cgiexe = "cgi-bin/bagOHD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&OHD=" + tempstring;
+		String getstring = wt_url + cgiexe;
+		getstring = getstring.replace(" ", "+");
 		GetMethod method = null;
 		try {
 			
@@ -349,7 +363,7 @@ public class WTOHD {
 			// Provide custom retry handler is necessary
 			method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
 
-		
+			String requestInfo = WorldTracerUtils.getWtRequest(wt_url, cgiexe);
 			// Execute the method.
 
 			int statusCode = client.executeMethod(method);
@@ -361,7 +375,7 @@ public class WTOHD {
 
 			// Read the response body.
 			responseBody = method.getResponseBodyAsString();
-			
+			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
 	
 		} catch (HttpException e) {
 			System.err.println("Fatal protocol violation: " + e.getMessage());
@@ -378,13 +392,7 @@ public class WTOHD {
 			if (method != null) method.releaseConnection();
 			
 			// get the worldtracer id
-			String wt_id = null;
-			Pattern p = Pattern.compile("WMT1=(\\w{3}\\w{2}\\d{5})");
-			Matcher m = p.matcher(responseBody);
-			if (m.find()) {
-				wt_id = m.group(1);
-			}
-
+			String wt_id = StringUtils.ParseWTString2(responseBody, "<td>WM DOH ", "     /-ACCEPTED");
 			if (wt_id != null && wt_id.length() >= 10) {
 				// insert wt_id into ohd
 				responseBody = wt_id;

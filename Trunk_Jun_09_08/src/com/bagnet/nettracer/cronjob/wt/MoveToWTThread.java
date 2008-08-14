@@ -3,7 +3,7 @@
  *
  * Administrator
  */
-package com.bagnet.nettracer.cronjob;
+package com.bagnet.nettracer.cronjob.wt;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -29,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
@@ -148,7 +149,7 @@ public class MoveToWTThread extends Thread {
 			Incident inc = null;
 			
 			
-			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
+			HttpClient client = BetaWtConnector.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
 			
 			if (list != null && list.size() > 0) {
 				for (int i=0;i<list.size();i++) {
@@ -196,7 +197,7 @@ public class MoveToWTThread extends Thread {
 			List list = q.list();
 			WTOHD wt = null;
 			OHD inc = null;
-			HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
+			HttpClient client = BetaWtConnector.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
 			
 			if (list != null && list.size() > 0) {
 				for (int i=0;i<list.size();i++) {

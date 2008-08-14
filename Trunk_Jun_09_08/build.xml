@@ -5,7 +5,11 @@
 	<property environment="env" />
 	<property name="lib" value="lib/jars" />
 	<property name="buildlib" value="lib/build-client" />
+	<property name="artifact.dir" value="${build.dir}/artifacts/"/>
 	<property name="main-class" value="com.bagnet.nettracer.cronjob.NettracerCron" />
+	<taskdef name="hibernatedoclet" classname="org.xdoclet.ant.XDocletTask">
+		<classpath refid="project.classpath" />
+	</taskdef>
 	<target name="init" unless="flag">
 		<patternset id="java.files">
 			<include name="**/**/*.java" />
@@ -32,6 +36,11 @@
 		<mkdir dir="${build.dir}/dist/web" />
 		<mkdir dir="${build.dir}/${ant_project_name}_app/classes" />
 		<mkdir dir="${build.dir}/dist/app" />
+		<mkdir dir="${build.dir}/dist/cron" />
+		<mkdir dir="${build.dir}/${ant_project_name}/classes" />
+		<mkdir dir="${artifact.dir}/${ant_project_name}"/>
+		<mkdir dir="${artifact.dir}/${ant_project_name}/zip"/>
+		
 		<mkdir dir="${build.dir}/webservices/passengerview" />
 
 		<path id="project.classpath">
@@ -62,10 +71,11 @@
         </unwar>-->
 	</target>
 
-	<target name="build" depends="init,compile" />
-	<target name="compile" depends="init">
+	<target name="build" depends="init,compile-web" />
+	<target name="compile-web" depends="init">
 		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on">
 			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
 		</javac>
 	</target>
 
@@ -80,7 +90,7 @@
 
 	<!-- Copy any resource or configuration files -->
 
-	<target name="resources2" depends="compile">
+	<target name="resources2" depends="compile-web">
 		<copy todir="${build.dir}/${ant_project_name}_web/classes" includeEmptyDirs="no">
 			<fileset dir="src">
 				<patternset>
@@ -110,10 +120,7 @@
 		</copy>
 	</target>
 
-	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile">
-		<taskdef name="hibernatedoclet" classname="org.xdoclet.ant.XDocletTask">
-			<classpath refid="project.classpath" />
-		</taskdef>
+	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
 		<hibernatedoclet>
 			<fileset dir="src">
 				<include name="com/bagnet/nettracer/tracing/db/*.java" />
@@ -135,7 +142,7 @@
 	</taskdef>
 
 
-	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile">
+	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile-web">
 
 		<jrc srcdir="${basedir}/web/reports">
 			<classpath refid="project.classpath" />
@@ -176,6 +183,7 @@
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
 			<lib dir="${lib.jar.dir}" >
 				<exclude name="log4j*.*"/>
+				<exclude name="servlet.jar"/>
 			</lib>
 		</war>
 	</target>
@@ -748,7 +756,7 @@
 		</jar>
 
 
-		<copy todir="C:/nettracer_service/passivetracer" file="${build.dir}/passivetracer/passivetracer.jar" />
+		<!-- <copy todir="C:/nettracer_service/passivetracer" file="${build.dir}/passivetracer/passivetracer.jar" /> -->
 
 		<!-- clean up -->
 	</target>
@@ -1143,6 +1151,123 @@
 		</java>
 	</target>
 
+	<target name="compile-core" depends="init">
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}/classes" debug="on">
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/tracing/actions/**/*.*" />
+			<exclude name="com/bagnet/nettracer/ws/**/*.*" />
+			<exclude name="com/bagnet/nettracer/tracing/forms/**/*.*" />
+			<exclude name="com/bagnet/nettracer/servlets/**/*.*" />
+			<exclude name="com/bagnet/nettracer/cronjob/**/*.*" />
+		</javac>
+	</target>
+
+	<target name="hibernate_generate_core" description="Generates Hibernate class descriptor files.">
+		<hibernatedoclet>
+			<fileset dir="src">
+				<include name="com/bagnet/nettracer/tracing/db/*.java" />
+				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+			</fileset>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${build.dir}/${ant_project_name}/classes" version="3.0" />
+		</hibernatedoclet>
+
+		<replace dir="${build.dir}/${ant_project_name}/classes" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
+			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
+			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
+			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
+		</replace>
+	</target>
+
+	<target name="build-core-jar" depends="hibernate_generate_core, compile-core">
+		<jar destfile="${artifact.dir}/${ant_project_name}/tracer-core.jar"
+			basedir="${build.dir}/${ant_project_name}/classes"
+			includes="**/*.class,**/*.xml" />
+	</target>
+
+	<path id="cron-class-path">
+		<fileset dir="${lib.build-client.dir}" id="cronjar1">
+			<patternset refid="jar.files" />
+			<exclude name="commons-collections*.*" />
+			<exclude name="backport*.*" />
+			<exclude name="quartz*.*" />
+		</fileset>
+		<fileset dir="${lib.jar.dir}" id="cronjar2">
+			<include name="activation*.jar"/>
+			<include name="antlr.jar"/>
+			<include name="asm.jar"/>
+			<include name="asm-attrs*.jar"/>
+			<include name="c3p0*.jar"/>
+			<include name="cglib*.jar"/>
+			<include name="commons-beanutils*.jar"/>
+			<include name="commons-*.jar"/>
+			<exclude name="commons-collections*.*" />
+			<include name="ehcache*.jar"/>
+			<include name="hibernate3*.jar"/>
+			<include name="log4j*.jar"/>
+			<include name="mail*.jar"/>
+			<include name="mysql-connector*.jar"/>
+			<include name="orchestra*.jar"/>
+			<include name="servlet*.jar"/>
+			<include name="struts*.jar"/>
+			<include name="sqljdbc*.jar"/>
+			<include name="xalan*.jar"/>
+			<include name="xbean*.jar"/>
+			<include name="xerces*.jar"/>
+		</fileset>
+		<fileset dir="${lib.build-cron.dir}" id="cronjar3">
+			<include name="backport-util*.jar" />
+			<include name="commons-collections*.jar" />
+			<include name="quartz*.jar"/>
+			<include name="spring*.jar"/>
+			<include name="wrapper.jar"/>
+		</fileset>
+	</path>
+	<target name="compile-cron" depends="init">
+		<javac srcdir="src" destdir="${build.dir}/${ant_project_name}/classes" debug="on">
+			<classpath refid="cron-class-path" />
+			<include name="com/bagnet/nettracer/cronjob/**/*.*" />
+		</javac>
+	</target>
+
+	<target name="build-cron-jar" depends="hibernate_generate_core,compile-core,compile-cron">
+		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
+		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/tracer/integration.properties" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/tracer/tracer.properties" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/tracer/hibernate_main.cfg.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/tracer/cron/config/log4j.properties" />
+		<jar destfile="${artifact.dir}/${ant_project_name}/tracer-cron.jar"
+			basedir="${build.dir}/${ant_project_name}/classes"
+			includes="**/*.class,**/*.xml,**/*.properties">
+		</jar>
+	</target>
+	
+	<target name="build-cron-service" depends="build-cron-jar">
+
+        <copy todir="${build.dir}/dist/cron/">
+        	<fileset dir="${basedir}/companies/${ant_project_name}/cron" />
+        </copy>
+        <copy todir="${build.dir}/dist/cron/lib">
+        	<fileset refid="cronjar2" />
+        	<fileset refid="cronjar3" />
+        	<fileset dir="${lib.build-client.dir}">
+        		<include name="dom4j*.jar"/>
+        	</fileset>
+        	
+        </copy>
+        <copy todir="${build.dir}/dist/cron/lib">
+        	<fileset dir="${artifact.dir}/${ant_project_name}">
+        		<include name="tracer-cron.jar" />
+        	</fileset>
+        	<fileset dir="${lib.build-cron.dir}">
+        		<include name="wrapper.dll" />
+        	</fileset>
+        </copy>
+        <zip destfile="${artifact.dir}/${ant_project_name}/zip/cron-svc.zip">
+			<fileset dir="${build.dir}/dist/cron/" />
+		</zip>
+	</target>
 
 	<target name="simplifyAll">
 		<antcall target="simplifyResourceFiles">

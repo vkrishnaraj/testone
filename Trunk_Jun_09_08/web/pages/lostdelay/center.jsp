@@ -353,9 +353,17 @@ function gotoHistoricalReport() {
             <td align="center" valign="top">
               <br>
               <logic:notEqual name="incidentForm" property="incident_ID" value="">
-                <html:submit property="save" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
-                  <bean:message key="button.save" />
+<%			if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
+%>
+                <html:submit property="save" styleId="button" onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
+                		      <bean:message key="button.save" />
                 </html:submit>
+<%  } else { %>
+				<html:submit property="save" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
+				                  <bean:message key="button.save" />
+                </html:submit>
+<%  } %>
+
 <%
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
 					if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
@@ -365,7 +373,7 @@ function gotoHistoricalReport() {
 %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<logic:equal name="incidentForm" property="wt_id" value="">
-                <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
+                <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
                   <bean:message key="button.savetoWT" />
                 </html:submit>
                 </logic:equal>
@@ -381,9 +389,15 @@ function gotoHistoricalReport() {
                 <input type="hidden" name="savetemp" value="">
                 <input type="button" name="s" value="Save as Temporary" onclick="if(validatereqFields(this.form)){saveIncidentTemporary(this.form, 'lostdelay')};" id="button">
                 &nbsp;&nbsp;&nbsp;
+<%			if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){     %>
+                <html:submit property="savetracing" styleId="button" onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
+                  <bean:message key="button.savetracing" />
+                </html:submit>
+<%  		} else { %>
                 <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
                   <bean:message key="button.savetracing" />
                 </html:submit>
+<%  } %>          
               </logic:equal>
             </td>
           </tr>

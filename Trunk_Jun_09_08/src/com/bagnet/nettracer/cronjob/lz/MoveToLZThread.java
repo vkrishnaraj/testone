@@ -3,7 +3,7 @@
  *
  * Administrator
  */
-package com.bagnet.nettracer.cronjob;
+package com.bagnet.nettracer.cronjob.lz;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -45,12 +45,12 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
  * 
  * create date - Sep 14, 2004
  */
-public class MoveToLZThread extends Thread {
+public class MoveToLZThread {
 
 	public final static int MBR = 0;
 	public final static int OHD = 1;
 
-	private static Logger logger = Logger.getLogger(MoveToLZThread.class);
+	private static final Logger logger = Logger.getLogger(MoveToLZThread.class);
 
 	// db
 	public int dbtype;
@@ -70,6 +70,11 @@ public class MoveToLZThread extends Thread {
 	private final static String AGENT_MSG = "; ASSIGNED AGENT REMOVED FOR RE-ASSIGNMENT AT ";
 
 	private String company;
+	
+	public MoveToLZThread(int type) {
+		this(HibernateWrapper.getConfig().getProperties(), type);
+	}
+	
 	public MoveToLZThread(Properties properties,int type) {
 		try {
 			Connection conn = null;
@@ -135,10 +140,8 @@ public class MoveToLZThread extends Thread {
 	}
 	
 
-	public void run() {
+	public void moveToLz() {
 		try {
-
-			while (true) {
 
 				// rotate through companies
 				String sql = "select * from company_specific_variable order by companycode_ID";
@@ -197,9 +200,6 @@ public class MoveToLZThread extends Thread {
 					}
 				}
 
-				pause(1 * 60 * 1000);
-
-			}
 		} catch (Exception e) {
 			logger.fatal("cron thread error: " + e);
 		}

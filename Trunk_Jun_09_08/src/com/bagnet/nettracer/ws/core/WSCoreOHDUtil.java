@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
@@ -801,7 +802,7 @@ public class WSCoreOHDUtil {
 				Remark r = new Remark();
 				r.setAgent(agent);
 				r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-				Station station = AdminUtils.getStation("" + log.getDestStationCode());
+				Station station = StationBMO.getStation("" + log.getDestStationCode());
 				r.setRemarktext(messages.getMessage(new Locale(agent.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
 						+ messages.getMessage(new Locale(agent.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
 				r.setOhd(onhand);

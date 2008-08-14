@@ -213,8 +213,6 @@ public class LostDelayAction extends Action {
 				theform.setEmail_customer(0);
 
 			
-			String test = "";
-			
 			if (request.getParameter("savetowt") != null ) {
 				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN){
 				WT_Queue wtq = new WT_Queue();
@@ -222,14 +220,14 @@ public class LostDelayAction extends Action {
                  
 				wtq.setCreatedate(TracerDateTime.getGMTDate());
 				wtq.setType_id(theform.getIncident_ID());
-				wtq.setStationcode(user.getStation().getStationcode());
-				
+			
+				wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN)
 				wtq.setType("Incident");
 				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED)
 				wtq.setType("closeIncident");
 				wtq.setQueue_status(TracingConstants.LOG_NOT_RECEIVED);
-				wq.saveWtobj(iDTO,theform,wtq, user);
+				WorldTracerQueueUtils.saveWtobj(iDTO,theform,wtq, user);
 				}
 				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED){
 					error = new ActionMessage("error.no_wt_id");
@@ -247,7 +245,7 @@ public class LostDelayAction extends Action {
 				wtq.setCreatedate(TracerDateTime.getGMTDate());
 				wtq.setType_id(theform.getIncident_ID());
 				System.out.println(theform.getIncident_ID());
-				wtq.setStationcode(user.getStation().getStationcode());
+				wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 				wtq.setType("closeIncident");
 				wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
 				wq.saveWtobj(iDTO, theform, wtq, user);

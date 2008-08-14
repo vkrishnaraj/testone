@@ -22,6 +22,7 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
@@ -148,7 +149,7 @@ public class WorldTracerROHAction extends Action {
 		if (tx4.length() > 0) ohd_string.append(".TX " + tx4);
 		if (name.length() > 0) ohd_string.append(".NM " + name);
 		
-		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
+		HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
 		String test = WorldTracerUtils.postROH(client, company, ahl_id,ohd_string.toString());
 		
 		// for now return ohd_string

@@ -55,7 +55,7 @@ public class WTBDO {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("STNARL" + _t);
-		sb.append(bdo.getStation().getStationcode());
+		sb.append(bdo.getStation().getWt_stationcode());
 		sb.append(bdo.getStation().getCompany().getCompanyCode_ID());
 		sb.append(_n);
 

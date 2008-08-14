@@ -6,6 +6,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -48,6 +49,7 @@ import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -55,7 +57,6 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
-import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.State;
@@ -1453,9 +1454,8 @@ public class TracerUtils {
 	public static String getTracerProperty(String theprop) {
 		try {
 			Properties properties = new Properties();
-
-			properties.load(new FileInputStream(HibernateWrapper.class
-					.getResource("/tracer.properties").getPath()));
+			
+			properties.load(HibernateWrapper.class.getResourceAsStream("/tracer.properties"));
 
 			return properties.getProperty(theprop);
 		} catch (Exception e) {

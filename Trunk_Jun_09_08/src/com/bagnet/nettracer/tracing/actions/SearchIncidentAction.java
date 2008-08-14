@@ -38,6 +38,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
@@ -68,7 +69,7 @@ public class SearchIncidentAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
 			if (foundinc == null) {
-				HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
+				HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
 				String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
 				String wt_url = "http://" + wt_http + "/";
 				String result = WorldTracerUtils.getRAF(client, request.getParameter("wt_id"),wt_url);

@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
@@ -178,7 +179,7 @@ public class WorldTracerTTYAction extends Action {
         ttylist.add(fref4);
         ttylist.add(ttytxt);
   
-		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
+		HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
 		String test = WorldTracerUtils.SendTty(client,company,ttylist);
 		
 		// for now return ohd_string

@@ -24,11 +24,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
-
 import com.bagnet.nettracer.tracing.db.WT_Queue;
-
-import com.bagnet.nettracer.tracing.db.Incident;
-
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -56,7 +52,6 @@ public class BDOAction extends Action {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 		Agent user = (Agent) session.getAttribute("user");
 
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
@@ -227,12 +222,12 @@ public class BDOAction extends Action {
              
 			wtq.setCreatedate(TracerDateTime.getGMTDate());
 			wtq.setType_id(String.valueOf(theform.getBDO_ID()));
-			wtq.setStationcode(user.getStation().getStationcode());
+			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 
 			wtq.setType("bdo");
 
 			wtq.setQueue_status(TracingConstants.LOG_NOT_RECEIVED);
-			wq.saveBdoobj(theform,wtq, user);
+			WorldTracerQueueUtils.saveBdoobj(theform,wtq, user);
 			
 			return (mapping.findForward(TracingConstants.BDO_MAIN));
 			}

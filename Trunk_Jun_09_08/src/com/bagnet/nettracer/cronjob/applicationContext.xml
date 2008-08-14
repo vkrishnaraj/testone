@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="file:../config/cron.properties" />
+	</bean>
+
+	<!-- Hibernate config -->
+	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper" factory-method="getSession" />
+
+	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
+
+	<!-- Data Access Objects -->
+	<bean id="wtq-bmo" class="com.bagnet.nettracer.cronjob.bmo.WTQueueBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="wtaf-bmo" class="com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="wtConnector" class="com.bagnet.nettracer.wt.BetaWtConnector">
+		<constructor-arg value="${company.code}" />
+	</bean>
+	
+	<!-- services used by the workers-->
+	<bean id="wtService" class="com.bagnet.nettracer.wt.DefaultWorldTracerService">
+		<property name="wtConnector" ref="wtConnector" />
+		<property name="wtCompanyCode" value="${company.code}" />
+	</bean>
+
+	<!--  Worker beans that have the methods to be scheduled -->
+
+	<bean id="wtProcessQueue" class="com.bagnet.nettracer.cronjob.wt.WorldTracerQueueSweeper">
+		<property name="companyCode" value="${company.code}" />
+		<property name="wtqBmo" ref="wtq-bmo" />
+		<property name="wtHitDelay" value="${wtqueue.request.delay}" />
+		<property name="wtEndDelay" value="${wtqueue.end.delay}" />
+		<property name="wtService" ref="wtService" />
+	</bean>
+
+	<bean id="wtActionFiles" class="com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles">
+		<constructor-arg value="${company.code}" />
+		<property name="wqBmo" ref="wtq-bmo" />
+		<property name="wtService" ref="wtService" />
+		<property name="wafBmo" ref="wtaf-bmo" />
+	</bean>
+
+	<bean id="moveToLz" class="com.bagnet.nettracer.cronjob.lz.MoveToLZThread">
+		<constructor-arg value="${lz.move.type}" />
+	</bean>
+
+	<!-- passive tracer just runs constantly so just creating this bean will kick it off -->
+	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracing" lazy-init="false">
+		<constructor-arg value="../tracing/config/" />
+		<constructor-arg value="${company.code}" />
+	</bean>
+
+	<!-- The different jobs to run -->
+	<bean id="wtQueueJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="wtProcessQueue" />
+		<property name="targetMethod" value="processWtQueue" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="wtActionFileJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="wtActionFiles" />
+		<property name="targetMethod" value="manageActionFiles" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+
+	<bean id="moveToLzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="moveToLz" />
+		<property name="targetMethod" value="moveToLz" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!--  The Schedule they should run on -->
+	<bean id="cronWtQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="wtQueueJob" />
+		<property name="cronExpression" value="${wtqueue.cron}" />
+		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
+	</bean>
+
+	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="wtActionFileJob" />
+		<property name="cronExpression" value="${wtaf.cron}" />
+		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
+	</bean>
+
+	<bean id="cronMoveToLzTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="moveToLzJob" />
+		<property name="cronExpression" value="${lz.move.cron}" />
+	</bean>
+
+	<!--  The bean that manages all the scheduled jobs and their threads -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronWtQueueTrigger" />
+				<ref bean="cronRetrieveAfTrigger" />
+				<ref bean="cronMoveToLzTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

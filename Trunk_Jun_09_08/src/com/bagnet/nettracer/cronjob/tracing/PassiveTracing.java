@@ -43,6 +43,13 @@ public class PassiveTracing {
 		mt.start();
 	}
 
+	public PassiveTracing() {}
+	
+	public PassiveTracing(String configPath, String company) {
+		MainMBRThread mt = new MainMBRThread(configPath, company, null, 0, null, null, null, false);
+		mt.start();
+	}
+
 	/**
 	 * active tracing method call
 	 * 

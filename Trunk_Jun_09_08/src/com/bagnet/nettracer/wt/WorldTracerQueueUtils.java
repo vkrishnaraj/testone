@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 
 import javax.mail.internet.InternetAddress;
@@ -17,11 +18,13 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.DynaValidatorForm;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -80,9 +83,13 @@ public class WorldTracerQueueUtils {
 		Session sess = null;
 		Transaction t = null;
 		try {
+			int temp = alreadyQueued(obj);
+			if(temp != -1) {
+				obj.setWt_queue_id(temp);
+			}
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			//Figure out if new or old.
+
 			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
 			if (isNew) {
 				sess.save(obj);
@@ -110,6 +117,10 @@ public class WorldTracerQueueUtils {
 		Session sess = null;
 		Transaction t = null;
 		try {
+			int temp = alreadyQueued(obj);
+			if(temp != -1) {
+				obj.setWt_queue_id(temp);
+			}
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			//Figure out if new or old.
@@ -119,9 +130,6 @@ public class WorldTracerQueueUtils {
 			} else {
 				sess.saveOrUpdate(obj);
 			}
-
-
-
 			t.commit();
 		
 		} catch (Exception e) {
@@ -192,11 +200,15 @@ public class WorldTracerQueueUtils {
 			if (sess != null) sess.close();
 		}
 	}
-	public  boolean saveWtobj(WT_Queue obj, Agent user) throws Exception {
+	public  static boolean saveWtobj(WT_Queue obj, Agent user) throws Exception {
 		
 		Session sess = null;
 		Transaction t = null;
 		try {
+			int temp = alreadyQueued(obj);
+			if(temp != -1) {
+				obj.setWt_queue_id(temp);
+			}
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			//Figure out if new or old.
@@ -222,11 +234,16 @@ public class WorldTracerQueueUtils {
 			if (sess != null) sess.close();
 		}
 	}
-	public  void saveOhdobj(WT_Queue obj, Agent user) throws Exception {
+	public static boolean saveOhdobj(WT_Queue obj, Agent user) throws Exception {
 
 		Session sess = null;
 		Transaction t = null;
+		boolean flag=true;
 		try {
+			int temp = alreadyQueued(obj);
+			if(temp != -1) {
+				obj.setWt_queue_id(temp);
+			}
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			//Figure out if new or old.
@@ -236,20 +253,18 @@ public class WorldTracerQueueUtils {
 			} else {
 				sess.saveOrUpdate(obj);
 			}
-
-
-
 			t.commit();
-		
 		} catch (Exception e) {
+			flag=false;
 			if (t != null) {
-				t.rollback();
-				
+				t.rollback();	
 			}
+			flag=false;
 			throw e;
 		} finally {
 			if (sess != null) sess.close();
 		}
+		return flag;
 	}
 	public String postWTROH(HttpClient client,WT_ROH inc) {
 		// make the request
@@ -348,8 +363,8 @@ public class WorldTracerQueueUtils {
 
 		sb.append("STNARL" + _t);
 		//sb.append(fwd.gegetHoldingStation().getStationcode());
-		sb.append(StationBMO.getStation(fwd.getFwd_station_id()));
-		sb.append(StationBMO.getStation(fwd.getFwd_station_id()).getStationcode());
+		//sb.append(StationBMO.getStation(fwd.getFwd_station_id()));
+		sb.append(StationBMO.getStation(fwd.getFwd_station_id()).getWt_stationcode());
 		sb.append(_n);
 		// passengers last name
 
@@ -439,9 +454,8 @@ public class WorldTracerQueueUtils {
 			try {
 				tempstring = URLEncoder.encode(tempstring,"UTF-8");
 			} catch (Exception e) {}
-			//String getstring = WorldTracerUtils.wt_url + "cgi-bin/bagOHD.exe";
-
-			String getstring = WorldTracerUtils.getWt_url(companycode) + "cgi-bin/bagFWD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&FWD=" + tempstring;
+            String cgiexe = "cgi-bin/bagFWD.exe?A1=" + companycode.toLowerCase() + "&A2=WM&STNARL="+wtstring.substring(0,5) + "&FWD=" + tempstring;
+			String getstring = WorldTracerUtils.getWt_url(companycode) + cgiexe;
 			getstring = getstring.replace(" ", "+");
 			GetMethod method = null;
 			try {
@@ -453,7 +467,8 @@ public class WorldTracerQueueUtils {
 		
 				// Provide custom retry handler is necessary
 				method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
-
+				
+				String requestInfo = WorldTracerUtils.getWtRequest(wtstring, cgiexe);
 			
 				// Execute the method.
 
@@ -469,7 +484,7 @@ public class WorldTracerQueueUtils {
 				// Read the response body.
 				responseBody = method.getResponseBodyAsString();
 				
-		
+				WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
 			} catch (HttpException e) {
 				System.err.println("Fatal protocol violation: " + e.getMessage());
 				e.printStackTrace();
@@ -487,7 +502,40 @@ public class WorldTracerQueueUtils {
 			}
 		return responseBody;
 	}
+	
+	/**
+	 * If there is already a pending queue entry for this task_id / type
+	 * then just return that id.
+	 * @param wtq wt_queue object that is checked for existence
+	 * @return id of the queue object if it already is in db, or -1 if not there
+	 */
+	public static int alreadyQueued(WT_Queue wtq) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("select wt_queue_id from WT_Queue wq where type = :type and type_id = :type_id and queue_status between 0 and 10");
+			q.setParameter("type", wtq.getType());
+			q.setParameter("type_id", wtq.getType_id());
+			q.setMaxResults(1);
+			List result = q.list();
+			if (result.size() > 0) {
+				return (Integer) result.get(0);
+			}
+			else {
+				return -1;
+			}
+		} catch (Exception e) {
+			return -1;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
+	
 	public void setError(String error) {
 		this.error = error;
 	}
+	public String getError(){
+		return error;
+	}
+
 }

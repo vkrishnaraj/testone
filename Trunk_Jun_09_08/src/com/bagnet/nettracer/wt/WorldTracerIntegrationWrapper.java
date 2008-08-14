@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.wt;
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		HttpSession session = req.getSession(true);
 		user = (Agent) session.getAttribute("user");
-		HttpClient client = WorldTracerUtils.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
+		HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
 		String method = req.getParameter("method");
 
 		res.setContentType("text/html");
@@ -238,8 +239,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 	}
 	
 	public static void main(String[] args) {
-		WorldTracerUtils wtutil = new WorldTracerUtils();
-		HttpClient client = wtutil.connectWT("fl/",user.getCompanycode_ID());
+		HttpClient client = BetaWtConnector.connectWT("fl/",user.getCompanycode_ID());
 		// String stations = getActiveStations(client,"aa");
 		// System.out.println("###\n" + stations + "\n###");
 
@@ -260,7 +260,7 @@ public class WorldTracerIntegrationWrapper extends HttpServlet  {
 		//OHD ohd = wi.parseWTOHD(result,true);
 		
 		// retrieve all raf
-		String result = wtutil.getAllRAF(client, airline, station, "A","");
+		String result = WorldTracerUtils.getAllRAF(client, airline, station, "A","");
 		
 	
 		System.out.println("###\n" + result + "\n###");

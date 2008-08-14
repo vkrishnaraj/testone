@@ -36,7 +36,7 @@
 <%
           String m = "";
 		
-			String fw = "",aa="",wm="",sp="",ap="",cm="",em="",lm="",pr="";
+			String cw = "",fw = "",aa="",wm="",sp="",ap="",cm="",em="",lm="",pr="";
 	
 			String addon = "";
 			
@@ -70,6 +70,8 @@
 		  	 lm = "b";
 		   } else if (request.getAttribute("wt_type") != null && request.getAttribute("wt_type").equals("PR")) {
 		  	 pr = "b";
+		   }else if(request.getAttribute("wt_type")!=null&&request.getAttribute("wt_type").equals("CW")){
+		   	 cw="b";
 		   }
 %>
           <dd>
@@ -81,7 +83,15 @@
                 <br />
                 &nbsp;</span></a>
           </dd>
-          
+          <dd>
+            <a href="worldtracercount.do?viewaction=cw<%=addon %>"><span class="aa<%= cw %>">&nbsp;
+                <br />
+                &nbsp;</span>
+              <span class="bb<%= cw %>"><bean:message key="menu.wt_count" /></span>
+              <span class="cc<%= cw %>">&nbsp;
+                <br />
+                &nbsp;</span></a>
+         	</dd>
            <dd>
             <a href="worldtraceraf.do?viewaction=fw<%=addon %>"><span class="aa<%= fw %>">&nbsp;
                 <br />

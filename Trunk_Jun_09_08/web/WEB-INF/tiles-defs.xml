@@ -220,6 +220,11 @@
     	<put name="center" value="/pages/worldtracer/worldtracer_viewaf_main.jsp"/>
     </definition>
     
+    <definition name="view_worldtracer_count" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_count.jsp"/>
+    </definition>
+
+    
     <definition name="view_worldtracerafviewraw" path="/pages/worldtracer/worldtracer_viewaf_rawinc.jsp">
     </definition>
     
@@ -581,6 +586,7 @@
 	
 	<definition name="pass_view_only" path="/pages/passengerview/passengerview.jsp">
     </definition> 
-
+    <definition name="suspend_rit" path="/pages/worldtracer/worldtracer_sus_rit.jsp">
+    </definition> 
 	
  </tiles-definitions>

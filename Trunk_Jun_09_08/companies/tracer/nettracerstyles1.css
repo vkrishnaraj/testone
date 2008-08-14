@@ -93,6 +93,16 @@ form {
 
 }
 
+/***** HEADER AND MENU *****/
+div.headerleft {
+	float:left;
+}
+
+div.headerright {
+	float:right;
+	text-align:right;
+}
+
 /***** HU *****/
 td#header {
 	height: 78px;
@@ -326,10 +336,12 @@ div#maincontent table.form2{
 
 td.white{
 	background-color:#fff;
+	height:10px;
 }
 
 td.header{
-	background-color:#717471;
+	background-color:#B90010;
+	color:#fff;
 }
 
 div#maincontent table.form2_inc{

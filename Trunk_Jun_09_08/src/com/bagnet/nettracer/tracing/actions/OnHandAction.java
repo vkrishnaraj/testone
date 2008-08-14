@@ -246,10 +246,10 @@ public class OnHandAction extends Action {
 				wtq.setAgent(user);
 				wtq.setCreatedate(TracerDateTime.getGMTDate());
 				wtq.setType_id(oDTO.getOHD_ID());
-				wtq.setStationcode(user.getStation().getStationcode());
+				wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 				wtq.setType("closeOHD");
 				wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-				wq.saveOhdobj(oDTO, theform, wtq, user);
+				wq.saveOhdobj(wtq, user);
 			}
 			
 			
@@ -265,10 +265,10 @@ public class OnHandAction extends Action {
 			wtq.setAgent(user);
 			wtq.setCreatedate(TracerDateTime.getGMTDate());
 			wtq.setType_id(oDTO.getOHD_ID());
-			wtq.setStationcode(user.getStation().getStationcode());
+			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
 			wtq.setType("OHD");
 			wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-			wq.saveOhdobj(oDTO, theform, wtq, user);
+			wq.saveOhdobj(wtq, user);
 			}
 				if(theform.getStatus().getStatus_ID()== TracingConstants.OHD_STATUS_CLOSED){
 					ActionMessage error = new ActionMessage("error.no_wt_id");

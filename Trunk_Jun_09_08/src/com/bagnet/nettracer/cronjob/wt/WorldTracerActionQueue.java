@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.cronjob;
+package com.bagnet.nettracer.cronjob.wt;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WTBDO;
@@ -66,7 +67,7 @@ public class WorldTracerActionQueue extends Thread {
 			wtaction = new WorldTracerActionQueue(cfg.getProperties());
 		
 			client =
-				WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) +
+				BetaWtConnector.connectWT(WorldTracerUtils.getWt_suffix_airline(company) +
 				 "/",company);
 			wtaction.run();
 			Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
@@ -87,7 +88,7 @@ public class WorldTracerActionQueue extends Thread {
 		try {
 			
 			company = properties.getProperty("company.code");
-			client = WorldTracerUtils.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
+			client = BetaWtConnector.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
 		} catch (Exception e) {
 			logger.fatal("unable to read the properties." + e);
 			return;
