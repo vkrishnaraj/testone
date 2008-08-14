@@ -893,7 +893,7 @@ public class WorldTracerUtils {
 				CountActionFile countActionFile = new CountActionFile();
 				for (int j = 1; j <= 7; j++) {
 					Query query = session
-							.createQuery("select count(*) from Worldtracer_Actionfiles worldtracer where worldtracer.action_file_type=? and worldtracer.day=? and worldtracer.airline=? and worldtracer.station=?");
+							.createQuery("select count(*) from Worldtracer_Actionfiles worldtracer where worldtracer.action_file_type=? and worldtracer.day=? and worldtracer.airline=? and worldtracer.station=? and worldtracer.deleted = false");
 					query.setParameter(0, type);
 					query.setParameter(1, j);
 					query.setParameter(2, airline);
@@ -921,7 +921,7 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Query query = sess
-					.createQuery("select count(*) from Worldtracer_Actionfiles where action_file_type=? and day=? and airline=? and station=?");
+					.createQuery("select count(*) from Worldtracer_Actionfiles where action_file_type=? and day=? and airline=? and station=? and deleted = false");
 			query.setParameter(0, ActionFileType.valueOf(type.toUpperCase()));
 			query.setParameter(1, int_day);
 			query.setParameter(2, airline);

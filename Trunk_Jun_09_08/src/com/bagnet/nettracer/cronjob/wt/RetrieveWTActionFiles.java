@@ -105,13 +105,15 @@ public class RetrieveWTActionFiles {
 				waf = new Worldtracer_Actionfiles(task.getType_id());
 				waf.setAction_file_text(wafBmo.findTextForAf(waf));
 				if (waf.getAction_file_text() == null) {
-					//logger.warn("tried to delete action file " + task.getType_id() + "but not found in db");
+					logger.warn(String.format("tried to delete action file %s but not found in db %s %s %s %d %d", 
+							task.getType_id(), waf.getAirline(), waf.getStation(), waf.getAction_file_type().name(),
+							waf.getDay(), waf.getItem_number()));
 					task.setQueue_status(-2);
 					wqBmo.updateQueue(task);
 					continue;
 				}
 				wtService.eraseActionFile(waf);
-				wafBmo.deleteMarkedActionFile(waf);
+				wafBmo.deleteActionFile(waf);
 				task.setQueue_status(-1);
 				wqBmo.updateQueue(task);
 			} catch (Exception e) {
