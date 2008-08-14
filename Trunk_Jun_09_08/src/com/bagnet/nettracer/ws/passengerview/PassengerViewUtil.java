@@ -41,20 +41,20 @@ public class PassengerViewUtil {
 	 * @param getIncidentPV
 	 * @return
 	 */
- public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument getIncidentPVAdvanced(
-     com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPV) {
-		String incident_id = getIncidentPV.getGetIncidentPVAdvanced().getIncidentId();
-		String name = getIncidentPV.getGetIncidentPVAdvanced().getLastname();
+ public com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument getAdvancedIncidentPV(
+     com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument getIncidentPV) {
+		String incident_id = getIncidentPV.getGetAdvancedIncidentPV().getIncidentId();
+		String name = getIncidentPV.getGetAdvancedIncidentPV().getLastname();
 		
 		boolean authorizeName = true;
-		if (getIncidentPV.getGetIncidentPVAdvanced().isSetDoNotAuthorize() == true)
-			authorizeName = !getIncidentPV.getGetIncidentPVAdvanced().getDoNotAuthorize();
+		if (getIncidentPV.getGetAdvancedIncidentPV().isSetDoNotAuthorize() == true)
+			authorizeName = !getIncidentPV.getGetAdvancedIncidentPV().getDoNotAuthorize();
 
 		
-		GetIncidentPVAdvancedResponseDocument resDoc = GetIncidentPVAdvancedResponseDocument.Factory
+		GetAdvancedIncidentPVResponseDocument resDoc = GetAdvancedIncidentPVResponseDocument.Factory
 				.newInstance();
-		GetIncidentPVAdvancedResponseDocument.GetIncidentPVAdvancedResponse res = resDoc
-				.addNewGetIncidentPVAdvancedResponse();
+		GetAdvancedIncidentPVResponseDocument.GetAdvancedIncidentPVResponse res = resDoc
+				.addNewGetAdvancedIncidentPVResponse();
 
 		
 		com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident si = findAdvancedIncidentForPVO(incident_id, name, authorizeName);

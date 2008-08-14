@@ -13,9 +13,9 @@
             <actionMapping>urn:getIncidentPV</actionMapping>
             <outputActionMapping>urn:getIncidentPVResponse</outputActionMapping>
         </operation>
-        <operation name="getIncidentPVAdvanced" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getIncidentPVAdvanced</actionMapping>
-            <outputActionMapping>urn:getIncidentPVAdvancedResponse</outputActionMapping>
+        <operation name="getAdvancedIncidentPV" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:getAdvancedIncidentPV</actionMapping>
+            <outputActionMapping>urn:getAdvancedIncidentPVResponse</outputActionMapping>
         </operation>
     </service>
 </serviceGroup>

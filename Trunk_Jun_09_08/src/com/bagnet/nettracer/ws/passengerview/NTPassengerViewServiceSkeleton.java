@@ -23,12 +23,12 @@ public class NTPassengerViewServiceSkeleton {
 
     /**
      * Auto generated method signature
-     * @param getIncidentPVAdvanced
+     * @param getAdvancedIncidentPV
      */
-    public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument getIncidentPVAdvanced(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPVAdvanced) {
+    public com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument getAdvancedIncidentPV(
+        com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument getAdvancedIncidentPV) {
         //TODO : fill this with the necessary business logic
         throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getIncidentPVAdvanced");
+            this.getClass().getName() + "#getAdvancedIncidentPV");
     }
 }

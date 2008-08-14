@@ -102,7 +102,7 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
         __operation.setName(new javax.xml.namespace.QName(
                 "http://passengerview.ws.nettracer.bagnet.com",
-                "getIncidentPVAdvanced"));
+                "getAdvancedIncidentPV"));
         _service.addOperation(__operation);
 
         _operations[1] = __operation;
@@ -352,15 +352,15 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.passengerview.NTPassengerViewService#getIncidentPVAdvanced
-     * @param getIncidentPVAdvanced26
+     * @see com.bagnet.nettracer.ws.passengerview.NTPassengerViewService#getAdvancedIncidentPV
+     * @param getAdvancedIncidentPV26
      */
-    public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument getIncidentPVAdvanced(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPVAdvanced26)
+    public com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument getAdvancedIncidentPV(
+        com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument getAdvancedIncidentPV26)
         throws java.rmi.RemoteException {
         try {
             org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
-            _operationClient.getOptions().setAction("urn:getIncidentPVAdvanced");
+            _operationClient.getOptions().setAction("urn:getAdvancedIncidentPV");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
             addPropertyToOperationClient(_operationClient,
@@ -375,11 +375,11 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    getIncidentPVAdvanced26,
+                    getAdvancedIncidentPV26,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://passengerview.ws.nettracer.bagnet.com",
-                            "getIncidentPVAdvanced")));
+                            "getAdvancedIncidentPV")));
 
             //adding SOAP soap_headers
             _serviceClient.addHeadersToEnvelope(env);
@@ -397,12 +397,12 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
             java.lang.Object object = fromOM(_returnEnv.getBody()
                                                        .getFirstElement(),
-                    com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument.class,
+                    com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument.class,
                     getEnvelopeNamespaces(_returnEnv));
             _messageContext.getTransportOut().getSender()
                            .cleanup(_messageContext);
 
-            return (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument) object;
+            return (com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument) object;
         } catch (org.apache.axis2.AxisFault f) {
             org.apache.axiom.om.OMElement faultElt = f.getDetail();
 
@@ -454,15 +454,15 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature for Asynchronous Invocations
-     * @see com.bagnet.nettracer.ws.passengerview.NTPassengerViewService#startgetIncidentPVAdvanced
-     * @param getIncidentPVAdvanced26
+     * @see com.bagnet.nettracer.ws.passengerview.NTPassengerViewService#startgetAdvancedIncidentPV
+     * @param getAdvancedIncidentPV26
      */
-    public void startgetIncidentPVAdvanced(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPVAdvanced26,
+    public void startgetAdvancedIncidentPV(
+        com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument getAdvancedIncidentPV26,
         final com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
         org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
-        _operationClient.getOptions().setAction("urn:getIncidentPVAdvanced");
+        _operationClient.getOptions().setAction("urn:getAdvancedIncidentPV");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
         addPropertyToOperationClient(_operationClient,
@@ -476,11 +476,11 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                getIncidentPVAdvanced26,
+                getAdvancedIncidentPV26,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://passengerview.ws.nettracer.bagnet.com",
-                        "getIncidentPVAdvanced")));
+                        "getAdvancedIncidentPV")));
 
         // adding SOAP soap_headers
         _serviceClient.addHeadersToEnvelope(env);
@@ -498,11 +498,11 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
                         java.lang.Object object = fromOM(resultEnv.getBody()
                                                                   .getFirstElement(),
-                                com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument.class,
+                                com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument.class,
                                 getEnvelopeNamespaces(resultEnv));
-                        callback.receiveResultgetIncidentPVAdvanced((com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument) object);
+                        callback.receiveResultgetAdvancedIncidentPV((com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument) object);
                     } catch (org.apache.axis2.AxisFault e) {
-                        callback.receiveErrorgetIncidentPVAdvanced(e);
+                        callback.receiveErrorgetAdvancedIncidentPV(e);
                     }
                 }
 
@@ -530,38 +530,38 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
                                     m.invoke(ex,
                                         new java.lang.Object[] { messageObject });
 
-                                    callback.receiveErrorgetIncidentPVAdvanced(new java.rmi.RemoteException(
+                                    callback.receiveErrorgetAdvancedIncidentPV(new java.rmi.RemoteException(
                                             ex.getMessage(), ex));
                                 } catch (java.lang.ClassCastException e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 } catch (java.lang.ClassNotFoundException e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 } catch (java.lang.NoSuchMethodException e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 } catch (java.lang.reflect.InvocationTargetException e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 } catch (java.lang.IllegalAccessException e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 } catch (java.lang.InstantiationException e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 } catch (org.apache.axis2.AxisFault e) {
                                     // we cannot intantiate the class - throw the original Axis fault
-                                    callback.receiveErrorgetIncidentPVAdvanced(f);
+                                    callback.receiveErrorgetAdvancedIncidentPV(f);
                                 }
                             } else {
-                                callback.receiveErrorgetIncidentPVAdvanced(f);
+                                callback.receiveErrorgetAdvancedIncidentPV(f);
                             }
                         } else {
-                            callback.receiveErrorgetIncidentPVAdvanced(f);
+                            callback.receiveErrorgetAdvancedIncidentPV(f);
                         }
                     } else {
-                        callback.receiveErrorgetIncidentPVAdvanced(error);
+                        callback.receiveErrorgetAdvancedIncidentPV(error);
                     }
                 }
 
@@ -620,6 +620,30 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
     //http://localhost:8080/axis2/services/NTPassengerViewService
     private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
@@ -643,33 +667,9 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
         return documentElement;
     }
 
-    private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
-        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
-
-        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
-
-        return documentElement;
-    }
-
-    private org.apache.axiom.om.OMElement toOM(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument param,
-        boolean optimizeContent) throws org.apache.axis2.AxisFault {
-        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
-        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
-
-        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
-
-        return documentElement;
-    }
-
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument param,
+        com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
 
@@ -682,7 +682,7 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
 
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument param,
+        com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
 
@@ -705,6 +705,28 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
         org.apache.axiom.om.OMElement param, java.lang.Class type,
         java.util.Map extraNamespaces) throws org.apache.axis2.AxisFault {
         try {
+            if (com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
             if (com.bagnet.nettracer.ws.passengerview.GetIncidentPVDocument.class.equals(
                         type)) {
                 if (extraNamespaces != null) {
@@ -724,28 +746,6 @@ public class NTPassengerViewServiceStub extends org.apache.axis2.client.Stub {
                             extraNamespaces));
                 } else {
                     return com.bagnet.nettracer.ws.passengerview.GetIncidentPVResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
-                }
-            }
-
-            if (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.class.equals(
-                        type)) {
-                if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
-                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
-                            extraNamespaces));
-                } else {
-                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
-                }
-            }
-
-            if (com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument.class.equals(
-                        type)) {
-                if (extraNamespaces != null) {
-                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
-                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
-                            extraNamespaces));
-                } else {
-                    return com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
         } catch (java.lang.Exception e) {

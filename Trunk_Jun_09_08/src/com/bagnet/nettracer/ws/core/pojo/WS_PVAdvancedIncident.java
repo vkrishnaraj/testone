@@ -2,6 +2,10 @@ package com.bagnet.nettracer.ws.core.pojo;
 
 
 
+/**
+ * @author byron
+ *
+ */
 public class WS_PVAdvancedIncident {
 	
 	private String Incident_ID;
@@ -13,6 +17,7 @@ public class WS_PVAdvancedIncident {
 	
 	private String companycode_id;
 	private String errorcode;
+	private String comments;
 	
 
 	/**
@@ -109,9 +114,23 @@ public class WS_PVAdvancedIncident {
 	}
 
 	/**
-	 * @param items the items to set
+	 * @param passengers the passengers to set
 	 */
-	public void setItems(WS_PVPassenger[] passengers) {
+	public void setPassengers(WS_PVPassenger[] passengers) {
 		this.passengers = passengers;
+	}
+
+	/**
+	 * @return the comments
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 }

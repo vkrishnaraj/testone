@@ -13,7 +13,6 @@ import com.bagnet.nettracer.ws.core.NTCoreServiceSkeleton;
  */
 public class NTPassengerViewServiceImplementation extends NTPassengerViewServiceSkeleton {
   
-	@Deprecated
 	/**
      * Auto generated method signature
      * @param getIncidentPV
@@ -23,12 +22,12 @@ public class NTPassengerViewServiceImplementation extends NTPassengerViewService
       return new PassengerViewUtil().getIncidentPV(getIncidentPV);
     }
     
-    /**
-     * Auto generated method signature
-     * @param getIncidentPVAdvanced
-     */
-    public com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedResponseDocument getIncidentPVAdvanced(
-        com.bagnet.nettracer.ws.passengerview.GetIncidentPVAdvancedDocument getIncidentPVAdvanced) {
-    	return new PassengerViewUtil().getIncidentPVAdvanced(getIncidentPVAdvanced);
+  /**
+   * Auto generated method signature
+   * @param getAdvancedIncidentPV
+   */
+  public com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVResponseDocument getAdvancedIncidentPV(
+      com.bagnet.nettracer.ws.passengerview.GetAdvancedIncidentPVDocument getAdvancedIncidentPV) {
+    	return new PassengerViewUtil().getAdvancedIncidentPV(getAdvancedIncidentPV);
     }
 }

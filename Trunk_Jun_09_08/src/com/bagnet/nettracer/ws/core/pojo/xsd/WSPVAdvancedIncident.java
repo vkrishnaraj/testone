@@ -15,8 +15,48 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sFC8F9E68937D2AB189E65DF85DA86C7B")
+            "schemaorg_apache_xmlbeans.system.s336AA68855A9C7F4EC085B140BA0FFE6")
                                                                                                                            .resolveHandle("wspvadvancedincident350dtype");
+
+    /**
+     * Gets the "comments" element
+     */
+    java.lang.String getComments();
+
+    /**
+     * Gets (as xml) the "comments" element
+     */
+    org.apache.xmlbeans.XmlString xgetComments();
+
+    /**
+     * Tests for nil "comments" element
+     */
+    boolean isNilComments();
+
+    /**
+     * True if has "comments" element
+     */
+    boolean isSetComments();
+
+    /**
+     * Sets the "comments" element
+     */
+    void setComments(java.lang.String comments);
+
+    /**
+     * Sets (as xml) the "comments" element
+     */
+    void xsetComments(org.apache.xmlbeans.XmlString comments);
+
+    /**
+     * Nils the "comments" element
+     */
+    void setNilComments();
+
+    /**
+     * Unsets the "comments" element
+     */
+    void unsetComments();
 
     /**
      * Gets the "companycode_id" element
