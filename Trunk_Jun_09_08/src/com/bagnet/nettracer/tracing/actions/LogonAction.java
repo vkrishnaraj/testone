@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -32,7 +31,6 @@ import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
 import com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm;
 import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
-import com.bagnet.nettracer.tracing.forms.SearchOnHandForm;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
@@ -276,19 +274,19 @@ public class LogonAction extends Action {
 													} else {
 														if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_BAGS_TO_BE_DELIVERED)) {
 															BagService bs = new BagService();
-															SearchOnHandForm daform = new SearchOnHandForm();
-															daform.setStatus_ID("" + TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
-															daform.setHeldCompany(s.getCompany().getCompanyCode_ID());
-															daform.setHeldStation(s.getStationcode());
+															SearchIncidentForm daform = new SearchIncidentForm();
+															daform.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
+															daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
+															daform.setStationassigned_ID(s.getStation_ID());
 															List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false);
 															if (resultlist != null && resultlist.size() > 0)
 																entries = ((Long) resultlist.get(0)).intValue();
 														} else {
 															if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_BAGS_IN_STATION)) {
 																BagService bs = new BagService();
-																SearchOnHandForm daform = new SearchOnHandForm();
-																daform.setHeldCompany(s.getCompany().getCompanyCode_ID());
-																daform.setHeldStation(s.getStationcode());
+																SearchIncidentForm daform = new SearchIncidentForm();
+																daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
+																daform.setStationassigned_ID(s.getStation_ID());
 																List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true);
 																if (resultlist != null && resultlist.size() > 0)
 																	entries = ((Long) resultlist.get(0)).intValue();

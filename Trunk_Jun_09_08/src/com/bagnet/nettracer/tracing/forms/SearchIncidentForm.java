@@ -3,11 +3,13 @@ package com.bagnet.nettracer.tracing.forms;
 import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.bmo.ItemTypeBMO;
 import com.bagnet.nettracer.tracing.bmo.ManufacturerBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.ItemType;
 
 /**
  * @author Ankur Gupta
@@ -16,49 +18,49 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
  */
 public final class SearchIncidentForm extends ValidatorForm {
 
-	private String incident_ID;
+	private String incident_ID = "";
 	private int itemType_ID;
-	private String s_createtime;
-	private String e_createtime;
-	private String agent; // create agent username
+	private String s_createtime = "";
+	private String e_createtime = "";
+	private String agent = ""; // create agent username
 
 	private int stationcreated_ID;
 	private int stationassigned_ID;
-	private String agentassigned;
-	private String companycreated_ID;
-	private String ticketnumber;
-	private String airline; // also for custom query
-	private String flightnum; // also for custom query
-	private String claimchecknum; // also for custom query
-	private String firstname; // also for custom query
-	private String middlename; // also for custom query
-	private String lastname; // also for custom query
-	private String companycode_ID; // also for custom query
-	private String membershipnum; // also for custom query
+	private String agentassigned = "";
+	private String companycreated_ID = "";
+	private String ticketnumber = "";
+	private String airline = ""; // also for custom query
+	private String flightnum = ""; // also for custom query
+	private String claimchecknum = ""; // also for custom query
+	private String firstname = ""; // also for custom query
+	private String middlename = ""; // also for custom query
+	private String lastname = ""; // also for custom query
+	private String companycode_ID = ""; // also for custom query
+	private String membershipnum = ""; // also for custom query
 	private int status_ID;
 	private int[] status_IDs;
 
 	// custom query on top of search incident
-	private String recordlocator;
-	private String email;
-	private String address1;
-	private String address2;
-	private String city;
-	private String state_ID;
-	private String zip;
-	private String province;
-	private String phone;
-	private String countrycode_ID;
+	private String recordlocator = "";
+	private String email = "";
+	private String address1 = "";
+	private String address2 = "";
+	private String city = "";
+	private String state_ID = "";
+	private String zip = "";
+	private String province = "";
+	private String phone = "";
+	private String countrycode_ID = "";
 
 	private int manufacturer_ID;
-	private String manufacturer_other;
-	private String color;
-	private String bagtype;
+	private String manufacturer_other = "";
+	private String color = "";
+	private String bagtype = "";
 	private int xdescelement_ID1;
 	private int xdescelement_ID2;
 	private int xdescelement_ID3;
 	private int category_ID;
-	private String description;
+	private String description = "";
 	private int noAssignedAgent;
 
 	/**
@@ -683,6 +685,9 @@ public final class SearchIncidentForm extends ValidatorForm {
 	 * @return Visual representation of item type information.
 	 */
 	public String getItemTypeString() {
+		if (itemType_ID > 0) {
+			return ItemTypeBMO.getItemType(itemType_ID).getDescription();
+		}
 		return null;
 	}
 	

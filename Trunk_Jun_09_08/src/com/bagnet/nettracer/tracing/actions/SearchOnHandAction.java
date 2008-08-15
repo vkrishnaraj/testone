@@ -26,15 +26,13 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.forms.SearchOnHandForm;
+import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.wt.BetaWtConnector;
-import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
@@ -66,7 +64,7 @@ public class SearchOnHandAction extends Action {
 		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
 		request.setAttribute("oStatusList", oStatusList);
 		
-		SearchOnHandForm daform = (SearchOnHandForm) form;
+		SearchIncidentForm daform = (SearchIncidentForm) form;
 		
 		// user passed in worldtracer id, so find it in db or retrieve it from worldtracer
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
@@ -97,9 +95,9 @@ public class SearchOnHandAction extends Action {
 		if (request.getParameter("search") == null && request.getParameter("generateReport") == null) {
 			
 			//daform.setAirline(user.getStation().getCompany().getCompanyCode_ID());
-			daform.setFoundCompany(user.getStation().getCompany().getCompanyCode_ID());
-			daform.setHeldCompany(user.getStation().getCompany().getCompanyCode_ID());
-			daform.setStatus_ID(Integer.toString(TracingConstants.OHD_STATUS_OPEN));
+			daform.setCompanycreated_ID(user.getStation().getCompany().getCompanyCode_ID());
+			daform.setCompanycode_ID(user.getStation().getCompany().getCompanyCode_ID());
+			daform.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
 			return (mapping.findForward(TracingConstants.SEARCH_ONHAND));
 		}
 

@@ -26,7 +26,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.forms.SearchOnHandForm;
+import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -67,10 +67,10 @@ public class ViewOnhands extends Action {
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_BAGS_IN_STATION);
 
 		BagService bs = new BagService();
-		SearchOnHandForm daform = new SearchOnHandForm();
+		SearchIncidentForm daform = new SearchIncidentForm();
 		//daform.setStatus_ID("" + TracingConstants.OHD_STATUS_OPEN);
-		daform.setHeldCompany(agent_station.getCompany().getCompanyCode_ID());
-		daform.setHeldStation(agent_station.getStationcode());
+		daform.setCompanycode_ID(agent_station.getCompany().getCompanyCode_ID());
+		daform.setStationassigned_ID(agent_station.getStation_ID());
 
 		List resultlist = null;
 

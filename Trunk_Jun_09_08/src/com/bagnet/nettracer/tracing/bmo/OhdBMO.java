@@ -701,6 +701,7 @@ public class OhdBMO {
 			return q.list();
 		} catch (Exception e) {
 			logger.error("unable to retrieve ohd: " + e);
+			e.printStackTrace();
 			return null;
 		} finally {
 			if (sess != null) {

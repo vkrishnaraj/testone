@@ -18,7 +18,7 @@
 		<form-bean name="forwardOnHandForm" type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
 		<form-bean name="forwardMessageForm" type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
 		<form-bean name="searchIncidentForm" type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm" />
-		<form-bean name="searchOnHandForm" type="com.bagnet.nettracer.tracing.forms.SearchOnHandForm" />
+		<!--  <form-bean name="searchOnHandForm" type="com.bagnet.nettracer.tracing.forms.SearchOnHandForm" /> -->
 		<form-bean name="activeTracingForm" type="com.bagnet.nettracer.tracing.forms.ActiveTracingForm" />
 		<form-bean name="OnHandForm" type="com.bagnet.nettracer.tracing.forms.OnHandForm" />
 		<form-bean name="requestOnHandForm" type="com.bagnet.nettracer.tracing.forms.RequestOnHandForm" />
@@ -376,7 +376,7 @@
 		<action path="/searchIncident" type="com.bagnet.nettracer.tracing.actions.SearchIncidentAction" name="searchIncidentForm" scope="request" validate="false"></action>
 
 		<!-- search on-hands forms -->
-		<action path="/searchOnHand" type="com.bagnet.nettracer.tracing.actions.SearchOnHandAction" name="searchOnHandForm" scope="request" validate="false"></action>
+		<action path="/searchOnHand" type="com.bagnet.nettracer.tracing.actions.SearchOnHandAction" name="searchIncidentForm" scope="request" validate="false"></action>
 
 		<action path="/customQuery" type="com.bagnet.nettracer.tracing.actions.CustomQueryAction" name="searchIncidentForm" scope="request" validate="false"></action>
 

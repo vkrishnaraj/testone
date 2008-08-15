@@ -2727,10 +2727,10 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			parameters.put("showdetail", "1");
+			parameters.put("form", request.getAttribute("searchIncidentForm"));
 			
 			IncidentBMO bmo = new IncidentBMO();
 			BagService bs = new BagService();
-			
 
 			ReportBMO rbmo = new ReportBMO(request);
 			JasperReport jasperReport = getCompiledReport(ReportingConstants.SEARCH_ONHAND_RPT_NAME, reportPath);

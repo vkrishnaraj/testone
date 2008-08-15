@@ -27,21 +27,21 @@
   <script language="javascript">
     <!--
 function goprev() {
-  o = document.searchOnHandForm;
+  o = document.searchIncidentForm;
   o.prevpage.value = "1";
   o.pagination.value="1";
   o.submit();
 }
 
 function gonext() {
-  o = document.searchOnHandForm;
+  o = document.searchIncidentForm;
   o.nextpage.value="1";
   o.pagination.value="1";
   o.submit();
 }
 
 function gopage(i) {
-  o = document.searchOnHandForm;
+  o = document.searchIncidentForm;
   o.currpage.value = i;
   o.pagination.value="1";
   o.submit();
@@ -92,7 +92,7 @@ function gopage(i) {
                 <td>
                   <bean:message key="colname.on_hand_report_number" />
                   <br>
-                  <html:text property="ohd_ID" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
+                  <html:text property="incident_ID" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
                 <td>
                   <bean:message key="colname.status" />
@@ -145,7 +145,7 @@ function gopage(i) {
                 <td>
                   <bean:message key="colname.found_company" />
                   <br>
-                  <html:select property="foundCompany" styleClass="dropdown">
+                  <html:select property="companycreated_ID" styleClass="dropdown">
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
@@ -155,17 +155,17 @@ function gopage(i) {
                 <td>
                   <bean:message key="colname.found_station_nobr" />
                   <br>
-                  <html:select property="foundStation" styleClass="dropdown">
+                  <html:select property="stationcreated_ID" styleClass="dropdown">
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="stationlist" property="stationcode" labelProperty="stationcode" />
+                    <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
                   </html:select>
                 </td>
                 <td>
                   <bean:message key="colname.holding_company" />
                   <br>
-                  <html:select property="heldCompany" styleClass="dropdown">
+                  <html:select property="companycode_ID" styleClass="dropdown">
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
@@ -175,11 +175,11 @@ function gopage(i) {
                 <td>
                   <bean:message key="colname.holding_station_nobr" />
                   <br>
-                  <html:select property="heldStation" styleClass="dropdown">
+                  <html:select property="stationassigned_ID" styleClass="dropdown">
                     <html:option value="">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="stationlist" property="stationcode" labelProperty="stationcode" />
+                    <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
                   </html:select>
                 </td>
               </tr>
@@ -189,8 +189,8 @@ function gopage(i) {
                   (
                   <%= a.getDateformat().getFormat() %>)
                   <br>
-                  <html:text property="s_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchOnHandForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
-                  <html:text property="e_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchOnHandForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                  <html:text property="s_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
+                  <html:text property="e_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                 <td colspan=2>
                   <bean:message key="colname.agentusername" />
                   <br>

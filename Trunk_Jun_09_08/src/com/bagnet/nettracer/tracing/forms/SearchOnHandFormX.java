@@ -8,12 +8,12 @@ import org.apache.struts.validator.ValidatorForm;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public final class SearchOnHandForm extends ValidatorForm {
+public final class SearchOnHandFormX extends ValidatorForm {
 
-	private String ohd_ID = "";
+	private String ohd_ID = ""; // DIFFERENT (incident_ID)
 	private String status_ID = "";
 	private String ticketnumber = "";
-	private int OHD_categorytype_ID;
+	private int OHD_categorytype_ID; // DIFFERENT
 	private String description = "";
 	private String s_createtime = "";
 	private String e_createtime = "";
@@ -22,11 +22,11 @@ public final class SearchOnHandForm extends ValidatorForm {
 	private String firstname = "";
 	private String middlename = "";
 	private String lastname = "";
-	private String foundStation = "";
-	private String heldStation = "";
-	private String foundCompany = "";
-	private String heldCompany = "";
-	private String agent; // create agent username
+	private String foundStation = ""; // DIFFERENT (stationcreated_ID)
+	private String heldStation = ""; // DIFFERENT (stationassigned_ID)
+	private String foundCompany = ""; // DIFFERENT (companycreated_ID)
+	private String heldCompany = ""; // DIFFERENT (companycode_ID)
+	private String agent; // 
 
 	/**
 	 * @return Returns the agent.
@@ -121,7 +121,7 @@ public final class SearchOnHandForm extends ValidatorForm {
 	/**
 	 * @return Returns the foundCompany.
 	 */
-	public String getFoundCompany() {
+	public String getCompanycreated_ID() {
 		return foundCompany;
 	}
 
@@ -129,14 +129,14 @@ public final class SearchOnHandForm extends ValidatorForm {
 	 * @param foundCompany
 	 *          The foundCompany to set.
 	 */
-	public void setFoundCompany(String foundCompany) {
+	public void setCompanycreated_ID(String foundCompany) {
 		this.foundCompany = foundCompany;
 	}
 
 	/**
 	 * @return Returns the foundStation.
 	 */
-	public String getFoundStation() {
+	public String getStationcreated_ID() {
 		return foundStation;
 	}
 
@@ -144,14 +144,14 @@ public final class SearchOnHandForm extends ValidatorForm {
 	 * @param foundStation
 	 *          The foundStation to set.
 	 */
-	public void setFoundStation(String foundStation) {
+	public void setStationcreated_ID(String foundStation) {
 		this.foundStation = foundStation;
 	}
 
 	/**
 	 * @return Returns the heldCompany.
 	 */
-	public String getHeldCompany() {
+	public String getCompanycode_ID() {
 		return heldCompany;
 	}
 
@@ -159,14 +159,14 @@ public final class SearchOnHandForm extends ValidatorForm {
 	 * @param heldCompany
 	 *          The heldCompany to set.
 	 */
-	public void setHeldCompany(String heldCompany) {
+	public void setCompanycode_ID(String heldCompany) {
 		this.heldCompany = heldCompany;
 	}
 
 	/**
 	 * @return Returns the heldStation.
 	 */
-	public String getHeldStation() {
+	public String getStationassigned_ID() {
 		return heldStation;
 	}
 
@@ -174,7 +174,7 @@ public final class SearchOnHandForm extends ValidatorForm {
 	 * @param heldStation
 	 *          The heldStation to set.
 	 */
-	public void setHeldStation(String heldStation) {
+	public void setStationassigned_ID(String heldStation) {
 		this.heldStation = heldStation;
 	}
 
@@ -211,7 +211,7 @@ public final class SearchOnHandForm extends ValidatorForm {
 	/**
 	 * @return Returns the oHD_categorytype_ID.
 	 */
-	public int getOHD_categorytype_ID() {
+	public int getCategory_ID() {
 		return OHD_categorytype_ID;
 	}
 
@@ -219,14 +219,14 @@ public final class SearchOnHandForm extends ValidatorForm {
 	 * @param ohd_categorytype_id
 	 *          The oHD_categorytype_ID to set.
 	 */
-	public void setOHD_categorytype_ID(int ohd_categorytype_id) {
+	public void setCategory_ID(int ohd_categorytype_id) {
 		OHD_categorytype_ID = ohd_categorytype_id;
 	}
 
 	/**
 	 * @return Returns the ohd_ID.
 	 */
-	public String getOhd_ID() {
+	public String getIncident_ID() {
 		return ohd_ID;
 	}
 
@@ -234,7 +234,7 @@ public final class SearchOnHandForm extends ValidatorForm {
 	 * @param ohd_ID
 	 *          The ohd_ID to set.
 	 */
-	public void setOhd_ID(String ohd_ID) {
+	public void setIncident_ID(String ohd_ID) {
 		this.ohd_ID = ohd_ID;
 	}
 

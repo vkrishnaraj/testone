@@ -7,7 +7,6 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.net.URL;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,8 +34,8 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -92,7 +91,6 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
-import com.bagnet.nettracer.tracing.forms.SearchOnHandForm;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
@@ -1373,15 +1371,28 @@ public class BagService {
 		}
 	}
 
-	public List findOnHandBagsBySearchCriteria(SearchOnHandForm daform, Agent user, int rowsperpage, int currpage, boolean isCount, boolean notClosed) {
+	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean isCount, boolean notClosed) {
 		try {
 			OhdBMO oBMO = new OhdBMO();
 			Ohd_DTO oDTO = new Ohd_DTO();
 			BeanUtils.copyProperties(oDTO, daform);
+			oDTO.setOhd_ID(daform.getIncident_ID());
+			oDTO.setOHD_categorytype_ID("" + daform.getCategory_ID());
+			oDTO.setFoundCompany(daform.getCompanycreated_ID());
+			oDTO.setHeldCompany(daform.getCompanycode_ID());
+			if (daform.getStationcreated_ID() > 0) {
+				oDTO.setFoundStation(StationBMO.getStation(daform.getStationcreated_ID()).getStationcode());
+			}
+			
+			if (daform.getStationassigned_ID() > 0) {
+				oDTO.setHeldStation(StationBMO.getStation(daform.getStationassigned_ID()).getStationcode());
+			}
+			
 			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed);
 
 		} catch (Exception e) {
 			logger.error("unable to find on-hands due to bean copyproperties error: " + e);
+			e.printStackTrace();
 			return null;
 		}
 	}
