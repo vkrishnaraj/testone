@@ -5,8 +5,9 @@ import java.util.Date;
 public class WS_QOHD {
 
 	private String foundAtStation;
-	private Date foundDateTime;
+	private Date founddatetime;
 	private String bagTagNumber;
+	private String comment;
 	
 
 	/**
@@ -25,13 +26,13 @@ public class WS_QOHD {
 	 * @return the foundDateTime
 	 */
 	public Date getFounddatetime() {
-		return foundDateTime;
+		return founddatetime;
 	}
 	/**
 	 * @param founddatetime the foundDateTime to set
 	 */
 	public void setFounddatetime(Date foundDateTime) {
-		this.foundDateTime = foundDateTime;
+		this.founddatetime = foundDateTime;
 	}
 
 	/**
@@ -45,5 +46,17 @@ public class WS_QOHD {
 	 */
 	public void setBagTagNumber(String bagTagNumber) {
 		this.bagTagNumber = bagTagNumber;
+	}
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }

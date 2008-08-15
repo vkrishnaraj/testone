@@ -16,9 +16,11 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
     implements com.bagnet.nettracer.ws.core.pojo.xsd.WSQOHD {
     private static final javax.xml.namespace.QName BAGTAGNUMBER$0 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "bagTagNumber");
-    private static final javax.xml.namespace.QName FOUNDATSTATION$2 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName COMMENT$2 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+            "comment");
+    private static final javax.xml.namespace.QName FOUNDATSTATION$4 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "foundAtStation");
-    private static final javax.xml.namespace.QName FOUNDDATETIME$4 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName FOUNDDATETIME$6 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "founddatetime");
 
     public WSQOHDImpl(org.apache.xmlbeans.SchemaType sType) {
@@ -166,6 +168,146 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
     }
 
     /**
+     * Gets the "comment" element
+     */
+    public java.lang.String getComment() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(COMMENT$2,
+                    0);
+
+            if (target == null) {
+                return null;
+            }
+
+            return target.getStringValue();
+        }
+    }
+
+    /**
+     * Gets (as xml) the "comment" element
+     */
+    public org.apache.xmlbeans.XmlString xgetComment() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COMMENT$2,
+                    0);
+
+            return target;
+        }
+    }
+
+    /**
+     * Tests for nil "comment" element
+     */
+    public boolean isNilComment() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COMMENT$2,
+                    0);
+
+            if (target == null) {
+                return false;
+            }
+
+            return target.isNil();
+        }
+    }
+
+    /**
+     * True if has "comment" element
+     */
+    public boolean isSetComment() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            return get_store().count_elements(COMMENT$2) != 0;
+        }
+    }
+
+    /**
+     * Sets the "comment" element
+     */
+    public void setComment(java.lang.String comment) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(COMMENT$2,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .add_element_user(COMMENT$2);
+            }
+
+            target.setStringValue(comment);
+        }
+    }
+
+    /**
+     * Sets (as xml) the "comment" element
+     */
+    public void xsetComment(org.apache.xmlbeans.XmlString comment) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COMMENT$2,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(COMMENT$2);
+            }
+
+            target.set(comment);
+        }
+    }
+
+    /**
+     * Nils the "comment" element
+     */
+    public void setNilComment() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COMMENT$2,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(COMMENT$2);
+            }
+
+            target.setNil();
+        }
+    }
+
+    /**
+     * Unsets the "comment" element
+     */
+    public void unsetComment() {
+        synchronized (monitor()) {
+            check_orphaned();
+            get_store().remove_element(COMMENT$2, 0);
+        }
+    }
+
+    /**
      * Gets the "foundAtStation" element
      */
     public java.lang.String getFoundAtStation() {
@@ -174,7 +316,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FOUNDATSTATION$2,
+                                                           .find_element_user(FOUNDATSTATION$4,
                     0);
 
             if (target == null) {
@@ -194,7 +336,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FOUNDATSTATION$2,
+                                                         .find_element_user(FOUNDATSTATION$4,
                     0);
 
             return target;
@@ -210,7 +352,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FOUNDATSTATION$2,
+                                                         .find_element_user(FOUNDATSTATION$4,
                     0);
 
             if (target == null) {
@@ -228,7 +370,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(FOUNDATSTATION$2) != 0;
+            return get_store().count_elements(FOUNDATSTATION$4) != 0;
         }
     }
 
@@ -241,12 +383,12 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FOUNDATSTATION$2,
+                                                           .find_element_user(FOUNDATSTATION$4,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(FOUNDATSTATION$2);
+                                                               .add_element_user(FOUNDATSTATION$4);
             }
 
             target.setStringValue(foundAtStation);
@@ -262,12 +404,12 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FOUNDATSTATION$2,
+                                                         .find_element_user(FOUNDATSTATION$4,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(FOUNDATSTATION$2);
+                                                             .add_element_user(FOUNDATSTATION$4);
             }
 
             target.set(foundAtStation);
@@ -283,12 +425,12 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FOUNDATSTATION$2,
+                                                         .find_element_user(FOUNDATSTATION$4,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(FOUNDATSTATION$2);
+                                                             .add_element_user(FOUNDATSTATION$4);
             }
 
             target.setNil();
@@ -301,7 +443,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
     public void unsetFoundAtStation() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(FOUNDATSTATION$2, 0);
+            get_store().remove_element(FOUNDATSTATION$4, 0);
         }
     }
 
@@ -314,7 +456,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FOUNDDATETIME$4,
+                                                           .find_element_user(FOUNDDATETIME$6,
                     0);
 
             if (target == null) {
@@ -334,7 +476,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlDateTime target = null;
             target = (org.apache.xmlbeans.XmlDateTime) get_store()
-                                                           .find_element_user(FOUNDDATETIME$4,
+                                                           .find_element_user(FOUNDDATETIME$6,
                     0);
 
             return target;
@@ -350,7 +492,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlDateTime target = null;
             target = (org.apache.xmlbeans.XmlDateTime) get_store()
-                                                           .find_element_user(FOUNDDATETIME$4,
+                                                           .find_element_user(FOUNDDATETIME$6,
                     0);
 
             if (target == null) {
@@ -368,7 +510,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(FOUNDDATETIME$4) != 0;
+            return get_store().count_elements(FOUNDDATETIME$6) != 0;
         }
     }
 
@@ -381,12 +523,12 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FOUNDDATETIME$4,
+                                                           .find_element_user(FOUNDDATETIME$6,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(FOUNDDATETIME$4);
+                                                               .add_element_user(FOUNDDATETIME$6);
             }
 
             target.setCalendarValue(founddatetime);
@@ -402,12 +544,12 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlDateTime target = null;
             target = (org.apache.xmlbeans.XmlDateTime) get_store()
-                                                           .find_element_user(FOUNDDATETIME$4,
+                                                           .find_element_user(FOUNDDATETIME$6,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlDateTime) get_store()
-                                                               .add_element_user(FOUNDDATETIME$4);
+                                                               .add_element_user(FOUNDDATETIME$6);
             }
 
             target.set(founddatetime);
@@ -423,12 +565,12 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
 
             org.apache.xmlbeans.XmlDateTime target = null;
             target = (org.apache.xmlbeans.XmlDateTime) get_store()
-                                                           .find_element_user(FOUNDDATETIME$4,
+                                                           .find_element_user(FOUNDDATETIME$6,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlDateTime) get_store()
-                                                               .add_element_user(FOUNDDATETIME$4);
+                                                               .add_element_user(FOUNDDATETIME$6);
             }
 
             target.setNil();
@@ -441,7 +583,7 @@ public class WSQOHDImpl extends org.apache.xmlbeans.impl.values.XmlComplexConten
     public void unsetFounddatetime() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(FOUNDDATETIME$4, 0);
+            get_store().remove_element(FOUNDDATETIME$6, 0);
         }
     }
 }

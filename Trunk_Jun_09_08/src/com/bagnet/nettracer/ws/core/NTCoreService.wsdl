@@ -206,6 +206,7 @@
             <xs:complexType name="WS_QOHD">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="bagTagNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>

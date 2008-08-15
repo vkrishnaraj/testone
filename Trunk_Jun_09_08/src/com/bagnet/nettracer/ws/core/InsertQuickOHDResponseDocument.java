@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core;
  */
 public interface InsertQuickOHDResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertQuickOHDResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
+            "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
                                                                                                                            .resolveHandle("insertquickohdresponse3db2doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface InsertQuickOHDResponseDocument extends org.apache.xmlbeans.XmlO
      */
     public interface InsertQuickOHDResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertQuickOHDResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
+                "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
                                                                                                                                .resolveHandle("insertquickohdresponse5fdeelemtype");
 
         /**

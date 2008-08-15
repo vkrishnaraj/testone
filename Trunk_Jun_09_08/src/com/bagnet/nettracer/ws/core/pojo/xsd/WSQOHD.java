@@ -15,7 +15,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSQOHD extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSQOHD.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s2182E89F12DCED7BC68D5ADCA1063463")
+            "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
                                                                                                                            .resolveHandle("wsqohd912dtype");
 
     /**
@@ -57,6 +57,46 @@ public interface WSQOHD extends org.apache.xmlbeans.XmlObject {
      * Unsets the "bagTagNumber" element
      */
     void unsetBagTagNumber();
+
+    /**
+     * Gets the "comment" element
+     */
+    java.lang.String getComment();
+
+    /**
+     * Gets (as xml) the "comment" element
+     */
+    org.apache.xmlbeans.XmlString xgetComment();
+
+    /**
+     * Tests for nil "comment" element
+     */
+    boolean isNilComment();
+
+    /**
+     * True if has "comment" element
+     */
+    boolean isSetComment();
+
+    /**
+     * Sets the "comment" element
+     */
+    void setComment(java.lang.String comment);
+
+    /**
+     * Sets (as xml) the "comment" element
+     */
+    void xsetComment(org.apache.xmlbeans.XmlString comment);
+
+    /**
+     * Nils the "comment" element
+     */
+    void setNilComment();
+
+    /**
+     * Unsets the "comment" element
+     */
+    void unsetComment();
 
     /**
      * Gets the "foundAtStation" element

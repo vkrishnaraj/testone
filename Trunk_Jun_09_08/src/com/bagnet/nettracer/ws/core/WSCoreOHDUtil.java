@@ -565,6 +565,9 @@ public class WSCoreOHDUtil {
   	Agent agent = WSCoreUtil.getAgent(sessionId);
 
   	
+  	// TODO: HERE
+  	String comment = insertFields.getSi().getComment();
+  	
   	String bagTagNumber = insertFields.getSi().getBagTagNumber();
   	if (bagTagNumber == null || bagTagNumber.length() == 0) {
   		si.setErrorResponse(errorMsg + "Invalid Bag Tag Number");
@@ -593,6 +596,8 @@ public class WSCoreOHDUtil {
     	res.setReturn(si);
   	}
   	
+ 
+  	
   	OHD onhand = OHDUtils.getExistingOnhandWithin24HoursAtStation(bagTagNumber, foundStation);
   	
   	// If OHD within last 24 hours with this ID:
@@ -601,7 +606,7 @@ public class WSCoreOHDUtil {
   		si.setErrorResponse(errorMsg + "Duplicate of OHD inserted in last 24 hours at station.");
   	} else {
 
-  		OHD ohd = createOnhand(agent, bagTagNumber, foundStation, foundDate);
+  		OHD ohd = createOnhand(agent, bagTagNumber, foundStation, foundDate, comment);
 
   		OhdBMO obmo = new OhdBMO();
   		boolean insertResult = obmo.insertOHD(ohd, ohd.getAgent(), foundStation);
@@ -691,7 +696,7 @@ public class WSCoreOHDUtil {
     	}
   	} else {
 
-  		onhand = createOnhand(agent, bagTagNumber, foundStation, foundDate);
+  		onhand = createOnhand(agent, bagTagNumber, foundStation, foundDate, null);
 
   	}
   	
@@ -842,7 +847,7 @@ public class WSCoreOHDUtil {
     return resDoc;
   }
   
-  public static OHD createOnhand(Agent agent, String bagTagNumber, Station foundStation, Date foundDate) {
+  public static OHD createOnhand(Agent agent, String bagTagNumber, Station foundStation, Date foundDate, String comment) {
 		OHD ohd = new OHD();
 		
 		ohd.setAgent(agent);
@@ -855,6 +860,17 @@ public class WSCoreOHDUtil {
 		ohd.setOhd_type(TracingConstants.MASS_OHD_TYPE);
 		ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, agent
 				.getDefaultlocale().toString()));
+		
+		Remark r = new Remark();
+		r.setAgent(agent);
+		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+		r.setOhd(ohd);
+		r.setRemarktext(comment);
+		r.setRemarktype(TracingConstants.REMARK_REGULAR);
+		
+		Set<Remark> remarks = new HashSet<Remark>();
+		remarks.add(r);
+		ohd.setRemarks(remarks);
 		
 		return ohd;
   }
