@@ -105,10 +105,10 @@ public class BDOAction extends Action {
 
 					if (null != bdo.getIncident()
 							&& !bdo.getIncident().toString().equals("")) {
-						if (null != bdo.getIncident().getWt_id()
-								&& !"".equals(bdo.getIncident().getWt_id())) {
+						if (null != bdo.getIncident().getWtFile()
+								&& !"".equals(bdo.getIncident().getWtFile())) {
 							request.setAttribute("wt_id", bdo.getIncident()
-									.getWt_id());
+									.getWtFile());
 						}
 					} else {
 						if (null != bdo.getOhd()

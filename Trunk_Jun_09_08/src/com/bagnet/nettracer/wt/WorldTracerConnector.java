@@ -15,7 +15,7 @@ public interface WorldTracerConnector {
 	String insertOhd(Map<WorldTracerField, List<String>> fieldMap, String companyCode, String stationCode)
 			throws WorldTracerException;
 
-	String closeIncident(Map<WorldTracerField, List<String>> fieldMap, String wt_id, String stationCode)
+	String closeIncident(Map<WorldTracerField, List<String>> fieldMap, String wtId, String stationCode)
 			throws WorldTracerException;
 
 	String closeOhd(Map<WorldTracerField, List<String>> fieldMap, String wt_id, String wt_stationcode)
@@ -29,6 +29,10 @@ public interface WorldTracerConnector {
 	List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day) throws WorldTracerException;
 	
 	Worldtracer_Actionfiles getActionFile(String airline, String station, ActionFileType actionFileType, int day, int itemNum) throws WorldTracerException;
+
+	String findAHL(String parameter) throws WorldTracerException;
+
+	String findOHD(String parameter) throws WorldTracerException;
 	
 
 }

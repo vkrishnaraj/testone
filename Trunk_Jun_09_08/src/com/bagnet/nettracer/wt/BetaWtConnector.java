@@ -2,6 +2,7 @@ package com.bagnet.nettracer.wt;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -43,12 +44,25 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	private HttpClient client;
 	
-	public BetaWtConnector(String companyCode) {
+	private static Map<String, BetaWtConnector> _instanceMap = new HashMap<String, BetaWtConnector>();
+
+	private BetaWtConnector(String companyCode) {
 		this.wtCompanycode = companyCode;
 		client = connectWT(WorldTracerUtils.getWt_suffix_airline(companyCode) + "/", companyCode);
 	}
 	
-	public  static HttpClient connectWT(String urlext,String companycode) {
+	public static synchronized WorldTracerConnector getInstance(String companyCode) {
+		if (_instanceMap == null) {
+			_instanceMap = new HashMap<String, BetaWtConnector>();
+			_instanceMap.put(companyCode.toUpperCase(), new BetaWtConnector(companyCode));
+		}
+		else if (_instanceMap.get(companyCode.toUpperCase()) == null) {
+			_instanceMap.put(companyCode.toUpperCase(), new BetaWtConnector(companyCode));
+		}
+		return _instanceMap.get(companyCode.toUpperCase());
+	}
+	
+	private HttpClient connectWT(String urlext,String companycode) {
 
 		HttpClient new_client = new HttpClient(new MultiThreadedHttpConnectionManager());
 
@@ -61,7 +75,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		if(wt_http == null || wt_http.trim().length() == 0) {
 			wt_http = TracingConstants.DEFAULT_WT_URL;
 		}
-		String wt_url = "http://"+wt_http+"/";
+
 		Credentials defaultcreds = new UsernamePasswordCredentials(wt_user, wt_pass);
 		new_client.getState().setCredentials(new AuthScope(wt_http, 80, AuthScope.ANY_REALM), defaultcreds);
 
@@ -163,8 +177,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 	}
 	
-	public void sendFwd(Map<WorldTracerField, List<String>> fieldMap, String wt_CompanyCode)
-	throws WorldTracerException {
+	public void sendFwd(Map<WorldTracerField, List<String>> fieldMap, String wt_CompanyCode) throws WorldTracerException {
 		
 	}
 
@@ -261,7 +274,6 @@ public class BetaWtConnector implements WorldTracerConnector {
 	}
 	
 	public void eraseActionFile(String station_id, String companyCode, ActionFileType area, int day, int itemNum) throws WorldTracerException {
-		//TODO
 		String responseBody = null;
 		String wt_http = WorldTracerUtils.getWt_url(wtCompanycode);
 		StringBuilder sb = new StringBuilder("http://" + wt_http + "/");
@@ -333,6 +345,25 @@ public class BetaWtConnector implements WorldTracerConnector {
 		return parseActionFileData(airline, station, actionFileType, day, afData);
 	}
 
+
+	public String findAHL(String wt_id) throws WorldTracerException {
+		GetMethod method = new GetMethod( buildUrlStart("DAH") + "T1=" + wt_id.toUpperCase());
+		try {
+			return sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+	}
+
+	public String findOHD(String wt_id) throws WorldTracerException {
+		GetMethod method = new GetMethod( buildUrlStart("DOH") + "T1=" + wt_id.toUpperCase());
+		try {
+			return sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+	}
+	
 	private List<Worldtracer_Actionfiles> parseActionFileData(String airline, String station,
 			ActionFileType actionFileType, int day, String afData) {
 		String ac_start = "<input type=\"hidden\" name=\"menuITEM\" value=\"";
@@ -499,5 +530,6 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 		return waf;
 	}
+
 
 }

@@ -140,51 +140,5 @@ public class WorldTracerTTYAction extends Action {
 		return true;
 
 	}
-	public void postWTTTY(WorldTracerTTYForm ttyForm, Agent user) {
-		// make the request
-		String company = user.getCompanycode_ID();
-		//StringBuffer tty_string = new StringBuffer();
-		String tx1 = ttyForm.getTeletype_address1().toUpperCase();
-		String tx2 = ttyForm.getTeletype_address2().toUpperCase();
-		String tx3 = ttyForm.getTeletype_address3().toUpperCase();
-		String tx4 = ttyForm.getTeletype_address4().toUpperCase();
-		String oa = ttyForm.getOrigin_address().toUpperCase();
-		String ca = ttyForm.getAirline_code().toUpperCase();
-		String ftyp1 = ttyForm.getFile_type1().toUpperCase();
-		String ftyp2 = ttyForm.getFile_type2().toUpperCase();
-		String ftyp3 = ttyForm.getFile_type3().toUpperCase();
-		String ftyp4 = ttyForm.getFile_type4().toUpperCase();
-		String fref1 = ttyForm.getFile_reference1().toUpperCase();
-		String fref2 = ttyForm.getFile_reference2().toUpperCase();
-		String fref3 = ttyForm.getFile_reference3().toUpperCase();
-		String fref4 = ttyForm.getFile_reference4().toUpperCase();
-		String ttytxt = ttyForm.getText().toUpperCase();
-		
-		
 
-        ArrayList <String> ttylist = new ArrayList();
-        ttylist.add(tx1);
-        ttylist.add(tx2);
-        ttylist.add(tx3);
-        ttylist.add(tx4);
-        ttylist.add(oa);
-        ttylist.add(ca);
-        ttylist.add(ftyp1);
-        ttylist.add(ftyp2);
-        ttylist.add(ftyp3);
-        ttylist.add(ftyp4);
-        ttylist.add(fref1);
-        ttylist.add(fref2);
-        ttylist.add(fref3);
-        ttylist.add(fref4);
-        ttylist.add(ttytxt);
-  
-		HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
-		String test = WorldTracerUtils.SendTty(client,company,ttylist);
-		
-		// for now return ohd_string
-		//test = tty_string.toString();
-		
-		//return test;
-	}
 }

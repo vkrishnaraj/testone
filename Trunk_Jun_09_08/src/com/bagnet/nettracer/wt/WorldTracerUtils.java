@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_Info;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -231,7 +232,7 @@ public class WorldTracerUtils {
 	}
 
 	public static String getAllRAF(HttpClient client, String companycode,
-			String stationcode, String status, String dt) {
+			String stationcode, WTStatus status, String dt) {
 		String responseBody = null;
 
 		if (dt != null && dt.length() > 0)

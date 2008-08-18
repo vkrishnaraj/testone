@@ -119,59 +119,59 @@ public class MoveToWTThread extends Thread {
 
 	public synchronized void moveMBRToWT(int mbr_move_days) throws Exception {
 
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getNtSession().openSession();
-			// get mbrs without wt_id after x days
-			
-			Date now = new Date();
-			long nowl = now.getTime();
-			mbr_move_days *= 86400000;
-			nowl = nowl - mbr_move_days;
-			Date righttime = new Date(nowl);
-			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
-			
-	
-			String sql = "select incident from com.bagnet.nettracer.tracing.db.Incident incident where "
-				+ " (incident.wt_id is null or incident.wt_id = '') and incident.createdate < :dt and incident.stationassigned.company.companyCode_ID = :companyCode_ID"
-				+ " and incident.status.status_ID = :status_ID "
-				+ " and incident.itemtype.itemType_ID = :itemtype_ID";
-			
-		
-			Query q = sess.createQuery(sql);
-			q.setParameter("companyCode_ID", company);
-			q.setParameter("dt", righttime);
-			q.setParameter("status_ID", new Integer(TracingConstants.MBR_STATUS_OPEN));
-			q.setParameter("itemtype_ID", new Integer(TracingConstants.LOST_DELAY));
-	
-			List list = q.list();
-			WTIncident wt = null;
-			Incident inc = null;
-			
-			
-			HttpClient client = BetaWtConnector.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
-			
-			if (list != null && list.size() > 0) {
-				for (int i=0;i<list.size();i++) {
-					
-					inc = (Incident) list.get(i);
-					wt = new WTIncident();
-					String result = wt.insertIncident(client, company, inc.getIncident_ID());
-					if (result == null) result = wt.getError();
-					else {
-						logger.info("inserted into wt: mbr: " + result);
-					}
-					logger.error("insert incident into wt: " + result);
-				}
-			}
-		} catch (Exception e) {
-			logger.fatal("error incident into wt: " + e);
-		}
+//		Session sess = null;
+//		try {
+//			sess = HibernateWrapper.getNtSession().openSession();
+//			// get mbrs without wt_id after x days
+//			
+//			Date now = new Date();
+//			long nowl = now.getTime();
+//			mbr_move_days *= 86400000;
+//			nowl = nowl - mbr_move_days;
+//			Date righttime = new Date(nowl);
+//			String dt = DateUtils.formatDate(righttime,TracingConstants.getDBDateFormat(HibernateWrapper.getNtConfig().getProperties()),null,null);
+//			
+//	
+//			String sql = "select incident from com.bagnet.nettracer.tracing.db.Incident incident where "
+//				+ " (incident.wt_id is null or incident.wt_id = '') and incident.createdate < :dt and incident.stationassigned.company.companyCode_ID = :companyCode_ID"
+//				+ " and incident.status.status_ID = :status_ID "
+//				+ " and incident.itemtype.itemType_ID = :itemtype_ID";
+//			
+//		
+//			Query q = sess.createQuery(sql);
+//			q.setParameter("companyCode_ID", company);
+//			q.setParameter("dt", righttime);
+//			q.setParameter("status_ID", new Integer(TracingConstants.MBR_STATUS_OPEN));
+//			q.setParameter("itemtype_ID", new Integer(TracingConstants.LOST_DELAY));
+//	
+//			List list = q.list();
+//			WTIncident wt = null;
+//			Incident inc = null;
+//			
+//			BetaWtConnector.getInstance(company);
+//			HttpClient client = BetaWtConnector.connectWT(WorldTracerUtils.getWt_suffix_airline(company) + "/",company);
+//			
+//			if (list != null && list.size() > 0) {
+//				for (int i=0;i<list.size();i++) {
+//					
+//					inc = (Incident) list.get(i);
+//					wt = new WTIncident();
+//					String result = wt.insertIncident(client, company, inc.getIncident_ID());
+//					if (result == null) result = wt.getError();
+//					else {
+//						logger.info("inserted into wt: mbr: " + result);
+//					}
+//					logger.error("insert incident into wt: " + result);
+//				}
+//			}
+//		} catch (Exception e) {
+//			logger.fatal("error incident into wt: " + e);
+//		}
 	}
 	
 	public synchronized void moveOHDToWT(int ohd_move_days) throws Exception {
 
-		Session sess = null;
+/*		Session sess = null;
 		try {
 			sess = HibernateWrapper.getNtSession().openSession();
 			// get mbrs without wt_id after x days
@@ -214,7 +214,7 @@ public class MoveToWTThread extends Thread {
 			}
 		} catch (Exception e) {
 			logger.fatal("error insert ohd into wt: " + e);
-		}
+		}*/
 	}
 }
 

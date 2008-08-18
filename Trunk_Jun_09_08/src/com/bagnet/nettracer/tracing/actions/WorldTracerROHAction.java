@@ -125,36 +125,4 @@ public class WorldTracerROHAction extends Action {
 		
 		return true;
 	}
-	public String postWTROH(DynaValidatorForm dForm, Agent user) {
-		// make the request
-		String company = user.getCompanycode_ID();
-		String ahl_id = dForm.getString("wt_ahl_id");
-		StringBuffer ohd_string = new StringBuffer();
-		
-		String ohd_id = dForm.getString("wt_ohd_id").toUpperCase();
-		String fi = dForm.getString("fi").toUpperCase();
-		String ag = dForm.getString("ag").toUpperCase();
-		String tx1 = dForm.getString("teletype_address1").toUpperCase();
-		String tx2 = dForm.getString("teletype_address2").toUpperCase();
-		String tx3 = dForm.getString("teletype_address3").toUpperCase();
-		String tx4 = dForm.getString("teletype_address4").toUpperCase();
-		String name = dForm.getString("lname").toUpperCase();
-		
-		ohd_string.append(".OHD " + ohd_id);
-		if (fi.length() > 0) ohd_string.append(".FI " + fi);
-		if (ag.length() > 0) ohd_string.append(".AG " + ag);
-		if (tx1.length() > 0) ohd_string.append(".TX " + tx1);
-		if (tx2.length() > 0) ohd_string.append(".TX " + tx2);
-		if (tx3.length() > 0) ohd_string.append(".TX " + tx3);
-		if (tx4.length() > 0) ohd_string.append(".TX " + tx4);
-		if (name.length() > 0) ohd_string.append(".NM " + name);
-		
-		HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",company);
-		String test = WorldTracerUtils.postROH(client, company, ahl_id,ohd_string.toString());
-		
-		// for now return ohd_string
-		test = ohd_string.toString();
-		
-		return test;
-	}
 }

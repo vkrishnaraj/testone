@@ -23,6 +23,8 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
@@ -154,7 +156,7 @@ public class WTSusRit {
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
 				responseBody = "got worldtracer id: " + wt_id;
-				incident.setWt_id(wt_id);
+				incident.setWtFile(new WorldTracerFile(wt_id, WTStatus.SUSPENDED));
 				HibernateUtils.save(incident);
 			} else {
 				error = responseBody;
@@ -399,7 +401,7 @@ public class WTSusRit {
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
 				responseBody = "got worldtracer id: " + wt_id;
-				incident.setWt_id(wt_id);
+				incident.setWtFile(new WorldTracerFile(wt_id));
 				HibernateUtils.save(incident);
 			} else {
 				error = responseBody;

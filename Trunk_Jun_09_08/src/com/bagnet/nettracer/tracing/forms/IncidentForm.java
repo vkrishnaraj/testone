@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -80,8 +81,19 @@ public final class IncidentForm extends ValidatorForm {
 	private String membershipnum;
 	private String membershipstatus;
 	
-	private String wt_id;
+	private WorldTracerFile wtFile;
+	
+	public String getWt_id() {
+		return wtFile != null ? wtFile.getWt_id() : null;
+	}
 
+	public WorldTracerFile getWtFile() {
+		return wtFile;
+	}
+
+	public void setWtFile(WorldTracerFile wtFile) {
+		this.wtFile = wtFile;
+	}
 	private List passengerlist = new ArrayList();
 	// addresses
 	//private List addresses = new ArrayList();
@@ -1080,19 +1092,6 @@ public final class IncidentForm extends ValidatorForm {
 		this.assoc_ID = assoc_ID;
 	}
 
-	/**
-	 * @return the wt_id
-	 */
-	public String getWt_id() {
-		return (wt_id == null ? "" : wt_id);
-	}
-
-	/**
-	 * @param wt_id the wt_id to set
-	 */
-	public void setWt_id(String wt_id) {
-		this.wt_id = wt_id;
-	}
 
 	/**
 	 * @return Returns the printedreceipt.

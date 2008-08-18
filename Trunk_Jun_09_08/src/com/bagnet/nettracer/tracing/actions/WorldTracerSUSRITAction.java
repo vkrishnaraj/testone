@@ -104,8 +104,7 @@ public class WorldTracerSUSRITAction extends Action {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 					} else {
-						if (incident.getWt_id() == null
-								|| incident.getWt_id().trim().equals("")) {
+						if (incident.getWtFile() == null) {
 							System.out.println("wt_id is null");
 							ActionMessage error = new ActionMessage(
 									"error.nowt_id");
@@ -178,8 +177,7 @@ public class WorldTracerSUSRITAction extends Action {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				} else {
-					if (incident.getWt_id() == null
-							|| incident.getWt_id().trim().equals("")) {
+					if (incident.getWtFile() == null) {
 						ActionMessage error = new ActionMessage("error.nowt_id");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);

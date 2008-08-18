@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.wt.WTIncident;
@@ -82,7 +83,7 @@ public class WorldTracerQueueSweeper {
 				logger.info("created wt ahl: " + wtId);
 				queue.setQueue_status(-1);
 				wtqBmo.updateQueue(queue);
-				incident.setWt_id(wtId);
+				incident.setWtFile(new WorldTracerFile(wtId));
 				MessageUtils.sendmessage(incident.getStationcreated(), "WT AHL Created", incident.getAgent(),
 						String.format("NetTracer Lost/Delay: %s -> WorldTracer AHL: %s", incident.getIncident_ID(), wtId),
 						incident.getIncident_ID(), "");

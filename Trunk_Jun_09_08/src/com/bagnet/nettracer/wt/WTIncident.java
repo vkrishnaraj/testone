@@ -40,7 +40,9 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -511,7 +513,8 @@ public class WTIncident {
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
 				responseBody = "got worldtracer id: " + wt_id;
-				incident.setWt_id(wt_id);
+				WorldTracerFile wtf = new WorldTracerFile(wt_id, WTStatus.ACTIVE);
+				incident.setWtFile(wtf);
 				HibernateUtils.save(incident);
 			} else {
 				error = responseBody;
@@ -907,7 +910,7 @@ public class WTIncident {
 		method.setDoAuthentication(true);
 		method.addParameter("A1", companycode.toLowerCase());
 		method.addParameter("A2", "WM");
-        method.addParameter("T1",idto.getWt_id());
+        method.addParameter("T1",idto.getWtFile().getWt_id());
         method.addParameter("NM",snm);
         method.addParameter("FS",idto.getStationcode());
         method.addParameter("RL",Integer.toString(idto.getLoss_code()));
@@ -982,7 +985,7 @@ public class WTIncident {
 	 * @param starttype
 	 * @return
 	 */
-	public Incident parseWTIncident(String wtdata,boolean starttype, String wtstatus) {
+	public Incident parseWTIncident(String wtdata,boolean starttype, WTStatus wtStatus) {
 		try {
 			// first figure out if this incident is new or already existing through
 			// WT_column
@@ -1005,14 +1008,14 @@ public class WTIncident {
 				incident = WorldTracerUtils.findIncidentByWTID(wt_id);
 			
 			if (incident == null) incident = new Incident();
-			incident.setWt_id(wt_id);
-			Status status = new Status();
-			if (wtstatus.equals(WorldTracerUtils.status_active))
-				status.setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
+			incident.setWtFile(new WorldTracerFile(wt_id, wtStatus));
+			Status ntStatus = new Status();
+			if (wtStatus.equals(WorldTracerUtils.status_active))
+				ntStatus.setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
 			else
-				status.setStatus_ID(TracingConstants.MBR_STATUS_CLOSED);
+				ntStatus.setStatus_ID(TracingConstants.MBR_STATUS_CLOSED);
 			
-			incident.setStatus(status);
+			incident.setStatus(ntStatus);
 			
 			// create station and assigned station are the wt_id 0,3 characters
 			String thes = wt_id.substring(0,3);

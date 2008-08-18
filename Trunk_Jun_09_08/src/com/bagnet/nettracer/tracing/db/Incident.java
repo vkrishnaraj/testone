@@ -59,8 +59,7 @@ public class Incident implements Serializable {
 	
 	private String ohd_lasttraced;
 	
-	private String wt_id;	//world tracer id
-    private String type_id;
+	private WorldTracerFile wtFile;	//world tracer id
 	private Set passengers;
 
 	private List itemlist;
@@ -767,18 +766,18 @@ public class Incident implements Serializable {
 	/**
 	 * @return the wt_id
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.component
 	 */
-	public String getWt_id() {
-		return wt_id;
+	public WorldTracerFile getWtFile() {
+		return wtFile;
 	}
 
 
 	/**
 	 * @param wt_id the wt_id to set
 	 */
-	public void setWt_id(String wt_id) {
-		this.wt_id = wt_id;
+	public void setWtFile(WorldTracerFile wtFile) {
+		this.wtFile = wtFile;
 	}
 
 	public ArrayList getItinerary_list() {

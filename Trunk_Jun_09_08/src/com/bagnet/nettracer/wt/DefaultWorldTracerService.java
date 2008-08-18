@@ -176,7 +176,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	public String closeIncident(Incident incident) throws WorldTracerException {
 		Map<WorldTracerField, List<String>> fieldMap = createCloseFieldMap(incident);
 
-		String wt_id = wtConnector.closeIncident(fieldMap, incident.getWt_id(), incident.getStationassigned()
+		String wt_id = wtConnector.closeIncident(fieldMap, incident.getWtFile().getWt_id(), incident.getStationassigned()
 				.getWt_stationcode());
 
 		return wt_id;

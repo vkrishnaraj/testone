@@ -31,6 +31,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
@@ -69,13 +71,10 @@ public class SearchIncidentAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
 			if (foundinc == null) {
-				HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
-				String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
-				String wt_url = "http://" + wt_http + "/";
-				String result = WorldTracerUtils.getRAF(client, request.getParameter("wt_id"),wt_url);
+				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("wt_id"));
 				WTIncident wi = new WTIncident();
 				// for now show all as active
-				foundinc = wi.parseWTIncident(result,true,WorldTracerUtils.status_active);
+				foundinc = wi.parseWTIncident(result,true,WTStatus.ACTIVE);
 				if (foundinc != null) incident = foundinc.getIncident_ID();
 				else {
 					ActionMessages errors = new ActionMessages();

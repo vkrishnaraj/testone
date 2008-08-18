@@ -70,10 +70,7 @@ public class SearchOnHandAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
 			if (foundohd == null) {
-				HttpClient client = BetaWtConnector.connectWT(user.getStation().getCompany().getVariable().getWt_url() + "/",user.getCompanycode_ID());
-				String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
-				String wt_url = "http://" + wt_http + "/";
-				String result = WorldTracerUtils.getROF(client, request.getParameter("wt_id"),wt_url);
+				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findOHD(request.getParameter("wt_id"));
 				WTOHD wi = new WTOHD();
 				// for now show all as active
 				foundohd = wi.parseWTOHD(result,true,WorldTracerUtils.status_active);

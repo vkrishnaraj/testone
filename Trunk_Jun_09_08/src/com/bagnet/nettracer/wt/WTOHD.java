@@ -785,7 +785,7 @@ public class WTOHD {
 		method.setDoAuthentication(true);
 		method.addParameter("A1", companycode.toLowerCase());
 		method.addParameter("A2", "WM");
-        method.addParameter("T1",idto.getWt_id());
+        method.addParameter("T1",idto.getWtFile().getWt_id());
         method.addParameter("NM",snm);
         method.addParameter("FS",idto.getStationcode());
         method.addParameter("RL",Integer.toString(idto.getLoss_code()));

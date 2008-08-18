@@ -84,12 +84,7 @@ public class WorldTracerAFAction extends Action {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request
 					.getParameter("ahl_id"));
 			if (foundinc == null) {
-				HttpClient client = BetaWtConnector.connectWT(user
-						.getStation().getCompany().getVariable().getWt_url()
-						+ "/", user.getCompanycode_ID());
-
-				String result = WorldTracerUtils.getRAF(client, request
-						.getParameter("ahl_id"), wt_url);
+				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ahl_id"));
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
@@ -103,19 +98,8 @@ public class WorldTracerAFAction extends Action {
 				&& request.getParameter("rawtext") != null) {
 			OHD foundinc = WorldTracerUtils.findOHDByWTID(request
 					.getParameter("ohd_id"));
-			/*
-			 * if(request.getParameter("id") != null){ Worldtracer_Actionfiles
-			 * Action_file = null; Action_file =
-			 * WorldTracerUtils.findActionFileByID(Integer.parseInt(request.getParameter("id")));
-			 * String remark = Action_file.getAction_file_text();
-			 * request.setAttribute("remark",remark); }
-			 */
 			if (foundinc == null) {
-				HttpClient client = BetaWtConnector.connectWT(user
-						.getStation().getCompany().getVariable().getWt_url()
-						+ "/", user.getCompanycode_ID());
-				String result = WorldTracerUtils.getROF(client, request
-						.getParameter("ohd_id"), wt_url);
+				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ohd_id"));
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
