@@ -15,6 +15,7 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
@@ -250,12 +251,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	private Map<WorldTracerField, List<String>> createCloseFieldMap(OHD ohd) {
 		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
-		addIncidentFieldEntry(WorldTracerField.AG, ohd.getAgent().getUsername().length() > 9 ? ohd.getAgent()
-				.getUsername().substring(0, 9) : ohd.getAgent().getUsername() + "/"
-				+ ohd.getAgent().getCompanycode_ID(), result);
+		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ohd.getAgent()), result);
 		return null;
 	}
 
+	public static String getAgentEntry(Agent ag) {
+		return (ag.getUsername().length() > 8 ? ag.getUsername().substring(0, 8) : ag.getUsername()) + "/" + ag.getCompanycode_ID();
+	}
 	private Map<WorldTracerField, List<String>> createFieldMap(OHD ohd) throws WorldTracerException {
 		if (ohd == null) {
 			return null;
@@ -308,9 +310,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			addIncidentFieldEntry(WorldTracerField.CC, entry, result);
 		}
 
-		addIncidentFieldEntry(WorldTracerField.AG, ohd.getAgent().getUsername().length() > 9 ? ohd.getAgent()
-				.getUsername().substring(0, 9) : ohd.getAgent().getUsername() + "/"
-				+ ohd.getAgent().getCompanycode_ID(), result);
+		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ohd.getAgent()), result);
 		return result;
 
 	}
@@ -413,9 +413,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		} else {
 			addIncidentFieldEntry(WorldTracerField.PB, "0000", result);
 		}
-		addIncidentFieldEntry(WorldTracerField.AG, ntIncident.getAgent().getUsername().length() > 9 ? ntIncident
-				.getAgent().getUsername().substring(0, 9) : ntIncident.getAgent().getUsername() + "/"
-				+ ntIncident.getAgent().getCompanycode_ID(), result);
+		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ntIncident.getAgent()), result);
 		return result;
 	}
 
@@ -473,9 +471,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		} else {
 			addIncidentFieldEntry(WorldTracerField.FS, incident.getStationassigned().getWt_stationcode(), result);
 		}
-		addIncidentFieldEntry(WorldTracerField.AG, incident.getAgent().getUsername().length() > 9 ? incident.getAgent()
-				.getUsername().substring(0, 9) : incident.getAgent().getUsername() + "/"
-				+ incident.getAgent().getCompanycode_ID(), result);
+		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(incident.getAgent()), result);
 		return result;
 	}
 
@@ -681,5 +677,26 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		this.wtCompanyCode = wtCompanyCode;
 	}
 
+	public String reinstateIncident(Incident incident)
+			throws WorldTracerException {
+		wtConnector.reinstateAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()));
+		return incident.getWt_id();
+	}
+
+	public String reinstateOhd(OHD ohd) throws WorldTracerException {
+		wtConnector.reinstateOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()));
+		return ohd.getWt_id();
+	}
+
+	public String suspendIncident(Incident incident)
+			throws WorldTracerException {
+		wtConnector.suspendAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()));
+		return incident.getWt_id();
+	}
+
+	public String suspendOhd(OHD ohd) throws WorldTracerException {
+		wtConnector.suspendOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()));
+		return ohd.getWt_id();
+	}
 
 }

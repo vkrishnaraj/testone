@@ -15,6 +15,8 @@ public class WT_Queue implements Serializable{
 	public static final String CLOSE_OHD_TYPE = "closeOHD";
 	public static final String SUS_INC_TYPE = "SUSIncident";
 	public static final String SUS_OHD_TYPE = "SUSOhd";
+	public static final String RIT_INC_TYPE = "RITIncident";
+	public static final String RIT_OHD_TYPE = "RITOhd";
 	public static final String PARTIAL_AHL_TYPE = "PartialAhl";
 	public static final String ERASE_AF_TYPE = "EraseActionFile";
 	

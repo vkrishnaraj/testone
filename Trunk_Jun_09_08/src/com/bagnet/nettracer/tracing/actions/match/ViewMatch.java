@@ -357,14 +357,14 @@ public final class ViewMatch extends Action {
 						// call unmatch to clear out match history
 						MatchUtils.unmatchOHD(ohd_id);
 						// if undomatch ,delete the wt_id in ohd/incident
-						if(ohd.getWt_id() != null){
+/*						if(ohd.getWt_id() != null){
 							ohd.setWt_id(null);
 							HibernateUtils.save(ohd);
 						}
 						if(incident.getWtFile() != null){
 						    incident.setWtFile(null);
 						    HibernateUtils.save(incident);
-						}
+						}*/
 						// empty out claim ohd
 						ic.setOHD_ID(null);
 
@@ -413,14 +413,14 @@ public final class ViewMatch extends Action {
 				// call unmatch to clear out match history
 				MatchUtils.unmatchOHD(ohd_id);
 				// if undomatch ,delete the wt_id in ohd/incident
-				if(ohd.getWt_id() != null){
+/*				if(ohd.getWt_id() != null){
 					ohd.setWt_id(null);
 					HibernateUtils.save(ohd);
 				}
 				if(incident.getWtFile() != null){
 				    incident.setWtFile(null);
 				    HibernateUtils.save(incident);
-				}
+				}*/
 				has_unmatched = true;
 				iBMO.updateIncidentNoAudit(incident);
 				match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_OPEN, user

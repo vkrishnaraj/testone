@@ -22,6 +22,9 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @author Administrator
  * 
  * @hibernate.class table="Incident"
+ * @hibernate.typedef name="worldTracerStatus" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
+ * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClassname"
+ * 			value="com.bagnet.nettracer.tracing.db.WorldTracerFile$WTStatus"
  */
 public class Incident implements Serializable {
 
@@ -766,7 +769,7 @@ public class Incident implements Serializable {
 	/**
 	 * @return the wt_id
 	 * 
-	 * @hibernate.component
+	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile"
 	 */
 	public WorldTracerFile getWtFile() {
 		return wtFile;
@@ -778,6 +781,13 @@ public class Incident implements Serializable {
 	 */
 	public void setWtFile(WorldTracerFile wtFile) {
 		this.wtFile = wtFile;
+	}
+	
+	public String getWt_id() {
+		if(wtFile != null) {
+			return wtFile.getWt_id();
+		}
+		return null;
 	}
 
 	public ArrayList getItinerary_list() {

@@ -11,11 +11,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -33,6 +31,10 @@ import com.bagnet.nettracer.wt.DefaultWorldTracerService.WorldTracerField;
 
 public class BetaWtConnector implements WorldTracerConnector {
 
+	private static final String OK = "OK";
+
+	private static final String ALREADY_REINSTATED = "ALREADY REINSTATED";
+
 	private String wtCompanycode;
 
 	private static final Logger logger = Logger.getLogger(BetaWtConnector.class);
@@ -41,6 +43,8 @@ public class BetaWtConnector implements WorldTracerConnector {
 	private static final Pattern ohd_patt = Pattern.compile("(?:(?:\\s|/)(?:OHD\\s+|O/))(\\w{5}\\d{5})\\b");
 	private static final Pattern percent_patt = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
 	private static final Pattern itemNum_patt = Pattern.compile("^\\s*(\\d+)/", Pattern.MULTILINE);
+
+	private static final Object ALREADY_SUSPENDED = null;
 
 	private HttpClient client;
 	
@@ -303,7 +307,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		} else {
 			errorString = responseBody;
 		}
-		if("OK".equals(errorString)) {
+		if(OK.equals(errorString)) {
 			return;
 		}
 		throw new WorldTracerException(errorString);
@@ -531,5 +535,96 @@ public class BetaWtConnector implements WorldTracerConnector {
 		return waf;
 	}
 
+	public void suspendAHL(String wt_id, String agent) throws WorldTracerException {
+		// TODO Auto-generated method stub
+		String responseBody = susritItem(wt_id, "SUS1", "AHL", agent);
+		String errorString;
+		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if(OK.equals(errorString) || ALREADY_SUSPENDED.equals(errorString)) {
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+	public void suspendOHD(String wt_id, String agent) throws WorldTracerException {
+		// TODO Auto-generated method stub
+		String responseBody = susritItem(wt_id, "SUS1", "OHD", agent);
+		String errorString;
+		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if(OK.equals(errorString) || ALREADY_SUSPENDED.equals(errorString)) {
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+	public void reinstateAHL(String wt_id, String agent) throws WorldTracerException {
+
+		//TODO figure out if it worked
+		String responseBody = susritItem(wt_id, "RIT1", "AHL", agent);
+		String errorString;
+		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if(OK.equals(errorString) || ALREADY_REINSTATED.equals(errorString)) {
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+	public void reinstateOHD(String wt_id, String agent) throws WorldTracerException {
+		// TODO Auto-generated method stub\
+		String responseBody = susritItem(wt_id, "RIT1", "OHD", agent);
+		String errorString;
+		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if(OK.equals(errorString) || ALREADY_REINSTATED.equals(errorString)) {
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+	
+	private String susritItem(String wt_id, String action, String type, String agent) {
+		String responseBody = null;
+		String wt_http = WorldTracerUtils.getWt_url(wtCompanycode);
+		StringBuilder sb = new StringBuilder("http://" + wt_http + "/");
+		sb.append("cgi-bin/bagSUS.exe");
+		
+		PostMethod method = new PostMethod(sb.toString());
+		method.addParameter("A1", wtCompanycode.toUpperCase());
+		method.addParameter("A2", "WM");
+		method.addParameter("ACTION", action);
+		method.addParameter("TYP1", type);
+		method.addParameter("FR1", wt_id.toLowerCase());
+		method.addParameter("AG", agent);
+
+		try {
+			responseBody = sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+		
+		return responseBody;
+	}
 
 }

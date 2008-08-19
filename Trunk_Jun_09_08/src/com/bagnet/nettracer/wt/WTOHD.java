@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
@@ -58,7 +59,7 @@ public class WTOHD {
 	 * @return
 	 */
 	
-	
+/*	
 	public String insertOHD(HttpClient client, String companycode, String filenum) {
 		String _n = ".";
 		String _t = "";
@@ -315,7 +316,7 @@ public class WTOHD {
 		sb.append(_n);
 		
 		// remarks
-		/*
+		
 		if (ohd.getRemarks() != null && ohd.getRemarks().size() > 0) {
 			String temp;
 			int c = 0;
@@ -329,7 +330,7 @@ public class WTOHD {
 				if (c >= 99) break;
 			}
 		}
-		*/
+		
 		
 		// agent
 		sb.append("AG" + _t + ohd.getAgent().getUsername() + "/" + ohd.getAgent().getCompanycode_ID() + _n);
@@ -406,7 +407,7 @@ public class WTOHD {
 				
 		}
 		return responseBody;
-	}
+	}*/
 	
 	//submit ohd amend to WorldTracer
 	public String amendAOH(HttpClient client,String companycode,String filenum){
@@ -885,7 +886,7 @@ public class WTOHD {
 				ohd = WorldTracerUtils.findOHDByWTID(wt_id);
 			
 			if (ohd == null) ohd = new OHD();
-			ohd.setWt_id(wt_id);
+			ohd.setWtFile(new WorldTracerFile(wt_id));
 			
 			// set status to open
 			Status status = new Status();
@@ -1252,7 +1253,7 @@ public class WTOHD {
 			
 			if (wt_id != null) {
 				Worldtracer_Actionfiles Action_file = null;
-				Action_file = WorldTracerUtils.findActionFileByID((wt_id));
+				Action_file = WorldTracerUtils.findActionFileByOhdID(wt_id);
 				String remarktext = Action_file.getAction_file_text();
 //System.out.println(remarktext);
 				rm.setAgent(ntuser);

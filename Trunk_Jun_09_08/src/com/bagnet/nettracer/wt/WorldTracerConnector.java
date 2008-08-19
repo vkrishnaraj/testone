@@ -30,9 +30,16 @@ public interface WorldTracerConnector {
 	
 	Worldtracer_Actionfiles getActionFile(String airline, String station, ActionFileType actionFileType, int day, int itemNum) throws WorldTracerException;
 
-	String findAHL(String parameter) throws WorldTracerException;
+	String findAHL(String wt_id) throws WorldTracerException;
 
-	String findOHD(String parameter) throws WorldTracerException;
+	String findOHD(String wt_id) throws WorldTracerException;
 	
+	void suspendOHD(String wt_id, String agent) throws WorldTracerException;
+	
+	void suspendAHL(String wt_id, String agent) throws WorldTracerException;
+	
+	void reinstateOHD(String wt_id, String agent) throws WorldTracerException;
+	
+	void reinstateAHL(String wt_id, String agent) throws WorldTracerException;
 
 }

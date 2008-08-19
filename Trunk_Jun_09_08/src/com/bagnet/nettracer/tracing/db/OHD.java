@@ -23,6 +23,9 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  * @author Administrator
  * 
  * @hibernate.class table="OHD"
+ * @hibernate.typedef name="worldTracerStatus" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
+ * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClassname"
+ * 			value="com.bagnet.nettracer.tracing.db.WorldTracerFile$WTStatus"
  */
 public class OHD implements Serializable {
 
@@ -61,7 +64,7 @@ public class OHD implements Serializable {
 	private Date close_date;
 	private Date lastupdated;
 	
-	private String wt_id;	// worldtracer id
+	private WorldTracerFile wtFile;	// worldtracer id
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -727,23 +730,28 @@ public class OHD implements Serializable {
 		this.close_date = close_date;
 	}
 	
-	
-
 	/**
-	 * @return the wt_id
+	 * @return the wtFile object
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile"
 	 */
-	public String getWt_id() {
-		return wt_id;
+	public WorldTracerFile getWtFile() {
+		return wtFile;
 	}
 
 
 	/**
 	 * @param wt_id the wt_id to set
 	 */
-	public void setWt_id(String wt_id) {
-		this.wt_id = wt_id;
+	public void setWtFile(WorldTracerFile wtFile) {
+		this.wtFile = wtFile;
+	}
+	
+	public String getWt_id() {
+		if(wtFile != null) {
+			return wtFile.getWt_id();
+		}
+		return null;
 	}
 	
 	/**

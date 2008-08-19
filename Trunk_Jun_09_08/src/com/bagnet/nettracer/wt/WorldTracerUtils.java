@@ -495,7 +495,7 @@ public class WorldTracerUtils {
 
 		try {
 			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wt_id = :wt_id");
+					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wtFile.wt_id = :wt_id");
 			q.setParameter("wt_id", wt_id);
 			List list = q.list();
 
@@ -596,7 +596,7 @@ public class WorldTracerUtils {
 
 	}
 
-	public static Worldtracer_Actionfiles findActionFileByID(String wt_id) {
+	public static Worldtracer_Actionfiles findActionFileByOhdID(String wt_id) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();

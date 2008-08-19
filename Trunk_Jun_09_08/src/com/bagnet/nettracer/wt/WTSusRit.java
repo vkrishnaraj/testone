@@ -268,7 +268,7 @@ public class WTSusRit {
 			if (wt_id != null && wt_id.length() >= 10) {
 				// return wt_id (insert wt_id into ohd here)
 				responseBody = "got worldtracer id: " + wt_id;
-				ohd.setWt_id(wt_id);
+				ohd.setWtFile(new WorldTracerFile(wt_id));
 				HibernateUtils.save(ohd);
 			} else {
 				error = responseBody;

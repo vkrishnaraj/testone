@@ -15,6 +15,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.wt.WTIncident;
@@ -115,7 +116,7 @@ public class WorldTracerQueueSweeper {
 				logger.info("created wt ohd: " + wtId);
 				queue.setQueue_status(-1);
 				wtqBmo.updateQueue(queue);
-				ohd.setWt_id(wtId);
+				ohd.setWtFile(new WorldTracerFile(wtId));
 				MessageUtils.sendmessage(ohd.getFoundAtStation(), "WT OHD Created", ohd.getAgent(),
 						String.format("NetTracer OHD: %s  -> WorldTracer OHD: %s", ohd.getOHD_ID(), wtId),
 						"", ohd.getOHD_ID());
@@ -143,8 +144,10 @@ public class WorldTracerQueueSweeper {
 					continue;
 				}
 				logger.info("closed wt ahl: " + result);
+				incident.getWtFile().setWt_status(WTStatus.CLOSED);
 				queue.setQueue_status(-1);
 				wtqBmo.updateQueue(queue);
+				iBmo.updateIncidentNoAudit(incident);
 			}
 			else if (WT_Queue.CLOSE_OHD_TYPE.equalsIgnoreCase(queue.getType())) {
 				String wtId = null;
@@ -170,8 +173,137 @@ public class WorldTracerQueueSweeper {
 					continue;
 				}
 				logger.info("closed wt ahl: " + wtId);
+				ohd.getWtFile().setWt_status(WTStatus.CLOSED);
 				queue.setQueue_status(-1);
 				wtqBmo.updateQueue(queue);
+				ohdBmo.updateOhdNoAudit(ohd);
+			}
+			else if (WT_Queue.SUS_INC_TYPE.equalsIgnoreCase(queue.getType())) {
+				String wtId = null;
+				Incident incident = iBmo.findIncidentByID(queue.getType_id());
+				try {
+					wtId = wtService.suspendIncident(incident);
+				}
+				catch  ( WorldTracerException ex) {
+					//TODO
+					logger.warn("unable to supsend incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					
+					continue;
+				} catch(WorldTracerConnectionException ex) {
+					//TODO
+					logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch (Throwable ex) {
+					//TODO
+					logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				logger.info("suspended wt ahl: " + wtId);
+				queue.setQueue_status(-1);
+				wtqBmo.updateQueue(queue);
+				incident.getWtFile().setWt_status(WTStatus.SUSPENDED);
+				iBmo.updateIncidentNoAudit(incident);
+			}
+			else if (WT_Queue.RIT_INC_TYPE.equalsIgnoreCase(queue.getType())) {
+				String wtId = null;
+				Incident incident = iBmo.findIncidentByID(queue.getType_id());
+				try {
+					wtId = wtService.reinstateIncident(incident);
+				}
+				catch  ( WorldTracerException ex) {
+					//TODO
+					logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch(WorldTracerConnectionException ex) {
+					//TODO
+					logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch (Throwable ex) {
+					//TODO
+					logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				logger.info("reinstated wt ahl: " + wtId);
+				queue.setQueue_status(-1);
+				wtqBmo.updateQueue(queue);
+				incident.getWtFile().setWt_status(WTStatus.ACTIVE);
+				iBmo.updateIncidentNoAudit(incident);
+			}
+			else if (WT_Queue.SUS_OHD_TYPE.equalsIgnoreCase(queue.getType())) {
+				String wtId = null;
+				OHD ohd = ohdBmo.findOHDByID(queue.getType_id());
+				try {
+					wtId = wtService.suspendOhd(ohd);
+				}
+				catch  ( WorldTracerException ex) {
+					//TODO
+					logger.warn("unable to supsend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					
+					continue;
+				} catch(WorldTracerConnectionException ex) {
+					//TODO
+					logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch (Throwable ex) {
+					//TODO
+					logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				logger.info("suspended wt ahl: " + wtId);
+				queue.setQueue_status(-1);
+				wtqBmo.updateQueue(queue);
+				ohd.getWtFile().setWt_status(WTStatus.SUSPENDED);
+				ohdBmo.updateOhdNoAudit(ohd);
+			}
+			else if (WT_Queue.RIT_OHD_TYPE.equalsIgnoreCase(queue.getType())) {
+				String wtId = null;
+				OHD ohd = ohdBmo.findOHDByID(queue.getType_id());
+				try {
+					wtId = wtService.reinstateOhd(ohd);
+				}
+				catch  ( WorldTracerException ex) {
+					//TODO
+					logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					
+					continue;
+				} catch(WorldTracerConnectionException ex) {
+					//TODO
+					logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch (Throwable ex) {
+					//TODO
+					logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+					queue.setQueue_status(queue.getQueue_status() + 1);
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				logger.info("suspended wt ahl: " + wtId);
+				queue.setQueue_status(-1);
+				wtqBmo.updateQueue(queue);
+				ohd.getWtFile().setWt_status(WTStatus.ACTIVE);
+				ohdBmo.updateOhdNoAudit(ohd);
 			}
 			try {
 				Thread.sleep(wtHitDelay * 1000);

@@ -17,6 +17,14 @@ public interface WorldTracerService {
 	String closeIncident(Incident incident) throws WorldTracerException;
 
 	String closeOHD(OHD ohd) throws WorldTracerException;
+	
+	String suspendIncident(Incident incident)throws WorldTracerException;
+	
+	String suspendOhd(OHD ohd) throws WorldTracerException;
+	
+	String reinstateIncident(Incident incident) throws WorldTracerException;
+	
+	String reinstateOhd(OHD ohd) throws WorldTracerException;
 
 	void sendFwd(WT_FWD_Log fwd) throws WorldTracerException;
 

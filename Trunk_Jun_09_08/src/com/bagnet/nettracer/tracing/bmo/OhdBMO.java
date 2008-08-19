@@ -1242,4 +1242,26 @@ public class OhdBMO {
 		
 		return inc;
 	}
+
+	public boolean updateOhdNoAudit(OHD ohd) {
+		Transaction t = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			t = sess.beginTransaction();
+
+			sess.saveOrUpdate(ohd);
+			t.commit();
+
+		} catch (Exception e) {
+			logger.error("unable to insert into database: " + e);
+			e.printStackTrace();
+			if (t != null)
+				t.rollback();
+			return false;
+		} finally {
+
+			sess.close();
+		}
+		return true;
+	}
 }
