@@ -1,7 +1,7 @@
 package com.bagnet.nettracer.tracing.utils.lookup;
 
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 
-public class AirlineCodesTest extends TestCase{
+public class AirlineCodesTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -54,6 +54,19 @@ public class AirlineCodesTest extends TestCase{
 	}
 	
 	@Test
+	public void testGetTwoLetterAirlineCode5() {
+		String threeDigitCode = "279";
+		assertEquals("B6", AirlineCodes.getTwoLetterAirlineCode(threeDigitCode));
+	}
+	
+	
+	@Test
+	public void testGetTwoLetterAirlineCode6() {
+		String threeDigitCode = "951";
+		assertEquals("6B", AirlineCodes.getTwoLetterAirlineCode(threeDigitCode));
+	}
+	
+	@Test
 	public void testGetThreeDigitTicketingCode1() {
 		String twoCharacterCode = "DL";
 		assertEquals("006", AirlineCodes.getThreeDigitTicketingCode(twoCharacterCode));
@@ -77,6 +90,17 @@ public class AirlineCodesTest extends TestCase{
 		assertEquals(null, AirlineCodes.getThreeDigitTicketingCode(twoCharacterCode));
 	}	
 	
+	@Test
+	public void testGetThreeDigitTicketingCode5() {
+		String twoCharacterCode = "B6";
+		assertEquals("279", AirlineCodes.getThreeDigitTicketingCode(twoCharacterCode));
+	}	
+	
+	@Test
+	public void testGetThreeDigitTicketingCode6() {
+		String twoCharacterCode = "6B";
+		assertEquals("951", AirlineCodes.getThreeDigitTicketingCode(twoCharacterCode));
+	}	
 	
 	@Test
 	public void testGetTwoCharacterBagTag1() throws BagtagException {
@@ -93,7 +117,13 @@ public class AirlineCodesTest extends TestCase{
 	@Test(expected = BagtagException.class)   
 	public void testGetTwoCharacterBagTag3() throws BagtagException {
 		String bagTag = "06123456";
-		assertEquals("DL123456", AirlineCodes.getTwoCharacterBagTag(bagTag));
+		AirlineCodes.getTwoCharacterBagTag(bagTag);
+	}
+	
+	@Test
+	public void testGetTwoCharacterBagTag4() throws BagtagException {
+		String bagTag = "0951123456";
+		assertEquals("6B123456", AirlineCodes.getTwoCharacterBagTag(bagTag));
 	}
 	
 	@Test
@@ -111,6 +141,12 @@ public class AirlineCodesTest extends TestCase{
 	@Test(expected = BagtagException.class)
 	public void testGetFullBagTag3() throws BagtagException {
 		String bagTag = "XX123456";
-		assertEquals("", AirlineCodes.getFullBagTag(bagTag));
+		AirlineCodes.getFullBagTag(bagTag);
+	}
+	
+	@Test
+	public void testGetFullBagTag4() throws BagtagException {
+		String bagTag = "6B123456";
+		assertEquals("0951123456", AirlineCodes.getFullBagTag(bagTag));
 	}
 }
