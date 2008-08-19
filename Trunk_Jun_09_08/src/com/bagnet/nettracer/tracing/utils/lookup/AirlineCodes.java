@@ -20,8 +20,8 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 public class AirlineCodes {
 
 	private static final String PATTERN_10_DIGIT_BAG_TAG = "^\\d{10}$";
-	private static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{10}$";
-	private static final String PATTERN_8_CHAR_BAG_TAG = "^[a-zA-Z]{2}\\d{6}$";
+	private static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{9}$";
+	private static final String PATTERN_8_CHAR_BAG_TAG = "^[a-zA-Z0-9]{2}\\d{6}$";
 
 	/**
 	 * Returns the two letter airline code when passed in the three
@@ -55,6 +55,7 @@ public class AirlineCodes {
 	 * @return Three digit airline ticketing code.  Returns null if no match is found.
 	 */
 	public static String getThreeDigitTicketingCode(String twoCharacterCode) {
+		
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		SQLQuery query = sess.createSQLQuery("SELECT * FROM LOOKUP_AIRLINE_CODES WHERE Airline_2_Character_Code = :string");
@@ -82,10 +83,6 @@ public class AirlineCodes {
 		Pattern tenDigitPattern = Pattern.compile(PATTERN_10_DIGIT_BAG_TAG);
 		Pattern nineDigitPattern = Pattern.compile(PATTERN_9_DIGIT_BAG_TAG);
 		Pattern twoCharPattern = Pattern.compile(PATTERN_8_CHAR_BAG_TAG);
-		
-		if (twoCharPattern.matcher(bagTag).find()) {
-			return bagTag;
-		}
 
 		String airlineCode = "";
 		String suffix = "";
@@ -132,7 +129,7 @@ public class AirlineCodes {
 			if (threeDigitCode == null) {
 				throw new BagtagException(BagtagException.NO_MATCH_MESSAGE);
 			}
-			return threeDigitCode + bagTag.substring(2);
+			return "0" + threeDigitCode + bagTag.substring(2);
 		} else {
 			throw new BagtagException(BagtagException.INVALID_FORMAT_MESSAGE);
 		}
