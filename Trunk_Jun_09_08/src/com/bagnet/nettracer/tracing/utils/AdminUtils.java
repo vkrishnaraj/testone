@@ -557,32 +557,6 @@ public class AdminUtils {
 		}
 	}
 
-	public static List getLZStation(String companycode, String locale, int rowsperpage, int currpage) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Station.class).add(Expression.eq("is_lz", new Integer(1))).add(Expression.eq("locale", locale));
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companycode));
-			if (rowsperpage > 0) {
-				int startnum = currpage * rowsperpage;
-				cri.setFirstResult(startnum);
-				cri.setMaxResults(rowsperpage);
-			}
-			return cri.list();
-		} catch (Exception e) {
-			logger.fatal(e.getMessage());
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					logger.fatal(e.getMessage());
-				}
-			}
-		}
-	}
-
 	/**
 	 * Get the shift based on its id
 	 * 

@@ -225,7 +225,7 @@ public class LogonAction extends Action {
 						entries = x;
 				} else {
 					if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_BAGS_TO_LZ)) {
-						if (s.isThisOhdLz()) {
+						if (!s.isThisOhdLz()) {
 							int x = OHDUtils.getBagsToLZedCount(s.getStation_ID());
 							if (x != -1)
 								entries = x;

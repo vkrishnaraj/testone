@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
@@ -176,8 +177,9 @@ public class ForwardOnHandAction extends Action {
 
 		if (request.getParameter("lz") != null) {
 			//from lz..update the
-			List stations = AdminUtils.getLZStation(user.getStation().getCompany()
-					.getCompanyCode_ID(), user.getDefaultlocale(), 0, 0);
+			List stations = new ArrayList();
+			stations.add(StationBMO.getStation(user.getStation().getCompany().getVariable().getOhd_lz()));
+				
 			if (stations == null || stations.size() == 0) {
 				return (mapping.findForward(TracingConstants.FORWARD_ERROR));
 			} else {

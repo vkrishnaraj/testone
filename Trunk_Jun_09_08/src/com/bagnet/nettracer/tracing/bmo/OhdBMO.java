@@ -564,10 +564,10 @@ public class OhdBMO {
 				sql.append(" and items.OHD_categorytype_ID = :OHD_categorytype_ID ");
 			}
 
-			if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
+			if (notClosed == true) {
+				sql.append(" and ohd.status.status_ID != :status_ID ");				
+			} else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
 				sql.append(" and ohd.status.status_ID = :status_ID ");
-			} else if (notClosed == true) {
-				sql.append(" and ohd.status.status_ID != :status_ID ");
 			}
 			
 			
@@ -680,11 +680,11 @@ public class OhdBMO {
 				}
 			}
 
-			if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
-				q.setInteger("status_ID", Integer.parseInt(oDTO.getStatus_ID()));
-			} else if (notClosed) {
+			if (notClosed) {
 				q.setInteger("status_ID", TracingConstants.OHD_STATUS_CLOSED);
-			}
+			}	else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
+				q.setInteger("status_ID", Integer.parseInt(oDTO.getStatus_ID()));
+			} 
 			
 			if (oDTO.getAirline() != null && oDTO.getAirline().length() > 0) {
 				q.setString("airline", oDTO.getAirline().toUpperCase());
