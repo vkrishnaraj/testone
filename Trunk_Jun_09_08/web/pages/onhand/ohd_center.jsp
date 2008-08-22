@@ -270,11 +270,23 @@ function gotoHistoricalReport() {
                 }
               }
 %>
+
+              <%
+                if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
+              %>
+              
+                <logic:notEmpty name="OnHandForm" property="bagTagNumber">
+                  <br/><b><a href="scannerData.do?bagTagNumber=<bean:write name="OnHandForm" property="bagTagNumber" />&ohdId=<bean:write name="OnHandForm" property="ohd_id" />"><bean:message key="scanner.link"/></a></b><br/>
+                </logic:notEmpty>
+              <%
+              }
+              %>
+
             </logic:notEqual>
             
   
             <logic:notEqual name="OnHandForm" property="wt_id" value="">
-        		<br> WorldTracer ID: <a href="worldtraceraf.do?ohd_id=<bean:write name="OnHandForm" property="wt_id" />"><bean:write name="OnHandForm" property="wt_id" /></a> 
+        		<br>WorldTracer ID: <a href="worldtraceraf.do?ohd_id=<bean:write name="OnHandForm" property="wt_id" />"><bean:write name="OnHandForm" property="wt_id" /></a> 
        		</logic:notEqual>
         
           </p>

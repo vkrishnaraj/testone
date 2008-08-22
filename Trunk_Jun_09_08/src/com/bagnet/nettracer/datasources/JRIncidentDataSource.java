@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bagnet.nettracer.tracing.utils.reporting;
+package com.bagnet.nettracer.datasources;
 
 import java.util.ArrayList;
 import java.util.HashMap;

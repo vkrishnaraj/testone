@@ -4,8 +4,16 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 
-        <h1 class="green">
+<%
+  Agent  user = (Agent)session.getAttribute("user");
+%>
+
+
+<h1 class="green">
           <bean:message key="Company" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           <input type="hidden" name="pageState" value="<%=request.getAttribute("pageState") %>" />
@@ -220,6 +228,37 @@
 	              <html:text styleClass="textfield" name="companyForm" property="min_interim_approval_miles" size="4" maxlength="4" />
 	            </td>
 	          </tr>
+            <%
+            if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, user)) {
+            %>
+	          <tr>
+	            <td>
+	              <bean:message key="colname.default.scanner.back" />
+	              <font color=red>
+	                *
+	              </font>
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="scannerDefaultBack" size="4" maxlength="4" />
+	            </td>
+	          </tr>
+	          <tr>
+	            <td>
+	              <bean:message key="colname.default.scanner.forward" />
+	              <font color=red>
+	                *
+	              </font>
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="scannerDefaultForward" size="4" maxlength="4" />
+	            </td>
+	          </tr>
+            <%
+            }
+	        %>
+
 		    <tr>
             <td colspan="2">
               &nbsp;

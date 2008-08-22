@@ -286,8 +286,8 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
 	                &nbsp;</span></a>
 	          </dd>
 	          <%
-	          	if (true) {
-				//if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, loginuser)) {
+	          	//if (true) {
+				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, loginuser)) {
 			  %>
 	          
 	          <dd>

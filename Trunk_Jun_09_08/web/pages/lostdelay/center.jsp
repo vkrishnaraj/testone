@@ -312,6 +312,19 @@ function gotoHistoricalReport() {
               </td>
               <td>
                 <html:text name="claimcheck" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
+                <%
+                  if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
+                %>
+                
+                  <logic:notEmpty name="claimcheck" property="claimchecknum">
+                    <a href="scannerData.do?bagTagNumber=<bean:write name="claimcheck" property="claimchecknum" />&incidentId=<bean:write name="incidentForm" property="incident_ID" />"><bean:message key="scanner.link"/></a>
+                  </logic:notEmpty>
+                <%
+                }
+                %>
+                
+              </td>
+              <td>
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
                   <logic:notEmpty name="claimcheck" property="OHD_ID">
                     <a href='addOnHandBag.do?ohd_ID=<bean:write name="claimcheck" property="OHD_ID"/>'><bean:write name="claimcheck" property="OHD_ID" /></a>
@@ -333,7 +346,7 @@ function gotoHistoricalReport() {
               </td>
             </tr>
             <tr>
-              <td colspan=2>
+              <td colspan="3">
                 <html:submit styleId="button" property="deleteClaimcheck" indexed="true">
                   <bean:message key="button.delete_claim" />
                 </html:submit>

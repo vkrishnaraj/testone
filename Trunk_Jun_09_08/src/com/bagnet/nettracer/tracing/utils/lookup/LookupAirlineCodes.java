@@ -17,7 +17,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
  * @author Byron
  *
  */
-public class AirlineCodes {
+public class LookupAirlineCodes {
 
 	private static final String PATTERN_10_DIGIT_BAG_TAG = "^\\d{10}$";
 	private static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{9}$";

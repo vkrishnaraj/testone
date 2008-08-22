@@ -813,6 +813,30 @@ function gopage(i) {
 
               </logic:iterate>
             </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.default.scanner.forward" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.scannerDefaultForward" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.default.scanner.back" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.scannerDefaultBack" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
 
 
           </table>

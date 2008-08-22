@@ -575,6 +575,10 @@
     	<put name="center" value="/pages/billing/billing_report.jsp"/>
     </definition>
     
+     <definition name="scanner_data" extends="homepage">
+    	<put name="center" value="/pages/scanners/scannerdata.jsp"/>
+    </definition>
+    
     <definition name="ajax_agentassigned" path="/pages/ajax_divs/agentassigned.jsp">
     </definition>
     <definition name="ajax_faultstation" path="/pages/ajax_divs/faultstation.jsp">

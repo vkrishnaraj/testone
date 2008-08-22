@@ -67,6 +67,8 @@ public class Company_Specific_Variable implements Serializable {
 	private String wt_airlinecode;
 	private int wt_enabled;
 	private int wt_write_enabled;
+	private int scannerDefaultBack;
+	private int scannerDefaultForward;
 	
 
 	/**
@@ -883,5 +885,33 @@ public class Company_Specific_Variable implements Serializable {
 	 */
 	public void setRetrieve_actionfile_interval(int retrieve_actionfile_interval) {
 		this.retrieve_actionfile_interval = retrieve_actionfile_interval;
+	}
+	/**
+	 * @return the scannerDefaultBack
+	 * @hibernate.property type="integer"
+	 */
+	public int getScannerDefaultBack() {
+		return scannerDefaultBack;
+	}
+	/**
+	 * @param scannerDefaultBack the scannerDefaultBack to set
+	 */
+	public void setScannerDefaultBack(int scannerDefaultBack) {
+		this.scannerDefaultBack = scannerDefaultBack;
+	}
+	
+	/**
+	 * @return the scannerDefaultForward
+	 * @hibernate.property type="integer"
+	 */
+	public int getScannerDefaultForward() {
+		return scannerDefaultForward;
+	}
+	
+	/**
+	 * @param scannerDefaultForward the scannerDefaultForward to set
+	 */
+	public void setScannerDefaultForward(int scannerDefaultForward) {
+		this.scannerDefaultForward = scannerDefaultForward;
 	}
 }

@@ -95,6 +95,14 @@
          	    <arg key="colname.ohd_to_lz_days"/>
            	</field>
            	
+          	<field property="scannerDefaultForward" depends="required,integer">
+         	    <arg key="colname.default.scanner.forward"/>
+           	</field>
+           	
+          	<field property="scannerDefaultBack" depends="required,integer">
+         	    <arg key="colname.default.scanner.back"/>
+           	</field>
+           	
 		</form>
 				
 		<form name="stationForm">
@@ -233,6 +241,21 @@
  	        <field property="password2"
          	   depends="required">
          	     <arg key="prompt.password"/>
+	         </field>
+		</form>
+		
+		<form name="scannerDataForm">
+ 	        <field property="bagTagNumber"
+         	   depends="required">
+         	     <arg key="scanner.field.bagTagNumber"/>
+	         </field>
+ 	        <field property="startDate"
+         	   depends="required">
+         	     <arg key="scanner.field.startDate"/>
+	         </field>
+ 	        <field property="endDate"
+         	   depends="required">
+         	     <arg key="scanner.field.endDate"/>
 	         </field>
 		</form>
 

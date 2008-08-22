@@ -65,5 +65,7 @@ public class ReportingConstants {
 	public final static String SEARCH_INCIDENT_RPT_NAME = "search_incident";
 	public final static int SEARCH_OHD_RPT = 26;
 	public final static String SEARCH_ONHAND_RPT_NAME = "search_onhand";
+	public final static int SEARCH_SCANDATA_RPT = 27;
+	public final static String SEARCH_SCANDATA_RPT_NAME = "search_scandata";
 
 }

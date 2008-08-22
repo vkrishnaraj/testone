@@ -75,10 +75,12 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String bak_nttracer_data_days;
 	private String bak_nttracer_ohd_data_days;
 	private String bak_nttracer_lostfound_data_days;
-    private String wt_url;
-    private String wt_airlinecode;
-    private String wt_enabled;
-    private String wt_write_enabled;
+  private String wt_url;
+  private String wt_airlinecode;
+  private String wt_enabled;
+  private String wt_write_enabled;
+ 	private Integer scannerDefaultBack;
+ 	private Integer scannerDefaultForward;
 
 
 	public String getWt_write_enabled() {
@@ -285,6 +287,34 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setRetrieve_actionfile_interval(String retrieve_actionfile_interval) {
 		this.retrieve_actionfile_interval = retrieve_actionfile_interval;
+	}
+
+	/**
+	 * @return the scannerDefaultBack
+	 */
+	public Integer getScannerDefaultBack() {
+		return scannerDefaultBack;
+	}
+
+	/**
+	 * @param scannerDefaultBack the scannerDefaultBack to set
+	 */
+	public void setScannerDefaultBack(Integer scannerDefaultBack) {
+		this.scannerDefaultBack = scannerDefaultBack;
+	}
+
+	/**
+	 * @return the scannerDefaultForward
+	 */
+	public Integer getScannerDefaultForward() {
+		return scannerDefaultForward;
+	}
+
+	/**
+	 * @param scannerDefaultForward the scannerDefaultForward to set
+	 */
+	public void setScannerDefaultForward(Integer scannerDefaultForward) {
+		this.scannerDefaultForward = scannerDefaultForward;
 	}
 
 

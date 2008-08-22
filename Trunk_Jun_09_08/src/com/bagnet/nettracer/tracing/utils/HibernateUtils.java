@@ -291,13 +291,10 @@ public class HibernateUtils {
 								obj.getVariable().getMin_interim_approval_voucher());
 						c.getVariable().setMin_interim_approval_miles(
 								obj.getVariable().getMin_interim_approval_miles());
-						c.getVariable().setBak_nttracer_data_days(
-								obj.getVariable().getBak_nttracer_data_days());
-						c.getVariable().setBak_nttracer_ohd_data_days(
-								obj.getVariable().getBak_nttracer_ohd_data_days());
-						c.getVariable().setBak_nttracer_lostfound_data_days(
-								obj.getVariable().getBak_nttracer_lostfound_data_days());
-
+						
+						
+						c.getVariable().setScannerDefaultBack(obj.getVariable().getScannerDefaultBack());
+						c.getVariable().setScannerDefaultForward(obj.getVariable().getScannerDefaultForward());
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {

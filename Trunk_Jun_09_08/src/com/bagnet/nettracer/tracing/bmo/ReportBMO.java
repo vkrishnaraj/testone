@@ -52,6 +52,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.bagnet.nettracer.datasources.JRIncidentDataSource;
+import com.bagnet.nettracer.datasources.JROnhandDataSource;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -62,6 +64,7 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncidentReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_3_DTO;
@@ -76,8 +79,6 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.utils.reporting.JRIncidentDataSource;
-import com.bagnet.nettracer.tracing.utils.reporting.JROnhandDataSource;
 
 /**
  * @author Administrator
@@ -2744,5 +2745,29 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		}
 	}
 	
-	
+	public static String createSearchScandataReport(ScannerDTO dto, HttpServletRequest request, int outputtype, String language, String reportPath) {
+		try {
+			
+			Map parameters = new HashMap();			
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			parameters.put("form", request.getAttribute("scannerDataForm"));
+			
+			IncidentBMO bmo = new IncidentBMO();
+			BagService bs = new BagService();
+
+			ReportBMO rbmo = new ReportBMO(request);
+			JasperReport jasperReport = getCompiledReport(ReportingConstants.SEARCH_SCANDATA_RPT_NAME, reportPath);
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(dto.getScannerDataDTOs());
+			return rbmo.getReportFile(jasperReport, ds, parameters, ReportingConstants.SEARCH_ONHAND_RPT_NAME, reportPath, outputtype);
+
+		} catch (Exception e) {
+			logger.error("unable to search incident report: " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

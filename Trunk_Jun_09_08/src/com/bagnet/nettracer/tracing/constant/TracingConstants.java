@@ -77,6 +77,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CUSTOM_REPORTS = "Custom Reports";
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_TO_BE_DELIVERED = "Bags To Be Delivered";
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_IN_STATION = "On-hand Bags";
+	public final static String SYSTEM_COMPONENT_NAME_SCANNER_DATA = "Scanner Data";
+	public final static String FORWARD_SCANNER_DATA = "scannerData";
 	
 	public final static String SYSTEM_COMPONENT_NAME_ANALYTICAL_REPORTS = "Analytical Reports";
 	public final static String SYSTEM_COMPONENT_NAME_ADMINISTRATION = "Administration";

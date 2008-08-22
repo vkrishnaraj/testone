@@ -63,6 +63,8 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int secure_password;
 	private int lz_mode;
 	private int ohd_lz;
+	private int scannerDefaultBack;
+	private int scannerDefaultForward;
 	
 	
 	/**
@@ -745,5 +747,31 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 */
 	public void setLz_mode(int lz_mode) {
 		this.lz_mode = lz_mode;
+	}
+	/**
+	 * @return the scannerDefaultBack
+	 * @hibernate.property type="integer"
+	 */
+	public int getScannerDefaultBack() {
+		return scannerDefaultBack;
+	}
+	/**
+	 * @param scannerDefaultBack the scannerDefaultBack to set
+	 */
+	public void setScannerDefaultBack(int scannerDefaultBack) {
+		this.scannerDefaultBack = scannerDefaultBack;
+	}
+	/**
+	 * @return the scannerDefaultForward
+	 * @hibernate.property type="integer"
+	 */
+	public int getScannerDefaultForward() {
+		return scannerDefaultForward;
+	}
+	/**
+	 * @param scannerDefaultForward the scannerDefaultForward to set
+	 */
+	public void setScannerDefaultForward(int scannerDefaultForward) {
+		this.scannerDefaultForward = scannerDefaultForward;
 	}
 }

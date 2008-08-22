@@ -149,7 +149,14 @@
 		<form-bean name="interimExpenseRequestForm" type="com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm" />
 		<form-bean name="createdInterimExpenseForm" type="com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm" />
 		<form-bean name="billingForm" type="com.bagnet.nettracer.tracing.forms.BillingForm" />
-
+		
+		<form-bean name="scannerDataForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="incidentId" type="java.lang.String" />
+			<form-property name="ohdId" type="java.lang.String" />
+			<form-property name="startDate" type="java.lang.String" />
+			<form-property name="endDate" type="java.lang.String" />
+			<form-property name="bagTagNumber" type="java.lang.String" />
+		</form-bean>
 
 		<form-bean name="worldtracerafForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="username" type="java.lang.String" />
@@ -355,7 +362,8 @@
 		<forward name="ajax_faultstation" path="ajax_faultstation" />
 		<forward name="ajax_servicelevel" path="ajax_servicelevel" />
 		<forward name="ajax_statuses" path="ajax_statuses" />
-		<forward name="viewworldtracercount" path="view_worldtracer_count"></forward>
+		<forward name="viewworldtracercount" path="view_worldtracer_count" />
+		<forward name="scannerData" path="scanner_data" />
 	</global-forwards>
 
 	<!-- ========== Action Mapping Definitions ============================== -->
@@ -543,7 +551,7 @@
 
 		<action path="/worldtracercount" type="com.bagnet.nettracer.tracing.actions.WorldTracerCount" name="worldtracerafForm" scope="request" validate="false"></action>
 
-
+		<action path="/scannerData" type="com.bagnet.nettracer.tracing.actions.ScannerDataAction" name="scannerDataForm" scope="request" validate="false"></action>
 
 	</action-mappings>
 
@@ -567,6 +575,8 @@
 		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 	</plug-in>
-
+	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+		<set-property property="contextConfigLocation" value="/WEB-INF/applicationContext.xml"/>
+	</plug-in>
 
 </struts-config>

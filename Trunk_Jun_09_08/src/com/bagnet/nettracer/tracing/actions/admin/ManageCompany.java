@@ -133,6 +133,8 @@ public final class ManageCompany extends Action {
 					dForm.setMin_interim_approval_miles(""
 							+ cmpny.getVariable().getMin_interim_approval_miles());
 					dForm.setMax_image_file_size("" + cmpny.getVariable().getMax_image_file_size());
+					dForm.setScannerDefaultBack(new Integer(cmpny.getVariable().getScannerDefaultBack()));
+					dForm.setScannerDefaultForward(new Integer(cmpny.getVariable().getScannerDefaultForward()));
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
@@ -143,12 +145,6 @@ public final class ManageCompany extends Action {
 					dForm.setLz_mode("" + cmpny.getVariable().getLz_mode());
 					dForm.setOhd_lz("" + cmpny.getVariable().getOhd_lz());
 					populateLists(request, dForm);
-					dForm.setBak_nttracer_data_days(""
-					        + cmpny.getVariable().getBak_nttracer_data_days());
-					dForm.setBak_nttracer_ohd_data_days(""
-					        + cmpny.getVariable().getBak_nttracer_ohd_data_days());
-					dForm.setBak_nttracer_lostfound_data_days(""
-					        + cmpny.getVariable().getBak_nttracer_lostfound_data_days());
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_SECURITY)) {
@@ -318,11 +314,13 @@ public final class ManageCompany extends Action {
 					var.setMin_interim_approval_miles(Double.parseDouble((String) dForm
 							.getMin_interim_approval_miles()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
-					var.setBak_nttracer_data_days(Integer.parseInt((String) dForm.getBak_nttracer_data_days()));
-					var.setBak_nttracer_ohd_data_days(Integer.parseInt((String) dForm.getBak_nttracer_ohd_data_days()));
-					var.setBak_nttracer_lostfound_data_days(Integer.parseInt((String) dForm.getBak_nttracer_lostfound_data_days()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
-					
+					if (dForm.getScannerDefaultBack() != null) {
+						var.setScannerDefaultBack(dForm.getScannerDefaultBack().intValue());
+					}
+					if (dForm.getScannerDefaultForward() != null) {
+						var.setScannerDefaultForward(dForm.getScannerDefaultForward().intValue());
+					}
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
@@ -390,6 +388,7 @@ public final class ManageCompany extends Action {
 				}
 
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 			try {
