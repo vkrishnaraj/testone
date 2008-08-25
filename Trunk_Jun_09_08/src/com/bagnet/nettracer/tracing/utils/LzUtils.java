@@ -205,7 +205,7 @@ public class LzUtils {
 			// Update stations assigned to deleted LZs to the new default.
 			// if assigned lz is in delete these
 			// change to new default
-			List<Station> stationList = AdminUtils.getCustomStations(null, form.getCompanyCode(), 0, 0, TracingConstants.ActiveStatus.ALL);
+			List<Station> stationList = AdminUtils.getCustomStations(null, form.getCompanyCode(), 0, 0, TracingConstants.AgentActiveStatus.ALL);
 			for (int i=0; i<stationList.size(); ++i) {
 				Station station = stationList.get(i);
 				Lz lz = LzUtils.getLz(station);

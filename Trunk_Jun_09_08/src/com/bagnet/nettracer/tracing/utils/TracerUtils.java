@@ -415,7 +415,7 @@ public class TracerUtils {
 								.getAttribute("airlineallstationlist")
 								: getStationList(locale, company
 										.getCompanyCode_ID(),
-										TracingConstants.ActiveStatus.ALL));
+										TracingConstants.AgentActiveStatus.ALL));
 
 		// set company lists
 		if (session.getAttribute("companylistByName") == null
@@ -629,7 +629,7 @@ public class TracerUtils {
 	}
 
 	public static ArrayList getStationList(String locale, String company,
-			TracingConstants.ActiveStatus status) throws HibernateException {
+			TracingConstants.AgentActiveStatus status) throws HibernateException {
 
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -641,22 +641,22 @@ public class TracerUtils {
 			if (company != null) {
 				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where "
 						+ "station.locale = :locale and station.company.companyCode_ID = :company ";
-				if (status != TracingConstants.ActiveStatus.ALL)
+				if (status != TracingConstants.AgentActiveStatus.ALL)
 					sql += " and station.active = :active ";
 				sql += " order by stationcode";
 
 			} else {
 				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where station.locale = :locale ";
-				if (status != TracingConstants.ActiveStatus.ALL)
+				if (status != TracingConstants.AgentActiveStatus.ALL)
 					sql += " and station.active = :active ";
 				sql += " order by stationcode";
 			}
 			Query q = sess.createQuery(sql);
 			q.setParameter("locale", locale);
-			if (status != TracingConstants.ActiveStatus.ALL)
-				if (status == TracingConstants.ActiveStatus.ACTIVE)
+			if (status != TracingConstants.AgentActiveStatus.ALL)
+				if (status == TracingConstants.AgentActiveStatus.ACTIVE)
 					q.setParameter("active", true);
-			if (status == TracingConstants.ActiveStatus.INACTIVE)
+			if (status == TracingConstants.AgentActiveStatus.INACTIVE)
 				q.setParameter("active", false);
 			if (company != null)
 				q.setParameter("company", company);
@@ -692,7 +692,7 @@ public class TracerUtils {
 	public static ArrayList getStationList(String locale, String company)
 			throws HibernateException {
 		return getStationList(locale, company,
-				TracingConstants.ActiveStatus.ACTIVE);
+				TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 
 	public static ArrayList<ArrayList<Company>> getCompanyLists()

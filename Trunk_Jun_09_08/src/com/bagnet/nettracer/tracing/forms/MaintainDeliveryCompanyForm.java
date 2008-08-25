@@ -20,6 +20,7 @@ public final class MaintainDeliveryCompanyForm extends ValidatorForm {
 	private String companySearchName;
 	private String description;
 	private String deliveryCompanyName;
+	private String integration_type;
 	
 	// May not be necessary
 	public void setStation_ID(int id) {
@@ -93,5 +94,19 @@ public final class MaintainDeliveryCompanyForm extends ValidatorForm {
 	
 	public String getCompanySearchName() {
 		return companySearchName;
+	}
+
+	/**
+	 * @return the integration_type
+	 */
+	public String getIntegration_type() {
+		return integration_type;
+	}
+
+	/**
+	 * @param integration_type the integration_type to set
+	 */
+	public void setIntegration_type(String integration_type) {
+		this.integration_type = integration_type;
 	}
 }

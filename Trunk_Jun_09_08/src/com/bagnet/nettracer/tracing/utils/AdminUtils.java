@@ -1142,7 +1142,7 @@ public class AdminUtils {
 	 * @return list of stations
 	 */
 	public static List getStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
-		return getCustomStations(form, companyCode, rowsperpage, currpage, TracingConstants.ActiveStatus.ACTIVE);
+		return getCustomStations(form, companyCode, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 	
 	/**
@@ -1153,16 +1153,16 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getCustomStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage, TracingConstants.ActiveStatus activeStatus) {
+	public static List getCustomStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class);
 			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
 
-			if (activeStatus.equals(TracingConstants.ActiveStatus.ACTIVE)) {
+			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE)) {
 				cri.add(Expression.eq("active", true));
-			} else if (activeStatus.equals(TracingConstants.ActiveStatus.INACTIVE)) {
+			} else if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) {
 				cri.add(Expression.eq("active", false));
 			}
 
@@ -1372,7 +1372,7 @@ public class AdminUtils {
 	 * @return
 	 */
 	public static List getAgents(String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
-		return getCustomAgents(null, companyCode, sort, dForm, rowsperpage, currpage, TracingConstants.ActiveStatus.ACTIVE);
+		return getCustomAgents(null, companyCode, sort, dForm, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 
 	/**
@@ -1385,7 +1385,7 @@ public class AdminUtils {
 	 * @return
 	 */
 	public static List getAgentsByStation(String station_Id, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
-		return getCustomAgents(station_Id, null, sort, dForm, rowsperpage, currpage, TracingConstants.ActiveStatus.ACTIVE);
+		return getCustomAgents(station_Id, null, sort, dForm, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 
 	/**
@@ -1398,7 +1398,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getCustomAgents(String stationId, String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage, TracingConstants.ActiveStatus activeStatus) {
+	public static List getCustomAgents(String stationId, String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
 		Session sess = null;
 
 		try {
@@ -1417,10 +1417,10 @@ public class AdminUtils {
 			if (companyCode != null && companyCode.length() > 0)
 				sql.append(" and agent.station.company.companyCode_ID = :companyCode_ID ");
 
-			if (activeStatus.equals(TracingConstants.ActiveStatus.ACTIVE))
+			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE))
 				sql.append(" and agent.active = 1 ");
 
-			if (activeStatus.equals(TracingConstants.ActiveStatus.INACTIVE)) 
+			if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) 
 				sql.append(" and agent.active = 0 ");
 
 			if (dForm != null) {

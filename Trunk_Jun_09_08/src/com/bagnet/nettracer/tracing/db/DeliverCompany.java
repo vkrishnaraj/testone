@@ -1,16 +1,31 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.LabelValueBean;
+import org.apache.struts.util.MessageResources;
+
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 
 /**
  * @author Administrator
  * 
  * @hibernate.class table="delivercompany"
+ * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
+ * 			value="com.bagnet.nettracer.tracing.db.DeliverCompany$DeliveryIntegrationType"
  */
 public class DeliverCompany implements Serializable {
+	
+	private static Logger logger = Logger.getLogger(DeliverCompany.class);
+	
+	
 	private int delivercompany_ID;
 	private String name;
 	private String address;
@@ -18,7 +33,8 @@ public class DeliverCompany implements Serializable {
 	private Set servicelevels;
 	private boolean active;
 	private Company company;
-	private static Logger logger = Logger.getLogger(DeliverCompany.class);
+	private DeliveryIntegrationType delivery_integration_type;
+
 
 	/**
 	 * @return Returns the address.
@@ -157,5 +173,43 @@ public class DeliverCompany implements Serializable {
 			e.printStackTrace();
 		}
 		return match;
+	}
+
+	
+	/**
+	 * @return the delivery_integration_type
+	 * @hibernate.property type="deliveryIntegrationType"
+	 */
+	public DeliveryIntegrationType getDelivery_integration_type() {
+		return delivery_integration_type;
+	}
+
+	/**
+	 * @param delivery_integration_type the delivery_integration_type to set
+	 */
+	public void setDelivery_integration_type(
+			DeliveryIntegrationType delivery_integration_type) {
+		this.delivery_integration_type = delivery_integration_type;
+	}
+	
+	public static String getIntegrationTypeString(DeliveryIntegrationType type) {
+		MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		if (type.equals(DeliveryIntegrationType.RYNNS)) {
+			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.rynns");
+		} else if (type.equals(DeliveryIntegrationType.DSI)) {
+			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.dsi");
+		} else if (type.equals(DeliveryIntegrationType.FEDEX)) {
+			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.fedex");
+		}
+		return " ";
+	}
+	
+	public String getDeliveryIntegrationTypeString() {
+		return getIntegrationTypeString(delivery_integration_type);
+	}
+	
+	
+	public static enum DeliveryIntegrationType {
+		NONE, RYNNS, DSI, FEDEX
 	}
 }

@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -21,6 +22,7 @@ import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.DeliverCompany.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.audit.Audit_DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_DeliverCompany;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Deliver_ServiceLevel;
@@ -72,6 +74,8 @@ public final class ManageDeliveryCompanies extends Action {
 						
 			mForm.setDescription("");
 			mForm.setDeliveryCompanyName(company.getName());
+			mForm.setIntegration_type("");
+			request.setAttribute("integrationTypeList", getIntegrationTypeList());
 			return mapping.findForward(TracingConstants.EDIT_SERVICE_LEVEL);
 		}
 		
@@ -267,6 +271,8 @@ public final class ManageDeliveryCompanies extends Action {
 			mForm.setDelivercompany_ID(company.getDelivercompany_ID());
 			mForm.setDescription(serviceLevel.getDescription());
 			mForm.setDeliveryCompanyName(company.getName());
+			mForm.setIntegration_type(company.getDeliveryIntegrationTypeString());
+			request.setAttribute("integrationTypeList", getIntegrationTypeList());
 			return mapping.findForward(TracingConstants.EDIT_SERVICE_LEVEL);
 		} 
 		
@@ -323,5 +329,14 @@ public final class ManageDeliveryCompanies extends Action {
 			request.setAttribute("currpage", Integer.toString(currpage));
 		}
 		return mapping.findForward(TracingConstants.VIEW_DELIVERY_COMPANIES);
+	}
+	
+	public List getIntegrationTypeList() {
+		ArrayList<LabelValueBean> list = new ArrayList<LabelValueBean>();
+		for (DeliveryIntegrationType type: DeliveryIntegrationType.values()) {
+			LabelValueBean bean = new LabelValueBean(DeliverCompany.getIntegrationTypeString(type), type.ordinal() + "");
+			list.add(bean);
+		}
+		return list;
 	}
 }

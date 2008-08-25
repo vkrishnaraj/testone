@@ -479,17 +479,17 @@ public final class ManageStation extends Action {
 		}
 		
 		List stationList = null;
-		TracingConstants.ActiveStatus status;
+		TracingConstants.AgentActiveStatus status;
 		if (request.getParameter("active") == null || request.getParameter("active").equals("-1") || request.getParameter("save") != null) {
 			dForm.set("active", null);
-			status = TracingConstants.ActiveStatus.ALL;
-			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.ActiveStatus.ALL);
+			status = TracingConstants.AgentActiveStatus.ALL;
+			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.AgentActiveStatus.ALL);
 		} else if (request.getParameter("active").equals("true")) {
-			status = TracingConstants.ActiveStatus.ACTIVE;
-			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.ActiveStatus.ACTIVE);
+			status = TracingConstants.AgentActiveStatus.ACTIVE;
+			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.AgentActiveStatus.ACTIVE);
 		} else {
-			status = TracingConstants.ActiveStatus.INACTIVE;
-			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.ActiveStatus.INACTIVE);
+			status = TracingConstants.AgentActiveStatus.INACTIVE;
+			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.AgentActiveStatus.INACTIVE);
 		}
 
 		if (stationList != null && stationList.size() > 0) {
