@@ -1,8 +1,6 @@
 /*
  * Created on Jul 9, 2004
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 package com.bagnet.nettracer.tracing.actions.admin;
 
@@ -176,15 +174,13 @@ public final class ManageAgents extends Action {
 			if (request.getParameter("addNew") != null) {
 				request.setAttribute("aNew", "1");
 				dForm.set("max_ws_sessions", "0");
+				
+				//set the default values.
+				dForm.set("timeout", TracingConstants.DEFAULT_AGENT_TIMEOUT);
+				dForm.set("currentTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
+				dForm.set("defaultTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
+				dForm.set("defCurrency", "" + TracingConstants.DEFAULT_AGENT_CURRENCY);
 			}
-
-
-			//set the default values.
-
-			dForm.set("timeout", TracingConstants.DEFAULT_AGENT_TIMEOUT);
-			dForm.set("currentTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
-			dForm.set("defaultTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
-			dForm.set("defCurrency", "" + TracingConstants.DEFAULT_AGENT_CURRENCY);
 
 			return mapping.findForward(TracingConstants.EDIT_AGENT);
 		}
@@ -370,8 +366,10 @@ public final class ManageAgents extends Action {
 				saveMessages(request, errors);
 				if (request.getParameter("self") != null)
 					return mapping.findForward(TracingConstants.SELF_UPDATE_SUCCESS);
-				else
-					return mapping.findForward(TracingConstants.EDIT_AGENT);
+				else {
+					dForm.initialize(mapping);
+					dForm.set("companyCode", companyCode);
+				}
 
 			} else {
 				if (request.getParameter("aNew") != null) {
@@ -392,22 +390,22 @@ public final class ManageAgents extends Action {
 
 		if (request.getParameter("self") != null) response.sendRedirect("logon.do?taskmanager=1");
 
-		TracingConstants.ActiveStatus status;
+		TracingConstants.AgentActiveStatus status;
 		if (request.getParameter("active") == null || request.getParameter("active").equals("-1") || request.getParameter("save") != null) {
 			dForm.set("active", null);
-			status = TracingConstants.ActiveStatus.ALL;
+			status = TracingConstants.AgentActiveStatus.ALL;
 		} else if (request.getParameter("active").equals("true")) {
-			status = TracingConstants.ActiveStatus.ACTIVE;
+			status = TracingConstants.AgentActiveStatus.ACTIVE;
 		} else {
-			status = TracingConstants.ActiveStatus.INACTIVE;
+			status = TracingConstants.AgentActiveStatus.INACTIVE;
 		}
 
 		List agentList = null;
 
-		if (request.getParameter("station_id") == null || request.getParameter("station_id").equals("-1")) {
+		if (((String) dForm.get("station_id")).equals("") || ((String) dForm.get("station_id")).equals("-1")) {
 			agentList = AdminUtils.getCustomAgents(null, companyCode, sort, dForm, 0, 0, status);
 		} else {
-			agentList = AdminUtils.getCustomAgents(request.getParameter("station_id"), null, sort, dForm, 0, 0, status);
+			agentList = AdminUtils.getCustomAgents((String) dForm.get("station_id"), null, sort, dForm, 0, 0, status);
 		}
 		
 		
@@ -433,10 +431,10 @@ public final class ManageAgents extends Action {
 				request.setAttribute("currpage", "0");
 			}
 
-			if (request.getParameter("station_id") == null || request.getParameter("station_id").equals("-1")) {
+			if (((String) dForm.get("station_id")).equals("") || ((String) dForm.get("station_id")).equals("-1")) {
 				agentList = AdminUtils.getCustomAgents(null, companyCode, sort, dForm, rowsperpage, currpage, status);
 			} else {
-				agentList = AdminUtils.getCustomAgents(request.getParameter("station_id"), null, sort, dForm, rowsperpage, currpage, status);
+				agentList = AdminUtils.getCustomAgents((String) dForm.get("station_id"), null, sort, dForm, rowsperpage, currpage, status);
 			}
 			
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
