@@ -14,21 +14,21 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.LabelValueBean;
 
+import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.DeliverCompany.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.audit.Audit_DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_DeliverCompany;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
+import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -64,22 +64,22 @@ public final class ManageDeliveryCompanies extends Action {
 		MaintainDeliveryCompanyForm mForm = (MaintainDeliveryCompanyForm) form;
 
 		String companyCode = user.getStation().getCompany().getCompanyCode_ID();
+		request.setAttribute("integrationTypeList", DeliveryIntegrationTypeUtils.getIntegrationTypeList());
 
 		String sort = request.getParameter("sort");
 		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
 		
 		if (request.getParameter("addNewServiceLevel") != null) {
 			String companyId = request.getParameter("delivercompany_ID");
-			DeliverCompany company = AdminUtils.getDeliveryCompany(companyId);
+			DeliverCompany company = DelivercompanyBMO.getDeliveryCompany(companyId);
 						
 			mForm.setDescription("");
 			mForm.setDeliveryCompanyName(company.getName());
-			mForm.setIntegration_type("");
-			request.setAttribute("integrationTypeList", getIntegrationTypeList());
 			return mapping.findForward(TracingConstants.EDIT_SERVICE_LEVEL);
 		}
 		
 		if (request.getParameter("addDeliveryCompany") != null) {
+
 			return mapping.findForward(TracingConstants.EDIT_DELIVERY_COMPANY);
 		}
 		
@@ -101,7 +101,7 @@ public final class ManageDeliveryCompanies extends Action {
 			if (request.getParameter("deleteDeliveryCompanyId") != null && !request.getParameter("deleteDeliveryCompanyId").equals("")) {
 				
 				String companyId = request.getParameter("deleteDeliveryCompanyId");
-				DeliverCompany company = AdminUtils.getDeliveryCompany(companyId);
+				DeliverCompany company = DelivercompanyBMO.getDeliveryCompany(companyId);
 				company.setActive(false);
 				HibernateUtils.save(company);
 				if (user.getStation().getCompany().getVariable().getAudit_delivery_companies() == 1) {
@@ -116,7 +116,7 @@ public final class ManageDeliveryCompanies extends Action {
 			if (request.getParameter("deleteDelivCoStation") != null && !request.getParameter("deleteDelivCoStation").equals("")) {
 				
 				String cid = request.getParameter("delivercompany_ID");
-				DeliverCompany c = AdminUtils.getDeliveryCompany(cid);
+				DeliverCompany c = DelivercompanyBMO.getDeliveryCompany(cid);
 			
 				String deleteDelivCoStation = request.getParameter("deleteDelivCoStation");		
 				DeliverCo_Station deliverCoStation = BDOUtils.getDeliverCo_Station(deleteDelivCoStation, c);
@@ -167,6 +167,8 @@ public final class ManageDeliveryCompanies extends Action {
 			c.setPhone(mForm.getPhone());
 			c.setName(mForm.getName());
 			c.setCompany(user.getStation().getCompany());
+			c.setDelivery_integration_type(new Integer(mForm.getIntegration_type()).intValue());
+			c.setIntegration_key(mForm.getIntegration_key());
 			c.setActive(true);
 			
 
@@ -195,7 +197,7 @@ public final class ManageDeliveryCompanies extends Action {
 				companyId =  Integer.toString(objRef.getDelivercompany_ID());
 			} else {
 				companyId = request.getParameter("delivercompany_ID");
-				company = AdminUtils.getDeliveryCompany(companyId);
+				company = DelivercompanyBMO.getDeliveryCompany(companyId);
 					
 			}
 			
@@ -237,6 +239,8 @@ public final class ManageDeliveryCompanies extends Action {
 			mForm.setName(company.getName());
 			mForm.setAddress(company.getAddress());
 			mForm.setPhone(company.getPhone());
+			mForm.setIntegration_type(company.getDelivery_integration_type().ordinal() + "");
+			mForm.setIntegration_key(company.getIntegration_key());
 			
 			List<Station> stationList = BDOUtils.getStationsByDeliveryCompany(company);
 			request.setAttribute("stationList", stationList);
@@ -264,15 +268,15 @@ public final class ManageDeliveryCompanies extends Action {
 
 		if (request.getParameter("editServiceLevel") != null) {
 			String companyId = request.getParameter("delivercompany_ID");
-			DeliverCompany company = AdminUtils.getDeliveryCompany(companyId);			
+			DeliverCompany company = DelivercompanyBMO.getDeliveryCompany(companyId);			
 			String serviceLevelId = request.getParameter("serviceLevelId");
 			Deliver_ServiceLevel serviceLevel = BDOUtils.getServiceLevel(serviceLevelId);
 			mForm.setServiceLevel_ID(serviceLevel.getServicelevel_ID());
 			mForm.setDelivercompany_ID(company.getDelivercompany_ID());
 			mForm.setDescription(serviceLevel.getDescription());
 			mForm.setDeliveryCompanyName(company.getName());
-			mForm.setIntegration_type(company.getDeliveryIntegrationTypeString());
-			request.setAttribute("integrationTypeList", getIntegrationTypeList());
+			mForm.setIntegration_type(company.getDelivery_integration_type().ordinal() + "");
+			request.setAttribute("integrationTypeList", DeliveryIntegrationTypeUtils.getIntegrationTypeList());
 			return mapping.findForward(TracingConstants.EDIT_SERVICE_LEVEL);
 		} 
 		
@@ -331,12 +335,6 @@ public final class ManageDeliveryCompanies extends Action {
 		return mapping.findForward(TracingConstants.VIEW_DELIVERY_COMPANIES);
 	}
 	
-	public List getIntegrationTypeList() {
-		ArrayList<LabelValueBean> list = new ArrayList<LabelValueBean>();
-		for (DeliveryIntegrationType type: DeliveryIntegrationType.values()) {
-			LabelValueBean bean = new LabelValueBean(DeliverCompany.getIntegrationTypeString(type), type.ordinal() + "");
-			list.add(bean);
-		}
-		return list;
-	}
+	
+
 }

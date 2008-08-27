@@ -50,7 +50,7 @@
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <table class="form2" cellspacing="0" cellpadding="0">
-            <font color=red>
+            <font color="red">
               <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             </font>
             <tr>
@@ -82,6 +82,28 @@
                 </td>
                 <td>
                   <html:text styleClass="textfield" name="MaintainDeliveryCompanyForm" property="phone" size="30" maxlength="50" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="delivercompany.header.integrationtype" />
+                  :
+                </td>
+                <td>
+                  <html:select styleClass="dropdown" name="MaintainDeliveryCompanyForm" property="integration_type">
+                    <html:options collection="integrationTypeList" property="value" labelProperty="label" />
+                  </html:select>
+
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="delivercompany.header.integrationkey" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" name="MaintainDeliveryCompanyForm" property="integration_key" size="20" maxlength="20" />
+
                 </td>
               </tr>
               <tr>

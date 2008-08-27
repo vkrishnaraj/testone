@@ -21,12 +21,17 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
+import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
+import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -35,8 +40,6 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 /**
  * @author Matt
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class BDOAction extends Action {
 
@@ -60,7 +63,7 @@ public class BDOAction extends Action {
 
 		BDOForm theform = (BDOForm) form;
 
-		ActionMessages errors = new ActionMessages();
+		ActionMessages messages = new ActionMessages();
 
 		// ohd id or mbr id present in the request parameter
 		String ohd = request.getParameter("ohd_id");
@@ -72,7 +75,7 @@ public class BDOAction extends Action {
 		} else if (request.getParameter("onhand") != null) {
 			request.setAttribute("onhand", "1");
 		} else {
-			// System.out.println("wwwwwwwwwwwwwwwwwwwwww");
+
 			request.setAttribute("show_word_for", "1"); // show "BDO for" in
 			// header
 			// String wt_id = "";
@@ -179,8 +182,8 @@ public class BDOAction extends Action {
 			if (theform.getItemlist().size() == 0
 					&& theform.getIncident_ID() != null) {
 				ActionMessage error = new ActionMessage("error.bdo_no_bag");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
+				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, messages);
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
 			}
 
@@ -193,24 +196,53 @@ public class BDOAction extends Action {
 				if (bagchosen == null) {
 					ActionMessage error = new ActionMessage(
 							"error.bdo_choose_bag");
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					saveMessages(request, errors);
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, messages);
 					return (mapping.findForward(TracingConstants.BDO_MAIN));
 				}
 			}
 
 			// do insert
-			ActionMessage error = BDOUtils.insertBDO(theform, bagchosen);
+			BDO bdo = null;
+			try {
+				bdo = BDOUtils.createBdo(theform, bagchosen);
+				boolean success = BDOUtils.insertBDO(bdo, user);
+				
+				if (!success) {
+					
+					ActionMessage error =  new ActionMessage("error.unable_to_insert_bdo");
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, messages);
+					return (mapping.findForward(TracingConstants.BDO_MAIN));
+				}
+			} catch (Exception e) {
+				ActionMessage error =  new ActionMessage("error.unable_to_insert_bdo");
+				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, messages);
+				return (mapping.findForward(TracingConstants.BDO_MAIN));
+			}
+			
 			ohd = theform.getOHD_ID(); // we will either have ohd or incident
 			incident = theform.getIncident_ID();
 
-			if (error != null) {
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
-				return (mapping.findForward(TracingConstants.BDO_MAIN));
-			} else {
-				request.setAttribute("inserted", "1");
-				request.setAttribute("showprint", "1");
+			request.setAttribute("inserted", "1");
+			request.setAttribute("showprint", "1");
+				
+			// Perform delivery integration if necessary.
+			DeliveryIntegrationResponse dir = DeliveryIntegrationTypeUtils.integrate(bdo, user);
+			
+			if (dir != null) {
+				if (dir.isSuccess()) {
+					if (dir.getResponse() != null) {
+						String responseText = dir.getResponse();
+						request.setAttribute("integrationResponse", responseText);
+					}
+				} else {
+					String responseText = dir.getResponse();
+					if (responseText != null) {
+						request.setAttribute("integrationResponse", responseText);
+					}
+				}
 			}
 		}
 		if (request.getParameter("savetowt") != null ) {
@@ -244,8 +276,8 @@ public class BDOAction extends Action {
 			if (!BDOUtils.findBDO(Integer.parseInt(request
 					.getParameter("bdo_id")), theform, request)) {
 				ActionMessage error = new ActionMessage("error.bdo_not_found");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
+				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, messages);
 			} else {
 				request.setAttribute("showbdo", "1");
 				request.setAttribute("showprint", "1");
@@ -262,8 +294,8 @@ public class BDOAction extends Action {
 			if (!BDOUtils.findBDOList(ohd, null, theform, request)) {
 
 				ActionMessage error = new ActionMessage("error.no.onhandreport");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
+				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, messages);
 				request.setAttribute("onhand", "1");
 			} else {
 				request.setAttribute("showbdolist", "1");
@@ -275,8 +307,8 @@ public class BDOAction extends Action {
 			// retrieve all bdos in a list for this incident
 			if (!BDOUtils.findBDOList(null, incident, theform, request)) {
 				ActionMessage error = new ActionMessage("error.noincident");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
+				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, messages);
 				request.setAttribute("mbr", "1");
 			} else {
 				request.setAttribute("showbdolist", "1");

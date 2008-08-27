@@ -21,6 +21,7 @@ public final class MaintainDeliveryCompanyForm extends ValidatorForm {
 	private String description;
 	private String deliveryCompanyName;
 	private String integration_type;
+	private String integration_key;
 	
 	// May not be necessary
 	public void setStation_ID(int id) {
@@ -108,5 +109,19 @@ public final class MaintainDeliveryCompanyForm extends ValidatorForm {
 	 */
 	public void setIntegration_type(String integration_type) {
 		this.integration_type = integration_type;
+	}
+
+	/**
+	 * @return the integration_key
+	 */
+	public String getIntegration_key() {
+		return integration_key;
+	}
+
+	/**
+	 * @param integration_key the integration_key to set
+	 */
+	public void setIntegration_key(String integration_key) {
+		this.integration_key = integration_key;
 	}
 }

@@ -1244,32 +1244,6 @@ public class AdminUtils {
 
 	
 	/**
-	 * Retrieve an delivery company based on its id
-	 * 
-	 * @param deliverCompany_ID
-	 * @return delivery company; null if not found or exception
-	 */
-	public static DeliverCompany getDeliveryCompany(String deliverCompany_ID) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(DeliverCompany.class).add(Expression.eq("delivercompany_ID", new Integer(deliverCompany_ID)));
-			return (DeliverCompany) cri.list().get(0);
-		} catch (Exception e) {
-			logger.fatal(e.getMessage());
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					logger.fatal(e.getMessage());
-				}
-			}
-		}
-	}
-	
-	/**
 	 * Retrieve an agent based on its id
 	 * 
 	 * @param agentID

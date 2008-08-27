@@ -118,9 +118,13 @@
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
           <tr>
-            <td width="90%">
+            <td width="60%">
               <b><bean:message key="header.companyDesc" /></b>
             </td>
+            <td width="30%">
+              <b><bean:message key="delivercompany.header.integrationtype.br" /></b>
+            </td>
+
             <td width="10%">
               <b><bean:message key="header.deleteDeliveryCompany" /></b>
             </td>
@@ -128,8 +132,12 @@
           <logic:present name="deliveryList" scope="request">
             <logic:iterate id="company" name="deliveryList">
               <tr>
-                <td width="90%">
+                <td width="60%">
                   <A HREF="bdoAdmin.do?edit=1&delivercompany_ID=<bean:write name="company" property="delivercompany_ID"/>"><bean:write name="company" property="name" /></A>
+                </td>
+                <td width="30%">
+                  <bean:write name="company" property="deliveryIntegrationTypeString" />
+                  &nbsp;
                 </td>
                 <td width="10%">
                   <input type="button" name="a" value="<bean:message key="delete"/>" onclick="deleteDeliveryCompany('<bean:write name="company" property="delivercompany_ID"/>','<bean:write name="company" property="name"/>');" id="button">
@@ -138,19 +146,19 @@
             </logic:iterate>
             <!-- pagination -->
             <tr>
-              <td colspan="2">
+              <td colspan="3">
                 <jsp:include page="../includes/pagination_incl.jsp" />
               </td>
             </tr>
             <!-- end pagination -->
           </logic:present>
           <tr>
-            <td colspan="2">
+            <td colspan="3">
               &nbsp;
             </td>
           </tr>
           <tr>
-            <td colspan="2" align="center">
+            <td colspan="3" align="center">
               <html:submit styleId="button" property="addNew">
                 <bean:message key="button.add.deliverycompany" />
               </html:submit>

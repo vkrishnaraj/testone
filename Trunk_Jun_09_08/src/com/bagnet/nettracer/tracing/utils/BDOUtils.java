@@ -150,6 +150,7 @@ public class BDOUtils {
 				bp.set_DATEFORMAT(user.getDateformat().getFormat());
 				BeanUtils.copyProperties(bp, p);
 				a = (Address) p.getAddress(0);
+				a.set_DATEFORMAT(user.getDateformat().getFormat());
 				BeanUtils.copyProperties(bp, a);
 				theform.getPassengerlist().add(bp);
 			}
@@ -326,13 +327,15 @@ public class BDOUtils {
 		}
 		return true;
 	}
-
-	public static ActionMessage insertBDO(BDOForm theform, String[] bagchosen) {
+	
+	public static BDO createBdo(BDOForm theform, String[] bagchosen) throws Exception {
+		BDO bdo = new BDO();
+		
 		try {
 			OhdBMO oBMO = new OhdBMO();
-			BDO bdo = new BDO();
+			
 			BeanUtils.copyProperties(bdo, theform);
-
+	
 			if (theform.getPassengerlist() != null) {
 				for (int i = 0; i < theform.getPassengerlist().size(); i++) {
 					BDO_Passenger bp = (BDO_Passenger) theform.getPassenger(i);
@@ -340,48 +343,48 @@ public class BDOUtils {
 				}
 				bdo.setPassengers(new HashSet(theform.getPassengerlist()));
 			}
-
+	
 			if (theform.getDelivercompany_ID() > 0) {
 				DeliverCompany dc = new DeliverCompany();
 				dc.setDelivercompany_ID(theform.getDelivercompany_ID());
 				bdo.setDelivercompany(dc);
 			}
-
+	
 			if (theform.getServicelevel_ID() > 0) {
 				Deliver_ServiceLevel dsl = new Deliver_ServiceLevel();
 				dsl.setServicelevel_ID(theform.getServicelevel_ID());
 				bdo.setServicelevel(dsl);
 			}
-
+	
 			if (theform.getIncident().getIncident_ID() != null) {
 				// prevent hibernate from erroring out
 				bdo.setOhd(null);
-
+	
 				// if it is lost delayed, change status to to be delivered
 				Item item = null;
 				int bagnumber;
 				OHD ohd_obj = null;
-
+	
 				for (int i = theform.getItemlist().size() - 1; i >= 0; i--) {
 					item = (Item) theform.getItemlist().get(i);
 					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
 					item.setBdo(bdo);
-
+	
 					// find out if this l/d bag is matched to ohd
 					ohd_obj = oBMO.findOHDByID(item.getOHD_ID());
 					if (ohd_obj != null && ohd_obj.getHoldingStation().getStation_ID() == theform.getIncident().getStationassigned().getStation_ID()) {
 						// bag matched and in station so change bag status to process as
 						// well
-						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
-						oBMO.insertOHD(ohd_obj, theform.getAgent());
+						// MOVING: ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+						// MOVING: oBMO.insertOHD(ohd_obj, theform.getAgent());
 						bdo.setOhd(ohd_obj);
 					}
-
+	
 					// do the following if it is mbr and has more than one bag
 					if (bagchosen != null) {
 						boolean b = false;
 						for (int j = 0; j < bagchosen.length; j++) {
-
+	
 							// remove the item that is not selected
 							bagnumber = Integer.parseInt(bagchosen[j]);
 							if (bagnumber == i) {
@@ -396,9 +399,9 @@ public class BDOUtils {
 						}
 					}
 				}
-
+	
 				bdo.setItems(new HashSet(theform.getItemlist()));
-
+	
 			} else if (theform.getOhd().getOHD_ID() != null) {
 				// first check to see if this ohd is matched to a l/d item
 				Item item = findOHDfromMatchedLD(theform.getOhd().getOHD_ID());
@@ -412,19 +415,39 @@ public class BDOUtils {
 				} else {
 					bdo.setIncident(null);
 				}
-				theform.getOhd().setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
-				oBMO.insertOHD(theform.getOhd(), theform.getAgent());
+	
 				
 			}
+		} catch (Exception e) {
+			logger.error("Error creating BDO object...");
+			e.printStackTrace();
+			throw e;
+		}
+		return bdo;
+	}
 
+	public static boolean insertBDO(BDO bdo, Agent agent) throws Exception {
+		try {
+			
+			OhdBMO oBMO = new OhdBMO();
+			OHD ohd = bdo.getOhd();
+			
+			// Find out if this l/d bag is matched to OHD
+			if (ohd != null) {
+				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+				oBMO.insertOHD(ohd, agent);
+				bdo.setOhd(ohd);
+			}
+			
 			if (!insertBDOtoDB(bdo))
-				return new ActionMessage("error.unable_to_insert_bdo");
-
-			return null;
+				return false;
 
 		} catch (Exception e) {
-			return new ActionMessage("error.unable_to_insert_bdo");
+			logger.error("Unable to insert BDO...");
+			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	public static List getDeliverCompanies(int station_ID) {
@@ -667,6 +690,13 @@ public class BDOUtils {
 			if (bdo.getBDO_ID() == 0)
 				isnew = true;
 
+			if (isnew == false) {
+				BDO oldBdo = BDOUtils.getBDOFromDB(bdo.getBDO_ID());
+				bdo.setDelivery_integration_id(oldBdo.getDelivery_integration_id());
+				bdo.setDelivery_integration_type(oldBdo.getDelivery_integration_type());
+				bdo.setIntegrationDelivercompany_ID(oldBdo.getIntegrationDelivercompany_ID());
+			}
+			
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			sess.saveOrUpdate(bdo);

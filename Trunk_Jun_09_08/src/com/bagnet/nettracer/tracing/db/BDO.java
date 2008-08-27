@@ -19,6 +19,9 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @author Administrator
  * 
  * @hibernate.class table = "BDO"
+ * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
+ * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
  */
 public class BDO implements Serializable {
 
@@ -47,6 +50,10 @@ public class BDO implements Serializable {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+
+	private DeliveryIntegrationType delivery_integration_type;
+	private String delivery_integration_id;
+	private int integrationDelivercompany_ID;
 
 	/**
 	 * @return Returns the passengers.
@@ -374,5 +381,53 @@ public class BDO implements Serializable {
 	 */
 	public void set_TIMEZONE(TimeZone _timezone) {
 		_TIMEZONE = _timezone;
+	}
+
+	/**
+	 * @return the delivery_integration_type
+	 * @hibernate.property type="deliveryIntegrationType"
+	 */
+	public DeliveryIntegrationType getDelivery_integration_type() {
+		return delivery_integration_type;
+	}
+
+	/**
+	 * @param delivery_integration_type the delivery_integration_type to set
+	 */
+	public void setDelivery_integration_type(
+			DeliveryIntegrationType delivery_integration_type) {
+		this.delivery_integration_type = delivery_integration_type;
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 * @return Returns unique ID provided by delivery company.
+	 */
+	public String getDelivery_integration_id() {
+		return delivery_integration_id;
+	}
+
+	/**
+	 * @param delivery_integration_id
+	 */
+	public void setDelivery_integration_id(String delivery_integration_id) {
+		this.delivery_integration_id = delivery_integration_id;
+		 
+	}
+
+	/**
+	 * @hibernate.property type="integer"
+	 * @return the integrationDelivercompany
+	 */
+	public int getIntegrationDelivercompany_ID() {
+		return integrationDelivercompany_ID;
+	}
+
+	/**
+	 * @param integrationDelivercompany the integrationDelivercompany to set
+	 */
+	public void setIntegrationDelivercompany_ID(
+			int integrationDelivercompany_ID) {
+		this.integrationDelivercompany_ID = integrationDelivercompany_ID;
 	}
 }

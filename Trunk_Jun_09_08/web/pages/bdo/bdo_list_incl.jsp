@@ -8,6 +8,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.BDOForm" %>
+
 <%
   int i = 0;
 %>
@@ -60,9 +61,22 @@
           <bean:message key="header.bdo_list" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#bdo/bdo.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
-        <font color=red>
+                
+        <font color="red">
           <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
         </font>
+        
+        <logic:present name="integrationResponse" scope="request">
+          <table border="1" width="400" align="center">
+            <tr>
+              <td align="center">
+                <bean:write name="integrationResponse" scope="request" filter="false"/>
+              </td>
+            </tr>
+          </table>
+        </logic:present>
+        
+
         <logic:present name="inserted" scope="request">
           <br>
           <center><font color=green>

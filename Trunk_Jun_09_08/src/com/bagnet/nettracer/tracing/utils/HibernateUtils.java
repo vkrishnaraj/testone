@@ -534,6 +534,8 @@ public class HibernateUtils {
 				c.setAddress(obj.getAddress());
 				c.setName(obj.getName());
 				c.setPhone(obj.getPhone());
+				c.setDelivery_integration_type(obj.getDelivery_integration_type());
+				c.setIntegration_key(obj.getIntegration_key());
 				sess.saveOrUpdate(c);
 				objRef = c;
 			}

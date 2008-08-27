@@ -34,6 +34,8 @@ public class AuditDeliveryCompanyUtils {
 		audit_dc.setName(dc.getName());
 		audit_dc.setTime_modified(TracerDateTime.getGMTDate());
 		audit_dc.setModifying_agent(mod_agent);
+		audit_dc.setDelivery_integration_type(dc.getDelivery_integration_type());
+		audit_dc.setIntegration_key(dc.getIntegration_key());
 		return audit_dc;
 	}
 	

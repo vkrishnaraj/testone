@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 
@@ -16,6 +17,9 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @author Administrator
  * 
  * @hibernate.class table="audit_delivercompany"
+ * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
+ * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
  */
 public class Audit_DeliverCompany implements Serializable {
 	
@@ -25,17 +29,20 @@ public class Audit_DeliverCompany implements Serializable {
 	private String name;
 	private String address;
 	private String phone;
-	private Set servicelevels;
+
 	private boolean active;
 	private Company company;
 
 	private Agent modifying_agent;
 	private Date time_modified;
 	private String reason_modified;
+	private DeliveryIntegrationType delivery_integration_type;
+	private String integration_key;
 	
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE; // timezone
+
 	
 	/**
 	 * @return Returns the _DATEFORMAT.
@@ -258,5 +265,50 @@ public class Audit_DeliverCompany implements Serializable {
 	 */
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+	
+	/**
+	 * @return the delivery_integration_type
+	 * @hibernate.property type="deliveryIntegrationType"
+	 */
+	public DeliveryIntegrationType getDelivery_integration_type() {
+		return delivery_integration_type;
+	}
+
+	/**
+	 * @param delivery_integration_type the delivery_integration_type to set
+	 */
+	public void setDelivery_integration_type(
+			DeliveryIntegrationType delivery_integration_type) {
+		this.delivery_integration_type = delivery_integration_type;
+	}
+	
+	/**
+	 * @param delivery_integration_type the delivery_integration_type to set
+	 */
+	public void setDelivery_integration_type(
+			int delivery_integration_type) {
+		DeliveryIntegrationType[] array = DeliveryIntegrationType.values();
+		for (DeliveryIntegrationType item: array) {
+			if (item.ordinal() == delivery_integration_type) {
+				this.delivery_integration_type = item;
+			}
+		}
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 * @return returns any required integration string
+	 */
+	public String getIntegration_key() {
+		return integration_key;
+	}
+
+	/**
+	 * 
+	 * @param integration_key integration_key to set.
+	 */
+	public void setIntegration_key(String integration_key) {
+		this.integration_key = integration_key;
 	}
 }

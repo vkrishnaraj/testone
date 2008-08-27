@@ -13,10 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -1450,4 +1452,12 @@ public class TracerUtils {
 		} 
 		return flag;
 	}
+	
+	public static String getResourcePropertyText(String key, Agent user) {
+		ResourceBundle myResources = ResourceBundle.getBundle(
+				"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user
+						.getCurrentlocale()));
+		return myResources.getString(key);
+	}
+
 }
