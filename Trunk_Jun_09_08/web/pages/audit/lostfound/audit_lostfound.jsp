@@ -252,7 +252,7 @@ function gopage(i) {
               <!-- result -->
               <h1 class="green">
                 <bean:message key="header.search_result" />
-                <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_On_Hand');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_On_Hand');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
               </h1>
               <a name="result"></a>
               <table class="form2" cellspacing="0" cellpadding="0">

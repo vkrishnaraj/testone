@@ -168,7 +168,7 @@ function gopage(i) {
 		</logic:notEqual> <logic:present name="resultlist" scope="request">
 			<h1 class="green"><bean:message key="header.search_result" /> <a
 				href="#"
-				onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Worldtracer_actionfiles');return false;"><img
+				onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Worldtracer_actionfiles');return false;"><img
 				src="deployment/main/images/nettracer/button_help.gif" width="20"
 				height="21" border="0"></a></h1>
 			<a name="result"></a>

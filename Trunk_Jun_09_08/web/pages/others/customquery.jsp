@@ -120,7 +120,7 @@ function gopage(i) {
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.record_information" />
-            <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
             <strong>
               <bean:message key="wildcard" />
@@ -259,7 +259,7 @@ function gopage(i) {
             </table>
             <h1 class="green">
               <bean:message key="header.pax_information" />
-              <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+              <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
             </h1>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
@@ -391,7 +391,7 @@ function gopage(i) {
             </table>
             <h1 class="green">
               <bean:message key="header.bag_information" />
-              <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+              <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
             </h1>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
@@ -510,7 +510,7 @@ function gopage(i) {
                 <a name="result"></a>
                 <h1 class="green">
                   <bean:message key="header.search_result" />
-                  <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                  <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                 </h1>
               </div>
               

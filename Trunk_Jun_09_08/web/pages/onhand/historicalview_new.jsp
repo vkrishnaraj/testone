@@ -469,7 +469,7 @@ function gotoHistoricalReport() {
               <a name="baginfo"></a>
               <h1 class="green">
                 <bean:message key="header.bag_info" />
-                <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
               </h1>
               <table class="form2" cellspacing="0" cellpadding="0">
                 <tr>
@@ -668,7 +668,7 @@ function gotoHistoricalReport() {
                 <a name="passengerinfo"></a>
                 <h1 class="green">
                   <bean:message key="header.passenger_info" />
-                  <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                  <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                 </h1>
                 <table class="form2" cellspacing="0" cellpadding="0">
                   <logic:iterate id="passenger" name="OnHandForm" property="passengerList" indexId="i" type="com.bagnet.nettracer.tracing.db.OHD_Passenger">
@@ -861,7 +861,7 @@ function gotoHistoricalReport() {
                   <a name="custitin"></a>
                   <h1 class="green">
                     <bean:message key="header.bag_itinerary" />
-                    <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                   </h1>
                   <table class="form2" cellspacing="0" cellpadding="0">
                     <logic:iterate id="itinerarylist" name="OnHandForm" property="itinerarylist">
@@ -925,7 +925,7 @@ function gotoHistoricalReport() {
                   <a name="centralbag"></a>
                   <h1 class="green">
                     <bean:message key="header.central_baggage_inventory" />
-                    <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                   </h1>
                   <table class="form2" cellspacing="0" cellpadding="0">
                     <logic:iterate indexId="i" id="itemlist" name="OnHandForm" property="itemlist">
@@ -963,7 +963,7 @@ function gotoHistoricalReport() {
                     <a name="photos"></a>
                     <h1 class="green">
                       <bean:message key="header.photos" />
-                      <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                     </h1>
                     <table class="form2" cellspacing="0" cellpadding="0">
                       <tr align="center">
@@ -982,7 +982,7 @@ function gotoHistoricalReport() {
                   <a name="remarks"></a>
                   <h1 class="green">
                     <bean:message key="header.remarks" />
-                    <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                   </h1>
                   <table class="form2" cellspacing="0" cellpadding="0">
                     <logic:iterate id="remarklist" indexId="i" name="OnHandForm" property="remarklist">
@@ -1026,7 +1026,7 @@ function gotoHistoricalReport() {
                   <a name="requests"></a>
                   <h1 class="green">
                     <bean:message key="header.requests" />
-                    <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                   </h1>
                   <table class="form2" cellspacing="0" cellpadding="0">
                     <logic:iterate id="request2" indexId="i" name="requestList" scope="request">
@@ -1079,7 +1079,7 @@ function gotoHistoricalReport() {
                   <a name="forward_log"></a>
                   <h1 class="green">
                     <bean:message key="header.forward_log" />
-                    <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                   </h1>
                   <table class="form2" cellspacing="0" cellpadding="0">
                     <logic:iterate id="forward" indexId="i" name="forward" scope="request">
@@ -1185,7 +1185,7 @@ function gotoHistoricalReport() {
                   <a name="matches"></a>
                   <h1 class="green">
                     <bean:message key="header.matches" />
-                    <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                   </h1>
                   <table class="form2" cellspacing="0" cellpadding="0">
                     <logic:iterate id="match" indexId="i" name="matches" scope="request">
@@ -1269,7 +1269,7 @@ function gotoHistoricalReport() {
                     <a name="inbox"></a>
                     <h1 class="green">
                       <bean:message key="header.messages" />
-                      <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                     </h1>
                     <table class="form2" cellspacing="0" cellpadding="0">
                       <logic:iterate id="message" indexId="i" name="messages" scope="request">
@@ -1324,7 +1324,7 @@ function gotoHistoricalReport() {
                     <a name="tasks"></a>
                     <h1 class="green">
                       <bean:message key="header.tasks" />
-                      <a href="#" onclick="openHelp('pages/WebHelp/NetTracer.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                     </h1>
                     <table class="form2" cellspacing="0" cellpadding="0">
                       <logic:iterate id="task" indexId="i" name="tasks" scope="request">

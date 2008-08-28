@@ -15,6 +15,12 @@
 <% LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
    Agent agent = (Agent)session.getAttribute("user");
    int total_menu = 0;
+ 
+   String forwardURI = (String) request.getAttribute(org.apache.catalina.Globals.FORWARD_REQUEST_URI_ATTR);
+   
+   if (forwardURI.contains("/WebHelp/")) {
+  	 response.sendRedirect("/tracer/pages/WebHelp/welcome_to_nettracer.htm");
+   } else {
 
 %>
 
@@ -576,3 +582,4 @@ document.onkeydown = function(){
 
 </body>
 </html>
+<% } %>
