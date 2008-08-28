@@ -84,17 +84,17 @@
                     :
                   </td>
                   <td>
-	              	<html:radio property="outputtype" value="0" />
+                    <input type="radio" value="0" name="outputtype" checked>
 	                <bean:message key="radio.pdf" />
-	                <html:radio property="outputtype" value="1" />
-	                <bean:message key="radio.html" />
+                    <input type="radio" value="1" name="outputtype">	        
+                    <bean:message key="radio.html" />
 	                
 	                <logic:present name="advanced" scope="request">
-	                  <html:radio property="outputtype" value="2" />
+	                  <input type="radio" value="2" name="outputtype">	
 	                  <bean:message key="radio.xls" />
-	                  <html:radio property="outputtype" value="3" />
+	                  <input type="radio" value="3" name="outputtype">	
 	                  <bean:message key="radio.csv" />
-	                  <html:radio property="outputtype" value="4" />
+	                  <input type="radio" value="4" name="outputtype">	
 	                  <bean:message key="radio.xml" />
                     </logic:present>
                   </td>
