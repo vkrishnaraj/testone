@@ -566,7 +566,7 @@ public class OhdBMO {
 
 			if (notClosed == true) {
 				sql.append(" and ohd.status.status_ID != :status_ID ");				
-			} else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
+			} else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("") && !oDTO.getStatus_ID().equals("0")) {
 				sql.append(" and ohd.status.status_ID = :status_ID ");
 			}
 			
@@ -682,7 +682,7 @@ public class OhdBMO {
 
 			if (notClosed) {
 				q.setInteger("status_ID", TracingConstants.OHD_STATUS_CLOSED);
-			}	else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("")) {
+			}	else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("") && !oDTO.getStatus_ID().equals("0")) {
 				q.setInteger("status_ID", Integer.parseInt(oDTO.getStatus_ID()));
 			} 
 			

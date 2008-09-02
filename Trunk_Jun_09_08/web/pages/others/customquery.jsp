@@ -16,7 +16,8 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <!-- Calendar includes -->
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <%@page import="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"%>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -205,16 +206,21 @@ function gopage(i) {
 		<%
 	}
 	if (ar != null && ar.size() > 0) {
+      int selectedStatusId = ((SearchIncidentForm)request.getAttribute("searchIncidentForm")).getStatus_ID();
 	%>
       <select name="status_ID" class="dropdown">
-      	<option value=""><bean:message key="select.all" /></option>
+      	<option value="" <% 
+              if (0 == selectedStatusId) { %>
+         selected
+        <% } %>><bean:message key="select.all" /></option>
 		<%
 		Status status = null;
 		for (int i=0; i < ar.size(); i++) {
 			status = (Status)ar.get(i);
       		%>
     		<option value="<%=status.getStatus_ID()%>" 
-    		<% if (status.getStatus_ID() == TracingConstants.MBR_STATUS_OPEN || status.getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) { %>
+    		<% 
+              if (status.getStatus_ID() == selectedStatusId) { %>
     		 selected
     		<% } %>
     		
