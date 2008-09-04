@@ -70,6 +70,7 @@ public class LzUtils {
 		// Create a new LZ pointing to correct station
 		// Save it.
 		Session sess = null;
+		Transaction t = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			
@@ -90,18 +91,26 @@ public class LzUtils {
 			lz.setCompanyCode_ID(station.getCompany().getCompanyCode_ID());
 			lz.setPercent_load(0);
 			lz.setIs_default(false);
-			
+			t = sess.beginTransaction();
 			sess.save(lz);
+			t.commit();
 
 		} catch (Exception e) {
-			logger.fatal(e.getMessage());
-			return;
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+				}
+			}
+
 		} finally {
 			if (sess != null) {
 				try {
 					sess.close();
 				} catch (Exception e) {
-					logger.fatal(e.getMessage());
+					logger.error(e.getMessage());
 				}
 			}
 		}
@@ -109,7 +118,6 @@ public class LzUtils {
 	
 	public static void updateStationAssignments(MaintainCompanyForm form, HttpServletRequest request, Agent user) {
 		Session sess = null;
-		Transaction t = null;
 		
 		try {
 			sess = HibernateWrapper.getSession().openSession();
