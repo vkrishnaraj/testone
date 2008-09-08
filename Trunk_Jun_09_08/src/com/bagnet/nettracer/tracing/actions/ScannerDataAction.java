@@ -23,8 +23,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.bagnet.nettracer.datasources.ScannerDataSource;
 import com.bagnet.nettracer.exceptions.BagtagException;
@@ -39,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
@@ -165,8 +164,7 @@ public class ScannerDataAction extends Action {
 			}
 			
 			// Obtain the appropriate scannerDataSource
-			ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(getServlet().getServletContext());
-			ScannerDataSource scannerDataSource =	(ScannerDataSource) ctx.getBean("scannerDataSource");
+			ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
 			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, null);
 			request.setAttribute("resultList", dto.getScannerDataDTOs());
 			

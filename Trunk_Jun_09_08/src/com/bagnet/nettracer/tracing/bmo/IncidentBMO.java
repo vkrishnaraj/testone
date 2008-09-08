@@ -5,11 +5,6 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.awt.image.DataBufferUShort;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -17,14 +12,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
-
-import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -51,6 +45,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
@@ -116,10 +111,10 @@ public class IncidentBMO {
 
 			if (isnew) {
 				// update airtran
-				if (MBRActionUtils.updateCommentOn()) {
+				if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
 					String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DB_DATETIMEFORMAT, null, iDTO.get_TIMEZONE());
 
-					MBRActionUtils.updateComment("Baggage Claim (" + iDTO.getIncident_ID() + ") created for this customer on "
+					SpringUtils.getReservationIntegration().writeCommentToPNR("Baggage Claim (" + iDTO.getIncident_ID() + ") created for this customer on "
 							+ formateddatetime, iDTO.getRecordlocator());
 				}
 				

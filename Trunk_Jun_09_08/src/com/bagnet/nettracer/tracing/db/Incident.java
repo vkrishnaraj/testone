@@ -82,6 +82,7 @@ public class Incident implements Serializable {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+	private String otherSystemInformation;
 
 
 	public String getReportMethodString(int val) {
@@ -446,6 +447,16 @@ public class Incident implements Serializable {
 		Date completedate = DateUtils.convertToDate(getCreatedate().toString() + " " + getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT,
 				null);
 		return DateUtils.formatDate(completedate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	
+	public Date getFullCreateDate() {
+		return DateUtils.convertToDate(getCreatedate().toString() + " " + getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT,
+				null);
+	}
+	
+	public Date getFullCloseDate() {
+		return DateUtils.convertToDate(getClosedate().toString(), TracingConstants.DB_DATETIMEFORMAT,
+				null);
 	}
 
 	/**
@@ -993,5 +1004,19 @@ public class Incident implements Serializable {
 			return val + " ";
 	}
 
+	/**
+	 * @return the otherSystemInformation
+	 * @hibernate.property type="string" column="other_system_information"
+	 */
+	public String getOtherSystemInformation() {
+		return otherSystemInformation;
+	}
+
+	/**
+	 * @param otherSystemInformation the otherSystemInformation to set
+	 */
+	public void setOtherSystemInformation(String otherSystemInformation) {
+		this.otherSystemInformation = otherSystemInformation;
+	}
 
 }

@@ -1362,22 +1362,6 @@ public class TracerUtils {
 		}
 	}
 
-	public static String getTracerProperty(String theprop) {
-		try {
-			Properties properties = new Properties();
-			
-			properties.load(HibernateWrapper.class.getResourceAsStream("/tracer.properties"));
-
-			return properties.getProperty(theprop);
-		} catch (Exception e) {
-			logger.error("Exception during getTracerProperty: "
-					+ e.getMessage());
-
-		}
-		return "";
-	}
-	
-	
 	//-------------------------------------------------------
 	public static Incident incidentFileReference(String fileReference)
 	{

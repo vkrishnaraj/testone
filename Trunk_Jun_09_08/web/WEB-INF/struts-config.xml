@@ -18,7 +18,6 @@
 		<form-bean name="forwardOnHandForm" type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
 		<form-bean name="forwardMessageForm" type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
 		<form-bean name="searchIncidentForm" type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm" />
-		<!--  <form-bean name="searchOnHandForm" type="com.bagnet.nettracer.tracing.forms.SearchOnHandForm" /> -->
 		<form-bean name="activeTracingForm" type="com.bagnet.nettracer.tracing.forms.ActiveTracingForm" />
 		<form-bean name="OnHandForm" type="com.bagnet.nettracer.tracing.forms.OnHandForm" />
 		<form-bean name="requestOnHandForm" type="com.bagnet.nettracer.tracing.forms.RequestOnHandForm" />
@@ -574,9 +573,6 @@
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
 		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
-	</plug-in>
-	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
-		<set-property property="contextConfigLocation" value="/WEB-INF/applicationContext.xml"/>
 	</plug-in>
 
 </struts-config>

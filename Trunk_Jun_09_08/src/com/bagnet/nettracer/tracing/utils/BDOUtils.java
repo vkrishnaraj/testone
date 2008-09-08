@@ -704,8 +704,8 @@ public class BDOUtils {
 
 			String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DB_DATETIMEFORMAT, null, bdo.get_TIMEZONE());
 
-			if (isnew && MBRActionUtils.updateCommentOn()) {
-				MBRActionUtils.updateComment("Baggage Claim (" + bdo.getIncident().getIncident_ID() + ") has been scheduled for delivery on "
+			if (isnew && SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
+				SpringUtils.getReservationIntegration().writeCommentToPNR("Baggage Claim (" + bdo.getIncident().getIncident_ID() + ") has been scheduled for delivery on "
 						+ formateddatetime, bdo.getIncident().getRecordlocator());
 
 			}

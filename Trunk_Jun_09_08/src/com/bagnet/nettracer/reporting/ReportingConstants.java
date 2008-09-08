@@ -55,9 +55,9 @@ public class ReportingConstants {
 	public static String PRORATE_NOTICE_TITLE = "Prorate Notice";
 	public static String LOST_DELAY_RECEIPT = "Customer Receipt";
 
-	// custome reports for airtran
+	// Custom reports for airtran
 	public final static int RPT_20 = 20;
-	public final static int RPT_20_CUSTOM_1 = 1; // mishandled bags summary by location
+	public final static int RPT_20_CUSTOM_1 = 1; // AirTran, mishandled bags summary by location
 	public final static String RPT_20_CUSTOM_1_NAME = "stat_rpt_20_custom_1";
 	public final static String RPT_20_CUSTOM_1_TITLE = "Mishandled Bags Summary By Location";
 	

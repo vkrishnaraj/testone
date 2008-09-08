@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -202,7 +203,7 @@ public class MissingAction extends Action {
 			// prepopulate
 			ActionMessage error = null;
 			ArrayList alerrors = new ArrayList();
-			if (MBRActionUtils.prePopulate(realpath,request,theform,session,alerrors,TracingConstants.MISSING_ARTICLES)) {
+			if (MBRActionUtils.prePopulate(request,theform,alerrors,TracingConstants.MISSING_ARTICLES)) {
 				if (alerrors.size() > 0) {
 					for (int i=0;i<alerrors.size();i++) {
 						error = new ActionMessage((String)alerrors.get(i));
@@ -214,7 +215,7 @@ public class MissingAction extends Action {
 				return (mapping.findForward(TracingConstants.MISSING_MAIN));
 			}
 			
-			if (MBRActionUtils.populateOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
+			if (SpringUtils.getReservationIntegration().isPopulateIncidentFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
 				request.setAttribute("prepopulate",new Integer("1"));
 				return (mapping.findForward(TracingConstants.MISSING_MAIN));
 			}

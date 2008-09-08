@@ -16,6 +16,7 @@
   String cssFormClass = "form2_ld";
 %>
   
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <script language="javascript">
     <!--
 function gotoHistoricalReport() {
@@ -83,6 +84,7 @@ function gotoHistoricalReport() {
         
   <jsp:include page="../includes/validation_incl.jsp" />
   <html:form action="lostDelay.do" method="post" onsubmit="return validateRest(this);">
+    <html:hidden property="otherSystemInformation"/>
     <input type="hidden" name="historical_report" value="">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -138,7 +140,7 @@ function gotoHistoricalReport() {
       <td colspan="3" id="navmenucell">
         <div class="menu">
           <dl>
-          	<% /*
+          	<% if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_INC_INFORMATION)) { %>
             <dd>
               <a href="#incidentinfo"><span class="aa">&nbsp;
                   <br />
@@ -148,7 +150,8 @@ function gotoHistoricalReport() {
                   <br />
                   &nbsp;</span></a>
             </dd>
-            */ %>
+            <% } %>
+            <% if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_PASSENGER)) { %>
             <dd>
               <a href="#contact"><span class="aa">&nbsp;
                   <br />
@@ -158,6 +161,8 @@ function gotoHistoricalReport() {
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <% } %>
+            <% if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_ITINERARY)) { %>
             <dd>
               <a href="#passit"><span class="aa">&nbsp;
                   <br />
@@ -167,7 +172,8 @@ function gotoHistoricalReport() {
                   <br />
                   &nbsp;</span></a>
             </dd>
-            <!--<dd><a href="#checkedbaggage"><span class="aa">&nbsp;<br />&nbsp;</span><span class="bb"><bean:message key="menu.checked_bag_info"/></span><span class="cc">&nbsp;<br />&nbsp;</span></a></dd>-->
+            <% } %>
+            <% if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_BAGGAGE)) { %>
             <dd>
               <a href="#checkedbaggage"><span class="aa">&nbsp;
                   <br />
@@ -177,6 +183,9 @@ function gotoHistoricalReport() {
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <% } %>
+            <% if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_INTERIM)) { %>
+
             <logic:notEqual name="incidentForm" property="incident_ID" value="">
             <dd>
               <a href="#interimexpense"><span class="aa">&nbsp;
@@ -188,6 +197,9 @@ function gotoHistoricalReport() {
                   &nbsp;</span></a>
             </dd>
             </logic:notEqual>
+            <% } %>
+            <% if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_REMARKS)) { %>
+
             <dd>
               <a href="#remarks"><span class="aa">&nbsp;
                   <br />
@@ -197,6 +209,7 @@ function gotoHistoricalReport() {
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <% } %>
             <logic:notEqual name="incidentForm" property="incident_ID" value="">
               <dd>
                 <a href='viewMatches.do?clear=1&incident_ID=<bean:write name="incidentForm" property="incident_ID"/>'><span class="aa">&nbsp;

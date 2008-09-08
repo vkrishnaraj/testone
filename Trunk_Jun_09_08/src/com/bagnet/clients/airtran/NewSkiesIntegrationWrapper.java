@@ -3,7 +3,7 @@
  *
  * matt
  */
-package com.bagnet.nettracer.ws.reservationintegration;
+package com.bagnet.clients.airtran;
 
 import java.io.FileInputStream;
 import java.io.IOException;

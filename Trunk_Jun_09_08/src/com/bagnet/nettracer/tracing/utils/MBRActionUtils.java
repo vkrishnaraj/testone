@@ -41,9 +41,6 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.ws.reservationintegration.NewSkiesIntegrationWrapper;
-import com.bagnet.nettracer.ws.reservationintegration.ReservationIntegrationUtils;
-import com.navitaire.schemas.messages.booking.Booking;
 
 /**
  * @author Administrator
@@ -51,6 +48,7 @@ import com.navitaire.schemas.messages.booking.Booking;
  * create date - Oct 28, 2004
  */
 public class MBRActionUtils {
+		
 	public static boolean actionAdd(IncidentForm theform, HttpServletRequest request, Agent user) {
 		// when adding or deleting from the page,
 		// email_customer checkbox needs to be set to 0 if user unchecked it
@@ -886,72 +884,16 @@ public class MBRActionUtils {
 		}
 		return false;
 	}
-	
-	public static boolean populateOn() {
-		/**** check to see prepopulate using integration system or not ***/
-		NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
-		return aiw.useIntegration("booking.is_on");
-	}
 
-	public static boolean updateCommentOn() {
-		/**** check to see prepopulate using integration system or not ***/
-		NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
-		return aiw.useIntegration("updatecomment.is_on");
-	}
-	
-	public static boolean prePopulate(String realpath,HttpServletRequest request,IncidentForm theform,HttpSession session,ArrayList alerrors, int itemtype) {
-		try {
-			if (request.getParameter("doprepopulate") != null) {
-				if (theform.getRecordlocator() == null || theform.getRecordlocator().trim().length() == 0) {
-					alerrors.add("error.no.recordlocator");
-					return true;
-				} else {
-					// run again webservice
-					NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
-					boolean callresult = aiw.getBooking(theform.getRecordlocator());
-					
-					if (!callresult) {
-						if (aiw.getErrormsg().equals("error.norecord")) alerrors.add("error.no.recordlocator");
-						else alerrors.add(aiw.getErrormsg());
-						return true;
-					} else {
-						Booking book = aiw.getThebook();
-						//populate
-						ReservationIntegrationUtils.populateIncident(theform, request, itemtype,book);
-					}
-					
-					request.setAttribute("newform", "1");
-
-					return true;
-				}
+	public static boolean prePopulate(HttpServletRequest request,IncidentForm form, ArrayList<String> alerrors, int incidentType) {
+		if (request.getParameter("doprepopulate") != null) {
+			if (form.getRecordlocator() == null || form.getRecordlocator().trim().length() == 0) {
+				alerrors.add("error.no.recordlocator");
+			} else {
+				alerrors.addAll(SpringUtils.getReservationIntegration().populateIncidentForm(request, form, incidentType));
 			}
-			
-			return false;
-
-		} catch (Exception e) {
-			return false;
-		}
-
-		
-	}
-	
-	public static boolean updateComment(String comment, String recordlocator) {
-		try {
-
-			// run again webservice
-			NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
-			boolean callresult = aiw.updateBookingComment(recordlocator,comment);
-			
-			if (!callresult) {
-				return false;
-			}
-				
 			return true;
-			
-		} catch (Exception e) {
-			return false;
 		}
-
-		
+		return false;
 	}
 }

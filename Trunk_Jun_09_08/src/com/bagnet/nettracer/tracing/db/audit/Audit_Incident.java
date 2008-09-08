@@ -82,6 +82,7 @@ public class Audit_Incident implements Serializable {
 	private Agent modify_agent;
 	private Date modify_time;
 	private String modify_reason;
+	private String otherSystemInformation;
 
 	/**
 	 * @return Returns the modify_agent.
@@ -821,4 +822,20 @@ public class Audit_Incident implements Serializable {
 		return new ArrayList((articles != null ? articles : new HashSet()));
 	}
 
+	/**
+	 * @return the otherSystemInformation
+	 */
+	public String getOtherSystemInformation() {
+		return otherSystemInformation;
+	}
+
+	/**
+	 * @param otherSystemInformation the otherSystemInformation to set
+	 * @hibernate.property type="string" column="other_system_information"
+
+	 */
+	public void setOtherSystemInformation(String otherSystemInformation) {
+		this.otherSystemInformation = otherSystemInformation;
+	}
+	
 }

@@ -32,8 +32,6 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 /**
  * @author Ankur Gupta
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class ImageUtils {
 	private static final int THUMB_WIDTH = 120;
@@ -98,7 +96,7 @@ public class ImageUtils {
 			}
 			
 			//retrieve the file data
-			String image_store = TracerUtils.getTracerProperty("image_store");
+			String image_store = TracerProperties.get("image_store");
 			if (!ImageUtils.makeFolder(image_store + folder)) {
 				//Error in creating a directory.
 				logger.error("Unable to create directory");

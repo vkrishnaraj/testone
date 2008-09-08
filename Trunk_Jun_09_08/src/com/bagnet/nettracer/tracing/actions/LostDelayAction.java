@@ -48,6 +48,7 @@ import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -294,10 +295,15 @@ public class LostDelayAction extends Action {
 			
 
 		} else {
-			// prepopulate
 			error = null;
 			ArrayList alerrors = new ArrayList();
-			if (MBRActionUtils.prePopulate(realpath,request,theform,session,alerrors,TracingConstants.LOST_DELAY)) {
+			
+			// prepopulate new incident fields
+			TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
+			request.setAttribute("newform", "1");
+
+			// Attempt to prepopulate the fields from the reservation integration.
+			if (MBRActionUtils.prePopulate(request,theform,alerrors,TracingConstants.LOST_DELAY)) {
 				if (alerrors.size() > 0) {
 					for (int i=0;i<alerrors.size();i++) {
 						error = new ActionMessage((String)alerrors.get(i));
@@ -309,16 +315,10 @@ public class LostDelayAction extends Action {
 				return (mapping.findForward(TracingConstants.LD_MAIN));
 			}
 			
-			if (MBRActionUtils.populateOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
+			if (SpringUtils.getReservationIntegration().isPopulateIncidentFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
 				request.setAttribute("prepopulate",new Integer("1"));
-				return (mapping.findForward(TracingConstants.LD_MAIN));
 			}
-			// prepopulate new incident fields
-			TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
-			request.setAttribute("newform", "1");
-
 		}
-
 		return (mapping.findForward(TracingConstants.LD_MAIN));
 	}
 

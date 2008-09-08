@@ -52,6 +52,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.bagnet.clients.airtran.CustomReportBMO;
 import com.bagnet.nettracer.datasources.JRIncidentDataSource;
 import com.bagnet.nettracer.datasources.JROnhandDataSource;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -77,6 +78,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -133,18 +135,7 @@ public class ReportBMO {
 				return create_onhand_rpt(srDTO, ReportingConstants.RPT_10, ReportingConstants.RPT_10_NAME, messages.getMessage(new Locale(user
 						.getCurrentlocale()), "header.reportnum.10"));
 			case ReportingConstants.RPT_20:
-				CustomReportBMO cbmo = new CustomReportBMO(req, user, rootpath);
-				switch (srDTO.getCustomreportnum()) {
-				case ReportingConstants.RPT_20_CUSTOM_1:
-					String creportdata = cbmo.create_custom_report_1(srDTO, ReportingConstants.RPT_20_CUSTOM_1, ReportingConstants.RPT_20_CUSTOM_1_NAME,
-							messages.getMessage(new Locale(user.getCurrentlocale()), "header.reportnum.20"));
-					if (creportdata == null) {
-						setErrormsg(cbmo.getErrormsg());
-						return null;
-					} else {
-						return creportdata;
-					}
-				}
+				String cReportData = SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
 			default:
 				return null;
 			}

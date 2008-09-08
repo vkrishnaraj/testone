@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -79,6 +78,11 @@ public class OHD implements Serializable {
 		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
 				+ this.getFoundtime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
 		return DateUtils.formatDate(completedate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	
+	public Date getFullFoundDate() {
+		return DateUtils.convertToDate(getFounddate().toString() + " " + getFoundtime().toString(), TracingConstants.DB_DATETIMEFORMAT,
+				null);
 	}
 
 

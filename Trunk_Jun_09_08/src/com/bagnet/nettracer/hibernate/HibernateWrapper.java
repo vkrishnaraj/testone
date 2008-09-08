@@ -78,7 +78,12 @@ import com.bagnet.nettracer.tracing.db.SystemComponent;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.TimeZone;
 import com.bagnet.nettracer.tracing.db.UserGroup;
+import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
+import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.WT_Info;
+import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.WT_ROH;
+import com.bagnet.nettracer.tracing.db.WT_TTY;
 import com.bagnet.nettracer.tracing.db.Webservice_Session;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -120,12 +125,8 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Remark;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Work_Shift;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
-import com.bagnet.nettracer.tracing.db.WT_TTY;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
-import com.bagnet.nettracer.tracing.db.WT_ROH;
 /**
  * @author Ankur Gupta
  * 
@@ -152,10 +153,10 @@ public class HibernateWrapper {
 
 	static {
 		try {
-			if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
+			if (TracerProperties.get("app_type").equals("qa")) {
 				addClasses(cfg_qa);
 				sf_qa = cfg_qa.configure(HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml")).buildSessionFactory();
-			} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
+			} else if (TracerProperties.get("app_type").equals("demo")) {
 				addClasses(cfg_demo);
 				sf_demo = cfg_demo.configure(HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml")).buildSessionFactory();
 			} else {
@@ -182,14 +183,14 @@ public class HibernateWrapper {
 			
 
 			
-			if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
+			if (TracerProperties.get("app_type").equals("qa")) {
 				if (sf_qa == null) {
 					addClasses(cfg_qa);
 					String hibernate_qa_path = HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml").getPath();
 					sf_qa = cfg_qa.configure(new File(hibernate_qa_path)).buildSessionFactory();
 				}
 				return sf_qa;
-			} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
+			} else if (TracerProperties.get("app_type").equals("demo")) {
 				if (sf_demo == null) {
 					addClasses(cfg_demo);
 					String hibernate_demo_path = HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml").getPath();
@@ -211,9 +212,9 @@ public class HibernateWrapper {
 	}
 
 	public static Configuration getConfig() {
-		if (TracerUtils.getTracerProperty("app_type").equals("qa")) {
+		if (TracerProperties.get("app_type").equals("qa")) {
 			return cfg_qa;
-		} else if (TracerUtils.getTracerProperty("app_type").equals("demo")) {
+		} else if (TracerProperties.get("app_type").equals("demo")) {
 			return cfg_demo;
 		} else {
 			return cfg_prod;

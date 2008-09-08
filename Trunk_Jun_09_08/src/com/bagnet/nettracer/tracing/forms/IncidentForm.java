@@ -80,6 +80,7 @@ public final class IncidentForm extends ValidatorForm {
 	private Company company;
 	private String membershipnum;
 	private String membershipstatus;
+	private String otherSystemInformation;
 	
 	private WorldTracerFile wtFile;
 	
@@ -1104,6 +1105,20 @@ public final class IncidentForm extends ValidatorForm {
 	 */
 	public void setPrintedreceipt(Date printedreceipt) {
 		this.printedreceipt = printedreceipt;
+	}
+
+	/**
+	 * @return the otherSystemInformation
+	 */
+	public String getOtherSystemInformation() {
+		return otherSystemInformation;
+	}
+
+	/**
+	 * @param otherSystemInformation the otherSystemInformation to set
+	 */
+	public void setOtherSystemInformation(String otherSystemInformation) {
+		this.otherSystemInformation = otherSystemInformation;
 	}
 
 }

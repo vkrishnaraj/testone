@@ -1,11 +1,7 @@
-/*
- * Created on Mar 12, 2007
- *
- * matt
- */
-package com.bagnet.nettracer.ws.reservationintegration;
+package com.bagnet.clients.airtran;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -47,24 +43,68 @@ import com.navitaire.schemas.messages.itinerary.JourneyService;
 import com.navitaire.schemas.messages.itinerary.Leg;
 import com.navitaire.schemas.messages.itinerary.Segment;
 
-/**
- * @author matt
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-public class ReservationIntegrationUtils {
-	public static void populateIncident(IncidentForm theform, HttpServletRequest request, int itemtype,Booking thebook) {
+public class ReservationIntegrationImpl extends
+		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
+		com.bagnet.nettracer.integrations.reservation.ReservationIntegration {
+
+	public ArrayList<String> populateIncidentForm(HttpServletRequest request, IncidentForm form,
+			int incidentType) {
+		ArrayList<String> errors = null;
+		try {
+
+				if (form.getRecordlocator() == null || form.getRecordlocator().trim().length() == 0) {
+					addError(errors, "error.no.recordlocator");
+
+				} else {
+
+					NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
+					boolean callresult = aiw.getBooking(form.getRecordlocator());
+					
+					if (!callresult) {
+						if (aiw.getErrormsg().equals("error.norecord")) {
+							
+							addError(errors, "error.no.recordlocator");
+						}
+						else addError(errors, aiw.getErrormsg());
+						return errors;
+					} else {
+						Booking book = aiw.getThebook();
+						populateIncident(form, request, incidentType, book);
+					}
+
+					request.setAttribute("newform", "1");
+				}
+
+			
+			return errors;
+
+		} catch (Exception e) {
+			logger.error(e.getStackTrace());
+			e.printStackTrace();
+			return errors;
+		}
+	}
+
+	public ArrayList<String> writeCommentToPNR(String comment, String recordLocator) {
+		boolean worked = updateComment(comment, recordLocator);
+		return null;
+	}
+
+	private static void populateIncident(IncidentForm theform,
+			HttpServletRequest request, int itemtype, Booking thebook) {
 		HttpSession session = request.getSession();
 		Agent user = (Agent) session.getAttribute("user");
 		theform = new IncidentForm();
+		
 
-		//theform = new IncidentForm();
+		// theform = new IncidentForm();
 		IncidentBMO iBMO = new IncidentBMO();
 
+		/*
 		theform.set_DATEFORMAT(user.getDateformat().getFormat());
 		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+				user.getDefaulttimezone()).getTimezone()));
 
 		session.setAttribute("incidentForm", theform);
 		// session
@@ -75,12 +115,14 @@ public class ReservationIntegrationUtils {
 		theform.setStationcreated_ID(user.getStation().getStation_ID());
 		theform.setStationcreated(user.getStation());
 		theform.setStationassigned_ID(user.getStation().getStation_ID());
-		List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
+		List agentassignedlist = TracerUtils.getAgentlist(theform
+				.getStationassigned_ID());
 		request.setAttribute("agentassignedlist", agentassignedlist);
 
-		//theform.setFaultstation(new Station());
+		// theform.setFaultstation(new Station());
 		// set agent
 		theform.setAgent(user);
+		
 
 		// set status as temp to start off
 		Status status = new Status();
@@ -88,24 +130,30 @@ public class ReservationIntegrationUtils {
 		theform.setStatus(status);
 
 		// set report method
-		theform.setReportmethod(user.getStation().getCompany().getVariable().getReport_method());
+		theform.setReportmethod(user.getStation().getCompany().getVariable()
+				.getReport_method());
 		theform.setRecordlocator(thebook.getRecordLocator());
+
+		*/
+
 		
-		//passenger
+		// passenger
 
 		// # of passengers on the plane
 		ArrayOfBookingPassenger aobp = thebook.getBookingPassengers();
 		BookingPassenger[] bpas = aobp.getBookingPassengerArray();
-		if (bpas != null && bpas.length > 0) theform.setNumpassengers(bpas.length);
-		else theform.setNumpassengers(1);
+		if (bpas != null && bpas.length > 0)
+			theform.setNumpassengers(bpas.length);
+		else
+			theform.setNumpassengers(1);
 
 		if (bpas != null && bpas.length > 0) {
-			for (int i=0;i<bpas.length;i++) {
+			for (int i = 0; i < bpas.length; i++) {
 				Passenger pa = theform.getPassenger(i);
 				Address addr = pa.getAddress(0);
-				
+
 				BookingPassenger bp = bpas[i];
-				
+
 				// name
 				com.navitaire.schemas.messages.common.Name bpn = bp.getName();
 				if (bpn != null) {
@@ -113,11 +161,12 @@ public class ReservationIntegrationUtils {
 					pa.setMiddlename(bpn.getMiddleName());
 					pa.setLastname(bpn.getLastName());
 				}
-				
+
 				// address
 				ArrayOfPassengerAddress aopa = bp.getPassengerAddresses();
-				
-				if (aopa.getPassengerAddressArray() != null && aopa.getPassengerAddressArray().length > 0) {
+
+				if (aopa.getPassengerAddressArray() != null
+						&& aopa.getPassengerAddressArray().length > 0) {
 					PassengerAddress paddr = aopa.getPassengerAddressArray(0);
 
 					addr.setAddress1(paddr.getAddressLine1());
@@ -127,53 +176,52 @@ public class ReservationIntegrationUtils {
 					addr.setZip(paddr.getPostalCode());
 					addr.setCountrycode_ID(paddr.getCountryCode());
 					addr.setHomephone(paddr.getPhone());
-					//addr.setAltphone(paddr.getFax());
-					//addr.setWorkphone(paddr.getWorkPhone());
-					//addr.setMobile(paddr.getOtherPhone());
+					// addr.setAltphone(paddr.getFax());
+					// addr.setWorkphone(paddr.getWorkPhone());
+					// addr.setMobile(paddr.getOtherPhone());
 					ArrayOfBookingContact aobc = thebook.getBookingContacts();
-					if (aobc.getBookingContactArray() != null && aobc.getBookingContactArray().length > 0) {
+					if (aobc.getBookingContactArray() != null
+							&& aobc.getBookingContactArray().length > 0) {
 						BookingContact bc = aobc.getBookingContactArray(0);
 						addr.setEmail(bc.getEmailAddress());
 					}
 
 				}
-				
 
 				// ff#
 				AirlineMembership am = new AirlineMembership();
-				if (bpas != null && bpas.length > (i+1)) {
+				if (bpas != null && bpas.length > (i + 1)) {
 					BookingPassenger bpa = aobp.getBookingPassengerArray(i);
 					am.setMembershipnum(bpa.getCustomerNumber());
 				}
 				pa.setMembership(am);
 
-				
-
 			}
 		} else {
 			theform.getPassenger(0);
 		}
-		
+
 		// get routing
 		int routingindex = 0;
 		ArrayOfJourneyService abjs = thebook.getJourneyServices();
 		JourneyService[] bjss = abjs.getJourneyServiceArray();
-		long deptime,nowtime;
+		long deptime, nowtime;
 
 		if (bjss != null && bjss.length > 0) {
-			for (int i=0;i<bjss.length;i++) {
+			for (int i = 0; i < bjss.length; i++) {
 				JourneyService bjs = bjss[i];
 				ArrayOfSegment ass = bjs.getSegments();
 				Segment[] ss = ass.getSegmentArray();
 				if (ss != null && ss.length > 0) {
-					for (int j=0;j<ss.length;j++) {
+					for (int j = 0; j < ss.length; j++) {
 						Segment bs = ss[j];
 						// if more than 24 hours old, don't import
 						deptime = (bs.getSTD().getTime().getTime()) / 3600000;
 						nowtime = ((new Date()).getTime()) / 3600000;
 						if (nowtime - deptime <= 24 && nowtime >= deptime) {
-						
-							Itinerary pi = theform.getItinerary(routingindex, TracingConstants.PASSENGER_ROUTING); // passenger
+
+							Itinerary pi = theform.getItinerary(routingindex,
+									TracingConstants.PASSENGER_ROUTING); // passenger
 							pi.setAirline(bs.getFlightDesignator().getCarrierCode());
 							pi.setFlightnum(bs.getFlightDesignator().getFlightNumber());
 							pi.setLegfrom(bs.getDepartureStation());
@@ -184,17 +232,18 @@ public class ReservationIntegrationUtils {
 							pi.setScharrivetime(bs.getSTA().getTime());
 							routingindex++;
 						}
-						
+
 						ArrayOfLeg als = bs.getLegs();
 						Leg[] lss = als.getLegArray();
 						if (lss != null && lss.length > 0) {
-							for (int k=0;k<lss.length;k++) {
+							for (int k = 0; k < lss.length; k++) {
 								Leg leg = lss[k];
-								
+
 								deptime = (leg.getSTD().getTime().getTime()) / 3600000;
 								nowtime = ((new Date()).getTime()) / 3600000;
 								if (nowtime - deptime <= 24 && nowtime >= deptime) {
-									Itinerary bi = theform.getItinerary(routingindex, TracingConstants.BAGGAGE_ROUTING);
+									Itinerary bi = theform.getItinerary(routingindex,
+											TracingConstants.BAGGAGE_ROUTING);
 									bi.setAirline(leg.getFlightDesignator().getCarrierCode());
 									bi.setFlightnum(leg.getFlightDesignator().getFlightNumber());
 									bi.setLegfrom(leg.getDepartureStation());
@@ -215,19 +264,17 @@ public class ReservationIntegrationUtils {
 			theform.getItinerary(0, TracingConstants.PASSENGER_ROUTING); // passenger
 			theform.getItinerary(1, TracingConstants.BAGGAGE_ROUTING); // bag route
 		}
-		
 
-		
 		// claim check and bag info
 		int allindex = 0;
 		if (bpas != null && bpas.length > 0) {
-			for (int i=0;i<bpas.length;i++) {
+			for (int i = 0; i < bpas.length; i++) {
 				BookingPassenger bpa = bpas[i];
 				ArrayOfBaggage aob = bpa.getBaggageList();
 				Baggage[] baggages = aob.getBaggageArray();
 				if (baggages != null && baggages.length > 0) {
-					for (int j=0;j<baggages.length;j++) {
-						
+					for (int j = 0; j < baggages.length; j++) {
+
 						Baggage bag = baggages[j];
 						deptime = (bag.getOSTagDate().getTime().getTime()) / 3600000;
 						nowtime = ((new Date()).getTime()) / 3600000;
@@ -238,10 +285,11 @@ public class ReservationIntegrationUtils {
 								Incident_Claimcheck ic = theform.getClaimcheck(allindex);
 								ic.setClaimchecknum(bag.getOSTag());
 							}
-							
+
 							// bag info
 							Item theitem = theform.getItem(allindex, itemtype);
-							if (itemtype != TracingConstants.LOST_DELAY && bag.getOSTag() != null && bag.getOSTag().length() > 0) {
+							if (itemtype != TracingConstants.LOST_DELAY
+									&& bag.getOSTag() != null && bag.getOSTag().length() > 0) {
 								theitem.setClaimchecknum(bag.getOSTag());
 							}
 							theitem.set_DATEFORMAT(user.getDateformat().getFormat());
@@ -250,11 +298,12 @@ public class ReservationIntegrationUtils {
 							theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 							theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 							theitem.setBagnumber(allindex);
-							theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
-							
+							theitem.setStatus(StatusBMO.getStatus(
+									TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+
 							allindex++;
 						}
-						
+
 					}
 				}
 			}
@@ -268,22 +317,25 @@ public class ReservationIntegrationUtils {
 			theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 			theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 			theitem.setBagnumber(allindex);
-			theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+			theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN,
+					user.getCurrentlocale()));
 		}
-		
+
 		// set number of bags checked in
-		if (allindex > 0) theform.setNumbagchecked(allindex);
-		else theform.setNumbagchecked(1);
-		
+		if (allindex > 0)
+			theform.setNumbagchecked(allindex);
+		else
+			theform.setNumbagchecked(1);
 
 		// set new remark with current time and current agent
 		Remark r = theform.getRemark(theform.getRemarklist().size());
-		r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+		r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT)
+				.format(TracerDateTime.getGMTDate()));
 		r.setAgent(user);
 		r.set_DATEFORMAT(user.getDateformat().getFormat());
 		r.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-
+		r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+				user.getDefaulttimezone()).getTimezone()));
 
 		// create new article
 		if (itemtype == TracingConstants.MISSING_ARTICLES) {
@@ -292,10 +344,28 @@ public class ReservationIntegrationUtils {
 			a.setCurrency_ID(user.getDefaultcurrency());
 		}
 
-		
-
-		Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(user
+				.getCompanycode_ID());
 		theform.setEmail_customer(csv.getEmail_customer());
+	}
+	
+	private static boolean updateComment(String comment, String recordlocator) {
+		try {
 
+			// run again webservice
+			NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
+			boolean callresult = aiw.updateBookingComment(recordlocator,comment);
+			
+			if (!callresult) {
+				return false;
+			}
+				
+			return true;
+			
+		} catch (Exception e) {
+			return false;
+		}
+
+		
 	}
 }

@@ -17,7 +17,7 @@
 		<property name="jdbc.use_scrollable_resultset">false</property> 
 		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
 		<property name="company.code">US</property>
-		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.show_sql">false</property>
 		
     	<!-- sql server 2000 -->
  		<!--

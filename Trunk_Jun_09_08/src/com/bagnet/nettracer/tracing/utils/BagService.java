@@ -1849,14 +1849,14 @@ public class BagService {
 			String formateddatetime =  DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 			
 			boolean result = cBMO.saveExpense(payout, a_ep);
-			if (result && MBRActionUtils.updateCommentOn()) {
+			if (result && SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
 				if (is_approveInterim) {
 					if (payout.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_DENIED) {
 						// deny
-						MBRActionUtils.updateComment(TracingConstants.CMT_DENIED_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
+						SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_DENIED_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
 					} else {
 						// approve
-						MBRActionUtils.updateComment(TracingConstants.CMT_APPROVED_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
+						SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_APPROVED_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
 					}
 				} else {
 					if (payout.getExpensetype().getExpensetype_ID() == TracingConstants.EXPENSEPAYOUT_INTERIM) {
@@ -1867,10 +1867,10 @@ public class BagService {
 								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform.getExpense().getMileageamt() <= user
 										.getStation().getCompany().getVariable().getMin_interim_approval_miles())) {
 							// under limit, auto approve
-							MBRActionUtils.updateComment(TracingConstants.CMT_CREATE_INTERIM_UNDERLIMIT + formateddatetime,cform.getIncident().getRecordlocator());
+							SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_CREATE_INTERIM_UNDERLIMIT + formateddatetime,cform.getIncident().getRecordlocator());
 						} else {
 							// over limit, pending
-							MBRActionUtils.updateComment(TracingConstants.CMT_CREATE_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
+							SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_CREATE_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
 						}
 						
 					}

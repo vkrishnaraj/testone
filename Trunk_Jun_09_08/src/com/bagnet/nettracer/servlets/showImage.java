@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 /**
  * This servlet is used to access the image from the file system.
@@ -36,7 +36,7 @@ public class showImage extends HttpServlet {
 
 		String imageID = req.getParameter("ID");
 	
-		File file = new File(TracerUtils.getTracerProperty("image_store") + imageID);
+		File file = new File(TracerProperties.get("image_store") + imageID);
 
 		InputStream is = new FileInputStream(file);
 

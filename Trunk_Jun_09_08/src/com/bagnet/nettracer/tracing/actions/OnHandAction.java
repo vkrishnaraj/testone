@@ -23,7 +23,6 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -47,7 +46,6 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WT_Queue;
-import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -57,11 +55,10 @@ import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for
@@ -702,7 +699,7 @@ public class OnHandAction extends Action {
 				if (photos != null && photos.size() > 0) {
 					for (Iterator i = photos.iterator(); i.hasNext();) {
 						OHD_Photo photo = (OHD_Photo) i.next();
-						photo.setThumbpath(TracerUtils.getTracerProperty("image_store")
+						photo.setThumbpath(TracerProperties.get("image_store")
 								+ photo.getThumbpath());
 					}
 					parameters.put("photoReport", ReportBMO.getCompiledReport(

@@ -3,7 +3,7 @@
  *
  * Administrator
  */
-package com.bagnet.nettracer.tracing.bmo;
+package com.bagnet.clients.airtran;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -11,14 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -35,26 +33,30 @@ import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.MessageResources;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_Custom_1_DTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.ws.reservationintegration.NewSkiesIntegrationWrapper;
 
 /**
  * @author Administrator
  * 
  * create date - Jul 15, 2004
  */
-public class CustomReportBMO {
+public class CustomReportBMO implements
+		com.bagnet.nettracer.integrations.reports.CustomReportBMO {
 	private static Logger logger = Logger.getLogger(CustomReportBMO.class);
 	private static String rootpath;
 	private Agent user;
@@ -76,21 +78,23 @@ public class CustomReportBMO {
 	 * @param reportnum
 	 * @param reportname
 	 * @param reporttitle
-	 * @return @throws
-	 *         HibernateException
+	 * @return
+	 * @throws HibernateException
 	 */
-	public String create_custom_report_1(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
+	public String create_custom_report_1(StatReportDTO srDTO, int reportnum,
+			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Map parameters = new HashMap();
 			parameters.put("title", reporttitle);
-			
-			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
+			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+					user.getDefaulttimezone()).getTimezone());
 
 			String goal = DateUtils.formatDate(new Date(), "yyyy", null, null);
 			parameters.put("goalyear", goal);
-			parameters.put("companyname", user.getStation().getCompany().getCompanydesc().toUpperCase());
+			parameters.put("companyname", user.getStation().getCompany()
+					.getCompanydesc().toUpperCase());
 
 			// mbr report type
 			String mbrtypeq = "";
@@ -99,7 +103,8 @@ public class CustomReportBMO {
 			}
 
 			String stationq = "";
-			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
+			if (srDTO.getStation_ID() != null
+					&& !srDTO.getStation_ID()[0].equals("0")) {
 				stationq = " and station.station_ID in (:station_ID) ";
 			}
 
@@ -109,20 +114,22 @@ public class CustomReportBMO {
 			}
 
 			String companylimit = " and station.company.companyCode_ID = :companyCode_ID ";
-			
+
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
 			String dateq = "";
-			
+
 			ArrayList dateal = null;
-			if ((dateal = ReportBMO.calculateDateDiff(srDTO,tz,user)) == null) {
+			if ((dateal = ReportBMO.calculateDateDiff(srDTO, tz, user)) == null) {
 				return null;
-			} 
-			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
-			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
-			stime = (Date)dateal.get(4);
-			
+			}
+			sdate = (Date) dateal.get(0);
+			sdate1 = (Date) dateal.get(1);
+			edate = (Date) dateal.get(2);
+			edate1 = (Date) dateal.get(3);
+			stime = (Date) dateal.get(4);
+
 			parameters.put("sdate", "All Dates");
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
@@ -147,20 +154,24 @@ public class CustomReportBMO {
 				dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
 						+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
 				edate = null;
-			}			
-
+			}
 
 			String sql = "SELECT station.stationcode, station.station_region,station.station_region_mgr, station.goal, station.station_ID "
-					+ " FROM  com.bagnet.nettracer.tracing.db.Station station " + " where 1=1 " + stationq + companylimit
+					+ " FROM  com.bagnet.nettracer.tracing.db.Station station "
+					+ " where 1=1 "
+					+ stationq
+					+ companylimit
 					+ " group by station.station_region,station.stationcode,station.station_region_mgr,station.goal, station.station_ID "
 					+ "order by station.station_region,station.stationcode";
 
 			Query q = sess.createQuery(sql);
 
-			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
+			if (srDTO.getStation_ID() != null
+					&& !srDTO.getStation_ID()[0].equals("0"))
 				q.setParameterList("station_ID", srDTO.getStation_ID());
 
-			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			q.setString("companyCode_ID", user.getStation().getCompany()
+					.getCompanyCode_ID());
 			List templist = q.list();
 			List list = new ArrayList();
 			if (templist.size() == 0) {
@@ -209,23 +220,25 @@ public class CustomReportBMO {
 				alparam.add(custom1.getStationcode());
 
 				// webservice call to retrieve enplanement information
-				//custom1.setBoarded(2.33);
-				
-				double callresult = eiw.getEnplanement(srDTO.getStarttime(), (srDTO.getEndtime() == null ? srDTO.getStarttime() : srDTO.getEndtime()), custom1
-						.getStationcode());
+				// custom1.setBoarded(2.33);
+
+				double callresult = eiw.getEnplanement(srDTO.getStarttime(), (srDTO
+						.getEndtime() == null ? srDTO.getStarttime() : srDTO.getEndtime()),
+						custom1.getStationcode());
 				if (callresult < 0) {
 					setErrormsg(eiw.getErrormsg());
 					return null;
-					
+
 				} else {
 					custom1.setBoarded(callresult / 1000);
 				}
-				
 
 				// get count of incidents for each loss code for this station
 
-				sql = "SELECT count(incident.loss_code), incident.loss_code " + " FROM com.bagnet.nettracer.tracing.db.Incident incident"
-						+ " where loss_code <> 0 and incident.faultstation.station_ID  = :station_ID " + dateq + mbrtypeq + statusq + " group by loss_code ";
+				sql = "SELECT count(incident.loss_code), incident.loss_code "
+						+ " FROM com.bagnet.nettracer.tracing.db.Incident incident"
+						+ " where loss_code <> 0 and incident.faultstation.station_ID  = :station_ID "
+						+ dateq + mbrtypeq + statusq + " group by loss_code ";
 
 				q = sess.createQuery(sql);
 
@@ -235,10 +248,11 @@ public class CustomReportBMO {
 					q.setInteger("status_ID", srDTO.getStatus_ID());
 				if (srDTO.getItemType_ID() >= 1)
 					q.setInteger("itemType_ID", srDTO.getItemType_ID());
-				
+
 				if (sdate != null) {
 					q.setDate("startdate", sdate);
-					if (edate == null) q.setDate("startdate1", sdate1);
+					if (edate == null)
+						q.setDate("startdate1", sdate1);
 					q.setTime("starttime", stime);
 				}
 				if (edate != null) {
@@ -252,7 +266,7 @@ public class CustomReportBMO {
 					o2 = (Object[]) inc_list.get(j);
 
 					incidents = ((Long) o2[0]).intValue();
-						
+
 					if (((Integer) o2[1]).intValue() == 10)
 						custom1.setLoss10(incidents);
 					else if (((Integer) o2[1]).intValue() == 12)
@@ -316,7 +330,8 @@ public class CustomReportBMO {
 
 			}
 
-			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+			return getReportFile(list, parameters, reportname, rootpath, srDTO
+					.getOutputtype());
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -329,7 +344,8 @@ public class CustomReportBMO {
 	public Status getStatus(int status_ID) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Status status where status_ID= :status_ID");
+			Query q = sess
+					.createQuery("from com.bagnet.nettracer.tracing.db.Status status where status_ID= :status_ID");
 			q.setInteger("status_ID", status_ID);
 			List list = q.list();
 			if (list == null || list.size() == 0) {
@@ -346,13 +362,18 @@ public class CustomReportBMO {
 		}
 	}
 
-	public static JasperReport getCompiledReport(String reportname, String rootpath) throws Exception {
+	public static JasperReport getCompiledReport(String reportname,
+			String rootpath) throws Exception {
 		/** look for compiled reports, if can't find it, compile xml report * */
 		File reportFile = new File(rootpath + "/reports/" + reportname + ".jasper");
 		if (!reportFile.exists()) {
 			/** used for runtime compilation * */
-			System.setProperty(ReportingConstants.CLASS_PATH, rootpath + ReportingConstants.JASPER_JAR + System.getProperty("path.separator") + rootpath
-					+ ReportingConstants.IREPORT_JAR + System.getProperty("path.separator") + rootpath + "/WEB-INF/classes/");
+			System.setProperty(ReportingConstants.CLASS_PATH, rootpath
+					+ ReportingConstants.JASPER_JAR
+					+ System.getProperty("path.separator") + rootpath
+					+ ReportingConstants.IREPORT_JAR
+					+ System.getProperty("path.separator") + rootpath
+					+ "/WEB-INF/classes/");
 			System.setProperty(ReportingConstants.COMPILE, rootpath + "/reports/");
 			String xmlpath = rootpath + "/reports/" + reportname + ".jrxml";
 			JasperCompileManager.compileReportToFile(xmlpath);
@@ -360,14 +381,19 @@ public class CustomReportBMO {
 		return (JasperReport) JRLoader.loadObject(reportFile.getPath());
 	}
 
-	public String getReportFile(List list, Map parameters, String reportname, String rootpath, int outputtype) throws Exception {
+	public String getReportFile(List list, Map parameters, String reportname,
+			String rootpath, int outputtype) throws Exception {
 		/** look for compiled reports, if can't find it, compile xml report * */
 		JasperReport jasperReport = getCompiledReport(reportname, rootpath);
-		//HibernateResultDS ds = new HibernateResultDS(list);
+		// HibernateResultDS ds = new HibernateResultDS(list);
 		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,
+				parameters, ds);
 
-		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
+		String outfile = reportname
+				+ "_"
+				+ (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime
+						.getGMTDate()));
 
 		if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
 			outfile += ".html";
@@ -395,7 +421,7 @@ public class CustomReportBMO {
 
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+			// exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
 			// Boolean.TRUE);
 			exporter.exportReport();
 		}
@@ -405,7 +431,7 @@ public class CustomReportBMO {
 
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+			// exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
 			// Boolean.TRUE);
 			exporter.exportReport();
 		} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
@@ -438,6 +464,27 @@ public class CustomReportBMO {
 	 */
 	public void setErrormsg(String errormsg) {
 		this.errormsg = errormsg;
+	}
+
+	public String createCustomReport(StatReportDTO srDTO,
+			HttpServletRequest request, Agent user, String rootpath) {
+		MessageResources messages = MessageResources
+				.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+
+		switch (srDTO.getCustomreportnum()) {
+		case ReportingConstants.RPT_20_CUSTOM_1:
+			String creportdata = create_custom_report_1(srDTO,
+					ReportingConstants.RPT_20_CUSTOM_1,
+					ReportingConstants.RPT_20_CUSTOM_1_NAME, messages.getMessage(
+							new Locale(user.getCurrentlocale()), "header.reportnum.20"));
+			if (creportdata == null) {
+				setErrormsg(getErrormsg());
+				return null;
+			} else {
+				return creportdata;
+			}
+		}
+		return null;
 	}
 
 }
