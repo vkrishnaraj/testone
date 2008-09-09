@@ -54,6 +54,21 @@ public abstract class NTCoreServiceCallbackHandler {
     }
 
     /**
+     * auto generated Axis2 call back method for queryForFaultCode method
+     * override this method for handling normal response from queryForFaultCode operation
+     */
+    public void receiveResultqueryForFaultCode(
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument result) {
+    }
+
+    /**
+     * auto generated Axis2 Error handler
+     * override this method for handling error response from queryForFaultCode operation
+     */
+    public void receiveErrorqueryForFaultCode(java.lang.Exception e) {
+    }
+
+    /**
      * auto generated Axis2 call back method for insertQuickOHD method
      * override this method for handling normal response from insertQuickOHD operation
      */
@@ -126,6 +141,21 @@ public abstract class NTCoreServiceCallbackHandler {
      * override this method for handling error response from authenticate operation
      */
     public void receiveErrorauthenticate(java.lang.Exception e) {
+    }
+
+    /**
+     * auto generated Axis2 call back method for updateIncidentFaultCodes method
+     * override this method for handling normal response from updateIncidentFaultCodes operation
+     */
+    public void receiveResultupdateIncidentFaultCodes(
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument result) {
+    }
+
+    /**
+     * auto generated Axis2 Error handler
+     * override this method for handling error response from updateIncidentFaultCodes operation
+     */
+    public void receiveErrorupdateIncidentFaultCodes(java.lang.Exception e) {
     }
 
     /**

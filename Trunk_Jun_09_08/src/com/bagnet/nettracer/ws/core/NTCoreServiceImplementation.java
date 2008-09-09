@@ -81,4 +81,23 @@ public class NTCoreServiceImplementation extends NTCoreServiceSkeleton{
         com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD) {
     	return new WSCoreOHDUtil().beornOHD(beornOHD);
     }
+    
+    /**
+     * Auto generated method signature
+     * @param updateIncidentFaultCodes
+     */
+    public com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument updateIncidentFaultCodes(
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument updateIncidentFaultCodes) {
+        
+    	return new WSCoreIncidentUtil().updateIncidentFaultCodes(updateIncidentFaultCodes);
+    }
+    
+    /**
+     * Auto generated method signature
+     * @param queryForFaultCode
+     */
+    public com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument queryForFaultCode(
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode) {
+    	return new WSCoreIncidentUtil().queryForFaultCode(queryForFaultCode);   	
+    }
 }

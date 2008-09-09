@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core;
  */
 public interface LogoffDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LogoffDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
+            "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
                                                                                                                            .resolveHandle("logoffee25doctype");
 
     /**
@@ -41,7 +41,7 @@ public interface LogoffDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface Logoff extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Logoff.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
+                "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
                                                                                                                                .resolveHandle("logoff2b3eelemtype");
 
         /**

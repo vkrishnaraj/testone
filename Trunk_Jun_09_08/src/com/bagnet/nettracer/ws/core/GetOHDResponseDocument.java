@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core;
  */
 public interface GetOHDResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetOHDResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
+            "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
                                                                                                                            .resolveHandle("getohdresponsea5d0doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface GetOHDResponseDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface GetOHDResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetOHDResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
+                "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
                                                                                                                                .resolveHandle("getohdresponsedc9eelemtype");
 
         /**

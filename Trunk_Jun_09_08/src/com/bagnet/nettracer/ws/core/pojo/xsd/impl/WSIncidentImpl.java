@@ -31,35 +31,35 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     private static final javax.xml.namespace.QName COURTESYREPORT$14 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "courtesyreport");
     private static final javax.xml.namespace.QName CREATEDATE$16 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
-            "createdate");
-    private static final javax.xml.namespace.QName CREATETIME$18 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
-            "createtime");
-    private static final javax.xml.namespace.QName CUSTOMCLEARED$20 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+            "createDate");
+    private static final javax.xml.namespace.QName CUSTOMCLEARED$18 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "customcleared");
-    private static final javax.xml.namespace.QName ERRORCODE$22 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName ERRORCODE$20 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "errorcode");
-    private static final javax.xml.namespace.QName FAULTAIRLINE$24 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName FAULTAIRLINE$22 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "faultairline");
-    private static final javax.xml.namespace.QName FAULTSTATION$26 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName FAULTSTATION$24 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "faultstation");
-    private static final javax.xml.namespace.QName INCIDENTID$28 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName INCIDENTID$26 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "incident_ID");
-    private static final javax.xml.namespace.QName ITEMS$30 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName ITEMS$28 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "items");
-    private static final javax.xml.namespace.QName ITEMTYPE$32 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName ITEMTYPE$30 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "itemtype");
-    private static final javax.xml.namespace.QName ITINERARIES$34 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName ITINERARIES$32 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "itineraries");
-    private static final javax.xml.namespace.QName LOSSCODE$36 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName LOSSCODE$34 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "loss_code");
-    private static final javax.xml.namespace.QName NONREVENUE$38 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName NONREVENUE$36 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "nonrevenue");
-    private static final javax.xml.namespace.QName NUMBAGCHECKED$40 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName NUMBAGCHECKED$38 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "numbagchecked");
-    private static final javax.xml.namespace.QName NUMBAGRECEIVED$42 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName NUMBAGRECEIVED$40 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "numbagreceived");
-    private static final javax.xml.namespace.QName NUMPASSENGERS$44 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName NUMPASSENGERS$42 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "numpassengers");
+    private static final javax.xml.namespace.QName OSI$44 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+            "osi");
     private static final javax.xml.namespace.QName PASSENGERS$46 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "passengers");
     private static final javax.xml.namespace.QName RECORDLOCATOR$48 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
@@ -833,7 +833,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     /**
      * Gets the "closedate" element
      */
-    public java.lang.String getClosedate() {
+    public java.util.Calendar getClosedate() {
         synchronized (monitor()) {
             check_orphaned();
 
@@ -846,20 +846,20 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
                 return null;
             }
 
-            return target.getStringValue();
+            return target.getCalendarValue();
         }
     }
 
     /**
      * Gets (as xml) the "closedate" element
      */
-    public org.apache.xmlbeans.XmlString xgetClosedate() {
+    public org.apache.xmlbeans.XmlDateTime xgetClosedate() {
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLOSEDATE$10,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CLOSEDATE$10,
                     0);
 
             return target;
@@ -873,9 +873,9 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLOSEDATE$10,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CLOSEDATE$10,
                     0);
 
             if (target == null) {
@@ -900,7 +900,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     /**
      * Sets the "closedate" element
      */
-    public void setClosedate(java.lang.String closedate) {
+    public void setClosedate(java.util.Calendar closedate) {
         synchronized (monitor()) {
             check_orphaned();
 
@@ -914,25 +914,25 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
                                                                .add_element_user(CLOSEDATE$10);
             }
 
-            target.setStringValue(closedate);
+            target.setCalendarValue(closedate);
         }
     }
 
     /**
      * Sets (as xml) the "closedate" element
      */
-    public void xsetClosedate(org.apache.xmlbeans.XmlString closedate) {
+    public void xsetClosedate(org.apache.xmlbeans.XmlDateTime closedate) {
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLOSEDATE$10,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CLOSEDATE$10,
                     0);
 
             if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CLOSEDATE$10);
+                target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                               .add_element_user(CLOSEDATE$10);
             }
 
             target.set(closedate);
@@ -946,14 +946,14 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLOSEDATE$10,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CLOSEDATE$10,
                     0);
 
             if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CLOSEDATE$10);
+                target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                               .add_element_user(CLOSEDATE$10);
             }
 
             target.setNil();
@@ -1210,9 +1210,9 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     }
 
     /**
-     * Gets the "createdate" element
+     * Gets the "createDate" element
      */
-    public java.lang.String getCreatedate() {
+    public java.util.Calendar getCreateDate() {
         synchronized (monitor()) {
             check_orphaned();
 
@@ -1225,20 +1225,20 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
                 return null;
             }
 
-            return target.getStringValue();
+            return target.getCalendarValue();
         }
     }
 
     /**
-     * Gets (as xml) the "createdate" element
+     * Gets (as xml) the "createDate" element
      */
-    public org.apache.xmlbeans.XmlString xgetCreatedate() {
+    public org.apache.xmlbeans.XmlDateTime xgetCreateDate() {
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATEDATE$16,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CREATEDATE$16,
                     0);
 
             return target;
@@ -1246,15 +1246,15 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     }
 
     /**
-     * Tests for nil "createdate" element
+     * Tests for nil "createDate" element
      */
-    public boolean isNilCreatedate() {
+    public boolean isNilCreateDate() {
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATEDATE$16,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CREATEDATE$16,
                     0);
 
             if (target == null) {
@@ -1266,9 +1266,9 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     }
 
     /**
-     * True if has "createdate" element
+     * True if has "createDate" element
      */
-    public boolean isSetCreatedate() {
+    public boolean isSetCreateDate() {
         synchronized (monitor()) {
             check_orphaned();
 
@@ -1277,9 +1277,9 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     }
 
     /**
-     * Sets the "createdate" element
+     * Sets the "createDate" element
      */
-    public void setCreatedate(java.lang.String createdate) {
+    public void setCreateDate(java.util.Calendar createDate) {
         synchronized (monitor()) {
             check_orphaned();
 
@@ -1293,46 +1293,46 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
                                                                .add_element_user(CREATEDATE$16);
             }
 
-            target.setStringValue(createdate);
+            target.setCalendarValue(createDate);
         }
     }
 
     /**
-     * Sets (as xml) the "createdate" element
+     * Sets (as xml) the "createDate" element
      */
-    public void xsetCreatedate(org.apache.xmlbeans.XmlString createdate) {
+    public void xsetCreateDate(org.apache.xmlbeans.XmlDateTime createDate) {
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATEDATE$16,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CREATEDATE$16,
                     0);
 
             if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CREATEDATE$16);
+                target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                               .add_element_user(CREATEDATE$16);
             }
 
-            target.set(createdate);
+            target.set(createDate);
         }
     }
 
     /**
-     * Nils the "createdate" element
+     * Nils the "createDate" element
      */
-    public void setNilCreatedate() {
+    public void setNilCreateDate() {
         synchronized (monitor()) {
             check_orphaned();
 
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATEDATE$16,
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(CREATEDATE$16,
                     0);
 
             if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CREATEDATE$16);
+                target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                               .add_element_user(CREATEDATE$16);
             }
 
             target.setNil();
@@ -1340,152 +1340,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     }
 
     /**
-     * Unsets the "createdate" element
+     * Unsets the "createDate" element
      */
-    public void unsetCreatedate() {
+    public void unsetCreateDate() {
         synchronized (monitor()) {
             check_orphaned();
             get_store().remove_element(CREATEDATE$16, 0);
-        }
-    }
-
-    /**
-     * Gets the "createtime" element
-     */
-    public java.lang.String getCreatetime() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(CREATETIME$18,
-                    0);
-
-            if (target == null) {
-                return null;
-            }
-
-            return target.getStringValue();
-        }
-    }
-
-    /**
-     * Gets (as xml) the "createtime" element
-     */
-    public org.apache.xmlbeans.XmlString xgetCreatetime() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATETIME$18,
-                    0);
-
-            return target;
-        }
-    }
-
-    /**
-     * Tests for nil "createtime" element
-     */
-    public boolean isNilCreatetime() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATETIME$18,
-                    0);
-
-            if (target == null) {
-                return false;
-            }
-
-            return target.isNil();
-        }
-    }
-
-    /**
-     * True if has "createtime" element
-     */
-    public boolean isSetCreatetime() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            return get_store().count_elements(CREATETIME$18) != 0;
-        }
-    }
-
-    /**
-     * Sets the "createtime" element
-     */
-    public void setCreatetime(java.lang.String createtime) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(CREATETIME$18,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(CREATETIME$18);
-            }
-
-            target.setStringValue(createtime);
-        }
-    }
-
-    /**
-     * Sets (as xml) the "createtime" element
-     */
-    public void xsetCreatetime(org.apache.xmlbeans.XmlString createtime) {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATETIME$18,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CREATETIME$18);
-            }
-
-            target.set(createtime);
-        }
-    }
-
-    /**
-     * Nils the "createtime" element
-     */
-    public void setNilCreatetime() {
-        synchronized (monitor()) {
-            check_orphaned();
-
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CREATETIME$18,
-                    0);
-
-            if (target == null) {
-                target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CREATETIME$18);
-            }
-
-            target.setNil();
-        }
-    }
-
-    /**
-     * Unsets the "createtime" element
-     */
-    public void unsetCreatetime() {
-        synchronized (monitor()) {
-            check_orphaned();
-            get_store().remove_element(CREATETIME$18, 0);
         }
     }
 
@@ -1498,7 +1358,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(CUSTOMCLEARED$20,
+                                                           .find_element_user(CUSTOMCLEARED$18,
                     0);
 
             if (target == null) {
@@ -1518,7 +1378,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(CUSTOMCLEARED$20,
+                                                      .find_element_user(CUSTOMCLEARED$18,
                     0);
 
             return target;
@@ -1532,7 +1392,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(CUSTOMCLEARED$20) != 0;
+            return get_store().count_elements(CUSTOMCLEARED$18) != 0;
         }
     }
 
@@ -1545,12 +1405,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(CUSTOMCLEARED$20,
+                                                           .find_element_user(CUSTOMCLEARED$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(CUSTOMCLEARED$20);
+                                                               .add_element_user(CUSTOMCLEARED$18);
             }
 
             target.setIntValue(customcleared);
@@ -1566,12 +1426,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(CUSTOMCLEARED$20,
+                                                      .find_element_user(CUSTOMCLEARED$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(CUSTOMCLEARED$20);
+                                                          .add_element_user(CUSTOMCLEARED$18);
             }
 
             target.set(customcleared);
@@ -1584,7 +1444,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetCustomcleared() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(CUSTOMCLEARED$20, 0);
+            get_store().remove_element(CUSTOMCLEARED$18, 0);
         }
     }
 
@@ -1597,7 +1457,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ERRORCODE$22,
+                                                           .find_element_user(ERRORCODE$20,
                     0);
 
             if (target == null) {
@@ -1617,7 +1477,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORCODE$22,
+                                                         .find_element_user(ERRORCODE$20,
                     0);
 
             return target;
@@ -1633,7 +1493,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORCODE$22,
+                                                         .find_element_user(ERRORCODE$20,
                     0);
 
             if (target == null) {
@@ -1651,7 +1511,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(ERRORCODE$22) != 0;
+            return get_store().count_elements(ERRORCODE$20) != 0;
         }
     }
 
@@ -1664,12 +1524,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ERRORCODE$22,
+                                                           .find_element_user(ERRORCODE$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(ERRORCODE$22);
+                                                               .add_element_user(ERRORCODE$20);
             }
 
             target.setStringValue(errorcode);
@@ -1685,12 +1545,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORCODE$22,
+                                                         .find_element_user(ERRORCODE$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ERRORCODE$22);
+                                                             .add_element_user(ERRORCODE$20);
             }
 
             target.set(errorcode);
@@ -1706,12 +1566,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORCODE$22,
+                                                         .find_element_user(ERRORCODE$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ERRORCODE$22);
+                                                             .add_element_user(ERRORCODE$20);
             }
 
             target.setNil();
@@ -1724,7 +1584,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetErrorcode() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(ERRORCODE$22, 0);
+            get_store().remove_element(ERRORCODE$20, 0);
         }
     }
 
@@ -1737,7 +1597,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FAULTAIRLINE$24,
+                                                           .find_element_user(FAULTAIRLINE$22,
                     0);
 
             if (target == null) {
@@ -1757,7 +1617,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTAIRLINE$24,
+                                                         .find_element_user(FAULTAIRLINE$22,
                     0);
 
             return target;
@@ -1773,7 +1633,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTAIRLINE$24,
+                                                         .find_element_user(FAULTAIRLINE$22,
                     0);
 
             if (target == null) {
@@ -1791,7 +1651,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(FAULTAIRLINE$24) != 0;
+            return get_store().count_elements(FAULTAIRLINE$22) != 0;
         }
     }
 
@@ -1804,12 +1664,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FAULTAIRLINE$24,
+                                                           .find_element_user(FAULTAIRLINE$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(FAULTAIRLINE$24);
+                                                               .add_element_user(FAULTAIRLINE$22);
             }
 
             target.setStringValue(faultairline);
@@ -1825,12 +1685,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTAIRLINE$24,
+                                                         .find_element_user(FAULTAIRLINE$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(FAULTAIRLINE$24);
+                                                             .add_element_user(FAULTAIRLINE$22);
             }
 
             target.set(faultairline);
@@ -1846,12 +1706,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTAIRLINE$24,
+                                                         .find_element_user(FAULTAIRLINE$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(FAULTAIRLINE$24);
+                                                             .add_element_user(FAULTAIRLINE$22);
             }
 
             target.setNil();
@@ -1864,7 +1724,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetFaultairline() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(FAULTAIRLINE$24, 0);
+            get_store().remove_element(FAULTAIRLINE$22, 0);
         }
     }
 
@@ -1877,7 +1737,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FAULTSTATION$26,
+                                                           .find_element_user(FAULTSTATION$24,
                     0);
 
             if (target == null) {
@@ -1897,7 +1757,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTSTATION$26,
+                                                         .find_element_user(FAULTSTATION$24,
                     0);
 
             return target;
@@ -1913,7 +1773,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTSTATION$26,
+                                                         .find_element_user(FAULTSTATION$24,
                     0);
 
             if (target == null) {
@@ -1931,7 +1791,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(FAULTSTATION$26) != 0;
+            return get_store().count_elements(FAULTSTATION$24) != 0;
         }
     }
 
@@ -1944,12 +1804,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(FAULTSTATION$26,
+                                                           .find_element_user(FAULTSTATION$24,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(FAULTSTATION$26);
+                                                               .add_element_user(FAULTSTATION$24);
             }
 
             target.setStringValue(faultstation);
@@ -1965,12 +1825,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTSTATION$26,
+                                                         .find_element_user(FAULTSTATION$24,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(FAULTSTATION$26);
+                                                             .add_element_user(FAULTSTATION$24);
             }
 
             target.set(faultstation);
@@ -1986,12 +1846,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(FAULTSTATION$26,
+                                                         .find_element_user(FAULTSTATION$24,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(FAULTSTATION$26);
+                                                             .add_element_user(FAULTSTATION$24);
             }
 
             target.setNil();
@@ -2004,7 +1864,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetFaultstation() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(FAULTSTATION$26, 0);
+            get_store().remove_element(FAULTSTATION$24, 0);
         }
     }
 
@@ -2017,7 +1877,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(INCIDENTID$28,
+                                                           .find_element_user(INCIDENTID$26,
                     0);
 
             if (target == null) {
@@ -2037,7 +1897,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(INCIDENTID$28,
+                                                         .find_element_user(INCIDENTID$26,
                     0);
 
             return target;
@@ -2053,7 +1913,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(INCIDENTID$28,
+                                                         .find_element_user(INCIDENTID$26,
                     0);
 
             if (target == null) {
@@ -2071,7 +1931,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(INCIDENTID$28) != 0;
+            return get_store().count_elements(INCIDENTID$26) != 0;
         }
     }
 
@@ -2084,12 +1944,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(INCIDENTID$28,
+                                                           .find_element_user(INCIDENTID$26,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(INCIDENTID$28);
+                                                               .add_element_user(INCIDENTID$26);
             }
 
             target.setStringValue(incidentID);
@@ -2105,12 +1965,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(INCIDENTID$28,
+                                                         .find_element_user(INCIDENTID$26,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(INCIDENTID$28);
+                                                             .add_element_user(INCIDENTID$26);
             }
 
             target.set(incidentID);
@@ -2126,12 +1986,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(INCIDENTID$28,
+                                                         .find_element_user(INCIDENTID$26,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(INCIDENTID$28);
+                                                             .add_element_user(INCIDENTID$26);
             }
 
             target.setNil();
@@ -2144,7 +2004,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetIncidentID() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(INCIDENTID$28, 0);
+            get_store().remove_element(INCIDENTID$26, 0);
         }
     }
 
@@ -2156,7 +2016,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
             check_orphaned();
 
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(ITEMS$30, targetList);
+            get_store().find_all_element_users(ITEMS$28, targetList);
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem[] result = new com.bagnet.nettracer.ws.core.pojo.xsd.WSItem[targetList.size()];
             targetList.toArray(result);
@@ -2174,7 +2034,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItem) get_store()
-                                                                        .find_element_user(ITEMS$30,
+                                                                        .find_element_user(ITEMS$28,
                     i);
 
             if (target == null) {
@@ -2194,7 +2054,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItem) get_store()
-                                                                        .find_element_user(ITEMS$30,
+                                                                        .find_element_user(ITEMS$28,
                     i);
 
             if (target == null) {
@@ -2212,7 +2072,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(ITEMS$30);
+            return get_store().count_elements(ITEMS$28);
         }
     }
 
@@ -2223,7 +2083,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         com.bagnet.nettracer.ws.core.pojo.xsd.WSItem[] itemsArray) {
         synchronized (monitor()) {
             check_orphaned();
-            arraySetterHelper(itemsArray, ITEMS$30);
+            arraySetterHelper(itemsArray, ITEMS$28);
         }
     }
 
@@ -2237,7 +2097,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItem) get_store()
-                                                                        .find_element_user(ITEMS$30,
+                                                                        .find_element_user(ITEMS$28,
                     i);
 
             if (target == null) {
@@ -2257,7 +2117,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItem) get_store()
-                                                                        .find_element_user(ITEMS$30,
+                                                                        .find_element_user(ITEMS$28,
                     i);
 
             if (target == null) {
@@ -2277,7 +2137,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItem) get_store()
-                                                                        .insert_element_user(ITEMS$30,
+                                                                        .insert_element_user(ITEMS$28,
                     i);
 
             return target;
@@ -2293,7 +2153,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItem target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItem) get_store()
-                                                                        .add_element_user(ITEMS$30);
+                                                                        .add_element_user(ITEMS$28);
 
             return target;
         }
@@ -2305,7 +2165,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void removeItems(int i) {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(ITEMS$30, i);
+            get_store().remove_element(ITEMS$28, i);
         }
     }
 
@@ -2318,7 +2178,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ITEMTYPE$32,
+                                                           .find_element_user(ITEMTYPE$30,
                     0);
 
             if (target == null) {
@@ -2338,7 +2198,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ITEMTYPE$32,
+                                                         .find_element_user(ITEMTYPE$30,
                     0);
 
             return target;
@@ -2354,7 +2214,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ITEMTYPE$32,
+                                                         .find_element_user(ITEMTYPE$30,
                     0);
 
             if (target == null) {
@@ -2372,7 +2232,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(ITEMTYPE$32) != 0;
+            return get_store().count_elements(ITEMTYPE$30) != 0;
         }
     }
 
@@ -2385,12 +2245,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ITEMTYPE$32,
+                                                           .find_element_user(ITEMTYPE$30,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(ITEMTYPE$32);
+                                                               .add_element_user(ITEMTYPE$30);
             }
 
             target.setStringValue(itemtype);
@@ -2406,12 +2266,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ITEMTYPE$32,
+                                                         .find_element_user(ITEMTYPE$30,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ITEMTYPE$32);
+                                                             .add_element_user(ITEMTYPE$30);
             }
 
             target.set(itemtype);
@@ -2427,12 +2287,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ITEMTYPE$32,
+                                                         .find_element_user(ITEMTYPE$30,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ITEMTYPE$32);
+                                                             .add_element_user(ITEMTYPE$30);
             }
 
             target.setNil();
@@ -2445,7 +2305,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetItemtype() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(ITEMTYPE$32, 0);
+            get_store().remove_element(ITEMTYPE$30, 0);
         }
     }
 
@@ -2457,7 +2317,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
             check_orphaned();
 
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(ITINERARIES$34, targetList);
+            get_store().find_all_element_users(ITINERARIES$32, targetList);
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary[] result = new com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary[targetList.size()];
             targetList.toArray(result);
@@ -2476,7 +2336,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary) get_store()
-                                                                             .find_element_user(ITINERARIES$34,
+                                                                             .find_element_user(ITINERARIES$32,
                     i);
 
             if (target == null) {
@@ -2496,7 +2356,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary) get_store()
-                                                                             .find_element_user(ITINERARIES$34,
+                                                                             .find_element_user(ITINERARIES$32,
                     i);
 
             if (target == null) {
@@ -2514,7 +2374,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(ITINERARIES$34);
+            return get_store().count_elements(ITINERARIES$32);
         }
     }
 
@@ -2525,7 +2385,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary[] itinerariesArray) {
         synchronized (monitor()) {
             check_orphaned();
-            arraySetterHelper(itinerariesArray, ITINERARIES$34);
+            arraySetterHelper(itinerariesArray, ITINERARIES$32);
         }
     }
 
@@ -2539,7 +2399,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary) get_store()
-                                                                             .find_element_user(ITINERARIES$34,
+                                                                             .find_element_user(ITINERARIES$32,
                     i);
 
             if (target == null) {
@@ -2559,7 +2419,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary) get_store()
-                                                                             .find_element_user(ITINERARIES$34,
+                                                                             .find_element_user(ITINERARIES$32,
                     i);
 
             if (target == null) {
@@ -2580,7 +2440,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary) get_store()
-                                                                             .insert_element_user(ITINERARIES$34,
+                                                                             .insert_element_user(ITINERARIES$32,
                     i);
 
             return target;
@@ -2596,7 +2456,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary target = null;
             target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary) get_store()
-                                                                             .add_element_user(ITINERARIES$34);
+                                                                             .add_element_user(ITINERARIES$32);
 
             return target;
         }
@@ -2608,7 +2468,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void removeItineraries(int i) {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(ITINERARIES$34, i);
+            get_store().remove_element(ITINERARIES$32, i);
         }
     }
 
@@ -2621,7 +2481,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(LOSSCODE$36,
+                                                           .find_element_user(LOSSCODE$34,
                     0);
 
             if (target == null) {
@@ -2641,7 +2501,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(LOSSCODE$36,
+                                                      .find_element_user(LOSSCODE$34,
                     0);
 
             return target;
@@ -2655,7 +2515,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(LOSSCODE$36) != 0;
+            return get_store().count_elements(LOSSCODE$34) != 0;
         }
     }
 
@@ -2668,12 +2528,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(LOSSCODE$36,
+                                                           .find_element_user(LOSSCODE$34,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(LOSSCODE$36);
+                                                               .add_element_user(LOSSCODE$34);
             }
 
             target.setIntValue(lossCode);
@@ -2689,12 +2549,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(LOSSCODE$36,
+                                                      .find_element_user(LOSSCODE$34,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(LOSSCODE$36);
+                                                          .add_element_user(LOSSCODE$34);
             }
 
             target.set(lossCode);
@@ -2707,7 +2567,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetLossCode() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(LOSSCODE$36, 0);
+            get_store().remove_element(LOSSCODE$34, 0);
         }
     }
 
@@ -2720,7 +2580,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NONREVENUE$38,
+                                                           .find_element_user(NONREVENUE$36,
                     0);
 
             if (target == null) {
@@ -2740,7 +2600,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NONREVENUE$38,
+                                                      .find_element_user(NONREVENUE$36,
                     0);
 
             return target;
@@ -2754,7 +2614,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(NONREVENUE$38) != 0;
+            return get_store().count_elements(NONREVENUE$36) != 0;
         }
     }
 
@@ -2767,12 +2627,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NONREVENUE$38,
+                                                           .find_element_user(NONREVENUE$36,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(NONREVENUE$38);
+                                                               .add_element_user(NONREVENUE$36);
             }
 
             target.setIntValue(nonrevenue);
@@ -2788,12 +2648,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NONREVENUE$38,
+                                                      .find_element_user(NONREVENUE$36,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(NONREVENUE$38);
+                                                          .add_element_user(NONREVENUE$36);
             }
 
             target.set(nonrevenue);
@@ -2806,7 +2666,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetNonrevenue() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(NONREVENUE$38, 0);
+            get_store().remove_element(NONREVENUE$36, 0);
         }
     }
 
@@ -2819,7 +2679,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NUMBAGCHECKED$40,
+                                                           .find_element_user(NUMBAGCHECKED$38,
                     0);
 
             if (target == null) {
@@ -2839,7 +2699,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NUMBAGCHECKED$40,
+                                                      .find_element_user(NUMBAGCHECKED$38,
                     0);
 
             return target;
@@ -2853,7 +2713,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(NUMBAGCHECKED$40) != 0;
+            return get_store().count_elements(NUMBAGCHECKED$38) != 0;
         }
     }
 
@@ -2866,12 +2726,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NUMBAGCHECKED$40,
+                                                           .find_element_user(NUMBAGCHECKED$38,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(NUMBAGCHECKED$40);
+                                                               .add_element_user(NUMBAGCHECKED$38);
             }
 
             target.setIntValue(numbagchecked);
@@ -2887,12 +2747,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NUMBAGCHECKED$40,
+                                                      .find_element_user(NUMBAGCHECKED$38,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(NUMBAGCHECKED$40);
+                                                          .add_element_user(NUMBAGCHECKED$38);
             }
 
             target.set(numbagchecked);
@@ -2905,7 +2765,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetNumbagchecked() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(NUMBAGCHECKED$40, 0);
+            get_store().remove_element(NUMBAGCHECKED$38, 0);
         }
     }
 
@@ -2918,7 +2778,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NUMBAGRECEIVED$42,
+                                                           .find_element_user(NUMBAGRECEIVED$40,
                     0);
 
             if (target == null) {
@@ -2938,7 +2798,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NUMBAGRECEIVED$42,
+                                                      .find_element_user(NUMBAGRECEIVED$40,
                     0);
 
             return target;
@@ -2952,7 +2812,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(NUMBAGRECEIVED$42) != 0;
+            return get_store().count_elements(NUMBAGRECEIVED$40) != 0;
         }
     }
 
@@ -2965,12 +2825,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NUMBAGRECEIVED$42,
+                                                           .find_element_user(NUMBAGRECEIVED$40,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(NUMBAGRECEIVED$42);
+                                                               .add_element_user(NUMBAGRECEIVED$40);
             }
 
             target.setIntValue(numbagreceived);
@@ -2986,12 +2846,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NUMBAGRECEIVED$42,
+                                                      .find_element_user(NUMBAGRECEIVED$40,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(NUMBAGRECEIVED$42);
+                                                          .add_element_user(NUMBAGRECEIVED$40);
             }
 
             target.set(numbagreceived);
@@ -3004,7 +2864,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetNumbagreceived() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(NUMBAGRECEIVED$42, 0);
+            get_store().remove_element(NUMBAGRECEIVED$40, 0);
         }
     }
 
@@ -3017,7 +2877,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NUMPASSENGERS$44,
+                                                           .find_element_user(NUMPASSENGERS$42,
                     0);
 
             if (target == null) {
@@ -3037,7 +2897,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NUMPASSENGERS$44,
+                                                      .find_element_user(NUMPASSENGERS$42,
                     0);
 
             return target;
@@ -3051,7 +2911,7 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(NUMPASSENGERS$44) != 0;
+            return get_store().count_elements(NUMPASSENGERS$42) != 0;
         }
     }
 
@@ -3064,12 +2924,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(NUMPASSENGERS$44,
+                                                           .find_element_user(NUMPASSENGERS$42,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(NUMPASSENGERS$44);
+                                                               .add_element_user(NUMPASSENGERS$42);
             }
 
             target.setIntValue(numpassengers);
@@ -3085,12 +2945,12 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
 
             org.apache.xmlbeans.XmlInt target = null;
             target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                      .find_element_user(NUMPASSENGERS$44,
+                                                      .find_element_user(NUMPASSENGERS$42,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlInt) get_store()
-                                                          .add_element_user(NUMPASSENGERS$44);
+                                                          .add_element_user(NUMPASSENGERS$42);
             }
 
             target.set(numpassengers);
@@ -3103,7 +2963,147 @@ public class WSIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCo
     public void unsetNumpassengers() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(NUMPASSENGERS$44, 0);
+            get_store().remove_element(NUMPASSENGERS$42, 0);
+        }
+    }
+
+    /**
+     * Gets the "osi" element
+     */
+    public java.lang.String getOsi() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(OSI$44,
+                    0);
+
+            if (target == null) {
+                return null;
+            }
+
+            return target.getStringValue();
+        }
+    }
+
+    /**
+     * Gets (as xml) the "osi" element
+     */
+    public org.apache.xmlbeans.XmlString xgetOsi() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(OSI$44,
+                    0);
+
+            return target;
+        }
+    }
+
+    /**
+     * Tests for nil "osi" element
+     */
+    public boolean isNilOsi() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(OSI$44,
+                    0);
+
+            if (target == null) {
+                return false;
+            }
+
+            return target.isNil();
+        }
+    }
+
+    /**
+     * True if has "osi" element
+     */
+    public boolean isSetOsi() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            return get_store().count_elements(OSI$44) != 0;
+        }
+    }
+
+    /**
+     * Sets the "osi" element
+     */
+    public void setOsi(java.lang.String osi) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(OSI$44,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .add_element_user(OSI$44);
+            }
+
+            target.setStringValue(osi);
+        }
+    }
+
+    /**
+     * Sets (as xml) the "osi" element
+     */
+    public void xsetOsi(org.apache.xmlbeans.XmlString osi) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(OSI$44,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(OSI$44);
+            }
+
+            target.set(osi);
+        }
+    }
+
+    /**
+     * Nils the "osi" element
+     */
+    public void setNilOsi() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(OSI$44,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(OSI$44);
+            }
+
+            target.setNil();
+        }
+    }
+
+    /**
+     * Unsets the "osi" element
+     */
+    public void unsetOsi() {
+        synchronized (monitor()) {
+            check_orphaned();
+            get_store().remove_element(OSI$44, 0);
         }
     }
 

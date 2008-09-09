@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns0="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns1="http://core.ws.nettracer.bagnet.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://core.ws.nettracer.bagnet.com">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ns2="http://core.ws.nettracer.bagnet.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://core.ws.nettracer.bagnet.com">
     <wsdl:types>
         <xs:schema xmlns:ax21="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
             <xs:complexType name="WS_Incident">
@@ -9,11 +9,10 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" nillable="true" type="ax21:WS_Article"/>
                     <xs:element minOccurs="0" name="checkedlocation" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="claimchecks" nillable="true" type="ax21:WS_IncidentClaimCheck"/>
-                    <xs:element minOccurs="0" name="closedate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="closedate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="companycode_ID" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="courtesyreport" type="xs:int"/>
-                    <xs:element minOccurs="0" name="createdate" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="createtime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="customcleared" type="xs:int"/>
                     <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="faultairline" nillable="true" type="xs:string"/>
@@ -27,6 +26,7 @@
                     <xs:element minOccurs="0" name="numbagchecked" type="xs:int"/>
                     <xs:element minOccurs="0" name="numbagreceived" type="xs:int"/>
                     <xs:element minOccurs="0" name="numpassengers" type="xs:int"/>
+                    <xs:element minOccurs="0" name="osi" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:WS_Passenger"/>
                     <xs:element minOccurs="0" name="recordlocator" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reportmethod" nillable="true" type="xs:string"/>
@@ -151,13 +151,15 @@
                     <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="disposal_status" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="inventories" nillable="true" type="ax21:WS_Inventory"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="itineraries" nillable="true" type="ax21:WS_Itinerary"/>
                     <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lossCode" type="xs:int"/>
                     <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="membership" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
@@ -209,6 +211,20 @@
                     <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_QueryResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="result" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax22="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="UpdateIncidentResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="success" type="xs:boolean"/>
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
@@ -303,6 +319,43 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="queryForFaultCode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="companyCode" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultCode" type="xs:int"/>
+                        <xs:element minOccurs="0" name="IncidentType" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="queryForFaultCodeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_QueryResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateIncidentFaultCodes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="companyCode" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultCode" type="xs:int"/>
+                        <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateIncidentFaultCodesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:UpdateIncidentResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="authenticate">
                 <xs:complexType>
                     <xs:sequence>
@@ -337,91 +390,120 @@
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="insertIncidentRequest">
-        <wsdl:part name="parameters" element="ns1:insertIncident"/>
+        <wsdl:part name="parameters" element="ns2:insertIncident"/>
     </wsdl:message>
     <wsdl:message name="insertIncidentResponse">
-        <wsdl:part name="parameters" element="ns1:insertIncidentResponse"/>
+        <wsdl:part name="parameters" element="ns2:insertIncidentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="queryForFaultCodeRequest">
+        <wsdl:part name="parameters" element="ns2:queryForFaultCode"/>
+    </wsdl:message>
+    <wsdl:message name="queryForFaultCodeResponse">
+        <wsdl:part name="parameters" element="ns2:queryForFaultCodeResponse"/>
     </wsdl:message>
     <wsdl:message name="insertQuickOHDRequest">
-        <wsdl:part name="parameters" element="ns1:insertQuickOHD"/>
+        <wsdl:part name="parameters" element="ns2:insertQuickOHD"/>
     </wsdl:message>
     <wsdl:message name="insertQuickOHDResponse">
-        <wsdl:part name="parameters" element="ns1:insertQuickOHDResponse"/>
+        <wsdl:part name="parameters" element="ns2:insertQuickOHDResponse"/>
     </wsdl:message>
     <wsdl:message name="getIncidentRequest">
-        <wsdl:part name="parameters" element="ns1:getIncident"/>
+        <wsdl:part name="parameters" element="ns2:getIncident"/>
     </wsdl:message>
     <wsdl:message name="getIncidentResponse">
-        <wsdl:part name="parameters" element="ns1:getIncidentResponse"/>
+        <wsdl:part name="parameters" element="ns2:getIncidentResponse"/>
     </wsdl:message>
     <wsdl:message name="getOHDRequest">
-        <wsdl:part name="parameters" element="ns1:getOHD"/>
+        <wsdl:part name="parameters" element="ns2:getOHD"/>
     </wsdl:message>
     <wsdl:message name="getOHDResponse">
-        <wsdl:part name="parameters" element="ns1:getOHDResponse"/>
+        <wsdl:part name="parameters" element="ns2:getOHDResponse"/>
     </wsdl:message>
     <wsdl:message name="logoffRequest">
-        <wsdl:part name="parameters" element="ns1:logoff"/>
+        <wsdl:part name="parameters" element="ns2:logoff"/>
     </wsdl:message>
     <wsdl:message name="logoffResponse">
-        <wsdl:part name="parameters" element="ns1:logoffResponse"/>
+        <wsdl:part name="parameters" element="ns2:logoffResponse"/>
     </wsdl:message>
     <wsdl:message name="authenticateRequest">
-        <wsdl:part name="parameters" element="ns1:authenticate"/>
+        <wsdl:part name="parameters" element="ns2:authenticate"/>
     </wsdl:message>
     <wsdl:message name="authenticateResponse">
-        <wsdl:part name="parameters" element="ns1:authenticateResponse"/>
+        <wsdl:part name="parameters" element="ns2:authenticateResponse"/>
+    </wsdl:message>
+    <wsdl:message name="updateIncidentFaultCodesRequest">
+        <wsdl:part name="parameters" element="ns2:updateIncidentFaultCodes"/>
+    </wsdl:message>
+    <wsdl:message name="updateIncidentFaultCodesResponse">
+        <wsdl:part name="parameters" element="ns2:updateIncidentFaultCodesResponse"/>
     </wsdl:message>
     <wsdl:message name="insertOHDRequest">
-        <wsdl:part name="parameters" element="ns1:insertOHD"/>
+        <wsdl:part name="parameters" element="ns2:insertOHD"/>
     </wsdl:message>
     <wsdl:message name="insertOHDResponse">
-        <wsdl:part name="parameters" element="ns1:insertOHDResponse"/>
+        <wsdl:part name="parameters" element="ns2:insertOHDResponse"/>
     </wsdl:message>
     <wsdl:message name="beornOHDRequest">
-        <wsdl:part name="parameters" element="ns1:beornOHD"/>
+        <wsdl:part name="parameters" element="ns2:beornOHD"/>
     </wsdl:message>
     <wsdl:message name="beornOHDResponse">
-        <wsdl:part name="parameters" element="ns1:beornOHDResponse"/>
+        <wsdl:part name="parameters" element="ns2:beornOHDResponse"/>
     </wsdl:message>
     <wsdl:portType name="NTCoreServicePortType">
         <wsdl:operation name="insertIncident">
-            <wsdl:input message="ns1:insertIncidentRequest" wsaw:Action="urn:insertIncident"/>
-            <wsdl:output message="ns1:insertIncidentResponse" wsaw:Action="urn:insertIncidentResponse"/>
+            <wsdl:input message="ns2:insertIncidentRequest" wsaw:Action="urn:insertIncident"/>
+            <wsdl:output message="ns2:insertIncidentResponse" wsaw:Action="urn:insertIncidentResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <wsdl:input message="ns2:queryForFaultCodeRequest" wsaw:Action="urn:queryForFaultCode"/>
+            <wsdl:output message="ns2:queryForFaultCodeResponse" wsaw:Action="urn:queryForFaultCodeResponse"/>
         </wsdl:operation>
         <wsdl:operation name="insertQuickOHD">
-            <wsdl:input message="ns1:insertQuickOHDRequest" wsaw:Action="urn:insertQuickOHD"/>
-            <wsdl:output message="ns1:insertQuickOHDResponse" wsaw:Action="urn:insertQuickOHDResponse"/>
+            <wsdl:input message="ns2:insertQuickOHDRequest" wsaw:Action="urn:insertQuickOHD"/>
+            <wsdl:output message="ns2:insertQuickOHDResponse" wsaw:Action="urn:insertQuickOHDResponse"/>
         </wsdl:operation>
         <wsdl:operation name="getIncident">
-            <wsdl:input message="ns1:getIncidentRequest" wsaw:Action="urn:getIncident"/>
-            <wsdl:output message="ns1:getIncidentResponse" wsaw:Action="urn:getIncidentResponse"/>
+            <wsdl:input message="ns2:getIncidentRequest" wsaw:Action="urn:getIncident"/>
+            <wsdl:output message="ns2:getIncidentResponse" wsaw:Action="urn:getIncidentResponse"/>
         </wsdl:operation>
         <wsdl:operation name="getOHD">
-            <wsdl:input message="ns1:getOHDRequest" wsaw:Action="urn:getOHD"/>
-            <wsdl:output message="ns1:getOHDResponse" wsaw:Action="urn:getOHDResponse"/>
+            <wsdl:input message="ns2:getOHDRequest" wsaw:Action="urn:getOHD"/>
+            <wsdl:output message="ns2:getOHDResponse" wsaw:Action="urn:getOHDResponse"/>
         </wsdl:operation>
         <wsdl:operation name="logoff">
-            <wsdl:input message="ns1:logoffRequest" wsaw:Action="urn:logoff"/>
-            <wsdl:output message="ns1:logoffResponse" wsaw:Action="urn:logoffResponse"/>
+            <wsdl:input message="ns2:logoffRequest" wsaw:Action="urn:logoff"/>
+            <wsdl:output message="ns2:logoffResponse" wsaw:Action="urn:logoffResponse"/>
         </wsdl:operation>
         <wsdl:operation name="authenticate">
-            <wsdl:input message="ns1:authenticateRequest" wsaw:Action="urn:authenticate"/>
-            <wsdl:output message="ns1:authenticateResponse" wsaw:Action="urn:authenticateResponse"/>
+            <wsdl:input message="ns2:authenticateRequest" wsaw:Action="urn:authenticate"/>
+            <wsdl:output message="ns2:authenticateResponse" wsaw:Action="urn:authenticateResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateIncidentFaultCodes">
+            <wsdl:input message="ns2:updateIncidentFaultCodesRequest" wsaw:Action="urn:updateIncidentFaultCodes"/>
+            <wsdl:output message="ns2:updateIncidentFaultCodesResponse" wsaw:Action="urn:updateIncidentFaultCodesResponse"/>
         </wsdl:operation>
         <wsdl:operation name="insertOHD">
-            <wsdl:input message="ns1:insertOHDRequest" wsaw:Action="urn:insertOHD"/>
-            <wsdl:output message="ns1:insertOHDResponse" wsaw:Action="urn:insertOHDResponse"/>
+            <wsdl:input message="ns2:insertOHDRequest" wsaw:Action="urn:insertOHD"/>
+            <wsdl:output message="ns2:insertOHDResponse" wsaw:Action="urn:insertOHDResponse"/>
         </wsdl:operation>
         <wsdl:operation name="beornOHD">
-            <wsdl:input message="ns1:beornOHDRequest" wsaw:Action="urn:beornOHD"/>
-            <wsdl:output message="ns1:beornOHDResponse" wsaw:Action="urn:beornOHDResponse"/>
+            <wsdl:input message="ns2:beornOHDRequest" wsaw:Action="urn:beornOHD"/>
+            <wsdl:output message="ns2:beornOHDResponse" wsaw:Action="urn:beornOHDResponse"/>
         </wsdl:operation>
     </wsdl:portType>
-    <wsdl:binding name="NTCoreServiceSOAP11Binding" type="ns1:NTCoreServicePortType">
+    <wsdl:binding name="NTCoreServiceSOAP11Binding" type="ns2:NTCoreServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="insertIncident">
             <soap:operation soapAction="urn:insertIncident" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <soap:operation soapAction="urn:queryForFaultCode" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -474,6 +556,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="updateIncidentFaultCodes">
+            <soap:operation soapAction="urn:updateIncidentFaultCodes" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="insertOHD">
             <soap:operation soapAction="urn:insertOHD" style="document"/>
             <wsdl:input>
@@ -493,10 +584,19 @@
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
-    <wsdl:binding name="NTCoreServiceSOAP12Binding" type="ns1:NTCoreServicePortType">
+    <wsdl:binding name="NTCoreServiceSOAP12Binding" type="ns2:NTCoreServicePortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="insertIncident">
             <soap12:operation soapAction="urn:insertIncident" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <soap12:operation soapAction="urn:queryForFaultCode" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -549,6 +649,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="updateIncidentFaultCodes">
+            <soap12:operation soapAction="urn:updateIncidentFaultCodes" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="insertOHD">
             <soap12:operation soapAction="urn:insertOHD" style="document"/>
             <wsdl:input>
@@ -568,7 +677,7 @@
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
-    <wsdl:binding name="NTCoreServiceHttpBinding" type="ns1:NTCoreServicePortType">
+    <wsdl:binding name="NTCoreServiceHttpBinding" type="ns2:NTCoreServicePortType">
         <http:binding verb="POST"/>
         <wsdl:operation name="insertIncident">
             <http:operation location="NTCoreService/insertIncident"/>
@@ -577,6 +686,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="insertIncident"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <http:operation location="NTCoreService/queryForFaultCode"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="queryForFaultCode"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="queryForFaultCode"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="insertQuickOHD">
@@ -624,6 +742,15 @@
                 <mime:content type="text/xml" part="authenticate"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="updateIncidentFaultCodes">
+            <http:operation location="NTCoreService/updateIncidentFaultCodes"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="updateIncidentFaultCodes"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="updateIncidentFaultCodes"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="insertOHD">
             <http:operation location="NTCoreService/insertOHD"/>
             <wsdl:input>
@@ -644,13 +771,13 @@
         </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="NTCoreService">
-        <wsdl:port name="NTCoreServiceSOAP11port_http" binding="ns1:NTCoreServiceSOAP11Binding">
+        <wsdl:port name="NTCoreServiceSOAP11port_http" binding="ns2:NTCoreServiceSOAP11Binding">
             <soap:address location="http://localhost:8080/axis2/services/NTCoreService"/>
         </wsdl:port>
-        <wsdl:port name="NTCoreServiceSOAP12port_http" binding="ns1:NTCoreServiceSOAP12Binding">
+        <wsdl:port name="NTCoreServiceSOAP12port_http" binding="ns2:NTCoreServiceSOAP12Binding">
             <soap12:address location="http://localhost:8080/axis2/services/NTCoreService"/>
         </wsdl:port>
-        <wsdl:port name="NTCoreServiceHttpport" binding="ns1:NTCoreServiceHttpBinding">
+        <wsdl:port name="NTCoreServiceHttpport" binding="ns2:NTCoreServiceHttpBinding">
             <http:address location="http://localhost:8080/axis2/services/NTCoreService"/>
         </wsdl:port>
     </wsdl:service>

@@ -51,11 +51,18 @@ public class StationBMO {
 	}
 	
 	public static Station getStationByCode(String stationCode) {
+		return getStationByCode(stationCode, null);
+	}
+	
+	public static Station getStationByCode(String stationCode, String companyCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class).add(
 					Expression.eq("stationcode", stationCode));
+			if (companyCode != null) {
+				cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			}
 			if (cri.list().size() > 0)
 				return (Station) cri.list().get(0);
 			else

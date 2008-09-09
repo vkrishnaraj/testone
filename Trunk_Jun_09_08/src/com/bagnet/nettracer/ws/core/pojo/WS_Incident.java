@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.ws.core.pojo;
 
+import java.util.Date;
+
 
 public class WS_Incident {
 	
@@ -12,10 +14,9 @@ public class WS_Incident {
 	
 	private String agent;
 	private String agentassigned;
-	private String createdate;
-	private String createtime;
+	private Date createDate;
 	
-	private String closedate;
+	private Date closedate;
 	private String recordlocator;
 	private String ticketnumber;
 	private String reportmethod;
@@ -31,6 +32,7 @@ public class WS_Incident {
 	private String itemtype;
 	private String status;
 	private int loss_code;
+	private String osi;
 	
 	private WS_Passenger[] passengers = null;
 
@@ -192,57 +194,8 @@ public class WS_Incident {
 
 
 
-	/**
-	 * @return the createdate
-	 */
-	public String getCreatedate() {
-		return createdate;
-	}
 
 
-
-	/**
-	 * @param createdate the createdate to set
-	 */
-	public void setCreatedate(String createdate) {
-		this.createdate = createdate;
-	}
-
-
-
-	/**
-	 * @return the createtime
-	 */
-	public String getCreatetime() {
-		return createtime;
-	}
-
-
-
-	/**
-	 * @param createtime the createtime to set
-	 */
-	public void setCreatetime(String createtime) {
-		this.createtime = createtime;
-	}
-
-
-
-	/**
-	 * @return the closedate
-	 */
-	public String getClosedate() {
-		return closedate;
-	}
-
-
-
-	/**
-	 * @param closedate the closedate to set
-	 */
-	public void setClosedate(String closedate) {
-		this.closedate = closedate;
-	}
 
 
 
@@ -619,6 +572,60 @@ public class WS_Incident {
 	 */
 	public void setErrorcode(String errorcode) {
 		this.errorcode = errorcode;
+	}
+
+
+
+	/**
+	 * @return the createDate
+	 */
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+
+
+	/**
+	 * @param createDate the createDate to set
+	 */
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+
+
+	/**
+	 * @return the closedate
+	 */
+	public Date getClosedate() {
+		return closedate;
+	}
+
+
+
+	/**
+	 * @param closedate the closedate to set
+	 */
+	public void setClosedate(Date closedate) {
+		this.closedate = closedate;
+	}
+
+
+
+	/**
+	 * @return the osi
+	 */
+	public String getOsi() {
+		return osi;
+	}
+
+
+
+	/**
+	 * @param osi the osi to set
+	 */
+	public void setOsi(String osi) {
+		this.osi = osi;
 	}
 	
 	

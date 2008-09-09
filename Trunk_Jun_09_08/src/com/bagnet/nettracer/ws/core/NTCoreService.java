@@ -5,6 +5,8 @@ import com.bagnet.nettracer.ws.core.pojo.WS_Incident;
 import com.bagnet.nettracer.ws.core.pojo.WS_OHD;
 import com.bagnet.nettracer.ws.core.pojo.WS_OhdResponse;
 import com.bagnet.nettracer.ws.core.pojo.WS_QOHD;
+import com.bagnet.nettracer.ws.core.pojo.WS_QueryResponse;
+import com.bagnet.nettracer.ws.core.pojo.xsd.UpdateIncidentResponse;
 
 
 public class NTCoreService {
@@ -119,5 +121,14 @@ public class NTCoreService {
 		*/
 		WS_OhdResponse so = null;
 		return so;
+	}
+	
+
+	public WS_QueryResponse queryForFaultCode(String session_id, String faultStation, String companyCode, int faultCode, String IncidentType) {
+		return null;
+	}
+	
+	public UpdateIncidentResponse updateIncidentFaultCodes(String session_id, String incidentId, String faultStation, String companyCode, int faultCode, String comment) {
+		return null;
 	}
 }

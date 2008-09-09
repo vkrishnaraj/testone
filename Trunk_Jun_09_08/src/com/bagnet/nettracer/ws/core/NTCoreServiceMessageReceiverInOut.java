@@ -39,7 +39,7 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                     ((methodName = org.apache.axis2.util.JavaUtils.xmlNameToJava(
                             op.getName().getLocalPart())) != null)) {
                 if ("insertIncident".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument insertIncidentResponse17 =
+                    com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument insertIncidentResponse21 =
                         null;
                     com.bagnet.nettracer.ws.core.InsertIncidentDocument wrappedParam =
                         (com.bagnet.nettracer.ws.core.InsertIncidentDocument) fromOM(msgContext.getEnvelope()
@@ -48,13 +48,28 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.InsertIncidentDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    insertIncidentResponse17 = skel.insertIncident(wrappedParam);
+                    insertIncidentResponse21 = skel.insertIncident(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            insertIncidentResponse17, false);
+                            insertIncidentResponse21, false);
+                } else
+                 if ("queryForFaultCode".equals(methodName)) {
+                    com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument queryForFaultCodeResponse23 =
+                        null;
+                    com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument wrappedParam =
+                        (com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument) fromOM(msgContext.getEnvelope()
+                                                                                                  .getBody()
+                                                                                                  .getFirstElement(),
+                            com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument.class,
+                            getEnvelopeNamespaces(msgContext.getEnvelope()));
+
+                    queryForFaultCodeResponse23 = skel.queryForFaultCode(wrappedParam);
+
+                    envelope = toEnvelope(getSOAPFactory(msgContext),
+                            queryForFaultCodeResponse23, false);
                 } else
                  if ("insertQuickOHD".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHDResponse19 =
+                    com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHDResponse25 =
                         null;
                     com.bagnet.nettracer.ws.core.InsertQuickOHDDocument wrappedParam =
                         (com.bagnet.nettracer.ws.core.InsertQuickOHDDocument) fromOM(msgContext.getEnvelope()
@@ -63,13 +78,13 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.InsertQuickOHDDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    insertQuickOHDResponse19 = skel.insertQuickOHD(wrappedParam);
+                    insertQuickOHDResponse25 = skel.insertQuickOHD(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            insertQuickOHDResponse19, false);
+                            insertQuickOHDResponse25, false);
                 } else
                  if ("getIncident".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.GetIncidentResponseDocument getIncidentResponse21 =
+                    com.bagnet.nettracer.ws.core.GetIncidentResponseDocument getIncidentResponse27 =
                         null;
                     com.bagnet.nettracer.ws.core.GetIncidentDocument wrappedParam =
                         (com.bagnet.nettracer.ws.core.GetIncidentDocument) fromOM(msgContext.getEnvelope()
@@ -78,13 +93,13 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.GetIncidentDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    getIncidentResponse21 = skel.getIncident(wrappedParam);
+                    getIncidentResponse27 = skel.getIncident(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            getIncidentResponse21, false);
+                            getIncidentResponse27, false);
                 } else
                  if ("getOHD".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHDResponse23 =
+                    com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHDResponse29 =
                         null;
                     com.bagnet.nettracer.ws.core.GetOHDDocument wrappedParam = (com.bagnet.nettracer.ws.core.GetOHDDocument) fromOM(msgContext.getEnvelope()
                                                                                                                                               .getBody()
@@ -92,13 +107,13 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.GetOHDDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    getOHDResponse23 = skel.getOHD(wrappedParam);
+                    getOHDResponse29 = skel.getOHD(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            getOHDResponse23, false);
+                            getOHDResponse29, false);
                 } else
                  if ("logoff".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.LogoffResponseDocument logoffResponse25 =
+                    com.bagnet.nettracer.ws.core.LogoffResponseDocument logoffResponse31 =
                         null;
                     com.bagnet.nettracer.ws.core.LogoffDocument wrappedParam = (com.bagnet.nettracer.ws.core.LogoffDocument) fromOM(msgContext.getEnvelope()
                                                                                                                                               .getBody()
@@ -106,13 +121,13 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.LogoffDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    logoffResponse25 = skel.logoff(wrappedParam);
+                    logoffResponse31 = skel.logoff(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            logoffResponse25, false);
+                            logoffResponse31, false);
                 } else
                  if ("authenticate".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticateResponse27 =
+                    com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticateResponse33 =
                         null;
                     com.bagnet.nettracer.ws.core.AuthenticateDocument wrappedParam =
                         (com.bagnet.nettracer.ws.core.AuthenticateDocument) fromOM(msgContext.getEnvelope()
@@ -121,13 +136,28 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.AuthenticateDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    authenticateResponse27 = skel.authenticate(wrappedParam);
+                    authenticateResponse33 = skel.authenticate(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            authenticateResponse27, false);
+                            authenticateResponse33, false);
+                } else
+                 if ("updateIncidentFaultCodes".equals(methodName)) {
+                    com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument updateIncidentFaultCodesResponse35 =
+                        null;
+                    com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument wrappedParam =
+                        (com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument) fromOM(msgContext.getEnvelope()
+                                                                                                         .getBody()
+                                                                                                         .getFirstElement(),
+                            com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument.class,
+                            getEnvelopeNamespaces(msgContext.getEnvelope()));
+
+                    updateIncidentFaultCodesResponse35 = skel.updateIncidentFaultCodes(wrappedParam);
+
+                    envelope = toEnvelope(getSOAPFactory(msgContext),
+                            updateIncidentFaultCodesResponse35, false);
                 } else
                  if ("insertOHD".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHDResponse29 =
+                    com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHDResponse37 =
                         null;
                     com.bagnet.nettracer.ws.core.InsertOHDDocument wrappedParam = (com.bagnet.nettracer.ws.core.InsertOHDDocument) fromOM(msgContext.getEnvelope()
                                                                                                                                                     .getBody()
@@ -135,13 +165,13 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.InsertOHDDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    insertOHDResponse29 = skel.insertOHD(wrappedParam);
+                    insertOHDResponse37 = skel.insertOHD(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            insertOHDResponse29, false);
+                            insertOHDResponse37, false);
                 } else
                  if ("beornOHD".equals(methodName)) {
-                    com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHDResponse31 =
+                    com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHDResponse39 =
                         null;
                     com.bagnet.nettracer.ws.core.BeornOHDDocument wrappedParam = (com.bagnet.nettracer.ws.core.BeornOHDDocument) fromOM(msgContext.getEnvelope()
                                                                                                                                                   .getBody()
@@ -149,10 +179,10 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             com.bagnet.nettracer.ws.core.BeornOHDDocument.class,
                             getEnvelopeNamespaces(msgContext.getEnvelope()));
 
-                    beornOHDResponse31 = skel.beornOHD(wrappedParam);
+                    beornOHDResponse39 = skel.beornOHD(wrappedParam);
 
                     envelope = toEnvelope(getSOAPFactory(msgContext),
-                            beornOHDResponse31, false);
+                            beornOHDResponse39, false);
                 } else {
                     throw new java.lang.RuntimeException("method not found");
                 }
@@ -203,6 +233,30 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
 
     private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.core.AuthenticateResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
                 new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
@@ -334,6 +388,30 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
     }
 
     private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.core.LogoffDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
@@ -373,6 +451,19 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
         com.bagnet.nettracer.ws.core.AuthenticateResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
+
+        return envelope;
+    }
+
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
 
@@ -450,6 +541,19 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
 
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
+
+        return envelope;
+    }
+
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
         com.bagnet.nettracer.ws.core.LogoffResponseDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
@@ -514,6 +618,28 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             extraNamespaces));
                 } else {
                     return com.bagnet.nettracer.ws.core.AuthenticateResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
 
@@ -622,6 +748,28 @@ public class NTCoreServiceMessageReceiverInOut extends org.apache.axis2.receiver
                             extraNamespaces));
                 } else {
                     return com.bagnet.nettracer.ws.core.GetIncidentResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
 

@@ -760,6 +760,7 @@ public class OHD implements Serializable {
 	
 	/**
 	 * @return Returns the faultStation.
+	 * @hibernate.property type="integer"
 	 */
 	public int getFaultstation_ID() {
 		return faultStation;

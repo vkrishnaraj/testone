@@ -13,8 +13,10 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
@@ -30,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Incident_Range;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
@@ -1195,6 +1198,40 @@ public class IncidentBMO {
 		if (inc.getPrintedreceipt() == null) {
 			inc.setPrintedreceipt(TracerDateTime.getGMTDate());
 			this.updateIncidentNoAudit(inc);
+		}
+	}
+	
+	public static List<String> queryForFaultCode(ItemType iType, int faultStation, int lossCode) {
+		
+		Session sess = null;
+		List<String> list = null;
+
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			SQLQuery query = sess.createSQLQuery("SELECT * FROM INCIDENT WHERE itemtype_ID = :itemType " +
+					"AND faultstation_id = :faultStation AND loss_code = :lossCode AND status_ID = :statusId");
+			
+			query.addScalar("Incident_ID", Hibernate.STRING);
+			query.setInteger("itemType", iType.getItemType_ID());
+			query.setInteger("faultStation", faultStation);
+			query.setInteger("lossCode", lossCode);
+			query.setInteger("statusId", TracingConstants.MBR_STATUS_CLOSED);
+
+			list = (List<String>) query.list();
+			return list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
 		}
 	}
 }

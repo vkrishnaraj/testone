@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.ws.core.pojo;
 
+import java.util.Date;
+
 
 
 public class WS_OHD {
@@ -10,7 +12,7 @@ public class WS_OHD {
 	private String holdingStation;
 	private String storage_location;
 	private String agent;
-	private String founddatetime;
+	private Date founddatetime;
 	private String bagarrivedate;
 	private String bagtagnum;
 	private String color;
@@ -26,6 +28,8 @@ public class WS_OHD {
 	private String manufacturer;
 	private String disposal_status;
 	private String close_date;
+	private int lossCode;
+	private String faultStation;
 	
 	private WS_Passenger[] passengers = null;
 	private WS_Inventory[] inventories = null;
@@ -95,18 +99,7 @@ public class WS_OHD {
 	public void setAgent(String agent) {
 		this.agent = agent;
 	}
-	/**
-	 * @return the founddatetime
-	 */
-	public String getFounddatetime() {
-		return founddatetime;
-	}
-	/**
-	 * @param founddatetime the founddatetime to set
-	 */
-	public void setFounddatetime(String founddatetime) {
-		this.founddatetime = founddatetime;
-	}
+	
 	/**
 	 * @return the bagarrivedate
 	 */
@@ -363,6 +356,42 @@ public class WS_OHD {
 	 */
 	public void setErrorcode(String errorcode) {
 		this.errorcode = errorcode;
+	}
+	/**
+	 * @return the lossCode
+	 */
+	public int getLossCode() {
+		return lossCode;
+	}
+	/**
+	 * @param lossCode the lossCode to set
+	 */
+	public void setLossCode(int lossCode) {
+		this.lossCode = lossCode;
+	}
+	/**
+	 * @return the faultStation
+	 */
+	public String getFaultStation() {
+		return faultStation;
+	}
+	/**
+	 * @param faultStation the faultStation to set
+	 */
+	public void setFaultStation(String faultStation) {
+		this.faultStation = faultStation;
+	}
+	/**
+	 * @return the founddatetime
+	 */
+	public Date getFounddatetime() {
+		return founddatetime;
+	}
+	/**
+	 * @param founddatetime the founddatetime to set
+	 */
+	public void setFounddatetime(Date founddatetime) {
+		this.founddatetime = founddatetime;
 	}
 	
 	

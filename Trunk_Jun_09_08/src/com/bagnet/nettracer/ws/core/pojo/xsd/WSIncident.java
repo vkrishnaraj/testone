@@ -15,7 +15,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSIncident extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSIncident.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
+            "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
                                                                                                                            .resolveHandle("wsincidenta7d5type");
 
     /**
@@ -247,12 +247,12 @@ public interface WSIncident extends org.apache.xmlbeans.XmlObject {
     /**
      * Gets the "closedate" element
      */
-    java.lang.String getClosedate();
+    java.util.Calendar getClosedate();
 
     /**
      * Gets (as xml) the "closedate" element
      */
-    org.apache.xmlbeans.XmlString xgetClosedate();
+    org.apache.xmlbeans.XmlDateTime xgetClosedate();
 
     /**
      * Tests for nil "closedate" element
@@ -267,12 +267,12 @@ public interface WSIncident extends org.apache.xmlbeans.XmlObject {
     /**
      * Sets the "closedate" element
      */
-    void setClosedate(java.lang.String closedate);
+    void setClosedate(java.util.Calendar closedate);
 
     /**
      * Sets (as xml) the "closedate" element
      */
-    void xsetClosedate(org.apache.xmlbeans.XmlString closedate);
+    void xsetClosedate(org.apache.xmlbeans.XmlDateTime closedate);
 
     /**
      * Nils the "closedate" element
@@ -355,84 +355,44 @@ public interface WSIncident extends org.apache.xmlbeans.XmlObject {
     void unsetCourtesyreport();
 
     /**
-     * Gets the "createdate" element
+     * Gets the "createDate" element
      */
-    java.lang.String getCreatedate();
+    java.util.Calendar getCreateDate();
 
     /**
-     * Gets (as xml) the "createdate" element
+     * Gets (as xml) the "createDate" element
      */
-    org.apache.xmlbeans.XmlString xgetCreatedate();
+    org.apache.xmlbeans.XmlDateTime xgetCreateDate();
 
     /**
-     * Tests for nil "createdate" element
+     * Tests for nil "createDate" element
      */
-    boolean isNilCreatedate();
+    boolean isNilCreateDate();
 
     /**
-     * True if has "createdate" element
+     * True if has "createDate" element
      */
-    boolean isSetCreatedate();
+    boolean isSetCreateDate();
 
     /**
-     * Sets the "createdate" element
+     * Sets the "createDate" element
      */
-    void setCreatedate(java.lang.String createdate);
+    void setCreateDate(java.util.Calendar createDate);
 
     /**
-     * Sets (as xml) the "createdate" element
+     * Sets (as xml) the "createDate" element
      */
-    void xsetCreatedate(org.apache.xmlbeans.XmlString createdate);
+    void xsetCreateDate(org.apache.xmlbeans.XmlDateTime createDate);
 
     /**
-     * Nils the "createdate" element
+     * Nils the "createDate" element
      */
-    void setNilCreatedate();
+    void setNilCreateDate();
 
     /**
-     * Unsets the "createdate" element
+     * Unsets the "createDate" element
      */
-    void unsetCreatedate();
-
-    /**
-     * Gets the "createtime" element
-     */
-    java.lang.String getCreatetime();
-
-    /**
-     * Gets (as xml) the "createtime" element
-     */
-    org.apache.xmlbeans.XmlString xgetCreatetime();
-
-    /**
-     * Tests for nil "createtime" element
-     */
-    boolean isNilCreatetime();
-
-    /**
-     * True if has "createtime" element
-     */
-    boolean isSetCreatetime();
-
-    /**
-     * Sets the "createtime" element
-     */
-    void setCreatetime(java.lang.String createtime);
-
-    /**
-     * Sets (as xml) the "createtime" element
-     */
-    void xsetCreatetime(org.apache.xmlbeans.XmlString createtime);
-
-    /**
-     * Nils the "createtime" element
-     */
-    void setNilCreatetime();
-
-    /**
-     * Unsets the "createtime" element
-     */
-    void unsetCreatetime();
+    void unsetCreateDate();
 
     /**
      * Gets the "customcleared" element
@@ -917,6 +877,46 @@ public interface WSIncident extends org.apache.xmlbeans.XmlObject {
      * Unsets the "numpassengers" element
      */
     void unsetNumpassengers();
+
+    /**
+     * Gets the "osi" element
+     */
+    java.lang.String getOsi();
+
+    /**
+     * Gets (as xml) the "osi" element
+     */
+    org.apache.xmlbeans.XmlString xgetOsi();
+
+    /**
+     * Tests for nil "osi" element
+     */
+    boolean isNilOsi();
+
+    /**
+     * True if has "osi" element
+     */
+    boolean isSetOsi();
+
+    /**
+     * Sets the "osi" element
+     */
+    void setOsi(java.lang.String osi);
+
+    /**
+     * Sets (as xml) the "osi" element
+     */
+    void xsetOsi(org.apache.xmlbeans.XmlString osi);
+
+    /**
+     * Nils the "osi" element
+     */
+    void setNilOsi();
+
+    /**
+     * Unsets the "osi" element
+     */
+    void unsetOsi();
 
     /**
      * Gets array of all "passengers" elements

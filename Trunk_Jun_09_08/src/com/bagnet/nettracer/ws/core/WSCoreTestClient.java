@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.ws.core;
 
+import java.util.GregorianCalendar;
+
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncident;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse;
@@ -100,7 +102,7 @@ public class WSCoreTestClient  {
 				so.setStatus("Open");
 				so.setFoundAtStation("ATL");
 				so.setHoldingStation("ATL");
-				so.setFounddatetime("2008-03-03 13:20:00");
+				so.setFounddatetime(new GregorianCalendar());
 				
 				
 				ohd2.setSi(so);
@@ -151,11 +153,10 @@ public class WSCoreTestClient  {
 				si.setStatus("Open");
 				si.setStationcreated("ATL");
 				si.setStationassigned("ATL");
-				si.setCreatedate("2008-03-11");
-				si.setCreatetime("14:30:00");
-	
-				
-				
+				si.setCreateDate(new GregorianCalendar());
+				//si.setCreatedate("2008-03-11");
+				//si.setCreatetime("14:30:00");
+
 				inc2.setSi(si);
 	
 				InsertIncidentResponseDocument resINC = stub.insertIncident(inc);

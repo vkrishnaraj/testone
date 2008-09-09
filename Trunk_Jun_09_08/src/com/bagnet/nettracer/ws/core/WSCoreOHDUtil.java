@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.ws.core;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,21 +7,19 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
-import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
-import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Inventory;
@@ -48,8 +45,6 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSQOHD;
-import com.bagnet.nettracer.ws.core.pojo.xsd.impl.WSOhdResponseImpl;
 
 public class WSCoreOHDUtil {
 
@@ -131,7 +126,9 @@ public class WSCoreOHDUtil {
 
 			return OHDtoWS_Mapping(oDTO);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
+			
 		}
 	}
  	
@@ -203,7 +200,19 @@ public class WSCoreOHDUtil {
 		so.setHoldingStation(oDTO.getHoldingStation().getStationcode());
 		so.setStorageLocation(oDTO.getStorage_location());
 		so.setAgent(oDTO.getAgent().getUsername());
-		so.setFounddatetime(WSCoreUtil.formatDatetoString(oDTO.getFounddate(),oDTO.getFoundtime()));
+		
+		GregorianCalendar tmpCal = new GregorianCalendar();
+		tmpCal.setTime(oDTO.getFullFoundDate());
+		
+		Station fs = StationBMO.getStation(oDTO.getFaultstation_ID());
+		
+		if (fs != null) {
+			so.setFaultStation(fs.getStationcode());
+		}
+		
+		so.setLossCode(oDTO.getLoss_code());
+		
+		so.setFounddatetime(tmpCal);
 		so.setBagarrivedate(WSCoreUtil.formatDatetoString(oDTO.getBagarrivedate(),null));
 		so.setBagtagnum(oDTO.getClaimnum());
 		so.setColor(oDTO.getColor());
@@ -330,15 +339,15 @@ public class WSCoreOHDUtil {
  		ohd.setAgent(agent);
  		
  		// found date time
- 		String datetimestr = ws.getFounddatetime();
-		Date thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATETIMEFORMAT, null);
-		if (thedate == null) {
-			ws.setErrorcode("invalid datetime format for found datetime, please use NT standard: " + WSCoreUtil.WS_DATETIMEFORMAT);
- 			return null;
-		}
-		ohd.setFounddate(thedate);
-		ohd.setFoundtime(thedate);
+ 		Date thedate = null;
+ 		
+ 		Calendar tmpCal = ws.getFounddatetime();
+ 		Date tmpDate = tmpCal.getTime();
 		
+		ohd.setFounddate(tmpDate);
+		ohd.setFoundtime(tmpDate);
+		
+		String datetimestr = null;
 		// bag arrive date
 		if (ws.getBagarrivedate() != null && ws.getBagarrivedate().length() > 0) {
 			datetimestr = ws.getBagarrivedate();

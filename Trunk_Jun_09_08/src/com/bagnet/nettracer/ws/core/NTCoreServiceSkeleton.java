@@ -23,6 +23,17 @@ public class NTCoreServiceSkeleton {
 
     /**
      * Auto generated method signature
+     * @param queryForFaultCode
+     */
+    public com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument queryForFaultCode(
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode) {
+        //TODO : fill this with the necessary business logic
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#queryForFaultCode");
+    }
+
+    /**
+     * Auto generated method signature
      * @param insertQuickOHD
      */
     public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHD(
@@ -74,6 +85,17 @@ public class NTCoreServiceSkeleton {
         //TODO : fill this with the necessary business logic
         throw new java.lang.UnsupportedOperationException("Please implement " +
             this.getClass().getName() + "#authenticate");
+    }
+
+    /**
+     * Auto generated method signature
+     * @param updateIncidentFaultCodes
+     */
+    public com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument updateIncidentFaultCodes(
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument updateIncidentFaultCodes) {
+        //TODO : fill this with the necessary business logic
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#updateIncidentFaultCodes");
     }
 
     /**

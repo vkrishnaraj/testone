@@ -15,7 +15,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSOHD extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSOHD.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s16B510B5563ED0857509A4DB5C2996DF")
+            "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
                                                                                                                            .resolveHandle("wsohd6390type");
 
     /**
@@ -339,6 +339,46 @@ public interface WSOHD extends org.apache.xmlbeans.XmlObject {
     void unsetErrorcode();
 
     /**
+     * Gets the "faultStation" element
+     */
+    java.lang.String getFaultStation();
+
+    /**
+     * Gets (as xml) the "faultStation" element
+     */
+    org.apache.xmlbeans.XmlString xgetFaultStation();
+
+    /**
+     * Tests for nil "faultStation" element
+     */
+    boolean isNilFaultStation();
+
+    /**
+     * True if has "faultStation" element
+     */
+    boolean isSetFaultStation();
+
+    /**
+     * Sets the "faultStation" element
+     */
+    void setFaultStation(java.lang.String faultStation);
+
+    /**
+     * Sets (as xml) the "faultStation" element
+     */
+    void xsetFaultStation(org.apache.xmlbeans.XmlString faultStation);
+
+    /**
+     * Nils the "faultStation" element
+     */
+    void setNilFaultStation();
+
+    /**
+     * Unsets the "faultStation" element
+     */
+    void unsetFaultStation();
+
+    /**
      * Gets the "firstname" element
      */
     java.lang.String getFirstname();
@@ -421,12 +461,12 @@ public interface WSOHD extends org.apache.xmlbeans.XmlObject {
     /**
      * Gets the "founddatetime" element
      */
-    java.lang.String getFounddatetime();
+    java.util.Calendar getFounddatetime();
 
     /**
      * Gets (as xml) the "founddatetime" element
      */
-    org.apache.xmlbeans.XmlString xgetFounddatetime();
+    org.apache.xmlbeans.XmlDateTime xgetFounddatetime();
 
     /**
      * Tests for nil "founddatetime" element
@@ -441,12 +481,12 @@ public interface WSOHD extends org.apache.xmlbeans.XmlObject {
     /**
      * Sets the "founddatetime" element
      */
-    void setFounddatetime(java.lang.String founddatetime);
+    void setFounddatetime(java.util.Calendar founddatetime);
 
     /**
      * Sets (as xml) the "founddatetime" element
      */
-    void xsetFounddatetime(org.apache.xmlbeans.XmlString founddatetime);
+    void xsetFounddatetime(org.apache.xmlbeans.XmlDateTime founddatetime);
 
     /**
      * Nils the "founddatetime" element
@@ -643,6 +683,36 @@ public interface WSOHD extends org.apache.xmlbeans.XmlObject {
      * Unsets the "lastname" element
      */
     void unsetLastname();
+
+    /**
+     * Gets the "lossCode" element
+     */
+    int getLossCode();
+
+    /**
+     * Gets (as xml) the "lossCode" element
+     */
+    org.apache.xmlbeans.XmlInt xgetLossCode();
+
+    /**
+     * True if has "lossCode" element
+     */
+    boolean isSetLossCode();
+
+    /**
+     * Sets the "lossCode" element
+     */
+    void setLossCode(int lossCode);
+
+    /**
+     * Sets (as xml) the "lossCode" element
+     */
+    void xsetLossCode(org.apache.xmlbeans.XmlInt lossCode);
+
+    /**
+     * Unsets the "lossCode" element
+     */
+    void unsetLossCode();
 
     /**
      * Gets the "manufacturer" element

@@ -1,12 +1,17 @@
 package com.bagnet.nettracer.ws.core;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -20,12 +25,16 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument.QueryForFaultCodeResponse;
+import com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument.UpdateIncidentFaultCodesResponse;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSArticle;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncident;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncidentClaimCheck;
@@ -33,6 +42,8 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSInventory;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItem;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSQueryResponse;
+import com.bagnet.nettracer.ws.core.pojo.xsd.xsd.UpdateIncidentResponse;
 
 public class WSCoreIncidentUtil {
 
@@ -90,7 +101,7 @@ public class WSCoreIncidentUtil {
    */
   public com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument insertIncident(
       com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident) {
-      //TODO : fill this with the necessary business logic
+
   	WSIncident ws = insertIncident.getInsertIncident().getSi();
   	InsertIncidentResponseDocument resDoc = InsertIncidentResponseDocument.Factory.newInstance();
   	InsertIncidentResponseDocument.InsertIncidentResponse res = resDoc.addNewInsertIncidentResponse();
@@ -181,9 +192,17 @@ public class WSCoreIncidentUtil {
 		if (iDTO.getAgentassigned() != null) {
 			si.setAgentassigned(iDTO.getAgentassigned().getUsername());
 		}
-		si.setCreatedate(WSCoreUtil.formatDatetoString(iDTO.getCreatedate(),null));
-		si.setCreatetime(WSCoreUtil.formatDatetoString(null,iDTO.getCreatetime()));
-		si.setClosedate(iDTO.getClosedate());
+		
+		si.setOsi(iDTO.getOtherSystemInformation());
+		
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(iDTO.getFullCreateDate());
+		si.setCreateDate(cal);
+		
+		GregorianCalendar cal1 = new GregorianCalendar();
+		cal1.setTime(iDTO.getFullCloseDate());
+		si.setClosedate(cal1);
+
 		si.setRecordlocator(iDTO.getRecordlocator());
 		si.setTicketnumber(iDTO.getTicketnumber());
 		si.setReportmethod(iDTO.getReportMethodString(iDTO.getReportmethod()));
@@ -400,6 +419,7 @@ public class WSCoreIncidentUtil {
  	public String WStoIncident_Mapping(WSIncident ws) throws Exception {
  		IncidentBMO obmo = new IncidentBMO();
  		Incident inc = null;
+ 		Date thedate;
  		
  		if (ws.getIncidentID() == null || ws.getIncidentID().length() == 0) inc = new Incident();
  		else {
@@ -466,23 +486,21 @@ public class WSCoreIncidentUtil {
  		}
 
  		// create date time
- 		String datetimestr = ws.getCreatedate();
-		Date thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
-		if (thedate == null) {
-			ws.setErrorcode("invalid date format for createdate, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
+ 		Date createdate = ws.getCreateDate().getTime();
+ 		//String datetimestr = ws.getCreatedate();
+		//Date thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
+		if (createdate == null) {
+			ws.setErrorcode("Invalid date format for createdate, must not be null: " + WSCoreUtil.WS_DATEFORMAT);
  			return null;
 		}
-		inc.setCreatedate(thedate);
 		
-		datetimestr = ws.getCreatetime();
-		thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
-		if (thedate == null) {
-			ws.setErrorcode("invalid time format for createtime, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
- 			return null;
-		}
-		inc.setCreatetime(thedate);
+		inc.setCreatedate(createdate);
+		inc.setCreatetime(createdate);
 		
-		inc.setClosedate(ws.getClosedate());
+		String datetimestr = null;
+		
+		Date tmpDate = ws.getClosedate().getTime();
+		inc.setClosedate(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(tmpDate));
 		inc.setRecordlocator(ws.getRecordlocator());
 		inc.setTicketnumber(ws.getTicketnumber());
 		inc.setReportmethod(IncidentUtils.getReportMethod(ws.getReportmethod()));
@@ -768,5 +786,138 @@ public class WSCoreIncidentUtil {
  		return inc.getIncident_ID();
  
  	}
+
+
+	public UpdateIncidentFaultCodesResponseDocument updateIncidentFaultCodes(
+			UpdateIncidentFaultCodesDocument updateIncidentFaultCodes) {
+		
+		UpdateIncidentFaultCodesResponseDocument resDoc = UpdateIncidentFaultCodesResponseDocument.Factory.newInstance();
+		UpdateIncidentFaultCodesResponse res = resDoc.addNewUpdateIncidentFaultCodesResponse();
+		UpdateIncidentResponse xreturn = UpdateIncidentResponse.Factory.newInstance();
+		
+		boolean success = true;
+		String sessionId = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getSessionId();
+		Agent agent = WSCoreUtil.getAgent(sessionId);
+		String incidentId = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getIncidentId();
+		IncidentBMO iBMO = new IncidentBMO();
+		Incident incident = iBMO.findIncidentByID(incidentId.trim().toUpperCase());
+  	String comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG;
+  			
+		if (incident != null) {
+			switch (incident.getItemtype().getItemType_ID()) {
+				case TracingConstants.LOST_DELAY: 
+					comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG;
+					break;
+				case TracingConstants.MISSING_ARTICLES: 
+					comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISSING_ARTICLES;
+					break;
+				case TracingConstants.DAMAGED_BAG: 
+					comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG;
+					break;
+			}
+		}
+		
+		String result = WSCoreUtil.reauth(sessionId, comp_id);
+		
+		if (result != null) {
+			xreturn.setErrorResponse(result);
+			success = false;		
+		}	else if (incident == null) {
+			xreturn.setErrorResponse("No incident matching provided incidentId");
+			success = false;
+		} else {
+					
+			String fs = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getFaultStation();
+			String companyCode = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getCompanyCode();
+			Station faultStation = StationBMO.getStationByCode(fs, companyCode);
+			int lossCode = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getFaultCode();
+			
+			if (faultStation == null) {
+				xreturn.setErrorResponse("No station matching provided faultStation and companyCode.");
+				success = false;
+			} else {
+				incident.setFaultstation(faultStation);
+				
+				incident.setLoss_code(lossCode);
+				
+				String comment = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getComment();
+				
+				Remark r = new Remark();
+
+				r.setAgent(agent);
+				r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+				r.setRemarktext(comment);
+				r.setIncident(incident);
+				r.setRemarktype(TracingConstants.REMARK_CLOSING);
+
+				Set remarks = incident.getRemarks();
+				
+				if (remarks == null) {
+					HashSet<Remark> newRemarks = new HashSet<Remark>();
+					newRemarks.add(r);
+					incident.setRemarks(newRemarks);
+				} else {
+					remarks.add(r);
+				}
+				
+				iBMO.insertIncident(incident, null, agent);
+				
+			}
+		}
+		
+		xreturn.setSuccess(success);
+		res.setReturn(xreturn);
+		return resDoc;
+	}
+
+
+	public QueryForFaultCodeResponseDocument queryForFaultCode(
+			QueryForFaultCodeDocument queryForFaultCode) {
+		QueryForFaultCodeResponseDocument resDoc = QueryForFaultCodeResponseDocument.Factory.newInstance();
+		QueryForFaultCodeResponse res = resDoc.addNewQueryForFaultCodeResponse();
+		
+		WSQueryResponse xreturn = WSQueryResponse.Factory.newInstance();
+		
+		String sessionId = queryForFaultCode.getQueryForFaultCode().getSessionId();
+		ItemType iType = IncidentUtils.retrieveItemTypeWithDesc(queryForFaultCode.getQueryForFaultCode().getIncidentType());
+
+		String comp_id = null;
+		if (iType.getItemType_ID() == TracingConstants.LOST_DELAY) {
+			comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_MISHANDLED_BAG;
+		} else if (iType.getItemType_ID() == TracingConstants.MISSING_ARTICLES) {
+			comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES;
+		} else if (iType.getItemType_ID() == TracingConstants.DAMAGED_BAG) {
+			comp_id = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG;
+		}
+
+		String authResult = WSCoreUtil.reauth(sessionId, comp_id);
+
+		if (authResult != null) {
+			xreturn.setErrorResponse(authResult);
+			
+		} else {
+			String faultStation = queryForFaultCode.getQueryForFaultCode().getFaultStation();
+			String companyCode = queryForFaultCode.getQueryForFaultCode().getCompanyCode();
+			int faultStationId = 0;
+			try {
+				faultStationId = StationBMO.getStationByCode(faultStation, companyCode).getStation_ID();
+			} catch (Exception e) {
+				// If no station could be found, ignore it.
+				e.printStackTrace();
+			}
+			
+			if (faultStationId != 0) {
+				int lossCode = queryForFaultCode.getQueryForFaultCode().getFaultCode();
+				List<String> stringArray = IncidentBMO.queryForFaultCode(iType, faultStationId, lossCode);
+				for (String result: stringArray) {
+					xreturn.addResult(result);
+				}
+			}
+
+		}
+		
+		res.setReturn(xreturn);
+		return resDoc;
+	}
  	
 }
