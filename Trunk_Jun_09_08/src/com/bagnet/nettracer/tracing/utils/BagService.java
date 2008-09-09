@@ -276,7 +276,7 @@ public class BagService {
 		Status s = new Status();
 		s.setStatus_ID(TracingConstants.OHD_STATUS_IN_TRANSIT);
 		oDTO.setStatus(s);
-		oDTO.setOhd_type(TracingConstants.NOT_MASS_OHD_TYPE);
+		oDTO.setOhd_type(TracingConstants.MASS_OHD_TYPE);
 		oDTO.setClaimnum(TracerUtils.removeSpaces(form.getBag_tag()).toUpperCase());
 
 		Date x = TracerDateTime.getGMTDate();
