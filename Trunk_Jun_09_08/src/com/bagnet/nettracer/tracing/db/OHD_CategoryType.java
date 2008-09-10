@@ -17,6 +17,7 @@ public class OHD_CategoryType implements Serializable {
 	private int OHD_CategoryType_ID;
 	private String categorytype;
 	private String locale;
+	private String wtCategory;
 
 	/**
 	 * @return Returns the locale.
@@ -72,4 +73,19 @@ public class OHD_CategoryType implements Serializable {
 	public void setOHD_CategoryType_ID(int categoryType_ID) {
 		OHD_CategoryType_ID = categoryType_ID;
 	}
+
+	/**
+	 * What this maps to in world tracer.
+	 * 
+	 * @hibernate.property type="string" length="15"
+	 */
+	public String getWtCategory() {
+		return wtCategory;
+	}
+
+	public void setWtCategory(String wtCategory) {
+		this.wtCategory = wtCategory;
+	}
+	
+	
 }
