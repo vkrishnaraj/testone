@@ -1503,6 +1503,66 @@
           return false;
         }
       }
+      
+      else if (currentElementName.indexOf("address1") != -1)
+      {
+        if (currentElement.value.length < 1)
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.street_addr") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+      
+      // Require City
+      else if (currentElementName.indexOf("city") != -1)
+      {
+        if (currentElement.value.length < 1)
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.city") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+      
+      else if (currentElementName.indexOf("].state_ID") != -1) {  
+      	var pos = currentElementName.indexOf(".");
+          var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
+  
+          if (form.elements[str].value == "US" && currentElement.value.length ==0) {
+  	        alert("<%=(String) myMessages.getMessage(myLocale,
+  								"colname.state") + myMessages.getMessage(myLocale,
+                  "error.state.required")%>");
+  	        currentElement.focus();
+  	        return false;
+          }
+      }	    
+
+
+      else if (currentElementName.indexOf("passenger[0].lastname") != -1) {  
+        if (currentElement.value.length == 0)
+        {
+	        alert("<%=(String) myMessages.getMessage(myLocale,
+							"colname.last_name")%>" + " <%=(String) myMessages.getMessage(myLocale,
+							"error.validation.isRequired")%>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      
+      else if (currentElementName.indexOf("zip") != -1)
+      {
+      	var pos = currentElementName.indexOf(".");
+        var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
+	    if (form.elements[str].value == "US" && currentElement.value.length ==0)
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.zip") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      
+      
        
     }
     return true;

@@ -43,6 +43,7 @@
 	<field name="vendor" class="java.lang.String"/>
 	<field name="charges" class="java.lang.String"/>
 	<field name="zip" class="java.lang.String"/>
+	<field name="instructions" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -82,18 +83,10 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["BDO#: " + $P{bdo_id}]]></textFieldExpression>
 				</textField>
-			</band>
-		</pageHeader>
-		<columnHeader>
-			<band height="0"  isSplitAllowed="true" >
-			</band>
-		</columnHeader>
-		<detail>
-			<band height="530"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="50"
-						y="21"
+						x="401"
+						y="2"
 						width="98"
 						height="14"
 						key="staticText-6"/>
@@ -105,8 +98,8 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="298"
-						y="21"
+						x="400"
+						y="35"
 						width="144"
 						height="14"
 						key="staticText-7"/>
@@ -118,8 +111,8 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="50"
-						y="37"
+						x="401"
+						y="19"
 						width="144"
 						height="14"
 						key="staticText-8"/>
@@ -129,12 +122,20 @@
 					</textElement>
 				<text><![CDATA[COPY 3 - VENDOR (INVOICE)]]></text>
 				</staticText>
-				<image  scaleImage="Clip" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="530"  isSplitAllowed="true" >
+				<image  scaleImage="RetainShape" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="52"
-						y="59"
-						width="433"
-						height="127"
+						x="96"
+						y="13"
+						width="352"
+						height="95"
 						key="image-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch"/>
@@ -143,7 +144,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="211"
+						y="123"
 						width="286"
 						height="0"
 						key="line-1"/>
@@ -152,7 +153,7 @@
 				<line direction="BottomUp">
 					<reportElement
 						x="289"
-						y="212"
+						y="124"
 						width="1"
 						height="21"
 						key="line-2"/>
@@ -161,7 +162,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="289"
-						y="233"
+						y="145"
 						width="258"
 						height="0"
 						key="line-3"/>
@@ -170,7 +171,7 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="215"
+						y="127"
 						width="230"
 						height="15"
 						key="staticText-9"/>
@@ -183,7 +184,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="264"
+						y="176"
 						width="543"
 						height="0"
 						key="line-4"/>
@@ -192,7 +193,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="270"
+						y="182"
 						width="543"
 						height="0"
 						key="line-5"/>
@@ -201,7 +202,7 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="275"
+						y="187"
 						width="63"
 						height="15"
 						key="staticText-10"/>
@@ -214,7 +215,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="297"
+						y="209"
 						width="543"
 						height="0"
 						key="line-6"/>
@@ -223,7 +224,7 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="306"
+						y="218"
 						width="63"
 						height="15"
 						key="staticText-11"/>
@@ -237,7 +238,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="303"
+						y="215"
 						width="254"
 						height="0"
 						key="line-7"/>
@@ -246,7 +247,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="329"
+						y="241"
 						width="254"
 						height="0"
 						key="line-8"/>
@@ -255,7 +256,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="257"
-						y="304"
+						y="216"
 						width="0"
 						height="25"
 						key="line-9"/>
@@ -266,7 +267,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="266"
-						y="303"
+						y="215"
 						width="281"
 						height="0"
 						key="line-10"/>
@@ -275,7 +276,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="266"
-						y="330"
+						y="242"
 						width="281"
 						height="0"
 						key="line-11"/>
@@ -284,7 +285,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="266"
-						y="304"
+						y="216"
 						width="0"
 						height="26"
 						key="line-12"/>
@@ -294,7 +295,7 @@
 				<staticText>
 					<reportElement
 						x="269"
-						y="306"
+						y="218"
 						width="63"
 						height="15"
 						key="staticText-12"/>
@@ -307,7 +308,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="336"
+						y="248"
 						width="292"
 						height="1"
 						key="line-14"/>
@@ -316,7 +317,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="296"
-						y="336"
+						y="248"
 						width="0"
 						height="25"
 						key="line-15"/>
@@ -325,7 +326,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="360"
+						y="272"
 						width="293"
 						height="0"
 						key="line-16"/>
@@ -334,7 +335,7 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="338"
+						y="250"
 						width="30"
 						height="13"
 						key="staticText-13"/>
@@ -347,7 +348,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="439"
-						y="335"
+						y="247"
 						width="108"
 						height="0"
 						key="line-17"/>
@@ -356,7 +357,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="438"
-						y="360"
+						y="272"
 						width="109"
 						height="0"
 						key="line-18"/>
@@ -365,7 +366,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="438"
-						y="335"
+						y="247"
 						width="0"
 						height="26"
 						key="line-19"/>
@@ -374,7 +375,7 @@
 				<staticText>
 					<reportElement
 						x="446"
-						y="337"
+						y="249"
 						width="39"
 						height="15"
 						key="staticText-14"/>
@@ -387,7 +388,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="366"
+						y="278"
 						width="84"
 						height="0"
 						key="line-20"/>
@@ -396,7 +397,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="97"
-						y="366"
+						y="278"
 						width="277"
 						height="0"
 						key="line-21"/>
@@ -405,7 +406,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="383"
-						y="366"
+						y="278"
 						width="164"
 						height="0"
 						key="line-22"/>
@@ -414,7 +415,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="88"
-						y="366"
+						y="278"
 						width="0"
 						height="25"
 						key="line-23"/>
@@ -423,7 +424,7 @@
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="391"
+						y="303"
 						width="84"
 						height="0"
 						key="line-24"/>
@@ -432,7 +433,7 @@
 				<staticText>
 					<reportElement
 						x="6"
-						y="367"
+						y="279"
 						width="41"
 						height="23"
 						key="staticText-15"/>
@@ -446,7 +447,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="97"
-						y="367"
+						y="279"
 						width="0"
 						height="25"
 						key="line-25"/>
@@ -455,7 +456,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="97"
-						y="392"
+						y="304"
 						width="277"
 						height="0"
 						key="line-26"/>
@@ -464,7 +465,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="373"
-						y="367"
+						y="279"
 						width="0"
 						height="25"
 						key="line-27"/>
@@ -473,7 +474,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="383"
-						y="367"
+						y="279"
 						width="0"
 						height="25"
 						key="line-28"/>
@@ -482,7 +483,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="383"
-						y="392"
+						y="304"
 						width="164"
 						height="0"
 						key="line-29"/>
@@ -491,7 +492,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="100"
-						y="368"
+						y="280"
 						width="79"
 						height="15"
 						key="staticText-16"/>
@@ -504,7 +505,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="385"
-						y="368"
+						y="280"
 						width="73"
 						height="15"
 						key="staticText-17"/>
@@ -517,7 +518,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="4"
-						y="397"
+						y="309"
 						width="543"
 						height="0"
 						key="line-30"/>
@@ -526,7 +527,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="6"
-						y="400"
+						y="312"
 						width="63"
 						height="15"
 						key="staticText-18"/>
@@ -539,7 +540,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="422"
+						y="334"
 						width="543"
 						height="0"
 						key="line-31"/>
@@ -548,7 +549,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="429"
+						y="341"
 						width="153"
 						height="0"
 						key="line-32"/>
@@ -557,7 +558,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="169"
-						y="429"
+						y="341"
 						width="207"
 						height="0"
 						key="line-33"/>
@@ -566,7 +567,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="384"
-						y="429"
+						y="341"
 						width="164"
 						height="0"
 						key="line-34"/>
@@ -575,7 +576,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="158"
-						y="429"
+						y="341"
 						width="0"
 						height="25"
 						key="line-35"/>
@@ -584,7 +585,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="6"
-						y="454"
+						y="366"
 						width="153"
 						height="0"
 						key="line-36"/>
@@ -593,7 +594,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="6"
-						y="431"
+						y="343"
 						width="41"
 						height="14"
 						key="staticText-19"/>
@@ -606,7 +607,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="169"
-						y="430"
+						y="342"
 						width="0"
 						height="25"
 						key="line-37"/>
@@ -615,7 +616,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="169"
-						y="455"
+						y="367"
 						width="208"
 						height="0"
 						key="line-38"/>
@@ -624,7 +625,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="376"
-						y="430"
+						y="342"
 						width="0"
 						height="25"
 						key="line-39"/>
@@ -633,7 +634,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="384"
-						y="430"
+						y="342"
 						width="0"
 						height="25"
 						key="line-40"/>
@@ -642,7 +643,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="384"
-						y="455"
+						y="367"
 						width="164"
 						height="0"
 						key="line-41"/>
@@ -651,7 +652,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="172"
-						y="431"
+						y="343"
 						width="79"
 						height="15"
 						key="staticText-20"/>
@@ -664,7 +665,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="386"
-						y="431"
+						y="343"
 						width="73"
 						height="15"
 						key="staticText-21"/>
@@ -677,7 +678,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="460"
+						y="372"
 						width="543"
 						height="0"
 						key="line-42"/>
@@ -686,7 +687,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="485"
+						y="397"
 						width="543"
 						height="0"
 						key="line-43"/>
@@ -695,7 +696,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="6"
-						y="463"
+						y="375"
 						width="79"
 						height="15"
 						key="staticText-22"/>
@@ -708,7 +709,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="491"
+						y="403"
 						width="355"
 						height="0"
 						key="line-44"/>
@@ -717,7 +718,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="359"
-						y="492"
+						y="404"
 						width="0"
 						height="25"
 						key="line-45"/>
@@ -726,7 +727,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="516"
+						y="428"
 						width="354"
 						height="0"
 						key="line-46"/>
@@ -735,7 +736,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="6"
-						y="494"
+						y="406"
 						width="63"
 						height="13"
 						key="staticText-23"/>
@@ -748,7 +749,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="366"
-						y="491"
+						y="403"
 						width="182"
 						height="0"
 						key="line-47"/>
@@ -757,7 +758,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="366"
-						y="516"
+						y="428"
 						width="182"
 						height="0"
 						key="line-48"/>
@@ -766,7 +767,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="365"
-						y="491"
+						y="403"
 						width="0"
 						height="26"
 						key="line-49"/>
@@ -775,7 +776,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="369"
-						y="494"
+						y="406"
 						width="63"
 						height="15"
 						key="staticText-24"/>
@@ -788,7 +789,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="5"
-						y="523"
+						y="435"
 						width="543"
 						height="0"
 						key="line-50"/>
@@ -797,7 +798,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="6"
-						y="239"
+						y="151"
 						width="523"
 						height="20"
 						key="textField-2"/>
@@ -810,7 +811,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="76"
-						y="275"
+						y="187"
 						width="470"
 						height="20"
 						key="textField-3"/>
@@ -823,7 +824,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="76"
-						y="306"
+						y="218"
 						width="175"
 						height="20"
 						key="textField-4"/>
@@ -836,7 +837,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="336"
-						y="306"
+						y="218"
 						width="208"
 						height="20"
 						key="textField-5"/>
@@ -849,7 +850,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="38"
-						y="338"
+						y="250"
 						width="253"
 						height="20"
 						key="textField-6"/>
@@ -862,7 +863,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="488"
-						y="337"
+						y="249"
 						width="53"
 						height="20"
 						key="textField-7"/>
@@ -875,7 +876,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="49"
-						y="368"
+						y="280"
 						width="36"
 						height="20"
 						key="textField-8"/>
@@ -888,7 +889,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="182"
-						y="368"
+						y="280"
 						width="187"
 						height="20"
 						key="textField-9"/>
@@ -901,7 +902,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="461"
-						y="368"
+						y="280"
 						width="84"
 						height="20"
 						key="textField-10"/>
@@ -914,7 +915,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="72"
-						y="400"
+						y="312"
 						width="470"
 						height="20"
 						key="textField-11"/>
@@ -927,7 +928,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="49"
-						y="431"
+						y="343"
 						width="103"
 						height="20"
 						key="textField-12"/>
@@ -940,7 +941,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="254"
-						y="431"
+						y="343"
 						width="115"
 						height="20"
 						key="textField-13"/>
@@ -953,7 +954,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="463"
-						y="431"
+						y="343"
 						width="81"
 						height="20"
 						key="textField-14"/>
@@ -966,7 +967,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="86"
-						y="463"
+						y="375"
 						width="460"
 						height="20"
 						key="textField-15"/>
@@ -979,7 +980,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="72"
-						y="494"
+						y="406"
 						width="283"
 						height="20"
 						key="textField-16"/>
@@ -992,7 +993,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="435"
-						y="494"
+						y="406"
 						width="111"
 						height="20"
 						key="textField-17"/>
@@ -1005,7 +1006,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="306"
-						y="360"
+						y="272"
 						width="124"
 						height="1"
 						key="line-51"/>
@@ -1014,7 +1015,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="305"
-						y="336"
+						y="248"
 						width="124"
 						height="1"
 						key="line-52"/>
@@ -1023,7 +1024,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="305"
-						y="336"
+						y="248"
 						width="0"
 						height="25"
 						key="line-53"/>
@@ -1032,7 +1033,7 @@ PIECES]]></text>
 				<line direction="TopDown">
 					<reportElement
 						x="429"
-						y="336"
+						y="248"
 						width="0"
 						height="25"
 						key="line-54"/>
@@ -1041,7 +1042,7 @@ PIECES]]></text>
 				<staticText>
 					<reportElement
 						x="308"
-						y="338"
+						y="250"
 						width="22"
 						height="15"
 						key="staticText-26"/>
@@ -1054,7 +1055,7 @@ PIECES]]></text>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="334"
-						y="338"
+						y="250"
 						width="89"
 						height="20"
 						key="textField-19"/>
@@ -1063,6 +1064,32 @@ PIECES]]></text>
 						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{zip}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="4"
+						y="441"
+						width="223"
+						height="13"
+						key="staticText-27"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[SPECIAL DELIVERY INSTRUCTIONS:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="459"
+						width="539"
+						height="66"
+						key="textField-20"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{instructions}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

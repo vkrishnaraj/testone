@@ -23,6 +23,15 @@ function toggledc(o) {
 		});
 		
 	}
+  
+    function textCounter3(field, countfield, maxlimit) {
+      if (field.value.length > maxlimit) {
+        field.value = field.value.substring(0, maxlimit);
+      } else {
+        countfield.value = maxlimit - field.value.length;
+      }
+    }
+
 
 //-->
 </script>
@@ -171,8 +180,16 @@ function toggledc(o) {
             <td nowrap>
               <bean:message key="colname.deliverydate" />
               (<%= a.getDateformat().getFormat() %>)
-              <br>
+              <br />
               <html:text property="dispdeliverydate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.dispdeliverydate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <bean:message key="colname.delivery.remarks" />
+              <br />
+              <html:textarea rows="10" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
+              <input name="textCounter2" type="text" value="500" size="4" maxlength="4" disabled="true" />
+            </td>
           </tr>
         </table>
         <a name="contact"></a>
