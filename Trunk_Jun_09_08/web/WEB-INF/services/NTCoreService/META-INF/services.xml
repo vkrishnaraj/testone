@@ -13,6 +13,10 @@
             <actionMapping>urn:insertIncident</actionMapping>
             <outputActionMapping>urn:insertIncidentResponse</outputActionMapping>
         </operation>
+        <operation name="queryForFaultCode" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:queryForFaultCode</actionMapping>
+            <outputActionMapping>urn:queryForFaultCodeResponse</outputActionMapping>
+        </operation>
         <operation name="insertQuickOHD" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:insertQuickOHD</actionMapping>
             <outputActionMapping>urn:insertQuickOHDResponse</outputActionMapping>
@@ -32,6 +36,10 @@
         <operation name="authenticate" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:authenticate</actionMapping>
             <outputActionMapping>urn:authenticateResponse</outputActionMapping>
+        </operation>
+        <operation name="updateIncidentFaultCodes" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:updateIncidentFaultCodes</actionMapping>
+            <outputActionMapping>urn:updateIncidentFaultCodesResponse</outputActionMapping>
         </operation>
         <operation name="insertOHD" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:insertOHD</actionMapping>
