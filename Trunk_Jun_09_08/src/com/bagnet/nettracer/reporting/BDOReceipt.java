@@ -115,6 +115,7 @@ public class BDOReceipt {
 				brd.setDate1(theform.getDispcreatetime());
 				brd.setDate2(theform.getDispdeliverydate());
 				brd.setReceivedby("");
+				brd.setInstructions(theform.getDelivery_comments());
 
 				DeliverCompany dc = BDOUtils.getDeliverCompany(theform.getDelivercompany_ID());
 				if (dc != null)

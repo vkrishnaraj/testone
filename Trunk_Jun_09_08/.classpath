@@ -99,5 +99,6 @@
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>
+	<classpathentry kind="lib" path="lib/jars/delivery-rynns.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

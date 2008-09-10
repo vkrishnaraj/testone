@@ -144,10 +144,11 @@ public class TracingConstants {
 
 	public final static int LOST_REPORT = 1;
 	public final static int FOUND_REPORT = 0;
-
+	
 	public final static String DISPLAY_DATETIMEFORMAT = "MM/dd/yyyy hh:mm:ss a";
 	public final static String DISPLAY_DATEFORMAT = "MM/dd/yyyy";
 	public final static String DISPLAY_TIMEFORMAT = "hh:mm:ss a";
+	public final static String DISPLAY_TIMEFORMAT_B = "hh:mm a";
 	
 	public final static String DB_DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public final static String DB_DATEFORMAT = "yyyy-MM-dd";
@@ -156,6 +157,8 @@ public class TracingConstants {
 	public final static String DB_DATETIMEFORMAT_MSSQL = "MM/dd/yyyy hh:mm:ss a";
 	public final static String DB_DATEFORMAT_MSSQL = "MM/dd/yyyy";
 	public final static String DB_TIMEFORMAT_MSSQL = "hh:mm:ss a";
+	
+
 
 	public final static int ROWS_PER_PAGE = 15;
 	public final static double MIN_MATCH_PERCENT = 5;

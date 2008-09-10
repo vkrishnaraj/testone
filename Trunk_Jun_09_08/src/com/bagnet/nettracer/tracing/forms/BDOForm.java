@@ -45,11 +45,14 @@ public final class BDOForm extends ValidatorForm {
 
 	private List passengerlist = new ArrayList();
 	private List itemlist = new ArrayList();
-	private int bagcount;
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+	private String delivery_comments;
+	private String delivery_integration_id;
+	
+	
     private String wt_id;
 	/**
 	 * @return the wt_id
@@ -377,6 +380,34 @@ public final class BDOForm extends ValidatorForm {
 	 */
 	public void set_TIMEZONE(TimeZone _timezone) {
 		_TIMEZONE = _timezone;
+	}
+
+	/**
+	 * @return the delivery_integration_id
+	 */
+	public String getDelivery_integration_id() {
+		return delivery_integration_id;
+	}
+
+	/**
+	 * @param delivery_integration_id the delivery_integration_id to set
+	 */
+	public void setDelivery_integration_id(String delivery_integration_id) {
+		this.delivery_integration_id = delivery_integration_id;
+	}
+
+	/**
+	 * @return the delivery_comments
+	 */
+	public String getDelivery_comments() {
+		return delivery_comments;
+	}
+
+	/**
+	 * @param delivery_comments the delivery_comments to set
+	 */
+	public void setDelivery_comments(String delivery_comments) {
+		this.delivery_comments = delivery_comments;
 	}
 
 }

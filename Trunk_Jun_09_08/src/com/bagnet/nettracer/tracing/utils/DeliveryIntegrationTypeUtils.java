@@ -78,12 +78,20 @@ public class DeliveryIntegrationTypeUtils {
 		// If there is a BDO
 		String currentCompanyId = bdo.getDelivercompany().getDelivercompany_ID() + "";
 		DeliverCompany currentDeliveryCompany = DelivercompanyBMO.getDeliveryCompany(currentCompanyId);
-		
-		
 				
 		DeliveryIntegrationResponse response = null;
 		
 		if (bdo != null) {
+			
+			String responseText = null;
+			
+			String noticeText = null;
+			
+			String delCompany1 = "";
+			String delCompany2 = currentDeliveryCompany.getName();
+			String phoneNumber1 = "";
+			String phoneNumber2 = currentDeliveryCompany.getPhone();
+			 
 			// If there has been a previous successful message, error out.
 			if (bdo.getDelivery_integration_type() != null) {
 				
@@ -92,33 +100,16 @@ public class DeliveryIntegrationTypeUtils {
 				
 				if (originalCompanyId != 0) {
 					integrationDeliveryCompany = DelivercompanyBMO.getDeliveryCompany("" + originalCompanyId);
-				}
-				
-				response = new DeliveryIntegrationResponse();
-				response.setSuccess(false);
-
-				String responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.alreadysubmitted.html", agent);
-
-				String phoneNumber1 = "";
-				if (integrationDeliveryCompany.getPhone() != null ) {
+					delCompany1 = integrationDeliveryCompany.getName();
 					phoneNumber1 = integrationDeliveryCompany.getPhone();
 				}
-				
-				String phoneNumber2 = "";
-				if (currentDeliveryCompany.getPhone() != null ) {
-					phoneNumber2 = currentDeliveryCompany.getPhone();
+
+				// If the delivery companies have changed, send response.
+				if (currentDeliveryCompany.getDelivercompany_ID() != integrationDeliveryCompany.getDelivercompany_ID()) {
+					noticeText = TracerUtils.getResourcePropertyText("delivercompany.integration.alreadysubmitted.html", agent);
 				}
-				
-				// Replace values in the response string
-				responseText = responseText.replace("${deliveryCompany1}", integrationDeliveryCompany.getName());
-				responseText = responseText.replace("${deliveryCompany2}", currentDeliveryCompany.getName());			
-				responseText = responseText.replace("${phoneNumber1}", phoneNumber1);
-				responseText = responseText.replace("${phoneNumber2}", phoneNumber2);
-				
-				response.setResponse(responseText); 
-				
-				return response;
 			}
+			
 			
 			// Integration with delivery company.
 			if (currentDeliveryCompany.getDelivery_integration_type() != DeliveryIntegrationType.NONE) {
@@ -134,6 +125,23 @@ public class DeliveryIntegrationTypeUtils {
 				response = integration.integrate(bdo, agent);
 				response.setIntegrationType(currentDeliveryCompany.getDelivery_integration_type());
 				
+				responseText = response.getResponse();
+				if (noticeText != null) {
+					if (responseText == null) {
+						responseText = "";
+					}
+					responseText = responseText + " " + noticeText;
+				}
+				
+				// Replace values in the response string
+				if (responseText != null) {
+					responseText = responseText.replace("${deliveryCompany1}", delCompany1);
+					responseText = responseText.replace("${deliveryCompany2}", delCompany2);			
+					responseText = responseText.replace("${phoneNumber1}", phoneNumber1);
+					responseText = responseText.replace("${phoneNumber2}", phoneNumber2);
+					response.setResponse(responseText);
+				}
+					
 				if (response.isSuccess()) {
 					// Update BDO with unique key and integration type;
 					bdo.setDelivery_integration_type(response.getIntegrationType());

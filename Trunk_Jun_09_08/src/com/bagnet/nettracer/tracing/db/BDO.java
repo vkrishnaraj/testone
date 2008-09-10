@@ -45,8 +45,6 @@ public class BDO implements Serializable {
 	private Set passengers; // passenger name and addresses
 	private Set items;
 
-	private int bagcount;
-
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
@@ -54,7 +52,9 @@ public class BDO implements Serializable {
 	private DeliveryIntegrationType delivery_integration_type;
 	private String delivery_integration_id;
 	private int integrationDelivercompany_ID;
-
+	private String delivery_comments;
+	
+	
 	/**
 	 * @return Returns the passengers.
 	 * 
@@ -429,5 +429,21 @@ public class BDO implements Serializable {
 	public void setIntegrationDelivercompany_ID(
 			int integrationDelivercompany_ID) {
 		this.integrationDelivercompany_ID = integrationDelivercompany_ID;
+	}
+
+	
+	/**
+	 * @hibernate.property type="string"
+	 * @return the delivery_comments
+	 */
+	public String getDelivery_comments() {
+		return delivery_comments;
+	}
+
+	/**
+	 * @param delivery_comments the delivery_comments to set
+	 */
+	public void setDelivery_comments(String delivery_comments) {
+		this.delivery_comments = delivery_comments;
 	}
 }

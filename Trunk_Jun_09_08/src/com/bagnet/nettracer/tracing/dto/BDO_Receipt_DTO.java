@@ -37,6 +37,7 @@ public class BDO_Receipt_DTO {
 	private String vendor;
 	private String charges;
 	private String zip;
+	private String instructions;
 	
 	
 	
@@ -245,5 +246,17 @@ public class BDO_Receipt_DTO {
 	 */
 	public void setZip(String zip) {
 		this.zip = zip;
+	}
+	/**
+	 * @return the instructions
+	 */
+	public String getInstructions() {
+		return instructions;
+	}
+	/**
+	 * @param instructions the instructions to set
+	 */
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
 	}
 }

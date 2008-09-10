@@ -7,22 +7,22 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
 public class TracerProperties {
 
+	private static Properties properties = new Properties();
+	
 	public static final String APP_TYPE = "app_type";
 	public static final String IMAGE_STORE = "image_store";
-	public static final String SCANNER_CLASS_PATH = "scanner.class.path";
-	public static final String RESERVATION_CLASS_PATH = "reservation.class.path";
-	public static final String RESERVATION_BOOKING_ON = "booking.is_on";
-	public static final String RESERVATION_UPDATE_COMMENT_ON = "booking.is_on";
-	public static final String INCIDENT_TAB_INC_INFORMATION = "inc.tab.incinfo";
-	public static final String INCIDENT_TAB_PASSENGER = "inc.tab.passenger";
-	public static final String INCIDENT_TAB_ITINERARY = "inc.tab.itinerary";
 	public static final String INCIDENT_TAB_BAGGAGE = "inc.tab.baggage";
+	public static final String INCIDENT_TAB_INC_INFORMATION = "inc.tab.incinfo";
 	public static final String INCIDENT_TAB_INTERIM = "inc.tab.interim";
-	public static final String INCIDENT_TAB_REMARKS = "inc.tab.remarks";
+	public static final String INCIDENT_TAB_ITINERARY = "inc.tab.itinerary";
 	public static final String INCIDENT_TAB_OTHER_SYSTEM_INFORMATION = "other.system.information";
-	
-	
-	private static Properties properties = new Properties();
+	public static final String INCIDENT_TAB_PASSENGER = "inc.tab.passenger";
+	public static final String INCIDENT_TAB_REMARKS = "inc.tab.remarks";
+	public static final String RESERVATION_BOOKING_ON = "booking.is_on";
+	public static final String RESERVATION_CLASS_PATH = "reservation.class.path";
+	public static final String RESERVATION_UPDATE_COMMENT_ON = "booking.is_on";
+	public static final String RYNNS_ENDPOINT = "rynns.endpoint";
+	public static final String SCANNER_CLASS_PATH = "scanner.class.path";
 	
 	static {
 		try {

@@ -101,7 +101,8 @@
 	
 	        if (form.elements[str].value == "US" && currentElement.value.length ==0) {
 		        alert("<%=(String) myMessages.getMessage(myLocale,
-									"colname.state")%>" + " is required if country is set to 'United States'");
+									"colname.state") + myMessages.getMessage(myLocale,
+                  "error.state.required")%>");
 		        currentElement.focus();
 		        return false;
 	      	}
