@@ -126,18 +126,38 @@
           <%
             }
           %>
-          
+
+
+<style>
+#str1 {
+width:expression(120 + "px");
+}
+#str2 {
+width:expression(60 + "px");
+}
+#str3 {
+width:expression(60 + "px");
+}
+#str4 {
+width:expression(200 + "px");
+}
+  
+#str5 {
+width:expression(60 + "px");
+}
+</style>
+    
           <table class="form2" cellspacing="0" cellpadding="0" width="500">
             <tr>
-              <td width="15%"><b><bean:message key="scanner.string1" /></b></td>
-              <td width="15%"><b><bean:message key="scanner.string2" /></b></td>
-              <td width="15%"><b><bean:message key="scanner.string3" /></b></td>
-              <td width="40%"><b><bean:message key="scanner.string4" /></b></td>
-              <td width="15%"><b><bean:message key="scanner.ohd.id" /></b></td>
+              <td width="120"><b><bean:message key="scanner.string1" /></b></td>
+              <td width="60"><b><bean:message key="scanner.string2" /></b></td>
+              <td width="60"><b><bean:message key="scanner.string3" /></b></td>
+              <td width="200"><b><bean:message key="scanner.string4" /></b></td>
+              <td width="60"><b><bean:message key="scanner.ohd.id" /></b></td>
             </tr>
             <c:forEach var="scannerDTO" items="${resultList}">
               <tr>
-                <td>
+                <td id="str1">
                   <c:if test='${scannerDTO.string1 != null && scannerDTO.string1 != ""}'>
                     <c:out value="${scannerDTO.string1}" />
                   </c:if>
@@ -145,7 +165,7 @@
                     &nbsp;
                   </c:if>
                 </td>
-                <td>
+                <td id="str2">
                   <c:if test='${scannerDTO.string2 != null && scannerDTO.string2 != ""}'>
                     <c:out value="${scannerDTO.string2}" />
                   </c:if>
@@ -153,7 +173,7 @@
                     &nbsp;
                   </c:if>
                 </td>
-                <td>
+                <td id="str3">
                   <c:if test='${scannerDTO.string3 != null && scannerDTO.string3 != ""}'>
                     <c:out value="${scannerDTO.string3}" />
                   </c:if>
@@ -161,7 +181,7 @@
                     &nbsp;
                   </c:if>
                 </td>
-                <td>
+                <td id="str4"> 
                   <c:if test='${scannerDTO.string4 != null && scannerDTO.string4 != ""}'>
                     <c:out value="${scannerDTO.string4}" />
                   </c:if>
@@ -169,7 +189,7 @@
                     &nbsp;
                   </c:if>
                 </td>
-                <td>
+                <td id="str5">
                   <c:if test='${scannerDTO.ohdId != null && scannerDTO.ohdId != ""}'>
                     <c:out value="${scannerDTO.ohdId}" />
                   </c:if>
