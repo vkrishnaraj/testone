@@ -27,6 +27,9 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -1187,6 +1190,20 @@ public class IncidentBMO {
 			for (Iterator i = inc.getRemarks().iterator(); i.hasNext();) {
 				Remark o = (Remark) i.next();
 				o.setRemark_ID(0);
+			}
+		}
+		
+		if (inc.getClaims() != null && inc.getClaims().size() > 0) {
+			for (Iterator i = inc.getClaims().iterator(); i.hasNext();) {
+				Claim o = (Claim) i.next();
+				o.setClaim_ID(0);
+				
+				if (o.getExpenses() != null && o.getExpenses().size() > 0) {
+					for (Iterator j = o.getExpenses().iterator(); j.hasNext();) {
+						ExpensePayout m = (ExpensePayout) j.next();
+						m.setExpensepayout_ID(0);
+					}
+				}
 			}
 		}
 
