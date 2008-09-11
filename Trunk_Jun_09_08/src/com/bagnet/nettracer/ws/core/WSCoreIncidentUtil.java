@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles;
+import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
@@ -33,6 +34,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument.QueryForFaultCodeResponse;
 import com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument.UpdateIncidentFaultCodesResponse;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSArticle;
@@ -289,7 +291,17 @@ public class WSCoreIncidentUtil {
 				itemarr.setItemtype(iDTO.getItemtype().getDescription());
 				
 				itemarr.setBagstatus(item.getStatus() != null ? item.getStatus().getDescription() : null);
-				itemarr.setClaimchecknum(item.getClaimchecknum());
+				
+				String claimCheckNum = item.getClaimchecknum();
+				
+				try {
+					String tmpStr = LookupAirlineCodes.getTwoCharacterBagTag(claimCheckNum);
+					claimCheckNum = tmpStr;
+				} catch (Exception e) {
+					// Ignore bag tag exceptions and null pointer exceptions.
+				}
+				
+				itemarr.setClaimchecknum(claimCheckNum);
 				itemarr.setColor(item.getColor());
 				itemarr.setBagtype(item.getBagtype());
 				
