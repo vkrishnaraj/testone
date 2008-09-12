@@ -875,6 +875,11 @@ public class BagService {
 			if (!user.getStation().getCompany().getCompanyCode_ID().equals(iDTO.getStationcreated().getCompany().getCompanyCode_ID())) {
 				theform.setReadonly(1);
 			}
+			
+			if (!UserPermissions.hasIncidentSavePermission(user, iDTO)) {
+				theform.setReadonly(1);
+				theform.setAllow_remark_update(1);
+			}
 
 			Claim claim = null;
 			if ((claim = theform.getClaim(0)) != null) {
@@ -1464,6 +1469,7 @@ public class BagService {
 		theform.setBagColor(iDTO.getColor());
 		theform.setBagTagNumber(iDTO.getClaimnum());
 		theform.setBagType(iDTO.getType());
+		theform.setXDesc1(iDTO.getXdescelement_ID_1());
 		theform.setXDesc2(iDTO.getXdescelement_ID_2());
 		theform.setLastname(iDTO.getLastname());
 		theform.setFirstname(iDTO.getFirstname());
