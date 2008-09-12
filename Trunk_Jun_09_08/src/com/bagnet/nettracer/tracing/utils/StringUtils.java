@@ -198,6 +198,19 @@ public class StringUtils {
             throw new Error("StringBuilder should not throw IOExceptions!");
         }
     }
+    
+    public static String join (String pattern, String... strings) {
+    	StringBuffer sb = new StringBuffer();
+    	for (int i = 0; i< strings.length; ++i) {
+    		if (strings[i] != null) {
+	    		sb.append(strings[i]);
+	    		if (i < strings.length - 1) {
+	    			sb.append(pattern);
+	    		}
+    		}
+    	}
+    	return sb.toString();
+    }
 
 
 }
