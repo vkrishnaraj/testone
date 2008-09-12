@@ -171,6 +171,18 @@ public class TracingConstants {
 	public final static int MISSING_ARTICLES = 2;
 	public final static int DAMAGED_BAG = 3;
 	public final static int OHD = 4;
+	
+	public final static String SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_ALL = "Update Incident LostDelay";
+	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_ALL = "Update Incident Damaged";
+	public final static String SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_ALL = "Update Incident Missing";
+	public final static String SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_CREATED = "Update Created LostDelay";
+	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_CREATED = "Update Created Damaged";
+	public final static String SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_CREATED = "Update Created Missing";
+	public final static String SYSTEM_COMPONENT_NAME_LOST_DELAY_REMARK = "Remark Update LostDelay";
+	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_REMARK = "Remark Update Missing";
+	public final static String SYSTEM_COMPONENT_NAME_DAMAGED_BAG_REMARK = "Remark Update Damaged";
+	
+	
 	// itinerary types
 	public final static int PASSENGER_ROUTING = 0;
 	public final static int BAGGAGE_ROUTING = 1;

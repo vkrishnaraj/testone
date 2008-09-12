@@ -16,8 +16,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.SystemComponent;
 
 /**
@@ -259,5 +262,60 @@ public class UserPermissions {
 
 		return ret;
 	}
+	
+	public static boolean hasIncidentSavePermission(Agent a, String incident_ID) {
+		IncidentBMO ibmo = new IncidentBMO();
+		return hasIncidentSavePermission(a, ibmo.findIncidentByID(incident_ID));
+	}
+	
+	public static boolean hasIncidentSavePermission(Agent a, Incident inc) {
+
+		if (inc == null) {
+			return true;
+		}
+		
+		int type = inc.getItemtype().getItemType_ID();
+		String componentNameCreated = null;
+		String componentNameAll = null;
+		String componentRemark = null;
+		
+		
+		switch (type) {
+			case TracingConstants.LOST_DELAY:
+				componentNameCreated = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_CREATED;
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_ALL;
+				componentRemark = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_REMARK;
+				break;
+			case TracingConstants.DAMAGED_BAG:
+				componentNameCreated = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_CREATED;
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_ALL;
+				componentRemark = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_REMARK;
+				break;
+			case TracingConstants.MISSING_ARTICLES:
+				componentNameCreated = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_CREATED;
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_ALL;
+				componentRemark = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_REMARK;
+				break;
+		}
+		
+		// If the user has full permission, allow it to be edited.
+		if (hasPermission(componentNameAll, a)) {
+			return true;
+		}
+		
+		// If the station was the created station and the user has that permission, it can be edited.
+		if (inc.getStationcreated().getStation_ID() == a.getStation().getStation_ID() && 
+				hasPermission(componentNameCreated, a)) {
+			return true;
+		}
+		
+		// If the agent and incident station are the same, user has permission to edit it.
+		if (inc.getStationassigned().getStation_ID() == a.getStation().getStation_ID()) {
+			return true;
+		}
+
+		return false;
+	}
+	
 
 }
