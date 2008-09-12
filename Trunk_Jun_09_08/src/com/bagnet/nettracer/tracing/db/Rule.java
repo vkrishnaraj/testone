@@ -3,8 +3,6 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 
 /**
- * @author Ankur Gupta
- * 
  * @hibernate.class table="TABLE1"
  * 
  */
