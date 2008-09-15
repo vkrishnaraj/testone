@@ -114,7 +114,14 @@ public class ScoringAlgorithm {
 		//	1)  -5% * 10% match doesn't subtract alot - recommend setting negative penalty as the addToScore.
 		//  2)  How to show in match details that negative percent on something hurt them?
 		//  3)  Percentage is showing as positive in match_details - see 474769.
-		double addToScore = matchResult.getPercentMatch() * ruleSet.getMultiplier(matchResult, score);
+		double multiplier = ruleSet.getMultiplier(matchResult, score);
+		double addToScore = 0;
+		if (multiplier >= 0) {
+			addToScore = matchResult.getPercentMatch() * multiplier;
+		} else {
+			addToScore = multiplier;
+		}
+		
 		if (matchResult.getMatchElement().name().equals("CONTENTS")) {
 			if (matchResult.isCategoryMatched() && addToScore != 0) {
 				addToScore += ruleSet.getMultiplier("CONTENTS_CATEGORY", 100);

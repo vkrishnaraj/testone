@@ -11,6 +11,14 @@ import com.bagnet.nettracer.tracing.db.OHD;
 
 public class Trace {
 	
+	public static void main(String[] args) {
+		String incident_ID = args[0];
+		String ohd_ID = args[1];
+		Score score = Trace.trace(incident_ID, ohd_ID, null);
+		System.out.print("Comparing Incident: " + incident_ID + " to OHD: " + ohd_ID +"\n\n");
+		System.out.print(score.toString());
+	}
+	
 	public static Score trace (String incident_ID, String ohd_ID, RuleSet ruleSet) {
 		IncidentBMO ibmo = new IncidentBMO();
 		Incident inc = ibmo.findIncidentByID(incident_ID);

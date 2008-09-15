@@ -29,7 +29,6 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class PassiveTrace implements Runnable {
 
@@ -48,8 +47,8 @@ public class PassiveTrace implements Runnable {
 		String companyCode = "NK";
 		int threads = 1;
 		int seconds = 60;
-		int daysBack = 5;
-		int daysForward = 365;
+		int daysBack = 2;
+		int daysForward = 15;
 		double minimumScore = 0;
 
 		if (args.length == 1) {
@@ -99,7 +98,7 @@ public class PassiveTrace implements Runnable {
 						e.printStackTrace();
 					}
 				}
-				// TODO: Get new incident list to trace
+
 				Session sess = HibernateWrapper.getSession().openSession();
 				String sql = "SELECT * FROM INCIDENT WHERE ITEMTYPE_ID = :itemType AND "
 						+ "STATUS_ID = :status ORDER BY lastupdated desc";
@@ -222,16 +221,16 @@ public class PassiveTrace implements Runnable {
 
 		List<String> ohdList = query.list();
 		
-		logger.debug("Total OHDs: " + ohdList.size() + " from Query: "
+		logger.info("Total OHDs: " + ohdList.size() + " from Query: "
 				+ query.getQueryString());
 
 		for (String ohd_ID : ohdList) {
 			OHD ohd = OhdBMO.getOHDByID(ohd_ID, sess);
 			sess.setReadOnly(ohd, true);
 			Score score = Trace.trace(incident, ohd, null);
-			logger.info("  OHD: " + ohd_ID + "  Score: " + score.getOverallScore());
+			logger.debug("  OHD: " + ohd_ID + "  Score: " + score.getOverallScore());
 			if (score.getOverallScore() > minimumScore) {
-				logger.info("Score over " + minimumScore + ": " + score.getOverallScore());
+				logger.debug("Score over " + minimumScore + ": " + score.getOverallScore());
 			}
 			GregorianCalendar now = new GregorianCalendar();
 			now.setTime(ohd.getLastupdated());
@@ -269,9 +268,9 @@ public class PassiveTrace implements Runnable {
 						detail.setMbr_info(result.getIncidentContents());
 						detail.setOhd_info(result.getOhdContents());
 						detail.setPercentage(result.getPercentMatch());
-						details.add(detail);
-						
 						detail.setItem(result.getMatchElement().getConstant());
+						
+						details.add(detail);
 					}
 				}
 				

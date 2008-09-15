@@ -6,7 +6,7 @@ public class Score {
 	private ArrayList<MatchResult> matchResults;
 	private double overallScore;
 	private boolean gtsv;
-	private int bagNumber;
+	private int bagNumber = -1;
 
 	public boolean isGtsv() {
 		return gtsv;

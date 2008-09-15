@@ -9,7 +9,7 @@ public class MatchResult {
 	private String incidentContents;
 	private String ohdContents;
 	private int itineraryType;
-	private int bagNumber;
+	private int bagNumber = -1;
 	private boolean categoryMatched;
 	private String contentCategory;
 	private boolean usedInScoring;
@@ -94,6 +94,14 @@ public class MatchResult {
 
 	public void setCategoryMatched(boolean categoryMatched) {
 		this.categoryMatched = categoryMatched;
+	}
+	
+	public String toStringIfUsedInScoString() {
+		if (this.usedInScoring == true) {
+			return toString();
+		} else {
+			return "";
+		}
 	}
 
 	public String toString() {
