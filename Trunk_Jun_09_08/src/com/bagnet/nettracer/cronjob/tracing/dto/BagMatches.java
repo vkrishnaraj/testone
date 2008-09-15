@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class BagMatches {
 
-	private ArrayList<MatchResult> matchResults;
+	private ArrayList<MatchResult> matchResults = new ArrayList<MatchResult>();
 	private double overallScore;
 	
 	public ArrayList<MatchResult> getMatchResults() {

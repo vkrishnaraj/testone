@@ -52,15 +52,21 @@ public class HibernateUtils {
 
 	private static Logger logger = Logger.getLogger(HibernateUtils.class);
 	
+	public static void save(Object obj) {
+		save(obj, null);
+	}
+	
 	/**
 	 * 
 	 * @param obj
 	 */
-	public static void save(Object obj) {
-		Session sess = null;
+	public static void save(Object obj, Session sess) {
+		boolean sessionNull = (sess == null);
 		Transaction t = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if (sessionNull) {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			t = sess.beginTransaction();
 			sess.saveOrUpdate(obj);
 			t.commit();
@@ -73,7 +79,8 @@ public class HibernateUtils {
 				}
 			}
 		} finally {
-			if (sess != null) {
+			
+			if (sess != null && sessionNull) {
 				try {
 					sess.close();
 				} catch (Exception e) {

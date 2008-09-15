@@ -4,10 +4,20 @@ import java.util.ArrayList;
 
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.cronjob.tracing.dto.Score;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 
 public class Trace {
+	
+	public static Score trace (String incident_ID, String ohd_ID, RuleSet ruleSet) {
+		IncidentBMO ibmo = new IncidentBMO();
+		Incident inc = ibmo.findIncidentByID(incident_ID);
+		OhdBMO obmo = new OhdBMO();
+		OHD ohd = obmo.findOHDByID(ohd_ID);
+		return Trace.trace(inc, ohd, null);
+	}
 	
 	public static Score trace (Incident incident, OHD ohd, RuleSet ruleSet) {
 		
@@ -19,6 +29,15 @@ public class Trace {
 		
 		Score score = ScoringAlgorithm.score(matchResults, ruleSet); 
 		assert(score != null);
+		if (score.getOverallScore() > 100) {
+			score.setOverallScore(100);
+		}
+		
+		if (score.getOverallScore() < 0) {
+			score.setOverallScore(0);
+		}
+		
+		
 		return score;
 	}
 	

@@ -40,6 +40,7 @@ public class LookupAirlineCodes {
 		query.setString("string", threeDigitCode);
 		
 		List results = query.list();
+		sess.close();
 		
 		if (results != null && results.size() >0) {
 			return (String)results.get(0);
@@ -64,6 +65,7 @@ public class LookupAirlineCodes {
 		query.setString("string", twoCharacterCode);
 		
 		List results = query.list();
+		sess.close();
 		
 		if (results != null && results.size() >0) {
 			return (String)results.get(0);

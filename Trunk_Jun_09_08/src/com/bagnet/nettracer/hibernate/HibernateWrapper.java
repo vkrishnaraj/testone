@@ -71,6 +71,7 @@ import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Recipient;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Resolution;
+import com.bagnet.nettracer.tracing.db.Rule;
 import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -392,6 +393,7 @@ public class HibernateWrapper {
 		cfg.addClass(WT_Queue.class);
 		cfg.addClass(WT_ROH.class);
 		cfg.addClass(WT_Info.class);
+		cfg.addClass(Rule.class);
 	}
 
 

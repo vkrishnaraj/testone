@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
@@ -34,8 +35,8 @@ public class RuleSet {
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Rule.class);
-			ruleList = cri.list();
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Rule rule where 1 = 1 ");
+			ruleList = q.list();
 
 			for (Rule rule : ruleList) {
 				if (ruleSet.containsKey(rule.getRuleName())) {
@@ -50,6 +51,7 @@ public class RuleSet {
 					ruleSet.put(rule.getRuleName(), list);
 				}
 			}
+			this.rules = ruleSet;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,7 +102,7 @@ public class RuleSet {
 			if (length > -1) {
 				for (Rule rule : rules) {
 					if (length >= rule.getMinLength()
-							&& length <= rule.getMaxLength()) {
+							&& length <= rule.getMaxLength() || rule.getMaxLength() == 0) {
 						ruleToUse = rule;
 					}
 				}
@@ -122,7 +124,7 @@ public class RuleSet {
 		}
 
 		// Return appropriate percent
-		return 0;
+		return multiplier/100;
 	}
 
 	private double determineMultiplier(double percent, Rule ruleToUse) {
@@ -157,6 +159,9 @@ public class RuleSet {
 
 	private ArrayList<Rule> getRules(String element, double percentMatch) {
 		ArrayList<Rule> potentialRules = rules.get(element);
+		if (potentialRules == null) {
+			return null;
+		}
 		if (potentialRules.size() > 0) {
 			return potentialRules;
 		} else {

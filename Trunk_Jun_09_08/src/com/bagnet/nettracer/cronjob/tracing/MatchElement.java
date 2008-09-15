@@ -49,72 +49,113 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 public enum MatchElement {
 	RECORD_LOCATOR {
+		
+		String getConstant() {
+			return TracingConstants.MATCH_RECORDLOC;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchRecordLocator(this, incident, ohd);
 		}
 	},
 	MEM_NUMBER {
+		String getConstant() {
+			return TracingConstants.MATCH_MEMBER;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchMemberNumber(this, incident, ohd);
 		}
 	},
 	NAME {
+		String getConstant() {
+			return TracingConstants.MATCH_NAME;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchName(this, incident, ohd);
 		}
 	},
 	ADDRESS {
+		String getConstant() {
+			return TracingConstants.MATCH_ADDRESS;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchAddress(this, incident, ohd);
 		}
 	},
 	ITINERARY {
+		String getConstant() {
+			return TracingConstants.MATCH_ITINERARY;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchItinerary(this, incident, ohd);
 		}
 	},
 	EMAIL {
+		String getConstant() {
+			return TracingConstants.MATCH_EMAIL;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchEmail(this, incident, ohd);
 		}
 	},
 	PHONE {
+		String getConstant() {
+			return TracingConstants.MATCH_PHONE;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchPhone(this, incident, ohd);
 		}
 	},
 	MANUFACTURER {
+		String getConstant() {
+			return TracingConstants.MATCH_MANUFACTURER;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchManufacturer(this, incident, ohd);
 		}
 	},
 	COLOR {
+		String getConstant() {
+			return TracingConstants.MATCH_COLOR;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchColor(this, incident, ohd);
 		}
 	},
 	TYPE {
+		String getConstant() {
+			return TracingConstants.MATCH_BAGTYPE;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchType(this, incident, ohd);
 		}
 	},
 	CLAIM_CHECK {
+		String getConstant() {
+			return TracingConstants.MATCH_CLAIMCHECK;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchClaimCheck(this, incident, ohd);
 		}
 	},
 	ELEMENTS {
+		String getConstant() {
+			return TracingConstants.MATCH_XDESC;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchElement(this, incident, ohd);
 		}
 	},
 	CONTENTS {
+		String getConstant() {
+			return TracingConstants.MATCH_CONTENTS;
+		}
 		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
 			return matchContent(this, incident, ohd);
 		}
 	};
 
 	abstract ArrayList<MatchResult> match(Incident incident, OHD ohd);
+	abstract String getConstant();
 
 	/**
 	 * Returns the stringCompare result of the two record locators.
@@ -145,7 +186,7 @@ public enum MatchElement {
 		ArrayList<MatchResult> al = new ArrayList<MatchResult>();
 
 		AirlineMembership om = ohd.getMembership();
-		if (om.getCompanycode_ID() != null && om.getMembershipnum() != null
+		if (om != null && om.getCompanycode_ID() != null && om.getMembershipnum() != null
 				&& om.getMembershipnum().trim().length() > 0) {
 			for (Passenger pax : (Set<Passenger>) incident.getPassengers()) {
 				AirlineMembership im = pax.getMembership();
@@ -271,63 +312,59 @@ public enum MatchElement {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		// Two approaches have been considered - picking the highest scoring segment
-		// and comparing overall itineraries against each other.  They appear in
+		// Two approaches have been considered - picking the highest scoring
+		// segment
+		// and comparing overall itineraries against each other. They appear in
 		// that order below, one should be commented out.
-		
+
 		// Pick the highest percent matching segment.
 		for (Itinerary i : (Set<Itinerary>) incident.getItinerary()) {
-			String incItinSeg = i.getLegfrom() + " " + i.getLegto() + " " + i.getFlightnum();
+			String incItinSeg = i.getLegfrom() + " " + i.getLegto() + " "
+					+ i.getFlightnum();
 			for (OHD_Itinerary it : (Set<OHD_Itinerary>) ohd.getItinerary()) {
-				String ohdItinSeg = it.getLegfrom() + " " + it.getLegto() + " " + it.getFlightnum();
-				MatchResult result = MatchUtils.stringCompare(e, incItinSeg, ohdItinSeg);
-				result.setItineraryType(i.getItinerarytype());
+				String ohdItinSeg = it.getLegfrom() + " " + it.getLegto() + " "
+						+ it.getFlightnum();
+				MatchResult result = MatchUtils.stringCompare(e, incItinSeg,
+						ohdItinSeg);
 				if (result != null) {
+					result.setItineraryType(i.getItinerarytype());
 					results.add(result);
 				}
 			}
 		}
-		
+
 		/*
-		// Build full itineraries and then compare them.
-		StringBuffer incidentPaxItinerary = new StringBuffer();
-		StringBuffer incidentBagItinerary = new StringBuffer();
-		StringBuffer ohdItinerary = new StringBuffer();
-
-		for (Itinerary it : (Set<Itinerary>) incident.getItinerary()) {
-			if (it.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
-				incidentPaxItinerary.append(it.getLegfrom() + " "
-						+ it.getLegto() + " " + it.getFlightnum() + " ");
-			} else if (it.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING) {
-				incidentBagItinerary.append(it.getLegfrom() + " "
-						+ it.getLegto() + " " + it.getFlightnum() + " ");
-			}
-		}
-
-		// Build the OHD itinerary
-		for (OHD_Itinerary it : (Set<OHD_Itinerary>) ohd.getItinerary()) {
-			ohdItinerary.append(it.getLegfrom() + " " + it.getLegto() + " "
-					+ it.getFlightnum() + " ");
-		}
-
-		// Compare itineraries
-		MatchResult result1 = MatchUtils.stringCompare(e, incidentPaxItinerary
-				.toString(), ohdItinerary.toString());
-
-		if (result1 != null) {
-			result1.setItineraryType(TracingConstants.PASSENGER_ROUTING);
-			results.add(result1);
-
-		}
-
-		MatchResult result2 = MatchUtils.stringCompare(e, incidentBagItinerary
-				.toString(), ohdItinerary.toString());
-
-		if (result2 != null) {
-			result2.setItineraryType(TracingConstants.BAGGAGE_ROUTING);
-			results.add(result2);
-		}
-		*/
+		 * // Build full itineraries and then compare them. StringBuffer
+		 * incidentPaxItinerary = new StringBuffer(); StringBuffer
+		 * incidentBagItinerary = new StringBuffer(); StringBuffer ohdItinerary =
+		 * new StringBuffer();
+		 * 
+		 * for (Itinerary it : (Set<Itinerary>) incident.getItinerary()) { if
+		 * (it.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
+		 * incidentPaxItinerary.append(it.getLegfrom() + " " + it.getLegto() + " " +
+		 * it.getFlightnum() + " "); } else if (it.getItinerarytype() ==
+		 * TracingConstants.BAGGAGE_ROUTING) {
+		 * incidentBagItinerary.append(it.getLegfrom() + " " + it.getLegto() + " " +
+		 * it.getFlightnum() + " "); } }
+		 *  // Build the OHD itinerary for (OHD_Itinerary it : (Set<OHD_Itinerary>)
+		 * ohd.getItinerary()) { ohdItinerary.append(it.getLegfrom() + " " +
+		 * it.getLegto() + " " + it.getFlightnum() + " "); }
+		 *  // Compare itineraries MatchResult result1 =
+		 * MatchUtils.stringCompare(e, incidentPaxItinerary .toString(),
+		 * ohdItinerary.toString());
+		 * 
+		 * if (result1 != null) {
+		 * result1.setItineraryType(TracingConstants.PASSENGER_ROUTING);
+		 * results.add(result1);
+		 *  }
+		 * 
+		 * MatchResult result2 = MatchUtils.stringCompare(e,
+		 * incidentBagItinerary .toString(), ohdItinerary.toString());
+		 * 
+		 * if (result2 != null) {
+		 * result2.setItineraryType(TracingConstants.BAGGAGE_ROUTING);
+		 * results.add(result2); }
+		 */
 
 		return results;
 	}
@@ -519,28 +556,34 @@ public enum MatchElement {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		String ohdColor = ohd.getColor();
+		
+		if (ohdColor == null) {
+			return results;
+		}
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			if (item.getColor().equals(ohdColor)) {
-				MatchResult result = new MatchResult(e, 100, item.getColor(),
-						ohdColor);
-				result.setBagNumber(item.getBagnumber());
-				results.add(result);
-			} else if (MatchUtils
-					.secondaryColorMatch(item.getColor(), ohdColor)) {
-				// TODO: Set this as database-driven property
-				double secondaryColorPercent = 66;
-				MatchResult result = new MatchResult(e, secondaryColorPercent,
-						item.getColor(), ohdColor);
-				result.setBagNumber(item.getBagnumber());
-				results.add(result);
-			} else if (MatchUtils.tertiaryColorMatch(item.getColor(), ohdColor)) {
-				// TODO: Set this as database-driven property
-				double tertiaryColorPercent = 33;
-				MatchResult result = new MatchResult(e, tertiaryColorPercent,
-						item.getColor(), ohdColor);
-				result.setBagNumber(item.getBagnumber());
-				results.add(result);
+			if (item.getColor() != null) {
+				if (item.getColor().equals(ohdColor)) {
+					MatchResult result = new MatchResult(e, 100, item.getColor(),
+							ohdColor);
+					result.setBagNumber(item.getBagnumber());
+					results.add(result);
+				} else if (MatchUtils
+						.secondaryColorMatch(item.getColor(), ohdColor)) {
+					// TODO: Set this as database-driven property
+					double secondaryColorPercent = 66;
+					MatchResult result = new MatchResult(e, secondaryColorPercent,
+							item.getColor(), ohdColor);
+					result.setBagNumber(item.getBagnumber());
+					results.add(result);
+				} else if (MatchUtils.tertiaryColorMatch(item.getColor(), ohdColor)) {
+					// TODO: Set this as database-driven property
+					double tertiaryColorPercent = 33;
+					MatchResult result = new MatchResult(e, tertiaryColorPercent,
+							item.getColor(), ohdColor);
+					result.setBagNumber(item.getBagnumber());
+					results.add(result);
+				}
 			}
 		}
 
@@ -561,29 +604,35 @@ public enum MatchElement {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		String ohdType = ohd.getType();
+		
+		if (ohdType == null) {
+			return results;
+		}
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			if (item.getBagtype().equals(ohdType)) {
-
-				MatchResult result = new MatchResult(e, 100, item.getBagtype(),
-						ohdType);
-				result.setBagNumber(item.getBagnumber());
-				results.add(result);
-			} else if (MatchUtils
-					.secondaryTypeMatch(item.getBagtype(), ohdType)) {
-				// TODO: Set this as database-driven property
-				double secondaryTypePercent = 66;
-				MatchResult result = new MatchResult(e, secondaryTypePercent,
-						item.getBagtype(), ohdType);
-				result.setBagNumber(item.getBagnumber());
-				results.add(result);
-			} else if (MatchUtils.tertiaryTypeMatch(item.getBagtype(), ohdType)) {
-				// TODO: Set this as database-driven property
-				double tertiaryTypePercent = 33;
-				MatchResult result = new MatchResult(e, tertiaryTypePercent,
-						item.getBagtype(), ohdType);
-				result.setBagNumber(item.getBagnumber());
-				results.add(result);
+			if (item.getBagtype() != null) {
+				if (item.getBagtype().equals(ohdType)) {
+	
+					MatchResult result = new MatchResult(e, 100, item.getBagtype(),
+							ohdType);
+					result.setBagNumber(item.getBagnumber());
+					results.add(result);
+				} else if (MatchUtils
+						.secondaryTypeMatch(item.getBagtype(), ohdType)) {
+					// TODO: Set this as database-driven property
+					double secondaryTypePercent = 66;
+					MatchResult result = new MatchResult(e, secondaryTypePercent,
+							item.getBagtype(), ohdType);
+					result.setBagNumber(item.getBagnumber());
+					results.add(result);
+				} else if (MatchUtils.tertiaryTypeMatch(item.getBagtype(), ohdType)) {
+					// TODO: Set this as database-driven property
+					double tertiaryTypePercent = 33;
+					MatchResult result = new MatchResult(e, tertiaryTypePercent,
+							item.getBagtype(), ohdType);
+					result.setBagNumber(item.getBagnumber());
+					results.add(result);
+				}
 			}
 		}
 
@@ -596,17 +645,24 @@ public enum MatchElement {
 
 		// Get list of ohd elements
 		ArrayList<Integer> ohdElements = new ArrayList<Integer>();
-		ohdElements.add(new Integer(ohd.getXdescelement_ID_1()));
-		ohdElements.add(new Integer(ohd.getXdescelement_ID_2()));
-		ohdElements.add(new Integer(ohd.getXdescelement_ID_3()));
+		
+		int traceX = TracingConstants.TRACING_ELEMENT_X;
+		
+		if (ohd.getXdescelement_ID_1() != traceX)
+			ohdElements.add(new Integer(ohd.getXdescelement_ID_1()));
+		if (ohd.getXdescelement_ID_2() != traceX)	
+			ohdElements.add(new Integer(ohd.getXdescelement_ID_2()));
+		if (ohd.getXdescelement_ID_3() != traceX)
+			ohdElements.add(new Integer(ohd.getXdescelement_ID_3()));
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
 			ArrayList<Integer> matched = new ArrayList<Integer>();
-			Integer int1 = new Integer(item.getXdescelement1());
-			Integer int2 = new Integer(item.getXdescelement2());
-			Integer int3 = new Integer(item.getXdescelement3());
+			
+			Integer int1 = new Integer(item.getXdescelement_ID_1());
+			Integer int2 = new Integer(item.getXdescelement_ID_2());
+			Integer int3 = new Integer(item.getXdescelement_ID_3());
 
-			if (ohdElements.contains(int1) && !matched.contains(int1)) {
+			if (!int1.equals(new Integer(0)) && ohdElements.contains(int1) && !matched.contains(int1)) {
 				String desc = TracerUtils.getXdescelement(int1)
 						.getDescription();
 				MatchResult mr = new MatchResult(e, 100, desc, desc);
@@ -615,7 +671,7 @@ public enum MatchElement {
 				matched.add(int1);
 			}
 
-			if (ohdElements.contains(int2) && !matched.contains(int2)) {
+			if (!int2.equals(new Integer(0)) && ohdElements.contains(int2) && !matched.contains(int2)) {
 				String desc = TracerUtils.getXdescelement(int2)
 						.getDescription();
 				MatchResult mr = new MatchResult(e, 100, desc, desc);
@@ -624,7 +680,7 @@ public enum MatchElement {
 				matched.add(int2);
 			}
 
-			if (ohdElements.contains(int3) && !matched.contains(int3)) {
+			if (!int3.equals(new Integer(0)) && ohdElements.contains(int3) && !matched.contains(int3)) {
 				String desc = TracerUtils.getXdescelement(int3)
 						.getDescription();
 				MatchResult mr = new MatchResult(e, 100, desc, desc);
@@ -647,10 +703,13 @@ public enum MatchElement {
 				for (OHD_Inventory oi : (Set<OHD_Inventory>) ohd.getItems()) {
 					String incCatType = i.getCategory();
 					String ohdCatType = oi.getCategory();
+					String incContent = StringUtils.removePronouns(i
+							.getDescription());
+					String ohdContent = StringUtils.removePronouns(oi
+							.getDescription());
 
-					MatchResult result = MatchUtils.stringCompare(e, i
-							.getDescription(), oi.getDescription(), item
-							.getBagnumber());
+					MatchResult result = MatchUtils.stringCompare(e,
+							incContent, ohdContent, item.getBagnumber());
 
 					if (result != null) {
 						if (incCatType.equals(ohdCatType)) {
@@ -675,7 +734,7 @@ class Name {
 	public final int ALL = 1;
 	public final int FIRST_LAST = 2;
 	public final int MIDDLE_LAST = 3;
-	public final int LAST = 1;
+	public final int LAST = 4;
 
 	public Name(String firstName, String middle, String lastName) {
 		if (firstName != null && firstName.trim().length() > 0) {

@@ -23,7 +23,6 @@ public class ScoringAlgorithm {
 		// Begin actual scoring
 		for (MatchElement element: MatchElement.values()) {
 			MatchResult topElement = null;
-			
 			for (MatchResult matchResult : matchResults) {
 				if (matchResult.getMatchElement().name().equals(element.name())) {
 					
@@ -62,8 +61,13 @@ public class ScoringAlgorithm {
 							bag = new BagMatches();
 							bags.put(new Integer(matchResult.getBagNumber()), bag);
 						}
-						
-						bag.setOverallScore(bag.getOverallScore() + check(matchResult, ruleSet, score, true));
+						double scoredValue = check(matchResult, ruleSet, score, true);
+						if (scoredValue != 0) {
+							matchResult.setUsableInScoring(true);
+							matchResult.setScoredValue(scoredValue);
+						}
+						bag.setOverallScore(bag.getOverallScore() + scoredValue);
+						bag.addMatchResult(matchResult);
 						
 					} // End of bag-specific matches
 				}
@@ -87,9 +91,17 @@ public class ScoringAlgorithm {
 		
 		// Add the best bag's score to the overall score and set its usedInScoring flags to true.
 		if (bestBag != null) {
+			// Add bag score to overall score.
 			overallScore += bestBag.getOverallScore();
+
+			// Set score's bag number
+			score.setBagNumber(bestBag.getMatchResults().get(0).getBagNumber());
+			
+			// Set the used in scoring attributes.
 			for (MatchResult result: bestBag.getMatchResults()) {
-				result.setUsedInScoring(true);
+				if (result.isUsableInScoring()) {
+					result.setUsedInScoring(true);
+				}
 			}
 		}
 		
@@ -98,14 +110,19 @@ public class ScoringAlgorithm {
 	}
 	
 	private static double check (MatchResult matchResult, RuleSet ruleSet, Score score, boolean bagSpecific) {
+		// TODO: Three problems with negative multiplier:
+		//	1)  -5% * 10% match doesn't subtract alot - recommend setting negative penalty as the addToScore.
+		//  2)  How to show in match details that negative percent on something hurt them?
+		//  3)  Percentage is showing as positive in match_details - see 474769.
 		double addToScore = matchResult.getPercentMatch() * ruleSet.getMultiplier(matchResult, score);
 		if (matchResult.getMatchElement().name().equals("CONTENTS")) {
-			if (matchResult.isCategoryMatched()) {
+			if (matchResult.isCategoryMatched() && addToScore != 0) {
 				addToScore += ruleSet.getMultiplier("CONTENTS_CATEGORY", 100);
 			}
 		}
-		if (addToScore > 0 && bagSpecific == false) { 
+		if (addToScore != 0 && bagSpecific == false) { 
 			matchResult.setUsedInScoring(true);
+			matchResult.setScoredValue(addToScore);
 		}
 		return addToScore;
 	}

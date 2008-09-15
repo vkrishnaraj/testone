@@ -13,6 +13,16 @@ public class MatchResult {
 	private boolean categoryMatched;
 	private String contentCategory;
 	private boolean usedInScoring;
+	private boolean usableInScoring;
+	private double scoredValue; // Value used primarily for manually validating scores.
+
+	public double getScoredValue() {
+		return scoredValue;
+	}
+
+	public void setScoredValue(double scoredValue) {
+		this.scoredValue = scoredValue;
+	}
 
 	public MatchResult(MatchElement matchElement, double percentMatch,
 			String incidentContents, String ohdContents) {
@@ -92,7 +102,9 @@ public class MatchResult {
 				"Percent Match: " + Double.toString(percentMatch), "Incident: "
 						+ incidentContents, "OHD: " + ohdContents, "Itin: "
 						+ itineraryType, "Bag #: " + bagNumber, "Cat Matched: "
-						+ categoryMatched, "Used in Scoring: " + usedInScoring);
+						+ categoryMatched, "Used in Scoring: " + usedInScoring,
+				"Usable in Scoring: " + usableInScoring, "Scored Value: "
+						+ scoredValue);
 	}
 
 	public String getContentCategory() {
@@ -101,6 +113,14 @@ public class MatchResult {
 
 	public void setContentCategory(String contentCategory) {
 		this.contentCategory = contentCategory;
+	}
+
+	public boolean isUsableInScoring() {
+		return usableInScoring;
+	}
+
+	public void setUsableInScoring(boolean usableInScoring) {
+		this.usableInScoring = usableInScoring;
 	}
 
 }

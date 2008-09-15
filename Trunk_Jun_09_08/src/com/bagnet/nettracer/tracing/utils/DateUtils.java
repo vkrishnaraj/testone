@@ -160,11 +160,10 @@ public class DateUtils {
 		}
 		return null;
 	}
-
-	public static Date convertToGMTDate(String str, String instyle) {
+	
+	public static Date convertToGMTDate(Date now) {
 		try {
-			Date now = convertToDate(str, instyle, null);
-
+	
 			DateFormat df = new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT);
 			df.setTimeZone(TimeZone.getTimeZone("GMT"));
 
@@ -175,7 +174,11 @@ public class DateUtils {
 		} catch (Exception e) {
 			return new Date();
 		}
+	}
 
+	public static Date convertToGMTDate(String str, String instyle) {
+		Date now = convertToDate(str, instyle, null);
+		return convertToGMTDate(now);
 	}
 
 }

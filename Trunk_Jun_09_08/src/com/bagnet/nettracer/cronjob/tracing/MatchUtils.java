@@ -64,7 +64,10 @@ public class MatchUtils {
 	public static ArrayList<MatchResult> stringCompareToArray(MatchElement e,
 			String a, String b) {
 		ArrayList<MatchResult> al = new ArrayList<MatchResult>();
-		al.add(stringCompare(e, a, b));
+		MatchResult mr = stringCompare(e, a, b);
+		if (mr != null) {
+			al.add(mr);
+		}
 		return al;
 	}
 

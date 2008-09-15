@@ -710,6 +710,7 @@ public class AdminUtils {
 			Criteria cri = sess.createCriteria(Company_Specific_Variable.class).add(Expression.eq("companyCode_ID", companycode));
 			return (Company_Specific_Variable) cri.list().get(0);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.fatal(e.getMessage());
 			return null;
 		} finally {

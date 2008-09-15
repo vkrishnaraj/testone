@@ -427,6 +427,47 @@ public class OhdBMO {
 			}
 		}
 	}
+	
+	/**
+	 * Find on hand based on the identifier.
+	 * 
+	 * @param ohd_ID
+	 *          the on hand id
+	 * @return ohd based on id, null otherwise.
+	 */
+	public static OHD getOHDByID(String ohd_ID, Session sess) {
+		boolean sessionNull = (sess == null);
+		try {
+			String query = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd "
+					+ "where ohd.OHD_ID=:ohd_ID";
+			if (sessionNull) {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			Query q = sess.createQuery(query);
+			q.setString("ohd_ID", ohd_ID);
+			List list = q.list();
+			if (list.size() == 0) {
+				logger.debug("unable to find ohd: " + ohd_ID);
+				return null;
+			}
+			OHD iDTO = (OHD) list.get(0);
+			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					if (sessionNull) {
+						sess.close();
+					}
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Find on hand based on the identifier.

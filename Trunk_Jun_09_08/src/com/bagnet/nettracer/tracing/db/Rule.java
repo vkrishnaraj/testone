@@ -40,8 +40,7 @@ public class Rule implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="string"
-	 * @hibernate.key column="rn"
+	 * @hibernate.property type="string" column="rn"
 	 * @return
 	 */
 	public String getRuleName() {
@@ -65,8 +64,7 @@ public class Rule implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="integer"
-	 * @hibernate.key column="minlen"
+	 * @hibernate.property type="integer" column="minlen"
 	 * @return
 	 */
 	public int getMinLength() {
@@ -78,8 +76,7 @@ public class Rule implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="integer"
-	 * @hibernate.key column="maxlen"
+	 * @hibernate.property type="integer" column="maxlen"
 	 * @return
 	 */
 	public int getMaxLength() {

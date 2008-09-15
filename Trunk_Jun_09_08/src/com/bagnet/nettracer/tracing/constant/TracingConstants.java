@@ -11,8 +11,7 @@ import java.util.Properties;
 public class TracingConstants {
 
 	public enum AgentActiveStatus { ALL, ACTIVE, INACTIVE }
-	
-	
+	public final static int TRACING_ELEMENT_X = 7;
 	public final static String MAINTAIN_AGENTS_TYPE_AGENTS = "0";
 	public final static String MAINTAIN_AGENTS_TYPE_WEBSRVICE = "1";
 		
