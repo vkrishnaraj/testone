@@ -154,7 +154,6 @@ public class PassiveTrace implements Runnable {
 		this.ruleSet = ruleSet;
 	}
 
-	@Override
 	public void run() {
 		logger.info("Incident ID: " + incidentId);
 
