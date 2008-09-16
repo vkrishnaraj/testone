@@ -578,7 +578,7 @@ document.onkeydown = function(){
 </script>
 </logic:present>
 
-<jsp:include page="../../../pages/includes/analytics.jsp" />
+<jsp:include page="/pages/includes/analytics.jsp" />
 
 </body>
 </html>
