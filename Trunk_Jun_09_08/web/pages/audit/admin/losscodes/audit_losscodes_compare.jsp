@@ -251,6 +251,17 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            <tr>
+              <td>
+                <bean:message key="header.visible_to_limited_users" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="show_to_limited_users" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
           </table>
           <br>
           <center><INPUT type="button" Id="button" value="Back" onClick="history.back()"></center>
