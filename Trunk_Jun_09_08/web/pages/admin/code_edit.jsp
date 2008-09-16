@@ -90,6 +90,18 @@
             <html:text styleClass="textfield" name="codeForm" property="description" size="50" maxlength="150" />
           </td>
         </tr>
+          </tr>
+          <td>
+            <bean:message key="header.visible_to_limited_users" />
+            <font color=red>
+              *
+            </font>
+            :
+          </td>
+          <td>
+            <html:checkbox property="visibleToLimited" value="1"></html:checkbox>
+          </td>
+        </tr>
         <tr>
           <td>
             <bean:message key="header.locale" />

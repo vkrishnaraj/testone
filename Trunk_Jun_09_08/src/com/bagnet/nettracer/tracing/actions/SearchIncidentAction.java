@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -235,8 +236,8 @@ public class SearchIncidentAction extends Action {
 				Item item = theform.getItem(0, 0);
 
 				//the company specific codes..
-				List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), item.getItemtype_ID(), user
-						.getCurrentlocale());
+				List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), item.getItemtype_ID(), user
+						.getCurrentlocale(), false, user);
 				//add to the loss codes
 				request.setAttribute("losscodes", codes);
 

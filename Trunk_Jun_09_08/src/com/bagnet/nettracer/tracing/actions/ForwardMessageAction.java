@@ -15,14 +15,15 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.forms.ForwardMessageForm;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for handling
@@ -69,14 +70,20 @@ public class ForwardMessageAction extends Action {
 		}
 		request.setAttribute("stationList", stationList);
 		
-		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
-				.getCurrentlocale());
+		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
+				.getCurrentlocale(), true, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
-		List faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
+		List faultstationlist = null;
+		if (UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
+			faultstationlist = UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY);
+		} else {
+			faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
+		}
 		request.setAttribute("faultstationlist", faultstationlist);
-
+		
+		
 
 		if (request.getParameter("additinerary") != null) {
 			OHD_Log_Itinerary itinerary = theform.getItinerary(theform.getForwarditinerarylist().size());

@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.cronjob.wt.WorldTracerTx;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -850,7 +851,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 		if (incident.getLoss_code() != 0) {
 			addIncidentFieldEntry(WorldTracerField.RL, Integer.toString(incident.getLoss_code()), result);
-			Company_specific_irregularity_code csic = AdminUtils.getLossCode(incident.getLoss_code(),
+			Company_specific_irregularity_code csic = LossCodeBMO.getLossCode(incident.getLoss_code(),
 					TracingConstants.LOST_DELAY, TracingConstants.DEFAULT_LOCALE, AdminUtils.getCompany(wtCompanyCode));
 			addIncidentFieldEntry(WorldTracerField.RC, csic.getDescription(), result);
 		} else {

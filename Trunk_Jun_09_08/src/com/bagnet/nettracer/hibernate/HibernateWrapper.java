@@ -67,6 +67,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Photo;
 import com.bagnet.nettracer.tracing.db.OHD_Range;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Priority;
+import com.bagnet.nettracer.tracing.db.Property;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Recipient;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -403,6 +404,7 @@ public class HibernateWrapper {
 		cfg.addClass(WT_ROH.class);
 		cfg.addClass(WT_Info.class);
 		cfg.addClass(Rule.class);
+		cfg.addClass(Property.class);
 	}
 */
 

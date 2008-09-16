@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Airport;
@@ -196,7 +197,7 @@ public class HibernateUtils {
 				g3.setDescription2("Default Admin group for " + obj.getCompanyCode_ID());
 
 				//Setup the company specific codes
-				List iata_codes = AdminUtils.getIATACodes(0, 0);
+				List iata_codes = LossCodeBMO.getIATACodes(0, 0);
 				
 				List<Company_specific_irregularity_code> comp_irr_codes = new ArrayList<Company_specific_irregularity_code>();
 				

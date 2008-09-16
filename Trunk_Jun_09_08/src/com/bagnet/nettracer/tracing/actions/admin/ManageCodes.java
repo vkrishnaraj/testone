@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -73,16 +74,21 @@ public final class ManageCodes extends Action {
 		dForm.set("companycode_ID", companyCode);
 		if (request.getParameter("edit") != null) {
 			String code_id = request.getParameter("code_id");
-			Company_specific_irregularity_code code = AdminUtils.getCode(code_id);
+			Company_specific_irregularity_code code = LossCodeBMO.getCode(code_id);
 			dForm.set("code_id", code_id);
 			dForm.set("report_type", "" + code.getReport_type());
 			dForm.set("loss_code", "" + code.getLoss_code());
 			dForm.set("description", code.getDescription());
 			dForm.set("companycode_ID", code.getCompany().getCompanyCode_ID());
+			String visible = "";
+			if (code.isShow_to_limited_users() == true)
+				visible = "1";
+			dForm.set("visibleToLimited", visible);
 			return mapping.findForward(TracingConstants.EDIT_CODE);
 		}
 
 		if (request.getParameter("addNew") != null) {
+			dForm.set("visibleToLimited", "on");
 			return mapping.findForward(TracingConstants.EDIT_CODE);
 		}
 
@@ -106,7 +112,7 @@ public final class ManageCodes extends Action {
 					escape = true;
 				}
 
-				Company_specific_irregularity_code code = AdminUtils.getCode(code_id);
+				Company_specific_irregularity_code code = LossCodeBMO.getCode(code_id);
 
 				//Check if there is any incident with this code.
 				if (IncidentUtils.incidentWithLossCode("" + code.getLoss_code(), code.getReport_type())) {
@@ -143,7 +149,7 @@ public final class ManageCodes extends Action {
 			boolean isNew = true;
 			String code_id = request.getParameter("code_id");
 			if (code_id == null || code_id.length() < 1) {
-				Company_specific_irregularity_code code = AdminUtils.getLossCode(new Integer( (String)dForm
+				Company_specific_irregularity_code code = LossCodeBMO.getLossCode(new Integer( (String)dForm
 						.get("loss_code")).intValue(), new Integer( (String) dForm.get("report_type")).intValue(), (String) dForm.get("locale"),
 						AdminUtils.getCompany(companyCode));
 				if (code != null) {
@@ -162,16 +168,22 @@ public final class ManageCodes extends Action {
 					s.setLoss_code(Integer.parseInt(loss_code));
 					s.setReport_type(Integer.parseInt(request.getParameter("report_type")));
 					s.setLocale(request.getParameter("locale"));
+
 					Company comp = new Company();
 					comp.setCompanyCode_ID(companyCode);
 					s.setCompany(comp);
 				}
 			} else {
 				isNew = false;
-				s = AdminUtils.getCode(code_id);
+				s = LossCodeBMO.getCode(code_id);
 			}
-
-			s.setDescription(request.getParameter("description"));
+			
+			s.setDescription((String)dForm.get("description"));
+			boolean show = false;
+			if (((String)dForm.get("visibleToLimited")).equals("1")) {
+				show = true;
+			}
+			s.setShow_to_limited_users(show);
 
 			try {
 				HibernateUtils.saveCode(s, isNew);
@@ -197,7 +209,7 @@ public final class ManageCodes extends Action {
 
 		if (report_type == null || report_type.equals("-1")) report_type = "";
 
-		List codeList = AdminUtils.getCodes(companyCode, report_type, dForm, 0, 0);
+		List codeList = LossCodeBMO.getCodes(companyCode, report_type, dForm, 0, 0);
 		if (codeList != null && codeList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -224,7 +236,7 @@ public final class ManageCodes extends Action {
 				currpage = 0;
 				request.setAttribute("currpage", "0");
 			}
-			codeList = AdminUtils.getCodes(companyCode, report_type, dForm, rowsperpage, currpage);
+			codeList = LossCodeBMO.getCodes(companyCode, report_type, dForm, rowsperpage, currpage);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {

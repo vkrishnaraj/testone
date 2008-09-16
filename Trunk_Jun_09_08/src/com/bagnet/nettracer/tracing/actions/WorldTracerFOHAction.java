@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
@@ -90,14 +91,18 @@ public class WorldTracerFOHAction extends Action {
 
 		// get faultstationlist
 		List faultstationlist = null;
-		faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(),
-				user.getCompanycode_ID());
+		if (UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
+			faultstationlist = UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY);
+		} else {
+			faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
+		}
 		request.setAttribute("faultstationlist", faultstationlist);
 
+
 		// the company specific codes..
-		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation()
+		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation()
 				.getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY,
-				user.getCurrentlocale());
+				user.getCurrentlocale(), true, user);
 		// add to the loss codes
 		request.setAttribute("losscodes", codes);
 

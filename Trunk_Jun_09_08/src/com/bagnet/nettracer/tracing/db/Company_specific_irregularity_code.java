@@ -20,7 +20,8 @@ public class Company_specific_irregularity_code implements Serializable {
 	private String locale;
 	private String description;
 	private int report_type;
-	
+	private boolean show_to_limited_users;
+
 	private Company company;
 
 	/**
@@ -61,7 +62,6 @@ public class Company_specific_irregularity_code implements Serializable {
 		this.code_id = code_id;
 	}
 
-	
 	/**
 	 * @return Returns the company.
 	 * 
@@ -71,12 +71,15 @@ public class Company_specific_irregularity_code implements Serializable {
 	public Company getCompany() {
 		return company;
 	}
+
 	/**
-	 * @param company The company to set.
+	 * @param company
+	 *          The company to set.
 	 */
 	public void setCompany(Company company) {
 		this.company = company;
 	}
+
 	/**
 	 * @hibernate.property type="string"
 	 * @return Returns the locale.
@@ -92,7 +95,6 @@ public class Company_specific_irregularity_code implements Serializable {
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
-
 
 	/**
 	 * @hibernate.property type="string"
@@ -125,8 +127,24 @@ public class Company_specific_irregularity_code implements Serializable {
 	public void setLoss_code(int loss_code) {
 		this.loss_code = loss_code;
 	}
-	
+
 	public String getCombination() {
 		return loss_code + " - " + description;
+	}
+
+	/**
+	 * @return the show_to_limited_users
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isShow_to_limited_users() {
+		return show_to_limited_users;
+	}
+
+	/**
+	 * @param show_to_limited_users
+	 *          the show_to_limited_users to set
+	 */
+	public void setShow_to_limited_users(boolean show_to_limited_users) {
+		this.show_to_limited_users = show_to_limited_users;
 	}
 }

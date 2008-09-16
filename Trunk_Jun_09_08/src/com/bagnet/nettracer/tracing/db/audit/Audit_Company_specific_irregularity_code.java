@@ -33,6 +33,7 @@ public class Audit_Company_specific_irregularity_code implements Serializable {
 	private Agent modifying_agent;
 	private Date time_modified;
 	private String reason_modified;
+	private boolean show_to_limited_users;
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -254,4 +255,21 @@ public class Audit_Company_specific_irregularity_code implements Serializable {
 	public void setLoss_code(int loss_code) {
 		this.loss_code = loss_code;
 	}
+	
+	/**
+	 * @return the show_to_limited_users
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isShow_to_limited_users() {
+		return show_to_limited_users;
+	}
+
+	/**
+	 * @param show_to_limited_users
+	 *          the show_to_limited_users to set
+	 */
+	public void setShow_to_limited_users(boolean show_to_limited_users) {
+		this.show_to_limited_users = show_to_limited_users;
+	}
+
 }

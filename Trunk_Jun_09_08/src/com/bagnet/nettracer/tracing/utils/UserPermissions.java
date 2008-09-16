@@ -17,10 +17,13 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.SystemComponent;
 
 /**
@@ -261,6 +264,92 @@ public class UserPermissions {
 		}
 
 		return ret;
+	}
+	
+	public static boolean hasLimitedSavePermission(Agent a, String incident_ID) {
+		if (incident_ID == null) {
+			return true;
+		}
+		
+		Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
+		int type = inc.getItemtype().getItemType_ID();
+		return hasLimitedSavePermissionByType(a, type);
+	}
+	
+	public static boolean hasLimitedSavePermissionByType(Agent a, int type) {
+
+		String componentNameAll = null;
+		boolean limitedPermission = false;
+		
+		
+		switch (type) {
+			case TracingConstants.LOST_DELAY:
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_ALL;
+				limitedPermission = (PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_LD_STATIONS).equals("1"));
+				break;
+			case TracingConstants.DAMAGED_BAG:
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_ALL;
+				limitedPermission = (PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_DAMAGED_STATIONS).equals("1"));
+				break;
+			case TracingConstants.MISSING_ARTICLES:
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_ALL;
+				limitedPermission = (PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_MISSING_STATIONS).equals("1"));
+				break;
+		}
+		
+		// If the user has full permission, allow it to be edited.
+		if (hasPermission(componentNameAll, a)) {
+			return false;
+		} 
+
+		return limitedPermission;
+	}
+	
+	public static List<Station> getLimitedSaveStations(Agent a, int type) {
+		return getLimitedSaveStations(a, null, type);
+	}
+	
+	public static List<Station> getLimitedSaveStations(Agent a, String incident_ID) {
+		return getLimitedSaveStations(a, incident_ID, 0);
+	}
+
+	public static List<Station> getLimitedSaveStations(Agent a, String incident_ID, int type) {
+		ArrayList<Station> stationList = new ArrayList<Station>();
+		ArrayList<String> stationCodeList = new ArrayList<String>();
+		
+		stationList.add(a.getStation());
+		stationCodeList.add(a.getStation().getStationcode());
+		
+		String stationString = null;
+		
+		if (incident_ID == null && type == 0) {
+			return stationList;
+		} else if (incident_ID != null) {
+			Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
+			type = inc.getItemtype().getItemType_ID();
+		}
+		
+		switch (type) {
+			case TracingConstants.LOST_DELAY:
+				stationString = PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_LD_ADDSTATIONS);
+				break;
+			case TracingConstants.DAMAGED_BAG:
+				stationString = PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_DAMAGED_ADDSTATIONS);
+				break;
+			case TracingConstants.MISSING_ARTICLES:
+				stationString = PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_MISSING_ADDSTATIONS);
+				break;
+		}
+		
+		for (String stationCode: stationString.split(",")) {
+			Station station = StationBMO.getStationByCode(stationCode, a.getCompanycode_ID());
+			if (!stationCodeList.contains(station.getStationcode())) {
+				stationList.add(station);
+				stationCodeList.add(station.getStationcode());
+			}
+		}
+		
+		return stationList;
 	}
 	
 	public static boolean hasIncidentSavePermission(Agent a, String incident_ID) {

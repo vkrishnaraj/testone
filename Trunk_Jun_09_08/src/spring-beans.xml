@@ -12,14 +12,14 @@
 		
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:/tracer.properties" />
+		<property name="location" value="resource:/tracer.properties" />
 	</bean>
 
 	<bean id="scannerDataSource"
-		class="${scanner.class.path}" />
+		class="com.bagnet.clients.${scanner.class.path}.ScannerDataSourceImpl" />
 
 	<bean id="reservationIntegration"
-		class="${reservation.class.path}" />
+		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />
 
 	<!-- Hibernate config -->
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper" factory-method="getSession" />

@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -82,8 +83,8 @@ public final class ManageCompany extends Action {
 		List fullStationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
 	  request.setAttribute("fullStationList", fullStationList);
 		
-		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
-				.getCurrentlocale());
+		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
+				.getCurrentlocale(), false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		

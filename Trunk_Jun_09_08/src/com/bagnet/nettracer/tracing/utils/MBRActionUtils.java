@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -269,14 +270,20 @@ public class MBRActionUtils {
 		}
 		return false;
 	}
-
+	
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
 
+		List faultstationlist = null;
 		if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
-			List faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+			// If the user has limited permission, 
+			if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+			} else {
+				faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+			}
 			request.setAttribute("faultstationlist", faultstationlist);
-		}
-
+		} 
+		
 		// change faultstationlist (ajax call)
 		if (request.getParameter("close") != null && request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
 
@@ -327,10 +334,11 @@ public class MBRActionUtils {
 		if ((comp == null || comp.length() == 0) && theform.getStationassigned().getCompany() != null) {
 			comp = theform.getStationassigned().getCompany().getCompanyCode_ID();
 		}
-
-		List faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), comp);
-		if (faultstationlist != null)
+		
+		if (faultstationlist == null) {
+			faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), comp);
 			request.setAttribute("faultstationlist", faultstationlist);
+		}
 
 		// add closing remark
 
