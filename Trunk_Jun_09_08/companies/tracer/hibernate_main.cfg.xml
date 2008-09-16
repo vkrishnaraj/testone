@@ -207,6 +207,8 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/DeliverCompany.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Webservice_Session.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Lz.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Rule.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Property.hbm.xml"/>
 		
 		<!-- WorldTracer Stuff -->
 		<mapping resource="com/bagnet/nettracer/tracing/db/Worldtracer_Actionfiles.hbm.xml"/>
