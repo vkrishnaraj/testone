@@ -78,7 +78,7 @@ public class OHD_CategoryType implements Serializable {
 	 * What this maps to in world tracer.
 	 * 
 	 * @hibernate.property type="string" length="15"
-	 * @hibernate.column name="wtcategory"
+	 * @hibernate.column name="wt_category"
 	 */
 	public String getWtCategory() {
 		return wtCategory;
