@@ -4,7 +4,6 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-
     <session-factory>	
     	
     	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
@@ -86,8 +85,160 @@
 
 			
 		<!-- mappings -->
-		<mapping resource="com/bagnet/nettracer/tracing/db/SystemPermission.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_Specific_Variable.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_specific_irregularity_code.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Airport.hbm.xml"/>
+	
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Deliver_ServiceLevel.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_DeliverCo_Station.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_DeliverCompany.hbm.xml"/>
+		
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Agent.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Station.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_UserGroup.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_GroupComponentPolicy.hbm.xml"/>
 
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Remark.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD_Remark.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_AirlineMembership.hbm.xml"/>
+
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD_Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD_Address.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD_Photo.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_OHD_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_ControlLog.hbm.xml"/>
+        
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_LostAndFoundIncident.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_LostAndFound_Photo.hbm.xml"/>
+
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Claim.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_ExpensePayout.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_ClaimProrate.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Prorate_Itinerary.hbm.xml"/>
+
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Address.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Articles.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Incident_Claimcheck.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Incident.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Item_Photo.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Item_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Item.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Passenger.hbm.xml"/>
+
+		<mapping resource="com/bagnet/nettracer/tracing/db/SystemComponent.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/SystemPermission.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Airport.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/LostAndFound_Range.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/LostAndFoundIncident.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/LostAndFound_Photo.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/GroupComponentPolicy.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/UserGroup.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Company.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Agent.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Agent_Logger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Address.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Incident.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Station.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Item.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Resolution.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/AirlineMembership.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Articles.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Currency.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ItemType.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Manufacturer.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/CountryCode.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/State.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Status.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/XDescElement.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Remark.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_CategoryType.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_ItemType.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Address.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Assoc.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Claim.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ExpensePayout.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
+
+		<mapping resource="com/bagnet/nettracer/tracing/db/LogEvent.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/LogEventThrowable.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ClaimProrate.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Prorate_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/NTDateFormat.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Photo.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/NTTimeFormat.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Task.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Priority.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ControlLog.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Match.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Match_Detail.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHDRequest.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Photo.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Claimcheck.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/DbLocale.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Work_Shift.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Message.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Recipient.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/MessageCopy.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Company_Specific_Variable.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/IATA_irregularity_code.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Company_specific_irregularity_code.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TimeZone.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Billing.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/BDO.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/BDO_Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Deliver_ServiceLevel.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/DeliverCo_Station.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/DeliverCompany.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Webservice_Session.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/Lz.hbm.xml"/>
+		
+		<!-- WorldTracer Stuff -->
+		<mapping resource="com/bagnet/nettracer/tracing/db/Worldtracer_Actionfiles.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/WT_ROH.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/WT_Info.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/WT_TTY.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/WT_FWD_Log.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/WT_FWD_Log_Itinerary.hbm.xml"/>
+		<!-- Java5 Annotated Classes -->
+		<mapping class="com.bagnet.nettracer.tracing.db.WorldTracerFile" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqSegment" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction" />
+		
+		
     </session-factory>
 
 </hibernate-configuration>
