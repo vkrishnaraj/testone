@@ -163,6 +163,7 @@
 		</form-bean>
 
 		<form-bean name="worldTracerFWDForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm" />
+		<form-bean name="worldTracerFOHForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerFOHForm" />
 		<form-bean name="worldTracerROHForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="wt_ahl_id" type="java.lang.String" />
 			<form-property name="wt_ohd_id" type="java.lang.String" />
@@ -179,6 +180,8 @@
 
 
 		<form-bean name="worldTracerSusRitForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerSusRitForm" />
+		
+		<form-bean name="searchWtLogsForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerLogsForm" />
 
 
 	</form-beans>
@@ -247,6 +250,7 @@
 		<forward name="viewworldtraceractionfiles" path="view_worldtraceractionfiles" />
 		<forward name="viewworldtracerafviewraw" path="view_worldtracerafviewraw" />
 		<forward name="viewworldtracerfwd" path="view_worldtracerfwd" />
+		<forward name="viewworldtracerfoh" path="view_worldtracerfoh" />
 		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
 		<forward name="viewworldtracertty" path="view_worldtracertty" />
 
@@ -445,6 +449,9 @@
 		<action path="/worldtraceraf" type="com.bagnet.nettracer.tracing.actions.WorldTracerAFAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/worldtracerfwd" type="com.bagnet.nettracer.tracing.actions.WorldTracerFWDAction" name="worldTracerFWDForm" scope="session" validate="false"></action>
+		
+		<action path="/worldtracerfoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerFOHAction" name="worldTracerFOHForm" scope="session" validate="false">
+		</action>
 
 		<action path="/worldtracerroh" type="com.bagnet.nettracer.tracing.actions.WorldTracerROHAction" name="worldTracerROHForm" scope="request" validate="false"></action>
 
@@ -551,6 +558,11 @@
 		<action path="/worldtracercount" type="com.bagnet.nettracer.tracing.actions.WorldTracerCount" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/scannerData" type="com.bagnet.nettracer.tracing.actions.ScannerDataAction" name="scannerDataForm" scope="request" validate="false"></action>
+		
+		<action path="/worldtracerlog" type="com.bagnet.nettracer.tracing.actions.WorldTracerLogAction" 
+				name="searchWtLogsForm" scope="request" validate="false">
+			<forward name="success" path="worldtracer_log"/>
+		</action>
 
 	</action-mappings>
 
@@ -558,7 +570,8 @@
 	<controller>
 		<!-- The "input" parameter on "action" elements is the name of a
 			local or global "forward" rather than a module-relative path -->
-		<set-property property="inputForward" value="true" />
+			<set-property property="inputForward" value="true" />
+			<set-property  property="processorClass" value="com.bagnet.nettracer.tracing.web.CustomRequestProcessor"/>	
 	</controller>
 
 	<!-- ========== Message Resources Definitions =========================== -->
