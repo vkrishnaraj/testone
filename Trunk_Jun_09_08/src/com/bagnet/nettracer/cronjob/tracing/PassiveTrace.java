@@ -251,7 +251,7 @@ public class PassiveTrace implements Runnable {
 					// Check to see if this is already in DB (Inc, OHD, Percent) - if so, skip.
 					// TODO: Not sure we really need this, so I'm skipping for now.
 					
-					logger.info("Match detected - Incident: " + incident.getIncident_ID() + " OHD: " + ohd.getOHD_ID() + " Score: " + score.getOverallScore());
+					logger.info("  Match detected - Incident: " + incident.getIncident_ID() + " OHD: " + ohd.getOHD_ID() + " Score: " + score.getOverallScore());
 					// Add to DB
 					Match match = new Match();
 					match.setBagnumber(score.getBagNumber());

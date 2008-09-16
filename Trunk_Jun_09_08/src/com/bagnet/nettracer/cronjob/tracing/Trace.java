@@ -37,13 +37,16 @@ public class Trace {
 		
 		Score score = ScoringAlgorithm.score(matchResults, ruleSet); 
 		assert(score != null);
-		if (score.getOverallScore() > 100) {
+		/*
+		 if (score.getOverallScore() > 100) {
 			score.setOverallScore(100);
 		}
+		*/
 		
 		if (score.getOverallScore() < 0) {
 			score.setOverallScore(0);
 		}
+		
 		
 		
 		return score;

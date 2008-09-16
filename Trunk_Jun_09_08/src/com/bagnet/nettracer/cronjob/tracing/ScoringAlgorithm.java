@@ -111,10 +111,17 @@ public class ScoringAlgorithm {
 	
 	private static double check (MatchResult matchResult, RuleSet ruleSet, Score score, boolean bagSpecific) {
 		// TODO: Three problems with negative multiplier:
-		//	1)  -5% * 10% match doesn't subtract alot - recommend setting negative penalty as the addToScore.
 		//  2)  How to show in match details that negative percent on something hurt them?
 		//  3)  Percentage is showing as positive in match_details - see 474769.
-		double multiplier = ruleSet.getMultiplier(matchResult, score);
+		double multiplier = 0;
+		
+		if (!matchResult.getMatchElement().name().equals("CONTENTS")) {
+			multiplier = ruleSet.getMultiplier(matchResult, score);
+		} else {
+			int length = (matchResult.getIncidentContents().length() + matchResult.getOhdContents().length()) / 2;
+			multiplier = ruleSet.getMultiplier(matchResult, score, length);
+		}
+		
 		double addToScore = 0;
 		if (multiplier >= 0) {
 			addToScore = matchResult.getPercentMatch() * multiplier;

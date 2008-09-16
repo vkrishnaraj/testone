@@ -487,7 +487,7 @@ public enum MatchElement {
 			Incident incident, OHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		if (ohd.getClaimnum() == null) {
+		if (ohd.getClaimnum() == null && ohd.getClaimnum().trim().length() > 0) {
 			return results;
 		}
 
@@ -497,25 +497,25 @@ public enum MatchElement {
 			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag);
 		} catch (BagtagException e1) {
 			ohdTenDigitTag = ohdBagTag;
-			PassiveTrace.logger.error("Error converting bag tag: " + ohdBagTag);
 		}
 
 		for (Incident_Claimcheck iClaim : (Set<Incident_Claimcheck>) incident
 				.getClaimchecks()) {
-			String incTenDigitTag = null;
-			try {
-				incTenDigitTag = LookupAirlineCodes.getFullBagTag(iClaim
-						.getClaimchecknum());
-			} catch (BagtagException e1) {
-				incTenDigitTag = iClaim.getClaimchecknum();
-				PassiveTrace.logger.error("Error converting bag tag: " + iClaim.getClaimchecknum());
-			}
-
-			MatchResult result = MatchUtils.stringCompare(e, incTenDigitTag,
-					ohdTenDigitTag);
-
-			if (result != null) {
-				results.add(result);
+			if (iClaim.getClaimchecknum().trim().length() > 0) {
+				String incTenDigitTag = null;
+				try {
+					incTenDigitTag = LookupAirlineCodes.getFullBagTag(iClaim
+							.getClaimchecknum());
+				} catch (BagtagException e1) {
+					incTenDigitTag = iClaim.getClaimchecknum();
+				}
+	
+				MatchResult result = MatchUtils.stringCompare(e, incTenDigitTag,
+						ohdTenDigitTag);
+	
+				if (result != null) {
+					results.add(result);
+				}
 			}
 		}
 

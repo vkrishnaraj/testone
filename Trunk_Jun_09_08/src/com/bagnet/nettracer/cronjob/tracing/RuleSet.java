@@ -102,7 +102,7 @@ public class RuleSet {
 			if (length > -1) {
 				for (Rule rule : rules) {
 					if (length >= rule.getMinLength()
-							&& length <= rule.getMaxLength() || rule.getMaxLength() == 0) {
+							&& (length <= rule.getMaxLength() || rule.getMaxLength() == 0)) {
 						ruleToUse = rule;
 					}
 				}
