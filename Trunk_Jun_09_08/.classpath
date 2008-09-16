@@ -100,5 +100,12 @@
 	<classpathentry kind="lib" path="lib/jars/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>
 	<classpathentry kind="lib" path="lib/jars/delivery-rynns.jar"/>
+	<classpathentry kind="lib" path="lib/jars/aspectjrt.jar"/>
+	<classpathentry kind="lib" path="lib/jars/aspectjweaver.jar"/>
+	<classpathentry kind="lib" path="lib/jars/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="lib/jars/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/jars/slf4j-log4j12-1.5.2.jar"/>
+	<classpathentry kind="lib" path="lib/jars/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/jars/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
