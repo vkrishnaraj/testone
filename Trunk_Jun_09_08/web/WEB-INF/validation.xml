@@ -204,11 +204,11 @@
          	     <arg name="intRange" key="${var:max}" resource="false"/>
                  <var>
                    <var-name>min</var-name>
-                   <var-value>30</var-value>
+                   <var-value>15</var-value>
                  </var>
                  <var>
                    <var-name>max</var-name>
-                   <var-value>200</var-value>
+                   <var-value>120</var-value>
                  </var>
 	       	</field>
 	       	<field property="currentTimezone" depends="required">
