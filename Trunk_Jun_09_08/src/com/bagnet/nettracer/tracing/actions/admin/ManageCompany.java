@@ -95,8 +95,9 @@ public final class ManageCompany extends Action {
    }
 	 request.setAttribute("pageState", pageState);
 
-		if (request.getParameter("edit") != null || pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ) &&
-				request.getParameter("pagination")!= null && !request.getParameter("pagination").equals("")) {
+		if (request.getParameter("edit") != null || (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ) &&
+				((request.getParameter("pagination")!= null && !request.getParameter("pagination").equals("")) ||
+				(request.getParameter("update_pagination")!= null && !request.getParameter("update_pagination").equals(""))))) {
 			
 			String companyCode = request.getParameter("companyCode");
 			Company cmpny = AdminUtils.getCompany(companyCode);
