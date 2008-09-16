@@ -23,7 +23,7 @@ public interface WorldTracerService {
 				"bag.tagnum"), BI("bag.brand"), HC("handled.copy"), FS("fault.station"), TK("ticket.num"), PB(
 				"pooled.ticket"), CC("contents"), AG("agent"), AB("bag.address"), PR("pnr.locator"), CS("costs"), RL(
 				"reason.loss"), RC("loss.comments"), SL("storage.location"), XT("expidite.tag"), FO("fwd.date"), FW(
-				"fwd.stations"), FB("fwd.bag.count"), FT("fault.terminal"), SI("sup.info"), TX("teletype.address"), FI("further.info");
+				"fwd.stations"), FB("fwd.bag.count"), FT("fault.terminal"), SI("sup.info"), TX("teletype.address"), FI("further.info"), TA("temp.address");
 	
 		private String description_id;
 	

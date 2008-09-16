@@ -59,4 +59,19 @@ public class ContentRule extends BasicRule {
 		}
 		return null;
 	}
+	
+	@Override
+	protected String formatEntry(String entry) {
+		if(entry == null) return null;
+		
+		String result = entry.trim().replaceAll("\\s+", " ");
+
+		if(result.length() < this.getMinLength()) {
+			return null;
+		}
+		if(result.length() > this.getMaxLength()) {
+			return result.substring(0, this.getMaxLength());
+		}
+		return result;
+	}
 }
