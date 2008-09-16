@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -48,6 +50,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 public enum MatchElement {
+	
 	RECORD_LOCATOR {
 		
 		String getConstant() {
@@ -226,8 +229,10 @@ public enum MatchElement {
 					.getLastname()));
 		}
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			incNames.add(new Name(item.getFnameonbag(), item.getMnameonbag(),
-					item.getLnameonbag()));
+			if (item != null) {
+				incNames.add(new Name(item.getFnameonbag(), item.getMnameonbag(),
+						item.getLnameonbag()));
+			}
 		}
 
 		// Get ohd names
@@ -275,20 +280,21 @@ public enum MatchElement {
 						.getPassengers()) {
 					for (OHD_Address oa : (Set<OHD_Address>) ohdPax
 							.getAddresses()) {
-
-						String incString = StringUtils.join(" ", ia
-								.getAddress1().trim(), ia.getCity().trim(), ia
-								.getState_ID(), ia.getProvince(), ia.getZip());
-
-						String ohdString = StringUtils.join(" ", oa
-								.getAddress1().trim(), oa.getCity().trim(), oa
-								.getState_ID(), oa.getProvince(), oa.getZip());
-
-						MatchResult result = MatchUtils.stringCompare(e,
-								incString, ohdString);
-
-						if (result != null) {
-							results.add(result);
+						if (ia.getAddress1() != null && ia.getState_ID() != null && ia.getZip() != null) {
+							String incString = StringUtils.join(" ", ia
+									.getAddress1().trim(), ia.getCity().trim(), ia
+									.getState_ID(), ia.getProvince(), ia.getZip());
+	
+							String ohdString = StringUtils.join(" ", oa
+									.getAddress1().trim(), oa.getCity().trim(), oa
+									.getState_ID(), oa.getProvince(), oa.getZip());
+	
+							MatchResult result = MatchUtils.stringCompare(e,
+									incString, ohdString);
+	
+							if (result != null) {
+								results.add(result);
+							}
 						}
 					}
 				}
@@ -491,6 +497,7 @@ public enum MatchElement {
 			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag);
 		} catch (BagtagException e1) {
 			ohdTenDigitTag = ohdBagTag;
+			PassiveTrace.logger.error("Error converting bag tag: " + ohdBagTag);
 		}
 
 		for (Incident_Claimcheck iClaim : (Set<Incident_Claimcheck>) incident
@@ -501,6 +508,7 @@ public enum MatchElement {
 						.getClaimchecknum());
 			} catch (BagtagException e1) {
 				incTenDigitTag = iClaim.getClaimchecknum();
+				PassiveTrace.logger.error("Error converting bag tag: " + iClaim.getClaimchecknum());
 			}
 
 			MatchResult result = MatchUtils.stringCompare(e, incTenDigitTag,
@@ -530,12 +538,14 @@ public enum MatchElement {
 
 			// We are going to use the manufacturer name and only add the result
 			// if we have a 100% match.
+			if (item != null) {
 
-			MatchResult result = MatchUtils.stringCompare(e, item
-					.getManufacturer(), ohd.getManufacturer(), item
-					.getBagnumber());
-			if (result != null && result.getPercentMatch() == 100) {
-				results.add(result);
+				MatchResult result = MatchUtils.stringCompare(e, item
+						.getManufacturer(), ohd.getManufacturer(), item
+						.getBagnumber());
+				if (result != null && result.getPercentMatch() == 100) {
+					results.add(result);
+				}
 			}
 		}
 
@@ -562,27 +572,29 @@ public enum MatchElement {
 		}
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			if (item.getColor() != null) {
-				if (item.getColor().equals(ohdColor)) {
-					MatchResult result = new MatchResult(e, 100, item.getColor(),
-							ohdColor);
-					result.setBagNumber(item.getBagnumber());
-					results.add(result);
-				} else if (MatchUtils
-						.secondaryColorMatch(item.getColor(), ohdColor)) {
-					// TODO: Set this as database-driven property
-					double secondaryColorPercent = 66;
-					MatchResult result = new MatchResult(e, secondaryColorPercent,
-							item.getColor(), ohdColor);
-					result.setBagNumber(item.getBagnumber());
-					results.add(result);
-				} else if (MatchUtils.tertiaryColorMatch(item.getColor(), ohdColor)) {
-					// TODO: Set this as database-driven property
-					double tertiaryColorPercent = 33;
-					MatchResult result = new MatchResult(e, tertiaryColorPercent,
-							item.getColor(), ohdColor);
-					result.setBagNumber(item.getBagnumber());
-					results.add(result);
+			if (item != null) {
+				if (item.getColor() != null) {
+					if (item.getColor().equals(ohdColor)) {
+						MatchResult result = new MatchResult(e, 100, item.getColor(),
+								ohdColor);
+						result.setBagNumber(item.getBagnumber());
+						results.add(result);
+					} else if (MatchUtils
+							.secondaryColorMatch(item.getColor(), ohdColor)) {
+						// TODO: Set this as database-driven property
+						double secondaryColorPercent = 66;
+						MatchResult result = new MatchResult(e, secondaryColorPercent,
+								item.getColor(), ohdColor);
+						result.setBagNumber(item.getBagnumber());
+						results.add(result);
+					} else if (MatchUtils.tertiaryColorMatch(item.getColor(), ohdColor)) {
+						// TODO: Set this as database-driven property
+						double tertiaryColorPercent = 33;
+						MatchResult result = new MatchResult(e, tertiaryColorPercent,
+								item.getColor(), ohdColor);
+						result.setBagNumber(item.getBagnumber());
+						results.add(result);
+					}
 				}
 			}
 		}
@@ -658,35 +670,37 @@ public enum MatchElement {
 		for (Item item : (List<Item>) incident.getItemlist()) {
 			ArrayList<Integer> matched = new ArrayList<Integer>();
 			
-			Integer int1 = new Integer(item.getXdescelement_ID_1());
-			Integer int2 = new Integer(item.getXdescelement_ID_2());
-			Integer int3 = new Integer(item.getXdescelement_ID_3());
-
-			if (!int1.equals(new Integer(0)) && ohdElements.contains(int1) && !matched.contains(int1)) {
-				String desc = TracerUtils.getXdescelement(int1)
-						.getDescription();
-				MatchResult mr = new MatchResult(e, 100, desc, desc);
-				mr.setBagNumber(item.getBagnumber());
-				results.add(mr);
-				matched.add(int1);
-			}
-
-			if (!int2.equals(new Integer(0)) && ohdElements.contains(int2) && !matched.contains(int2)) {
-				String desc = TracerUtils.getXdescelement(int2)
-						.getDescription();
-				MatchResult mr = new MatchResult(e, 100, desc, desc);
-				mr.setBagNumber(item.getBagnumber());
-				results.add(mr);
-				matched.add(int2);
-			}
-
-			if (!int3.equals(new Integer(0)) && ohdElements.contains(int3) && !matched.contains(int3)) {
-				String desc = TracerUtils.getXdescelement(int3)
-						.getDescription();
-				MatchResult mr = new MatchResult(e, 100, desc, desc);
-				mr.setBagNumber(item.getBagnumber());
-				results.add(mr);
-				matched.add(int3);
+			if (item != null) {
+				Integer int1 = new Integer(item.getXdescelement_ID_1());
+				Integer int2 = new Integer(item.getXdescelement_ID_2());
+				Integer int3 = new Integer(item.getXdescelement_ID_3());
+	
+				if (!int1.equals(new Integer(0)) && ohdElements.contains(int1) && !matched.contains(int1)) {
+					String desc = TracerUtils.getXdescelement(int1)
+							.getDescription();
+					MatchResult mr = new MatchResult(e, 100, desc, desc);
+					mr.setBagNumber(item.getBagnumber());
+					results.add(mr);
+					matched.add(int1);
+				}
+	
+				if (!int2.equals(new Integer(0)) && ohdElements.contains(int2) && !matched.contains(int2)) {
+					String desc = TracerUtils.getXdescelement(int2)
+							.getDescription();
+					MatchResult mr = new MatchResult(e, 100, desc, desc);
+					mr.setBagNumber(item.getBagnumber());
+					results.add(mr);
+					matched.add(int2);
+				}
+	
+				if (!int3.equals(new Integer(0)) && ohdElements.contains(int3) && !matched.contains(int3)) {
+					String desc = TracerUtils.getXdescelement(int3)
+							.getDescription();
+					MatchResult mr = new MatchResult(e, 100, desc, desc);
+					mr.setBagNumber(item.getBagnumber());
+					results.add(mr);
+					matched.add(int3);
+				}
 			}
 		}
 
@@ -699,24 +713,26 @@ public enum MatchElement {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			for (Item_Inventory i : (Set<Item_Inventory>) item.getInventory()) {
-				for (OHD_Inventory oi : (Set<OHD_Inventory>) ohd.getItems()) {
-					String incCatType = i.getCategory();
-					String ohdCatType = oi.getCategory();
-					String incContent = StringUtils.removePronouns(i
-							.getDescription());
-					String ohdContent = StringUtils.removePronouns(oi
-							.getDescription());
-
-					MatchResult result = MatchUtils.stringCompare(e,
-							incContent, ohdContent, item.getBagnumber());
-
-					if (result != null) {
-						if (incCatType.equals(ohdCatType)) {
-							result.setCategoryMatched(true);
-							result.setContentCategory(i.getCategory());
+			if (item != null) {
+				for (Item_Inventory i : (Set<Item_Inventory>) item.getInventory()) {
+					for (OHD_Inventory oi : (Set<OHD_Inventory>) ohd.getItems()) {
+						String incCatType = i.getCategory();
+						String ohdCatType = oi.getCategory();
+						String incContent = StringUtils.removePronouns(i
+								.getDescription());
+						String ohdContent = StringUtils.removePronouns(oi
+								.getDescription());
+	
+						MatchResult result = MatchUtils.stringCompare(e,
+								incContent, ohdContent, item.getBagnumber());
+	
+						if (result != null) {
+							if (incCatType.equals(ohdCatType)) {
+								result.setCategoryMatched(true);
+								result.setContentCategory(i.getCategory());
+							}
+							results.add(result);
 						}
-						results.add(result);
 					}
 				}
 			}
@@ -779,4 +795,5 @@ class Name {
 			return LAST;
 		return 0;
 	}
+
 }
