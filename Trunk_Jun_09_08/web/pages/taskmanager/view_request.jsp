@@ -29,7 +29,9 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 function sortIncomingRequests(sortOrder) {
 	o = document.viewRequestForm;
 	o.sort.value = sortOrder;
@@ -40,7 +42,7 @@ function sortIncomingRequests(sortOrder) {
 // -->
   </script>
   <html:form action="viewROH.do" method="post">
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <%
     String sort = (String)request.getAttribute("sort");
 
@@ -201,7 +203,7 @@ function sortIncomingRequests(sortOrder) {
             <!-- pagination -->
             <tr>
               <td colspan="6">
-                <jsp:include page="../includes/pagination_incl.jsp" />
+                <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 <!-- eof pagination -->
               </td>
             </tr>

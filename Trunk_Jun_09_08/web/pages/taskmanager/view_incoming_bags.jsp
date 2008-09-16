@@ -9,7 +9,7 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <script language="javascript">
     <!--
 function goprev() {
@@ -29,7 +29,9 @@ function gopage(i) {
   o.currpage.value = i;
   o.submit();
 }
-
+function updatePagination() {
+    return true;
+}
 function sortIncomingBags(sortOrder) {
 	o = document.viewIncomingRequestForm;
 	o.sort.value = sortOrder;
@@ -39,7 +41,7 @@ function sortIncomingBags(sortOrder) {
 // -->
   </script>
   <html:form action="incomingBags.do" method="post">
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <%
     String sort = (String)request.getAttribute("sort");
 
@@ -222,7 +224,7 @@ function sortIncomingBags(sortOrder) {
               <!-- pagination -->
               <tr>
                 <td colspan="11">
-                  <jsp:include page="../includes/pagination_incl.jsp" />
+                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
                   <!-- eof pagination -->
                 </td>
               </tr>

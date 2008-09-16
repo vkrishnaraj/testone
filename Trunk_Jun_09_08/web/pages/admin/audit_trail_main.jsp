@@ -33,7 +33,9 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
   <html:form action="auditTrail.do" method="post">
@@ -48,7 +50,7 @@ function gopage(i) {
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -139,13 +141,13 @@ function gopage(i) {
             </table>
             <logic:present name="resultlist" scope="request">
               <logic:equal name="auditTrailForm" property="auditType" value="<%= new Integer(AuditTrailUtils.AUD_CLAIM).toString() %>">
-                <jsp:include page="../includes/audit/audit_claim_incl.jsp" />
+                <jsp:include page="/pages/includes/audit/audit_claim_incl.jsp" />
               </logic:equal>
               <logic:equal name="auditTrailForm" property="auditType" value="<%= new Integer(AuditTrailUtils.AUD_PAYOUT).toString() %>">
-                <jsp:include page="../includes/audit/audit_payout_incl.jsp" />
+                <jsp:include page="/pages/includes/audit/audit_payout_incl.jsp" />
               </logic:equal>
               <!-- pagination -->
-              <jsp:include page="../includes/pagination_incl.jsp" />
+              <jsp:include page="/pages/includes/pagination_incl.jsp" />
             </td>
           </tr>
           <!-- end pagination -->

@@ -3,6 +3,8 @@
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm"%>
@@ -18,6 +20,11 @@
       } else {
         countfield.value = maxlimit - field.value.length;
       }
+    }
+
+    function deleteFwdSegment(segNum) {
+        document.worldTracerFWDForm.deleteSegment.value = segNum;
+        document.worldTracerFWDForm.submit();
     }
     // End -->
   </SCRIPT>
@@ -35,18 +42,22 @@
   <!-- calendar stuff ends here -->
   <script language="javascript">
 
-function getreason(choose){
+function setReason(choose){
   var choosestr = choose.options[choose.selectedIndex].text;
   var reason = choosestr.substring(4);
-  document.all.reason_for_loss.value = reason;
+  document.worldTracerFWDForm.reason_for_loss.value = reason;
 }
 </script>
 
   
 <!-- calendar stuff ends here -->
 
-<html:form action="worldtracerfwd.do" method="post"
-	onsubmit="return (validateForwardOHD(this) && setExpediteNum(this)); ">
+<jsp:include page="/pages/includes/validation_incl.jsp" />
+
+<html:form action="worldtracerfwd.do" method="post">
+	
+	<input type="hidden" name="deleteSegment" />
+	<input type="hidden" name="reason_for_loss" />
 
 	<tr>
 		<!-- MIDDLE COLUMN -->
@@ -66,25 +77,10 @@ function getreason(choose){
 		 </font>
 		<table class="form2" cellspacing="0" cellpadding="0">
 			<tr>
-				<td colspan="1"><bean:message
-					key="colname.on_hand_report_number" />:</td>
-				<td colspan="1"><html:text name="worldTracerFWDForm"
-					property="ohd_ID" size="20" maxlength="13" onblur="submit()" /></td>
-				<td colspan="1">
-
-				    <bean:message
-					key="wt.id" />:</td>
-				<td colspan="1"><html:text name="worldTracerFWDForm"
-					property="wt_id" size="20" maxlength="13" /></td>
-			</tr>
-			<tr>
-				<td colspan="1"><bean:message key="FWD.placed.in.File" /> :</td>
-				<td colspan="3"><html:select name="worldTracerFWDForm"
-					property="placed_in_file" styleClass="dropdown">
-					<html:option value=""></html:option>
-					<html:option value="AHL">AHL</html:option>
-					<html:option value="DPR">DPR</html:option>
-				</html:select></td>
+				<td colspan="1"><bean:message key="FWD.matching.ahl" /> :</td>
+				<td colspan="3"><html:text name="worldTracerFWDForm" size="20"
+					property="matchingAhl" maxlength="11"/>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="1"><bean:message key="colname.expedite_number" />
@@ -106,7 +102,17 @@ function getreason(choose){
 					property="passenger3" size="20" maxlength="13" /></td>
 			</tr>
 
-            <tr>
+            <tr>	
+            	<td colspan="1">
+                  <bean:message key="colname.airlineForwardTo" />
+                  <font color=red>
+                    *
+                  </font>
+                  :
+                </td>
+                <td colspan="1">
+					<html:text name="worldTracerFWDForm" property="destinationAirline" size="4" maxlength="2" styleClass="textfield" />
+                </td>
                 <td colspan="1">
                   <bean:message key="colname.stationForwardTo" />
                   <font color=red>
@@ -114,21 +120,8 @@ function getreason(choose){
                   </font>
                   :
                 </td>
-                <td colspan="3">
-                	<html:select name="worldTracerFWDForm" property="companyCode" styleClass="dropdown" onchange="submit()" >
-                    	<html:options collection="companylistById"  property="companyCode_ID" labelProperty="companyCode_ID" />
-                  	</html:select>&nbsp;
-                    <logic:present name="stationList" scope="request">
-                      <html:select name="worldTracerFWDForm" styleClass="dropdown" property="destStation">
-                        <logic:empty name="worldTracerFWDForm" property="destStation">
-                          <html:option value="">
-                            <bean:message key="select.please_select" />
-                          </html:option>
-                        </logic:empty>
-                        <html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
-                      </html:select>
-                    </logic:present>
-
+                <td colspan="1">
+                	<html:text name="worldTracerFWDForm" property="destinationStation" size="6" maxlength="3" styleClass="textfield" />
                 </td>
               </tr>
 			<tr>
@@ -136,7 +129,7 @@ function getreason(choose){
 				<table>
 					<tr>
 						<td colspan="3"><strong> <bean:message
-							key="header.bag_itinerary" /> </strong></td>
+							key="header.fwd_bag_itinerary" /> </strong></td>
 					</tr>
 					<tr>
 						<td colspan=1 valign="top"><strong> <bean:message
@@ -149,53 +142,41 @@ function getreason(choose){
 							key="colname.departdate" /><br>
 						( <%=a.getDateformat().getFormat()%>) </strong>
 						</td>
-
 					</tr>
-					<logic:iterate indexId="k" id="itinerary"
-						name="worldTracerFWDForm" property="itinerarylist">
+					<c:forEach items="${worldTracerFWDForm.itinerarylist}" var="segment" varStatus="status" >
 						<tr>
-							<td colspan=1 nowrap>
-							<html:hidden name="itinerary" property="itinerarytype" value="1" indexed="true" />
-							<html:text name="itinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-							<a href="#" 
-							    onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img
+							<td>
+							<input type="text" size="3" maxlength="3" value="${segment.legfrom}" name="itinerary[${status.index}].legfrom" />
+								<a href="#" 
+							    onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerary[${status.index}].legfrom','airportcode',500,600);return false;"><img
 								src="deployment/main/images/nettracer/airport_codes.gif"
-								border=0></a> 
-								/ 
-							<html:text name="itinerary" property="legto" size="3" maxlength="3" styleClass="textfield"   indexed="true" /> 
-							<a href="#"
-								onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerary[<%= k %>].legto','airportcode',500,600);return false;"><img
+								border=0></a>
+								<c:out value="/" /> 
+								<input type="text" value="${segment.legto}" size="3" maxlength="3" name="itinerary[${status.index}].legto" />
+																<a href="#" 
+							    onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerary[${status.index}].legto','airportcode',500,600);return false;"><img
 								src="deployment/main/images/nettracer/airport_codes.gif"
 								border=0></a>
 							</td>
-							<td colspan=1><html:select name="itinerary" property="airline"
-								styleClass="dropdown" indexed="true">
-								<html:option value="">
-									<bean:message key="select.please_select" />
-								</html:option>
-								<html:options collection="companylistById" property="companyCode_ID"
-									labelProperty="companyCode_ID" />
-							</html:select> &nbsp; 
-							<html:text styleClass="textfield" name="itinerary"
-								property="flightnum" size="4" maxlength="4" indexed="true" />
+							<td>
+								<input type="text" value="${segment.airline}" size="3" maxlength="3" name="itinerary[${status.index}].airline" />
+								&nbsp;
+								<input type="text" value="${segment.flightnum}" size="6" maxlength="5" name="itinerary[${status.index}].flightnum" />
 							</td>
-							<td colspan="1" nowrap><html:text styleClass="textfield" name="itinerary"
-								property="disdepartdate" size="11" maxlength="10" indexed="true" /><img
-								src="deployment/main/images/calendar/calendar_icon.gif"
-								id="calendar<%= k %>" name="calendar<%= k %>" height="15"
-								width="20" border="0" onmouseover="this.style.cursor='hand'"
-								onClick="cal1xx.select2(document.worldTracerFWDForm, '<%= "itinerary[" + k + "].disdepartdate" %>','calendar<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-
+							<td colspan="1" nowrap="nowrap" >
+								<input type="text" value="${segment.departdate}" size="11" maxlength="10" name="itinerary[${status.index}].departdate" />
+								<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar${status.index}" name="calendar${status.index}" height="15"
+									width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.worldTracerFWDForm, 'itinerary[${status.index}].departdate','calendar${status.index}','<%= a.getDateformat().getFormat() %>'); return false;">
+							</td>
 						</tr>
 						<tr>
 							<td colspan=3>
-							<html:submit styleId="button"
-								property="deleteBag" indexed="true">
-								<bean:message key="button.delete_bag_itinerary" />
-							</html:submit>
+								<button type="button" value="${status.index}" id="button" onclick="deleteFwdSegment(${status.index});">
+									<bean:message key="button.delete_bag_itinerary" />
+								</button>
 							</td>
 						</tr>
-					</logic:iterate>
+					</c:forEach>
 				</table>
 				<center><html:submit styleId="button"
 					property="additinerary">
@@ -210,46 +191,26 @@ function getreason(choose){
 				<td colspan="3"><html:text name="worldTracerFWDForm"
 					property="bagtag" size="20" maxlength="10" /></td>
 			</tr>
-			<tr>
-				<td colspan="1"><bean:message key="Expedite_Tag_Number" />
-				 :</td>
-				<td colspan="3"><html:text name="worldTracerFWDForm"
-					property="ebagtag" size="20" maxlength="10" /></td>
-			</tr>
             <%String codedes = null; %>
 			<tr>
 				<td nowrap colspan=4>
 				<bean:message key="colname.losscode" /> 
-				<html:select property="loss_code" styleClass="dropdown" onclick="getreason(this)">
+				<html:select property="loss_code" styleClass="dropdown" onclick="setReason(this);">
 					<html:option value="0">
 						<bean:message key="select.please_select" />
 					</html:option>
-					<%
-						java.util.List codes = (java.util.List) request
-										.getAttribute("losscodes");
-
-								for (java.util.Iterator i = codes.iterator(); i.hasNext();) {
-									com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code) i
-											.next();
-					%>
-					<OPTION VALUE="<%= "" + code.getLoss_code() %>"
-						<% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm)session.getAttribute("worldTracerFWDForm")).getLoss_code();  
-					    if (lost_code.equals("" + code.getLoss_code())) { %>
-						SELECTED <% } %>>        
-						<%= "" + code.getLoss_code() %>-
-                        <%= "" + code.getDescription() %>
-					<%
-					     codedes = code.getDescription();
-						}
-					%>
-					
+					<c:forEach items="${losscodes}" var="code">
+						<option value="${code.loss_code}" ${code.loss_code == worldTracerFWDForm.loss_code ? 'selected="true"' : ''}>
+							<c:out value="${code.loss_code} - ${code.description}"/>
+						</option>
+					</c:forEach>
 				</html:select>
 				</td>
 			</tr>
+			<logic:present name="faultstationlist" scope="request">
 			<tr>
 				<td colspan="1"><bean:message key="Fault_Station" />:</td>
 				<td colspan="3">				
-				<logic:present name="stationList" scope="request">
 					<html:select name="worldTracerFWDForm" styleClass="dropdown"
 						property="fault_station">
 						<logic:empty name="worldTracerFWDForm" property="fault_station">
@@ -260,7 +221,7 @@ function getreason(choose){
 						<html:options collection="faultstationlist" property="station_ID"
 							labelProperty="stationcode" />
 					</html:select>
-				</logic:present>
+
 				</td>
 			</tr>
 			<tr>
@@ -268,12 +229,7 @@ function getreason(choose){
 				<td colspan="3"><html:text name="worldTracerFWDForm"
 					property="fault_terminal" size="20" maxlength="10" /></td>
 			</tr>
-			<tr>
-				<td colspan="1"><bean:message key="Reason_For_Loss_Comments" />:
-				</td>
-				<td colspan="3"><html:text name="worldTracerFWDForm"
-					property="reason_for_loss" size="20" maxlength="10" /></td>
-			</tr>
+			</logic:present>
 
 			<tr>
 				<td colspan="1"><bean:message key="Supplementary_Information" />:
@@ -297,7 +253,7 @@ function getreason(choose){
 			<tr>
 				<td colspan="4" align="center"><INPUT type="button" Id="button"
 					value="Back" onClick="history.back()"> &nbsp; <html:submit
-					styleId="button" property="save">
+					styleId="button" property="save" onclick="return validateWtFwd(this.form);" >
 					<bean:message key="button.forward" />
 				</html:submit></td>
 			</tr>

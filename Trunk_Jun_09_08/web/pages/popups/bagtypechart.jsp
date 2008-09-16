@@ -134,10 +134,10 @@ document.oncontextmenu = returnFalse;
                                                                                                                         ("2")) {
 
                                                                                                                         %>
-  <img src="../../deployment/main/images/nettracer/charts/IATA_BAG2.JPG" border=0 usemap="#FPMap1"><%
+  <img src="/deployment/main/images/nettracer/charts/IATA_BAG2.JPG" border=0 usemap="#FPMap1"><%
 } else {
 %>
-  <img src="../../deployment/main/images/nettracer/charts/IATA_BAG1.JPG" border=0 usemap="#FPMap0"><%
+  <img src="/deployment/main/images/nettracer/charts/IATA_BAG1.JPG" border=0 usemap="#FPMap0"><%
 }
 %>
 </body>

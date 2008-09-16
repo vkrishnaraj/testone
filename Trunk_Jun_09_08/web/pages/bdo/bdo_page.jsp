@@ -26,7 +26,7 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="bdo.do" method="post" onsubmit="return validateBDO(this);">
     <logic:notPresent name="onhand" scope="request">
       <logic:notPresent name="mbr" scope="request">
@@ -81,7 +81,7 @@
                   
                 </logic:present>
               </logic:notPresent>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>

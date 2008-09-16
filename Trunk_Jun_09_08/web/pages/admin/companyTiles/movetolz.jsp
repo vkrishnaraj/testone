@@ -28,6 +28,12 @@
       o.pagination.value="1";
       o.submit();
     }
+
+    function updatePagination() {
+        o= document.companyForm;
+        o.update_pagination.value = "1";
+        return true;
+    }
     
   // -->
 </script>
@@ -329,7 +335,7 @@
           <tr>
             <td colspan="2">
                 <!-- pagination -->
-                <jsp:include page="../../../includes/pagination_incl.jsp" />
+                <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 <!-- eof pagination -->
             </td>
           </tr>

@@ -30,12 +30,14 @@ function gopage(i) {
 	o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
   <form name="matchform" action="viewMatches.do" method="post">
 
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <td colspan="3" align="center">
         <table border=0 width="70%">
@@ -278,7 +280,7 @@ function gopage(i) {
               <tr>
                 <td colspan="8">
                   <!-- pagination -->
-                  <jsp:include page="../includes/pagination_incl.jsp" />
+                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
               <tr>

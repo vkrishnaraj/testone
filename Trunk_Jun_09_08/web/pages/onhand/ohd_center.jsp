@@ -56,7 +56,7 @@ function gotoHistoricalReport() {
     }
     // End -->
   </SCRIPT>
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="addOnHandBag.do" method="post" enctype="multipart/form-data" onsubmit="return validateRest(this);">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -80,7 +80,7 @@ function gotoHistoricalReport() {
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -232,7 +232,7 @@ function gotoHistoricalReport() {
 %>
 						<logic:notEqual name="OnHandForm" property="wt_id" value="">
 						&nbsp;|&nbsp;
-						<a href="worldtracerfwd.do?ohd_id=<bean:write name="OnHandForm" property="ohd_id" />">Forward to WT</a>
+						<a href="worldtracerfoh.do?ohd_id=<bean:write name="OnHandForm" property="ohd_id" />">Forward to WT</a>
 						</logic:notEqual>
 <%
             		}		

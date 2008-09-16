@@ -29,11 +29,13 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
   <html:form action="message.do" method="post">
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <!-- MIDDLE COLUMN -->
       <td id="middlecolumn">

@@ -15,7 +15,7 @@
   <logic:present name="match" scope="request">
     <form action="viewMatches.do">
       <input type="hidden" name="match_ID" value='<bean:write name="match" property="match_id" scope="request"/>'>
-      <jsp:include page="../includes/taskmanager_header.jsp" />
+      <jsp:include page="/pages/includes/taskmanager_header.jsp" />
       <tr>
         <!-- MIDDLE COLUMN -->
         <td id="middlecolumn">

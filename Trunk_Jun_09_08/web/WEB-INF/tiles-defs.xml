@@ -232,6 +232,10 @@
     	<put name="center" value="/pages/worldtracer/worldtracer_fwd_main.jsp"/>
     </definition>
     
+    <definition name="view_worldtracerfoh" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_foh_main.jsp"/>
+    </definition>
+    
     <definition name="view_worldtracerroh" extends="user_menu">
     	<put name="center" value="/pages/worldtracer/worldtracer_roh_main.jsp"/>
     </definition>
@@ -577,6 +581,10 @@
     
      <definition name="scanner_data" extends="homepage">
     	<put name="center" value="/pages/scanners/scannerdata.jsp"/>
+    </definition>
+    
+    <definition name="worldtracer_log" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_log.jsp"/>
     </definition>
     
     <definition name="ajax_agentassigned" path="/pages/ajax_divs/agentassigned.jsp">

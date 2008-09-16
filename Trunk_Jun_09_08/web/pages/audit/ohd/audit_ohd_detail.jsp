@@ -35,10 +35,12 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
-  <jsp:include page="../../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="audit_ohd.do" method="post">
     <input type="hidden" name="detail" value="1">
     <input type="hidden" name="audit_ohd_id">
@@ -52,7 +54,7 @@ function gopage(i) {
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -250,7 +252,7 @@ function gopage(i) {
             </logic:iterate>
             <tr>
               <td colspan="11">
-                <jsp:include page="../../includes/pagination_incl.jsp" />
+                <jsp:include page="/pages/includes/pagination_incl.jsp" />
               </td>
             </tr>
             <!-- end pagination -->

@@ -208,18 +208,6 @@
 	        return false;
 	      }
 	    }
-
-	    else if (currentElementName.indexOf("salutation") != -1) {
-	      if (currentElement.value == 0)
-	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-							"colname.salutation")%>" + " <%=(String) myMessages.getMessage(myLocale,
-							"error.validation.isRequired")%>");
-	        currentElement.focus();
-	        return false;
-	      }
-	      
-	    }
 	   else if (currentElementName.indexOf("numpassengers") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {

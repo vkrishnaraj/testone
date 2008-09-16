@@ -96,7 +96,7 @@ function execOnSuccess(stateChangeCallback)
             if (xmlHttpReq.readyState == 4 &&
                     xmlHttpReq.status == 200) {
             	if (xmlHttpReq.responseText.indexOf("DOCTYPE") != -1) {
-            		window.location = "/tracer/logoff.do";           		
+            		window.location = "logoff.do";           		
             	} else {
             		stateChangeCallback(xmlHttpReq);
             	}

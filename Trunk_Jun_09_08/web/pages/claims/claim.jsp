@@ -38,7 +38,7 @@
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -106,7 +106,7 @@
                           <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PAYOUT_RPT" scope="request"/>','ExpensePayout',800,600);return false;"><bean:message key="link.claim_payout" /></a>
                         </td>
                       </logic:notPresent>
-                      <jsp:include page="../includes/mail_incl.jsp" />
+                      <jsp:include page="/pages/includes/mail_incl.jsp" />
                       <td>
                         <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
                       </td>

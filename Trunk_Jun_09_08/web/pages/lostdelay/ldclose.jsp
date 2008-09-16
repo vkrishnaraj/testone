@@ -24,7 +24,7 @@
 	var cal1xx = new CalendarPopup();	
 	//cal1xx.showNavigationDropdowns();
 	var doCheck = 0;
-	<jsp:include page="../includes/ldclose.jsp" />
+	<jsp:include page="/pages/includes/ldclose.jsp" />
 	<% %>
 // -->
   </SCRIPT>
@@ -45,7 +45,7 @@
             <tr>
               <td></td>
               <td></td>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -129,9 +129,9 @@
             </table>
           </logic:iterate>
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-            <jsp:include page="../includes/closereport_incl.jsp" />
+            <jsp:include page="/pages/includes/closereport_incl.jsp" />
           </table>
-          <jsp:include page="../includes/remarkclose_incl.jsp" />
+          <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
         </div>
         <logic:notEqual name="incidentForm" property="readonly" value="1">
           <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>

@@ -5,7 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<jsp:include page="../includes/taskmanager_header.jsp" />
+<jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <tr>
   <!-- MIDDLE COLUMN -->
   <td id="middlecolumn">

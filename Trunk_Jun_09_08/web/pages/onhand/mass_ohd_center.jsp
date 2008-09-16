@@ -6,7 +6,7 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
-<jsp:include page="../includes/validation_incl.jsp" />
+<jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="addOnHandBag.do" method="post" enctype="multipart/form-data" onsubmit="return submitMassform(this);">
   <tr>
     <td colspan="3" id="pageheadercell">
@@ -18,7 +18,7 @@
       <div id="pageheaderright">
         <table id="pageheaderright">
           <tr>
-            <jsp:include page="../includes/mail_incl.jsp" />
+            <jsp:include page="/pages/includes/mail_incl.jsp" />
             <td>
               <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
             </td>

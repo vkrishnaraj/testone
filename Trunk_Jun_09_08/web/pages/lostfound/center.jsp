@@ -45,18 +45,18 @@ function gotoHistoricalReport() {
 // -->
   </SCRIPT>
   <!-- calendar stuff ends here -->
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
 <%
   String found = (String)request.getAttribute("found");
 %>
 <%
   if (found == null) {
 %>
-    <form name="LostAndFoundForm" method="post"action="/tracer/addLost.do" onsubmit="return validateLostFound(this);">
+    <form name="LostAndFoundForm" method="post"action="addLost.do" onsubmit="return validateLostFound(this);">
 <%
     } else {
 %>
-      <form name="LostAndFoundForm" method="post" action="/tracer/addFound.do"  enctype="multipart/form-data" onsubmit="return validateLostFound(this);">
+      <form name="LostAndFoundForm" method="post" action="addFound.do"  enctype="multipart/form-data" onsubmit="return validateLostFound(this);">
 <%
       }
 %>
@@ -80,7 +80,7 @@ function gotoHistoricalReport() {
               <tr>
                 <td></td>
                 <td></td>
-                <jsp:include page="../includes/mail_incl.jsp" />
+                <jsp:include page="/pages/includes/mail_incl.jsp" />
                 <td>
                   <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
                 </td>

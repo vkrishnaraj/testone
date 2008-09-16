@@ -41,7 +41,9 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 function sortClaims(sortOrder) {
 	o = document.claimToBeProcessedForm;
 	o.sort.value = sortOrder;
@@ -64,7 +66,7 @@ function sortClaims(sortOrder) {
 <%
     }
 %>
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <!-- MIDDLE COLUMN -->
       <td id="middlecolumn">
@@ -143,7 +145,7 @@ function sortClaims(sortOrder) {
               <!-- pagination -->
               <tr>
                 <td colspan="11">
-                  <jsp:include page="../includes/pagination_incl.jsp" />
+                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
                   <!-- eof pagination -->
                 </td>
               </tr>

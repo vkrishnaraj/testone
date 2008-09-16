@@ -29,7 +29,7 @@
             <tr>
               <td></td>
               <td></td>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -78,9 +78,9 @@
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-            <jsp:include page="../includes/closereport_incl.jsp" />
+            <jsp:include page="/pages/includes/closereport_incl.jsp" />
           </table>
-          <jsp:include page="../includes/remarkclose_incl.jsp" />
+          <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
         </div>
         <logic:notEqual name="incidentForm" property="readonly" value="1">
           <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>

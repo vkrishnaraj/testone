@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
@@ -44,7 +45,9 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
 
@@ -102,6 +105,7 @@ function gopage(i) {
             header_text="cw";
  	}
  	%>
+ 	&nbsp;<bean:message key="header.wt_day"/>&nbsp;<c:out value="${af_day}" default="1" />
  <%
  	if (request.getParameter("ahl_id") != null
  				&& request.getParameter("ahl_id").length() > 9) {
@@ -222,7 +226,7 @@ function gopage(i) {
 				</logic:iterate>
 				<tr>
 					<td colspan="3"><!-- pagination --> <jsp:include
-						page="../includes/pagination_incl.jsp" /> <!-- eof pagination -->
+						page="/pages/includes/pagination_incl.jsp" /> <!-- eof pagination -->
 					</td>
 				</tr>
 				<!-- end pagination -->

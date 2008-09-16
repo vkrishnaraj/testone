@@ -37,7 +37,7 @@ function gotoHistoricalReport() {
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -77,7 +77,7 @@ function gotoHistoricalReport() {
         <logic:notPresent name="prepopulate" scope="request">
         
         
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="damaged.do" method="post" enctype="multipart/form-data" onsubmit="return validateRest(this);">
     <input type="hidden" name="historical_report" value="">
     <tr>
@@ -115,7 +115,7 @@ function gotoHistoricalReport() {
                   &nbsp;
                 </td>
               </logic:notEqual>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -128,7 +128,7 @@ function gotoHistoricalReport() {
     <!-- ICONS MENU -->
     <logic:present name="express" scope="request">
     <!-- express input //-->
-    <jsp:include page="../includes/mbrexpress_incl.jsp" />
+    <jsp:include page="/pages/includes/mbrexpress_incl.jsp" />
     <!-- eof express input //-->
   </logic:present>
   <logic:notPresent name="express" scope="request">
@@ -269,9 +269,9 @@ function gotoHistoricalReport() {
       <!-- MIDDLE COLUMN -->
       <td id="middlecolumn">
         <!-- MAIN BODY -->
-        <jsp:include page="../includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
-        <jsp:include page="../includes/mbrbag_incl.jsp" />
-        <jsp:include page="../includes/remark_incl.jsp" />
+        <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
+        <jsp:include page="/pages/includes/mbrbag_incl.jsp" />
+        <jsp:include page="/pages/includes/remark_incl.jsp" />
       
       <logic:notEqual name="incidentForm" property="readonly" value="1">
         <table width="100%" border="0" cellpadding="0" cellspacing="0">

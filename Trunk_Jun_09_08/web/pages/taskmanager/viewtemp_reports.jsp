@@ -46,7 +46,9 @@ function gopage(i) {
   o.pagination.value="1";
   o.submit();
 }
-
+function updatePagination() {
+    return true;
+}
 function sortReports(sortOrder) {
 	o = document.viewTemporaryReportsForm;
 	o.sort.value = sortOrder;
@@ -55,7 +57,7 @@ function sortReports(sortOrder) {
 
 // -->
   </script>
-  <jsp:include page="../includes/taskmanager_header.jsp" />
+  <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <html:form action="temporaryReports.do" method="post">
 <%
     String sort = (String)request.getAttribute("sort");
@@ -154,7 +156,7 @@ function sortReports(sortOrder) {
             <tr>
               <td colspan="11">
                 <!-- pagination -->
-                <jsp:include page="../includes/pagination_incl.jsp" />
+                <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 <!-- eof pagination -->
               </td>
             </tr>

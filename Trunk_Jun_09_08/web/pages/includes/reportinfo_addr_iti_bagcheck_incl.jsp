@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
@@ -78,13 +79,27 @@
 %>
             <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
+    
         
-        <logic:notEqual name="incidentForm" property="wt_id" value="">
+	<c:if test="${!empty incidentForm.wt_id }">
         <p align="right">
-        	WorldTracer ID: <a href="worldtraceraf.do?ahl_id=<bean:write name="incidentForm" property="wt_id" />"><bean:write name="incidentForm" property="wt_id" /></a>
+	WorldTracer ID: <a href="worldtraceraf.do?ahl_id=<bean:write name="incidentForm" property="wt_id" />">
+		<c:out value="${incidentForm.wt_id}" /></a>
         </p>
+	</c:if>
+
+	<c:choose>
+	<c:when test="${pending_wt == 'PENDING_CREATE'}">
+	<p align="right">World Tracer Export Pending</p>
+	</c:when>
+	<c:when test="${pending_wt == 'PENDING_AMEND'}">
+	<p align="right">World Tracer Amend Pending</p>
+	</c:when>
+	<c:when test="${pending_wt eq 'PENDING_SUSPEND'}">
+	<p align="right">World Tracer Suspend Pending</p>
+	</c:when>
+	</c:choose>
         
-        </logic:notEqual>
         
         <span class="reqfield">*</span>
         <bean:message key="message.required" />
@@ -94,7 +109,7 @@
         <br>
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-            <td nowrap>
+            <td nowrap=>
               <bean:message key="colname.incident_num" />
               <br>
               <html:text property="incident_ID" size="14" styleClass="textfield" readonly="true" />
@@ -281,7 +296,7 @@
           <br>
           <br>
           <!-- contact info -->
-          <jsp:include page="../includes/contactinfo_incl.jsp" />
+          <jsp:include page="/pages/includes/contactinfo_incl.jsp" />
           <!-- eof contact info -->
           <a name="passit"></a>
           <h1 class="green">

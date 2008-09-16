@@ -112,7 +112,7 @@
             <a href="#"><bean:message key="link.to_top" /></a>
             <br>
             <br>
-            <jsp:include page="../includes/contactinfo_incl.jsp" />
+            <jsp:include page="/pages/includes/contactinfo_incl.jsp" />
             <a name="passit"></a>
             <h1 class="green">
               <bean:message key="header.itinerary" />
@@ -569,7 +569,7 @@
 <%
                     }
 %>
-                    <jsp:include page="../includes/remark_incl.jsp" />
+                    <jsp:include page="/pages/includes/remark_incl.jsp" />
                   </div>
                   <logic:notEqual name="incidentForm" property="readonly" value="1">
                     <table width="100%" border="0" cellpadding="0" cellspacing="0">

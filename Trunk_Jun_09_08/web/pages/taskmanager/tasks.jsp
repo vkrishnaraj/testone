@@ -29,7 +29,9 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 function sortAgents(sortOrder) {
 	o = document.taskForm;
 	o.sort.value = sortOrder;
@@ -50,14 +52,14 @@ function sortAgents(sortOrder) {
 // -->
   </SCRIPT>
   <!-- calendar stuff ends here -->
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="otherTasks.do" method="post" onsubmit="return validateRest(this);">
     <logic:present name="file_type" scope="request">
       <html:hidden property="file_type" value="<%= (String)request.getAttribute("file_type") %>" />
     </logic:present>
     <input type=hidden name="task_ids" value="">
     <input type=hidden name="delete1" value="">
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <!-- MIDDLE COLUMN -->
       <td id="middlecolumn">
@@ -270,7 +272,7 @@ function sortAgents(sortOrder) {
               <!-- pagination -->
               <tr>
                 <td colspan="11">
-                  <jsp:include page="../includes/pagination_incl.jsp" />
+                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
                   <!-- eof pagination -->
                 </td>
               </tr>

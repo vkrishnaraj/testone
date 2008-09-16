@@ -41,7 +41,9 @@ function sortAgents(sortOrder) {
 	o.sort.value = sortOrder;
 	o.submit();
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
   <html:form action="stationAdmin.do" method="post">
@@ -57,7 +59,7 @@ function sortAgents(sortOrder) {
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>
@@ -195,7 +197,7 @@ function sortAgents(sortOrder) {
               <!-- pagination -->
               <tr>
                 <td colspan="10">
-                  <jsp:include page="../includes/pagination_incl.jsp" />
+                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
               <!-- end pagination -->

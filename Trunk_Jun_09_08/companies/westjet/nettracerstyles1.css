@@ -2,7 +2,7 @@
 /*	GENERAL HTML TAGS							  */
 /**************************************************/
 a {
-	color:#369;
+	color:#002b61;
 }	
 a:hover, 
 a:active {
@@ -93,6 +93,15 @@ form {
 }
 
 /***** HEADER AND MENU *****/
+div.headerleft {
+	float:left;
+}
+
+div.headerright {
+	float:right;
+	text-align:right;
+}
+
 td#header {
 	height: 78px;
 }
@@ -289,7 +298,7 @@ td#middlecolumn {
 	padding: 13px;
 	padding-left:20px;
 	padding-right:20px;
-	background-color:#E0EDFB;
+	background-color:#d2eceb;
 }
 
 /* main content  */
@@ -319,29 +328,39 @@ div#maincontent table.form{
 	background-color:#E0E0A3;
 }
 div#maincontent table.form2{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
+}
+
+td.white{
+	background-color:#FFFFFF;
+	height:10px;
+}
+
+td.header{
+	background-color:#00306e;
+	color:#FFFFFF;
 }
 
 div#maincontent table.form2_inc{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 
 div#maincontent table.form2_ld{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 
 div#maincontent table.form2_dam{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 div#maincontent table.form2_pil{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 
 div#maincontent table.form2_lf{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 div#maincontent table.form2_ohd{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 
 div#maincontent h1.blue{
@@ -352,7 +371,7 @@ div#maincontent td.login{
 	padding: 15px;
 }
 div#maincontent table.blue{
-	background-color:#D1E4F1;
+	background-color:#d2eceb;
 }
 
 /* buttons area - content */

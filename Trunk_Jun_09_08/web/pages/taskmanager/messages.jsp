@@ -40,7 +40,9 @@ function gopage(i) {
   o.currpage.value = i;
   o.submit();
 }
-
+function updatePagination() {
+    return true;
+}
 function sortAgents(sortOrder) {
 	o = document.composeForm;
 	o.sort.value = sortOrder;
@@ -48,7 +50,7 @@ function sortAgents(sortOrder) {
 }
 // -->
   </script>
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="message.do" method="post">
     <input type=hidden name="message_ids" value="">
     <input type=hidden name="delete1" value="">
@@ -65,7 +67,7 @@ function sortAgents(sortOrder) {
 <%
     }
 %>
-    <jsp:include page="../includes/taskmanager_header.jsp" />
+    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <!-- MIDDLE COLUMN -->
       <td id="middlecolumn">
@@ -215,7 +217,7 @@ function sortAgents(sortOrder) {
                     </td>
                   </logic:empty>
                   <TD class="testoNero">
-                    <A HREF="/tracer/message.do?message_copy_id=<bean:write name="message" property="message_copy_id"/>"><bean:write name="message" property="subject" /></A>
+                    <A HREF="message.do?message_copy_id=<bean:write name="message" property="message_copy_id"/>"><bean:write name="message" property="subject" /></A>
                   </TD>
                   <TD>
                     <bean:write name="message" property="parent_message.send_station.company.companyCode_ID" />
@@ -235,7 +237,7 @@ function sortAgents(sortOrder) {
               <input type="hidden" name="inbox" value="1">
               <tr>
                 <td colspan="11">
-                  <jsp:include page="../includes/pagination_incl.jsp" />
+                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
                   <!-- eof pagination -->
                 </td>
               </tr>

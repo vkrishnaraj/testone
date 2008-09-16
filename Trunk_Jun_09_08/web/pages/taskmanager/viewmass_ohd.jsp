@@ -47,7 +47,9 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 function sortMass(sortOrder) {
 	o = document.viewMassOnHandsForm;
 	o.sort.value = sortOrder;
@@ -56,7 +58,7 @@ function sortMass(sortOrder) {
 
 // -->
   </script>
-  <jsp:include page="../includes/taskmanager_header.jsp" />
+  <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <html:form action="massOnhands.do" method="post">
 <%
     String sort = (String)request.getAttribute("sort");
@@ -164,7 +166,7 @@ function sortMass(sortOrder) {
             <tr>
               <td colspan="11">
                 <!-- pagination -->
-                <jsp:include page="../includes/pagination_incl.jsp" />
+                <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 <!-- eof pagination -->
               </td>
             </tr>

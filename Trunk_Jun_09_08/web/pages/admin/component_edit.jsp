@@ -35,7 +35,9 @@
     o.submit();
 
   }
-
+  function updatePagination() {
+	    return true;
+	}
 // -->
   </script>
   <html:form action="createGroup.do" method="post" onsubmit="return validateGroupForm(this);">
@@ -50,7 +52,7 @@
         <div id="pageheaderright">
           <table id="pageheaderright">
             <tr>
-              <jsp:include page="../includes/mail_incl.jsp" />
+              <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
               </td>

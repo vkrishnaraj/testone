@@ -16,7 +16,7 @@
     }
     // End -->
   </SCRIPT>
-  <jsp:include page="../includes/taskmanager_header.jsp" />
+  <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
     <!-- MIDDLE COLUMN -->
     <td id="middlecolumn">

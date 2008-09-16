@@ -44,14 +44,16 @@ function gopage(i) {
   o.submit();
 
 }
-
+function updatePagination() {
+    return true;
+}
 // -->
   </script>
   
-  <jsp:include page="../includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="incomingReports.do" method="post" focus="incident_ID" onsubmit="return validateSearch(this);">
   
-  <jsp:include page="../includes/taskmanager_header.jsp" />
+  <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
     <!-- END PAGE HEADER/SEARCH -->
     <tr>
@@ -301,7 +303,7 @@ function gopage(i) {
                 <tr>
                   <td colspan="<logic:notEmpty name="searchIncidentForm" property="flightnum">11</logic:notEmpty> <logic:empty name="searchIncidentForm" property="flightnum">10</logic:empty>">
                     <!-- pagination -->
-                    <jsp:include page="../includes/pagination_incl.jsp" />
+                    <jsp:include page="/pages/includes/pagination_incl.jsp" />
                     <!-- eof pagination -->
                   </td>
                 </tr>
