@@ -526,7 +526,7 @@ public class WorldTracerUtils {
 
 		try {
 			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.wt_id = :wt_id");
+					.createQuery("from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.wtFile.wt_id = :wt_id");
 			q.setParameter("wt_id", wt_id);
 			List list = q.list();
 
@@ -710,7 +710,7 @@ public class WorldTracerUtils {
 			sess = HibernateWrapper.getSession().openSession();
 
 			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles wa where wa.id = :af_id");
+					.createQuery("from com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles wa where wa.id = :af_id and deleted = false");
 			q.setInteger("af_id", af_id);
 			List list = q.list();
 

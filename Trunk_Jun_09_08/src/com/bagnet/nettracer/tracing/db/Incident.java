@@ -780,7 +780,7 @@ public class Incident implements Serializable {
 	/**
 	 * @return the wt_id
 	 * 
-	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile"
+	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile" lazy="false"
 	 */
 	public WorldTracerFile getWtFile() {
 		return wtFile;

@@ -8,7 +8,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 
 public class WT_FWD_LogBmo extends HibernateDaoSupport {
 	private static final String FIND_FWDS_BY_COMPANY = "from WT_FWD_Log wf where wf.forwarding_agent.companycode_ID = :company and wq.queue_status between 0 and 4";

@@ -1,6 +1,8 @@
-package com.bagnet.nettracer.wt;
+package com.bagnet.nettracer.wt.connector;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +13,11 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -27,7 +31,12 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
-import com.bagnet.nettracer.wt.DefaultWorldTracerService.WorldTracerField;
+import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
+import com.bagnet.nettracer.wt.svc.WorldTracerRule;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
+import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 public class BetaWtConnector implements WorldTracerConnector {
 
@@ -86,8 +95,137 @@ public class BetaWtConnector implements WorldTracerConnector {
 		return new_client;
 
 	}
+	public String amendAhl(Map<WorldTracerField, List<String>> fieldMap, String wt_ahl_id) throws WorldTracerException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(buildUrlStart("ResponseAAH"));
+		sb.append("A2=WM");
+		sb.append("FR="+ wt_ahl_id);
+		sb.append("AAH=");
+		sb.append(DefaultWorldTracerService.FIELD_SEP);
 
-	public String insertIncident(Map<WorldTracerField, List<String>> fieldMap, String companyCode, String stationCode)
+		ArrayList<String> temp = new ArrayList<String>();
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.AMEND_AHL_FIELD_RULES.entrySet()) {
+			if (fieldMap.containsKey(entry.getKey())) {
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
+			}
+		}
+		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll("\\s+", "%20");
+		sb.append(queryString);
+		String getstring = sb.toString();
+
+		String responseBody = null;
+		try {
+			logger.info("GETSTring creat AHL: " + getstring);
+			GetMethod method = new GetMethod(getstring);
+			responseBody = sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+
+		if( responseBody.toUpperCase().contains("REPORT WAS AMENDED")) {
+			return "AHL AMENDED";
+		}
+		else {
+			String errorString;
+			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Matcher m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to amend AHL. See logs for details";
+			}
+			throw new WorldTracerException(errorString);
+		}
+	}
+
+	public String amendOhd(Map<WorldTracerField, List<String>> fieldMap, String wt_ohd_id) throws WorldTracerException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(buildUrlStart("ResponseAOH"));
+		sb.append("&FR="+ wt_ohd_id);
+		sb.append("&AOH=");
+		sb.append(DefaultWorldTracerService.FIELD_SEP);
+
+		ArrayList<String> temp = new ArrayList<String>();
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.AMEND_OHD_FIELD_RULES.entrySet()) {
+			if (fieldMap.containsKey(entry.getKey())) {
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
+			}
+		}
+		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll("\\s+", "%20");
+		sb.append(queryString);
+		String getstring = sb.toString();
+
+		String responseBody = null;
+		try {
+			logger.info("GETSTring amend OHD: " + getstring);
+			GetMethod method = new GetMethod(getstring);
+			responseBody = sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+
+		if( responseBody.toUpperCase().contains("FILE WAS AMENDED")) {
+			return "OHD AMENDED";
+		}
+		else {
+			String errorString;
+			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Matcher m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to amend OHD. See logs for details";
+			}
+			throw new WorldTracerException(errorString);
+		}
+	}
+
+	public String requestOhd(String wt_ohd_id, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
+			throws WorldTracerException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(buildUrlStart("ResponseROH"));
+		sb.append("T1="+wt_ahl_id);
+		sb.append("ROH=");
+		sb.append(DefaultWorldTracerService.FIELD_SEP + "OHD " + wt_ohd_id + DefaultWorldTracerService.FIELD_SEP);
+
+		ArrayList<String> temp = new ArrayList<String>();
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.ROH_FIELD_RULES.entrySet()) {
+			if (fieldMap.containsKey(entry.getKey())) {
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
+			}
+		}
+		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll(
+				"\\s+", "%20");
+		sb.append(queryString);
+		String getstring = sb.toString();
+
+		String responseBody = null;
+		try {
+			logger.info("GETSTring Request OHD: " + getstring);
+			GetMethod method = new GetMethod(getstring);
+			responseBody = sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+		
+		if( responseBody.toUpperCase().contains("ROH MESSAGE SENT")) {
+			return "ROH MESSAGE SENT";
+		}
+		else {
+			String errorString;
+			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Matcher m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to ROH. See logs for details";
+			}
+			throw new WorldTracerException(errorString);
+		}
+	}
+	
+	
+	public String insertIncident(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap, String companyCode, String stationCode)
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("AHL"));
@@ -98,9 +236,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 		sb.append(DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerField, Object[]> entry : DefaultWorldTracerService.INC_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.INC_FIELD_RULES.entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
-				temp.add(getFields(entry.getKey(), fieldMap.get(entry.getKey()), entry.getValue()));
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
 		}
 		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll(
@@ -110,6 +248,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 		String responseBody = null;
 		try {
+			logger.info("GETSTring creat AHL: " + getstring);
 			GetMethod method = new GetMethod(getstring);
 			responseBody = sendRequest(method);
 		} catch (Exception e) {
@@ -123,7 +262,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		if (m.find()) {
 			wt_id = m.group(1);
 		} else {
-			Pattern error_patt = Pattern.compile("/-(.*?)-/");
+			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
 			m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -139,7 +278,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 	}
 
-	public String closeIncident(Map<WorldTracerField, List<String>> fieldMap, String wt_id, String stationCode)
+	public String closeIncident(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap, String wt_id, String stationCode)
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseCAH"));
@@ -147,9 +286,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 		sb.append("CAH=" + DefaultWorldTracerService.FIELD_SEP);
 		
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerField, Object[]> entry : DefaultWorldTracerService.CAH_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.CAH_FIELD_RULES.entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
-				temp.add(getFields(entry.getKey(), fieldMap.get(entry.getKey()), entry.getValue()));
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
 		}
 		
@@ -159,6 +298,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		String getstring = sb.toString();
 		String responseBody = null;
 		try {
+			logger.info("GETSTring close AHL: " + getstring);
 			GetMethod method = new GetMethod(getstring);
 			responseBody = sendRequest(method);
 		} catch (Exception e) {
@@ -181,11 +321,52 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 	}
 	
-	public void sendFwd(Map<WorldTracerField, List<String>> fieldMap, String wt_CompanyCode) throws WorldTracerException {
+	public String sendFwd(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap, String stationCode, String companyCode) throws WorldTracerException {
 		
+		StringBuilder sb = new StringBuilder();
+		sb.append(buildUrlStart("FWD"));
+		sb.append("A2=WMSTNARL=");
+		sb.append(stationCode.toUpperCase());
+		sb.append(companyCode.toUpperCase());
+		sb.append("FWD=" + DefaultWorldTracerService.FIELD_SEP);
+		
+		ArrayList<String> temp = new ArrayList<String>();
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.FWD_FIELD_RULES.entrySet()) {
+			if (fieldMap.containsKey(entry.getKey())) {
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
+			}
+		}
+		
+		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll(
+				"\\s+", "^");
+		
+		sb.append(queryString);
+		String getstring = sb.toString();
+		String responseBody = null;
+		try {
+			logger.info("GETSTring FWD: " + getstring);
+			GetMethod method = new GetMethod();
+			URI uri = new URI(getstring, false);
+			method.setURI(uri);
+			responseBody = sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+		String errorString;
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE);
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if(OK.equals(errorString)) {
+			return errorString;
+		}
+		throw new WorldTracerException(errorString);
 	}
 
-	public String insertOhd(Map<WorldTracerField, List<String>> fieldMap, String companyCode, String stationCode)
+	public String insertOhd(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap, String companyCode, String stationCode)
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("OHD"));
@@ -195,9 +376,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 		sb.append("&OHD=" + DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerField, Object[]> entry : DefaultWorldTracerService.OHD_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.OHD_FIELD_RULES.entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
-				temp.add(getFields(entry.getKey(), fieldMap.get(entry.getKey()), entry.getValue()));
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
 		}
 
@@ -208,6 +389,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 		String responseBody = null;
 		try {
+			logger.info("GETSTring create ohd:" + getstring);
 			GetMethod method = new GetMethod(getstring);
 			responseBody = sendRequest(method);
 		} catch (Exception e) {
@@ -236,16 +418,16 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 	}
 	
-	public String closeOhd(Map<WorldTracerField, List<String>> fieldMap, String wt_id, String wt_stationcode) throws WorldTracerException {
+	public String closeOhd(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap, String wt_id, String wt_stationcode) throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseCOH"));
 		sb.append("T1=" + wt_id);
 		sb.append("COH=" + DefaultWorldTracerService.FIELD_SEP);
 		
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerField, Object[]> entry : DefaultWorldTracerService.CAH_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.COH_FIELD_RULES.entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
-				temp.add(getFields(entry.getKey(), fieldMap.get(entry.getKey()), entry.getValue()));
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
 		}
 		
@@ -255,6 +437,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		String getstring = sb.toString();
 		String responseBody = null;
 		try {
+			logger.info("GETSTring close ohd:" + getstring);
 			GetMethod method = new GetMethod(getstring);
 			responseBody = sendRequest(method);
 		} catch (Exception e) {
@@ -425,7 +608,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		return method;
 	}
 
-	private String getFields(WorldTracerField field, List<String> list, Object[] rules) {
+	private String getFields(WorldTracerService.WorldTracerField field, List<String> list, Object[] rules) {
 		ArrayList<String> temp = new ArrayList<String>();
 
 		List<String> subset;
@@ -467,7 +650,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	private String sendRequest(HttpMethod method) throws IOException {
 
-		String responseBody = null;
+		String responseBody = "";
 		try {
 
 			method.setDoAuthentication(true);
@@ -475,6 +658,10 @@ public class BetaWtConnector implements WorldTracerConnector {
 			// Provide custom retry handler is necessary
 			method.getParams()
 					.setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+			method.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 120000);
+			
+			logger.info("query string is: " + method.getQueryString());
+			logger.info("path is: " +  method.getPath());
 
 			// Execute the method.
 			int statusCode = client.executeMethod(method);
@@ -627,4 +814,79 @@ public class BetaWtConnector implements WorldTracerConnector {
 		return responseBody;
 	}
 
+	public String forwardOhd(Map<WorldTracerField, List<String>> fieldMap, String ohd_id, String ahl_id) throws WorldTracerException {
+		String responseBody = null;
+		String wt_http = WorldTracerUtils.getWt_url(wtCompanycode);
+		StringBuilder sb = new StringBuilder("http://" + wt_http + "/");
+		sb.append("cgi-bin/bagResponseFOH.exe");
+		
+		PostMethod method = new PostMethod(sb.toString());
+		
+
+		
+		method.addParameter("AHL", ahl_id);
+		
+		
+		if(fieldMap.containsKey(WorldTracerField.NM)) {
+			method.addParameter("NM", fieldMap.get(WorldTracerField.NM).get(0));
+		}
+		if(fieldMap.containsKey(WorldTracerField.FO)) {
+			List<String> itinList = fieldMap.get(WorldTracerField.FO);
+			
+			for (int i = 0; i < itinList.size() && i < 4; i++) {
+				String fo = itinList.get(i);
+				method.addParameter("FO" + (i+1), fo);
+			}
+		}
+		if(fieldMap.containsKey(WorldTracerField.FW)) {
+			List<String> routeList = fieldMap.get(WorldTracerField.FW);
+			
+			for (int i = 0; i < routeList.size() && i < 5; i++) {
+				String fw = routeList.get(i);
+				method.addParameter("FW" + (i+1), fw);
+			}
+		}
+		if(fieldMap.containsKey(WorldTracerField.XT)) {
+			method.addParameter("XT1", fieldMap.get(WorldTracerField.XT).get(0));
+		}
+		
+		if(fieldMap.containsKey(WorldTracerField.SI)) {
+			method.addParameter("SI1", fieldMap.get(WorldTracerField.SI).get(0));
+		}
+		if(fieldMap.containsKey(WorldTracerField.TX)) {
+			List<String> ttList = fieldMap.get(WorldTracerField.TX);
+			for (int i = 0; i < ttList.size() && i < 4; i++) {
+				String tt = ttList.get(i);
+				method.addParameter("TX" + (i+1), tt);
+			}
+		}
+		if(fieldMap.containsKey(WorldTracerField.AG)) {
+			method.addParameter("AG", fieldMap.get(WorldTracerField.AG).get(0).toUpperCase());
+		}
+		method.addParameter("A1", wtCompanycode);
+		method.addParameter("OHD1", ohd_id);
+		method.addParameter("B1", "Submit FOH");
+		
+		try {
+			responseBody = sendRequest(method);
+		}	catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+		
+		String errorString;
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if(OK.equals(errorString)) {
+			return errorString;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+
 }
+

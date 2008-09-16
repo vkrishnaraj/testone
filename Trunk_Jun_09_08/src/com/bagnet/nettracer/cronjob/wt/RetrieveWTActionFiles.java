@@ -29,16 +29,18 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
-import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
-import com.bagnet.nettracer.wt.WorldTracerService;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.BetaWtConnector;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
  * @author Administrator
@@ -97,29 +99,35 @@ public class RetrieveWTActionFiles {
 	}
 
 	public void eraseActionFiles() {
-		List<WT_Queue> tasks = wqBmo.getPendingTasksByCompanyType(company, WT_Queue.ERASE_AF_TYPE);
+		List<WtqEraseActionFile> tasks = wqBmo.findPendingEraseActionFiles(company);
 
-		for (WT_Queue task : tasks) {
+		for (WtqEraseActionFile task : tasks) {
 			Worldtracer_Actionfiles waf;
 			try {
-				waf = new Worldtracer_Actionfiles(task.getType_id());
+				waf = new Worldtracer_Actionfiles(task.getAf_id());
 				waf.setAction_file_text(wafBmo.findTextForAf(waf));
 				if (waf.getAction_file_text() == null) {
 					logger.warn(String.format("tried to delete action file %s but not found in db %s %s %s %d %d", 
-							task.getType_id(), waf.getAirline(), waf.getStation(), waf.getAction_file_type().name(),
+							task.getAf_id(), waf.getAirline(), waf.getStation(), waf.getAction_file_type().name(),
 							waf.getDay(), waf.getItem_number()));
-					task.setQueue_status(-2);
-					wqBmo.updateQueue(task);
-					continue;
+					task.setStatus(WtqStatus.FAIL);
 				}
-				wtService.eraseActionFile(waf);
-				wafBmo.deleteActionFile(waf);
-				task.setQueue_status(-1);
-				wqBmo.updateQueue(task);
+				else {
+					wtService.eraseActionFile(waf);
+					wafBmo.deleteActionFile(waf);
+					task.setStatus(WtqStatus.SUCCESS);
+				}
 			} catch (Exception e) {
-				logger.error("unable to delete action file for queue task: " + task.getWt_queue_id());
-				task.setQueue_status(task.getQueue_status() + 1);
-				continue;
+				logger.error("unable to delete action file for queue task: " + task.getWt_queue_id(), e);
+			}
+			finally {
+				try {
+					task.setAttempts(task.getAttempts() + 1);
+					wqBmo.updateQueue(task);
+				}
+				catch (Exception e) {
+					logger.error("unable to update queue task", e);
+				}
 			}
 		}
 	}

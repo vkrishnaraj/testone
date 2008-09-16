@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+		
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="resource:/tracer.properties" />
+		<property name="location" value="classpath:/tracer.properties" />
 	</bean>
 
 	<bean id="scannerDataSource"
-		class="com.bagnet.clients.${scanner.class.path}.ScannerDataSourceImpl" />
+		class="${scanner.class.path}" />
 
 	<bean id="reservationIntegration"
-		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />
+		class="${reservation.class.path}" />
 
+	<!-- Hibernate config -->
+	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper" factory-method="getSession" />
+
+	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
+
+	<!-- Data Access Objects -->
+	
+	<bean id="wtTx-bmo" class="com.bagnet.nettracer.wt.bmo.WtTransactionBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- services used by the workers-->
+	
+	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.BetaWtConnector">
+		<constructor-arg value="${wt.company.code}" />
+	</bean>
+	
+	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService">
+		<property name="wtConnector" ref="wtConnector" />
+		<property name="wtCompanyCode" value="${wt.company.code}" />
+	</bean>
+
+	<!-- Aspects and advice -->
+	<aop:aspectj-autoproxy />
+	
+	<!--  world tracer transaction logging -->
+	<bean id="wtLogging" class="com.bagnet.nettracer.wt.svc.WorldTracerLogger">
+		<constructor-arg ref="wtTx-bmo" />
+	</bean>
+	
 </beans>

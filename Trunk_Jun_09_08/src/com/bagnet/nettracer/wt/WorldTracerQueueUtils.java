@@ -49,12 +49,14 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_ROH;
 import com.bagnet.nettracer.tracing.db.WT_TTY;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
@@ -72,77 +74,38 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditStationUtils;
 public class WorldTracerQueueUtils {
 	private String error;
 	private static Logger logger = Logger.getLogger(WorldTracerQueueUtils.class);
+
+	public static boolean saveFwdobj(WorldTracerFWDForm theform,WorldTracerQueue obj, Agent user) throws Exception {
+		
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			//Figure out if new or old.
+			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
+			if (isNew) {
+				sess.save(obj);
+			} else {
+				sess.saveOrUpdate(obj);
+			}
+
+
+
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+				return false;
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
 	
-	/**
-	 * 
-	 * @param obj
-	 * @throws Exception
-	 */
-	public static boolean saveWtobj(Incident iDTO, IncidentForm theform,WT_Queue obj, Agent user) throws Exception {
-		BeanUtils.copyProperties(iDTO, theform);
-		Session sess = null;
-		Transaction t = null;
-		try {
-			int temp = alreadyQueued(obj);
-			if(temp != -1) {
-				obj.setWt_queue_id(temp);
-			}
-			sess = HibernateWrapper.getSession().openSession();
-			t = sess.beginTransaction();
-
-			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
-			if (isNew) {
-				sess.save(obj);
-			} else {
-				sess.saveOrUpdate(obj);
-			}
-
-
-
-			t.commit();
-			return true;
-		} catch (Exception e) {
-			
-			if (t != null) {
-				t.rollback();
-				return false;
-			}
-			throw e;
-		} finally {
-			if (sess != null) sess.close();
-		}
-	}
-	public static void saveOhdobj(OHD oDTO, OnHandForm theform,WT_Queue obj, Agent user) throws Exception {
-		BeanUtils.copyProperties(oDTO, theform);
-		Session sess = null;
-		Transaction t = null;
-		try {
-			int temp = alreadyQueued(obj);
-			if(temp != -1) {
-				obj.setWt_queue_id(temp);
-			}
-			sess = HibernateWrapper.getSession().openSession();
-			t = sess.beginTransaction();
-			//Figure out if new or old.
-			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
-			if (isNew) {
-				sess.save(obj);
-			} else {
-				sess.saveOrUpdate(obj);
-			}
-			t.commit();
-		
-		} catch (Exception e) {
-			if (t != null) {
-				t.rollback();
-				
-			}
-			throw e;
-		} finally {
-			if (sess != null) sess.close();
-		}
-	}
-	public static boolean saveFwdobj(WorldTracerFWDForm theform,WT_Queue obj, Agent user) throws Exception {
+	public static boolean saveBdoobj(BDOForm theform,WorldTracerQueue obj, Agent user) throws Exception {
 		
 		Session sess = null;
 		Transaction t = null;
@@ -156,9 +119,6 @@ public class WorldTracerQueueUtils {
 			} else {
 				sess.saveOrUpdate(obj);
 			}
-
-
-
 			t.commit();
 			return true;
 		} catch (Exception e) {
@@ -171,101 +131,58 @@ public class WorldTracerQueueUtils {
 			if (sess != null) sess.close();
 		}
 	}
-	public static boolean saveBdoobj(BDOForm theform,WT_Queue obj, Agent user) throws Exception {
+	public static boolean createOrReplaceQueue(WorldTracerQueue entry) throws Exception {
 		
 		Session sess = null;
 		Transaction t = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			//Figure out if new or old.
-			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
-			if (isNew) {
-				sess.save(obj);
-			} else {
-				sess.saveOrUpdate(obj);
+			WorldTracerQueue oldEntry = alreadyQueued(entry, sess);
+			if(oldEntry != null) {
+				oldEntry.setReplacement(entry);
+				oldEntry.setStatus(WtqStatus.REPLACED);
+				sess.save(entry);
+				sess.update(oldEntry);
 			}
-
-
-
+			else {
+				sess.save(entry);
+			}
 			t.commit();
 			return true;
 		} catch (Exception e) {
 			if (t != null) {
 				t.rollback();
-				return false;
 			}
 			throw e;
 		} finally {
 			if (sess != null) sess.close();
 		}
 	}
-	public  static boolean saveWtobj(WT_Queue obj, Agent user) throws Exception {
-		
+	
+	public static WtqIncidentAction findIncidentAction(String ntIncident) {
 		Session sess = null;
 		Transaction t = null;
 		try {
-			int temp = alreadyQueued(obj);
-			if(temp != -1) {
-				obj.setWt_queue_id(temp);
-			}
 			sess = HibernateWrapper.getSession().openSession();
-			t = sess.beginTransaction();
-			//Figure out if new or old.
-			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
-			if (isNew) {
-				sess.save(obj);
-			} else {
-				sess.saveOrUpdate(obj);
+			Query q = sess.createQuery("from WtqIncidentAction wia where wia.status = :status and wia.incident.incident_ID = :ntIncident");
+			q.setParameter("status", WtqStatus.PENDING);
+			q.setParameter("ntIncident", ntIncident);
+			q.setMaxResults(1);
+			List<WtqIncidentAction> result = q.list();
+			if(result != null && result.size() > 0) {
+				return result.get(0);
 			}
+			return null;
 
-
-
-			t.commit();
-			return true;
 		} catch (Exception e) {
-			
-			if (t != null) {
-				t.rollback();
-				return false;
-			}
-			throw e;
+			logger.warn("unable to retrieve wt_queue incident actions for :" + ntIncident);
+			return null;
 		} finally {
 			if (sess != null) sess.close();
 		}
 	}
-	public static boolean saveOhdobj(WT_Queue obj, Agent user) throws Exception {
 
-		Session sess = null;
-		Transaction t = null;
-		boolean flag=true;
-		try {
-			int temp = alreadyQueued(obj);
-			if(temp != -1) {
-				obj.setWt_queue_id(temp);
-			}
-			sess = HibernateWrapper.getSession().openSession();
-			t = sess.beginTransaction();
-			//Figure out if new or old.
-			boolean isNew = obj.getWt_queue_id() != 0 ? false: true;
-			if (isNew) {
-				sess.save(obj);
-			} else {
-				sess.saveOrUpdate(obj);
-			}
-			t.commit();
-		} catch (Exception e) {
-			flag=false;
-			if (t != null) {
-				t.rollback();	
-			}
-			flag=false;
-			throw e;
-		} finally {
-			if (sess != null) sess.close();
-		}
-		return flag;
-	}
 	public String postWTROH(HttpClient client,WT_ROH inc) {
 		// make the request
 		String company = inc.getRoh_agent_id().getCompanycode_ID();
@@ -498,32 +415,28 @@ public class WorldTracerQueueUtils {
 			}
 		return responseBody;
 	}
-	
+
 	/**
-	 * If there is already a pending queue entry for this task_id / type
-	 * then just return that id.
-	 * @param wtq wt_queue object that is checked for existence
-	 * @return id of the queue object if it already is in db, or -1 if not there
+	 * If there is already a pending queue entry for this task_id / type then
+	 * just return that id.
+	 * 
+	 * @param wtq
+	 *            wt_queue object that is checked for existence
+	 * @return queue object if it already is in db, or null if not there
 	 */
-	public static int alreadyQueued(WT_Queue wtq) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery("select wt_queue_id from WT_Queue wq where type = :type and type_id = :type_id and queue_status between 0 and 10");
-			q.setParameter("type", wtq.getType());
-			q.setParameter("type_id", wtq.getType_id());
-			q.setMaxResults(1);
-			List result = q.list();
-			if (result.size() > 0) {
-				return (Integer) result.get(0);
-			}
-			else {
-				return -1;
-			}
-		} catch (Exception e) {
-			return -1;
-		} finally {
-			if (sess != null) sess.close();
+	private static WorldTracerQueue alreadyQueued(WorldTracerQueue wtq, Session sess) {
+		Query q = sess.createQuery(wtq.getExistsQuery());
+		Object[] params = wtq.getExistsParameters();
+		for(int i = 0; i < params.length; i++) {
+			q.setParameter(i, params[i]);
+		}
+		q.setMaxResults(1);
+		List<WorldTracerQueue> result = q.list();
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		else {
+			return null;
 		}
 	}
 	

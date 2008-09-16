@@ -54,8 +54,7 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditCompanyUtils;
 import com.bagnet.nettracer.ws.core.WSCoreUtil;
 
 public class WTIncident {
-	private String error;
-	private static Logger logger = Logger.getLogger(WTIncident.class);
+	private static final Logger logger = Logger.getLogger(WTIncident.class);
 	
 	/**
 	 * insert incident into WT
@@ -64,7 +63,7 @@ public class WTIncident {
 	 * @param companycode
 	 * @return
 	 */
-	public String insertIncident(HttpClient client, String companycode, String filenum) {
+/*	public String insertIncident(HttpClient client, String companycode, String filenum) {
 		String _n = ".";
 		String _t = "";
 		String _h = "/";
@@ -952,31 +951,8 @@ public class WTIncident {
 			method.releaseConnection();
 		}
 		return responseBody;
-    }
-	/**
-	 * return an arraylist of worldtracer ohd ids from a list of ids
-	 * @param wtdata
-	 * @return
-	 */
-	public ArrayList<String> parseAllWTIncident(String wtdata) {
-		ArrayList<String> wt_ids = new ArrayList<String>();
-		
-		if (wtdata == null) {
-			setError("wt content is bad");
-			return null;
-		}
-		
-		String wt_id = null;
-		while (true) {
-			wt_id = StringUtils.ParseWTString2(wtdata, "<!-- fileref:", "-->");
-			if (wt_id == null) break;
-			if (wt_id.length()> 0) wt_ids.add(wt_id);
-			wtdata = StringUtils.ParseWTString2(wtdata, "<!-- fileref:" + wt_id,null);
-			
-		}
-		return wt_ids;
+    }*/
 
-	}
 
 	/**
 	 * starttype = true means came from hibernate
@@ -984,8 +960,9 @@ public class WTIncident {
 	 * @param wtdata
 	 * @param starttype
 	 * @return
+	 * @throws WorldTracerException 
 	 */
-	public Incident parseWTIncident(String wtdata,boolean starttype, WTStatus wtStatus) {
+	public static Incident parseWTIncident(String wtdata, WTStatus wtStatus) throws WorldTracerException {
 		try {
 			// first figure out if this incident is new or already existing through
 			// WT_column
@@ -999,18 +976,17 @@ public class WTIncident {
 			// get wt_id
 			wt_id = StringUtils.ParseWTString2(wtdata, "WM DAH ", "\r");
 			if (wt_id == null) {
-				setError("unable to retrieve worldtracer id, wt content is bad");
-				return null;
+				throw new WorldTracerException("unable to retrieve worldtraer id, wt content is bad");
 			}
-			System.out.println(wt_id);
+			
+			logger.debug("parsed worldtracer id, " + wt_id + " from wt response.");
 
-			if (starttype)
-				incident = WorldTracerUtils.findIncidentByWTID(wt_id);
+			incident = WorldTracerUtils.findIncidentByWTID(wt_id);
 			
 			if (incident == null) incident = new Incident();
 			incident.setWtFile(new WorldTracerFile(wt_id, wtStatus));
 			Status ntStatus = new Status();
-			if (wtStatus.equals(WorldTracerUtils.status_active))
+			if (wtStatus.equals(WTStatus.ACTIVE))
 				ntStatus.setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
 			else
 				ntStatus.setStatus_ID(TracingConstants.MBR_STATUS_CLOSED);
@@ -1041,9 +1017,7 @@ public class WTIncident {
 				} 
 				
 				if (c == null) {
-					setError("unable to create company in nettracer, please contact admin");
-					logger.error(error);
-					return null;
+					throw new WorldTracerException(String.format("Could not Import WorldTracer file %s.  Could not create company %s", wt_id, thec));
 				} else {
 					// create station for this company
 					s = TracerUtils.getStationByCode(thes.toUpperCase(), c.getCompanyCode_ID());
@@ -1058,9 +1032,7 @@ public class WTIncident {
 					}
 					
 					if (s == null) {
-						setError("unable to create station in nettracer, please contact admin");
-						logger.error(error);
-						return null;
+						throw new WorldTracerException(String.format("Could not Import WorldTracer file %s.  Could not create station %s", wt_id, thes));
 					}
 				}
 				
@@ -1079,9 +1051,7 @@ public class WTIncident {
 			// agent
 			Agent ntuser = WorldTracerUtils.getWTAgent(incident.getStationcreated().getStation_ID(),thec);
 			if (ntuser == null) {
-				setError("unable to find designated wt_user in: " + thes + " for the company overall in nt database, please designate an user for wt first");
-				logger.error(error);
-				return null;
+				throw new WorldTracerException("Unable to import incident, not default worldtracer agent found");
 			}
 			incident.setAgent(ntuser);
 			
@@ -1114,8 +1084,7 @@ public class WTIncident {
 				incident.setCreatedate(thedate);
 				incident.setCreatetime(thedate);
 			} else {
-				error = "invalid create date";
-				return null;
+				throw new WorldTracerException("unable to import WT file.  Unable to parse create date");
 			}
 			
 			
@@ -1283,8 +1252,7 @@ public class WTIncident {
 					cdesc = StringUtils.ParseWTString2(cstr, "/", null);
 				}
 				if (ccat != null) {
-					if (starttype) ccat_id = WSCoreUtil.getContentCategory(ccat);
-					else ccat_id = 0;
+					ccat_id = WSCoreUtil.getContentCategory(ccat);
 				}
 				// if wt category is not found, then keep the category in the string
 				if (ccat_id == 0) cdesc = cstr;
@@ -1317,8 +1285,7 @@ public class WTIncident {
 							if (cdesc == null) break;
 						}
 						if (ccat != null) {
-							if (starttype) ccat_id = WSCoreUtil.getContentCategory(ccat);
-							else ccat_id = 0;
+							ccat_id = WSCoreUtil.getContentCategory(ccat);
 						}
 						// if wt category is not found, then keep the category in the string
 						if (ccat_id == 0) cdesc = cstr;
@@ -1426,43 +1393,23 @@ public class WTIncident {
 			}
 			incident.setItinerary(iti_set);
 			
-			if (incident == null) {
-				error = "unable to create incident object";
-				return null;
-			}
-			
 			if (incident.getIncident_ID() != null && incident.getIncident_ID().length() > 0) {
 				//update
 				System.out.println("update incident: " + incident.getIncident_ID());
 			} else {
 				System.out.println("insert new incident");
 			}
-			
-			
+
 			// insert or update incident into database
 			IncidentBMO ibmo = new IncidentBMO();
 			ibmo.insertIncidentForWT(incident);
 			
 			return incident;
-		} catch (Exception e) {
-			setError(e.toString());
-			return null;
+		} catch (WorldTracerException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			throw new WorldTracerException("unknown error importing WT File", e);
 		}
 	}
-
-	/**
-	 * @return the error
-	 */
-	public String getError() {
-		return error;
-	}
-
-	/**
-	 * @param error
-	 *          the error to set
-	 */
-	public void setError(String error) {
-		this.error = error;
-	}
-
 }

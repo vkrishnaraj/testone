@@ -29,10 +29,10 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 
 /**
  * @author Administrator

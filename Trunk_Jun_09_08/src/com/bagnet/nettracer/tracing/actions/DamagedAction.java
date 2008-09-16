@@ -270,7 +270,7 @@ public class DamagedAction extends Action {
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user);
 			} else {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user, true, false);
+				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user, true);
 			}
 			
 			if (error == null) {

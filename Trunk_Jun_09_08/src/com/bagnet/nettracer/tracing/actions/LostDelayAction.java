@@ -31,6 +31,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -39,7 +40,12 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.Task;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -56,8 +62,11 @@ import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.mchange.v1.lang.AmbiguousClassNameException;
+
 public class LostDelayAction extends Action {
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
 		// check session
@@ -65,14 +74,14 @@ public class LostDelayAction extends Action {
 
 		ActionMessages errors = new ActionMessages();
 
-		if (session.getAttribute("user") == null || form == null) {
+		if(session.getAttribute("user") == null || form == null) {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		
+
 		Agent user = (Agent) session.getAttribute("user");
 
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
@@ -80,40 +89,43 @@ public class LostDelayAction extends Action {
 		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 		IncidentForm theform = (IncidentForm) form;
 
-		//the company specific codes..
-		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
-				.getCurrentlocale());
-		//add to the loss codes
+		// the company specific codes..
+		List codes = AdminUtils.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(),
+				TracingConstants.LOST_DELAY, user.getCurrentlocale());
+		// add to the loss codes
 		request.setAttribute("losscodes", codes);
 
 		request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
 		request.setAttribute("lostdelay", "1");
 
-		if (request.getParameter("express") != null)
+		if(request.getParameter("express") != null)
 			request.setAttribute("express", "1");
 
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, user))
+		if(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, user))
 			theform.setReadonly(1);
-		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
+		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 			theform.setAllow_remark_update(1);
 
-		if (user.getStation().getStation_ID() != theform.getStationassigned_ID()) {
+		if(user.getStation().getStation_ID() != theform.getStationassigned_ID()) {
 			request.setAttribute("cantmatch", "1");
 		}
 
 		/** ****************** handle requests ******************** */
 
-		if (request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
+		if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
 			request.setAttribute("outputtype", "0");
 			return (mapping.findForward(TracingConstants.LD_HISTORICAL));
-		} else if (request.getParameter("viewhistoryreport") != null && request.getParameter("viewhistoryreport").length() > 0) {
+		}
+		else if(request.getParameter("viewhistoryreport") != null
+				&& request.getParameter("viewhistoryreport").length() > 0) {
 			String reportfile = getReportFile(theform, user, request);
 
-			if (reportfile == null || reportfile.equals("")) {
+			if(reportfile == null || reportfile.equals("")) {
 				ActionMessage error = new ActionMessage("message.nodata");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
-			} else {
+			}
+			else {
 				request.setAttribute("reportfile", reportfile);
 			}
 
@@ -123,155 +135,132 @@ public class LostDelayAction extends Action {
 		ActionMessage error = null;
 
 		// ajax call to change assigned agent dropdown
-		if (MBRActionUtils.actionChangeAssignedStation(theform, request)) {
+		if(MBRActionUtils.actionChangeAssignedStation(theform, request)) {
 			return (mapping.findForward(TracingConstants.AJAX_AGENTASSIGNED));
 		}
-		
+
 		IncidentUtils.manageIncidentEmailing(user.getStation().getCompany(), request);
-		
+
 		List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
 		request.setAttribute("agentassignedlist", agentassignedlist);
-		if (theform.getIncident_ID() != null) request.setAttribute("incident",theform.getIncident_ID());
+		if(theform.getIncident_ID() != null)
+			request.setAttribute("incident", theform.getIncident_ID());
 
-		
 		ServletContext sc = getServlet().getServletContext();
 		String realpath = sc.getRealPath("/");
 
-		/// confirm matching and unmatching
+		// / confirm matching and unmatching
 		error = MBRActionUtils.actionMatching(theform, request, user, realpath);
-		
-		if (error != null) {
-			if (error.getKey().length() > 0) {
+
+		if(error != null) {
+			if(error.getKey().length() > 0) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
-		if (MBRActionUtils.actionUnMatching(theform, request, user, realpath)) {
+		if(MBRActionUtils.actionUnMatching(theform, request, user, realpath)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
-		
-		// if got here and one of the claimchecks has tempOHD entered, then alert user
+
+		// if got here and one of the claimchecks has tempOHD entered, then
+		// alert user
 		error = MBRActionUtils.checkOHDEntered(theform, request, user, realpath);
-		if (error != null) {
-			if (error.getKey().length() > 0) {
+		if(error != null) {
+			if(error.getKey().length() > 0) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
-		
-		
+
 		// close report
-		if (MBRActionUtils.actionClose(theform, request, user, errors)) {
+		if(MBRActionUtils.actionClose(theform, request, user, errors)) {
 			saveMessages(request, errors);
 
 			// AJAX CALL
-			if (request.getParameter("close") != null && request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
+			if(request.getParameter("close") != null && request.getParameter("getstation") != null
+					&& request.getParameter("getstation").equals("1")) {
 				return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
-			} else {
+			}
+			else {
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
 			}
 		}
 
-		if (MBRActionUtils.actionAdd(theform, request, user)) {
+		if(MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
-		if (MBRActionUtils.actionDelete(theform, request)) {
+		if(MBRActionUtils.actionDelete(theform, request)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
 		String loc = null;
-		if ((loc = MBRActionUtils.actionAddAssoc(theform, request, user)) != null) {
+		if((loc = MBRActionUtils.actionAddAssoc(theform, request, user)) != null) {
 			return (mapping.findForward(loc));
 		}
 
-
-
-
-		
-
 		// save incident
-		if (request.getParameter("save") != null || request.getParameter("close") != null || request.getParameter("doclose") != null || request.getParameter("doclosewt") != null || request.getParameter("savetemp") != null
-				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null) {
+		if(request.getParameter("save") != null || request.getParameter("close") != null
+				|| request.getParameter("doclose") != null || request.getParameter("doclosewt") != null
+				|| request.getParameter("savetemp") != null || request.getParameter("savetracing") != null
+				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null ) {
 			Incident iDTO = new Incident();
 
 			// if save for tracing, change status to open,
-			if (request.getParameter("savetracing") != null)
+			if(request.getParameter("savetracing") != null)
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
 
 			// if save for temp, change status to temp
-			if (request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
+			if(request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_TEMP);
 
 			// if just save, then don't do anything.
 
-			if (request.getParameter("email_customer") != null)
+			if(request.getParameter("email_customer") != null)
 				theform.setEmail_customer(1);
 			else
 				theform.setEmail_customer(0);
 
-			
-			if (request.getParameter("savetowt") != null ) {
-				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN){
-				WT_Queue wtq = new WT_Queue();
-				wtq.setAgent(user);
-                 
-				wtq.setCreatedate(TracerDateTime.getGMTDate());
-				wtq.setType_id(theform.getIncident_ID());
-			
-				wtq.setWt_stationcode(user.getStation().getWt_stationcode());
-				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN)
-				wtq.setType("Incident");
-				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED)
-				wtq.setType("closeIncident");
-				wtq.setQueue_status(TracingConstants.LOG_NOT_RECEIVED);
-				WorldTracerQueueUtils.saveWtobj(iDTO,theform,wtq, user);
-				}
-				if(theform.getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED){
-					error = new ActionMessage("error.no_wt_id");
-					//errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-			
-				}
-				//error = bs.insertIncidenttoWT(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user);
-			} else if (request.getParameter("close") != null && request.getParameter("close").equals("1") && request.getParameter("doclose") != null) {
-					error = bs.insertIncidenttoWT(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user);
-
-			} else if (request.getParameter("doclosewt") !=null){	
-				
-				WT_Queue wtq = new WT_Queue();
-				wtq.setAgent(user);
-				wtq.setCreatedate(TracerDateTime.getGMTDate());
-				wtq.setType_id(theform.getIncident_ID());
-				System.out.println(theform.getIncident_ID());
-				wtq.setWt_stationcode(user.getStation().getWt_stationcode());
-				wtq.setType("closeIncident");
-				wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-				wq.saveWtobj(iDTO, theform, wtq, user);
-				//HttpClient client = WorldTracerUtils.connectWT(WorldTracerUtils.wt_suffix_airline + "/");
-				//WTOHD wt = new WTOHD();
-				//wt.closeIncident(client, user.getCompanycode_ID(), iDTO);
-				
-			} else {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true, false);
+			if(request.getParameter("savetowt") != null && theform.getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
+				error = new ActionMessage("error.wt_save_closed");
 			}
-		
+			else {
+				error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);
+				if(error == null) {
+					WtqIncidentAction wtq = null;
+					if(request.getParameter("savetowt") != null && (iDTO.getWt_id() == null || iDTO.getWt_id().trim().length() == 0) ) {
+						wtq = new WtqCreateAhl();
+					}
+					else if (request.getParameter("amendWT") != null) {
+						wtq = new WtqAmendAhl();
+					}
+					else if ((request.getParameter("doclosewt") != null || request.getParameter("close") != null || request.getParameter("doclose") != null)
+							&& (iDTO.getWtFile() != null && iDTO.getWtFile().getWt_status() != WTStatus.CLOSED)) {
+						wtq = new WtqCloseAhl();
+					}
+					if(wtq != null) {
+						wtq.setAgent(user);
+						wtq.setCreatedate(TracerDateTime.getGMTDate());
+						wtq.setIncident(iDTO);
+						WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+					}
+				}
+			}
 
-			
-			
-
-
-			if (error == null) {
+			if(error == null) {
 				request.setAttribute("lostdelay", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
 				return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
-			} else if (error.getKey().equals("error.unable_to_close_incident")) {
+			}
+			else if(error.getKey().equals("error.unable_to_close_incident")) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
-			}	else {
+			}
+			else {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.LD_MAIN));
@@ -279,25 +268,30 @@ public class LostDelayAction extends Action {
 		}
 
 		/**
-		 * *********** prepopulation for new list *********** or retrieve to modify
-		 * incident on html rewrite link
+		 * *********** prepopulation for new list *********** or retrieve to
+		 * modify incident on html rewrite link
 		 */
 		String incident = request.getParameter("incident_ID");
-		if (incident != null && incident.length() > 0) {
-			if (!bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY)) {
+		if(incident != null && incident.length() > 0) {
+			if(!bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY)) {
 
 				error = new ActionMessage("error.noincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
+			//need to find out if there are any pending world tracer actions for this incident
+			WtqIncidentAction pendingAction = WorldTracerQueueUtils.findIncidentAction(incident);
+			if (pendingAction != null) {
+				if(pendingAction instanceof WtqCreateAhl) {
+					request.setAttribute("pending_wt", TracingConstants.PENDING_CREATE);
+				}
+			}
 			request.setAttribute("incident", incident);
-			
 
 		} else {
 			error = null;
 			ArrayList alerrors = new ArrayList();
-			
 			// prepopulate new incident fields
 			TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
 			request.setAttribute("newform", "1");
@@ -310,7 +304,7 @@ public class LostDelayAction extends Action {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					}
 					saveMessages(request, errors);
-					request.setAttribute("prepopulate",new Integer("1"));
+					request.setAttribute("prepopulate", new Integer("1"));
 				}
 				return (mapping.findForward(TracingConstants.LD_MAIN));
 			}
@@ -329,7 +323,7 @@ public class LostDelayAction extends Action {
 
 		HashMap selections = new HashMap();
 
-		if (request.getParameter("all") != null) {
+		if(request.getParameter("all") != null) {
 			request.setAttribute("all", "1");
 			selections.put("passenger", "true");
 			selections.put("passenger_itinerary", "true");
@@ -343,97 +337,112 @@ public class LostDelayAction extends Action {
 			selections.put("request", "true");
 			selections.put("matches", "true");
 
-		} else {
+		}
+		else {
 			request.setAttribute("all", "0");
-			if (request.getParameter("passenger") != null) {
+			if(request.getParameter("passenger") != null) {
 				request.setAttribute("passenger", "1");
 				selections.put("passenger", "true");
-			} else {
+			}
+			else {
 				selections.put("passenger", null);
 			}
 
-			if (request.getParameter("passenger_itinerary") != null) {
+			if(request.getParameter("passenger_itinerary") != null) {
 				request.setAttribute("passenger_itinerary", "1");
 				selections.put("passenger_itinerary", "true");
-			} else
+			}
+			else
 				selections.put("passenger_itinerary", null);
 
-			if (request.getParameter("baggage_itinerary") != null) {
+			if(request.getParameter("baggage_itinerary") != null) {
 				request.setAttribute("baggage_itinerary", "1");
 				selections.put("baggage_itinerary", "true");
-			} else
+			}
+			else
 				selections.put("baggage_itinerary", null);
 
-			if (request.getParameter("baggage_check") != null) {
+			if(request.getParameter("baggage_check") != null) {
 				request.setAttribute("baggage_check", "1");
 				selections.put("baggage_check", "true");
-			} else
+			}
+			else
 				selections.put("baggage_check", null);
 
-			if (request.getParameter("claim_check") != null) {
+			if(request.getParameter("claim_check") != null) {
 				request.setAttribute("claim_check", "1");
 				selections.put("claim_check", "true");
-			} else
+			}
+			else
 				selections.put("claim_check", null);
 
-			if (request.getParameter("baggage_info") != null) {
+			if(request.getParameter("baggage_info") != null) {
 				request.setAttribute("baggage_info", "1");
 				selections.put("baggage_info", "true");
-			} else
+			}
+			else
 				selections.put("baggage_info", null);
 
-			if (request.getParameter("remarks") != null) {
+			if(request.getParameter("remarks") != null) {
 				request.setAttribute("remarks", "1");
 				selections.put("remarks", "true");
-			} else
+			}
+			else
 				selections.put("remarks", null);
 
-			if (request.getParameter("messages") != null) {
+			if(request.getParameter("messages") != null) {
 				request.setAttribute("messages", "1");
 				selections.put("messages", "true");
-			} else
+			}
+			else
 				selections.put("messages", null);
 
-			if (request.getParameter("tasks") != null) {
+			if(request.getParameter("tasks") != null) {
 				request.setAttribute("tasks", "1");
 				selections.put("tasks", "true");
-			} else
+			}
+			else
 				selections.put("tasks", null);
 
-			if (request.getParameter("request") != null) {
+			if(request.getParameter("request") != null) {
 				request.setAttribute("request", "1");
 				selections.put("request", "true");
-			} else
+			}
+			else
 				selections.put("request", null);
 
-			if (request.getParameter("matches") != null) {
+			if(request.getParameter("matches") != null) {
 				request.setAttribute("matches", "1");
 				selections.put("matches", "true");
-			} else
+			}
+			else
 				selections.put("matches", null);
 		}
 
 		int type = Integer.parseInt(request.getParameter("outputtype"));
 		request.setAttribute("outputtype", "" + type);
-		String reportfile = createReport(selections, type, sc, (String) request.getParameter("incident_ID"), user, request);
+		String reportfile = createReport(selections, type, sc, (String) request.getParameter("incident_ID"), user,
+				request);
 		return reportfile;
 
 	}
 
-	private static String createReport(HashMap selections, int type, ServletContext sc, String incident_ID, Agent user, HttpServletRequest request) {
+	private static String createReport(HashMap selections, int type, ServletContext sc, String incident_ID, Agent user,
+			HttpServletRequest request) {
 
 		IncidentForm form = new IncidentForm();
 		BagService bs = new BagService();
 		try {
 			bs.findIncidentByID(incident_ID, form, user, TracingConstants.MISSING_ARTICLES);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 		}
 
 		try {
 			Map parameters = new HashMap();
 
-			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user
-					.getCurrentlocale()));
+			ResourceBundle myResources = ResourceBundle.getBundle(
+					"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 
@@ -444,216 +453,245 @@ public class LostDelayAction extends Action {
 			report_info.put("stationcreatedcode", form.getStationcreated().getStationcode());
 			report_info.put("dispclosedate", form.getDispclosedate());
 			report_info.put("status", form.getStatus().getDescription());
-			report_info.put("stationassigned", StationBMO.getStation("" + form.getStationassigned_ID()).getStationcode());
+			report_info.put("stationassigned", StationBMO.getStation("" + form.getStationassigned_ID())
+					.getStationcode());
 			report_info.put("nonrevenue", form.getNonrevenue() == 0 ? "no" : "yes");
 
-			if (form.getReportmethod() == 0)
+			if(form.getReportmethod() == 0)
 				report_info.put("reportmethod", "In Person");
-			else if (form.getReportmethod() == 1)
+			else if(form.getReportmethod() == 1)
 				report_info.put("reportmethod", "BSO Phone");
-			else if (form.getReportmethod() == 2)
+			else if(form.getReportmethod() == 2)
 				report_info.put("reportmethod", "Call Center");
-			else if (form.getReportmethod() == 3)
+			else if(form.getReportmethod() == 3)
 				report_info.put("reportmethod", "Internet");
-			else if (form.getReportmethod() == 4)
+			else if(form.getReportmethod() == 4)
 				report_info.put("reportmethod", "Kiosk");
 
 			report_info.put("recordlocator", form.getRecordlocator());
 			report_info.put("ticketnumber", form.getTicketnumber());
 			parameters.put("report_info", report_info);
 
-			if (selections.get("passenger") != null) {
+			if(selections.get("passenger") != null) {
 				List passengers = form.getPassengerlist();
-				if (passengers != null && passengers.size() > 0) {
+				if(passengers != null && passengers.size() > 0) {
 					parameters.put("passengerReport", ReportBMO.getCompiledReport("ma_passenger", sc.getRealPath("/")));
 					parameters.put("addressReport", ReportBMO.getCompiledReport("ma_address", sc.getRealPath("/")));
 					parameters.put("passenger", new JRBeanCollectionDataSource(passengers));
-				} else {
+				}
+				else {
 					parameters.put("passenger", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("passenger", null);
 			}
 
-			if (selections.get("passenger_itinerary") != null) {
+			if(selections.get("passenger_itinerary") != null) {
 				List pass_itineraries = form.getPassItineraryList();
-				if (pass_itineraries != null && pass_itineraries.size() > 0) {
-					parameters.put("passitineraryReport", ReportBMO.getCompiledReport("itinerary", sc.getRealPath("/")));
+				if(pass_itineraries != null && pass_itineraries.size() > 0) {
+					parameters
+							.put("passitineraryReport", ReportBMO.getCompiledReport("itinerary", sc.getRealPath("/")));
 					parameters.put("passitinerary", new JRBeanCollectionDataSource(pass_itineraries));
-				} else
+				}
+				else
 					parameters.put("passitinerary", null);
-			} else {
+			}
+			else {
 				parameters.put("passenger_itinerary", null);
 			}
 
-			if (selections.get("baggage_itinerary") != null) {
+			if(selections.get("baggage_itinerary") != null) {
 
 				List bag_itineraries = form.getBagItineraryList();
-				if (bag_itineraries != null && bag_itineraries.size() > 0) {
+				if(bag_itineraries != null && bag_itineraries.size() > 0) {
 					parameters.put("bagitineraryReport", ReportBMO.getCompiledReport("itinerary", sc.getRealPath("/")));
 					parameters.put("bagitinerary", new JRBeanCollectionDataSource(bag_itineraries));
-				} else
+				}
+				else
 					parameters.put("bagitinerary", null);
-			} else {
+			}
+			else {
 				parameters.put("bagitinerary", null);
 			}
 
-			if (selections.get("baggage_check") != null) {
+			if(selections.get("baggage_check") != null) {
 
 				HashMap bag_check_info = new HashMap();
 				bag_check_info.put("numpassengers", "" + form.getNumpassengers());
 				bag_check_info.put("numbagchecked", "" + form.getNumbagchecked());
 				bag_check_info.put("numbagreceived", "" + form.getNumbagreceived());
 
-				if (form.getCheckedlocation().equalsIgnoreCase("0"))
+				if(form.getCheckedlocation().equalsIgnoreCase("0"))
 					bag_check_info.put("checkedlocation", "");
-				else if (form.getCheckedlocation().equalsIgnoreCase("1"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("1"))
 					bag_check_info.put("checkedlocation", "Curb-side");
-				else if (form.getCheckedlocation().equalsIgnoreCase("2"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("2"))
 					bag_check_info.put("checkedlocation", "Ticket Counter");
-				else if (form.getCheckedlocation().equalsIgnoreCase("3"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("3"))
 					bag_check_info.put("checkedlocation", "Gate");
-				else if (form.getCheckedlocation().equalsIgnoreCase("4"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("4"))
 					bag_check_info.put("checkedlocation", "Remote");
-				else if (form.getCheckedlocation().equalsIgnoreCase("5"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("5"))
 					bag_check_info.put("checkedlocation", "Plane-side");
-				else if (form.getCheckedlocation().equalsIgnoreCase("6"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("6"))
 					bag_check_info.put("checkedlocation", "Unchecked");
-				else if (form.getCheckedlocation().equalsIgnoreCase("7"))
+				else if(form.getCheckedlocation().equalsIgnoreCase("7"))
 					bag_check_info.put("checkedlocation", "Kiosk");
 
-				if (form.getCourtesyreport() == 0)
+				if(form.getCourtesyreport() == 0)
 					bag_check_info.put("courtesyreport", "no");
-				else if (form.getCourtesyreport() == 1)
+				else if(form.getCourtesyreport() == 1)
 					bag_check_info.put("courtesyreport", "yes");
 				else
 					bag_check_info.put("courtesyreport", "");
 
-				if (form.getTsachecked() == 0)
+				if(form.getTsachecked() == 0)
 					bag_check_info.put("tsachecked", "no");
-				else if (form.getTsachecked() == 1)
+				else if(form.getTsachecked() == 1)
 					bag_check_info.put("tsachecked", "yes");
 				else
 					bag_check_info.put("tsachecked", "");
 
-				if (form.getCustomcleared() == 0)
+				if(form.getCustomcleared() == 0)
 					bag_check_info.put("customcleared", "no");
-				else if (form.getCustomcleared() == 1)
+				else if(form.getCustomcleared() == 1)
 					bag_check_info.put("customcleared", "yes");
 				else
 					bag_check_info.put("customcleared", "");
 
 				parameters.put("bag_check_info", bag_check_info);
-			} else {
+			}
+			else {
 				parameters.put("bag_check_info", null);
 			}
 
-			if (selections.get("claim_check") != null) {
+			if(selections.get("claim_check") != null) {
 
 				List claimchecks = form.getClaimchecklist();
-				if (claimchecks != null && claimchecks.size() > 0) {
-					parameters.put("claimcheckReport", ReportBMO.getCompiledReport("ld_claimcheck", sc.getRealPath("/")));
+				if(claimchecks != null && claimchecks.size() > 0) {
+					parameters.put("claimcheckReport", ReportBMO
+							.getCompiledReport("ld_claimcheck", sc.getRealPath("/")));
 					parameters.put("claimchecks", new JRBeanCollectionDataSource(claimchecks));
-				} else {
+				}
+				else {
 					parameters.put("claimchecks", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("claimchecks", null);
 			}
 
-			if (selections.get("baggage_info") != null) {
+			if(selections.get("baggage_info") != null) {
 
 				List bag_items = form.getItemlist();
-				if (bag_items != null && bag_items.size() > 0) {
+				if(bag_items != null && bag_items.size() > 0) {
 					parameters.put("baginfoReport", ReportBMO.getCompiledReport("ma_bag_info", sc.getRealPath("/")));
-					parameters.put("inventoryReport", ReportBMO.getCompiledReport("item_inventory", sc.getRealPath("/")));
+					parameters.put("inventoryReport", ReportBMO
+							.getCompiledReport("item_inventory", sc.getRealPath("/")));
 					parameters.put("baginfo", new JRBeanCollectionDataSource(bag_items));
-				} else {
+				}
+				else {
 					parameters.put("baginfo", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("baginfo", null);
 			}
 
-			if (selections.get("remarks") != null) {
+			if(selections.get("remarks") != null) {
 
 				List remarks = form.getRemarklist();
-				if (remarks != null && remarks.size() > 0) {
+				if(remarks != null && remarks.size() > 0) {
 					parameters.put("remarkReport", ReportBMO.getCompiledReport("remarks", sc.getRealPath("/")));
 					parameters.put("remarks", new JRBeanCollectionDataSource(remarks));
-				} else {
+				}
+				else {
 					parameters.put("remarks", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("remarks", null);
 			}
 
-			if (selections.get("request") != null) {
+			if(selections.get("request") != null) {
 				List requestList = OHDUtils.getIncidentRequests(form.getIncident_ID());
-				if (requestList != null && requestList.size() > 0) {
-					for (Iterator iter = requestList.iterator(); iter.hasNext();) {
+				if(requestList != null && requestList.size() > 0) {
+					for(Iterator iter = requestList.iterator(); iter.hasNext();) {
 						OHDRequest req = (OHDRequest) iter.next();
 						req.set_DATEFORMAT(user.getDateformat().getFormat());
 						req.set_TIMEFORMAT(user.getTimeformat().getFormat());
-						req.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+						req.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+								.getTimezone()));
 					}
-					//request reports
+					// request reports
 					parameters.put("requestReport", ReportBMO.getCompiledReport("ohd_request", sc.getRealPath("/")));
 					parameters.put("request", new JRBeanCollectionDataSource(requestList));
-				} else {
+				}
+				else {
 					parameters.put("request", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("request", null);
 			}
 
-			if (selections.get("matches") != null) {
+			if(selections.get("matches") != null) {
 				List matches = MatchUtils.getMatchWithMBR(form.getIncident_ID());
-				if (matches != null && matches.size() > 0) {
-					parameters.put("match_detail_report", ReportBMO.getCompiledReport("match_detail_report", sc.getRealPath("/")));
+				if(matches != null && matches.size() > 0) {
+					parameters.put("match_detail_report", ReportBMO.getCompiledReport("match_detail_report", sc
+							.getRealPath("/")));
 					parameters.put("matchReport", ReportBMO.getCompiledReport("match_report", sc.getRealPath("/")));
 					parameters.put("matches", new JRBeanCollectionDataSource(matches));
-				} else {
+				}
+				else {
 					parameters.put("matches", null);
 				}
-			} else
+			}
+			else
 				parameters.put("matches", null);
 
-			if (selections.get("messages") != null) {
+			if(selections.get("messages") != null) {
 
 				List messages = MessageUtils.getReportMessages(incident_ID, 1);
-				if (messages != null && messages.size() > 0) {
-					for (Iterator i = messages.iterator(); i.hasNext();) {
+				if(messages != null && messages.size() > 0) {
+					for(Iterator i = messages.iterator(); i.hasNext();) {
 						Message msg = (Message) i.next();
 						msg.set_DATEFORMAT(user.getDateformat().getFormat());
 						msg.set_TIMEFORMAT(user.getTimeformat().getFormat());
-						msg.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+						msg.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+								.getTimezone()));
 					}
 					parameters.put("messageReport", ReportBMO.getCompiledReport("messages", sc.getRealPath("/")));
 					parameters.put("messages", new JRBeanCollectionDataSource(messages));
-				} else {
+				}
+				else {
 					parameters.put("messages", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("messages", null);
 			}
 
-			if (selections.get("tasks") != null) {
+			if(selections.get("tasks") != null) {
 
 				List tasks = TaskUtils.getFileTasks(incident_ID, 1);
-				if (tasks != null && tasks.size() > 0) {
-					for (Iterator i = tasks.iterator(); i.hasNext();) {
+				if(tasks != null && tasks.size() > 0) {
+					for(Iterator i = tasks.iterator(); i.hasNext();) {
 						Task task = (Task) i.next();
 						task.set_DATEFORMAT(user.getDateformat().getFormat());
 						task.set_TIMEFORMAT(user.getTimeformat().getFormat());
-						task.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+						task.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+								.getTimezone()));
 					}
 					parameters.put("taskReport", ReportBMO.getCompiledReport("tasks", sc.getRealPath("/")));
 					parameters.put("tasks", new JRBeanCollectionDataSource(tasks));
-				} else {
+				}
+				else {
 					parameters.put("tasks", null);
 				}
-			} else {
+			}
+			else {
 				parameters.put("tasks", null);
 			}
 
@@ -661,14 +699,15 @@ public class LostDelayAction extends Action {
 			t.add("");
 			ReportBMO bmo = new ReportBMO(request);
 			return bmo.getReportFile(t, parameters, "ld_history", sc.getRealPath("/"), type);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	private static String format(String input) {
-		if (input == null || input.equals("null"))
+		if(input == null || input.equals("null"))
 			return "";
 		else
 			return input;

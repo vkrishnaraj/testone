@@ -39,6 +39,7 @@ import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -48,8 +49,6 @@ import com.bagnet.nettracer.ws.core.WSCoreUtil;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
 
 public class WTOHD {
-	private String error;
-	private static Logger logger = Logger.getLogger(WTOHD.class);
 
 	/**
 	 * insert ohd into WT
@@ -410,7 +409,7 @@ public class WTOHD {
 	}*/
 	
 	//submit ohd amend to WorldTracer
-	public String amendAOH(HttpClient client,String companycode,String filenum){
+/*	public String amendAOH(HttpClient client,String companycode,String filenum){
 		String _n = "\n";
 		String _t = "";
 		String _h = "/";
@@ -684,9 +683,9 @@ public class WTOHD {
 			method.releaseConnection();
 		}
 		return responseBody;
-	}
+	}*/
 	
-    public String closeOHD(HttpClient client, String companycode,OHD odto){
+/*    public String closeOHD(HttpClient client, String companycode,OHD odto){
 		String responseBody = null;	
 		String wt_http = WorldTracerUtils.getWt_url(companycode);
 		String wt_url = "http://" + wt_http + "/";
@@ -823,45 +822,21 @@ public class WTOHD {
 			method.releaseConnection();
 		}
 		return responseBody;
-    }
+    }*/
 
-	/**
-	 * return an arraylist of worldtracer ohd ids from a list of ids
-	 * @param wtdata
-	 * @return
-	 */
-	public ArrayList<String> parseAllWTOHD(String wtdata) {
-		ArrayList<String> wt_ids = new ArrayList<String>();
-		
-		if (wtdata == null) {
-			setError("wt content is bad");
-			return null;
-		}
-		
-		String wt_id = null;
-		while (true) {
-			wt_id = StringUtils.ParseWTString2(wtdata, "<!-- fileref:", "-->");
-			if (wt_id == null) break;
-			if (wt_id.length()> 0) wt_ids.add(wt_id);
-			wtdata = StringUtils.ParseWTString2(wtdata, "<!-- fileref:" + wt_id,null);
-			
-		}
-		return wt_ids;
 
-	}
 	/**
 	 * starttype = true means came from hibernate
 	 * starttype = false means came from main method so don't call any hibernate code
 	 * @param wtdata
 	 * @param starttype
 	 * @return
+	 * @throws WorldTracerException 
 	 */
-	public OHD parseWTOHD(String wtdata,boolean starttype,String wtstatus) {
+	public static OHD parseWTOHD(String wtdata, WTStatus wtstatus) throws WorldTracerException {
 		try {
 			if (wtdata == null) {
-				setError("wt content is bad");
-				logger.error(error);
-				return null;
+				throw new WorldTracerException("no OHD data to parse");
 			}
 			
 			// first figure out if this incident is new or already existing through
@@ -876,21 +851,18 @@ public class WTOHD {
 			// get wt_id
 			wt_id = StringUtils.ParseWTString2(wtdata, "WM DOH ", "\r");
 			if (wt_id == null) {
-				setError("unable to retrieve worldtracer id, wt content is bad");
-				logger.error(error);
-				return null;
+				throw new WorldTracerException("unable to import OHD.  no wt_id was parsed");
 			}
 			System.out.println(wt_id);
 
-			if (starttype)
-				ohd = WorldTracerUtils.findOHDByWTID(wt_id);
+			ohd = WorldTracerUtils.findOHDByWTID(wt_id);
 			
 			if (ohd == null) ohd = new OHD();
 			ohd.setWtFile(new WorldTracerFile(wt_id));
 			
 			// set status to open
 			Status status = new Status();
-			if (wtstatus.equals(WorldTracerUtils.status_active))
+			if (wtstatus.equals(WTStatus.ACTIVE))
 				status.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
 			else
 				status.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);	
@@ -919,9 +891,7 @@ public class WTOHD {
 				} 
 				
 				if (c == null) {
-					setError("unable to create company in nettracer, please contact admin");
-					logger.error(error);
-					return null;
+					throw new WorldTracerException(String.format("Could not Import WorldTracer OHD %s.  Could not create company %s", wt_id, thec));
 				} else {
 					// create station for this company
 					s = TracerUtils.getStationByCode(thes.toUpperCase(), c.getCompanyCode_ID());
@@ -937,9 +907,7 @@ public class WTOHD {
 					}
 					
 					if (s == null) {
-						setError("unable to create station in nettracer, please contact admin");
-						logger.error(error);
-						return null;
+						throw new WorldTracerException(String.format("Could not Import WorldTracer ohd %s.  Could not create station %s", wt_id, thes));
 					}
 				}
 				
@@ -952,9 +920,7 @@ public class WTOHD {
 			// agent
 			Agent ntuser = WorldTracerUtils.getWTAgent(ohd.getFoundAtStation().getStation_ID(),thec);
 			if (ntuser == null) {
-				setError("unable to find designated wt_user in: " + thes + " for the company overall in nt database, please designate an user for wt first");
-				logger.error(error);
-				return null;
+				throw new WorldTracerException("Unable to import OHD, not default worldtracer agent found");
 			}
 			ohd.setAgent(ntuser);
 
@@ -969,8 +935,7 @@ public class WTOHD {
 				ohd.setFounddate(thedate);
 				ohd.setFoundtime(thedate);
 			} else {
-				error = "invalid create date";
-				return null;
+				throw new WorldTracerException("unable to import WT OHD.  Unable to parse create date");
 			}
 			
 			/*****
@@ -1102,8 +1067,7 @@ public class WTOHD {
 				cdesc = StringUtils.ParseWTString2(cstr, "/", null);
 			}
 			if (ccat != null) {
-				if (starttype) ccat_id = WSCoreUtil.getContentCategory(ccat);
-				else ccat_id = 0;
+				ccat_id = WSCoreUtil.getContentCategory(ccat);
 			}
 			// if wt category is not found, then keep the category in the string
 			if (ccat_id == 0) cdesc = cstr;
@@ -1138,8 +1102,7 @@ public class WTOHD {
 						if (cdesc == null) break;
 					}
 					if (ccat != null) {
-						if (starttype) ccat_id = WSCoreUtil.getContentCategory(ccat);
-						else ccat_id = 0;
+						ccat_id = WSCoreUtil.getContentCategory(ccat);
 					}
 					// if wt category is not found, then keep the category in the string
 					if (ccat_id == 0) cdesc = cstr;
@@ -1282,12 +1245,6 @@ public class WTOHD {
 			
 			ohd.setRemarks(remark_set);
 			
-			
-			if (ohd == null) {
-				error = "unable to create ohd object";
-				return null;
-			}
-			
 			if (ohd.getOHD_ID() != null && ohd.getOHD_ID().length() > 0) {
 				//update
 				System.out.println("update ohd: " + ohd.getOHD_ID());
@@ -1302,29 +1259,8 @@ public class WTOHD {
 
 			return ohd;
 		} catch (Exception e) {
-			e.printStackTrace();
-			setError(e.toString());
-			return null;
+			throw new WorldTracerException("unexpected error importing WT OHD", e);
 		}
 	}
-	
-	
-
-	/**
-	 * @return the error
-	 */
-	public String getError() {
-		return error;
-	}
-
-	/**
-	 * @param error the error to set
-	 */
-	public void setError(String error) {
-		this.error = error;
-	}
-
-
-	
 	
 }

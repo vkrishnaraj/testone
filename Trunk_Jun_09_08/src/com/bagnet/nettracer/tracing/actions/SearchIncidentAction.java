@@ -38,11 +38,14 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTIncident;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.BetaWtConnector;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
  * @author Matt
@@ -71,12 +74,11 @@ public class SearchIncidentAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
 			if (foundinc == null) {
-				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("wt_id"));
-				WTIncident wi = new WTIncident();
-				// for now show all as active
-				foundinc = wi.parseWTIncident(result,true,WTStatus.ACTIVE);
-				if (foundinc != null) incident = foundinc.getIncident_ID();
-				else {
+				WorldTracerService wts = SpringUtils.getWorldTracerService();
+				try {
+					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE);
+				}
+				catch (WorldTracerException e) {
 					ActionMessages errors = new ActionMessages();
 					ActionMessage error = new ActionMessage("error.wt_nostation");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);

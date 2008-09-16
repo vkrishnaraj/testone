@@ -26,14 +26,17 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.BetaWtConnector;
+import com.ctc.wstx.util.StringUtil;
 
 /**
  * @author matt
@@ -84,7 +87,8 @@ public class WorldTracerAFAction extends Action {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request
 					.getParameter("ahl_id"));
 			if (foundinc == null) {
-				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ahl_id"));
+				String result = SpringUtils.getWorldTracerConnector().findAHL(request.getParameter("ahl_id"));
+//				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ahl_id"));
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
@@ -99,7 +103,8 @@ public class WorldTracerAFAction extends Action {
 			OHD foundinc = WorldTracerUtils.findOHDByWTID(request
 					.getParameter("ohd_id"));
 			if (foundinc == null) {
-				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ohd_id"));
+				String result = SpringUtils.getWorldTracerConnector().findOHD(request.getParameter("ohd_id"));
+				//String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ohd_id"));
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
@@ -118,6 +123,7 @@ public class WorldTracerAFAction extends Action {
 		String day = request.getParameter("d");
 		if (day == null || day.equals("") || day.equals("null"))
 			day = "1";
+		request.setAttribute("af_day", day);
 
 		if (wt_type == null || wt_type.equals(""))
 			wt_type = "FW";
@@ -130,14 +136,11 @@ public class WorldTracerAFAction extends Action {
 			boolean deleted = false;
 			if(waf != null) {
 				//queue for WT deletion and delete from our database
-				WT_Queue wq = new WT_Queue();
+				WtqEraseActionFile wq = new WtqEraseActionFile();
 				wq.setAgent(user);
 				wq.setCreatedate(TracerDateTime.getGMTDate());
-				wq.setQueue_status(0);
-				wq.setType(WT_Queue.ERASE_AF_TYPE);
-				wq.setType_id(waf.generateId());
-				wq.setWt_stationcode(waf.getStation());
-				WorldTracerQueueUtils.saveWtobj(wq, user);
+				wq.setAf_id(waf.generateId());
+				WorldTracerQueueUtils.createOrReplaceQueue(wq);
 				deleted = WorldTracerUtils.deleteActionFiles(request
 						.getParameter("delete"));
 			}

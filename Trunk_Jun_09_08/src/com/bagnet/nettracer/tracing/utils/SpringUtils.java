@@ -5,6 +5,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
+import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
+import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class SpringUtils {
 
@@ -13,6 +16,11 @@ public class SpringUtils {
 	public final static String RESERVATION_INTEGRATION = "reservationIntegration";
 	public final static String SCANNER_DATA_SOURCE = "scannerDataSource";
 	public final static String CUSTOM_REPORT_BMO = "customReportBmo";
+	public final static String WORLDTRACER_SERVICE = "wtService";
+
+	private static final String WORLDTRACER_CONNECTOR = "wtConnector";
+
+	private static final String WORLDTRACER_TX_BMO = "wtTx-bmo";
 	
 	static {
 		try {
@@ -35,6 +43,19 @@ public class SpringUtils {
 	
 	public static CustomReportBMO getCustomReportBMO() {
 		return (CustomReportBMO) getBean(CUSTOM_REPORT_BMO);
+	}
+	
+	public static WorldTracerService getWorldTracerService() {
+		return (WorldTracerService) getBean(WORLDTRACER_SERVICE);
+	}
+	
+	public static WorldTracerConnector getWorldTracerConnector() {
+		return (WorldTracerConnector) getBean(WORLDTRACER_CONNECTOR);
+	}
+
+	public static WtTransactionBmo getWtTxBmo() {
+		// TODO Auto-generated method stub
+		return (WtTransactionBmo) getBean(WORLDTRACER_TX_BMO);
 	}
 	
 }

@@ -737,7 +737,7 @@ public class OHD implements Serializable {
 	/**
 	 * @return the wtFile object
 	 * 
-	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile"
+	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile" lazy="false"
 	 */
 	public WorldTracerFile getWtFile() {
 		return wtFile;

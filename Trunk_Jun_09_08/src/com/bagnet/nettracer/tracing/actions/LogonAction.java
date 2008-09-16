@@ -51,6 +51,8 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class LogonAction extends Action {
 
+	private String foobar;
+
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
 	 * response (or forward to another web component that will create it). Return
@@ -106,6 +108,7 @@ public class LogonAction extends Action {
 		// Report any errors we have discovered back to the original form
 		if (!errors.isEmpty()) {
 			saveMessages(request, errors);
+			PropertyUtils.setSimpleProperty(form, "username", foobar);
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 
@@ -343,4 +346,9 @@ public class LogonAction extends Action {
 			session.setAttribute("activityList", list);
 		}
 	}
+
+	public void setFoobar(String foobar) {
+		this.foobar = foobar;
+	}
+
 }

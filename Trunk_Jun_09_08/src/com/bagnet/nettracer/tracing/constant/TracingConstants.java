@@ -409,6 +409,7 @@ public class TracingConstants {
 	public final static String VIEW_WORLDTRACER_ACTION_FILES_COUNT = "viewworldtracercount";
 	public final static String VIEW_WORLDTRACER_AF_VIEW_RAW_INC = "viewworldtracerafviewraw";
 	public final static String VIEW_WORLDTRACER_FWD = "viewworldtracerfwd";
+	public final static String VIEW_WORLDTRACER_FOH = "viewworldtracerfoh";
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
 	public final static String VIEW_WORLDTRACER_TTY = "viewworldtracertty";
 
@@ -458,7 +459,7 @@ public class TracingConstants {
 	public final static String CANNOT_FORWARD_ON_HAND = "errorforwardonhand";
 
 	//relative path to the images directory.
-	public final static String IMAGE_PATH = "/tracer/deployment/main/images/";
+	public final static String IMAGE_PATH = "/deployment/main/images/";
 
 	//lost-found
 	public final static String SEARCH_LOST_FOUND = "searchlostfound";
@@ -628,6 +629,7 @@ public class TracingConstants {
 	public final static int MOVETOLZ_MODE_ASSIGNMENT = 1;
 	public final static int MOVETOLZ_MODE_PERCENTAGE = 2;
 	public static final String DEFAULT_WT_URL = "www.worldtracer.aero";
+	public static final String PENDING_CREATE = "PENDING_CREATE";
 	
 	
 	public static String getDBDateFormat(Properties properties) {

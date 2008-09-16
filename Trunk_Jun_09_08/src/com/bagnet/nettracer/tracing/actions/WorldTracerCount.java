@@ -24,8 +24,9 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -121,14 +122,11 @@ public class WorldTracerCount extends Action {
 				boolean deleted = false;
 				if(waf != null) {
 					//queue for WT deletion and delete from our database
-					WT_Queue wq = new WT_Queue();
-					wq.setAgent(user);
-					wq.setCreatedate(TracerDateTime.getGMTDate());
-					wq.setQueue_status(0);
-					wq.setType(WT_Queue.ERASE_AF_TYPE);
-					wq.setType_id(waf.generateId());
-					wq.setWt_stationcode(waf.getStation());
-					WorldTracerQueueUtils.saveWtobj(wq, user);
+					WtqEraseActionFile wtq = new WtqEraseActionFile();
+					wtq.setAgent(user);
+					wtq.setCreatedate(TracerDateTime.getGMTDate());
+					wtq.setAf_id(waf.generateId());
+					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 					deleted = WorldTracerUtils.deleteActionFiles(request
 							.getParameter("delete"));
 				}

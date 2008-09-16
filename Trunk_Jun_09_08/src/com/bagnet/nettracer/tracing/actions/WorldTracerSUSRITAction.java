@@ -21,7 +21,11 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -121,15 +125,11 @@ public class WorldTracerSUSRITAction extends Action {
 								errors.add(ActionMessages.GLOBAL_MESSAGE,error);
 								saveMessages(request, errors);
 							}
-							WT_Queue wtq = new WT_Queue();
+							WtqIncidentAction wtq = new WtqSuspendAhl();
 							wtq.setAgent(user);
 							wtq.setCreatedate(TracerDateTime.getGMTDate());
-							wtq.setType_id(incident.getIncident_ID());
-							wtq.setWt_stationcode(user.getStation()
-									.getWt_stationcode());
-							wtq.setType(WT_Queue.SUS_INC_TYPE);
-							wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-							WorldTracerQueueUtils.saveWtobj(wtq, user);
+							wtq.setIncident(incident);
+							WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 						}
 					}
 				}
@@ -149,19 +149,11 @@ public class WorldTracerSUSRITAction extends Action {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 					} else {
-						request.setAttribute("ohdsuccess", "1");
-						// list3 = new ArrayList(ohd.getItems());
-						// TracerUtils.madeSuspendWT_BAG_SELECTED(list3);
-						WT_Queue wtq = new WT_Queue();
+						WtqOhdAction wtq = new WtqSuspendOhd();
 						wtq.setAgent(user);
 						wtq.setCreatedate(TracerDateTime.getGMTDate());
-						wtq.setType_id(ohd.getOHD_ID());
-						wtq.setWt_stationcode(user.getStation()
-								.getWt_stationcode());
-						wtq.setType(WT_Queue.SUS_OHD_TYPE);
-						wtq
-								.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-						boolean flag = WorldTracerQueueUtils.saveOhdobj(wtq, user);
+						wtq.setOhd(ohd);
+						boolean flag = WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 						if (flag) {
 							request.setAttribute("ohdsuccess", "1");
 						} else {
@@ -169,7 +161,7 @@ public class WorldTracerSUSRITAction extends Action {
 						}
 					}
 				}
-			} else if (suspend.equals("partSUS")) {
+			} /*else if (suspend.equals("partSUS")) {
 				request.setAttribute("radio", "partSUS");
 				Incident incident = TracerUtils.incidentFileReference(fileReference);
 				if (null == incident) {
@@ -221,7 +213,7 @@ public class WorldTracerSUSRITAction extends Action {
 						}
 					}
 				}
-			}
+			}*/
 		}
 		return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_SUSRIT);
 	}

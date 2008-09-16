@@ -1,0 +1,23 @@
+package com.bagnet.nettracer.wt.svc;
+
+public class EmailRule extends BasicRule {
+
+	public EmailRule() {
+		super();
+		replace_char = "";
+		// TODO Auto-generated constructor stub
+	}
+
+	public EmailRule(int minLength, int maxLength, int maxAllowed, Format format) {
+		super(minLength, maxLength, maxAllowed, format);
+		replace_char = "";
+	}
+	
+	@Override
+	protected String formatEntry(String entry) {
+		String result = entry.replace("@", "/A/").replace(".", "/D/").replace("_", "/U/").replace("~", "/T/").replace("+",
+		"/P/");
+		return super.formatEntry(entry);
+	}
+
+}

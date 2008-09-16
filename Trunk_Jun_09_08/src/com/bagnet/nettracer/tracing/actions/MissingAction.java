@@ -166,7 +166,7 @@ public class MissingAction extends Action {
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user);
 			} else {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user, true, false);
+				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user, true);
 			}
 
 			if (error == null) {

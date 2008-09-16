@@ -22,20 +22,14 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
-import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
-import com.bagnet.nettracer.tracing.db.DeliverCompany;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
-import com.bagnet.nettracer.tracing.utils.HibernateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
  * @author Matt
@@ -110,8 +104,7 @@ public class BDOAction extends Action {
 							&& !bdo.getIncident().toString().equals("")) {
 						if (null != bdo.getIncident().getWtFile()
 								&& !"".equals(bdo.getIncident().getWtFile())) {
-							request.setAttribute("wt_id", bdo.getIncident()
-									.getWtFile());
+							request.setAttribute("wt_id", bdo.getIncident().getWtFile());
 						}
 					} else {
 						if (null != bdo.getOhd()
@@ -245,13 +238,14 @@ public class BDOAction extends Action {
 				}
 			}
 		}
-		if (request.getParameter("savetowt") != null ) {
+		if (request.getParameter("savetowt") != null) {
 			request.setAttribute("showbdo", "1");
 			request.setAttribute("inserted", "1");
 			request.setAttribute("showprint", "1");
-			WT_Queue wtq = new WT_Queue();
+			//TODO
+/*			WT_Queue wtq = new WT_Queue();
 			wtq.setAgent(user);
-             
+
 			wtq.setCreatedate(TracerDateTime.getGMTDate());
 			wtq.setType_id(String.valueOf(theform.getBDO_ID()));
 			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
@@ -259,10 +253,10 @@ public class BDOAction extends Action {
 			wtq.setType("bdo");
 
 			wtq.setQueue_status(TracingConstants.LOG_NOT_RECEIVED);
-			WorldTracerQueueUtils.saveBdoobj(theform,wtq, user);
-			
+			WorldTracerQueueUtils.saveBdoobj(theform, wtq, user);*/
+
 			return (mapping.findForward(TracingConstants.BDO_MAIN));
-			}
+		}
 		// user wants to create a new bdo
 		if (request.getParameter("createnewbdo") != null) {
 			BDOUtils.createNewBDO(ohd, incident, theform, request);

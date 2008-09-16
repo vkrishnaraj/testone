@@ -5,42 +5,45 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+
+import static org.hibernate.criterion.Restrictions.*;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bagnet.nettracer.tracing.db.WT_Queue;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 
 public class WTQueueBmo extends HibernateDaoSupport {
 	
 	private static final String FIND_TASKS_BY_COMPANY_HQL =
-		"from WT_Queue wq where wq.agent.companycode_ID = :company and wq.queue_status between 0 and 10";
-	
-	private static final String FIND_TASKS_BY_COMPANY_TYPE_HQL =
-		"from WT_Queue wq where wq.agent.companycode_ID = :company and wq.type = :type and wq.queue_status between 0 and 10";
-	
-	@Transactional(readOnly = true)
-	public List<WT_Queue> getPendingTasksByCompany(String companyCode) {
-		Session sess = getSession(false);
-		Query q = sess.createQuery(FIND_TASKS_BY_COMPANY_HQL);
-		q.setParameter("company", companyCode);
-		List<WT_Queue> result = q.list();
-		return result;
-	}
+		"from WorldTracerQueue wq where wq.agent.companycode_ID = :company and wq.status = :status";
 
 	@Transactional
-	public void updateQueue(WT_Queue queue) {
+	public void updateQueue(WorldTracerQueue queue) {
 		Session sess = getSession(false);
 		sess.update(queue);
 	}
 
-	@Transactional(readOnly = true)
-	public List<WT_Queue> getPendingTasksByCompanyType(String companyCode, String wqType) {
-		// TODO Auto-generated method stub
-		Session sess = getSession(false);
-		Query q = sess.createQuery(FIND_TASKS_BY_COMPANY_TYPE_HQL);
-		q.setParameter("company", companyCode);
-		q.setParameter("type", wqType);
-		List<WT_Queue> result = q.list();
-		return result;
+	@Transactional(readOnly=true)
+	public List<WorldTracerQueue> findAllPendingTasks(String company) {
+		return findPendingTasksByType(company, WorldTracerQueue.class);
 	}
+	
+	@Transactional(readOnly=true)
+	public List<WtqEraseActionFile> findPendingEraseActionFiles(String company) {
+		return findPendingTasksByType(company, WtqEraseActionFile.class);
+	}
+	
+	private <T extends WorldTracerQueue> List<T> findPendingTasksByType(String company, Class<T> queueClass) {
+		Session sess = getSession(false);
+		Criteria cri = sess.createCriteria(queueClass);
+		cri.createCriteria("agent").add(Restrictions.eq("companycode_ID", company));
+		cri.add(Restrictions.eq("status", WtqStatus.PENDING));
+		return cri.list();
+	}
+
+
 }

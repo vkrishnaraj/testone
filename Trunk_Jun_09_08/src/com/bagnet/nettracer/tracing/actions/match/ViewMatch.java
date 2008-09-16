@@ -35,8 +35,13 @@ import com.bagnet.nettracer.tracing.db.Match;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
-import com.bagnet.nettracer.tracing.db.WT_Queue;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -239,7 +244,7 @@ public final class ViewMatch extends Action {
 						.getDefaultlocale().toString()));
 				
 				//if has the wt_id,close wt
-				this.CloseWTInMatch(incident.getWtFile(), ohd.getWt_id(), user, incident.getIncident_ID(), ohd.getOHD_ID());
+				this.CloseWTInMatch(incident, ohd, user);
 				
 				request.setAttribute("already_matched", "1");
 			} else {
@@ -265,7 +270,7 @@ public final class ViewMatch extends Action {
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
-						this.CloseWTInMatch(incident.getWtFile(), ohd.getWt_id(), user, incident.getIncident_ID(), ohd.getOHD_ID());
+						this.CloseWTInMatch(incident, ohd, user);
 						request.setAttribute("already_matched", "1");
 					}
 
@@ -300,7 +305,7 @@ public final class ViewMatch extends Action {
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
-						this.CloseWTInMatch(incident.getWtFile(), ohd.getWt_id(), user, incident.getIncident_ID(), ohd.getOHD_ID());
+						this.CloseWTInMatch(incident, ohd, user);
 						request.setAttribute("already_matched", "1");
 					}
 				} else {
@@ -356,16 +361,7 @@ public final class ViewMatch extends Action {
 
 						// call unmatch to clear out match history
 						MatchUtils.unmatchOHD(ohd_id);
-						// if undomatch ,delete the wt_id in ohd/incident
-/*						if(ohd.getWt_id() != null){
-							ohd.setWt_id(null);
-							HibernateUtils.save(ohd);
-						}
-						if(incident.getWtFile() != null){
-						    incident.setWtFile(null);
-						    HibernateUtils.save(incident);
-						}*/
-						// empty out claim ohd
+
 						ic.setOHD_ID(null);
 
 						has_unmatched = true;
@@ -608,37 +604,26 @@ public final class ViewMatch extends Action {
 		}
 	}
 	
-	public void CloseWTInMatch(WorldTracerFile worldTracerFile,String Ohd_Wt_id,Agent user,String Incident_ID,String OHD_ID){
+	public void CloseWTInMatch(Incident incident, OHD ohd, Agent user){
 
-		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 		try {
-		if(worldTracerFile != null){
-			
-			WT_Queue wtq = new WT_Queue();
-			wtq.setAgent(user);
-			wtq.setCreatedate(TracerDateTime.getGMTDate());
-			wtq.setType_id(Incident_ID);
-			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
-			wtq.setType("closeIncident");
-			wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-			wq.saveWtobj(wtq, user);
-		}
-		if(Ohd_Wt_id != null){
-			
-			WT_Queue wtq = new WT_Queue();
-			wtq.setAgent(user);
-			wtq.setCreatedate(TracerDateTime.getGMTDate());
-			wtq.setType_id(OHD_ID);
-			wtq.setWt_stationcode(user.getStation().getWt_stationcode());
-			wtq.setType("closeOHD");
-			wtq.setQueue_status((TracingConstants.LOG_NOT_RECEIVED));
-			wq.saveOhdobj(wtq, user);
-		}
+			if(incident.getWtFile() != null && incident.getWtFile().getWt_status() != WTStatus.CLOSED) {
+				WtqIncidentAction wtq = new WtqCloseAhl();
+				wtq.setAgent(user);
+				wtq.setCreatedate(TracerDateTime.getGMTDate());
+				wtq.setIncident(incident);
+				WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+			}
+			if(ohd.getWtFile() != null && ohd.getWtFile().getWt_status() != WTStatus.CLOSED) {
+				WtqOhdAction wtq = new WtqCloseOhd();
+				wtq.setAgent(user);
+				wtq.setCreatedate(TracerDateTime.getGMTDate());
+				wtq.setOhd(ohd);
+				WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public void UpdateIncident(){
-		
-	}
+
 }

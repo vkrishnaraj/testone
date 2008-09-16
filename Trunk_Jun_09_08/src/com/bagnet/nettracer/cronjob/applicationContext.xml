@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="file:../config/cron.properties" />
@@ -25,13 +31,18 @@
 	<bean id="wtaf-bmo" class="com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<bean id="wtTx-bmo" class="com.bagnet.nettracer.wt.bmo.WtTransactionBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
-	<bean id="wtConnector" class="com.bagnet.nettracer.wt.BetaWtConnector">
+	<!-- services used by the workers-->
+	
+	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.BetaWtConnector">
 		<constructor-arg value="${company.code}" />
 	</bean>
 	
-	<!-- services used by the workers-->
-	<bean id="wtService" class="com.bagnet.nettracer.wt.DefaultWorldTracerService">
+	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService">
 		<property name="wtConnector" ref="wtConnector" />
 		<property name="wtCompanyCode" value="${company.code}" />
 	</bean>
@@ -112,4 +123,12 @@
 		</property>
 	</bean>
 
+	<!-- Aspects and advice -->
+	<aop:aspectj-autoproxy />
+	
+	<!--  world tracer transaction logging -->
+	<bean id="wtLogging" class="com.bagnet.nettracer.wt.svc.WorldTracerLogger">
+		<constructor-arg ref="wtTx-bmo" />
+	</bean>
+	
 </beans>

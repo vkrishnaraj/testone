@@ -33,9 +33,9 @@ import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 
 import org.apache.commons.httpclient.HttpClient;
 

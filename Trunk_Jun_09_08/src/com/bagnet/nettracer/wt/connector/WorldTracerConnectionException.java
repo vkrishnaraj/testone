@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.wt;
+package com.bagnet.nettracer.wt.connector;
 
 public class WorldTracerConnectionException extends RuntimeException {
 

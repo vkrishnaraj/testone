@@ -27,14 +27,18 @@ import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.wt.BetaWtConnector;
 import com.bagnet.nettracer.wt.WTOHD;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.BetaWtConnector;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for providing
@@ -70,21 +74,26 @@ public class SearchOnHandAction extends Action {
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
 			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
 			if (foundohd == null) {
-				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findOHD(request.getParameter("wt_id"));
-				WTOHD wi = new WTOHD();
-				// for now show all as active
-				foundohd = wi.parseWTOHD(result,true,WorldTracerUtils.status_active);
-				if (foundohd != null) response.sendRedirect("addOnHandBag.do?ohd_ID=" + foundohd.getOHD_ID());
-				else {
+				WorldTracerService wts = SpringUtils.getWorldTracerService();
+				try {
+					foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE);
+					if (foundohd != null) response.sendRedirect("addOnHandBag.do?ohd_ID=" + foundohd.getOHD_ID());
+					else {
+						ActionMessages errors = new ActionMessages();
+						ActionMessage error = new ActionMessage("error.wt_nostation");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					}
+				}
+				catch (WorldTracerException e) {
 					ActionMessages errors = new ActionMessages();
 					ActionMessage error = new ActionMessage("error.wt_nostation");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				}
-				
+
 			} else {
 				response.sendRedirect("addOnHandBag.do?ohd_ID=" + foundohd.getOHD_ID());
-				
 			}
 		}
 		
