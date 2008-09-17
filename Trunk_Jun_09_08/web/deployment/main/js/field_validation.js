@@ -18,7 +18,7 @@ function checkExpedite(strng)
 
 function checkClaimCheck(strng)
 { 
-    var objRegExp  = /(^[a-zA-Z0-9]*$)/;
+    var objRegExp  = /(^\d{10}$|^[a-zA-Z0-9]{2}\d{6}$)/;
     return objRegExp.test(strng);
 }
 

@@ -3,11 +3,58 @@ var chartWin = null;
 function openChart(url)
 {
     // compensate for margins
-    w = 1000;
-    h = 600;
- 
-	var options = "width=" + w + ",height=" + h;
+    w = 800;
+    h = 50;
+
+	var options = "width=" + w + ",height=" + h + ",menubar=no";
 	chartWin = window.open(url,"bagtypechart",options);
+}
+<!--
+var imgObj;
+function checkImg(theURL,winName){
+
+  if (typeof(imgObj) == "object"){
+  
+    if ((imgObj.width != 0) && (imgObj.height != 0))
+
+      OpenFullSizeWindow(theURL,winName, ",width=" + (imgObj.width+20) + ",height=" + (imgObj.height+30));
+    else
+     
+      setTimeout("checkImg('" + theURL + "','" + winName + "')", 100)
+  }
+}
+
+function OpenFullSizeWindow(theURL,winName,features) {
+  var aNewWin, sBaseCmd;
+ 
+  sBaseCmd = "toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,";
+
+  if (features == null || features == ""){
+ 
+    imgObj = new Image();
+
+    imgObj.src = theURL;
+
+    checkImg(theURL, winName)
+  }
+  else{
+
+    aNewWin = window.open(theURL,winName, sBaseCmd + features);
+  
+    aNewWin.focus();
+  }
+}
+//-->
+function openChart2(url,width,height,left)
+{
+    // compensate for margins
+
+    w = width;
+    h = height;
+    l = left;
+	var options = "width=" + w + ",height=" + h +",left=" + l+",top=1";
+	chartWin = window.open(url,"bagtypechart",options);
+	
 }
 
 function closeChart()
