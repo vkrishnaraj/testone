@@ -21,8 +21,13 @@ public class PropertyBMO {
 	public static final String PROPERTY_LIMIT_LD_ADDSTATIONS = "losscode.ld.addstations";
 	public static final String PROPERTY_LIMIT_MISSING_ADDSTATIONS = "losscode.missing.addstations";
 	public static final String PROPERTY_LIMIT_DAMAGED_ADDSTATIONS = "losscode.dam.addstations";
-
-
+	public static final String PROPERTY_TRACING_SECONDARY_COLOR_PERCENT = "tracing.secondary.color";
+	public static final String PROPERTY_TRACING_TERTIARY_COLOR_PERCENT = "tracing.tertiary.color";
+	public static final String PROPERTY_TRACING_SECONDARY_TYPE_PERCENT = "tracing.secondary.type";
+	public static final String PROPERTY_TRACING_TERTIARY_TYPE_PERCENT = "tracing.tertiary.type";
+	public static final String PROPERTY_TRACING_DAYS_BACKWARD = "tracing.backward";
+	public static final String PROPERTY_TRACING_DAYS_FORWARD = "tracing.forward";
+	
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 
@@ -47,4 +52,5 @@ public class PropertyBMO {
 			sess.close();
 		}
 	}
+	
 }

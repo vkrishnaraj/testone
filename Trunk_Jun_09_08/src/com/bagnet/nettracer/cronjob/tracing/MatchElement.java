@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
@@ -581,15 +583,21 @@ public enum MatchElement {
 						results.add(result);
 					} else if (MatchUtils
 							.secondaryColorMatch(item.getColor(), ohdColor)) {
-						// TODO: Set this as database-driven property
 						double secondaryColorPercent = 66;
+						
+						String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_COLOR_PERCENT);
+						secondaryColorPercent = Double.parseDouble(typePercent);
+						
 						MatchResult result = new MatchResult(e, secondaryColorPercent,
 								item.getColor(), ohdColor);
 						result.setBagNumber(item.getBagnumber());
 						results.add(result);
 					} else if (MatchUtils.tertiaryColorMatch(item.getColor(), ohdColor)) {
-						// TODO: Set this as database-driven property
 						double tertiaryColorPercent = 33;
+						
+						String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_COLOR_PERCENT);
+						tertiaryColorPercent = Double.parseDouble(typePercent);
+						
 						MatchResult result = new MatchResult(e, tertiaryColorPercent,
 								item.getColor(), ohdColor);
 						result.setBagNumber(item.getBagnumber());
@@ -622,7 +630,7 @@ public enum MatchElement {
 		}
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			if (item.getBagtype() != null) {
+			if (item != null && item.getBagtype() != null) {
 				if (item.getBagtype().equals(ohdType)) {
 	
 					MatchResult result = new MatchResult(e, 100, item.getBagtype(),
@@ -631,15 +639,21 @@ public enum MatchElement {
 					results.add(result);
 				} else if (MatchUtils
 						.secondaryTypeMatch(item.getBagtype(), ohdType)) {
-					// TODO: Set this as database-driven property
 					double secondaryTypePercent = 66;
+					
+					String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_TYPE_PERCENT);
+					secondaryTypePercent = Double.parseDouble(typePercent);
+					
 					MatchResult result = new MatchResult(e, secondaryTypePercent,
 							item.getBagtype(), ohdType);
 					result.setBagNumber(item.getBagnumber());
 					results.add(result);
 				} else if (MatchUtils.tertiaryTypeMatch(item.getBagtype(), ohdType)) {
-					// TODO: Set this as database-driven property
 					double tertiaryTypePercent = 33;
+					
+					String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_TYPE_PERCENT);
+					tertiaryTypePercent = Double.parseDouble(typePercent);
+					
 					MatchResult result = new MatchResult(e, tertiaryTypePercent,
 							item.getBagtype(), ohdType);
 					result.setBagNumber(item.getBagnumber());

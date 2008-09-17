@@ -90,7 +90,7 @@ public class ScoringAlgorithm {
 		}
 		
 		// Add the best bag's score to the overall score and set its usedInScoring flags to true.
-		if (bestBag != null) {
+		if (bestBag != null && bestBag.getOverallScore() > 0) {
 			// Add bag score to overall score.
 			overallScore += bestBag.getOverallScore();
 
