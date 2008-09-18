@@ -14,6 +14,7 @@ public class MatchResult {
 	private String contentCategory;
 	private boolean usedInScoring;
 	private boolean usableInScoring;
+	private boolean dateMatched;
 	private double scoredValue; // Value used primarily for manually validating scores.
 
 	public double getScoredValue() {
@@ -129,6 +130,14 @@ public class MatchResult {
 
 	public void setUsableInScoring(boolean usableInScoring) {
 		this.usableInScoring = usableInScoring;
+	}
+
+	public boolean isDateMatched() {
+		return dateMatched;
+	}
+
+	public void setDateMatched(boolean dateMatched) {
+		this.dateMatched = dateMatched;
 	}
 
 }

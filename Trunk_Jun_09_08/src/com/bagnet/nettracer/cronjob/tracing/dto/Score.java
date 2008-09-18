@@ -7,6 +7,7 @@ public class Score {
 	private double overallScore;
 	private boolean gtsv;
 	private int bagNumber = -1;
+	private String claimCheckNumber;
 
 	public boolean isGtsv() {
 		return gtsv;
@@ -47,6 +48,14 @@ public class Score {
 
 	public void setBagNumber(int bagNumber) {
 		this.bagNumber = bagNumber;
+	}
+
+	public String getClaimCheckNumber() {
+		return claimCheckNumber;
+	}
+
+	public void setClaimCheckNumber(String claimCheckNumber) {
+		this.claimCheckNumber = claimCheckNumber;
 	}
 
 }

@@ -44,13 +44,6 @@
             <br>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
-                <td colspan=4>
-                  <b><bean:message key="header.match_category" />
-                  :
-                  <bean:write name="match" property="category" scope="request" />
-                </td>
-              </tr>
-              <tr>
                 <td>
                   <bean:message key="header.file" />
                   :

@@ -39,34 +39,6 @@ function updatePagination() {
 
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <td colspan="3" align="center">
-        <table border=0 width="70%">
-          <tr>
-            <td align=right nowrap class="grayTxt">
-              Category I:
-            </td>
-            <td bgcolor="#A9B6E7" width=30>
-              &nbsp;&nbsp;
-            </td>
-            <td width=50%>
-              &nbsp;
-            </td>
-          </tr>
-          <tr>
-            <td align=right nowrap class="grayTxt">
-              Category II:
-            </td>
-            <td bgcolor="#D1E4F1" width=30>
-              &nbsp;&nbsp;
-            </td>
-            <td width=50%>
-              &nbsp;
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
       <!-- MIDDLE COLUMN -->
       <td id="middlecolumn">
         <!-- MAIN BODY -->
@@ -129,7 +101,7 @@ function updatePagination() {
           </table>
           <h1 class="green">
             <bean:message key="header.matches" />
-            <a href="#" onclick="openHelp('task_manager\view_trace_results.htm#sort trace results');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/view_trace_results.htm#sort trace results');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
@@ -173,14 +145,7 @@ function updatePagination() {
             </tr>
             <logic:present name="matchList" scope="request">
               <logic:iterate id="matches" name="matchList" scope="request" type="com.bagnet.nettracer.tracing.db.Match">
-                <tr
-                  <logic:equal name="matches" property="category" value="1">
-                  	bgcolor="#A9B6E7"
-                  </logic:equal>
-                  <logic:equal name="matches" property="category" value="2">
-                  	bgcolor="#D1E4F1"
-                  </logic:equal>
-                  >
+                <tr>
                   <td>
                     <logic:notEqual name="matches" property="status.status_ID" value="22">
                       <input type="checkbox" name="match_ID" value='<bean:write name="matches" property="match_id"/>'>

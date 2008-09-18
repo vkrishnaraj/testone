@@ -27,9 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -282,13 +279,13 @@ public enum MatchElement {
 						.getPassengers()) {
 					for (OHD_Address oa : (Set<OHD_Address>) ohdPax
 							.getAddresses()) {
-						if (ia.getAddress1() != null && ia.getState_ID() != null && ia.getZip() != null) {
+						if (ia.getAddress1() != null && ia.getAddress2() != null && ia.getState_ID() != null && ia.getZip() != null) {
 							String incString = StringUtils.join(" ", ia
-									.getAddress1().trim(), ia.getCity().trim(), ia
+									.getAddress1().trim(), ia.getAddress2().trim(), ia.getCity().trim(), ia
 									.getState_ID(), ia.getProvince(), ia.getZip());
 	
 							String ohdString = StringUtils.join(" ", oa
-									.getAddress1().trim(), oa.getCity().trim(), oa
+									.getAddress1().trim(), oa.getAddress2().trim(), oa.getCity().trim(), oa
 									.getState_ID(), oa.getProvince(), oa.getZip());
 	
 							MatchResult result = MatchUtils.stringCompare(e,
@@ -302,7 +299,6 @@ public enum MatchElement {
 				}
 			}
 		}
-
 		return results;
 	}
 
@@ -335,6 +331,9 @@ public enum MatchElement {
 				MatchResult result = MatchUtils.stringCompare(e, incItinSeg,
 						ohdItinSeg);
 				if (result != null) {
+					if (i.getDepartdate().equals(it.getDepartdate())) {
+						result.setDateMatched(true);
+					}
 					result.setItineraryType(i.getItinerarytype());
 					results.add(result);
 				}

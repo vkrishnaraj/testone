@@ -32,7 +32,6 @@ import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 
 public class PassiveTrace implements Runnable {
@@ -178,15 +177,10 @@ public class PassiveTrace implements Runnable {
 					}
 				}
 			}catch (HibernateException e) {
-				hibernateErrorDates.add(new Date());
-				if (hibernateErrorDates.size() > 10) {
-					String message = "Passive tracer 10+ HIBERNATE errors while running...\n\n " +
-							"The first was at: " + hibernateErrorDates.get(0) + "\n " +
-							"The tenth was at: " + hibernateErrorDates.get(9) + "\n\n";
-					errorHandler.sendEmail(message, e, true);
-					hibernateErrorDates.clear();
-				}
-				logger.fatal("Passive tracer encountered a HIBERNATE error while running.  Sleeping for 60 seconds...");
+
+				errorHandler.sendEmail("Passive tracer encountered a FATAL HIBERNATE error while running.", e, true, true);
+				
+				logger.fatal("Passive tracer encountered a FATAL HIBERNATE error while running.");
 				e.printStackTrace();
 				try {
 					Thread.sleep(60*1000);
@@ -196,8 +190,8 @@ public class PassiveTrace implements Runnable {
 
 				
 			} catch (Exception e) {
-				logger.fatal("Passive tracer encountered an error while running...");
-				errorHandler.sendEmail("Passive tracer encountered an error while running...", true);
+				logger.fatal("Passive tracer encountered a FATAL error while running...");
+				errorHandler.sendEmail("Passive tracer encountered a FATAL error while running...", true, false);
 				e.printStackTrace();
 			}
 		}
@@ -307,36 +301,37 @@ public class PassiveTrace implements Runnable {
 				if (score.getOverallScore() > this.minimumScore || score.isGtsv()) {
 					
 					// Does the match already exist in our system?
-					DecimalFormat format = (DecimalFormat) NumberFormat.getInstance();
-					format.setMaximumFractionDigits(4);
-					double percMatch = new Double(format.format(score.getOverallScore())).doubleValue(); 				 					
-					String matchExistsSQL = "SELECT COUNT(*) as count FROM MATCH_HISTORY WHERE MBR_NUMBER= :incident_ID AND OHD_ID = :ohd_ID AND MATCH_PERCENT = :matchPercent";
+					double percMatch = formatPercent(score.getOverallScore());
+					
+					String matchExistsSQL = "SELECT COUNT(*) as COUNT FROM MATCH_HISTORY WHERE MBR_NUMBER= :incident_ID AND OHD_ID = :ohd_ID AND MATCH_PERCENT = :matchPercent";
 	
 					SQLQuery matchExistsQuery = sess.createSQLQuery(matchExistsSQL);
 					matchExistsQuery.setString("incident_ID", incidentId);
 					matchExistsQuery.setString("ohd_ID", ohd_ID);
 					matchExistsQuery.setDouble("matchPercent", percMatch);
 					matchExistsQuery.addScalar("COUNT", Hibernate.INTEGER);
-					List<String> queryResults = query.list();
-					int queryCount = new Integer(queryResults.get(0)).intValue();
+					List<Integer> queryResults = matchExistsQuery.list();
+					int queryCount = queryResults.get(0).intValue();
 					
 					// If we have not saved this particular match before, then do so now.
 					if (queryCount == 0) {
-						logger.info("  Match detected - Incident: "
+						logger.info("  New Match detected - Incident: "
 								+ incident.getIncident_ID() + " OHD: "
 								+ ohd.getOHD_ID() + " Score: "
 								+ score.getOverallScore());
-						// Add to DB
+
+						
 						Match match = new Match();
 						match.setBagnumber(score.getBagNumber());
 						match.setMatch_type(TracingConstants.PASSIVE_MATCH_TYPE);
-						match.setMatch_percent(score.getOverallScore());
+						match.setMatch_percent(formatPercent(score.getOverallScore()));
 						match.setStatus(StatusBMO
 								.getStatus(TracingConstants.MATCH_STATUS_OPEN));
 						match.setMatch_made_on(DateUtils
 								.convertToGMTDate(new Date()));
 						match.setMbr(incident);
 						match.setOhd(ohd);
+						match.setClaimchecknum(score.getClaimCheckNumber());
 	
 						HashSet<Match_Detail> details = new HashSet<Match_Detail>();
 	
@@ -346,7 +341,7 @@ public class PassiveTrace implements Runnable {
 								detail.setMatch(match);
 								detail.setMbr_info(result.getIncidentContents());
 								detail.setOhd_info(result.getOhdContents());
-								detail.setPercentage(result.getPercentMatch());
+								detail.setPercentage(formatPercent(result.getPercentMatch()));
 								detail.setItem(result.getMatchElement()
 										.getConstant());
 								details.add(detail);
@@ -367,11 +362,39 @@ public class PassiveTrace implements Runnable {
 			}
 			sess.close();
 
+		} catch (HibernateException e) {
+			errorHandler.sendEmail(message + "<br /><br />", e, false, true);
+			logger.error(message);
+			e.printStackTrace();			
 		} catch (Exception e) {
-			errorHandler.sendEmail(message + "\n", e, false);
+			errorHandler.sendEmail(message + "<br /><br />", e, false, false);
 			logger.error(message);
 			e.printStackTrace();
 		}
 
 	}
+	
+	private static double formatPercent(double percent) {
+		DecimalFormat format = (DecimalFormat) NumberFormat.getInstance();
+		format.setMaximumFractionDigits(4);
+		return new Double(format.format(percent)).doubleValue();
+	}
+	
+	public static OHD getOhd(String ohd_ID) {
+		// OHD
+		// PASSENGERS
+		// ADDRESSES
+		// ITINERARIES
+		return null;
+	}
+	
+	public static Incident getIncident(String incident_ID) {
+		// OHD
+		// PASSENGERS
+		// ADDRESSES
+		// ITINERARIES
+		return null;
+	}
+
+
 }

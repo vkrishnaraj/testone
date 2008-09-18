@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.cronjob.tracing;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.mail.internet.InternetAddress;
 
@@ -17,6 +18,7 @@ public class PassiveTraceErrorHandler {
 	private String emailTo = "bsmith@nettracer.aero";
 	private int emailPort = 25;
 	private String instanceName = null;
+	private volatile ArrayList<Date> dateList = new ArrayList<Date>();
 	
 	
 	public PassiveTraceErrorHandler(String emailHost, String emailFrom, String emailTo, int emailPort, String instanceName) {
@@ -28,17 +30,17 @@ public class PassiveTraceErrorHandler {
 
 	}
 	
-	public void sendEmail(String message, Exception e, boolean fatal) {
+	public void sendEmail(String message, Exception e, boolean fatal, boolean hibernateError) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(message + "\n\n");
 		java.io.StringWriter out = new java.io.StringWriter();
         e.printStackTrace(new java.io.PrintWriter(out));
         String stackTrace = out.toString();
         sb.append(stackTrace);
-		sendEmail(sb.toString(), fatal);
+		sendEmail(sb.toString(), fatal, hibernateError);
 	}
 
-	public void sendEmail(String message, boolean fatal) {
+	public void sendEmail(String message, boolean fatal,  boolean hibernateError) {
 		try {
 			HtmlEmail he = new HtmlEmail();
 			he.setHostName(emailHost);
@@ -52,18 +54,29 @@ public class PassiveTraceErrorHandler {
 				al.add(new InternetAddress("support@nettracer.aero"));
 			}
 			*/
-			
-			
 			he.setTo(al);
-			 
 			he.setHtmlMsg(message);
+			
 			if (fatal) {
 				he.setSubject("Fatal Passive Tracing Error: " + instanceName);
+				he.send();
+			} else 	if (hibernateError) {
+				synchronized (dateList) {
+					dateList.add(new Date());
+					if (dateList.size() > 5) {
+						dateList.clear();
+						he.setSubject("Multiple Hibernate Errors: " + instanceName);
+						he.send();
+						// Sleep for 5 minutes
+						Thread.sleep(300*1000);
+					}
+				}
 			} else {
-				he.setSubject("Thread Passive Tracing Error: " + instanceName);
+				he.setSubject("Passive Tracing Thread Error: " + instanceName);
+				he.send();
 			}
-		
-			he.send();
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.fatal("Unable to send error via email due to: " + e);

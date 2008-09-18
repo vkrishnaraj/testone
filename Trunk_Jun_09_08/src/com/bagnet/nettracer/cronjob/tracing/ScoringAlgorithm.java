@@ -37,8 +37,7 @@ public class ScoringAlgorithm {
 							matchResult.getMatchElement().name().equals("CLAIM_CHECK")) {
 						if (topElement != null) {
 							if (topElement.getPercentMatch() < matchResult.getPercentMatch()) {
-								topElement = matchResult;
-							}
+								topElement = matchResult;							}
 						} else {
 							topElement = matchResult;
 						}
@@ -115,6 +114,7 @@ public class ScoringAlgorithm {
 		//  3)  Percentage is showing as positive in match_details - see 474769.
 		double multiplier = 0;
 		
+		// Contents have a variable multiplier.
 		if (!matchResult.getMatchElement().name().equals("CONTENTS")) {
 			multiplier = ruleSet.getMultiplier(matchResult, score);
 		} else {
@@ -122,18 +122,34 @@ public class ScoringAlgorithm {
 			multiplier = ruleSet.getMultiplier(matchResult, score, length);
 		}
 		
+		// Determine new score
 		double addToScore = 0;
 		if (multiplier >= 0) {
 			addToScore = matchResult.getPercentMatch() * multiplier;
 		} else {
-			addToScore = multiplier;
+			addToScore = multiplier*100;
 		}
 		
+		// If contents & category match, apply bonus
 		if (matchResult.getMatchElement().name().equals("CONTENTS")) {
 			if (matchResult.isCategoryMatched() && addToScore != 0) {
 				addToScore += ruleSet.getMultiplier("CONTENTS_CATEGORY", 100);
 			}
 		}
+		
+		// If itinerary and date match, apply bonus
+		if (matchResult.getMatchElement().name().equals("ITINERARY")) {
+			if (matchResult.isDateMatched() && addToScore != 0) {
+				addToScore += ruleSet.getMultiplier("ITIN_DATE", 100);
+			}
+		}
+		
+		// If it is a scored claim check match, set the claim check element in the score object.
+		if (addToScore != 0 && matchResult.getMatchElement().name().equals("CLAIM_CHECK")) {
+			score.setClaimCheckNumber(matchResult.getIncidentContents());
+		}
+		
+		// If it is not bag specific, set the scored value. 
 		if (addToScore != 0 && bagSpecific == false) { 
 			matchResult.setUsedInScoring(true);
 			matchResult.setScoredValue(addToScore);

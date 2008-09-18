@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -35,9 +36,7 @@ import com.bagnet.nettracer.tracing.db.Match;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
-import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
@@ -48,15 +47,13 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
  * @author Matt
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public final class ViewMatch extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -207,8 +204,16 @@ public final class ViewMatch extends Action {
 						&& match.getClaimchecknum().length() > 0) {
 					for (Iterator i = incident.getClaimchecks().iterator(); i.hasNext();) {
 						ic = (Incident_Claimcheck) i.next();
-						if (ic.getClaimchecknum().equals(match.getClaimchecknum())) ic.setOHD_ID(ohd
-								.getOHD_ID());
+						String bagTag = ic.getClaimchecknum();
+						String tenDigitCode = null;
+						try {
+							tenDigitCode = LookupAirlineCodes.getFullBagTag(bagTag);
+						} catch (BagtagException e) {
+							// Ignore-  we couldn't convert the number.
+						}
+						if (bagTag.equals(match.getClaimchecknum()) || (tenDigitCode != null && tenDigitCode.equals(match.getClaimchecknum()))) {
+							ic.setOHD_ID(ohd.getOHD_ID());
+						}
 					}
 				}
 				// match bag if bag number was matched in match history
@@ -259,8 +264,16 @@ public final class ViewMatch extends Action {
 						// no bags at all in report, match claim check automatically
 						for (Iterator i = incident.getClaimchecks().iterator(); i.hasNext();) {
 							ic = (Incident_Claimcheck) i.next();
-							if (ic.getClaimchecknum().equals(match.getClaimchecknum())) ic.setOHD_ID(ohd
-									.getOHD_ID());
+							String bagTag = ic.getClaimchecknum();
+							String tenDigitCode = null;
+							try {
+								tenDigitCode = LookupAirlineCodes.getFullBagTag(bagTag);
+							} catch (BagtagException e) {
+								// Ignore-  we couldn't convert the number.
+							}
+							if (bagTag.equals(match.getClaimchecknum()) || (tenDigitCode != null && tenDigitCode.equals(match.getClaimchecknum()))) {
+								ic.setOHD_ID(ohd.getOHD_ID());
+							}
 						}
 
 						// update matching database
@@ -333,7 +346,14 @@ public final class ViewMatch extends Action {
 			if (match.getClaimchecknum() != null && match.getClaimchecknum().length() > 0) {
 				for (int i = 0; i < incident.getClaimcheck_list().size(); i++) {
 					ic = (Incident_Claimcheck) incident.getClaimcheck_list().get(i);
-					if (ic.getClaimchecknum().equals(match.getClaimchecknum())) {
+					String bagTag = ic.getClaimchecknum();
+					String tenDigitCode = null;
+					try {
+						tenDigitCode = LookupAirlineCodes.getFullBagTag(bagTag);
+					} catch (BagtagException e) {
+						// Ignore-  we couldn't convert the number.
+					}
+					if (bagTag.equals(match.getClaimchecknum()) || (tenDigitCode != null && tenDigitCode.equals(match.getClaimchecknum()))) {
 						ohd_id = ic.getOHD_ID();
 						// find the bag associated with this
 						for (int j = 0; j < incident.getItemlist().size(); j++) {
