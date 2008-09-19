@@ -626,12 +626,12 @@ public enum MatchElement {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		String ohdType = ohd.getType();
 		
-		if (ohdType == null) {
+		if (ohdType == null || ohdType.trim().length() == 0) {
 			return results;
 		}
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
-			if (item != null && item.getBagtype() != null) {
+			if (item != null && item.getBagtype() != null && item.getBagtype().trim().length() > 0) {
 				if (item.getBagtype().equals(ohdType)) {
 	
 					MatchResult result = new MatchResult(e, 100, item.getBagtype(),

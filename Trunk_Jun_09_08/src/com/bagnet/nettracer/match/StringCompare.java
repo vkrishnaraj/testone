@@ -15,17 +15,17 @@ import java.util.ArrayList;
 public class StringCompare {
 
 	/** @return lexical similarity value in the range [0,1] */
-	public synchronized static double compareStrings(String str1, String str2) {
+	public static double compareStrings(String str1, String str2) {
 		if (str1 == null || str2 == null || str1.trim().length() == 0 || str2.trim().length() == 0) return 0;
 		// so if there is a compare already, always return greater than 0
 		double result = docompare(str1, str2);
-		if (result <= 0) return 0.1;
+		if (result <= 0) return 0;
 		else return result;
 	}
 
-	public synchronized static double compareStrings(int str1, int str2) {
+	public static double compareStrings(int str1, int str2) {
 		if (str1 == 0 || str2 == 0) return 0;
-		return docompare(Integer.toString(str1), Integer.toString(str2)) + 0.1;
+		return docompare(Integer.toString(str1), Integer.toString(str2)) + 0;
 	}
 
 	private static double docompare(String str1, String str2) {
