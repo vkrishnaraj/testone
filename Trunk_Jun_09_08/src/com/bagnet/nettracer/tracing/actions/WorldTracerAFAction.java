@@ -229,7 +229,7 @@ public class WorldTracerAFAction extends Action {
 		request.setAttribute("resultlist", resultlist);
 
 		/** ************ end of pagination ************* */
-		System.out.println(resultlist.size()+"------------------");
+		//System.out.println(resultlist.size()+"------------------");
 		return (mapping
 				.findForward(TracingConstants.VIEW_WORLDTRACER_ACTION_FILES));
 

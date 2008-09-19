@@ -75,10 +75,16 @@
 		<constructor-arg value="${company.code}" />
 		
 	</bean>
-	 -->
+	-->
 	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
 		<constructor-arg value="${company.code}" />
 		<constructor-arg value="${pt.instance.label}" />
+	</bean>
+		 
+	<bean id="runPassiveTracerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="passiveTracer" />
+		<property name="targetMethod" value="startTracing" />
+		<property name="concurrent" value="false" />
 	</bean>
 	
 	<!-- The different jobs to run -->
@@ -108,6 +114,12 @@
 		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
 	</bean>
 
+	<bean id="cronPassiveTracerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runPassiveTracerJob" />
+		<property name="cronExpression" value="${pt.cron}" />
+		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
+	</bean>
+
 	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="wtActionFileJob" />
 		<property name="cronExpression" value="${wtaf.cron}" />
@@ -126,6 +138,7 @@
 				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronRetrieveAfTrigger" />
 				<ref bean="cronMoveToLzTrigger" />
+				<ref bean="cronPassiveTracerTrigger" />
 			</list>
 		</property>
 	</bean>
