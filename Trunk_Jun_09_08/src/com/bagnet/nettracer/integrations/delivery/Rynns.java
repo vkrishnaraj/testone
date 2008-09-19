@@ -12,12 +12,15 @@ import org.tempuri.ItemData;
 import org.tempuri.NetTracerStub;
 import org.tempuri.BDOAddDocument.BDOAdd;
 
+import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -40,13 +43,11 @@ public class Rynns implements BDOIntegration {
 			BDOAdd ws = doc.addNewBDOAdd();
 			/********* MAPPING FIELDS *******************/
 			
-			ws.setVendorImportCode(bdo.getDelivercompany().getIntegration_key());
+			DeliverCompany dc = DelivercompanyBMO.getDeliveryCompany(bdo.getDelivercompany().getDelivercompany_ID() + "");
+			ws.setVendorImportCode(dc.getIntegration_key());
 			ws.setAirportCode(agent.getStation().getStationcode());
 			
 			String airlineCode = agent.getCompanycode_ID();
-			if (airlineCode.equals("DA")) {
-				airlineCode = "US";
-			}
 			
 			ws.setAirlineCode(airlineCode);
 			String bdoNum = bdo.getBDO_ID_ref().substring(3);
@@ -72,7 +73,14 @@ public class Rynns implements BDOIntegration {
 				ws.setClaimReferenceNumber(bdo.getOhd().getOHD_ID());
 			}
 			
-			ws.setDeliveryRemarks(bdo.getDelivery_comments());
+			StringBuffer remarks = new StringBuffer();
+			if (bdo.getDeliverydate() != null) {
+				String date = DateUtils.formatDate(bdo.getDeliverydate(), TracingConstants.DISPLAY_DATEFORMAT, null, null);
+				remarks.append("Please deliver on: " + date + "\n");
+			}
+			remarks.append(bdo.getDelivery_comments());
+			
+			ws.setDeliveryRemarks(remarks.toString());
 
 			bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 			bdo.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
@@ -83,39 +91,17 @@ public class Rynns implements BDOIntegration {
 			
 			ArrayOfItemData array = ws.addNewItemsData();
 			
-			if (bdo.getOhd() != null) {
+			for (Item item: (Set<Item>)bdo.getItems()) {
 				ItemData id = array.addNewItemData();
-				if (bdo.getOhd().getClaimnum() != null && bdo.getOhd().getClaimnum().length() > 0) {
-					id.setTag(bdo.getOhd().getClaimnum());
+				id.setColor(item.getColor());
+				if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+					id.setTag(item.getClaimchecknum());	
 				} else {
 					id.setTag("notAvailable");
 				}
 				
-				if (bdo.getOhd().getColor() != null && bdo.getOhd().getColor().length() > 0) {
-					id.setColor(bdo.getOhd().getColor());
-				}
-				
-				if (bdo.getOhd().getType() != null && bdo.getOhd().getType().length() > 0) {
-					id.setItemType(bdo.getOhd().getType());
-				}
-				
-				if (bdo.getOhd().getManufacturer() != null && bdo.getOhd().getManufacturer().length() > 0) {
-					id.setBrand(bdo.getOhd().getManufacturer());
-				}
-				
-			} else {
-				for (Item item: (Set<Item>)bdo.getItems()) {
-					ItemData id = array.addNewItemData();
-					id.setColor(item.getColor());
-					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
-						id.setTag(item.getClaimchecknum());	
-					} else {
-						id.setTag("notAvailable");
-					}
-					
-					id.setItemType(item.getBagtype());
-					id.setBrand(item.getManuname());
-				}
+				id.setItemType(item.getBagtype());
+				id.setBrand(item.getManuname());
 			}
 			
 			

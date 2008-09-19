@@ -552,9 +552,9 @@ public class HibernateUtils {
 				if (audit_dc != null) {
 					//HibernateUtils.saveNew(audit_dc);
 					sess.save(audit_dc);
-					retValue = objRef;
 				}
 			}
+			retValue = objRef;
 
 			t.commit();
 		} catch (Exception e) {

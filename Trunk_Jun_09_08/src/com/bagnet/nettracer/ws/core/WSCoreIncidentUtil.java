@@ -195,7 +195,7 @@ public class WSCoreIncidentUtil {
 			si.setAgentassigned(iDTO.getAgentassigned().getUsername());
 		}
 		
-		si.setOsi(iDTO.getOtherSystemInformation());
+		//si.setOsi(iDTO.getOtherSystemInformation());
 		
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(iDTO.getFullCreateDate());

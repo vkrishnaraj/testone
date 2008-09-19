@@ -82,7 +82,6 @@ public class Incident implements Serializable {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
-	private String otherSystemInformation;
 
 
 	public String getReportMethodString(int val) {
@@ -1003,20 +1002,4 @@ public class Incident implements Serializable {
 		else
 			return val + " ";
 	}
-
-	/**
-	 * @return the otherSystemInformation
-	 * @hibernate.property type="string" column="other_system_information"
-	 */
-	public String getOtherSystemInformation() {
-		return otherSystemInformation;
-	}
-
-	/**
-	 * @param otherSystemInformation the otherSystemInformation to set
-	 */
-	public void setOtherSystemInformation(String otherSystemInformation) {
-		this.otherSystemInformation = otherSystemInformation;
-	}
-
 }

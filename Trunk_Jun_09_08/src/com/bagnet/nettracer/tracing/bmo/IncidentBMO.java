@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -606,6 +607,7 @@ public class IncidentBMO {
 				s.append(" order by incident.incident_ID");
 
 			q = sess.createQuery(s.toString());
+			q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
@@ -685,7 +687,7 @@ public class IncidentBMO {
 
 			if (siDTO.getAgent().length() > 0)
 				q.setString("agent", siDTO.getAgent());
-
+			
 			List results = q.list();
 			return results;
 		} catch (Exception e) {

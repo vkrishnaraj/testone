@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -770,7 +771,7 @@ public class BDOUtils {
 						.append("select count(bdo.BDO_ID) from com.bagnet.nettracer.tracing.db.BDO bdo ");
 			else
 				s
-						.append("select distinct bdo from com.bagnet.nettracer.tracing.db.BDO bdo ");
+						.append("select bdo from com.bagnet.nettracer.tracing.db.BDO bdo ");
 
 			if (siDTO.getFirstname().length() > 0
 					|| siDTO.getMiddlename().length() > 0
@@ -905,8 +906,9 @@ public class BDOUtils {
 			if (siDTO.getAgent().length() > 0)
 				q.setString("agent", siDTO.getAgent());
 
-			ArrayList results = (ArrayList) q.list();
-			return results;
+			LinkedHashSet qlhs = new LinkedHashSet(q.list());
+			ArrayList al = new ArrayList(qlhs);
+			return al;
 		} catch (Exception e) {
 			logger.error("unable to retrieve bdo in searchBDOs: " + e);
 			e.printStackTrace();

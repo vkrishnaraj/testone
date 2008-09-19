@@ -37,8 +37,8 @@ public class ReservationIntegrationImpl extends
 		Incident_Claimcheck claim2 = form.getClaimcheck(1);
 		
 		// Populate objects
-		claim1.setClaimchecknum("US123450");
-		claim2.setClaimchecknum("DL123451");
+		claim1.setClaimchecknum("US000001");
+		claim2.setClaimchecknum("US000002");
 		
 		form.setRecordlocator("DUNLAF");
 		form.setNumpassengers(1);
@@ -64,28 +64,28 @@ public class ReservationIntegrationImpl extends
 		address.setIs_permanent(1);
 		address.setHomephone("555-555-5555");
 		
-		ia.setAirline("DA");
+		ia.setAirline("US");
 		ia.setLegfrom("DFW");
 		ia.setLegto("ATL");
 		ia.setFlightnum("1111");
 		ia.setDepartdate(new Date());
 		ia.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
 		
-		ib.setAirline("DA");
+		ib.setAirline("US");
 		ib.setLegfrom("ATL");
 		ib.setLegto("FLL");
 		ib.setFlightnum("2222");
 		ib.setDepartdate(new Date());
 		ib.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
 		
-		ic.setAirline("DA");
+		ic.setAirline("US");
 		ic.setLegfrom("DFW");
 		ic.setLegto("ATL");
 		ic.setFlightnum("1111");
 		ic.setDepartdate(new Date());
 		ic.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
 		
-		id.setAirline("DA");
+		id.setAirline("US");
 		id.setLegfrom("ATL");
 		id.setLegto("FLL");
 		id.setFlightnum("2222");
