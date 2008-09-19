@@ -17,7 +17,7 @@
 %>
   <!-- Calendar includes -->
   <%@page import="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"%>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -415,6 +415,7 @@ function updatePagination() {
               <tr>
                 <td valign="top">
                   <bean:message key="colname.color" />
+                  <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&type=color',800,10,230);return false;"><bean:message key="chart3" /></a>
                   <br>
                   <html:select property="color" styleClass="dropdown">
                     <html:options collection="colorlistforsearch" property="value" labelProperty="label" />
@@ -422,8 +423,8 @@ function updatePagination() {
                   <br>
                   <br>
                   <bean:message key="colname.bagtype" />
-                  <a href="#" onclick="openChart('pages/popups/bagtypechart.jsp?charttype=1&key=bagtype');return false;"><bean:message key="chart1" /></a>
-                  <a href="#" onclick="openChart('pages/popups/bagtypechart.jsp?charttype=2&key=bagtype');return false;"><bean:message key="chart2" /></a>
+                  <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=bagtype&type=bagtype',800,280);return false;"><bean:message key="chart1" /></a>
+                  <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=bagtype&type=bagtype',800,370);return false;"><bean:message key="chart2" /></a>
                   <br>
                   <html:select property="bagtype" styleClass="dropdown">
                     <html:options collection="typelist" property="value" labelProperty="label" />
@@ -438,6 +439,7 @@ function updatePagination() {
                     </html:option>
                     <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                   </html:select>
+                   <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=xdescelement_ID1',800,100,230);return false;"><bean:message key="chart4" /></a>
                   <br>
                   <html:select property="xdescelement_ID2" styleClass="dropdown">
                     <html:option value="">
@@ -445,6 +447,7 @@ function updatePagination() {
                     </html:option>
                     <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                   </html:select>
+                  <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=xdescelement_ID2',800,100,230);return false;"><bean:message key="chart4" /></a>
                   <br>
                   <html:select property="xdescelement_ID3" styleClass="dropdown">
                     <html:option value="">
@@ -452,6 +455,7 @@ function updatePagination() {
                     </html:option>
                     <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                   </html:select>
+                  <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=xdescelement_ID3',800,100,230);return false;"><bean:message key="chart4" /></a>
                 </td>
                 <td valign="top">
                   <bean:message key="colname.manufacturer" />

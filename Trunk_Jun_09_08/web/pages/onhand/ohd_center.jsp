@@ -432,6 +432,7 @@ function gotoHistoricalReport() {
             <tr>
               <td valign=top>
                 <bean:message key="colname.color.req" />
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&type=bagColor',800,30,230);return false;"><bean:message key="chart3" /></a>
                 <br>
                 <html:select property="bagColor" styleClass="dropdown">
                   <html:options collection="colorlist" property="value" labelProperty="label" />
@@ -439,8 +440,8 @@ function gotoHistoricalReport() {
                 <br>
                 <br>
                 <bean:message key="colname.bagtype.req" />
-                <a href="#" onclick="openChart('pages/popups/bagtypechart.jsp?charttype=1');return false;"><bean:message key="chart1" /></a>
-                <a href="#" onclick="openChart('pages/popups/bagtypechart.jsp?charttype=2');return false;"><bean:message key="chart2" /></a>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&type=bagType',800,280,230);return false;"><bean:message key="chart1" /></a>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&type=bagType',800,370,230);return false;"><bean:message key="chart2" /></a>
                 <br>
                 <html:select property="bagType" styleClass="dropdown">
                   <html:options collection="typelist" property="value" labelProperty="label" />
@@ -455,6 +456,7 @@ function gotoHistoricalReport() {
                   </html:option>
                   <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                 </html:select>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=XDesc1',800,30,230);return false;"><bean:message key="chart4" /></a>
                 <br>
                 <html:select property="XDesc2" styleClass="dropdown">
                   <html:option value="">
@@ -462,6 +464,7 @@ function gotoHistoricalReport() {
                   </html:option>
                   <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                 </html:select>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=XDesc2',800,30,230);return false;"><bean:message key="chart4" /></a>
                 <br>
                 <html:select property="XDesc3" styleClass="dropdown">
                   <html:option value="">
@@ -469,6 +472,7 @@ function gotoHistoricalReport() {
                   </html:option>
                   <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
                 </html:select>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=XDesc3',800,30,230);return false;"><bean:message key="chart4" /></a>
               </td>
               <td valign=top>
                 <bean:message key="colname.manufacturer" />

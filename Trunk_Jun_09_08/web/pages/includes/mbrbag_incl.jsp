@@ -167,15 +167,17 @@
           <tr>
             <td valign=top>
               <bean:message key="colname.color.req" />
+            
+              <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&key=theitem[<%= i %>].color&type=color',800,10,230);return false;"><bean:message key="chart3" /></a>
               <br>
               <html:select name="theitem" property="color" indexed="true" styleClass="dropdown">
                 <html:options collection="colorlist" property="value" labelProperty="label" />
               </html:select>
-              <br>
+            
               <br>
               <bean:message key="colname.bagtype.req" />
-              <a href="#" onclick="openChart('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%= i %>].bagtype');return false;"><bean:message key="chart1" /></a>
-              <a href="#" onclick="openChart('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%= i %>].bagtype');return false;"><bean:message key="chart2" /></a>
+              <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%= i %>].bagtype&type=bagtype',800,280,230);return false;"><bean:message key="chart1" /></a>
+              <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%= i %>].bagtype&type=bagtype',800,370,230);return false;"><bean:message key="chart2" /></a>
               <br>
               <html:select name="theitem" property="bagtype" styleClass="dropdown" indexed="true">
                 <html:options collection="typelist" property="value" labelProperty="label" />
@@ -184,12 +186,14 @@
             <td valign=top>
               <bean:message key="colname.x_desc" />
               <br>
+            
               <html:select name="theitem" property="xdescelement_ID_1" styleClass="dropdown" indexed="true">
                 <html:option value="">
                   <bean:message key="select.please_select" />
                 </html:option>
                 <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
               </html:select>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_1&type=xdescelement_ID_1',800,30,230);return false;"><bean:message key="chart4" /></a>
               <br>
               <html:select name="theitem" property="xdescelement_ID_2" styleClass="dropdown" indexed="true">
                 <html:option value="">
@@ -197,6 +201,7 @@
                 </html:option>
                 <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
               </html:select>
+                <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_2&type=xdescelement_ID_2',800,30,230);return false;"><bean:message key="chart4" /></a>
               <br>
               <html:select name="theitem" property="xdescelement_ID_3" styleClass="dropdown" indexed="true">
                 <html:option value="">
@@ -204,6 +209,7 @@
                 </html:option>
                 <html:options collection="xdescelementlist" property="XDesc_ID" labelProperty="description" />
               </html:select>
+              <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_3&type=xdescelement_ID_3',800,30,230);return false;"><bean:message key="chart4" /></a>
             </td>
             <td valign=top>
               <bean:message key="colname.manufacturer" />
