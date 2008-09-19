@@ -319,7 +319,7 @@ function gotoHistoricalReport() {
                 %>
                 
                   <logic:notEmpty name="claimcheck" property="claimchecknum">
-                    <a href="scannerData.do?bagTagNumber=<bean:write name="claimcheck" property="claimchecknum" />&incidentId=<bean:write name="incidentForm" property="incident_ID" />"><bean:message key="scanner.link"/></a>
+                    <a href="scannerData.do?bagTagNumber=<bean:write name="claimcheck" property="claimchecknum" />&incidentId=<bean:write name="incidentForm" property="incident_ID" />"><br /><bean:message key="scanner.link"/></a>
                   </logic:notEmpty>
                 <%
                 }
