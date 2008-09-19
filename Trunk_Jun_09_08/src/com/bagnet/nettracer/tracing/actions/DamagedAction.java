@@ -294,7 +294,7 @@ public class DamagedAction extends Action {
 		 */
 		String incident = request.getParameter("incident_ID");
 		if (incident != null && incident.length() > 0) {
-			if (!bs.findIncidentByID(incident, theform, user, TracingConstants.DAMAGED_BAG)) {
+			if (bs.findIncidentByID(incident, theform, user, TracingConstants.DAMAGED_BAG) == null) {
 				ActionMessage error = new ActionMessage("error.noincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);

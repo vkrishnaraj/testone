@@ -167,7 +167,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 5, RepeatType.SAME_LINE });
 		OHD_FIELD_RULES.put(WorldTracerField.AG, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
-		OHD_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
 		OHD_FIELD_RULES.put(WorldTracerField.CP, new BasicRule(1, 20, 2, Format.NUMERIC));
 		// new Object[] { 2, RepeatType.MULTIPLE });
@@ -184,6 +183,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 1, RepeatType.NONE });
 		OHD_FIELD_RULES.put(WorldTracerField.BI, new BasicRule(2, 57, 1, Format.FREE_FLOW));
 		OHD_FIELD_RULES.put(WorldTracerField.PT, new BasicRule(1, 25, 1, Format.FREE_FLOW));
+		OHD_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.FREE_FLOW));
 
 		CAH_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
 		CAH_FIELD_RULES.put(WorldTracerField.CS, new BasicRule(6, 16, 5, Format.ALPHA_NUMERIC));
@@ -244,15 +244,15 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		ROH_FIELD_RULES.put(WorldTracerField.TX, new BasicRule(5, 9, 10, Format.ALPHA_NUMERIC));
 		
 		AMEND_AHL_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CT, new NumberedLinesRule(7, 7, 10, Format.ALPHA_NUMERIC));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CT, new NumberedLinesRule(7, 7, 10, Format.ALPHA_NUMERIC, true));
 		// new Object[] { 10, RepeatType.MULTIPLE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.FD, new SameLineRule(1, 14, 4, Format.ALPHA_NUMERIC));
 		// , new Object[] { 4, RepeatType.SAME_LINE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.IT, new NumberedLinesRule(1, 4, 3, Format.ALPHA));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.IT, new NumberedLinesRule(1, 4, 3, Format.ALPHA, false));
 		// new Object[] { 3, RepeatType.SAME_LINE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.RT, new SameLineRule(3, 3, 5, Format.ALPHA_NUMERIC));
 		// new Object[] { 15, RepeatType.SAME_LINE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.NM, new NumberedLinesRule(2, 16, 3, Format.ALPHA));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.NM, new NumberedLinesRule(2, 16, 3, Format.ALPHA, true));
 		// new Object[] { 3, RepeatType.SAME_LINE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PT, new BasicRule(1, 25, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
@@ -260,19 +260,20 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 1, RepeatType.NONE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.FL, new BasicRule(1, 25, 1, Format.ALPHA_NUMERIC));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PA, new NumberedLinesRule(1, 57, 2, Format.FREE_FLOW));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PA, new NumberedLinesRule(1, 57, 2, Format.FREE_FLOW, true));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.TA, new NumberedLinesRule(1, 57, 2, Format.FREE_FLOW, true));
 		// new Object[] { 1, RepeatType.MULTIPLE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.EA, new EmailRule(1, 44, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CO, new BasicRule(2, 5, 1, Format.ALPHA_NUMERIC));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PN, new NumberedLinesRule(1, 20, 2, Format.NUMERIC));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PN, new NumberedLinesRule(1, 20, 2, Format.NUMERIC, true));
 		// new Object[] { 2, RepeatType.MULTIPLE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.TP, new NumberedLinesRule(1, 20, 2, Format.NUMERIC));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.TP, new NumberedLinesRule(1, 20, 2, Format.NUMERIC, true));
 		// new Object[] { 2, RepeatType.MULTIPLE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CP, new NumberedLinesRule(1, 20, 2, Format.NUMERIC));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CP, new NumberedLinesRule(1, 20, 2, Format.NUMERIC, true));
 		// new Object[] { 2, RepeatType.MULTIPLE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.FX, new NumberedLinesRule(1, 20, 2, Format.NUMERIC));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.FX, new NumberedLinesRule(1, 20, 2, Format.NUMERIC, true));
 		// new Object[] { 2, RepeatType.MULTIPLE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.NP, new BasicRule(1, 25, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
@@ -280,7 +281,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 4, RepeatType.SAME_LINE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.TN, new NumberedLinesRule(8, 10, 10, Format.ALPHA_NUMERIC));
 		// new Object[] { 10, RepeatType.MULTIPLE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.BI, new NumberedLinesRule(2, 57, 10, Format.FREE_FLOW));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.BI, new NumberedLinesRule(2, 57, 10, Format.FREE_FLOW, true));
 		// new Object[] { 10, RepeatType.MULTIPLE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.HC, new BasicRule(1, 1, 1, Format.ALPHA));
 		// new Object[] { 1, RepeatType.NONE });
@@ -290,7 +291,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 1, RepeatType.NONE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PB, new BasicRule(1, 15, 1, Format.ALPHA_NUMERIC));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.FREE_FLOW));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CC, new ContentAmendRule(1, 57, 10, Format.FREE_FLOW, true));
 		// new Object[] { 10, RepeatType.MULTIPLE });
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.AG, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 		
@@ -299,7 +300,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 1, RepeatType.NONE });
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.TN, new BasicRule(8, 10, 1, Format.ALPHA_NUMERIC));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_OHD_FIELD_RULES.put(WorldTracerField.PA, new NumberedLinesRule(1, 57, 2, Format.FREE_FLOW));
+		AMEND_OHD_FIELD_RULES.put(WorldTracerField.PA, new NumberedLinesRule(1, 57, 2, Format.FREE_FLOW, true));
 		// new Object[] { 1, RepeatType.MULTIPLE });
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.FD, new SameLineRule(1, 14, 4, Format.ALPHA_NUMERIC));
 		// new Object[] { 4, RepeatType.SAME_LINE });
@@ -307,13 +308,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 5, RepeatType.SAME_LINE });
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.AG, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_OHD_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.FREE_FLOW));
+		AMEND_OHD_FIELD_RULES.put(WorldTracerField.CC, new ContentAmendRule(1, 57, 10, Format.FREE_FLOW, false));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_OHD_FIELD_RULES.put(WorldTracerField.CP, new NumberedLinesRule(1, 20, 2, Format.NUMERIC));
+		AMEND_OHD_FIELD_RULES.put(WorldTracerField.CP, new NumberedLinesRule(1, 20, 2, Format.NUMERIC, true));
 		// new Object[] { 2, RepeatType.MULTIPLE });
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.FL, new BasicRule(1, 25, 1, Format.ALPHA_NUMERIC));
 		// new Object[] { 1, RepeatType.NONE });
-		AMEND_OHD_FIELD_RULES.put(WorldTracerField.NM, new NumberedLinesRule(2, 16, 3, Format.ALPHA));
+		AMEND_OHD_FIELD_RULES.put(WorldTracerField.NM, new NumberedLinesRule(2, 16, 3, Format.ALPHA, true));
 		// new Object[] { 3, RepeatType.SAME_LINE });
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.EA, new EmailRule(1, 44, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
@@ -674,7 +675,8 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				temp.get(category).add(contents);
 			}
 			if (temp.size() > 0) {
-				String entry = ContentRule.buildEntry(temp, 1);
+				//pass 0 for bagnum so no numbers on field
+				String entry = ContentRule.buildEntry(temp, 0);
 				if (entry != null) {
 					addIncidentFieldEntry(WorldTracerField.CC, entry, result);
 				}

@@ -56,6 +56,7 @@ import com.bagnet.nettracer.tracing.db.WT_TTY;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
@@ -160,9 +161,32 @@ public class WorldTracerQueueUtils {
 		}
 	}
 	
-	public static WtqIncidentAction findIncidentAction(String ntIncident) {
+
+	public static boolean cancelPendingAction(long wtq_id) throws Exception {
 		Session sess = null;
 		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			WorldTracerQueue wtq = (WorldTracerQueue) sess.get(WorldTracerQueue.class, wtq_id);
+			if(wtq == null || !wtq.getStatus().equals(WtqStatus.PENDING)) {
+				return false;
+			}
+			wtq.setStatus(WtqStatus.CANCELED);
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
+	
+	public static WtqIncidentAction findPendingIncidentAction(String ntIncident) {
+		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery("from WtqIncidentAction wia where wia.status = :status and wia.incident.incident_ID = :ntIncident");
@@ -177,6 +201,28 @@ public class WorldTracerQueueUtils {
 
 		} catch (Exception e) {
 			logger.warn("unable to retrieve wt_queue incident actions for :" + ntIncident);
+			return null;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
+	
+	public static WtqOhdAction findPendingOhdAction(String ntOHD) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("from WtqOhdAction woa where woa.status = :status and woa.ohd.OHD_ID = :ntOHD");
+			q.setParameter("status", WtqStatus.PENDING);
+			q.setParameter("ntOHD", ntOHD);
+			q.setMaxResults(1);
+			List<WtqOhdAction> result = q.list();
+			if(result != null && result.size() > 0) {
+				return result.get(0);
+			}
+			return null;
+
+		} catch (Exception e) {
+			logger.warn("unable to retrieve wt_queue ohd actions for :" + ntOHD);
 			return null;
 		} finally {
 			if (sess != null) sess.close();
@@ -446,5 +492,6 @@ public class WorldTracerQueueUtils {
 	public String getError(){
 		return error;
 	}
+
 
 }

@@ -169,7 +169,8 @@ function gotoHistoricalReport() {
   <input type="hidden" name="wtq_pending_cancel" value="" />
   <input type="hidden" name="wtq_suspend" value="" />
   <input type="hidden" name="wtq_reinstate" value="" />
-  <input type="hidden" name="historical_report" value="">
+  <input type="hidden" name="historical_report" value="" />
+  <input type="hidden" name="hidden_ohd_id" value="" />
   <!-- END ICONS MENU -->
   <tr>
     <!-- MIDDLE COLUMN -->
@@ -258,21 +259,21 @@ function gotoHistoricalReport() {
                 <bean:message key="wt.pending.ohd.close" />
               </c:when>
             </c:choose> &nbsp;<a
-              href="javascript: document.forms[0].wtq_pending_cancel.value = '1'; document.forms[0].submit();"><bean:message
+              href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message
               key="cancel" /></a></p>
           </c:when>
           <c:otherwise>
             <p align="right"><c:choose>
               <c:when
-                test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
+                test="${OnHandForm.wtFile.wt_status == 'ACTIVE'}">
                 <a
-                  href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].submit();"><bean:message
+                  href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message
                   key="wt.ohd.suspend" /></a>
               </c:when>
               <c:when
-                test="${incidentForm.wtFile.wt_status == 'SUSPENDED'}">
+                test="${OnHandForm.wtFile.wt_status == 'SUSPENDED'}">
                 <a
-                  href="javascript: document.forms[0].wtq_reinstate.value = '1'; document.forms[0].submit();"><bean:message
+                  href="javascript: document.forms[0].wtq_reinstate.value = '1'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message
                   key="wt.ohd.reinstate" /></a>
               </c:when>
               <c:otherwise>
@@ -1025,6 +1026,7 @@ function gotoHistoricalReport() {
             	}
             %>
 
+<c:if test="${empty pendingWtAction}">
             <%
             	if (UserPermissions.hasPermission(
             						TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
@@ -1066,6 +1068,7 @@ function gotoHistoricalReport() {
             					}
             				}
             %>
+            </c:if>
           </logic:notEmpty> <logic:empty name="OnHandForm" property="status">
             <input type="hidden" name="savetemp" value="">
             <input type="button" name="s" value="Save as Temporary"

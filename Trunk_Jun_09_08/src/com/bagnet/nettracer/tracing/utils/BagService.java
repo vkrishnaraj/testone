@@ -760,12 +760,12 @@ public class BagService {
 	}
 
 	/** for use with html rewrite find by incident_ID * */
-	public boolean findIncidentByID(String incident_ID, IncidentForm theform, Agent user, int itemtype) {
+	public Incident findIncidentByID(String incident_ID, IncidentForm theform, Agent user, int itemtype) {
 		try {
 			IncidentBMO iBMO = new IncidentBMO();
 			Incident iDTO = iBMO.findIncidentByID(incident_ID);
 			if(iDTO == null)
-				return false;
+				return null;
 
 			BeanUtils.copyProperties(theform, iDTO);
 			// make sure separate stationcreate and stationassigned and
@@ -956,11 +956,11 @@ public class BagService {
 			Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
 			theform.setEmail_customer(csv.getEmail_customer());
 
-			return true;
+			return iDTO;
 		}
 		catch (Exception e) {
 			logger.error("unable to find incident due to bean copyproperties error: " + e);
-			return false;
+			return null;
 		}
 	}
 
@@ -1492,11 +1492,11 @@ public class BagService {
 		return true;
 	}
 
-	public boolean findOnHand(String ohd_ID, OnHandForm theform, Agent user) throws Exception {
+	public OHD findOnHand(String ohd_ID, OnHandForm theform, Agent user) throws Exception {
 		OhdBMO oBMO = new OhdBMO();
 		OHD iDTO = oBMO.findOHDByID(ohd_ID);
 		if(iDTO == null)
-			return false;
+			return null;
 		theform.setOhd_id(ohd_ID);
 		theform.setAgent_initials(iDTO.getAgent().getUsername());
 		theform.setBagColor(iDTO.getColor());
@@ -1515,6 +1515,7 @@ public class BagService {
 		theform.setBagarrivedate(iDTO.getBagarrivedate());
 		theform.setClose_date(iDTO.getClose_date());
 		theform.setOhd_type(iDTO.getOhd_type());
+		theform.setWtFile(iDTO.getWtFile());
 
 		BeanUtils.copyProperties(theform, iDTO);
 		if(iDTO.getMembership() == null) {
@@ -1606,8 +1607,10 @@ public class BagService {
 			theform.setForwarded_date(null);
 			theform.setForwarded_station(null);
 		}
+		
 
-		return true;
+
+		return iDTO;
 	}
 
 	/**

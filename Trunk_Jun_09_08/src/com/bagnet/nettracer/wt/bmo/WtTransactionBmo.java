@@ -53,10 +53,10 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 			cri.add(Restrictions.le("createDate", endDate));
 		}
 		if(incident_id != null && incident_id.trim().length() > 0) {
-			cri.add(Restrictions.like("incident.incident_ID", incident_id));
+			cri.add(Restrictions.like("incident.incident_ID", incident_id).ignoreCase());
 		}
-		if(ohd_id != null && incident_id.trim().length() > 0) {
-			cri.add(Restrictions.like("ohd.oHD_ID", ohd_id));
+		if(ohd_id != null && ohd_id.trim().length() > 0) {
+			cri.add(Restrictions.like("ohd.OHD_ID", ohd_id).ignoreCase());
 		}
 		List<WorldTracerTransaction> txList = null;
 		try {

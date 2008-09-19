@@ -188,17 +188,18 @@ public class WorldTracerTransaction {
 		this.setTxOutputData(data);
 	}
 	public void failTransaction(Throwable e) {
-		String error = "";
+		String error = null;
 		this.result = Result.FAILURE;
 		if(e.getMessage() != null && e.getMessage().trim().length() > 0) {
-			error = e.getMessage();
+			error = e.getClass().getName() + ": " + e.getMessage();
+		}
+		else {
+			error = e.getClass().getName() + ": " + WorldTracerTransaction.UNKNOWN_ERROR;
 		}
 		if(e.getCause() != null) {
 			error += "\nCause: " + e.getCause().getClass().getName() + " " + e.getCause().getMessage();
 		}
-		else {
-			this.setError(e.getClass().getName() + ": " + WorldTracerTransaction.UNKNOWN_ERROR);
-		}
+		this.setError(error);
 	}
 
 }

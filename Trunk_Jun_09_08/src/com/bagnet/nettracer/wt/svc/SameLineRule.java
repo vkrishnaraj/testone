@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 public class SameLineRule extends BasicRule {
@@ -19,8 +20,11 @@ public class SameLineRule extends BasicRule {
 	}
 
 	@Override
-	public String getFieldString(WorldTracerField field, List<String> resultSet) {	
+	public String getFieldString(WorldTracerField field, List<String> resultSet) throws WorldTracerException {	
 		if (resultSet == null || resultSet.size() == 0) {
+			if(this.isDoDelete()) {
+				return field.name();
+			}
 			return null;
 		}
 		

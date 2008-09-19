@@ -405,7 +405,7 @@ function gotoHistoricalReport() {
                 %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 
-					<c:if test="${empty pending_wt}">
+					<c:if test="${empty pendingWtAction}">
 					<c:choose>
 						<c:when test="${(incidentForm.wt_id == '') || (incidentForm.wt_id == null)}">
 							<html:submit styleId="button" property="savetowt"

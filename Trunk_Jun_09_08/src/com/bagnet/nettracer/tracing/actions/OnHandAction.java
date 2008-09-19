@@ -47,9 +47,19 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -381,15 +391,65 @@ public class OnHandAction extends Action {
 			}
 			else {
 				String onhand_id = request.getParameter("ohd_ID");
+				if(onhand_id == null || onhand_id.trim().length() < 1) {
+					onhand_id = request.getParameter("hidden_ohd_id");
+				}
 				OnHandForm addform = (OnHandForm) form;
 				if(onhand_id != null && onhand_id.length() > 0) {
 					// if OHD_ID exists; load exisiting on-hand
 					addform.setAgent(user);
-					if(!bs.findOnHand(onhand_id, addform, user)) {
+					OHD ohd;
+					if((ohd = bs.findOnHand(onhand_id, addform, user)) == null) {
 						ActionMessage error = new ActionMessage("error.no.onhandreport");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 						return (mapping.findForward(TracingConstants.SEARCH_ONHAND));
+					}
+					if(request.getParameter("wtq_reinstate") != null && request.getParameter("wtq_reinstate").trim().length() > 0) {
+						WtqReinstateOhd wtq = new WtqReinstateOhd();
+						wtq.setAgent(user);
+						wtq.setOhd(ohd);
+						WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+					}
+					if(request.getParameter("wtq_suspend") != null && request.getParameter("wtq_suspend").trim().length() > 0) {
+						WtqSuspendOhd wtq = new WtqSuspendOhd();
+						wtq.setAgent(user);
+						wtq.setOhd(ohd);
+						WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+					}
+					// need to find out if there are any pending world tracer actions
+					// for this incident
+					boolean result = true;
+					if(request.getParameter("wtq_pending_cancel") != null && request.getParameter("wtq_pending_cancel").trim().length() > 0) {
+						long wtq_id = Long.parseLong(request.getParameter("wtq_pending_cancel"));
+						try {
+							result = WorldTracerQueueUtils.cancelPendingAction(wtq_id);
+							if(result) {
+								request.setAttribute("ohd_id", ohd.getOHD_ID());
+								return (mapping.findForward(TracingConstants.OHD_MAIN));
+							}
+						} catch(Exception ex) {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.wt_cancel_pending"));	
+						}
+					}
+					WtqOhdAction pendingAction = WorldTracerQueueUtils.findPendingOhdAction(onhand_id);
+					if(pendingAction != null) {
+						if(pendingAction instanceof WtqCreateOhd) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CREATE);
+						}
+						else if(pendingAction instanceof WtqAmendOhd) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_AMEND);
+						}
+						else if(pendingAction instanceof WtqSuspendOhd) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_SUSPEND);
+						}
+						else if(pendingAction instanceof WtqReinstateOhd) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_REINSTATE);
+						}
+						else if(pendingAction instanceof WtqCloseOhd) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CLOSE);
+						}
+						request.setAttribute("wtq_pending_id", pendingAction.getWt_queue_id());
 					}
 				}
 				else {

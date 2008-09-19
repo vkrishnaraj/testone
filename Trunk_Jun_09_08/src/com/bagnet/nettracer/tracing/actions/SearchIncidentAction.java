@@ -34,6 +34,12 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
@@ -44,6 +50,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
@@ -214,7 +221,7 @@ public class SearchIncidentAction extends Action {
 				return (mapping.findForward(TracingConstants.RECEIPT_PARAMS));
 			}
 
-			if (!bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES)) {
+			if (bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES) == null) {
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.noincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -250,6 +257,24 @@ public class SearchIncidentAction extends Action {
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 						theform.setAllow_remark_update(1);
 					request.setAttribute("lostdelay", "1");
+					WtqIncidentAction pendingAction = WorldTracerQueueUtils.findPendingIncidentAction(incident);
+					if(pendingAction != null) {
+						if(pendingAction instanceof WtqCreateAhl) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CREATE);
+						}
+						else if(pendingAction instanceof WtqAmendAhl) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_AMEND);
+						}
+						else if(pendingAction instanceof WtqSuspendAhl) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_SUSPEND);
+						}
+						else if(pendingAction instanceof WtqReinstateAhl) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_REINSTATE);
+						}
+						else if(pendingAction instanceof WtqCloseAhl) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CLOSE);
+						}
+					}
 					return (mapping.findForward(TracingConstants.LD_MAIN));
 				case TracingConstants.DAMAGED_BAG:
 					if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG, user))

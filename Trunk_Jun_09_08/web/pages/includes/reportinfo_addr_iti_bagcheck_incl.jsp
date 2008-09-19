@@ -45,7 +45,10 @@
 		});
 
 	}
-
+	function submitWtCancel(theform, wtq_id) {
+	theform.wtq_pending_cancel.value = wtq_id;
+	theform.submit();
+	}
 
 // -->
   </SCRIPT>
@@ -79,26 +82,52 @@
 %>
             <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
-    
-        
-	<c:if test="${!empty incidentForm.wt_id }">
-        <p align="right">
-	WorldTracer ID: <a href="worldtraceraf.do?ahl_id=<bean:write name="incidentForm" property="wt_id" />">
-		<c:out value="${incidentForm.wt_id}" /></a>
-        </p>
-	</c:if>
 
-	<c:choose>
-	<c:when test="${pending_wt == 'PENDING_CREATE'}">
-	<p align="right">World Tracer Export Pending</p>
-	</c:when>
-	<c:when test="${pending_wt == 'PENDING_AMEND'}">
-	<p align="right">World Tracer Amend Pending</p>
-	</c:when>
-	<c:when test="${pending_wt eq 'PENDING_SUSPEND'}">
-	<p align="right">World Tracer Suspend Pending</p>
-	</c:when>
-	</c:choose>
+
+	<c:if test="${pendingWtAction == 'WT_PENDING_CREATE'}">
+		<p align="right"><bean:message key="wt.pending.ahl.create"/></p>
+	</c:if>
+	<c:if test="${!empty incidentForm.wt_id }">
+		<p align="right">
+		WorldTracer ID: <a href="worldtraceraf.do?ahl_id=<bean:write name="incidentForm" property="wt_id" />">
+			<c:out value="${incidentForm.wt_id}" /></a>
+			</p>
+		<c:choose>
+			<c:when test="${!empty pendingWtAction}">
+				<p align="right">
+				<c:choose>
+					<c:when test="${pendingWtAction == 'WT_PENDING_AMEND'}">
+						<bean:message key="wt.pending.ahl.amend"/>
+					</c:when>
+					<c:when test="${pendingWtAction == 'WT_PENDING_SUSPEND'}">
+						<bean:message key="wt.pending.ahl.suspend"/>
+					</c:when>
+					<c:when test="${pendingWtAction == 'WT_PENDING_REINSTATE'}">
+					<bean:message key="wt.pending.ahl.reinstate"/>
+					</c:when>
+					<c:when test="${pendingWtAction == 'WT_PENDING_CLOSE'}">
+						<bean:message key="wt.pending.ahl.close"/>
+					</c:when>
+				</c:choose>
+				&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="cancel"/></a></p>
+			</c:when>
+			<c:otherwise>
+				<p align="right">
+				<c:choose>
+					<c:when test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
+						<a href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="wt.ahl.suspend"/></a>
+					</c:when>
+					<c:when test="${incidentForm.wtFile.wt_status == 'SUSPENDED'}">
+						<a href="javascript: document.forms[0].wtq_reinstate.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="wt.ahl.reinstate"/></a>
+					</c:when>
+					<c:otherwise>
+						<bean:message key="wt.ahl.closed"/>
+					</c:otherwise>	
+				</c:choose>
+				</p>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
         
         
         <span class="reqfield">*</span>
@@ -117,6 +146,10 @@
               <html:hidden property="ld_inc_ID"/>
               <html:hidden property="damage_inc_ID" />
               <html:hidden property="ma_inc_ID" />
+              <input type="hidden" name="wtq_pending_cancel" value="" />
+              <input type="hidden" name="wtq_suspend" value="" />
+              <input type="hidden" name="wtq_reinstate" value="" />
+              <input type="hidden" name="incident_ID" value="<c:out value='${incident_ID}'/>" />
             </td>
             <td nowrap>
               <bean:message key="colname.incident_create_date" />

@@ -102,11 +102,17 @@ public class BetaWtConnector implements WorldTracerConnector {
 		sb.append("FR="+ wt_ahl_id);
 		sb.append("AAH=");
 		sb.append(DefaultWorldTracerService.FIELD_SEP);
-
+		
 		ArrayList<String> temp = new ArrayList<String>();
 		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.AMEND_AHL_FIELD_RULES.entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
+			}
+			else {
+				String result =entry.getValue().getFieldString(entry.getKey(), null);
+				if (result != null) {
+					temp.add(result);
+				}
 			}
 		}
 		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll("\\s+", "%20");
@@ -122,12 +128,12 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
 		}
 
-		if( responseBody.toUpperCase().contains("REPORT WAS AMENDED")) {
+		if( responseBody.toUpperCase().contains("WAS AMENDED")) {
 			return "AHL AMENDED";
 		}
 		else {
 			String errorString;
-			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			Matcher m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -150,6 +156,12 @@ public class BetaWtConnector implements WorldTracerConnector {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
+			else {
+				String result =entry.getValue().getFieldString(entry.getKey(), null);
+				if (result != null) {
+					temp.add(result);
+				}
+			}
 		}
 		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll("\\s+", "%20");
 		sb.append(queryString);
@@ -169,7 +181,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		else {
 			String errorString;
-			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			Matcher m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -213,7 +225,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		else {
 			String errorString;
-			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			Matcher m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -262,7 +274,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		if (m.find()) {
 			wt_id = m.group(1);
 		} else {
-			Pattern error_patt = Pattern.compile("/-(.*?)-/", Pattern.DOTALL);
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -310,7 +322,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		else {
 			String errorString;
-			Pattern error_patt = Pattern.compile("/-(.*?)-/");
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			Matcher m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -353,7 +365,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
 		}
 		String errorString;
-		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE);
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = error_patt.matcher(responseBody);
 		if (m.find()) {
 			errorString = m.group(1);
@@ -402,7 +414,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		if (m.find()) {
 			wt_id = m.group(1);
 		} else {
-			Pattern error_patt = Pattern.compile("/-(.*?)-/");
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -449,7 +461,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		else {
 			String errorString;
-			Pattern error_patt = Pattern.compile("/-(.*?)-/");
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			Matcher m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
@@ -483,7 +495,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		
 		String errorString;
-		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = error_patt.matcher(responseBody);
 		if (m.find()) {
 			errorString = m.group(1);

@@ -97,7 +97,7 @@ public class ClaimAction extends Action {
 			if (incident_id != null && incident_id.length() > 0) {
 				if (theform == null)
 					theform = new IncidentForm();
-				if (!bs.findIncidentByID(incident_id, theform, user, TracingConstants.MISSING_ARTICLES)) {
+				if (bs.findIncidentByID(incident_id, theform, user, TracingConstants.MISSING_ARTICLES) == null) {
 
 					ActionMessage error = new ActionMessage("error.noincident");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -140,7 +140,7 @@ public class ClaimAction extends Action {
 			incident_id = request.getParameter("incidentid");
 			if (incident_id != null && incident_id.length() > 0) {
 				theform = new IncidentForm();
-				if (!bs.findIncidentByID(incident_id, theform, user, TracingConstants.MISSING_ARTICLES)) {
+				if (bs.findIncidentByID(incident_id, theform, user, TracingConstants.MISSING_ARTICLES) != null) {
 					ActionMessage error = new ActionMessage("error.noincident");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);

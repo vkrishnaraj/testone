@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule.Format;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
@@ -55,22 +56,25 @@ public class ContentRule extends BasicRule {
 			}
 		}
 		if(temp1.size() > 0) {
-			return String.format("%02d %s", bagNum, StringUtils.join(temp1, DefaultWorldTracerService.FIELD_SEP + DefaultWorldTracerService.CONTINUATION + " "));
+			if(bagNum > 0) {
+				return String.format("%02d %s", bagNum, StringUtils.join(temp1, DefaultWorldTracerService.FIELD_SEP + DefaultWorldTracerService.CONTINUATION + " "));	
+			}
+			else {
+				return StringUtils.join(temp1, DefaultWorldTracerService.FIELD_SEP + DefaultWorldTracerService.CONTINUATION + " ");	
+			}
+			
 		}
 		return null;
 	}
 	
 	@Override
-	protected String formatEntry(String entry) {
+	protected String formatEntry(String entry) throws WorldTracerException {
 		if(entry == null) return null;
 		
 		String result = entry.trim().replaceAll("\\s+", " ");
 
 		if(result.length() < this.getMinLength()) {
-			return null;
-		}
-		if(result.length() > this.getMaxLength()) {
-			return result.substring(0, this.getMaxLength());
+			throw new WorldTracerException("Field entry too short");
 		}
 		return result;
 	}

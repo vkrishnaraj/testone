@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule.Format;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
-public class NumberedLinesRule extends BasicRule implements WorldTracerRule<String> {
+public class NumberedLinesRule extends BasicRule{
 
 	public NumberedLinesRule() {
 		super();
@@ -15,17 +16,21 @@ public class NumberedLinesRule extends BasicRule implements WorldTracerRule<Stri
 	}
 
 	public NumberedLinesRule(int minLength, int maxLength, int maxAllowed, Format format) {
-		super(minLength, maxLength, maxAllowed, format);
+		this(minLength, maxLength, maxAllowed, format, false);
+	}
+	
+	public NumberedLinesRule(int minLength, int maxLength, int maxAllowed, Format format, boolean doDelete) {
+		super(minLength, maxLength, maxAllowed, format, doDelete);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public String getFieldString(WorldTracerField field, List<String> resultSet) {
+	public String getFieldString(WorldTracerField field, List<String> resultSet) throws WorldTracerException {
 		List<String> workingSet;
 		if (resultSet == null || resultSet.size() == 0) {
-			return null;
+			workingSet = new ArrayList<String>();
 		}
-		if (resultSet.size() > this.getMaxAllowed()) {
+		else if (resultSet.size() > this.getMaxAllowed()) {
 			workingSet = resultSet.subList(0, this.getMaxAllowed());
 		} else {
 			workingSet = resultSet;
@@ -36,6 +41,11 @@ public class NumberedLinesRule extends BasicRule implements WorldTracerRule<Stri
 		for (String result : workingSet) {
 			temp.add(String.format("%s%02d %s", field.name(), i, formatEntry(result)));
 			i++;
+		}
+		if(this.isDoDelete()) {
+			for(; i <= this.getMaxAllowed(); i++) {
+				temp.add(String.format("%s%02d", field.name(), i));
+			}
 		}
 		return StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP);
 	}

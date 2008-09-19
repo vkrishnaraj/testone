@@ -17,6 +17,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -76,7 +77,7 @@ public final class OnHandForm extends ValidatorForm {
 	private String forwarded_agent;
 	private Date forwarded_date;
 
-	private String wt_id;
+	private WorldTracerFile wtFile;
 	
 	/**
 	 * @return Returns the ohd_type.
@@ -886,18 +887,16 @@ public final class OnHandForm extends ValidatorForm {
 				_TIMEZONE);
 	}
 	
-	/**
-	 * @return the wt_id
-	 */
 	public String getWt_id() {
-		return (wt_id == null ? "" : wt_id);
+		return wtFile != null ? wtFile.getWt_id() : null;
 	}
 
-	/**
-	 * @param wt_id the wt_id to set
-	 */
-	public void setWt_id(String wt_id) {
-		this.wt_id = wt_id;
+	public WorldTracerFile getWtFile() {
+		return wtFile;
+	}
+
+	public void setWtFile(WorldTracerFile wtFile) {
+		this.wtFile = wtFile;
 	}
 	
 	

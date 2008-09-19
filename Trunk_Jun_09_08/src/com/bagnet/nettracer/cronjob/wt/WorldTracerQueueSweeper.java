@@ -69,7 +69,6 @@ public class WorldTracerQueueSweeper {
 		if (csv == null || csv.getWt_enabled() != 1 || csv.getWt_write_enabled() != 1) {
 			return;
 		}
-		//TODO logging
 		Agent ogadmin = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
 		//proess the queued tasks
 		List<WorldTracerQueue> qTasks = null;
@@ -77,7 +76,6 @@ public class WorldTracerQueueSweeper {
 			qTasks = wtqBmo.findAllPendingTasks(companyCode);
 		}
 		catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		for (WorldTracerQueue queue : qTasks) {
@@ -149,7 +147,6 @@ public class WorldTracerQueueSweeper {
 					wtqBmo.updateQueue(queue);
 					continue;
 				} catch (Throwable ex) {
-					//TODO
 					logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
 					queue.setAttempts(queue.getAttempts() + 1);
 					if(queue.getAttempts() >= MAX_ATTEMPTS) {
@@ -554,7 +551,7 @@ public class WorldTracerQueueSweeper {
 					wtqBmo.updateQueue(queue);
 					continue;
 				}
-				logger.info("forwarded ohd: " + ((WtqFwdOhd)queue).getOhd().getOHD_ID());
+				logger.info("amended AHL: " + ((WtqAmendAhl)queue).getIncident().getIncident_ID());
 				queue.setStatus(WtqStatus.SUCCESS);
 				wtqBmo.updateQueue(queue);
 			}
@@ -574,7 +571,7 @@ public class WorldTracerQueueSweeper {
 					continue;
 				} catch(WorldTracerConnectionException ex) {
 					//TODO
-					logger.warn("unable to amend ahl", ex);
+					logger.warn("unable to amend ohd", ex);
 					queue.setAttempts(queue.getAttempts() + 1);
 					if(queue.getAttempts() >= MAX_ATTEMPTS) {
 						queue.setStatus(WtqStatus.FAIL);
@@ -583,7 +580,7 @@ public class WorldTracerQueueSweeper {
 					continue;
 				} catch (Throwable ex) {
 					//TODO
-					logger.warn("unable to amend ahl", ex);
+					logger.warn("unable to amend ohd", ex);
 					queue.setAttempts(queue.getAttempts() + 1);
 					if(queue.getAttempts() >= MAX_ATTEMPTS) {
 						queue.setStatus(WtqStatus.FAIL);
@@ -591,7 +588,7 @@ public class WorldTracerQueueSweeper {
 					wtqBmo.updateQueue(queue);
 					continue;
 				}
-				logger.info("forwarded ohd: " + ((WtqFwdOhd)queue).getOhd().getOHD_ID());
+				logger.info("amended ohd: " + ((WtqAmendOhd)queue).getOhd().getOHD_ID());
 				queue.setStatus(WtqStatus.SUCCESS);
 				wtqBmo.updateQueue(queue);
 			}

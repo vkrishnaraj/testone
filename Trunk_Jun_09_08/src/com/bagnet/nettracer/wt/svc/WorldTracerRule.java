@@ -3,6 +3,7 @@ package com.bagnet.nettracer.wt.svc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 /**
@@ -31,6 +32,7 @@ public interface WorldTracerRule<T> {
 	/**
 	 * @param resultSets
 	 * @return
+	 * @throws WorldTracerException 
 	 */
-	String getFieldString(WorldTracerField field, List<String> list);
+	String getFieldString(WorldTracerField field, List<String> list) throws WorldTracerException;
 }

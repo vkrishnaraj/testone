@@ -189,7 +189,7 @@ function updatePagination() {
 						</c:choose></td>
 						<td><c:choose>
 							<c:when test="${!empty wtTx.ohd}">
-								<a href="addOnHandBag.do?ohd_ID=${wtTx.ohd.oHD_ID}">${wtTx.ohd.oHD_ID}</a>
+								<a href="addOnHandBag.do?ohd_ID=${wtTx.ohd.OHD_ID}">${wtTx.ohd.OHD_ID}</a>
 							</c:when>
 							<c:otherwise>&nbsp;</c:otherwise>
 						</c:choose></td>

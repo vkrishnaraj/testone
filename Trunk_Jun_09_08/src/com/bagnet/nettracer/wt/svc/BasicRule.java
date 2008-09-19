@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 public class BasicRule implements WorldTracerRule<String> {
@@ -14,20 +15,26 @@ public class BasicRule implements WorldTracerRule<String> {
 	private int maxAllowed;
 	private Format format;
 	protected String replace_char;
+	private boolean doDelete;
 
 	public BasicRule() {
-		this(1, 58, 1, Format.FREE_FLOW);
+		this(1, 58, 1, Format.FREE_FLOW, false);
 	}
 	
 	public BasicRule(int minLength, int maxLength, int maxAllowed, Format format) {
+		this(minLength, maxLength, maxAllowed, format, false);
+	}
+	
+	public BasicRule(int minLength, int maxLength, int maxAllowed, Format format, boolean doDelete) {
 		this.minLength = minLength;
 		this.maxLength = maxLength;
 		this.maxAllowed = maxAllowed;
 		this.format = format;
 		replace_char = DEFAULT_REPLACE_CHAR;
+		this.doDelete = doDelete;
 	}
 
-	protected String formatEntry(String entry) {
+	protected String formatEntry(String entry) throws WorldTracerException {
 		if(entry == null) return null;
 		
 		String result;
@@ -70,12 +77,15 @@ public class BasicRule implements WorldTracerRule<String> {
 		return maxAllowed;
 	}
 
-	public String getFieldString(WorldTracerField field, List<String> resultSet) {
+	public String getFieldString(WorldTracerField field, List<String> resultSet) throws WorldTracerException {
 		List<String> workingSet;
 		if (resultSet == null || resultSet.size() == 0) {
-			return null;
+			if(!isDoDelete()) {
+				return null;
+			}
+			workingSet = new ArrayList<String>();
 		}
-		if(resultSet.size() > maxAllowed) {
+		else if(resultSet.size() > maxAllowed) {
 			workingSet = resultSet.subList(0, maxAllowed);
 		}
 		else {
@@ -86,6 +96,15 @@ public class BasicRule implements WorldTracerRule<String> {
 		for (String result : workingSet) {
 			temp.add(field.name() + formatEntry(result));
 		}
+		if(this.isDoDelete()) {
+			for(int i = 0; i <= this.getMaxAllowed() - workingSet.size(); i++) {
+				temp.add(field.name());
+			}
+		}
 		return StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP);
+	}
+
+	public boolean isDoDelete() {
+		return doDelete;
 	}
 }

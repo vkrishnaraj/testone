@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.wt.svc;
 
+import com.bagnet.nettracer.wt.WorldTracerException;
+
 public class EmailRule extends BasicRule {
 
 	public EmailRule() {
@@ -14,7 +16,7 @@ public class EmailRule extends BasicRule {
 	}
 	
 	@Override
-	protected String formatEntry(String entry) {
+	protected String formatEntry(String entry) throws WorldTracerException {
 		String result = entry.replace("@", "/A/").replace(".", "/D/").replace("_", "/U/").replace("~", "/T/").replace("+",
 		"/P/");
 		return super.formatEntry(entry);

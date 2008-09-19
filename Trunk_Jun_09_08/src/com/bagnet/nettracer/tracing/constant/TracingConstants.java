@@ -630,7 +630,11 @@ public class TracingConstants {
 	public final static int MOVETOLZ_MODE_ASSIGNMENT = 1;
 	public final static int MOVETOLZ_MODE_PERCENTAGE = 2;
 	public static final String DEFAULT_WT_URL = "www.worldtracer.aero";
-	public static final String PENDING_CREATE = "PENDING_CREATE";
+	public static final String WT_PENDING_CREATE = "WT_PENDING_CREATE";
+	public static final String WT_PENDING_AMEND = "WT_PENDING_AMEND";
+	public static final String WT_PENDING_SUSPEND = "WT_PENDING_SUSPEND";
+	public static final String WT_PENDING_REINSTATE = "WT_PENDING_REINSTATE";
+	public static final String WT_PENDING_CLOSE = "WT_PENDING_CLOSE";
 	
 	
 	public static String getDBDateFormat(Properties properties) {

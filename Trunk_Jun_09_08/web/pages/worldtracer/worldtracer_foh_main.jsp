@@ -61,12 +61,10 @@
 			key="header.forward_to_worldtracer_title" /> </h1>
 		<font color=red> 
 		 <logic:messagesPresent message="true">
-			<html:messages id="msg" message="true">
-				
+			<html:messages id="msg" message="true">		
 				<bean:write name="msg" />
-				
 			</html:messages>
-		 </logic:messagesPresent> 
+		 </logic:messagesPresent>
 		 <br>
 		 </font>
 		<table class="form2" cellspacing="0" cellpadding="0">
