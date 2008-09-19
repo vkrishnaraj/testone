@@ -192,12 +192,14 @@ public enum MatchElement {
 				&& om.getMembershipnum().trim().length() > 0) {
 			for (Passenger pax : (Set<Passenger>) incident.getPassengers()) {
 				AirlineMembership im = pax.getMembership();
-				if (im.getCompanycode_ID() != null
-						&& im.getMembershipnum() != null
-						&& im.getMembershipnum().trim().length() > 0) {
-					al.add(MatchUtils.stringCompare(e, im.getCompanycode_ID()
-							+ im.getMembershipnum(), om.getCompanycode_ID()
-							+ om.getMembershipnum()));
+				if (im != null) {
+					if (im.getCompanycode_ID() != null
+							&& im.getMembershipnum() != null
+							&& im.getMembershipnum().trim().length() > 0) {
+						al.add(MatchUtils.stringCompare(e, im.getCompanycode_ID()
+								+ im.getMembershipnum(), om.getCompanycode_ID()
+								+ om.getMembershipnum()));
+					}
 				}
 			}
 		}
@@ -568,13 +570,13 @@ public enum MatchElement {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		String ohdColor = ohd.getColor();
 		
-		if (ohdColor == null) {
+		if (ohdColor == null || ohdColor.trim().length() == 0) {
 			return results;
 		}
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
 			if (item != null) {
-				if (item.getColor() != null) {
+				if (item.getColor() != null && item.getColor().trim().length() > 0) {
 					if (item.getColor().equals(ohdColor)) {
 						MatchResult result = new MatchResult(e, 100, item.getColor(),
 								ohdColor);

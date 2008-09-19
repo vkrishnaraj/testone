@@ -104,7 +104,13 @@ public class ScoringAlgorithm {
 			}
 		}
 		
-		score.setOverallScore(overallScore);
+		if (overallScore <= 0) {
+			score.setOverallScore(0);
+		} else if (overallScore >= 100) {
+			score.setOverallScore(100);
+		} else {
+			score.setOverallScore(overallScore);
+		}
 		return score;
 	}
 	

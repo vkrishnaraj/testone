@@ -69,11 +69,18 @@
 	</bean>
 
 	<!-- passive tracer just runs constantly so just creating this bean will kick it off -->
+	<!-- OLD PASSIVE TRACER -->
+	<!-- 
 	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracing" lazy-init="false">
-		<constructor-arg value="../tracing/config/" />
 		<constructor-arg value="${company.code}" />
+		
 	</bean>
-
+	 -->
+	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
+		<constructor-arg value="${company.code}" />
+		<constructor-arg value="${pt.instance.label}" />
+	</bean>
+	
 	<!-- The different jobs to run -->
 	<bean id="wtQueueJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="wtProcessQueue" />

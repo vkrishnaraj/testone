@@ -65,8 +65,6 @@ public class PassiveTrace implements Runnable {
 			System.out.println("Startup arguments required:");
 			System.out.println(" arg[0] = CompanyCode (i.e. 'DA'), arg[1] = InstanceName");
 		}
-	
-
 	}
 
 	public static void startPassiveTracing(String companyCode, String instanceName) {
@@ -180,7 +178,7 @@ public class PassiveTrace implements Runnable {
 
 				errorHandler.sendEmail("Passive tracer encountered a FATAL HIBERNATE error while running.", e, true, true);
 				
-				logger.fatal("Passive tracer encountered a FATAL HIBERNATE error while running.");
+				logger.fatal("Passive tracer encountered a FATAL HIBERNATE error while running.", e);
 				e.printStackTrace();
 				try {
 					Thread.sleep(60*1000);
@@ -190,9 +188,9 @@ public class PassiveTrace implements Runnable {
 
 				
 			} catch (Exception e) {
-				logger.fatal("Passive tracer encountered a FATAL error while running...");
+				logger.fatal("Passive tracer encountered a FATAL error while running...", e);
 				errorHandler.sendEmail("Passive tracer encountered a FATAL error while running...", true, false);
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -363,12 +361,13 @@ public class PassiveTrace implements Runnable {
 			sess.close();
 
 		} catch (HibernateException e) {
+			logger.error(message, e);
 			errorHandler.sendEmail(message + "<br /><br />", e, false, true);
-			logger.error(message);
+			
 			e.printStackTrace();			
 		} catch (Exception e) {
+			logger.error(message, e);
 			errorHandler.sendEmail(message + "<br /><br />", e, false, false);
-			logger.error(message);
 			e.printStackTrace();
 		}
 
