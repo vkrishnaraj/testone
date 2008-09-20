@@ -333,7 +333,7 @@ public enum MatchElement {
 				MatchResult result = MatchUtils.stringCompare(e, incItinSeg,
 						ohdItinSeg);
 				if (result != null) {
-					if (i.getDepartdate().equals(it.getDepartdate())) {
+					if (i.getDepartdate()!= null && it.getDepartdate() != null && i.getDepartdate().equals(it.getDepartdate())) {
 						result.setDateMatched(true);
 					}
 					result.setItineraryType(i.getItinerarytype());
