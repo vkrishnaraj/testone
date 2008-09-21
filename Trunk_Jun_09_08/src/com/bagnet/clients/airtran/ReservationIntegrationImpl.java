@@ -3,13 +3,11 @@ package com.bagnet.clients.airtran;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -22,11 +20,9 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.navitaire.schemas.messages.booking.ArrayOfBaggage;
 import com.navitaire.schemas.messages.booking.ArrayOfBookingContact;
 import com.navitaire.schemas.messages.booking.ArrayOfBookingPassenger;
@@ -94,11 +90,11 @@ public class ReservationIntegrationImpl extends
 			HttpServletRequest request, int itemtype, Booking thebook) {
 		HttpSession session = request.getSession();
 		Agent user = (Agent) session.getAttribute("user");
-		theform = new IncidentForm();
+		//theform = new IncidentForm();
 		
 
 		// theform = new IncidentForm();
-		IncidentBMO iBMO = new IncidentBMO();
+		//IncidentBMO iBMO = new IncidentBMO();
 
 		/*
 		theform.set_DATEFORMAT(user.getDateformat().getFormat());

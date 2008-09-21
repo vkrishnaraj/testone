@@ -75,6 +75,7 @@ public final class IncidentForm extends ValidatorForm {
 	private int customcleared;
 	private int nonrevenue;
 	private Date printedreceipt;
+	private String bagTagNumber;
 
 	// airline membership
 	private Company company;
@@ -1119,6 +1120,14 @@ public final class IncidentForm extends ValidatorForm {
 	 */
 	public void setOtherSystemInformation(String otherSystemInformation) {
 		this.otherSystemInformation = otherSystemInformation;
+	}
+
+	public String getBagTagNumber() {
+		return bagTagNumber;
+	}
+
+	public void setBagTagNumber(String bagTagNumber) {
+		this.bagTagNumber = bagTagNumber;
 	}
 
 }

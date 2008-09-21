@@ -611,6 +611,7 @@ public class TracingConstants {
 	
 	// defaults
 	public final static String DEFAULT_COUNTRY = "US";
+	public final static String US_COUNTRY_CODE = "US";
 	//public final static String DEFAULT_AIRLINE = "FL";
 	
 	// update comment integration with airtran
