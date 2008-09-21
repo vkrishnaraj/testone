@@ -82,7 +82,7 @@ public class Match {
 
 	/**
 	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="Matchdetail_ID"
+	 * @hibernate.set cascade="all" inverse="true" order-by="item"
 	 * @hibernate.key column="match_id"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Match_Detail"
 	 * 
