@@ -84,7 +84,7 @@
                 &nbsp;</span></a>
           </dd>
           <dd>
-            <a href="worldtracercount.do?viewaction=cw<%=addon %>"><span class="aa<%= cw %>">&nbsp;
+            <a href="worldtracercount.do?viewaction=cw"><span class="aa<%= cw %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= cw %>"><bean:message key="menu.wt_count" /></span>

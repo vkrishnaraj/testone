@@ -699,6 +699,37 @@ public class IncidentBMO {
 		}
 	}
 	
+	public Incident findIncidentByWtId(String wt_id) {
+		Session sess = null;
+
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wtFile.wt_id= :wt_id");
+			q.setParameter("wt_id", wt_id);
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find incident with wt_id: " + wt_id);
+				return null;
+			}
+			Incident iDTO = (Incident) list.get(0);
+
+			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+	
 
 
 	/**

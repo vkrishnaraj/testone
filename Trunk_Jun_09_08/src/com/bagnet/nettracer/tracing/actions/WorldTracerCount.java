@@ -65,9 +65,16 @@ public class WorldTracerCount extends Action {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
 		Station agent_station = null;
-		if (session.getAttribute("cbroStationID") != null) {
-			agent_station = StationBMO.getStation((String) session
-					.getAttribute("cbroStationID"));
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_VIEW, user)) {
+			if (request.getParameter("cbroStation") != null
+					&& !((String) request.getParameter("cbroStation")).equals(""))
+				session.setAttribute("cbroStationID", request.getParameter("cbroStation"));
+			if (session.getAttribute("cbroStationID") != null) {
+				agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
+			}
+			else {
+				agent_station = user.getStation();
+			}
 		} else {
 			agent_station = user.getStation();
 		}

@@ -176,13 +176,23 @@ function gotoHistoricalReport() {
     <!-- MIDDLE COLUMN -->
     <td id="middlecolumn"><!-- MAIN BODY -->
     <div id="maincontent"><a name="baginfo"></a>
+    <div id="pageheaderleft">
     <h1 class="green"><bean:message key="header.bag_info" /> <a
       href="#"
       onclick="openHelp('pages/WebHelp/nettracerhelp.htm#on-hand_reports/work_with_on-hand_bag_reports.htm#baggage_info_fields');return false;"><img
       src="deployment/main/images/nettracer/button_help.gif" width="20"
       height="21" border="0"></a></h1>
-    <p align="right"><logic:notEqual name="OnHandForm"
-      property="ohd_id" value="">
+          <span class="reqfield">*</span> <bean:message key="Required" /> <font
+      color=red> <logic:messagesPresent message="true">
+      <html:messages id="msg" message="true">
+        <br />
+        <bean:write name="msg" />
+        <br />
+      </html:messages>
+    </logic:messagesPresent> </font> <br>
+      </div>
+      <div id="pageheaderright">
+    <logic:notEqual name="OnHandForm" property="ohd_id" value="">
       <%
       	if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) {
       				if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())
@@ -190,8 +200,7 @@ function gotoHistoricalReport() {
       								onHandForm.getHolding_station())) {
       %>
       <A
-        HREF="forward_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>"><b><bean:message
-        key="colname.forwardThisBag" /></b></A>
+        HREF="forward_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>"><b><bean:message key="colname.forwardThisBag" /></b></A>
       <c:if test="${!empty OnHandForm.wt_id }">
         <%
         	if (UserPermissions.hasPermission(
@@ -200,7 +209,7 @@ function gotoHistoricalReport() {
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
                         <a
-            href="worldtracerfoh.do?ohd_id=<bean:write name="OnHandForm" property="ohd_id" />">Forward
+            href="worldtracerfoh.do?ohd_id=${OnHandForm.ohd_id}">Forward
           to WT</a>
         </logic:notEqual>
         <%
@@ -210,8 +219,7 @@ function gotoHistoricalReport() {
       <%
       	} else {
       %>
-      <A
-        HREF='request_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>'><b><bean:message
+      <a href='request_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>'><b><bean:message
         key="colname.requestThisBag" /></b></a>
       <c:if test="${!empty OnHandForm.wt_id }">
         <%
@@ -220,9 +228,7 @@ function gotoHistoricalReport() {
         %>
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
-                        <a
-            href="worldtracerroh.do?wt_id=<bean:write name="OnHandForm" property="wt_id" />">Request
-          from WT</a>
+            <a href="worldtracerroh.do?wt_id=${OnHandForm.wt_id}">Request from WT</a>
         </logic:notEqual>
         <%
         	}
@@ -234,17 +240,22 @@ function gotoHistoricalReport() {
 
 
       <c:if test="${pendingWtAction == 'WT_PENDING_CREATE'}">
-        <p align="right"><bean:message key="wt.pending.ohd.create" /></p>
+		<br />
+        <bean:message key="wt.pending.ohd.create" />
+		&nbsp;<a href="javascript: document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message key="update" /></a>
+		&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();">
+			<bean:message key="cancel" /></a>
       </c:if>
       <c:if test="${!empty OnHandForm.wt_id }">
-        <p align="right">WorldTracer ID: <a
-          href="worldtraceraf.do?ohd_id=<bean:write name="OnHandForm" property="wt_id" />">
-        <c:out value="${OnHandForm.wt_id}" /></a></p>
+		<br />
+        WorldTracer ID: <a href="worldtraceraf.do?ohd_id=${OnHandForm.wt_id}">
+        <c:out value="${OnHandForm.wt_id}" /></a>
 
 
         <c:choose>
           <c:when test="${!empty pendingWtAction}">
-            <p align="right"><c:choose>
+			<br />
+            <c:choose>
               <c:when test="${pendingWtAction == 'WT_PENDING_AMEND'}">
                 <bean:message key="wt.pending.ohd.amend" />
               </c:when>
@@ -259,11 +270,14 @@ function gotoHistoricalReport() {
                 <bean:message key="wt.pending.ohd.close" />
               </c:when>
             </c:choose> &nbsp;<a
+              href="javascript: ; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message
+              key="update" /></a>&nbsp;<a
               href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message
-              key="cancel" /></a></p>
+              key="cancel" /></a>
           </c:when>
           <c:otherwise>
-            <p align="right"><c:choose>
+			<br />
+            <c:choose>
               <c:when
                 test="${OnHandForm.wtFile.wt_status == 'ACTIVE'}">
                 <a
@@ -279,7 +293,7 @@ function gotoHistoricalReport() {
               <c:otherwise>
                 <bean:message key="wt.ohd.closed" />
               </c:otherwise>
-            </c:choose></p>
+            </c:choose>
           </c:otherwise>
         </c:choose>
       </c:if>
@@ -322,15 +336,8 @@ function gotoHistoricalReport() {
       	}
       %>
 
-    </logic:notEqual></p>
-    <span class="reqfield">*</span> <bean:message key="Required" /> <font
-      color=red> <logic:messagesPresent message="true">
-      <html:messages id="msg" message="true">
-        <br />
-        <bean:write name="msg" />
-        <br />
-      </html:messages>
-    </logic:messagesPresent> </font> <br>
+    </logic:notEqual></div>
+
     <table class="form2_ohd" cellspacing="0" cellpadding="0">
       <tr>
         <td><bean:message key="colname.on_hand_report_number" /> <br>
@@ -513,9 +520,9 @@ function gotoHistoricalReport() {
           <td colspan=5>
           <%
           	if (i.intValue() > 0) {
-          %> <b><bean:message key="colname.addi_pass_info" /> <%
+          %> <b><bean:message key="colname.addi_pass_info" /></b> <%
  	} else {
- %> <b><bean:message key="colname.pri_pass_info" /> <%
+ %> <b><bean:message key="colname.pri_pass_info" /></b><%
  	}
  %>
           </td>
@@ -1044,9 +1051,9 @@ function gotoHistoricalReport() {
                   property="status.status_ID"
                   value="<%=""
 																	+ TracingConstants.OHD_STATUS_CLOSED%>">
-                  <html:submit property="closetowt" styleId="button"
+                  <html:submit property="amendtowt" styleId="button"
                     onclick="return validatereqOHDForm(this.form);">
-                    <bean:message key="button.closetoWT" />
+                    <bean:message key="button.amendWT" />
                   </html:submit>
                 </logic:notEqual>
               </logic:notEmpty>

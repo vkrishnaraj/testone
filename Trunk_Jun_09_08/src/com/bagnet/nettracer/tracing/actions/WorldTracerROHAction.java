@@ -1,10 +1,14 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -14,14 +18,18 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.WT_ROH;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 
@@ -34,6 +42,9 @@ import com.bagnet.nettracer.wt.connector.BetaWtConnector;
  */
 
 public class WorldTracerROHAction extends Action {
+	
+	private static final Logger logger = Logger.getLogger(WorldTracerROHAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -107,21 +118,38 @@ public class WorldTracerROHAction extends Action {
 		return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_ROH);
 	}
 	private boolean InsertWtRoh(DynaValidatorForm theform,Agent user){
-		WT_ROH wtroh = new WT_ROH();
-		wtroh.setWt_ahl_id(theform.getString("wt_ahl_id"));
-		wtroh.setWt_ohd_id(theform.getString("wt_ohd_id"));
-		wtroh.setFi(theform.getString("fi"));
-		wtroh.setAg(theform.getString("ag"));
-		wtroh.setTeletype_address1(theform.getString("teletype_address1"));
-		wtroh.setTeletype_address2(theform.getString("teletype_address2"));
-		wtroh.setTeletype_address3(theform.getString("teletype_address3"));
-		wtroh.setTeletype_address4(theform.getString("teletype_address4"));
-		wtroh.setLname(theform.getString("lname"));
-		wtroh.setRoh_agent(user);
-		wtroh.setRoh_station_id(user.getStation().getStation_ID());
-		wtroh.setRoh_status(TracingConstants.LOG_NOT_RECEIVED);
-		
-		HibernateUtils.save(wtroh);
+		IncidentBMO ibmo = new IncidentBMO();
+		WtqRequestOhd wtq = new WtqRequestOhd();
+		wtq.setAgent(user);
+		wtq.setFurtherInfo(theform.getString("fi"));
+		try {
+			Incident inc = ibmo.findIncidentByWtId(theform.getString("wt_ahl_id"));
+			if (inc == null) {
+				return false;
+			}
+			wtq.setIncident(inc);
+			Set<String> teletypes = new HashSet<String>();
+			if(theform.getString("teletype_address1") != null && theform.getString("teletype_address1").trim().length() > 3) {
+				teletypes.add(theform.getString("teletype_address1"));
+			}
+			if(theform.getString("teletype_address2") != null && theform.getString("teletype_address2").trim().length() > 3) {
+				teletypes.add(theform.getString("teletype_address2"));
+			}
+			if(theform.getString("teletype_address3") != null && theform.getString("teletype_address3").trim().length() > 3) {
+				teletypes.add(theform.getString("teletype_address3"));
+			}
+			if(theform.getString("teletype_address4") != null && theform.getString("teletype_address4").trim().length() > 3) {
+				teletypes.add(theform.getString("teletype_address4"));
+			}
+			wtq.setTeletypes(teletypes);
+			wtq.setWt_ohd(theform.getString("wt_ohd_id"));
+			
+			WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.warn("unable to complete Request OHD", e);
+			return false;
+		}
 		
 		return true;
 	}

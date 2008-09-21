@@ -1253,8 +1253,9 @@
 			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" />
 		</antcall>
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/test/tracer.properties" />
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/test/hibernate_main.cfg.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/tracer.properties" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/hibernate_main.cfg.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/cron/config/log4j.properties" />
 		<jar destfile="${artifact.dir}/${ant_project_name}/tracer-cron.jar"
@@ -1269,6 +1270,10 @@
 	</target>
 	<target name="usair-build-cron">
 		<property name="ant_project_name" value="usair"/>
+		<antcall target="build-cron-service" />
+	</target>
+	<target name="dev-build-cron">
+		<property name="ant_project_name" value="tracer"/>
 		<antcall target="build-cron-service" />
 	</target>
 

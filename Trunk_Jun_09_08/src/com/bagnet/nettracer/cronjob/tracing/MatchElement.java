@@ -490,7 +490,7 @@ public enum MatchElement {
 			Incident incident, OHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		if (ohd.getClaimnum() == null && ohd.getClaimnum().trim().length() > 0) {
+		if (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() < 1) {
 			return results;
 		}
 

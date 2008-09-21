@@ -114,10 +114,10 @@
 		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
 	</bean>
 
-	<bean id="cronPassiveTracerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="cronPassiveTracerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail" ref="runPassiveTracerJob" />
-		<property name="cronExpression" value="${pt.cron}" />
-		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
+		<property name="repeatCount" value="0"/>
+		<property name="startDelay" value="30000"/>
 	</bean>
 
 	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">

@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Transient;
@@ -58,7 +59,7 @@ public class WtqRequestOhd extends WtqIncidentAction {
 		this.furtherInfo = furtherInfo;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class)
+	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch=FetchType.EAGER)
 	@JoinTable(name = "wtq_teletype", joinColumns=@JoinColumn(name="wt_queue_id"))
 	@Column(name = "ttype_address", nullable = false)
 	public Set<String> getTeletypes() {

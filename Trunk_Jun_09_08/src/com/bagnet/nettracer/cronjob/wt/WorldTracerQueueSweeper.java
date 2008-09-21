@@ -514,7 +514,7 @@ public class WorldTracerQueueSweeper {
 					wtqBmo.updateQueue(queue);
 					continue;
 				}
-				logger.info("requested ohd: " + ((WtqFwdOhd)queue).getOhd().getOHD_ID());
+				logger.info("requested ohd: " + ((WtqRequestOhd)queue).getWt_ohd());
 				queue.setStatus(WtqStatus.SUCCESS);
 				wtqBmo.updateQueue(queue);
 			}

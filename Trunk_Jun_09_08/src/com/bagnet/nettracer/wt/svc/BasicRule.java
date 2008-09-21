@@ -52,7 +52,7 @@ public class BasicRule implements WorldTracerRule<String> {
 			return null;
 		}
 		if(result.length() > this.getMaxLength()) {
-			return result.substring(0, this.getMaxLength());
+			return result.substring(0, this.getMaxLength()).trim();
 		}
 		return result;
 	}

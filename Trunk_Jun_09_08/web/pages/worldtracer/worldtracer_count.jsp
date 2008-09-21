@@ -59,74 +59,27 @@ function updatePagination() {
 		<td id="middlecolumn"><!-- MAIN BODY -->
 		<div id="maincontent">
 		<h1 class="green">
+		<div id="pageheaderleft">
 		<bean:message key="header.file_count" />
-		<%
-			String header_text = "fw";
-				if (request.getAttribute("wt_type") != null
-						&& request.getAttribute("wt_type").equals("FW")) {
-					header_text = "fw";
-		%> <bean:message key="header.wt_fw" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("AA")) {
- 			header_text = "aa";
- %> <bean:message key="header.wt_aa" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("WM")) {
- 			header_text = "wm";
- %> <bean:message key="header.wt_wm" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("SP")) {
- 			header_text = "sp";
- %> <bean:message key="header.wt_sp" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("AP")) {
- 			header_text = "ap";
- %> <bean:message key="header.wt_ap" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("CM")) {
- 			header_text = "cm";
- %> <bean:message key="header.wt_cm" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("EM")) {
- 			header_text = "em";
- %> <bean:message key="header.wt_em" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("LM")) {
- 			header_text = "lm";
- %> <bean:message key="header.wt_lm" /> <%
- 	} else if (request.getAttribute("wt_type") != null
- 				&& request.getAttribute("wt_type").equals("PR")) {
- 			header_text = "pr";
- %> <bean:message key="header.wt_pr" /> <%
- 	}
- %> <%
- 	if (request.getParameter("ahl_id") != null
- 				&& request.getParameter("ahl_id").length() > 9) {
- 			out.println("&nbsp;&nbsp;( "
- 					+ request.getParameter("ahl_id") + " )");
- 		} else if (request.getParameter("ohd_id") != null
- 				&& request.getParameter("ohd_id").length() > 9) {
- 			out.println("&nbsp;&nbsp;( "
- 					+ request.getParameter("ohd_id") + " )");
- 		}
- %> <a href="#"
+ <a href="#"
 			onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img
 			src="deployment/main/images/nettracer/button_help.gif" width="20"
 			height="21" border="0"></a></h1>
-
-		<%
-			if ((request.getParameter("ahl_id") != null && request
-						.getParameter("ahl_id").length() > 9)
-						|| (request.getParameter("ohd_id") != null && request
-								.getParameter("ohd_id").length() > 9)) {
-		%>
-		<div align="right" style=""><a
-			href="worldtraceraf.do?viewaction=<%=Integer.parseInt((String)request.getAttribute("wt_type"))-1 %>"><bean:message
-			key="link.back_to_all" /></a></div>
-		<%
-			}
-		%> <br>
-		<font color=red> <logic:messagesPresent message="true">
+			</div>
+		<div id="pageheaderright">
+			<logic:present name="cbroStationID" scope="session">
+	            <bean:message key="Station" /> : 
+	            <select name="cbroStation" onchange="submit()" class="textfield">
+	              <logic:iterate id="station" name="stationlist" scope="session" type="com.bagnet.nettracer.tracing.db.Station">
+	                <option value="<bean:write name="station" property="station_ID"/>" <% if (session.getAttribute("cbroStationID").equals("" + station.getStation_ID())) { %> selected <% } %>>
+	                <bean:write name="station" property="stationcode" />
+	                </option>
+	              </logic:iterate>
+	            </select>
+	        </logic:present>
+		</div>
+		<br>
+		<font color="red"> <logic:messagesPresent message="true">
 			<html:messages id="msg" message="true">
 				<br />
 				<bean:write name="msg" />
@@ -150,7 +103,7 @@ function updatePagination() {
 					<c:forEach var="countActionFile" items="${countlist}">
 						<tr>
 							<td>
-								<c:out value="${countActionFile.type}" />
+								<bean:message key="actionfile.${countActionFile.type}" />
 							</td>
 							<c:forEach var="amount" items="${countActionFile.counts}"
 								varStatus="currentDay">

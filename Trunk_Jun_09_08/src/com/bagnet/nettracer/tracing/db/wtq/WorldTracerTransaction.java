@@ -29,6 +29,9 @@ public class WorldTracerTransaction {
 	
 	public static final String UNKNOWN_ERROR = "Unknown Error";
 	
+	private static int MAX_SUCCESS_MSG = 99;
+	private static int MAX_ERROR_MSG = 254;
+	
 	public enum Result {FAILURE("wt_txfailure"), SUCCESS("wt_txsuccess");
 		private String messageKey;
 		
@@ -106,7 +109,7 @@ public class WorldTracerTransaction {
 	}
 
 	@Enumerated(EnumType.STRING)
-	@Column(length=20)
+	@Column(length=100)
 	public Result getResult() {
 		return result;
 	}
@@ -115,7 +118,7 @@ public class WorldTracerTransaction {
 		this.result = result;
 	}
 
-	@Column(length=100)
+	@Column(length=255)
 	public String getError() {
 		return error;
 	}
@@ -188,7 +191,7 @@ public class WorldTracerTransaction {
 		this.setTxOutputData(data);
 	}
 	public void failTransaction(Throwable e) {
-		String error = null;
+		String error = "";
 		this.result = Result.FAILURE;
 		if(e.getMessage() != null && e.getMessage().trim().length() > 0) {
 			error = e.getClass().getName() + ": " + e.getMessage();
@@ -199,7 +202,12 @@ public class WorldTracerTransaction {
 		if(e.getCause() != null) {
 			error += "\nCause: " + e.getCause().getClass().getName() + " " + e.getCause().getMessage();
 		}
+		if(error.length() > MAX_ERROR_MSG ) {
+			error = error.substring(0, MAX_ERROR_MSG);
+		}
+		else {
 		this.setError(error);
+		}
 	}
 
 }

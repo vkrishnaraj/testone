@@ -228,11 +228,11 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 1, RepeatType.NONE });
 		FWD_FIELD_RULES.put(WorldTracerField.NM, new SameLineRule(2, 16, 10, Format.ALPHA));
 		// new Object[] { 10, RepeatType.SAME_LINE });
-		FWD_FIELD_RULES.put(WorldTracerField.RC, new BasicRule(1, 57, 1, Format.FREE_FLOW));
+		FWD_FIELD_RULES.put(WorldTracerField.RC, new BasicRule(1, 55, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
 		FWD_FIELD_RULES.put(WorldTracerField.RL, new BasicRule(2, 2, 1, Format.NUMERIC));
 		// new Object[] { 1, RepeatType.NONE });
-		FWD_FIELD_RULES.put(WorldTracerField.SI, new BasicRule(1, 57, 3, Format.FREE_FLOW));
+		FWD_FIELD_RULES.put(WorldTracerField.SI, new BasicRule(1, 55, 3, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.MANY_LINES });
 		FWD_FIELD_RULES.put(WorldTracerField.TX, new BasicRule(5, 9, 10, Format.ALPHA_NUMERIC));
 		// new Object[] { 10, RepeatType.SAME_LINE });

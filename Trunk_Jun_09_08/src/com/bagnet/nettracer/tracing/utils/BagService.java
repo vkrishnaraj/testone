@@ -79,6 +79,8 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.ActiveTracingForm;

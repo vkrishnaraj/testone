@@ -53,7 +53,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 	private static final Pattern percent_patt = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
 	private static final Pattern itemNum_patt = Pattern.compile("^\\s*(\\d+)/", Pattern.MULTILINE);
 
-	private static final Object ALREADY_SUSPENDED = null;
+	private static final Object ALREADY_SUSPENDED = "ALREADY SUSPENDED";
 
 	private HttpClient client;
 	
@@ -209,7 +209,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll(
 				"\\s+", "%20");
 		sb.append(queryString);
-		String getstring = sb.toString();
+		String getstring = sb.toString().replaceAll("\\s+", "%20");
 
 		String responseBody = null;
 		try {
@@ -350,7 +350,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		
 		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll(
-				"\\s+", "^");
+				"\\s+", "_");
 		
 		sb.append(queryString);
 		String getstring = sb.toString();
@@ -358,6 +358,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		try {
 			logger.info("GETSTring FWD: " + getstring);
 			GetMethod method = new GetMethod();
+			method.getParams().setParameter(HttpMethodParams.STRICT_TRANSFER_ENCODING, false);
 			URI uri = new URI(getstring, false);
 			method.setURI(uri);
 			responseBody = sendRequest(method);
@@ -736,9 +737,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	public void suspendAHL(String wt_id, String agent) throws WorldTracerException {
 		// TODO Auto-generated method stub
-		String responseBody = susritItem(wt_id, "SUS1", "AHL", agent);
+		String responseBody = susritItem(wt_id, "SUS", "AHL", agent);
 		String errorString;
-		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = error_patt.matcher(responseBody);
 		if (m.find()) {
 			errorString = m.group(1);
@@ -753,9 +754,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	public void suspendOHD(String wt_id, String agent) throws WorldTracerException {
 		// TODO Auto-generated method stub
-		String responseBody = susritItem(wt_id, "SUS1", "OHD", agent);
+		String responseBody = susritItem(wt_id, "SUS", "OHD", agent);
 		String errorString;
-		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = error_patt.matcher(responseBody);
 		if (m.find()) {
 			errorString = m.group(1);
@@ -771,9 +772,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 	public void reinstateAHL(String wt_id, String agent) throws WorldTracerException {
 
 		//TODO figure out if it worked
-		String responseBody = susritItem(wt_id, "RIT1", "AHL", agent);
+		String responseBody = susritItem(wt_id, "RIT", "AHL", agent);
 		String errorString;
-		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = error_patt.matcher(responseBody);
 		if (m.find()) {
 			errorString = m.group(1);
@@ -788,9 +789,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	public void reinstateOHD(String wt_id, String agent) throws WorldTracerException {
 		// TODO Auto-generated method stub\
-		String responseBody = susritItem(wt_id, "RIT1", "OHD", agent);
+		String responseBody = susritItem(wt_id, "RIT", "OHD", agent);
 		String errorString;
-		Pattern error_patt = Pattern.compile("/-(.*?)-/");
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = error_patt.matcher(responseBody);
 		if (m.find()) {
 			errorString = m.group(1);
@@ -812,10 +813,15 @@ public class BetaWtConnector implements WorldTracerConnector {
 		PostMethod method = new PostMethod(sb.toString());
 		method.addParameter("A1", wtCompanycode.toUpperCase());
 		method.addParameter("A2", "WM");
-		method.addParameter("ACTION", action);
+		method.addParameter("ACTION", action + "1");
 		method.addParameter("TYP1", type);
 		method.addParameter("FR1", wt_id.toLowerCase());
+		for(int i=2; i <= 10; i++)  {
+			method.addParameter("TYP" + i, type);
+			method.addParameter("FR" + i, "");
+		}
 		method.addParameter("AG", agent);
+		method.addParameter("B1", "Submit " + action);
 
 		try {
 			responseBody = sendRequest(method);

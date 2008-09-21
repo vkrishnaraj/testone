@@ -66,6 +66,7 @@
 %>
   <div id="maincontent">
     <a name="incidentinfo"></a>
+    <div id="pageheaderleft">
     <h1 class="green">
       <bean:message key="header.incident_info" />
 <%
@@ -82,19 +83,24 @@
 %>
             <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
+        <span class="reqfield">*</span>
+        <bean:message key="message.required" />
+        <font color=red>
+          <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+        </font>
+        <br>
+    </div>
 
-
+	<div id="pageheaderright">
 	<c:if test="${pendingWtAction == 'WT_PENDING_CREATE'}">
-		<p align="right"><bean:message key="wt.pending.ahl.create"/></p>
+		<bean:message key="wt.pending.ahl.create"/>&nbsp;<a href="javascript: document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="update"/></a>&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="cancel"/></a>
 	</c:if>
 	<c:if test="${!empty incidentForm.wt_id }">
-		<p align="right">
 		WorldTracer ID: <a href="worldtraceraf.do?ahl_id=<bean:write name="incidentForm" property="wt_id" />">
-			<c:out value="${incidentForm.wt_id}" /></a>
-			</p>
+			<c:out value="${incidentForm.wt_id}" /></a><br/>
 		<c:choose>
 			<c:when test="${!empty pendingWtAction}">
-				<p align="right">
+				<br />
 				<c:choose>
 					<c:when test="${pendingWtAction == 'WT_PENDING_AMEND'}">
 						<bean:message key="wt.pending.ahl.amend"/>
@@ -109,10 +115,11 @@
 						<bean:message key="wt.pending.ahl.close"/>
 					</c:when>
 				</c:choose>
-				&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="cancel"/></a></p>
+				&nbsp;<a href="javascript: document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="update"/></a>
+				&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="cancel"/></a>
 			</c:when>
 			<c:otherwise>
-				<p align="right">
+				<br />
 				<c:choose>
 					<c:when test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
 						<a href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="wt.ahl.suspend"/></a>
@@ -124,18 +131,13 @@
 						<bean:message key="wt.ahl.closed"/>
 					</c:otherwise>	
 				</c:choose>
-				</p>
 			</c:otherwise>
 		</c:choose>
 	</c:if>
+	</div>
         
         
-        <span class="reqfield">*</span>
-        <bean:message key="message.required" />
-        <font color=red>
-          <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-        </font>
-        <br>
+
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
             <td nowrap=>

@@ -46,6 +46,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd;
@@ -211,8 +212,7 @@ public class OnHandAction extends Action {
 		}
 		// save temporary.
 		else if((request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
-				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null
-				|| request.getParameter("closetowt") != null) {
+				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null || request.getParameter("amendtowt") != null) {
 			OHD oDTO = null;
 			if(theform.getOhd_id() != null)
 				oDTO = bs.findOHDByID(theform.getOhd_id());
@@ -242,18 +242,25 @@ public class OnHandAction extends Action {
 			if(request.getParameter("savetowt") != null && oDTO.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_OPEN) {
 				rohd = false;
 			}
-			else if((request.getParameter("savetracing") != null || request.getParameter("savetowt") != null
-					|| request.getParameter("closetowt") != null)) {
-				rohd = bs.insertOnHand(oDTO, theform, list, user);	
-				if(request.getParameter("savetowt") != null) {
+			else if(request.getParameter("savetracing") != null || request.getParameter("savetowt") != null  || request.getParameter("amendtowt") != null) {
+
+				rohd = bs.insertOnHand(oDTO, theform, list, user);
+				if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED && oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED)) {
+					WtqOhdAction wtq = new WtqCloseOhd();
+					wtq.setAgent(user);
+					wtq.setCreatedate(TracerDateTime.getGMTDate());
+					wtq.setOhd(oDTO);
+					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+				}
+				else if(request.getParameter("savetowt") != null) {
 					WtqOhdAction wtq = new WtqCreateOhd();
 					wtq.setAgent(user);
 					wtq.setCreatedate(TracerDateTime.getGMTDate());
 					wtq.setOhd(oDTO);
 					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 				}
-				else if (request.getParameter("closetowt") != null) {
-					WtqOhdAction wtq = new WtqCloseOhd();
+				else if(request.getParameter("amendtowt") != null) {
+					WtqOhdAction wtq = new WtqAmendOhd();
 					wtq.setAgent(user);
 					wtq.setCreatedate(TracerDateTime.getGMTDate());
 					wtq.setOhd(oDTO);

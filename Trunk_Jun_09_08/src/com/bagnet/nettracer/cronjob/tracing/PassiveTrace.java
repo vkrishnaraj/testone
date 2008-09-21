@@ -121,7 +121,7 @@ public class PassiveTrace implements Runnable {
 								Thread.sleep(1000 * seconds);
 							} catch (InterruptedException e) {
 								// Ignore exception
-								e.printStackTrace();
+								logger.debug("ignoring thread interrupted exception", e);
 							}
 						}
 	
