@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -72,7 +73,34 @@ public class MoveToLZThread {
 	private String company;
 	
 	public MoveToLZThread(int type) {
-		this(HibernateWrapper.getConfig().getProperties(), type);
+		
+		try {
+			AnnotationConfiguration foo = HibernateWrapper.getConfig();
+			Properties properties = foo.getProperties();
+			Connection conn = null;
+			this.type = type;
+			
+			try {
+				dbdrivername = properties.getProperty("hibernate.connection.driver_class");
+				mbr_dburl = properties.getProperty("hibernate.connection.url");
+				mbr_dbuid = properties.getProperty("hibernate.connection.username");
+				mbr_dbpwd = properties.getProperty("hibernate.connection.password");
+				this.company = properties.getProperty("company.code");
+				
+				if (mbr_dburl.indexOf("mysql") > 0) dbtype = MYSQL;
+				else if (mbr_dburl.indexOf("sqlserver") > 0) dbtype = MSSQL;
+				else if (mbr_dburl.indexOf("oracle") > 0) dbtype = ORACLE;
+
+			} catch (Exception e) {
+				logger.fatal("unable to read the properties." + e);
+				return;
+			}
+
+			Class.forName(dbdrivername).newInstance();
+
+		} catch (Exception e) {
+			logger.fatal("unable to start move to lz thread: " + e);
+		}
 	}
 	
 	public MoveToLZThread(Properties properties,int type) {
