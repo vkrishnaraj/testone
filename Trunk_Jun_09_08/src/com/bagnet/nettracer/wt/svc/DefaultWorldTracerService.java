@@ -942,7 +942,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			Pattern wt_patt = Pattern.compile("([a-zA-Z0-9]{2})(\\d{1,6})");
 			Matcher m = wt_patt.matcher(claimCheck.trim());
 			if (m.find() && LookupAirlineCodes.getThreeDigitTicketingCode(m.group(1)) != null) {
-				bagTagString = String.format("%s%06d", m.group(1), m.group(2));
+				bagTagString = String.format("%s%06d", m.group(1), Integer.parseInt(m.group(2)));
 			} else {
 				Pattern base_patt = Pattern.compile("(\\d{1,6})(\\D|$)");
 				m = base_patt.matcher(claimCheck.trim());
