@@ -51,6 +51,9 @@
 			<fileset dir="${lib.jar.dir}">
 				<patternset refid="jar.files" />
 			</fileset>
+			<fileset dir="${basedir}/lib/client-us">
+				<patternset refid="jar.files" />
+			</fileset>
 		</path>
 	</target>
 
@@ -512,7 +515,7 @@
 	<target name="build-westjet-all">
 		<antcall target="build-westjet-test"/>
 		<antcall target="build-westjet-qa"/>
-		<antcall target="build-westjet-prod"/>	
+		<antcall target="build-westjet-prod"/>
 	</target>
 	<target name="build-westjet-test" depends="delete">
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/westjet/environment/test/header_bg_noconf.gif" />
@@ -524,7 +527,7 @@
 		<property name="westjet.init.complete" value="true" />
 		<antcall target="donotrun-build-westjet" />
 	</target>
-	
+
 	<target name="build-westjet-qa" depends="delete">
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/westjet/environment/qa/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/westjet/environment/qa/login/center.jsp" />
@@ -535,7 +538,7 @@
 		<property name="westjet.init.complete" value="true" />
 		<antcall target="donotrun-build-westjet" />
 	</target>
-	
+
 	<target name="build-westjet-prod" depends="delete">
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/westjet/environment/prod/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/westjet/environment/prod/login/center.jsp" />
@@ -546,7 +549,7 @@
 		<property name="westjet.init.complete" value="true" />
 		<antcall target="donotrun-build-westjet" />
 	</target>
-	
+
 
 	<target name="donotrun-build-westjet" if="westjet.init.complete">
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
@@ -1036,12 +1039,12 @@
 	<!-- run build dev first -->
 
 	<!-- core ws build -->
-	
+
 	<target name="ntcoreservice_completeRebuild">
 		<antcall target="ntcoreservice_java2wsdl" />
 		<antcall target="ntcoreservice_wsdl2java" />
 	</target>
-	
+
 	<target name="ntcoreservice_java2wsdl" depends="build-dev">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 
@@ -1250,7 +1253,7 @@
 		<antcall target="combineResourceFiles">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/${ant_project_name}/ApplicationResources.properties" />
-			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" />
+			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/tracer.properties" />
@@ -1304,12 +1307,12 @@
 	</target>
 
 	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask"	classpathref="project.classpath"/>
-	
+
 	<target name="tracerSchema">
 		<property name="ant_project_name" value="tracer" />
 		<antcall target="schemaexport" />
 	</target>
-	
+
 	<target name="schemaexport" depends="compile-core,hibernate_generate_core" description="Exports a generated schema to DB and file">
 		<hibernatetool destdir="${build.dir}/${ant_project_name}/ddl">
 			<classpath>
@@ -1320,8 +1323,8 @@
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
-	
-	
+
+
 	<target name="simplifyAll">
 		<antcall target="simplifyResourceFiles">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
