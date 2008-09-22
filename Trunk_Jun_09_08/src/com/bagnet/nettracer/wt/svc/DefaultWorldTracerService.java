@@ -625,7 +625,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			throw new WorldTracerException("OHD missing color / type");
 		}
 
-		String colorType = ohd.getColor().trim() + ohd.getType().trim();
+		String colorType = "";
+		if("TD".equals(ohd.getColor().trim())) {
+			colorType = "BN" + ohd.getType().trim();
+		}
+		else {
+			colorType = ohd.getColor().trim() + ohd.getType().trim();
+		}
 		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1()));
 		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2()));
 		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3()));
@@ -924,7 +930,14 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				|| item.getBagtype().trim().length() != 2) {
 			return;
 		}
-		String colorType = item.getColor().trim() + item.getBagtype().trim();
+		String colorType = "";
+		if("TD".equals(item.getColor().trim())) {
+			colorType = "BN" + item.getBagtype().trim();
+		}
+		else {
+			colorType = item.getColor().trim() + item.getBagtype().trim();
+		}
+		
 		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1()));
 		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2()));
 		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3()));
