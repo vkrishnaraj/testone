@@ -895,11 +895,11 @@ public class MBRActionUtils {
 
 	public static boolean prePopulate(HttpServletRequest request,IncidentForm form, ArrayList<String> alerrors, int incidentType) {
 		if (request.getParameter("doprepopulate") != null) {
-			if (form.getRecordlocator() == null || form.getRecordlocator().trim().length() == 0) {
-				alerrors.add("error.no.recordlocator");
-			} else {
+//			if (form.getRecordlocator() == null || form.getRecordlocator().trim().length() == 0) {
+//				alerrors.add("error.no.recordlocator");
+//			} else {
 				alerrors.addAll(SpringUtils.getReservationIntegration().populateIncidentForm(request, form, incidentType));
-			}
+//			}
 			return true;
 		}
 		return false;

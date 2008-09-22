@@ -7,9 +7,9 @@ import phx_52n_gr90.sharesws.services_asmx.ServicesStub;
 
 public class SharesIntegrationWrapper {
 
-	private String endpoint;
 	private Booking booking;
 	private String errorMessage;
+	private final String PASSWORD = "password";
 
 	/**
 	 * Method assumes that one of the two keys is null; it will perform the reservation system
@@ -20,9 +20,10 @@ public class SharesIntegrationWrapper {
 	 */
 	public boolean getBookingByKey(String recordLocator, String bagTag) {
 		try {
-			ServicesStub stub = new ServicesStub(null, endpoint);
+			ServicesStub stub = new ServicesStub();
 			GetBookingInformationDocument biDoc = GetBookingInformationDocument.Factory.newInstance();
 			GetBookingInformationDocument.GetBookingInformation bi = biDoc.addNewGetBookingInformation();
+			bi.setPassword(PASSWORD);
 			if (recordLocator != null) {
 				bi.setRecordLocator(recordLocator);
 			} else if (bagTag != null) {
@@ -36,8 +37,9 @@ public class SharesIntegrationWrapper {
 		} catch (Exception e) {
 			e.printStackTrace();
 			setErrorMessage("Error calling webservice: " + e.toString());
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	public Booking getBooking() {
