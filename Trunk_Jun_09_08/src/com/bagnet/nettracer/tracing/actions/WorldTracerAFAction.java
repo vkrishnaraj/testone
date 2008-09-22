@@ -155,7 +155,7 @@ public class WorldTracerAFAction extends Action {
 		}
 
 		int rowcount = -1;
-		ArrayList<Worldtracer_Actionfiles> resultlist = null;
+		ArrayList<Worldtracer_Actionfiles> resultlist = new ArrayList<Worldtracer_Actionfiles>();
 
 		// get action file by type and date or by id
 		if ((request.getParameter("ahl_id") != null && request.getParameter(
@@ -167,11 +167,14 @@ public class WorldTracerAFAction extends Action {
 					wt_type, 0, 0);
 			request.setAttribute("wt_id_specific", "1");
 		} else {
+			if(agent_station.getWt_stationcode() != null && agent_station.getWt_stationcode().trim().length() > 0) {
 			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user
-					.getCompanycode_ID(), agent_station.getStationcode(),
+					.getCompanycode_ID(), agent_station.getWt_stationcode(),
 					0, 0);
+			}
 		}
 		rowcount = resultlist.size();
+
 
 		/** ************ pagination ************* */
 		int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
@@ -221,7 +224,7 @@ public class WorldTracerAFAction extends Action {
 			request.setAttribute("wt_id_specific", "1");
 		} else {
 			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user
-					.getCompanycode_ID(), agent_station.getStationcode(),
+					.getCompanycode_ID(), agent_station.getWt_stationcode(),
 					rowsperpage, currpage);
 		}
 
@@ -230,8 +233,7 @@ public class WorldTracerAFAction extends Action {
 
 		/** ************ end of pagination ************* */
 		//System.out.println(resultlist.size()+"------------------");
-		return (mapping
-				.findForward(TracingConstants.VIEW_WORLDTRACER_ACTION_FILES));
+		return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_ACTION_FILES));
 
 	}
 
