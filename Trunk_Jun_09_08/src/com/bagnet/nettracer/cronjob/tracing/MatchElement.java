@@ -283,11 +283,11 @@ public enum MatchElement {
 							.getAddresses()) {
 						if (ia.getAddress1() != null && ia.getAddress2() != null && ia.getState_ID() != null && ia.getZip() != null) {
 							String incString = StringUtils.join(" ", ia
-									.getAddress1().trim(), ia.getAddress2().trim(), ia.getCity().trim(), ia
+									.getAddress1(), ia.getAddress2(), ia.getCity(), ia
 									.getState_ID(), ia.getProvince(), ia.getZip());
 	
 							String ohdString = StringUtils.join(" ", oa
-									.getAddress1().trim(), oa.getAddress2().trim(), oa.getCity().trim(), oa
+									.getAddress1(), oa.getAddress2(), oa.getCity(), oa
 									.getState_ID(), oa.getProvince(), oa.getZip());
 	
 							MatchResult result = MatchUtils.stringCompare(e,

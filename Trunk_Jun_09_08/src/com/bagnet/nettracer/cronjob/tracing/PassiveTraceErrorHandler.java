@@ -15,7 +15,7 @@ public class PassiveTraceErrorHandler {
 
 	private String emailHost = "localhost";
 	private String emailFrom = "donotreply@nettracer.aero";
-	private String emailTo = "bsmith@nettracer.aero";
+	private String emailTo = "support@nettracer.aero";
 	private int emailPort = 25;
 	private String instanceName = null;
 	private volatile ArrayList<Date> dateList = new ArrayList<Date>();
@@ -50,6 +50,7 @@ public class PassiveTraceErrorHandler {
 			ArrayList al = new ArrayList();
 			al.add(new InternetAddress(emailTo));
 			/*
+			 * TODO : Update
 			if (!emailTo.equals("support@nettracer.aero")) {
 				al.add(new InternetAddress("support@nettracer.aero"));
 			}

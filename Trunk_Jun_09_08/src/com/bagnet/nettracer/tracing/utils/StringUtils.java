@@ -203,7 +203,7 @@ public class StringUtils {
     	StringBuffer sb = new StringBuffer();
     	for (int i = 0; i< strings.length; ++i) {
     		if (strings[i] != null) {
-	    		sb.append(strings[i]);
+	    		sb.append(strings[i].trim());
 	    		if (i < strings.length - 1) {
 	    			sb.append(pattern);
 	    		}
