@@ -6,12 +6,14 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -20,6 +22,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -121,8 +125,16 @@ public class WorldTracerAFAction extends Action {
 		if (wt_type == null || wt_type.equals("") || wt_type.equals("null"))
 			wt_type = "FW";
 		String day = request.getParameter("d");
-		if (day == null || day.equals("") || day.equals("null"))
-			day = "1";
+		if(day == null || day.trim().equals("") || day.trim().equals("null")) {
+			if((request.getParameter("ahl_id") != null && request.getParameter("ahl_id").length() > 9)
+					|| (request.getParameter("ohd_id") != null && request.getParameter("ohd_id").length() > 9)) {
+				day = "-1";
+			}
+			else {
+				day = "1";
+			}
+		}
+
 		request.setAttribute("af_day", day);
 
 		if (wt_type == null || wt_type.equals(""))
@@ -213,28 +225,95 @@ public class WorldTracerAFAction extends Action {
 			}
 			request.setAttribute("pages", al);
 		}
-
-		if ((request.getParameter("ahl_id") != null && request.getParameter(
-				"ahl_id").length() > 9)
-				|| (request.getParameter("ohd_id") != null && request
-						.getParameter("ohd_id").length() > 9)) {
-			resultlist = WorldTracerUtils.findActionFilesbyWTId(request
-					.getParameter("ahl_id"), request.getParameter("ohd_id"),
-					wt_type, rowsperpage, currpage);
-			request.setAttribute("wt_id_specific", "1");
-		} else {
-			resultlist = WorldTracerUtils.findActionFiles(wt_type, day, user
-					.getCompanycode_ID(), agent_station.getWt_stationcode(),
-					rowsperpage, currpage);
-		}
-
 		
-		request.setAttribute("resultlist", resultlist);
+		List<Worldtracer_Actionfiles> tempList = resultlist.subList(currpage * rowsperpage, ((currpage* rowsperpage) + rowsperpage) > resultlist.size() ? resultlist.size() : ((currpage* rowsperpage) + rowsperpage));
+		
+		List<ActionData> displayList = createDisplayList(tempList);
+
+		request.setAttribute("resultlist", displayList);
 
 		/** ************ end of pagination ************* */
 		//System.out.println(resultlist.size()+"------------------");
 		return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_ACTION_FILES));
 
+	}
+	
+	private List<ActionData> createDisplayList(List<Worldtracer_Actionfiles> tempList) {
+		List<ActionData> result = new ArrayList<ActionData>();
+		IncidentBMO ibmo = new IncidentBMO();
+		
+		for(Worldtracer_Actionfiles af : tempList) {
+			ActionData ad = new ActionData();
+			ad.setAf_id(af.getId());
+			ad.setAf_text(StringEscapeUtils.escapeHtml(af.getAction_file_text()).replaceAll("\\n", "<br />"));
+			ad.setWt_incident_id(af.getWt_incident_id());
+			if(af.getWt_incident_id() != null && af.getWt_incident_id().trim().length() > 0) {
+				Incident inc = ibmo.findIncidentByWtId(af.getWt_incident_id().trim().toUpperCase());
+				if (inc != null) {
+					ad.setIncident_id(inc.getIncident_ID());
+				}
+			}
+			ad.setWt_ohd_id(af.getWt_ohd_id());
+			if(af.getWt_ohd_id() != null && af.getWt_ohd_id().trim().length() > 0) {
+				OHD ohd = OhdBMO.findOhdByWtId(af.getWt_ohd_id().trim().toUpperCase());
+				if (ohd != null) {
+					ad.setOhd_id(ohd.getOHD_ID());
+				}
+			}
+			result.add(ad);
+		}
+		return result;
+	}
+
+	public class ActionData {
+		private long af_id;
+		private String wt_incident_id;
+		private String wt_ohd_id;
+		private String incident_id;
+		private String ohd_id;
+		private String af_text;
+		
+		
+		public long getAf_id() {
+			return af_id;
+		}
+		public void setAf_id(long af_id) {
+			this.af_id = af_id;
+			}
+		
+		public String getWt_incident_id() {
+			return wt_incident_id;
+		}
+		public void setWt_incident_id(String wt_incident_id) {
+			this.wt_incident_id = wt_incident_id;
+		}
+		public String getWt_ohd_id() {
+			return wt_ohd_id;
+		}
+		public void setWt_ohd_id(String wt_ohd_id) {
+			this.wt_ohd_id = wt_ohd_id;
+		}
+		public String getIncident_id() {
+			return incident_id;
+		}
+		public void setIncident_id(String incident_id) {
+			this.incident_id = incident_id;
+		}
+		public String getOhd_id() {
+			return ohd_id;
+		}
+		public void setOhd_id(String ohd_id) {
+			this.ohd_id = ohd_id;
+		}
+		public String getAf_text() {
+			return af_text;
+		}
+		public void setAf_text(String af_text) {
+			this.af_text = af_text;
+		}
+
+		
+		
 	}
 
 }

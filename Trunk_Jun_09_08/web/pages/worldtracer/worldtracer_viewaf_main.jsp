@@ -66,7 +66,7 @@ function updatePagination() {
 			String header_text = "fw";
 				if (request.getAttribute("wt_type") != null
 						&& request.getAttribute("wt_type").equals("FW")) {
-					header_text = "fw";
+				header_text = "fw";
 		%> <bean:message key="header.wt_fw" /> <%
  	} else if (request.getAttribute("wt_type") != null
  				&& request.getAttribute("wt_type").equals("AA")) {
@@ -105,7 +105,9 @@ function updatePagination() {
             header_text="cw";
  	}
  	%>
+ 	<c:if test="${af_day != '-1'}">
  	&nbsp;<bean:message key="header.wt_day"/>&nbsp;<c:out value="${af_day}" default="1" />
+ 	</c:if>
  <%
  	if (request.getParameter("ahl_id") != null
  				&& request.getParameter("ahl_id").length() > 9) {
@@ -183,47 +185,58 @@ function updatePagination() {
 					<td><b><bean:message key="colname.actionfiles" /></b></td>
 					<td><b><bean:message key="colname.deleteaf" /></b></td>
 				</tr>
-				<logic:iterate id="results" name="resultlist"
-					type="com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles">
-					<tr>
-						<%
-							String res = results.getAction_file_text();
-											res = res.replace("\n", "<br>");
-						%>
-						<td><logic:notEqual name="results" property="wt_incident_id"
-							value="">
-							<a href="javascript:void(0);"
-								onclick="openWindow('worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="results" property="wt_incident_id" />','wtrawtext',500,600);return false;"><bean:write
-								name="results" property="wt_incident_id" /></a>
-						&nbsp;
-						</logic:notEqual> <logic:equal name="results" property="wt_incident_id" value="">
-							<a
-								href="lostDelay.do?wt_af_id=<bean:write name="results" property="id" />">No_AHL_ID</a>
-						</logic:equal></td>
+				<c:forEach var="actionData" items="${resultlist}">
+				<tr>
+					<td>
+						<c:choose>
+						<c:when test="${!empty actionData.incident_id}">
+							<c:url	value="/lostDelay.do" var="incidentLink">
+								<c:param name="incident_ID" value="${actionData.incident_id}" />
+							</c:url>
+							<p><bean:message key="nettracer.id" />:&nbsp;<a href="${incidentLink}">${actionData.incident_id}</a></p>
+							<p><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_incident_id}</p>
+						</c:when>
+						<c:when test="${!empty actionData.wt_incident_id}">
+						<p><bean:message key="worldtracer.id" />:&nbsp;
+						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}','wtrawtext',500,600);return false;">${actionData.wt_incident_id}</a></p>
+						</c:when>
+						<c:otherwise>
+							<c:url	value="/lostDelay.do" var="incidentLink">
+								<c:param name="wt_af_id" value="${actionData.af_id}" />
+							</c:url>
 
-						<td><logic:notEqual name="results" property="wt_ohd_id"
-							value="">
-							<a href="javascript:void(0);"
-								onclick="openWindow('worldtraceraf.do?rawtext=1&ohd_id=<bean:write name="results" property="wt_ohd_id" />','wtrawtext',500,600);return false;"><bean:write
-								name="results" property="wt_ohd_id" /></a>
-                    	&nbsp;
-                    	</logic:notEqual> <logic:equal name="results" property="wt_ohd_id"
-							value="">
-							<a
-								href="addOnHandBag.do?wt_af_id=<bean:write name="results" property="id" />">No_OHD_ID</a>
-						</logic:equal></td>
-
-						<td>
-						<%
-							out.println(res);
-											// <bean:write name="results" property="action_file_text" />
-						%>
-						</td>
-						<td><a
-							href="worldtraceraf.do?viewaction=<%=header_text %>&d=<%=request.getParameter("d")%>&delete=<bean:write name="results" property="id"/>">Delete</a></td>
-
-					</tr>
-				</logic:iterate>
+							<p><a href="${incidentLink}"><bean:message key="no.wt_ahl.id" /></a></p>
+						</c:otherwise>
+						</c:choose>
+					</td>
+					<td>
+						<c:choose>
+						<c:when test="${!empty actionData.ohd_id}">
+							<c:url	value="/addOnHandBag.do" var="ohdLink">
+								<c:param name="ohd_ID" value="${actionData.ohd_id}" />
+							</c:url>
+							<p><bean:message key="nettracer.id" />:&nbsp;<a href="${ohdLink}">${actionData.ohd_id}</a></p>
+							<p><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_ohd_id}</p>
+						</c:when>
+						<c:when test="${!empty actionData.wt_ohd_id}">
+						<p><bean:message key="worldtracer.id" />:&nbsp;
+						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ohd_id=${actionData.wt_ohd_id}','wtrawtext',500,600);return false;">${actionData.wt_ohd_id}</a></p>
+						</c:when>
+						<c:otherwise>
+							<c:url	value="/addOnHandBag.do" var="ohdLink">
+								<c:param name="wt_af_id" value="${actionData.af_id}" />
+							</c:url>
+							<p><a href="${ohdLink}"><bean:message key="no.wt_ohd.id" /></a></p>
+						</c:otherwise>
+						</c:choose>
+					</td>
+					<td>
+						<c:out value="${actionData.af_text}" escapeXml="false"/>
+					</td>
+					<td><a
+							href="worldtraceraf.do?viewaction=<%=header_text %>&d=<%=request.getParameter("d")%>&delete=${actionData.af_id}">Delete</a>
+					</td>
+				</c:forEach>
 				<tr>
 					<td colspan="3"><!-- pagination --> <jsp:include
 						page="/pages/includes/pagination_incl.jsp" /> <!-- eof pagination -->
