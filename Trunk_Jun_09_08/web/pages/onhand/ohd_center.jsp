@@ -209,7 +209,7 @@ function gotoHistoricalReport() {
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
                         <a
-            href="worldtracerfoh.do?ohd_id=${OnHandForm.ohd_id}">Forward
+            href="worldtracerfoh.do?ohd_id=${OnHandForm.ohd_id}&clear=1">Forward
           to WT</a>
         </logic:notEqual>
         <%
