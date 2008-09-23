@@ -230,7 +230,12 @@ public class LostDelayAction extends Action {
 				error = new ActionMessage("error.wt_save_closed");
 			}
 			else {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);
+				if( request.getParameter("close") != null && request.getParameter("doclose") != null) {
+					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, false);
+				}
+				else {
+					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);
+				}
 				if(error == null) {
 					WtqIncidentAction wtq = null;
 					if(request.getParameter("savetowt") != null && (iDTO.getWt_id() == null || iDTO.getWt_id().trim().length() == 0) ) {
