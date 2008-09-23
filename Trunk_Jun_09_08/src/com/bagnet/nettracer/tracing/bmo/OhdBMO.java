@@ -22,6 +22,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ControlLog;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
@@ -1304,5 +1305,36 @@ public class OhdBMO {
 			sess.close();
 		}
 		return true;
+	}
+
+	public static OHD findOhdByWtId(String wt_id) {
+		Session sess = null;
+
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.OHD o where o.wtFile.wt_id= :wt_id");
+			q.setParameter("wt_id", wt_id);
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find incident with wt_id: " + wt_id);
+				return null;
+			}
+			OHD ohd = (OHD) list.get(0);
+
+			return ohd;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
 	}
 }
