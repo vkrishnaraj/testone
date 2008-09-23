@@ -193,19 +193,19 @@ function updatePagination() {
 							<c:url	value="/lostDelay.do" var="incidentLink">
 								<c:param name="incident_ID" value="${actionData.incident_id}" />
 							</c:url>
-							<p><bean:message key="nettracer.id" />:&nbsp;<a href="${incidentLink}">${actionData.incident_id}</a></p>
-							<p><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_incident_id}</p>
+							<bean:message key="nettracer.id" />:&nbsp;<a href="${incidentLink}">${actionData.incident_id}</a>
+							<br /><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_incident_id}
 						</c:when>
 						<c:when test="${!empty actionData.wt_incident_id}">
-						<p><bean:message key="worldtracer.id" />:&nbsp;
-						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}','wtrawtext',500,600);return false;">${actionData.wt_incident_id}</a></p>
+						<bean:message key="worldtracer.id" />:&nbsp;
+						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}','wtrawtext',500,600);return false;">${actionData.wt_incident_id}</a>
 						</c:when>
 						<c:otherwise>
 							<c:url	value="/lostDelay.do" var="incidentLink">
 								<c:param name="wt_af_id" value="${actionData.af_id}" />
 							</c:url>
 
-							<p><a href="${incidentLink}"><bean:message key="no.wt_ahl.id" /></a></p>
+							<a href="${incidentLink}"><bean:message key="no.wt_ahl.id" /></a>
 						</c:otherwise>
 						</c:choose>
 					</td>
@@ -215,18 +215,18 @@ function updatePagination() {
 							<c:url	value="/addOnHandBag.do" var="ohdLink">
 								<c:param name="ohd_ID" value="${actionData.ohd_id}" />
 							</c:url>
-							<p><bean:message key="nettracer.id" />:&nbsp;<a href="${ohdLink}">${actionData.ohd_id}</a></p>
-							<p><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_ohd_id}</p>
+							<bean:message key="nettracer.id" />:&nbsp;<a href="${ohdLink}">${actionData.ohd_id}</a>
+							<br /><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_ohd_id}
 						</c:when>
 						<c:when test="${!empty actionData.wt_ohd_id}">
-						<p><bean:message key="worldtracer.id" />:&nbsp;
-						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ohd_id=${actionData.wt_ohd_id}','wtrawtext',500,600);return false;">${actionData.wt_ohd_id}</a></p>
+						<bean:message key="worldtracer.id" />:&nbsp;
+						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ohd_id=${actionData.wt_ohd_id}','wtrawtext',500,600);return false;">${actionData.wt_ohd_id}</a>
 						</c:when>
 						<c:otherwise>
 							<c:url	value="/addOnHandBag.do" var="ohdLink">
 								<c:param name="wt_af_id" value="${actionData.af_id}" />
 							</c:url>
-							<p><a href="${ohdLink}"><bean:message key="no.wt_ohd.id" /></a></p>
+							<a href="${ohdLink}"><bean:message key="no.wt_ohd.id" /></a>
 						</c:otherwise>
 						</c:choose>
 					</td>
