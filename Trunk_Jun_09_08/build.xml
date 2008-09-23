@@ -1250,6 +1250,7 @@
 	</target>
 
 	<target name="build-cron-jar" depends="hibernate_generate_core,compile-core,compile-cron">
+		<mkdir dir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" />
 		<antcall target="combineResourceFiles">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/${ant_project_name}/ApplicationResources.properties" />
