@@ -2,12 +2,8 @@ package com.bagnet.nettracer.tracing.actions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,38 +16,20 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
-import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.OHDRequest;
-import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
-import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
-import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFOHForm;
-import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFOHForm.FwdFormSegment;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
-import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
-import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
-
-import org.apache.commons.httpclient.HttpClient;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for handling
@@ -88,6 +66,11 @@ public class WorldTracerFOHAction extends Action {
 
 		BagService bs = new BagService();
 		WorldTracerFOHForm theform = (WorldTracerFOHForm) form;
+		if (theform == null || request.getParameter("clear") != null) {
+			theform = new WorldTracerFOHForm();
+			theform.addSegment();
+			session.setAttribute("worldTracerFOHForm", theform);
+		}
 
 		// get faultstationlist
 		List faultstationlist = null;
@@ -97,6 +80,7 @@ public class WorldTracerFOHAction extends Action {
 			faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
 		}
 		request.setAttribute("faultstationlist", faultstationlist);
+
 
 
 		// the company specific codes..
@@ -130,9 +114,6 @@ public class WorldTracerFOHAction extends Action {
 
 		}
 
-		if (theform == null || request.getParameter("clear") != null) {
-			this.clear(mapping, user, session, request);
-		}
 		// Add itinerary item is clicked.
 		if (request.getParameter("additinerary") != null) {
 			theform.addSegment();
@@ -163,16 +144,6 @@ public class WorldTracerFOHAction extends Action {
 		}
 
 		return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_FOH);
-	}
-
-	// clear
-	private ActionForward clear(ActionMapping mapping, Agent user,
-			HttpSession session, HttpServletRequest request) {
-		WorldTracerFOHForm theform = new WorldTracerFOHForm();
-
-		theform.addSegment();
-		session.setAttribute("worldTracerFOHForm", theform);
-		return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_FOH));
 	}
 
 	// Insert worldtracer forward to database
