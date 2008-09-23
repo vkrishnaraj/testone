@@ -201,7 +201,7 @@ function gotoHistoricalReport() {
       %>
       <A
         HREF="forward_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>"><b><bean:message key="colname.forwardThisBag" /></b></A>
-      <c:if test="${!empty OnHandForm.wt_id }">
+      <c:if test="${!empty OnHandForm.wt_id and empty pendingWtAction }">
         <%
         	if (UserPermissions.hasPermission(
         								TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_FWD, a)) {
@@ -269,6 +269,9 @@ function gotoHistoricalReport() {
               <c:when test="${pendingWtAction == 'WT_PENDING_CLOSE'}">
                 <bean:message key="wt.pending.ohd.close" />
               </c:when>
+              <c:when test="${pendingWtAction == 'WT_PENDING_FOH'}">
+                <bean:message key="wt.pending.ohd.fwd" />
+              </c:when>
             </c:choose> &nbsp;<a
               href="javascript: ; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message
               key="update" /></a>&nbsp;<a
@@ -318,7 +321,14 @@ function gotoHistoricalReport() {
       <%
       	}
       			}
+      	else {
       %>
+	
+<c:if test="${!empty OnHandForm.wt_id }">
+        WorldTracer ID: <a href="worldtraceraf.do?ohd_id=${OnHandForm.wt_id}">
+        <c:out value="${OnHandForm.wt_id}" /></a>
+</c:if>
+<%} %>
 
       <%
       	if (UserPermissions.hasPermission(
@@ -814,7 +824,7 @@ function gotoHistoricalReport() {
             size="5" maxlength="5" styleClass="textfield" indexed="true" /></td>
         </tr>
         <tr>
-          <td colspan=4><html:submit styleId="button"
+          <td colspan="4"><html:submit styleId="button"
             property="deleteBag" indexed="true">
             <bean:message key="button.delete_bag_itinerary" />
           </html:submit></td>

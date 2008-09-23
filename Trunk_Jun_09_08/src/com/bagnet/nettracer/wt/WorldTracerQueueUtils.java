@@ -207,7 +207,7 @@ public class WorldTracerQueueUtils {
 		}
 	}
 	
-	public static WtqOhdAction findPendingOhdAction(String ntOHD) {
+	public static WorldTracerQueue findPendingOhdAction(String ntOHD) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -215,10 +215,22 @@ public class WorldTracerQueueUtils {
 			q.setParameter("status", WtqStatus.PENDING);
 			q.setParameter("ntOHD", ntOHD);
 			q.setMaxResults(1);
-			List<WtqOhdAction> result = q.list();
+			List<WorldTracerQueue> result = q.list();
 			if(result != null && result.size() > 0) {
 				return result.get(0);
 			}
+			
+			//no basic actions, check for forwards (hibernate doesn't support unions yet
+			//don't want to write sql that I'm not 100% sure is database agnostic
+			q = sess.createQuery("from WtqFwdOhd foh where foh.status = :status and foh.ohd.OHD_ID = :ntOHD");
+			q.setParameter("status", WtqStatus.PENDING);
+			q.setParameter("ntOHD", ntOHD);
+			q.setMaxResults(1);
+			result = q.list();
+			if(result != null && result.size() > 0) {
+				return result.get(0);
+			}
+			
 			return null;
 
 		} catch (Exception e) {

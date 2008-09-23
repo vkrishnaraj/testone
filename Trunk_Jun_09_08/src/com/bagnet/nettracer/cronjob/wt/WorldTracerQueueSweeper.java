@@ -8,10 +8,12 @@ import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.cronjob.bmo.WT_FWD_LogBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
@@ -470,7 +472,16 @@ public class WorldTracerQueueSweeper {
 				}
 				logger.info("forwarded ohd: " + ((WtqFwdOhd)queue).getOhd().getOHD_ID());
 				queue.setStatus(WtqStatus.SUCCESS);
+				OHD ohd = ((WtqFwdOhd) queue).getOhd();
+				if (ohd.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_CLOSED) {
+					Status s = new Status();
+					s.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+					ohd.setStatus(s);
+					ohdBmo.updateOhdNoAudit(ohd);
+				}
 				wtqBmo.updateQueue(queue);
+				//need to close the OHD if it has been forwarded.
+
 			}
 			else if (queue instanceof WtqRequestOhd) {
 				OHD ohd = null;

@@ -439,7 +439,7 @@ public class OnHandAction extends Action {
 							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.wt_cancel_pending"));	
 						}
 					}
-					WtqOhdAction pendingAction = WorldTracerQueueUtils.findPendingOhdAction(onhand_id);
+					WorldTracerQueue pendingAction = WorldTracerQueueUtils.findPendingOhdAction(onhand_id);
 					if(pendingAction != null) {
 						if(pendingAction instanceof WtqCreateOhd) {
 							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CREATE);
@@ -455,6 +455,9 @@ public class OnHandAction extends Action {
 						}
 						else if(pendingAction instanceof WtqCloseOhd) {
 							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CLOSE);
+						}
+						else if(pendingAction instanceof WtqFwdOhd) {
+							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_FOH);
 						}
 						request.setAttribute("wtq_pending_id", pendingAction.getWt_queue_id());
 					}
