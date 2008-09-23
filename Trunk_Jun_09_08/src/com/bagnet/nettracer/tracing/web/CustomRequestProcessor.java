@@ -23,7 +23,8 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
         //If user is trying to access login page
         // then don't check
         if( request.getServletPath().equals("/logon.do")
-            || request.getServletPath().equals("/logoff.do") )
+            || request.getServletPath().equals("/logoff.do") || request.getServletPath().equals("/passreset.do") 
+            || request.getServletPath().startsWith("/passengerview"))
             return true;
         //Check if userName attribute is there is session.
         //If so, it means user has allready logged in
