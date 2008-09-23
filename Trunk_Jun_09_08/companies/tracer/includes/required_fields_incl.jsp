@@ -1,6 +1,7 @@
 <%@ page language="java" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="org.apache.struts.action.Action" %>
+
 <%
 	Agent a = (Agent) session.getAttribute("user");
 
@@ -25,6 +26,7 @@
     var theindex = 0;
   	var addressIndices = [];
   	var bagIndices = [];
+  	var ccCount = 0;
   	for (var j=0;j<form.length;j++) {
 	    currentElement = form.elements[j];
 	    currentElementName=currentElement.name;
@@ -240,6 +242,9 @@
 	        return false;
 	      } 
 	    }
+	  	else if(currentElementName.indexOf("].claimchecknum") != -1 && currentElement.value.length > 0) {
+		  	ccCount += 1;
+	  	} 
   	}
 	
 	var bag0 = document.getElementById("theItem[0].lnameonbag");
@@ -249,6 +254,12 @@
 							"header.bag_info")%>" + " <%=(String) myMessages.getMessage(myLocale,
 							"error.validation.isRequired")%>");
 		return false;
+	}
+
+	if(ccCount > bagIndices.length) {
+        alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.too.many.claimchecks")%>');
+        document.getElementById("claimcheck[0].claimchecknum").focus();
+        return false;
 	}
   	
   	for (var j=0;j<bagIndices.length;j++) {
