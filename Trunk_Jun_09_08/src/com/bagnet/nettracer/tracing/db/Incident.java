@@ -454,8 +454,12 @@ public class Incident implements Serializable {
 	}
 	
 	public Date getFullCloseDate() {
-		return DateUtils.convertToDate(getClosedate().toString(), TracingConstants.DB_DATETIMEFORMAT,
+		if (getClosedate() != null) {
+			return DateUtils.convertToDate(getClosedate().toString(), TracingConstants.DB_DATETIMEFORMAT,
 				null);
+		} else {
+			return null;
+		}
 	}
 
 	/**
