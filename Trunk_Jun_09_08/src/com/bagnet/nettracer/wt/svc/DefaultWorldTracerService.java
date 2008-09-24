@@ -3,10 +3,13 @@ package com.bagnet.nettracer.wt.svc;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.bagnet.nettracer.cronjob.wt.WorldTracerTx;
+import com.bagnet.nettracer.aop.WorldTracerTx;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -34,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
+import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 import com.bagnet.nettracer.tracing.db.OHD_Inventory;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
@@ -78,6 +82,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	private String wtCompanyCode;
 
 	private WtTransactionBmo txBmo;
+	
+	private static final List<String> wt_mats = Arrays.asList("D", "L", "M", "R", "T");
+	private static final List<String> wt_descs = Arrays.asList("D", "L", "M", "R", "T", "B", "K", "C", "H", "S", "W", "X" );
 
 	public static final String FIELD_SEP = ".";
 	public static final String ENTRY_SEP = "/";
@@ -632,9 +639,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		else {
 			colorType = ohd.getColor().trim() + ohd.getType().trim();
 		}
-		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1()));
-		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2()));
-		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3()));
+		
+		String desc1 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1()));
+		String desc2 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2()));
+		String desc3 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3()));
+		
+		colorType += getDescString(desc1, desc2, desc3);
+
 		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
 
 		if (ohd.getClaimnum() != null && ohd.getClaimnum().trim().length() > 0) {
@@ -670,7 +681,11 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			Map<String, List<String>> temp = new HashMap<String, List<String>>();
 			for (OHD_Inventory inv : (Iterable<OHD_Inventory>) ohd.getItems()) {
 				// TODO update for ContentRule
-				String category = CategoryBMO.getCategory(inv.getOHD_categorytype_ID()).getWtCategory();
+				OHD_CategoryType cat = CategoryBMO.getCategory(inv.getOHD_categorytype_ID());
+				if(cat == null) {
+					continue;
+				}
+				String category = cat.getWtCategory();
 				String contents = inv.getDescription().trim().toUpperCase();
 				if (category == null || contents == null || category.trim().length() == 0
 						|| contents.trim().length() == 0)
@@ -694,9 +709,45 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	}
 
-	private String mapXDesc(String code) {
+	private String getDescString(String... descs) {
 		// TODO Auto-generated method stub
-		return "P".equalsIgnoreCase(code) ? "X" : code;
+		//need to remove duplicates 
+		Set<String> foo = new HashSet<String>(Arrays.asList(descs));
+		String result = "";
+		boolean hasMat = false;
+		for(String desc : foo) {
+			if(wt_mats.contains(desc)) {
+				if(!hasMat) {
+					result += desc;
+					hasMat = true;
+				}
+			}
+			else {
+				result += desc;
+			}
+		}
+		if(result.length() > 3) {
+			return result.substring(0, 3);
+		}
+		else if (result.length() == 3) {
+			return result;
+		}
+		else if (result.length() == 2) {
+			return result + "X";
+		}
+		else if (result.length() == 1) {
+			return result + "XX";
+		}
+		else {
+			return "XXX";
+		}
+	}
+
+	private String mapXDesc(String code) {
+		if (code == null || !wt_descs.contains(code)) {
+			return "X";
+		}
+		return code;
 	}
 
 	private void getOhdPaxInfo(OHD_Passenger p, Map<WorldTracerField, List<String>> result) {
@@ -938,9 +989,12 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			colorType = item.getColor().trim() + item.getBagtype().trim();
 		}
 		
-		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1()));
-		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2()));
-		colorType += mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3()));
+		String desc1 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1()));
+		String desc2 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2()));
+		String desc3 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3()));
+		
+		colorType += getDescString(desc1, desc2, desc3);
+		
 		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
 
 		addIncidentFieldEntry(WorldTracerField.BI, item.getManufacturer(), result);
