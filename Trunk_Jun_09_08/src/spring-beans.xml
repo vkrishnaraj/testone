@@ -51,7 +51,7 @@
 	<aop:aspectj-autoproxy />
 	
 	<!--  world tracer transaction logging -->
-	<bean id="wtLogging" class="com.bagnet.nettracer.wt.svc.WorldTracerLogger">
+	<bean id="wtLogging" class="com.bagnet.nettracer.aop.WorldTracerLogger">
 		<constructor-arg ref="wtTx-bmo" />
 	</bean>
 	

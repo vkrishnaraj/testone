@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.cronjob.wt;
+package com.bagnet.nettracer.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

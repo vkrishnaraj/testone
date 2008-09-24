@@ -1,17 +1,15 @@
-package com.bagnet.nettracer.wt.svc;
+package com.bagnet.nettracer.aop;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 
-import com.bagnet.nettracer.cronjob.wt.WorldTracerTx;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 
 @Aspect
@@ -25,11 +23,7 @@ public class WorldTracerLogger {
 		this.txBmo = txBmo;
 	}
 
-	@Pointcut("within(com.bagnet.nettracer.wt.svc..*)")
-	public void inWorldTracerService() {
-	}
-
-	@Around("com.bagnet.nettracer.wt.svc.WorldTracerLogger.inWorldTracerService() &&" + "@annotation(tx)")
+	@Around("PointCuts.inWorldTracerService() &&" + "@annotation(tx)")
 	public Object logWorldTracer(ProceedingJoinPoint pjp, WorldTracerTx tx) throws Throwable {
 
 		TxType type = tx.type();
@@ -41,6 +35,7 @@ public class WorldTracerLogger {
 			case AMEND_AHL:
 			case SUSPEND_AHL:
 			case REINSTATE_AHL:
+			case CLOSE_AHL:
 				Incident inc = (Incident) pjp.getArgs()[0];
 				wttx.setIncident(inc);
 				break;
@@ -48,6 +43,8 @@ public class WorldTracerLogger {
 			case CLOSE_OHD:
 			case CREATE_OHD:
 			case REINSTATE_OHD:
+			case SUSPEND_OHD:
+			case FWD_OHD:
 				OHD ohd = (OHD) pjp.getArgs()[0];
 				wttx.setOhd(ohd);
 				break;
