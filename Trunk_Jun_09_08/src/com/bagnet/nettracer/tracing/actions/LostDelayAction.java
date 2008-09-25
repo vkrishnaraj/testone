@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,6 +39,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
@@ -264,7 +266,27 @@ public class LostDelayAction extends Action {
 			}
 			else if(error.getKey().equals("error.unable_to_close_incident")) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				//request attribute would have been set to closed initially, but we need to unset it, so the close
+				//button will show up on the close form
+				request.setAttribute("currentstatus", iDTO.getStatus().getStatus_ID());
 				saveMessages(request, errors);
+				boolean hasclose = false;
+				for (int i = 0; i < theform.getRemarklist().size(); i++) {
+					Remark r = theform.getClosingRemark(i);
+					if (r.getRemarktype() == TracingConstants.REMARK_CLOSING) {
+						hasclose = true;
+						break;
+					}
+				}
+				if (!hasclose) {
+					// add closing remark if there isn't one
+					Remark r = theform.getClosingRemark(theform.getRemarklist().size());
+					r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+					r.setAgent(user);
+					r.set_DATEFORMAT(user.getDateformat().getFormat());
+					r.set_TIMEFORMAT(user.getTimeformat().getFormat());
+					r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+				}
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
 			}
 			else {
