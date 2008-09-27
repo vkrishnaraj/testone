@@ -12,7 +12,7 @@ function checkFlightNum(strng)
 
 function checkExpedite(strng)
 {     
-    var objRegExp  = /(^[a-z A-Z0-9]*$)/;
+    var objRegExp  = /(^\d{10}$|^[a-zA-Z0-9]{2}\d{6}$)/;
     return objRegExp.test(strng);
 }
 

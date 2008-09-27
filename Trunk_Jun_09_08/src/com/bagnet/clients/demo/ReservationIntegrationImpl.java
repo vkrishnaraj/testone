@@ -35,12 +35,14 @@ public class ReservationIntegrationImpl extends
 		Itinerary id = form.getItinerary(3, TracingConstants.BAGGAGE_ROUTING);
 		Incident_Claimcheck claim1 = form.getClaimcheck(0);
 		Incident_Claimcheck claim2 = form.getClaimcheck(1);
+		form.getItem(0, -1);
+		form.getItem(1, -1);
 		
 		// Populate objects
 		claim1.setClaimchecknum("US000001");
 		claim2.setClaimchecknum("US000002");
 		
-		form.setRecordlocator("DUNLAF");
+		form.setRecordlocator("MEDLEN");
 		form.setNumpassengers(1);
 		form.setNumbagchecked(2);
 		form.setNumbagreceived(1);

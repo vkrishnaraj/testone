@@ -98,6 +98,8 @@ public class ScannerDataAction extends Action {
 				
 			} else if (!((String) dynaForm.get("ohdId")).equals("")) {
 				
+				informationProvided = true;
+				
 				String ohdId = (String) dynaForm.get("ohdId");
 				OhdBMO oBMO = new OhdBMO();
 				OHD ohd = oBMO.findOHDByID(ohdId);
@@ -192,8 +194,19 @@ public class ScannerDataAction extends Action {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
+			return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
 		}
 			
+		// All else fails, set date values to yesterday and today
+		
+		GregorianCalendar a = new GregorianCalendar();
+		Date today = a.getTime();
+		a.add(Calendar.DATE, -1);
+		Date yesterday = a.getTime();
+		
+		dynaForm.set("startDate", DateUtils.formatDate(today, user.getDateformat().getFormat(), null, null));
+		dynaForm.set("endDate", DateUtils.formatDate(yesterday, user.getDateformat().getFormat(), null, null));
+		
 		return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
 	}
 }

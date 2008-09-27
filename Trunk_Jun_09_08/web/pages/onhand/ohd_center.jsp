@@ -14,7 +14,84 @@
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
+	String cssFormClass = "form2_ohd";
 %>
+
+
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<logic:present name="prepopulate" scope="request">
+  <script language="javascript">
+    <!--
+    var buttonSelected = null;
+    function validateThis(form) {
+      if (buttonSelected == null) {
+        return true;
+      } else {
+        return validateRest(form);
+      } 
+      return true;
+    }
+    // -->
+  </script>
+  
+  <html:form action="addOnHandBag.do" method="post" onsubmit="return validateThis(this);">
+    <jsp:include page="/pages/includes/validation_incl.jsp" />
+    <!-- search for record locator-->
+    <tr>
+      <td colspan="3" id="pageheadercell">
+      <div id="pageheaderleft">
+      <h1><bean:message key="header.prepopulate" /></h1>
+      </div>
+      <div id="pageheaderright">
+      <table id="pageheaderright">
+        <tr>
+          <jsp:include page="/pages/includes/mail_incl.jsp" />
+          <td><a href="#"
+            onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message
+            key="Help" /></a></td>
+        </tr>
+      </table>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td id="middlecolumn">
+      <div id="maincontent" align="center"><font color=red>
+      <logic:messagesPresent message="true">
+        <html:messages id="msg" message="true">
+          <br />
+          <bean:write name="msg" />
+          <br />
+        </html:messages>
+      </logic:messagesPresent> </font> <br>
+      <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align=center><bean:message
+            key="colname.recordlocator" /> <br>
+          <html:text property="recordlocator" size="15"
+            styleClass="textfield" value="" maxlength="6"/></td>
+        </tr>
+        <% if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) { %>
+          <tr>
+            <td align=center><bean:message
+              key="colname.bag_tag_number" /> <br>
+            <html:text property="bagTagNumber" size="15" maxlength="10"
+              styleClass="textfield" value="" /></td>
+          </tr>
+        <% } %>
+        <tr>
+          <td align="center" valign="top" colspan="12"><html:submit
+            property="doprepopulate" styleId="button" onclick="buttonSelected = 'prepopulate'">
+            <bean:message key="button.populate" />
+          </html:submit> <html:submit property="skip_prepopulate" styleId="button"  onclick="buttonSelected = null">
+            <bean:message key="button.skip_populate"/>
+          </html:submit></td>
+        </tr>
+      </table>
+  </html:form>
+</logic:present>
+
+<logic:notPresent name="prepopulate" scope="request">
 <!-- Calendar includes -->
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
@@ -452,8 +529,8 @@ function gotoHistoricalReport() {
           styleClass="textfield" /></td>
       </tr>
       <tr>
-        <td valign=top><bean:message key="colname.color.req" /> <br>
-        <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&type=bagColor',800,30,230);return false;"><bean:message key="chart3" /></a>
+        <td valign="top"><bean:message key="colname.color.req" /> 
+        <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&type=bagColor',800,30,230);return false;"><bean:message key="chart3" /></a><br />
         <html:select property="bagColor" styleClass="dropdown">
           <html:options collection="colorlist" property="value"
             labelProperty="label" />
@@ -467,7 +544,7 @@ function gotoHistoricalReport() {
           <html:options collection="typelist" property="value"
             labelProperty="label" />
         </html:select></td>
-        <td valign=top><bean:message key="colname.x_desc" /> <br>
+        <td valign="top"><bean:message key="colname.x_desc" /> <br>
         <html:select property="XDesc1" styleClass="dropdown">
           <html:option value="">
             <bean:message key="select.please_select" />
@@ -495,7 +572,7 @@ function gotoHistoricalReport() {
         </html:select>
         <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&type=XDesc3',800,30,230);return false;"><bean:message key="chart4" /></a>
         </td>
-        <td valign=top><bean:message key="colname.manufacturer" />
+        <td valign="top"><bean:message key="colname.manufacturer" />
         <br>
         <html:select property="manufacturer_ID" styleClass="dropdown"
           onchange='showmanu(this);return true;'>
@@ -538,10 +615,10 @@ function gotoHistoricalReport() {
           </td>
         </tr>
         <tr>
-          <td colspan=2><bean:message key="colname.last_name" /> <br>
+          <td colspan="2"><bean:message key="colname.last_name" /> <br>
           <html:text name="passenger" property="lastname" size="20"
             maxlength="20" indexed="true" styleClass="textfield" /></td>
-          <td colspan=2><bean:message key="colname.first_name" />
+          <td colspan="2"><bean:message key="colname.first_name" />
           <br>
           <html:text name="passenger" property="firstname" size="20"
             maxlength="20" indexed="true" styleClass="textfield" /></td>
@@ -1099,7 +1176,8 @@ function gotoHistoricalReport() {
           </logic:empty></td>
         </tr>
       </table>
-    </logic:notEqual> <logic:equal name="OnHandForm" property="readonly" value="1">
+    </logic:notEqual>
+    <logic:equal name="OnHandForm" property="readonly" value="1">
       <logic:equal name="OnHandForm" property="allow_remark_update"
         value="1">
         <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -1166,3 +1244,4 @@ function gotoHistoricalReport() {
 
 //-->
   </SCRIPT>
+</logic:notPresent>

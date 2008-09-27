@@ -12,6 +12,7 @@ import java.util.Set;
 import com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -25,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
+import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -152,7 +154,9 @@ public class WSCoreIncidentUtil {
 
 			return IncidenttoWS_Mapping(iDTO);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
+			
 		}
 	}
  	/**
@@ -202,8 +206,10 @@ public class WSCoreIncidentUtil {
 		si.setCreateDate(cal);
 		
 		GregorianCalendar cal1 = new GregorianCalendar();
-		cal1.setTime(iDTO.getFullCloseDate());
-		si.setClosedate(cal1);
+		if (iDTO.getFullCloseDate() != null) {
+			cal1.setTime(iDTO.getFullCloseDate());
+			si.setClosedate(cal1);
+		}
 
 		si.setRecordlocator(iDTO.getRecordlocator());
 		si.setTicketnumber(iDTO.getTicketnumber());
@@ -417,6 +423,15 @@ public class WSCoreIncidentUtil {
 				c++;
 			}
 		}
+		
+		String osiInfo = null;
+		OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(iDTO.getIncident_ID(), null);
+		if (osi != null && osi.getInfo() != null) {
+			osiInfo = osi.getInfo();
+		}
+			
+		
+		si.setOsi(osiInfo);
 
 		return si;
  	}

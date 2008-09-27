@@ -87,6 +87,9 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG = "Add Mishandled Bag";
 	public final static String SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG = "Add Damaged Bag";
 	public final static String SYSTEM_COMPONENT_NAME_ACTIVE_TRACING = "Active Tracing";
+	public final static String SYSTEM_COMPONENT_NAME_OSI_LD = "Other System Information LD";
+	public final static String SYSTEM_COMPONENT_NAME_OSI_DAM = "Other System Information PIL";
+	public final static String SYSTEM_COMPONENT_NAME_OSI_PIL = "Other System Information DAM";
 	
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER = "WorldTracer";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES = "WorldTracer Action Files";
@@ -469,6 +472,9 @@ public class TracingConstants {
 
 	// customer view only
 	public final static String PASS_VIEW_ONLY = "passview";
+	
+	// OSI
+	public final static String OSI = "osi";
 
 	// bdo
 	public final static String BDO_MAIN = "bdo";

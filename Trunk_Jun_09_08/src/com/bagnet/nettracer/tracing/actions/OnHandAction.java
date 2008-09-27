@@ -45,21 +45,14 @@ import com.bagnet.nettracer.tracing.db.OHD_Photo;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
-import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
-import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
-import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -68,6 +61,7 @@ import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -401,12 +395,11 @@ public class OnHandAction extends Action {
 				if(onhand_id == null || onhand_id.trim().length() < 1) {
 					onhand_id = request.getParameter("hidden_ohd_id");
 				}
-				OnHandForm addform = (OnHandForm) form;
 				if(onhand_id != null && onhand_id.length() > 0) {
 					// if OHD_ID exists; load exisiting on-hand
-					addform.setAgent(user);
+					theform.setAgent(user);
 					OHD ohd;
-					if((ohd = bs.findOnHand(onhand_id, addform, user)) == null) {
+					if((ohd = bs.findOnHand(onhand_id, theform, user)) == null) {
 						ActionMessage error = new ActionMessage("error.no.onhandreport");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
@@ -464,8 +457,26 @@ public class OnHandAction extends Action {
 				}
 				else {
 					// Create a new on-hand entry
-					TracerUtils.populateOnHand(addform, request);
+					TracerUtils.populateOnHand(theform, request);
+					// Begin Prepopulate
+					
+					ArrayList alerrors = new ArrayList();
+					if (request.getParameter("doprepopulate") != null) {
+						alerrors.addAll(SpringUtils.getReservationIntegration().populateOhdForm(request, theform));
 
+						if (alerrors.size() > 0) {
+							for (int i=0;i<alerrors.size();i++) {
+								ActionMessage error = new ActionMessage((String)alerrors.get(i));
+								errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							}
+							saveMessages(request, errors);
+							request.setAttribute("prepopulate", new Integer("1"));
+						}
+					} else if (SpringUtils.getReservationIntegration().isPopulateOhdFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
+						request.setAttribute("prepopulate",new Integer("1"));
+					}
+					// End prepopulate
+					return mapping.findForward(TracingConstants.OHD_MAIN);
 				}
 
 				if(request.getParameter("express") != null) {
@@ -475,17 +486,17 @@ public class OnHandAction extends Action {
 					return mapping.findForward(TracingConstants.OHD_MASS_MAIN);
 
 				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_ON_HAND_BAG, user)) {
-					if(user.getStation().getCompany().getCompanyCode_ID().equals(addform.getHolding_company())
-							&& user.getStation().getStationcode().equals(addform.getHolding_station())) {
-						addform.setReadonly(0);
+					if(user.getStation().getCompany().getCompanyCode_ID().equals(theform.getHolding_company())
+							&& user.getStation().getStationcode().equals(theform.getHolding_station())) {
+						theform.setReadonly(0);
 						return mapping.findForward(TracingConstants.OHD_MAIN);
 					}
 					else {
-						addform.setReadonly(1);
+						theform.setReadonly(1);
 					}
 				}
 				else {
-					addform.setReadonly(1);
+					theform.setReadonly(1);
 				}
 
 				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_OH, user))

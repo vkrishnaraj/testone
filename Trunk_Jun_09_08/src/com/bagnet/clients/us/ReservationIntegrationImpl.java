@@ -15,8 +15,8 @@ import phx_52n_gr90.sharesws.services_asmx.Passenger;
 import phx_52n_gr90.sharesws.services_asmx.PassengerAddress;
 import phx_52n_gr90.sharesws.services_asmx.Segment;
 
-
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -24,14 +24,20 @@ import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.forms.OnHandForm;
 
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
 		ReservationIntegration {
-	Logger logger = Logger.getLogger(ReservationIntegrationImpl.class);
+	private Logger logger = Logger.getLogger(ReservationIntegrationImpl.class);
+	private Booking booking = null;
+	private final long WS_NULL_DATE = -62135578800000L;
+	private final int HOURS_BACK_ITINERARY = 24;
+	private String pnrContents;
+	
 
-	public ArrayList<String> populateIncidentForm(HttpServletRequest request,
-			IncidentForm form, int incidentType) {
+	private ArrayList<String> getBooking(HttpServletRequest request,
+			IncidentForm form) {
 		ArrayList<String> errors = new ArrayList<String>();
 		try {
 			SharesIntegrationWrapper wrapper = new SharesIntegrationWrapper();
@@ -54,11 +60,8 @@ public class ReservationIntegrationImpl extends
 				addError(errors, "error.no.recordlocator.bagtag");
 			} else {
 				// Get the booking
-				Booking booking = wrapper.getBooking();
-				populateIncidentForm(booking, form, incidentType, request);
-				HttpSession session = request.getSession();
-				session.setAttribute("incidentForm", form);
-				// Populate the incident
+				booking = wrapper.getBooking();
+				pnrContents = wrapper.getPnrContents();
 			}
 
 			return errors;
@@ -68,11 +71,172 @@ public class ReservationIntegrationImpl extends
 			e.printStackTrace();
 			return errors;
 		}
+	}
+	
+	private ArrayList<String> getBooking(HttpServletRequest request,
+			OnHandForm form) {
+		ArrayList<String> errors = new ArrayList<String>();
+		try {
+			SharesIntegrationWrapper wrapper = new SharesIntegrationWrapper();
+			// Record Locator
+			
+			boolean result = true;
+			if (form.getRecordlocator() != null && form.getRecordlocator().trim().length() > 0) {
+				// If searching bag record locator				
+				result = wrapper.getBookingByKey(form.getRecordlocator(), null);
+			} else if (form.getBagTagNumber() != null && form.getBagTagNumber().trim().length() > 0) {
+				// If searching by bag tag number
+				result = wrapper.getBookingByKey(null, form.getBagTagNumber());
+			} else {
+				// Neither a bag tag or record locator was provided.
+				addError(errors, "error.no.recordlocator.bagtag");
+				return errors;
+			}
+			
+			if (!result) {
+				addError(errors, "error.no.recordlocator.bagtag");
+			} else {
+				// Get the booking
+				booking = wrapper.getBooking();
+			}
 
+			return errors;
+
+		} catch (Exception e) {
+			logger.error(e.getStackTrace());
+			e.printStackTrace();
+			return errors;
+		}
+	}
+	
+	public ArrayList<String> populateIncidentForm(HttpServletRequest request,
+			IncidentForm form, int incidentType) {
+		
+		ArrayList<String> retList = getBooking(request, form);
+		
+		if (retList.size() > 0) {
+			return retList;
+		}
+			
+		populateIncidentFormInner(form, incidentType, request);
+		HttpSession session = request.getSession();
+		session.setAttribute("incidentForm", form);
+		return retList;
+	}
+	
+	public ArrayList<String> populateOhdForm(HttpServletRequest request,
+			OnHandForm form) {
+		ArrayList<String> retList = getBooking(request, form);
+		
+		if (retList.size() > 0) {
+			return retList;
+		}
+			
+		populateOhdFormInner(request, form);
+		HttpSession session = request.getSession();
+		session.setAttribute("OnHandForm", form);
+		return retList;
+	}
+
+	private void populateOhdFormInner(HttpServletRequest request, OnHandForm form) {
+		
+		// Record Locator
+		form.setRecordlocator(booking.getRecordLocator());
+		
+		// Passengers and Bags
+		if (booking.getPassengers() != null) {
+			Passenger[] aPax = booking.getPassengers().getPassengerArray();
+			
+			for (int i = 0; i<aPax.length; ++i) {
+				Passenger pax = aPax[i];
+			
+				com.bagnet.nettracer.tracing.db.OHD_Passenger fPax = form.getPassenger(i);
+				
+				fPax.setFirstname(pax.getFirstName());
+				fPax.setMiddlename(pax.getMiddleName());
+				fPax.setLastname(pax.getLastName());
+				
+				com.bagnet.nettracer.tracing.db.OHD_Address fAddr = fPax.getAddress(0);
+				fAddr.setEmail(pax.getEmailAddress());
+				
+				PassengerAddress[] pAddrs = pax.getPassengerAddresses().getPassengerAddressArray();
+				for (int j=0; j<pAddrs.length; ++j) {
+					PassengerAddress pAddr = pAddrs[j];
+					fAddr.setAddress1(pAddr.getAddressLine1());
+					fAddr.setAddress2(pAddr.getAddressLine2() + " " + pAddr.getAddressLine3());
+					fAddr.setCity(pAddr.getCity());
+					fAddr.setCountrycode_ID(pAddr.getCountryCode());
+					fAddr.setHomephone(pAddr.getPhone());
+					fAddr.setZip(pAddr.getPostalCode());
+					if (fAddr.getCountrycode_ID().equals(TracingConstants.US_COUNTRY_CODE)) {
+						fAddr.setState_ID(pAddr.getProvinceState());					
+					} else {
+						fAddr.setProvince(pAddr.getProvinceState());
+					}				
+				}
+			}
+		}
+		
+		int itinCount = 0;
+	
+		// Baggage Itinerary
+		if (booking.getBaggageItinerary() != null) {
+			Itinerary[] itin = booking.getBaggageItinerary().getItineraryArray();
+			if (itin.length > 0) {
+				int i = 0;
+				if (itin[i].getSegments() != null) {
+					Segment[] segs = itin[i].getSegments().getSegmentArray();
+					for (int j=0; j<segs.length; ++j) {
+						com.bagnet.nettracer.tracing.db.OHD_Itinerary fItin = form.getItinerary(itinCount);
+						Segment seg = segs[j];
+						
+						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						Long nowtime = ((new Date()).getTime()) / 3600000;
+						if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+							fItin.setAirline(seg.getCarrierCode());
+							fItin.setFlightnum(seg.getFlightNumber());
+							fItin.setLegfrom(seg.getDepartureStation());
+							fItin.setLegto(seg.getArrivalStation());
+							fItin.setDepartdate(seg.getDepartureEstimated().getTime());
+							fItin.setArrivedate(seg.getArrivalEstimated().getTime());
+							fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
+							fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+
+							if (seg.getArrivalActual().getTime().getTime() != WS_NULL_DATE) {
+								fItin.setActarrivetime(seg.getArrivalActual().getTime());
+							}
+							
+							if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
+								fItin.setActdeparttime(seg.getDepartureActual().getTime());
+							}
+							fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+							itinCount ++;
+						}
+					}
+				} else {
+					com.bagnet.nettracer.tracing.db.OHD_Itinerary fItin = form.getItinerary(itinCount);
+					fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+					itinCount ++;
+				}
+			}
+		}
+		if (itinCount == 0) {
+			com.bagnet.nettracer.tracing.db.OHD_Itinerary fItin = form.getItinerary(itinCount);
+			fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+			itinCount ++;
+		}
 	}
 
 
-	private void populateIncidentForm(Booking booking, IncidentForm form,
+	public ArrayList<String> writeCommentToPNR(String comment,
+			String recordLocator) {
+
+		SharesIntegrationWrapper wrapper = new SharesIntegrationWrapper();
+		wrapper.writeCommentToPNR(recordLocator, comment);
+		return new ArrayList<String>();
+	}
+
+	private void populateIncidentFormInner(IncidentForm form,
 			int itemtype, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
@@ -80,6 +244,9 @@ public class ReservationIntegrationImpl extends
 		
 		// Record Locator
 		form.setRecordlocator(booking.getRecordLocator());
+		if (pnrContents != null) {
+			form.setOtherSystemInformation(pnrContents);
+		}
 		int bagIndex = 0;
 		
 		// Pasengers and Bags
@@ -136,7 +303,7 @@ public class ReservationIntegrationImpl extends
 					long deptime = (bag.getBagTagDate().getTime().getTime()) / 3600000;
 					long nowtime = ((new Date()).getTime()) / 3600000;
 	
-					if (nowtime - deptime <= 24 && nowtime >= deptime) {
+					if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
 						// claimcheck
 						if (bag.getBagTag() != null && bag.getBagTag().length() > 0) {
 							Incident_Claimcheck ic = form.getClaimcheck(bagIndex);
@@ -170,61 +337,104 @@ public class ReservationIntegrationImpl extends
 		// Passenger Itinerary
 		if (booking.getPassengerItinerary() != null) {
 			Itinerary[] itin = booking.getPassengerItinerary().getItineraryArray();
-			for (int i=0; i<itin.length; ++i) {
+			if (itin.length > 0) {
+				int i = 0;
 				if (itin[i].getSegments() != null) {
 					Segment[] segs = itin[i].getSegments().getSegmentArray();
 					for (int j=0; j<segs.length; ++j) {
 						com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.PASSENGER_ROUTING);
-		
 						Segment seg = segs[j];
-						fItin.setAirline(seg.getCarrierCode());
-						fItin.setFlightnum(seg.getFlightNumber());
-						fItin.setLegfrom(seg.getDepartureStation());
-						fItin.setLegto(seg.getArrivalStation());
-						fItin.setDepartdate(seg.getDepartureEstimated().getTime());
-						fItin.setArrivedate(seg.getArrivalEstimated().getTime());
-						fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
-						fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
-						fItin.setActarrivetime(seg.getArrivalActual().getTime());
-						fItin.setActdeparttime(seg.getDepartureActual().getTime());
-						itinCount ++;
+		
+						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						Long nowtime = ((new Date()).getTime()) / 3600000;
+						if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+
+							// Create carrier in database in not present.
+							CompanyBMO.createCompany(seg.getCarrierCode(), session);
+
+							fItin.setAirline(seg.getCarrierCode());
+							fItin.setFlightnum(seg.getFlightNumber());
+							fItin.setLegfrom(seg.getDepartureStation());
+							fItin.setLegto(seg.getArrivalStation());
+							fItin.setDepartdate(seg.getDepartureEstimated().getTime());
+							fItin.setArrivedate(seg.getArrivalEstimated().getTime());
+							fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
+							fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+							
+
+							if (seg.getArrivalActual().getTime().getTime() != WS_NULL_DATE) {
+								fItin.setActarrivetime(seg.getArrivalActual().getTime());
+							}
+							
+							if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
+								fItin.setActdeparttime(seg.getDepartureActual().getTime());
+							}
+							fItin.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
+							itinCount ++;
+						}
 					}
+				} else {
+					com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.PASSENGER_ROUTING);
+					fItin.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
+					itinCount ++;
 				}
+			}
+			if (itinCount == 0) {
+				com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.PASSENGER_ROUTING);
+				fItin.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
+				itinCount ++;
 			}
 		}
 		
 		// Baggage Itinerary
+		int bagItinCount = 0;
 		if (booking.getBaggageItinerary() != null) {
 			Itinerary[] itin = booking.getBaggageItinerary().getItineraryArray();
-			for (int i=0; i<itin.length; ++i) {
+			if (itin.length > 0) {
+				int i = 0;
 				if (itin[i].getSegments() != null) {
 					Segment[] segs = itin[i].getSegments().getSegmentArray();
 					for (int j=0; j<segs.length; ++j) {
 						com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);
-		
 						Segment seg = segs[j];
-						fItin.setAirline(seg.getCarrierCode());
-						fItin.setFlightnum(seg.getFlightNumber());
-						fItin.setLegfrom(seg.getDepartureStation());
-						fItin.setLegto(seg.getArrivalStation());
-						fItin.setDepartdate(seg.getDepartureEstimated().getTime());
-						fItin.setArrivedate(seg.getArrivalEstimated().getTime());
-						fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
-						fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
-						fItin.setActarrivetime(seg.getArrivalActual().getTime());
-						fItin.setActdeparttime(seg.getDepartureActual().getTime());
-						itinCount ++;
+						
+						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						Long nowtime = ((new Date()).getTime()) / 3600000;
+						if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+							fItin.setAirline(seg.getCarrierCode());
+							fItin.setFlightnum(seg.getFlightNumber());
+							fItin.setLegfrom(seg.getDepartureStation());
+							fItin.setLegto(seg.getArrivalStation());
+							fItin.setDepartdate(seg.getDepartureEstimated().getTime());
+							fItin.setArrivedate(seg.getArrivalEstimated().getTime());
+							fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
+							fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+
+							if (seg.getArrivalActual().getTime().getTime() != WS_NULL_DATE) {
+								fItin.setActarrivetime(seg.getArrivalActual().getTime());
+							}
+							
+							if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
+								fItin.setActdeparttime(seg.getDepartureActual().getTime());
+							}
+							fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+							itinCount ++;
+							bagItinCount ++;
+						}
 					}
+				} else {
+					com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);
+					fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+					itinCount ++;
+					bagItinCount ++;
 				}
 			}
 		}
+		if (bagItinCount == 0) {
+			com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);
+			fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+			itinCount ++;
+		}
 	}
-
-
-	public ArrayList<String> writeCommentToPNR(String comment,
-			String recordLocator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

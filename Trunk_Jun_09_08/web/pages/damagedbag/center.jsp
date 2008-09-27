@@ -13,6 +13,7 @@
 
 <%
 	Agent a = (Agent) session.getAttribute("user");
+    String cssFormClass = "form2_dam";
 %>
 
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -26,7 +27,23 @@ function gotoHistoricalReport() {
 // -->
   </script>
 <logic:present name="prepopulate" scope="request">
-  <html:form action="damaged.do" method="post">
+
+  <script language="javascript">
+    <!--
+    var buttonSelected = null;
+    function validateThis(form) {
+      if (buttonSelected == null) {
+        return true;
+      } else {
+        return validateRest(form);
+      } 
+      return true;
+    }
+    // -->
+  </script>
+  
+  <html:form action="damaged.do" method="post" onsubmit="return validateThis(this);">
+    <jsp:include page="/pages/includes/validation_incl.jsp" />
     <!-- search for record locator-->
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -55,32 +72,27 @@ function gotoHistoricalReport() {
           <br />
         </html:messages>
       </logic:messagesPresent> </font> <br>
-      <table class="form2" cellspacing="0" cellpadding="0">
+      <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
         <tr>
           <td align=center><bean:message
             key="colname.recordlocator" /> <br>
           <html:text property="recordlocator" size="15"
-            styleClass="textfield" value="" maxlength="6" /></td>
+            styleClass="textfield" value="" maxlength="6"/></td>
         </tr>
-        <%
-        	if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) {
-        %>
-        <tr>
-          <td align=center><bean:message
-            key="colname.bag_tag_number" /> <br>
-          <html:text property="bagTagNumber" size="15" maxlength="10"
-            styleClass="textfield" value="" /></td>
-        </tr>
-        <%
-        	}
-        %>
-
+        <% if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) { %>
+          <tr>
+            <td align=center><bean:message
+              key="colname.bag_tag_number" /> <br>
+            <html:text property="bagTagNumber" size="15" maxlength="10"
+              styleClass="textfield" value="" /></td>
+          </tr>
+        <% } %>
         <tr>
           <td align="center" valign="top" colspan="12"><html:submit
-            property="doprepopulate" styleId="button">
+            property="doprepopulate" styleId="button" onclick="buttonSelected = 'prepopulate'">
             <bean:message key="button.populate" />
-          </html:submit> <html:submit property="skip_prepopulate" styleId="button">
-            <bean:message key="button.skip_populate" />
+          </html:submit> <html:submit property="skip_prepopulate" styleId="button"  onclick="buttonSelected = null">
+            <bean:message key="button.skip_populate"/>
           </html:submit></td>
         </tr>
       </table>
@@ -189,6 +201,32 @@ function gotoHistoricalReport() {
           &nbsp;</span></a></dd>
           <logic:notEqual name="incidentForm" property="incident_ID"
             value="">
+            
+          <%
+            boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_DAM, a);
+            if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_OSI)) {
+          %>
+
+          <dd><a href="osi.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />"><span class="aa">&nbsp;
+          <br />
+          &nbsp;</span> <span class="bb"><bean:message
+            key="menu.osi" /></span> <span class="cc">&nbsp; <br />
+          &nbsp;</span></a></dd>
+          <%
+            }
+          %>
+          <%
+            if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
+          %>
+
+          <dd><a href="customerComments.do"><span class="aa">&nbsp;
+          <br />
+          &nbsp;</span> <span class="bb"><bean:message
+            key="menu.customercomments" /></span> <span class="cc">&nbsp; <br />
+          &nbsp;</span></a></dd>
+          <%
+            }
+          %>
             <dd><a
               href="otherTasks.do?type=1&file=<bean:write name="incidentForm" property="incident_ID"/>"><span
               class="aa">&nbsp; <br />

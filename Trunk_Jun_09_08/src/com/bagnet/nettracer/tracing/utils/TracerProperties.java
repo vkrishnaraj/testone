@@ -15,15 +15,19 @@ public class TracerProperties {
 	public static final String INCIDENT_TAB_INC_INFORMATION = "inc.tab.incinfo";
 	public static final String INCIDENT_TAB_INTERIM = "inc.tab.interim";
 	public static final String INCIDENT_TAB_ITINERARY = "inc.tab.itinerary";
-	public static final String INCIDENT_TAB_OTHER_SYSTEM_INFORMATION = "other.system.information";
+	public static final String INCIDENT_TAB_OSI = "inc.tab.osi";
 	public static final String INCIDENT_TAB_PASSENGER = "inc.tab.passenger";
 	public static final String INCIDENT_TAB_REMARKS = "inc.tab.remarks";
-	public static final String RESERVATION_BOOKING_ON = "booking.is_on";
+	public static final String INCIDENT_TAB_CUSTOMER_COMMENTS = "inc.tab.customercomments";
+	public static final String RESERVATION_POPULATE_INCIDENT_ON = "booking.is_on";
 	public static final String RESERVATION_CLASS_PATH = "reservation.class.path";
 	public static final String RESERVATION_BY_BAGTAG = "reservation.bagtag";
 	public static final String RESERVATION_UPDATE_COMMENT_ON = "booking.is_on";
-	public static final String RYNNS_ENDPOINT = "rynns.endpoint";
+	public static final String RESERVATION_POPULATE_OHD_ON = "populate.onhand";
 	public static final String SCANNER_CLASS_PATH = "scanner.class.path";
+	public static final String RYNNS_ENDPOINT = "rynns.endpoint";
+	
+	
 	
 	
 	static {

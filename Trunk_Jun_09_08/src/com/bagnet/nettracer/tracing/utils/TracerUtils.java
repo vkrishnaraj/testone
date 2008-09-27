@@ -423,11 +423,7 @@ public class TracerUtils {
 		// set company lists
 		if (session.getAttribute("companylistByName") == null
 				|| session.getAttribute("companylistById") == null) {
-			ArrayList<ArrayList<Company>> result = getCompanyLists();
-			session.setAttribute("companylistByName", result
-					.get(COMPANY_LIST_BY_NAME_INDEX));
-			session.setAttribute("companylistById", result
-					.get(COMPANY_LIST_BY_ID_INDEX));
+			populateCompanyLists(session);
 		}
 
 		// set expense type list
@@ -449,6 +445,14 @@ public class TracerUtils {
 		 * "com.bagnet.nettracer.tracing.db.ExpenseLocation", "expenselocation",
 		 * "locale", "description"));
 		 */
+	}
+
+	public static void populateCompanyLists(HttpSession session) {
+		ArrayList<ArrayList<Company>> result = getCompanyLists();
+		session.setAttribute("companylistByName", result
+				.get(COMPANY_LIST_BY_NAME_INDEX));
+		session.setAttribute("companylistById", result
+				.get(COMPANY_LIST_BY_ID_INDEX));
 	}
 
 	public static ClaimForm populateClaim(ClaimForm cform,

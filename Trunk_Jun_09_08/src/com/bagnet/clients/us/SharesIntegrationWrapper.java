@@ -1,8 +1,18 @@
 package com.bagnet.clients.us;
 
+import org.apache.log4j.Logger;
+
+import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+
+import phx_52n_gr90.sharesws.services_asmx.AddBookingCommentsDocument;
+import phx_52n_gr90.sharesws.services_asmx.AddBookingCommentsResponseDocument;
 import phx_52n_gr90.sharesws.services_asmx.Booking;
 import phx_52n_gr90.sharesws.services_asmx.GetBookingInformationDocument;
 import phx_52n_gr90.sharesws.services_asmx.GetBookingInformationResponseDocument;
+import phx_52n_gr90.sharesws.services_asmx.GetPnrContentsDocument;
+import phx_52n_gr90.sharesws.services_asmx.GetPnrContentsResponseDocument;
 import phx_52n_gr90.sharesws.services_asmx.ServicesStub;
 
 public class SharesIntegrationWrapper {
@@ -10,7 +20,32 @@ public class SharesIntegrationWrapper {
 	private Booking booking;
 	private String errorMessage;
 	private final String PASSWORD = "password";
+	private String pnrContents;
+	private Logger logger = Logger.getLogger(SharesIntegrationWrapper.class);
 
+	public boolean writeCommentToPNR(String recordLocator, String comment) {
+		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)) {
+			try {
+				ServicesStub stub = new ServicesStub();
+				AddBookingCommentsDocument acDoc = AddBookingCommentsDocument.Factory.newInstance();
+				AddBookingCommentsDocument.AddBookingComments ac = acDoc.addNewAddBookingComments();
+				ac.setPassword(PASSWORD);
+				ac.setComments(comment);
+				ac.setRecordLocator(recordLocator);
+				
+				AddBookingCommentsResponseDocument responseDoc = stub.AddBookingComments(acDoc);
+				responseDoc.getAddBookingCommentsResponse();
+			} catch (Exception e) {
+				e.printStackTrace();
+				setErrorMessage("Error calling webservice: " + e.toString());
+				return false;
+			}
+			return true;
+		}
+		return false;
+		
+	}
+	
 	/**
 	 * Method assumes that one of the two keys is null; it will perform the reservation system
 	 * baed on the first key that is not null.
@@ -27,13 +62,50 @@ public class SharesIntegrationWrapper {
 			if (recordLocator != null) {
 				bi.setRecordLocator(recordLocator);
 			} else if (bagTag != null) {
+				bagTag = bagTag.toUpperCase();
+				try {
+					bagTag = LookupAirlineCodes.getTwoCharacterBagTag(bagTag);
+				} catch (BagtagException e) {
+					// Ignore
+				}
 				bi.setBagTagNumber(bagTag);
 			} else {
 				return false;
 			}
-
+			
+			logger.info("Getting Booking information");
 			GetBookingInformationResponseDocument responseDoc = stub.GetBookingInformation(biDoc);
 			booking = responseDoc.getGetBookingInformationResponse().getGetBookingInformationResult();
+			
+			if (booking != null && booking.getRecordLocator() != null && booking.getRecordLocator().trim().length() > 0) {
+				logger.info("Getting PNR Contents");
+				getPnrContents(booking.getRecordLocator());
+				logger.info("Contents Retrieved");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			setErrorMessage("Error calling webservice: " + e.toString());
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean getPnrContents(String recordLocator) {
+		try {
+			ServicesStub stub = new ServicesStub();
+			GetPnrContentsDocument biDoc = GetPnrContentsDocument.Factory.newInstance();
+			GetPnrContentsDocument.GetPnrContents bi = biDoc.addNewGetPnrContents();
+			
+			bi.setPassword(PASSWORD);
+			if (recordLocator != null) {
+				bi.setRecordLocator(recordLocator);
+			} else {
+				return false;
+			}
+				
+
+			GetPnrContentsResponseDocument responseDoc = stub.GetPnrContents(biDoc);
+			pnrContents = responseDoc.getGetPnrContentsResponse().getGetPnrContentsResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 			setErrorMessage("Error calling webservice: " + e.toString());
@@ -56,6 +128,20 @@ public class SharesIntegrationWrapper {
 
 	private void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	/**
+	 * @return the pnrContents
+	 */
+	public String getPnrContents() {
+		return pnrContents;
+	}
+
+	/**
+	 * @param pnrContents the pnrContents to set
+	 */
+	public void setPnrContents(String pnrContents) {
+		this.pnrContents = pnrContents;
 	}
 
 }

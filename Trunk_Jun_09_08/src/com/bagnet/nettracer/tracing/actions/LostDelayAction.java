@@ -39,6 +39,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
+import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
@@ -51,6 +52,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
@@ -239,6 +241,13 @@ public class LostDelayAction extends Action {
 					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);
 				}
 				if(error == null) {
+					if (theform.getOtherSystemInformation() != null && theform.getOtherSystemInformation().trim().length() >0) {
+						// Assumes this is new and that we are saving OSI for first time.
+						OtherSystemInformation osi = new OtherSystemInformation();
+						osi.setIncident(iDTO);
+						osi.setInfo(theform.getOtherSystemInformation());
+						HibernateUtils.save(osi);
+					}
 					WtqIncidentAction wtq = null;
 					if(request.getParameter("savetowt") != null && (iDTO.getWt_id() == null || iDTO.getWt_id().trim().length() == 0) ) {
 						wtq = new WtqCreateAhl();

@@ -152,3 +152,4 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction" />
+		<mapping class="com.bagnet.nettracer.tracing.db.OtherSystemInformation" />

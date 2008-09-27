@@ -67,6 +67,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.OHD_Photo;
+import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -396,7 +397,7 @@ public class BagService {
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
-
+			
 			if(iDTO.getAgentassigned() == null || iDTO.getAgentassigned().getAgent_ID() == 0)
 				iDTO.setAgentassigned(null);
 

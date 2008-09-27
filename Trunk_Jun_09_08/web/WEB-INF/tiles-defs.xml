@@ -35,6 +35,10 @@
         <put name="center"   value="/pages/others/error.jsp"/>
     </definition>
     
+    <definition name="osi" extends="user_menu">
+        <put name="center"  value="/pages/others/osi.jsp"/>
+    </definition>
+    
     <definition name="insert_success" extends="user_menu">
         <put name="center"   value="/pages/others/insertsuccess.jsp"/>
     </definition>

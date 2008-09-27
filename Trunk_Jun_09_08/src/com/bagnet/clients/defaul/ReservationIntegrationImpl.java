@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class ReservationIntegrationImpl implements
@@ -22,16 +23,15 @@ public class ReservationIntegrationImpl implements
 	}
 	
 	public boolean isPopulateIncidentFormOn() {
-		String property = TracerProperties.get("booking.is_on");
-		if (property == null) return false;
-		else return property.equals("1");
+		return TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_INCIDENT_ON);
 	}
 
 	public boolean isWriteCommentToPnrOn() {
-		String property = TracerProperties.get("updatecomment.is_on");
-		if (property == null) return false;
-		else return property.equals("1");
-
+		return TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON);
+	}
+	
+	public boolean isPopulateOhdFormOn() {
+		return TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON);
 	}
 
 	public ArrayList<String> populateIncidentForm(HttpServletRequest request, IncidentForm form,
@@ -43,4 +43,8 @@ public class ReservationIntegrationImpl implements
 		return null;
 	}
 
+	public ArrayList<String> populateOhdForm(HttpServletRequest request,
+			OnHandForm form) {
+		return null;
+	}
 }

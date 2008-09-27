@@ -71,6 +71,7 @@ public final class OnHandForm extends ValidatorForm {
 	private int ohd_type;
 	private int readonly = 0;
 	private int allow_remark_update=0;
+	private String recordlocator;
 	
 	// forward log
 	private String forwarded_station;
@@ -897,6 +898,20 @@ public final class OnHandForm extends ValidatorForm {
 
 	public void setWtFile(WorldTracerFile wtFile) {
 		this.wtFile = wtFile;
+	}
+
+	/**
+	 * @return the recordlocator
+	 */
+	public String getRecordlocator() {
+		return recordlocator;
+	}
+
+	/**
+	 * @param recordlocator the recordlocator to set
+	 */
+	public void setRecordlocator(String recordlocator) {
+		this.recordlocator = recordlocator;
 	}
 	
 	

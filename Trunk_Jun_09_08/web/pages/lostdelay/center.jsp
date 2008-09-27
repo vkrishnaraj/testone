@@ -22,19 +22,39 @@
 
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
-<script language="javascript">
+
+  <script language="javascript">
     <!--
-function gotoHistoricalReport() {
-  o = document.incidentForm;
-	o.historical_report.value = "1";
-	o.submit();
-}
-// -->
+        
+    function gotoHistoricalReport(form) {
+      o = document.incidentForm;
+    	o.historical_report.value = "1";
+    	o.submit();
+    }
+    
+    // -->
   </script>
+  
 
 
 <logic:present name="prepopulate" scope="request">
-  <html:form action="lostDelay.do" method="post">
+
+  <script language="javascript">
+    <!--
+    var buttonSelected = null;
+    function validateThis(form) {
+      if (buttonSelected == null) {
+        return true;
+      } else {
+        return validateRest(form);
+      } 
+      return true;
+    }
+    // -->
+  </script>
+  
+  <html:form action="lostDelay.do" method="post" onsubmit="return validateThis(this);">
+    <jsp:include page="/pages/includes/validation_incl.jsp" />
     <!-- search for record locator-->
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -80,10 +100,10 @@ function gotoHistoricalReport() {
         <% } %>
         <tr>
           <td align="center" valign="top" colspan="12"><html:submit
-            property="doprepopulate" styleId="button">
+            property="doprepopulate" styleId="button" onclick="buttonSelected = 'prepopulate'">
             <bean:message key="button.populate" />
-          </html:submit> <html:submit property="skip_prepopulate" styleId="button">
-            <bean:message key="button.skip_populate" />
+          </html:submit> <html:submit property="skip_prepopulate" styleId="button"  onclick="buttonSelected = null">
+            <bean:message key="button.skip_populate"/>
           </html:submit></td>
         </tr>
       </table>
@@ -224,6 +244,32 @@ function gotoHistoricalReport() {
           %>
           <logic:notEqual name="incidentForm" property="incident_ID"
             value="">
+            
+          <%
+            boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_LD, a);
+            if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_OSI)) {
+          %>
+
+          <dd><a href="osi.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />"><span class="aa">&nbsp;
+          <br />
+          &nbsp;</span> <span class="bb"><bean:message
+            key="menu.osi" /></span> <span class="cc">&nbsp; <br />
+          &nbsp;</span></a></dd>
+          <%
+            }
+          %>
+          <%
+            if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
+          %>
+
+          <dd><a href="customerComments.do"><span class="aa">&nbsp;
+          <br />
+          &nbsp;</span> <span class="bb"><bean:message
+            key="menu.customercomments" /></span> <span class="cc">&nbsp; <br />
+          &nbsp;</span></a></dd>
+          <%
+            }
+          %>
             <dd><a
               href='viewMatches.do?clear=1&incident_ID=<bean:write name="incidentForm" property="incident_ID"/>'><span
               class="aa">&nbsp; <br />

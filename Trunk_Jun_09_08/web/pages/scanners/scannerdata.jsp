@@ -10,7 +10,7 @@
 <!--SCANNERDATA.JSP-->
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
-<html:form action="scannerData.do" method="post" onsubmit="return validateScannerDataForm(this);">
+<html:form action="scannerData.do" method="post">
   <tr>
     <td colspan="3" id="pageheadercell">
       

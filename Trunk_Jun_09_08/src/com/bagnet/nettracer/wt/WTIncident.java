@@ -20,6 +20,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -1002,18 +1003,7 @@ public class WTIncident {
 				// no station, create the station into the database, if no company, go ahead and create the company as well
 				c = AdminUtils.getCompany(thec);
 				if (c == null) {
-					// create company first
-					c = new Company();
-					c.setCompanyCode_ID(thec.toUpperCase());
-					c.setCompanydesc(thec.toUpperCase());
-					
-					Company_Specific_Variable var = new Company_Specific_Variable();
-					var.setCompanyCode_ID(c.getCompanyCode_ID());
-					
-					c.setVariable(var);
-					
-					HibernateUtils.saveCompany(c, null, false);
-
+					c = CompanyBMO.createCompany(thec, null);
 				} 
 				
 				if (c == null) {

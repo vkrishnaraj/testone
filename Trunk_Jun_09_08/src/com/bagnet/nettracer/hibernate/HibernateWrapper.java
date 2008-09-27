@@ -175,6 +175,7 @@ public class HibernateWrapper {
 
 		} catch (Exception e) {
 			logger.fatal("Unable to initiate hibernate: " + e);
+			e.printStackTrace();
 		}
 	}
 
