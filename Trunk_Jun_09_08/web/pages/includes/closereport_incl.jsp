@@ -29,6 +29,7 @@
     lc = null;
   }
   Station faultStation = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getFaultstation();
+  String faultAirline = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getFaultcompany_id();
   
 %>
 
@@ -59,27 +60,21 @@
     <bean:message key="colname.faultcompany" />
     <br>
     <input type="hidden" name="getstation">
-    <html:select property="faultcompany_id" styleClass="dropdown" onchange="getstations();">
-      <html:option value="">
-        <bean:message key="select.please_select" />
-      </html:option>
       <%
  		 		Agent faultagent = (Agent)session.getAttribute("user");
-
-        if (TracingConstants.LIMIT_FAULT_AIRLINE) {
         	
       %>
-      <html:option value="<%=faultagent.getCompanycode_ID()%>">
-				<%=faultagent.getStation().getCompany().getCompanydesc()%>
-      </html:option>
-
-      <%
-      	} else {
-      %>
-      <html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
-      <% } %>
-      
-    </html:select>
+      <logic:equal name="incidentForm" property="readonly" value="1">
+        <%= faultAirline %>
+      </logic:equal>
+      <logic:notEqual name="incidentForm" property="readonly" value="1">
+        <html:select property="faultcompany_id" styleClass="dropdown" onchange="getstations();">
+          <html:option value="">
+            <bean:message key="select.please_select" />
+          </html:option>
+          <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
+        </html:select>     
+      </logic:notEqual>
   </td>
   
   

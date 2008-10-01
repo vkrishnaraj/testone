@@ -105,6 +105,7 @@ function gotoHistoricalReport() {
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="damaged.do" method="post"
     enctype="multipart/form-data" onsubmit="return validateRest(this);">
+    <html:hidden property="otherSystemInformation" />
     <input type="hidden" name="historical_report" value="">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -211,18 +212,6 @@ function gotoHistoricalReport() {
           <br />
           &nbsp;</span> <span class="bb"><bean:message
             key="menu.osi" /></span> <span class="cc">&nbsp; <br />
-          &nbsp;</span></a></dd>
-          <%
-            }
-          %>
-          <%
-            if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
-          %>
-
-          <dd><a href="customerComments.do"><span class="aa">&nbsp;
-          <br />
-          &nbsp;</span> <span class="bb"><bean:message
-            key="menu.customercomments" /></span> <span class="cc">&nbsp; <br />
           &nbsp;</span></a></dd>
           <%
             }

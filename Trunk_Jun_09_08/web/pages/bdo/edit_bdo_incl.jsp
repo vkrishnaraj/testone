@@ -178,7 +178,7 @@ function toggledc(o) {
               </div>
             </td>
             <td nowrap>
-              <bean:message key="colname.deliverydate" />
+              <bean:message key="colname.deliverydate.req" />
               (<%= a.getDateformat().getFormat() %>)
               <br />
               <html:text property="dispdeliverydate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.dispdeliverydate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;"></td>

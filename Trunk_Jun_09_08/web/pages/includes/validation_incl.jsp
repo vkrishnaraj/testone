@@ -62,21 +62,30 @@
 	
 	function validateMessageForm (form)
 	{
-		 for (var j=0;j<form.length;j++) {
-	  	currentElement = form.elements[j];
-    	currentElementName=currentElement.name;
-		 	if (currentElementName.indexOf("expedite") != -1)
+      expediteElement = null;
+      bagTagElement = null;
+
+      
+      for (var j=0;j<form.length;j++) {
+        currentElement = form.elements[j];
+        currentElementName=currentElement.name;
+		
+        if (currentElementName.indexOf("expedite") != -1)
 	    {
-	      if (currentElement.value.length < 1)
-	      {
-	         alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
-	         currentElement.focus();
-	         return false;
-	      }
-	        
+          expediteElement = currentElement;
 	      if (currentElement.value.length > 0 && !checkExpedite(currentElement.value))
 	      {
 	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("bag_tag") != -1)
+	    {
+          bagTagElement = currentElement;
+	      if (currentElement.value.length > 0 && !checkClaimCheck(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_tag_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
 	        currentElement.focus();
 	        return false;
 	      }
@@ -88,22 +97,6 @@
 	         alert("<%= (String)myMessages.getMessage(myLocale, "colname.stationForwardTo") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
 	         currentElement.focus();
 	         return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("bag_tag") != -1)
-	    {
-	      if (currentElement.value.length < 1)
-	      {
-	         alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_tag_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
-	         currentElement.focus();
-	         return false;
-	      }
-	        
-	      if (currentElement.value.length > 0 && !checkClaimCheck(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_tag_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
-	        currentElement.focus();
-	        return false;
 	      }
 	    }
 	    else if (currentElementName.indexOf("legfrom") != -1)
@@ -184,8 +177,16 @@
     	if (!validatereqBEORN(form)) return false;
     }
     
-	 	 return true;
+   
+    if (expediteElement.value.length == 0 && bagTagElement.value.length ==0) {
+      alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.beorn.tagrequired") %>");
+      bagTagElement.focus();
+      return false;
+    }
+    
+	 return true;
   }
+  
   function validateWtFoh(form) {
 	  for (var j=0;j<form.length;j++) {
 		  	currentElement = form.elements[j];

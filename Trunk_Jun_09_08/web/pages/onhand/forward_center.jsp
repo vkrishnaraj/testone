@@ -85,12 +85,6 @@
                   :
                 </td>
                 <td>
-                	<html:select name="forwardMessageForm" property="companyCode" styleClass="dropdown" onchange="submit()" >
-                    	<html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-                  	</html:select>
-                  	
-                  &nbsp;
- 
                     <logic:present name="stationList" scope="request">
                       <html:select name="forwardMessageForm" styleClass="dropdown" property="destStation">
                         <logic:empty name="forwardMessageForm" property="destStation">
@@ -101,7 +95,6 @@
                         <html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
                       </html:select>
                     </logic:present>
-
                 </td>
               </tr>
                           
@@ -235,7 +228,7 @@
                         <bean:message key="colname.flightnum.req" />
                       </td>
                       <td>
-                        <bean:message key="colname.departdate.req" /><br>
+                        <bean:message key="colname.fwd.departdate.req" /><br>
                         (
                         <%= a.getDateformat().getFormat() %>)
                       </td>

@@ -43,10 +43,18 @@
 		<form-bean name="MaintainDeliveryCompanyForm" type="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm" />
 		<form-bean name="companyForm" type="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm" />
 		
-		<form-bean name="osiForm" type="org.apache.struts.validator.DynaValidatorForm">
+		<form-bean name="OsiForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="id" type="java.lang.String" />
 			<form-property name="incident_id" type="java.lang.String" />
 			<form-property name="text" type="java.lang.String" />
+			<form-property name="readOnly" type="java.lang.String" />
+		</form-bean>
+		
+		<form-bean name="CustomerCommentsForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="incident_id" type="java.lang.String" />
+			<form-property name="text" type="java.lang.String" />
+			<form-property name="readOnly" type="java.lang.String" />
 		</form-bean>
 		
 		<form-bean name="agentForm" type="org.apache.struts.validator.DynaValidatorForm">
@@ -310,6 +318,7 @@
 		<forward name="searchlostfound" path="search_lostfound" />
 		<forward name="passview" path="pass_view_only" />
 		<forward name="osi" path="osi" />
+		<forward name="customer_comments" path="customer_comments" />
 		<forward name="closeonhandsuccess" path="close_onhandsuccess" />
 		<forward name="expensepayoutapprovedsuccess" path="expense_payoutapprovedsuccess" />
 		<forward name="expensepayoutdeniedsuccess" path="expense_payoutdeniedsuccess" />
@@ -492,7 +501,9 @@
 		<!-- Administer Agents -->
 		<action path="/agentAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageAgents" name="agentForm" scope="request" validate="false"></action>
 		
-		<action path="/osi" type="com.bagnet.nettracer.tracing.actions.OsiAction" name="osiForm" scope="request" validate="false"></action>
+		<action path="/osi" type="com.bagnet.nettracer.tracing.actions.OsiAction" name="OsiForm" scope="request" validate="false"></action>
+
+		<action path="/customerComments" type="com.bagnet.nettracer.tracing.actions.CustomerCommentsAction" name="CustomerCommentsForm" scope="request" validate="false"></action>
 
 		<!-- Administer Tasks -->
 		<action path="/otherTasks" type="com.bagnet.nettracer.tracing.actions.ManageTask" name="taskForm" scope="request" validate="false"></action>

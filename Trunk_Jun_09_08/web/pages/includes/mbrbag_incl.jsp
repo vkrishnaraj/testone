@@ -106,7 +106,7 @@
             if (report_type != 1) {
 %>
               <td colspan=2>
-                <bean:message key="colname.claimnum.req" />
+                <bean:message key="colname.claimnum.req2" />
                 <br>
                 <html:text name="theitem" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
               </td>

@@ -88,7 +88,6 @@
 	<classpathentry kind="lib" path="lib/jars/passengerview_schemas.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ntwscore_schemas.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/jars/navitaire_newskies.jar"/>
 	<classpathentry kind="lib" path="lib/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/dom4j-1.6.jar"/>
@@ -108,5 +107,6 @@
 	<classpathentry kind="lib" path="lib/jars/hibernate-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/jars/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/client-us/us-shares.jar"/>
+	<classpathentry kind="lib" path="lib/client-fl/navitaire_newskies.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

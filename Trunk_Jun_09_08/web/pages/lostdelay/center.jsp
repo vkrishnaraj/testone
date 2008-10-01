@@ -259,10 +259,11 @@
             }
           %>
           <%
-            if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
+            val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS, a);
+            if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
           %>
 
-          <dd><a href="customerComments.do"><span class="aa">&nbsp;
+          <dd><a href="customerComments.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />"><span class="aa">&nbsp;
           <br />
           &nbsp;</span> <span class="bb"><bean:message
             key="menu.customercomments" /></span> <span class="cc">&nbsp; <br />
@@ -401,7 +402,7 @@
                       id="button">
                   </logic:empty>
                 </logic:notPresent>
-              </logic:notEqual></td>
+              </logic:notEqual>&nbsp;</td>
             </tr>
             <tr>
               <td colspan="3"><html:submit styleId="button"
@@ -425,23 +426,10 @@
               <td align="center" valign="top"><br>
               <logic:notEqual name="incidentForm" property="incident_ID"
                 value="">
-                <%
-                	if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-                %>
-                <html:submit property="save" styleId="button"
-                  onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
-                  <bean:message key="button.save" />
-                </html:submit>
-                <%
-                	} else {
-                %>
                 <html:submit property="save" styleId="button"
                   onclick="return validatereqFields(this.form, 'lostdelay');">
                   <bean:message key="button.save" />
                 </html:submit>
-                <%
-                	}
-                %>
 
                 <%
                 	if (UserPermissions.hasPermission(
@@ -461,14 +449,14 @@
                     <c:when
                       test="${(incidentForm.wt_id == '') || (incidentForm.wt_id == null)}">
                       <html:submit styleId="button" property="savetowt"
-                        onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
+                        onclick="return validatereqFields(this.form, 'lostdelay');">
                         <bean:message key="button.savetoWT" />
                       </html:submit>
                     </c:when>
                     <c:when
                       test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
                       <html:submit styleId="button" property="amendWT"
-                        onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
+                        onclick="return validatereqFields(this.form, 'lostdelay');">
                         <bean:message key="button.amendWT" />
                       </html:submit>
                     </c:when>
@@ -488,23 +476,12 @@
                   onclick="if(validatereqFields(this.form)){saveIncidentTemporary(this.form, 'lostdelay')};"
                   id="button">
                 &nbsp;&nbsp;&nbsp;
-                <%
-                	if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-                %>
-                <html:submit property="savetracing" styleId="button"
-                  onclick="return validatereqWtIncFields(this.form, 'lostdelay');">
-                  <bean:message key="button.savetracing" />
-                </html:submit>
-                <%
-                	} else {
-                %>
+
                 <html:submit property="savetracing" styleId="button"
                   onclick="return validatereqFields(this.form, 'lostdelay');">
                   <bean:message key="button.savetracing" />
                 </html:submit>
-                <%
-                	}
-                %>
+
               </logic:equal></td>
             </tr>
           </table>

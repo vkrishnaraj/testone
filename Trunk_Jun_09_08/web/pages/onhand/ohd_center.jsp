@@ -838,7 +838,7 @@ function gotoHistoricalReport() {
       property="itinerarylist">
       <table class="form2_ohd" cellspacing="0" cellpadding="0">
         <tr>
-          <td><bean:message key="colname.fromto" /> <br>
+          <td><bean:message key="colname.ohd.fromto.req" /> <br>
           <html:hidden name="itinerarylist" property="itinerarytype"
             value="1" indexed="true" /> <html:text name="itinerarylist"
             property="legfrom" size="3" maxlength="3"
@@ -851,7 +851,7 @@ function gotoHistoricalReport() {
             onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerarylist[<%=k%>].legto','airportcode',500,600);return false;"><img
             src="deployment/main/images/nettracer/airport_codes.gif"
             border=0></a></td>
-          <td><bean:message key="colname.flightnum" /> <br>
+          <td><bean:message key="colname.ohd.flightnum.req" /> <br>
           <html:select name="itinerarylist" property="airline"
             styleClass="dropdown" indexed="true">
             <html:option value="">
@@ -861,7 +861,7 @@ function gotoHistoricalReport() {
               property="companyCode_ID" labelProperty="companyCode_ID" />
           </html:select> &nbsp; <html:text name="itinerarylist" property="flightnum"
             size="4" maxlength="4" styleClass="textfield" indexed="true" /></td>
-          <td><bean:message key="colname.departdate" /> ( <%=a.getDateformat().getFormat()%>):
+          <td><bean:message key="colname.ohd.departdate.req" /> ( <%=a.getDateformat().getFormat()%>):
           <br>
           <html:text name="itinerarylist" property="disdepartdate"
             size="11" maxlength="10" styleClass="textfield"
@@ -871,7 +871,7 @@ function gotoHistoricalReport() {
             width="20" border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.OnHandForm, '<%="itinerarylist[" + k
 									+ "].disdepartdate"%>','calendar2<%=k%>','<%=a.getDateformat().getFormat()%>'); return false;"></td>
-          <td><bean:message key="colname.arrdate" /> ( <%=a.getDateformat().getFormat()%>)
+          <td><bean:message key="colname.ohd.arrdate.req" /> ( <%=a.getDateformat().getFormat()%>)
           <br>
           <html:text name="itinerarylist" property="disarrivedate"
             size="11" maxlength="10" styleClass="textfield"
@@ -939,7 +939,7 @@ function gotoHistoricalReport() {
               property="OHD_CategoryType_ID"
               labelProperty="categorytype" />
           </html:select></td>
-          <td><bean:message key="colname.description" /> <br>
+          <td><bean:message key="colname.ohd.description.req" /> <br>
           <html:text name="itemlist" property="description" size="70"
             maxlength="255" styleClass="textfield" indexed="true" /></td>
           <td align="center">&nbsp;<br>

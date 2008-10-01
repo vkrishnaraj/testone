@@ -385,7 +385,7 @@
                         <br>
                         <html:text name="theitinerary" property="disdepartdate" size="11" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar<%= k %>" name="itcalendar<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitinerary[" + k + "].disdepartdate" %>','itcalendar<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                       <td nowrap>
-                        <bean:message key="colname.arrdate" />
+                        <bean:message key="colname.pax.arrdate.req" />
                         (
                         <%= a.getDateformat().getFormat() %>)
                         <br>
@@ -489,7 +489,7 @@
                             <br>
                             <html:text name="theitinerary" property="disdepartdate" size="11" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3<%= k %>" name="calendar3<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitinerary[" + k + "].disdepartdate" %>','calendar3<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                           <td nowrap>
-                            <bean:message key="colname.arrdate" />
+                            <bean:message key="colname.bag.arrdate.req" />
                             (
                             <%= a.getDateformat().getFormat() %>)
                             <br>

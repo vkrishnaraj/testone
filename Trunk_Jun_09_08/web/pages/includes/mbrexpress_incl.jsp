@@ -148,7 +148,7 @@
                           <%= a.getDateformat().getFormat() %>)
                         </td>
                         <td>
-                          <bean:message key="colname.arrdate" />
+                          <bean:message key="colname.pax.arrdate.req" />
                           (
                           <%= a.getDateformat().getFormat() %>)
                         </td>
@@ -273,7 +273,7 @@
                           if (report_type != 1) {
 %>
                             <td colspan=2>
-                              <bean:message key="colname.claimnum" />
+                              <bean:message key="colname.claimnum2" />
                               :
                               <html:text name="theitem" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
                             </td>
