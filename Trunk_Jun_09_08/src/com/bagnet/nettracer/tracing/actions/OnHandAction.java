@@ -472,7 +472,7 @@ public class OnHandAction extends Action {
 							saveMessages(request, errors);
 							request.setAttribute("prepopulate", new Integer("1"));
 						}
-					} else if (SpringUtils.getReservationIntegration().isPopulateOhdFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
+					} else if (SpringUtils.getReservationIntegration().isPopulateOhdFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("wt_af_id") == null) {
 						request.setAttribute("prepopulate",new Integer("1"));
 					}
 					// End prepopulate
