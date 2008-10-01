@@ -1,6 +1,7 @@
 package com.bagnet.clients.defaul;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,5 +47,9 @@ public class ReservationIntegrationImpl implements
 	public ArrayList<String> populateOhdForm(HttpServletRequest request,
 			OnHandForm form) {
 		return null;
+	}
+
+	public void doEventOnBeornWS(HashMap<String, String> map) {
+		// Do nothing
 	}
 }

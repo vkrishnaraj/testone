@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.utils;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
@@ -17,6 +18,7 @@ public class SpringUtils {
 	public final static String SCANNER_DATA_SOURCE = "scannerDataSource";
 	public final static String CUSTOM_REPORT_BMO = "customReportBmo";
 	public final static String WORLDTRACER_SERVICE = "wtService";
+	public final static String EVENT_HANDLER = "eventHandler";
 
 	private static final String WORLDTRACER_CONNECTOR = "wtConnector";
 
@@ -52,10 +54,12 @@ public class SpringUtils {
 	public static WorldTracerConnector getWorldTracerConnector() {
 		return (WorldTracerConnector) getBean(WORLDTRACER_CONNECTOR);
 	}
+	
+	public static ClientEventHandler getClientEventHandler() {
+		return (ClientEventHandler) getBean(EVENT_HANDLER);
+	}
 
 	public static WtTransactionBmo getWtTxBmo() {
-		// TODO Auto-generated method stub
 		return (WtTransactionBmo) getBean(WORLDTRACER_TX_BMO);
 	}
-	
 }

@@ -25,6 +25,7 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ErrorMessages;
 
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
@@ -34,7 +35,7 @@ public class ReservationIntegrationImpl extends
 	private final long WS_NULL_DATE = -62135578800000L;
 	private final int HOURS_BACK_ITINERARY = 24;
 	private String pnrContents;
-	
+
 
 	private ArrayList<String> getBooking(HttpServletRequest request,
 			IncidentForm form) {
@@ -52,7 +53,12 @@ public class ReservationIntegrationImpl extends
 				result = wrapper.getBookingByKey(null, form.getBagTagNumber());
 			} else {
 				// Neither a bag tag or record locator was provided.
-				addError(errors, "error.no.recordlocator.bagtag");
+				if (wrapper.getErrorMessage() != null) {
+					addError(errors, wrapper.getErrorMessage());
+				} else {
+					addError(errors, "error.no.recordlocator.bagtag");
+				}
+					
 				return errors;
 			}
 			

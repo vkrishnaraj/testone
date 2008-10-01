@@ -17,7 +17,6 @@ public class TracingConstants {
 		
 	public final static String OWENS_GROUP = "OW";
 	public final static boolean LIMIT_FAULT_AIRLINE = true;
-	
 	//System components
 	public final static String SYSTEM_COMPONENT_NAME_AUDIT_ON_HAND = "Audit On hand";
 	public final static String SYSTEM_COMPONENT_NAME_VIEW_MATCHES = "View Matches";
@@ -90,6 +89,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_OSI_LD = "Other System Information LD";
 	public final static String SYSTEM_COMPONENT_NAME_OSI_DAM = "Other System Information PIL";
 	public final static String SYSTEM_COMPONENT_NAME_OSI_PIL = "Other System Information DAM";
+	public final static String SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS = "Customer Comments";
 	
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER = "WorldTracer";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES = "WorldTracer Action Files";
@@ -474,7 +474,8 @@ public class TracingConstants {
 	public final static String PASS_VIEW_ONLY = "passview";
 	
 	// OSI
-	public final static String OSI = "osi";
+	public final static String FORWARD_OSI = "osi";
+	public final static String FORWARD_CUSTOMER_COMMENTS = "customer_comments";
 
 	// bdo
 	public final static String BDO_MAIN = "bdo";

@@ -28,9 +28,6 @@ import com.bagnet.nettracer.tracing.db.SystemComponent;
 
 /**
  * @author Ankur Gupta
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class UserPermissions {
 	public static LinkedHashMap renderApplicationLinks(Agent agent) {
@@ -366,24 +363,20 @@ public class UserPermissions {
 		int type = inc.getItemtype().getItemType_ID();
 		String componentNameCreated = null;
 		String componentNameAll = null;
-		String componentRemark = null;
 		
 		
 		switch (type) {
 			case TracingConstants.LOST_DELAY:
 				componentNameCreated = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_CREATED;
 				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_ALL;
-				componentRemark = TracingConstants.SYSTEM_COMPONENT_NAME_LOST_DELAY_REMARK;
 				break;
 			case TracingConstants.DAMAGED_BAG:
 				componentNameCreated = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_CREATED;
 				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_UPDATE_ALL;
-				componentRemark = TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_BAG_REMARK;
 				break;
 			case TracingConstants.MISSING_ARTICLES:
 				componentNameCreated = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_CREATED;
 				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_ALL;
-				componentRemark = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_REMARK;
 				break;
 		}
 		

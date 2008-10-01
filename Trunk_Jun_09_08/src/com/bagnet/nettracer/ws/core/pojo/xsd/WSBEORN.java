@@ -15,7 +15,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSBEORN extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSBEORN.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
+            "schemaorg_apache_xmlbeans.system.s5F00CE2730FFF02120AFB9825DCE1651")
                                                                                                                            .resolveHandle("wsbeorn2a13type");
 
     /**
@@ -365,6 +365,47 @@ public interface WSBEORN extends org.apache.xmlbeans.XmlObject {
      * Unsets the "message" element
      */
     void unsetMessage();
+
+    /**
+     * Gets the "specialInstructions" element
+     */
+    java.lang.String getSpecialInstructions();
+
+    /**
+     * Gets (as xml) the "specialInstructions" element
+     */
+    org.apache.xmlbeans.XmlString xgetSpecialInstructions();
+
+    /**
+     * Tests for nil "specialInstructions" element
+     */
+    boolean isNilSpecialInstructions();
+
+    /**
+     * True if has "specialInstructions" element
+     */
+    boolean isSetSpecialInstructions();
+
+    /**
+     * Sets the "specialInstructions" element
+     */
+    void setSpecialInstructions(java.lang.String specialInstructions);
+
+    /**
+     * Sets (as xml) the "specialInstructions" element
+     */
+    void xsetSpecialInstructions(
+        org.apache.xmlbeans.XmlString specialInstructions);
+
+    /**
+     * Nils the "specialInstructions" element
+     */
+    void setNilSpecialInstructions();
+
+    /**
+     * Unsets the "specialInstructions" element
+     */
+    void unsetSpecialInstructions();
 
     /**
      * Gets the "tagOff" element

@@ -15,6 +15,7 @@ public class WS_BEORN {
 	private WS_ForwardItinerary[] forwardItinerary;
 	private String foundAtStation;
 	private Date foundDateTime;
+	private String specialInstructions;
 	
 
 	/**
@@ -175,5 +176,19 @@ public class WS_BEORN {
 	 */
 	public void setFounddatetime(Date foundDateTime) {
 		this.foundDateTime = foundDateTime;
+	}
+
+	/**
+	 * @return the specialInstructions
+	 */
+	public String getSpecialInstructions() {
+		return specialInstructions;
+	}
+
+	/**
+	 * @param specialInstructions the specialInstructions to set
+	 */
+	public void setSpecialInstructions(String specialInstructions) {
+		this.specialInstructions = specialInstructions;
 	}
 }

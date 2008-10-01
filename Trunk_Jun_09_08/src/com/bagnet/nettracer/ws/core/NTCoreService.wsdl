@@ -184,6 +184,7 @@
                     <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="lossCode" nillable="true" type="xs:int"/>
                     <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="specialInstructions" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="tagOff" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="claimCheckNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>

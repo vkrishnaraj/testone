@@ -2,10 +2,12 @@ package com.bagnet.nettracer.ws.passengerview;
 
 import java.util.Iterator;
 
+import com.bagnet.nettracer.tracing.bmo.CustomerViewableCommentBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.CustomerViewableComment;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Passenger;
@@ -247,6 +249,11 @@ public class PassengerViewUtil {
 					si.setItemsArray(i, siarr);
 				}
 
+			}
+			
+			CustomerViewableComment comment = CustomerViewableCommentBMO.getComment(iDTO.getIncident_ID(), null);
+			if (comment != null) {
+				si.setComments(comment.getComment());
 			}
 
 			return si;

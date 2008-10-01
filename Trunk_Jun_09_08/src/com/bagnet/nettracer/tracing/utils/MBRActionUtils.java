@@ -273,14 +273,19 @@ public class MBRActionUtils {
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
 
 		List faultstationlist = null;
+		List faultCompanyList = null;
 		if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
 			// If the user has limited permission, 
 			if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
 				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+				faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
 			} else {
 				faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+				faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
 			}
 			request.setAttribute("faultstationlist", faultstationlist);
+			request.setAttribute("faultCompanyList", faultCompanyList);
 		} 
 		
 		// change faultstationlist (ajax call)

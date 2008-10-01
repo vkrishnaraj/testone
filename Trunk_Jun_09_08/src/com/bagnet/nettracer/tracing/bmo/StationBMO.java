@@ -9,7 +9,11 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class StationBMO {
 
@@ -99,4 +103,18 @@ public class StationBMO {
 		}
 	}
 	
+	public static Station createStation(String stationCode, Company c, Session sess) {
+		Station s = getStationByCode(stationCode.toUpperCase(), c.getCompanyCode_ID());
+		if (s == null) {
+			// create station
+			s = new Station();
+			s.setCompany(c);
+			s.setStationcode(stationCode.toUpperCase());
+			s.setStationdesc(stationCode.toUpperCase());
+			s.setLocale(TracingConstants.DEFAULT_LOCALE);
+			s.setActive(true);
+			HibernateUtils.save(s);
+		}
+		return s;
+	}
 }

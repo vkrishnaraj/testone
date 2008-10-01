@@ -2,10 +2,6 @@ package com.bagnet.clients.us;
 
 import org.apache.log4j.Logger;
 
-import com.bagnet.nettracer.exceptions.BagtagException;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
-import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
-
 import phx_52n_gr90.sharesws.services_asmx.AddBookingCommentsDocument;
 import phx_52n_gr90.sharesws.services_asmx.AddBookingCommentsResponseDocument;
 import phx_52n_gr90.sharesws.services_asmx.Booking;
@@ -13,7 +9,13 @@ import phx_52n_gr90.sharesws.services_asmx.GetBookingInformationDocument;
 import phx_52n_gr90.sharesws.services_asmx.GetBookingInformationResponseDocument;
 import phx_52n_gr90.sharesws.services_asmx.GetPnrContentsDocument;
 import phx_52n_gr90.sharesws.services_asmx.GetPnrContentsResponseDocument;
+import phx_52n_gr90.sharesws.services_asmx.SendPrintMessageDocument;
+import phx_52n_gr90.sharesws.services_asmx.SendPrintMessageResponseDocument;
 import phx_52n_gr90.sharesws.services_asmx.ServicesStub;
+
+import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 public class SharesIntegrationWrapper {
 
@@ -23,17 +25,42 @@ public class SharesIntegrationWrapper {
 	private String pnrContents;
 	private Logger logger = Logger.getLogger(SharesIntegrationWrapper.class);
 
+	public void sendTelex(String message, String address) {
+		try {
+			ServicesStub stub = new ServicesStub();
+			SendPrintMessageDocument printDoc = SendPrintMessageDocument.Factory.newInstance();
+			SendPrintMessageDocument.SendPrintMessage sp = printDoc.addNewSendPrintMessage();
+			
+			sp.setPassword(PASSWORD);
+			sp.setDestination(address);
+			sp.setSource(address);
+			sp.setMessage(message);
+			
+
+			SendPrintMessageResponseDocument responseDoc = stub.SendPrintMessage(printDoc);
+			responseDoc.addNewSendPrintMessageResponse();
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+			setErrorMessage("Error calling webservice: " + e.toString());
+		}
+	}
+	
 	public boolean writeCommentToPNR(String recordLocator, String comment) {
-		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)) {
+		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
+				&& recordLocator != null && recordLocator.trim().length() == 6) {
 			try {
 				ServicesStub stub = new ServicesStub();
-				AddBookingCommentsDocument acDoc = AddBookingCommentsDocument.Factory.newInstance();
-				AddBookingCommentsDocument.AddBookingComments ac = acDoc.addNewAddBookingComments();
+				AddBookingCommentsDocument acDoc = AddBookingCommentsDocument.Factory
+						.newInstance();
+				AddBookingCommentsDocument.AddBookingComments ac = acDoc
+						.addNewAddBookingComments();
 				ac.setPassword(PASSWORD);
 				ac.setComments(comment);
 				ac.setRecordLocator(recordLocator);
-				
-				AddBookingCommentsResponseDocument responseDoc = stub.AddBookingComments(acDoc);
+
+				AddBookingCommentsResponseDocument responseDoc = stub
+						.AddBookingComments(acDoc);
 				responseDoc.getAddBookingCommentsResponse();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -43,12 +70,13 @@ public class SharesIntegrationWrapper {
 			return true;
 		}
 		return false;
-		
+
 	}
-	
+
 	/**
-	 * Method assumes that one of the two keys is null; it will perform the reservation system
-	 * baed on the first key that is not null.
+	 * Method assumes that one of the two keys is null; it will perform the
+	 * reservation system baed on the first key that is not null.
+	 * 
 	 * @param recordLocator
 	 * @param bagTag
 	 * @return
@@ -56,8 +84,10 @@ public class SharesIntegrationWrapper {
 	public boolean getBookingByKey(String recordLocator, String bagTag) {
 		try {
 			ServicesStub stub = new ServicesStub();
-			GetBookingInformationDocument biDoc = GetBookingInformationDocument.Factory.newInstance();
-			GetBookingInformationDocument.GetBookingInformation bi = biDoc.addNewGetBookingInformation();
+			GetBookingInformationDocument biDoc = GetBookingInformationDocument.Factory
+					.newInstance();
+			GetBookingInformationDocument.GetBookingInformation bi = biDoc
+					.addNewGetBookingInformation();
 			bi.setPassword(PASSWORD);
 			if (recordLocator != null) {
 				bi.setRecordLocator(recordLocator);
@@ -72,40 +102,53 @@ public class SharesIntegrationWrapper {
 			} else {
 				return false;
 			}
-			
+
 			logger.info("Getting Booking information");
-			GetBookingInformationResponseDocument responseDoc = stub.GetBookingInformation(biDoc);
-			booking = responseDoc.getGetBookingInformationResponse().getGetBookingInformationResult();
-			
-			if (booking != null && booking.getRecordLocator() != null && booking.getRecordLocator().trim().length() > 0) {
+			GetBookingInformationResponseDocument responseDoc = stub
+					.GetBookingInformation(biDoc);
+			booking = responseDoc.getGetBookingInformationResponse()
+					.getGetBookingInformationResult();		
+
+			if (booking != null && booking.getRecordLocator() != null
+					&& booking.getRecordLocator().trim().length() > 0) {
 				logger.info("Getting PNR Contents");
 				getPnrContents(booking.getRecordLocator());
 				logger.info("Contents Retrieved");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			setErrorMessage("Error calling webservice: " + e.toString());
+			e.printStackTrace();			
+			if (e.getMessage().contains("UNBL TO RTRV PNR")) {
+				setErrorMessage("shares.error.unable.rtrv.pnr");
+			} else if (e.getMessage().contains("Bag Tag Number was not found")) {
+				setErrorMessage("shares.error.unable.rtrv.tag");
+			} else if (e.getMessage().contains("timed")){
+				setErrorMessage("shares.error.unable.timeout");
+				e.printStackTrace();
+			} else {
+				e.printStackTrace();
+			}
 			return false;
 		}
 		return true;
 	}
-	
+
 	private boolean getPnrContents(String recordLocator) {
 		try {
 			ServicesStub stub = new ServicesStub();
-			GetPnrContentsDocument biDoc = GetPnrContentsDocument.Factory.newInstance();
+			GetPnrContentsDocument biDoc = GetPnrContentsDocument.Factory
+					.newInstance();
 			GetPnrContentsDocument.GetPnrContents bi = biDoc.addNewGetPnrContents();
-			
+
 			bi.setPassword(PASSWORD);
 			if (recordLocator != null) {
 				bi.setRecordLocator(recordLocator);
 			} else {
 				return false;
 			}
-				
 
 			GetPnrContentsResponseDocument responseDoc = stub.GetPnrContents(biDoc);
-			pnrContents = responseDoc.getGetPnrContentsResponse().getGetPnrContentsResult();
+			pnrContents = responseDoc.getGetPnrContentsResponse()
+					.getGetPnrContentsResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 			setErrorMessage("Error calling webservice: " + e.toString());
@@ -138,7 +181,8 @@ public class SharesIntegrationWrapper {
 	}
 
 	/**
-	 * @param pnrContents the pnrContents to set
+	 * @param pnrContents
+	 *          the pnrContents to set
 	 */
 	public void setPnrContents(String pnrContents) {
 		this.pnrContents = pnrContents;

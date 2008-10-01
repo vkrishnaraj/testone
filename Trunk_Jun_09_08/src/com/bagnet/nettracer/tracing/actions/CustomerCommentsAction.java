@@ -13,19 +13,19 @@ import org.apache.struts.action.DynaActionForm;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.CustomerViewableCommentBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
-import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.CustomerViewableComment;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
-import com.bagnet.nettracer.tracing.db.audit.Audit_OtherSystemInformation;
+import com.bagnet.nettracer.tracing.db.audit.Audit_CustomerViewableComment;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
-public class OsiAction extends Action {
+public class CustomerCommentsAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -44,64 +44,54 @@ public class OsiAction extends Action {
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 		Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
-		OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(incident_ID, sess);
 		
-		switch(inc.getItemtype_ID()) {
-			case TracingConstants.LOST_DELAY: 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_LD, user))
-					return (mapping.findForward(TracingConstants.NO_PERMISSION));
-				break;
-			case TracingConstants.MISSING_ARTICLES: 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_PIL, user))
-					return (mapping.findForward(TracingConstants.NO_PERMISSION));
-				break;
-			case TracingConstants.DAMAGED_BAG: 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_DAM, user))
-					return (mapping.findForward(TracingConstants.NO_PERMISSION));
-				break;
-		}
+		CustomerViewableComment comment = CustomerViewableCommentBMO.getComment(incident_ID, sess);
+		
+		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS, user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
 		// SAVE OSI
 		if (request.getParameter("save") != null) {
-			if (osi == null) {
-				osi = new OtherSystemInformation();
+			if (comment == null) {
+				comment = new CustomerViewableComment();
 			}
 		
 			String text = (String) theForm.get("text");
 			 		
-			osi.setIncident(inc);
-			osi.setInfo(text);
+			comment.setIncident(inc);
+			comment.setComment(text);
 			
-			HibernateUtils.save(osi, sess);
+			HibernateUtils.save(comment, sess);
 			
-			Audit_OtherSystemInformation auditOsi = new Audit_OtherSystemInformation();
-			BeanUtils.copyProperties(auditOsi, osi);
-			auditOsi.setModifying_agent(user);
-			auditOsi.setTime_modified(TracerDateTime.getGMTDate());
-			HibernateUtils.save(auditOsi, sess);
+			Audit_CustomerViewableComment auditComment = new Audit_CustomerViewableComment();
+			BeanUtils.copyProperties(auditComment, comment);
+			auditComment.setModifying_agent(user);
+			auditComment.setTime_modified(TracerDateTime.getGMTDate());
+			HibernateUtils.save(auditComment, sess);
+
 			
+			//OtherSystemInformationBMO.saveOsi(inc, osi);
 		} else {
 			// GET OSI OR CREATE NEW OSI
-			if (osi == null) {
-				osi = new OtherSystemInformation();
-				osi.setIncident(inc);
+			if (comment == null) {
+				comment = new CustomerViewableComment();
+				comment.setIncident(inc);
 			}
 		}
 		
 		sess.close();
 		
 		// POPULATE THE FORM
-		theForm.set("id", Integer.toString(osi.getId()));
-		theForm.set("incident_id", osi.getIncident().getIncident_ID());
-		theForm.set("text", osi.getInfo());
+		theForm.set("id", Integer.toString(comment.getId()));
+		theForm.set("incident_id", comment.getIncident().getIncident_ID());
+		theForm.set("text", comment.getComment());
+		
 		
 		if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
 			theForm.set("readOnly", "true");
 		}
 		
-		return (mapping.findForward(TracingConstants.FORWARD_OSI));
+		return (mapping.findForward(TracingConstants.FORWARD_CUSTOMER_COMMENTS));
 	}
 }

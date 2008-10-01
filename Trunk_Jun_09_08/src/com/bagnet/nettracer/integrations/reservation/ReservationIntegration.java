@@ -16,5 +16,5 @@ public interface ReservationIntegration {
 	public ArrayList<String> populateIncidentForm(HttpServletRequest request, IncidentForm form, int incidentType);
 	public ArrayList<String> writeCommentToPNR(String comment, String recordLocator);
 	public ArrayList<String> populateOhdForm(HttpServletRequest request, OnHandForm form);
-
+	
 }

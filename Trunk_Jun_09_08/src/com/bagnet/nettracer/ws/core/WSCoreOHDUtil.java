@@ -10,8 +10,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -34,6 +36,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.ws.core.BeornOHDDocument.BeornOHD;
@@ -48,6 +51,7 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
 
 public class WSCoreOHDUtil {
 
+	private static Logger logger = Logger.getLogger(WSCoreOHDUtil.class);
 	
 	/**
 	 * this method modularize the method in service skeleton
@@ -573,9 +577,7 @@ public class WSCoreOHDUtil {
   	// Search for OHD within last 24 hours of this ID.
   	Agent agent = WSCoreUtil.getAgent(sessionId);
 
-  	
-  	// TODO: HERE
-  	String comment = insertFields.getSi().getComment();
+   	String comment = insertFields.getSi().getComment();
   	
   	String bagTagNumber = insertFields.getSi().getBagTagNumber();
   	if (bagTagNumber == null || bagTagNumber.length() == 0) {
@@ -713,6 +715,10 @@ public class WSCoreOHDUtil {
   	if (onhand != null) {
   		try {
 	  		WSBEORN si = insertFields.getSi();
+	  		String finalFlightNumber = "";
+	  		String finalFlightAirline = "";
+	  		String finalDestination = "";
+	  		Date finalFlightDate = new Date();
 	  		
 	  		// Update the onhand's status
 	  		Status status = new Status();
@@ -807,6 +813,13 @@ public class WSCoreOHDUtil {
 
 		  			seg.setLog(log);
 		  			forwardItin.add(seg);
+		  			if (i == si.getForwardItineraryArray().length -1) {
+		  				finalFlightAirline = seg.getAirline();
+		  				finalFlightNumber = seg.getFlightnum();
+		  				finalDestination = seg.getLegto(); 
+		  				finalFlightDate = seg.getDepartdate();
+		  				
+		  			}
 		  		}
 	  		}
 	  		
@@ -844,13 +857,33 @@ public class WSCoreOHDUtil {
 	  		so.setOhdId(onhand.getOHD_ID());
 				
 				HibernateUtils.save(log);
+				
+	  		BeornDTO dto = new BeornDTO();
+	  		dto.setSpecialInstructions(insertFields.getSi().getSpecialInstructions());
+	  		dto.setExpediteNumber(si.getExpediteNumber());
+	  		dto.setFinalFlightNumber(finalFlightNumber);
+	  		dto.setFaultStation(si.getFaultStation());
+	  		dto.setFinalDestination(finalDestination);
+	  		dto.setFinalFlightDepartureDate(finalFlightDate);
+	  		dto.setFinalFlightAirline(finalFlightAirline);
+	  		dto.setReasonForLoss("" + si.getLossCode());
+	  		dto.setTagNumber(si.getClaimCheckNumber());
+	  		try {
+	  			SpringUtils.getClientEventHandler().doEventOnBeornWS(dto);
+	  		} catch (Exception e) {
+	  			logger.error("Error performing client-specific BEORN Action...");
+	  			e.printStackTrace();
+	  		}
+
+				
   		} catch (Exception e) {
   			e.printStackTrace();
   			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
   		}
   		
+  		
   	}
-
+  	
   	// Return Response
   	res.setReturn(so);
     return resDoc;

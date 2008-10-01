@@ -30,11 +30,13 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
             "lossCode");
     private static final javax.xml.namespace.QName MESSAGE$14 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "message");
-    private static final javax.xml.namespace.QName TAGOFF$16 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName SPECIALINSTRUCTIONS$16 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+            "specialInstructions");
+    private static final javax.xml.namespace.QName TAGOFF$18 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "tagOff");
-    private static final javax.xml.namespace.QName CLAIMCHECKNUMBER$18 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName CLAIMCHECKNUMBER$20 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "claimCheckNumber");
-    private static final javax.xml.namespace.QName DESTINATIONSTATION$20 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName DESTINATIONSTATION$22 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "destinationStation");
 
     public WSBEORNImpl(org.apache.xmlbeans.SchemaType sType) {
@@ -1208,6 +1210,147 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     }
 
     /**
+     * Gets the "specialInstructions" element
+     */
+    public java.lang.String getSpecialInstructions() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(SPECIALINSTRUCTIONS$16,
+                    0);
+
+            if (target == null) {
+                return null;
+            }
+
+            return target.getStringValue();
+        }
+    }
+
+    /**
+     * Gets (as xml) the "specialInstructions" element
+     */
+    public org.apache.xmlbeans.XmlString xgetSpecialInstructions() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(SPECIALINSTRUCTIONS$16,
+                    0);
+
+            return target;
+        }
+    }
+
+    /**
+     * Tests for nil "specialInstructions" element
+     */
+    public boolean isNilSpecialInstructions() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(SPECIALINSTRUCTIONS$16,
+                    0);
+
+            if (target == null) {
+                return false;
+            }
+
+            return target.isNil();
+        }
+    }
+
+    /**
+     * True if has "specialInstructions" element
+     */
+    public boolean isSetSpecialInstructions() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            return get_store().count_elements(SPECIALINSTRUCTIONS$16) != 0;
+        }
+    }
+
+    /**
+     * Sets the "specialInstructions" element
+     */
+    public void setSpecialInstructions(java.lang.String specialInstructions) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(SPECIALINSTRUCTIONS$16,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .add_element_user(SPECIALINSTRUCTIONS$16);
+            }
+
+            target.setStringValue(specialInstructions);
+        }
+    }
+
+    /**
+     * Sets (as xml) the "specialInstructions" element
+     */
+    public void xsetSpecialInstructions(
+        org.apache.xmlbeans.XmlString specialInstructions) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(SPECIALINSTRUCTIONS$16,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(SPECIALINSTRUCTIONS$16);
+            }
+
+            target.set(specialInstructions);
+        }
+    }
+
+    /**
+     * Nils the "specialInstructions" element
+     */
+    public void setNilSpecialInstructions() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(SPECIALINSTRUCTIONS$16,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(SPECIALINSTRUCTIONS$16);
+            }
+
+            target.setNil();
+        }
+    }
+
+    /**
+     * Unsets the "specialInstructions" element
+     */
+    public void unsetSpecialInstructions() {
+        synchronized (monitor()) {
+            check_orphaned();
+            get_store().remove_element(SPECIALINSTRUCTIONS$16, 0);
+        }
+    }
+
+    /**
      * Gets the "tagOff" element
      */
     public boolean getTagOff() {
@@ -1216,7 +1359,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(TAGOFF$16,
+                                                           .find_element_user(TAGOFF$18,
                     0);
 
             if (target == null) {
@@ -1236,7 +1379,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlBoolean target = null;
             target = (org.apache.xmlbeans.XmlBoolean) get_store()
-                                                          .find_element_user(TAGOFF$16,
+                                                          .find_element_user(TAGOFF$18,
                     0);
 
             return target;
@@ -1250,7 +1393,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(TAGOFF$16) != 0;
+            return get_store().count_elements(TAGOFF$18) != 0;
         }
     }
 
@@ -1263,12 +1406,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(TAGOFF$16,
+                                                           .find_element_user(TAGOFF$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(TAGOFF$16);
+                                                               .add_element_user(TAGOFF$18);
             }
 
             target.setBooleanValue(tagOff);
@@ -1284,12 +1427,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlBoolean target = null;
             target = (org.apache.xmlbeans.XmlBoolean) get_store()
-                                                          .find_element_user(TAGOFF$16,
+                                                          .find_element_user(TAGOFF$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlBoolean) get_store()
-                                                              .add_element_user(TAGOFF$16);
+                                                              .add_element_user(TAGOFF$18);
             }
 
             target.set(tagOff);
@@ -1302,7 +1445,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetTagOff() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(TAGOFF$16, 0);
+            get_store().remove_element(TAGOFF$18, 0);
         }
     }
 
@@ -1315,7 +1458,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(CLAIMCHECKNUMBER$18,
+                                                           .find_element_user(CLAIMCHECKNUMBER$20,
                     0);
 
             if (target == null) {
@@ -1335,7 +1478,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLAIMCHECKNUMBER$18,
+                                                         .find_element_user(CLAIMCHECKNUMBER$20,
                     0);
 
             return target;
@@ -1351,7 +1494,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLAIMCHECKNUMBER$18,
+                                                         .find_element_user(CLAIMCHECKNUMBER$20,
                     0);
 
             if (target == null) {
@@ -1369,7 +1512,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(CLAIMCHECKNUMBER$18) != 0;
+            return get_store().count_elements(CLAIMCHECKNUMBER$20) != 0;
         }
     }
 
@@ -1382,12 +1525,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(CLAIMCHECKNUMBER$18,
+                                                           .find_element_user(CLAIMCHECKNUMBER$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(CLAIMCHECKNUMBER$18);
+                                                               .add_element_user(CLAIMCHECKNUMBER$20);
             }
 
             target.setStringValue(claimCheckNumber);
@@ -1404,12 +1547,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLAIMCHECKNUMBER$18,
+                                                         .find_element_user(CLAIMCHECKNUMBER$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CLAIMCHECKNUMBER$18);
+                                                             .add_element_user(CLAIMCHECKNUMBER$20);
             }
 
             target.set(claimCheckNumber);
@@ -1425,12 +1568,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(CLAIMCHECKNUMBER$18,
+                                                         .find_element_user(CLAIMCHECKNUMBER$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(CLAIMCHECKNUMBER$18);
+                                                             .add_element_user(CLAIMCHECKNUMBER$20);
             }
 
             target.setNil();
@@ -1443,7 +1586,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetClaimCheckNumber() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(CLAIMCHECKNUMBER$18, 0);
+            get_store().remove_element(CLAIMCHECKNUMBER$20, 0);
         }
     }
 
@@ -1456,7 +1599,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(DESTINATIONSTATION$20,
+                                                           .find_element_user(DESTINATIONSTATION$22,
                     0);
 
             if (target == null) {
@@ -1476,7 +1619,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(DESTINATIONSTATION$20,
+                                                         .find_element_user(DESTINATIONSTATION$22,
                     0);
 
             return target;
@@ -1492,7 +1635,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(DESTINATIONSTATION$20,
+                                                         .find_element_user(DESTINATIONSTATION$22,
                     0);
 
             if (target == null) {
@@ -1510,7 +1653,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(DESTINATIONSTATION$20) != 0;
+            return get_store().count_elements(DESTINATIONSTATION$22) != 0;
         }
     }
 
@@ -1523,12 +1666,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(DESTINATIONSTATION$20,
+                                                           .find_element_user(DESTINATIONSTATION$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(DESTINATIONSTATION$20);
+                                                               .add_element_user(DESTINATIONSTATION$22);
             }
 
             target.setStringValue(destinationStation);
@@ -1545,12 +1688,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(DESTINATIONSTATION$20,
+                                                         .find_element_user(DESTINATIONSTATION$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(DESTINATIONSTATION$20);
+                                                             .add_element_user(DESTINATIONSTATION$22);
             }
 
             target.set(destinationStation);
@@ -1566,12 +1709,12 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(DESTINATIONSTATION$20,
+                                                         .find_element_user(DESTINATIONSTATION$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(DESTINATIONSTATION$20);
+                                                             .add_element_user(DESTINATIONSTATION$22);
             }
 
             target.setNil();
@@ -1584,7 +1727,7 @@ public class WSBEORNImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetDestinationStation() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(DESTINATIONSTATION$20, 0);
+            get_store().remove_element(DESTINATIONSTATION$22, 0);
         }
     }
 }

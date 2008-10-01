@@ -20,6 +20,9 @@
 
 	<bean id="reservationIntegration"
 		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />
+		
+	<bean id="eventHandler"
+		class="com.bagnet.clients.${event.class.path}.ClientEventHandlerImpl" />
 
 	<!-- Hibernate config -->
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper" factory-method="getSession" />

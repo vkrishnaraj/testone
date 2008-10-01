@@ -722,7 +722,7 @@ public class BDOUtils {
 					.get_TIMEZONE());
 
 			if (isnew
-					&& SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
+					&& SpringUtils.getReservationIntegration().isWriteCommentToPnrOn() && bdo.getIncident() != null) {
 				SpringUtils.getReservationIntegration().writeCommentToPNR(
 						"Baggage Claim (" + bdo.getIncident().getIncident_ID()
 								+ ") has been scheduled for delivery on " + formateddatetime,

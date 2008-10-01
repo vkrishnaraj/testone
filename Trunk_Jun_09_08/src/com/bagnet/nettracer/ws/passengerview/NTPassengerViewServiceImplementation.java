@@ -6,7 +6,6 @@
  */
 package com.bagnet.nettracer.ws.passengerview;
 
-import com.bagnet.nettracer.ws.core.NTCoreServiceSkeleton;
 
 /**
  *  NTPassengerViewServiceSkeleton java skeleton for the axisService

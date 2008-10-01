@@ -483,6 +483,11 @@ document.onkeydown = function(){
 	if (window.event && window.event.keyCode == 77 && window.event.ctrlKey) {
 		hasurlfocus(0);
 	}
+    
+    if (window.event && window.event.keyCode == 78 && window.event.ctrlKey) {
+      return false;
+    }
+    
 	// e
 	if (window.event && window.event.keyCode == 69 && window.event.ctrlKey) {
 		window.event.keyCode = 505;

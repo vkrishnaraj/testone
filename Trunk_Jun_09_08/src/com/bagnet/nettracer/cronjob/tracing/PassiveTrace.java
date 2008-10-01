@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 public class PassiveTrace implements Runnable {
 
@@ -325,8 +326,7 @@ public class PassiveTrace implements Runnable {
 						match.setMatch_percent(formatPercent(score.getOverallScore()));
 						match.setStatus(StatusBMO
 								.getStatus(TracingConstants.MATCH_STATUS_OPEN));
-						match.setMatch_made_on(DateUtils
-								.convertToGMTDate(new Date()));
+						match.setMatch_made_on(TracerDateTime.getGMTDate());
 						match.setMbr(incident);
 						match.setOhd(ohd);
 						match.setClaimchecknum(score.getClaimCheckNumber());

@@ -19,6 +19,7 @@ import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -91,17 +92,30 @@ public class Rynns implements BDOIntegration {
 			
 			ArrayOfItemData array = ws.addNewItemsData();
 			
-			for (Item item: (Set<Item>)bdo.getItems()) {
+			if (bdo.getItems() != null) {
+				for (Item item: (Set<Item>)bdo.getItems()) {
+					ItemData id = array.addNewItemData();
+					id.setColor(item.getColor());
+					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+						id.setTag(item.getClaimchecknum());	
+					} else {
+						id.setTag("notAvailable");
+					}
+					
+					id.setItemType(item.getBagtype());
+					id.setBrand(item.getManuname());
+				}
+			} else if (bdo.getOhd() != null) {
+				OHD ohd = bdo.getOhd();
 				ItemData id = array.addNewItemData();
-				id.setColor(item.getColor());
-				if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
-					id.setTag(item.getClaimchecknum());	
+				if (ohd.getColor() != null) {
+					id.setColor(ohd.getColor());
+				}
+				if (ohd.getClaimnum() != null && ohd.getClaimnum().trim().length() > 0) {
+					id.setTag(ohd.getClaimnum());	
 				} else {
 					id.setTag("notAvailable");
 				}
-				
-				id.setItemType(item.getBagtype());
-				id.setBrand(item.getManuname());
 			}
 			
 			

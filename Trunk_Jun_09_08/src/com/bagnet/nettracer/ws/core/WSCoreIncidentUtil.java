@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles;
 import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -20,6 +21,7 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -856,7 +858,13 @@ public class WSCoreIncidentUtil {
 					
 			String fs = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getFaultStation();
 			String companyCode = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getCompanyCode();
+			
+			// Create the company if it doesn't exist.
+			Company company = CompanyBMO.createCompany(companyCode, null);
+			StationBMO.createStation(fs, company, null);
+			
 			Station faultStation = StationBMO.getStationByCode(fs, companyCode);
+			
 			int lossCode = updateIncidentFaultCodes.getUpdateIncidentFaultCodes().getFaultCode();
 			
 			if (faultStation == null) {

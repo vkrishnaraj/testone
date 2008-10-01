@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core;
  */
 public interface AuthenticateResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthenticateResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
+            "schemaorg_apache_xmlbeans.system.s5F00CE2730FFF02120AFB9825DCE1651")
                                                                                                                            .resolveHandle("authenticateresponse9370doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface AuthenticateResponseDocument extends org.apache.xmlbeans.XmlObj
      */
     public interface AuthenticateResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthenticateResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s1D7B384C2D5AC0ADBB343DF3D7AAA999")
+                "schemaorg_apache_xmlbeans.system.s5F00CE2730FFF02120AFB9825DCE1651")
                                                                                                                                .resolveHandle("authenticateresponsee15eelemtype");
 
         /**

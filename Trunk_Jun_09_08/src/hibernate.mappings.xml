@@ -153,3 +153,4 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction" />
 		<mapping class="com.bagnet.nettracer.tracing.db.OtherSystemInformation" />
+		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
