@@ -127,11 +127,6 @@
   }
     
   function validatereqOHDForm(form) {
-    return true;
-  }
-   
-  function validatereqOHD(form)
-  {
     returnValue = true;
     var addressIndices = [];
     
@@ -147,7 +142,7 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.num_pass") %>" + 
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_arrived_date") %>" + 
           " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
@@ -166,6 +161,12 @@
       }
     }
     return true;
+  }
+   
+  function validatereqOHD(form)
+  {
+    return true;
+
   }
 	
   function validatereqBEORN(form)
