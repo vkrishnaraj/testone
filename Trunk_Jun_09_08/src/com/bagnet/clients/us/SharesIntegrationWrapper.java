@@ -14,6 +14,7 @@ import phx_52n_gr90.sharesws.services_asmx.SendPrintMessageResponseDocument;
 import phx_52n_gr90.sharesws.services_asmx.ServicesStub;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
@@ -24,10 +25,11 @@ public class SharesIntegrationWrapper {
 	private final String PASSWORD = "password";
 	private String pnrContents;
 	private Logger logger = Logger.getLogger(SharesIntegrationWrapper.class);
+	private String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_BOOKING_ENDPOINT);
 
 	public void sendTelex(String message, String address) {
 		try {
-			ServicesStub stub = new ServicesStub();
+			ServicesStub stub = new ServicesStub(endpoint);
 			SendPrintMessageDocument printDoc = SendPrintMessageDocument.Factory.newInstance();
 			SendPrintMessageDocument.SendPrintMessage sp = printDoc.addNewSendPrintMessage();
 			
@@ -50,7 +52,7 @@ public class SharesIntegrationWrapper {
 		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
 				&& recordLocator != null && recordLocator.trim().length() == 6) {
 			try {
-				ServicesStub stub = new ServicesStub();
+				ServicesStub stub = new ServicesStub(endpoint);
 				AddBookingCommentsDocument acDoc = AddBookingCommentsDocument.Factory
 						.newInstance();
 				AddBookingCommentsDocument.AddBookingComments ac = acDoc
@@ -83,7 +85,7 @@ public class SharesIntegrationWrapper {
 	 */
 	public boolean getBookingByKey(String recordLocator, String bagTag) {
 		try {
-			ServicesStub stub = new ServicesStub();
+			ServicesStub stub = new ServicesStub(endpoint);
 			GetBookingInformationDocument biDoc = GetBookingInformationDocument.Factory
 					.newInstance();
 			GetBookingInformationDocument.GetBookingInformation bi = biDoc
@@ -111,9 +113,7 @@ public class SharesIntegrationWrapper {
 
 			if (booking != null && booking.getRecordLocator() != null
 					&& booking.getRecordLocator().trim().length() > 0) {
-				logger.info("Getting PNR Contents");
 				getPnrContents(booking.getRecordLocator());
-				logger.info("Contents Retrieved");
 			}
 		} catch (Exception e) {
 			if (e.getMessage().contains("UNBL TO RTRV PNR")) {
@@ -133,7 +133,7 @@ public class SharesIntegrationWrapper {
 
 	private boolean getPnrContents(String recordLocator) {
 		try {
-			ServicesStub stub = new ServicesStub();
+			ServicesStub stub = new ServicesStub(endpoint);
 			GetPnrContentsDocument biDoc = GetPnrContentsDocument.Factory
 					.newInstance();
 			GetPnrContentsDocument.GetPnrContents bi = biDoc.addNewGetPnrContents();
