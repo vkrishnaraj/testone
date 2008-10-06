@@ -475,8 +475,6 @@ public class OnHandAction extends Action {
 					} else if (SpringUtils.getReservationIntegration().isPopulateOhdFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("wt_af_id") == null) {
 						request.setAttribute("prepopulate",new Integer("1"));
 					}
-					// End prepopulate
-					return mapping.findForward(TracingConstants.OHD_MAIN);
 				}
 
 				if(request.getParameter("express") != null) {

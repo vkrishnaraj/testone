@@ -116,7 +116,6 @@ public class SharesIntegrationWrapper {
 				logger.info("Contents Retrieved");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();			
 			if (e.getMessage().contains("UNBL TO RTRV PNR")) {
 				setErrorMessage("shares.error.unable.rtrv.pnr");
 			} else if (e.getMessage().contains("Bag Tag Number was not found")) {

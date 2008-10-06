@@ -216,7 +216,7 @@ public class MissingAction extends Action {
 				return (mapping.findForward(TracingConstants.MISSING_MAIN));
 			}
 			
-			if (SpringUtils.getReservationIntegration().isPopulateIncidentFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("express") != "") {
+			if (SpringUtils.getReservationIntegration().isPopulateIncidentFormOn() && request.getParameter("skip_prepopulate") == null  && request.getParameter("express") == null) {
 				request.setAttribute("prepopulate",new Integer("1"));
 				return (mapping.findForward(TracingConstants.MISSING_MAIN));
 			}

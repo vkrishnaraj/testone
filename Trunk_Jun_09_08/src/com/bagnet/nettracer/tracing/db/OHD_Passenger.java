@@ -233,7 +233,7 @@ public class OHD_Passenger implements Serializable {
 		if (this.getAddresses() != null) {
 			for (Iterator i = this.getAddresses().iterator(); i.hasNext();) {
 				OHD_Address address = (OHD_Address) i.next();
-				System.out.println(address);
+				//System.out.println(address);
 			}
 		}
 		return sb.toString();

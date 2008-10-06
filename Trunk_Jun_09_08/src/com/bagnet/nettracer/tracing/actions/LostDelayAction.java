@@ -390,7 +390,7 @@ public class LostDelayAction extends Action {
 				return (mapping.findForward(TracingConstants.LD_MAIN));
 			}
 			
-			if (SpringUtils.getReservationIntegration().isPopulateIncidentFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("wt_af_id") == null) {
+			if (SpringUtils.getReservationIntegration().isPopulateIncidentFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("wt_af_id") == null && request.getParameter("express") == null) {
 				request.setAttribute("prepopulate",new Integer("1"));
 			}
 		}

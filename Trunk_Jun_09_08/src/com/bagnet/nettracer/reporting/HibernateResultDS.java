@@ -32,9 +32,9 @@ public class HibernateResultDS implements JRDataSource {
 		Object value = null;
 		try {
 			Method fld = currentValue.getClass().getMethod("get" + field.getName(), null);
-			System.out.println(fld.getName());
+			//System.out.println(fld.getName());
 			value = fld.invoke(currentValue, null);
-			System.out.println(value);
+			//System.out.println(value);
 		} catch (IllegalAccessException iae) {
 			iae.printStackTrace();
 		} catch (InvocationTargetException ite) {

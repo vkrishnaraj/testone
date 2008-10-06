@@ -31,16 +31,15 @@
   }
     
   function validatereqOHDForm(form) {
-    return true;
-  }
-   
-  function validatereqOHD(form)
-  {
     returnValue = true;
         
     returnValue = validatereqWtOHDForm(form);
     if (returnValue == false) { return returnValue; }
-    
+  }
+   
+  function validatereqOHD(form)
+  {
+
     return true;
   }
 	

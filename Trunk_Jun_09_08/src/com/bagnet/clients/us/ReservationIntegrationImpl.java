@@ -100,7 +100,11 @@ public class ReservationIntegrationImpl extends
 			}
 			
 			if (!result) {
-				addError(errors, "error.no.recordlocator.bagtag");
+				if (wrapper.getErrorMessage() != null) {
+					addError(errors, wrapper.getErrorMessage());
+				} else {
+					addError(errors, "error.no.recordlocator.bagtag");	
+				}
 			} else {
 				// Get the booking
 				booking = wrapper.getBooking();

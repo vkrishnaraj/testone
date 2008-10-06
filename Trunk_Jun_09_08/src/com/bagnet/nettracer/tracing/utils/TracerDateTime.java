@@ -47,7 +47,7 @@ public class TracerDateTime {
 	public static void main(String args[]) {
 
 		Date now = getGMTDate();
-        System.out.println(now);
+    // System.out.println(now);
 		//getAllTimeZones();
 
 	}
