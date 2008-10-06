@@ -127,7 +127,8 @@ public class ReservationIntegrationImpl extends
 		if (retList.size() > 0) {
 			return retList;
 		}
-			
+		
+		form = (IncidentForm) request.getSession().getAttribute("incidentForm");
 		populateIncidentFormInner(form, incidentType, request);
 		HttpSession session = request.getSession();
 		session.setAttribute("incidentForm", form);

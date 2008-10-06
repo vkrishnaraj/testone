@@ -27,6 +27,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_TRACING_TERTIARY_TYPE_PERCENT = "tracing.tertiary.type";
 	public static final String PROPERTY_TRACING_DAYS_BACKWARD = "tracing.backward";
 	public static final String PROPERTY_TRACING_DAYS_FORWARD = "tracing.forward";
+	public static final String PROPERTY_BOOKING_ENDPOINT = "booking.endpoint";
 	
 	/**
 	 * Retrieves the value of the property from the database.
