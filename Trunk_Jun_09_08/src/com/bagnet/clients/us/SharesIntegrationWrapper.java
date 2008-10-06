@@ -105,7 +105,6 @@ public class SharesIntegrationWrapper {
 				return false;
 			}
 
-			logger.info("Getting Booking information");
 			GetBookingInformationResponseDocument responseDoc = stub
 					.GetBookingInformation(biDoc);
 			booking = responseDoc.getGetBookingInformationResponse()
