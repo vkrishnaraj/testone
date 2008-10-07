@@ -12,6 +12,7 @@
 <%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
 
 
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <SCRIPT LANGUAGE="JavaScript">
   <!--
 	
@@ -28,21 +29,20 @@
 	<%
 		}
 	%>
-		
-		var checked=frm.outputtype[0].checked;
-		
-		var output="";
-		if (checked)
-			output="0";
-		else
-		{
-			checked=frm.outputtype[1].checked;		
-			if (checked)
-				output="1";
-			else
-				output="0";	
-		}
-
+		var output = "";
+    
+		for (var j=0;j < frm.length; j++) {
+          currentElement = frm.elements[j];
+          currentElementName=currentElement.name;
+          
+          if (currentElementName.indexOf("outputtype") != -1) {
+            var checked = currentElement.checked;
+            if (checked) {
+              output = currentElement.value;
+            }
+          }
+        }
+    
 		openWindowWithBar('reporting?print=' + toprint + '&outputtype=' + output,'Receipt',800,600);
 		return self.close();
 		
@@ -84,19 +84,23 @@
                     :
                   </td>
                   <td>
-                    <input type="radio" value="0" name="outputtype" checked>
-	                <bean:message key="radio.pdf" />
-                    <input type="radio" value="1" name="outputtype">	        
-                    <bean:message key="radio.html" />
-	                
-	                <logic:present name="advanced" scope="request">
-	                  <input type="radio" value="2" name="outputtype">	
-	                  <bean:message key="radio.xls" />
-	                  <input type="radio" value="3" name="outputtype">	
-	                  <bean:message key="radio.csv" />
-	                  <input type="radio" value="4" name="outputtype">	
-	                  <bean:message key="radio.xml" />
-                    </logic:present>
+                    <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                       <input type="radio" value="0" name="outputtype" checked>
+	                   <bean:message key="radio.pdf" />
+                      <input type="radio" value="1" name="outputtype">          
+                      <bean:message key="radio.html" />
+    	                <logic:present name="advanced" scope="request">
+    	                  <input type="radio" value="2" name="outputtype">	
+    	                  <bean:message key="radio.xls" />
+    	                  <input type="radio" value="3" name="outputtype">	
+    	                  <bean:message key="radio.csv" />
+    	                  <input type="radio" value="4" name="outputtype">	
+    	                  <bean:message key="radio.xml" />
+                        </logic:present>
+                    <% } else { %>
+                      <input type="radio" value="1" name="outputtype" checked>          
+                      <bean:message key="radio.html" />
+                    <% } %>
                   </td>
                 </tr>
                 <tr>

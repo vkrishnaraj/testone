@@ -10,6 +10,7 @@
 <!--SCANNERDATA.JSP-->
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <html:form action="scannerData.do" method="post">
   <tr>
     <td colspan="3" id="pageheadercell">
@@ -111,7 +112,9 @@
           %>
           <div id="pageheaderright">
               <select name="outputtype">
-                <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                  <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                <% } %>
                 <option value="1"><bean:message key="radio.html" /></option>
               </select>
               <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">

@@ -10,7 +10,8 @@
   Agent agent = (Agent)session.getAttribute("user");
 %>
 
-                    <tr>
+                    <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<tr>
                       <td>
                         <bean:message key="colname.report_type" />
                         :
@@ -72,16 +73,21 @@
 			                  :
 			                </td>
 			                <td>
-			                  <html:radio property="outputtype" value="0" />
-			                  <bean:message key="radio.pdf" />
-			                  <html:radio property="outputtype" value="1" />
-			                  <bean:message key="radio.html" />
-			                  <html:radio property="outputtype" value="2" />
-			                  <bean:message key="radio.xls" />
-			                  <html:radio property="outputtype" value="3" />
-			                  <bean:message key="radio.csv" />
-			                  <html:radio property="outputtype" value="4" />
-			                  <bean:message key="radio.xml" />
+                              <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+    			                  <html:radio property="outputtype" value="0" />
+    			                  <bean:message key="radio.pdf" />
+    			                  <html:radio property="outputtype" value="1" />
+    			                  <bean:message key="radio.html" />
+    			                  <html:radio property="outputtype" value="2" />
+    			                  <bean:message key="radio.xls" />
+    			                  <html:radio property="outputtype" value="3" />
+    			                  <bean:message key="radio.csv" />
+    			                  <html:radio property="outputtype" value="4" />
+    			                  <bean:message key="radio.xml" />
+                            <% } else {%>
+    			                  <html:radio property="outputtype" value="1" checked/>
+    			                  <bean:message key="radio.html" />
+                            <% } %>
 			                </td>
 			              </tr>
 			              <tr>

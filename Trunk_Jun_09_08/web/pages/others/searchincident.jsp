@@ -13,6 +13,7 @@
   <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -267,7 +268,9 @@ function updatePagination() {
               %>
               <div id="pageheaderright">
                 <select name="outputtype">
-                  <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                  <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                    <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                  <% } %>
                   <option value="1"><bean:message key="radio.html" /></option>
                 </select>
                 <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">

@@ -10,7 +10,8 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <script language="javascript">
+  <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<script language="javascript">
     <!--
 
 function CheckBoxGroup() {
@@ -342,16 +343,21 @@ function CBG_check(obj) {
             </tr>
             <tr>
               <td>
-                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("0")) { %> checked <% } %> value="0">
-                <bean:message key="radio.pdf" />
-                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1")) { %> checked <% } %> value="1">
+                <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("0")) { %> checked <% } %> value="0">
+                  <bean:message key="radio.pdf" />
+                <% } %>
+                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1") || TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %> checked <% } %> value="1">
                 <bean:message key="radio.html" />
-                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("2")) { %> checked <% } %> value="2">
-                <bean:message key="radio.xls" />
-                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("3")) { %> checked <% } %> value="3">
-                <bean:message key="radio.csv" />
-                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("4")) { %> checked <% } %> value="4">
-                <bean:message key="radio.xml" />
+                <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("2")) { %> checked <% } %> value="2">
+                  <bean:message key="radio.xls" />
+                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("3")) { %> checked <% } %> value="3">
+                  <bean:message key="radio.csv" />
+                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("4")) { %> checked <% } %> value="4">
+                  <bean:message key="radio.xml" />
+                <% } %>
+
               </td>
             </tr>
             <tr>
@@ -370,7 +376,7 @@ function CBG_check(obj) {
               <td colspan=2 align=center bgcolor=white>
                 <br>
                 <br>
-                <a href="#" onclick="openWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></a>
+                <a href="#" onclick="openWindowWithBar('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></a>
               </td>
             </tr>
           </logic:present>
@@ -379,7 +385,7 @@ function CBG_check(obj) {
           <script language=javascript>
             <!--
 		
-		openWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+		openWindowWithBar('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
 		
 		//-->
           </script>

@@ -11,7 +11,8 @@
 <%
   Agent agent = (Agent)session.getAttribute("user");
 %>
-  <html:form action="statReport.do" method="post">
+  <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<html:form action="statReport.do" method="post">
   <!-- Calendar includes -->
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
@@ -337,16 +338,21 @@
 	                  :
 	                </td>
 	                <td>
-	                  <html:radio property="outputtype" value="0" />
-	                  <bean:message key="radio.pdf" />
-	                  <html:radio property="outputtype" value="1" />
-	                  <bean:message key="radio.html" />
-	                  <html:radio property="outputtype" value="2" />
-	                  <bean:message key="radio.xls" />
-	                  <html:radio property="outputtype" value="3" />
-	                  <bean:message key="radio.csv" />
-	                  <html:radio property="outputtype" value="4" />
-	                  <bean:message key="radio.xml" />
+                      <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+    	                  <html:radio property="outputtype" value="0" />
+    	                  <bean:message key="radio.pdf" />
+    	                  <html:radio property="outputtype" value="1" />
+    	                  <bean:message key="radio.html" />
+    	                  <html:radio property="outputtype" value="2" />
+    	                  <bean:message key="radio.xls" />
+    	                  <html:radio property="outputtype" value="3" />
+    	                  <bean:message key="radio.csv" />
+    	                  <html:radio property="outputtype" value="4" />
+    	                  <bean:message key="radio.xml" />
+                      <% } else { %>
+                        <html:radio property="outputtype" value="1" />
+                        <bean:message key="radio.html" />
+                      <% } %>
 	                </td>
 	              </tr>
 	              <tr>
