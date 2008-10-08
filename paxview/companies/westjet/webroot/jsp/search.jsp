@@ -12,6 +12,7 @@
 <link href="css/sIFR-print.css" rel="stylesheet" type="text/css" media="print" />
 <script type="text/javascript" src="js/sifr.js"></script>
 <script type="text/javascript" src="js/sifr-addons.js"></script>
+<script type="text/javascript" src="js/nettracer.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>WestJet Baggage Tracking Service</title>
 </head>
@@ -40,7 +41,7 @@
         </tr>
         <tr>
           <td><label for="claim number">Claim Number:</label></td>
-          <td class="formField"><form:input path="claimnumber" tabindex="2" cssClass="formField" /></td>
+          <td class="formField"><form:input path="claimnumber" tabindex="2" cssClass="formField" onblur="fillzero(this,13);"/></td>
           <td class="formError"><form:errors path="claimnumber" /></td>
         </tr>
         <tr>

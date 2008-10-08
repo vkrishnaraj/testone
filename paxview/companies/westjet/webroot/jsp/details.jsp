@@ -21,18 +21,36 @@ window.addEvent('domready', function() {
 	var myAccordion = new Accordion($('accordion'), 'p.statClaimToggle', 'div.statClaimContent', {
 		opacity: false,
 		onActive: function(toggler, element){
-		toggler.setStyle('text-decoration', 'none');
-	},
-	onBackground: function(toggler, element){
-		toggler.setStyle('text-decoration', 'underline');
-	}
+			toggler.setStyle('text-decoration', 'none');
+		},
+		onBackground: function(toggler, element){
+			toggler.setStyle('text-decoration', 'underline');
+		},
+		display: <c:choose>
+			<c:when test="${incident.incident_status == 'Temporary'}">
+			0
+			</c:when>
+			<c:when test="${incident.incident_status == 'Open'}">
+				1
+			</c:when>
+				<c:when test="${incident.incident_status == 'Pending'}">
+				2
+			</c:when>
+			<c:when test="${incident.incident_status == 'Open'}">
+				3
+			</c:when>
+			<c:otherwise>
+				0
+			</c:otherwise>
+		</c:choose>
+	
 	
 	});
 
 });
 	
 	</script>
-	<style type-"text/css">
+	<style type="text/css">
 		p.statClaimToggle {
 			cursor: pointer;
 		}
