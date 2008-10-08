@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="paxview" default="build-dev">
+<project name="paxview" default="build-tracer-alpha">
 
 	<property name="src.dir" location="${basedir}/src" />
 	<property name="build.dir" location="${basedir}/build" />
@@ -48,15 +48,14 @@
 			<fileset dir="${build.dir}/${company.name}-war"/>
 		</war>
 	</target>
-	
-	<target name="build-dev">
+
+	<target name="build-tracer-alpha">
 		<property name="company.name" value="tracer" />
-		<property name="environment.name" value="dev" />
+		<property name="environment.name" value="alpha" />
 		<antcall target="war" >
 		</antcall> 	
 	</target>
 
-	
 	<target name="build-westjet-prod">
 		<property name="company.name" value="westjet" />
 		<property name="environment.name" value="prod" />
