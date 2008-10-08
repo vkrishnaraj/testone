@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<project name="paxview" default="build-dev">
+
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="dist.dir" location="${basedir}/dist" />
+	<property name="webroot.dir" location="${basedir}/webroot" />
+	<property name="companies.dir" location="${basedir}/companies" />
+	<property name="provided.libs.dir" location="${basedir}/provided-libs" />
+	
+	<property name="source.files.tocopy" value="**/*.properties,**/*.dtd,**/*.xml,**/*.xsd,**/*.jpg" />
+
+	<path id="compile.classpath">
+		<fileset dir="${webroot.dir}/WEB-INF/lib" id="web-libs" includes="*.jar" />
+		<fileset dir="${provided.libs.dir}" id="provided-libs" includes="*.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<copy todir="${build.classes.dir}">
+		  <fileset dir="${src.dir}" includes="${source.files.tocopy}"/>
+		</copy>
+		<echo>compilation complete!</echo>
+	</target>
+
+	<target name="war" depends="compile" if="company.name">
+		<mkdir dir="${build.dir}/${company.name}-war"/>
+		<copy todir="${build.dir}/${company.name}-war">
+			<fileset dir="${companies.dir}/${company.name}/webroot" />
+			<fileset dir="${webroot.dir}" >
+				<include name="WEB-INF/**/*"/>
+				<include name="META-INF/**/*"/>
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}/${company.name}-war/WEB-INF/classes">
+			<fileset dir="${build.classes.dir}" />
+			<fileset file="${companies.dir}/${company.name}/${environment.name}/paxview.properties" />
+		</copy>
+		<war destfile="${dist.dir}/${company.name}-pv-${environment.name}.war" duplicate="preserve" compress="true">
+			<fileset dir="${build.dir}/${company.name}-war"/>
+		</war>
+	</target>
+	
+	<target name="build-dev">
+		<property name="company.name" value="tracer" />
+		<property name="environment.name" value="dev" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
+	
+	<target name="build-westjet-prod">
+		<property name="company.name" value="westjet" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="${build.dir}" defaultexcludes="false" includeemptydirs="true" />
+		<delete dir="${dist.dir}" defaultexcludes="false" includeemptydirs="true" />
+	</target>
+</project>

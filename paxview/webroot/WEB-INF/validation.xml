@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC
+"-//Apache Software Foundation//DTD
+Commons Validator Rules Configuration 1.1//EN"
+"http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+<form-validation>
+	<formset>
+		<form name="search">
+			<field property="claimnumber" depends="required,mask">
+				<arg0 key="field.claimnumber"/>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>^\s*\w{5}0*[1-9]+\s*$</var-value>
+				</var>
+			</field>
+			<field property="lastname" depends="required">
+				<arg0 key="field.lastname"/>
+			</field>
+		</form>
+	</formset>
+</form-validation>

@@ -1,0 +1,247 @@
+/* CSS Document */
+
+/* /////////////////////////////////// */
+
+/* Layout Formatting 
+
+/* /////////////////////////////////// */
+
+body {
+	margin: 0;
+	padding: 0;
+	font-size: 0.8em;
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	color: #00285E;
+	background-color: #e8f2fc;
+	text-align: center;
+}
+
+
+#wrapper {
+	position: relative;
+	text-align: left;
+	margin: 20px auto;
+	width: 918px;
+	background: url(../images/wrapperBG.png) repeat-x #fff;
+}
+
+#header {
+	position: relative;
+	margin: 0;
+	width: 918px;
+	height: 96px;
+	background: url(../images/header.png) no-repeat;
+}
+
+#content {
+	position: relative;
+	margin: 0;
+	padding: 20px;
+	background: url(../images/headerDip.png) no-repeat #ffffff;
+}
+
+#content_resultsLeftCol {
+	position: relative;
+	float: left;
+	width: 350px;
+	margin: 15px 0px;
+	background-color: fff;
+/*	border: 1px solid #9495a2;  */
+}
+
+#content_resultsRightCol {
+	position: relative;
+	float: right;
+	margin: -20px 0 15px 15px;
+	width: 490px;
+	background-color: #e8f2fc; 
+}
+
+#footer {
+	position: relative;
+	clear: both;
+	width: 918px;
+	height: 41px;
+	background: url(../images/footer.png) no-repeat;
+}
+
+#copyright {
+	bottom: 15px;
+	color: #00285E;
+	width: 100%;
+	text-align: center;
+	font-size: 80%;
+	position: absolute;
+}
+
+/* /////////////////////////////////// */
+
+/* General Formatting & Table Formatting
+
+/* /////////////////////////////////// */
+
+p {
+	line-height: 140%;
+	margin-bottom: 15px;
+}
+
+h1 {
+	font-weight: bold;
+	letter-spacing: 0;
+	font-size: 18px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+h2 {
+	font-weight: bold;
+	letter-spacing: 0;
+	font-size: 14px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.hr {
+    width: 100%;
+	background: url(../images/hr.png) repeat-x;
+	height: 1px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+table#inputDelayedBags {
+	border: 0;
+	width: 575px;
+	font-size: 100%;
+}
+
+table#baggageTrackingSummary {
+	border: 0;
+	font-size: 100%;
+	width: 100%;
+}
+
+table#Definitions {
+	border: 0;
+	font-size: 100%;
+	width: 100%;
+}
+
+#specialInstructions {
+	width: 340px;
+	border: 1px solid #b2d5f1;
+}
+
+.rightAlign {
+	text-align: right;
+	font-weight: bold;
+}
+
+td.rightAlign {
+		text-align: right;
+	font-weight: bold;
+	width: 150px;
+}
+
+label {
+	font-weight: bold;
+	text-align: right;
+	width: 150px;
+	display: block;
+	margin-left: 15px;
+	margin-right: 10px;
+}
+
+td.formField {
+	width: 210px;
+}
+
+.formField input {
+	width: 175px;
+	margin-bottom: 8px;
+}
+
+.errors {
+	width: 150px;
+	margin-left: 10px;
+	text-align: left;
+	color: #FF0000;
+}
+
+.formError {
+	width: 150px;
+	margin-left: 10px;
+	text-align: left;
+	color: #FF0000;
+}
+	
+
+.smallFormText {
+	font-size: 85%;
+	color: #00285E;
+	text-align: left;
+}
+
+/* /////////////////////////////////// */
+
+/* Individual Items
+
+/* /////////////////////////////////// */
+
+#francais {
+	top: 20px;
+	right: 20px;
+	width: 300px;
+	position: absolute;
+	text-align: right;
+}
+
+/* /////////////////////////////////// */
+
+/* Button Formatting & Positioning
+
+/* /////////////////////////////////// */
+
+.button {
+	font-weight: bold; 
+	font-size: 95%; 
+	text-transform: lowercase; 
+	cursor: pointer; 
+	color: #fff; 
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	background-color: #00285e; 
+	text-align: center;
+	padding: 2px;
+}
+
+#searchButtonContainer {
+	margin-top: 10px;
+}
+
+#newSearchButtonContainer {
+	margin-right: 4px;
+}
+
+/* /////////////////////////////////// */
+
+/* Link Styles + Formatting
+
+/* /////////////////////////////////// */
+
+a:link {font-family: Tahoma, Verdana, Arial, sans-serif; color: #00285E; font-weight: bold; font-size: 100%; text-decoration: underline;}
+a:visited {font-family: Tahoma, Verdana, Arial, sans-serif; color: #00285E; font-weight: bold; font-size: 100%; text-decoration: underline;}
+a:active {font-family: Tahoma, Verdana, Arial, sans-serif; color: #00285E; font-weight: bold; font-size: 100%; text-decoration: underline;}
+a:hover {font-family: Tahoma, Verdana, Arial, sans-serif; color: #00285E; font-weight: bold; font-size: 100%; text-decoration: none;}
+
+p.statClaimToggle {
+	font-family: Tahoma, Verdana, Arial, sans-serif;
+	color: #00285E;
+	font-weight: bold;
+	font-size: 100%;
+	margin: 0px 0px 0px 0px;
+
+}
+
+div.statClaimContent p {
+	margin: 0px 0px 0px 0px;
+}

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns0="http://passengerview.ws.nettracer.bagnet.com" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns1="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://passengerview.ws.nettracer.bagnet.com">
+    <wsdl:types>
+        <xs:schema xmlns:ns="http://passengerview.ws.nettracer.bagnet.com" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://passengerview.ws.nettracer.bagnet.com" xmlns:ns1="http://pojo.core.ws.nettracer.bagnet.com/xsd" >
+            <xs:element name="getAdvancedIncidentPV">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="doNotAuthorize" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAdvancedIncidentPVResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:WS_PVAdvancedIncident"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getIncidentPV">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getIncidentPVResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:WS_PVIncident"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax21="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="WS_PVAdvancedIncident">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="dispcreatetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_status" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax21:WS_PVItem"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:WS_PVPassenger"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_PVItem">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagstatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="claimchecknum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="state_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_PVPassenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="email" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homephone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="hotel" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobile" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="workphone" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_PVIncident">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="dispcreatetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="email" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homephone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="hotel" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_status" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax21:WS_PVItem"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobile" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="workphone" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getIncidentPVRequest">
+        <wsdl:part name="parameters" element="ns0:getIncidentPV"/>
+    </wsdl:message>
+    <wsdl:message name="getIncidentPVResponse">
+        <wsdl:part name="parameters" element="ns0:getIncidentPVResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getAdvancedIncidentPVRequest">
+        <wsdl:part name="parameters" element="ns0:getAdvancedIncidentPV"/>
+    </wsdl:message>
+    <wsdl:message name="getAdvancedIncidentPVResponse">
+        <wsdl:part name="parameters" element="ns0:getAdvancedIncidentPVResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="NTPassengerViewServicePortType">
+        <wsdl:operation name="getIncidentPV">
+            <wsdl:input message="ns0:getIncidentPVRequest" wsaw:Action="urn:getIncidentPV"/>
+            <wsdl:output message="ns0:getIncidentPVResponse" wsaw:Action="urn:getIncidentPVResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAdvancedIncidentPV">
+            <wsdl:input message="ns0:getAdvancedIncidentPVRequest" wsaw:Action="urn:getAdvancedIncidentPV"/>
+            <wsdl:output message="ns0:getAdvancedIncidentPVResponse" wsaw:Action="urn:getAdvancedIncidentPVResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="NTPassengerViewServiceSOAP11Binding" type="ns0:NTPassengerViewServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getIncidentPV">
+            <soap:operation soapAction="urn:getIncidentPV" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAdvancedIncidentPV">
+            <soap:operation soapAction="urn:getAdvancedIncidentPV" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="NTPassengerViewServiceSOAP12Binding" type="ns0:NTPassengerViewServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getIncidentPV">
+            <soap12:operation soapAction="urn:getIncidentPV" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAdvancedIncidentPV">
+            <soap12:operation soapAction="urn:getAdvancedIncidentPV" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="NTPassengerViewServiceHttpBinding" type="ns0:NTPassengerViewServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getIncidentPV">
+            <http:operation location="NTPassengerViewService/getIncidentPV"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getIncidentPV"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getIncidentPV"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAdvancedIncidentPV">
+            <http:operation location="NTPassengerViewService/getAdvancedIncidentPV"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAdvancedIncidentPV"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAdvancedIncidentPV"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="NTPassengerViewService">
+        <wsdl:port name="NTPassengerViewServiceSOAP11port_http" binding="ns0:NTPassengerViewServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/NTPassengerViewService"/>
+        </wsdl:port>
+        <wsdl:port name="NTPassengerViewServiceSOAP12port_http" binding="ns0:NTPassengerViewServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/NTPassengerViewService"/>
+        </wsdl:port>
+        <wsdl:port name="NTPassengerViewServiceHttpport" binding="ns0:NTPassengerViewServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/NTPassengerViewService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

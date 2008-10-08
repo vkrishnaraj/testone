@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="resource:/paxview.properties" />
+	</bean>
+	
+	<!--  Web Service Definitions -->
+	<bean name="serviceLocator"
+		class="com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceLocator">
+		<property name="NTPassengerViewServiceSOAP12port_httpEndpointAddress"
+			value="${webservice.url}" />
+	</bean>
+	<bean name="paxViewService" class="com.bagnet.nettracer.paxview.PaxViewServiceImpl">
+		<property name="serviceLocator" ref="serviceLocator" />
+	</bean>
+
+	<!-- Controller Beans -->
+	<bean name="/search.htm" class="com.bagnet.nettracer.paxview.PaxViewController">
+		<property name="formView" value="search" />
+		<property name="successView" value="details" />
+		<property name="commandClass" value="com.bagnet.nettracer.paxview.Search" />
+		<property name="pvService" ref="paxViewService" />
+		<property name="validator" ref="beanValidator" />
+	</bean>
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>errors</value>
+				<value>messages</value>
+				<value>company</value>
+			</list>
+		</property>
+	</bean>
+	<!--
+		View Resolver - example: view "search" will resolve to
+		/jsp/search.jsp
+	-->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/jsp/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+	
+	<!-- Form Validation -->
+	<bean id="validatorFactory"
+		class="org.springmodules.validation.commons.DefaultValidatorFactory">
+		<property name="validationConfigLocations">
+			<list>
+				<value>WEB-INF/validator-rules.xml</value>
+				<value>WEB-INF/validation.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="beanValidator"
+		class="org.springmodules.validation.commons.DefaultBeanValidator">
+		<property name="validatorFactory" ref="validatorFactory" />
+	</bean>
+</beans>
