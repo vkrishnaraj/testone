@@ -81,6 +81,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
   private String wt_write_enabled;
  	private Integer scannerDefaultBack;
  	private Integer scannerDefaultForward;
+ 	private String blindEmail;
 
 
 	public String getWt_write_enabled() {
@@ -315,6 +316,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	 */
 	public void setScannerDefaultForward(Integer scannerDefaultForward) {
 		this.scannerDefaultForward = scannerDefaultForward;
+	}
+
+	public String getBlindEmail() {
+		return blindEmail;
+	}
+
+	public void setBlindEmail(String blindEmail) {
+		this.blindEmail = blindEmail;
 	}
 
 

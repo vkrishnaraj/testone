@@ -493,6 +493,17 @@ function updatePagination() {
             </tr>
             <tr>
               <td>
+                <bean:message key="colname.blind_email" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.blindEmail" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            <tr>
+              <td>
                 <bean:message key="colname.max_image_file_size" />
               </td>
               <logic:iterate id="audit_lfi" name="compareList" scope="request">

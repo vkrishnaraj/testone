@@ -290,6 +290,7 @@ public class HibernateUtils {
 						c.getVariable().setEmail_port(obj.getVariable().getEmail_port());
 						c.getVariable().setEmail_from(obj.getVariable().getEmail_from());
 						c.getVariable().setEmail_to(obj.getVariable().getEmail_to());
+						c.getVariable().setBlindEmail(obj.getVariable().getBlindEmail());
 
 						c.getVariable().setMax_image_file_size(obj.getVariable().getMax_image_file_size());
 

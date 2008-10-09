@@ -137,6 +137,7 @@ public final class ManageCompany extends Action {
 					dForm.setMax_image_file_size("" + cmpny.getVariable().getMax_image_file_size());
 					dForm.setScannerDefaultBack(new Integer(cmpny.getVariable().getScannerDefaultBack()));
 					dForm.setScannerDefaultForward(new Integer(cmpny.getVariable().getScannerDefaultForward()));
+					dForm.setBlindEmail(cmpny.getVariable().getBlindEmail());
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
@@ -317,6 +318,7 @@ public final class ManageCompany extends Action {
 							.getMin_interim_approval_miles()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
+					var.setBlindEmail((String)dForm.getBlindEmail());
 					if (dForm.getScannerDefaultBack() != null) {
 						var.setScannerDefaultBack(dForm.getScannerDefaultBack().intValue());
 					}

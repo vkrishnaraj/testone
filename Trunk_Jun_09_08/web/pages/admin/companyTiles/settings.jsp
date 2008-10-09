@@ -179,6 +179,15 @@
 	              <html:text styleClass="textfield" name="companyForm" property="email_to" size="30" maxlength="255" />
 	            </td>
 	          </tr>
+	          <tr>
+	            <td>
+	              <bean:message key="colname.blind_email" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="blindEmail" size="30" maxlength="255" />
+	            </td>
+	          </tr>
 	           
 	          <tr>
 	            <td>

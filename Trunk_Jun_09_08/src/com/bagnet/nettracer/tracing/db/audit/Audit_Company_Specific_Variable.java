@@ -56,6 +56,7 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int email_port;
 	private String email_from;
 	private String email_to;
+	private String blindEmail;
 	private int pass_expire_days;
 	private int max_failed_logins;
 	
@@ -584,6 +585,20 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	public void setEmail_host(String email_host) {
 		this.email_host = email_host;
 	}
+	
+	/**
+	 * @return Returns the blind cc address.
+	 * 
+	 * @hibernate.property type="string" column="blind_cc" length="100"
+	 */
+	public String getBlindEmail() {
+		return blindEmail;
+	}
+	
+	public void setBlindEmail(String blindEmail) {
+		this.blindEmail = blindEmail;
+	}
+	
 	/**
 	 * @return Returns the email_port.
 	 *

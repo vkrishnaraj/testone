@@ -69,6 +69,7 @@ public class Company_Specific_Variable implements Serializable {
 	private int wt_write_enabled;
 	private int scannerDefaultBack;
 	private int scannerDefaultForward;
+	private String blindEmail;
 	
 
 	/**
@@ -914,4 +915,18 @@ public class Company_Specific_Variable implements Serializable {
 	public void setScannerDefaultForward(int scannerDefaultForward) {
 		this.scannerDefaultForward = scannerDefaultForward;
 	}
+	
+	/**
+	 * @return the scannerDefaultForward
+	 * @hibernate.property type="string" column="blind_cc" length="100"
+	 */
+	public String getBlindEmail() {
+		return blindEmail;
+	}
+	
+	public void setBlindEmail(String blindEmail) {
+		this.blindEmail = blindEmail;
+	}
+	
+	
 }

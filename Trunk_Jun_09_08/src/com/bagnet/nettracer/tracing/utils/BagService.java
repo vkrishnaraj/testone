@@ -675,7 +675,12 @@ public class BagService {
 							ArrayList al = new ArrayList();
 							al.add(new InternetAddress(toemail));
 							he.setTo(al);
-
+							String bcc = theform.getAgent().getStation().getCompany().getVariable().getBlindEmail();
+							if(bcc != null && bcc.trim().length() > 0) {
+							List<InternetAddress> bccList = new ArrayList<InternetAddress>();
+							bccList.add(new InternetAddress(bcc));
+							he.setBcc(bccList);
+							}
 							MessageResources messages = MessageResources
 									.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
