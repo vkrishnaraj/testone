@@ -36,7 +36,6 @@ public class ReservationIntegrationImpl extends
 		Incident_Claimcheck claim1 = form.getClaimcheck(0);
 		Incident_Claimcheck claim2 = form.getClaimcheck(1);
 		form.getItem(0, -1);
-		form.getItem(1, -1);
 		
 		// Populate objects
 		claim1.setClaimchecknum("US000001");
