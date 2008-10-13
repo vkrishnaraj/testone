@@ -1095,8 +1095,17 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			addIncidentFieldEntry(WorldTracerField.IT, initials, result);
 	
 			// add the passenger title (salutation)
-			String title = StringUtils.join(" ", p.getSalutationdesc() != null ? p.getSalutationdesc() : "", p.getFirstname() != null ? p.getFirstname() : "");
-			addIncidentFieldEntry(WorldTracerField.PT, title, result);
+			if(p.getSalutation() == 0) {
+				addIncidentFieldEntry(WorldTracerField.PT, p.getFirstname(), result);
+			}
+			else {
+				String title = StringUtils.join(" ", p.getSalutationdesc() != null ? p.getSalutationdesc() : "", p.getFirstname() != null ? p.getFirstname() : "");
+				addIncidentFieldEntry(WorldTracerField.PT, title, result);
+			}
+			
+			if(result.get(WorldTracerField.PT) == null) {
+				throw new WorldTracerException("Salutation or first name required to create AHL");
+			}
 	
 			// add the frequent flier class status
 			addIncidentFieldEntry(WorldTracerField.PS, p.getAirlinememstatus(), result);
