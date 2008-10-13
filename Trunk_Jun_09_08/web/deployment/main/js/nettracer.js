@@ -78,7 +78,7 @@ function openWindowWithBar(url,name,w,h)
     w = w;
     h = h;
  
-    var options = "width=" + w + ",height=" + h + ",resizable=yes,scrollbars=yes,toolbar=yes,menubar=yes";
+    var options = "width=" + w + ",height=" + h + ",resizable=yes,scrollbars=yes,toolbar=no,menubar=yes";
     newwin = window.open(url,name,options);
 }
 
@@ -89,7 +89,7 @@ function openWindow(url,name,w,h)
     w = w;
     h = h;
  
-    var options = "width=" + w + ",height=" + h + ",resizable=yes,scrollbars=yes,toolbar=no";
+    var options = "width=" + w + ",height=" + h + ",resizable=yes,scrollbars=yes,toolbar=no,menubar=yes";
     newwin = window.open(url,name,options);
 }
 

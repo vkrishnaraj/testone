@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -21,16 +22,17 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
-import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 /**
  * @author Matt
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+
  */
 public class LostDelayReceipt {
 	private static Logger logger = Logger.getLogger(LostDelayReceipt.class);
@@ -40,13 +42,13 @@ public class LostDelayReceipt {
 	 */
 	public LostDelayReceipt() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public static String createReport(IncidentForm theform, ServletContext sc, HttpServletRequest request, int outputtype, String language) {
 		try {
 
 			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
 			Map parameters = new HashMap();
@@ -68,11 +70,25 @@ public class LostDelayReceipt {
 					+ theform.getStationassigned().getCompany().getState_ID() + " " + theform.getStationassigned().getCompany().getZip());
 			parameters.put("airline_phone", theform.getStationassigned().getCompany().getPhone());
 			parameters.put("airline_email", theform.getStationassigned().getCompany().getEmail_address());
-
+			String prettyDate = "";
+			
+			String format = "MMMMMMMMMM dd, yyyy";
+			prettyDate = DateUtils.formatDate(TracerDateTime.getGMTDate(), format, null, TimeZone.getTimeZone(AdminUtils
+					.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+ 
+			parameters.put("prettydate", prettyDate);
+			
+				
 			File logo = new File(sc.getRealPath("/") + "reports/logo.jpg");
 			if (logo.exists()) {
 				parameters.put("logo", logo.getAbsolutePath());
 			}
+			
+			File powered = new File(sc.getRealPath("/") + "deployment/main/images/nettracer/poweredby_net_tracer.jpg");
+			if (powered.exists()) {
+				parameters.put("powered", powered.getAbsolutePath());
+			}
+
 
 			Passenger pa = (Passenger) theform.getPassenger(0);
 
@@ -92,6 +108,7 @@ public class LostDelayReceipt {
 					+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
 
 			parameters.put("station", theform.getStationcreated().getStationcode());
+			parameters.put("stationname", theform.getStationcreated().getStationdesc());
 
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < theform.getClaimchecklist().size(); i++) {

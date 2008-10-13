@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -21,15 +22,16 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 /**
  * @author Matt
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class DamageReceipt {
 	private static Logger logger = Logger.getLogger(DamageReceipt.class);
@@ -46,7 +48,8 @@ public class DamageReceipt {
 
 			HttpSession session = request.getSession();
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
-
+			Agent user = (Agent) session.getAttribute("user");
+			
 			Map parameters = new HashMap();
 			String airline = theform.getStationcreated().getCompany().getCompanydesc();
 			parameters.put("title", messages.getMessage(new Locale(language), "damage.receipt.title"));
@@ -69,8 +72,23 @@ public class DamageReceipt {
 			if (logo.exists()) {
 				parameters.put("logo", logo.getAbsolutePath());
 			}
+			
+			File powered = new File(sc.getRealPath("/") + "deployment/main/images/nettracer/poweredby_net_tracer.jpg");
+			if (powered.exists()) {
+				parameters.put("powered", powered.getAbsolutePath());
+			}
+
 
 			Passenger pa = (Passenger) theform.getPassenger(0);
+			
+			String prettyDate = "";
+			
+			String format = "MMMMMMMMMM dd, yyyy";
+			prettyDate = DateUtils.formatDate(TracerDateTime.getGMTDate(), format, null, TimeZone.getTimeZone(AdminUtils
+					.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+ 
+			parameters.put("prettydate", prettyDate);
+
 
 			parameters.put("createdate", theform.getDispcreatetime());
 			parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
@@ -99,6 +117,7 @@ public class DamageReceipt {
 			if (sb.length() > 0)
 				parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
 			ReportBMO rbmo = new ReportBMO(request);
+			parameters.put("stationname", theform.getStationcreated().getStationdesc());
 			
 			IncidentBMO ibmo = new IncidentBMO();
 			ibmo.incrementPrintedReceipt(theform.getIncident_ID());

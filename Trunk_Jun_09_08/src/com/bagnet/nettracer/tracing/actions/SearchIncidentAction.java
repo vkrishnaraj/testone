@@ -221,7 +221,9 @@ public class SearchIncidentAction extends Action {
 				return (mapping.findForward(TracingConstants.RECEIPT_PARAMS));
 			}
 
-			if (bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES) == null) {
+			Incident inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
+			
+			if (inc == null) {
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.noincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -229,6 +231,7 @@ public class SearchIncidentAction extends Action {
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			} else {
 				// populate session
+				int itemType = inc.getItemtype_ID();
 				request.setAttribute("incident", incident);
 				session.setAttribute("incidentForm", theform);
 				List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
@@ -240,17 +243,15 @@ public class SearchIncidentAction extends Action {
 
 				request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
 
-				Item item = theform.getItem(0, 0);
-
 				//the company specific codes..
-				List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), item.getItemtype_ID(), user
+				List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), itemType, user
 						.getCurrentlocale(), false, user);
 				//add to the loss codes
 				request.setAttribute("losscodes", codes);
 
 				// find out what kind of incident this is
 
-				switch (item.getItemtype_ID()) {
+				switch (itemType) {
 				case TracingConstants.LOST_DELAY:
 					if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, user))
 						theform.setReadonly(1);
