@@ -153,6 +153,9 @@ public class ReservationIntegrationImpl extends
 		
 		// Record Locator
 		form.setRecordlocator(booking.getRecordLocator());
+		Agent user = (Agent) request.getSession().getAttribute("user");
+		form.setHolding_company(user.getCompanycode_ID());
+		form.setHolding_station(user.getStation().getStationcode());
 		
 		// Passengers and Bags
 		if (booking.getPassengers() != null) {
