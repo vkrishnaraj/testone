@@ -202,6 +202,9 @@ public class MissingAction extends Action {
 		} else {
 			
 			// prepopulate
+			TracerUtils.populateIncident(theform, request, TracingConstants.MISSING_ARTICLES);
+			request.setAttribute("newform", "1");
+
 			ActionMessage error = null;
 			ArrayList alerrors = new ArrayList();
 			if (MBRActionUtils.prePopulate(request,theform,alerrors,TracingConstants.MISSING_ARTICLES)) {
@@ -221,10 +224,6 @@ public class MissingAction extends Action {
 				return (mapping.findForward(TracingConstants.MISSING_MAIN));
 			}
 			
-			
-			// prepopulate new incident fields
-			TracerUtils.populateIncident(theform, request, TracingConstants.MISSING_ARTICLES);
-			request.setAttribute("newform", "1");
 		}
 		
 		return (mapping.findForward(TracingConstants.MISSING_MAIN));

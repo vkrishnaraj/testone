@@ -258,6 +258,7 @@ public class ReservationIntegrationImpl extends
 		
 		// Record Locator
 		form.setRecordlocator(booking.getRecordLocator());
+		form.setAgent(user);
 		if (pnrContents != null) {
 			form.setOtherSystemInformation(pnrContents);
 		}

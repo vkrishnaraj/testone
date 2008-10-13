@@ -305,6 +305,9 @@ public class DamagedAction extends Action {
 
 		} else {
 			// prepopulate
+			TracerUtils.populateIncident(theform, request, TracingConstants.DAMAGED_BAG);
+			request.setAttribute("newform", "1");
+			
 			ActionMessage error = null;
 			ArrayList alerrors = new ArrayList();
 			if (MBRActionUtils.prePopulate(request,theform,alerrors,TracingConstants.DAMAGED_BAG)) {
@@ -323,10 +326,7 @@ public class DamagedAction extends Action {
 				request.setAttribute("prepopulate",new Integer("1"));
 				return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 			}
-			
-			// prepopulate new incident fields
-			TracerUtils.populateIncident(theform, request, TracingConstants.DAMAGED_BAG);
-			request.setAttribute("newform", "1");
+		
 		}
 
 		return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
