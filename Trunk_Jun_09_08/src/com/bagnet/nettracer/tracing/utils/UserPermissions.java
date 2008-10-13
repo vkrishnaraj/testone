@@ -269,8 +269,12 @@ public class UserPermissions {
 		}
 		
 		Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
-		int type = inc.getItemtype().getItemType_ID();
-		return hasLimitedSavePermissionByType(a, type);
+		if (inc != null) {
+			int type = inc.getItemtype().getItemType_ID();
+			return hasLimitedSavePermissionByType(a, type);
+		} else {
+			return false;
+		}
 	}
 	
 	public static boolean hasLimitedSavePermissionByType(Agent a, int type) {
