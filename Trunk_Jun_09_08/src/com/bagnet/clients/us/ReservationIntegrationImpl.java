@@ -341,6 +341,7 @@ public class ReservationIntegrationImpl extends
 								TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
 	
 						bagIndex++;
+						form.setNumbagchecked(bagIndex);
 					}
 				}
 			}
