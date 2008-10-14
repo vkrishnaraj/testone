@@ -304,7 +304,7 @@ public class MoveToLZThread {
 			+ " and incident.stationassigned.company.companyCode_ID = '" + company + "' ";
 			
 		for (int i=0; i<lzList.size(); ++i) {
-			queryStr += "and incident.stationassigned.station_ID <> " + lzList.get(i).getLz_ID();
+			queryStr += " and incident.stationassigned.station_ID <> " + lzList.get(i).getStation().getStation_ID();
 		}
 		
 		// logger.info("Creating query... ");
