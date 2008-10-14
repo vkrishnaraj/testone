@@ -249,7 +249,7 @@ public final class ViewMatch extends Action {
 						.getDefaultlocale().toString()));
 				
 				//if has the wt_id,close wt
-				this.CloseWTInMatch(incident, ohd, user);
+				//this.CloseWTInMatch(incident, ohd, user);
 				
 				request.setAttribute("already_matched", "1");
 			} else {
@@ -283,7 +283,7 @@ public final class ViewMatch extends Action {
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
-						this.CloseWTInMatch(incident, ohd, user);
+						//this.CloseWTInMatch(incident, ohd, user);
 						request.setAttribute("already_matched", "1");
 					}
 
@@ -318,7 +318,7 @@ public final class ViewMatch extends Action {
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
-						this.CloseWTInMatch(incident, ohd, user);
+						//this.CloseWTInMatch(incident, ohd, user);
 						request.setAttribute("already_matched", "1");
 					}
 				} else {
