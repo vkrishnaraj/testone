@@ -49,25 +49,13 @@
 	<servlet-name>ImageServlet</servlet-name>
 	<servlet-class>com.bagnet.nettracer.reporting.ImageServlet</servlet-class>
   </servlet>
+  
   <servlet>
       <description>view log</description>
       <display-name>view log</display-name>
     <servlet-name>ViewLog</servlet-name>
     <servlet-class>com.bagnet.nettracer.logging.ViewLog</servlet-class>
   </servlet>
-  
-  <servlet>
-     <description>WT test</description>
-     <display-name>Test WT</display-name>
-    <servlet-name>WTTest</servlet-name>
-    <servlet-class>com.bagnet.nettracer.wt.WorldTracerIntegrationWrapper</servlet-class>
-  </servlet>
-  <!-- end of report servlet -->
-
-
-
-
-
   
     <!-- AJAX Servlet to retrieve messages -->
   <servlet>
@@ -77,13 +65,7 @@
   </servlet>
  
   <!-- web service client for testing -->
-  <servlet>
-         <display-name>PassengerView Test Servlet</display-name>
-        <servlet-name>PassengerViewTest</servlet-name>
-        <servlet-class>
-            com.bagnet.nettracer.ws.passengerview.PVTestServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-  </servlet>
+
   
   <servlet>
     <servlet-name>showImage</servlet-name>
@@ -121,10 +103,7 @@
     <servlet-name>checkmessages</servlet-name>
     <url-pattern>/checkMessages.view</url-pattern>
   </servlet-mapping> 
-  <servlet-mapping>
-    <servlet-name>PassengerViewTest</servlet-name>
-    <url-pattern>/passengerviewtest</url-pattern>
-  </servlet-mapping>
+
   
   
   
@@ -157,10 +136,6 @@
   </servlet-mapping>
   
   
-  <servlet-mapping>
-    <servlet-name>WTTest</servlet-name>
-    <url-pattern>/WTTest</url-pattern>
-  </servlet-mapping>
  
   
   

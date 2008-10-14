@@ -32,7 +32,6 @@
 	<classpathentry kind="lib" path="lib/jars/c3p0-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/c3p0-oracle-thin-extras-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/cglib-2.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jars/classes12.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-discovery.jar"/>
@@ -52,9 +51,6 @@
 	<classpathentry kind="lib" path="lib/jars/jakarta-oro.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jalopy-1.5rc3.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jasperreports-1.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/jars/jaxb-api-2.0.jar"/>
-	<classpathentry kind="lib" path="lib/jars/jaxb-impl-2.0.5.jar"/>
-	<classpathentry kind="lib" path="lib/jars/jaxb-xjc-2.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jettison-1.0-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jibx-bind-1.1.5.jar"/>
@@ -75,20 +71,14 @@
 	<classpathentry kind="lib" path="lib/jars/woden-1.0-incubating-M7b.jar"/>
 	<classpathentry kind="lib" path="lib/jars/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/wstx-asl-3.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/jars/xalan-2.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/xbean-2.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/jars/xercesImpl-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jars/xml-apis-1.3.03.jar"/>
 	<classpathentry kind="lib" path="lib/jars/XmlSchema-1.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-digester-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/jars/asm.jar"/>
 	<classpathentry kind="lib" path="lib/jars/asm-attrs.jar"/>
-	<classpathentry kind="lib" path="lib/jars/passengerview_schemas.jar"/>
-	<classpathentry kind="lib" path="lib/jars/ntwscore_schemas.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/servlet-api-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/dom4j-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jta.jar"/>
@@ -96,7 +86,6 @@
 	<classpathentry kind="lib" path="lib/cron/spring-2.5.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
-	<classpathentry kind="lib" path="lib/jars/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>
 	<classpathentry kind="lib" path="lib/jars/delivery-rynns.jar"/>
 	<classpathentry kind="lib" path="lib/jars/aspectjrt.jar"/>
@@ -108,5 +97,15 @@
 	<classpathentry kind="lib" path="lib/jars/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/client-us/us-shares.jar"/>
 	<classpathentry kind="lib" path="lib/client-fl/navitaire_newskies.jar"/>
+	<classpathentry kind="lib" path="lib/jars/hibernate3.jar"/>
+	<classpathentry kind="lib" path="lib/provided/classes12.jar"/>
+	<classpathentry kind="lib" path="lib/provided/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/hibernate2.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/jaxb-api-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/provided/jaxb-impl-2.0.5.jar"/>
+	<classpathentry kind="lib" path="lib/provided/jaxb-xjc-2.0.5.jar"/>
+	<classpathentry kind="lib" path="lib/provided/xalan-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/provided/xercesImpl-2.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/xml-apis-1.3.03.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
