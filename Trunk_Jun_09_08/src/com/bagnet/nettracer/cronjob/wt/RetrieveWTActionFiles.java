@@ -40,6 +40,7 @@ import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.connector.BetaWtConnector;
+import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
@@ -200,7 +201,9 @@ public class RetrieveWTActionFiles {
 				logger.fatal("unable to send mail due to smtp error." + maile);
 				// return new ActionMessage("error.unable_to_send_mail");
 			}
-
+			if (e instanceof WorldTracerConnectionException) {
+				throw (WorldTracerConnectionException) e;
+			}
 		}
 
 	}
