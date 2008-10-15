@@ -95,11 +95,20 @@ public class RetrieveWTActionFiles {
 	}
 
 	public void manageActionFiles() {
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
+		if (csv == null || csv.getWt_enabled() != 1) {
+			return;
+		}
 		eraseActionFiles();
 		retrieveActionFiles();
 	}
 
 	public void eraseActionFiles() {
+		
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
+		if (csv == null || csv.getWt_enabled() != 1 || csv.getWt_write_enabled() != 1) {
+			return;
+		}
 		List<WtqEraseActionFile> tasks = wqBmo.findPendingEraseActionFiles(company);
 
 		for (WtqEraseActionFile task : tasks) {
