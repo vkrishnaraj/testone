@@ -196,9 +196,13 @@ public enum MatchElement {
 					if (im.getCompanycode_ID() != null
 							&& im.getMembershipnum() != null
 							&& im.getMembershipnum().trim().length() > 0) {
-						al.add(MatchUtils.stringCompare(e, im.getCompanycode_ID()
+						//MatchResult 
+						MatchResult result = MatchUtils.stringCompare(e, im.getCompanycode_ID()
 								+ im.getMembershipnum(), om.getCompanycode_ID()
-								+ om.getMembershipnum()));
+								+ om.getMembershipnum());
+						if (result != null) {
+							al.add(result);
+						}
 					}
 				}
 			}
