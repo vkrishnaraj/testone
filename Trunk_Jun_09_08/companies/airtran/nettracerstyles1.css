@@ -95,6 +95,26 @@ form {
 }
 
 /***** HEADER AND MENU *****/
+div.headerleft {
+	float:left;
+}
+
+div.headerright {
+	float:right;
+	text-align:right;
+}
+
+
+td.white{
+	background-color:#fff;
+	height:10px;
+}
+
+td.header{
+	background-color:#006699;
+	color:#fff;
+}
+
 td#header {
 	height: 78px;
 }
