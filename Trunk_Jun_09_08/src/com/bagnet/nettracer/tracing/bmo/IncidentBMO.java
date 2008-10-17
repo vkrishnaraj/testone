@@ -23,6 +23,7 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
+import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -56,6 +57,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 /**
  * @author Administrator
@@ -378,6 +380,95 @@ public class IncidentBMO {
 		return 1;
 	}
 	
+	/**
+	 * This is to be used solely by the tag number trace feature that may
+	 * occur when an agent selects to search by bag tag number from the 
+	 * Lost/Delay prepopulation screen.
+	 * 
+	 * @param tagNumber
+	 * @return
+	 */
+	public static List<Incident> queryLDIncidentsForTagTrace(String tagNumber) {
+
+		if (tagNumber == null || tagNumber.trim().length() == 0) {
+			return null;
+		}
+		
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			StringBuffer queryString = new StringBuffer();
+			queryString.append("select incident from com.bagnet.nettracer.tracing.db.Incident incident ");
+			queryString.append(" left outer join incident.claimchecks claimcheck ");
+			queryString.append(" left outer join incident.itemlist item ");
+			queryString.append(" where ");
+			queryString.append(" incident.status.status_ID <> :closed");
+			queryString.append(" and incident.itemtype.itemType_ID = :lostdelay ");
+			
+			String fullTag = null;
+			String basicTag = null;
+
+			
+			try {
+				fullTag = LookupAirlineCodes.getFullBagTag(tagNumber);
+			} catch (BagtagException e) {
+				// Ignore
+			}
+			
+			try {
+				basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
+			} catch (BagtagException e) {
+				// Ignore
+			}
+			
+			if (fullTag != null && basicTag != null) {
+				queryString.append(" and ((item.claimchecknum like :fullTag");
+				queryString.append(" or claimcheck.claimchecknum like :fullTag) ");
+				queryString.append(" or (item.claimchecknum like :basicTag");
+				queryString.append(" or claimcheck.claimchecknum like :basicTag)) ");
+			} else if (fullTag != null) {
+				queryString.append(" and (item.claimchecknum like :fullTag");
+				queryString.append(" or claimcheck.claimchecknum like :fullTag) ");
+			} else if (basicTag != null) {
+				queryString.append(" and (item.claimchecknum like :basicTag");
+				queryString.append(" or claimcheck.claimchecknum like :basicTag) ");
+			}
+			
+			Query q = sess.createQuery(queryString.toString());
+			
+			q.setInteger("closed", TracingConstants.MBR_STATUS_CLOSED);
+			q.setInteger("lostdelay", TracingConstants.LOST_DELAY);
+			
+			if (basicTag != null) {
+				q.setParameter("basicTag", basicTag);
+			}
+			if (fullTag != null) {
+				q.setParameter("fullTag", fullTag);
+			}
+			
+			List<Incident> list = (List<Incident>) q.list();
+
+			if (list.size() == 0) {
+				// No matching incidents found
+				return null;
+			}
+			
+			return list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				sess.close();
+			} catch (Exception e) {
+				logger.error("unable to close connection: " + e);
+			}
+		}
+		
+		
+
+	}
 	
 	public static Incident getIncidentByID(String incident_ID, Session sess) {
 		boolean sessionNull = (sess == null);
@@ -386,6 +477,7 @@ public class IncidentBMO {
 			if (sessionNull) {
 				sess = HibernateWrapper.getSession().openSession();
 			}
+			
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();

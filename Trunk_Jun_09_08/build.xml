@@ -303,7 +303,10 @@
 
 
 	<target name="build-airtran" depends="delete">
+		<property name="ant_project_name" value="tracer" />
 		<property name="include.fl" value="1" />
+		<property name="include.demo" value="1" />
+		<antcall target ="airtran-libraries-create" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/airtran/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/airtran/DamageReceipt.jrxml" />
@@ -325,7 +328,7 @@
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/required_fields_incl.jsp" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/analytics.jsp" />
 		<copy todir="${basedir}/src" file="companies/airtran/tracer.properties" />
-		<copy todir="${basedir}/web/WEB-INF" file="companies/airtran/context.xml" />
+		<!--<copy todir="${basedir}/web/WEB-INF" file="companies/airtran/context.xml" />-->
 		<copy todir="${basedir}/src" file="companies/airtran/hibernate_main.cfg.xml" />
 
 		<antcall target="combineResourceFiles">
@@ -338,6 +341,7 @@
 			<param name="ant_project_name" value="tracer" />
 		</antcall>
 		<antcall target="delete" />
+		<antcall target="airtran-libraries-cleanup"/>
 	</target>
 
 	<target name="build-xjet" depends="delete">
@@ -1154,6 +1158,10 @@
 	</target>
 	<target name="usair-build-cron">
 		<property name="ant_project_name" value="usair"/>
+		<antcall target="build-cron-service" />
+	</target>
+	<target name="airtran-build-cron">
+		<property name="ant_project_name" value="airtran"/>
 		<antcall target="build-cron-service" />
 	</target>
 	<target name="dev-build-cron">

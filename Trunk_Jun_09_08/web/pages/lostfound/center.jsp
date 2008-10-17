@@ -414,7 +414,12 @@ function gotoHistoricalReport() {
             </table>
           </div>
           <br>
-          <center><html:submit styleId="button" property="save" styleId="button">
-            <bean:message key="button.save" />
-          </html:submit></center>
+          <center>
+            <logic:notEqual name="LostAndFoundForm" property="file_ref_number" value="">
+              <input type="button" Id="button" value="Back" onClick="history.back()">&nbsp;
+            </logic:notEqual>
+            <html:submit styleId="button" property="save" styleId="button">
+              <bean:message key="button.save" />
+            </html:submit>
+          </center>
         </form>

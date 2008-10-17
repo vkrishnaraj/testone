@@ -31,13 +31,16 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -116,7 +119,21 @@ public class LostDelayAction extends Action {
 
 		/** ****************** handle requests ******************** */
 
-		if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
+		if (request.getParameter("prepopSearch") != null) {
+			
+			List prepopIncList = IncidentBMO.queryLDIncidentsForTagTrace(theform.getBagTagNumber());
+			List prepopOhdList = OhdBMO.queryOhdsForTagTrace(theform.getBagTagNumber());
+			
+			if (prepopIncList != null) {
+				request.setAttribute("prepopIncList", prepopIncList);
+			}
+			if (prepopOhdList != null) {
+				request.setAttribute("prepopOhdList", prepopOhdList);
+			}
+			
+			request.setAttribute("prepopulate", new Integer("1"));
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}	else if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
 			request.setAttribute("outputtype", "0");
 			return (mapping.findForward(TracingConstants.LD_HISTORICAL));
 		}

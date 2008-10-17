@@ -61,7 +61,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	private BetaWtConnector(String companyCode) {
 		this.wtCompanycode = companyCode;
-		client = connectWT(WorldTracerUtils.getWt_suffix_airline(companyCode) + "/", companyCode);
+		client = connectWT(null, companyCode);
 	}
 	
 	public static synchronized WorldTracerConnector getInstance(String companyCode) {
@@ -82,6 +82,10 @@ public class BetaWtConnector implements WorldTracerConnector {
 		new_client.getParams().setAuthenticationPreemptive(true);
 		//get worldtracer user info
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
+		if (comsv.getWt_enabled() == 0) {
+			return null;
+		}
+
 		String wt_user = comsv.getWt_user();
 		String wt_pass = comsv.getWt_pass();
 		String wt_http = comsv.getWt_url();
@@ -93,7 +97,6 @@ public class BetaWtConnector implements WorldTracerConnector {
 		new_client.getState().setCredentials(new AuthScope(wt_http, 80, AuthScope.ANY_REALM), defaultcreds);
 
 		return new_client;
-
 	}
 	public String amendAhl(Map<WorldTracerField, List<String>> fieldMap, String wt_ahl_id) throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();

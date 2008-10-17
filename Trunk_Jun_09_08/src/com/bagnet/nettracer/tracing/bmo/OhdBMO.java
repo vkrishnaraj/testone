@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Expression;
 
+import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -44,6 +45,7 @@ import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 /**
  * This class provides utility methods for on-hand related functionality.
@@ -1334,6 +1336,87 @@ public class OhdBMO {
 				} catch (Exception e) {
 					logger.error("unable to close connection: " + e);
 				}
+			}
+		}
+	}
+	
+	/**
+	 * This is to be used solely by the tag number trace feature that may
+	 * occur when an agent selects to search by bag tag number from the 
+	 * Lost/Delay prepopulation screen.
+	 * 
+	 * @param tagNumber
+	 * @return
+	 */
+	public static List<OHD> queryOhdsForTagTrace(String tagNumber) {
+
+		if (tagNumber == null || tagNumber.trim().length() == 0) {
+			return null;
+		}
+		
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			StringBuffer queryString = new StringBuffer();
+			queryString.append("from com.bagnet.nettracer.tracing.db.OHD o ");
+			queryString.append(" where ");
+			queryString.append(" o.status.status_ID <> :closed ");
+
+			
+			String fullTag = null;
+			String basicTag = null;
+
+			
+			try {
+				fullTag = LookupAirlineCodes.getFullBagTag(tagNumber);
+			} catch (BagtagException e) {
+				// Ignore
+			}
+			
+			try {
+				basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
+			} catch (BagtagException e) {
+				// Ignore
+			}
+			
+			if (fullTag != null && basicTag != null) {
+				queryString.append(" and (o.claimnum like :basicTag or ");
+				queryString.append(" o.claimnum like :fullTag)");
+			} else if (fullTag != null) {
+				queryString.append(" and o.claimnum like :fullTag");
+			} else if (basicTag != null) {
+				queryString.append(" and o.claimnum like :basicTag");
+			}
+			
+			Query q = sess.createQuery(queryString.toString());
+			
+			q.setInteger("closed", TracingConstants.OHD_STATUS_CLOSED);
+			
+			
+			if (basicTag != null) {
+				q.setParameter("basicTag", basicTag);
+			}
+			if (fullTag != null) {
+				q.setParameter("fullTag", fullTag);
+			}
+			
+			List<OHD> list = (List<OHD>) q.list();
+
+			if (list.size() == 0) {
+				// No matching incidents found
+				return null;
+			}
+			
+			return list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve ohds: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				sess.close();
+			} catch (Exception e) {
+				logger.error("unable to close connection: " + e);
 			}
 		}
 	}

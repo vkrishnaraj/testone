@@ -62,7 +62,7 @@ function gotoHistoricalReport() {
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">
-      <h1><bean:message key="header.prepopulate" /></h1>
+      <h1><bean:message key="header.prepopulate_pil" /></h1>
       </div>
       <div id="pageheaderright">
       <table id="pageheaderright">
@@ -86,30 +86,7 @@ function gotoHistoricalReport() {
           <br />
         </html:messages>
       </logic:messagesPresent> </font> <br>
-      <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-        <tr>
-          <td align=center><bean:message
-            key="colname.recordlocator" /> <br>
-          <html:text property="recordlocator" size="15"
-            styleClass="textfield" value="" maxlength="6"/></td>
-        </tr>
-        <% if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) { %>
-          <tr>
-            <td align=center><bean:message
-              key="colname.bag_tag_number" /> <br>
-            <html:text property="bagTagNumber" size="15" maxlength="10"
-              styleClass="textfield" value="" /></td>
-          </tr>
-        <% } %>
-        <tr>
-          <td align="center" valign="top" colspan="12"><html:submit
-            property="doprepopulate" styleId="button" onclick="buttonSelected = 'prepopulate'">
-            <bean:message key="button.populate" />
-          </html:submit> <html:submit property="skip_prepopulate" styleId="button"  onclick="buttonSelected = null">
-            <bean:message key="button.skip_populate"/>
-          </html:submit></td>
-        </tr>
-      </table>
+      <jsp:include page="/pages/includes/incident_population.jsp" />
   </html:form>
 </logic:present>
 <!-- regular incident -->
@@ -317,7 +294,7 @@ function gotoHistoricalReport() {
                 height="15" width="20" border="0"
                 onmouseover="this.style.cursor='hand'"
                 onClick="cal1xx.select2(document.incidentForm, '<%= "article[" + i + "].dispurchasedate" %>','calendar5<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-              <td><bean:message key="colname.cost" /> <br>
+              <td><bean:message key="colname.cost.article" /> <br>
               <html:text name="article" property="discost" size="13"
                 maxlength="12" styleClass="textfield" indexed="true" />
               </td>

@@ -24,6 +24,7 @@ public class TracerProperties {
 	public static final String RESERVATION_BY_BAGTAG = "reservation.bagtag";
 	public static final String RESERVATION_UPDATE_COMMENT_ON = "updatecomment.is_on";
 	public static final String RESERVATION_POPULATE_OHD_ON = "populate.onhand";
+	public static final String RESERVATION_POPULATION_SEARCH = "populate.incident.bagtagsearch";
 	public static final String SCANNER_CLASS_PATH = "scanner.class.path";
 	public static final String RYNNS_ENDPOINT = "rynns.endpoint";
 	public static final String SUPPRESSION_PRINTING_NONHTML = "suppress.print.nonhtml";

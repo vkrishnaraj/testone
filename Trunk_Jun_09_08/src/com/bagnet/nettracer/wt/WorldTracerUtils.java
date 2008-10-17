@@ -817,6 +817,9 @@ public class WorldTracerUtils {
 		Company_Specific_Variable comsv = AdminUtils
 				.getCompVariable(companycode);
 		String wt_suffix_airline = comsv.getWt_airlinecode();
+		if (wt_suffix_airline == null) {
+			return null;
+		}
 		return wt_suffix_airline.toLowerCase();
 	}
 

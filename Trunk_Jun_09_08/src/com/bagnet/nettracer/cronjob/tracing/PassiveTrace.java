@@ -81,6 +81,8 @@ public class PassiveTrace implements Runnable {
 		if (var.getTotal_threads() > 0) {
 			threadLimit = var.getTotal_threads();
 		}
+		
+		logger.info("Total threads: " + threadLimit);
 
 		if (var.getSeconds_wait() > 0) {
 			seconds = var.getSeconds_wait();
@@ -220,6 +222,10 @@ public class PassiveTrace implements Runnable {
 
 			// Get the Inc
 			Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
+			
+			if (incident == null) {
+				logger.error("No incident found by ID: " + incidentId);
+			}
 
 			// We only want to trace against ohds that have not been traced or
 			// have been updated in recent history.

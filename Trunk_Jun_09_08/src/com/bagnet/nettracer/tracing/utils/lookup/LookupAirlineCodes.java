@@ -95,6 +95,8 @@ public class LookupAirlineCodes {
 		} else if (nineDigitPattern.matcher(bagTag).find()) {
 			airlineCode = bagTag.substring(0, 3);
 			suffix = bagTag.substring(3);
+		} else if (twoCharPattern.matcher(bagTag).find()) {
+			return bagTag;
 		} else {
 			throw new BagtagException(BagtagException.INVALID_FORMAT_MESSAGE);
 		}

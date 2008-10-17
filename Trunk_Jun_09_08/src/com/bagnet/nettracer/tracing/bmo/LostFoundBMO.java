@@ -340,7 +340,7 @@ public class LostFoundBMO {
 			}
 
 			if (daform.getFinding_agent_name() != null && daform.getFinding_agent_name().length() > 0) {
-				q.setString("finding_agent_name", daform.getFinding_agent_name());
+				q.setString("finding_agent_name", "%" + daform.getFinding_agent_name() + "%");
 			}
 
 			if (daform.getCustomer_name() != null && daform.getCustomer_name().length() > 0) {
@@ -356,7 +356,7 @@ public class LostFoundBMO {
 			}
 
 			if (daform.getLocation() != null && daform.getLocation().length() > 0) {
-				q.setString("location", daform.getLocation());
+				q.setString("location", "%" + daform.getLocation() + "%");
 			}
 			
 			if (daform.getFiling_station()  > 0) {

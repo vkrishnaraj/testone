@@ -23,7 +23,8 @@
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
-  <script language="javascript">
+  <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
+<script language="javascript">
     <!--
         
     function gotoHistoricalReport(form) {
@@ -59,7 +60,7 @@
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">
-      <h1><bean:message key="header.prepopulate" /></h1>
+      <h1><bean:message key="header.prepopulate_ld" /></h1>
       </div>
       <div id="pageheaderright">
       <table id="pageheaderright">
@@ -83,31 +84,117 @@
           <br />
         </html:messages>
       </logic:messagesPresent> </font> <br>
-      <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-        <tr>
-          <td align=center><bean:message
-            key="colname.recordlocator" /> <br>
-          <html:text property="recordlocator" size="15"
-            styleClass="textfield" value="" maxlength="6"/></td>
-        </tr>
-        <% if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) { %>
+      <jsp:include page="/pages/includes/incident_population.jsp" />
+      
+      <logic:present name="prepopIncList" scope="request">
+        <h1 class="green">
+          <bean:message key="prepop.search.incresults" />
+        </h1>
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-            <td align=center><bean:message
-              key="colname.bag_tag_number" /> <br>
-            <html:text property="bagTagNumber" size="15" maxlength="10"
-              styleClass="textfield" value="" /></td>
+            <td><strong><bean:message key="prepop.search.inc" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc_create_date" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc_status" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc_pax" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc.create_station" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc.assigned_station" /></strong></td>
           </tr>
-        <% } %>
-        <tr>
-          <td align="center" valign="top" colspan="12"><html:submit
-            property="doprepopulate" styleId="button" onclick="buttonSelected = 'prepopulate'">
-            <bean:message key="button.populate" />
-          </html:submit> <html:submit property="skip_prepopulate" styleId="button"  onclick="buttonSelected = null">
-            <bean:message key="button.skip_populate"/>
-          </html:submit></td>
-        </tr>
-      </table>
+          <logic:iterate id="prepopInc" name="prepopIncList" type="com.bagnet.nettracer.tracing.db.Incident">
+            <tr>
+              <td><a href='searchIncident.do?incident=<bean:write name="prepopInc" property="incident_ID"/>'>
+              <bean:write name="prepopInc" property="incident_ID" />
+              </a></td>
+              <td><bean:write name="prepopInc" property="displaydate" /></td>
+              <td><bean:write name="prepopInc" property="statusdesc" /></td>
+              <td>
+<%
+                boolean hasp = false;
+%>              <bean:define id="passengers" name="prepopInc" property="passenger_list" />
+                <logic:iterate id="passenger" name="passengers" type="com.bagnet.nettracer.tracing.db.Passenger">
+<%
+                  hasp = false;
+%>
+                  <logic:notEqual name="passenger" property="lastname" value="">
+                    <bean:write name="passenger" property="lastname" />
+                    ,
+<%
+                    hasp = true;
+%>
+                  </logic:notEqual>
+                  <logic:notEqual name="passenger" property="firstname" value="">
+<%
+                    hasp = true;
+%>
+                  </logic:notEqual>
+                  <bean:write name="passenger" property="firstname" />
+                  <bean:write name="passenger" property="middlename" />
+<%
+                  if (hasp) {
+%>
+                    <br>
+<%
+                  }
+%>
+                </logic:iterate>
+                &nbsp;
+              </td>
+              <td><bean:write name="prepopInc" property="stationcreated.stationcode" /></td>
+              <td><bean:write name="prepopInc" property="stationassigned.stationcode" /></td>
+            </tr>
+          </logic:iterate>
+        </table>
+      </logic:present>
+
+      <logic:present name="prepopOhdList" scope="request">
+        <h1 class="green">
+          <bean:message key="prepop.search.ohdresults" />
+        </h1>
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+          <tr>
+            <td><strong><bean:message key="prepop.search.ohd_id" /></strong></td>
+            <td><strong><bean:message key="prepop.search.ohd_create_date" /></strong></td>
+            <td><strong><bean:message key="prepop.search.ohd_name_on_bag" /></strong></td>
+            <td><strong><bean:message key="prepop.search.ohd_color" /></strong></td>
+            <td><strong><bean:message key="prepop.search.ohd_type" /></strong></td>
+            <td><strong><bean:message key="prepop.search.ohd_found" /></strong></td>
+            <td><strong><bean:message key="prepop.search.ohd_holding" /></strong></td>
+          </tr>
+          <logic:iterate id="prepopOhd" name="prepopOhdList" type="com.bagnet.nettracer.tracing.db.OHD">
+            <tr>
+              <td><a href="addOnHandBag.do?ohd_ID=<bean:write name="prepopOhd" property="OHD_ID"/>"><bean:write name="prepopOhd" property="OHD_ID" /></a></td>
+              <td><bean:write name="prepopOhd" property="displaydate"/></td>
+              <td>
+                <logic:notEmpty name="prepopOhd" property="passenger">
+                  <logic:notEmpty name="prepopOhd" property="passenger.lastname">
+                    <bean:write name="prepopOhd" property="passenger.lastname" />
+                    ,
+                    <bean:write name="prepopOhd" property="passenger.firstname" />
+                    &nbsp;
+                    <bean:write name="prepopOhd" property="passenger.middlename" />
+                    &nbsp;
+                  </logic:notEmpty>
+                  <logic:empty name="prepopOhd" property="passenger.lastname">
+                    &nbsp;
+                  </logic:empty>
+                </logic:notEmpty>
+                <logic:empty name="prepopOhd" property="passenger">
+                &nbsp;
+                </logic:empty>
+              </td>
+              <td><bean:write name="prepopOhd" property="color"/>&nbsp;</td>
+              <td><bean:write name="prepopOhd" property="type"/>&nbsp;</td>
+              <td><bean:write name="prepopOhd" property="foundAtStation.stationcode"/>&nbsp;</td>
+              <td><bean:write name="prepopOhd" property="holdingStation.stationcode"/>&nbsp;</td>
+            </tr>
+          </logic:iterate>
+        </table>
+      </logic:present>
+
   </html:form>
+  
+  
+  
+  
 </logic:present>
 <!-- regular incident -->
 <logic:notPresent name="prepopulate" scope="request">
