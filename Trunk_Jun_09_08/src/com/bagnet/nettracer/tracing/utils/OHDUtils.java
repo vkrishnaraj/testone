@@ -1073,7 +1073,7 @@ public class OHDUtils {
 
 			OHDRequest req = OHDUtils.getRequest("" + request_id);
 
-			if (req == null) return "";
+			if (req == null || req.getIncident_ID() == null) return "";
 			else return req.getIncident_ID();
 
 		} catch (Exception e) {
