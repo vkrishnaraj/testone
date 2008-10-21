@@ -5,6 +5,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
@@ -30,7 +31,7 @@ public class WorldTracerLogger {
 		WorldTracerTransaction wttx = new WorldTracerTransaction(type);
 		wttx.startTransaction();
 		try {
-			switch(type) {
+			switch (type) {
 			case CREATE_AHL:
 			case AMEND_AHL:
 			case SUSPEND_AHL:
@@ -47,6 +48,17 @@ public class WorldTracerLogger {
 			case FWD_OHD:
 				OHD ohd = (OHD) pjp.getArgs()[0];
 				wttx.setOhd(ohd);
+				break;
+			case CREATE_BDO:
+				BDO bdo = (BDO) pjp.getArgs()[0];
+				if(bdo != null) {
+					if(bdo.getOhd() != null) {
+						wttx.setOhd(bdo.getOhd());
+					}
+					if(bdo.getIncident() != null) {
+						wttx.setIncident(bdo.getIncident());
+					}
+				}
 				break;
 			}
 			Object retVal = pjp.proceed();
