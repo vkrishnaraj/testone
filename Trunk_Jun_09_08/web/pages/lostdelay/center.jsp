@@ -531,23 +531,26 @@
                 %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 
-					<c:if test="${empty pendingWtAction}">
-                  <c:choose>
-                    <c:when
-                      test="${(incidentForm.wt_id == '') || (incidentForm.wt_id == null)}">
-                      <html:submit styleId="button" property="savetowt"
+				<c:if test="${empty pendingWtAction}">
+					<c:if test="${ (incidentForm.wt_id == '') || (incidentForm.wt_id == null)}">
+						<html:submit styleId="button" property="savetowt"
                         onclick="return validatereqFields(this.form, 'lostdelay');">
                         <bean:message key="button.savetoWT" />
-                      </html:submit>
-                    </c:when>
-                    <c:when
-                      test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
+                      	</html:submit>
+					</c:if>
+ 
+                <%
+                	if (!a.getStation().getCompany().getVariable().isAuto_wt_amend()) {
+                %>
+                    <c:if test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
                       <html:submit styleId="button" property="amendWT"
                         onclick="return validatereqFields(this.form, 'lostdelay');">
                         <bean:message key="button.amendWT" />
                       </html:submit>
-                    </c:when>
-                  </c:choose>
+                    </c:if>
+                <%
+                	}
+                %>
                 </c:if>
 
                 <%

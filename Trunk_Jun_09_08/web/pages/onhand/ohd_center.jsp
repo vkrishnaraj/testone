@@ -12,27 +12,28 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
 <%
-	Agent a = (Agent) session.getAttribute("user");
-	OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
-	String cssFormClass = "form2_ohd";
+   Agent a = (Agent) session.getAttribute("user");
+   OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
+   String cssFormClass = "form2_ohd";
 %>
 
 
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <logic:present name="prepopulate" scope="request">
-  <script language="javascript">
-    <!--
-    var buttonSelected = null;
-    function validateThis(form) {
-      if (buttonSelected == null) {
-        return true;
-      } else {
-        return validateRest(form);
-      } 
-      return true;
-    }
-    // -->
-  </script>
+   <script language="javascript">
+   <!--
+      var buttonSelected = null;
+
+      function validateThis(form) {
+         if (buttonSelected == null) {
+            return true;
+         } else {
+            return validateRest(form);
+         } 
+         return true;
+      }
+   // -->
+   </script>
   
   <html:form action="addOnHandBag.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/validation_incl.jsp" />
@@ -117,15 +118,15 @@ function gotoHistoricalReport() {
     <td colspan="3" id="pageheadercell">
     <div id="pageheaderleft">
     <%
-    	if (onHandForm.getOhd_type() == TracingConstants.MASS_OHD_TYPE) {
+       if (onHandForm.getOhd_type() == TracingConstants.MASS_OHD_TYPE) {
     %>
     <h1><bean:message key="header.mass_add_on_hand_title" /></h1>
     <%
-    	} else {
+       } else {
     %>
     <h1><bean:message key="header.add_on_hand_title" /></h1>
     <%
-    	}
+       }
     %>
     </div>
     <div id="pageheaderright">
@@ -170,23 +171,23 @@ function gotoHistoricalReport() {
       <span class="cc">&nbsp; <br />
       &nbsp;</span></a></dd>
       <%
-      	if (UserPermissions.hasPermission(
-      				TracingConstants.SYSTEM_COMPONENT_NAME_OHD_PHOTOS, a)) {
+         if (UserPermissions.hasPermission(
+                  TracingConstants.SYSTEM_COMPONENT_NAME_OHD_PHOTOS, a)) {
       %>
       <dd><a href="#photos"><span class="aa">&nbsp; <br />
       &nbsp;</span> <span class="bb"><bean:message key="menu.photos" /></span>
       <span class="cc">&nbsp; <br />
       &nbsp;</span></a></dd>
       <%
-      	}
+         }
       %>
       <logic:notEqual name="OnHandForm" property="ohd_id" value="">
         <%
-        	if (UserPermissions.hasPermission(
-        					TracingConstants.SYSTEM_COMPONENT_NAME_BDO, a)) {
-        				if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())
-        						&& a.getStation().getStationcode().equals(
-        								onHandForm.getHolding_station())) {
+           if (UserPermissions.hasPermission(
+                       TracingConstants.SYSTEM_COMPONENT_NAME_BDO, a)) {
+                    if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())
+                          && a.getStation().getStationcode().equals(
+                                onHandForm.getHolding_station())) {
         %>
         <dd><a
           href='bdo.do?ohd_id=<bean:write name="OnHandForm" property="ohd_id"/>'><span
@@ -195,8 +196,8 @@ function gotoHistoricalReport() {
         <span class="cc">&nbsp; <br />
         &nbsp;</span></a></dd>
         <%
-        	}
-        			}
+           }
+                 }
         %>
         <dd><a
           href='viewMatches.do?clear=1&ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>'><span
@@ -248,17 +249,17 @@ function gotoHistoricalReport() {
       <div id="pageheaderright">
     <logic:notEqual name="OnHandForm" property="ohd_id" value="">
       <%
-      	if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) {
-      				if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())
-      						&& a.getStation().getStationcode().equals(
-      								onHandForm.getHolding_station())) {
+         if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) {
+                  if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())
+                        && a.getStation().getStationcode().equals(
+                              onHandForm.getHolding_station())) {
       %>
       <A
         HREF="forward_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>"><b><bean:message key="colname.forwardThisBag" /></b></A>
       <c:if test="${!empty OnHandForm.wt_id and empty pendingWtAction }">
         <%
-        	if (UserPermissions.hasPermission(
-        								TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_FWD, a)) {
+           if (UserPermissions.hasPermission(
+                                TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_FWD, a)) {
         %>
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
@@ -267,48 +268,48 @@ function gotoHistoricalReport() {
           to WT</a>
         </logic:notEqual>
         <%
-        	}
+           }
         %>
       </c:if>
       <%
-      	} else {
+         } else {
       %>
       <a href='request_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>'><b><bean:message
         key="colname.requestThisBag" /></b></a>
       <c:if test="${!empty OnHandForm.wt_id }">
         <%
-        	if (UserPermissions.hasPermission(
-        								TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ROH, a)) {
+           if (UserPermissions.hasPermission(
+                                TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ROH, a)) {
         %>
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
             <a href="worldtracerroh.do?wt_id=${OnHandForm.wt_id}">Request from WT</a>
         </logic:notEqual>
         <%
-        	}
+           }
         %>
       </c:if>
       <%
-      	}
+         }
       %>
 
 
       <c:if test="${pendingWtAction == 'WT_PENDING_CREATE'}">
-		<br />
+      <br />
         <bean:message key="wt.pending.ohd.create" />
-		&nbsp;<a href="javascript: document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message key="update" /></a>
-		&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();">
-			<bean:message key="cancel" /></a>
+      &nbsp;<a href="javascript: document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();"><bean:message key="update" /></a>
+      &nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();">
+         <bean:message key="cancel" /></a>
       </c:if>
       <c:if test="${!empty OnHandForm.wt_id }">
-		<br />
+      <br />
         WorldTracer ID: <a href="worldtraceraf.do?ohd_id=${OnHandForm.wt_id}">
         <c:out value="${OnHandForm.wt_id}" /></a>
 
 
         <c:choose>
           <c:when test="${!empty pendingWtAction}">
-			<br />
+         <br />
             <c:choose>
               <c:when test="${pendingWtAction == 'WT_PENDING_AMEND'}">
                 <bean:message key="wt.pending.ohd.amend" />
@@ -333,7 +334,7 @@ function gotoHistoricalReport() {
               key="cancel" /></a>
           </c:when>
           <c:otherwise>
-			<br />
+         <br />
             <c:choose>
               <c:when
                 test="${OnHandForm.wtFile.wt_status == 'ACTIVE'}">
@@ -357,13 +358,13 @@ function gotoHistoricalReport() {
 
 
       <%
-      	} else if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
-      				if (onHandForm.getForwarded_station() != null
-      						&& onHandForm.getForwarded_station().length() > 0
-      						&& a.getCompanycode_ID()
-      								.equals(onHandForm.getHolding_company())
-      						&& a.getStation().getStationcode().equals(
-      								onHandForm.getHolding_station())) {
+         } else if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
+                  if (onHandForm.getForwarded_station() != null
+                        && onHandForm.getForwarded_station().length() > 0
+                        && a.getCompanycode_ID()
+                              .equals(onHandForm.getHolding_company())
+                        && a.getStation().getStationcode().equals(
+                              onHandForm.getHolding_station())) {
       %>
 
       <bean:message key="message.forwarded" />
@@ -373,11 +374,11 @@ function gotoHistoricalReport() {
       <bean:message key="message.forwarded_by" />
       <b><bean:write name="OnHandForm" property="forwarded_agent" /></b>
       <%
-      	}
-      			}
-      	else {
+         }
+               }
+         else {
       %>
-	
+   
 <c:if test="${!empty OnHandForm.wt_id }">
         WorldTracer ID: <a href="worldtraceraf.do?ohd_id=${OnHandForm.wt_id}">
         <c:out value="${OnHandForm.wt_id}" /></a>
@@ -385,8 +386,8 @@ function gotoHistoricalReport() {
 <%} %>
 
       <%
-      	if (UserPermissions.hasPermission(
-      					TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
+         if (UserPermissions.hasPermission(
+                     TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
       %>
 
       <logic:notEmpty name="OnHandForm" property="bagTagNumber">
@@ -397,7 +398,7 @@ function gotoHistoricalReport() {
         <br />
       </logic:notEmpty>
       <%
-      	}
+         }
       %>
 
     </logic:notEqual></div>
@@ -583,11 +584,11 @@ function gotoHistoricalReport() {
         <tr>
           <td colspan=5>
           <%
-          	if (i.intValue() > 0) {
+             if (i.intValue() > 0) {
           %> <b><bean:message key="colname.addi_pass_info" /></b> <%
- 	} else {
+    } else {
  %> <b><bean:message key="colname.pri_pass_info" /></b><%
- 	}
+    }
  %>
           </td>
         </tr>
@@ -612,36 +613,36 @@ function gotoHistoricalReport() {
                 key="colname.street_addr1" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].address1"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].address1"%>'
                 size="45" maxlength="50" styleClass="textfield" /></td>
               <td colspan=3><bean:message
                 key="colname.street_addr2" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].address2"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].address2"%>'
                 size="45" maxlength="50" styleClass="textfield" /></td>
             </tr>
             <tr>
               <td><bean:message key="colname.city" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].city"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].city"%>'
                 size="15" maxlength="50" styleClass="textfield" /></td>
               <td><bean:message key="colname.state" /> <br>
               <logic:equal name="addresses" property="countrycode_ID"
                 value="US">
                 <html:select
                   property='<%="addresses["
-																	+ (i
-																			.intValue() * 20 + k
-																			.intValue())
-																	+ "].state_ID"%>'
+                                                   + (i
+                                                         .intValue() * 20 + k
+                                                         .intValue())
+                                                   + "].state_ID"%>'
                   styleClass="dropdown"
                   onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
                   <html:option value="">
@@ -654,10 +655,10 @@ function gotoHistoricalReport() {
                 value="">
                 <html:select
                   property='<%="addresses["
-																	+ (i
-																			.intValue() * 20 + k
-																			.intValue())
-																	+ "].state_ID"%>'
+                                                   + (i
+                                                         .intValue() * 20 + k
+                                                         .intValue())
+                                                   + "].state_ID"%>'
                   styleClass="dropdown"
                   onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
                   <html:option value="">
@@ -672,10 +673,10 @@ function gotoHistoricalReport() {
                   property="countrycode_ID" value="US">
                   <html:select
                     property='<%="addresses["
-																		+ (i
-																				.intValue() * 20 + k
-																				.intValue())
-																		+ "].state_ID"%>'
+                                                      + (i
+                                                            .intValue() * 20 + k
+                                                            .intValue())
+                                                      + "].state_ID"%>'
                     styleClass="dropdown" disabled="true"
                     onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');">
                     <html:option value="">
@@ -691,18 +692,18 @@ function gotoHistoricalReport() {
                 value="US">
                 <html:text
                   property='<%="addresses["
-																+ (i.intValue() * 20 + k
-																		.intValue())
-																+ "].province"%>'
+                                                + (i.intValue() * 20 + k
+                                                      .intValue())
+                                                + "].province"%>'
                   size="15" maxlength="100"
                   styleClass="disabledtextfield" disabled="true" />
               </logic:equal> <logic:equal name="addresses" property="countrycode_ID"
                 value="">
                 <html:text
                   property='<%="addresses["
-																+ (i.intValue() * 20 + k
-																		.intValue())
-																+ "].province"%>'
+                                                + (i.intValue() * 20 + k
+                                                      .intValue())
+                                                + "].province"%>'
                   size="15" maxlength="100" styleClass="textfield" />
               </logic:equal> <logic:notEqual name="addresses"
                 property="countrycode_ID" value="">
@@ -710,26 +711,26 @@ function gotoHistoricalReport() {
                   property="countrycode_ID" value="US">
                   <html:text
                     property='<%="addresses["
-																	+ (i
-																			.intValue() * 20 + k
-																			.intValue())
-																	+ "].province"%>'
+                                                   + (i
+                                                         .intValue() * 20 + k
+                                                         .intValue())
+                                                   + "].province"%>'
                     size="15" maxlength="100" styleClass="textfield" />
                 </logic:notEqual>
               </logic:notEqual></td>
               <td><bean:message key="colname.zip" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].zip"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].zip"%>'
                 size="15" maxlength="11" styleClass="textfield" /></td>
               <td><bean:message key="colname.country" /> <br>
               <html:select
                 property='<%="addresses["
-																+ (i.intValue() * 20 + k
-																		.intValue())
-																+ "].countrycode_ID"%>'
+                                                + (i.intValue() * 20 + k
+                                                      .intValue())
+                                                + "].countrycode_ID"%>'
                 styleClass="dropdown"
                 onchange="checkstate(this,this.form,'state_ID', 'province');">
                 <html:option value="">
@@ -743,46 +744,46 @@ function gotoHistoricalReport() {
               <td><bean:message key="colname.home_ph" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].homephone"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].homephone"%>'
                 size="15" maxlength="25" styleClass="textfield" /></td>
               <td><bean:message key="colname.business_ph" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].workphone"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].workphone"%>'
                 size="15" maxlength="25" styleClass="textfield" /></td>
               <td><bean:message key="colname.mobile_ph" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].mobile"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].mobile"%>'
                 size="15" maxlength="25" styleClass="textfield" /></td>
               <td><bean:message key="colname.pager_ph" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].pager"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].pager"%>'
                 size="15" maxlength="25" styleClass="textfield" /></td>
               <td><bean:message key="colname.alt_ph" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].altphone"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].altphone"%>'
                 size="15" maxlength="25" styleClass="textfield" /></td>
             </tr>
             <tr>
               <td colspan=5><bean:message key="colname.email" /> <br>
               <html:text
                 property='<%="addresses["
-													+ (i.intValue() * 20 + k
-															.intValue())
-													+ "].email"%>'
+                                       + (i.intValue() * 20 + k
+                                             .intValue())
+                                       + "].email"%>'
                 size="45" maxlength="50" styleClass="textfield" /></td>
             </tr>
           </logic:iterate>
@@ -847,7 +848,7 @@ function gotoHistoricalReport() {
             id="calendar2<%=k%>" name="calendar2<%=k%>" height="15"
             width="20" border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.OnHandForm, '<%="itinerarylist[" + k
-									+ "].disdepartdate"%>','calendar2<%=k%>','<%=a.getDateformat().getFormat()%>'); return false;"></td>
+                           + "].disdepartdate"%>','calendar2<%=k%>','<%=a.getDateformat().getFormat()%>'); return false;"></td>
           <td><bean:message key="colname.ohd.arrdate.req" /> ( <%=a.getDateformat().getFormat()%>)
           <br>
           <html:text name="itinerarylist" property="disarrivedate"
@@ -857,7 +858,7 @@ function gotoHistoricalReport() {
             id="calendar3<%=k%>" name="calendar3<%=k%>" height="15"
             width="20" border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.OnHandForm, '<%="itinerarylist[" + k
-									+ "].disarrivedate"%>','calendar3<%=k%>','<%=a.getDateformat().getFormat()%>'); return false;"></td>
+                           + "].disarrivedate"%>','calendar3<%=k%>','<%=a.getDateformat().getFormat()%>'); return false;"></td>
         </tr>
         <tr>
           <td><bean:message key="colname.schdeptime" /> ( <%=a.getTimeformat().getFormat()%>)
@@ -936,8 +937,8 @@ function gotoHistoricalReport() {
     <br>
     <br>
     <%
-    	if (UserPermissions.hasPermission(
-    				TracingConstants.SYSTEM_COMPONENT_NAME_OHD_PHOTOS, a)) {
+       if (UserPermissions.hasPermission(
+                TracingConstants.SYSTEM_COMPONENT_NAME_OHD_PHOTOS, a)) {
     %> <a name="photos"></a>
     <h1 class="green"><bean:message key="header.photos" /> <a
       href="#"
@@ -950,18 +951,18 @@ function gotoHistoricalReport() {
         <td>
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
           <%
-          	int k = 0;
+             int k = 0;
           %>
           <logic:present name="OnHandForm" property="photoList">
             <logic:iterate id="photo" name="OnHandForm"
               property="photoList"
               type="com.bagnet.nettracer.tracing.db.OHD_Photo">
               <%
-              	if (k % 3 == 0) {
+                 if (k % 3 == 0) {
               %>
               <tr align="center">
                 <%
-                	}
+                   }
                 %>
                 <td align=center><a
                   href='showImage?ID=<bean:write name="photo" property="picpath"/>'
@@ -973,12 +974,12 @@ function gotoHistoricalReport() {
                   <bean:message key="button.delete_photo" />
                 </html:submit></td>
                 <%
-                	if (k % 3 == 2) {
+                   if (k % 3 == 2) {
                 %>
               </tr>
               <%
-              	}
-              						k++;
+                 }
+                                k++;
               %>
             </logic:iterate>
           </logic:present>
@@ -997,7 +998,7 @@ function gotoHistoricalReport() {
     <br>
     <br>
     <%
-    	}
+       }
     %>
     <h1 class="green"><bean:message key="header.remarks" /> <a
       href="#"
@@ -1011,7 +1012,7 @@ function gotoHistoricalReport() {
         type="com.bagnet.nettracer.tracing.db.Remark">
         <logic:equal name="remark" property="remarktype"
           value="<%=""
-										+ TracingConstants.REMARK_REGULAR%>">
+                              + TracingConstants.REMARK_REGULAR%>">
           <logic:present name="remark" property="agent">
             <bean:define id="agent" name="remark" property="agent"
               type="com.bagnet.nettracer.tracing.db.Agent" />
@@ -1034,14 +1035,14 @@ function gotoHistoricalReport() {
           <tr>
             <td valign="top" colspan=3>
             <%
-            	if (a.getGroup().getDescription().equalsIgnoreCase("Admin")
-            								|| remark.getRemark_ID() == 0) {
+               if (a.getGroup().getDescription().equalsIgnoreCase("Admin")
+                                    || remark.getRemark_ID() == 0) {
             %> <%
- 	String remarkDescription = "remark[" + i + "].remarktext";
- 							String remarkText = "this.form.elements['"
- 									+ remarkDescription + "']";
- 							String remarkText2 = "this.form.elements['"
- 									+ remarkDescription + "2']";
+    String remarkDescription = "remark[" + i + "].remarktext";
+                      String remarkText = "this.form.elements['"
+                            + remarkDescription + "']";
+                      String remarkText2 = "this.form.elements['"
+                            + remarkDescription + "2']";
  %> <textarea name="<%=remarkDescription%>" cols="80" rows="10"
               onkeydown="textCounter2(<%=remarkText%>, <%=remarkText2%>,1500);"
               onkeyup="textCounter2(<%=remarkText%>, <%=remarkText2%>,1500);"
@@ -1056,9 +1057,9 @@ function gotoHistoricalReport() {
                 <bean:message key="button.delete_remark" />
               </html:submit>
             </logic:notEqual> <%
- 	} else {
+    } else {
  %> <bean:write name="remark" property="remarktext" /> <%
- 	}
+    }
  %>
             </td>
           </tr>
@@ -1075,84 +1076,72 @@ function gotoHistoricalReport() {
     <br>
     </div>
     <logic:notEqual name="OnHandForm" property="readonly" value="1">
-      <table width="100%" cellspacing="0" cellpadding="0">
-        <tr>
-          <td align="center"><br>
-          <logic:notEmpty name="OnHandForm" property="status">
-            <%
-            	if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-            %>
-            <html:submit property="savetracing" styleId="button"
-              onclick="return validatereqWtOHDForm(this.form);">
-              <bean:message key="button.saveohd" />
-            </html:submit>
-            <%
-            	} else {
-            %>
-            <html:submit property="savetracing" styleId="button"
-              onclick="return validatereqOHDForm(this.form);">
-              <bean:message key="button.saveohd" />
-            </html:submit>
-            <%
-            	}
-            %>
+    <table width="100%" cellspacing="0" cellpadding="0">
+      <tr><td align="center"><br />
+    <c:if test="${empty OnHandForm.status}">
+        <input type="hidden" name="savetemp" value="">
+        <input type="button" name="s" value="Save as Temporary"
+          onclick="if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};"
+          id="button">
+        &nbsp;&nbsp;&nbsp;
+             <%
+       if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
+     %>
+         <html:submit styleId="button" property="savetracing" onclick="return validatereqWtOHDForm(this.form);">
+           <bean:message key="button.saveohd" />
+         </html:submit>
+     <% } else { %>
+         <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
+          <bean:message key="button.saveohd" />
+        </html:submit>
+     <% } %>
+    </c:if>
 
-<c:if test="${empty pendingWtAction}">
-            <%
-            	if (UserPermissions.hasPermission(
-            						TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) {
-            					if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-            						if (a.getStation().getCompany().getVariable()
-            								.getWt_write_enabled() == 1) {
-            							if (UserPermissions.hasPermission(
-            									TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD,
-            									a)) {
-            %>
+     <c:if test="${!empty OnHandForm.status}">
+          <%
+       if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
+     %>
+         <html:submit styleId="button" property="savetracing" onclick="return validatereqWtOHDForm(this.form);">
+           <bean:message key="button.savetracingohd" />
+         </html:submit>
+     <% } else { %>
+         <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
+          <bean:message key="button.savetracingohd" />
+        </html:submit>
+     <% } %>
+     <%
+      if ((a.getStation().getCompany().getVariable().getWt_enabled() == 1) &&
+          (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1) &&
+          (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) &&
+	  (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD, a))) {
+    %>
+	<c:if test="${empty pendingWtAction and empty OnHandForm.wt_id}">
 &nbsp;&nbsp;&nbsp;&nbsp;
-<c:if test="${empty pendingWtAction}">
-              <logic:notEmpty name="OnHandForm" property="wt_id">
-                <logic:notEqual name="OnHandForm"
-                  property="status.status_ID"
-                  value="<%=""
-																	+ TracingConstants.OHD_STATUS_CLOSED%>">
-                  <html:submit property="amendtowt" styleId="button"
-                    onclick="return validatereqOHDForm(this.form);">
-                    <bean:message key="button.amendWT" />
-                  </html:submit>
-                </logic:notEqual>
-              </logic:notEmpty>
-              <logic:equal name="OnHandForm" property="wt_id" value="">
-                <logic:notEqual name="OnHandForm"
-                  property="status.status_ID"
-                  value="<%=""
-																	+ TracingConstants.OHD_STATUS_CLOSED%>">
-                  <html:submit property="savetowt" styleId="button"
-                    onclick="return validatereqWtOHDForm(this.form);">
+                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
+                  <html:submit property="savetowt" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
                     <bean:message key="button.savetoWT" />
                   </html:submit>
                 </logic:notEqual>
-              </logic:equal>
-            </c:if>
+	</c:if>
+	<c:if test="${empty pendingWtAction and !empty OnHandForm.wt_id}">
             <%
-            	}
-            						}
-            					}
-            				}
+               if (!a.getStation().getCompany().getVariable().isAuto_wt_amend()) {
             %>
-            </c:if>
-          </logic:notEmpty> <logic:empty name="OnHandForm" property="status">
-            <input type="hidden" name="savetemp" value="">
-            <input type="button" name="s" value="Save as Temporary"
-              onclick="if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};"
-              id="button">
-        &nbsp;&nbsp;&nbsp;
-        <html:submit styleId="button" property="savetracing"
-              onclick="return validatereqOHDForm(this.form);">
+&nbsp;&nbsp;&nbsp;&nbsp;
+                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
+                  <html:submit property="amendtowt" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
+                    <bean:message key="button.amendWT" />
+                  </html:submit>
+                </logic:notEqual>
+		<% } %>
+	</c:if>
+        <% } else { %>
+      	   <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
               <bean:message key="button.savetracingohd" />
-            </html:submit>
-          </logic:empty></td>
-        </tr>
-      </table>
+           </html:submit>
+	<% } %>
+    </c:if>    
+  </td></tr></table>
     </logic:notEqual>
     <logic:equal name="OnHandForm" property="readonly" value="1">
       <logic:equal name="OnHandForm" property="allow_remark_update"
@@ -1162,21 +1151,21 @@ function gotoHistoricalReport() {
             <td align="center" valign="top"><br>
             <logic:notEmpty name="OnHandForm" property="status">
               <%
-              	if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
+                 if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
               %>
               <html:submit property="savetracing" styleId="button"
                 onclick="return validatereqWtOHDForm(this.form);">
                 <bean:message key="button.saveremark" />
               </html:submit>
               <%
-              	} else {
+                 } else {
               %>
               <html:submit property="savetracing" styleId="button"
                 onclick="return validatereqOHDForm(this.form);">
                 <bean:message key="button.saveremark" />
               </html:submit>
               <%
-              	}
+                 }
               %>
             </logic:notEmpty></td>
           </tr>
@@ -1189,7 +1178,7 @@ function gotoHistoricalReport() {
 
     // happens after load
 
-    if (document.OnHandForm.manufacturer_ID.value == <%=TracingConstants.MANUFACTURER_OTHER_ID%>) {
+    if (document.OnHandForm.manufacturer_ID.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
         document.getElementById("manu_other").style.visibility = "visible";
 
     } else {
