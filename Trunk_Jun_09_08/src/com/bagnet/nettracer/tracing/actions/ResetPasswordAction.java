@@ -84,7 +84,9 @@ public class ResetPasswordAction extends Action {
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 		
-		
+		response.addHeader("Pragma", "No-cache");
+		response.addHeader("Cache-Control", "no-cache");
+		response.addDateHeader("Expires", 1);
 		return mapping.findForward(TracingConstants.PASS_RESET);
 	}
 }

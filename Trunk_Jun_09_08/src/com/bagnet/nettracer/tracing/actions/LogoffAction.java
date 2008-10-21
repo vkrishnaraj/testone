@@ -61,6 +61,9 @@ public class LogoffAction extends Action {
 
 		session.invalidate();
 		// Forward control to the specified success URI
+		response.addHeader("Pragma", "No-cache");
+		response.addHeader("Cache-Control", "no-cache");
+		response.addDateHeader("Expires", -1);
 		return mapping.findForward(TracingConstants.LOGON);
 	}
 }

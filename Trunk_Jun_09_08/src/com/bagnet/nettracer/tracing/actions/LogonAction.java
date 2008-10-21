@@ -100,6 +100,9 @@ public class LogonAction extends Action {
 
 		if (username.length() == 0 && password.length() == 0) {
 			session.invalidate();
+			response.addHeader("Pragma", "No-cache");
+			response.addHeader("Cache-Control", "no-cache");
+			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 
@@ -109,12 +112,18 @@ public class LogonAction extends Action {
 		if (!errors.isEmpty()) {
 			saveMessages(request, errors);
 			PropertyUtils.setSimpleProperty(form, "username", foobar);
+			response.addHeader("Pragma", "No-cache");
+			response.addHeader("Cache-Control", "no-cache");
+			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 
 		// check to see if password needs to be reset
 		if (agent.isReset_password() || !SecurityUtils.isPolicyAcceptablePassword(companyCode, password, username, request, true)) {
 			session.setAttribute("usertemp", agent);
+			response.addHeader("Pragma", "No-cache");
+			response.addHeader("Cache-Control", "no-cache");
+			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.PASS_RESET);
 		}
 		
@@ -130,6 +139,9 @@ public class LogonAction extends Action {
 				if ((nowtime - lastresettime) > expiredays) {
 					// forward to reset page
 					session.setAttribute("usertemp", agent);
+					response.addHeader("Pragma", "No-cache");
+					response.addHeader("Cache-Control", "no-cache");
+					response.addDateHeader("Expires", -1);
 					return mapping.findForward(TracingConstants.PASS_RESET);
 				}
 			}
@@ -160,6 +172,9 @@ public class LogonAction extends Action {
 
 		} catch (IOException e) {
 			// unable to get config
+			response.addHeader("Pragma", "No-cache");
+			response.addHeader("Cache-Control", "no-cache");
+			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 
