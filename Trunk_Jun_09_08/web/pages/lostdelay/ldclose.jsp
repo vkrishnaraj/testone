@@ -116,7 +116,7 @@
                   </html:select>
                 </td>
                 <td>
-                  <bean:message key="colname.arr_flight_num" />
+                  <bean:message key="colname.ldclose.arr_flight_num" />
                   <br>
                   <html:text name="theitem" property="arrivedonflightnum" size="10" maxlength="5" styleClass="textfield" indexed="true" />
                 </td>
