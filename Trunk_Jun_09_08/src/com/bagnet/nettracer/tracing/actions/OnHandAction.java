@@ -238,7 +238,10 @@ public class OnHandAction extends Action {
 			}
 			else if(request.getParameter("savetracing") != null || request.getParameter("savetowt") != null  || request.getParameter("amendtowt") != null) {
 
+				//in all situations we save the nettracer copy of the file
 				rohd = bs.insertOnHand(oDTO, theform, list, user);
+				
+				//they did a save of any kind and the status is now closed, we need to close the WT file
 				if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED && oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED)) {
 					WtqOhdAction wtq = new WtqCloseOhd();
 					wtq.setAgent(user);
@@ -246,6 +249,17 @@ public class OnHandAction extends Action {
 					wtq.setOhd(oDTO);
 					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 				}
+				else if (request.getParameter("savetracing") != null) {
+					if(oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED) &&
+							UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_AUTO_AMEND, user)) {
+						WtqOhdAction wtq = new WtqAmendOhd();
+						wtq.setAgent(user);
+						wtq.setCreatedate(TracerDateTime.getGMTDate());
+						wtq.setOhd(oDTO);
+						WorldTracerQueueUtils.createOnlyQueue(wtq);
+					}
+				}
+				//they hit the savetowt file, we need to create a WT OHD
 				else if(request.getParameter("savetowt") != null) {
 					WtqOhdAction wtq = new WtqCreateOhd();
 					wtq.setAgent(user);
@@ -253,7 +267,8 @@ public class OnHandAction extends Action {
 					wtq.setOhd(oDTO);
 					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 				}
-				else if(request.getParameter("amendtowt") != null) {
+				
+				else if(request.getParameter("amendtowt") != null && oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED )) {
 					WtqOhdAction wtq = new WtqAmendOhd();
 					wtq.setAgent(user);
 					wtq.setCreatedate(TracerDateTime.getGMTDate());

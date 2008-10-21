@@ -40,7 +40,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
-import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -272,11 +271,20 @@ public class LostDelayAction extends Action {
 					else if (request.getParameter("amendWT") != null) {
 						wtq = new WtqAmendAhl();
 					}
-					else if ((request.getParameter("doclosewt") != null || request.getParameter("close") != null || request.getParameter("doclose") != null)
+					else if (
+							(request.getParameter("doclosewt") != null || request.getParameter("close") != null || request.getParameter("doclose") != null)
+							
 							&& (iDTO.getWtFile() != null && iDTO.getWtFile().getWt_status() != WTStatus.CLOSED)) {
 						wtq = new WtqCloseAhl();
 					}
 					if(wtq != null) {
+						wtq.setAgent(user);
+						wtq.setCreatedate(TracerDateTime.getGMTDate());
+						wtq.setIncident(iDTO);
+						WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+					}
+					else if ( user.getStation().getCompany().getVariable().isAuto_wt_amend() && iDTO.getWtFile() != null && iDTO.getWtFile().getWt_status() != WTStatus.CLOSED ) {
+						wtq = new WtqAmendAhl();
 						wtq.setAgent(user);
 						wtq.setCreatedate(TracerDateTime.getGMTDate());
 						wtq.setIncident(iDTO);
