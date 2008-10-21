@@ -35,6 +35,14 @@
 	<bean id="wtTx-bmo" class="com.bagnet.nettracer.wt.bmo.WtTransactionBmo">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<bean id="flight-info-bmo" class="com.bagnet.nettracer.cronjob.bmo.FlightInfoBmo" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="datafeed-log-bmo" class="com.bagnet.nettracer.cronjob.bmo.DataFeedLogBmo" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<!-- services used by the workers-->
 	
@@ -67,6 +75,20 @@
 	<bean id="moveToLz" class="com.bagnet.nettracer.cronjob.lz.MoveToLZThread">
 		<constructor-arg value="${lz.move.type}" />
 	</bean>
+	
+	<bean id="flight-update" class="com.bagnet.nettracer.cronjob.datafeed.FlightInfoUpdate" >
+		<property name="companyCode" value="${company.code}" />
+		<property name="backupLocation" value="c:\\temp\\backup"/>
+		<property name="reportFileLocation" value="c:\\temp"/>
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="fiBmo" ref="flight-info-bmo" />
+		<property name="dflBmo" ref="datafeed-log-bmo" />
+	</bean>
+	
+	<bean id="moveToWt" class="com.bagnet.nettracer.cronjob.wt.MoveToWorldTracer" >
+		<property name="companyCode" value="${company.code}" />
+		<property name="qbmo" ref="wtq-bmo" />
+	</bean>
 
 	<!-- passive tracer just runs constantly so just creating this bean will kick it off -->
 	<!-- OLD PASSIVE TRACER -->
@@ -79,6 +101,12 @@
 	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
 		<constructor-arg value="${company.code}" />
 		<constructor-arg value="${pt.instance.label}" />
+	</bean>
+	
+	<bean id="dataFeedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >
+		<property name="targetBeanName" value="flight-update"/>
+		<property name="targetMethod"  value="updateFlightInfo"/>
+		<property name="concurrent" value="false"/>
 	</bean>
 		 
 	<bean id="runPassiveTracerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -106,11 +134,23 @@
 		<property name="targetMethod" value="moveToLz" />
 		<property name="concurrent" value="false" />
 	</bean>
+	
+	<bean id="moveToWtJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="moveToWt" />
+		<property name="targetMethod" value="moveFiles" />
+		<property name="concurrent" value="false" />
+	</bean>
 
 	<!--  The Schedule they should run on -->
 	<bean id="cronWtQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="wtQueueJob" />
 		<property name="cronExpression" value="${wtqueue.cron}" />
+		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
+	</bean>
+	
+	<bean id="cronMoveToWtTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="moveToWtJob" />
+		<property name="cronExpression" value="${move.wt.cron}" />
 		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
 	</bean>
 
@@ -130,6 +170,11 @@
 		<property name="jobDetail" ref="moveToLzJob" />
 		<property name="cronExpression" value="${lz.move.cron}" />
 	</bean>
+	
+	<bean id="cronDataFeedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="dataFeedJob" />
+		<property name="cronExpression" value="${data.feed.cron}" />
+	</bean>
 
 	<!--  The bean that manages all the scheduled jobs and their threads -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -138,7 +183,8 @@
 				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronRetrieveAfTrigger" />
 				<ref bean="cronMoveToLzTrigger" />
-				<ref bean="cronPassiveTracerTrigger" />
+				<ref bean="cronPassiveTracerTrigger" /> 
+				<ref bean="cronMoveToWtTrigger" />
 			</list>
 		</property>
 	</bean>
