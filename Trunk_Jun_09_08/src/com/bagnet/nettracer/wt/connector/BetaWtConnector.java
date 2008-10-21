@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -27,10 +29,14 @@ import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.DeliverCompany;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
@@ -97,6 +103,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		new_client.getState().setCredentials(new AuthScope(wt_http, 80, AuthScope.ANY_REALM), defaultcreds);
 
 		return new_client;
+
 	}
 	public String amendAhl(Map<WorldTracerField, List<String>> fieldMap, String wt_ahl_id) throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
@@ -906,6 +913,224 @@ public class BetaWtConnector implements WorldTracerConnector {
 			return errorString;
 		}
 		throw new WorldTracerException(errorString);
+	}
+
+	/**
+	 * 
+	 */
+	public String createBdo(Map<WorldTracerField, List<String>> fieldMap, String ahl_id, String ohd_id,
+			DeliverCompany delivercompany, Station station) throws WorldTracerException {
+			// TODO Auto-generated method stub
+		/* in yet another fun twist, this uses a post request but basically you just enter a bunch of "LINE1"
+		 * "LINE2" etc parameters that represent the lines that would be sent to the worldtracer system.  However
+		 * it also appears you have up to 17 lines to work with in roughly the following format where data on 
+		 * 
+		 * !LINE1=WM BDO/I <<AHL|OHD>> <<WT FILE REF>> /<<GMT TIME>>/<<GMT DATE>>
+		 * !LINE2=DS <<STATIONCODE>><<ARLINE>>01 - <<DELIVERY SERVICE NAME>>/<<DS PHONE>>
+		 * !LINE3=         <<STATION NAME>> / <<STATION PHONE>>
+		 * !LINE4= SVC LVL <<LEVEL>>/TN
+		 * LINE5=NM01 <<NAME>> .NM02 .NM03
+		 * !LINE6=PA01 <<Permanent address (we aren't sending)>>
+		 * LINE7=PA02 << Perm adresss 2>>
+		 * LINE7=DA01 <<DELIVERY ADDRESS>>
+		 * LINE9=DA02 << DA 2>>
+		 * !LINE8= .DD <<DELIVERY DATE>>
+		 * LINE9=PN01 <<PERM PHONE>>
+		 * !LINE10=LD01 <<DELIVERY INSTRUCTIONS>>
+		 * !LINE11=CT01 <<BAG COLOR/TYPE>> [.CT02 <<CT>>] ...
+		 * LINE12= /RECHARGE -    /SIGNATURE FOR THE RECEIPT OF <<# OF BAGS>> BAG   .RT <<RT BAG TOOK TO GET TO THIS STATION?????>>
+		 */
+		int linenum = 1;
+		
+		List<String> lines = new ArrayList<String>();
+		String tempName = delivercompany.getName();
+		if(tempName == null || tempName.trim().length() < 1) {
+			tempName = "DEFAULT DELIVERY CO";
+		}
+		else if (tempName.length() > 26) {
+			tempName = tempName.substring(0, 26);
+		}
+		String tempPhone = delivercompany.getPhone();
+		if(tempPhone == null || tempPhone.trim().length() < 1) {
+			tempPhone = "PHONE";
+		}
+		else if (tempPhone.length() > 20 ) {
+			tempPhone  = tempPhone.substring(0, 20);
+		}
+		lines.add(String.format("DS %s%s01 - %s/%s", station.getWt_stationcode(), wtCompanycode, tempName, tempPhone));
+		
+		String tempDesc = station.getStationdesc();
+		if(tempDesc == null || tempDesc.trim().length() < 1) {
+			tempDesc = "DEFAULT DELIVERY CO";
+		}
+		else if (tempDesc.length() > 26) {
+			tempDesc = tempDesc.substring(0, 26);
+		}
+		lines.add(String.format("     %s / %s", 
+				tempDesc, 
+				station.getPhone() != null && station.getPhone().trim().length() > 0 ? station.getPhone() : "PHONE"));
+		lines.add(" SVC LVL STD/TN");
+		List<String> names = fieldMap.get(WorldTracerField.NM);
+		
+		if (names != null) {
+			int i = 0;
+			List<String> result = new ArrayList<String>();
+			for(String name : names) {
+				if(name != null && name.trim().length() > 0) {
+					i++;
+					String temp = name.replaceAll("[^a-zA-Z ]", "");
+					if(temp.length() > 20) {
+						temp = temp.substring(0, 20);
+					}
+					result.add(String.format("NM%02d %s", i, temp));
+					if(i >= 3) break;
+				}
+			}
+			lines.add(StringUtils.join(result, " ."));
+		}
+		lines.add("PA01");
+
+		List<String> deliveryAddresses = fieldMap.get(WorldTracerField.DA);
+		if(deliveryAddresses != null && deliveryAddresses.size() > 0) {
+			String addr = deliveryAddresses.get(0);
+			if (addr.length() > 58) {
+				addr = addr.substring(0,57);
+			}
+			lines.add("DA01 " + addr);
+		}
+		
+		List<String> delDates = fieldMap.get(WorldTracerField.DD);
+		if(delDates != null && delDates.size() > 0) {
+			lines.add(" .DD " + delDates.get(0));
+		}
+		else {
+			throw new WorldTracerException("Cannot send BDO.  Invalid delivery date");
+		}
+		
+		List<String> phones = fieldMap.get(WorldTracerField.PN);
+		if(phones != null && phones.size() > 0) {
+			String temp = phones.get(0);
+			if(temp.length() > 20) {
+				temp = temp.substring(0,20);
+			}
+			lines.add("PN01 " + phones.get(0));
+		}
+		
+		List<String> instructions = fieldMap.get(WorldTracerField.LD);
+		if(instructions != null && instructions.size() > 0) {
+			String temp = instructions.get(0);
+			if(temp.length() > 58) {
+				temp = temp.substring(0, 57);
+			}
+			lines.add("LD01 " + instructions.get(0));
+		}
+		else {
+			lines.add("LD01");
+		}
+		
+		List<String> bagTypes = fieldMap.get(WorldTracerField.CT);
+		int bagCount = 0;
+		if(bagTypes != null && bagTypes.size() > 0) {
+			List<String> result = new ArrayList<String>();
+			for(String ct : bagTypes) {
+				if(ct != null && ct.trim().length() > 0) {
+					bagCount++;
+					result.add(String.format("CT%02d %s", bagCount, ct));
+					if(bagCount>=3) break;
+				}
+			}
+			lines.add(StringUtils.join(result, " ."));
+		}
+		else {
+			throw new WorldTracerException("Cannot send BDO. No bag descriptions");
+		}
+		
+		lines.add(String.format(" /RECHARGE -    /SIGNATURE FOR RECEIPT OF %d BAG%s", bagCount, (bagCount > 1) ? "S" : ""));
+		
+		String responseBody = null;
+		String wt_http = WorldTracerUtils.getWt_url(wtCompanycode);
+		StringBuilder sb = new StringBuilder("http://" + wt_http + "/");
+		sb.append("cgi-bin/bagBDO.exe");
+
+		Date now = TracerDateTime.getGMTDate();
+		boolean success = false;
+		Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		if(ahl_id != null) {
+			PostMethod method = new PostMethod(sb.toString());
+			
+			method.addParameter("LINE1", String.format("WM BDO/I AHL %1$s /%2$tI%2$tMGMT/%2$td%2$tb%2$ty", ahl_id, now));
+			
+			int index = 0;
+			for(index = 0; index < lines.size(); index++) {
+				method.addParameter(String.format("LINE%d", index + 2), lines.get(index).toUpperCase());
+			}
+			for(int i = index + 2; i <=17 ; i++) {
+				method.addParameter("LINE" + i, "");
+			}
+			try {
+				responseBody = sendRequest(method);
+				logger.debug("got this when sending ahl bdo:\n" + responseBody);
+
+			}	catch (Exception e) {
+				throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+			}
+			String errorString;
+
+			Matcher m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = responseBody;
+			}
+			if(OK.equals(errorString)) {
+				success = true;
+			}
+			else {
+				logger.warn("Unable to send bdo for AHL");
+			}
+		}
+		
+		if(ohd_id != null) {
+			PostMethod method = new PostMethod(sb.toString());
+			
+			method.addParameter("LINE1", String.format("WM BDO/I OHD %1$s /%2$tI%2$tMGMT/%2$td%2$tb%2$ty", ohd_id, now));
+			
+			int index = 0;
+			for(index = 0; index < lines.size(); index++) {
+				method.addParameter(String.format("LINE%d", index + 2), lines.get(index).toUpperCase());
+			}
+			for(int i = index + 2; i <=17 ; i++) {
+				method.addParameter("LINE" + i, "");
+			}
+			try {
+				responseBody = sendRequest(method);
+				logger.debug("got this when sending ohd bdo:\n" + responseBody);
+			}	catch (Exception e) {
+				throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+			}
+			Matcher m = error_patt.matcher(responseBody);
+			String errorString;
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = responseBody;
+			}
+			if(OK.equals(errorString)) {
+				success = true;
+			}
+			else {
+				logger.warn("Unable to send bdo for OHD");
+			}
+
+		}
+		
+		if(success) {
+			return "YAY";
+		}
+		else {
+			throw new WorldTracerException("Bdo failed");
+		}	
+	
 	}
 
 

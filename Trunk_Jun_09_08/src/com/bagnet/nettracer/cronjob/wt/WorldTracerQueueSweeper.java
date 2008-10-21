@@ -10,6 +10,7 @@ import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -23,6 +24,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
@@ -600,6 +602,47 @@ public class WorldTracerQueueSweeper {
 					continue;
 				}
 				logger.info("amended ohd: " + ((WtqAmendOhd)queue).getOhd().getOHD_ID());
+				queue.setStatus(WtqStatus.SUCCESS);
+				wtqBmo.updateQueue(queue);
+			}
+			else if (queue instanceof WtqCreateBdo) {
+				BDO bdo;
+				try {
+					bdo = ((WtqCreateBdo)queue).getBdo();
+					if(bdo == null) {
+						throw new WorldTracerException("Cannot export BDO, invalid bdo referenced in queue");
+					}
+					String result = wtService.insertBdo(bdo);
+				}
+				catch  ( WorldTracerException ex) {
+					//TODO
+					logger.warn("unable to insert bdo", ex);
+					queue.setAttempts(queue.getAttempts() + 1);
+					if(queue.getAttempts() >= MAX_ATTEMPTS) {
+						queue.setStatus(WtqStatus.FAIL);
+					}
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch(WorldTracerConnectionException ex) {
+					//TODO
+					logger.warn("unable to insert bdo", ex);
+					queue.setAttempts(queue.getAttempts() + 1);
+					if(queue.getAttempts() >= MAX_ATTEMPTS) {
+						queue.setStatus(WtqStatus.FAIL);
+					}
+					wtqBmo.updateQueue(queue);
+					continue;
+				} catch (Throwable ex) {
+					//TODO
+					logger.warn("unable to insert bdo", ex);
+					queue.setAttempts(queue.getAttempts() + 1);
+					if(queue.getAttempts() >= MAX_ATTEMPTS) {
+						queue.setStatus(WtqStatus.FAIL);
+					}
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				logger.info("sent bdo to worldtracer: " + bdo.getBDO_ID());
 				queue.setStatus(WtqStatus.SUCCESS);
 				wtqBmo.updateQueue(queue);
 			}

@@ -151,6 +151,9 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction" />
 		<mapping class="com.bagnet.nettracer.tracing.db.OtherSystemInformation" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
+		<mapping class="com.bagnet.nettracer.tracing.db.datafeed.FlightInfo" />
+		<mapping class="com.bagnet.nettracer.tracing.db.datafeed.DataFeedLog" />

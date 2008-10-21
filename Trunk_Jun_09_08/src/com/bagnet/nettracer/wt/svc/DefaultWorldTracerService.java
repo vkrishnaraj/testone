@@ -27,6 +27,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
@@ -158,6 +159,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		INC_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.FREE_FLOW));
 		// new Object[] { 10, RepeatType.MULTIPLE });
 		INC_FIELD_RULES.put(WorldTracerField.AG, new BasicRule(1, 12, 1, Format.FREE_FLOW));
+		INC_FIELD_RULES.put(WorldTracerField.PR, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.NONE });
 
 		OHD_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
@@ -167,6 +169,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// new Object[] { 1, RepeatType.NONE });
 		OHD_FIELD_RULES.put(WorldTracerField.PA, new BasicRule(1, 57, 2, Format.FREE_FLOW));
 		OHD_FIELD_RULES.put(WorldTracerField.TA, new BasicRule(1, 57, 2, Format.FREE_FLOW));
+		OHD_FIELD_RULES.put(WorldTracerField.AB, new BasicRule(1, 57, 2, Format.FREE_FLOW));
 		// new Object[] { 1, RepeatType.MULTIPLE });
 		OHD_FIELD_RULES.put(WorldTracerField.FD, new SameLineRule(1, 14, 4, Format.ALPHA_NUMERIC));
 		// new Object[] { 4, RepeatType.SAME_LINE });
@@ -191,6 +194,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		OHD_FIELD_RULES.put(WorldTracerField.BI, new BasicRule(2, 57, 1, Format.FREE_FLOW));
 		OHD_FIELD_RULES.put(WorldTracerField.PT, new BasicRule(1, 25, 1, Format.FREE_FLOW));
 		OHD_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.FREE_FLOW));
+		OHD_FIELD_RULES.put(WorldTracerField.PR, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 
 		CAH_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
 		CAH_FIELD_RULES.put(WorldTracerField.CS, new BasicRule(6, 16, 5, Format.ALPHA_NUMERIC));
@@ -359,6 +363,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	@WorldTracerTx(type = TxType.CLOSE_AHL)
 	public String closeIncident(Incident incident) throws WorldTracerException {
 
+		if(incident.getWt_id() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
 		Map<WorldTracerField, List<String>> fieldMap = createCloseFieldMap(incident);
 
 		String wt_id = wtConnector.closeIncident(fieldMap, incident.getWtFile().getWt_id(), incident
@@ -387,6 +394,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.CLOSE_OHD)
 	public String closeOHD(OHD ohd) throws WorldTracerException {
+		if(ohd.getWt_id() == null) {
+			throw new WorldTracerException("Can't close ohd, no associated wt file");
+		}
 		Map<WorldTracerField, List<String>> fieldMap = createCloseFieldMap(ohd);
 
 		if (fieldMap == null) {
@@ -402,32 +412,109 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.REINSTATE_AHL)
 	public String reinstateIncident(Incident incident) throws WorldTracerException {
+		if(incident.getWt_id() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
 		wtConnector.reinstateAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()));
 		return incident.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.REINSTATE_OHD)
 	public String reinstateOhd(OHD ohd) throws WorldTracerException {
+		if(ohd.getWt_id() == null) {
+			throw new WorldTracerException("Can't reinstate ohd, no associated wt file");
+		}
 		wtConnector.reinstateOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()));
 		return ohd.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.SUSPEND_AHL)
 	public String suspendIncident(Incident incident) throws WorldTracerException {
+		if(incident.getWt_id() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
 		wtConnector.suspendAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()));
 		return incident.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.SUSPEND_OHD)
 	public String suspendOhd(OHD ohd) throws WorldTracerException {
+		if(ohd.getWt_id() == null) {
+			throw new WorldTracerException("Can't suspend ohd, no associated wt file");
+		}
 		wtConnector.suspendOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()));
 		return ohd.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.CREATE_BDO)
 	public String insertBdo(BDO bdo) throws WorldTracerException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(bdo.getStation().getWt_stationcode() == null || bdo.getStation().getWt_stationcode().trim().length() < 1) {
+			throw new WorldTracerException("BDO station " + bdo.getStation().getStationcode() + " does not have a world tracer station");
+		}
+		if((bdo.getOhd() == null || bdo.getOhd().getWt_id() == null)
+				&& (bdo.getIncident() == null || bdo.getIncident().getWt_id() == null)) {
+			throw new WorldTracerException("Cannot export BDO: " + bdo.getBDO_ID() + " - no associated WorldTracer Files");
+		}
+		Map<WorldTracerField, List<String>> fieldMap = createBdoFieldMap(bdo);
+		
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate Bdo mapping, ID: " + bdo.getBDO_ID());
+		}
+		
+		return wtConnector.createBdo(fieldMap, bdo.getIncident() != null ? bdo.getIncident().getWt_id() : null, 
+				bdo.getOhd() != null ? bdo.getOhd().getWt_id() : null, bdo.getDelivercompany(), bdo.getStation());
+	}
+
+	private Map<WorldTracerField, List<String>> createBdoFieldMap(BDO bdo) throws WorldTracerException {
+		//TODO
+		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
+		
+		if(bdo.getItems() == null || bdo.getItems().size() < 1) {
+			throw new WorldTracerException("Can't send a bdo with no Items for bdo: " + bdo.getBDO_ID());
+		}
+		for(Item item : (Iterable<Item>)bdo.getItems()) {
+			getItemInfo(item, result, false);
+		}
+		
+		if(bdo.getDeliverydate() != null) {
+			addIncidentFieldEntry(WorldTracerField.DD, ITIN_DATE_FORMAT.format(bdo.getDeliverydate()), result);
+		}
+		
+		if(result.get(WorldTracerField.DD) == null) {
+			throw new WorldTracerException("Could not export BDO due to invalid delivery date. Id: " + bdo.getBDO_ID());
+		}
+		
+		addIncidentFieldEntry(WorldTracerField.LD, bdo.getDelivery_comments(), result);
+
+		addIncidentFieldEntry(WorldTracerField.AG, getAgentEntry(bdo.getAgent()), result);
+		
+		
+		if(bdo.getPassengers() != null && bdo.getPassengers().size() > 0) {
+			for(BDO_Passenger p : (Iterable<BDO_Passenger>) bdo.getPassengers()) {
+				getBdoPaxInfo(p, result);
+			}
+		}
+
+		return result;
+	}
+
+	private void getBdoPaxInfo(BDO_Passenger pax, Map<WorldTracerField, List<String>> result) {
+		addIncidentFieldEntry(WorldTracerField.NM, pax.getLastname(), result);
+		String addressStr = "";
+		String addy = StringUtils.join(" ", elimNulls(pax.getAddress1()), elimNulls(pax.getAddress2()), elimNulls(pax.getCity()),
+				elimNulls(pax.getState_ID()).equals("") ? elimNulls(pax.getProvince()) : elimNulls(pax.getState_ID()),
+				elimNulls(pax.getZip())).trim().replaceAll("\\s+", " ");
+		addIncidentFieldEntry(WorldTracerField.DA, addy, result);
+		
+		addIncidentFieldEntry(WorldTracerField.PN, wtPhone(pax.getHomephone()), result);
+		addIncidentFieldEntry(WorldTracerField.TP, wtPhone(pax.getWorkphone()), result);
+		addIncidentFieldEntry(WorldTracerField.CP, wtPhone(pax.getMobile()), result);
+	}
+
+	private String elimNulls(String str) {
+		if(str != null) return str.trim();
+		return "";
 	}
 
 	@WorldTracerTx(type = TxType.ERASE_AF)
@@ -464,6 +551,10 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.FWD_OHD)
 	public String forwardOhd(WtqFwdOhd fwd) throws WorldTracerException {
+		
+		if(fwd.getOhd() == null || fwd.getOhd().getWt_id() == null) {
+			throw new WorldTracerException("No associated worldtracer file");
+		}
 		Map<WorldTracerField, List<String>> fieldMap = createFwdFieldMap(fwd);
 
 		if (fieldMap == null) {
@@ -495,6 +586,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.AMEND_AHL)
 	public String amendAhl(Incident incident) throws WorldTracerException {
+		if(incident.getWt_id() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
 		String wt_id = null;
 
 		try {
@@ -518,6 +612,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.AMEND_OHD)
 	public String amendOhd(OHD ohd) throws WorldTracerException {
+		if(ohd.getWt_id() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
 		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(ohd);
 
 		if (fieldMap == null) {
@@ -533,6 +630,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.REQUEST_OHD)
 	public String requestOhd(WtqRequestOhd roh) throws WorldTracerException {
+		if(roh.getIncident() == null || roh.getIncident().getWt_id() == null) {
+			throw new WorldTracerException("no associated WT file");
+		}
 		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(roh);
 		String result = wtConnector.requestOhd(roh.getWt_ohd(), roh.getIncident().getWt_id(), fieldMap);
 		return result;
@@ -566,7 +666,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	private static String getAgentEntry(Agent ag) {
-		return (ag.getUsername().length() > 8 ? ag.getUsername().substring(0, 8) : ag.getUsername()) + "/"
+		return (ag.getUsername().length() > 7 ? ag.getUsername().substring(0, 7) : ag.getUsername()) + "/"
 				+ ag.getCompanycode_ID();
 	}
 
@@ -753,7 +853,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	private void getOhdPaxInfo(OHD_Passenger p, Map<WorldTracerField, List<String>> result) {
 		OHD_Address address = p.getAddress(0);
 		if (p.getLastname() == null || p.getLastname().trim().length() <= 0) {
-			if(!result.containsKey(WorldTracerField.TA) && address != null) {
+			if(address != null) {
 				addWtOhdAddress(result, address, WorldTracerField.TA);
 			}
 		}
@@ -774,12 +874,14 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			addIncidentFieldEntry(WorldTracerField.PT, p.getFirstname(), result);
 	
 			// add permanent address
-			if (address != null && !result.containsKey(WorldTracerField.PA)) {
+			if (address != null) {
 				addWtOhdAddress(result,address, WorldTracerField.PA);
 			}
 		}
 		if(address != null) {
-
+			if(!result.containsKey(WorldTracerField.AB)) {
+				addWtOhdAddress(result, address, WorldTracerField.AB);
+			}
 			// add email
 			addIncidentFieldEntry(WorldTracerField.EA, wtEscape(address.getEmail()), result);
 
@@ -803,43 +905,37 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	private void addWtOhdAddress(Map<WorldTracerField, List<String>> result, OHD_Address address, WorldTracerField addressField) {
 		ArrayList<String> addr1Pieces = new ArrayList<String>();
-		ArrayList<String> addr2Pieces = new ArrayList<String>();
 		if (address.getAddress1() != null)
 			addr1Pieces.add(address.getAddress1().trim());
 		if (address.getAddress2() != null)
 			addr1Pieces.add(address.getAddress2().trim());
 		if (address.getCity() != null)
-			addr2Pieces.add(address.getCity().trim());
+			addr1Pieces.add(address.getCity().trim());
 		if (address.getState() != null)
-			addr2Pieces.add(address.getState().trim());
+			addr1Pieces.add(address.getState().trim());
 		else if (address.getProvince() != null)
-			addr2Pieces.add(address.getProvince().trim());
+			addr1Pieces.add(address.getProvince().trim());
 		if (address.getZip() != null)
-			addr2Pieces.add(address.getZip().trim());
-		String value = StringUtils.join(addr1Pieces, " ").replaceAll("\\s+", " ");
-		addIncidentFieldEntry(addressField, wtClear(value), result);
-		value = StringUtils.join(addr2Pieces, " ").replaceAll("\\s+", " ");
+			addr1Pieces.add(address.getZip().trim());
+		String value = StringUtils.join(addr1Pieces, " ").trim().replaceAll("\\s+", " ");
 		addIncidentFieldEntry(addressField, wtClear(value), result);
 	}
 	
 	private void addWtIncAddress(Map<WorldTracerField, List<String>> result, Address address, WorldTracerField addressField) {
 		ArrayList<String> addr1Pieces = new ArrayList<String>();
-		ArrayList<String> addr2Pieces = new ArrayList<String>();
 		if (address.getAddress1() != null)
 			addr1Pieces.add(address.getAddress1().trim());
 		if (address.getAddress2() != null)
 			addr1Pieces.add(address.getAddress2().trim());
 		if (address.getCity() != null)
-			addr2Pieces.add(address.getCity().trim());
-		if (address.getState() != null)
-			addr2Pieces.add(address.getState().trim());
+			addr1Pieces.add(address.getCity().trim());
+		if (address.getState() != null && address.getState().trim().length() > 0)
+			addr1Pieces.add(address.getState().trim());
 		else if (address.getProvince() != null)
-			addr2Pieces.add(address.getProvince().trim());
+			addr1Pieces.add(address.getProvince().trim());
 		if (address.getZip() != null)
-			addr2Pieces.add(address.getZip().trim());
-		String value = StringUtils.join(addr1Pieces, " ").replaceAll("\\s+", " ");
-		addIncidentFieldEntry(addressField, wtClear(value), result);
-		value = StringUtils.join(addr2Pieces, " ").replaceAll("\\s+", " ");
+			addr1Pieces.add(address.getZip().trim());
+		String value = StringUtils.join(addr1Pieces, " ").trim().replaceAll("\\s+", " ");
 		addIncidentFieldEntry(addressField, wtClear(value), result);
 	}
 
@@ -850,14 +946,43 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		}
 		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
 
+		//this is a little messy, but we are keeping track of the addresses here.
+		//ones explicitly marked permanent get highest priority for the PA field
+		List<Address> permAdds = new ArrayList<Address>();
+		List<Address> namedAdds = new ArrayList<Address>();
+		List<Address> tempAdds = new ArrayList<Address>();
 		if (ntIncident.getPassenger_list() != null) {
 			for (Passenger p : (List<Passenger>) ntIncident.getPassenger_list()) {
+				
 				getPassengerInfo(p, result);
+				Address a = p.getAddress(0);
+				if(a != null) {
+					if(a.getIs_permanent() == 1) {
+						permAdds.add(a);
+					}
+					else if (p.getLastname() == null || p.getLastname().trim().length() <= 0) {
+						tempAdds.add(a);
+					}
+					else {
+						namedAdds.add(a);
+					}
+				}
+			}
+			for(Address addr : permAdds) {
+				addWtIncAddress(result, addr, WorldTracerField.PA);
+			}
+			for(Address addr : namedAdds) {
+				addWtIncAddress(result, addr, WorldTracerField.PA);
+			}
+			for(Address addr : tempAdds) {
+				addWtIncAddress(result, addr, WorldTracerField.TA);
 			}
 		}
 
 		// num passengers
 		addIncidentFieldEntry(WorldTracerField.NP, Integer.toString(ntIncident.getNumpassengers()), result);
+		
+		addIncidentFieldEntry(WorldTracerField.PR, ntIncident.getRecordlocator(), result);
 
 		if (ntIncident.getItinerary_list() != null) {
 			for (Itinerary i : (List<Itinerary>) ntIncident.getItinerary_list()) {
@@ -873,13 +998,14 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				}
 			}
 		}
+		
 		// contents category can only have one entry in WT, but you can use up
 		// to two lines for each
 		// you can have 12 total categories (see ContentRule class)
 		if (ntIncident.getItemlist() != null) {
 			int bagCount = 1;
 			for (Item i : (List<Item>) ntIncident.getItemlist()) {
-				getItemInfo(i, result, ntIncident.getStationassigned().getCompany().getCompanyCode_ID());
+				getItemInfo(i, result);
 				if (i.getInventorylist() != null) {
 
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
@@ -975,7 +1101,10 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		return result;
 	}
 
-	protected void getItemInfo(Item item, Map<WorldTracerField, List<String>> result, String companyCode) {
+	protected void getItemInfo(Item item, Map<WorldTracerField, List<String>> result) {
+		getItemInfo(item, result, true);
+	}
+	protected void getItemInfo(Item item, Map<WorldTracerField, List<String>> result, boolean includeXdesc) {
 
 		if (item.getColor() == null || item.getColor().trim().length() <= 0 || item.getBagtype() == null
 				|| item.getBagtype().trim().length() != 2) {
@@ -989,12 +1118,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			colorType = item.getColor().trim() + item.getBagtype().trim();
 		}
 		
-		String desc1 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1()));
-		String desc2 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2()));
-		String desc3 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3()));
-		
-		colorType += getDescString(desc1, desc2, desc3);
-		
+		if (includeXdesc) {
+			String desc1 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_1()));
+			String desc2 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_2()));
+			String desc3 = mapXDesc(XDescElementsBMO.getXdescelementcode(item.getXdescelement_ID_3()));
+			
+			colorType += getDescString(desc1, desc2, desc3);
+		}
 		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
 
 		addIncidentFieldEntry(WorldTracerField.BI, item.getManufacturer(), result);
@@ -1072,16 +1202,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	protected void getPassengerInfo(Passenger p, Map<WorldTracerField, List<String>> result)
 			throws WorldTracerException {
 		Address address = p.getAddress(0);
-		if(address != null && address.getIs_permanent() == 1) {
-			result.remove(WorldTracerField.PA);
-			addWtIncAddress(result, address, WorldTracerField.PA);
-		}
-		if (p.getLastname() == null || p.getLastname().trim().length() <= 0) {
-			if(!result.containsKey(WorldTracerField.TA) && address != null && address.getIs_permanent() != 1) {
-				addWtIncAddress(result, address, WorldTracerField.TA);
-			}
-		}
-		else {			
+		if (p.getLastname() != null && p.getLastname().trim().length() > 0) {		
 			// add the name
 			addIncidentFieldEntry(WorldTracerField.NM, p.getLastname().trim(), result);
 	
@@ -1112,11 +1233,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	
 			// add the frequent flier num
 			addIncidentFieldEntry(WorldTracerField.FL, p.getAirlinememnumber(), result);
-	
-			// add permanent address
-			if (address != null && !result.containsKey(WorldTracerField.PA)) {
-				addWtIncAddress(result,address, WorldTracerField.PA);
-			}
 		}
 		if(address != null) {
 

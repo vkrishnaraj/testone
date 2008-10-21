@@ -47,8 +47,10 @@ import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.SearchBDOForm;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
  * @author Administrator
@@ -728,6 +730,21 @@ public class BDOUtils {
 								+ ") has been scheduled for delivery on " + formateddatetime,
 						bdo.getIncident().getRecordlocator());
 
+			}
+			
+			if(isnew) {
+				if((bdo.getIncident() != null && bdo.getIncident().getWtFile() != null) ||
+						(bdo.getOhd() != null && bdo.getOhd().getWtFile() != null)) {
+					WtqCreateBdo wtq = new WtqCreateBdo();
+					wtq.setAgent(bdo.getAgent());
+					wtq.setBdo(bdo);
+					try {
+					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+					}
+					catch(Exception e) {
+						logger.error("unable to queue Worldtracer Bdo", e);
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
