@@ -106,18 +106,66 @@
 	              (Default: 0)
 	            </td>
 	          </tr>
-	
-	          <tr>
+	          	  <tr>
 	            <td>
-	              <bean:message key="colname.ohd_to_wt_days" />
+	              <html:hidden name="companyForm" property="companyCode" />
+	              <bean:message key="colname.oal_inc_hours" />
 	              <font color=red>
 	                *
 	              </font>
 	              :
 	            </td>
 	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="ohd_to_wt_days" size="4" maxlength="4" />
+	              <html:text styleClass="textfield" name="companyForm" property="oal_inc_hours" size="4" maxlength="4" />
 	              (Default: 0)
+	            </td>
+	          </tr>
+	          <tr>
+	            <td>
+	              <bean:message key="colname.ohd_to_wt_hours" />
+	              <font color=red>
+	                *
+	              </font>
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="ohd_to_wt_hours" size="4" maxlength="4" />
+	              (Default: 0)
+	            </td>
+	          </tr>
+	                    	  <tr>
+	            <td>
+	              <html:hidden name="companyForm" property="companyCode" />
+	              <bean:message key="colname.oal_ohd_hours" />
+	              <font color=red>
+	                *
+	              </font>
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="oal_ohd_hours" size="4" maxlength="4" />
+	              (Default: 0)
+	            </td>
+	          </tr>
+	          
+	          
+	                    <tr>
+	            <td>
+	              <bean:message key="colname.wt_auto_amend" />
+	              <font color=red>
+	                *
+	              </font>
+	              :
+	            </td>
+	            <td>
+	            <html:select name="companyForm" property="auto_wt_amend" styleClass="dropdown">
+                  <html:option value="true">
+                  	<bean:message key="select.on" />
+                  </html:option>
+                  <html:option value="false">
+                  	<bean:message key="select.off" />
+                  </html:option>
+                </html:select>
 	            </td>
 	          </tr>
 	          <tr>

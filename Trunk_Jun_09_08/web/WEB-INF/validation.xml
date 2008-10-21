@@ -103,6 +103,62 @@
          	    <arg key="colname.default.scanner.back"/>
            	</field>
            	
+           	<field property="ohd_to_wt_hours" depends="required,integer,intRange">
+           		<arg key="header.ohd_to_wt_hours"/>
+         	     <arg name="intRange" key="${var:min}" resource="false"/>
+         	     <arg name="intRange" key="${var:max}" resource="false"/>
+                 <var>
+                   <var-name>min</var-name>
+                   <var-value>0</var-value>
+                 </var>
+                 <var>
+                   <var-name>max</var-name>
+                   <var-value>240</var-value>
+                 </var>
+	       	</field>
+	       	
+	       	 <field property="oal_inc_hours" depends="required,integer,intRange">
+           		<arg key="header.oal_inc_hours"/>
+         	     <arg name="intRange" key="${var:min}" resource="false"/>
+         	     <arg name="intRange" key="${var:max}" resource="false"/>
+                 <var>
+                   <var-name>min</var-name>
+                   <var-value>0</var-value>
+                 </var>
+                 <var>
+                   <var-name>max</var-name>
+                   <var-value>240</var-value>
+                 </var>
+	       	</field>
+	       	
+	       	<field property="oal_ohd_hours" depends="required,integer,intRange">
+           		<arg key="header.oal_ohd_hours"/>
+         	     <arg name="intRange" key="${var:min}" resource="false"/>
+         	     <arg name="intRange" key="${var:max}" resource="false"/>
+                 <var>
+                   <var-name>min</var-name>
+                   <var-value>0</var-value>
+                 </var>
+                 <var>
+                   <var-name>max</var-name>
+                   <var-value>240</var-value>
+                 </var>
+	       	</field>
+	       	
+	       	 <field property="mbr_to_wt_days" depends="required,integer,intRange">
+           		<arg key="header.mbr_to_wt_days"/>
+         	     <arg name="intRange" key="${var:min}" resource="false"/>
+         	     <arg name="intRange" key="${var:max}" resource="false"/>
+                 <var>
+                   <var-name>min</var-name>
+                   <var-value>0</var-value>
+                 </var>
+                 <var>
+                   <var-name>max</var-name>
+                   <var-value>30</var-value>
+                 </var>
+	       	</field>
+	       	
 		</form>
 				
 		<form name="stationForm">
