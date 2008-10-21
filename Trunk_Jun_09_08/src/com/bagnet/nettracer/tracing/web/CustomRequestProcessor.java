@@ -33,7 +33,8 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
         else{
             try{
                 //If no redirect user to login Page
-                request.getRequestDispatcher("/logoff.do").forward(request,response);
+            	response.sendRedirect("logoff.do");
+                //request.getRequestDispatcher("/logoff.do").forward(request,response);
             }catch(Exception ex){
             }
         }
