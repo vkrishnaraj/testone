@@ -466,8 +466,6 @@ function toggledc(o) {
               <br>
               <html:text name="theitem" property="claimchecknum" size="25" styleClass="textfield" indexed="true" />
             </td>
-            
-            
           </tr>
           <tr>
             <td>
@@ -518,22 +516,6 @@ function toggledc(o) {
         &nbsp;&nbsp;
         <input id="button" type="button" name="print" value="<bean:message key="button.bdo_sendprint" />" onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','BDOReceipt',800,600);return false;">
         </logic:present>
-                  <%	
-                   if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
-                	   if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
-                		   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO, a)){
-                  %>
-                  
-         <logic:present name="wt_id" scope="request">
-             <html:submit styleId="button" property="savetowt" styleId="button" onclick="return validatereqBDOForm(this.form);">
-                 <bean:message key="button.savetoWT" />
-             </html:submit>
-         </logic:present>
-                  <%
-                		   }
-                	   }
-                   }
-                  %>
       </td>
     </tr>
   </table>
