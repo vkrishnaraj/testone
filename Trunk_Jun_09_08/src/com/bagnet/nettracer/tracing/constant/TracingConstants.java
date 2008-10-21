@@ -100,6 +100,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD = "WorldTracer Insert OHD";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO = "WorldTracer Insert BDO";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_LOG = "WorldTracer Log";
+	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_AUTO_AMEND = "WorldTracer Auto Amend";
 
 	public final static String SYSTEM_COMPONENT_NAME_BDO = "Baggage Delivery Order";
 

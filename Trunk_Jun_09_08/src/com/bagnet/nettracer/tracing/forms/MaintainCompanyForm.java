@@ -48,7 +48,9 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String pass_expire_days;
 	private String account_lockout;
 	private String mbr_to_wt_days;
-	private String ohd_to_wt_days;
+	private String ohd_to_wt_hours;
+	private String oal_inc_hours;
+	private String oal_ohd_hours;
 	private String wt_user;
 	private String wt_pass;
 	private String retrieve_actionfile_interval;
@@ -82,6 +84,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
  	private Integer scannerDefaultBack;
  	private Integer scannerDefaultForward;
  	private String blindEmail;
+	private boolean auto_wt_amend;
 
 
 	public String getWt_write_enabled() {
@@ -204,7 +207,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public String getPass_expire_days() { return this.pass_expire_days;}
 	public String getAccount_lockout() { return this.account_lockout;}
 	public String getMbr_to_wt_days() { return this.mbr_to_wt_days;}
-	public String getOhd_to_wt_days() { return this.ohd_to_wt_days;}
+	public String getOhd_to_wt_hours() { return this.ohd_to_wt_hours;}
 	public String getWt_user() { return this.wt_user;}
 	public String getWt_pass() { return this.wt_pass;}
 	public String getAudit_ohd() { return this.audit_ohd;}
@@ -263,7 +266,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setPass_expire_days ( String  pass_expire_days ) { this.pass_expire_days  =  pass_expire_days ; }
 	public void setAccount_lockout ( String  account_lockout ) { this.account_lockout  =  account_lockout ; }
 	public void setMbr_to_wt_days ( String  mbr_to_wt_days ) { this.mbr_to_wt_days  =  mbr_to_wt_days ; }
-	public void setOhd_to_wt_days ( String  ohd_to_wt_days ) { this.ohd_to_wt_days  =  ohd_to_wt_days ; }
+	public void setOhd_to_wt_hours ( String  ohd_to_wt_hours ) { this.ohd_to_wt_hours  =  ohd_to_wt_hours ; }
 	public void setWt_user ( String  wt_user ) { this.wt_user  =  wt_user ; }
 	public void setWt_pass ( String  wt_pass ) { this.wt_pass  =  wt_pass ; }
 	public void setAudit_ohd ( String  audit_ohd ) { this.audit_ohd  =  audit_ohd ; }
@@ -324,6 +327,31 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setBlindEmail(String blindEmail) {
 		this.blindEmail = blindEmail;
+	}
+
+	public boolean isAuto_wt_amend() {
+		return auto_wt_amend;
+	}
+
+	public void setAuto_wt_amend(boolean auto_wt_amend) {
+		this.auto_wt_amend = auto_wt_amend;
+		
+	}
+
+	public String getOal_inc_hours() {
+		return oal_inc_hours;
+	}
+
+	public void setOal_inc_hours(String oal_inc_hours) {
+		this.oal_inc_hours = oal_inc_hours;
+	}
+
+	public String getOal_ohd_hours() {
+		return oal_ohd_hours;
+	}
+
+	public void setOal_ohd_hours(String oal_ohd_hours) {
+		this.oal_ohd_hours = oal_ohd_hours;
 	}
 
 

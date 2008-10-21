@@ -505,5 +505,32 @@ public class WorldTracerQueueUtils {
 		return error;
 	}
 
+	public static boolean createOnlyQueue(WorldTracerQueue entry) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			
+			WorldTracerQueue oldEntry = alreadyQueued(entry, sess);
+			if(oldEntry != null) {
+				return false;
+			}
+			else {
+				t = sess.beginTransaction();
+				sess.save(entry);
+				t.commit();
+			}
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+		
+	}
+
 
 }

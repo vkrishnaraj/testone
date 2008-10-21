@@ -6,7 +6,9 @@
 package com.bagnet.nettracer.tracing.bmo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -41,11 +43,13 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -465,7 +469,7 @@ public class IncidentBMO {
 				logger.error("unable to close connection: " + e);
 			}
 		}
-		
+	
 		
 
 	}
@@ -477,7 +481,6 @@ public class IncidentBMO {
 			if (sessionNull) {
 				sess = HibernateWrapper.getSession().openSession();
 			}
-			
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
@@ -573,9 +576,51 @@ public class IncidentBMO {
 		}
 	}
 
+	/**
+	 * @param hours the number of hours old the ohd must be to move to wt
+	 * @param companyCode company whose ohds are to be moved to wt
+	 * @return list of OHD that need to be moved to world tracer
+	 */
+	public List<Incident> findMoveToWtInc(int hours, String companyCode) {
+		if (hours <= 0) {
+			return null;
+		}
+		Calendar c = new GregorianCalendar();
+		c.setTime(TracerDateTime.getGMTDate());
+		c.add(Calendar.HOUR, (0-hours));
+		Date incCutoff = c.getTime();
 
-
-
+		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where " +
+		" inc.wtFile is null " +  //no worldtracer file already
+		" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)" +
+		" and inc.createdate <= :incCutoff " + //old enough
+		" and inc.status.status_ID = :status " + // only open
+		" and inc.stationassigned.company.companyCode_ID = :companyCode " +
+		" order by inc.createdate asc ";
+		
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(queryString);
+			q.setParameter("incCutoff", incCutoff);
+			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("companyCode", companyCode);
+			q.setParameter("qStatus", WtqStatus.PENDING);
+			return q.list();
+		}
+		catch (Exception e) {
+			logger.error("unable to get move to WT Incident list: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
 	
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();

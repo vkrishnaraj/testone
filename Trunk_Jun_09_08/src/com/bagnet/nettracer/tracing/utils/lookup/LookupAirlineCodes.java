@@ -4,6 +4,7 @@
 package com.bagnet.nettracer.tracing.utils.lookup;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.Hibernate;
@@ -137,5 +138,18 @@ public class LookupAirlineCodes {
 		} else {
 			throw new BagtagException(BagtagException.INVALID_FORMAT_MESSAGE);
 		}
+	}
+	
+	public static String extractTwoCharAirlineCode(String bagTag) {
+		if(Pattern.compile(PATTERN_10_DIGIT_BAG_TAG).matcher(bagTag).find()) {
+			return getTwoLetterAirlineCode(bagTag.substring(1, 4));
+		}
+		if(Pattern.compile(PATTERN_9_DIGIT_BAG_TAG).matcher(bagTag).find()) {
+			return getTwoLetterAirlineCode(bagTag.substring(0, 3));
+		}
+		if(Pattern.compile(PATTERN_8_CHAR_BAG_TAG).matcher(bagTag).find()) {
+			return bagTag.substring(0, 2);
+		}
+		return null;	
 	}
 }

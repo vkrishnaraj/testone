@@ -35,7 +35,9 @@ public class Audit_Company_Specific_Variable implements Serializable {
 																						 // report creation or
 
 	private int mbr_to_wt_days;
-	private int ohd_to_wt_days;
+	private int ohd_to_wt_hours;
+	private int oal_ohd_hours;
+	private int oal_inc_hours;
 	
 	private int audit_ohd;
 	private int audit_lost_found;
@@ -66,6 +68,8 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int ohd_lz;
 	private int scannerDefaultBack;
 	private int scannerDefaultForward;
+
+	private boolean auto_wt_amend;
 	
 	
 	/**
@@ -703,18 +707,18 @@ public class Audit_Company_Specific_Variable implements Serializable {
 		this.mbr_to_wt_days = mbr_to_wt_days;
 	}
 	/**
-	 * @return the ohd_to_wt_days
+	 * @return the ohd_to_wt_hours
 	 * 
 	 * @hibernate.property type="integer"
 	 */
-	public int getOhd_to_wt_days() {
-		return ohd_to_wt_days;
+	public int getOhd_to_wt_hours() {
+		return ohd_to_wt_hours;
 	}
 	/**
-	 * @param ohd_to_wt_days the ohd_to_wt_days to set
+	 * @param ohd_to_wt_hours the ohd_to_wt_hours to set
 	 */
-	public void setOhd_to_wt_days(int ohd_to_wt_days) {
-		this.ohd_to_wt_days = ohd_to_wt_days;
+	public void setOhd_to_wt_hours(int ohd_to_wt_hours) {
+		this.ohd_to_wt_hours = ohd_to_wt_hours;
 	}
 	
 	/**
@@ -788,5 +792,47 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 */
 	public void setScannerDefaultForward(int scannerDefaultForward) {
 		this.scannerDefaultForward = scannerDefaultForward;
+	}
+	
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getOal_ohd_hours() {
+		return oal_ohd_hours;
+	}
+	/**
+	 * @param oal_ohd_hours
+	 */
+	public void setOal_ohd_hours(int oal_ohd_hours) {
+		this.oal_ohd_hours = oal_ohd_hours;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getOal_inc_hours() {
+		return oal_inc_hours;
+	}
+	/**
+	 * @param oal_inc_hours
+	 *
+	 */
+	public void setOal_inc_hours(int oal_inc_hours) {
+		this.oal_inc_hours = oal_inc_hours;
+	}
+	
+	/**
+	 * @return
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isAuto_wt_amend() {
+		return auto_wt_amend;
+	}
+	/**
+	 * @param auto_wt_amend
+	 */
+	public void setAuto_wt_amend(boolean auto_wt_amend) {
+		this.auto_wt_amend = auto_wt_amend;
 	}
 }

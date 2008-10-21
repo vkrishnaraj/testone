@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -1327,7 +1328,6 @@ public class OhdBMO {
 			return ohd;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
-			e.printStackTrace();
 			return null;
 		} finally {
 			if (sess != null) {
@@ -1339,8 +1339,54 @@ public class OhdBMO {
 			}
 		}
 	}
-	
+
 	/**
+	 * @param hours the number of hours old the ohd must be to move to wt
+	 * @param companyCode company whose ohds are to be moved to wt
+	 * @return list of OHD that need to be moved to world tracer
+	 */
+	public List<OHD> findMoveToWtOhd(int hours, String companyCode) {
+		if (hours <= 0) {
+			return null;
+		}
+		Calendar c = new GregorianCalendar();
+		c.setTime(TracerDateTime.getGMTDate());
+		c.add(Calendar.HOUR, (0-hours));
+		Date ohdCutoff = c.getTime();
+
+		String queryString = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where " +
+		" ohd.wtFile is null " +  //no worldtracer file already
+		" and ohd.OHD_ID not in (select q.ohd.OHD_ID from WtqOhdAction q where q.status = :qStatus)" +
+		" and ohd.founddate <= :ohdCutoff " + //old enough
+		" and ohd.status.status_ID = :status " + // only open
+		" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
+		" order by ohd.founddate desc";
+		
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(queryString);
+			q.setParameter("ohdCutoff", ohdCutoff);
+			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
+			q.setParameter("companyCode", companyCode);
+			q.setParameter("qStatus", WtqStatus.PENDING);
+			return q.list();
+		}
+		catch (Exception e) {
+			logger.error("unable to get move to WT OHD list: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
+	
+		/**
 	 * This is to be used solely by the tag number trace feature that may
 	 * occur when an agent selects to search by bag tag number from the 
 	 * Lost/Delay prepopulation screen.

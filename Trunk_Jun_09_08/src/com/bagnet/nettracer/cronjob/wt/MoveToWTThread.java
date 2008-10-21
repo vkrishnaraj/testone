@@ -86,7 +86,7 @@ public class MoveToWTThread extends Thread {
 					
 					if (csv != null) {
 						int mbr = csv.getMbr_to_wt_days();	
-						int ohd = csv.getOhd_to_wt_days();
+						int ohd = csv.getOhd_to_wt_hours();
 						int wt_write_enabled = csv.getWt_enabled();
 						int retrieve = csv.getRetrieve_actionfile_interval();
 						if (wt_write_enabled == 1){
@@ -108,6 +108,7 @@ public class MoveToWTThread extends Thread {
 			logger.fatal("cron thread error: " + e);
 
 		}
+		
 	}
 
 	private void pause(double seconds) {

@@ -179,7 +179,9 @@ public final class ManageCompany extends Action {
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER)) {
 					dForm.setMbr_to_wt_days("" + cmpny.getVariable().getMbr_to_wt_days());
-					dForm.setOhd_to_wt_days("" + cmpny.getVariable().getOhd_to_wt_days());
+					dForm.setOhd_to_wt_hours("" + cmpny.getVariable().getOhd_to_wt_hours());
+					dForm.setOal_inc_hours("" + cmpny.getVariable().getOal_inc_hours());
+					dForm.setOal_ohd_hours("" + cmpny.getVariable().getOal_ohd_hours());
 					dForm.setWt_user("" + cmpny.getVariable().getWt_user());
 					dForm.setWt_pass("" + cmpny.getVariable().getWt_pass());
 					dForm.setRetrieve_actionfile_interval("" + cmpny.getVariable().getRetrieve_actionfile_interval());
@@ -187,6 +189,7 @@ public final class ManageCompany extends Action {
 					dForm.setWt_airlinecode("" + cmpny.getVariable().getWt_airlinecode());
 					dForm.setWt_enabled("" + cmpny.getVariable().getWt_enabled());
 					dForm.setWt_write_enabled("" + cmpny.getVariable().getWt_write_enabled());
+					dForm.setAuto_wt_amend(cmpny.getVariable().isAuto_wt_amend());
 				}
 				
 			}
@@ -374,7 +377,9 @@ public final class ManageCompany extends Action {
 				}
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER)) {
 					var.setMbr_to_wt_days(Integer.parseInt((String) dForm.getMbr_to_wt_days()));
-					var.setOhd_to_wt_days(Integer.parseInt((String) dForm.getOhd_to_wt_days()));
+					var.setOhd_to_wt_hours(Integer.parseInt((String) dForm.getOhd_to_wt_hours()));
+					var.setOal_inc_hours(Integer.parseInt((String)dForm.getOal_inc_hours()));
+					var.setOal_ohd_hours(Integer.parseInt((String)dForm.getOal_ohd_hours()));
 					var.setWt_user((String)dForm.getWt_user());
 					var.setWt_pass((String)dForm.getWt_pass());
 					var.setRetrieve_actionfile_interval(Integer.parseInt((String)dForm.getRetrieve_actionfile_interval()));
@@ -388,6 +393,7 @@ public final class ManageCompany extends Action {
 					var.setWt_airlinecode((String)dForm.getWt_airlinecode());
 					var.setWt_enabled(Integer.parseInt(dForm.getWt_enabled()));
 					var.setWt_write_enabled(Integer.parseInt(dForm.getWt_write_enabled()));
+					var.setAuto_wt_amend(dForm.isAuto_wt_amend());
 					
 				}
 
