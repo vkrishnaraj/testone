@@ -9,6 +9,7 @@ import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
@@ -45,9 +46,15 @@ public class WorldTracerLogger {
 			case CREATE_OHD:
 			case REINSTATE_OHD:
 			case SUSPEND_OHD:
-			case FWD_OHD:
 				OHD ohd = (OHD) pjp.getArgs()[0];
 				wttx.setOhd(ohd);
+				break;
+			case FWD_OHD:
+				WtqFwdOhd foh = (WtqFwdOhd) pjp.getArgs()[0];
+				if(foh != null) {
+					OHD ohd2 = foh.getOhd();
+					wttx.setOhd(ohd2);
+				}
 				break;
 			case CREATE_BDO:
 				BDO bdo = (BDO) pjp.getArgs()[0];

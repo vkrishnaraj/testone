@@ -235,7 +235,7 @@ function setReason(choose){
 				<td colspan="1"><bean:message key="Supplementary_Information" />:
 				</td>
 				<td colspan="3"><html:text name="worldTracerFWDForm"
-					property="supplementary_information" size="20" maxlength="10" /></td>
+					property="supplementary_information" size="57" maxlength="56" /></td>
 			</tr>
 			<tr>
 				<td colspan="4"><bean:message key="Teletype_Address" />:</td>
