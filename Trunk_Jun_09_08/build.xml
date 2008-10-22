@@ -1,4 +1,4 @@
-<project name="tracer" default="build-usair" basedir=".">
+<project name="tracer" default="build-dev" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -463,7 +463,9 @@
 	</target>
 	
 	<target name="build-usair-training" depends="delete">
+		<property name="ant_project_name" value="tracer" />
 		<antcall target ="usair-libraries-create" />
+		<property name="include.us" value="1" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
@@ -501,7 +503,9 @@
 	</target>
 	
 	<target name="build-usair-beta" depends="delete">
+		<property name="ant_project_name" value="tracer" />
 		<antcall target ="usair-libraries-create" />
+		<property name="include.us" value="1" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
@@ -1080,6 +1084,7 @@
 			<exclude name="com/bagnet/nettracer/tracing/forms/**/*.*" />
 			<exclude name="com/bagnet/nettracer/servlets/**/*.*" />
 			<exclude name="com/bagnet/nettracer/cronjob/**/*.*" />
+			<exclude name="com/bagnet/clients/airtran/**/*.*" />
 		</javac>
 	</target>
 
