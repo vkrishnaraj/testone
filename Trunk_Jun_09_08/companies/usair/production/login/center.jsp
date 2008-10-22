@@ -38,7 +38,7 @@
             </td>
             <td>
               <SELECT NAME="companyCode" class="dropdown">
-              	<option value="US" selected="selected">USAir BETA</option>
+              	<option value="US" selected="selected">US Airways</option>
               	<option value="OW">Owens Group</option>
               </SELECT>
             </td>
@@ -65,7 +65,6 @@
           </tr>
           <tr>
             <td colspan=2 align=center>
-            <H1><font color="red">Warning: This is a test environment only.  Do not enter real claims or bags.</font></H2>
               <p>
                 <font color=red>
                   <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
