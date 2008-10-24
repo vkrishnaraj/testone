@@ -1088,11 +1088,11 @@ function gotoHistoricalReport() {
        if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
      %>
          <html:submit styleId="button" property="savetracing" onclick="return validatereqWtOHDForm(this.form);">
-           <bean:message key="button.saveohd" />
+           <bean:message key="button.savetracingohd" />
          </html:submit>
      <% } else { %>
          <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
-          <bean:message key="button.saveohd" />
+          <bean:message key="button.savetracingohd" />
         </html:submit>
      <% } %>
     </c:if>
@@ -1102,11 +1102,11 @@ function gotoHistoricalReport() {
        if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
      %>
          <html:submit styleId="button" property="savetracing" onclick="return validatereqWtOHDForm(this.form);">
-           <bean:message key="button.savetracingohd" />
+           <bean:message key="button.saveohd" />
          </html:submit>
      <% } else { %>
          <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
-          <bean:message key="button.savetracingohd" />
+          <bean:message key="button.saveohd" />
         </html:submit>
      <% } %>
      <%
@@ -1135,10 +1135,6 @@ function gotoHistoricalReport() {
                 </logic:notEqual>
 		<% } %>
 	</c:if>
-        <% } else { %>
-      	   <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
-              <bean:message key="button.savetracingohd" />
-           </html:submit>
 	<% } %>
     </c:if>    
   </td></tr></table>
