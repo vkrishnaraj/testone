@@ -69,6 +69,7 @@ public class RetrieveWTActionFiles {
 	private WTQueueBmo wqBmo;
 	private WT_ActionFileBmo wafBmo;
 	private WorldTracerService wtService;
+	private int errorCount = 0;
 
 	public void setWtService(WorldTracerService wtService) {
 		this.wtService = wtService;
@@ -95,6 +96,7 @@ public class RetrieveWTActionFiles {
 	}
 
 	public void manageActionFiles() {
+		errorCount = 0;
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(company);
 		if (csv == null || csv.getWt_enabled() != 1) {
 			return;
@@ -173,7 +175,7 @@ public class RetrieveWTActionFiles {
 
 	}
 
-	public void parsewt_actionfiles(ActionFileType actionFileType, int day, String airline, String station) {
+	public void parsewt_actionfiles(ActionFileType actionFileType, int day, String airline, String station) throws Exception {
 
 		try {
 			logger.debug("******** retrieving: " + actionFileType + ", day: " + day + "*************");
@@ -189,9 +191,11 @@ public class RetrieveWTActionFiles {
 			}
 
 		} catch (Exception e) {
+			errorCount++;
 			logger.error("error retriving wt action file data", e);
 
 			try {
+
 				HtmlEmail he = new HtmlEmail();
 				he.setHostName(email_host);
 				he.setSmtpPort(email_port);
@@ -212,6 +216,9 @@ public class RetrieveWTActionFiles {
 			}
 			if (e instanceof WorldTracerConnectionException) {
 				throw (WorldTracerConnectionException) e;
+			}
+			else if (errorCount >= 3) {
+				throw e;
 			}
 		}
 
