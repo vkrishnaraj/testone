@@ -30,12 +30,14 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.UserGroup;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
 import com.bagnet.nettracer.tracing.db.audit.Audit_GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditGroupUtils;
 
 /**
@@ -70,7 +72,7 @@ public final class ManageGroups extends Action {
 
 		String companyCode = "";
 		if (request.getParameter("edit") != null || request.getParameter("addAgents") != null) {
-			UserGroup group = AdminUtils.getGroup(request.getParameter("groupID"));
+		UserGroup group = AdminUtils.getGroup(request.getParameter("groupID"));
 			dForm.set("groupID", "" + group.getUserGroup_ID());
 			dForm.set("companyCode", group.getCompanycode_ID());
 			dForm.set("groupName", group.getDescription());
@@ -87,6 +89,14 @@ public final class ManageGroups extends Action {
 						a.setGroup(group);
 						//change association for the agent.
 						HibernateUtils.save(a);
+						
+						if (AdminUtils.getCompVariable(a.getCompanycode_ID()).getAudit_agent() == 1) {
+							Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(a, user);
+							if (audit_agent != null) {
+								HibernateUtils.saveNew(audit_agent);
+							}
+						}
+
 					}
 				}
 				//Get all the agents for this station.
@@ -95,12 +105,19 @@ public final class ManageGroups extends Action {
 				if (request.getParameter("station_id") != null) station_id = request
 						.getParameter("station_id");
 
+				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
+						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
+				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
+						.getParameter("currpage")) : 0;
+
+				
 				List agents = null;
 				if (!station_id.equals("-1")) agents = AdminUtils.getAgentsByStation(station_id, sort,
-						null, 0, 0);
-				else agents = AdminUtils.getAgents(group.getCompanycode_ID(), sort, null, 0, 0);
+						null, rowsperpage, currpage);
+				else agents = AdminUtils.getAgents(group.getCompanycode_ID(), sort, null, rowsperpage, currpage);
 
 				UserGroup guest = AdminUtils.getGuestGroup(group.getCompanycode_ID());
+				
 				for (Iterator i = agents.iterator(); i.hasNext();) {
 					Agent a = (Agent) i.next();
 					if (a.getGroup().getUserGroup_ID() == group.getUserGroup_ID()) {
@@ -109,6 +126,13 @@ public final class ManageGroups extends Action {
 							//not selected..move the user to the guest group.
 							a.setGroup(guest);
 							HibernateUtils.save(a);
+							
+							if (AdminUtils.getCompVariable(a.getCompanycode_ID()).getAudit_agent() == 1) {
+								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(a, user);
+								if (audit_agent != null) {
+									HibernateUtils.saveNew(audit_agent);
+								}
+							}
 						}
 					}
 				}
