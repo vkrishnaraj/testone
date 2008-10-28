@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Inventory;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -1092,8 +1093,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			addIncidentFieldEntry(WorldTracerField.RC, "Created in error", result);
 		}
 		if (incident.getFaultstation() != null) {
-			addIncidentFieldEntry(WorldTracerField.FS, StationBMO.getStationByCode(incident.getFaultstationcode())
-					.getWt_stationcode(), result);
+			Station fs = StationBMO.getStationByCode(incident.getFaultstationcode());
+			if(fs.getWt_stationcode() == null || fs.getWt_stationcode().trim().length() < 1) {
+				addIncidentFieldEntry(WorldTracerField.FS, incident.getStationcreated().getWt_stationcode(), result);
+			}
+			else {
+				addIncidentFieldEntry(WorldTracerField.FS, fs.getWt_stationcode(), result);
+			}
 		} else {
 			addIncidentFieldEntry(WorldTracerField.FS, incident.getStationcreated().getWt_stationcode(), result);
 		}
