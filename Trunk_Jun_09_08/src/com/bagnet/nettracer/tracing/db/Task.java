@@ -36,6 +36,9 @@ public class Task implements Serializable {
 	private TimeZone _TIMEZONE;
 
 	private Agent assignedTo;
+	
+	public static final int ALL_TASKS = -1;
+	public static final int ACTIVE_TASKS = -2;
 
 
 	/**

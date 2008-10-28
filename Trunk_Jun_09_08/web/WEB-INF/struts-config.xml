@@ -510,6 +510,7 @@
 
 		<!-- Administer Tasks -->
 		<action path="/otherTasks" type="com.bagnet.nettracer.tracing.actions.ManageTask" name="taskForm" scope="request" validate="false"></action>
+		<action parameter="active" path="/activeOtherTasks" type="com.bagnet.nettracer.tracing.actions.ManageTask" name="taskForm" scope="request" validate="false"></action>
 
 		<!-- Inbox -->
 		<action path="/message" type="com.bagnet.nettracer.tracing.actions.ManageMessage" name="composeForm" scope="session" validate="false"></action>

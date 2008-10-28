@@ -63,11 +63,12 @@ public class ManageTask extends Action {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		
 		Agent user = (Agent) session.getAttribute("user");
 
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) return (mapping
-				.findForward(TracingConstants.NO_PERMISSION));
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS, user)) {
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		}
+				
 
 		//	 menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS);
@@ -319,11 +320,14 @@ public class ManageTask extends Action {
 			return mapping.findForward(TracingConstants.VIEW_TASK);
 		}
 
-		int task_status_id = -1;
+		int task_status_id = Task.ALL_TASKS;
 		if (request.getParameter("task_status") != null) task_status_id = Integer.parseInt(request
 				.getParameter("task_status"));
+		else if (mapping.getParameter() != null && mapping.getParameter().equals("active")) {
+			task_status_id = Task.ACTIVE_TASKS;
+		}
 
-		int taskListCount = taskListCount = ((Long) TaskUtils.getTasks(
+		int taskListCount = ((Long) TaskUtils.getTasks(
 				agent_station.getStation_ID(), assigned_to, file_ref_number, task_status_id,
 				request.getParameter("s_time"), request.getParameter("e_time"), user, 0, 0, sort,
 				file_type, true).get(0)).intValue();

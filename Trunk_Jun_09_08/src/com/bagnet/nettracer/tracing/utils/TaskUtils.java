@@ -37,7 +37,7 @@ public class TaskUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Task.class);
 			cri.createCriteria("station").add(Expression.eq("station_ID", new Integer(station_id)));
-			if (task_status_id != -1) cri.createCriteria("status").add(
+			if (task_status_id != Task.ALL_TASKS) cri.createCriteria("status").add(
 					Expression.eq("status_ID", new Integer(task_status_id)));
 			else cri.createCriteria("status").add(
 					Expression.not(Expression.eq("status_ID", new Integer(task_status_id))));
@@ -189,15 +189,19 @@ public class TaskUtils {
 				sql.append(" and task.assignedTo.agent_ID = :agent_ID");
 			}
 
-			if (task_status_id != -1) {
+			if (task_status_id == Task.ALL_TASKS) {
+				sql.append(" and task.status.status_ID <> :status_ID");
+			} else if(task_status_id == Task.ACTIVE_TASKS) {
+				sql.append(" and task.status.status_ID != :deleted_status ");
+				sql.append(" and task.status.status_ID != :completed_status ");
+			}
+			else {
 				if (task_status_id == TracingConstants.TASK_STATUS_NOT_COMPLETED) {
 					task_status_id = TracingConstants.TASK_STATUS_COMPLETED;
 					sql.append(" and task.status.status_ID <> :status_ID");
 				} else {
 					sql.append(" and task.status.status_ID = :status_ID");
 				}
-			} else {
-				sql.append(" and task.status.status_ID <> :status_ID");
 			}
 
 			if (file_ref_number != null && file_ref_number.length() > 0) sql
@@ -265,7 +269,14 @@ public class TaskUtils {
 				q.setMaxResults(rowsperpage);
 			}
 
-			q.setInteger("status_ID", task_status_id);
+			if(task_status_id != Task.ACTIVE_TASKS) {
+				q.setInteger("status_ID", task_status_id);
+			}
+			else {
+				q.setInteger("completed_status", TracingConstants.TASK_STATUS_COMPLETED);
+				q.setInteger("deleted_status", TracingConstants.TASK_STATUS_DELETED);
+			}
+			
 			if (file_ref_number != null && file_ref_number.length() > 0) q.setString("file_ref_number",
 					file_ref_number);
 			if (file_type != null && file_type.length() > 0 && !file_type.equals("-1")) {
@@ -342,7 +353,7 @@ public class TaskUtils {
 				}
 			}
 
-			if (task_status_id != -1) {
+			if (task_status_id != Task.ALL_TASKS) {
 				if (task_status_id == TracingConstants.TASK_STATUS_NOT_COMPLETED) {
 					task_status_id = TracingConstants.TASK_STATUS_COMPLETED;
 					sql += " and task.status.status_ID <> :status_ID";

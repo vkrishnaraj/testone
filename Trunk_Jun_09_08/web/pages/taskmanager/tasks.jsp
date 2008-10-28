@@ -97,7 +97,10 @@ function sortAgents(sortOrder) {
               <td>
                 <html:select property="task_status" styleClass="dropdown">
                   <html:option value="-1">
-                    All
+                    <bean:message key="select.all" />
+                  </html:option>
+                  <html:option value="-2">
+                    <bean:message key="select.all_active" />
                   </html:option>
                   <html:options collection="task_status_list" property="status_ID" labelProperty="description" />
                 </html:select>
