@@ -64,76 +64,33 @@
  		 		Agent faultagent = (Agent)session.getAttribute("user");
         	
       %>
-      <logic:equal name="incidentForm" property="readonly" value="1">
-        <%= faultAirline %>
-      </logic:equal>
-      <logic:notEqual name="incidentForm" property="readonly" value="1">
         <html:select property="faultcompany_id" styleClass="dropdown" onchange="getstations();">
           <html:option value="">
             <bean:message key="select.please_select" />
           </html:option>
           <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
         </html:select>     
-      </logic:notEqual>
   </td>
-  
-  
- 
     <td nowrap>
     	<div id="faultstationdiv">
-    	 <logic:present name="faultstationlist" scope="request">
+    <logic:present name="faultstationlist" scope="request">
       <bean:message key="colname.faultstation" />
       <br>
-      <html:select property="faultstation_id" styleClass="dropdown">
-        <logic:equal name="incidentForm" property="readonly" value="1">
-          <% if (faultStation != null) {
-          	String faultStationCode = StationBMO.getStation(faultStation.getStation_ID()).getStationcode();
-            int faultStationId = faultStation.getStation_ID();
-          %>
-            <OPTION VALUE="<%= faultStationId %>">
-              <%=faultStationCode %>
-            </OPTION>
-          <% } else {%>
-          <html:option value="">
-            <bean:message key="select.please_select" />
-          </html:option>
-          <% } %>
-        </logic:equal>
-        <logic:notEqual name="incidentForm" property="readonly" value="1">
-        
+      <html:select property="faultstation_id" styleClass="dropdown">  
           <html:option value="">
             <bean:message key="select.please_select" />
           </html:option>
           <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
-
-        </logic:notEqual>
       </html:select>
       </logic:present>
       </div>
     </td>
-  
-  
-  
 </tr>
 <tr>
   <td nowrap colspan=2>
     <bean:message key="colname.losscode" />
     <br>
-      <html:select property="loss_code" styleClass="dropdown">
-        <logic:equal name="incidentForm" property="readonly" value="1">
-          <% if (lc != null) { %>
-            <OPTION VALUE="<%= "" + lc.getLoss_code() %>">
-              <%= "" + lc.getLoss_code() %>-
-              <%= "" + lc.getDescription() %>
-              </OPTION>
-          <% } else {%>
-          <html:option value="0">
-            <bean:message key="select.please_select" />
-          </html:option>
-          <% } %>
-        </logic:equal>
-        <logic:notEqual name="incidentForm" property="readonly" value="1">
-        
+      <html:select property="loss_code" styleClass="dropdown">      
           <html:option value="0">
             <bean:message key="select.please_select" />
           </html:option>
@@ -151,9 +108,6 @@
     <%
           }
     %>
-        </logic:notEqual>
       </html:select>
-      
-    
   </td>
 </tr>

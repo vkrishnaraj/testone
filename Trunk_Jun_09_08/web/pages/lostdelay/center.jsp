@@ -559,23 +559,27 @@
                 							}
                 						}
                 %>
-              </logic:notEqual> <logic:equal name="incidentForm" property="incident_ID"
-                value="">
+              </logic:notEqual>
+              <logic:equal name="incidentForm" property="incident_ID" value="">
                 <input type="hidden" name="savetemp" value="">
+                <%
+                	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS, a)) {
+                	%>
                 <input type="button" name="s" value="Save as Temporary"
                   onclick="if(validatereqFields(this.form)){saveIncidentTemporary(this.form, 'lostdelay')};"
                   id="button">
                 &nbsp;&nbsp;&nbsp;
+                <% } %>
 
-                <html:submit property="savetracing" styleId="button"
-                  onclick="return validatereqFields(this.form, 'lostdelay');">
+                <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
                   <bean:message key="button.savetracing" />
                 </html:submit>
 
               </logic:equal></td>
             </tr>
           </table>
-        </logic:notEqual> <logic:equal name="incidentForm" property="readonly" value="1">
+        </logic:notEqual>
+        <logic:equal name="incidentForm" property="readonly" value="1">
           <logic:equal name="incidentForm"
             property="allow_remark_update" value="1">
             <table width="100%" border="0" cellpadding="0"

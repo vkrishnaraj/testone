@@ -6,7 +6,10 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
+
 <SCRIPT LANGUAGE="JavaScript">
   function textCounter2(field, countfield, maxlimit) {
     if (field.value.length > maxlimit) {
@@ -83,15 +86,19 @@
               </td>
             </tr>
             <tr>
-              <td valign="top" colspan=3>
 <%
-                if (a.getGroup().getDescription().equalsIgnoreCase("Admin") || remark.getRemark_ID() == 0) {
+            String remarkDescription = "remark[" + i + "].remarktext";
+            String remarkText        = "this.form.elements['" + remarkDescription + "']";
+            String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
 %>
+<%  		if(remark.getRemark_ID() != 0) {
+%>
+	
+            <td valign="top" colspan=3>
 <%
-                  String remarkDescription = "remark[" + i + "].remarktext";
-                  String remarkText        = "this.form.elements['" + remarkDescription + "']";
-                  String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
+                if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_REMARKS, a)) {
 %>
+
                   <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"
                   <logic:equal name="incidentForm" property="readonly" value="1"><% if (remark.getRemark_ID() > 0) {%> readonly="readonly"<% } %></logic:equal>
                   ><%= remark.getRemarktext() %></textarea>
@@ -103,13 +110,29 @@
                   </html:submit>
                   </logic:notEqual>
 <%
-                } else {
+                }
+                else {
 %>
                   <bean:write name="remark" property="remarktext" />
 <%
                 }
 %>
-              </td>
+            	</td>
+<%
+			} else if( ((IncidentForm)session.getAttribute("incidentForm")).getReadonly() != 1) {
+%>
+				<td valign="top" colspan=3>
+                  <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" 
+                  	onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemarktext() %></textarea>
+                  <input name="<%= remarkDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
+                  <br>
+                  <html:submit styleId="button" property="deleteRemark" indexed="true">
+                    <bean:message key="button.delete_remark" />
+                  </html:submit>
+                  </td>
+<%
+			}
+%>
             </tr>
           </logic:equal>
         </logic:iterate>

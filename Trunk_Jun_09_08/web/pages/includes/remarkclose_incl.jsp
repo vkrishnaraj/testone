@@ -1,12 +1,15 @@
-<%@ page language="java" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ page language="java"%>
+<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
+<%@ taglib uri="/tags/struts-html" prefix="html"%>
+<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
 
-<%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
-<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ taglib uri="/tags/struts-nested" prefix="nested"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
+
 <SCRIPT LANGUAGE="JavaScript">
   function textCounter2(field, countfield, maxlimit) {
     if (field.value.length > maxlimit) {
@@ -31,70 +34,53 @@
     }
   }
 %>
-  <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-    <logic:iterate id="remark" indexId="i" name="incidentForm" property="remarklist" type="com.bagnet.nettracer.tracing.db.Remark">
-      <logic:equal name="remark" property="remarktype" value="<%= "" + TracingConstants.REMARK_CLOSING %>">
-        <logic:present name="remark" property="agent">
-        	<bean:define id="agent" name="remark" property="agent" type="com.bagnet.nettracer.tracing.db.Agent" />
-        </logic:present>
-        <tr>
-          <td valign="top">
-            <a name='addremark<%= i %>'></a>
-            <bean:message key="colname.date" />
-            :
-            <bean:write name="remark" property="dispcreatetime" />
-          </td>
-          <td>
-            <bean:message key="colname.station" />
-            :
-                <logic:present name="remark" property="agent">
-   
-	                <bean:write name="agent" property="companycode_ID" />
+<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+	<logic:iterate id="remark" indexId="i" name="incidentForm"
+		property="remarklist" type="com.bagnet.nettracer.tracing.db.Remark">
+		<logic:equal name="remark" property="remarktype"
+			value="<%= "" + TracingConstants.REMARK_CLOSING %>">
+			<logic:present name="remark" property="agent">
+				<bean:define id="agent" name="remark" property="agent"
+					type="com.bagnet.nettracer.tracing.db.Agent" />
+			</logic:present>
+			<tr>
+				<td valign="top"><a name='addremark<%= i %>' /> <bean:message
+					key="colname.date" /> : <bean:write name="remark"
+					property="dispcreatetime" /></td>
+				<td><bean:message key="colname.station" /> : <logic:present
+					name="remark" property="agent">
+
+					<bean:write name="agent" property="companycode_ID" />
 	                &nbsp;
 	                <bean:write name="agent" property="station.stationcode" />
-	              </logic:present>
-          </td>
-          <td>
-            <bean:message key="colname.agent" />
-            :
-                <logic:present name="remark" property="agent">
-                <bean:write name="agent" property="username" />
-                </logic:present>
-          </td>
-        </tr>
-        <tr>
-          <td valign="top" colspan=3>
+				</logic:present></td>
+				<td><bean:message key="colname.agent" /> : <logic:present
+					name="remark" property="agent">
+					<bean:write name="agent" property="username" />
+				</logic:present></td>
+			</tr>
+			<tr>
 <%
-            if (a.getGroup().getDescription().equalsIgnoreCase("Admin") || remark.getRemarktext() == null
-                    || remark.getRemarktext().trim().length() <= 0) {
+        String remarkDescription = "remark[" + i + "].remarktext";
+        String remarkText        = "this.form.elements['" + remarkDescription + "']";
+        String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
 %>
-<%
-              String remarkDescription = "remark[" + i + "].remarktext";
-              String remarkText        = "this.form.elements['" + remarkDescription + "']";
-              String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
-%>
-              <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemarktext() %></textarea>
-              <input name="<%= remarkDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
-              <br>
-              <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-                <html:submit styleId="button" property="deleteCloseRemark" indexed="true">
-                  <bean:message key="button.delete_remark" />
-                </html:submit>
-              </logic:notEqual>
-<%
-            } else {
-%>
-              <bean:write name="remark" property="remarktext" />
-<%
-            }
-%>
-          </td>
-        </tr>
-      </logic:equal>
-    </logic:iterate>
-  </table>
-
-    <center><html:submit property="addcloseremark" styleId="button">
-      <bean:message key="button.add_remark" />
-    </html:submit></center>
+			<td valign="top" colspan=3>
+				<textarea name="<%= remarkDescription %>" cols="80" rows="10"
+					onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"
+					onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemarktext() %></textarea>
+				<input name="<%= remarkDescription + "2" %>" type="text"
+					value="1500" size="4" maxlength="4" disabled="true" /> <br>
+				<html:submit styleId="button" property="deleteCloseRemark"
+					indexed="true">
+					<bean:message key="button.delete_remark" />
+				</html:submit> 
+			</td>
+		</tr>
+		</logic:equal>
+	</logic:iterate>
+</table>
+<center><html:submit property="addcloseremark" styleId="button">
+	<bean:message key="button.add_remark" />
+</html:submit></center>
 

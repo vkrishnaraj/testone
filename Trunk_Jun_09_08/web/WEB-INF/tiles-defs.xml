@@ -83,6 +83,10 @@
         <put name="center"   value="/pages/lostdelay/ldclose.jsp"/>
     </definition>
     
+    <definition name="ld_close_ro" extends="user_menu">
+        <put name="center"   value="/pages/lostdelay/ldclose_ro.jsp"/>
+    </definition>
+    
     <definition name="close_onhandsuccess" extends="user_menu">
         <put name="center"   value="/pages/onhand/close_on_hand_success.jsp"/>
     </definition>
@@ -95,12 +99,20 @@
         <put name="center"   value="/pages/missingarticles/maclose.jsp"/>
     </definition>
     
+    <definition name="ma_close_ro" extends="user_menu">
+        <put name="center"   value="/pages/missingarticles/maclose_ro.jsp"/>
+    </definition>
+    
     <definition name="damagedbag" extends="user_menu">
         <put name="center"   value="/pages/damagedbag/center.jsp"/>
     </definition>
 
     <definition name="damaged_close" extends="user_menu">
         <put name="center"   value="/pages/damagedbag/damagedclose.jsp"/>
+    </definition>
+    
+   <definition name="damaged_close_ro" extends="user_menu">
+        <put name="center"   value="/pages/damagedbag/damagedclose_ro.jsp"/>
     </definition>
         
     <definition name="onhandbag" extends="user_menu">

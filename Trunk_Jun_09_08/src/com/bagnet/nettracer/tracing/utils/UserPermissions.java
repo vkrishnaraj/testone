@@ -364,6 +364,10 @@ public class UserPermissions {
 			return true;
 		}
 		
+		if(!inc.getStationassigned().getCompany().getCompanyCode_ID().equals(a.getCompanycode_ID())) {
+			return false;
+		}
+		
 		int type = inc.getItemtype().getItemType_ID();
 		String componentNameCreated = null;
 		String componentNameAll = null;

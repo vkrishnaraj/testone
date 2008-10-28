@@ -134,8 +134,6 @@
           </table>
           <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
         </div>
-        <logic:notEqual name="incidentForm" property="readonly" value="1">
-          <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td align="center" valign="top">
@@ -143,12 +141,15 @@
                   <html:submit property="save" styleId="button">
                     <bean:message key="button.save" />
                   </html:submit>
+                  <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                   &nbsp;
+                  
                   <html:submit property="doclose" styleId="button" onclick="doCheck = 1;">
                     <bean:message key="button.closereport" />
                   </html:submit>
+                  </logic:notEqual>
                   &nbsp;
-                  	<c:if test="${!empty incidentForm.wt_id }">
+                  	<c:if test="${!empty incidentForm.wt_id and incidentForm.wtFile.wt_status != 'CLOSED'}">
                   <%	
                    if (a.getStation().getCompany().getVariable().getWt_enabled() == 1){
                 	   if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
@@ -167,26 +168,4 @@
                 </td>
               </tr>
             </table>
-          </logic:notEqual>
-          <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-          <!-- only admin can edit closed section once it is closed -->
-<%
-          if (a.getGroup().getDescription().equalsIgnoreCase("Admin")) {
-%>
-            <table width="100%" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td align="center" valign="top">
-                  <br>
-                  <html:submit property="save" styleId="button">
-                    <bean:message key="button.save" />
-                  </html:submit>
-                </td>
-              </tr>
-            </table>
-<%
-          }
-%>
-          <!-- eof admin -->
-        </logic:equal>
-      </logic:notEqual>
     </html:form>

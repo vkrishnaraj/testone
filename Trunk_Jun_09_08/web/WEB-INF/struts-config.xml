@@ -224,8 +224,11 @@
 		<forward name="missingmain" path="missing_articles" />
 		<forward name="damagedmain" path="damagedbag" />
 		<forward name="ldclose" path="ld_close" />
+		<forward name="ldclose_ro" path="ld_close_ro" />
 		<forward name="maclose" path="ma_close" />
+		<forward name="maclose_ro" path="ma_close_ro" />
 		<forward name="damagedclose" path="damaged_close" />
+		<forward name="damagedclose_ro" path="damaged_close_ro" />
 		<forward name="viewohdmain" path="viewonhandbag" />
 		<forward name="ohdmain" path="onhandbag" />
 		<forward name="ohdhistorical" path="ohd_historical" />

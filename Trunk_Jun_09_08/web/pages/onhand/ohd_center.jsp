@@ -1080,62 +1080,49 @@ function gotoHistoricalReport() {
       <tr><td align="center"><br />
     <c:if test="${empty OnHandForm.status}">
         <input type="hidden" name="savetemp" value="">
+        <%
+           if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS, a)) {
+        %>
         <input type="button" name="s" value="Save as Temporary"
-          onclick="if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};"
-          id="button">
+        	onclick="if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};" id="button">
         &nbsp;&nbsp;&nbsp;
-             <%
-       if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-     %>
-         <html:submit styleId="button" property="savetracing" onclick="return validatereqWtOHDForm(this.form);">
+        <% } %>
+        <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
            <bean:message key="button.savetracingohd" />
-         </html:submit>
-     <% } else { %>
-         <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
-          <bean:message key="button.savetracingohd" />
         </html:submit>
-     <% } %>
     </c:if>
 
      <c:if test="${!empty OnHandForm.status}">
-          <%
-       if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-     %>
-         <html:submit styleId="button" property="savetracing" onclick="return validatereqWtOHDForm(this.form);">
-           <bean:message key="button.saveohd" />
-         </html:submit>
-     <% } else { %>
          <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
           <bean:message key="button.saveohd" />
         </html:submit>
-     <% } %>
-     <%
-      if ((a.getStation().getCompany().getVariable().getWt_enabled() == 1) &&
-          (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1) &&
-          (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) &&
-	  (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD, a))) {
-    %>
-	<c:if test="${empty pendingWtAction and empty OnHandForm.wt_id}">
-&nbsp;&nbsp;&nbsp;&nbsp;
-                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-                  <html:submit property="savetowt" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
-                    <bean:message key="button.savetoWT" />
-                  </html:submit>
-                </logic:notEqual>
-	</c:if>
-	<c:if test="${empty pendingWtAction and !empty OnHandForm.wt_id}">
-            <%
-               if (!a.getStation().getCompany().getVariable().isAuto_wt_amend()) {
-            %>
-&nbsp;&nbsp;&nbsp;&nbsp;
-                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-                  <html:submit property="amendtowt" styleId="button" onclick="return validatereqWtOHDForm(this.form);">
-                    <bean:message key="button.amendWT" />
-                  </html:submit>
-                </logic:notEqual>
+	     <%
+	      if ((a.getStation().getCompany().getVariable().getWt_enabled() == 1) &&
+	          (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1) &&
+	          (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, a)) &&
+		  (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD, a))) {
+	    %>
+		<c:if test="${empty pendingWtAction and empty OnHandForm.wt_id}">
+			&nbsp;&nbsp;&nbsp;&nbsp;
+	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
+	                  <html:submit property="savetowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
+	                    <bean:message key="button.savetoWT" />
+	                  </html:submit>
+	                </logic:notEqual>
+		</c:if>
+		<c:if test="${empty pendingWtAction and !empty OnHandForm.wt_id}">
+	            <%
+	               if (!a.getStation().getCompany().getVariable().isAuto_wt_amend()) {
+	            %>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
+	                  <html:submit property="amendtowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
+	                    <bean:message key="button.amendWT" />
+	                  </html:submit>
+	                </logic:notEqual>
+			<% } %>
+		</c:if>
 		<% } %>
-	</c:if>
-	<% } %>
     </c:if>    
   </td></tr></table>
     </logic:notEqual>
@@ -1146,23 +1133,10 @@ function gotoHistoricalReport() {
           <tr>
             <td align="center" valign="top"><br>
             <logic:notEmpty name="OnHandForm" property="status">
-              <%
-                 if (a.getStation().getCompany().getVariable().getWt_enabled() == 1) {
-              %>
-              <html:submit property="savetracing" styleId="button"
-                onclick="return validatereqWtOHDForm(this.form);">
-                <bean:message key="button.saveremark" />
-              </html:submit>
-              <%
-                 } else {
-              %>
               <html:submit property="savetracing" styleId="button"
                 onclick="return validatereqOHDForm(this.form);">
                 <bean:message key="button.saveremark" />
               </html:submit>
-              <%
-                 }
-              %>
             </logic:notEmpty></td>
           </tr>
         </table>
