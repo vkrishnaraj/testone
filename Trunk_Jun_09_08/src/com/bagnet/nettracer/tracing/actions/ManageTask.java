@@ -325,6 +325,7 @@ public class ManageTask extends Action {
 				.getParameter("task_status"));
 		else if (mapping.getParameter() != null && mapping.getParameter().equals("active")) {
 			task_status_id = Task.ACTIVE_TASKS;
+			dForm.setTask_status(Integer.toString(task_status_id));
 		}
 
 		int taskListCount = ((Long) TaskUtils.getTasks(
