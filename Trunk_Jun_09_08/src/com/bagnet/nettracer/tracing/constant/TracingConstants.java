@@ -90,6 +90,12 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_OSI_DAM = "Other System Information PIL";
 	public final static String SYSTEM_COMPONENT_NAME_OSI_PIL = "Other System Information DAM";
 	public final static String SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS = "Customer Comments";
+	public final static String SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS = "Create Temp Incidents";
+	public final static String SYSTEM_COMPONENT_NAME_CREATE_TEMP_OHD = "Create Temp OHD";
+	public final static String SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES = "Update Loss Codes";
+	public final static String SYSTEM_COMPONENT_NAME_UPDATE_DAMAGE_LOSS_CODES = "Update Damage Loss Codes";
+	public final static String SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES = "Update Missing Loss Codes";
+	public final static String SYSTEM_COMPONENT_NAME_UPDATE_REMARKS = "Update Remarks";
 	
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER = "WorldTracer";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES = "WorldTracer Action Files";
@@ -339,10 +345,13 @@ public class TracingConstants {
 
 	// lostdelay close page
 	public final static String LD_CLOSE = "ldclose";
+	public static final String LD_CLOSE_READ_ONLY = "ldclose_ro";
 	// missing articles close page
 	public final static String MISSING_CLOSE = "maclose";
+	public final static String MISSING_CLOSE_READ_ONLY = "maclose_ro";
 	// damaged bag close page
 	public final static String DAMAGED_CLOSE = "damagedclose";
+	public final static String DAMAGED_CLOSE_READ_ONLY = "damagedclose_ro";
 
 	// on hand bag main page
 	public final static String OHD_MAIN = "ohdmain";
@@ -645,6 +654,7 @@ public class TracingConstants {
 	public static final String WT_PENDING_REINSTATE = "WT_PENDING_REINSTATE";
 	public static final String WT_PENDING_CLOSE = "WT_PENDING_CLOSE";
 	public static final Object WT_PENDING_FOH = "WT_PENDING_FOH";
+
 	
 	
 	public static String getDBDateFormat(Properties properties) {
