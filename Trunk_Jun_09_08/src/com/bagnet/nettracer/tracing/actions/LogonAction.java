@@ -238,7 +238,7 @@ public class LogonAction extends Action {
 
 				int entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
-					int x = TaskUtils.getTaskCount(s.getStation_ID(), -1);
+					int x = TaskUtils.getActiveTaskCount(s.getStation_ID());
 					if (x != -1)
 						entries = x;
 				} else {

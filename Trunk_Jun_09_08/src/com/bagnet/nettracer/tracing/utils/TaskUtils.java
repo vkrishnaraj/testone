@@ -111,41 +111,45 @@ public class TaskUtils {
 	}
 
 	/**
+	 * Used for the task manager only, assumes -1
 	 * 
 	 * @param station_id
 	 * @param task_status_id
 	 * @return
 	 */
-	public static int getTaskCount(int station_id, int task_status_id) {
+	public static int getActiveTaskCount(int station_id) {
 		Session sess = null;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			String sql = "select count(task.task_id) from "
-					+ "com.bagnet.nettracer.tracing.db.Task task where 1=1 ";
+			String sql = "select count(task.task_id) from " + "com.bagnet.nettracer.tracing.db.Task task where 1=1 ";
 			sql += " and task.station.station_ID = :station_ID";
-			if (task_status_id != -1) {
-				sql += " and task.status.status_ID = :status_ID";
-			}
+			sql += " and task.status.status_ID != :deleted_status";
+			sql += " and task.status.status_ID != :completed_status";
 			Query q = sess.createQuery(sql);
 			q.setInteger("station_ID", station_id);
-			if (task_status_id != -1) {
-				q.setInteger("status_ID", task_status_id);
-			}
+
+			q.setInteger("deleted_status", TracingConstants.TASK_STATUS_DELETED);
+			q.setInteger("completed_status", TracingConstants.TASK_STATUS_COMPLETED);
+
 			List list = q.list();
-			if (list.size() > 0) {
+			if(list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
-			} else {
+			}
+			else {
 				return 0;
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			return -1;
-		} finally {
-			if (sess != null) {
+		}
+		finally {
+			if(sess != null) {
 				try {
 					sess.close();
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
