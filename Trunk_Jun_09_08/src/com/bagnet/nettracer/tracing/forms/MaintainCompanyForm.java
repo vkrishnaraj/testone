@@ -36,7 +36,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String lz_mode;
 	private String default_station_code;
 	private String default_loss_code;
-	private String email_customer;
+	private boolean email_customer;
 	private String email_host;
 	private String email_port;
 	private String email_from;
@@ -195,7 +195,6 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public String getLz_mode() { return this.lz_mode;}
 	public String getDefault_station_code() { return this.default_station_code;}
 	public String getDefault_loss_code() { return this.default_loss_code;}
-	public String getEmail_customer() { return this.email_customer;}
 	public String getEmail_host() { return this.email_host;}
 	public String getEmail_port() { return this.email_port;}
 	public String getEmail_from() { return this.email_from;}
@@ -254,7 +253,6 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setLz_mode ( String  lz_mode ) { this.lz_mode  =  lz_mode ; }
 	public void setDefault_station_code ( String  default_station_code ) { this.default_station_code  =  default_station_code ; }
 	public void setDefault_loss_code ( String  default_loss_code ) { this.default_loss_code  =  default_loss_code ; }
-	public void setEmail_customer ( String  email_customer ) { this.email_customer  =  email_customer ; }
 	public void setEmail_host ( String  email_host ) { this.email_host  =  email_host ; }
 	public void setEmail_port ( String  email_port ) { this.email_port  =  email_port ; }
 	public void setEmail_from ( String  email_from ) { this.email_from  =  email_from ; }
@@ -336,6 +334,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setAuto_wt_amend(boolean auto_wt_amend) {
 		this.auto_wt_amend = auto_wt_amend;
 		
+	}
+
+	public boolean isEmail_customer() {
+		return email_customer;
+	}
+
+	public void setEmail_customer(boolean email_customer) {
+		this.email_customer = email_customer;
 	}
 
 	public String getOal_inc_hours() {

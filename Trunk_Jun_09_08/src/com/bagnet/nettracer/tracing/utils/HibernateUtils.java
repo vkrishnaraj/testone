@@ -285,7 +285,7 @@ public class HibernateUtils {
 						c.getVariable().setTotal_threads(obj.getVariable().getTotal_threads());
 						c.getVariable().setDefault_station_code(obj.getVariable().getDefault_station_code());
 						c.getVariable().setDefault_loss_code(obj.getVariable().getDefault_loss_code());
-						c.getVariable().setEmail_customer(obj.getVariable().getEmail_customer());
+						c.getVariable().setEmail_customer(obj.getVariable().isEmail_customer());
 						c.getVariable().setEmail_host(obj.getVariable().getEmail_host());
 						c.getVariable().setEmail_port(obj.getVariable().getEmail_port());
 						c.getVariable().setEmail_from(obj.getVariable().getEmail_from());

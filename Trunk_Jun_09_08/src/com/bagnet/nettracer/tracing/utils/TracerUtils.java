@@ -238,7 +238,7 @@ public class TracerUtils {
 
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(user
 				.getCompanycode_ID());
-		theform.setEmail_customer(csv.getEmail_customer());
+		theform.setEmail_customer(csv.isEmail_customer() ? 1 : 0);
 
 	}
 

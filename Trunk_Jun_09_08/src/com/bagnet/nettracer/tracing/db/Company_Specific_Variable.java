@@ -28,7 +28,7 @@ public class Company_Specific_Variable implements Serializable {
 	private int report_method;
 	private int default_station_code;
 	private int default_loss_code;
-	private int email_customer; // send email to customer after report creation or
+	private boolean email_customer; // send email to customer after report creation or
 	private double min_interim_approval_check;
 	private double min_interim_approval_miles;
 	private double min_interim_approval_voucher;
@@ -609,23 +609,6 @@ public class Company_Specific_Variable implements Serializable {
 		this.report_method = report_method;
 	}
 
-	/**
-	 * @return Returns the email_customer.
-	 * 
-	 * @hibernate.property type="integer"
-	 */
-	public int getEmail_customer() {
-		return email_customer;
-	}
-
-	/**
-	 * @param email_customer
-	 *          The email_customer to set.
-	 */
-	public void setEmail_customer(int email_customer) {
-		this.email_customer = email_customer;
-	}
-	
 	
 	/**
 	 * @return Returns the email_from.
@@ -971,4 +954,18 @@ public class Company_Specific_Variable implements Serializable {
 	public void setAuto_wt_amend(boolean auto_wt_amend) {
 		this.auto_wt_amend = auto_wt_amend;
 	}
+	
+	/**
+	 * @return Returns the email_customer.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isEmail_customer() {
+		return email_customer;
+	}
+	public void setEmail_customer(boolean email_customer) {
+		this.email_customer = email_customer;
+	}
+	
+	
 }

@@ -678,7 +678,7 @@ public class IncidentUtils {
 	}
 
 	public static void manageIncidentEmailing(Company company, HttpServletRequest request) {
-		if (company.getVariable().getEmail_customer() == 0) {
+		if (!company.getVariable().isEmail_customer()) {
 			request.setAttribute("companyDoesntEmail", 1);
 		}
 			

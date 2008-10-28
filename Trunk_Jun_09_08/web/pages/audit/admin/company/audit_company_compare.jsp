@@ -437,10 +437,10 @@ function updatePagination() {
               </td>
               <logic:iterate id="audit_lfi" name="compareList" scope="request">
                 <td>
-                  <logic:equal name="audit_lfi" property="variable.email_customer" value="1">
+                  <logic:equal name="audit_lfi" property="variable.email_customer" value="true">
                     <bean:message key="select.yes" />
                   </logic:equal>
-                  <logic:notEqual name="audit_lfi" property="variable.email_customer" value="1">
+                  <logic:notEqual name="audit_lfi" property="variable.email_customer" value="false">
                     <bean:message key="select.no" />
                   </logic:notEqual>
                   &nbsp;

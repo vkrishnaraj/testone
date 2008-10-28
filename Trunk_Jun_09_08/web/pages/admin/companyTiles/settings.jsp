@@ -100,7 +100,6 @@
 	    
 	            </td>
 	          </tr>
-	          
 	          <tr>
 	            <td>
 	              <bean:message key="colname.email_customer" />
@@ -110,20 +109,14 @@
 	              :
 	            </td>
 	            <td>
-	              <select name="email_customer" style="dropdown">
-	                <option value="1">
-	                <logic:equal name="companyForm" property="email_customer" value="1">
-	                  selected
-	                </logic:equal>
-	                >
-	                <bean:message key="select.yes" />
-	                <option value="0">
-	                <logic:equal name="companyForm" property="email_customer" value="0">
-	                  selected
-	                </logic:equal>
-	                >
-	                <bean:message key="select.no" />
-	              </select>
+	              <html:select name="companyForm" property="email_customer" style="dropdown">
+ 					<html:option value="true">
+                  		<bean:message key="select.yes" />
+                  	</html:option>
+                  	<html:option value="false">
+                  		<bean:message key="select.no" />
+                  	</html:option>
+                  </html:select>
 	            </td>
 	          </tr>
 	
@@ -267,7 +260,6 @@
             <%
             }
 	        %>
-
 		    <tr>
             <td colspan="2">
               &nbsp;
