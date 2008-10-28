@@ -128,7 +128,26 @@ public class MissingAction extends Action {
 			if (request.getParameter("close") != null && request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
 				return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
 			} else {
-				return (mapping.findForward(TracingConstants.MISSING_CLOSE));
+				int currentStatus = -1;
+				boolean canSave = UserPermissions.hasIncidentSavePermission(user, theform.getIncident_ID());
+				if(!canSave) {
+					return mapping.findForward(TracingConstants.MISSING_CLOSE_READ_ONLY);
+				}
+				if(request.getAttribute("currentstatus") != null) {
+					currentStatus = Integer.parseInt((String)request.getAttribute("currentstatus"));
+				}
+
+				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
+					//if it is closed user can only edit it if they have the permission to edit closed files
+					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES, user)) {
+						return mapping.findForward(TracingConstants.MISSING_CLOSE);
+					}
+					return mapping.findForward(TracingConstants.MISSING_CLOSE_READ_ONLY);
+				}
+				//not closed
+				else {
+					return (mapping.findForward(TracingConstants.MISSING_CLOSE));
+				}
 			}
 			
 		}

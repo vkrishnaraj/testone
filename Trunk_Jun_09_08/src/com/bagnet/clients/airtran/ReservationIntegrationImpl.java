@@ -342,7 +342,7 @@ public class ReservationIntegrationImpl extends
 
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(user
 				.getCompanycode_ID());
-		theform.setEmail_customer(csv.getEmail_customer());
+		theform.setEmail_customer(csv.isEmail_customer() ? 1 : 0);
 	}
 	
 	private static boolean updateComment(String comment, String recordlocator) {

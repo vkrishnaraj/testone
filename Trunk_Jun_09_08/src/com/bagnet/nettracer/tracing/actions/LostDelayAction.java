@@ -164,8 +164,11 @@ public class LostDelayAction extends Action {
 
 		List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
 		request.setAttribute("agentassignedlist", agentassignedlist);
-		if(theform.getIncident_ID() != null)
-			request.setAttribute("incident", theform.getIncident_ID());
+		String form_incident_id = null;
+		if(theform.getIncident_ID() != null) {
+			form_incident_id = theform.getIncident_ID();
+			request.setAttribute("incident", form_incident_id);
+		}
 
 		ServletContext sc = getServlet().getServletContext();
 		String realpath = sc.getRealPath("/");
@@ -206,7 +209,26 @@ public class LostDelayAction extends Action {
 				return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
 			}
 			else {
-				return (mapping.findForward(TracingConstants.LD_CLOSE));
+				int currentStatus = -1;
+				boolean canSave = UserPermissions.hasIncidentSavePermission(user, form_incident_id);
+				if(!canSave) {
+					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
+				}
+				if(request.getAttribute("currentstatus") != null) {
+					currentStatus = Integer.parseInt((String)request.getAttribute("currentstatus"));
+				}
+
+				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
+					//if it is closed user can only edit it if they have the permission to edit closed files
+					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, user)) {
+						return mapping.findForward(TracingConstants.LD_CLOSE);
+					}
+					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
+				}
+				//not closed
+				else {
+					return (mapping.findForward(TracingConstants.LD_CLOSE));
+				}
 			}
 		}
 
