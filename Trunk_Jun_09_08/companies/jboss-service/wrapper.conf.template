@@ -14,12 +14,13 @@ wrapper.java.additional.1=-server
 # enviroment variables - define the ones that match your desired environment
 wrapper.java.additional.2=-Djava.rmi.server.hostname=${IP_ADDRESS}
 wrapper.java.additional.3=-Dcom.sun.management.jmxremote
+wrapper.java.additional.4=-Djava.endorsed.dirs=%JBOSS_HOME%/lib/endorsed
 
 # memory parameters - define the ones that match your desired environment
-wrapper.java.additional.4=-Xms512m
-wrapper.java.additional.5=-Xmx900m
-wrapper.java.additional.6=-XX:MaxPermSize=192m
-wrapper.java.additional.7=-XX:+HeapDumpOnOutOfMemoryError
+wrapper.java.additional.5=-Xms512m
+wrapper.java.additional.6=-Xmx900m
+wrapper.java.additional.7=-XX:MaxPermSize=192m
+wrapper.java.additional.8=-XX:+HeapDumpOnOutOfMemoryError
 
 wrapper.app.parameter.1=org.jboss.Main
 # Parameters to be passed to the application (Jboss) 
