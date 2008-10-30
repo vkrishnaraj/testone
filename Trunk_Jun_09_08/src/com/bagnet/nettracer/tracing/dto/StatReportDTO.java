@@ -45,9 +45,10 @@ public class StatReportDTO {
 
 	private int sumordet;
 
-	private int outputtype;
+	private int outputtype = -1;
 
 	private String agent;
+	private String lz_id;
 
 	/**
 	 * @return Returns the itemType_ID.
@@ -401,5 +402,19 @@ public class StatReportDTO {
 
 	public void setAgent(String agent) {
 		this.agent = agent;
+	}
+
+	/**
+	 * @return the lz_id
+	 */
+	public String getLz_id() {
+		return lz_id;
+	}
+
+	/**
+	 * @param lz_id the lz_id to set
+	 */
+	public void setLz_id(String lz_id) {
+		this.lz_id = lz_id;
 	}
 }

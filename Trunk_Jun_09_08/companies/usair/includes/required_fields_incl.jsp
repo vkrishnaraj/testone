@@ -113,7 +113,7 @@
     } // End FOR LOOP
     
     for (var j=0;j<addressIndices.length;j++) {
-      var index = addressIndices[j];
+      var index = addressIndices[0];
       var mobile = document.getElementById("addresses[" + index + "].mobile");
       var home = document.getElementById("addresses[" + index + "].homephone");
       var work = document.getElementById("addresses[" + index + "].workphone");
@@ -123,6 +123,7 @@
         mobile.focus();
         return false;
       }
+      break;
     }
   }
     

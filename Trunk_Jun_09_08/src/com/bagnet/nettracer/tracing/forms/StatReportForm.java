@@ -39,6 +39,21 @@ public final class StatReportForm extends ValidatorForm {
 	private int outputtype = 0;
 
 	private String agent;
+	private String lz_id;
+
+	/**
+	 * @return the lz_id
+	 */
+	public String getLz_id() {
+		return lz_id;
+	}
+
+	/**
+	 * @param lz_id the lz_id to set
+	 */
+	public void setLz_id(String lz_id) {
+		this.lz_id = lz_id;
+	}
 
 	/**
 	 * Initialize the form

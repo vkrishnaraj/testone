@@ -374,7 +374,7 @@
 		 for (var j=0;j<form.length;j++) {
 	  	currentElement = form.elements[j];
     	currentElementName=currentElement.name;
-		 	if (currentElementName.indexOf("expedite") != -1)
+	    if (currentElementName.indexOf("expedite") != -1 && currentElement.type != "hidden")
 	    {
 	      if (currentElement.value.length < 1)
 	      {
@@ -385,6 +385,7 @@
 	        
 	      if (currentElement.value.length > 0 && !checkExpedite(currentElement.value))
 	      {
+            alert("Contents: " + currentElement.value);
 	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
 	        currentElement.focus();
 	        return false;

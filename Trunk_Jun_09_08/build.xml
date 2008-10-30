@@ -1,4 +1,4 @@
-<project name="tracer" default="build-dev" basedir=".">
+<project name="tracer" default="build-usair" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -206,14 +206,14 @@
 	</target>
 
 
-	<target name="jar-gensrc" depends="init,compile-gensrc">
-		<jar destfile="${build.gen-lib.dir}/${ant_project_name}/common/${ant_project_name}_app-client.jar">
-			<fileset dir="${build.gen-src.dir}/${ant_project_name}_app/classes" />
+	<target name="jar-gensrc">
+		<jar destfile="${build.dir}/tracerfiles.jar">
+			<fileset dir="${build.dir}/tracer_web/classes" />
 		</jar>
 	</target>
 
 	<target name="compile-gensrc" depends="init,gen-src">
-		<javac srcdir="${build.gen-src.dir}/${ant_project_name}_app" fork="true" destdir="${root.dir}/tmp/${ant_project_name}_app/classes" debug="on" sourcepath="${basedir}/ejbsrc:${basedir}/src">
+		<javac srcdir="${build.gen-src.dir}/${ant_project_name}_app" fork="true" destdir="${build.dir}/${ant_project_name}_app/classes" debug="on" sourcepath="${basedir}/ejbsrc:${basedir}/src">
 			<classpath>
 				<path refid="project.classpath" />
 			</classpath>
@@ -418,10 +418,17 @@
 		<antcall target="delete" />
 	</target>
 	
+	<target name="build-usair-all">
+		<antcall target="build-usair-dev" />
+		<antcall target="build-usair-beta" />
+		<antcall target="build-usair-prod" />
+		<antcall target="build-usair" />
+	</target>
+	
 	<target name="build-usair" depends="delete">
 		<property name="ant_project_name" value="tracer" />
 		<property name="include.us" value="1" />
-		<antcall target ="usair-libraries-create" />
+		<antcall target="usair-libraries-create" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
@@ -453,17 +460,15 @@
 		</antcall>
 
 		
-		<antcall target="fast_all">
+		<antcall target="fast_all" />
 			
-		</antcall>
-		
 		<antcall target="delete" />
 		
 		<antcall target ="usair-libraries-cleanup" />
 	</target>
 	
 	<target name="build-usair-dev" depends="delete">
-		<property name="ant_project_name" value="tracer" />
+		<property name="ant_project_name" value="usair-dev" />
 		<antcall target ="usair-libraries-create" />
 		<property name="include.us" value="1" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
@@ -486,8 +491,8 @@
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo/bdologo.gif" />
 		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/usair/includes/required_fields_incl.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/training/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/training/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/usair/dev/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_main.cfg.xml" />
 
 		<antcall target="combineResourceFiles">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
@@ -495,15 +500,14 @@
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<antcall target="fast_all">
-			<param name="ant_project_name" value="tracer" />
-		</antcall>
+		<antcall target="fast_all" />
+
 		<antcall target="delete" />
 		<antcall target ="usair-libraries-cleanup" />
 	</target>
 	
 	<target name="build-usair-beta" depends="delete">
-		<property name="ant_project_name" value="tracer" />
+		<property name="ant_project_name" value="usair-beta" />
 		<antcall target ="usair-libraries-create" />
 		<property name="include.us" value="1" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
@@ -535,9 +539,45 @@
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<antcall target="fast_all">
-			<param name="ant_project_name" value="tracer" />
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<antcall target ="usair-libraries-cleanup" />
+	</target>
+	
+	<target name="build-usair-prod" depends="delete">
+		<property name="ant_project_name" value="usair" />
+		<antcall target ="usair-libraries-create" />
+		<property name="include.us" value="1" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/usair/nettracerstyles1.css" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/usair/formstyles.css" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/usair/header_bg.gif" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/usair/header_bg_noconf.gif" />
+		<copy todir="${basedir}/src" file="companies/usair/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/usair/report_email.html" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/usair/beta/login/center.jsp" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/receipt/logo.jpg" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo/bdologo.gif" />
+		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/usair/includes/required_fields_incl.jsp" />
+		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_main.cfg.xml" />
+
+		<antcall target="combineResourceFiles">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/usair/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
+
+		<antcall target="fast_all" />
 		<antcall target="delete" />
 		<antcall target ="usair-libraries-cleanup" />
 	</target>
@@ -1146,12 +1186,13 @@
 			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/tracer.properties" />
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/hibernate_main.cfg.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}tracer.properties" />
+		
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/cron/config/log4j.properties" />
-		<jar destfile="${artifact.dir}/${ant_project_name}/tracer-cron.jar"
+		<jar destfile="${artifact.dir}/${ant_project_name}/${jarprefix}tracer-cron.jar"
 			basedir="${build.dir}/${ant_project_name}/classes"
 			includes="**/*.class,**/*.xml,**/*.properties">
 		</jar>
@@ -1161,10 +1202,41 @@
 		<property name="ant_project_name" value="westjet"/>
 		<antcall target="build-cron-service" />
 	</target>
+	
 	<target name="usair-build-cron">
 		<property name="ant_project_name" value="usair"/>
+		<property name="sub_path" value=""/>
 		<antcall target="build-cron-service" />
 	</target>
+	
+	<target name="usair-build-cron-all">
+		<antcall target="usair-build-cron-dev" />
+		<antcall target="usair-build-cron-beta" />
+		<antcall target="usair-build-cron-prod" />
+	</target>
+
+	<target name="usair-build-cron-dev">
+		<property name="ant_project_name" value="usair"/>
+		<property name="sub_path" value="dev/"/>
+		<property name="jarprefix" value="dev-"/>
+		<antcall target="build-cron-service" />
+	</target>
+
+
+	<target name="usair-build-cron-beta">
+		<property name="ant_project_name" value="usair"/>
+		<property name="sub_path" value="beta/"/>
+		<property name="jarprefix" value="beta-"/>
+		<antcall target="build-cron-service" />
+	</target>
+	
+	<target name="usair-build-cron-prod">
+		<property name="ant_project_name" value="usair"/>
+		<property name="jarprefix" value="prod-"/>
+		<property name="sub_path" value="production/"/>
+		<antcall target="build-cron-service" />
+	</target>
+	
 	<target name="airtran-build-cron">
 		<property name="ant_project_name" value="airtran"/>
 		<antcall target="build-cron-service" />
@@ -1189,7 +1261,7 @@
 		</copy>
 		<copy todir="${build.dir}/dist/cron/lib">
 			<fileset dir="${artifact.dir}/${ant_project_name}">
-				<include name="tracer-cron.jar" />
+				<include name="${jarprefix}tracer-cron.jar" />
 			</fileset>
 			<fileset dir="${lib.build-cron.dir}">
 				<include name="wrapper.dll" />

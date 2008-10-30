@@ -130,6 +130,12 @@ public class LostDelayAction extends Action {
 				request.setAttribute("prepopOhdList", prepopOhdList);
 			}
 			
+			if (prepopIncList == null || prepopOhdList == null) {
+				ActionMessage error = new ActionMessage("prepop.search.nodata");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}
+			
 			request.setAttribute("prepopulate", new Integer("1"));
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}	else if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {

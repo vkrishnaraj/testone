@@ -35,9 +35,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 /**
  * @author Matt
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+
  */
 public class StatReportAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -76,8 +74,10 @@ public class StatReportAction extends Action {
 			request.setAttribute("oStatusList", oStatusList);
 		}
 		
-
 		request.setAttribute("reportnum", reportnum);
+		
+		request.setAttribute("customReports", ReportBMO.getAllCustomReports());
+		request.setAttribute("company", user.getStation().getCompany().getCompanyCode_ID().toLowerCase());
 
 		String customreportnum = request.getParameter("customreportnum");
 
@@ -112,7 +112,9 @@ public class StatReportAction extends Action {
 				saveMessages(request, errors);
 			} else {
 				request.setAttribute("reportfile", reportfile);
-				request.setAttribute("outputtype", Integer.toString(daform.getOutputtype()));
+				if (request.getAttribute("outputtype") == null) {
+					request.setAttribute("outputtype", Integer.toString(daform.getOutputtype()));
+				}
 			}
 
 			return (mapping.findForward(TracingConstants.STAT_REPORT_MAIN));

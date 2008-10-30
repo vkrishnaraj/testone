@@ -47,9 +47,11 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.datasources.JRIncidentDataSource;
 import com.bagnet.nettracer.datasources.JROnhandDataSource;
@@ -58,6 +60,7 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ItemType;
+import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
@@ -73,6 +76,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 /**
@@ -128,7 +132,7 @@ public class ReportBMO {
 				return create_onhand_rpt(srDTO, ReportingConstants.RPT_10, ReportingConstants.RPT_10_NAME, messages.getMessage(new Locale(user
 						.getCurrentlocale()), "header.reportnum.10"));
 			case ReportingConstants.RPT_20:
-				String cReportData = SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
+				return SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
 			default:
 				return null;
 			}
@@ -2515,9 +2519,18 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
 		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype);
 	}
-		
 	
+	public static String getReportFile(List list, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request) throws Exception {
+		JasperReport jasperReport = getCompiledReport(reportname, rootpath);
+		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, request);
+	}
+
 	private String getReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype) throws Exception {
+		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, req);
+	}
+	
+	public static String getReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request) throws Exception {
 		/** look for compiled reports, if can't find it, compile xml report * */
 		
 
@@ -2534,13 +2547,33 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
 			outfile += ".html";
 		else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
-			outfile += ".pdf";
+			// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+			if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+				outfile += ".pdf";
+			} else {
+				outfile += ".html";
+				outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+				request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+			}
+			
 		else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS)
 			outfile += ".xls";
 		else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV)
 			outfile += ".csv";
 		else if (outputtype == TracingConstants.REPORT_OUTPUT_XML)
 			outfile += ".xml";
+		else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
+			// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+			if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+				outfile += ".pdf";
+				outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+			} else {
+				outfile += ".html";
+				outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+				request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+			}
+		}
+			
 
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
 		JRExporter exporter = null;
@@ -2551,7 +2584,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			exporter = new JRHtmlExporter();
 
 			Map imagesMap = new HashMap();
-			req.getSession().setAttribute("IMAGES_MAP", imagesMap);
+			request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 			exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 			exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
 
@@ -2752,6 +2785,53 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			logger.error("unable to search incident report: " + e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static List<Report> getAllCustomReports() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Report.class);
+			return cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static Report getCustomReport(int number) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Report.class).add(
+					Expression.eq("number", new Integer(number)));
+			
+			List<Report> list = cri.list();
+			if (list.size() == 1) {
+				return list.get(0);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

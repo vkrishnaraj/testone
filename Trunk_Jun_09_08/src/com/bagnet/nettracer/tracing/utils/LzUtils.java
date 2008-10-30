@@ -53,6 +53,27 @@ public class LzUtils {
 		}
 	}
 	
+	public static List<Station> getStationsForLz(int lz_ID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class);
+			cri.add(Expression.eq("lz_ID", lz_ID));
+			return (List<Station>)cri.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
 	public static ArrayList getIncidentLzStationsBeans(String companyCode) {
 		ArrayList al = new ArrayList();
 

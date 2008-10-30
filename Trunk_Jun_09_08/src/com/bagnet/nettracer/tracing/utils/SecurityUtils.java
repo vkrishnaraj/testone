@@ -121,7 +121,7 @@ public class SecurityUtils {
 				
 				if (logintype == 1 && agent.isWs_enabled() != true) {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.ws_disabled"));
-				} else if (agent.isWeb_enabled() != true) {
+				} else if (logintype == 0 && agent.isWeb_enabled() != true) {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.web_disabled"));
 				}
 				if (agent.isAccount_locked()) {

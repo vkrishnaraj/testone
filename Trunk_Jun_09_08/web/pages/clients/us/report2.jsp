@@ -6,24 +6,37 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+
 <%
   Agent agent = (Agent)session.getAttribute("user");
 %>
+                    <%@page import="com.bagnet.nettracer.tracing.utils.LzUtils"%>
 
-                    <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@page import="java.util.List"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Lz"%>
 <tr>
                       <td>
-                        <bean:message key="colname.report_type" />
+                        <bean:message key="movetolz.colname.assignment" />
+                        <font color=red>
+                          *
+                        </font>
                         :
                       </td>
                       <td>
-                        <html:select property="itemType_ID" styleClass="dropdown">
-                          <html:option value="0">
-                            <bean:message key="select.all" />
-                          </html:option>
-                          <html:options collection="mbrreporttypes" property="itemType_ID" labelProperty="description" />
+                        <html:select styleClass="dropdown" name="statReportForm" property="lz_id">
+                          <%
+                            List lzs = LzUtils.getIncidentLzStations(agent.getStation().getCompany().getCompanyCode_ID());
+                            for (int i = 0; i<lzs.size(); ++i) {
+                              Lz lz = (Lz)lzs.get(i);
+                              String value = "" + lz.getLz_ID();
+                              String text = lz.getStation().getStationcode();
+                          %>
+							<option value="<%=value %>"><%=text %></option>
+                          <% 
+                            }
+                          %>
                         </html:select>
-                      </td>
                     </tr>
                   	<tr>
                       <td>
@@ -39,34 +52,6 @@
                         <html:text property="starttime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.starttime,'calendar','<%= agent.getDateformat().getFormat() %>'); return false;">-
                         <html:text property="endtime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.endtime,'calendar2','<%= agent.getDateformat().getFormat() %>'); return false;"></td>
                     </tr>
-                    <tr>
-                      <td>
-                        <bean:message key="colname.faultstation" />
-                        :
-                      </td>
-                      <td>
-                        <html:select property="station_ID" styleClass="dropdown" multiple="true">
-                          <html:option value="0">
-                            <bean:message key="select.all" />
-                          </html:option>
-                          <html:options collection="airlineallstationlist" property="station_ID" labelProperty="stationcode" />
-                        </html:select>
-                      </td>
-                    </tr>
-                    <tr>
-	                    <td>
-	                      <bean:message key="colname.status" />
-	                      :
-	                    </td>
-	                    <td>
-	                      <html:select property="status_ID" styleClass="dropdown">
-	                        <html:option value="0">
-	                          <bean:message key="select.all" />
-	                        </html:option>
-	                        <html:options collection="statuslist" property="status_ID" labelProperty="description" />
-	                      </html:select>
-	                    </td>
-	                  </tr>
                     <tr>
 			                <td>
 			                  <bean:message key="colname.report_output_type" />
@@ -85,7 +70,7 @@
     			                  <html:radio property="outputtype" value="4" />
     			                  <bean:message key="radio.xml" />
                             <% } else {%>
-    			                  <html:radio property="outputtype" value="1" checked/>
+    			                  <html:radio property="outputtype" value="1" />
     			                  <bean:message key="radio.html" />
                             <% } %>
 			                </td>
@@ -111,4 +96,4 @@
 			                    <a target="reportwin" href="reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>"><b><bean:message key="link.save_report" /></a>
 		                  </td>
 		                </tr>
-		             	 	</logic:present>
+	                 </logic:present>

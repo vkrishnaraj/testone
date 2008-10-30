@@ -34,136 +34,17 @@ public class TraceTest {
 	public void tearDown() throws Exception {
 	}
 	
-	
+	@Test
 	public void testTrace1() {
 		// 217905
 		// 100% overall match
 		// 100% claim check
 		// 100% record locator
-		String incident_ID = "CTGNK00025246";
-		String ohd_ID = "CBTNK00021101";
+		String incident_ID = "DALUS00000210";
+		String ohd_ID = "XFKUS00000204";
 		double actual = trace(incident_ID, ohd_ID);
 		//assertEquals(100, actual, .01);
 	}
 	
 	
-	
-	public void testTrace2() {
-		// 217904
-		// 90% overall match
-		// 100% claim check
-		// 60% record locator
-		String incident_ID = "SJONK00023611";
-		String ohd_ID = "MYRNK00020086";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertEquals(100, actual, .01);
-	}
-	
-	
-	public void testTrace3() {
-		// ??
-		// 80% overall match
-		// 100% itinerary
-		// 100% color
-		// 100% type
-		String incident_ID = "SJUNK00028156";
-		String ohd_ID = "SJUNK00020998";
-		trace(incident_ID, ohd_ID);
-	}
-	
-	
-	public void testTrace4() {
-		// 217779
-		// 78.4% overall match
-		// 96% Name match
-		// 96% Name on bag match
-		// 100% Itinerary
-		// 100% Type
-		// 100% Color
-		String incident_ID = "POSNK00027997";
-		String ohd_ID = "LIMNK00021078";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertEquals(100, actual, .01);
-	}
-	
-	
-	/**
-	 * Should return a relatively low match.
-	 */
-	
-	public void testTrace5() {
-		// 215210
-		// 90% Member (NK)
-		// 100% Tertiary
-		// 100% Type
-		String incident_ID = "LGANK00023157";
-		String ohd_ID = "FLLNK00019875";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-	
-	/**
-	 * Should return a relatively low match.
-	 */
-	
-	public void testTrace6() {
-
-		String incident_ID = "PSENK00019608";
-		String ohd_ID = "FLLNK00015144";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-	
-	
-	public void testTrace7() {
-
-		String incident_ID = "LGANK00000348";
-		String ohd_ID = "LGANK00013240";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-	
-	
-	public void testTrace8() {
-
-		String incident_ID = "DCANK00000307";
-		String ohd_ID = "CBTNK00005337";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-
-	
-	public void testException1() {
-
-		String incident_ID = "CTGNK00009056";
-		String ohd_ID = "FLLNK00006464";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-	
-	
-	public void testException2() {
-
-		String incident_ID = "MYRNK00018831";
-		String ohd_ID = "FLLNK00013760";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-	
-	
-	public void testException3() {
-
-		String incident_ID = "LASNK00024226";
-		String ohd_ID = "BOSNK00017756";
-		double actual = trace(incident_ID, ohd_ID);
-		//assertTrue(actual < 25);
-	}
-
-	@Test
-	public void testLength() {
-
-		String incident_ID = "NASNK00005864";
-		String ohd_ID = "CBTNK00007729";
-		double actual = trace(incident_ID, ohd_ID);
-	}	
 }

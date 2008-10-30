@@ -8,10 +8,13 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%
   Agent agent = (Agent)session.getAttribute("user");
 %>
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <html:form action="statReport.do" method="post">
   <!-- Calendar includes -->
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -284,21 +287,20 @@
                   <logic:equal name="reportnum" scope="request" value="20">
                   
                   <!-- custom report 1 MBR report -->
-                  <logic:equal name="customreportnum" scope="request" value="1">
                   
-                  <table class="form2" cellspacing="0" cellpadding="0">
-                    <tr>
-                      <td colspan=2>
-                        <strong>
-                          <bean:message key="header.report_options" />
+                  
+                  <c:if test="${!empty customreportnum}">
+                    <table class="form2" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td colspan=2>
+                          <strong>
+                            <bean:message key="header.report_options" />
                         </strong>
                       </td>
                     </tr>
-										
-										<jsp:include page="custom_report_default_include.jsp" />
-										
-		            	</table>
-	                </logic:equal>
+                    <jsp:include page="/pages/clients/${company}/report${customreportnum}.jsp" />
+                    </table>
+                  </c:if>
 	                  
                   <logic:notPresent name="customreportnum" scope="request">
                   <table class="form2" cellspacing="0" cellpadding="0">
@@ -309,9 +311,15 @@
                       </strong>
                     </td>
                   </tr>
-                  <tr><td>
-                  <a href="statReport.do?reportnum=20&customreportnum=1"><bean:message key="header.customreportnum.1" /></a>
-                  </td></tr>
+                  
+                  <logic:iterate id="report" indexId="i" name="customReports" type="com.bagnet.nettracer.tracing.db.Report" scope="request">
+                    <tr>
+                      <td>
+                        <a href="statReport.do?reportnum=20&customreportnum=<bean:write name="report" property="number"/>"><bean:write name="report" property="resourceValue"/></a>
+                      </td>
+                    </tr>
+                  </logic:iterate>
+
                   </table>
                   </logic:notPresent>
                   

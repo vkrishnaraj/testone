@@ -344,7 +344,7 @@ public class UserPermissions {
 		
 		for (String stationCode: stationString.split(",")) {
 			Station station = StationBMO.getStationByCode(stationCode, a.getCompanycode_ID());
-			if (!stationCodeList.contains(station.getStationcode())) {
+			if (station != null && !stationCodeList.contains(station.getStationcode())) {
 				stationList.add(station);
 				stationCodeList.add(station.getStationcode());
 			}

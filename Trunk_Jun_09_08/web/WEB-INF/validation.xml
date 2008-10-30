@@ -264,7 +264,7 @@
                  </var>
                  <var>
                    <var-name>max</var-name>
-                   <var-value>120</var-value>
+                   <var-value>60</var-value>
                  </var>
 	       	</field>
 	       	<field property="currentTimezone" depends="required">
