@@ -52,7 +52,7 @@ public class ClaimPayoutRpt {
 
 			ReportBMO rbmo = new ReportBMO(request);
 			return rbmo.getReportFile(expenselist, parameters, "ClaimPayout", sc.getRealPath("/"),
-					TracingConstants.REPORT_OUTPUT_PDF);
+					TracingConstants.REPORT_OUTPUT_UNDECLARED);
 
 			//JasperPrint jasperPrint = JasperManager.fillReport(jasperReport,
 			// parameters, ds);

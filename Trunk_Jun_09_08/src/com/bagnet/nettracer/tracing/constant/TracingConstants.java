@@ -288,6 +288,7 @@ public class TracingConstants {
 	public final static int REMARK_WORLDTRACER_RESPONSE = 4;
 
 	// report output type
+	public final static int REPORT_OUTPUT_UNDECLARED = -1;
 	public final static int REPORT_OUTPUT_PDF = 0;
 	public final static int REPORT_OUTPUT_HTML = 1;
 	public final static int REPORT_OUTPUT_XLS = 2;

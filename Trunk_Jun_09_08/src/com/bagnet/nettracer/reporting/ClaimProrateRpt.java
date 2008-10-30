@@ -94,7 +94,7 @@ public class ClaimProrateRpt {
 
 			ReportBMO rbmo = new ReportBMO(request);
 			return rbmo.getReportFile(itinerarylist, parameters, "ClaimProrate", sc.getRealPath("/"),
-					TracingConstants.REPORT_OUTPUT_PDF);
+					TracingConstants.REPORT_OUTPUT_UNDECLARED);
 
 		} catch (Exception e) {
 			logger.error("unable to create claim prorate report: " + e);

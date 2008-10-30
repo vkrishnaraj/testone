@@ -17,6 +17,9 @@
 
 	<bean id="scannerDataSource"
 		class="com.bagnet.clients.${scanner.class.path}.ScannerDataSourceImpl" />
+		
+	<bean id="customReportBmo"
+		class="com.bagnet.clients.${report.class.path}.CustomReportBMO" />
 
 	<bean id="reservationIntegration"
 		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />

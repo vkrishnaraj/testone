@@ -224,157 +224,177 @@ public class PassiveTrace implements Runnable {
 			Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
 			
 			if (incident == null) {
-				logger.error("No incident found by ID: " + incidentId);
-			}
-
-			// We only want to trace against ohds that have not been traced or
-			// have been updated in recent history.
-			String lastUpdatedStr = null;
-			if (incident.getOhd_lasttraced() == null) {
-				lastUpdatedStr = " LASTUPDATED IS NOT NULL ";
-			} else {
-				lastUpdatedStr = " LASTUPDATED >= :lastUpdated";
-			}
-
-			// Find the earliest date to search from - the earlier of the create
-			// date and the first itinerary departure date.
-			Date searchFromDate = incident.getCreatedate();
-
-			Set<Itinerary> itinSet = ((Set<Itinerary>) incident.getItinerary());
-			if (itinSet != null && itinSet.size() > 0) {
-				Object[] itinArray = (itinSet.toArray());
-				Itinerary itin = (Itinerary) itinArray[0];
-				if (itin.getDepartdate() != null
-						&& itin.getDepartdate().compareTo(searchFromDate) < 0) {
-					searchFromDate = itin.getDepartdate();
-				}
-
-			}
-
-			GregorianCalendar cal = new GregorianCalendar();
-			cal.setTime(searchFromDate);
-			cal.add(Calendar.DAY_OF_YEAR, -this.daysBack);
-			Date beginDateRange = cal.getTime();
-			cal.setTime(searchFromDate);
-			cal.add(Calendar.DAY_OF_YEAR, this.daysForward);
-			Date endDateRange = cal.getTime();
-
-			String dateRange = " FOUNDDATE >= :beginDateRange AND FOUNDDATE <= :endDateRange ";
-
-			String sql = "SELECT * FROM OHD WHERE "
-					+ "(STATUS_ID = :status1 or STATUS_ID = :status2) AND "
-					+ dateRange + " AND " + lastUpdatedStr
-					+ " ORDER BY LASTUPDATED ASC";
-
-			SQLQuery query = sess.createSQLQuery(sql);
-			query.setInteger("status1", TracingConstants.OHD_STATUS_OPEN);
-			query.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
-			query.setTimestamp("beginDateRange", beginDateRange);
-			query.setTimestamp("endDateRange", endDateRange);
-
-			if (incident.getOhd_lasttraced() != null) {
-				Date ohdLastTraced = DateUtils.convertToDate(incident
-						.getOhd_lasttraced(),
-						TracingConstants.DB_DATETIMEFORMAT, null);
-				query.setTimestamp("lastUpdated", ohdLastTraced);
-			}
-
-			query.addScalar("OHD_ID", Hibernate.STRING);
-
-			List<String> ohdList = query.list();
-			logger.debug("Total OHDs found: " + ohdList.size());
-
-			for (String ohd_ID : ohdList) {
-				message = "Exception thrown - Incident: "
-						+ incident.getIncident_ID() + " OHD:" + ohd_ID;
+				String LOCAL_ERROR_MESSAGE = "No incident found by ID - usually indicative of DB error: " + incidentId; 
+				logger.error(LOCAL_ERROR_MESSAGE);
+				errorHandler.sendEmail(message + "<br /><br />", false, true);
 				
-				OHD ohd = OhdBMO.getOHDByID(ohd_ID, sess);
-				sess.setReadOnly(ohd, true);
-				Score score = Trace.trace(incident, ohd, null);
-
-				logger.debug("  OHD: " + ohd_ID + "  Score: "
-						+ score.getOverallScore());
-
-				GregorianCalendar now = new GregorianCalendar();
-				now.setTime(ohd.getLastupdated());
-				now.add(Calendar.SECOND, 1);
-
-				lastTraced = DateUtils.formatDate(now.getTime(),
-						TracingConstants.DB_DATETIMEFORMAT, null, null);
-
-				// If worth scoring, add to DB.
-				if (score.getOverallScore() > this.minimumScore || score.isGtsv()) {
-					
-					// Does the match already exist in our system?
-					double percMatch = formatPercent(score.getOverallScore());
-					
-					String matchExistsSQL = "SELECT COUNT(*) as COUNT FROM MATCH_HISTORY WHERE MBR_NUMBER= :incident_ID AND OHD_ID = :ohd_ID AND MATCH_PERCENT = :matchPercent";
-	
-					SQLQuery matchExistsQuery = sess.createSQLQuery(matchExistsSQL);
-					matchExistsQuery.setString("incident_ID", incidentId);
-					matchExistsQuery.setString("ohd_ID", ohd_ID);
-					matchExistsQuery.setDouble("matchPercent", percMatch);
-					matchExistsQuery.addScalar("COUNT", Hibernate.INTEGER);
-					List<Integer> queryResults = matchExistsQuery.list();
-					int queryCount = queryResults.get(0).intValue();
-					
-					// If we have not saved this particular match before, then do so now.
-					if (queryCount == 0) {
-						logger.info("  New Match detected - Incident: "
-								+ incident.getIncident_ID() + " OHD: "
-								+ ohd.getOHD_ID() + " Score: "
-								+ score.getOverallScore());
-
-						
-						Match match = new Match();
-						match.setBagnumber(score.getBagNumber());
-						match.setMatch_type(TracingConstants.PASSIVE_MATCH_TYPE);
-						match.setMatch_percent(formatPercent(score.getOverallScore()));
-						match.setStatus(StatusBMO
-								.getStatus(TracingConstants.MATCH_STATUS_OPEN));
-						match.setMatch_made_on(TracerDateTime.getGMTDate());
-						match.setMbr(incident);
-						match.setOhd(ohd);
-						match.setClaimchecknum(score.getClaimCheckNumber());
-	
-						HashSet<Match_Detail> details = new HashSet<Match_Detail>();
-	
-						for (MatchResult result : score.getMatchResults()) {
-							if (result.isUsedInScoring()) {
-								Match_Detail detail = new Match_Detail();
-								detail.setMatch(match);
-								detail.setMbr_info(result.getIncidentContents());
-								detail.setOhd_info(result.getOhdContents());
-								detail.setPercentage(formatPercent(result.getPercentMatch()));
-								detail.setItem(result.getMatchElement()
-										.getConstant());
-								details.add(detail);
-							}
-						}
-	
-						match.setDetails(details);
-						HibernateUtils.save(match);
-						sess.evict(match);
-					}
+				try {
+					Thread.sleep(300*1000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
 				}
-				sess.evict(ohd);
-			}
+				
+			} else {
 
-			if (lastTraced != null) {
-				incident.setOhd_lasttraced(lastTraced);
-				HibernateUtils.save(incident, sess);
+				// We only want to trace against ohds that have not been traced or
+				// have been updated in recent history.
+				String lastUpdatedStr = null;
+				if (incident.getOhd_lasttraced() == null) {
+					lastUpdatedStr = " LASTUPDATED IS NOT NULL ";
+				} else {
+					lastUpdatedStr = " LASTUPDATED >= :lastUpdated";
+				}
+	
+				// Find the earliest date to search from - the earlier of the create
+				// date and the first itinerary departure date.
+				Date searchFromDate = incident.getCreatedate();
+	
+				Set<Itinerary> itinSet = ((Set<Itinerary>) incident.getItinerary());
+				if (itinSet != null && itinSet.size() > 0) {
+					Object[] itinArray = (itinSet.toArray());
+					Itinerary itin = (Itinerary) itinArray[0];
+					if (itin.getDepartdate() != null
+							&& itin.getDepartdate().compareTo(searchFromDate) < 0) {
+						searchFromDate = itin.getDepartdate();
+					}
+	
+				}
+	
+				GregorianCalendar cal = new GregorianCalendar();
+				cal.setTime(searchFromDate);
+				cal.add(Calendar.DAY_OF_YEAR, -this.daysBack);
+				Date beginDateRange = cal.getTime();
+				cal.setTime(searchFromDate);
+				cal.add(Calendar.DAY_OF_YEAR, this.daysForward);
+				Date endDateRange = cal.getTime();
+	
+				String dateRange = " FOUNDDATE >= :beginDateRange AND FOUNDDATE <= :endDateRange ";
+	
+				String sql = "SELECT * FROM OHD WHERE "
+						+ "(STATUS_ID = :status1 or STATUS_ID = :status2) AND "
+						+ dateRange + " AND " + lastUpdatedStr
+						+ " ORDER BY LASTUPDATED ASC";
+	
+				SQLQuery query = sess.createSQLQuery(sql);
+				query.setInteger("status1", TracingConstants.OHD_STATUS_OPEN);
+				query.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
+				query.setTimestamp("beginDateRange", beginDateRange);
+				query.setTimestamp("endDateRange", endDateRange);
+	
+				if (incident.getOhd_lasttraced() != null) {
+					Date ohdLastTraced = DateUtils.convertToDate(incident
+							.getOhd_lasttraced(),
+							TracingConstants.DB_DATETIMEFORMAT, null);
+					query.setTimestamp("lastUpdated", ohdLastTraced);
+				}
+	
+				query.addScalar("OHD_ID", Hibernate.STRING);
+	
+				List<String> ohdList = query.list();
+				logger.debug("Total OHDs found: " + ohdList.size());
+	
+				for (String ohd_ID : ohdList) {
+					message = "Exception thrown - Incident: "
+							+ incident.getIncident_ID() + " OHD:" + ohd_ID;
+					
+					OHD ohd = OhdBMO.getOHDByID(ohd_ID, sess);
+					sess.setReadOnly(ohd, true);
+					Score score = Trace.trace(incident, ohd, null);
+	
+					logger.debug("  OHD: " + ohd_ID + "  Score: "
+							+ score.getOverallScore());
+	
+					GregorianCalendar now = new GregorianCalendar();
+					now.setTime(ohd.getLastupdated());
+					now.add(Calendar.SECOND, 1);
+	
+					lastTraced = DateUtils.formatDate(now.getTime(),
+							TracingConstants.DB_DATETIMEFORMAT, null, null);
+	
+					// If worth scoring, add to DB.
+					if (score.getOverallScore() > this.minimumScore || score.isGtsv()) {
+						
+						// Does the match already exist in our system?
+						double percMatch = formatPercent(score.getOverallScore());
+						
+						String matchExistsSQL = "SELECT COUNT(*) as COUNT FROM MATCH_HISTORY WHERE MBR_NUMBER= :incident_ID AND OHD_ID = :ohd_ID AND MATCH_PERCENT = :matchPercent";
+		
+						SQLQuery matchExistsQuery = sess.createSQLQuery(matchExistsSQL);
+						matchExistsQuery.setString("incident_ID", incidentId);
+						matchExistsQuery.setString("ohd_ID", ohd_ID);
+						matchExistsQuery.setDouble("matchPercent", percMatch);
+						matchExistsQuery.addScalar("COUNT", Hibernate.INTEGER);
+						List<Integer> queryResults = matchExistsQuery.list();
+						int queryCount = queryResults.get(0).intValue();
+						
+						// If we have not saved this particular match before, then do so now.
+						if (queryCount == 0) {
+							logger.info("  New Match detected - Incident: "
+									+ incident.getIncident_ID() + " OHD: "
+									+ ohd.getOHD_ID() + " Score: "
+									+ score.getOverallScore());
+	
+							
+							Match match = new Match();
+							match.setBagnumber(score.getBagNumber());
+							match.setMatch_type(TracingConstants.PASSIVE_MATCH_TYPE);
+							match.setMatch_percent(formatPercent(score.getOverallScore()));
+							match.setStatus(StatusBMO
+									.getStatus(TracingConstants.MATCH_STATUS_OPEN));
+							match.setMatch_made_on(TracerDateTime.getGMTDate());
+							match.setMbr(incident);
+							match.setOhd(ohd);
+							match.setClaimchecknum(score.getClaimCheckNumber());
+		
+							HashSet<Match_Detail> details = new HashSet<Match_Detail>();
+		
+							for (MatchResult result : score.getMatchResults()) {
+								if (result.isUsedInScoring()) {
+									Match_Detail detail = new Match_Detail();
+									detail.setMatch(match);
+									detail.setMbr_info(result.getIncidentContents());
+									detail.setOhd_info(result.getOhdContents());
+									detail.setPercentage(formatPercent(result.getPercentMatch()));
+									detail.setItem(result.getMatchElement()
+											.getConstant());
+									details.add(detail);
+								}
+							}
+		
+							match.setDetails(details);
+							HibernateUtils.save(match);
+							sess.evict(match);
+						}
+					}
+					sess.evict(ohd);
+				}
+	
+				if (lastTraced != null) {
+					incident.setOhd_lasttraced(lastTraced);
+					HibernateUtils.save(incident, sess);
+				}
+				sess.close();
 			}
-			sess.close();
-
 		} catch (HibernateException e) {
 			logger.error(message, e);
 			errorHandler.sendEmail(message + "<br /><br />", e, false, true);
+			e.printStackTrace();
 			
-			e.printStackTrace();			
+			try {
+				Thread.sleep(300*1000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		} catch (Exception e) {
 			logger.error(message, e);
 			errorHandler.sendEmail(message + "<br /><br />", e, false, false);
 			e.printStackTrace();
+			
+			try {
+				Thread.sleep(300*1000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 	}

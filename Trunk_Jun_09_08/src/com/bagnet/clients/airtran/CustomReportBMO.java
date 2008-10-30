@@ -5,8 +5,6 @@
  */
 package com.bagnet.clients.airtran;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,21 +15,6 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
-import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXmlExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.HibernateException;
@@ -41,14 +24,11 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_Custom_1_DTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 /**
  * @author Administrator
@@ -63,11 +43,6 @@ public class CustomReportBMO implements
 	private HttpServletRequest req;
 	private String errormsg = "";
 
-	public CustomReportBMO(HttpServletRequest request, Agent user, String rootpath) {
-		this.req = request;
-		this.user = user;
-		CustomReportBMO.rootpath = rootpath;
-	}
 
 	/*****************************************************************************
 	 * custom report MBR report for airtran
@@ -82,7 +57,7 @@ public class CustomReportBMO implements
 	 * @throws HibernateException
 	 */
 	public String create_custom_report_1(StatReportDTO srDTO, int reportnum,
-			String reportname, String reporttitle) throws HibernateException {
+			String reportname, String reporttitle, HttpServletRequest request) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Map parameters = new HashMap();
@@ -191,7 +166,6 @@ public class CustomReportBMO implements
 			boolean b1 = eiw.readEnplaneProps("enplane.endpoint", "enplane.calltype");
 			if (!b1) {
 				logger.error(eiw.getErrormsg());
-				setErrormsg(eiw.getErrormsg());
 				return null;
 			}
 
@@ -226,7 +200,6 @@ public class CustomReportBMO implements
 						.getEndtime() == null ? srDTO.getStarttime() : srDTO.getEndtime()),
 						custom1.getStationcode());
 				if (callresult < 0) {
-					setErrormsg(eiw.getErrormsg());
 					return null;
 
 				} else {
@@ -330,8 +303,8 @@ public class CustomReportBMO implements
 
 			}
 
-			return getReportFile(list, parameters, reportname, rootpath, srDTO
-					.getOutputtype());
+			return ReportBMO.getReportFile(list, parameters, reportname, rootpath, srDTO
+					.getOutputtype(), request);
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -341,130 +314,6 @@ public class CustomReportBMO implements
 		}
 	}
 
-	public Status getStatus(int status_ID) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.Status status where status_ID= :status_ID");
-			q.setInteger("status_ID", status_ID);
-			List list = q.list();
-			if (list == null || list.size() == 0) {
-				logger.debug("unable to find status");
-				return null;
-			}
-			return (Status) list.get(0);
-		} catch (Exception e) {
-			logger.error("unable to retrieve station from database: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			sess.close();
-		}
-	}
-
-	public static JasperReport getCompiledReport(String reportname,
-			String rootpath) throws Exception {
-		/** look for compiled reports, if can't find it, compile xml report * */
-		File reportFile = new File(rootpath + "/reports/" + reportname + ".jasper");
-		if (!reportFile.exists()) {
-			/** used for runtime compilation * */
-			System.setProperty(ReportingConstants.CLASS_PATH, rootpath
-					+ ReportingConstants.JASPER_JAR
-					+ System.getProperty("path.separator") + rootpath
-					+ ReportingConstants.IREPORT_JAR
-					+ System.getProperty("path.separator") + rootpath
-					+ "/WEB-INF/classes/");
-			System.setProperty(ReportingConstants.COMPILE, rootpath + "/reports/");
-			String xmlpath = rootpath + "/reports/" + reportname + ".jrxml";
-			JasperCompileManager.compileReportToFile(xmlpath);
-		}
-		return (JasperReport) JRLoader.loadObject(reportFile.getPath());
-	}
-
-	public String getReportFile(List list, Map parameters, String reportname,
-			String rootpath, int outputtype) throws Exception {
-		/** look for compiled reports, if can't find it, compile xml report * */
-		JasperReport jasperReport = getCompiledReport(reportname, rootpath);
-		// HibernateResultDS ds = new HibernateResultDS(list);
-		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,
-				parameters, ds);
-
-		String outfile = reportname
-				+ "_"
-				+ (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime
-						.getGMTDate()));
-
-		if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
-			outfile += ".html";
-		else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
-			outfile += ".pdf";
-		else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS)
-			outfile += ".xls";
-		else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV)
-			outfile += ".csv";
-		else if (outputtype == TracingConstants.REPORT_OUTPUT_XML)
-			outfile += ".xml";
-
-		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
-		JRExporter exporter = null;
-
-		if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
-			JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
-		else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
-			exporter = new JRHtmlExporter();
-
-			Map imagesMap = new HashMap();
-			req.getSession().setAttribute("IMAGES_MAP", imagesMap);
-			exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
-			exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
-
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			// exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-			// Boolean.TRUE);
-			exporter.exportReport();
-		}
-
-		else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
-			exporter = new JRXlsExporter();
-
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			// exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-			// Boolean.TRUE);
-			exporter.exportReport();
-		} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
-			exporter = new JRCsvExporter();
-
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			exporter.exportReport();
-		} else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) {
-			exporter = new JRXmlExporter();
-
-			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			exporter.exportReport();
-		}
-
-		return outfile;
-	}
-
-	/**
-	 * @return Returns the errormsg.
-	 */
-	public String getErrormsg() {
-		return errormsg;
-	}
-
-	/**
-	 * @param errormsg
-	 *          The errormsg to set.
-	 */
-	public void setErrormsg(String errormsg) {
-		this.errormsg = errormsg;
-	}
 
 	public String createCustomReport(StatReportDTO srDTO,
 			HttpServletRequest request, Agent user, String rootpath) {
@@ -476,9 +325,8 @@ public class CustomReportBMO implements
 			String creportdata = create_custom_report_1(srDTO,
 					ReportingConstants.RPT_20_CUSTOM_1,
 					ReportingConstants.RPT_20_CUSTOM_1_NAME, messages.getMessage(
-							new Locale(user.getCurrentlocale()), "header.reportnum.20"));
+							new Locale(user.getCurrentlocale()), "header.reportnum.20"), request);
 			if (creportdata == null) {
-				setErrormsg(getErrormsg());
 				return null;
 			} else {
 				return creportdata;

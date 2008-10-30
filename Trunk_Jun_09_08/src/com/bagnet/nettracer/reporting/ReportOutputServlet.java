@@ -86,7 +86,7 @@ public class ReportOutputServlet extends HttpServlet {
 			throws ServletException, java.io.IOException {
 		
 		String language = TracingConstants.DEFAULT_LOCALE;
-		int outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+		int outputtype = TracingConstants.REPORT_OUTPUT_UNDECLARED;
 		
 		try {
 			
