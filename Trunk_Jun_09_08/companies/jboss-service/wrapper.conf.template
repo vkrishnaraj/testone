@@ -1,0 +1,36 @@
+wrapper.java.command=%JAVA_HOME%/bin/java
+
+wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp
+
+wrapper.java.classpath.1=%JBOSS_HOME%/lib/wrapper.jar
+wrapper.java.classpath.2=%JAVA_HOME%/lib/tools.jar
+wrapper.java.classpath.3=./run.jar
+
+wrapper.java.library.path.1=%JBOSS_HOME%/lib
+
+# these are the JAVA_OPTS
+wrapper.java.additional.1=-server
+
+# enviroment variables - define the ones that match your desired environment
+wrapper.java.additional.2=-Djava.rmi.server.hostname=${IP_ADDRESS}
+
+# memory parameters - define the ones that match your desired environment
+wrapper.java.additional.3=-Xms512m
+wrapper.java.additional.4=-Xmx900m
+wrapper.java.additional.5=-XX:MaxPermSize=192m
+wrapper.java.additional.6=-XX:+HeapDumpOnCtrlBreak
+
+wrapper.app.parameter.1=org.jboss.Main
+# Parameters to be passed to the application (Jboss) 
+wrapper.app.parameter.2=-c ${INSTANCE_NAME} 
+# Define listening IP
+wrapper.app.parameter.3=-b ${IP_ADDRESS} 
+# wrapper log location
+wrapper.logfile=%JBOSS_HOME%/server/${INSTANCE_NAME}/log/wrapper.log
+
+# You must not change below parameters without first uninstall the service
+# service name
+wrapper.ntservice.name=JBoss-${COMPANY_CODE}-${INSTANCE_NAME}
+# service display name
+wrapper.ntservice.displayname=JBoss-${COMPANY_CODE}-${INSTANCE_NAME}
+
