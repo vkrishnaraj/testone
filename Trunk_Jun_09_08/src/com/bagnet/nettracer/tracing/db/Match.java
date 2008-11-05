@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  * 
  * @hibernate.class table="match_history"
  */
-public class Match {
+public class Match implements Serializable {
 
 	private int match_id;
 	private int match_type; // 0 = passive, 1 = active

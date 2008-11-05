@@ -3,12 +3,14 @@ package com.bagnet.nettracer.tracing.utils;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
 public class TracerProperties {
 
 	private static Properties properties = new Properties();
-	
+
 	public static final String APP_TYPE = "app_type";
 	public static final String IMAGE_STORE = "image_store";
 	public static final String INCIDENT_TAB_BAGGAGE = "inc.tab.baggage";
@@ -28,29 +30,34 @@ public class TracerProperties {
 	public static final String SCANNER_CLASS_PATH = "scanner.class.path";
 	public static final String RYNNS_ENDPOINT = "rynns.endpoint";
 	public static final String SUPPRESSION_PRINTING_NONHTML = "suppress.print.nonhtml";
-	
-	
-	
+	public static final String EMAIL_REPORT_LD = "inc.receipt.email.ld";
+	public static final String EMAIL_REPORT_DAM = "inc.receipt.email.dam";
+	public static final String EMAIL_REPORT_PIL = "inc.receipt.email.pil";
+	public static final String EMAIL_REPORT_LD_DISABLE_IMAGE = "inc.receipt.email.ld.disableimg";
+	public static final String EMAIL_REPORT_DAM_DISABLE_IMAGE = "inc.receipt.email.dam.disableimg";
+	public static final String EMAIL_REPORT_PIL_DISABLE_IMAGE = "inc.receipt.email.pil.disableimg";
+
 	static {
 		try {
-			properties.load(HibernateWrapper.class.getResourceAsStream("/tracer.properties"));
+			properties.load(HibernateWrapper.class
+					.getResourceAsStream("/tracer.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	
-	}
-	
-	public static String get(String property) {
-		return properties.getProperty(property);
-	}
-	
-	public static boolean isTrue(String property) {
-		try {
-			return properties.getProperty(property).equals("1");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
 		}
 	}
 
-	
+	public static String get(String property) {
+		return properties.getProperty(property);
+	}
+
+	public static boolean isTrue(String property) {
+		String value = properties.getProperty(property);
+		if (value != null) {
+			return value.equals("1");
+		} else {
+			// If the value is not found a null value will be returned
+			// and we need to return false.
+			return false;
+		}
+	}
 }

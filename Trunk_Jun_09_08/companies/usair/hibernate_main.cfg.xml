@@ -10,7 +10,7 @@
     <session-factory>	
     
 		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-		<property name="hibernate.connection.url">jdbc:sqlserver://192.168.2.128:1433;databaseName=beta-copy</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://192.168.2.128:1433;databaseName=test4</property>
 		<property name="connection.username">nettracer</property>
 		<property name="connection.password">nettracer</property>
 		<property name="show_sql">false</property>

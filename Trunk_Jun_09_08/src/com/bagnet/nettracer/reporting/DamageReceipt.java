@@ -50,23 +50,13 @@ public class DamageReceipt {
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 			Agent user = (Agent) session.getAttribute("user");
 			
-			Map parameters = new HashMap();
-			String airline = theform.getStationcreated().getCompany().getCompanydesc();
-			parameters.put("title", messages.getMessage(new Locale(language), "damage.receipt.title"));
-
+			//Map parameters = new HashMap();
+			
+			Map parameters = LostDelayReceipt.getParameters(theform, messages, language, user, "damage.receipt.title");
+			
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
-
-			parameters.put("station_city", (theform.getStationassigned().getCity() != null ? theform.getStationassigned().getCity().toUpperCase() : ""));
-			parameters.put("station_phone", (theform.getStationassigned().getPhone() != null ? theform.getStationassigned().getPhone() : ""));
-
-			parameters.put("airline", theform.getStationassigned().getCompany().getCompanydesc());
-			parameters.put("airline_addr", theform.getStationassigned().getCompany().getAddress1() + "\n"
-					+ theform.getStationassigned().getCompany().getAddress2() + "\n" + theform.getStationassigned().getCompany().getCity() + ", "
-					+ theform.getStationassigned().getCompany().getState_ID() + " " + theform.getStationassigned().getCompany().getZip());
-			parameters.put("airline_phone", theform.getStationassigned().getCompany().getPhone());
-			parameters.put("airline_email", theform.getStationassigned().getCompany().getEmail_address());
 
 			File logo = new File(sc.getRealPath("/") + "reports/logo.jpg");
 			if (logo.exists()) {
@@ -78,46 +68,8 @@ public class DamageReceipt {
 				parameters.put("powered", powered.getAbsolutePath());
 			}
 
-
-			Passenger pa = (Passenger) theform.getPassenger(0);
-			
-			String prettyDate = "";
-			
-			String format = "MMMMMMMMMM dd, yyyy";
-			prettyDate = DateUtils.formatDate(TracerDateTime.getGMTDate(), format, null, TimeZone.getTimeZone(AdminUtils
-					.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
- 
-			parameters.put("prettydate", prettyDate);
-
-
-			parameters.put("createdate", theform.getDispcreatetime());
-			parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
-			parameters.put("file_reference", theform.getIncident_ID());
-
-			String phno = pa.getAddress(0).getHomephone();
-			if (phno == null || phno.length() == 0)
-				phno = pa.getAddress(0).getMobile();
-
-			parameters.put("phone", phno);
-			parameters.put("address1", pa.getAddress(0).getAddress1());
-			parameters.put("address2", pa.getAddress(0).getAddress2());
-			parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
-					+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : "")
-					+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
-
-			parameters.put("station", theform.getStationcreated().getStationcode());
-
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < theform.getClaimchecklist().size(); i++) {
-				if (((Incident_Claimcheck) theform.getClaimchecklist().get(i)).getClaimchecknum() != null) {
-					sb.append(((Incident_Claimcheck) theform.getClaimchecklist().get(i)).getClaimchecknum().trim());
-					sb.append(",");
-				}
-			}
-			if (sb.length() > 0)
-				parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
 			ReportBMO rbmo = new ReportBMO(request);
-			parameters.put("stationname", theform.getStationcreated().getStationdesc());
+			
 			
 			IncidentBMO ibmo = new IncidentBMO();
 			ibmo.incrementPrintedReceipt(theform.getIncident_ID());

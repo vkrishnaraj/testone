@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
+
 /**
  * Process for adding new delivery company integrations:
  * 
@@ -14,6 +16,6 @@ package com.bagnet.nettracer.tracing.db;
  * then the database will contain "RYNNS" in the integration field.
  */
 
-public enum DeliveryIntegrationType {
+public enum DeliveryIntegrationType implements Serializable {
 	NONE, RYNNS //,  DSI,  FEDEX
 }

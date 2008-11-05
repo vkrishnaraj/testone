@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -12,7 +14,7 @@ import javax.persistence.Enumerated;
  * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClassname"
  * 			value="com.bagnet.nettracer.tracing.db.WorldTracerFile$WTStatus"
  */
-public class WorldTracerFile {
+public class WorldTracerFile implements Serializable{
 
 	
 	private WTStatus status;

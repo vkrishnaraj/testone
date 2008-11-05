@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import org.hibernate.annotations.Proxy;
 @Entity
 @Table(name="customer_viewable_comments")
 @Proxy(lazy=false)
-public class CustomerViewableComment {
+public class CustomerViewableComment implements Serializable{
 
 	private int id;
 	private Incident incident;

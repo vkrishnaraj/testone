@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context cookies="true" crossContext="true">
+	<Manager pathname="sessions.ser" />
+	<!--
    <Manager className="org.apache.catalina.session.PersistentManager" 
 	checkInterval="1"
 	saveOnRestart="true"
@@ -11,7 +13,7 @@
 		<Store
 	    	debug="0"
 		   	className="org.apache.catalina.session.JDBCStore" 
-		   	connectionURL="jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod;user=nettracer;password=nettracer" 
+		   	connectionURL="jdbc:sqlserver://192.168.2.128:1433;databaseName=test4;user=nettracer;password=nettracer" 
 		   	driverName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
 		   	sessionAppCol="app_name" 
 		   	sessionDataCol="session_data" 
@@ -21,5 +23,6 @@
 		   	sessionTable="jdbc_sessions"
 		   	sessionValidCol="valid_session"/>
    	</Manager>
+   	-->
 
 </Context>

@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.audit;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -21,7 +22,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 @Entity
 @Table(name="customer_viewable_comments")
 @Proxy(lazy=false)
-public class Audit_CustomerViewableComment {
+public class Audit_CustomerViewableComment implements Serializable{
 
 	private int audit_id;
 	private int id;

@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -18,7 +19,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 @Entity
 @Table(name = "report")
 @Proxy(lazy = false)
-public class Report {
+public class Report implements Serializable {
 
 	private int id;
 	private int number;

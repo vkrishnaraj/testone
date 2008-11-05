@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.db.wtq;
 
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -25,7 +26,7 @@ import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 @Entity
 @Table(name="wt_transaction")
 @Proxy(lazy=false)
-public class WorldTracerTransaction {
+public class WorldTracerTransaction implements Serializable {
 	
 	public static final String UNKNOWN_ERROR = "Unknown Error";
 	

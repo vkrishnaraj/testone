@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.audit;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -21,7 +22,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 @Entity
 @Table(name = "audit_other_system_information")
 @Proxy(lazy = false)
-public class Audit_OtherSystemInformation {
+public class Audit_OtherSystemInformation implements Serializable {
 
 	private int audit_id;
 	private int id;

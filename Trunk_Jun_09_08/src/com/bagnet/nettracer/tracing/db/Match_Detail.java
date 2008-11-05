@@ -6,6 +6,8 @@
  */
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
+
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 /**
@@ -13,7 +15,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  * 
  * @hibernate.class table="match_detail"
  */
-public class Match_Detail {
+public class Match_Detail implements Serializable {
 
 	private int Matchdetail_ID;
 	private String item;

@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * @author matt
  *
  */
-public class Webservice_Session {
+public class Webservice_Session implements Serializable{
 	private int id;
 	private String username;
 	private String companycode_id;

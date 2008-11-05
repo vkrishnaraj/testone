@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +18,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 @Entity
 @Table(name="other_system_information")
 @Proxy(lazy=false)
-public class OtherSystemInformation {
+public class OtherSystemInformation implements Serializable {
 
 	private int id;
 	private Incident incident;

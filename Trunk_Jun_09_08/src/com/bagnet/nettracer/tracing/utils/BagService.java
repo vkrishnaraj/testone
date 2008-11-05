@@ -30,6 +30,7 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
+import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
@@ -67,7 +68,6 @@ import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.OHD_Photo;
-import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -78,10 +78,6 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
-import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
-import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.ActiveTracingForm;
@@ -95,13 +91,10 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
-import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
  * @author Matt
  * 
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class BagService {
 	private static Logger logger = Logger.getLogger(BagService.class);
@@ -111,7 +104,6 @@ public class BagService {
 	 */
 	public BagService() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public OHDRequest findOHDRequestById(String Id) {
@@ -677,24 +669,46 @@ public class BagService {
 							he.setTo(al);
 							String bcc = theform.getAgent().getStation().getCompany().getVariable().getBlindEmail();
 							if(bcc != null && bcc.trim().length() > 0) {
-							List<InternetAddress> bccList = new ArrayList<InternetAddress>();
-							bccList.add(new InternetAddress(bcc));
-							he.setBcc(bccList);
+								List<InternetAddress> bccList = new ArrayList<InternetAddress>();
+								bccList.add(new InternetAddress(bcc));
+								he.setBcc(bccList);
 							}
+
 							MessageResources messages = MessageResources
 									.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
+							String htmlFileName = "report_email.html";
+							String tmpHtmlFileName = null;
+							boolean embedImage = true;
+							
 							HashMap h = new HashMap();
 							h.put("PASS_NAME", passname);
-							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY)
+							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(iDTO.getAgent().getCurrentlocale()), "email.mishandled"));
-							if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG)
+								
+								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_LD);
+								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.receipt.title"));
+							}
+							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(iDTO.getAgent().getCurrentlocale()), "email.damaged"));
-							if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES)
+								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_DAM);
+								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.receipt.title"));
+							} 
+							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(iDTO.getAgent().getCurrentlocale()), "email.missing"));
+								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_PIL);
+								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.receipt.title"));
+							}
+						
+							if (tmpHtmlFileName != null) {
+								htmlFileName = tmpHtmlFileName;
+							}
 
 							h.put("REPORT_NUMBER", iDTO.getIncident_ID());
 							h.put("AIRLINE", iDTO.getStationcreated().getCompany().getCompanydesc());
@@ -725,29 +739,25 @@ public class BagService {
 							he.setSubject("Report for your " + h.get("REPORT_TYPE") + " has been filed.");
 
 							// set embedded images
-							String img1 = he.embed(new URL("file:/" + imagepath + TracingConstants.BANNER_IMAGE),
-									TracingConstants.BANNER_IMAGE);
-							h.put("BANNER_IMAGE", img1);
-							// String img2 = he.embed(new URL("file:/" +
-							// imagepath +
-							// TracingConstants.LOGO_IMAGE),TracingConstants.
-							// LOGO_IMAGE);
-							// h.put("LOGO_IMAGE",img2);
-
-							String msg = EmailParser.parse(configpath + "report_email.html", h);
+							if (embedImage) {
+								String img1 = he.embed(new URL("file:/" + imagepath + TracingConstants.BANNER_IMAGE),
+										TracingConstants.BANNER_IMAGE);
+								h.put("BANNER_IMAGE", img1);
+							}
+								
+							String msg = EmailParser.parse(configpath + htmlFileName, h);
+							
 							if(msg != null) {
 								he.setHtmlMsg(msg);
 								he.send();
 							}
 							else {
-								logger.warn("unable to send email because report_email.html was not parsed.");
+								logger.warn("Unable to send email because email HTML file was not parsed.");
 							}
 
 						}
 						catch (Exception maile) {
-							logger.error("unable to send mail due to smtp error." + maile);
-							// return new
-							// ActionMessage("error.unable_to_send_mail");
+							logger.error("Unable to send mail due to smtp error. " + maile);
 						}
 
 					}

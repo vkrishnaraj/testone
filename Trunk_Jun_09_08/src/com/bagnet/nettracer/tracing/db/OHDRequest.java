@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -16,7 +17,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * 
  * @hibernate.class table="OHD_Request"
  */
-public class OHDRequest {
+public class OHDRequest implements Serializable {
 	private int ohd_request_id;
 	private Agent requestingAgent;
 	private Station requestForStation;

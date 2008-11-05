@@ -22,9 +22,13 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -43,6 +47,78 @@ public class LostDelayReceipt {
 	public LostDelayReceipt() {
 		super();
 	}
+	
+	public static HashMap getParameters(IncidentForm theform, MessageResources messages, String language, Agent user, String titleProperty) {
+		HashMap parameters = new HashMap();
+		
+		if (messages == null) {
+			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		}
+		
+		if (language == null) {
+			language = TracingConstants.DEFAULT_LOCALE;
+		}
+
+		String airline = theform.getStationcreated().getCompany().getCompanydesc();
+		parameters.put("title", messages.getMessage(new Locale(language), titleProperty));
+
+		parameters.put("station_city", (theform.getStationassigned().getCity() != null ? theform.getStationassigned().getCity().toUpperCase() : ""));
+		parameters.put("station_phone", (theform.getStationassigned().getPhone() != null ? theform.getStationassigned().getPhone() : ""));
+
+		Company company = null;
+		if (theform.getStationassigned().getCompany() != null) {
+			company = theform.getStationassigned().getCompany();
+		} else {
+			company = StationBMO.getStation(theform.getStationassigned().getStation_ID()).getCompany();
+		}
+		
+		parameters.put("airline", company.getCompanydesc());
+		
+		parameters.put("airline_addr", company.getAddress1() + "\n"
+				+ company.getAddress2() + "\n" + company.getCity() + ", "
+				+ company.getState_ID() + " " + company.getZip());
+		parameters.put("airline_phone", company.getPhone());
+		parameters.put("airline_email", company.getEmail_address());
+		String prettyDate = "";
+		
+		String format = "MMMMMMMMMM dd, yyyy";
+		prettyDate = DateUtils.formatDate(TracerDateTime.getGMTDate(), format, null, TimeZone.getTimeZone(AdminUtils
+				.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+		parameters.put("prettydate", prettyDate);
+
+		Passenger pa = (Passenger) theform.getPassenger(0);
+
+		parameters.put("createdate", theform.getDispcreatetime());
+		parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
+		parameters.put("file_reference", theform.getIncident_ID());
+
+		String phno = pa.getAddress(0).getHomephone();
+		if (phno == null || phno.length() == 0)
+			phno = pa.getAddress(0).getMobile();
+
+		parameters.put("phone", phno);
+		parameters.put("address1", pa.getAddress(0).getAddress1());
+		parameters.put("address2", pa.getAddress(0).getAddress2());
+		parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
+				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : "")
+				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
+
+		parameters.put("station", theform.getStationcreated().getStationcode());
+		parameters.put("stationname", theform.getStationcreated().getStationdesc());
+
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < theform.getClaimchecklist().size(); i++) {
+			if (((Incident_Claimcheck) theform.getClaimchecklist().get(i)).getClaimchecknum() != null) {
+				sb.append(((Incident_Claimcheck) theform.getClaimchecklist().get(i)).getClaimchecknum().trim());
+				sb.append(",");
+			}
+		}
+		if (sb.length() > 0)
+			parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
+
+		return parameters;
+	}
 
 	public static String createReport(IncidentForm theform, ServletContext sc, HttpServletRequest request, int outputtype, String language) {
 		try {
@@ -51,34 +127,12 @@ public class LostDelayReceipt {
 			Agent user = (Agent) session.getAttribute("user");
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
-			Map parameters = new HashMap();
-			String airline = theform.getStationcreated().getCompany().getCompanydesc();
-			parameters.put("title", messages.getMessage(new Locale(language), "lostdelay.receipt.title"));
+			Map parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title");
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
-			//parameters.put("paragraph_1", messages.getMessage(new
-			// Locale(language),"lostdelay.receipt.paragraph_1"));
 
-			parameters.put("station_city", (theform.getStationassigned().getCity() != null ? theform.getStationassigned().getCity().toUpperCase() : ""));
-			parameters.put("station_phone", (theform.getStationassigned().getPhone() != null ? theform.getStationassigned().getPhone() : ""));
-
-			parameters.put("airline", theform.getStationassigned().getCompany().getCompanydesc());
-			parameters.put("airline_addr", theform.getStationassigned().getCompany().getAddress1() + "\n"
-					+ theform.getStationassigned().getCompany().getAddress2() + "\n" + theform.getStationassigned().getCompany().getCity() + ", "
-					+ theform.getStationassigned().getCompany().getState_ID() + " " + theform.getStationassigned().getCompany().getZip());
-			parameters.put("airline_phone", theform.getStationassigned().getCompany().getPhone());
-			parameters.put("airline_email", theform.getStationassigned().getCompany().getEmail_address());
-			String prettyDate = "";
-			
-			String format = "MMMMMMMMMM dd, yyyy";
-			prettyDate = DateUtils.formatDate(TracerDateTime.getGMTDate(), format, null, TimeZone.getTimeZone(AdminUtils
-					.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
- 
-			parameters.put("prettydate", prettyDate);
-			
-				
 			File logo = new File(sc.getRealPath("/") + "reports/logo.jpg");
 			if (logo.exists()) {
 				parameters.put("logo", logo.getAbsolutePath());
@@ -89,36 +143,6 @@ public class LostDelayReceipt {
 				parameters.put("powered", powered.getAbsolutePath());
 			}
 
-
-			Passenger pa = (Passenger) theform.getPassenger(0);
-
-			parameters.put("createdate", theform.getDispcreatetime());
-			parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
-			parameters.put("file_reference", theform.getIncident_ID());
-
-			String phno = pa.getAddress(0).getHomephone();
-			if (phno == null || phno.length() == 0)
-				phno = pa.getAddress(0).getMobile();
-
-			parameters.put("phone", phno);
-			parameters.put("address1", pa.getAddress(0).getAddress1());
-			parameters.put("address2", pa.getAddress(0).getAddress2());
-			parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
-					+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : "")
-					+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
-
-			parameters.put("station", theform.getStationcreated().getStationcode());
-			parameters.put("stationname", theform.getStationcreated().getStationdesc());
-
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < theform.getClaimchecklist().size(); i++) {
-				if (((Incident_Claimcheck) theform.getClaimchecklist().get(i)).getClaimchecknum() != null) {
-					sb.append(((Incident_Claimcheck) theform.getClaimchecklist().get(i)).getClaimchecknum().trim());
-					sb.append(",");
-				}
-			}
-			if (sb.length() > 0)
-				parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
 			ReportBMO rbmo = new ReportBMO(request);
 			
 			IncidentBMO ibmo = new IncidentBMO();

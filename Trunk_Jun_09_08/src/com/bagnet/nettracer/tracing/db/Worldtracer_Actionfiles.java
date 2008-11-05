@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
  * @hibernate.typedef-param typedef-name="actionFileType" name="enumClassname"
  * 			value="com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles$ActionFileType"
  */
-public class Worldtracer_Actionfiles {
+public class Worldtracer_Actionfiles implements Serializable {
 	private int id;
 	private ActionFileType action_file_type;
 	private String action_file_text;
