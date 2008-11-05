@@ -40,6 +40,7 @@ public class ClaimBMO {
 			if (acDTO != null
 					&& acDTO.getModify_agent().getStation().getCompany().getVariable().getAudit_claims() == 1) {
 				if (acDTO != null) {
+					acDTO.setClaim_ID(cDTO.getClaim_ID());
 					t = sess.beginTransaction();
 					sess.save(acDTO);
 					t.commit();

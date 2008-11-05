@@ -1753,7 +1753,7 @@ public class BagService {
 			acDTO.setModify_reason(cform.getMod_claim_reason());
 
 			boolean result = cBMO.insertClaim(cDTO, acDTO);
-
+			cform.setClaim_ID(cDTO.getClaim_ID());
 			if(!result)
 				return false;
 			else
