@@ -67,6 +67,7 @@
 
 	<bean id="wtActionFiles" class="com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles">
 		<constructor-arg value="${company.code}" />
+		<constructor-arg value="${cron.instance.label}" />
 		<property name="wqBmo" ref="wtq-bmo" />
 		<property name="wtService" ref="wtService" />
 		<property name="wafBmo" ref="wtaf-bmo" />
@@ -100,7 +101,7 @@
 	-->
 	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
 		<constructor-arg value="${company.code}" />
-		<constructor-arg value="${pt.instance.label}" />
+		<constructor-arg value="${cron.instance.label}" />
 	</bean>
 	
 	<bean id="dataFeedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >

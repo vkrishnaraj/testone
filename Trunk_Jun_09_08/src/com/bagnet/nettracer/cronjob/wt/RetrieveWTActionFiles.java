@@ -71,11 +71,13 @@ public class RetrieveWTActionFiles {
 	private WorldTracerService wtService;
 	private int errorCount = 0;
 
+	private String instanceLabel;
+
 	public void setWtService(WorldTracerService wtService) {
 		this.wtService = wtService;
 	}
 
-	public RetrieveWTActionFiles(String companyCode) {
+	public RetrieveWTActionFiles(String companyCode, String instanceLabel) {
 		try {
 
 			company = companyCode;
@@ -85,8 +87,9 @@ public class RetrieveWTActionFiles {
 			email_from = csv.getEmail_from();
 			email_port = csv.getEmail_port();
 			email_to = csv.getEmail_to();
+			this.instanceLabel = instanceLabel;
 		} catch (Exception e) {
-			logger.fatal("unable to start move to lz thread: " + e);
+			logger.fatal("unable to initialize retrieve action file bean: " + e);
 		}
 
 	}
@@ -191,37 +194,42 @@ public class RetrieveWTActionFiles {
 			}
 
 		} catch (Exception e) {
+			sendErrorMail(e, airline, station, actionFileType, day);
 			errorCount++;
-			logger.error("error retriving wt action file data", e);
-
-			try {
-
-				HtmlEmail he = new HtmlEmail();
-				he.setHostName(email_host);
-				he.setSmtpPort(email_port);
-				he.setFrom(email_from);
-
-				ArrayList<Address> al = new ArrayList<Address>();
-				al.add(new InternetAddress(email_to));
-				he.setTo(al);
-				String msg = "please restart NT cronjob thread for environment indicated by sending email address.";
-				msg += "\n\nError with retrieve wt action file in RetrieveWTActionFiles thread: \n" + e.toString();
-
-				he.setHtmlMsg(msg);
-
-				he.send();
-			} catch (Exception maile) {
-				logger.fatal("unable to send mail due to smtp error." + maile);
-				// return new ActionMessage("error.unable_to_send_mail");
-			}
 			if (e instanceof WorldTracerConnectionException) {
 				throw (WorldTracerConnectionException) e;
 			}
-			else if (errorCount >= 3) {
+			if(errorCount >= 3) {
 				throw e;
 			}
 		}
 
+	}
+
+	private void sendErrorMail(Exception e, String airline, String station, ActionFileType actionFileType, int day) {
+
+		logger.error("error retriving wt action file data", e);
+
+		try {
+
+			HtmlEmail he = new HtmlEmail();
+			he.setHostName(email_host);
+			he.setSmtpPort(email_port);
+			he.setFrom(email_from);
+
+			ArrayList<Address> al = new ArrayList<Address>();
+			al.add(new InternetAddress(email_to));
+			he.setTo(al);
+			String msg = String.format("Error Processing WT Action files for %s", instanceLabel);
+			msg += String.format("\n\nError for airline: %s station: %s Category: %s day: %d", airline, station, actionFileType.name(), day);
+			msg += "\n\nCause of error: \n" + e.toString();
+
+			he.setHtmlMsg(msg);
+
+			he.send();
+		} catch (Exception maile) {
+			logger.fatal("unable to send mail due to smtp error." + maile);
+		}
 	}
 
 
