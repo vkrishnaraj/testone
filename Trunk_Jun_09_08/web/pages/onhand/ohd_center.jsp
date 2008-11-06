@@ -11,9 +11,15 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
+
+<%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
 <%
    Agent a = (Agent) session.getAttribute("user");
    OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
+   Station holdingStation = null;
+   if(onHandForm != null ) {
+	   holdingStation = StationBMO.getStation(onHandForm.getHolding_station());)
+   }
    String cssFormClass = "form2_ohd";
 %>
 
@@ -1103,12 +1109,16 @@ function gotoHistoricalReport() {
 		  (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_OHD, a))) {
 	    %>
 		<c:if test="${empty pendingWtAction and empty OnHandForm.wt_id}">
+		<%
+		if (holdingStation != null && holdingStation.getWt_stationcode() != null && holdingStation.getWt_stationcode().trim().length() > 0) { 
+		%>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
 	                  <html:submit property="savetowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
 	                    <bean:message key="button.savetoWT" />
 	                  </html:submit>
 	                </logic:notEqual>
+	                <% } %>
 		</c:if>
 		<c:if test="${empty pendingWtAction and !empty OnHandForm.wt_id}">
 	            <%
