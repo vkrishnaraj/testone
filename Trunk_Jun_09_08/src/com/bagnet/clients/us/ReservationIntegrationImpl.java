@@ -25,7 +25,6 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.ErrorMessages;
 
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
@@ -34,6 +33,7 @@ public class ReservationIntegrationImpl extends
 	private Booking booking = null;
 	private final long WS_NULL_DATE = -62135578800000L;
 	private final int HOURS_BACK_ITINERARY = 24;
+	private final int HOURS_FORWARD_ITINERARY = 6;
 	private String pnrContents;
 
 
@@ -206,7 +206,15 @@ public class ReservationIntegrationImpl extends
 						
 						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
 						Long nowtime = ((new Date()).getTime()) / 3600000;
-						if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+						Long timeDifference = nowtime - deptime;
+						
+						boolean includeSegment = false;
+						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
+							includeSegment = true;
+						}
+						
+						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
+								(timeDifference < -HOURS_FORWARD_ITINERARY && includeSegment)) {
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
@@ -317,8 +325,9 @@ public class ReservationIntegrationImpl extends
 					
 					long deptime = (bag.getBagTagDate().getTime().getTime()) / 3600000;
 					long nowtime = ((new Date()).getTime()) / 3600000;
-	
-					if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+					Long timeDifference = nowtime - deptime;
+					if (timeDifference <= HOURS_BACK_ITINERARY) {
+
 						// claimcheck
 						if (bag.getBagTag() != null && bag.getBagTag().length() > 0) {
 							Incident_Claimcheck ic = form.getClaimcheck(bagIndex);
@@ -363,7 +372,16 @@ public class ReservationIntegrationImpl extends
 		
 						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
 						Long nowtime = ((new Date()).getTime()) / 3600000;
-						if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+						Long timeDifference = nowtime - deptime;
+						
+						boolean includeSegment = false;
+						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
+							includeSegment = true;
+						}
+						
+						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
+								(timeDifference < -HOURS_FORWARD_ITINERARY && includeSegment)) {
+
 
 							// Create carrier in database in not present.
 							CompanyBMO.createCompany(seg.getCarrierCode(), session);
@@ -411,12 +429,21 @@ public class ReservationIntegrationImpl extends
 				if (itin[i].getSegments() != null) {
 					Segment[] segs = itin[i].getSegments().getSegmentArray();
 					for (int j=0; j<segs.length; ++j) {
-						com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);
+						
 						Segment seg = segs[j];
 						
 						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
 						Long nowtime = ((new Date()).getTime()) / 3600000;
-						if (nowtime - deptime <= HOURS_BACK_ITINERARY && nowtime >= deptime) {
+						Long timeDifference = nowtime - deptime;
+						
+						boolean includeSegment = false;
+						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
+							includeSegment = true;
+						}
+						
+						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
+								(timeDifference < -HOURS_FORWARD_ITINERARY && includeSegment)) {
+							com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);							
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
