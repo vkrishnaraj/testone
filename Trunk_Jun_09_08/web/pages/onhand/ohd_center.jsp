@@ -18,7 +18,7 @@
    OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
    Station holdingStation = null;
    if(onHandForm != null ) {
-	   holdingStation = StationBMO.getStation(onHandForm.getHolding_station());
+	   holdingStation = StationBMO.getStationByCode(onHandForm.getHolding_station(), onHandForm.getHolding_company());
    }
    String cssFormClass = "form2_ohd";
 %>

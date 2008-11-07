@@ -18,13 +18,17 @@
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	String cssFormClass = "form2_ld";
+	IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
+	Station stationAss = StationBMO.getStation(myform.getStationassigned_ID());
 %>
 
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
   <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
-<script language="javascript">
+
+<%@page import="com.bagnet.nettracer.tracing.db.Station"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%><script language="javascript">
     <!--
         
     function gotoHistoricalReport(form) {
@@ -532,11 +536,13 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;
 
 				<c:if test="${empty pendingWtAction}">
-					<c:if test="${ ((incidentForm.wt_id == '') || (incidentForm.wt_id == null)) && !empty incidentForm.stationassigned.wt_stationcode }">
+					<c:if test="${(incidentForm.wt_id == '') || (incidentForm.wt_id == null)}" > 
+					<% if (stationAss != null && stationAss.getWt_stationcode() != null && stationAss.getWt_stationcode().trim().length() > 0) { %>
 						<html:submit styleId="button" property="savetowt"
                         onclick="return validatereqFields(this.form, 'lostdelay');">
                         <bean:message key="button.savetoWT" />
                       	</html:submit>
+                      	<% } %>
 					</c:if>
  
                 <%
