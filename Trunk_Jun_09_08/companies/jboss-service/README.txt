@@ -15,12 +15,12 @@ Prereq - Make sure the system has JAVA_HOME and JBOSS_HOME environment variables
 cd %JBOSS_HOME%\bin\
 wrapper.exe -c %JBOSS_HOME%\server\${INSTANCE_NAME}\wrapper\wrapper.conf
 
-Install the service:
+To Install the service:
 
 cd %JBOSS_HOME%\bin\
 wrapper.exe -i %JBOSS_HOME%\server\${INSTANCE_NAME}\wrapper\wrapper.conf
 
-Uninstall the service:
+To Uninstall the service:
 
 cd %JBOSS_HOME%\bin\
 wrapper.exe -r %JBOSS_HOME%\server\${INSTANCE_NAME}\wrapper\wrapper.conf

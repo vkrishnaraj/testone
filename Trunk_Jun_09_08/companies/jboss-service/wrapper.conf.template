@@ -29,6 +29,9 @@ wrapper.app.parameter.2=-c ${INSTANCE_NAME}
 wrapper.app.parameter.3=-b ${IP_ADDRESS} 
 # wrapper log location
 wrapper.logfile=%JBOSS_HOME%/server/${INSTANCE_NAME}/log/wrapper.log
+wrapper.logfile.loglevel=WARN
+wrapper.logfile.maxsize=5m
+wrapper.logfile.maxfiles=2
 
 # You must not change below parameters without first uninstall the service
 # service name
