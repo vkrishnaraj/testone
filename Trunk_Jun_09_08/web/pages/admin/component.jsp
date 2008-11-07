@@ -337,14 +337,7 @@ function CBG_nameIsArray(obj) {
 %>
                         <tr>
                           <td width="5%">
-                            <INPUT TYPE=CHECKBOX NAME="<%= cDTO.getComponent_ID() %>" <% if (cDTO.getComponent_Name().toLowerCase().indexOf("claim") != -1) { %> disabled <% } %> <% if (cDTO.isChecked()) { %> CHECKED <% } %> onClick="<%= "ABC" + parent_ID %>.check(this);">
-<%
-                            if (cDTO.getComponent_Name().toLowerCase().indexOf("claim") != -1) {
-%>
-                              <INPUT TYPE=hidden NAME="<%= cDTO.getComponent_ID() %>" value="">
-<%
-                            }
-%>
+                            <INPUT TYPE=CHECKBOX NAME="<%= cDTO.getComponent_ID() %>"  <% if (cDTO.isChecked()) { %> CHECKED <% } %> onClick="<%= "ABC" + parent_ID %>.check(this);">
                           </td>
                           <td width="45%">
                             <bean:message key="<%= cDTO.getComponent_Name().replaceAll(" ", "_") %>" />
