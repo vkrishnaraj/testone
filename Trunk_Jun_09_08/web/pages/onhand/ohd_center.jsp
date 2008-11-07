@@ -11,14 +11,14 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
-
+<%@page import="com.bagnet.nettracer.tracing.db.Station"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
 <%
    Agent a = (Agent) session.getAttribute("user");
    OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
    Station holdingStation = null;
    if(onHandForm != null ) {
-	   holdingStation = StationBMO.getStation(onHandForm.getHolding_station());)
+	   holdingStation = StationBMO.getStation(onHandForm.getHolding_station());
    }
    String cssFormClass = "form2_ohd";
 %>
