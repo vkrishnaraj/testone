@@ -13,6 +13,7 @@ import org.tempuri.NetTracerStub;
 import org.tempuri.BDOAddDocument.BDOAdd;
 
 import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -22,10 +23,11 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class Rynns implements BDOIntegration {
+	
+	private static final String PROPERTY_RYNNS_ENDPOINT = "rynns.endpoint";
 	
 	Logger logger = Logger.getLogger(Rynns.class);
 
@@ -38,7 +40,7 @@ public class Rynns implements BDOIntegration {
 		/*****WEB SERVICE INTEGRATION*****/
 	
 		try {
-			String endpoint= TracerProperties.get(TracerProperties.RYNNS_ENDPOINT);
+			String endpoint= PropertyBMO.getValue(PROPERTY_RYNNS_ENDPOINT);
 			NetTracerStub stub = new NetTracerStub(null, endpoint);
 			BDOAddDocument doc = BDOAddDocument.Factory.newInstance();
 			BDOAdd ws = doc.addNewBDOAdd();

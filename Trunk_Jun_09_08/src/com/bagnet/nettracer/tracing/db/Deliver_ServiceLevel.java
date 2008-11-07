@@ -12,6 +12,7 @@ public class Deliver_ServiceLevel implements Serializable {
 	private String description;
 	private DeliverCompany delivercompany;
 	private boolean active;
+	private String service_code;
 	
 
 	/**
@@ -83,6 +84,22 @@ public class Deliver_ServiceLevel implements Serializable {
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	/**
+	 * @return the service_code
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getService_code() {
+		return service_code;
+	}
+
+	/**
+	 * @param service_code the service_code to set
+	 */
+	public void setService_code(String service_code) {
+		this.service_code = service_code;
 	}
 
 }

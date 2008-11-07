@@ -3,8 +3,6 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 
 /**

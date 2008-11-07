@@ -54,6 +54,7 @@ public class AuditDeliveryCompanyUtils {
 		audit_sl.setServicelevel_ID(sl.getServicelevel_ID());
 		audit_sl.setDelivercompany(sl.getDelivercompany());
 		audit_sl.setDescription(sl.getDescription());
+		audit_sl.setService_code(sl.getService_code());
 		audit_sl.setTime_modified(TracerDateTime.getGMTDate());
 		audit_sl.setModifying_agent(mod_agent);
 		return audit_sl;

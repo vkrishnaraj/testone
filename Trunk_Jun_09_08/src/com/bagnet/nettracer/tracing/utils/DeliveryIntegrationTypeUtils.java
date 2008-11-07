@@ -8,6 +8,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.integrations.delivery.BDOIntegration;
+import com.bagnet.nettracer.integrations.delivery.DSI;
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.integrations.delivery.Rynns;
 import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
@@ -41,10 +42,11 @@ public class DeliveryIntegrationTypeUtils {
 		if (type.equals(DeliveryIntegrationType.RYNNS)) {
 			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.rynns");
 		} 
-		/*
+		
 		else if (type.equals(DeliveryIntegrationType.DSI)) {
 			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.dsi");
 		}
+		/*
 		else if (type.equals(DeliveryIntegrationType.FEDEX)) {
 			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.fedex");
 		}
@@ -120,6 +122,8 @@ public class DeliveryIntegrationTypeUtils {
 				// Add new integration types here. 
 				if (type.equals(DeliveryIntegrationType.RYNNS)) {
 					integration = new Rynns();
+				} else if (type.equals(DeliveryIntegrationType.DSI)) {
+					integration = new DSI();
 				}
 				
 				response = integration.integrate(bdo, agent);

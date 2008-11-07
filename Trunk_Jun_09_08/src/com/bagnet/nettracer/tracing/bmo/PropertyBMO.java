@@ -28,11 +28,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_TRACING_DAYS_BACKWARD = "tracing.backward";
 	public static final String PROPERTY_TRACING_DAYS_FORWARD = "tracing.forward";
 	public static final String PROPERTY_BOOKING_ENDPOINT = "booking.endpoint";
-	
-	// TODO Implement these.
-	public static final String PROPERTY_RYNNS_ENDPOINT = "rynns.endpoint";
-	public static final String PROPERTY_CUSTOM_REPORT_1 = "report.custom1";
-	public static final String PROPERTY_CUSTOM_REPORT_2 = "report.custom2";
+
 	
 	/**
 	 * Retrieves the value of the property from the database.

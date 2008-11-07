@@ -26,6 +26,7 @@ public class Audit_Deliver_ServiceLevel implements Serializable {
 	private Agent modifying_agent;
 	private Date time_modified;
 	private String reason_modified;
+	private String service_code;
 	
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -220,6 +221,20 @@ public class Audit_Deliver_ServiceLevel implements Serializable {
 	 */
 	public void setTime_modified(Date time_modified) {
 		this.time_modified = time_modified;
+	}
+
+	/**
+	 * @return the service_code
+	 */
+	public String getService_code() {
+		return service_code;
+	}
+
+	/**
+	 * @param service_code the service_code to set
+	 */
+	public void setService_code(String service_code) {
+		this.service_code = service_code;
 	}
 	
 }

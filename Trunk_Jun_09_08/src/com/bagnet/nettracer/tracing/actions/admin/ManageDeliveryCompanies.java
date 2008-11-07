@@ -74,6 +74,7 @@ public final class ManageDeliveryCompanies extends Action {
 			DeliverCompany company = DelivercompanyBMO.getDeliveryCompany(companyId);
 						
 			mForm.setDescription("");
+			mForm.setService_code("");
 			mForm.setDeliveryCompanyName(company.getName());
 			return mapping.findForward(TracingConstants.EDIT_SERVICE_LEVEL);
 		}
@@ -207,6 +208,7 @@ public final class ManageDeliveryCompanies extends Action {
 				Deliver_ServiceLevel c = new Deliver_ServiceLevel();
 				c.setDelivercompany(company);
 				c.setDescription(mForm.getDescription());
+				c.setService_code(mForm.getService_code());
 				c.setServicelevel_ID(new Integer(serviceLevelId).intValue());
 				c.setActive(true);
 				
@@ -274,6 +276,7 @@ public final class ManageDeliveryCompanies extends Action {
 			mForm.setServiceLevel_ID(serviceLevel.getServicelevel_ID());
 			mForm.setDelivercompany_ID(company.getDelivercompany_ID());
 			mForm.setDescription(serviceLevel.getDescription());
+			mForm.setService_code(serviceLevel.getService_code());
 			mForm.setDeliveryCompanyName(company.getName());
 			mForm.setIntegration_type(company.getDelivery_integration_type().ordinal() + "");
 			request.setAttribute("integrationTypeList", DeliveryIntegrationTypeUtils.getIntegrationTypeList());

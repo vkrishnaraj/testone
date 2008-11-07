@@ -62,6 +62,14 @@
 					maxlength="50" /></td>
 			</tr>
 			<tr>
+				<td><bean:message key="header.deliverycompany_servicelevel.service_code" /> <font
+					color=red> *: </td>
+				<td><html:text styleClass="textfield"
+					name="MaintainDeliveryCompanyForm" property="service_code" size="30"
+					maxlength="50" /></td>
+			</tr>
+
+			<tr>
 				<td colspan="2" align="center">&nbsp;</td>
 			</tr>
 			<tr>

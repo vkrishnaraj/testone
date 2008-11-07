@@ -113,5 +113,6 @@
 	<classpathentry kind="lib" path="lib/cron/mysql-connector-java-5.1.6-bin.jar"/>
 	<classpathentry kind="lib" path="lib/cron/quartz-all-1.6.1-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/cron/wrapper.jar"/>
+	<classpathentry kind="lib" path="lib/jars/dsi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

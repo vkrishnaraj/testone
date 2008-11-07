@@ -494,6 +494,7 @@ public class HibernateUtils {
 				Deliver_ServiceLevel c = (Deliver_ServiceLevel) results.get(0);
 				c.setDelivercompany(obj.getDelivercompany());
 				c.setDescription(obj.getDescription());
+				c.setService_code(obj.getService_code());
 				sess.saveOrUpdate(c);
 				objRef = c;
 			}
@@ -501,7 +502,6 @@ public class HibernateUtils {
 			if (user.getStation().getCompany().getVariable().getAudit_delivery_companies() == 1) {
 				Audit_Deliver_ServiceLevel audit_dsl = AuditDeliveryCompanyUtils.getAuditDeliver_ServiceLevel(objRef, user);
 				if (audit_dsl != null) {
-					//HibernateUtils.saveNew(audit_dsl);
 					sess.save(audit_dsl);
 				}
 			}

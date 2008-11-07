@@ -28,7 +28,6 @@ public class TracerProperties {
 	public static final String RESERVATION_POPULATE_OHD_ON = "populate.onhand";
 	public static final String RESERVATION_POPULATION_SEARCH = "populate.incident.bagtagsearch";
 	public static final String SCANNER_CLASS_PATH = "scanner.class.path";
-	public static final String RYNNS_ENDPOINT = "rynns.endpoint";
 	public static final String SUPPRESSION_PRINTING_NONHTML = "suppress.print.nonhtml";
 	public static final String EMAIL_REPORT_LD = "inc.receipt.email.ld";
 	public static final String EMAIL_REPORT_DAM = "inc.receipt.email.dam";
