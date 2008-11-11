@@ -110,7 +110,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	static {
 		INC_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
-		INC_FIELD_RULES.put(WorldTracerField.CT, new SameLineRule(7, 7, 10, Format.ALPHA_NUMERIC));
+		INC_FIELD_RULES.put(WorldTracerField.CT, new BasicRule(7, 7, 10, Format.ALPHA_NUMERIC));
 		// new Object[] { 10, RepeatType.MULTIPLE });
 		INC_FIELD_RULES.put(WorldTracerField.FD, new SameLineRule(1, 14, 4, Format.ALPHA_NUMERIC));
 		// , new Object[] { 4, RepeatType.SAME_LINE });
