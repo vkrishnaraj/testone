@@ -249,8 +249,7 @@ function gotoHistoricalReport() {
       <!-- END ICONS MENU -->
       <tr>
         <!-- MIDDLE COLUMN -->
-        <td id="middlecolumn"><!-- MAIN BODY --> <jsp:include
-          page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
+        <td id="middlecolumn"><!-- MAIN BODY --> <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
         <jsp:include page="/pages/includes/mbrbag_incl.jsp" /> <jsp:include
           page="/pages/includes/remark_incl.jsp" /> <logic:notEqual
           name="incidentForm" property="readonly" value="1">

@@ -657,6 +657,10 @@ public class IncidentBMO {
 			if (siDTO.getItemType_ID() > 0) {
 				s.append(" and incident.itemtype.itemType_ID = :itemType_ID ");
 			}
+			
+			if(siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
+				s.append(" and incident.recordlocator like :recordlocator");
+			}
 
 			if (siDTO.getAgent().length() > 0)
 				s.append(" and incident.agent.username like :agent ");
@@ -757,6 +761,9 @@ public class IncidentBMO {
 
 			if (siDTO.getItemType_ID() > 0) {
 				q.setInteger("itemType_ID", siDTO.getItemType_ID());
+			}
+			if(siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
+				q.setString("recordlocator", siDTO.getRecordlocator());
 			}
 			if (siDTO.getStatus_ID() > 0) {
 				q.setInteger("status_ID", siDTO.getStatus_ID());

@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 /**
@@ -76,7 +77,7 @@ public class Station implements Serializable {
 	 * @return Returns the countrycode_ID.
 	 */
 	public String getCountrycode_ID() {
-		return (countrycode_ID == null || countrycode_ID.length() ==  0 ? TracingConstants.DEFAULT_COUNTRY : countrycode_ID);
+		return (countrycode_ID == null || countrycode_ID.length() ==  0 ? PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY) : countrycode_ID);
 	}
 
 	/**

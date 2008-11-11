@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.datafeed;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -11,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="z_ws_flight_info")
-public class FlightInfo {
+public class FlightInfo implements Serializable {
 	
 	@Id @GeneratedValue
 	private long id;

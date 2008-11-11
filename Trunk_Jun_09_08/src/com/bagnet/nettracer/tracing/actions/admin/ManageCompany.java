@@ -184,7 +184,7 @@ public final class ManageCompany extends Action {
 					dForm.setOal_ohd_hours("" + cmpny.getVariable().getOal_ohd_hours());
 					dForm.setWt_user("" + cmpny.getVariable().getWt_user());
 					dForm.setWt_pass("" + cmpny.getVariable().getWt_pass());
-					dForm.setRetrieve_actionfile_interval("" + cmpny.getVariable().getRetrieve_actionfile_interval());
+					//dForm.setRetrieve_actionfile_interval("" + cmpny.getVariable().getRetrieve_actionfile_interval());
 					dForm.setWt_url("" + cmpny.getVariable().getWt_url());
 					dForm.setWt_airlinecode("" + cmpny.getVariable().getWt_airlinecode());
 					dForm.setWt_enabled("" + cmpny.getVariable().getWt_enabled());
@@ -382,7 +382,7 @@ public final class ManageCompany extends Action {
 					var.setOal_ohd_hours(Integer.parseInt((String)dForm.getOal_ohd_hours()));
 					var.setWt_user((String)dForm.getWt_user());
 					var.setWt_pass((String)dForm.getWt_pass());
-					var.setRetrieve_actionfile_interval(Integer.parseInt((String)dForm.getRetrieve_actionfile_interval()));
+					//var.setRetrieve_actionfile_interval(Integer.parseInt((String)dForm.getRetrieve_actionfile_interval()));
 					// let them save a blank url if wt is being disabled.
 					// otherwise store the default instead of blank
 					String wt_url = dForm.getWt_url();

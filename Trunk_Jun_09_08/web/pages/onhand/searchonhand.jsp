@@ -98,7 +98,7 @@ function updatePagination() {
                   <html:text property="incident_ID" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
                 <td>
-                  <bean:message key="colname.status" />
+                  <bean:message key="colname.ohd_status" />
                   <br>
                   <html:select property="status_ID" styleClass="dropdown">
                     <html:option value="">

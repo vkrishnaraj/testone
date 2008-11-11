@@ -628,7 +628,6 @@ public class TracingConstants {
 	public final static String AJAX_STATUSES = "ajax_statuses";
 	
 	// defaults
-	public final static String DEFAULT_COUNTRY = "US";
 	public final static String US_COUNTRY_CODE = "US";
 	//public final static String DEFAULT_AIRLINE = "FL";
 	

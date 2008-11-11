@@ -348,7 +348,7 @@ public class HibernateUtils {
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER))  {
 						c.getVariable().setWt_user(obj.getVariable().getWt_user());
 						c.getVariable().setWt_pass(obj.getVariable().getWt_pass());
-						c.getVariable().setRetrieve_actionfile_interval(obj.getVariable().getRetrieve_actionfile_interval());
+						//c.getVariable().setRetrieve_actionfile_interval(obj.getVariable().getRetrieve_actionfile_interval());
 						c.getVariable().setMbr_to_wt_days(obj.getVariable().getMbr_to_wt_days());
 						c.getVariable().setOhd_to_wt_hours(obj.getVariable().getOhd_to_wt_hours());
 						c.getVariable().setOal_inc_hours(obj.getVariable().getOal_inc_hours());

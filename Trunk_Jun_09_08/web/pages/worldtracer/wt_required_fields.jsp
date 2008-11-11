@@ -33,7 +33,7 @@
         reqContentFields = false;
       }
       
-      if (currentElementName.indexOf("lastname") != -1) {  
+      if (currentElementName.indexOf("[0].lastname") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale,
@@ -43,7 +43,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("firstname") != -1) {
+      else if (currentElementName.indexOf("[0].firstname") != -1) {
         if (currentElement.value.length == 0)
         {
           alert("<%= (String)myMessages.getMessage(myLocale, 

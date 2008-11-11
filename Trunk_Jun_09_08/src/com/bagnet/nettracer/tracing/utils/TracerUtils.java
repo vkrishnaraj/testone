@@ -40,6 +40,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -114,7 +115,7 @@ public class TracerUtils {
 
 		theform.setDateFoundLost(theform.getCreate_date());
 		theform.setReport_type(TracingConstants.LOST_REPORT);
-		theform.setCustomer_countrycode_ID(TracingConstants.DEFAULT_COUNTRY);
+		theform.setCustomer_countrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 	}
 
 	public static void populateFoundItem(LostFoundIncidentForm theform,
@@ -138,7 +139,7 @@ public class TracerUtils {
 
 		theform.setDateFoundLost(theform.getCreate_date());
 		theform.setReport_type(TracingConstants.FOUND_REPORT);
-		theform.setCustomer_countrycode_ID(TracingConstants.DEFAULT_COUNTRY);
+		theform.setCustomer_countrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 	}
 
 	public static void populateIncident(IncidentForm theform,

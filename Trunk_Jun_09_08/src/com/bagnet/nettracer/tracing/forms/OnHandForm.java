@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import org.apache.struts.validator.ValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -521,7 +522,7 @@ public final class OnHandForm extends ValidatorForm {
 		if (this.passengerList.size() <= index) {
 		//if ((index == 0 && this.passengerList.size() < 1) || (this.passengerList.size() <= index)) {
 			OHD_Address address = new OHD_Address();
-			address.setCountrycode_ID(TracingConstants.DEFAULT_COUNTRY);
+			address.setCountrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 			OHD_Passenger passenger = new OHD_Passenger();
 			passenger.setIsprimary(0);
 			address.setOhd_passenger(passenger);

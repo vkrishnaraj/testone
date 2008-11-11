@@ -274,7 +274,17 @@
           
           <tr>
             <td colspan=3>
+            	<% 
+            	if (report_type == 0) { 
+            	%>
+            	<bean:message key="colname.damaged_bag_status" />
+            	<% 
+            	} else { 
+            	%>
               <bean:message key="colname.bag_status" />
+              <% 
+              } 
+              %>
               <br>
               <html:text name="theitem" property="status.description" size="25" maxlength="25" styleClass="textfield" indexed="true" readonly="true" />
               &nbsp;&nbsp;&nbsp;&nbsp;

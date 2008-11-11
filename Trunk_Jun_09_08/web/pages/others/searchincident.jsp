@@ -228,13 +228,17 @@ function updatePagination() {
                   <html:text property="agent" size="20" maxlength="20" styleClass="textfield" />
                 </td>
 
-                <td colspan="2">
+                <td>
 	                <bean:message key="colname.agentassigned_nobr" />
 	                <br>
 	                <html:text property="agentassigned" size="20" maxlength="20" styleClass="textfield" onkeypress="document.searchIncidentForm.noAssignedAgent.checked = false;"/>
 	                <html:checkbox property="noAssignedAgent" value="1" onclick="if (this.checked == true) {document.searchIncidentForm.agentassigned.value = ''; } else if (this.checked == false){}"><bean:message key="colname.noassignedagent" /></html:checkbox>
                 </td>
-                
+                <td>
+                	<bean:message key="colname.recordlocator" />
+                	<br />
+                	<html:text property="recordlocator" size="8" maxlength="6" styleClass="textfield" />
+                </td>
                 
               </tr>
               <tr>

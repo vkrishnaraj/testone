@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -202,7 +203,7 @@ public class LostAndFoundIncident implements Serializable {
 	 * @return Returns the customer_countrycode_ID.
 	 */
 	public String getCustomer_countrycode_ID() {
-		return (customer_countrycode_ID == null || customer_countrycode_ID.length() ==  0 ? TracingConstants.DEFAULT_COUNTRY : customer_countrycode_ID);
+		return (customer_countrycode_ID == null || customer_countrycode_ID.length() ==  0 ? PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY) : customer_countrycode_ID);
 	}
 
 	/**

@@ -159,7 +159,7 @@
               <html:text property="dispcreatetime" size="20" styleClass="textfield" disabled="true" />
             </td>
             <td nowrap>
-              <bean:message key="colname.agentusername" />
+              <bean:message key="colname.incident.createagent" />
               <br>
               <html:text property="agentinit" size="4" styleClass="textfield" disabled="true" />
             </td>

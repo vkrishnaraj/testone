@@ -7,7 +7,7 @@ public class PassiveTracingWrapper {
 	
 	public PassiveTracingWrapper(String companyCode, String instanceName) {
 		this.companyCode = companyCode;
-		this.instanceName = instanceName;
+		this.instanceName = "Passive Tracer " + instanceName;
 	}
 	
 	public void startTracing() {

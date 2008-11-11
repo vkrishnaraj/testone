@@ -192,18 +192,6 @@
 	              <html:password styleClass="textfield" name="companyForm" property="wt_pass" size="15" maxlength="15" />
 	            </td>  
 	          </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.Interval" />
-	              <font color=red>
-	              *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="retrieve_actionfile_interval" size="15" maxlength="15" />
-	            </td>  
-	          </tr>
 	      <tr>
             <td colspan="2">
               &nbsp;

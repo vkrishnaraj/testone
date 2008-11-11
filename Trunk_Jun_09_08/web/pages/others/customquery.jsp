@@ -198,7 +198,7 @@ function updatePagination() {
 	if (request.getAttribute("ohd") != null) {
 		ar = (ArrayList)request.getAttribute("oStatusList");
 		%>
-		<bean:message key="colname.bag_status" />
+		<bean:message key="colname.ohd_status" />
 		<br />
 		<%
 	} else {
@@ -399,7 +399,7 @@ function updatePagination() {
               </tr>
             </table>
             <h1 class="green">
-              <bean:message key="header.bag_information" />
+              <bean:message key="header.bag_info" />
               <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
             </h1>
             <table class="form2" cellspacing="0" cellpadding="0">

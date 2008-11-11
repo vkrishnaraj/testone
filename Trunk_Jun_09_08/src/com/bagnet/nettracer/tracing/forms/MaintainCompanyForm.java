@@ -53,7 +53,6 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String oal_ohd_hours;
 	private String wt_user;
 	private String wt_pass;
-	private String retrieve_actionfile_interval;
 	private String audit_ohd;
 	private String audit_lost_found;
 	private String audit_lost_delayed;
@@ -226,9 +225,6 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public String getAudit_delivery_companies() { return this.audit_delivery_companies;}
 	public String getSecure_password() { return this.secure_password;}
 	public String getWebs_enabled() { return this.webs_enabled;}
-	public String getRetrieve_actionfile_interval() {
-		return this.retrieve_actionfile_interval;
-	}
 	public void setPageState ( String  pageState ) { this.pageState  =  pageState ; }
 	public void setCompanySearchName ( String  companySearchName ) { this.companySearchName  =  companySearchName ; }
 	public void setCompanyCode ( String  companyCode ) { this.companyCode  =  companyCode ; }
@@ -284,12 +280,6 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setAudit_delivery_companies ( String  audit_delivery_companies ) { this.audit_delivery_companies  =  audit_delivery_companies ; }
 	public void setSecure_password ( String  secure_password ) { this.secure_password  =  secure_password ; }
 	public void setWebs_enabled ( String  webs_enabled ) { this.webs_enabled  =  webs_enabled ; }
-
-
-
-	public void setRetrieve_actionfile_interval(String retrieve_actionfile_interval) {
-		this.retrieve_actionfile_interval = retrieve_actionfile_interval;
-	}
 
 	/**
 	 * @return the scannerDefaultBack

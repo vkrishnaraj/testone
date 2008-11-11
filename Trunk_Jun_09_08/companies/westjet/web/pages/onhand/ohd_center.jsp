@@ -311,6 +311,7 @@ function gotoHistoricalReport() {
       &nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].hidden_ohd_id.value = '${OnHandForm.ohd_id}'; document.forms[0].submit();">
          <bean:message key="cancel" /></a>
       </c:if>
+
       <c:if test="${!empty OnHandForm.wt_id }">
             <%
       	if(a.getCompanycode_ID().equals(onHandForm.getHolding_company())) {
@@ -369,6 +370,7 @@ function gotoHistoricalReport() {
         </c:choose>
               <% } %>
       </c:if>
+
 
 
       <%
@@ -597,13 +599,7 @@ function gotoHistoricalReport() {
       <table class="form2_ohd" cellspacing="0" cellpadding="0">
         <tr>
           <td colspan=5>
-          <%
-             if (i.intValue() > 0) {
-          %> <b><bean:message key="colname.addi_pass_info" /></b> <%
-    } else {
- %> <b><bean:message key="colname.pri_pass_info" /></b><%
-    }
- %>
+			<b><bean:message key="colname.passenger" /> <%= i + 1 %></b>
           </td>
         </tr>
         <tr>

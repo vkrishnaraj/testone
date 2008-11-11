@@ -32,6 +32,7 @@ public class SearchIncident_DTO {
 	private int status_ID;
 	private int[] status_IDs;	// used for search incoming incidents
 	private int noAssignedAgent;
+	private String recordlocator;
 	
 
 	/**
@@ -345,5 +346,14 @@ public class SearchIncident_DTO {
 	 */
 	public void setNoAssignedAgent(int noAssignedAgent) {
 		this.noAssignedAgent = noAssignedAgent;
+	}
+
+	public String getRecordlocator() {
+		return recordlocator;
+	}
+
+	public void setRecordlocator(String recordlocator) {
+		this.recordlocator = recordlocator;
 	}	
+	
 }

@@ -92,10 +92,14 @@ public class WorldTracerROHAction extends Action {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 					} else {
-						boolean result = this.InsertWtRoh(dForm, user);
-						//String result = postWTROH(dForm, user);
-						//request.setAttribute("result", result);
-						return (mapping.findForward(TracingConstants.SEND_WT_ROH_SUCCESS));
+						ActionMessage error = this.InsertWtRoh(dForm, user);
+						if(error != null) {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						}
+						else {
+							return (mapping.findForward(TracingConstants.SEND_WT_ROH_SUCCESS));
+						}
 					}
 					
 				}
@@ -109,7 +113,6 @@ public class WorldTracerROHAction extends Action {
 					
 				}
 			}
-			
 			dForm.set("ag", user.getUsername() + "/" + user.getCompanycode_ID());
 		}
 
@@ -117,7 +120,7 @@ public class WorldTracerROHAction extends Action {
 		//Allow modifications to the forward.
 		return mapping.findForward(TracingConstants.VIEW_WORLDTRACER_ROH);
 	}
-	private boolean InsertWtRoh(DynaValidatorForm theform,Agent user){
+	private ActionMessage InsertWtRoh(DynaValidatorForm theform,Agent user){
 		IncidentBMO ibmo = new IncidentBMO();
 		WtqRequestOhd wtq = new WtqRequestOhd();
 		wtq.setAgent(user);
@@ -125,7 +128,7 @@ public class WorldTracerROHAction extends Action {
 		try {
 			Incident inc = ibmo.findIncidentByWtId(theform.getString("wt_ahl_id"));
 			if (inc == null) {
-				return false;
+				return new ActionMessage("error.wt_err_no_inc_for_ahl");
 			}
 			wtq.setIncident(inc);
 			Set<String> teletypes = new HashSet<String>();
@@ -148,9 +151,9 @@ public class WorldTracerROHAction extends Action {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.warn("unable to complete Request OHD", e);
-			return false;
+			return new ActionMessage("error.wt_err_database_queue_error");
 		}
 		
-		return true;
+		return null;
 	}
 }

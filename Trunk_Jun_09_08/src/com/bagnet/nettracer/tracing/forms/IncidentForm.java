@@ -10,6 +10,7 @@ import java.util.TimeZone;
 
 import org.apache.struts.validator.ValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -213,7 +214,7 @@ public final class IncidentForm extends ValidatorForm {
 			a.setMembership(new AirlineMembership());
 			Address addr = new Address();
 			addr.set_DATEFORMAT(get_DATEFORMAT());
-			addr.setCountrycode_ID(TracingConstants.DEFAULT_COUNTRY);
+			addr.setCountrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 			addr.setPassenger(a);
 			a.addAddress(addr);
 			this.passengerlist.add(a);
@@ -301,6 +302,12 @@ public final class IncidentForm extends ValidatorForm {
 			Item item = new Item(itemtype);
 			item.setBagnumber(index);
 			Item_Inventory ii = new Item_Inventory();
+			ii.setItem(item);
+			item.getInventorylist().add(ii);
+			ii = new Item_Inventory();
+			ii.setItem(item);
+			item.getInventorylist().add(ii);
+			ii = new Item_Inventory();
 			ii.setItem(item);
 			item.getInventorylist().add(ii);
 			this.itemlist.add(item);

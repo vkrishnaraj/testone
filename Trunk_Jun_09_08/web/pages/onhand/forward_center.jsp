@@ -130,7 +130,7 @@
                     <tr>
                       <td colspan="6">
                         <strong>
-                          <bean:message key="header.bag_itinerary" />
+                          <bean:message key="header.ohd_bag_itinerary" />
                         </strong>
                       </td>
                     </tr>
