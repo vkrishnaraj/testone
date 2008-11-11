@@ -1128,7 +1128,8 @@
 	</target>
 
 	<target name="wjtest-build-cron">
-		<property name="ant_project_name" value="westjet"/>
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="environment/test/" />
 		<antcall target="build-cron-service" />
 	</target>
 	
