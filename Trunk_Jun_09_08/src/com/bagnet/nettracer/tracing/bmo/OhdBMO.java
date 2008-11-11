@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -47,6 +48,7 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringType;
 
 /**
  * This class provides utility methods for on-hand related functionality.
@@ -1360,6 +1362,7 @@ public class OhdBMO {
 		" and ohd.founddate <= :ohdCutoff " + //old enough
 		" and ohd.status.status_ID = :status " + // only open
 		" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
+		" and ohd.ohd_type = :ohd_type " +
 		" order by ohd.founddate desc";
 		
 		Session sess = null;
@@ -1370,6 +1373,7 @@ public class OhdBMO {
 			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
 			q.setParameter("companyCode", companyCode);
 			q.setParameter("qStatus", WtqStatus.PENDING);
+			q.setParameter("ohd_type", TracingConstants.NOT_MASS_OHD_TYPE);
 			return q.list();
 		}
 		catch (Exception e) {
@@ -1466,4 +1470,49 @@ public class OhdBMO {
 			}
 		}
 	}
+
+		public List<OHD> findWtEarlyMove(int hours, List<String> earlyMoveStations, String companyCode) {
+			if (hours <= 0) {
+				return null;
+			}
+			Calendar c = new GregorianCalendar();
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.HOUR, (0-hours));
+			Date ohdCutoff = c.getTime();
+
+			String queryString = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where " +
+			" ohd.wtFile is null " +  //no worldtracer file already
+			" and ohd.OHD_ID not in (select q.ohd.OHD_ID from WtqOhdAction q where q.status = :qStatus)" +
+			" and ohd.founddate <= :ohdCutoff " + //old enough
+			" and ohd.status.status_ID = :status " + // only open
+			" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
+			" and ohd.ohd_type = :ohd_type " +
+			" and ohd.holdingStation.stationcode in (:earlyStationList) " +
+			" order by ohd.founddate desc";
+			
+			Session sess = null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+				Query q = sess.createQuery(queryString);
+				q.setParameter("ohdCutoff", ohdCutoff);
+				q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
+				q.setParameter("companyCode", companyCode);
+				q.setParameter("qStatus", WtqStatus.PENDING);
+				q.setParameter("ohd_type", TracingConstants.NOT_MASS_OHD_TYPE);
+				q.setParameterList("earlyStationList", earlyMoveStations, Hibernate.STRING);
+				return q.list();
+			}
+			catch (Exception e) {
+				logger.error("unable to get move to WT OHD list: " + e);
+				return null;
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						logger.error("unable to close hibernate session: " + e);
+					}
+				}
+			}
+		}
 }

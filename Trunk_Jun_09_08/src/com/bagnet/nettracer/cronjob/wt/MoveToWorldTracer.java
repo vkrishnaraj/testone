@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
-import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -26,18 +26,21 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 
 public class MoveToWorldTracer {
 
 	private static final Logger logger = Logger.getLogger(MoveToWorldTracer.class);
-	
+
 	private String companyCode;
 	private OhdBMO obmo;
 	private IncidentBMO ibmo;
 	private WTQueueBmo qbmo;
 
 	private Agent ogadmin;
+
+	private static final String WT_EARLY_MOVE_STATION = "wt.early.move.station";
+	private static final String WT_EARLY_MOVE_OHD_HOURS = "wt.early.move.ohd.hours";
+	private static final String WT_EARLY_MOVE_AHL_HOURS = "wt.early.move.ahl.hours";
 
 	public MoveToWorldTracer() {
 		ogadmin = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
@@ -46,28 +49,58 @@ public class MoveToWorldTracer {
 	}
 
 	public void moveFiles() {
-		//TODO
+		// TODO
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(companyCode);
-		
-		//did we get company variables?
+
+		// did we get company variables?
 		if(csv == null) {
 			logger.error("Move To WorldTracer aborted: unable to get company variables for " + companyCode);
 			return;
 		}
-		
-		//is the company allowed to move files to worldtracer?
+
+		// is the company allowed to move files to worldtracer?
 		if(csv.getWt_enabled() != 1 || csv.getWt_write_enabled() != 1) {
 			logger.info("Move to Worldtracer aborted: worldtracer writing not turned on for " + companyCode);
 			return;
 		}
-		
+
 		int ohdHours = csv.getOhd_to_wt_hours();
 		int incDays = csv.getMbr_to_wt_days();
 		int ohdOal = csv.getOal_ohd_hours();
 		int incOal = csv.getOal_inc_hours();
-		
+
+		String temp2 = PropertyBMO.getValue(WT_EARLY_MOVE_OHD_HOURS);
+		List<String> earlyMoveStations = PropertyBMO.getValueList(WT_EARLY_MOVE_STATION);
+
+		if(temp2 != null && earlyMoveStations != null) {
+			int ohdEarlyHours = 0;
+			try {
+				ohdEarlyHours = Integer.parseInt(temp2);
+			}
+			catch (NumberFormatException e) {
+				logger.warn("unable to parse early move ohd hours from properties", e);
+			}
+			if(ohdEarlyHours > 0 && ohdEarlyHours < ohdHours) {
+				List<OHD> earlyMoveOHD = obmo.findWtEarlyMove(ohdEarlyHours, earlyMoveStations, companyCode);
+
+				if(earlyMoveOHD != null) {
+					for(OHD ohd : earlyMoveOHD) {
+						try {
+							if(ohd.getHoldingStation().getWt_stationcode() != null
+									&& ohd.getHoldingStation().getWt_stationcode().trim().length() > 0) {
+								queueOhd(ohd);
+							}
+						}
+						catch (Exception e) {
+							logger.error("Unable to queue OHD create in Move to WT thread", e);
+						}
+					}
+				}
+			}
+		}
+
 		int hours = 0;
-		
+
 		// select OHD's that meet requirements
 		if(ohdOal > 0 && ohdOal < ohdHours) {
 			hours = ohdOal;
@@ -75,64 +108,102 @@ public class MoveToWorldTracer {
 		else {
 			hours = ohdHours;
 		}
-		List<OHD> temp = obmo.findMoveToWtOhd(hours, companyCode);
-		List<OHD> ohdList = null;
-		
-		ohdList = filterOhdList(temp, ohdHours, ohdOal, companyCode);
-		
-		//this list will be sorted by create date.  however, the query to get it
-		if(ohdList != null) {
-			for(OHD ohd : ohdList) {
-				try {
-					queueOhd(ohd);
-				}
-				catch (Exception e) {
-					logger.error("Unable to queue OHD create in Move to WT thread", e);
+		if(hours > 0) {
+			List<OHD> temp = obmo.findMoveToWtOhd(hours, companyCode);
+			List<OHD> ohdList = null;
+			if(temp != null) {
+				ohdList = filterOhdList(temp, ohdHours, ohdOal, companyCode);
+				// this list will be sorted by create date. however, the query
+				// to get it
+				if(ohdList != null) {
+					for(OHD ohd : ohdList) {
+						try {
+							if(ohd.getHoldingStation().getWt_stationcode() != null
+									&& ohd.getHoldingStation().getWt_stationcode().trim().length() > 0) {
+								queueOhd(ohd);
+							}
+						}
+						catch (Exception e) {
+							logger.error("Unable to queue OHD create in Move to WT thread", e);
+						}
+					}
 				}
 			}
 		}
-		
-		//repeat for incidents
-		
+		// repeat for incidents
+		temp2 = PropertyBMO.getValue(WT_EARLY_MOVE_AHL_HOURS);
+
+		if(temp2 != null && earlyMoveStations != null) {
+			int incEarlyHours = 0;
+			try {
+				incEarlyHours = Integer.parseInt(temp2);
+			}
+			catch (NumberFormatException e) {
+				logger.warn("unable to parse early move ohd hours from properties", e);
+			}
+			if(incEarlyHours > 0 && incEarlyHours < incDays * 24) {
+				List<Incident> earlyMoveInc = ibmo.findWtEarlyMove(incEarlyHours, earlyMoveStations, companyCode);
+
+				if(earlyMoveInc != null) {
+					for(Incident incident : earlyMoveInc) {
+						try {
+							if(incident.getStationassigned().getWt_stationcode() != null
+									&& incident.getStationassigned().getWt_stationcode().trim().length() > 0) {
+								queueIncident(incident);
+							}
+						}
+						catch (Exception e) {
+							logger.error("Unable to queue OHD create in Move to WT thread", e);
+						}
+					}
+				}
+			}
+		}
+
 		if(incOal > 0 && incOal < (incDays * 24)) {
 			hours = incOal;
 		}
 		else {
 			hours = incDays * 24;
 		}
-		//get the incidents that need to be moved
-		List<Incident> tempInc = ibmo.findMoveToWtInc(hours, companyCode);
-		List<Incident> incList = null;
-
-		incList = filterIncList(tempInc, incDays * 24, incOal, companyCode);
-		
-		//this list will be sorted by create date.  however, the query to get it
-		if(incList != null) {
-			for(Incident inc : incList) {
-				try {
-					queueIncident(inc);
-				}
-				catch (Exception e) {
-					logger.error("Unable to queue inc create in Move to WT thread", e);
+		if(hours > 0) {
+			// get the incidents that need to be moved
+			List<Incident> tempInc = ibmo.findMoveToWtInc(hours, companyCode);
+			List<Incident> incList = null;
+			if(tempInc != null) {
+				incList = filterIncList(tempInc, incDays * 24, incOal, companyCode);
+				// this list will be sorted by create date. however, the query
+				// to get it
+				if(incList != null) {
+					for(Incident incident : incList) {
+						try {
+							if(incident.getStationassigned().getWt_stationcode() != null
+									&& incident.getStationassigned().getWt_stationcode().trim().length() > 0) {
+								queueIncident(incident);
+							}
+						}
+						catch (Exception e) {
+							logger.error("Unable to queue inc create in Move to WT thread", e);
+						}
+					}
 				}
 			}
 		}
 	}
 
-
 	private List<Incident> filterIncList(List<Incident> temp, int myHours, int oalHours, String company) {
 		List<Incident> result = new ArrayList<Incident>();
 		Calendar c = new GregorianCalendar();
 		c.setTime(TracerDateTime.getGMTDate());
-		c.add(Calendar.HOUR, (0-myHours));
+		c.add(Calendar.HOUR, (0 - myHours));
 		Date myCutoff = c.getTime();
-		
+
 		c.add(Calendar.HOUR, myHours - oalHours);
 		Date oalCutoff = c.getTime();
-		
+
 		for(Incident incident : temp) {
-			if((isOther(incident, company) && oalHours > 0 && incident.getCreatedate().before(oalCutoff)) ||
-					(myHours > 0 && incident.getCreatedate().before(myCutoff))){
+			if((isOther(incident, company) && oalHours > 0 && incident.getCreatedate().before(oalCutoff))
+					|| (myHours > 0 && incident.getCreatedate().before(myCutoff))) {
 				result.add(incident);
 			}
 		}
@@ -140,8 +211,9 @@ public class MoveToWorldTracer {
 	}
 
 	private boolean isOther(Incident incident, String company) {
-		if(incident == null || company == null ) return false;
-		
+		if(incident == null || company == null)
+			return false;
+
 		if(incident.getItinerary() != null) {
 			for(Itinerary itin : (Iterable<Itinerary>) incident.getItinerary()) {
 				if(itin.getAirline() != null && !itin.getAirline().equalsIgnoreCase(company)) {
@@ -150,8 +222,9 @@ public class MoveToWorldTracer {
 			}
 		}
 		if(incident.getClaimcheck_list() != null) {
-			for(Incident_Claimcheck claimCheck : (List<Incident_Claimcheck>)incident.getClaimcheck_list()) {
-				if(claimCheck.getClaimchecknum() == null) continue;
+			for(Incident_Claimcheck claimCheck : (List<Incident_Claimcheck>) incident.getClaimcheck_list()) {
+				if(claimCheck.getClaimchecknum() == null)
+					continue;
 				String claimCompany = LookupAirlineCodes.extractTwoCharAirlineCode(claimCheck.getClaimchecknum());
 				if(claimCompany != null && !claimCompany.equalsIgnoreCase(company)) {
 					return true;
@@ -162,25 +235,26 @@ public class MoveToWorldTracer {
 		return false;
 	}
 
-	//the list passed here will already be at least old enough for the other airline
-	//so all other airlines can be automatically included.  only ones that are only for
-	//this airline that must be checked.
+	// the list passed here will already be at least old enough for the other
+	// airline
+	// so all other airlines can be automatically included. only ones that are
+	// only for
+	// this airline that must be checked.
 	private List<OHD> filterOhdList(List<OHD> temp, int myHours, int oalHours, String company) {
-		
+
 		List<OHD> result = new ArrayList<OHD>();
 		Calendar c = new GregorianCalendar();
 		c.setTime(TracerDateTime.getGMTDate());
-		c.add(Calendar.HOUR, (0-myHours));
+		c.add(Calendar.HOUR, (0 - myHours));
 		Date ohdCutoff = c.getTime();
-		
-		
+
 		c.add(Calendar.HOUR, myHours - oalHours);
 		Date oalCutoff = c.getTime();
-		
+
 		for(OHD ohd : temp) {
 			Date foundDate = ohd.getFullFoundDate();
-			if((isOther(ohd, company) && oalHours > 0 && foundDate.before(oalCutoff)) ||
-					(myHours > 0 && foundDate.before(ohdCutoff))) {
+			if((isOther(ohd, company) && oalHours > 0 && foundDate.before(oalCutoff))
+					|| (myHours > 0 && foundDate.before(ohdCutoff))) {
 				result.add(ohd);
 			}
 		}
@@ -194,8 +268,9 @@ public class MoveToWorldTracer {
 	 * @return
 	 */
 	private boolean isOther(OHD ohd, String company) {
-		if(ohd == null || company == null ) return false;
-		
+		if(ohd == null || company == null)
+			return false;
+
 		if(ohd.getItinerary() != null) {
 			for(OHD_Itinerary itin : (Iterable<OHD_Itinerary>) ohd.getItinerary()) {
 				if(itin.getAirline() != null && !itin.getAirline().equalsIgnoreCase(company)) {
@@ -213,7 +288,7 @@ public class MoveToWorldTracer {
 	}
 
 	private void queueIncident(Incident incident) throws Exception {
-		
+
 		WtqCreateAhl wtq = new WtqCreateAhl();
 		wtq.setAgent(ogadmin);
 		wtq.setIncident(incident);
@@ -221,12 +296,12 @@ public class MoveToWorldTracer {
 	}
 
 	private void queueOhd(OHD ohd) throws Exception {
-		
+
 		WtqCreateOhd wtq = new WtqCreateOhd();
 		wtq.setAgent(ogadmin);
 		wtq.setOhd(ohd);
 		WorldTracerQueueUtils.createOnlyQueue(wtq);
-		
+
 	}
 
 	public void setObmo(OhdBMO obmo) {
@@ -244,6 +319,5 @@ public class MoveToWorldTracer {
 	public void setQbmo(WTQueueBmo qbmo) {
 		this.qbmo = qbmo;
 	}
-	
 
 }

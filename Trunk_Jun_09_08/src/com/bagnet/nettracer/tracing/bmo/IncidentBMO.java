@@ -577,9 +577,9 @@ public class IncidentBMO {
 	}
 
 	/**
-	 * @param hours the number of hours old the ohd must be to move to wt
-	 * @param companyCode company whose ohds are to be moved to wt
-	 * @return list of OHD that need to be moved to world tracer
+	 * @param hours the number of hours old the incident must be to move to wt
+	 * @param companyCode company whose incidents are to be moved to wt
+	 * @return list of Incidents that need to be moved to world tracer
 	 */
 	public List<Incident> findMoveToWtInc(int hours, String companyCode) {
 		if (hours <= 0) {
@@ -596,6 +596,7 @@ public class IncidentBMO {
 		" and inc.createdate <= :incCutoff " + //old enough
 		" and inc.status.status_ID = :status " + // only open
 		" and inc.stationassigned.company.companyCode_ID = :companyCode " +
+		" and inc.itemtype.itemType_ID = :itemType " +
 		" order by inc.createdate asc ";
 		
 		Session sess = null;
@@ -606,6 +607,7 @@ public class IncidentBMO {
 			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
 			q.setParameter("companyCode", companyCode);
 			q.setParameter("qStatus", WtqStatus.PENDING);
+			q.setParameter("itemType", TracingConstants.LOST_DELAY);
 			return q.list();
 		}
 		catch (Exception e) {
@@ -1459,6 +1461,53 @@ public class IncidentBMO {
 					sess.close();
 				} catch (Exception e) {
 					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+
+	public List<Incident> findWtEarlyMove(int incEarlyHours, List<String> earlyMoveStations, String companyCode) {
+		if (incEarlyHours <= 0) {
+			return null;
+		}
+		
+		Calendar c = new GregorianCalendar();
+		c.setTime(TracerDateTime.getGMTDate());
+		c.add(Calendar.HOUR, (0-incEarlyHours));
+		Date incCutoff = c.getTime();
+		
+		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where " +
+		" inc.wtFile is null " +  //no worldtracer file already
+		" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)" +
+		" and inc.createdate <= :incCutoff " + //old enough
+		" and inc.status.status_ID = :status " + // only open
+		" and inc.stationassigned.company.companyCode_ID = :companyCode " +
+		" and inc.itemtype.itemType_ID = :itemType " +
+		" and inc.stationassigned.stationcode in (:earlyStationList) " +
+		" order by inc.createdate asc ";
+		
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(queryString);
+			q.setParameter("incCutoff", incCutoff);
+			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("companyCode", companyCode);
+			q.setParameter("qStatus", WtqStatus.PENDING);
+			q.setParameter("itemType", TracingConstants.LOST_DELAY);
+			q.setParameterList("earlyStationList", earlyMoveStations, Hibernate.STRING);
+			return q.list();
+		}
+		catch (Exception e) {
+			logger.error("unable to get move to WT Incident list: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
 				}
 			}
 		}

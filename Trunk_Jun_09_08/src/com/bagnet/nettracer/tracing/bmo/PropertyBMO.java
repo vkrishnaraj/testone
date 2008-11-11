@@ -38,29 +38,46 @@ public class PropertyBMO {
 	 * @return String property value.
 	 * @throws HibernateException
 	 */
-	public static String getValue(String keyVal) throws HibernateException {
+	private static List<String> getValues(String keyVal) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Property property where keyStr= :key");
+			Query q = sess.createQuery("select property.valueStr from com.bagnet.nettracer.tracing.db.Property property where keyStr= :key");
 			q.setString("key", keyVal);
-			List list = q.list();
+			List<String> list = q.list();
 			if (list == null || list.size() == 0) {
 				return null;
 			}
-			return (String) ((Property)list.get(0)).getValueStr();
+			return list;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error retreiving property " + keyVal, e);
 			return null;
 		} finally {
 			sess.close();
 		}
 	}
 	
+	public static String getValue(String keyVal) {
+		List<String> list = getValues(keyVal);
+		
+		if(list == null || list.size() == 0) {
+			return null;
+		}
+		return list.get(0);
+	}
+	
+	public static List<String> getValueList(String keyVal) {
+		List<String> list = getValues(keyVal);
+		if(list == null || list.size() == 0) {
+			return null;
+		}
+		return list;
+	}
+	
 	public static boolean isTrue(String property) {
 		try {
 			return getValue(property).equals("1");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn("error checking boolean property " + property + ", returning false", e);
 			return false;
 		}
 	}
