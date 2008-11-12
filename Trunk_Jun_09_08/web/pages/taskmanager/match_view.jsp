@@ -397,8 +397,9 @@
               </logic:notPresent>
               <tr>
                 <td align="center">
-                  <INPUT type="button" value="Return to View Matches" onClick="document.location.href='viewMatches.do';return false;" Id="button">
+                  <INPUT type="button" value="Back" onClick="history.back()" id="button">
                   &nbsp;
+                  <INPUT type="button" value="Return to View Matches" onClick="document.location.href='viewMatches.do';return false;" Id="button">
                 </td>
               </tr>
             </table>

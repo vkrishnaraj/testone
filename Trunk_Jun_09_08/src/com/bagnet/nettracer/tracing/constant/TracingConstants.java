@@ -72,11 +72,13 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION = "Claim Resolution";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_PRORATE = "Claim Prorate";
 	public final static String SYSTEM_COMPONENT_NAME_CBRO_VIEW = "CBRO View";
+	public final static String SYSTEM_COMPONENT_NAME_CBRO_MGMT = "CBRO Management";
 	public final static String SYSTEM_COMPONENT_NAME_BY_PASSENGER_BOARDINGS = "By Passenger Boardings";
 	public final static String SYSTEM_COMPONENT_NAME_CUSTOM_REPORTS = "Custom Reports";
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_TO_BE_DELIVERED = "Bags To Be Delivered";
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_IN_STATION = "On-hand Bags";
 	public final static String SYSTEM_COMPONENT_NAME_SCANNER_DATA = "Scanner Data";
+
 	public final static String FORWARD_SCANNER_DATA = "scannerData";
 	
 	public final static String SYSTEM_COMPONENT_NAME_ANALYTICAL_REPORTS = "Analytical Reports";

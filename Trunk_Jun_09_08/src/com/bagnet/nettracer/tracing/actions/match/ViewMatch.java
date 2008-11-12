@@ -403,7 +403,7 @@ public final class ViewMatch extends Action {
 				// find the claimcheck associated with this
 				for (int j = 0; j < incident.getClaimcheck_list().size(); j++) {
 					ic = (Incident_Claimcheck) incident.getClaimcheck_list().get(j);
-					if (ic.getOHD_ID().equals(ohd_id)) {
+					if (ic.getOHD_ID() != null && ic.getOHD_ID().equals(ohd_id)) {
 						// clear claim ohd
 						ic.setOHD_ID("");
 						break;

@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -22,6 +24,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.forms.ForwardMessageForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -71,16 +74,12 @@ public class ForwardMessageAction extends Action {
 		request.setAttribute("stationList", stationList);
 		
 		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
-				.getCurrentlocale(), true, user);
+				.getCurrentlocale(), false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
 		List faultstationlist = null;
-		if (UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
-			faultstationlist = UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY);
-		} else {
-			faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
-		}
+		faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
 		request.setAttribute("faultstationlist", faultstationlist);
 		
 		

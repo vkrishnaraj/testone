@@ -58,6 +58,42 @@ public class StationBMO {
 		return getStationByCode(stationCode, null);
 	}
 	
+	/**
+	 * Used to retrieve the station matching the given stationId and companyCode.
+	 * We use both to prevent users from submitting other airline (or Owens Group)
+	 * station IDs.
+	 * 
+	 * @param stationId
+	 * @param companyCode
+	 * @return
+	 */
+	public static Station getStationById(int stationId, String companyCode) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class).add(
+					Expression.eq("station_ID", stationId));
+			if (companyCode != null) {
+				cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			}
+			if (cri.list().size() > 0)
+				return (Station) cri.list().get(0);
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static Station getStationByCode(String stationCode, String companyCode) {
 		Session sess = null;
 		try {

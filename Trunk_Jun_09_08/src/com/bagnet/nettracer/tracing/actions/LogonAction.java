@@ -213,8 +213,15 @@ public class LogonAction extends Action {
 
 		//	check if the cbro agent
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_VIEW, agent)) {
-			if (request.getParameter("cbroStation") != null && !((String) request.getParameter("cbroStation")).equals(""))
-				session.setAttribute("cbroStationID", request.getParameter("cbroStation"));
+			if (request.getParameter("cbroStation") != null && !((String) request.getParameter("cbroStation")).equals("")) {
+				Station station = StationBMO.getStation((String) request.getParameter("cbroStation"));
+				if (station.getCompany().getCompanyCode_ID().equals(agent.getCompanycode_ID())) {
+					session.setAttribute("cbroStationID", request.getParameter("cbroStation"));
+					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_MGMT, agent)) {				
+						agent.setStation(StationBMO.getStationById(Integer.parseInt(request.getParameter("cbroStation")), agent.getCompanycode_ID()));
+					}
+				}
+			}
 		}
 
 		if (taskList != null && agent != null) {

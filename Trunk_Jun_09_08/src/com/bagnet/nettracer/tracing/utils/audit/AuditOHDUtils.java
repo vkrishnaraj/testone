@@ -145,7 +145,7 @@ public class AuditOHDUtils {
 				sql.append(" and aohd.time_modified between :sdate and :edate ");
 			}
 
-			if (!iscount) sql.append(" order by aohd.OHD_ID");
+			if (!iscount) sql.append(" order by ohd.OHD_ID");
 
 			Query q = sess.createQuery(sql.toString());
 

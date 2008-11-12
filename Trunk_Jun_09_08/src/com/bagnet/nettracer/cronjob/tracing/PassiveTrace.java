@@ -138,7 +138,9 @@ public class PassiveTrace implements Runnable {
 						query.addScalar("INCIDENT_ID", Hibernate.STRING);
 						incidentList = query.list();
 						sess.close();
-	
+						
+						count = 0;
+						
 						logger.info("Starting tracing session... Total Incidents: "
 								+ incidentList.size());
 					}

@@ -30,6 +30,7 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
+import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -275,6 +276,15 @@ public class BagService {
 
 		// create an on-hand entry
 		OHD oDTO = new OHD();
+		
+		// Fields for Special Instructions Implementation
+		BeornDTO bdto = new BeornDTO();
+		String finalFlightNumber = "";
+		String finalFlightAirline = "";
+		Date finalFlightDate = new Date();
+		String faultStationName = "";
+		
+		
 		oDTO.setAgent(user);
 		Status s = new Status();
 		s.setStatus_ID(TracingConstants.OHD_STATUS_IN_TRANSIT);
@@ -294,6 +304,7 @@ public class BagService {
 		if(!form.getFaultStation().equals("0")) {
 			Station faultStation = StationBMO.getStation(form.getFaultStation());
 			oDTO.setFaultstation_ID(faultStation.getStation_ID());
+			faultStationName = faultStation.getStationcode();
 		}
 
 		if(!form.getLossCode().equals("0")) {
@@ -322,13 +333,40 @@ public class BagService {
 		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 		OHD_Log_Itinerary oli = null;
 		if(log.getItinerary() != null) {
-			for(Iterator i = log.getItinerary().iterator(); i.hasNext();) {
-				oli = (OHD_Log_Itinerary) i.next();
+			List itinList = log.getItinerarylist();
+			for (int i = 0; itinList != null && i<itinList.size(); ++i) {
+				oli = (OHD_Log_Itinerary) itinList.get(i);
 				oli.setLog(log);
+  			if (i == itinList.size() -1) {
+  				finalFlightAirline = oli.getAirline();
+  				finalFlightNumber = oli.getFlightnum();
+  				finalFlightDate = oli.getDepartdate();
+  				
+  			}
 			}
+
 		}
 
 		HibernateUtils.save(log);
+		
+		bdto.setSpecialInstructions(form.getSpecialInstructions());
+		bdto.setExpediteNumber(form.getExpediteNumber());
+		bdto.setFinalFlightNumber(finalFlightNumber);
+		bdto.setFaultStation(faultStationName);
+		bdto.setFinalDestination(StationBMO.getStation(form.getDestStation()).getStationcode());
+		bdto.setFinalFlightDepartureDate(finalFlightDate);
+		bdto.setFinalFlightAirline(finalFlightAirline);
+		bdto.setReasonForLoss(form.getLossCode());
+		bdto.setTagNumber(form.getBag_tag());
+		
+		try {
+			SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);
+		} catch (Exception e) {
+			logger.error("Error performing client-specific BEORN Action...");
+			e.printStackTrace();
+		}
+		
+		
 		return oDTO.getOHD_ID();
 	}
 

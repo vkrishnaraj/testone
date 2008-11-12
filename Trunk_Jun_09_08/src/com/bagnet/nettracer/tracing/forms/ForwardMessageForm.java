@@ -29,6 +29,7 @@ public final class ForwardMessageForm extends ActionForm {
 	private TimeZone _TIMEZONE;
 	private String lossCode;
 	private String faultStation;
+	private String specialInstructions;
 	
 
 	/**
@@ -208,5 +209,19 @@ public final class ForwardMessageForm extends ActionForm {
 			this.forwarditinerarylist.add(i);
 		}
 		return (OHD_Log_Itinerary) this.forwarditinerarylist.get(index);
+	}
+
+	/**
+	 * @return the specialInstructions
+	 */
+	public String getSpecialInstructions() {
+		return specialInstructions;
+	}
+
+	/**
+	 * @param specialInstructions the specialInstructions to set
+	 */
+	public void setSpecialInstructions(String specialInstructions) {
+		this.specialInstructions = specialInstructions;
 	}
 }

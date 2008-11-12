@@ -10,6 +10,7 @@
 	java.util.Locale myLocale = (java.util.Locale) session
 			.getAttribute("org.apache.struts.action.LOCALE");
 %>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <script language="javascript">
   <!--
   
@@ -23,7 +24,6 @@
   function validatereqFields(form, formType)
   {
     returnValue = true;
-    var addressIndices = [];
     
     returnValue = validatereqWtIncFields(form, formType, false);
     if (returnValue == false) { return returnValue; }
@@ -35,8 +35,8 @@
       if (currentElementName.indexOf("address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
-        addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
-      } else if (currentElementName.indexOf("].zip") != -1) {  
+
+      } else if (currentElementName.indexOf("[0].zip") != -1) {  
         
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
@@ -112,24 +112,34 @@
       }
     } // End FOR LOOP
     
-    for (var j=0;j<addressIndices.length;j++) {
-      var index = addressIndices[0];
-      var mobile = document.getElementById("addresses[" + index + "].mobile");
-      var home = document.getElementById("addresses[" + index + "].homephone");
-      var work = document.getElementById("addresses[" + index + "].workphone");
-          
-      if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
-        alert("<%= (String)myMessages.getMessage(myLocale, "colname.phone") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
-        mobile.focus();
-        return false;
-      }
-      break;
+
+    var mobile = document.getElementById("addresses[0].mobile");
+    var home = document.getElementById("addresses[0].homephone");
+    var work = document.getElementById("addresses[0].workphone");
+        
+    if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
+      alert("<%= (String)myMessages.getMessage(myLocale, "colname.phone") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+      mobile.focus();
+      return false;
     }
+
   }
     
   function validatereqOHDForm(form) {
     returnValue = true;
     var addressIndices = [];
+
+    
+    for (var j=0;j < form.length; j++) {
+      currentElement = form.elements[j];
+      if (currentElement.name == "status.status_ID") {
+        statusId = currentElement.options[currentElement.selectedIndex].value;
+        if (statusId == <%= TracingConstants.OHD_STATUS_CLOSED %>) {
+          return true;
+        }
+      }
+    }
+
     
     returnValue = validatereqWtOHDForm(form);
     if (returnValue == false) { return returnValue; }

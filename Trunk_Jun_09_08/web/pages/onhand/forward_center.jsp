@@ -46,7 +46,7 @@
 
 
   <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="forward_message.do" method="post" onsubmit="return (validateMessageForm(this) && setExpediteNum(this)); ">
+  <html:form action="forward_message.do" method="post">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <!-- MIDDLE COLUMN -->
@@ -121,6 +121,12 @@
 					  </html:option>
 					  <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
 					</html:select>
+              	</td>
+              </tr>
+              <tr>
+              	<td><bean:message key="colname.fwd.specialinstructions" /></td>
+              	<td>
+                  <html:text name="forwardMessageForm" property="specialInstructions" size="20" maxlength="20" />
               	</td>
               </tr>
               
@@ -315,7 +321,7 @@
                 <td colspan="2" align="center">
                   <INPUT type="button" Id="button" value="Back" onClick="history.back()">
                   &nbsp;
-                  <html:submit styleId="button" property="save">
+                  <html:submit styleId="button" property="save" onclick="return (validateMessageForm(this.form) && setExpediteNum(this.form)); ">
                     <bean:message key="button.forward" />
                   </html:submit>
                 </td>

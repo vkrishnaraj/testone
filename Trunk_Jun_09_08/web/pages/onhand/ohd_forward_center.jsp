@@ -195,7 +195,7 @@
                     <tr>
                       <td colspan="6">
                         <strong>
-                          <bean:message key="header.bag_itinerary" />
+                          <bean:message key="header.forward_itinerary" />
                         </strong>
                       </td>
                     </tr>
@@ -277,14 +277,14 @@
                       <tr>
                         <td colspan=6>
                           <html:submit styleId="button" property="deleteBag" indexed="true">
-                            <bean:message key="button.delete_bag_itinerary" />
+                            <bean:message key="button.delete_forward_itinerary" />
                           </html:submit>
                         </td>
                       </tr>
                     </logic:iterate>
                   </table>
                   <center><html:submit styleId="button" property="additinerary">
-                    <bean:message key="button.add_bag_itinerary" />
+                    <bean:message key="button.add_forward_itinerary" />
                   </html:submit></center>
                 </td>
               </tr>

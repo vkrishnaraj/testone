@@ -53,7 +53,7 @@
           return false;
         }
       }
-    else if (currentElementName.indexOf("address1") != -1) {
+    else if (currentElementName.indexOf("[0].address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -66,7 +66,7 @@
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("address1") != -1) {
+      } else if (currentElementName.indexOf("[0]address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -81,7 +81,7 @@
         }
       }
       
-      else if (currentElementName.indexOf("city") != -1) {  
+      else if (currentElementName.indexOf("[0].city") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale, "colname.city")%>" + " <%=(String) myMessages.getMessage(myLocale,
@@ -90,7 +90,7 @@
           return false;
         } 
       } 
-      else if (currentElementName.indexOf("countrycode_ID") != -1) {
+      else if (currentElementName.indexOf("[0].countrycode_ID") != -1) {
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
           
         if (currentElement.value.length == 0)
@@ -102,7 +102,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("].state_ID") != -1) {  
+      else if (currentElementName.indexOf("[0].state_ID") != -1) {  
         // check country
         var pos = currentElementName.indexOf(".");
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
