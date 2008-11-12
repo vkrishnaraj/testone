@@ -20,6 +20,7 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -81,13 +82,14 @@ public class MoveToWorldTracer {
 				logger.warn("unable to parse early move ohd hours from properties", e);
 			}
 			if(ohdEarlyHours > 0 && ohdEarlyHours < ohdHours) {
-				List<OHD> earlyMoveOHD = obmo.findWtEarlyMove(ohdEarlyHours, earlyMoveStations, companyCode);
-
+				List<OHD> earlyMoveOHD = obmo.findMoveToWtOhd(ohdEarlyHours, companyCode);
+				
 				if(earlyMoveOHD != null) {
 					for(OHD ohd : earlyMoveOHD) {
 						try {
 							if(ohd.getHoldingStation().getWt_stationcode() != null
-									&& ohd.getHoldingStation().getWt_stationcode().trim().length() > 0) {
+									&& ohd.getHoldingStation().getWt_stationcode().trim().length() > 0
+									&& isEarlyMover(ohd, earlyMoveStations)) {
 								queueOhd(ohd);
 							}
 						}
@@ -142,13 +144,14 @@ public class MoveToWorldTracer {
 				logger.warn("unable to parse early move ohd hours from properties", e);
 			}
 			if(incEarlyHours > 0 && incEarlyHours < incDays * 24) {
-				List<Incident> earlyMoveInc = ibmo.findWtEarlyMove(incEarlyHours, earlyMoveStations, companyCode);
+				List<Incident> earlyMoveInc = ibmo.findMoveToWtInc(incEarlyHours, companyCode);
 
 				if(earlyMoveInc != null) {
 					for(Incident incident : earlyMoveInc) {
 						try {
 							if(incident.getStationassigned().getWt_stationcode() != null
-									&& incident.getStationassigned().getWt_stationcode().trim().length() > 0) {
+									&& incident.getStationassigned().getWt_stationcode().trim().length() > 0
+									&& isEarlyMover(incident, earlyMoveStations)) {
 								queueIncident(incident);
 							}
 						}
@@ -190,6 +193,7 @@ public class MoveToWorldTracer {
 			}
 		}
 	}
+
 
 	private List<Incident> filterIncList(List<Incident> temp, int myHours, int oalHours, String company) {
 		List<Incident> result = new ArrayList<Incident>();
@@ -234,7 +238,31 @@ public class MoveToWorldTracer {
 		}
 		return false;
 	}
+	
+	private boolean isEarlyMover(Incident incident, List<String> earlyMoveStations) {
+		if(incident == null || earlyMoveStations == null)
+			return false;
 
+		if(incident.getItinerary() != null) {
+			for(Itinerary itin : (Iterable<Itinerary>) incident.getItinerary()) {
+				if(itin ==  null) continue;
+				if((itin.getLegfrom() != null && earlyMoveStations.contains(itin.getLegfrom().toUpperCase()))
+						|| (itin.getLegto() != null && earlyMoveStations.contains(itin.getLegto().toUpperCase()))) {
+					return true;
+				}
+			}
+		}
+		
+		if(incident.getStationcreated() != null && earlyMoveStations.contains(incident.getStationcreated().getStationcode())) {
+			return true;
+		}
+		if(incident.getStationassigned() != null && earlyMoveStations.contains(incident.getStationassigned().getStationcode())) {
+			return true;
+		}
+		return false;
+	}
+	
+	
 	// the list passed here will already be at least old enough for the other
 	// airline
 	// so all other airlines can be automatically included. only ones that are
@@ -286,6 +314,33 @@ public class MoveToWorldTracer {
 		}
 		return false;
 	}
+
+
+	private boolean isEarlyMover(OHD ohd, List<String> earlyMoveStations) {
+		if(ohd == null || earlyMoveStations == null)
+			return false;
+
+		if(ohd.getItinerary() != null) {
+			for(OHD_Itinerary itin : (Iterable<OHD_Itinerary>) ohd.getItinerary()) {
+				if(itin ==  null) continue;
+				if((itin.getLegfrom() != null && earlyMoveStations.contains(itin.getLegfrom().toUpperCase()))
+						|| (itin.getLegto() != null && earlyMoveStations.contains(itin.getLegto().toUpperCase()))) {
+					return true;
+				}
+			}
+		}
+		
+		Station temp = ohd.getFoundAtStation();
+		if(temp != null && temp.getStationcode() != null && earlyMoveStations.contains(temp.getStationcode().toUpperCase())) {
+			return true;
+		}
+		temp = ohd.getHoldingStation();
+		if(temp != null && temp.getStationcode() != null && earlyMoveStations.contains(temp.getStationcode().toUpperCase())) {
+			return true;
+		}
+		return false;
+	}
+
 
 	private void queueIncident(Incident incident) throws Exception {
 
