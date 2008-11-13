@@ -99,9 +99,16 @@
 		
 	</bean>
 	-->
-	<bean id="passiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
+	<bean id="newPassiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
 		<constructor-arg value="${company.code}" />
 		<constructor-arg value="${cron.instance.label}" />
+		<constructor-arg value="NEW" />
+	</bean>
+	
+	<bean id="oldPassiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
+		<constructor-arg value="${company.code}" />
+		<constructor-arg value="${cron.instance.label}" />
+		<constructor-arg value="OLD" />
 	</bean>
 	
 	<bean id="dataFeedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >

@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -46,29 +47,25 @@ public class PassiveTrace implements Runnable {
 	private double minimumScore;
 	private RuleSet ruleSet;
 	private PassiveTraceErrorHandler errorHandler;
+	private PTMode mode;
+	
+	public enum PTMode {NEW, OLD};
 
 	public static void main(String[] args) {
 		PassiveTraceErrorHandler errorHandler = null;
 		
 		String companyCode = null;
-		int threads = 1;
+		int threads = 10;
 		int seconds = 60;
-		int daysBack = 2;
-		int daysForward = 15;
-		double minimumScore = 0;
-		String instanceName = "Not Defined";
+		int daysBack = 5;
+		int daysForward = 90;
+		double minimumScore = 50;
+		String instanceName = "Noah Test";
+		startPassiveTracing("WS", instanceName, PTMode.OLD);
 
-		if (args.length == 2) {
-			companyCode = args[0];
-			instanceName = args[1];
-			startPassiveTracing(companyCode, instanceName);
-		} else {
-			System.out.println("Startup arguments required:");
-			System.out.println(" arg[0] = CompanyCode (i.e. 'DA'), arg[1] = InstanceName");
-		}
 	}
 
-	public static void startPassiveTracing(String companyCode, String instanceName) {
+	public static void startPassiveTracing(String companyCode, String instanceName, PTMode mode) {
 
 		int threadLimit = 10;
 		int seconds = 60;
@@ -127,20 +124,37 @@ public class PassiveTrace implements Runnable {
 								logger.debug("ignoring thread interrupted exception", e);
 							}
 						}
-	
+
 						Session sess = HibernateWrapper.getSession().openSession();
-						String sql = "SELECT * FROM INCIDENT WHERE ITEMTYPE_ID = :itemType AND "
-								+ "STATUS_ID = :status ORDER BY lastupdated desc";
-	
-						SQLQuery query = sess.createSQLQuery(sql);
+						Calendar c;
+						Date cutoff = null;
+						String hsql = "";
+						switch (mode) {
+						case NEW:
+							c = new GregorianCalendar();
+							c.setTime(TracerDateTime.getGMTDate());
+							c.add(GregorianCalendar.HOUR, -48);
+							cutoff = c.getTime();
+							hsql = "SELECT i.incident_ID FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
+									+ " i.status.status_ID = :status and i.createdate > :dateCutoff ORDER BY i.lastupdated desc";
+							break;
+						case OLD:
+							c = new GregorianCalendar();
+							c.setTime(TracerDateTime.getGMTDate());
+							c.add(GregorianCalendar.HOUR, -48);
+							cutoff = c.getTime();
+							hsql = "SELECT i.incident_ID FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
+									+ " i.status.status_ID = :status and i.createdate < :dateCutoff ORDER BY i.lastupdated desc";
+							break;
+						}
+
+						Query query = sess.createQuery(hsql);
 						query.setInteger("status", TracingConstants.MBR_STATUS_OPEN);
 						query.setInteger("itemType", TracingConstants.LOST_DELAY);
-						query.addScalar("INCIDENT_ID", Hibernate.STRING);
+						query.setDate("dateCutoff", cutoff);
 						incidentList = query.list();
 						sess.close();
-						
-						count = 0;
-						
+	
 						logger.info("Starting tracing session... Total Incidents: "
 								+ incidentList.size());
 					}
