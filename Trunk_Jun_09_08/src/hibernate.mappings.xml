@@ -72,6 +72,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Remark.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Itinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_CategoryType.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_ItemType.hbm.xml"/>

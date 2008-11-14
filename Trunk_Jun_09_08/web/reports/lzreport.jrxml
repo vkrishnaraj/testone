@@ -40,7 +40,7 @@
 	<field name="timeZoneDesc" class="java.lang.String"/>
 
 
-		<group  name="bydate" isStartNewPage="true" >
+		<group  name="bydate" >
 			<groupExpression><![CDATA[$F{stationAssigned}]]></groupExpression>
 			<groupHeader>
 			<band height="23"  isSplitAllowed="true" >

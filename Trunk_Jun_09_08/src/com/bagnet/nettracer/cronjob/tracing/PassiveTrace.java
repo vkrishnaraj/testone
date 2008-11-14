@@ -9,6 +9,9 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -21,7 +24,6 @@ import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.cronjob.tracing.dto.Score;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
-import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -31,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Match;
 import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -38,7 +41,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 public class PassiveTrace implements Runnable {
 
-	public static Logger logger = Logger.getLogger(PassiveTrace.class);
+	public Logger logger = null;
 	
 	private String incidentId;
 	private String companyCode;
@@ -46,32 +49,44 @@ public class PassiveTrace implements Runnable {
 	private int daysForward;
 	private double minimumScore;
 	private RuleSet ruleSet;
+	private OhdWrapper ohdWrapper;
 	private PassiveTraceErrorHandler errorHandler;
+	protected static String SECONDARY_COLOR = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_COLOR_PERCENT);
+	protected static String TERTIARY_COLOR = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_COLOR_PERCENT);
+	protected static String SECONDARY_TYPE = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_TYPE_PERCENT);
+	protected static String TERTIARY_TYPE = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_TYPE_PERCENT);
+	protected static ConcurrentHashMap<String, String> AirlineConversionMap = new ConcurrentHashMap<String, String>();
+	public static final String PROPERTY_TRACING_DAYS_BACKWARD = "tracing.backward";
+	public static final String PROPERTY_TRACING_DAYS_FORWARD = "tracing.forward";
+	public static final String PROPERTY_TRACING_DAY_BREAK = "tracing.oldnewbreak";
+	
 	private PTMode mode;
 	
 	public enum PTMode {NEW, OLD};
+
 
 	public static void main(String[] args) {
 		PassiveTraceErrorHandler errorHandler = null;
 		
 		String companyCode = null;
-		int threads = 10;
+		int threads = 1;
 		int seconds = 60;
-		int daysBack = 5;
-		int daysForward = 90;
-		double minimumScore = 50;
-		String instanceName = "Noah Test";
-		startPassiveTracing("WS", instanceName, PTMode.OLD);
+		int daysBack = 2;
+		int daysForward = 45;
+		double minimumScore = 0;
 
+		String instanceName = "Test";
+		startPassiveTracing("US", instanceName, PTMode.OLD);
 	}
 
 	public static void startPassiveTracing(String companyCode, String instanceName, PTMode mode) {
-
+		String loggerName = mode.name() + "PassiveTracing";
+		Logger logger = Logger.getLogger(loggerName);
 		int threadLimit = 10;
 		int seconds = 60;
 		double minimumScore = 50;
-		int daysForward = Integer.parseInt(PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_DAYS_FORWARD));
-		int daysBack = Integer.parseInt(PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_DAYS_BACKWARD));
+		int daysForward = Integer.parseInt(PropertyBMO.getValue(PROPERTY_TRACING_DAYS_FORWARD));
+		int daysBack = Integer.parseInt(PropertyBMO.getValue(PROPERTY_TRACING_DAYS_BACKWARD));
 		
 		Company_Specific_Variable var = AdminUtils.getCompVariable(companyCode);
 		
@@ -97,43 +112,26 @@ public class PassiveTrace implements Runnable {
 		PassiveTraceErrorHandler errorHandler = new PassiveTraceErrorHandler(
 				emailHost, emailFrom, emailTo, port, instanceName);
 		
-		ArrayList<Thread> threadList = new ArrayList<Thread>();
 		List<String> incidentList = new ArrayList<String>();
 		boolean initialRun = true;
 		RuleSet ruleSet = new RuleSet();
-		int count = 0;
+		OhdWrapper ohdWrapperX = null;
 		ArrayList<Date> hibernateErrorDates = new ArrayList<Date>();
 		
 		while (true) {
 			try {
 				Date tmpDate = null;
-				// If the incidentList is empty, sleep for a little while.
-				if (incidentList.size() == 0) {
-					if (threadList.size() == 0) {
-	
-						// Sleep before next run.
-						if (initialRun == true) {
-							initialRun = false;
-						} else {
-							try {
-								tmpDate = new Date();
-								logger.info("Sleeping for " + seconds + "...");
-								Thread.sleep(1000 * seconds);
-							} catch (InterruptedException e) {
-								// Ignore exception
-								logger.debug("ignoring thread interrupted exception", e);
-							}
-						}
 
 						Session sess = HibernateWrapper.getSession().openSession();
 						Calendar c;
 						Date cutoff = null;
 						String hsql = "";
+						int hourBreak = Integer.parseInt(PropertyBMO.getValue(PROPERTY_TRACING_DAY_BREAK));
 						switch (mode) {
 						case NEW:
 							c = new GregorianCalendar();
 							c.setTime(TracerDateTime.getGMTDate());
-							c.add(GregorianCalendar.HOUR, -48);
+							c.add(GregorianCalendar.HOUR, -hourBreak);
 							cutoff = c.getTime();
 							hsql = "SELECT i.incident_ID FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
 									+ " i.status.status_ID = :status and i.createdate > :dateCutoff ORDER BY i.lastupdated desc";
@@ -141,7 +139,8 @@ public class PassiveTrace implements Runnable {
 						case OLD:
 							c = new GregorianCalendar();
 							c.setTime(TracerDateTime.getGMTDate());
-							c.add(GregorianCalendar.HOUR, -48);
+							c.add(GregorianCalendar.HOUR, -hourBreak);
+							
 							cutoff = c.getTime();
 							hsql = "SELECT i.incident_ID FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
 									+ " i.status.status_ID = :status and i.createdate < :dateCutoff ORDER BY i.lastupdated desc";
@@ -154,46 +153,42 @@ public class PassiveTrace implements Runnable {
 						query.setDate("dateCutoff", cutoff);
 						incidentList = query.list();
 						sess.close();
-	
-						logger.info("Starting tracing session... Total Incidents: "
-								+ incidentList.size());
+					
+					ohdWrapperX = new OhdWrapper(loggerName);
+					
+					logger.info("Starting tracing session... Total Incidents: "
+							+ incidentList.size());
+					
+					ExecutorService pool = Executors.newFixedThreadPool(threadLimit);
+					
+					if (incidentList.size() == 0) {
+						Thread.sleep(60*1000);
 					}
-	
-				} else {
-					// Get the next incident in the list and kick off a trace.
-					if (threadList.size() < threadLimit) {
-						String incidentId = incidentList.remove(0);
+					
+					for (int i = 0; i<incidentList.size(); ++i) {
+						String incidentId = incidentList.get(i);
 						PassiveTrace pt = new PassiveTrace(companyCode, daysBack,
-								daysForward, incidentId, minimumScore, ruleSet,
-								errorHandler);
-						Thread ptThread = new Thread(pt);
-						threadList.add(ptThread);
-						ptThread.start();
-						++count;
-	
-						if (count % 250 == 0) {
-							logger.info(count + " incidents processed");
+							daysForward, incidentId, minimumScore, ruleSet,
+							errorHandler, ohdWrapperX, logger);
+						pool.execute(pt);
+						
+						if (i % 250 == 0) {
+							logger.info(i + " incidents processed");
 						}
-					} else {
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// Ignore exception
-							e.printStackTrace();
-						}
-	
 					}
-				}
-	
-				// Clean up unused threads from end backward so I don't miss any
-				// threads.
-				for (int i = threadList.size() - 1; i >= 0; i--) {
-					Thread thread = threadList.get(i);
-					if (thread == null || (thread != null && !thread.isAlive())) {
-						threadList.remove(i);
+						
+					pool.shutdown();
+					
+					while (pool.isTerminated() == false) {
+						Thread.sleep(10*1000);
 					}
-				}
-			}catch (HibernateException e) {
+					logger.info("All incidents processed...");
+					
+					if (incidentList.size() == 0) {
+						Thread.sleep(60*1000);
+					}
+
+			} catch (HibernateException e) {
 
 				errorHandler.sendEmail("Passive tracer encountered a FATAL HIBERNATE error while running.", e, true, true);
 				
@@ -204,20 +199,17 @@ public class PassiveTrace implements Runnable {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-
-				
 			} catch (Exception e) {
 				logger.fatal("Passive tracer encountered a FATAL error while running...", e);
 				errorHandler.sendEmail("Passive tracer encountered a FATAL error while running...", true, false);
 				
 			}
 		}
-
 	}
 
 	public PassiveTrace(String companyCode, int daysBack, int daysForward,
 			String incidentId, double minimumScore, RuleSet ruleSet,
-			PassiveTraceErrorHandler errorHandler) {
+			PassiveTraceErrorHandler errorHandler, OhdWrapper ohdWrapper, Logger logger) {
 		this.companyCode = companyCode;
 		this.incidentId = incidentId;
 		this.daysBack = daysBack;
@@ -225,6 +217,8 @@ public class PassiveTrace implements Runnable {
 		this.minimumScore = minimumScore;
 		this.ruleSet = ruleSet;
 		this.errorHandler = errorHandler;
+		this.ohdWrapper = ohdWrapper;
+		this.logger = logger;
 	}
 
 	public void run() {
@@ -312,9 +306,10 @@ public class PassiveTrace implements Runnable {
 				for (String ohd_ID : ohdList) {
 					message = "Exception thrown - Incident: "
 							+ incident.getIncident_ID() + " OHD:" + ohd_ID;
-					
-					OHD ohd = OhdBMO.getOHDByID(ohd_ID, sess);
-					sess.setReadOnly(ohd, true);
+					//OHD ohd = (OHD) sess.load(OHD.class, ohd_ID);
+					TraceOHD ohd = ohdWrapper.loadOhd(ohd_ID, sess);
+					//OHD ohd = OhdBMO.getOHDByID(ohd_ID, sess);
+
 					Score score = Trace.trace(incident, ohd, null);
 	
 					logger.debug("  OHD: " + ohd_ID + "  Score: "
@@ -359,7 +354,9 @@ public class PassiveTrace implements Runnable {
 									.getStatus(TracingConstants.MATCH_STATUS_OPEN));
 							match.setMatch_made_on(TracerDateTime.getGMTDate());
 							match.setMbr(incident);
-							match.setOhd(ohd);
+							OHD tmpOhd = new OHD();
+							tmpOhd.setOHD_ID(ohd.getOHD_ID());
+							match.setOhd(tmpOhd);
 							match.setClaimchecknum(score.getClaimCheckNumber());
 		
 							HashSet<Match_Detail> details = new HashSet<Match_Detail>();
@@ -412,7 +409,8 @@ public class PassiveTrace implements Runnable {
 				e1.printStackTrace();
 			}
 		}
-
+		logger.debug("Incident complete.");
+		
 	}
 	
 	private static double formatPercent(double percent) {

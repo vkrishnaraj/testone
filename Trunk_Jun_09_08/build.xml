@@ -144,12 +144,13 @@
 			</fileset>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
 		</hibernatedoclet>
-
+		
 		<replace dir="src" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
 			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
 			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
 			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
 		</replace>
+		
 
 	</target>
 
@@ -474,7 +475,7 @@
 	</target>
 	
 	<target name="build-usair" depends="delete">
-		<property name="ant_project_name" value="tracer" />
+		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="tracer" />
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
@@ -484,7 +485,7 @@
 	</target>
 	
 	<target name="build-usair-dev" depends="delete">
-				<property name="ant_project_name" value="usair" />
+		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-dev" />
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/dev/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/tracer.properties" />

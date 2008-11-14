@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Range;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
@@ -496,6 +497,43 @@ public class OhdBMO {
 				return null;
 			}
 			OHD iDTO = (OHD) list.get(0);
+			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+	
+
+	/**
+	 * Find on hand based on the identifier.
+	 * 
+	 * @param ohd_ID
+	 *          the on hand id
+	 * @return ohd based on id, null otherwise.
+	 */
+	public TraceOHD findTraceOHDByID(String ohd_ID) {
+		Session sess = null;
+		try {
+			String query = "select ohd from com.bagnet.nettracer.tracing.db.TraceOHD ohd "
+					+ "where ohd.OHD_ID=:ohd_ID";
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			q.setString("ohd_ID", ohd_ID);
+			List list = q.list();
+			if (list.size() == 0) {
+				logger.debug("unable to find ohd: " + ohd_ID);
+				return null;
+			}
+			TraceOHD iDTO = (TraceOHD) list.get(0);
 			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);

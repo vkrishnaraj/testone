@@ -4,7 +4,7 @@
 package com.bagnet.nettracer.tracing.utils.lookup;
 
 import java.util.List;
-import java.util.regex.Matcher;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import org.hibernate.Hibernate;
@@ -119,6 +119,10 @@ public class LookupAirlineCodes {
 	 * @param bagTag
 	 * @return Returns an 8 character bag tag number.	 */
 	public static String getFullBagTag(String bagTag) throws BagtagException {
+		return getFullBagTag(bagTag, null);
+	}
+	
+	public static String getFullBagTag(String bagTag, ConcurrentHashMap<String, String> cachedMap) throws BagtagException {
 
 		Pattern tenDigitPattern = Pattern.compile(PATTERN_10_DIGIT_BAG_TAG);
 		Pattern nineDigitPattern = Pattern.compile(PATTERN_9_DIGIT_BAG_TAG);
@@ -130,7 +134,12 @@ public class LookupAirlineCodes {
 			return "0" + bagTag;
 		} else if (twoCharPattern.matcher(bagTag).find()) {
 			String twoCharacterCode = bagTag.substring(0, 2);
-			String threeDigitCode = getThreeDigitTicketingCode(twoCharacterCode);
+			String threeDigitCode = null;
+			if (cachedMap != null && cachedMap.containsKey(twoCharacterCode)) {
+				threeDigitCode = cachedMap.get(twoCharacterCode);
+			} else {
+				threeDigitCode = getThreeDigitTicketingCode(twoCharacterCode);
+			}
 			if (threeDigitCode == null) {
 				throw new BagtagException(BagtagException.NO_MATCH_MESSAGE);
 			}
@@ -139,6 +148,7 @@ public class LookupAirlineCodes {
 			throw new BagtagException(BagtagException.INVALID_FORMAT_MESSAGE);
 		}
 	}
+	
 	
 	public static String extractTwoCharAirlineCode(String bagTag) {
 		if(Pattern.compile(PATTERN_10_DIGIT_BAG_TAG).matcher(bagTag).find()) {

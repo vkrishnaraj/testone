@@ -8,7 +8,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.db.Property;
 
 public class PropertyBMO {
 	
@@ -25,8 +24,6 @@ public class PropertyBMO {
 	public static final String PROPERTY_TRACING_TERTIARY_COLOR_PERCENT = "tracing.tertiary.color";
 	public static final String PROPERTY_TRACING_SECONDARY_TYPE_PERCENT = "tracing.secondary.type";
 	public static final String PROPERTY_TRACING_TERTIARY_TYPE_PERCENT = "tracing.tertiary.type";
-	public static final String PROPERTY_TRACING_DAYS_BACKWARD = "tracing.backward";
-	public static final String PROPERTY_TRACING_DAYS_FORWARD = "tracing.forward";
 	public static final String PROPERTY_BOOKING_ENDPOINT = "booking.endpoint";
 	public static final String PROPERTY_DEFAULT_COUNTRY = "default.country";
 

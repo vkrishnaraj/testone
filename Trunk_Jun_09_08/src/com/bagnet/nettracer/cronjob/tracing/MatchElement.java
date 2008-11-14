@@ -29,7 +29,6 @@ import java.util.Set;
 
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.exceptions.BagtagException;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
@@ -38,12 +37,12 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
-import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Inventory;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
@@ -55,7 +54,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_RECORDLOC;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchRecordLocator(this, incident, ohd);
 		}
 	},
@@ -63,7 +62,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_MEMBER;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchMemberNumber(this, incident, ohd);
 		}
 	},
@@ -71,7 +70,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_NAME;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchName(this, incident, ohd);
 		}
 	},
@@ -79,7 +78,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_ADDRESS;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchAddress(this, incident, ohd);
 		}
 	},
@@ -87,7 +86,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_ITINERARY;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchItinerary(this, incident, ohd);
 		}
 	},
@@ -95,7 +94,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_EMAIL;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchEmail(this, incident, ohd);
 		}
 	},
@@ -103,7 +102,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_PHONE;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchPhone(this, incident, ohd);
 		}
 	},
@@ -111,7 +110,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_MANUFACTURER;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchManufacturer(this, incident, ohd);
 		}
 	},
@@ -119,7 +118,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_COLOR;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchColor(this, incident, ohd);
 		}
 	},
@@ -127,7 +126,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_BAGTYPE;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchType(this, incident, ohd);
 		}
 	},
@@ -135,7 +134,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_CLAIMCHECK;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchClaimCheck(this, incident, ohd);
 		}
 	},
@@ -143,7 +142,7 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_XDESC;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchElement(this, incident, ohd);
 		}
 	},
@@ -151,12 +150,12 @@ public enum MatchElement {
 		String getConstant() {
 			return TracingConstants.MATCH_CONTENTS;
 		}
-		ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+		ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 			return matchContent(this, incident, ohd);
 		}
 	};
 
-	abstract ArrayList<MatchResult> match(Incident incident, OHD ohd);
+	abstract ArrayList<MatchResult> match(Incident incident, TraceOHD ohd);
 	abstract String getConstant();
 
 	/**
@@ -168,13 +167,13 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchRecordLocator(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		return MatchUtils.stringCompareToArray(e, incident.getRecordlocator(),
 				ohd.getRecord_locator());
 	}
 
 	/**
-	 * Compares all incident memberships to the singular OHD membership. Returns
+	 * Compares all incident memberships to the singular TraceOHD membership. Returns
 	 * the cross product of the string compare in all cases where both the
 	 * number and the airline are present.
 	 * 
@@ -184,7 +183,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchMemberNumber(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> al = new ArrayList<MatchResult>();
 
 		AirlineMembership om = ohd.getMembership();
@@ -222,7 +221,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchName(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		ArrayList<Name> incNames = new ArrayList<Name>();
@@ -275,7 +274,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchAddress(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
@@ -318,7 +317,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchItinerary(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
@@ -359,7 +358,7 @@ public enum MatchElement {
 		 * TracingConstants.BAGGAGE_ROUTING) {
 		 * incidentBagItinerary.append(it.getLegfrom() + " " + it.getLegto() + " " +
 		 * it.getFlightnum() + " "); } }
-		 *  // Build the OHD itinerary for (OHD_Itinerary it : (Set<OHD_Itinerary>)
+		 *  // Build the TraceOHD itinerary for (OHD_Itinerary it : (Set<OHD_Itinerary>)
 		 * ohd.getItinerary()) { ohdItinerary.append(it.getLegfrom() + " " +
 		 * it.getLegto() + " " + it.getFlightnum() + " "); }
 		 *  // Compare itineraries MatchResult result1 =
@@ -392,7 +391,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchEmail(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
 		for (Passenger incPax : (Set<Passenger>) incident.getPassengers()) {
@@ -425,7 +424,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchPhone(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		ArrayList<String> incPhones = new ArrayList<String>();
 		ArrayList<String> ohdPhones = new ArrayList<String>();
@@ -446,7 +445,7 @@ public enum MatchElement {
 			}
 		}
 
-		// Get all OHD phone numbers
+		// Get all TraceOHD phone numbers
 		for (OHD_Passenger ohdPax : (Set<OHD_Passenger>) ohd.getPassengers()) {
 			for (OHD_Address a : (Set<OHD_Address>) ohdPax.getAddresses()) {
 				if (a.getHomephone() != null)
@@ -491,7 +490,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchClaimCheck(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
 		if (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() < 1) {
@@ -501,7 +500,7 @@ public enum MatchElement {
 		String ohdBagTag = ohd.getClaimnum();
 		String ohdTenDigitTag = null;
 		try {
-			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag);
+			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag, PassiveTrace.AirlineConversionMap);
 		} catch (BagtagException e1) {
 			ohdTenDigitTag = ohdBagTag;
 		}
@@ -512,7 +511,7 @@ public enum MatchElement {
 				String incTenDigitTag = null;
 				try {
 					incTenDigitTag = LookupAirlineCodes.getFullBagTag(iClaim
-							.getClaimchecknum());
+							.getClaimchecknum(), PassiveTrace.AirlineConversionMap);
 				} catch (BagtagException e1) {
 					incTenDigitTag = iClaim.getClaimchecknum();
 				}
@@ -530,7 +529,7 @@ public enum MatchElement {
 	}
 
 	/**
-	 * Matches manufacturers in the incident against manufacturers in the OHD.
+	 * Matches manufacturers in the incident against manufacturers in the TraceOHD.
 	 * 
 	 * @param e
 	 * @param incident
@@ -538,7 +537,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchManufacturer(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
 		for (Item item : (List<Item>) incident.getItemlist()) {
@@ -569,7 +568,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchColor(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		String ohdColor = ohd.getColor();
@@ -590,8 +589,7 @@ public enum MatchElement {
 							.secondaryColorMatch(item.getColor(), ohdColor)) {
 						double secondaryColorPercent = 66;
 						
-						String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_COLOR_PERCENT);
-						secondaryColorPercent = Double.parseDouble(typePercent);
+						secondaryColorPercent = Double.parseDouble(PassiveTrace.SECONDARY_COLOR);
 						
 						MatchResult result = new MatchResult(e, secondaryColorPercent,
 								item.getColor(), ohdColor);
@@ -600,8 +598,7 @@ public enum MatchElement {
 					} else if (MatchUtils.tertiaryColorMatch(item.getColor(), ohdColor)) {
 						double tertiaryColorPercent = 33;
 						
-						String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_COLOR_PERCENT);
-						tertiaryColorPercent = Double.parseDouble(typePercent);
+						tertiaryColorPercent = Double.parseDouble(PassiveTrace.TERTIARY_COLOR);
 						
 						MatchResult result = new MatchResult(e, tertiaryColorPercent,
 								item.getColor(), ohdColor);
@@ -625,7 +622,7 @@ public enum MatchElement {
 	 * @return
 	 */
 	private static ArrayList<MatchResult> matchType(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		String ohdType = ohd.getType();
@@ -646,8 +643,8 @@ public enum MatchElement {
 						.secondaryTypeMatch(item.getBagtype(), ohdType)) {
 					double secondaryTypePercent = 66;
 					
-					String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_TYPE_PERCENT);
-					secondaryTypePercent = Double.parseDouble(typePercent);
+					
+					secondaryTypePercent = Double.parseDouble(PassiveTrace.SECONDARY_TYPE);
 					
 					MatchResult result = new MatchResult(e, secondaryTypePercent,
 							item.getBagtype(), ohdType);
@@ -656,8 +653,8 @@ public enum MatchElement {
 				} else if (MatchUtils.tertiaryTypeMatch(item.getBagtype(), ohdType)) {
 					double tertiaryTypePercent = 33;
 					
-					String typePercent = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_TYPE_PERCENT);
-					tertiaryTypePercent = Double.parseDouble(typePercent);
+					
+					tertiaryTypePercent = Double.parseDouble(PassiveTrace.TERTIARY_TYPE);
 					
 					MatchResult result = new MatchResult(e, tertiaryTypePercent,
 							item.getBagtype(), ohdType);
@@ -671,7 +668,7 @@ public enum MatchElement {
 	}
 
 	private static ArrayList<MatchResult> matchElement(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
 		// Get list of ohd elements
@@ -727,7 +724,7 @@ public enum MatchElement {
 	}
 
 	private static ArrayList<MatchResult> matchContent(MatchElement e,
-			Incident incident, OHD ohd) {
+			Incident incident, TraceOHD ohd) {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 

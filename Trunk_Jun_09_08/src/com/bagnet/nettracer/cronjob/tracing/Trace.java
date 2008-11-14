@@ -8,6 +8,7 @@ import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.TraceOHD;
 
 public class Trace {
 	
@@ -23,11 +24,11 @@ public class Trace {
 		IncidentBMO ibmo = new IncidentBMO();
 		Incident inc = ibmo.findIncidentByID(incident_ID);
 		OhdBMO obmo = new OhdBMO();
-		OHD ohd = obmo.findOHDByID(ohd_ID);
+		TraceOHD ohd = (TraceOHD) obmo.findTraceOHDByID(ohd_ID);
 		return Trace.trace(inc, ohd, null);
 	}
 	
-	public static Score trace (Incident incident, OHD ohd, RuleSet ruleSet) {
+	public static Score trace (Incident incident, TraceOHD ohd, RuleSet ruleSet) {
 		
 		ArrayList<MatchResult> matchResults = match(incident, ohd);
 
@@ -61,7 +62,7 @@ public class Trace {
 	 * @return ArrayList of MatchResults that are to be fed into the 
 	 * preferred preprocessor and then scoring algorithm.
 	 */
-	private static ArrayList<MatchResult> match(Incident incident, OHD ohd) {
+	private static ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> returnList = new ArrayList<MatchResult>();
 		for(MatchElement element: MatchElement.values()) {
 			ArrayList<MatchResult> result = element.match(incident, ohd);
