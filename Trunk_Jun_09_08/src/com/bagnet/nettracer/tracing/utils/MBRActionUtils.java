@@ -464,6 +464,7 @@ public class MBRActionUtils {
 			// initialize vars
 			request.setAttribute("newform", "1");
 			theform.setIncident_ID("");
+			theform.setWtFile(null);
 			theform.set_DATEFORMAT(user.getDateformat().getFormat());
 			theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
