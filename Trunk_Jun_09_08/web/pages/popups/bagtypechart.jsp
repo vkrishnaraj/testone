@@ -177,8 +177,8 @@ document.oncontextmenu = returnFalse;
                         
                           <area href="javascript:choosetype('20');" shape="rect" coords="411,17,534,99">
                             <area href="javascript:choosetype('22');" shape="rect" coords="539,17,622,100">
-                              <area href="javascript:choosetype('22D');" shape="rect" coords="626,15,708,100">
-                                <area href="javascript:choosetype('22R');" shape="rect" coords="715,16,797,98">
+                              <area href="javascript:choosetype('22');" shape="rect" coords="626,15,708,100">
+                                <area href="javascript:choosetype('22');" shape="rect" coords="715,16,797,98">
                                   <area href="javascript:choosetype('23');" shape="rect" coords="411,107,512,188">
                                     <area href="javascript:choosetype('25');" shape="rect" coords="697,106,798,189">
                                     <!--<area href="javascript:choosetype('-2');" shape="rect" coords="619, 160, 834, 264">//-->
