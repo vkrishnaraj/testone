@@ -16,7 +16,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class NettracerCron {
 	public static void main(String[] args) {
-		AbstractApplicationContext ctx = new ClassPathXmlApplicationContext("com/bagnet/nettracer/cronjob/applicationContext.xml");
+		String[] configs = {"com/bagnet/nettracer/cronjob/applicationContext.xml", "com/bagnet/nettracer/cronjob/cronJobs.xml"};
+		AbstractApplicationContext ctx = new ClassPathXmlApplicationContext(configs);
 		
 		ctx.registerShutdownHook();
 	}

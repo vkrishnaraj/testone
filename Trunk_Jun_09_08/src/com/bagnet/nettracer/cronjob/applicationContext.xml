@@ -92,7 +92,7 @@
 	</bean>
 
 	<!-- passive tracer just runs constantly so just creating this bean will kick it off -->
-
+		
 	<bean id="newPassiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
 		<constructor-arg value="${company.code}" />
 		<constructor-arg value="${cron.instance.label}" />
@@ -122,7 +122,6 @@
 		<property name="targetMethod" value="startTracing" />
 		<property name="concurrent" value="false" />
 	</bean>
-	
 	
 	<!-- The different jobs to run -->
 	<bean id="wtQueueJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -174,8 +173,6 @@
 		<property name="repeatCount" value="0"/>
 		<property name="startDelay" value="30000"/>
 	</bean>
-	
-	
 
 	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="wtActionFileJob" />
@@ -191,20 +188,6 @@
 	<bean id="cronDataFeedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="dataFeedJob" />
 		<property name="cronExpression" value="${data.feed.cron}" />
-	</bean>
-
-	<!--  The bean that manages all the scheduled jobs and their threads -->
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="cronWtQueueTrigger" />
-				<ref bean="cronRetrieveAfTrigger" />
-				<ref bean="cronMoveToLzTrigger" />
-				<ref bean="cronNewPassiveTracerTrigger" /> 
-				<ref bean="cronOldPassiveTracerTrigger" />
-				<ref bean="cronMoveToWtTrigger" />
-			</list>
-		</property>
 	</bean>
 
 	<!-- Aspects and advice -->
