@@ -92,6 +92,7 @@
 			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl"/>
 			<exclude name="com/bagnet/clients/us/**" unless="include.us"/>
 			<exclude name="com/bagnet/clients/demo/**" unless="include.demo"/>
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws"/>
 		</javac>
 	</target>
 
@@ -144,13 +145,12 @@
 			</fileset>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
 		</hibernatedoclet>
-		
+
 		<replace dir="src" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
 			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
 			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
 			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
 		</replace>
-		
 
 	</target>
 
@@ -485,7 +485,7 @@
 	</target>
 	
 	<target name="build-usair-dev" depends="delete">
-		<property name="ant_project_name" value="usair" />
+				<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-dev" />
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/dev/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/tracer.properties" />
@@ -627,6 +627,7 @@
 
 
 	<target name="donotrun-build-westjet" if="westjet.init.complete">
+		<property name="include.ws" value="1" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
@@ -1116,11 +1117,12 @@
 			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}tracer.properties" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}tracer.properties" overwrite="true" />
 		
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
+		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/cron/config/log4j.properties" />
 		<jar destfile="${artifact.dir}/${ant_project_name}/${jarprefix}tracer-cron.jar"
 			basedir="${build.dir}/${ant_project_name}/classes"
@@ -1131,6 +1133,7 @@
 	<target name="wjtest-build-cron">
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="environment/test/" />
+		<property name="cron.job.config.file" value="companies/westjet/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
 	
@@ -1143,13 +1146,15 @@
 	<target name="usair-build-cron-all">
 		<antcall target="usair-build-cron-dev" />
 		<antcall target="usair-build-cron-beta" />
-		<antcall target="usair-build-cron-prod" />
+		<antcall target="usair-build-cron-prod1" />
+		<antcall target="usair-build-cron-prod2" />
 	</target>
 
 	<target name="usair-build-cron-dev">
 		<property name="ant_project_name" value="usair"/>
 		<property name="sub_path" value="dev/"/>
 		<property name="jarprefix" value="dev-"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
 
@@ -1158,13 +1163,23 @@
 		<property name="ant_project_name" value="usair"/>
 		<property name="sub_path" value="beta/"/>
 		<property name="jarprefix" value="beta-"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
 	
-	<target name="usair-build-cron-prod">
+	<target name="usair-build-cron-prod1">
 		<property name="ant_project_name" value="usair"/>
-		<property name="jarprefix" value="prod-"/>
+		<property name="jarprefix" value="prod1-"/>
 		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs1.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+	
+	<target name="usair-build-cron-prod2">
+		<property name="ant_project_name" value="usair"/>
+		<property name="jarprefix" value="prod2-"/>
+		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs2.xml" />
 		<antcall target="build-cron-service" />
 	</target>
 	
