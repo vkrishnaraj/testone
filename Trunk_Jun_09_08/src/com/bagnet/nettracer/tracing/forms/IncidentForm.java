@@ -301,15 +301,20 @@ public final class IncidentForm extends ValidatorForm {
 		if (this.itemlist.size() <= index) {
 			Item item = new Item(itemtype);
 			item.setBagnumber(index);
-			Item_Inventory ii = new Item_Inventory();
-			ii.setItem(item);
-			item.getInventorylist().add(ii);
-			ii = new Item_Inventory();
-			ii.setItem(item);
-			item.getInventorylist().add(ii);
-			ii = new Item_Inventory();
-			ii.setItem(item);
-			item.getInventorylist().add(ii);
+			int inventoryCount = 1;
+			String tmp = PropertyBMO.getValue(PropertyBMO.PROPERTY_NUM_CONTENT_FIELDS);
+			if(tmp != null) {
+				try {
+					inventoryCount = Integer.parseInt(tmp);
+				} catch (NumberFormatException e) {
+					//pass
+				}
+			}
+			for(int i = 0; i < inventoryCount; i++) {
+				Item_Inventory ii = new Item_Inventory();
+				ii.setItem(item);
+				item.getInventorylist().add(ii);
+			}
 			this.itemlist.add(item);
 			return item;
 		}
