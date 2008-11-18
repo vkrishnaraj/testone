@@ -108,6 +108,8 @@ public class DeliveryIntegrationTypeUtils {
 
 				// If the delivery companies have changed, send response.
 				if (currentDeliveryCompany.getDelivercompany_ID() != integrationDeliveryCompany.getDelivercompany_ID()) {
+					response = new DeliveryIntegrationResponse();
+					response.setSuccess(false);
 					noticeText = TracerUtils.getResourcePropertyText("delivercompany.integration.alreadysubmitted.html", agent);
 				}
 			}
@@ -120,16 +122,21 @@ public class DeliveryIntegrationTypeUtils {
 				BDOIntegration integration = null;
 				
 				// Add new integration types here. 
-				if (type.equals(DeliveryIntegrationType.RYNNS)) {
-					integration = new Rynns();
-				} else if (type.equals(DeliveryIntegrationType.DSI)) {
-					integration = new DSI();
+				if (response == null) {
+					if (type.equals(DeliveryIntegrationType.RYNNS)) {
+						integration = new Rynns();
+					} else if (type.equals(DeliveryIntegrationType.DSI)) {
+						integration = new DSI();
+					}
 				}
 				
-				response = integration.integrate(bdo, agent);
-				response.setIntegrationType(currentDeliveryCompany.getDelivery_integration_type());
+				if (response == null) {
+					response = integration.integrate(bdo, agent);
+					response.setIntegrationType(currentDeliveryCompany.getDelivery_integration_type());
+					responseText = response.getResponse();
+				}
 				
-				responseText = response.getResponse();
+				
 				if (noticeText != null) {
 					if (responseText == null) {
 						responseText = "";

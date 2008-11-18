@@ -23,7 +23,6 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.cronjob.tracing.dto.Score;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -33,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Match;
 import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -49,7 +49,7 @@ public class PassiveTrace implements Runnable {
 	private int daysForward;
 	private double minimumScore;
 	private RuleSet ruleSet;
-	private OhdWrapper ohdWrapper;
+	private TracingOhdCache ohdCache;
 	private PassiveTraceErrorHandler errorHandler;
 	protected static String SECONDARY_COLOR = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_SECONDARY_COLOR_PERCENT);
 	protected static String TERTIARY_COLOR = PropertyBMO.getValue(PropertyBMO.PROPERTY_TRACING_TERTIARY_COLOR_PERCENT);
@@ -59,8 +59,20 @@ public class PassiveTrace implements Runnable {
 	public static final String PROPERTY_TRACING_DAYS_BACKWARD = "tracing.backward";
 	public static final String PROPERTY_TRACING_DAYS_FORWARD = "tracing.forward";
 	public static final String PROPERTY_TRACING_DAY_BREAK = "tracing.oldnewbreak";
+
+	private static final int INCIDENT_INDEX = 0;
+
+	private static final int TRACED_INDEX = 1;
+
+	private static final int OHD_ID_INDEX = 0;
+
+	private static final int OHD_DATE_INDEX = 1;
 	
 	private PTMode mode;
+
+	private TracingIncidentCache incidentCache;
+
+	private String lastTracedDate;
 	
 	public enum PTMode {NEW, OLD};
 
@@ -112,81 +124,106 @@ public class PassiveTrace implements Runnable {
 		PassiveTraceErrorHandler errorHandler = new PassiveTraceErrorHandler(
 				emailHost, emailFrom, emailTo, port, instanceName);
 		
-		List<String> incidentList = new ArrayList<String>();
+		List<Object[]> incidentList = new ArrayList<Object[]>();
 		boolean initialRun = true;
 		RuleSet ruleSet = new RuleSet();
-		OhdWrapper ohdWrapperX = null;
+		TracingOhdCache ohdCache = null;
+		TracingIncidentCache incidentCache = null;
+		
 		ArrayList<Date> hibernateErrorDates = new ArrayList<Date>();
 		
 		while (true) {
 			try {
 				Date tmpDate = null;
 
-						Session sess = HibernateWrapper.getSession().openSession();
-						Calendar c;
-						Date cutoff = null;
-						String hsql = "";
-						int hourBreak = Integer.parseInt(PropertyBMO.getValue(PROPERTY_TRACING_DAY_BREAK));
-						switch (mode) {
-						case NEW:
-							c = new GregorianCalendar();
-							c.setTime(TracerDateTime.getGMTDate());
-							c.add(GregorianCalendar.HOUR, -hourBreak);
-							cutoff = c.getTime();
-							hsql = "SELECT i.incident_ID FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
-									+ " i.status.status_ID = :status and i.createdate > :dateCutoff ORDER BY i.lastupdated desc";
-							break;
-						case OLD:
-							c = new GregorianCalendar();
-							c.setTime(TracerDateTime.getGMTDate());
-							c.add(GregorianCalendar.HOUR, -hourBreak);
-							
-							cutoff = c.getTime();
-							hsql = "SELECT i.incident_ID FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
-									+ " i.status.status_ID = :status and i.createdate < :dateCutoff ORDER BY i.lastupdated desc";
-							break;
-						}
+				Session sess = HibernateWrapper.getSession().openSession();
+				Calendar c;
+				Date cutoff = null;
+				String hsql = "";
+				int hourBreak = Integer.parseInt(PropertyBMO.getValue(PROPERTY_TRACING_DAY_BREAK));
+				switch (mode) {
+				case NEW:
+					c = new GregorianCalendar();
+					c.setTime(TracerDateTime.getGMTDate());
+					c.add(GregorianCalendar.HOUR, -hourBreak);
+					cutoff = c.getTime();
+					hsql = "SELECT i.incident_ID, i.ohd_lasttraced FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
+							+ " i.status.status_ID = :status and i.createdate > :dateCutoff and i.createtime > :timeCutoff ORDER BY i.lastupdated desc";
+					break;
+				case OLD:
+					c = new GregorianCalendar();
+					c.setTime(TracerDateTime.getGMTDate());
+					c.add(GregorianCalendar.HOUR, -hourBreak);
+					
+					cutoff = c.getTime();
+					hsql = "SELECT i.incident_ID, i.ohd_lasttraced FROM Incident i WHERE i.itemtype.itemType_ID = :itemType AND "
+							+ " i.status.status_ID = :status and i.createdate < :dateCutoff and i.createtime < :timeCutoff ORDER BY i.lastupdated desc";
+					break;
+				}
 
-						Query query = sess.createQuery(hsql);
-						query.setInteger("status", TracingConstants.MBR_STATUS_OPEN);
-						query.setInteger("itemType", TracingConstants.LOST_DELAY);
-						query.setDate("dateCutoff", cutoff);
-						incidentList = query.list();
-						sess.close();
+				Query query = sess.createQuery(hsql);
+				query.setInteger("status", TracingConstants.MBR_STATUS_OPEN);
+				query.setInteger("itemType", TracingConstants.LOST_DELAY);
+				query.setDate("dateCutoff", cutoff);
+				query.setTime("timeCutoff", cutoff);
+				incidentList = query.list();
+				
+				
+				if (ohdCache == null || ohdCache.getReCacheDate().before(new GregorianCalendar())) {
+					ohdCache = new TracingOhdCache(loggerName);
+				}
+				
+				if (incidentCache == null || incidentCache.getReCacheDate().before(new GregorianCalendar())) {
+					incidentCache = new TracingIncidentCache(loggerName);
+				}
+				
+				
+				
+				logger.info("Starting tracing session... Total Incidents: "
+						+ incidentList.size());
+				
+				ExecutorService pool = Executors.newFixedThreadPool(threadLimit);
+				
+				for (int i = 0; i<incidentList.size(); ++i) {
+					String incidentId = (String) incidentList.get(i)[INCIDENT_INDEX];
+					PassiveTrace pt = new PassiveTrace(companyCode, daysBack,
+						daysForward, incidentId, minimumScore, ruleSet,
+						errorHandler, ohdCache, incidentCache, logger, (String) incidentList.get(i)[TRACED_INDEX]);
+					pool.execute(pt);
 					
-					ohdWrapperX = new OhdWrapper(loggerName);
-					
-					logger.info("Starting tracing session... Total Incidents: "
-							+ incidentList.size());
-					
-					ExecutorService pool = Executors.newFixedThreadPool(threadLimit);
-					
-					if (incidentList.size() == 0) {
-						Thread.sleep(60*1000);
+					if (i % 250 == 0 && i > 0) {
+						logger.info(i + " incidents processed");
 					}
+				}
 					
-					for (int i = 0; i<incidentList.size(); ++i) {
-						String incidentId = incidentList.get(i);
-						PassiveTrace pt = new PassiveTrace(companyCode, daysBack,
-							daysForward, incidentId, minimumScore, ruleSet,
-							errorHandler, ohdWrapperX, logger);
-						pool.execute(pt);
-						
-						if (i % 250 == 0) {
-							logger.info(i + " incidents processed");
-						}
-					}
-						
-					pool.shutdown();
-					
-					while (pool.isTerminated() == false) {
-						Thread.sleep(10*1000);
-					}
-					logger.info("All incidents processed...");
-					
-					if (incidentList.size() == 0) {
-						Thread.sleep(60*1000);
-					}
+				pool.shutdown();
+
+				while (pool.isTerminated() == false) {
+					Thread.sleep(10*1000);
+				}
+				logger.info("All incidents processed...");
+				
+				// Reset Caches
+				incidentCache.reset();
+				
+				String sql = "SELECT * FROM OHD WHERE "
+					+ "(STATUS_ID = :status1 or STATUS_ID = :status2)";
+
+				SQLQuery validOhdQuery = sess.createSQLQuery(sql);
+				
+				validOhdQuery.setInteger("status1", TracingConstants.OHD_STATUS_OPEN);
+				validOhdQuery.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
+	
+				validOhdQuery.addScalar("OHD_ID", Hibernate.STRING);
+	
+				List<String> validOhdList = validOhdQuery.list();
+				sess.close();
+				
+				ohdCache.reset(validOhdList);
+				
+				if (incidentList.size() == 0) {
+					Thread.sleep(30*1000);
+				}
 
 			} catch (HibernateException e) {
 
@@ -209,7 +246,7 @@ public class PassiveTrace implements Runnable {
 
 	public PassiveTrace(String companyCode, int daysBack, int daysForward,
 			String incidentId, double minimumScore, RuleSet ruleSet,
-			PassiveTraceErrorHandler errorHandler, OhdWrapper ohdWrapper, Logger logger) {
+			PassiveTraceErrorHandler errorHandler, TracingOhdCache ohdCache, TracingIncidentCache incidentCache, Logger logger, String lastTracedDate) {
 		this.companyCode = companyCode;
 		this.incidentId = incidentId;
 		this.daysBack = daysBack;
@@ -217,21 +254,23 @@ public class PassiveTrace implements Runnable {
 		this.minimumScore = minimumScore;
 		this.ruleSet = ruleSet;
 		this.errorHandler = errorHandler;
-		this.ohdWrapper = ohdWrapper;
+		this.ohdCache = ohdCache;
+		this.incidentCache = incidentCache;
 		this.logger = logger;
+		this.lastTracedDate = lastTracedDate;
+		
 	}
 
 	public void run() {
 		String message = null;
 		try {
-			logger.debug("Incident ID: " + incidentId);
+			logger.debug("TraceIncident ID: " + incidentId);
 			
 			// Get the hibernate session we're going to use for this thread.
 			Session sess = HibernateWrapper.getSession().openSession();
 			String lastTraced = null;
 
-			// Get the Inc
-			Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
+			TraceIncident incident = incidentCache.loadIncident(incidentId, lastTracedDate, sess);
 			
 			if (incident == null) {
 				String LOCAL_ERROR_MESSAGE = "No incident found by ID - usually indicative of DB error: " + incidentId; 
@@ -299,15 +338,19 @@ public class PassiveTrace implements Runnable {
 				}
 	
 				query.addScalar("OHD_ID", Hibernate.STRING);
+				query.addScalar("lastupdated", Hibernate.TIMESTAMP);
 	
-				List<String> ohdList = query.list();
+				List<Object[]> ohdList = query.list();
 				logger.debug("Total OHDs found: " + ohdList.size());
 	
-				for (String ohd_ID : ohdList) {
-					message = "Exception thrown - Incident: "
+				for (Object[] ohdItem : ohdList) {
+					String ohd_ID = (String) ohdItem[OHD_ID_INDEX];
+					Date lastUpdated = (Date) ohdItem[OHD_DATE_INDEX];
+					
+					message = "Exception thrown - TraceIncident: "
 							+ incident.getIncident_ID() + " OHD:" + ohd_ID;
 					//OHD ohd = (OHD) sess.load(OHD.class, ohd_ID);
-					TraceOHD ohd = ohdWrapper.loadOhd(ohd_ID, sess);
+					TraceOHD ohd = ohdCache.loadOhd(ohd_ID, lastUpdated, sess);
 					//OHD ohd = OhdBMO.getOHDByID(ohd_ID, sess);
 
 					Score score = Trace.trace(incident, ohd, null);
@@ -340,7 +383,7 @@ public class PassiveTrace implements Runnable {
 						
 						// If we have not saved this particular match before, then do so now.
 						if (queryCount == 0) {
-							logger.info("  New Match detected - Incident: "
+							logger.info("  New Match detected - TraceIncident: "
 									+ incident.getIncident_ID() + " OHD: "
 									+ ohd.getOHD_ID() + " Score: "
 									+ score.getOverallScore());
@@ -353,7 +396,9 @@ public class PassiveTrace implements Runnable {
 							match.setStatus(StatusBMO
 									.getStatus(TracingConstants.MATCH_STATUS_OPEN));
 							match.setMatch_made_on(TracerDateTime.getGMTDate());
-							match.setMbr(incident);
+							Incident tmpIncident = new Incident();
+							tmpIncident.setIncident_ID(incident.getIncident_ID());
+							match.setMbr(tmpIncident);
 							OHD tmpOhd = new OHD();
 							tmpOhd.setOHD_ID(ohd.getOHD_ID());
 							match.setOhd(tmpOhd);
@@ -409,7 +454,7 @@ public class PassiveTrace implements Runnable {
 				e1.printStackTrace();
 			}
 		}
-		logger.debug("Incident complete.");
+		logger.debug("TraceIncident complete.");
 		
 	}
 	
@@ -427,7 +472,7 @@ public class PassiveTrace implements Runnable {
 		return null;
 	}
 	
-	public static Incident getIncident(String incident_ID) {
+	public static TraceIncident getIncident(String incident_ID) {
 		// OHD
 		// PASSENGERS
 		// ADDRESSES

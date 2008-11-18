@@ -180,6 +180,55 @@
 
   }
 	
+  function validateReqForward(form) {
+        var theindex = 0;
+    for (var j=0;j<form.length;j++) {
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+      
+        if (!(currentElementName.indexOf("bagItinerary") != -1)) {
+          if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legfrom") != -1) {  
+            if (currentElement.value.length == 0)
+            {
+              alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              currentElement.focus();
+              return false;
+            }
+          } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legto") != -1) {
+            if (currentElement.value.length == 0)
+            {
+              alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              currentElement.focus();
+              return false;
+            }
+          } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".airline") != -1) {
+            if (currentElement.value.length == 0)
+            {
+              alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              currentElement.focus();
+              return false;
+            }
+          } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".flightnum") != -1) {
+            if (currentElement.value.length == 0)
+            {
+              alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              currentElement.focus();
+              return false;
+            }
+          } else if (currentElementName.indexOf("disdepartdate") != -1) {
+            if (currentElement.value.length == 0)
+            {
+              alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              currentElement.focus();
+              return false;
+            }
+          }
+
+        }
+    }
+    return true;
+  }
+  
   function validatereqBEORN(form)
   {
   	var theindex = 0;

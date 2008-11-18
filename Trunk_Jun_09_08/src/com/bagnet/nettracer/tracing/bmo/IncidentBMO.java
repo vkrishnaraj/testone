@@ -48,6 +48,7 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
@@ -522,6 +523,37 @@ public class IncidentBMO {
 				return null;
 			}
 			Incident iDTO = (Incident) list.get(0);
+
+			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+	
+	public TraceIncident findTraceIncidentByID(String incident_ID) {
+		Session sess = null;
+
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.TraceIncident incident where incident.incident_ID= :incident_ID");
+			q.setParameter("incident_ID", incident_ID);
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find incident: " + incident_ID);
+				return null;
+			}
+			TraceIncident iDTO = (TraceIncident) list.get(0);
 
 			return iDTO;
 		} catch (Exception e) {

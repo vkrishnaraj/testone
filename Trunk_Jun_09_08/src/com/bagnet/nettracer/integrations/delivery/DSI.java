@@ -20,18 +20,29 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.AuthType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.BdoSubmitRequestType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.BdoType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.BdoUpdateRequestType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.BdoUpdateType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.ClaimInfoType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.ClaimInfoUpdateType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.ConsigneeNameType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.DeliveryInfoType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.DeliveryInfoUpdateType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.HeaderType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.HeaderUpdateType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.JobIdType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.LuggageItemType;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.LuggageItemUpdateType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.ServiceLevelType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.StatusType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.SubmitBdoJobRequestDocument.SubmitBdoJobRequest;
+import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.UpdateBdoJobRequestDocument.UpdateBdoJobRequest;
 import com.dsii.bdoservicetest.BdoServiceStub;
 import com.dsii.bdoservicetest.SubmitBdoJobDocument;
 import com.dsii.bdoservicetest.SubmitBdoJobResponseDocument;
+import com.dsii.bdoservicetest.SubmitBdoUpdateDocument;
+import com.dsii.bdoservicetest.SubmitBdoUpdateResponseDocument;
 import com.dsii.bdoservicetest.SubmitBdoJobDocument.SubmitBdoJob;
+import com.dsii.bdoservicetest.SubmitBdoUpdateDocument.SubmitBdoUpdate;
 
 public class DSI implements BDOIntegration {
 	
@@ -60,16 +71,133 @@ public class DSI implements BDOIntegration {
 		
 			try {
 				
-				
+				BdoServiceStub stub = new BdoServiceStub(null, endpoint);
+
 				// Already have submitted BDO need to send update
 				if (bdo.getDelivery_integration_id() != null && bdo.getDelivery_integration_id().trim().length() > 0) {
-					// TODO: If updated
+
+					// Updated
+				
+					String fullId = bdo.getDelivery_integration_id().trim();
+					
+					SubmitBdoUpdateDocument doc = SubmitBdoUpdateDocument.Factory.newInstance();
+					SubmitBdoUpdate update = doc.addNewSubmitBdoUpdate();
+					UpdateBdoJobRequest request = update.addNewUpdateBdoJobRequest();
+					BdoUpdateRequestType req = request.addNewRequest();
+					
+					request.setSubmitId("1");
+					
+					AuthType auth = request.addNewAuthenticate();
+					auth.setClientId(PropertyBMO.getValue(PROPERTY_DSI_CLIENT_ID));
+					auth.setPassCode(PropertyBMO.getValue(PROPERTY_DSI_PASS_CODE));
+					auth.setProfileName(PropertyBMO.getValue(PROPERTY_DSI_PROFILE_NAME));
+					
+					String[] fullIdArray = fullId.split("/");
+					
+					String pst = fullIdArray[0];
+					String rno = fullIdArray[1];
+					
+					JobIdType jobId = req.addNewJobId();
+					jobId.setPST(pst);
+					jobId.setRNO(new BigInteger(rno));
+					
+					BdoUpdateType bdoType = req.addNewBdo();
+					
+					HeaderUpdateType ht = bdoType.addNewHeader();
+					ServiceLevelType.Enum serviceLevel = getServiceLevel(bdo);
+					ht.setServiceLevel(serviceLevel);
+
+					StringBuffer remarks = new StringBuffer();
+					if (bdo.getDeliverydate() != null) {
+						String date = DateUtils.formatDate(bdo.getDeliverydate(), TracingConstants.DISPLAY_DATEFORMAT, null, null);
+						remarks.append("Please deliver on: " + date + "\n");
+					}
+
+					ht.setDeliveryNote(remarks.toString());
+					
+					ClaimInfoUpdateType claim = bdoType.addNewClaimInfo();
+					claim.setFieldOfficeName(bdo.getDelivercompany().getName());
+					claim.setStationAgent(agent.getUsername());
+					claim.setFlightDetail("");
+					claim.setRoute("");
+					
+					
+					DeliveryInfoUpdateType del = bdoType.addNewDeliveryInfo();
+					BDO_Passenger pax = bdo.getPassenger(0);
+					ConsigneeNameType con = del.addNewContactName();
+					con.setFirstName(pax.getFirstname());
+					con.setMiddleName(pax.getMiddlename());
+					con.setLastName(pax.getLastname());
+					
+					del.setCompany(pax.getFirstname() + " " + pax.getLastname());
+					
+					String phone = pax.getMobile();
+					
+					if (phone == null) {
+						phone = pax.getHomephone();
+					} else if (phone == null) {
+						phone = pax.getWorkphone();
+					} else if (phone == null) {
+						phone = pax.getHotel();
+					}
+					
+					del.setContactPhone(phone);
+					del.setAddress(pax.getAddress1());
+					del.setAddress2(pax.getAddress2());
+					del.setCity(pax.getCity());
+					del.setState(pax.getState_ID());
+					del.setZip(pax.getZip());
+					
+					
+					for (Item item: (Set<Item>)bdo.getItems()) {
+						LuggageItemUpdateType lug = bdoType.addNewLuggageItem();
+						
+						if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+							lug.setTagNumber(item.getClaimchecknum());	
+						} else {
+							lug.setTagNumber("");
+						}
+						
+						StringBuffer sb = new StringBuffer();
+						sb.append(item.getBagtype());
+						sb.append(getElementDescriptor(item.getXdescelement_ID_1()));
+						sb.append(getElementDescriptor(item.getXdescelement_ID_2()));
+						sb.append(getElementDescriptor(item.getXdescelement_ID_3()));
+		
+						lug.setType(sb.toString());
+						lug.setColor(item.getColor());
+					}
+					
+					SubmitBdoUpdateResponseDocument resDoc = stub.SubmitBdoUpdate(doc);
+					
+					// Success or failure
+					BigInteger deliveredOrNot = resDoc.getSubmitBdoUpdateResponse().getSubmitBdoUpdateResult().getStatus().getCode();
+					
+					StatusType status = resDoc.getSubmitBdoUpdateResponse().getSubmitBdoUpdateResult().getStatus();
+					// logger.info("DSI BDO Submission Status: " + status.getCode().toString());
+					if (deliveredOrNot.equals(new BigInteger("0003"))) {
+						// Already delivered
+						responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.bdoClosed", agent);
+						integrationId = fullId;
+					} else if (status.getMessage().equals("OK")) {
+						//Success
+						// PST/RNO
+						
+						integrationId = resDoc.getSubmitBdoUpdateResponse().getSubmitBdoUpdateResult().getResult().getJobId().getPST();
+						integrationId += "/";
+						integrationId += resDoc.getSubmitBdoUpdateResponse().getSubmitBdoUpdateResult().getResult().getJobId().getRNO();
+						
+						//int orderId = 0;
+		
+					} else {
+						success = false;
+						responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.failure", agent);
+						integrationId = fullId;
+					}
 					
 				} else {
 				
 					// IF NEW
-					
-					BdoServiceStub stub = new BdoServiceStub(null, endpoint);
 				  SubmitBdoJobDocument doc = SubmitBdoJobDocument.Factory.newInstance();
 				  
 				  SubmitBdoJob job = doc.addNewSubmitBdoJob();
@@ -200,9 +328,9 @@ public class DSI implements BDOIntegration {
 						//Success
 						// PST/RNO
 						
-						integrationId = resDoc.getSubmitBdoJobResponse().getSubmitBdoJobResult().getResult().getBdoSubmit().getJobId().getPST();
+						integrationId = resDoc.getSubmitBdoJobResponse().getSubmitBdoJobResult().getResult().getJobId().getPST();
 						integrationId += "/";
-						integrationId += resDoc.getSubmitBdoJobResponse().getSubmitBdoJobResult().getResult().getBdoSubmit().getJobId().getRNO();
+						integrationId += resDoc.getSubmitBdoJobResponse().getSubmitBdoJobResult().getResult().getJobId().getRNO();
 						
 						//int orderId = 0;
 		

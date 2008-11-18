@@ -6,7 +6,7 @@ import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.cronjob.tracing.dto.Score;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.TraceOHD;
 
@@ -16,19 +16,19 @@ public class Trace {
 		String incident_ID = args[0];
 		String ohd_ID = args[1];
 		Score score = Trace.trace(incident_ID, ohd_ID, null);
-		System.out.print("Comparing Incident: " + incident_ID + " to OHD: " + ohd_ID +"\n\n");
+		System.out.print("Comparing TraceIncident: " + incident_ID + " to OHD: " + ohd_ID +"\n\n");
 		System.out.print(score.toString());
 	}
 	
 	public static Score trace (String incident_ID, String ohd_ID, RuleSet ruleSet) {
 		IncidentBMO ibmo = new IncidentBMO();
-		Incident inc = ibmo.findIncidentByID(incident_ID);
+		TraceIncident inc = ibmo.findTraceIncidentByID(incident_ID);
 		OhdBMO obmo = new OhdBMO();
 		TraceOHD ohd = (TraceOHD) obmo.findTraceOHDByID(ohd_ID);
 		return Trace.trace(inc, ohd, null);
 	}
 	
-	public static Score trace (Incident incident, TraceOHD ohd, RuleSet ruleSet) {
+	public static Score trace (TraceIncident incident, TraceOHD ohd, RuleSet ruleSet) {
 		
 		ArrayList<MatchResult> matchResults = match(incident, ohd);
 
@@ -57,12 +57,12 @@ public class Trace {
 	 * Method runs all of the matching methods to produce an ArrayList
 	 * containing the sum total of all comparisons and cross products.
 	 * 
-	 * @param incident Incident being compared.
+	 * @param incident TraceIncident being compared.
 	 * @param ohd OHD being compared.
 	 * @return ArrayList of MatchResults that are to be fed into the 
 	 * preferred preprocessor and then scoring algorithm.
 	 */
-	private static ArrayList<MatchResult> match(Incident incident, TraceOHD ohd) {
+	private static ArrayList<MatchResult> match(TraceIncident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> returnList = new ArrayList<MatchResult>();
 		for(MatchElement element: MatchElement.values()) {
 			ArrayList<MatchResult> result = element.match(incident, ohd);
