@@ -34,6 +34,7 @@ public class TraceTest {
 	public void tearDown() throws Exception {
 	}
 	
+	/*
 	@Test
 	public void testTrace1() {
 		// 217905
@@ -45,6 +46,13 @@ public class TraceTest {
 		double actual = trace(incident_ID, ohd_ID);
 		//assertEquals(100, actual, .01);
 	}
+	*/
+	
+	@Test
+	public void testTraceing() {
+		PassiveTrace.startPassiveTracing("US", "Test Instance", PassiveTrace.PTMode.OLD);
+	}
+	
 	
 	
 }

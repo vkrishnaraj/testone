@@ -473,6 +473,7 @@
 	      }
 	    } 
 	 	}
+    if (!validateReqForward(form)) return false;
 	 	 return true;
   }
 

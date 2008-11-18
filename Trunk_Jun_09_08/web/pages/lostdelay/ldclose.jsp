@@ -106,7 +106,7 @@
               </tr>
               <tr>
                 <td>
-                  <bean:message key="colname.arr_airline_id" />
+                  <bean:message key="colname.ldclose.arr_airline_id" />
                   <br>
                   <html:select name="theitem" property="arrivedonairline_ID" styleClass="dropdown" indexed="true">
                     <html:option value="">
@@ -121,7 +121,7 @@
                   <html:text name="theitem" property="arrivedonflightnum" size="10" maxlength="5" styleClass="textfield" indexed="true" />
                 </td>
                 <td>
-                  <bean:message key="colname.arr_date" />
+                  <bean:message key="colname.ldclose.arr_date" />
                   (
                   <%= a.getDateformat().getFormat() %>)
                   <br>

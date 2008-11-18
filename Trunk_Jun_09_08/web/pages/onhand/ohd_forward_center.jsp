@@ -202,17 +202,17 @@
                     <tr>
                       <td valign="top">
                         <strong>
-                          <bean:message key="colname.fromto" />
+                          <bean:message key="colname.foh.fromto" />
                         </strong>
                       </td>
                       <td valign="top">
                         <strong>
-                          <bean:message key="colname.flightnum" />
+                          <bean:message key="colname.foh.flightnum" />
                         </strong>
                       </td>
                       <td nowrap>
                         <strong>
-                          <bean:message key="colname.departdate" /><br>
+                          <bean:message key="colname.foh.departdate" /><br>
                           (
                           <%= a.getDateformat().getFormat() %>)
                         </strong>
