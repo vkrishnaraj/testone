@@ -52,6 +52,7 @@ public class OHD implements Serializable {
 	private String manufacturer_other;
 	private Status status;
 	private Status disposal_status;
+	private boolean earlyBag;
 
 	private Set items;
 	private Set remarks;
@@ -788,6 +789,18 @@ public class OHD implements Serializable {
 	 */
 	public void setLoss_code(int loss_code) {
 		this.loss_code = loss_code;
+	}
+
+	/**
+	 * @hibernate.property type="boolean"
+	 * @return
+	 */
+	public boolean isEarlyBag() {
+		return earlyBag;
+	}
+
+	public void setEarlyBag(boolean earlyBag) {
+		this.earlyBag = earlyBag;
 	}
 
 	public String getText() {

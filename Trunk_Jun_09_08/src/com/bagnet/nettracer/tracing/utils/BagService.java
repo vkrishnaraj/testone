@@ -1434,6 +1434,8 @@ public class BagService {
 				else {
 					result = oBMO.insertOHD(oDTO, mod_agent);
 				}
+				
+
 
 				if(!result) {
 					return false;
@@ -1572,6 +1574,7 @@ public class BagService {
 		theform.setClose_date(iDTO.getClose_date());
 		theform.setOhd_type(iDTO.getOhd_type());
 		theform.setWtFile(iDTO.getWtFile());
+		theform.setEarlyBag(iDTO.isEarlyBag());
 
 		BeanUtils.copyProperties(theform, iDTO);
 		if(iDTO.getMembership() == null) {

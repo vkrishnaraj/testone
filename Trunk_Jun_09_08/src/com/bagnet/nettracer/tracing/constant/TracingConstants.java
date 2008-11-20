@@ -242,6 +242,7 @@ public class TracingConstants {
 	public final static int OHD_STATUS_MATCH_IN_TRANSIT = 5;
 	public final static int OHD_STATUS_IN_TRANSIT = 6;
 	public final static int OHD_STATUS_TO_BE_DELIVERED = 7;
+	public final static int OHD_STATUS_EARLY_BAG = 57;
 
 	public final static int OHD_REQUEST_STATUS_DENIED = 8;
 	public final static int OHD_REQUEST_STATUS_FORWARDED = 9;

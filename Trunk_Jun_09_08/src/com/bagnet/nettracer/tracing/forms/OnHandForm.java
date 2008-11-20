@@ -73,6 +73,7 @@ public final class OnHandForm extends ValidatorForm {
 	private int readonly = 0;
 	private int allow_remark_update=0;
 	private String recordlocator;
+	private Boolean earlyBag;
 	
 	// forward log
 	private String forwarded_station;
@@ -914,6 +915,12 @@ public final class OnHandForm extends ValidatorForm {
 	public void setRecordlocator(String recordlocator) {
 		this.recordlocator = recordlocator;
 	}
-	
-	
+
+	public Boolean getEarlyBag() {
+		return earlyBag;
+	}
+
+	public void setEarlyBag(Boolean earlyBag) {
+		this.earlyBag = earlyBag;
+	}
 }
