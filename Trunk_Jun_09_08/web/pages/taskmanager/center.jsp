@@ -51,7 +51,7 @@
               <logic:equal name="activityDTO" property="group" value="1">
                 <tr>
                   <td>
-                    <a href="<bean:write name="activityDTO" property="activityloc"/>"><bean:message key="<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>" /></a>
+                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
                     <bean:write name="activityDTO" property="entries" />
@@ -76,7 +76,7 @@
               <logic:equal name="activityDTO" property="group" value="2">
                 <tr>
                   <td>
-                    <a href="<bean:write name="activityDTO" property="activityloc"/>"><bean:message key="<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>" /></a>
+                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
                     <bean:write name="activityDTO" property="entries" />
@@ -101,7 +101,7 @@
               <logic:equal name="activityDTO" property="group" value="3">
                 <tr>
                   <td>
-                    <a href="<bean:write name="activityDTO" property="activityloc"/>"><bean:message key="<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>" /></a>
+                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
                     <bean:write name="activityDTO" property="entries" />
@@ -126,7 +126,7 @@
               <logic:equal name="activityDTO" property="group" value="4">
                 <tr>
                   <td>
-                    <a href="<bean:write name="activityDTO" property="activityloc"/>"><bean:message key="<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>" /></a>
+                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
                     <bean:write name="activityDTO" property="entries" />

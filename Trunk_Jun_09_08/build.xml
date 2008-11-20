@@ -51,6 +51,9 @@
 			<fileset dir="${lib.jar.dir}">
 				<patternset refid="jar.files" />
 			</fileset>
+			<fileset dir="${basedir}/lib/provided">
+				<patternset refid="jar.files" />
+			</fileset>
 			<fileset dir="${basedir}/lib/client-us">
 				<patternset refid="jar.files" />
 			</fileset>
@@ -596,6 +599,7 @@
 		<copy todir="${basedir}/web/pages/login" file="companies/westjet/environment/test/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/test/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/test/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/test/report_email.html" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="ant_war_name" value="wjtest" />
 		<property name="westjet.init.complete" value="true" />
@@ -607,6 +611,7 @@
 		<copy todir="${basedir}/web/pages/login" file="companies/westjet/environment/qa/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/qa/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/qa/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/qa/report_email.html" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="ant_war_name" value="wjqa" />
 		<property name="westjet.init.complete" value="true" />
@@ -619,6 +624,7 @@
 		<copy todir="${basedir}/src" file="companies/westjet/environment/prod/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/prod/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/web/WEB-INF" file="companies/westjet/environment/prod/jboss-web.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/prod/report_email.html" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="ant_war_name" value="wjprod" />
 		<property name="westjet.init.complete" value="true" />
@@ -637,7 +643,6 @@
 		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/tracer/pvlogo.gif" />
 		<copy todir="${basedir}/src" file="companies/westjet/custom_ui.properties" />
-		<copy todir="${basedir}/src" file="companies/tracer/report_email.html" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/receipt/logo.jpg" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo/bdologo.gif" />
 		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
@@ -1133,7 +1138,7 @@
 	<target name="wjtest-build-cron">
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="environment/test/" />
-		<property name="cron.job.config.file" value="companies/westjet/cronJobs.xml" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/test/jobs/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
 	

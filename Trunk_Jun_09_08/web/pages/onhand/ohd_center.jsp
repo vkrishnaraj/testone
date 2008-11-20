@@ -448,18 +448,7 @@ function gotoHistoricalReport() {
     </table>
     <table class="form2_ohd" cellspacing="0" cellpadding="0">
       <tr>
-        <td><bean:message key="colname.ohd_status" /> <br>
-        <logic:notEqual name="OnHandForm" property="ohd_id" value="">
-          <html:select name="OnHandForm" property="status.status_ID"
-            styleClass="dropdown">
-            <html:options collection="oStatusList" property="status_ID"
-              labelProperty="description" />
-          </html:select>
-        </logic:notEqual> <logic:equal name="OnHandForm" property="ohd_id" value="">
-          <input type=text class="textfield" size=4
-            value="<bean:message key="OnHandForm.new_status"/>" disabled>
-        </logic:equal></td>
-
+		<jsp:include page="/pages/onhand/ohdStatus_incl.jsp" />
         <td><bean:message key="colname.disposal_status" /> <br>
 
         <html:select name="OnHandForm"
@@ -596,15 +585,9 @@ function gotoHistoricalReport() {
       indexId="i" type="com.bagnet.nettracer.tracing.db.OHD_Passenger">
       <table class="form2_ohd" cellspacing="0" cellpadding="0">
         <tr>
-          <td colspan=5>
-          <%
-             if (i.intValue() > 0) {
-          %> <b><bean:message key="colname.addi_pass_info" /></b> <%
-    } else {
- %> <b><bean:message key="colname.pri_pass_info" /></b><%
-    }
- %>
-          </td>
+			<jsp:include page="/pages/includes/paxHeader.jsp" >
+				<jsp:param name="header_index" value="<%= i %>"/>
+			</jsp:include>
         </tr>
         <tr>
           <td colspan="2"><bean:message key="colname.last_name" /> <br>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport name="wsDetailReport" columnCount="1"
+	printOrder="Vertical" orientation="Portrait" pageWidth="800"
+	pageHeight="750" columnWidth="800" columnSpacing="0" leftMargin="0"
+	rightMargin="0" topMargin="0" bottomMargin="0" whenNoDataType="NoPages"
+	isTitleNewPage="false" isSummaryNewPage="false"
+	resourceBundle="com.bagnet.nettracer.tracing.resources.ApplicationResources"
+	whenResourceMissingType="Key">
+
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+
+	<field name="flightDate" class="java.lang.String" />
+	<field name="cityPair" class="java.lang.String" />
+	<field name="faultStation" class="java.lang.String" />
+	<field name="lossCode" class="java.lang.Integer" />
+	<field name="flightNum" class="java.lang.String" />
+	<field name="bagTag" class="java.lang.String" />
+	<field name="recordLocator" class="java.lang.String" />
+	<field name="reasonForLoss" class="java.lang.String" />
+
+	<background>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</background>
+	<title>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</title>
+	<pageHeader>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" isSplitAllowed="true">
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="0" y="0" width="85" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.flight.date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="85" y="0" width="65" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.citypair}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="150" y="0" width="65" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.fault.station}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="215" y="0" width="50" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.loss.code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="265" y="0" width="60" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.flight.num}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="325" y="0" width="65" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.bag.tag}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="390" y="0" width="60" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.record.locator}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="450" y="0" width="350" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font isBold="true" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.reason.for.loss}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" isSplitAllowed="true">
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="0" y="0" width="85" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{flightDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="85" y="0" width="65" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cityPair}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="150" y="0" width="65" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{faultStation}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="215" y="0" width="50" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{lossCode}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="265" y="0" width="60" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{flightNum}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="325" y="0" width="65" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{bagTag}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="390" y="0" width="60" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{recordLocator}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="false" isBlankWhenNull="false"
+				evaluationTime="Now" hyperlinkType="None" hyperlinkTarget="Self">
+				<reportElement x="450" y="0" width="350" height="30" />
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+					<bottomPen lineWidth="0.5" lineColor="#000000" />
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000" />
+				</box>
+				<textElement>
+					<font />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{reasonForLoss}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="0" isSplitAllowed="true">
+		</band>
+	</summary>
+</jasperReport>

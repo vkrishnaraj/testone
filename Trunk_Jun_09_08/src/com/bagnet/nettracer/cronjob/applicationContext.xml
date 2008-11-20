@@ -77,15 +77,6 @@
 		<constructor-arg value="${lz.move.type}" />
 	</bean>
 	
-	<bean id="flight-update" class="com.bagnet.nettracer.cronjob.datafeed.FlightInfoUpdate" >
-		<property name="companyCode" value="${company.code}" />
-		<property name="backupLocation" value="c:\\temp\\backup"/>
-		<property name="reportFileLocation" value="c:\\temp"/>
-		<property name="sessionFactory" ref="sessionFactory" />
-		<property name="fiBmo" ref="flight-info-bmo" />
-		<property name="dflBmo" ref="datafeed-log-bmo" />
-	</bean>
-	
 	<bean id="moveToWt" class="com.bagnet.nettracer.cronjob.wt.MoveToWorldTracer" >
 		<property name="companyCode" value="${company.code}" />
 		<property name="qbmo" ref="wtq-bmo" />
@@ -105,12 +96,6 @@
 		<constructor-arg value="OLD" />
 	</bean>
 	
-	<bean id="dataFeedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >
-		<property name="targetBeanName" value="flight-update"/>
-		<property name="targetMethod"  value="updateFlightInfo"/>
-		<property name="concurrent" value="false"/>
-	</bean>
-		 
 	<bean id="runNewPassiveTracerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="newPassiveTracer" />
 		<property name="targetMethod" value="startTracing" />
@@ -185,11 +170,6 @@
 		<property name="cronExpression" value="${lz.move.cron}" />
 	</bean>
 	
-	<bean id="cronDataFeedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="dataFeedJob" />
-		<property name="cronExpression" value="${data.feed.cron}" />
-	</bean>
-
 	<!-- Aspects and advice -->
 	<aop:aspectj-autoproxy />
 	

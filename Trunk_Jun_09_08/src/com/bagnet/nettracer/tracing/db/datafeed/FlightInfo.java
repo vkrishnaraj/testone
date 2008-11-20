@@ -1,7 +1,9 @@
 package com.bagnet.nettracer.tracing.db.datafeed;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -9,44 +11,45 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Formula;
 
 @Entity
-@Table(name="z_ws_flight_info")
+@Table(name = "z_ws_flight_info")
 public class FlightInfo implements Serializable {
-	
-	@Id @GeneratedValue
+
 	private long id;
-	
-	@Column(length=10)
+
+
 	private String flightNum;
-	
-	@Basic
+
+
 	private Date departureDate;
-	
-	@Basic
+
 	private Date arrivalDate;
-	
-	@Column(length=5)
+
+
 	private String departureCity;
-	
-	@Column(length=5)
+
 	private String arrivalCity;
-	
-	@Basic
+
 	private int totalPax;
-	
-	@Basic
+
 	private int connPax;
 
-	
+	@Id
+	@GeneratedValue
 	public long getId() {
 		return id;
 	}
 
+	
 	public void setId(long id) {
 		this.id = id;
 	}
 
+	@Column(length = 10)
 	public String getFlightNum() {
 		return flightNum;
 	}
@@ -55,6 +58,7 @@ public class FlightInfo implements Serializable {
 		this.flightNum = flightNum;
 	}
 
+	@Basic
 	public Date getDepartureDate() {
 		return departureDate;
 	}
@@ -63,6 +67,7 @@ public class FlightInfo implements Serializable {
 		this.departureDate = departureDate;
 	}
 
+	@Basic
 	public Date getArrivalDate() {
 		return arrivalDate;
 	}
@@ -71,6 +76,7 @@ public class FlightInfo implements Serializable {
 		this.arrivalDate = arrivalDate;
 	}
 
+	@Column(length = 5)
 	public String getDepartureCity() {
 		return departureCity;
 	}
@@ -79,6 +85,7 @@ public class FlightInfo implements Serializable {
 		this.departureCity = departureCity;
 	}
 
+	@Column(length = 5)
 	public String getArrivalCity() {
 		return arrivalCity;
 	}
@@ -87,6 +94,7 @@ public class FlightInfo implements Serializable {
 		this.arrivalCity = arrivalCity;
 	}
 
+	@Basic
 	public int getTotalPax() {
 		return totalPax;
 	}
@@ -95,6 +103,7 @@ public class FlightInfo implements Serializable {
 		this.totalPax = totalPax;
 	}
 
+	@Basic
 	public int getConnPax() {
 		return connPax;
 	}
@@ -102,6 +111,24 @@ public class FlightInfo implements Serializable {
 	public void setConnPax(int connPax) {
 		this.connPax = connPax;
 	}
-
 	
+	//TODO
+	//Warning this is MySQL specific, if any company other than WestJet uses this, it will have to be moved to compnay specific code
+	@Formula("DATE(departureDate)")
+	public Date getTruncDepartDate() {
+		if (this.departureDate == null)
+			return null;
+		Calendar c = new GregorianCalendar();
+		c.setTime(this.departureDate);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
+	}
+	
+	private void setTruncDepartDate(Date truncDepartDate) {
+		
+	}
+
 }

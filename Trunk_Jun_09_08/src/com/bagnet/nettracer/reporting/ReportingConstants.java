@@ -68,5 +68,7 @@ public class ReportingConstants {
 	public final static String SEARCH_ONHAND_RPT_NAME = "search_onhand";
 	public final static int SEARCH_SCANDATA_RPT = 27;
 	public final static String SEARCH_SCANDATA_RPT_NAME = "search_scandata";
+	public static final int RPT_20_CUSTOM_3 = 3;
+	public static final int RPT_20_CUSTOM_4 = 4;
 
 }

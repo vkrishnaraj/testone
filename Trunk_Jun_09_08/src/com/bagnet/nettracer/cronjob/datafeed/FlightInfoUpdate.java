@@ -169,11 +169,16 @@ public class FlightInfoUpdate extends HibernateDaoSupport {
 	private FlightInfo buildFlightInfo(String line) throws ParseException {
 
 		String[] pieces = line.trim().split(",");
-
+		
+		for(int i = 0; i < pieces.length; i++) {
+			pieces[i] = pieces[i].replaceAll("(^\")|(\"$)", "");
+		}
 		if(pieces.length != CsvItems.values().length) {
 			logger.warn("invalid number of items in csv line: " + line);
 			return null;
 		}
+		
+		
 
 		String flightNum = pieces[CsvItems.FLIGHT_NUM.ordinal()];
 		Date departDate = DATE_FORMAT.parse(pieces[CsvItems.DEPART_DATE.ordinal()]);

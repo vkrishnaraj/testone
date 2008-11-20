@@ -38,9 +38,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -2538,6 +2541,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		JRFileVirtualizer virtualizer = new JRFileVirtualizer(2, rootpath + "/reports/tmp");
 		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
+		if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+		}
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
 
 		virtualizer.setReadOnly(true);
@@ -2600,6 +2606,12 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+//			exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
+			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
+//			exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, true);
+			exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+//			exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, true);
+//			exporter.setParameter(JRXlsExporterParameter.IS_COLLAPSE_ROW_SPAN, true);
 			//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
 			// Boolean.TRUE);
 			exporter.exportReport();

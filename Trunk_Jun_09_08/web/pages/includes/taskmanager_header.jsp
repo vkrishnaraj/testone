@@ -61,7 +61,7 @@
                 <a href="<bean:write name="activityDTO" property="activityloc"/>"><span class="aa<%= b %>">&nbsp;
                     <br />
                     &nbsp;</span>
-                  <span class="bb<%= b %>"><bean:message key="<%= activityDTO.getActivityinfomenu().replaceAll(" ", "*") %>" /></span>
+                  <span class="bb<%= b %>"><bean:message key='<%= activityDTO.getActivityinfomenu().replaceAll(" ", "*") %>' /></span>
                   <span class="cc<%= b %>">&nbsp;
                     <br />
                     &nbsp;</span></a>

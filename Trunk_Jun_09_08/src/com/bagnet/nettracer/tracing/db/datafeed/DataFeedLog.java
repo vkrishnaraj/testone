@@ -22,7 +22,7 @@ import com.bagnet.nettracer.tracing.db.Company;
 	)
 	})
 @Entity
-@Table(name="data_feed_log")
+@Table(name="z_ws_data_feed_log")
 public class DataFeedLog implements Serializable {
 	
 	public static final String ALREADY_PROCESSED_BY_TYPE = "alreadyProcessedByType";
