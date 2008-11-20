@@ -220,12 +220,25 @@ public class OnHandAction extends Action {
 			if(request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
 				s.setStatus_ID(TracingConstants.OHD_STATUS_TEMP);
 			else {
-
-				// Can only change the status to OPEN if the file status is null
-				if(theform.getStatus() == null)
-					s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-				else
+				//file status of null indicates new file so we have to set status
+				//to "open" or "early bag"
+				if(theform.getStatus() == null) {
+					if(theform.getEarlyBag() != null && theform.getEarlyBag()) {
+						s.setStatus_ID(TracingConstants.OHD_STATUS_EARLY_BAG);
+						oDTO.setEarlyBag(true);
+					}
+					else {
+						s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+					}
+				}
+				else {
 					s.setStatus_ID(theform.getStatus().getStatus_ID());
+					//earlybag indicator is tightly coupled with status so we set it here instead of
+					//in insertOnHand function below
+					if(theform.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_EARLY_BAG) {
+						oDTO.setEarlyBag(true);
+					}
+				}
 			}
 			oDTO.setStatus(s);
 			ArrayList list = new ArrayList();
