@@ -7,12 +7,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
 
 
 public class TracingIncidentCache{
 	
-	private static final int MAX_INC_CACHE = 4000;
+	private static final String PROPERTY_MAX_INC_CACHE = "tracing.maxinc.cache";
+	private static final int MAX_INC_CACHE = Integer.parseInt(PropertyBMO.getValue(PROPERTY_MAX_INC_CACHE));
 	
 	private Calendar reCacheDate = null;
 	private Logger logger = null;
@@ -22,7 +24,11 @@ public class TracingIncidentCache{
 	
 	public void reset() {
 		incMap = newMap;
-		newMap = new ConcurrentHashMap<String, TraceIncident>(3000);
+		newMap = new ConcurrentHashMap<String, TraceIncident>(5000);
+		if (stopCaching == true && incMap.size() < MAX_INC_CACHE) {
+			stopCaching = false;
+			logger.info("Incident Caching re-enabled...");
+		}
 	}
 	
 	public TracingIncidentCache(String loggerName) {
@@ -48,16 +54,17 @@ public class TracingIncidentCache{
 			return tmp;
 		} else {
 			TraceIncident inc = (TraceIncident) sess.get(TraceIncident.class, incidentId);
+			sess.evict(inc);
 			if (!stopCaching || containsKey) {
 				newMap.put(incidentId, inc);
 				if (containsKey) {
-					logger.info("Reloading Incident into cache: " + incidentId);
+					logger.debug("Reloading Incident into cache: " + incidentId);
 				}
 			}
 			
 			if (stopCaching == false && newMap.size() % 250 == 0) {
 				int size = newMap.size();
-				logger.info("Current OHD Cache Size: " + size);
+				logger.info("Current Incident Cache Size: " + size);
 				if (size >= MAX_INC_CACHE) {
 					stopCaching = true;
 					logger.info("Caching capped at " + MAX_INC_CACHE + ".");

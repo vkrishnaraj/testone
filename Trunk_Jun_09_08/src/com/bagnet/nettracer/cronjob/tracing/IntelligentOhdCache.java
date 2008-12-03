@@ -3,27 +3,28 @@ package com.bagnet.nettracer.cronjob.tracing;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.TraceOHD;
 
 
-public class TracingOhdCache{
+public class IntelligentOhdCache{
 	
-	private static final String PROPERTY_MAX_OHD_CACHE = "tracing.maxohd.cache";
-	private static final int MAX_OHD_CACHE = Integer.parseInt(PropertyBMO.getValue(PROPERTY_MAX_OHD_CACHE));
+	private static final int MAX_OHD_CACHE = 6000;
 	
 	private Calendar reCacheDate = null;
 	private Logger logger = null;
-	private ConcurrentHashMap<String, TraceOHD> ohdMap = new ConcurrentHashMap<String, TraceOHD>(3000);
+	private ConcurrentHashMap<String, TraceOHD> ohdMap = new ConcurrentHashMap<String, TraceOHD>(3500);
+	private LinkedHashMap<Date, ConcurrentHashMap<String, TraceOHD>> dateMap = new LinkedHashMap<Date, ConcurrentHashMap<String, TraceOHD>>();
+	
 	private boolean stopCaching = false;
 	
-	public TracingOhdCache(String loggerName) {
+	public IntelligentOhdCache(String loggerName) {
 		logger = Logger.getLogger(loggerName);
 		
 		Calendar killCacheDate = new GregorianCalendar();
@@ -36,18 +37,13 @@ public class TracingOhdCache{
 		reCacheDate = killCacheDate;
 	}
 	
-	public void reset(List<Object[]> validOhdList) {
+	public void reset(List<String> validOhdList) {
 		ConcurrentHashMap<String, TraceOHD> newMap = new ConcurrentHashMap<String, TraceOHD>(3000);
 		
-		for (Object[] obj: validOhdList) {
-			String ohdId = (String) obj[0];
+		for (String ohdId: validOhdList) {
 			if (ohdMap.containsKey(ohdId)) {
 				newMap.put(ohdId, ohdMap.get(ohdId));
 			}
-		}
-		if (stopCaching == true && newMap.size() < MAX_OHD_CACHE) {
-			stopCaching = false;
-			logger.info("OHD Caching re-enabled...");
 		}
 		ohdMap = newMap;
 	}
@@ -69,7 +65,7 @@ public class TracingOhdCache{
 			if (!stopCaching || containsKey) {
 				ohdMap.put(ohdId, ohd);
 				if (containsKey) {
-					logger.debug("Reloading OHD into cache: " + ohdId);
+					logger.info("Reloading OHD into cache: " + ohdId);
 				}
 			}
 			
