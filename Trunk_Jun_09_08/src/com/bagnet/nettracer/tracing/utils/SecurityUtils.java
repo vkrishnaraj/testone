@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
@@ -149,7 +151,7 @@ public class SecurityUtils {
 
 	}
 
-	public static void updateAgentLogin(Agent agent, Date log_off_time) {
+	public static void updateAgentLogin(Agent agent, Date log_off_time, int is_online, boolean fullSave) {
 		Session sess = null;
 		Transaction t = null;
 		if (agent == null) return;
@@ -158,7 +160,15 @@ public class SecurityUtils {
 
 			// update agent table
 			t = sess.beginTransaction();
-			sess.saveOrUpdate(agent);
+			if(fullSave) {
+				sess.saveOrUpdate(agent);
+			}
+			else {
+				SQLQuery q = sess.createSQLQuery("update agent set is_online = :is_online where agent_id = :agent_id");
+				q.setParameter("is_online", is_online);
+			q.setParameter("agent_id", agent.getAgent_ID());
+			q.executeUpdate();
+			}
 			t.commit();
 
 			// update agent_logger table
