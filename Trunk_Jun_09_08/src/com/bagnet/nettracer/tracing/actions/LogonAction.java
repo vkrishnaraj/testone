@@ -155,7 +155,7 @@ public class LogonAction extends Action {
 		// write to database
 		agent.setLast_logged_on(TracerDateTime.getGMTDate());
 		agent.setIs_online(1);
-		SecurityUtils.updateAgentLogin(agent, null);
+		SecurityUtils.updateAgentLogin(agent, null, 1, true);
 
 		// load drop down ui properties into session
 		Properties properties = new Properties();

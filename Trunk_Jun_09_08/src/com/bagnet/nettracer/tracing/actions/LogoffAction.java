@@ -52,7 +52,7 @@ public class LogoffAction extends Action {
 			}
 
 			user.setIs_online(0);
-			SecurityUtils.updateAgentLogin(user, TracerDateTime.getGMTDate());
+			SecurityUtils.updateAgentLogin(user, TracerDateTime.getGMTDate(), 0, false);
 		} else {
 			if (log.isDebugEnabled()) {
 				log.debug("LogoffActon: User logged off in session " + session.getId());
