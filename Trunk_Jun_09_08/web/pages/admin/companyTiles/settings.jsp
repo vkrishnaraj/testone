@@ -193,43 +193,8 @@
 	            <td>
 	              <html:text styleClass="textfield" name="companyForm" property="max_image_file_size" size="5" maxlength="5" />
 	            </td>
-	          </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.min_interim_approval_check" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="min_interim_approval_check" size="4" maxlength="4" />
-	            </td>
-	          </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.min_interim_approval_voucher" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="min_interim_approval_voucher" size="4" maxlength="4" />
-	            </td>
-	          </tr>
-	          <tr>
-	            <td>
-	              <bean:message key="colname.min_interim_approval_miles" />
-	              <font color=red>
-	                *
-	              </font>
-	              :
-	            </td>
-	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="min_interim_approval_miles" size="4" maxlength="4" />
-	            </td>
-	          </tr>
+	    </tr>
+            <jsp:include page="/pages/includes/payment_minumums_incl.jsp" />
             <%
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, user)) {
             %>

@@ -3,6 +3,8 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
@@ -319,6 +321,18 @@ function updatePagination() {
                   <bean:message key="colname.mileageamt" />
                   :
                   <bean:write name="expenselist" property="mileageamt" />
+                  <br>
+                  <bean:message key="colname.cc.refund.amt" />
+                  :
+                  <fmt:formatNumber currencySymbol="" type="currency" value="${expenselist.creditCardRefund}" />
+                  <br>
+                  <bean:message key="colname.incidental.auth.amt" />
+                  :
+                  <fmt:formatNumber currencySymbol="" type="currency" value="${expenselist.incidentalAmountAuth}" />
+                  <br>
+                  <bean:message key="colname.incidental.claim.amt" />
+                  :
+                  <fmt:formatNumber currencySymbol="" type="currency" value="${expenselist.incidentalAmountClaimed}" />
                   <br>
                   <bean:message key="colname.comments" />
                   :

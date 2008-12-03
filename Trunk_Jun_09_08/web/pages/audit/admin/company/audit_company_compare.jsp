@@ -548,6 +548,28 @@ function updatePagination() {
             </tr>
             <tr>
               <td>
+                <bean:message key="colname.min_interim_approval_cc_refund" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.min_interim_approval_cc_refund" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            <tr>
+              <td>
+                <bean:message key="colname.min_interim_approval_incidental" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.min_interim_approval_incidental" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            <tr>
+              <td>
                 <bean:message key="colname.pass_expire_days" />
               </td>
               <logic:iterate id="audit_lfi" name="compareList" scope="request">
