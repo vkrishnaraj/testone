@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 
@@ -21,8 +22,23 @@ public class OHD_Inventory implements Serializable {
 	private int OHD_categorytype_ID = 0;
 	//private int OHD_itemtype_ID;
 	private String description = "";
-	
 	private OHD ohd;
+	private static ConcurrentHashMap<Integer, String> cachedCategoryString = new ConcurrentHashMap<Integer, String>();
+
+	
+	public String getCachedCategory() {
+		Integer key = new Integer(OHD_categorytype_ID);
+		if (OHD_categorytype_ID != 0) {
+			if (cachedCategoryString.containsKey(key)) {
+				return cachedCategoryString.get(key);
+			} else {
+				String category = getCategory();
+				cachedCategoryString.put(key, category);
+				return category;
+			}
+		}
+		return "";
+	}
 
 	public String getCategory() {
 		String category = null;

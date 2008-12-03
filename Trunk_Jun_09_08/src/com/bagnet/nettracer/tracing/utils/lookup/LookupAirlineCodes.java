@@ -139,6 +139,9 @@ public class LookupAirlineCodes {
 				threeDigitCode = cachedMap.get(twoCharacterCode);
 			} else {
 				threeDigitCode = getThreeDigitTicketingCode(twoCharacterCode);
+				if (cachedMap != null && twoCharacterCode != null && threeDigitCode != null) {
+					cachedMap.put(twoCharacterCode, threeDigitCode);
+				}
 			}
 			if (threeDigitCode == null) {
 				throw new BagtagException(BagtagException.NO_MATCH_MESSAGE);

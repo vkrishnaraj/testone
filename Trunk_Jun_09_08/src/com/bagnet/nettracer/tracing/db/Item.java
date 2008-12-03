@@ -159,6 +159,22 @@ public class Item implements Serializable {
 
 		return ret;
 	}
+	
+	public String getCachedManufacturerDescription() {
+		String ret = "";
+
+		if (this.getManufacturer_ID() > 0) {
+			if (this.getManufacturer_ID() == TracingConstants.MANUFACTURER_OTHER_ID) {
+				if (this.getManufacturer_other() != null && this.getManufacturer_other().length() > 0) {
+					ret = this.getManufacturer_other();
+				}
+			} else {
+				ret = TracerUtils.getCachedManufacturerDescription(this.getManufacturer_ID());
+			}
+		}
+
+		return ret;
+	}
 
 	public String getManufacturer() {
 		String ret = "";
