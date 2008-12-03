@@ -47,7 +47,7 @@
             </tr>
             <tr>
               <td><bean:message key="colname.wt_roh_fi" />:</td>
-              <td><html:text property="fi" size="80" maxlength="80"/></td>
+              <td><html:text property="fi" size="60" maxlength="55"/></td>
             </tr>
             <tr>
               <td><bean:message key="colname.wt_roh_ag" />:</td>
