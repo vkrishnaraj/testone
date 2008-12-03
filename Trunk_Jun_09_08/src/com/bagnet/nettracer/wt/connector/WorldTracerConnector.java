@@ -32,6 +32,8 @@ public interface WorldTracerConnector {
 
 	List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day) throws WorldTracerException;
 	
+	List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day, int startItem, int endItem) throws WorldTracerException;
+	
 	Worldtracer_Actionfiles getActionFile(String airline, String station, ActionFileType actionFileType, int day, int itemNum) throws WorldTracerException;
 
 	String findAHL(String wt_id) throws WorldTracerException;

@@ -57,6 +57,8 @@ public interface WorldTracerService {
 		}
 	}
 
+	String MAX_ACTIONFILES = "max.actionfiles";
+
 	String insertIncident(Incident incident) throws WorldTracerException;
 
 	String insertOhd(OHD ohd) throws WorldTracerException;
