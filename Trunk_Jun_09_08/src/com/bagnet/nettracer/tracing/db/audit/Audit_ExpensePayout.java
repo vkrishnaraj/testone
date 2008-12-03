@@ -38,6 +38,10 @@ public class Audit_ExpensePayout implements Serializable {
 	private ExpenseType expensetype;
 	private String comments;
 	private Status status;
+	private double incidentalAmountAuth;
+	private double incidentalAmountClaimed;
+	private double creditCardRefund;
+	private Date voucherExpirationDate;
 	
 	private String approval_date;
 
@@ -449,4 +453,58 @@ public class Audit_ExpensePayout implements Serializable {
 	public void set_TIMEZONE(TimeZone _timezone) {
 		_TIMEZONE = _timezone;
 	}
+	
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="double" column="incidental_amount_auth"
+	 */
+	public double getIncidentalAmountAuth() {
+		return incidentalAmountAuth;
+	}
+
+	public void setIncidentalAmountAuth(double incidentalAmount) {
+		this.incidentalAmountAuth = incidentalAmount;
+	}
+
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="date" column="voucher_exp"
+	 */
+	public Date getVoucherExpirationDate() {
+		return voucherExpirationDate;
+	}
+
+	public void setVoucherExpirationDate(Date voucherExpirationDate) {
+		this.voucherExpirationDate = voucherExpirationDate;
+	}
+	
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="double" column="incidental_amount_claim"
+	 */
+	public double getIncidentalAmountClaimed() {
+		return incidentalAmountClaimed;
+	}
+	
+	public void setIncidentalAmountClaimed(double incidentalAmountClaimed) {
+		this.incidentalAmountClaimed = incidentalAmountClaimed;
+	}
+	
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="double" column="creditcard_refund"
+	 */
+	public double getCreditCardRefund() {
+		return creditCardRefund;
+	}
+	
+	public void setCreditCardRefund(double creditCardRefund) {
+		this.creditCardRefund = creditCardRefund;
+	}
+	
+	
 }

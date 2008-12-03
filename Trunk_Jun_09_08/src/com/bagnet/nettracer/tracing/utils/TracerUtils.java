@@ -21,6 +21,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -89,7 +90,9 @@ public class TracerUtils {
 	public static final int COMPANY_LIST_BY_ID_INDEX = 1;
 
 	private static Logger logger = Logger.getLogger(TracerUtils.class);
-
+	private static ConcurrentHashMap<Integer, String> cachedManufacturerMap = new ConcurrentHashMap<Integer, String>();
+	private static ConcurrentHashMap<Integer, String> cachedXDescElementMap = new ConcurrentHashMap<Integer, String>();
+	
 	private static MessageResources messages = MessageResources
 			.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
@@ -1164,10 +1167,26 @@ public class TracerUtils {
 		if (end - start > timeout) {
 			session.removeAttribute("user");
 			user.setIs_online(0);
-			SecurityUtils.updateAgentLogin(user, TracerDateTime.getGMTDate());
+			SecurityUtils.updateAgentLogin(user, TracerDateTime.getGMTDate(), 0, false);
 		} else {
 			session.setAttribute("lastupdate", now);
 		}
+	}
+
+	public static String getCachedManufacturerDescription(int code) {
+		Integer key = new Integer(code);
+		if (code != 0) {
+			if (cachedManufacturerMap.containsKey(key)) {
+				return cachedManufacturerMap.get(key);
+			} else {
+				Manufacturer manu = getManufacturer(code);
+				if (manu != null) {
+					cachedManufacturerMap.put(key, manu.getDescription());
+					return manu.getDescription();
+				}
+			}
+		}
+		return "";
 	}
 
 	public static Manufacturer getManufacturer(int code) {
@@ -1189,6 +1208,22 @@ public class TracerUtils {
 				}
 			}
 		}
+	}
+	
+	public static String getCachedXdescelementDescription(int code) {
+		Integer key = new Integer(code);
+		if (code != 0) {
+			if (cachedXDescElementMap.containsKey(key)) {
+				return cachedXDescElementMap.get(key);
+			} else {
+				XDescElement element = getXdescelement(code);
+				if (element != null) {
+					cachedXDescElementMap.put(key, element.getDescription());
+					return element.getDescription();
+				}
+			}
+		}
+		return "";
 	}
 
 	public static XDescElement getXdescelement(int id) {
@@ -1401,7 +1436,6 @@ public class TracerUtils {
 			}
 			session.close();
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
 			flag=false;
 			e.printStackTrace();
 		}
@@ -1436,7 +1470,6 @@ public class TracerUtils {
 			}
 			session.close();
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
 			flag=false;
 			e.printStackTrace();
 		} 

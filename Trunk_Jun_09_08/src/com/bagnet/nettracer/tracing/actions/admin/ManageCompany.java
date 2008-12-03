@@ -134,6 +134,10 @@ public final class ManageCompany extends Action {
 							+ cmpny.getVariable().getMin_interim_approval_voucher());
 					dForm.setMin_interim_approval_miles(""
 							+ cmpny.getVariable().getMin_interim_approval_miles());
+					dForm.setMin_interim_approval_cc_refund(""
+							+ cmpny.getVariable().getMin_interim_approval_cc_refund());
+					dForm.setMin_interim_approval_incidental(""
+							+ cmpny.getVariable().getMin_interim_approval_incidental());
 					dForm.setMax_image_file_size("" + cmpny.getVariable().getMax_image_file_size());
 					dForm.setScannerDefaultBack(new Integer(cmpny.getVariable().getScannerDefaultBack()));
 					dForm.setScannerDefaultForward(new Integer(cmpny.getVariable().getScannerDefaultForward()));
@@ -319,6 +323,10 @@ public final class ManageCompany extends Action {
 							.getMin_interim_approval_voucher()));
 					var.setMin_interim_approval_miles(Double.parseDouble((String) dForm
 							.getMin_interim_approval_miles()));
+					var.setMin_interim_approval_cc_refund(Double.parseDouble((String) dForm
+							.getMin_interim_approval_cc_refund()));
+					var.setMin_interim_approval_incidental(Double.parseDouble((String) dForm
+							.getMin_interim_approval_incidental()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
 					var.setMax_image_file_size(Integer.parseInt((String) dForm.getMax_image_file_size()));
 					var.setBlindEmail((String)dForm.getBlindEmail());

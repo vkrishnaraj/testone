@@ -618,4 +618,36 @@ public final class ClaimForm extends ActionForm {
 		_TIMEZONE = _timezone;
 	}
 
+	public String getIncidentalAmountAuth() {
+		return TracingConstants.DECIMALFORMAT.format(expense.getIncidentalAmountAuth());
+	}
+
+	public void setIncidentalAmountAuth(String incidentalAmountAuth) {
+		expense.setIncidentalAmountAuth(TracerUtils.convertToDouble(incidentalAmountAuth));
+	}
+	
+	public String getIncidentalAmountClaimed() {
+		return TracingConstants.DECIMALFORMAT.format(expense.getIncidentalAmountClaimed());
+	}
+
+	public void setIncidentalAmountClaimed(String incidentalAmountClaimed) {
+		expense.setIncidentalAmountClaimed(TracerUtils.convertToDouble(incidentalAmountClaimed));
+	}
+
+	public String getVoucherExpirationDate() {
+		return DateUtils.formatDate(expense.getVoucherExpirationDate(), _DATEFORMAT, null, null);
+	}
+
+	public void setVoucherExpirationDate(String voucherExpiration) {
+		expense.setVoucherExpirationDate(DateUtils.convertToDate(voucherExpiration, _DATEFORMAT, null));
+	}
+	
+	public String getCreditCardRefund() {
+		return TracingConstants.DECIMALFORMAT.format(expense.getCreditCardRefund());
+	}
+
+	public void setCreditCardRefund(String creditCardRefund) {
+		expense.setCreditCardRefund(TracerUtils.convertToDouble(creditCardRefund));
+	}
+
 }

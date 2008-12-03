@@ -38,6 +38,10 @@ public class ExpensePayout implements Serializable {
 	private Station expenselocation;
 	private String currency_ID;
 	private Status status;
+	private double incidentalAmountAuth;
+	private double incidentalAmountClaimed;
+	private Date voucherExpirationDate;
+	private double creditCardRefund;
 	
 	private String approval_date;
 
@@ -524,5 +528,59 @@ public class ExpensePayout implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="double" column="incidental_amount_auth"
+	 */
+	public double getIncidentalAmountAuth() {
+		return incidentalAmountAuth;
+	}
+
+	public void setIncidentalAmountAuth(double incidentalAmount) {
+		this.incidentalAmountAuth = incidentalAmount;
+	}
+
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="date" column="voucher_exp"
+	 */
+	public Date getVoucherExpirationDate() {
+		return voucherExpirationDate;
+	}
+
+	public void setVoucherExpirationDate(Date voucherExpirationDate) {
+		this.voucherExpirationDate = voucherExpirationDate;
+	}
+
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="double" column="creditcard_refund"
+	 */
+	public double getCreditCardRefund() {
+		return creditCardRefund;
+	}
+
+	public void setCreditCardRefund(double creditCardRefund) {
+		this.creditCardRefund = creditCardRefund;
+	}
+
+	/**
+	 * @return Returns the status.
+	 * 
+	 * @hibernate.property type="double" column="incidental_amount_claim"
+	 */
+	public double getIncidentalAmountClaimed() {
+		return incidentalAmountClaimed;
+	}
+
+	public void setIncidentalAmountClaimed(double incidentalAmountClaimed) {
+		this.incidentalAmountClaimed = incidentalAmountClaimed;
+	}
+	
+	
 
 }

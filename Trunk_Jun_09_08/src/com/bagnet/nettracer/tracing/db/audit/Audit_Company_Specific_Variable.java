@@ -27,12 +27,12 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int default_station_code;
 	private int default_loss_code;
 	private boolean email_customer; // send email to customer after report creation or
-	private double min_interim_approval_check; // send email to customer after
-																						 // report creation or
-	private double min_interim_approval_voucher; // send email to customer after
-																							 // report creation or
-	private double min_interim_approval_miles; // send email to customer after
-																						 // report creation or
+	private double min_interim_approval_check;
+	private double min_interim_approval_voucher; 
+	private double min_interim_approval_miles;
+	private double min_interim_approval_incidental;
+	private double min_interim_approval_cc_refund;
+	
 
 	private int mbr_to_wt_days;
 	private int ohd_to_wt_hours;
@@ -138,7 +138,34 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	public void setMin_interim_approval_miles(double min_interim_approval_miles) {
 		this.min_interim_approval_miles = min_interim_approval_miles;
 	}
-
+	
+	
+	/**
+	 * @hibernate.property type="double"
+	 * 
+	 * @return Returns the min_interim_approval_incidental.
+	 */
+	public double getMin_interim_approval_incidental() {
+		return min_interim_approval_incidental;
+	}
+	
+	public void setMin_interim_approval_incidental(double min_interim_approval_incidental) {
+		this.min_interim_approval_incidental = min_interim_approval_incidental;
+	}
+	
+	/**
+	 * @hibernate.property type="double"
+	 * 
+	 * @return Returns the min_interim_approval_cc_refund
+	 */
+	public double getMin_interim_approval_cc_refund() {
+		return min_interim_approval_cc_refund;
+	}
+	
+	public void setMin_interim_approval_cc_refund(double min_interim_approval_cc_refund) {
+		this.min_interim_approval_cc_refund = min_interim_approval_cc_refund;
+	}
+	
 	/**
 	 * @hibernate.property type="double"
 	 * 

@@ -1717,6 +1717,12 @@ public class BagService {
 							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_voucher() <= -1.0 || cform
 									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
 									.getMin_interim_approval_voucher())
+							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_incidental() <= -1.0 || cform
+									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
+									.getMin_interim_approval_voucher())
+							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_cc_refund() <= -1.0 || cform
+									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
+									.getMin_interim_approval_voucher())
 							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform
 									.getExpense().getMileageamt() <= user.getStation().getCompany().getVariable()
 									.getMin_interim_approval_miles())) {
@@ -1945,6 +1951,12 @@ public class BagService {
 							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_voucher() <= -1.0 || cform
 									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
 									.getMin_interim_approval_voucher())
+							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_incidental() <= -1.0 || cform
+									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
+									.getMin_interim_approval_voucher())
+							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_cc_refund() <= -1.0 || cform
+									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
+									.getMin_interim_approval_voucher())
 							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform
 									.getExpense().getMileageamt() <= user.getStation().getCompany().getVariable()
 									.getMin_interim_approval_miles())) {
@@ -1999,6 +2011,12 @@ public class BagService {
 								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_voucher() <= -1.0 || cform
 										.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
 										.getMin_interim_approval_voucher())
+								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_incidental() <= -1.0 || cform
+									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
+									.getMin_interim_approval_voucher())
+								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_cc_refund() <= -1.0 || cform
+									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
+									.getMin_interim_approval_voucher())
 								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform
 										.getExpense().getMileageamt() <= user.getStation().getCompany().getVariable()
 										.getMin_interim_approval_miles())) {

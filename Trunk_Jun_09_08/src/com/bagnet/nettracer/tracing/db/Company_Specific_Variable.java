@@ -32,6 +32,8 @@ public class Company_Specific_Variable implements Serializable {
 	private double min_interim_approval_check;
 	private double min_interim_approval_miles;
 	private double min_interim_approval_voucher;
+	private double min_interim_approval_incidental;
+	private double min_interim_approval_cc_refund;
     private int bak_nttracer_data_days;
     private int bak_nttracer_ohd_data_days;
     private int bak_nttracer_lostfound_data_days;
@@ -208,6 +210,32 @@ public class Company_Specific_Variable implements Serializable {
 		this.min_interim_approval_voucher = min_interim_approval_voucher;
 	}
 
+	/**
+	 * @hibernate.property type="double"
+	 * 
+	 * @return Returns the min_interim_approval_incidental.
+	 */
+	public double getMin_interim_approval_incidental() {
+		return min_interim_approval_incidental;
+	}
+	
+	public void setMin_interim_approval_incidental(double min_interim_approval_incidental) {
+		this.min_interim_approval_incidental = min_interim_approval_incidental;
+	}
+	
+	/**
+	 * @hibernate.property type="double"
+	 * 
+	 * @return Returns the min_interim_approval_cc_refund.
+	 */
+	public double getMin_interim_approval_cc_refund() {
+		return min_interim_approval_cc_refund;
+	}
+	
+	public void setMin_interim_approval_cc_refund(double min_interim_approval_cc_refund) {
+		this.min_interim_approval_cc_refund = min_interim_approval_cc_refund;
+	}
+	
 	/**
 	 * @hibernate.property type="integer"
 	 * 

@@ -191,6 +191,7 @@ public class StringUtils {
         return dst;
     }
     
+    
     public static String join(Iterable<? extends CharSequence> src, CharSequence pattern) {
         try {
             return join(src, pattern, new StringBuilder()).toString();
@@ -211,4 +212,26 @@ public class StringUtils {
     	}
     	return sb.toString();
     }
+    
+    
+    public static <T extends Appendable> T joinIntegers(Iterable<? extends Number> src, CharSequence pattern, T dst) throws IOException {
+      Iterator<? extends Number> it = src.iterator();
+      if (it.hasNext()) {
+          dst.append(it.next().toString());
+      }
+      while (it.hasNext()) {
+          dst.append(pattern).append(it.next().toString());
+      }
+      return dst;
+  }
+  
+  
+  public static String joinIntegers(Iterable<? extends Number> src, CharSequence pattern) {
+      try {
+          return joinIntegers(src, pattern, new StringBuilder()).toString();
+      } catch (IOException excpt) {
+          throw new Error("StringBuilder should not throw IOExceptions!");
+      }
+  }
+    
 }

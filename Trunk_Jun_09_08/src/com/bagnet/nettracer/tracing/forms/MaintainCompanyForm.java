@@ -45,6 +45,8 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String min_interim_approval_check;
 	private String min_interim_approval_miles;
 	private String min_interim_approval_voucher;
+	private String min_interim_approval_cc_refund;
+	private String min_interim_approval_incidental;
 	private String pass_expire_days;
 	private String account_lockout;
 	private String mbr_to_wt_days;
@@ -201,7 +203,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public String getMax_image_file_size() { return this.max_image_file_size;}
 	public String getMin_interim_approval_check() { return this.min_interim_approval_check;}
 	public String getMin_interim_approval_miles() { return this.min_interim_approval_miles;}
-	public String getMin_interim_approval_voucher() { return this.min_interim_approval_miles;}
+	public String getMin_interim_approval_voucher() { return this.min_interim_approval_voucher;}
 	public String getPass_expire_days() { return this.pass_expire_days;}
 	public String getAccount_lockout() { return this.account_lockout;}
 	public String getMbr_to_wt_days() { return this.mbr_to_wt_days;}
@@ -348,6 +350,22 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setOal_ohd_hours(String oal_ohd_hours) {
 		this.oal_ohd_hours = oal_ohd_hours;
+	}
+
+	public String getMin_interim_approval_cc_refund() {
+		return min_interim_approval_cc_refund;
+	}
+
+	public void setMin_interim_approval_cc_refund(String min_interim_approval_cc_refund) {
+		this.min_interim_approval_cc_refund = min_interim_approval_cc_refund;
+	}
+
+	public String getMin_interim_approval_incidental() {
+		return min_interim_approval_incidental;
+	}
+
+	public void setMin_interim_approval_incidental(String min_interim_approval_incidental) {
+		this.min_interim_approval_incidental = min_interim_approval_incidental;
 	}
 
 

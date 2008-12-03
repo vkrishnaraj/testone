@@ -72,11 +72,13 @@ public class HibernateUtils {
 			sess.saveOrUpdate(obj);
 			t.commit();
 		} catch (Exception e) {
+			logger.error("Error Saving: ", e);
 			e.printStackTrace();
 			if (t != null) {
 				try {
 					t.rollback();
 				} catch (Exception ex) {
+					logger.error("Error Saving: ", ex);
 				}
 			}
 		} finally {
@@ -300,6 +302,10 @@ public class HibernateUtils {
 								obj.getVariable().getMin_interim_approval_voucher());
 						c.getVariable().setMin_interim_approval_miles(
 								obj.getVariable().getMin_interim_approval_miles());
+						c.getVariable().setMin_interim_approval_cc_refund(
+								obj.getVariable().getMin_interim_approval_cc_refund());
+						c.getVariable().setMin_interim_approval_incidental(
+								obj.getVariable().getMin_interim_approval_incidental());
 						
 						
 						c.getVariable().setScannerDefaultBack(obj.getVariable().getScannerDefaultBack());
