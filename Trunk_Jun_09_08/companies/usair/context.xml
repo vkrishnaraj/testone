@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context cookies="true" crossContext="true">
 	<Manager pathname="sessions.ser" />
-	<!--
-   <Manager className="org.apache.catalina.session.PersistentManager" 
-	checkInterval="1"
-	saveOnRestart="true"
-	maxActiveSessions="-1"
-	minIdleSwap="-1"
-	maxIdleSwap="0"
-	maxIdleBackup="0"
-   	debug="0">
-		<Store
-	    	debug="0"
-		   	className="org.apache.catalina.session.JDBCStore" 
-		   	connectionURL="jdbc:sqlserver://192.168.2.128:1433;databaseName=test4;user=nettracer;password=nettracer" 
-		   	driverName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
-		   	sessionAppCol="app_name" 
-		   	sessionDataCol="session_data" 
-		   	sessionIdCol="session_id" 
-		   	sessionLastAccessedCol="last_access" 
-		   	sessionMaxInactiveCol="max_inactive" 
-		   	sessionTable="jdbc_sessions"
-		   	sessionValidCol="valid_session"/>
-   	</Manager>
-   	-->
+
 
 </Context>
