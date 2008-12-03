@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 public class MoveToWorldTracer {
@@ -43,10 +44,14 @@ public class MoveToWorldTracer {
 	private static final String WT_EARLY_MOVE_OHD_HOURS = "wt.early.move.ohd.hours";
 	private static final String WT_EARLY_MOVE_AHL_HOURS = "wt.early.move.ahl.hours";
 
-	public MoveToWorldTracer() {
-		ogadmin = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+	public MoveToWorldTracer(String agentName, String companyCode) throws WorldTracerException {
+		ogadmin = AdminUtils.getAgentBasedOnUsername(agentName, companyCode);
+		if(ogadmin == null) {
+			throw new WorldTracerException("Can't start Move to WT process, invalid default agent");
+		}
 		ibmo = new IncidentBMO();
 		obmo = new OhdBMO();
+		this.companyCode = companyCode;
 	}
 
 	public void moveFiles() {
