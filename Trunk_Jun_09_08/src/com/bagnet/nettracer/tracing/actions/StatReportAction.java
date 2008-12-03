@@ -67,9 +67,12 @@ public class StatReportAction extends Action {
 
 		String reportnum = request.getParameter("reportnum");
 
+		String customreportnum = request.getParameter("customreportnum");
+
 		if (reportnum == null) reportnum = Integer.toString(ReportingConstants.RPT_3);
 		
-		if (Integer.parseInt(reportnum) ==  ReportingConstants.RPT_10) {
+		if ((Integer.parseInt(reportnum) ==  ReportingConstants.RPT_10) ||
+				(Integer.parseInt(reportnum) == ReportingConstants.RPT_20 && customreportnum != null && Integer.parseInt(customreportnum) == ReportingConstants.RPT_20_CUSTOM_5)){
 			List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
 			request.setAttribute("oStatusList", oStatusList);
 		}
@@ -79,7 +82,6 @@ public class StatReportAction extends Action {
 		request.setAttribute("customReports", ReportBMO.getAllCustomReports());
 		request.setAttribute("company", user.getStation().getCompany().getCompanyCode_ID().toLowerCase());
 
-		String customreportnum = request.getParameter("customreportnum");
 
 		if (customreportnum != null) request.setAttribute("customreportnum", customreportnum);
 		

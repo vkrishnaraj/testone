@@ -100,6 +100,10 @@ public class ReportBMO {
 		this.req = request;
 	}
 
+	public void setUser(Agent user) {
+		this.user = user;
+	}
+
 	public String createReport(String rootpath, StatReportDTO srDTO, Agent user) {
 		ReportBMO.rootpath = rootpath;
 		this.user = user;
@@ -2219,6 +2223,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	}
 
 	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
+		return this.create_onhand_rpt(srDTO, reportnum, reportname, reporttitle, false);
+	}
+	
+	public String create_earlyBag_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
+		return this.create_onhand_rpt(srDTO, reportnum, reportname, reporttitle, true);
+	}
+	
+	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle, boolean earlyBag) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Map parameters = new HashMap();
@@ -2245,6 +2257,10 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			if (srDTO.getStatus_ID() >= 1)
 				sql += " and ohd.status_ID=" + srDTO.getStatus_ID();
+			
+			if(earlyBag) {
+				sql += " and ohd.earlyBag = true ";
+			}
 			
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0) {
 				sql += " and agent.username like '" + srDTO.getAgent() + "'";
