@@ -37,7 +37,6 @@
 	<field name="incidentId" class="java.lang.String"/>
 	<field name="stationAssigned" class="java.lang.String"/>
 	<field name="stationCreated" class="java.lang.String"/>
-	<field name="timeZoneDesc" class="java.lang.String"/>
 
 
 		<group  name="bydate" >
@@ -72,22 +71,6 @@
 						key="line-7"/>
 					<graphicElement stretchType="NoStretch" fill="Solid" />
 				</line>
-				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						mode="Transparent"
-						x="89"
-						y="3"
-						width="69"
-						height="15"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="textField-23"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Times-Roman" pdfFontName="Times-Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="CP1252" isStrikeThrough="false" />
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{timeZoneDesc}]]></textFieldExpression>
-				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -376,24 +359,6 @@
 						<font fontName="Arial" pdfFontName="Times-Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1250" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[Create Agent]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Transparent"
-						x="90"
-						y="6"
-						width="45"
-						height="16"
-						forecolor="#000000"
-						backcolor="#FFFFFF"
-						key="element-100">
-							<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-						<font fontName="Arial" pdfFontName="Times-Roman" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1250" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[TZ]]></text>
 				</staticText>
 			</band>
 		</columnHeader>
