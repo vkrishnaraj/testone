@@ -36,13 +36,13 @@ import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.ServiceLevelType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.StatusType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.SubmitBdoJobRequestDocument.SubmitBdoJobRequest;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.UpdateBdoJobRequestDocument.UpdateBdoJobRequest;
-import com.dsii.bdoservicetest.BdoServiceStub;
-import com.dsii.bdoservicetest.SubmitBdoJobDocument;
-import com.dsii.bdoservicetest.SubmitBdoJobResponseDocument;
-import com.dsii.bdoservicetest.SubmitBdoUpdateDocument;
-import com.dsii.bdoservicetest.SubmitBdoUpdateResponseDocument;
-import com.dsii.bdoservicetest.SubmitBdoJobDocument.SubmitBdoJob;
-import com.dsii.bdoservicetest.SubmitBdoUpdateDocument.SubmitBdoUpdate;
+import com.dsii.bdoservice.BdoServiceStub;
+import com.dsii.bdoservice.SubmitBdoJobDocument;
+import com.dsii.bdoservice.SubmitBdoJobResponseDocument;
+import com.dsii.bdoservice.SubmitBdoUpdateDocument;
+import com.dsii.bdoservice.SubmitBdoUpdateResponseDocument;
+import com.dsii.bdoservice.SubmitBdoJobDocument.SubmitBdoJob;
+import com.dsii.bdoservice.SubmitBdoUpdateDocument.SubmitBdoUpdate;
 
 public class DSI implements BDOIntegration {
 	
