@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpMethod;
@@ -82,10 +83,6 @@ public class BetaWtConnector implements WorldTracerConnector {
 	}
 	
 	private HttpClient connectWT(String urlext,String companycode) {
-
-		HttpClient new_client = new HttpClient(new MultiThreadedHttpConnectionManager());
-
-		new_client.getParams().setAuthenticationPreemptive(true);
 		//get worldtracer user info
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companycode);
 		if (comsv.getWt_enabled() == 0) {
@@ -100,6 +97,12 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 
 		Credentials defaultcreds = new UsernamePasswordCredentials(wt_user, wt_pass);
+		MultiThreadedHttpConnectionManager cm = new MultiThreadedHttpConnectionManager();
+		HostConfiguration hc = new HostConfiguration();
+		hc.setHost(wt_http);
+		cm.getParams().setMaxConnectionsPerHost(hc, 8);
+		HttpClient new_client = new HttpClient(cm);
+		new_client.getParams().setAuthenticationPreemptive(true);
 		new_client.getState().setCredentials(new AuthScope(wt_http, 80, AuthScope.ANY_REALM), defaultcreds);
 
 		return new_client;
@@ -540,12 +543,20 @@ public class BetaWtConnector implements WorldTracerConnector {
 		return null;
 	}
 
-	public List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day)
+	public List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType,
+			int day) throws WorldTracerException {
+		return getActionFiles(airline, station, actionFileType, day, 0, 0);
+	}
+
+	public List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day, int startItem, int endItem)
 			throws WorldTracerException {
 		String afData = null;
 		String wt_http = WorldTracerUtils.getWt_url(wtCompanycode);
 		PostMethod method = buildAfBaseMethod(airline, station, actionFileType, day, wt_http);
-		
+		if(startItem > 0 && endItem >= startItem) {
+			String itemString = String.format("%d-%d", startItem, endItem);
+			method.setParameter("ITEM", itemString);
+		}
 		try {
 			afData = sendRequest(method);
 		} catch (Exception e) {
@@ -998,6 +1009,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 			}
 			lines.add("DA01 " + addr);
 		}
+		else {
+			throw new WorldTracerException("Cannot send BDO. No Delivery Address");
+		}
 		
 		List<String> delDates = fieldMap.get(WorldTracerField.DD);
 		if(delDates != null && delDates.size() > 0) {
@@ -1132,6 +1146,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}	
 	
 	}
+
 
 
 }
