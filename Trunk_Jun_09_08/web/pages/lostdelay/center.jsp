@@ -437,19 +437,20 @@
       <!-- END ICONS MENU -->
       <tr>
         <!-- MIDDLE COLUMN -->
-        <td id="middlecolumn"><!-- MAIN BODY --> <jsp:include
-          page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
-        <!-- claimcheck numbers --> <a name="claimcheck"></a> <a
-          name='addclaimcheck'></a>
+        <td id="middlecolumn">
+        <!-- MAIN BODY -->
+        <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
+        <!-- claimcheck numbers -->
+        <a name="claimcheck"></a>
+        <a name='addclaimcheck'></a>
         <h1 class="green"><bean:message key="colname.claimnum" />
         <a href="#"
           onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#add claim check');return false;"><img
           src="deployment/main/images/nettracer/button_help.gif"
-          width="20" height="21" border="0"></a></h1>
-        <table class="<%=cssFormClass %>" cellspacing="0"
-          cellpadding="0">
-          <logic:iterate id="claimcheck" indexId="i" name="incidentForm"
-            property="claimchecklist">
+          width="20" height="21" border="0"></a>
+        </h1>
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+          <logic:iterate id="claimcheck" indexId="i" name="incidentForm" property="claimchecklist">
             <tr>
               <td width="30%" nowrap="nowrap"><bean:message
                 key="colname.claimnum.req" /> :</td>
@@ -507,9 +508,10 @@
           styleId="button">
           <bean:message key="button.add_claimcheck" />
         </html:submit></center>
-        <jsp:include page="/pages/includes/mbrbag_incl.jsp" /> <jsp:include
-          page="/pages/includes/remark_incl.jsp" />
+        <jsp:include page="/pages/includes/mbrbag_incl.jsp" />
+        <jsp:include page="/pages/includes/remark_incl.jsp" />
         </div>
+        
         <logic:notEqual name="incidentForm" property="readonly"
           value="1">
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
