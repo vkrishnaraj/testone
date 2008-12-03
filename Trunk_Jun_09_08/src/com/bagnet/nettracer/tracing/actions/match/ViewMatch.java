@@ -218,21 +218,25 @@ public final class ViewMatch extends Action {
 				}
 				// match bag if bag number was matched in match history
 				if (request.getParameter("selectedbag") == null && match.getBagnumber() >= 0) {
-					item = (Item) incident.getItemlist().get(match.getBagnumber());
-					item.setOHD_ID(ohd.getOHD_ID());
-					// set bag claimcheck
-					item.setClaimchecknum(ohd.getClaimnum());
-
-					// if bag is at the report station, change item status to to be
-					// delivered
-					if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
-							.getStation_ID()) {
-						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
-								.getDefaultlocale().toString()));
-					} else {
-						// change item status to be matched
-						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
-								.getDefaultlocale().toString()));
+					try {
+						item = (Item) incident.getItemlist().get(match.getBagnumber());
+						item.setOHD_ID(ohd.getOHD_ID());
+						// set bag claimcheck
+						item.setClaimchecknum(ohd.getClaimnum());
+	
+						// if bag is at the report station, change item status to to be
+						// delivered
+						if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned()
+								.getStation_ID()) {
+							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED, user
+									.getDefaultlocale().toString()));
+						} else {
+							// change item status to be matched
+							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED, user
+									.getDefaultlocale().toString()));
+						}
+					} catch (IndexOutOfBoundsException e) {
+						// The bag no longer exists in the incident...
 					}
 
 				}
