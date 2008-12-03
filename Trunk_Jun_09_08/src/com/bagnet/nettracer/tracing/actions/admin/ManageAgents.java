@@ -302,23 +302,25 @@ public final class ManageAgents extends Action {
 
 				if (UserPermissions.hasPermission(
 						TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS, user)) {
-					agent.setWeb_enabled(((String) dForm.get("web_enabled")).equals("true"));
-					agent.setWs_enabled(((String) dForm.get("ws_enabled")).equals("true"));
-					try {
-						agent.setMax_ws_sessions(Integer.parseInt((String)dForm.get("max_ws_sessions")));
-					}
-					catch (NumberFormatException ex) {
-						ActionMessage error = new ActionMessage("error.invalid_max_ws_sessions");
-						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-						saveMessages(request, errors);
-						return mapping.findForward(TracingConstants.EDIT_AGENT);
-					}
-
-					if (!agent.isWeb_enabled() && !agent.isWs_enabled()) {
-						ActionMessage error = new ActionMessage("error.agents.mustbeweborws");
-						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-						saveMessages(request, errors);
-						return mapping.findForward(TracingConstants.EDIT_AGENT);
+					if (!((String) dForm.get("web_enabled")).equals("")) {
+						agent.setWeb_enabled(((String) dForm.get("web_enabled")).equals("true"));
+						agent.setWs_enabled(((String) dForm.get("ws_enabled")).equals("true"));
+						try {
+							agent.setMax_ws_sessions(Integer.parseInt((String)dForm.get("max_ws_sessions")));
+						}
+						catch (NumberFormatException ex) {
+							ActionMessage error = new ActionMessage("error.invalid_max_ws_sessions");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+							return mapping.findForward(TracingConstants.EDIT_AGENT);
+						}
+	
+						if (!agent.isWeb_enabled() && !agent.isWs_enabled()) {
+							ActionMessage error = new ActionMessage("error.agents.mustbeweborws");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+							return mapping.findForward(TracingConstants.EDIT_AGENT);
+						}
 					}
 				} else {
 					agent.setWeb_enabled(true);
