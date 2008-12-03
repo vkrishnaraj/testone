@@ -58,17 +58,16 @@
 	<!--  Worker beans that have the methods to be scheduled -->
 
 	<bean id="wtProcessQueue" class="com.bagnet.nettracer.cronjob.wt.WorldTracerQueueSweeper">
-		<property name="companyCode" value="${company.code}" />
+		<constructor-arg value="${default.wt.agent}" />
+		<constructor-arg value="${company.code}" />
 		<property name="wtqBmo" ref="wtq-bmo" />
-		<property name="wtHitDelay" value="${wtqueue.request.delay}" />
-		<property name="wtEndDelay" value="${wtqueue.end.delay}" />
+		<property name="wafBmo" ref="wtaf-bmo" />
 		<property name="wtService" ref="wtService" />
 	</bean>
 
 	<bean id="wtActionFiles" class="com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles">
 		<constructor-arg value="${company.code}" />
 		<constructor-arg value="${cron.instance.label}" />
-		<property name="wqBmo" ref="wtq-bmo" />
 		<property name="wtService" ref="wtService" />
 		<property name="wafBmo" ref="wtaf-bmo" />
 	</bean>
@@ -78,7 +77,8 @@
 	</bean>
 	
 	<bean id="moveToWt" class="com.bagnet.nettracer.cronjob.wt.MoveToWorldTracer" >
-		<property name="companyCode" value="${company.code}" />
+		<constructor-arg value="${default.wt.agent}" />
+		<constructor-arg value="${company.code}" />
 		<property name="qbmo" ref="wtq-bmo" />
 	</bean>
 
@@ -159,10 +159,10 @@
 		<property name="startDelay" value="30000"/>
 	</bean>
 
-	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail" ref="wtActionFileJob" />
-		<property name="cronExpression" value="${wtaf.cron}" />
-		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
+		<property name="repeatCount" value="0" />
+		<property name="startDelay" value="5000" />
 	</bean>
 
 	<bean id="cronMoveToLzTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
