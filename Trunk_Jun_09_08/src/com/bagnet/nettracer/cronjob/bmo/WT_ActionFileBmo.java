@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.cronjob.bmo;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -70,6 +71,16 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		q.setParameter("item_number", waf.getItem_number());
 		
 		q.executeUpdate();
+		
+	}
+
+	@Transactional
+	public void replaceActionFiles(List<Worldtracer_Actionfiles> result, String companyCode, String stationCode,
+			ActionFileType type, int day) {
+		deleteActionFiles(companyCode, stationCode, type, day);
+		for(Worldtracer_Actionfiles waf : result) {
+			saveActionFile(waf);
+		}
 		
 	}
 }
