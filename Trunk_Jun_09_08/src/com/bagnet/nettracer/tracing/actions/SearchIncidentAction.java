@@ -248,6 +248,22 @@ public class SearchIncidentAction extends Action {
 						.getCurrentlocale(), false, user);
 				//add to the loss codes
 				request.setAttribute("losscodes", codes);
+				
+				
+				List faultstationlist = null;
+				List faultCompanyList = null;
+				//if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
+					// If the user has limited permission, 
+					if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+						faultCompanyList = new ArrayList();
+						faultCompanyList.add(user.getStation().getCompany());
+					} else {
+						faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+						faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+					}
+					request.setAttribute("faultstationlist", faultstationlist);
+					request.setAttribute("faultCompanyList", faultCompanyList);
 
 				// find out what kind of incident this is
 
