@@ -61,8 +61,18 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		case ReportingConstants.RPT_20_CUSTOM_4:
 			creportdata = createSummaryReport(srDTO, ReportBMO.getCustomReport(4).getResource_key(), request, user);
 			break;
+		case ReportingConstants.RPT_20_CUSTOM_5:
+			creportdata = createEarlyBagReport(srDTO, ReportBMO.getCustomReport(5).getResource_key(), request, user);
+			break;
 		}
 		return creportdata;
+	}
+
+	private String createEarlyBagReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
+		// TODO Auto-generated method stub
+		ReportBMO rbmo= new ReportBMO(request);
+		rbmo.setUser(user);
+		return rbmo.create_earlyBag_rpt(srDTO, 0, ReportingConstants.RPT_10_NAME, "Early Baggage Report");
 	}
 
 	private String createSummaryReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
@@ -119,6 +129,10 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			
 			List<Object[]> foo = cri.list();
 			
+			if(foo == null || foo.size() < 1) {
+				return null;
+			}
+			
 			for (Object[] fi : foo) {
 				Criteria c = sess.createCriteria(Incident.class);
 				c.add(Restrictions.eq("createdate", (Date)fi[0]));
@@ -149,7 +163,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		finally {
-			sess.close();
+			if(sess != null) sess.close();
 		}
 	}
 
