@@ -210,8 +210,7 @@ public class LostDelayAction extends Action {
 			saveMessages(request, errors);
 
 			// AJAX CALL
-			if(request.getParameter("close") != null && request.getParameter("getstation") != null
-					&& request.getParameter("getstation").equals("1")) {
+			if(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
 				return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
 			}
 			else {
@@ -235,6 +234,18 @@ public class LostDelayAction extends Action {
 				else {
 					return (mapping.findForward(TracingConstants.LD_CLOSE));
 				}
+			}
+		}
+		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
+			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
+				request.setAttribute("faultstationlist", UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY));
+				ArrayList faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
+				request.setAttribute("faultCompanyList", faultCompanyList);
+			}
+			else {
+				request.setAttribute("faultstationlist", TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id()));
+				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
 			}
 		}
 

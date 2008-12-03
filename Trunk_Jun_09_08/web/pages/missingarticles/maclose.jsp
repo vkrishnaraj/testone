@@ -78,6 +78,7 @@
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+          <input type="hidden" name="close" value="1">
             <jsp:include page="/pages/includes/closereport_incl.jsp" />
           </table>
           <jsp:include page="/pages/includes/remarkclose_incl.jsp" />

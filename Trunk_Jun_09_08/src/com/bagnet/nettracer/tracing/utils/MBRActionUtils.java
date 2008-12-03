@@ -274,7 +274,7 @@ public class MBRActionUtils {
 
 		List faultstationlist = null;
 		List faultCompanyList = null;
-		//if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
+		if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
 			// If the user has limited permission, 
 			if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
 				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
@@ -286,10 +286,10 @@ public class MBRActionUtils {
 			}
 			request.setAttribute("faultstationlist", faultstationlist);
 			request.setAttribute("faultCompanyList", faultCompanyList);
-		//} 
+		} 
 		
 		// change faultstationlist (ajax call)
-		if (request.getParameter("close") != null && request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
+		if (request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
 
 			if (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals("")) {
 				theform.setFaultstation_id(0);

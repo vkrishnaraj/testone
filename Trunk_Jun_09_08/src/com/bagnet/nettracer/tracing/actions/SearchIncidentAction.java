@@ -252,9 +252,12 @@ public class SearchIncidentAction extends Action {
 				
 				List faultstationlist = null;
 				List faultCompanyList = null;
-				//if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
-					// If the user has limited permission, 
-					if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+
+				// find out what kind of incident this is
+
+				switch (itemType) {
+				case TracingConstants.LOST_DELAY:
+					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
 						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());
@@ -264,14 +267,9 @@ public class SearchIncidentAction extends Action {
 					}
 					request.setAttribute("faultstationlist", faultstationlist);
 					request.setAttribute("faultCompanyList", faultCompanyList);
-
-				// find out what kind of incident this is
-
-				switch (itemType) {
-				case TracingConstants.LOST_DELAY:
-					if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, user))
+					if(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, user))
 						theform.setReadonly(1);
-					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
+					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 						theform.setAllow_remark_update(1);
 					request.setAttribute("lostdelay", "1");
 					WtqIncidentAction pendingAction = WorldTracerQueueUtils.findPendingIncidentAction(incident);
@@ -294,6 +292,16 @@ public class SearchIncidentAction extends Action {
 					}
 					return (mapping.findForward(TracingConstants.LD_MAIN));
 				case TracingConstants.DAMAGED_BAG:
+					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+						faultCompanyList = new ArrayList();
+						faultCompanyList.add(user.getStation().getCompany());
+					} else {
+						faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+						faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+					}
+					request.setAttribute("faultstationlist", faultstationlist);
+					request.setAttribute("faultCompanyList", faultCompanyList);
 					if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG, user))
 						theform.setReadonly(1);
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
@@ -301,6 +309,16 @@ public class SearchIncidentAction extends Action {
 					request.setAttribute("damaged", "1");
 					return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 				case TracingConstants.MISSING_ARTICLES:
+					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+						faultCompanyList = new ArrayList();
+						faultCompanyList.add(user.getStation().getCompany());
+					} else {
+						faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+						faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+					}
+					request.setAttribute("faultstationlist", faultstationlist);
+					request.setAttribute("faultCompanyList", faultCompanyList);
 					if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISSING_ARTICLES, user))
 						theform.setReadonly(1);
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user))

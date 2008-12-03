@@ -125,7 +125,7 @@ public class MissingAction extends Action {
 			saveMessages(request, errors);
 			
 			//		 AJAX CALL
-			if (request.getParameter("close") != null && request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
+			if (request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
 				return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
 			} else {
 				int currentStatus = -1;
@@ -151,7 +151,19 @@ public class MissingAction extends Action {
 			}
 			
 		}
-
+		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
+			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.MISSING_ARTICLES)) {
+				request.setAttribute("faultstationlist", UserPermissions.getLimitedSaveStations(user, TracingConstants.MISSING_ARTICLES));
+				ArrayList faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
+				request.setAttribute("faultCompanyList", faultCompanyList);
+			}
+			else {
+				request.setAttribute("faultstationlist", TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id()));
+				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
+			}
+		}
+		
 		if (MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}

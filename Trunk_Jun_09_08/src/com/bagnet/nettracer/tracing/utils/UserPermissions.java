@@ -327,7 +327,9 @@ public class UserPermissions {
 			return stationList;
 		} else if (incident_ID != null) {
 			Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
+			if(inc != null) {
 			type = inc.getItemtype().getItemType_ID();
+			}
 		}
 		
 		switch (type) {

@@ -55,7 +55,6 @@
 </script>
 <tr>
   <td nowrap width=20%>
-    <input type="hidden" name="close" value="1">
     <a name="fault"></a>
     <bean:message key="colname.faultcompany" />
     <br>
