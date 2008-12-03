@@ -1,43 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context cookies="true" crossContext="true">
-   <Manager className="org.apache.catalina.session.PersistentManager" 
-	checkInterval="1"
-	saveOnRestart="true"
-	maxActiveSessions="-1"
-	minIdleSwap="-1"
-	maxIdleSwap="0"
-	maxIdleBackup="0"
-   	debug="0">
-		<Store
-	    	debug="0"
-		   	className="org.apache.catalina.session.JDBCStore" 
-		   	connectionURL="jdbc:jtds:sqlserver://localhost/nettracer;user=nettracer;password=N3tTr4c3r" 
-		   	driverName="net.sourceforge.jtds.jdbc.Driver" 
-		   	sessionAppCol="app_name" 
-		   	sessionDataCol="session_data" 
-		   	sessionIdCol="session_id" 
-		   	sessionLastAccessedCol="last_access" 
-		   	sessionMaxInactiveCol="max_inactive" 
-		   	sessionTable="jdbc_sessions"
-		   	sessionValidCol="valid_session"/>
-   	</Manager>
+	<Manager pathname="sessions.ser" />
+
 
 </Context>
-
-<!-- 
-
-	    <Store
-	    	debug="0"
-		   	className="org.apache.catalina.session.JDBCStore" 
-		   	connectionURL="jdbc:jtds:sqlserver://server02/nettracer_airtran;user=nettracer;password=nettracer" 
-		   	driverName="net.sourceforge.jtds.jdbc.Driver" 
-		   	sessionAppCol="app_name" 
-		   	sessionDataCol="session_data" 
-		   	sessionIdCol="session_id" 
-		   	sessionLastAccessedCol="last_access" 
-		   	sessionMaxInactiveCol="max_inactive" 
-		   	sessionTable="jdbc_sessions"
-		   	sessionValidCol="valid_session"/>
-		   	
-
--->
