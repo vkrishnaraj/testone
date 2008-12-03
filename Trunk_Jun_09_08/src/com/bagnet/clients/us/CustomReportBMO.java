@@ -5,6 +5,7 @@
  */
 package com.bagnet.clients.us;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.bagnet.clients.us.reports.LzReportDTO;
@@ -32,6 +34,7 @@ import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.LzUtils;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 /**
  * @author Administrator
@@ -69,121 +72,110 @@ public class CustomReportBMO implements
 		parameters.put("title", messages.getMessage(resource_key));
 		parameters.put("lz", LzUtils.getLz(Integer.parseInt(srDTO.getLz_id())).getStation().getStationcode());
 		parameters.put("showdetail", "1");
+		Agent user = (Agent) request.getSession().getAttribute("user");
 		
-
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			
 			HashMap<String, TimeZone> hm = new HashMap<String, TimeZone>();
 			List<Station> stationList = LzUtils.getStationsForLz(Integer.parseInt(srDTO.getLz_id()));
+			List<Integer> stationCodeList = new ArrayList<Integer>();
 			List<LzReportDTO> reportList = new ArrayList<LzReportDTO>();
 
-			for (Iterator i = stationList.iterator(); i.hasNext();) {
-				StringBuffer query = new StringBuffer();
-				query.append("from com.bagnet.nettracer.tracing.db.Incident incident where (");
+			StringBuffer query = new StringBuffer();
+			query.append("select incident.incident_ID, incident.agent.username, " +
+					"incident.stationassigned.stationcode, incident.stationcreated.stationcode, " +
+					"incident.createdate, incident.createtime " +
+					"from com.bagnet.nettracer.tracing.db.Incident incident where (");
 				
-				Station station = (Station) i.next();
-				Agent agent = (Agent) request.getSession().getAttribute("user");
-				TimeZone tz = getTzFromFirstActiveAgentInStation(station, agent);
-				
-				
-				hm.put(station.getStationcode(), tz);
-				
-				// *******
-				
-				Date sdate = null, edate = null;
-				Date sdate1 = null, edate1 = null; // add one for timezone
-				Date stime = null; // time to compare (04:00 if eastern, for example)
-				String dateq = "";
+			for (Station station: stationList) {
+				stationCodeList.add(station.getStation_ID());
+			}
+			String stationIdString = StringUtils.joinIntegers(stationCodeList, ", ");
+							
+			Date sdate = null, edate = null;
+			Date sdate1 = null, edate1 = null; // add one for timezone
+			Date stime = null; // time to compare (04:00 if eastern, for example)
+			String dateq = "";
 
-				ArrayList dateal = null;
-				Agent user = (Agent) request.getSession().getAttribute("user");
+			ArrayList dateal = null;
+			
+			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone());
 				
-				
-				if ((dateal = ReportBMO.calculateDateDiff(srDTO, tz, user)) == null) {
-					return null;
-				}
-				sdate = (Date) dateal.get(0);
-				sdate1 = (Date) dateal.get(1);
-				edate = (Date) dateal.get(2);
-				edate1 = (Date) dateal.get(3);
-				stime = (Date) dateal.get(4);
+			if ((dateal = ReportBMO.calculateDateDiff(srDTO, tz, user)) == null) {
+				return null;
+			}
+			sdate = (Date) dateal.get(0);
+			sdate1 = (Date) dateal.get(1);
+			edate = (Date) dateal.get(2);
+			edate1 = (Date) dateal.get(3);
+			stime = (Date) dateal.get(4);
 
-				parameters.put("sdate", "All Dates");
-				if (sdate != null && edate != null) {
-					parameters.put("sdate", srDTO.getStarttime());
-					if (sdate.equals(edate)) {
-						// need to add the timezone diff here
-						dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-								+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
-
-						edate = null;
-					} else {
-
-						// first get the beginning and end dates using date and time, then get
-						// dates in between
-						dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-								+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
-								+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))";
-
-						parameters.put("edate", srDTO.getEndtime());
-					}
-				} else if (sdate != null) {
-					parameters.put("sdate", srDTO.getStarttime());
+			parameters.put("sdate", "All Dates");
+			if (sdate != null && edate != null) {
+				parameters.put("sdate", srDTO.getStarttime());
+				if (sdate.equals(edate)) {
+					// need to add the timezone diff here
 					dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
 							+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
+
 					edate = null;
+				} else {
+
+					// first get the beginning and end dates using date and time, then get
+					// dates in between
+					dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
+							+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
+							+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))";
+
+					parameters.put("edate", srDTO.getEndtime());
 				}
-				
-				// *******
-				
-				query.append(" (incident.stationassigned.station_ID = " + station.getStation_ID() + " ");
-				query.append(" " + dateq + ") ");
-				
-				query.append(" ) and incident.status.status_ID <> :closedStatus ");
-				query.append(" and incident.itemtype.itemType_ID = :itemType ");
-				query.append(" order by incident.stationassigned.stationcode, incident.createdate, incident.createtime ");
-				
-				
-				Query q = sess.createQuery(query.toString());
-				
-				q.setInteger("closedStatus", TracingConstants.MBR_STATUS_CLOSED);
-				q.setInteger("itemType", TracingConstants.LOST_DELAY);
-				
-				if (sdate != null) {
-					q.setDate("startdate", sdate);
-					if (edate == null)
-						q.setDate("startdate1", sdate1);
-					q.setTime("starttime", stime);
-				}
-				if (edate != null) {
-					q.setDate("enddate1", edate1);
-					q.setDate("enddate", edate);
-				}
-				
-				List<Incident> results = q.list();
-				logger.info("Query: " + query.toString());
-				
-				for (Incident inc: results) {
-					
-					if (tz != null) {
-						inc.set_TIMEZONE(tz);
-					}
-					
-					LzReportDTO dto = new LzReportDTO();
-					dto.setTimeZoneDesc(tz.getDisplayName());
-					dto.setAgent(inc.getAgent_username());
-					dto.setIncidentId(inc.getIncident_ID());
-					dto.setStationAssigned(inc.getStationassigned().getStationcode());
-					dto.setStationCreated(inc.getStationcreated().getStationcode());
-					String createDate = DateUtils.formatDate(inc.getCreatedate(), TracingConstants.DISPLAY_DATEFORMAT, null, tz);
-					String createTime = DateUtils.formatDate(inc.getCreatetime(), TracingConstants.DISPLAY_TIMEFORMAT, null, tz);
-					dto.setCreateDate(createDate);
-					dto.setCreateTime(createTime);
-					reportList.add(dto);
-					logger.info("Incident: " + inc.getIncident_ID());
-				}
+			} else if (sdate != null) {
+				parameters.put("sdate", srDTO.getStarttime());
+				dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
+						+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
+				edate = null;
 			}
+				
+			query.append(" (incident.stationassigned.station_ID in (" + stationIdString + ") ");
+			query.append(" " + dateq + ") ");
+			
+			query.append(" ) and incident.status.status_ID <> :closedStatus ");
+			query.append(" and incident.itemtype.itemType_ID = :itemType ");
+			query.append(" order by incident.stationassigned.stationcode, incident.createdate, incident.createtime ");
+			
+			
+			Query q = sess.createQuery(query.toString());
+			
+			q.setInteger("closedStatus", TracingConstants.MBR_STATUS_CLOSED);
+			q.setInteger("itemType", TracingConstants.LOST_DELAY);
+			
+			if (sdate != null) {
+				q.setDate("startdate", sdate);
+				if (edate == null)
+					q.setDate("startdate1", sdate1);
+				q.setTime("starttime", stime);
+			}
+			if (edate != null) {
+				q.setDate("enddate1", edate1);
+				q.setDate("enddate", edate);
+			}
+			
+			List<Object[]> results = q.list();
+				
+			for (Object[] obj: results) {
+				
+				LzReportDTO dto = new LzReportDTO();
+				dto.setIncidentId((String) obj[0]);
+				dto.setAgent((String) obj[1]);			
+				dto.setStationAssigned((String) obj[2]);
+				dto.setStationCreated((String) obj[3]);
+				String createDate = DateUtils.formatDate((Date) obj[4], TracingConstants.DISPLAY_DATEFORMAT, null, tz);
+				String createTime = DateUtils.formatDate((Date) obj[5], TracingConstants.DISPLAY_TIMEFORMAT, null, tz);
+				dto.setCreateDate(createDate);
+				dto.setCreateTime(createTime);
+				reportList.add(dto);
+		}
 						
 			// Create report
 			logger.info(reportList.size());

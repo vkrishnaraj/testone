@@ -8,7 +8,7 @@ public class LzReportDTO {
 	private String incidentId;
 	private String stationAssigned;
 	private String stationCreated;
-	private String timeZoneDesc;
+	//private String timeZoneDesc;
 
 	/**
 	 * @return the createDate
@@ -99,20 +99,4 @@ public class LzReportDTO {
 	public void setStationCreated(String stationCreated) {
 		this.stationCreated = stationCreated;
 	}
-
-	/**
-	 * @return the timeZoneDesc
-	 */
-	public String getTimeZoneDesc() {
-		return timeZoneDesc;
-	}
-
-	/**
-	 * @param timeZoneDesc the timeZoneDesc to set
-	 */
-	public void setTimeZoneDesc(String timeZoneDesc) {
-		this.timeZoneDesc = timeZoneDesc;
-	}
-
-
 }
