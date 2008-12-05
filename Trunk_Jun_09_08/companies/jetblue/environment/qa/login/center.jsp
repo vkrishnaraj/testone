@@ -38,7 +38,7 @@
             </td>
             <td>
               <SELECT NAME="companyCode" class="dropdown">
-              	<option value="B6" selected="selected">JetBlue Airlines</option>
+              	<option value="B6" selected="selected">JetBlue QA</option>
               	<option value="OW">Owens Group</option>
               </SELECT>
             </td>
@@ -54,7 +54,8 @@
               <html:text property="username" size="16" maxlength="18" styleClass="textfield" />
             </td>
           </tr>
-          <tr>
+	  <tr>
+	  <h2><font color="red">Warning: This is a QA environment only.  Do not enter real claims or bags.</font></h2>
             <td align=right valign=middle>
               <bean:message key="prompt.password" />
               :
