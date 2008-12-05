@@ -97,6 +97,15 @@ form {
 
 
 /***** HEADER AND MENU *****/
+div.headerleft {
+	float:left;
+}
+
+div.headerright {
+	float:right;
+	text-align:right;
+}
+
 td#header {
 	height: 78px;
 }
@@ -117,7 +126,7 @@ table#headercontent a{
 	color:#ffffff;
 	text-decoration:none;
 }
-table#headercontent a:hover{
+table#headercontent a:hover {
 	color:#ffffff;
 	text-decoration:underline;
 }
@@ -326,6 +335,18 @@ div#maincontent table.form{
 div#maincontent table.form2{
 	background-color:#D1E4F1;
 }
+
+
+td.white{
+	background-color:#fff;
+	height:10px;
+}
+
+td.header{
+	background-color:#004990;
+	color:#fff;
+}
+
 div#maincontent table.form2_inc{
 	background-color:#D1E4F1;
 }
@@ -394,7 +415,7 @@ div.helplink a{
 	color:#B51717;
 	text-decoration:none;
 }
-div.helplink a:hover,a:active{
+div.helplink a:hover,a:active {
 	color:#B51717;
 	text-decoration:underline;
 }
@@ -442,3 +463,4 @@ div#maincontent li.loginlinks {
 .bold {
 	font-weight: bold;
 }
+
