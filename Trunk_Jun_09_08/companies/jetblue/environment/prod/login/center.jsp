@@ -38,7 +38,7 @@
             </td>
             <td>
               <SELECT NAME="companyCode" class="dropdown">
-              	<option value="B6" selected="selected">JetBlue QA</option>
+              	<option value="B6" selected="selected">JetBlue</option>
               	<option value="OW">Owens Group</option>
               </SELECT>
             </td>
@@ -55,7 +55,6 @@
             </td>
           </tr>
 	  <tr>
-	  <h2><font color="red">Warning: This is a QA environment only.  Do not enter real claims or bags.</font></h2>
             <td align=right valign=middle>
               <bean:message key="prompt.password" />
               :
@@ -81,20 +80,6 @@
                 </td>
               </tr>
        </table>
-                
-      <table class=login2 width="50%" align=center>
-		<tr><td width="780">
-
-Thank you for evaluating NetTracer, an intuitive baggage tracing application.  We encourage you to try out all of the features contained within this application.  If you need assistance while using the application, click on the question mark icons to bring up the context sensitive help.  Please keep in mind that this instance of the application is for demonstration purposes only and the data will be periodically refreshed. 
-<p>
-If you have any questions, please do not hesitate to call or email us, we are happy to answer all of your questions.
-<p>
-The NetTracer Team 
-<br><br><br>
-<center>The information contained in this site is confidential and falls under the executed nondisclosure agreement between jetBlue airlines and The Owens Group.</center>
- 
-		</td></tr>
-		</table>
                 
               </div>
             </html:form>

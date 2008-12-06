@@ -1186,9 +1186,9 @@
 			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}tracer.properties" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}tracer.properties" overwrite="true" />
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
@@ -1305,7 +1305,7 @@
 				<include name="wrapper.dll" />
 			</fileset>
 		</copy>
-		<zip destfile="${artifact.dir}/${ant_project_name}/zip/cron-svc.zip">
+		<zip destfile="${artifact.dir}/${ant_project_name}/zip/${jarprefix}cron-svc.zip">
 			<fileset dir="${build.dir}/dist/cron/" />
 		</zip>
 	</target>
