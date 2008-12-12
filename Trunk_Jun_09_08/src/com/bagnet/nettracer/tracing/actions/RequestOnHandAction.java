@@ -18,9 +18,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.RequestOhdBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -113,8 +116,24 @@ public class RequestOnHandAction extends Action {
 
 				return mapping.findForward(TracingConstants.VIEW_REQUEST_DETAILS);
 			} else {
+				
+				//check and make sure the agents station does not already have a pending request for that bag.
+				String ohd_ID = request.getParameter("ohd_ID");
+				if(ohd_ID != null) {
+					OHDRequest existing = RequestOhdBMO.getOpenRequest(user.getStation(), ohd_ID);
+					if(existing != null) {
+						request.setAttribute("ohd_request", existing);
+						ActionMessage error = new ActionMessage("message.request.ohd.already.exists");
+						ActionMessages errors = new ActionMessages();
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						return mapping.findForward(TracingConstants.VIEW_REQUEST_DETAILS);
+					}
+				}
+
 				BagService bs = new BagService();
 
+				
 				if (request.getParameter("save") != null) {
 					if (bs.requestOnHand(theform, user, messages)) {
 						return (mapping.findForward(TracingConstants.REQUEST_ON_HAND_SUCCESS));
@@ -123,7 +142,6 @@ public class RequestOnHandAction extends Action {
 					}
 				}
 
-				String ohd_ID = request.getParameter("ohd_ID");
 				String incident_ID = request.getParameter("mbr_ID");
 				String match_ID = request.getParameter("match_ID");
 
