@@ -24,6 +24,8 @@
   {
     returnValue = true;
     var addressIndices = [];
+    var bagIndices = [];
+    var ccCount = 0;
     
     returnValue = validatereqWtIncFields(form, formType, false);
     if (returnValue == false) { return returnValue; }
@@ -84,7 +86,15 @@
             currentElement.focus();
             return false;
           }
-        } 
+        }
+      else if(currentElementName.indexOf("].claimchecknum") != -1 && currentElement.value.length > 0) {
+          ccCount += 1;
+        }
+      else if (currentElementName.indexOf("].color") != -1) {
+    	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
+
+      }
+        
     } // End FOR LOOP
     
     for (var j=0;j<addressIndices.length;j++) {
@@ -100,6 +110,14 @@
       }
       break;
     }
+    
+    if(ccCount < bagIndices.length) {
+  	  var answer = confirm('<%=(String) myMessages.getMessage(myLocale,  "confirm.more.bags.than.tags")%>');
+	  	if(!answer) {
+    		  return false;
+	 	 }
+	  }
+    
   }
     
   function validatereqOHDForm(form) {
