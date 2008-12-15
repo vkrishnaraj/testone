@@ -109,6 +109,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO = "WorldTracer Insert BDO";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_LOG = "WorldTracer Log";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_AUTO_AMEND = "WorldTracer Auto Amend";
+	public static final String SYSTEM_COMPONENT_NAME_WORLD_TRACER_REQ_QOH = "WorldTracer Request QOH";
 
 	public final static String SYSTEM_COMPONENT_NAME_BDO = "Baggage Delivery Order";
 
@@ -430,6 +431,7 @@ public class TracingConstants {
 	public final static String VIEW_WORLDTRACER_FOH = "viewworldtracerfoh";
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
 	public final static String VIEW_WORLDTRACER_TTY = "viewworldtracertty";
+	public static final String VIEW_WORLDTRACER_REQ_QOH = "viewworldtracerreqqoh";
 
 	public final static String VIEW_WORLDTRACER_SUSRIT = "viewworldtracersusrit";
 

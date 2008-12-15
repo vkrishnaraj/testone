@@ -827,6 +827,11 @@ function gotoHistoricalReport() {
             src="deployment/main/images/nettracer/airport_codes.gif"
             border=0></a></td>
           <td><bean:message key="colname.ohd.flightnum.req" /> <br>
+          
+          <logic:empty name="itinerarylist" property="airline">
+            <jsp:setProperty name="itinerarylist" property="airline" value="<%= a.getCompanycode_ID() %>"/>
+          </logic:empty>
+          
           <html:select name="itinerarylist" property="airline"
             styleClass="dropdown" indexed="true">
             <html:option value="">

@@ -146,6 +146,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd" />

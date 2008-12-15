@@ -20,7 +20,7 @@ public class NumberedLinesRule extends BasicRule{
 	}
 	
 	public NumberedLinesRule(int minLength, int maxLength, int maxAllowed, Format format, boolean doDelete) {
-		super(minLength, maxLength, maxAllowed, format, doDelete);
+		super(minLength, maxLength, maxAllowed, format, doDelete, false);
 		// TODO Auto-generated constructor stub
 	}
 

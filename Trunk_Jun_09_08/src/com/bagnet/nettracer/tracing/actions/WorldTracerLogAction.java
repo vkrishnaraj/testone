@@ -79,12 +79,12 @@ public class WorldTracerLogAction extends Action {
 			SimpleDateFormat sdf = new SimpleDateFormat(user.getDateformat().getFormat());
 			Date startDate = wtForm.getStartDate() == null || wtForm.getStartDate().trim().length() < 1 ? null : sdf.parse(wtForm.getStartDate());
 			Date endDate = wtForm.getEndDate() == null || wtForm.getEndDate().trim().length() < 1? null : sdf.parse(wtForm.getEndDate());
-			
-			List<WorldTracerTransaction> foo =  wttBmo.findTransactions(wtForm.getTxType(),
-					wtForm.getResult(), startDate, endDate,
-					wtForm.getIncident_id(), wtForm.getOhd_id());
-			
-			request.setAttribute("resultlist", foo);
+			Calendar temp = new GregorianCalendar();
+			if(endDate != null) {
+				temp.setTime(endDate);
+				temp.add(Calendar.DATE, 1);
+				endDate = temp.getTime();
+			}
 			
 			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request.getParameter("rowsperpage"))
 					: TracingConstants.ROWS_PER_PAGE;
@@ -102,7 +102,9 @@ public class WorldTracerLogAction extends Action {
 			request.setAttribute("currpage", Integer.toString(currpage));
 
 			// find out total pages
-			totalpages = (int) Math.ceil((double) foo.size() / (double) rowsperpage);
+			
+			int totalRows = wttBmo.getTransactionCount(wtForm.getTxType(), wtForm.getResult(), startDate, endDate, wtForm.getIncident_id(), wtForm.getOhd_id());
+			totalpages = (int) Math.ceil((double) totalRows / (double) rowsperpage);
 
 			if (totalpages <= currpage) {
 				currpage = 0;
@@ -118,8 +120,12 @@ public class WorldTracerLogAction extends Action {
 				}
 				request.setAttribute("pages", al);
 			}
-			request.setAttribute("pag_begin", currpage * rowsperpage);
-			request.setAttribute("pag_end", currpage * rowsperpage + (rowsperpage - 1));
+			
+			List<WorldTracerTransaction> results =  wttBmo.findTransactions(wtForm.getTxType(),
+					wtForm.getResult(), startDate, endDate,
+					wtForm.getIncident_id(), wtForm.getOhd_id(), currpage * rowsperpage, rowsperpage);
+			
+			request.setAttribute("resultlist", results);
 		}
 		
 		return mapping.findForward("success");

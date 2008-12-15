@@ -33,6 +33,7 @@ function toggledc(o) {
     }
 
 
+
 //-->
 </script>
 
@@ -509,9 +510,11 @@ function toggledc(o) {
     <tr>
       <td align="center" valign="top">
         <br>
-        <html:submit property="save" styleId="button">
+        <html:hidden property="save" value = ""/>
+                <html:hidden property="save" value = ""/>
+        <html:button property="saveButton" styleId="button" onclick="changebutton(); if(validateReqBDO(document.BDOForm)) {document.BDOForm.submit();} else {undoChangebutton();}">
           <bean:message key="button.bdo_send" />
-        </html:submit>
+        </html:button>
         <logic:present name="showprint" scope="request">
         &nbsp;&nbsp;
         <input id="button" type="button" name="print" value="<bean:message key="button.bdo_sendprint" />" onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','BDOReceipt',800,600);return false;">

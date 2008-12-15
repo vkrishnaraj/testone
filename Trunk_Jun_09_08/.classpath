@@ -85,6 +85,7 @@
 	<classpathentry kind="lib" path="lib/jars/iText-2.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jasperreports-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/poi-3.0.1-FINAL-20070705.jar"/>
+	<classpathentry kind="lib" path="lib/client-us/us-scanhistory.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>

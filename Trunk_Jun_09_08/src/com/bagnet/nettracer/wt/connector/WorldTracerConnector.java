@@ -126,5 +126,8 @@ public interface WorldTracerConnector {
 	 */
 	String createBdo(Map<WorldTracerField, List<String>> fieldMap, String ahl_id, String ohd_id,
 			DeliverCompany delivercompany, Station station) throws WorldTracerException;
+	
+	public String requestQoh(String fromStation, String fromAirline, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
+	throws WorldTracerException;
 
 }

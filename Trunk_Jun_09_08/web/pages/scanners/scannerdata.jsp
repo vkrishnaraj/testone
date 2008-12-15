@@ -149,7 +149,10 @@ width:expression(200 + "px");
 width:expression(60 + "px");
 }
 </style>
-    
+          <br />
+          <logic:empty name="resultList" scope="request">
+            <font color="red"><bean:message key="scanner.noresultsfound"/></font>
+          </logic:empty>
           <table class="form2" cellspacing="0" cellpadding="0" width="500">
             <tr>
               <td width="120"><b><bean:message key="scanner.string1" /></b></td>
@@ -186,7 +189,7 @@ width:expression(60 + "px");
                 </td>
                 <td id="str4"> 
                   <c:if test='${scannerDTO.string4 != null && scannerDTO.string4 != ""}'>
-                    <c:out value="${scannerDTO.string4}" />
+                    <c:out value="${scannerDTO.string4}" escapeXml="false"/>
                   </c:if>
                   <c:if test='${scannerDTO.string4 == null || scannerDTO.string4 == ""}'>
                     &nbsp;
@@ -194,7 +197,9 @@ width:expression(60 + "px");
                 </td>
                 <td id="str5">
                   <c:if test='${scannerDTO.ohdId != null && scannerDTO.ohdId != ""}'>
-                    <c:out value="${scannerDTO.ohdId}" />
+                    <a href="addOnHandBag.do?ohd_ID=<c:out value="${scannerDTO.ohdId}" />">
+                      <c:out value="${scannerDTO.ohdId}" />
+                    </a>
                   </c:if>
                   <c:if test='${scannerDTO.ohdId == null || scannerDTO.ohdId == ""}'>
                     &nbsp;

@@ -169,8 +169,7 @@ function updatePagination() {
 					<th><bean:message key="colname.incident_num" /></th>
 					<th><bean:message key="colname.ohd_ID" /></th>
 				</tr>
-				<c:forEach var="wtTx" items="${resultlist}" begin="${pag_begin}"
-					end="${pag_end}">
+				<c:forEach var="wtTx" items="${resultlist}">
 					<tr>
 						<td><c:out value="${wtTx.createDate}" /></td>
 						<td><bean:message key="${wtTx.txType.messageKey}" /></td>

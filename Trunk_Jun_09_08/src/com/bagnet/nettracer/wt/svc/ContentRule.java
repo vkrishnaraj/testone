@@ -19,7 +19,7 @@ public class ContentRule extends BasicRule {
     }
 
     private static final int CATEGORY_LENGTH = 12;
-    private static final int CONTENT_LENGTH = 45;
+    private static final int CONTENT_LENGTH = 43;
     private static final Format CONTENT_FORMAT = Format.FREE_FLOW;
     private static final int MAX_CATEGORIES = 10;
 

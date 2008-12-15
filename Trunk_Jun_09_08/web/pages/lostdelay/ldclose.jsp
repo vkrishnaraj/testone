@@ -108,6 +108,10 @@
                 <td>
                   <bean:message key="colname.ldclose.arr_airline_id" />
                   <br>
+                  
+                  <logic:empty name="theitem" property="arrivedonairline_ID">
+                    <jsp:setProperty name="theitem" property="arrivedonairline_ID" value="<%= a.getCompanycode_ID() %>"/>
+                  </logic:empty>
                   <html:select name="theitem" property="arrivedonairline_ID" styleClass="dropdown" indexed="true">
                     <html:option value="">
                       <bean:message key="select.please_select" />

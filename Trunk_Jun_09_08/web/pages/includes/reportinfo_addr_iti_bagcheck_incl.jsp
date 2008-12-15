@@ -367,9 +367,15 @@
                         <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
                       </td>
                       <td>
+                      
+                      
+                      <logic:empty name="theitinerary" property="airline">
+                        <jsp:setProperty name="theitinerary" property="airline" value="<%= a.getCompanycode_ID() %>"/>
+                      </logic:empty>
+                      
                         <bean:message key="colname.pax.flightnum.req" />
                         <br>
-                        <html:select name="theitinerary" property="airline" styleClass="dropdown" indexed="true">
+                        <html:select name="theitinerary" property="airline" styleClass="dropdown" indexed="true" >
 			                    <html:option value="">
 			                      <bean:message key="select.please_select" />
 			                    </html:option>
@@ -473,6 +479,11 @@
                           <td>
                             <bean:message key="colname.bag.flightnum.req" />
                             <br>
+                            
+                            <logic:empty name="theitinerary" property="airline">
+                              <jsp:setProperty name="theitinerary" property="airline" value="<%= a.getCompanycode_ID() %>"/>
+                            </logic:empty>
+                            
                             <html:select name="theitinerary" property="airline" styleClass="dropdown" indexed="true">
 					                    <html:option value="">
 					                      <bean:message key="select.please_select" />

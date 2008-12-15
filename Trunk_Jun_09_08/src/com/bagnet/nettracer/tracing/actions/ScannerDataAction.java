@@ -167,7 +167,7 @@ public class ScannerDataAction extends Action {
 			
 			// Obtain the appropriate scannerDataSource
 			ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
-			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, null);
+			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, bagTagNumber);
 			request.setAttribute("resultList", dto.getScannerDataDTOs());
 			
 			if (request.getParameter("generateReport") != null && 
@@ -204,8 +204,8 @@ public class ScannerDataAction extends Action {
 		a.add(Calendar.DATE, -1);
 		Date yesterday = a.getTime();
 		
-		dynaForm.set("startDate", DateUtils.formatDate(today, user.getDateformat().getFormat(), null, null));
-		dynaForm.set("endDate", DateUtils.formatDate(yesterday, user.getDateformat().getFormat(), null, null));
+		dynaForm.set("startDate", DateUtils.formatDate(yesterday, user.getDateformat().getFormat(), null, null));
+		dynaForm.set("endDate", DateUtils.formatDate(today, user.getDateformat().getFormat(), null, null));
 		
 		return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
 	}

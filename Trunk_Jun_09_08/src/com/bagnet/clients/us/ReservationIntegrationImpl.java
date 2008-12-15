@@ -33,7 +33,7 @@ public class ReservationIntegrationImpl extends
 	private Booking booking = null;
 	private final long WS_NULL_DATE = -62135578800000L;
 	private final int HOURS_BACK_ITINERARY = 24;
-	private final int HOURS_FORWARD_ITINERARY = 6;
+	private final int HOURS_FORWARD_ITINERARY = 12;
 	private String pnrContents;
 
 
@@ -180,7 +180,10 @@ public class ReservationIntegrationImpl extends
 					fAddr.setAddress2(pAddr.getAddressLine2() + " " + pAddr.getAddressLine3());
 					fAddr.setCity(pAddr.getCity());
 					fAddr.setCountrycode_ID(pAddr.getCountryCode());
-					fAddr.setHomephone(pAddr.getPhone());
+					if (!pAddr.getPhone().equals("000-")) {
+						fAddr.setHomephone(pAddr.getPhone());
+					}
+					
 					fAddr.setZip(pAddr.getPostalCode());
 					if (fAddr.getCountrycode_ID().equals(TracingConstants.US_COUNTRY_CODE)) {
 						fAddr.setState_ID(pAddr.getProvinceState());					
@@ -214,7 +217,7 @@ public class ReservationIntegrationImpl extends
 						}
 						
 						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
-								(timeDifference < -HOURS_FORWARD_ITINERARY && includeSegment)) {
+								(timeDifference > -HOURS_FORWARD_ITINERARY && includeSegment)) {
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
@@ -309,7 +312,9 @@ public class ReservationIntegrationImpl extends
 					fAddr.setAddress2(pAddr.getAddressLine2() + " " + pAddr.getAddressLine3());
 					fAddr.setCity(pAddr.getCity());
 					fAddr.setCountrycode_ID(pAddr.getCountryCode());
-					fAddr.setHomephone(pAddr.getPhone());
+					if (!pAddr.getPhone().trim().equals("000-")) {
+						fAddr.setHomephone(pAddr.getPhone());
+					}
 					fAddr.setZip(pAddr.getPostalCode());
 					if (fAddr.getCountrycode_ID().equals(TracingConstants.US_COUNTRY_CODE)) {
 						fAddr.setState_ID(pAddr.getProvinceState());					
@@ -380,7 +385,7 @@ public class ReservationIntegrationImpl extends
 						}
 						
 						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
-								(timeDifference < -HOURS_FORWARD_ITINERARY && includeSegment)) {
+								(timeDifference > -HOURS_FORWARD_ITINERARY && includeSegment)) {
 
 
 							// Create carrier in database in not present.
@@ -442,7 +447,7 @@ public class ReservationIntegrationImpl extends
 						}
 						
 						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
-								(timeDifference < -HOURS_FORWARD_ITINERARY && includeSegment)) {
+								(timeDifference > -HOURS_FORWARD_ITINERARY && includeSegment)) {
 							com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);							
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -24,9 +25,11 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.DynaValidatorForm;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -55,6 +58,8 @@ import com.bagnet.nettracer.tracing.db.WT_ROH;
 import com.bagnet.nettracer.tracing.db.WT_TTY;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
@@ -498,6 +503,7 @@ public class WorldTracerQueueUtils {
 		}
 	}
 	
+	
 	public void setError(String error) {
 		this.error = error;
 	}
@@ -531,6 +537,96 @@ public class WorldTracerQueueUtils {
 		}
 		
 	}
+
+	public static boolean createOnlyOhdQueue(WtqCreateOhd entry, Date lastupdated) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			if(alreadyAnyOhdQueued(entry, sess)) {
+				return false;
+			}
+			else {
+				t = sess.beginTransaction();
+				sess.save(entry);
+				t.commit();
+			}
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+		
+	}
+	
+
+	public static boolean createOnlyIncQueue(WtqCreateAhl entry, Date lastupdated) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			if(alreadyAnyIncQueued(entry, sess)) {
+				return false;
+			}
+			else {
+				t = sess.beginTransaction();
+				sess.save(entry);
+				t.commit();
+			}
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+		
+	}
+
+	private static boolean alreadyAnyIncQueued(WtqCreateAhl entry, Session sess) {
+		String queryString = "select wtq.wt_queue_id from WtqCreateAhl wtq where wtq.incident.incident_ID = :incident_ID "
+				+ " and ((wtq.status = :qStatus) or (wtq.createdate > :lastUpdated))";
+		Query q = sess.createQuery(queryString);
+
+		q.setString("incident_ID", entry.getIncident().getIncident_ID());
+		q.setParameter("qStatus", WtqStatus.PENDING);
+		q.setTimestamp("lastUpdated", entry.getIncident().getLastupdated());
+		q.setMaxResults(1);
+		List<WorldTracerQueue> result = q.list();
+		if(result.size() > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	private static boolean alreadyAnyOhdQueued(WtqCreateOhd entry, Session sess) {
+		String queryString = "select wtq.wt_queue_id from WtqCreateOhd wtq where wtq.ohd.OHD_ID = :OHD_ID " + 
+							" and ((wtq.status = :qStatus) or (wtq.createdate > :lastUpdated)) "; 
+		Query q = sess.createQuery(queryString);
+		
+		q.setString("OHD_ID", entry.getOhd().getOHD_ID());
+		q.setParameter("qStatus", WtqStatus.PENDING);
+		q.setTimestamp("lastUpdated", entry.getOhd().getLastupdated());
+		q.setMaxResults(1);
+		List<WorldTracerQueue> result = q.list();
+		if(result.size() > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 
 
 }

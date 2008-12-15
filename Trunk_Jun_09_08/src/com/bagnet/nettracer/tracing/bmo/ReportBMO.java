@@ -2606,6 +2606,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			exporter = new JRHtmlExporter();
 
 			Map imagesMap = new HashMap();
+			
+			exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 			request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 			exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 			exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");

@@ -109,7 +109,11 @@ public class IncidentBMO {
 						iDTO.setStatus(oldStatus);
 						iDTO.setClosedate(oldinc.getClosedate());
 						oldStatusKept = true;
-					} 
+					}
+					
+					if(oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
+						iDTO.setWtFile(oldinc.getWtFile());
+					}
 					
 					// delete first then insert
 					sess.delete(oldinc);
@@ -624,8 +628,8 @@ public class IncidentBMO {
 
 		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where " +
 		" inc.wtFile is null " +  //no worldtracer file already
-		" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)" +
-		" and inc.createdate <= :incCutoff " + //old enough
+		//" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)" +
+		" and ((inc.createdate < :incCutoff) or (inc.createdate = :incCutoff and inc.createtime < :incTimeCutoff))  " + //old enough
 		" and inc.status.status_ID = :status " + // only open
 		" and inc.stationassigned.company.companyCode_ID = :companyCode " +
 		" and inc.itemtype.itemType_ID = :itemType " +
@@ -635,10 +639,11 @@ public class IncidentBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(queryString);
-			q.setParameter("incCutoff", incCutoff);
+			q.setDate("incCutoff", incCutoff);
+			q.setTime("incTimeCutoff", incCutoff);
 			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
 			q.setParameter("companyCode", companyCode);
-			q.setParameter("qStatus", WtqStatus.PENDING);
+			//q.setParameter("qStatus", WtqStatus.PENDING);
 			q.setParameter("itemType", TracingConstants.LOST_DELAY);
 			return q.list();
 		}

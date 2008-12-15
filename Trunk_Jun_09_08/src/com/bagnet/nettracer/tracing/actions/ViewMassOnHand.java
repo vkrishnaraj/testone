@@ -68,7 +68,7 @@ public class ViewMassOnHand extends Action {
 		//		 menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_MASS_ON_HANDS);
 
-		int ohdListCount = ((Long) OHDUtils.getOHDsByType(user, sort,
+		int ohdListCount = ((Long) OHDUtils.getOHDsByTypeStatus(user, sort,
 				"" + TracingConstants.MASS_OHD_TYPE, theform, "" + agent_station.getStation_ID(), 0, 0,
 				true).get(0)).intValue();
 		if (ohdListCount > 0) {
@@ -99,7 +99,7 @@ public class ViewMassOnHand extends Action {
 			}
 
 			//request list
-			List ohdList = OHDUtils.getOHDsByType(user, sort, "" + TracingConstants.MASS_OHD_TYPE,
+			List ohdList = OHDUtils.getOHDsByTypeStatus(user, sort, "" + TracingConstants.MASS_OHD_TYPE,
 					theform, "" + agent_station.getStation_ID(), rowsperpage, currpage, false);
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {

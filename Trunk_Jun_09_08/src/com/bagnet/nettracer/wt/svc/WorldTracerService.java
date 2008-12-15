@@ -12,6 +12,7 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.wt.WorldTracerException;
 
 public interface WorldTracerService {
@@ -41,7 +42,7 @@ public interface WorldTracerService {
 		SUSPEND_AHL("wt.suspend_ahl"), REINSTATE_AHL("wt.reinstate_ahl"), CREATE_OHD("wt.create_ohd"), CLOSE_OHD("wt.close_ohd"),
 		SUSPEND_OHD("wt.suspend_ohd"), REINSTATE_OHD("wt.reinstate_ohd"), FWD_GENERAL("wt.fwd_gen"), FWD_OHD("wt.fwd_ohd"),
 		REQUEST_OHD("wt.request_ohd"), AMEND_AHL("wt.amend_ahl"), AMEND_OHD("wt.amend_ohd"), IMPORT_AHL("wt.import_ahl"),
-		IMPORT_OHD("wt.import_ohd"), CREATE_BDO("wt.create_bdo"), ERASE_AF("wt.erase_actionfile");
+		IMPORT_OHD("wt.import_ohd"), CREATE_BDO("wt.create_bdo"), ERASE_AF("wt.erase_actionfile"), REQUEST_QOH("wt.request.qoh");
 	
 		private String messageKey;
 		
@@ -80,6 +81,8 @@ public interface WorldTracerService {
 	String forwardOhd(WtqFwdOhd fwd) throws WorldTracerException;
 	
 	String requestOhd(WtqRequestOhd roh) throws WorldTracerException;
+	
+	String requestQoh(WtqRequestQoh qoh) throws WorldTracerException;
 
 	void eraseActionFile(Worldtracer_Actionfiles waf) throws WorldTracerException;
 

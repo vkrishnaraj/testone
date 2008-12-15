@@ -180,5 +180,18 @@ public class DateUtils {
 		Date now = convertToDate(str, instyle, null);
 		return convertToGMTDate(now);
 	}
+	
+	public static Date convertSystemCalendarToGMTDate(Calendar date) {
+		return convertSystemDateToGMTDate(date.getTime());
+	}
+	
+	public static Date convertSystemDateToGMTDate(Date date) {
+		return new Date(date.getTime() + date.getTimezoneOffset()*1000*60);
+	}
+	
+	public static Date convertGMTDateToLocalTime(Date date) {
+		return new Date(date.getTime() - date.getTimezoneOffset()*1000*60);
+	}
+	
 
 }

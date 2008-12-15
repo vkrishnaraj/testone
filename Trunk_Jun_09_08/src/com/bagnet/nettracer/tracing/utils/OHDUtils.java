@@ -899,7 +899,7 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getOHDsByType(Agent user, String sort, String ohd_type,
+	public static List getOHDsByTypeStatus(Agent user, String sort, String ohd_type,
 			ViewMassOnHandsForm form, String station_id, int rowsperpage, int currpage, boolean isCount) {
 		OHD ret = null;
 		Session sess = null;
@@ -916,6 +916,7 @@ public class OHDUtils {
 
 			sql.append(" and ohd.holdingStation.station_ID = :stationID ");
 			sql.append(" and ohd.ohd_type = :type ");
+			sql.append(" and ohd.status.status_ID != :status ");
 
 			if (form.getOhd_num() != null && form.getOhd_num().length() > 0) {
 				sql.append(" and ohd.OHD_ID like :ohd_id ");
@@ -971,6 +972,7 @@ public class OHDUtils {
 
 			q.setInteger("stationID", Integer.parseInt(station_id));
 			q.setInteger("type", Integer.parseInt(ohd_type));
+			q.setInteger("status", TracingConstants.OHD_STATUS_CLOSED);
 
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
@@ -1266,12 +1268,12 @@ public class OHDUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			StringBuffer sql = new StringBuffer(512);
 
-			GregorianCalendar nowDate = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-			nowDate.add(GregorianCalendar.DATE, -1);
+			// GMT Minus 24 hours
+			Date dateCutoff = new Date(TracerDateTime.getGMTDate().getTime() - 1*24*60*60*1000);
 			
 			sql.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd where 1=1 ");
 			sql.append(" and ohd.holdingStation.station_ID = :stationID ");
-			sql.append(" and ohd.founddate >= :foundDate ");
+			sql.append(" and (ohd.founddate > :foundDate OR (ohd.founddate = :foundDate AND ohd.foundtime >= :foundTime))");
 			sql.append(" and ohd.claimnum = :claimnum ");
 			sql.append(" and ohd.status.status_ID <> :closedStatus ");
 			
@@ -1279,7 +1281,8 @@ public class OHDUtils {
 			Query q = sess.createQuery(sql.toString());
 
 			q.setInteger("stationID", foundAtStation.getStation_ID());
-			q.setCalendar("foundDate", nowDate);
+			q.setDate("foundDate", dateCutoff);
+			q.setTime("foundTime", dateCutoff);
 			q.setString("claimnum", bagTagNumber);
 			q.setInteger("closedStatus", TracingConstants.OHD_STATUS_CLOSED);
 

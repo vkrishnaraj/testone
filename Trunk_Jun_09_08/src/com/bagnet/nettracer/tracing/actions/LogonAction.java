@@ -325,7 +325,7 @@ public class LogonAction extends Action {
 																		entries = x;
 																} else {
 																	if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MASS_ON_HANDS)) {
-																		int x = ((Long) OHDUtils.getOHDsByType(agent, "", "" + TracingConstants.MASS_OHD_TYPE,
+																		int x = ((Long) OHDUtils.getOHDsByTypeStatus(agent, "", "" + TracingConstants.MASS_OHD_TYPE,
 																				new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
 																		;
 																		if (x != -1)

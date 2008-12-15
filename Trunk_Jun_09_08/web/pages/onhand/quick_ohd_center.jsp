@@ -320,6 +320,7 @@
                 <td>
                   <bean:message key="colname.flightnum" />
                   <br>
+                  
                   <html:select name="itinerarylist" property="airline" styleClass="dropdown" indexed="true">
                     <html:option value="">
                       <bean:message key="select.please_select" />

@@ -15,6 +15,7 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
@@ -595,10 +596,16 @@ public class WSCoreOHDUtil {
   		return resDoc;
   	}
 	
-  	
   	Date foundDate = null;
+  	boolean localTime = PropertyBMO.isTrue("webservices.qoh.islocaltime");
+  	
   	try {
-			foundDate = insertFields.getSi().getFounddatetime().getTime();
+  		if (!localTime) {
+  			foundDate = DateUtils.convertSystemCalendarToGMTDate(insertFields.getSi().getFounddatetime());
+  		} else {
+  			// Date is being sent as local server time
+  			foundDate = DateUtils.convertGMTDateToLocalTime(insertFields.getSi().getFounddatetime().getTime());
+  		}
   	} catch (Exception e) {
   		foundDate = TracerDateTime.getGMTDate();
   	}
@@ -679,11 +686,19 @@ public class WSCoreOHDUtil {
 	
   	
   	Date foundDate = null;
+  	boolean localTime = PropertyBMO.isTrue("webservices.qoh.islocaltime");
+  	
   	try {
-			foundDate = insertFields.getSi().getFounddatetime().getTime();
+  		if (!localTime) {
+  			foundDate = DateUtils.convertSystemCalendarToGMTDate(insertFields.getSi().getFounddatetime());
+  		} else {
+  			// Date is being sent as local server time
+  			foundDate = DateUtils.convertGMTDateToLocalTime(insertFields.getSi().getFounddatetime().getTime());
+  		}
   	} catch (Exception e) {
   		foundDate = TracerDateTime.getGMTDate();
   	}
+  	
   	if (foundDate == null) {
   		so.setErrorResponse("Warning: Invalid Date, current time used.");
   		res.setReturn(so);

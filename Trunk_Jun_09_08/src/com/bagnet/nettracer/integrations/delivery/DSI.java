@@ -217,7 +217,7 @@ public class DSI implements BDOIntegration {
 					
 					// Header
 					HeaderType ht = bdoType.addNewHeader();
-					ht.setBDONumber(Integer.toString(bdo.getBDO_ID()));
+					ht.setBDONumber(bdo.getBDO_ID_ref().substring(3));
 					
 					ServiceLevelType.Enum serviceLevel = getServiceLevel(bdo);
 					

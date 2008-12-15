@@ -146,7 +146,7 @@ public class MoveToWorldTracer {
 				incEarlyHours = Integer.parseInt(temp2);
 			}
 			catch (NumberFormatException e) {
-				logger.warn("unable to parse early move ohd hours from properties", e);
+				logger.warn("unable to parse early move incident hours from properties", e);
 			}
 			if(incEarlyHours > 0 && incEarlyHours < incDays * 24) {
 				List<Incident> earlyMoveInc = ibmo.findMoveToWtInc(incEarlyHours, companyCode);
@@ -161,7 +161,7 @@ public class MoveToWorldTracer {
 							}
 						}
 						catch (Exception e) {
-							logger.error("Unable to queue OHD create in Move to WT thread", e);
+							logger.error("Unable to queue incident create in Move to WT thread", e);
 						}
 					}
 				}
@@ -352,7 +352,7 @@ public class MoveToWorldTracer {
 		WtqCreateAhl wtq = new WtqCreateAhl();
 		wtq.setAgent(ogadmin);
 		wtq.setIncident(incident);
-		WorldTracerQueueUtils.createOnlyQueue(wtq);
+		WorldTracerQueueUtils.createOnlyIncQueue(wtq, incident.getLastupdated());
 	}
 
 	private void queueOhd(OHD ohd) throws Exception {
@@ -360,8 +360,7 @@ public class MoveToWorldTracer {
 		WtqCreateOhd wtq = new WtqCreateOhd();
 		wtq.setAgent(ogadmin);
 		wtq.setOhd(ohd);
-		WorldTracerQueueUtils.createOnlyQueue(wtq);
-
+		WorldTracerQueueUtils.createOnlyOhdQueue(wtq, ohd.getLastupdated());
 	}
 
 	public void setObmo(OhdBMO obmo) {

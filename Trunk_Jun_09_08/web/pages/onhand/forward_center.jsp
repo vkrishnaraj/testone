@@ -182,6 +182,13 @@
 
                         </td>
                         <td>
+                        
+                        
+                            <logic:empty name="bagItinerary" property="airline">
+                              <jsp:setProperty name="bagItinerary" property="airline" value="<%= a.getCompanycode_ID() %>"/>
+                            </logic:empty>
+                            
+                        
                         	<html:select name="bagItinerary" property="airline" styleClass="dropdown" indexed="true">
 		                    	<html:option value="">
 		                      		<bean:message key="select.please_select" />
@@ -268,6 +275,10 @@
       
                         </td>
                         <td >
+                            <logic:empty name="itinerary" property="airline">
+                              <jsp:setProperty name="itinerary" property="airline" value="<%= a.getCompanycode_ID() %>"/>
+                            </logic:empty>
+                        
                         	<html:select name="itinerary" property="airline" styleClass="dropdown" indexed="true">
 		                    	<html:option value="">
 		                      		<bean:message key="select.please_select" />

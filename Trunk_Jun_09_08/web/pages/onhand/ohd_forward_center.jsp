@@ -252,6 +252,10 @@
 
                         </td>
                         <td>
+                        
+                            <logic:empty name="itinerarylist" property="airline">
+                              <jsp:setProperty name="itinerarylist" property="airline" value="<%= a.getCompanycode_ID() %>"/>
+                            </logic:empty>
                         	
                         	<html:select name="itinerarylist" property="airline" styleClass="dropdown" indexed="true">
 		                    	<html:option value="">

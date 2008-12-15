@@ -159,7 +159,7 @@ public class OhdBMO {
 		return true;
 	}
 
-	
+
 	/** 
 	 * insert ohd for worldtracer parser
 	 * @param iDTO
@@ -1396,8 +1396,9 @@ public class OhdBMO {
 
 		String queryString = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where " +
 		" ohd.wtFile is null " +  //no worldtracer file already
-		" and ohd.OHD_ID not in (select q.ohd.OHD_ID from WtqOhdAction q where q.status = :qStatus)" +
-		" and ohd.founddate <= :ohdCutoff " + //old enough
+		//" and ohd.OHD_ID not in (select q.ohd.OHD_ID from WtqOhdAction q where q.status = :qStatus)" +
+		//" and ((ohd.lastupdated > (select max(q.createdate) from WtqOhdAction q where q.ohd = ohd)) or ((select max(q.createdate) from WtqOhdAction q where q.ohd.OHD_ID = ohd.OHD_ID) is null)) " +
+		" and ((ohd.founddate < :ohdCutoff) or (ohd.founddate = :ohdCutoff and ohd.foundtime < :ohdTimeCutoff))  " + //old enough
 		" and ohd.status.status_ID = :status " + // only open
 		" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
 		" and ohd.ohd_type = :ohd_type " +
@@ -1407,10 +1408,11 @@ public class OhdBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(queryString);
-			q.setParameter("ohdCutoff", ohdCutoff);
+			q.setDate("ohdCutoff", ohdCutoff);
+			q.setTime("ohdTimeCutoff", ohdCutoff);
 			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
 			q.setParameter("companyCode", companyCode);
-			q.setParameter("qStatus", WtqStatus.PENDING);
+			//q.setParameter("qStatus", WtqStatus.PENDING);
 			q.setParameter("ohd_type", TracingConstants.NOT_MASS_OHD_TYPE);
 			return q.list();
 		}
@@ -1552,5 +1554,74 @@ public class OhdBMO {
 					}
 				}
 			}
+		}
+		
+		
+		
+		
+		/**
+		 * Perform the insert based on passed in object
+		 * 
+		 * @param iDTO
+		 *          the ohd data to be inserted
+		 * @param mod_agent
+		 *          agent creating the OHD.
+		 * @param createStation
+		 *          Station that we would like object associated with in ID(???DA00001)
+		 * @return true if succesful; false otherwise
+		 */
+		public static boolean updateOHD(OHD ohd, Agent mod_agent, Session sess) {
+			
+			Transaction t = null;
+			boolean nullSession = false;
+
+			try {
+				if (sess == null) {
+					sess = HibernateWrapper.getSession().openSession();
+					nullSession = true;
+				}
+				
+				t = sess.beginTransaction();
+				
+				Date nowGmt = TracerDateTime.getGMTDate();
+				
+				ohd.setLastupdated(nowGmt);
+				ohd.setClose_date(nowGmt);
+				sess.saveOrUpdate(ohd);
+				t.commit();
+
+				// check to see if we closed the ohd, if we did, then close all matches
+				if (ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
+					MatchUtils.closeMatches(null, ohd.getOHD_ID());
+				}
+
+				//check if audit is enabled for this company....
+				if (ohd.getAgent().getStation().getCompany().getVariable().getAudit_ohd() == 1) {
+					Audit_OHD audit_dto = AuditOHDUtils.getAuditOHD(ohd, mod_agent);
+					if (audit_dto != null) {
+						t = sess.beginTransaction();
+						sess.save(audit_dto);
+						t.commit();
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("unable to insert ohd into database: " + e);
+				try {
+					t.rollback();
+				} catch (Exception e1) {
+				}
+				return false;
+			} finally {
+				if (nullSession && sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						logger.error("unable to close connection: " + e);
+					}
+				}
+			}
+			return true;
 		}
 }

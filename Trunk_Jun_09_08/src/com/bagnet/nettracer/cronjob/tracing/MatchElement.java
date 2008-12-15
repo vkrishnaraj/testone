@@ -509,9 +509,13 @@ public enum MatchElement {
 
 		String ohdBagTag = ohd.getClaimnum();
 		String ohdTenDigitTag = null;
+		Boolean ignoreCheckDigit = false;
 		try {
 			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag,
 					PassiveTrace.AirlineConversionMap);
+			if (!ohdBagTag.equals(ohdTenDigitTag)) {
+				ignoreCheckDigit = true;
+			}
 		} catch (BagtagException e1) {
 			ohdTenDigitTag = ohdBagTag;
 		}
@@ -523,12 +527,25 @@ public enum MatchElement {
 				try {
 					incTenDigitTag = LookupAirlineCodes.getFullBagTag(iClaim
 							.getClaimchecknum(), PassiveTrace.AirlineConversionMap);
+					if (!iClaim.getClaimchecknum().equals(incTenDigitTag)) {
+						ignoreCheckDigit = true;
+					}
 				} catch (BagtagException e1) {
 					incTenDigitTag = iClaim.getClaimchecknum();
 				}
-
-				MatchResult result = MatchUtils.stringCompare(e, incTenDigitTag,
-						ohdTenDigitTag);
+				MatchResult result = null;
+				if (ignoreCheckDigit) {
+					if (incTenDigitTag.length() == 10) {
+						incTenDigitTag = incTenDigitTag.substring(1);
+					}
+					
+					if (ohdTenDigitTag.length() == 10) {
+						ohdTenDigitTag = ohdTenDigitTag.substring(1);
+					}
+					result = MatchUtils.stringCompare(e, incTenDigitTag, ohdTenDigitTag);
+				} else {
+					result = MatchUtils.stringCompare(e, incTenDigitTag, ohdTenDigitTag);
+				}
 
 				if (result != null) {
 					results.add(result);

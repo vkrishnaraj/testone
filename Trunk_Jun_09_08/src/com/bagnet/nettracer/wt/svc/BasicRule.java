@@ -16,22 +16,24 @@ public class BasicRule implements WorldTracerRule<String> {
 	private Format format;
 	protected String replace_char;
 	private boolean doDelete;
+	private boolean addSpace;
 
 	public BasicRule() {
-		this(1, 58, 1, Format.FREE_FLOW, false);
+		this(1, 58, 1, Format.FREE_FLOW, false, false);
 	}
 	
 	public BasicRule(int minLength, int maxLength, int maxAllowed, Format format) {
-		this(minLength, maxLength, maxAllowed, format, false);
+		this(minLength, maxLength, maxAllowed, format, false, false);
 	}
 	
-	public BasicRule(int minLength, int maxLength, int maxAllowed, Format format, boolean doDelete) {
+	public BasicRule(int minLength, int maxLength, int maxAllowed, Format format, boolean doDelete, boolean addSpace) {
 		this.minLength = minLength;
 		this.maxLength = maxLength;
 		this.maxAllowed = maxAllowed;
 		this.format = format;
 		replace_char = DEFAULT_REPLACE_CHAR;
 		this.doDelete = doDelete;
+		this.addSpace  = addSpace;
 	}
 
 	protected String formatEntry(String entry) throws WorldTracerException {
@@ -94,7 +96,12 @@ public class BasicRule implements WorldTracerRule<String> {
 		
 		ArrayList<String> temp = new ArrayList<String>();
 		for (String result : workingSet) {
-			temp.add(field.name() + formatEntry(result));
+			if(this.addSpace) {
+				temp.add(field.name() + " " + formatEntry(result));
+			}
+			else {
+				temp.add(field.name() + formatEntry(result));
+			}
 		}
 		if(this.isDoDelete()) {
 			for(int i = 0; i <= this.getMaxAllowed() - workingSet.size(); i++) {

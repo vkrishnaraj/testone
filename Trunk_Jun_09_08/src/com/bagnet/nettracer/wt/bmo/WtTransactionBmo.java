@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +32,41 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 		sess.save(tx);
 
 	}
+	
+	@Transactional(readOnly=true)
+	public int getTransactionCount(String txType,
+			String result, Date startDate, Date endDate, String incident_id,
+			String ohd_id) {
+		Session sess = getSession(false);
+		Criteria cri = sess.createCriteria(WorldTracerTransaction.class);
+
+		if(txType != null && !"ALL".equals(txType)) {
+			cri.add(Restrictions.eq("txType", TxType.valueOf(txType)));
+		}
+		if(result != null && !"ALL".equals(result)) {
+			cri.add(Restrictions.eq("result", Result.valueOf(result)));
+		}
+		if(startDate != null) {
+			cri.add(Restrictions.ge("createDate", startDate));
+		}
+		if(endDate != null) {
+			cri.add(Restrictions.le("createDate", endDate));
+		}
+		if(incident_id != null && incident_id.trim().length() > 0) {
+			cri.add(Restrictions.like("incident.incident_ID", incident_id).ignoreCase());
+		}
+		if(ohd_id != null && ohd_id.trim().length() > 0) {
+			cri.add(Restrictions.like("ohd.OHD_ID", ohd_id).ignoreCase());
+		}
+		cri.setProjection(Projections.rowCount());
+		Integer foo = (Integer) cri.uniqueResult();
+		return foo;
+	}
 
 	@Transactional(readOnly = true)
 	public List<WorldTracerTransaction> findTransactions(String txType,
 			String result, Date startDate, Date endDate, String incident_id,
-			String ohd_id) {
+			String ohd_id, int startrow, int rowsperpage) {
 		Session sess = getSession(false);
 		Criteria cri = sess.createCriteria(WorldTracerTransaction.class);
 		
@@ -58,6 +89,9 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 		if(ohd_id != null && ohd_id.trim().length() > 0) {
 			cri.add(Restrictions.like("ohd.OHD_ID", ohd_id).ignoreCase());
 		}
+		cri.setFirstResult(startrow);
+		cri.setMaxResults(rowsperpage);
+		
 		List<WorldTracerTransaction> txList = null;
 		try {
 			txList = cri.list();
@@ -66,7 +100,6 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 			logger.error("unable to find transactions", t);
 		}
 		return txList;
-
 	}
 
 }

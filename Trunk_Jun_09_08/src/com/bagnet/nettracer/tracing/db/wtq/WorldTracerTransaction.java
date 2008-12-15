@@ -31,7 +31,7 @@ public class WorldTracerTransaction implements Serializable {
 	public static final String UNKNOWN_ERROR = "Unknown Error";
 	
 	private static int MAX_SUCCESS_MSG = 99;
-	private static int MAX_ERROR_MSG = 254;
+	private static int MAX_ERROR_MSG = 99;
 	
 	public enum Result {FAILURE("wt_txfailure"), SUCCESS("wt_txsuccess");
 		private String messageKey;

@@ -260,6 +260,10 @@
     	<put name="center" value="/pages/worldtracer/worldtracer_roh_main.jsp"/>
     </definition>
     
+    <definition name="view_worldtracerreqqoh" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_req_qoh_main.jsp"/>
+    </definition>
+    
     <definition name="view_worldtracertty" extends="user_menu">
         <put name="center" value="/pages/worldtracer/worldtracer_tty_main.jsp"/>
     </definition>

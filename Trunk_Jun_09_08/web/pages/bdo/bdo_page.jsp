@@ -19,7 +19,19 @@
 <SCRIPT LANGUAGE="JavaScript">
   <!--
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+  
+    function changebutton() {
+      document.BDOForm.saveButton.disabled = true;
+      document.BDOForm.saveButton.value = "<bean:message key="ajax.please_wait" />";
+      document.BDOForm.save.disabled = false;
+    }
+    
+    function undoChangebutton() {
+      document.BDOForm.saveButton.disabled = false;
+      document.BDOForm.saveButton.value = "<bean:message key="button.bdo_send" />";
+      document.BDOForm.save.disabled = true;
+    }
+
 // -->
 </SCRIPT>
 <!-- calendar stuff ends here -->

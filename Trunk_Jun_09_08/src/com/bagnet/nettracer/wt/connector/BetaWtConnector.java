@@ -38,6 +38,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
@@ -59,6 +60,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 	private static final Pattern ohd_patt = Pattern.compile("(?:(?:\\s|/)(?:OHD\\s+|O/))(\\w{5}\\d{5})\\b");
 	private static final Pattern percent_patt = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
 	private static final Pattern itemNum_patt = Pattern.compile("^\\s*(\\d+)/", Pattern.MULTILINE);
+	private static final Pattern qoh_success = Pattern.compile("rohOK\\s*\\(\\s*[01]\\s*\\)");
 
 	private static final Object ALREADY_SUSPENDED = "ALREADY SUSPENDED";
 
@@ -153,6 +155,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 			} else {
 				errorString = "Unable to amend AHL. See logs for details";
 			}
+			if(errorString.toUpperCase().contains("/CLOSED")) {
+				throw new WorldTracerAlreadyClosedException(errorString);
+			}
 			throw new WorldTracerException(errorString);
 		}
 	}
@@ -204,7 +209,54 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throw new WorldTracerException(errorString);
 		}
 	}
+	
+	public String requestQoh(String fromStation, String fromAirline, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
+	throws WorldTracerException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(buildUrlStart("ResponseROH"));
+		sb.append("T1="+wt_ahl_id);
+		sb.append("STN="+fromStation);
+		sb.append("ARL="+fromAirline);
+		sb.append("ROH=");
+		sb.append(DefaultWorldTracerService.FIELD_SEP);
 
+		ArrayList<String> temp = new ArrayList<String>();
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.REQ_QOH_FIELD_RULES.entrySet()) {
+			if (fieldMap.containsKey(entry.getKey())) {
+				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
+			}
+		}
+		String queryString = StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP).toUpperCase().replaceAll(
+				"\\s+", "%20");
+		sb.append(queryString);
+		String getstring = sb.toString().replaceAll("\\s+", "%20");
+
+		String responseBody = null;
+		try {
+			logger.info("GETSTring Request QOH: " + getstring);
+			GetMethod method = new GetMethod(getstring);
+			responseBody = sendRequest(method);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+		
+		Matcher m1 = qoh_success.matcher(responseBody);
+		if(( responseBody.toUpperCase().split("ROH MESSAGE SENT").length >= 3) || m1.find()) {
+			return "QOH Requested";
+		}
+		else {
+			String errorString;
+			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+			Matcher m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to Request QOH. See logs for details";
+			}
+			throw new WorldTracerException(errorString);
+		}
+		
+	}
 	public String requestOhd(String wt_ohd_id, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
@@ -330,7 +382,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
 		}
 		
-		if( responseBody.toUpperCase().contains("FILE WAS CLOSED")) {
+		if( responseBody.toUpperCase().contains("FILE WAS CLOSED") || responseBody.toUpperCase().contains("FILE CLOSED")) {
 			return wt_id;
 		}
 		else {
@@ -470,7 +522,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
 		}
 		
-		if( responseBody.toUpperCase().contains("FILE WAS CLOSED")) {
+		if( responseBody.toUpperCase().contains("FILE WAS CLOSED") || responseBody.toUpperCase().contains("FILE CLOSED")) {
 			return wt_id;
 		}
 		else {

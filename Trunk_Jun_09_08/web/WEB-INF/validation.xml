@@ -21,6 +21,14 @@
         <constant-name>zip</constant-name>
         <constant-value>^[a-z\- A-Z0-9]*$</constant-value>
       </constant>
+      <constant>
+      	<constant-name>bagtag</constant-name>
+      	<constant-value>^\w{2}\d{6}$</constant-value>
+      </constant>
+      <constant>
+      	<constant-name>ahl_id</constant-name>
+      	<constant-value>^\w{5}\d{5}$</constant-value>
+      </constant>
  	</global>
    
 
@@ -344,5 +352,47 @@
 	   		</field>  	
 	   	</form>
 	
+		<form name="worldTracerReqQOHForm">
+			<field property="bagTag" depends="required,mask">
+				<arg key="colname.bag.tag"/>
+    			<var>
+                	<var-name>mask</var-name>
+                  	<var-value>${bagtag}</var-value>
+           		</var>
+			</field>
+			<field property="matchingAhl" depends="required,mask">
+				<arg key="colname.request_ahl"/>
+    			<var>
+                	<var-name>mask</var-name>
+                  	<var-value>${ahl_id}</var-value>
+           		</var>
+			</field>
+			<field property="fromAirline" depends="required,minlength,maxlength">
+	 	     <arg key="colname.wt_request_airline"/>
+	 	     <arg name="minlength" key="${var:minlength}" resource="false"/>
+	 	     <arg name="maxlength" key="${var:maxlength}" resource="false"/>
+	        	<var>
+                	<var-name>minlength</var-name>
+                   	<var-value>2</var-value>
+               	</var>
+              	<var>
+                	<var-name>maxlength</var-name>
+                   	<var-value>2</var-value>
+              	</var>
+	       	</field>
+	       <field property="fromStation" depends="required,minlength,maxlength">
+	 	     <arg key="colname.wt_request_station"/>
+	 	     <arg name="minlength" key="${var:minlength}" resource="false"/>
+	 	     <arg name="maxlength" key="${var:maxlength}" resource="false"/>
+	        	<var>
+                	<var-name>minlength</var-name>
+                   	<var-value>3</var-value>
+               	</var>
+              	<var>
+                	<var-name>maxlength</var-name>
+                   	<var-value>3</var-value>
+              	</var>
+	       	</field>
+		</form>
 	</formset>
 </form-validation>

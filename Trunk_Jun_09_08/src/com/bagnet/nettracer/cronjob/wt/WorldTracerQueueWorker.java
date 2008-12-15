@@ -34,10 +34,12 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
+import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
@@ -110,9 +112,6 @@ public class WorldTracerQueueWorker implements Runnable {
 				queue.setStatus(WtqStatus.SUCCESS);
 				wtqBmo.updateQueue(queue);
 				incident.setWtFile(new WorldTracerFile(wtId));
-				MessageUtils.sendmessage(incident.getStationcreated(), "WT AHL Created", incident.getAgent(), String
-						.format("NetTracer Lost/Delay: %s -> WorldTracer AHL: %s", incident.getIncident_ID(), wtId),
-						incident.getIncident_ID(), "");
 				iBmo.updateIncidentNoAudit(incident);
 			}
 			else if(queue instanceof WtqCreateOhd) {
@@ -154,8 +153,6 @@ public class WorldTracerQueueWorker implements Runnable {
 				queue.setStatus(WtqStatus.SUCCESS);
 				wtqBmo.updateQueue(queue);
 				ohd.setWtFile(new WorldTracerFile(wtId));
-				MessageUtils.sendmessage(ohd.getFoundAtStation(), "WT OHD Created", ohd.getAgent(), String.format(
-						"NetTracer OHD: %s  -> WorldTracer OHD: %s", ohd.getOHD_ID(), wtId), "", ohd.getOHD_ID());
 				ohdBmo.updateOhdNoAudit(ohd);
 			}
 			else if(queue instanceof WtqCloseAhl) {
@@ -492,6 +489,48 @@ public class WorldTracerQueueWorker implements Runnable {
 				// need to close the OHD if it has been forwarded.
 
 			}
+			else if(queue instanceof WtqRequestQoh) {
+				try {
+					WtqRequestQoh wtq = (WtqRequestQoh) queue;
+					// this one is a little complicated. gotta have an ahl and
+					// an ohd
+					// then we need to map them up...
+					String result = wtService.requestQoh(wtq);
+				}
+				catch (WorldTracerException ex) {
+					// TODO
+					logger.warn("unable to request qoh", ex);
+					queue.setAttempts(queue.getAttempts() + 1);
+					if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+						queue.setStatus(WtqStatus.FAIL);
+					}
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				catch (WorldTracerConnectionException ex) {
+					// TODO
+					logger.warn("unable to request qoh", ex);
+					queue.setAttempts(queue.getAttempts() + 1);
+					if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+						queue.setStatus(WtqStatus.FAIL);
+					}
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				catch (Throwable ex) {
+					// TODO
+					logger.warn("unable to request qoh", ex);
+					queue.setAttempts(queue.getAttempts() + 1);
+					if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+						queue.setStatus(WtqStatus.FAIL);
+					}
+					wtqBmo.updateQueue(queue);
+					continue;
+				}
+				logger.info("requested qoh: " + ((WtqRequestQoh) queue).getBagTagNumber());
+				queue.setStatus(WtqStatus.SUCCESS);
+				wtqBmo.updateQueue(queue);
+			}
 			else if(queue instanceof WtqRequestOhd) {
 				OHD ohd = null;
 				try {
@@ -542,9 +581,17 @@ public class WorldTracerQueueWorker implements Runnable {
 				wtqBmo.updateQueue(queue);
 			}
 			else if(queue instanceof WtqAmendAhl) {
+				Incident incident = null;
 				try {
-					Incident incident = ((WtqIncidentAction) queue).getIncident();
+					incident = ((WtqIncidentAction) queue).getIncident();
 					String result = wtService.amendAhl(incident);
+				}
+				catch (WorldTracerAlreadyClosedException ex) {
+					queue.setStatus(WtqStatus.CANCELED);
+					incident.getWtFile().setWt_status(WTStatus.CLOSED);
+					wtqBmo.updateQueue(queue);
+					iBmo.updateIncidentNoAudit(incident);
+					continue;
 				}
 				catch (WorldTracerException ex) {
 					// TODO

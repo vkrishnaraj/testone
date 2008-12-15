@@ -180,6 +180,7 @@
 
 		<form-bean name="worldTracerFWDForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm" />
 		<form-bean name="worldTracerFOHForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerFOHForm" />
+		<form-bean name="worldTracerReqQOHForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerReqQOHForm" />
 		<form-bean name="worldTracerROHForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="wt_ahl_id" type="java.lang.String" />
 			<form-property name="wt_ohd_id" type="java.lang.String" />
@@ -272,6 +273,7 @@
 		<forward name="viewworldtracerfoh" path="view_worldtracerfoh" />
 		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
 		<forward name="viewworldtracertty" path="view_worldtracertty" />
+		<forward name="viewworldtracerreqqoh" path="view_worldtracerreqqoh" />
 
 
 
@@ -470,6 +472,8 @@
 		<action path="/worldtraceraf" type="com.bagnet.nettracer.tracing.actions.WorldTracerAFAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/worldtracerfwd" type="com.bagnet.nettracer.tracing.actions.WorldTracerFWDAction" name="worldTracerFWDForm" scope="session" validate="false"></action>
+		
+		<action path="/worldtracerqoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerReqQOHAction" name="worldTracerReqQOHForm" scope="session" validate="false"></action>
 		
 		<action path="/worldtracerfoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerFOHAction" name="worldTracerFOHForm" scope="session" validate="false">
 		</action>

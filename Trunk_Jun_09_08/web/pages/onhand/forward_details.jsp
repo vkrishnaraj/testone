@@ -105,6 +105,7 @@
 
                       </td>
                       <td>
+                                          
                         <html:select name="itinerarylist" disabled="true" property="airline" styleClass="dropdown" indexed="true">
                           <html:option value="">
                             <bean:message key="select.please_select" />
