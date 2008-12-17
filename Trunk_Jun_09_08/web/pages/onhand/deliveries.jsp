@@ -77,7 +77,7 @@ function updatePagination() {
                 </td>
                 <td>
                   <strong>
-                    <bean:message key="colname.on_hand_report_number" />
+                    <bean:message key="colname.on_hand_report_file_number" />
                   </strong>
                 </td>
                 <td>

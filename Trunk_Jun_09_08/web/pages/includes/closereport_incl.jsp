@@ -87,7 +87,7 @@
 </tr>
 <tr>
   <td nowrap colspan=2>
-    <bean:message key="colname.losscode" />
+    <bean:message key="colname.closereport.losscode" />
     <br>
       <html:select property="loss_code" styleClass="dropdown">      
           <html:option value="0">

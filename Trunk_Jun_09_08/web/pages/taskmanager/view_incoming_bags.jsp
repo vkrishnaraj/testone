@@ -74,7 +74,7 @@ function sortIncomingBags(sortOrder) {
             </font>
             <tr>
               <td>
-                <bean:message key="colname.on_hand_report_number" />
+                <bean:message key="colname.on_hand_report_file_number" />
                 :
               </td>
               <td colspan="3">
@@ -112,7 +112,7 @@ function sortIncomingBags(sortOrder) {
           </table>
           <br>
           <h1 class="green">
-            <bean:message key="header.incomingBags" />
+            <bean:message key="header.search_result" />
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/incoming_bags.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <font color=red>

@@ -68,16 +68,18 @@
     <a name="incidentinfo"></a>
     <div id="pageheaderleft">
     <h1 class="green">
-      <bean:message key="header.incident_info" />
 <%
       if (report_type == 0) {
 %>
+<bean:message key="header.damaged_info" />
         <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#damaged_bag_reports/damaged_bag_reports.htm#report info fields');return false;"><%
         } else if (report_type == 1) {
 %>
+			<bean:message key="header.incident_info" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_lost_delayed_reports.htm#report info fields');return false;"><%
           } else if (report_type == 2) {
 %>
+<bean:message key="header.pilferage_info" />
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#missing_articles_reports/work_with_missing_articles_reports.htm#report info fields');return false;"><%
             }
 %>
@@ -141,7 +143,22 @@
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
             <td nowrap=>
-              <bean:message key="colname.incident_num" />
+<%
+      if (report_type == 0) {
+%>
+            <bean:message key="colname.damaged_incident_num" />
+<%
+        } else if (report_type == 1) {
+%>
+			<bean:message key="colname.incident_num" />
+<%
+          } else if (report_type == 2) {
+%>
+			<bean:message key="colname.pilferage_incident_num" />
+<%
+            }
+%>
+
               <br>
               <html:text property="incident_ID" size="14" styleClass="textfield" readonly="true" />
               <html:hidden property="assoc_ID"/>
@@ -159,7 +176,22 @@
               <html:text property="dispcreatetime" size="20" styleClass="textfield" disabled="true" />
             </td>
             <td nowrap>
-              <bean:message key="colname.incident.createagent" />
+            <%
+      if (report_type == 0) {
+%>
+            <bean:message key="colname.damage.createagent" />
+<%
+        } else if (report_type == 1) {
+%>
+			<bean:message key="colname.incident.createagent" />
+<%
+          } else if (report_type == 2) {
+%>
+			<bean:message key="colname.pilferage.createagent" />
+<%
+            }
+%>
+              
               <br>
               <html:text property="agentinit" size="4" styleClass="textfield" disabled="true" />
             </td>

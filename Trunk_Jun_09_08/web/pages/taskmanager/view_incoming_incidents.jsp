@@ -74,7 +74,7 @@ function updatePagination() {
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
-                  <bean:message key="colname.incident_num" />
+                  <bean:message key="colname.incident_file_num2" />
                   <br>
                   <html:text property="incident_ID" size="20" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
@@ -154,7 +154,7 @@ function updatePagination() {
                 <tr>
                   <td>
                     <b>
-                      <bean:message key="colname.incident_num" />
+                      <bean:message key="colname.incident_file_num_br" />
                     </b>
                   </td>
                   <td>
@@ -164,7 +164,7 @@ function updatePagination() {
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.incident_create_date" />
+                      <bean:message key="colname.incident_create_date_short" />
                     </b>
                   </td>
                   <td>

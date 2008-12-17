@@ -73,7 +73,7 @@ function sortIncomingRequests(sortOrder) {
             </font>
             <tr>
               <td>
-                <bean:message key="colname.on_hand_report_number" />
+                <bean:message key="colname.on_hand_report_file_number" />
                 :
               </td>
               <td colspan="3">
@@ -82,7 +82,7 @@ function sortIncomingRequests(sortOrder) {
             </tr>
             <tr>
               <td>
-                <bean:message key="colname.incident_num" />
+                <bean:message key="colname.incident_file_num" />
                 :
               </td>
               <td colspan="3">
@@ -104,7 +104,7 @@ function sortIncomingRequests(sortOrder) {
           </table>
           <br>
           <h1 class="green">
-            <bean:message key="header.incomingRequests" />
+            <bean:message key="header.search_result" />
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/view_incoming_requests.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <font color=red>

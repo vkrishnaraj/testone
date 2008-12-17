@@ -69,14 +69,14 @@ function updatePagination() {
             </tr>
             <tr>
               <td>
-                <bean:message key="colname.on_hand_report_number" />
+                <bean:message key="colname.on_hand_report_file_number" />
                 :
               </td>
               <td>
                 <html:text property="ohd_num" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
               </td>
               <td>
-                <bean:message key="colname.incident_num" />
+                <bean:message key="colname.incident_file_num" />
                 :
               </td>
               <td>
@@ -98,7 +98,7 @@ function updatePagination() {
           </table>
           <br>
           <h1 class="green">
-            <bean:message key="header.createdRequests" />
+            <bean:message key="header.search_result" />
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#NetTracer.htm#My_Task_Manager.htm#View_Created_Requests');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <font color=red>

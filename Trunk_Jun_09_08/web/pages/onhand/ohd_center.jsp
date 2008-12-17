@@ -419,7 +419,7 @@ function gotoHistoricalReport() {
 
     <table class="form2_ohd" cellspacing="0" cellpadding="0">
       <tr>
-        <td><bean:message key="colname.on_hand_report_number" /> <br>
+        <td><bean:message key="colname.on_hand_create_report_number" /> <br>
         <html:text property="ohd_id" size="14" styleClass="textfield"
           readonly="true" /></td>
         <td><bean:message key="colname.found_date_time" /> <br>
@@ -469,16 +469,13 @@ function gotoHistoricalReport() {
           onClick="cal1xx.select(document.OnHandForm.dispBagArriveDate,'calendar','<%=a.getDateformat().getFormat()%>'); return false;"></td>
       </tr>
       <tr>
-        <td colspan="3"><bean:message key="colname.name_on_bag" /></td>
-      </tr>
-      <tr>
-        <td><bean:message key="colname.last_name" /> <br>
+        <td><bean:message key="colname.last_name_onbag" /> <br>
         <html:text name="OnHandForm" property="lastname" size="20"
           maxlength="20" styleClass="textfield" /></td>
-        <td><bean:message key="colname.first_name" /> <br>
+        <td><bean:message key="colname.first_name_onbag" /> <br>
         <html:text name="OnHandForm" property="firstname" size="20"
           maxlength="20" styleClass="textfield" /></td>
-        <td><bean:message key="colname.mid_initial" /> <br>
+        <td><bean:message key="colname.mid_initial_onbag" /> <br>
         <html:text name="OnHandForm" property="middlename" size="4"
           maxlength="1" styleClass="textfield" /></td>
       </tr>

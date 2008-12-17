@@ -73,7 +73,7 @@
                   </td>
                 </logic:notPresent>
                 <td>
-                  <b><bean:message key="colname.on_hand_report_number" /></b>
+                  <b><bean:message key="colname.on_hand_report_file_number" /></b>
                 </td>
                 <td>
                   <b><bean:message key="colname.bag_tag_number" /></b>

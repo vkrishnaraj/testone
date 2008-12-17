@@ -57,13 +57,13 @@ function updatePagination() {
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td nowrap>
-                <bean:message key="colname.incident_num" />
+                <bean:message key="colname.incident_file_num" />
                 :
                 <br>
                 <input type="text" name="incident_ID" size="20" maxlength="13" class="textfield" value="<bean:write name="mbr" scope="session"/>" onblur="fillzero(this,13);" />
               </td>
               <td>
-                <bean:message key="colname.on_hand_report_number" />
+                <bean:message key="colname.on_hand_report_file_number" />
                 :
                 <br>
                 <input type="text" name="ohd_ID" size="20" maxlength="13" class="textfield" value="<bean:write name="ohd" scope="session"/>" onblur="fillzero(this,13);" />
@@ -109,10 +109,10 @@ function updatePagination() {
                 <b><bean:message key="header.select" /></b>
               </td>
               <td>
-                <b><a href="viewMatches.do?sort=mbr"><bean:message key="header.file" /></a></b>
+                <b><a href="viewMatches.do?sort=mbr"><bean:message key="header.matchlist.file" /></a></b>
               </td>
               <td>
-                <b><a href="viewMatches.do?sort=ohd"><bean:message key="header.ohd" /></a></b>
+                <b><a href="viewMatches.do?sort=ohd"><bean:message key="header.matchlist.ohd" /></a></b>
               </td>
               <td>
                 <b><a href="viewMatches.do?sort="><bean:message key="header.match_percent" /></a></b>
