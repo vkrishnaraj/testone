@@ -5,19 +5,15 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -54,7 +50,6 @@ import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -62,8 +57,8 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
+import com.bagnet.nettracer.tracing.db.ReceiptDbLocale;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -342,6 +337,10 @@ public class TracerUtils {
 		session.setAttribute("localelist",
 				session.getAttribute("localelist") != null ? session
 						.getAttribute("localelist") : getLocaleList());
+		
+		session.setAttribute("receiptLocaleList",
+				session.getAttribute("receiptLocaleList") != null ? session
+						.getAttribute("receiptLocaleList") : getReceiptLocaleList());
 
 		// set country
 		session.setAttribute("countrylist",
@@ -1030,6 +1029,22 @@ public class TracerUtils {
 		 * Select", "")); al.add(new LabelValueBean("Photo Album", "1")); return
 		 * al;
 		 */
+	}
+	
+	/**
+	 * @return Returns the localelist.
+	 */
+	public static ArrayList getReceiptLocaleList() {
+		ArrayList al = new ArrayList();
+
+		List localeList = HibernateUtils.retrieveAll(ReceiptDbLocale.class);
+
+		for (Iterator i = localeList.iterator(); i.hasNext();) {
+			ReceiptDbLocale loc = (ReceiptDbLocale) i.next();
+			al.add(new LabelValueBean(loc.getLocale_description(), loc
+					.getLocale_id()));
+		}
+		return al;
 	}
 
 	/**

@@ -103,6 +103,18 @@ public class LostDelayReceipt {
 		parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
 				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : "")
 				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
+		
+		if (pa.getAddress(0).getIs_permanent() == 1) {
+			parameters.put("valid_until", "Permanent");
+		} else {
+			if (pa.getAddress(0).getValid_edate() != null) {
+				parameters.put("valid_until", 
+					DateUtils.formatDate(pa.getAddress(0).getValid_edate(), format, null, TimeZone.getTimeZone(AdminUtils
+							.getTimeZoneById(user.getDefaulttimezone()).getTimezone())));
+			} else {
+				parameters.put("valid_until", "");
+			}
+		}
 
 		parameters.put("station", theform.getStationcreated().getStationcode());
 		parameters.put("stationname", theform.getStationcreated().getStationdesc());
@@ -116,6 +128,10 @@ public class LostDelayReceipt {
 		}
 		if (sb.length() > 0)
 			parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
+		
+
+
+		parameters.put("pnr_locator", theform.getRecordlocator());
 
 		return parameters;
 	}
@@ -130,8 +146,9 @@ public class LostDelayReceipt {
 			Map parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title");
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
-
+			
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			
 
 			File logo = new File(sc.getRealPath("/") + "reports/logo.jpg");
 			if (logo.exists()) {

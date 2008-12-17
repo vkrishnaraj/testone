@@ -105,6 +105,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Claimcheck.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/DbLocale.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ReceiptDbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log_Itinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Work_Shift.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Message.hbm.xml"/>

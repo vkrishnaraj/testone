@@ -86,11 +86,12 @@ public class ReportOutputServlet extends HttpServlet {
 			throws ServletException, java.io.IOException {
 		
 		String language = TracingConstants.DEFAULT_LOCALE;
+		
 		int outputtype = TracingConstants.REPORT_OUTPUT_UNDECLARED;
 		
 		try {
 			
-			if (request.getParameter("language") != null) {
+			if (request.getParameter("language") != null && !request.getParameter("language").equals("")) {
 				language = (String) request.getParameter("language");
 			}
 			
