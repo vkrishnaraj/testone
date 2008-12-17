@@ -30,6 +30,7 @@
 		}
 	%>
 		var output = "";
+        var language = "";
     
 		for (var j=0;j < frm.length; j++) {
           currentElement = frm.elements[j];
@@ -41,9 +42,15 @@
               output = currentElement.value;
             }
           }
+          
+          if (currentElementName.indexOf("language") != -1) {
+            language = currentElement.value;
+          }
         }
     
-		openWindowWithBar('reporting?print=' + toprint + '&outputtype=' + output,'Receipt',800,600);
+        
+		openWindowWithBar('reporting?print=' + toprint + '&outputtype=' + output + "&language=" + language,'Receipt',800,600);
+        
 		return self.close();
 		
 
@@ -110,12 +117,8 @@
                   </td>
                   <td>
                     <select name="language" class="dropdown">
-                      <logic:iterate id="locale" name="localelist" scope="session">
+                      <logic:iterate id="locale" name="receiptLocaleList" scope="session">
                         <option value='<bean:write name="locale" property="value"/>'>
-                        <logic:equal name="locale" property="value" value="en">
-                          selected
-                        </logic:equal>
-                        >
                         <bean:write name="locale" property="label" />
                       </logic:iterate>
                     </select>
