@@ -312,6 +312,7 @@
 
 	<target name="build-airtran" depends="delete">
 		<property name="ant_project_name" value="tracer" />
+		<property name="ant_war_name" value="tracer" />
 		<property name="include.fl" value="1" />
 		<property name="include.demo" value="1" />
 		<antcall target="airtran-libraries-create" />
@@ -321,7 +322,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/airtran/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
+		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/airtran/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/airtran/nettracerstyles1.css" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/airtran/formstyles.css" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/airtran/header_bg.gif" />

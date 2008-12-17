@@ -1934,7 +1934,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				if (srDTO.getSumordet() == 1)
 					ss = 1;
 				sr.setStationcode(((String) o[ss]));
-				num = ((Integer) o[ss + 1]).intValue();
+				num = ((Long) o[ss + 1]).intValue();
 				numclose = 0;
 				// find out the corresponding station with number of close count
 				for (int j = 0; j < closelist.size(); j++) {

@@ -1,7 +1,5 @@
 <%
-response.addHeader("Pragma", "No-cache");
-response.addHeader("Cache-Control", "no-cache");
-response.addDateHeader("Expires", -1);
+
 %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>

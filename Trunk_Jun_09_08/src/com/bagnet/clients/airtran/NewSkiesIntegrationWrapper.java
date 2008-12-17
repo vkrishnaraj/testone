@@ -17,6 +17,7 @@ import com.airtran.GetBookingInformationESDocument;
 import com.airtran.GetBookingInformationESResponseDocument;
 import com.airtran.GetEnplanementsESDocument;
 import com.airtran.GetEnplanementsESResponseDocument;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.navitaire.schemas.messages.booking.Booking;
 
 /**
@@ -26,7 +27,7 @@ import com.navitaire.schemas.messages.booking.Booking;
  * Preferences - Java - Code Style - Code Templates
  */
 public class NewSkiesIntegrationWrapper {
-	private String propertyfile;
+	
 	private String endpoint;
 	private String calltype;
 	
@@ -38,53 +39,25 @@ public class NewSkiesIntegrationWrapper {
 	private String resultstr = "";
 
 	public NewSkiesIntegrationWrapper() {
-		propertyfile = NewSkiesIntegrationWrapper.class.getResource("/integration.properties").getPath();
+
 	}
 	
 	public boolean useIntegration(String prop) {
-		Properties properties = new Properties();
-		if (propertyfile == null) return false;
-		try {
-			properties.load(new FileInputStream(propertyfile));
-			String useIntegration = properties.getProperty(prop);
-			if (useIntegration != null && useIntegration.equals("1")) return true;
-			else return false;
-		} catch (IOException e) {
-			// unable to get config
-			setErrormsg("Unable to retrieve properties from integration.properties file");
-			return false;
-		}
+		
+		String useIntegration = TracerProperties.get(prop);
+		if (useIntegration != null && useIntegration.equals("1")) return true;
+		else return false;
 	}
 
 	public boolean readBookingProps(String urlprop) {
 		Properties properties = new Properties();
-		if (propertyfile == null) return false;
-		try {
-			properties.load(new FileInputStream(propertyfile));
-			endpoint = properties.getProperty(urlprop);
-
-
-		} catch (IOException e) {
-			// unable to get config
-			setErrormsg("Unable to retrieve properties from integration.properties file");
-			return false;
-		}
+		endpoint = TracerProperties.get(urlprop);
 		return true;
 	}
 	
 	public boolean readEnplaneProps(String urlprop, String calltype) {
-		Properties properties = new Properties();
-		if (propertyfile == null) return false;
-		try {
-			properties.load(new FileInputStream(propertyfile));
-			endpoint = properties.getProperty(urlprop);
-			this.calltype = properties.getProperty(calltype);
-
-		} catch (IOException e) {
-			// unable to get config
-			setErrormsg("Unable to retrieve properties from integration.properties file");
-			return false;
-		}
+		endpoint = TracerProperties.get(urlprop);
+		this.calltype = TracerProperties.get(calltype);
 		return true;
 	}
 
