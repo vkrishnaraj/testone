@@ -33,14 +33,14 @@
 
 	<target name="war" depends="compile" if="company.name">
 		<mkdir dir="${build.dir}/${company.name}-war"/>
-		<copy todir="${build.dir}/${company.name}-war">
+		<copy todir="${build.dir}/${company.name}-war" overwrite="true">
 			<fileset dir="${companies.dir}/${company.name}/webroot" />
 			<fileset dir="${webroot.dir}" >
 				<include name="WEB-INF/**/*"/>
 				<include name="META-INF/**/*"/>
 			</fileset>
 		</copy>
-		<copy todir="${build.dir}/${company.name}-war/WEB-INF/classes">
+		<copy todir="${build.dir}/${company.name}-war/WEB-INF/classes" overwrite="true">
 			<fileset dir="${build.classes.dir}" />
 			<fileset file="${companies.dir}/${company.name}/${environment.name}/paxview.properties" />
 			<fileset dir="${companies.dir}/${company.name}" >
@@ -76,6 +76,13 @@
 	<target name="build-westjet-qa">
 		<property name="company.name" value="westjet" />
 		<property name="environment.name" value="qa" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-jetblue-dev">
+		<property name="company.name" value="jetblue" />
+		<property name="environment.name" value="dev" />
 		<antcall target="war" >
 		</antcall> 	
 	</target>

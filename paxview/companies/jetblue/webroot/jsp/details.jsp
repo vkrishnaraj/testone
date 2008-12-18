@@ -63,23 +63,23 @@
 				</tr>
 				<tr>
 					<td class="label"><span class="label"><spring:message code="pv10" />:</span></td>
-					<td><c:out value="${incident.passengers[0].homephone}" default='<spring:message code="unknown"/>'/></td>
+					<td><c:out value="${incident.passengers[0].homephone}" ><spring:message code="unknown"/></c:out></td>
 				</tr>
-			    <c:if test="${!empty incident.passengers[0].workphone}">
-				  <tr>
-				    <td class="label"><span><spring:message code="pv11" />:</span></td>
-				    <td><c:out value="${incident.passengers[0].workphone}" /></td>
-				  </tr>
-			    </c:if>
 			    <c:if test="${!empty incident.passengers[0].mobile}">
 				  <tr>
 				    <td class="label"><span><spring:message code="pv12" />:</span></td>
 				    <td><c:out value="${incident.passengers[0].mobile}" /></td>
 				  </tr>
 			    </c:if>
+			    <c:if test="${!empty incident.passengers[0].workphone}">
+				  <tr>
+				    <td class="label"><span><spring:message code="pv11" />:</span></td>
+				    <td><c:out value="${incident.passengers[0].workphone}" /></td>
+				  </tr>
+			    </c:if>
 				<tr>
 					<td class="label"><span class="label"><spring:message code="pv14" />:</span></td>
-					<td><c:out value="${incident.passengers[0].email}" default='<spring:message code="unknown"/>'/></td>
+					<td><c:out value="${incident.passengers[0].email}" ><spring:message code="unknown"/></c:out></td>
 				</tr>
 				
 				<tr>
@@ -90,18 +90,34 @@
 			
 				<tr>
 					<td class="label"><span><spring:message code="pv15" />:</span></td>
-					<td><c:out value="${incident.incident_ID}" default='<spring:message code="unknown"/>'/></td>
+					<td><c:out value="${incident.incident_ID}" ><spring:message code="unknown"/></c:out></td>
 				
 				</tr>
 					
 				<tr>
 					<td class="label"><span><spring:message code="pv16" />:</span></td>
-					<td ><c:out value="${incident.dispcreatetime}" default='<spring:message code="unknown"/>'/></td>	
+					<td ><c:out value="${incident.dispcreatetime}" ><spring:message code="unknown"/></c:out></td>	
 				</tr>	
 					
 				<tr>
 					<td class="label"><span><spring:message code="pv17" />:</span></td>
-					<td align="left"><strong><c:out value="${incident.incident_status}" default='<spring:message code="unknown"/>'/></strong></td>
+					<td align="left"><strong>
+						<c:choose>
+							<c:when test="${incident.incident_status == 'Open' }">
+								<spring:message code="claim.status.open"/>
+						</c:when>
+						<c:when test="${incident.incident_status == 'Pending' }">
+								<spring:message code="claim.status.pending"/>
+						</c:when>
+						<c:when test="${incident.incident_status == 'Closed' }">
+								<spring:message code="claim.status.closed"/>
+						</c:when>
+						<c:otherwise>
+							<spring:message code="unknown"/>
+						</c:otherwise>
+						</c:choose>
+					</strong></td>
+					
 				</tr>		
 					
 					
@@ -118,12 +134,33 @@
 		<c:forEach items="${incident.items}" var="item" varStatus="status" >
 		    <tr>
 					<td width="125px"  class="label"><span><spring:message code="pv18" />:</span></td>
-					<td width="225px"  class="field"><c:out value="${item.claimchecknum}" /></td>
+					<td width="225px"  class="field"><c:out value="${item.claimchecknum}" ><spring:message code="unknown"/></c:out></td>
 				</tr>
 		
 				<tr>
 					<td class="label"><span class="label"><spring:message code="pv19" />:</span></td>
-					<td><strong><c:out value="${item.bagstatus}" /></strong></td>
+					<td><strong>
+						<c:choose>
+							<c:when test="${item.bagstatus == 'Open' }">
+								<spring:message code="bag.status.open"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'Matched' }">
+									<spring:message code="bag.status.matched"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'In Transit' }">
+									<spring:message code="claim.status.inTransit"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'To Be Delivered' }">
+									<spring:message code="claim.status.toBeDelivered"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'Process For Delivery' }">
+									<spring:message code="claim.status.procForDelivery"/>
+							</c:when>
+							<c:otherwise>
+								<spring:message code="unknown"/>
+							</c:otherwise>
+						</c:choose>
+					</strong></td>
 				</tr>
 				<tr>
 					<td colspan="2"><hr size="1px" width="275px" /></td>
@@ -131,7 +168,7 @@
 			</c:forEach>
 
 				<tr>
-
+					<td colspan="2" align="center"> <a href="search.htm" style="font-weight: bold;"><spring:message code="pv21" /></a></td>
 				</tr>
 		
 			</table><p /></td>
@@ -139,30 +176,26 @@
 			<td>
 		
 			<div id="right">
-				<div align="center"><center><spring:message code="pv22" /></center><p /></div>
 				<div class="tools" id="info" style="width: 200px !IMPORTANT;">
 		    		<h4><spring:message code="pv23" /></h4>
 		    		<ul>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Temporary</strong></a><div class="statClaimContent"><spring:message code="pv24" /></div></li>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Open</strong></a><div class="statClaimContent"><spring:message code="pv25" /></div></li>
-		
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Pending</strong></a><div class="statClaimContent"><spring:message code="pv26" /></div></li>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Closed</strong></a><div class="statClaimContent"><spring:message code="pv27" /></div></li>
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="claim.status.open"/></strong></a><div class="statClaimContent"><spring:message code="pv25" /></div></li>
+	
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="claim.status.pending"/></strong></a><div class="statClaimContent"><spring:message code="pv26" /></div></li>
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="claim.status.closed"/></strong></a><div class="statClaimContent"><spring:message code="pv27" /></div></li>
 		    		</ul>
 		    		<p>&nbsp;</p>
 		    		<h4><spring:message code="pv28" /></h4>
 		    		<ul>
 		
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Open</strong></a><div class="statClaimContent"><spring:message code="pv29" /></div></li>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Matched</strong></a><div class="statClaimContent"><spring:message code="pv30" /></div></li>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>In Transit</strong></a><div class="statClaimContent"><spring:message code="pv31" /></div></li>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>Process for Delivery</strong></a><div class="statClaimContent"><spring:message code="pv32" /></div></li>
-		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong>To Be Delivered</strong></a><div class="statClaimContent"><spring:message code="pv33" /></div></li>
-		
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="bag.status.open"/></strong></a><div class="statClaimContent"><spring:message code="pv29" /></div></li>
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="bag.status.matched"/></strong></a><div class="statClaimContent"><spring:message code="pv30" /></div></li>
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="bag.status.inTransit"/></strong></a><div class="statClaimContent"><spring:message code="pv31" /></div></li>
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="bag.status.procForDelivery"/></strong></a><div class="statClaimContent"><spring:message code="pv32" /></div></li>
+		    			<li><a href="javascript:void(0);" class="statClaimToggle"><strong><spring:message code="bag.status.toBeDelivered"/></strong></a><div class="statClaimContent"><spring:message code="pv33" /></div></li>
 		    		</ul>
 		    	</div>
-		    </div>
-<img src="images/poweredby_net_tracer.jpg"  alt="<spring:message code="pv34" />" align="right"/>		    
+		    </div>	    
 		</td></tr></table>
 		<div>
 		    
@@ -181,8 +214,5 @@
 		</td>
 		</tr>
 		</table>
-		        <form action="search.htm" method="get" >
-		<input type="submit" value="<spring:message code="pv21" />" class="button" />
-        </form>
 		</body>
 		</html>

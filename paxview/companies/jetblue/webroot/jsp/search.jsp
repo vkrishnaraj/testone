@@ -70,7 +70,10 @@
 										</td>
 										<td width="25%">
 											<form:input path="lastname" tabindex="1" cssClass="textField"
-												size="20" maxlength="50" />&nbsp;<font color=red><form:errors path="lastname" /></font>
+												size="20" maxlength="50" />
+													<spring:hasBindErrors name="command">
+														<br/><font color=red><form:errors path="lastname" /></font>
+													</spring:hasBindErrors>			
 										</td>
 										<td width="2%"></td>
 										<td width="48%" rowspan="3">
@@ -94,7 +97,10 @@
 										<td width="25%">
 											<form:input path="claimnumber" tabindex="2"
 												cssClass="textField" size="20" maxlength="50"
-												onblur="fillzero(this,13);" />&nbsp;<font color=red><form:errors path="claimnumber" /></font>
+												onblur="fillzero(this,13);" />
+												<spring:hasBindErrors name="command">
+													<br/><font color=red><form:errors path="claimnumber" /></font>
+												</spring:hasBindErrors>
 										</td>
 										<td width="2%"></td>
 									</tr>
