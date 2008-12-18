@@ -43,6 +43,10 @@
 		<copy todir="${build.dir}/${company.name}-war/WEB-INF/classes">
 			<fileset dir="${build.classes.dir}" />
 			<fileset file="${companies.dir}/${company.name}/${environment.name}/paxview.properties" />
+			<fileset dir="${companies.dir}/${company.name}" >
+				<include name="messages*.properties"/>
+				<include name="error*.properties"/>
+			</fileset>
 		</copy>
 		<war destfile="${dist.dir}/${company.name}-pv-${environment.name}.war" duplicate="preserve" compress="true">
 			<fileset dir="${build.dir}/${company.name}-war"/>
@@ -75,7 +79,27 @@
 		<antcall target="war" >
 		</antcall> 	
 	</target>
+	
+	<target name="build-jetblue-qa">
+		<property name="company.name" value="jetblue" />
+		<property name="environment.name" value="qa" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
 
+	<target name="build-jetblue-training">
+		<property name="company.name" value="jetblue" />
+		<property name="environment.name" value="training" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-jetblue-prod">
+		<property name="company.name" value="jetblue" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
 	
 	<target name="clean" depends="init">
 		<delete dir="${build.dir}" defaultexcludes="false" includeemptydirs="true" />

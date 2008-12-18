@@ -69,7 +69,7 @@ window.addEvent('domready', function() {
         <p>
         <table cellspacing="4" cellpadding="0" id="baggageTrackingSummary">
           <tr>
-            <td class="rightAlign">Passenger Name:</td>
+            <td class="rightAlign">Guest Name:</td>
 	    <td><c:out value="${incident.passengers[0].firstname} ${incident.passengers[0].lastname}" /></td>
     </tr>
     <c:if test="${!empty incident.passengers[0].homephone}">
@@ -165,9 +165,11 @@ window.addEvent('domready', function() {
         </table>
         </p>
 
+		<c:if test="${!empty incident.comments }">
         <p><strong>Special Instructions</strong>:<br />
-          <textarea name="specialInstructions" id="specialInstructions" cols="45" rows="5"></textarea>
+          <textarea name="specialInstructions" id="specialInstructions" cols="45" rows="5" readonly="readonly"><c:out value="${incident.comments }"/></textarea>
         </p>
+        </c:if>
         <p>
         <div align="right" id="newSearchButtonContainer">
         <form action="search.htm" method="get">

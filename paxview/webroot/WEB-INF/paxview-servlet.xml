@@ -16,6 +16,13 @@
 	</bean>
 
 	<!-- Controller Beans -->
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="localeChangeInterceptor" />
+			</list>
+		</property>
+	</bean>
 	<bean name="/search.htm" class="com.bagnet.nettracer.paxview.PaxViewController">
 		<property name="formView" value="search" />
 		<property name="successView" value="details" />
@@ -30,7 +37,6 @@
 			<list>
 				<value>errors</value>
 				<value>messages</value>
-				<value>company</value>
 			</list>
 		</property>
 	</bean>
@@ -48,6 +54,14 @@
 		</property>
 	</bean>
 	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+
+	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="userLanguage" />
+		<property name="defaultLocale" value="en" />
+	</bean>
+	
 	<!-- Form Validation -->
 	<bean id="validatorFactory"
 		class="org.springmodules.validation.commons.DefaultValidatorFactory">
@@ -58,6 +72,7 @@
 			</list>
 		</property>
 	</bean>
+	
 	<bean id="beanValidator"
 		class="org.springmodules.validation.commons.DefaultBeanValidator">
 		<property name="validatorFactory" ref="validatorFactory" />

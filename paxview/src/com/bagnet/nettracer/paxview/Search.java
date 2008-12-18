@@ -17,5 +17,4 @@ public class Search {
 		this.claimnumber = claimnumber;
 	}
 	
-	
 }
