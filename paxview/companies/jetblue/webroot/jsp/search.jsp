@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<jsp:directive.page language="java"
-	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
-<jsp:directive.taglib prefix="form"
-	uri="http://www.springframework.org/tags/form" />
-<jsp:directive.taglib prefix="spring"
-	uri="http://www.springframework.org/tags" />
-<jsp:directive.taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" />
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -17,16 +14,25 @@
 		<title><spring:message code="pv0" />
 		</title>
 	</head>
-	<body onload="initStaticClaim()">
-		<form:form method="POST" action="search.htm">
-
+	<body>
+		<form:form method="POST" action="search.htm" name="searchForm">
 			<table cellspacing="0" width="600" border="0">
 				<tr>
 					<td>
-						<img src="images/pvlogo.gif" />
+						<img src="images/pvlogo.jpg" />
 					</td>
 					<td valign="top" align="right">
-						Need to do language thing here
+					<c:choose>
+						<c:when test="${siteLanguage == 'es'}">
+						<a href="search.htm?locale=en"><spring:message code="english"/></a>
+						</c:when>
+						<c:when test="${(empty siteLanguage) and cookie.userLanguage.value == 'es'}">
+						<a href="search.htm?locale=en"><spring:message code="english"/></a>
+						</c:when>
+						<c:otherwise>
+						<a href="search.htm?locale=es"><spring:message code="spanish"/></a>
+						</c:otherwise>
+					</c:choose>
 					</td>
 				</tr>
 				<tr>
@@ -41,6 +47,9 @@
 							</h3>
 							<p>
 								<spring:message code="pv2" />
+							</p>
+							<p>
+								<spring:message code="pv2.more" />
 							</p>
 							<c:if test="${!empty noneFound }">
 								<p>
@@ -61,7 +70,7 @@
 										</td>
 										<td width="25%">
 											<form:input path="lastname" tabindex="1" cssClass="textField"
-												size="20" maxlength="50" />
+												size="20" maxlength="50" />&nbsp;<font color=red><form:errors path="lastname" /></font>
 										</td>
 										<td width="2%"></td>
 										<td width="48%" rowspan="3">
@@ -72,8 +81,8 @@
 														code="pv5" />
 												</font>
 												<br />
-												<font style="font-size: 11px; line-height: 25px;">LGWB6486
-													&nbsp;becomes&nbsp; LGWB600000486</font>
+												<font style="font-size: 11px; line-height: 25px;">JFKB600000015
+													&nbsp;<spring:message code="becomes"/>&nbsp; JFKB615</font>
 											</p>
 
 										</td>
@@ -85,7 +94,7 @@
 										<td width="25%">
 											<form:input path="claimnumber" tabindex="2"
 												cssClass="textField" size="20" maxlength="50"
-												onblur="fillzero(this,13);" />
+												onblur="fillzero(this,13);" />&nbsp;<font color=red><form:errors path="claimnumber" /></font>
 										</td>
 										<td width="2%"></td>
 									</tr>
@@ -95,9 +104,8 @@
 											&nbsp;
 										</td>
 										<td>
-											<span class="button" style="width: 100px;"><input
-													type="submit" tabindex="3"
-													value="<spring:message code="pv6" />" align="absmiddle" />
+											<span class="button" style="width: 100px;">
+												<input type="submit" tabindex="3" value='<spring:message code="pv7" />' align="absmiddle" />
 											</span>
 										</td>
 										<td width="2%"></td>
