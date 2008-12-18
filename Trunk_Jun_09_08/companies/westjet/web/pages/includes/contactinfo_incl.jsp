@@ -290,7 +290,21 @@
                         checked="checked"
                       </logic:equal>
                       >
-                      <b><bean:message key="colname.report_email_cus" />
+<%
+    if (report_type == 0) {
+%>
+                      <b><bean:message key="colname.damaged_email_cus" /></b>
+<%
+    } else if (report_type == 1) {
+%>
+                      <b><bean:message key="colname.report_email_cus" /></b>
+<%
+    } else if (report_type == 1) {
+%>
+                      <b><bean:message key="colname.pilferage_email_cus" /></b>
+<%
+	}
+%>
 <%
                     	}
                     }
