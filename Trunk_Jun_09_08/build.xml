@@ -609,6 +609,7 @@
 
 	<target name="donotrun-build-jetblue" if="jetblue.init.complete">
 		<property name="include.ws" value="1" />
+		<antcall target="jetblue-libraries-create" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/DamageReceipt.jrxml" />
@@ -634,6 +635,7 @@
 		
 		<antcall target="fast_all" />
 		<antcall target="delete" />
+		<antcall target="jetblue-libraries-cleanup" />
 	</target>
 
 	<target name="build-westjet-all">
@@ -1365,6 +1367,14 @@
 	<target name="usair-libraries-cleanup">
 		<delete file="${basedir}/lib/jars/us-shares.jar" />
 		<delete file="${basedir}/lib/jars/us-scanhistory.jar" />
+	</target>
+	
+	<target name="jetblue-libraries-create">
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-b6/JetBlueReservation.jar" />
+	</target>
+
+	<target name="jetblue-libraries-cleanup">
+		<delete file="${basedir}/lib/jars/JetBlueReservation.jar" />
 	</target>
 
 </project>

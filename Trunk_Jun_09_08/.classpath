@@ -116,5 +116,6 @@
 	<classpathentry kind="lib" path="lib/cron/quartz-all-1.6.1-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/cron/wrapper.jar"/>
 	<classpathentry kind="lib" path="lib/jars/dsi.jar"/>
+	<classpathentry kind="lib" path="lib/client-b6/JetBlueReservation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
