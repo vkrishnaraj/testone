@@ -67,6 +67,13 @@
 		</antcall> 	
 	</target>
 
+	<target name="build-westjet-dev">
+		<property name="company.name" value="westjet" />
+		<property name="environment.name" value="dev" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
 	<target name="build-westjet-test">
 		<property name="company.name" value="westjet" />
 		<property name="environment.name" value="test" />
