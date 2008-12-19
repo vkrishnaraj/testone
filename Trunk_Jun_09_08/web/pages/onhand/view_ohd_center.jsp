@@ -132,7 +132,7 @@ function gotoHistoricalReport() {
                 <a href="#" onclick="gotoHistoricalReport();"><span class="aa">&nbsp;
                     <br />
                     &nbsp;</span>
-                  <span class="bb"><bean:message key="menu.history" /></span>
+                  <span class="bb"><bean:message key="menu.ohd_history" /></span>
                   <span class="cc">&nbsp;
                     <br />
                     &nbsp;</span></a>

@@ -7,6 +7,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass;
@@ -584,13 +585,24 @@
                           if (report_type == 0) {
 %>
                             <html:submit property="save" styleId="button"  onclick="return validatereqFields(this.form, 'damaged');">
+                             <logic:notEqual name="incidentForm" property="incident_ID" value="">
                               <bean:message key="button.save" />
+                              </logic:notEqual>
+                              <logic:equal name="incidentForm" property="incident_ID" value="">
+                              <bean:message key="button.savetracing" />
+                              </logic:equal>
+                              
                             </html:submit>
 <%
                           } else if(report_type == 2) {
 %>
                             <html:submit property="save" styleId="button"  onclick="return validatereqFields(this.form, 'pilfered');">
+                               <logic:notEqual name="incidentForm" property="incident_ID" value="">
                               <bean:message key="button.save" />
+                              </logic:notEqual>
+                              <logic:equal name="incidentForm" property="incident_ID" value="">
+                              <bean:message key="button.savetracing" />
+                              </logic:equal>
                             </html:submit>
 <%
                           } else {
@@ -601,10 +613,14 @@
                               </html:submit>
                             </logic:notEqual>
                             <logic:equal name="incidentForm" property="incident_ID" value="">
+                             <%
+                	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS, a)) {
+                	%>
                               <html:submit property="savetemp" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
                                 <bean:message key="button.savetemp" />
                               </html:submit>
-                              &nbsp;&nbsp;&nbsp;
+	                           &nbsp;&nbsp;&nbsp;
+	                               <% } %>
                               <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
                                 <bean:message key="button.savetracing" />
                               </html:submit>

@@ -18,7 +18,7 @@
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
           <h1>
-            <bean:message key="header.close" />
+            <bean:message key="header.ma_close" />
             (
             <bean:write name="incident" scope="request" />
             )
