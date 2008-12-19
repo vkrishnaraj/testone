@@ -442,7 +442,7 @@
               <input type="button" name="s" value="Save as Temporary" onclick="saveOHDTemporary(this.form);" id="button">
               &nbsp;&nbsp;&nbsp;
               <html:submit styleId="button" property="savetracing">
-                <bean:message key="button.savetracing" />
+                <bean:message key="button.savetracingohd" />
               </html:submit>
             </td>
           </tr>

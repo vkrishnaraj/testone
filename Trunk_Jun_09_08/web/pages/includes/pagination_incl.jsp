@@ -44,7 +44,7 @@ if ((curp <= (i.intValue() + 15)) && (curp >=(i.intValue() - 15))) {
 &nbsp;
 <bean:message key="RowsPerPage" />
 &nbsp;&nbsp;
-<input type="submit" name="update" value="update" Id="button" onclick="return updatePagination();">
+<input type="submit" name="update" value='<bean:message key="update" />' Id="button" onclick="return updatePagination();">
 <!-- pagination -->
 <input type="hidden" name="currpage" value='<bean:write name="currpage" scope="request"/>'>
 <input type="hidden" name="nextpage"/>

@@ -114,7 +114,7 @@ function gotoHistoricalReport() {
             <table class="form2_lf" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
-                  <bean:message key="colname.file_ref_number" />
+                  <bean:message key="colname.lostfound_ref_number" />
                   <br>
                   <html:text name="LostAndFoundForm" property="file_ref_number" size="14" styleClass="textfield" disabled="true" />
                 </td>
@@ -136,7 +136,7 @@ function gotoHistoricalReport() {
               </tr>
               <tr>
                 <td>
-                  <bean:message key="colname.status" />
+                  <bean:message key="colname.lostfound_status" />
                   <br>
                   <div id="tohide1">
                   <html:select name="LostAndFoundForm" property="report_status.status_ID" styleClass="dropdown">

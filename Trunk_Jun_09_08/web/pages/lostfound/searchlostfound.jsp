@@ -91,12 +91,12 @@ function updatePagination() {
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
-                  <bean:message key="colname.file_ref_number" />
+                  <bean:message key="colname.lostfound_ref_number" />
                   <br>
                   <html:text property="file_ref_number" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
                 <td>
-                  <bean:message key="colname.status" />
+                  <bean:message key="colname.lostfound_status" />
                   <br>
                   <html:select property="report_status_ID" styleClass="dropdown">
                     <html:option value="">
@@ -208,7 +208,7 @@ function updatePagination() {
               <tr>
                 <td>
                   <strong>
-                    <bean:message key="colname.file_ref_number" />
+                    <bean:message key="colname.lostfound_ref_number" />
                   </strong>
                 </td>
                 <td>
@@ -228,7 +228,7 @@ function updatePagination() {
                 </td>
                 <td>
                   <strong>
-                    <bean:message key="colname.status" />
+                    <bean:message key="colname.lostfound_status" />
                   </strong>
                 </td>
               </tr>

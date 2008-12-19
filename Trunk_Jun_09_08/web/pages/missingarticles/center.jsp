@@ -337,7 +337,12 @@ function gotoHistoricalReport() {
               <td align="center" valign="top"><br>
               <html:submit property="save" styleId="button"
                 onclick="return validatereqFields(this.form, 'pilfered');">
-                <bean:message key="button.saveincident" />
+                <logic:notEqual name="incidentForm" property="incident_ID" value="">
+              	  <bean:message key="button.save" />
+                </logic:notEqual>
+                <logic:equal name="incidentForm" property="incident_ID" value="">
+              	  <bean:message key="button.saveincident" />
+                </logic:equal>
               </html:submit></td>
             </tr>
           </table>

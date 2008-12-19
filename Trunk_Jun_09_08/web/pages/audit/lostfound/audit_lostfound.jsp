@@ -220,7 +220,7 @@ function updatePagination() {
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
-                  <bean:message key="colname.file_ref_number" />
+                  <bean:message key="colname.lostfound_ref_number" />
                   <br>
                   <html:text property="file_ref_number" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
