@@ -52,6 +52,7 @@ public class Item implements Serializable {
 	private String arrivedonflightnum;
 	private String arrivedonairline_ID;
 	private Date arrivedondate;
+	private Date purchaseDate;
 	private Incident incident;
 	private BDO bdo;
 	private String _DATEFORMAT;
@@ -817,9 +818,19 @@ public class Item implements Serializable {
 	public void set_DATEFORMAT(String _dateformat) {
 		_DATEFORMAT = _dateformat;
 	}
+	
+	/**
+	 * @return Returns the original purchase date
+	 * 
+	 * @hibernate.property type="date" column="purchase_date"
+	 */
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
 
-
-	// for passenger view only pages
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
 
 	public String getManuname() {
 		if (manufacturer_ID <= 0)
@@ -845,4 +856,5 @@ public class Item implements Serializable {
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getDescription();
 	}
+	
 }
