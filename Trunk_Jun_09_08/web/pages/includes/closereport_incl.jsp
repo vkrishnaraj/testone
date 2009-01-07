@@ -22,8 +22,13 @@
   
   Company_specific_irregularity_code lc = null;
   if (lossCodeInt != 0) {
-  	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
-    int itemType = IncidentBMO.getIncidentByID(incident_ID, null).getItemtype().getItemType_ID();
+	int itemType = 3;
+  	if (request.getAttribute("lostdelay") != null) {
+    	itemType = 1;
+  	} else if (request.getAttribute("missing") != null) {
+     		 itemType = 2;
+    }	
+  	//String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
     lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getCurrentlocale(), a.getStation().getCompany());
   } else {
     lc = null;

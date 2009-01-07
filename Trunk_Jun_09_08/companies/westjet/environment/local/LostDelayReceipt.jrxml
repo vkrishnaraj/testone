@@ -207,7 +207,7 @@
 						x="16"
 						y="409"
 						width="0"
-						height="172"
+						height="193"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="line-3"/>
@@ -378,7 +378,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="135"
+						x="165"
 						y="579"
 						width="188"
 						height="15"
@@ -429,7 +429,7 @@
 						x="533"
 						y="409"
 						width="0"
-						height="172"
+						height="193"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="line-6"/>
@@ -440,9 +440,9 @@
 				<line direction="TopDown">
 					<reportElement
 						mode="Opaque"
-						x="291"
+						x="283"
 						y="409"
-						width="242"
+						width="250"
 						height="0"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -507,7 +507,7 @@
 						mode="Opaque"
 						x="49"
 						y="404"
-						width="238"
+						width="234"
 						height="15"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -667,7 +667,7 @@
 						mode="Opaque"
 						x="23"
 						y="579"
-						width="112"
+						width="142"
 						height="15"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
