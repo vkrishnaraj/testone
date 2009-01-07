@@ -18,6 +18,7 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.cronjob.tracing.dto.ConsumerDTO;
 import com.bagnet.nettracer.cronjob.tracing.dto.ProducerDTO;
 import com.bagnet.nettracer.cronjob.tracing.dto.SettingsDTO;
+import com.bagnet.nettracer.cronjob.tracing.dto.UpdateDTO;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -92,6 +93,7 @@ public class PassiveTrace {
 				
 		ArrayBlockingQueue<ProducerDTO> producerQueue = new ArrayBlockingQueue<ProducerDTO>(5);
 		ArrayBlockingQueue<ConsumerDTO> consumerQueue = new ArrayBlockingQueue<ConsumerDTO>(500);
+		ArrayBlockingQueue<UpdateDTO> updateQueue = new ArrayBlockingQueue<UpdateDTO>(500);
 		
 		int NUM_PRODUCER_THREADS = java.lang.Math.max(threadLimit / 4, 1);
 		int NUM_CONSUMER_THREADS = java.lang.Math.max(threadLimit / 4 * 3, 1);
@@ -109,9 +111,12 @@ public class PassiveTrace {
 		}
 		
 		for (int i=0; i<NUM_CONSUMER_THREADS; ++i) {
-			TracingConsumer consumer = new TracingConsumer(consumerQueue, settings);
+			TracingConsumer consumer = new TracingConsumer(consumerQueue, settings, updateQueue);
 			new Thread(consumer).start();
 		}
+		
+		TracingUpdater updater = new TracingUpdater(updateQueue, settings);
+		new Thread(updater).start();
 
 		long elapsedTime = 0;
 		long remainingTime = 0;
@@ -134,7 +139,7 @@ public class PassiveTrace {
 				settings.setRuleSet(new RuleSet());
 
 				
-				Session sess = HibernateWrapper.getSession().openSession();
+				Session sess = HibernateWrapper.getDirtySession().openSession();
 				Calendar c;
 				Date cutoff = null;
 				String hsql = "";
@@ -179,7 +184,7 @@ public class PassiveTrace {
 				}
 				
 				// Wait for everything to complete.
-				while (producerQueue.size() > 0 || consumerQueue.size() > 0) {
+				while (producerQueue.size() > 0 || consumerQueue.size() > 0 || updateQueue.size() > 0) {
 					Thread.sleep(10*1000);
 				}
 				
@@ -189,7 +194,7 @@ public class PassiveTrace {
 				incidentCache.reset();
 				
 				// RESET OHD CACHE
-				String sql = "SELECT * FROM OHD WHERE "
+				String sql = "SELECT OHD_ID FROM OHD WHERE "
 					+ "(STATUS_ID = :status1 or STATUS_ID = :status2) order by founddate asc";
 
 				SQLQuery validOhdQuery = sess.createSQLQuery(sql);
@@ -198,9 +203,8 @@ public class PassiveTrace {
 				validOhdQuery.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
 	
 				validOhdQuery.addScalar("OHD_ID", Hibernate.STRING);
-				validOhdQuery.addScalar("founddate", Hibernate.DATE);
 	
-				List<Object[]> validOhdList = validOhdQuery.list();
+				List<String> validOhdList = validOhdQuery.list();
 				
 				sess.close();
 				
@@ -238,3 +242,4 @@ public class PassiveTrace {
 		}
 	}
 }
+	

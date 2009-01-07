@@ -36,6 +36,7 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -92,6 +93,8 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * @author Matt
@@ -695,12 +698,32 @@ public class BagService {
 						// send email
 						try {
 							HtmlEmail he = new HtmlEmail();
+							boolean useFrench = false;
 							he.setHostName(theform.getAgent().getStation().getCompany().getVariable().getEmail_host());
 							he.setSmtpPort(theform.getAgent().getStation().getCompany().getVariable().getEmail_port());
 
 							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
 
 							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
+							
+							if ("WS".equalsIgnoreCase(theform.getAgent().getCompanycode_ID())) {
+								String temp = PropertyBMO.getValue(TracerProperties.FRENCH_STATIONS);
+								List<String> frenchStations = null;
+								if(temp != null) {
+									frenchStations = Arrays.asList(temp.split(","));
+									if(frenchStations.contains(theform.getStationcreated().getStationcode().toUpperCase())) {
+										useFrench = true;
+									}
+								}
+							}
+							
+							String currentLocale;
+							if(useFrench) {
+								currentLocale = "fr";
+							}
+							else {
+								currentLocale = iDTO.getAgent().getCurrentlocale();
+							}
 
 							ArrayList al = new ArrayList();
 							al.add(new InternetAddress(toemail));
@@ -723,7 +746,7 @@ public class BagService {
 							h.put("PASS_NAME", passname);
 							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY) {
 								h.put("REPORT_TYPE", messages.getMessage(
-										new Locale(iDTO.getAgent().getCurrentlocale()), "email.mishandled"));
+										new Locale(currentLocale), "email.mishandled"));
 								
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_LD);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
@@ -731,14 +754,14 @@ public class BagService {
 							}
 							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
 								h.put("REPORT_TYPE", messages.getMessage(
-										new Locale(iDTO.getAgent().getCurrentlocale()), "email.damaged"));
+										new Locale(currentLocale), "email.damaged"));
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_DAM);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.receipt.title"));
 							} 
 							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
 								h.put("REPORT_TYPE", messages.getMessage(
-										new Locale(iDTO.getAgent().getCurrentlocale()), "email.missing"));
+										new Locale(currentLocale), "email.missing"));
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_PIL);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.receipt.title"));
@@ -746,6 +769,9 @@ public class BagService {
 						
 							if (tmpHtmlFileName != null) {
 								htmlFileName = tmpHtmlFileName;
+							}
+							if(useFrench) {
+								htmlFileName = htmlFileName.replaceFirst("\\.html$", "_fr.html");
 							}
 
 							h.put("REPORT_NUMBER", iDTO.getIncident_ID());
@@ -773,8 +799,10 @@ public class BagService {
 								}
 							}
 							h.put("CLAIM_CHECKS", sb.toString());
+							
+							he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
 
-							he.setSubject("Report for your " + h.get("REPORT_TYPE") + " has been filed.");
+							//he.setSubject("Report for your " + h.get("REPORT_TYPE") + " has been filed.");
 
 							// set embedded images
 							if (embedImage) {
@@ -1183,6 +1211,10 @@ public class BagService {
 		}
 	}
 
+	
+	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount) {
+		return findIncident(daform, user, rowsperpage, currpage, iscount, false);
+	}
 	/**
 	 * 
 	 * @param daform
@@ -1190,30 +1222,35 @@ public class BagService {
 	 *            used to search incident by different criterias
 	 * @return
 	 */
-	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount) {
+	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead) {
 		try {
 			IncidentBMO iBMO = new IncidentBMO();
 			SearchIncident_DTO siDTO = new SearchIncident_DTO();
 			BeanUtils.copyProperties(siDTO, daform);
-			return (ArrayList) iBMO.findIncident(siDTO, user, rowsperpage, currpage, iscount);
+			return (ArrayList) iBMO.findIncident(siDTO, user, rowsperpage, currpage, iscount, dirtyRead);
 		}
 		catch (Exception e) {
 			logger.error("unable to find incident due to bean copyproperties error: " + e);
 			return null;
 		}
 	}
-
+	
 	public ArrayList customQuery(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchtype) {
+		return customQuery(daform, user, rowsperpage, currpage, iscount, searchtype, false);
+	}
+
+	public ArrayList customQuery(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount,
+			String searchtype, boolean dirtyRead) {
 		try {
 
 			if(searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4")) {
 				IncidentBMO iBMO = new IncidentBMO();
-				return (ArrayList) iBMO.customQuery(daform, user, rowsperpage, currpage, iscount, searchtype);
+				return (ArrayList) iBMO.customQuery(daform, user, rowsperpage, currpage, iscount, searchtype, dirtyRead);
 			}
 			else {
 				OhdBMO oBMO = new OhdBMO();
-				return (ArrayList) oBMO.customQuery(daform, user, rowsperpage, currpage, iscount);
+				return (ArrayList) oBMO.customQuery(daform, user, rowsperpage, currpage, iscount, dirtyRead);
 			}
 		}
 		catch (Exception e) {
@@ -1462,6 +1499,11 @@ public class BagService {
 
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
 			boolean isCount, boolean notClosed) {
+		return findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage, isCount, notClosed, false);
+		
+	}
+	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
+			boolean isCount, boolean notClosed, boolean dirtyRead) {
 		try {
 			OhdBMO oBMO = new OhdBMO();
 			Ohd_DTO oDTO = new Ohd_DTO();
@@ -1478,7 +1520,7 @@ public class BagService {
 				oDTO.setHeldStation(StationBMO.getStation(daform.getStationassigned_ID()).getStationcode());
 			}
 
-			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed);
+			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed, dirtyRead);
 
 		}
 		catch (Exception e) {

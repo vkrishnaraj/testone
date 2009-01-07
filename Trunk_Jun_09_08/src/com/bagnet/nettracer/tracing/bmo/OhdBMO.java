@@ -549,6 +549,11 @@ public class OhdBMO {
 		}
 	}
 
+	
+	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
+			int currpage, boolean iscount, boolean notClosed) {
+		return findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, iscount, notClosed, false);
+	}
 	/**
 	 * Find on hands based on the search criteria
 	 * 
@@ -563,12 +568,17 @@ public class OhdBMO {
 	 * @return list of on hands, null if none found.
 	 */
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
-			int currpage, boolean iscount, boolean notClosed) {
+			int currpage, boolean iscount, boolean notClosed, boolean dirtyRead) {
 
 		Session sess = null;
 
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			StringBuffer sql = new StringBuffer(512);
 			
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
@@ -798,10 +808,23 @@ public class OhdBMO {
 			}
 		}
 	}
-
+	
 	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage,
 			boolean iscount) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		return customQuery(siDTO, user, rowsperpage, currpage, iscount, false);
+	}
+
+	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage,
+			boolean iscount, boolean dirtyRead) throws HibernateException {
+		Session sess = null;
+		
+		if(dirtyRead) {
+			sess = HibernateWrapper.getDirtySession().openSession();
+		}
+		else {
+			sess = HibernateWrapper.getSession().openSession();
+		}
+		
 		Query q = null;
 		try {
 			StringBuffer s = new StringBuffer(512);
@@ -1406,7 +1429,7 @@ public class OhdBMO {
 		
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getDirtySession().openSession();
 			Query q = sess.createQuery(queryString);
 			q.setDate("ohdCutoff", ohdCutoff);
 			q.setTime("ohdTimeCutoff", ohdCutoff);

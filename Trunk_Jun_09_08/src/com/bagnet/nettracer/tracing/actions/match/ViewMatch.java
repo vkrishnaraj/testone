@@ -102,7 +102,7 @@ public final class ViewMatch extends Action {
 		Match tempmatch = null;
 		if (matchselected != null) {
 			for (int i = 0; i < matchselected.length; i++) {
-				tempmatch = MatchUtils.getMatchWithID(matchselected[i]);
+				tempmatch = MatchUtils.getMatchWithID(matchselected[i], true);
 				if (request.getParameter("multireject") != null) {
 					status_obj = new Status();
 					status_obj.setStatus_ID(TracingConstants.MATCH_STATUS_REJECTED);
@@ -591,7 +591,7 @@ public final class ViewMatch extends Action {
 			session.setAttribute("ohd", ohd_id != null ? ohd_id : "");
 
 			// get row count
-			rowcount = MatchUtils.getMatchRowCount(isactivetrace, agent_station, status, mbr, ohd_id);
+			rowcount = MatchUtils.getMatchRowCount(isactivetrace, agent_station, status, mbr, ohd_id, true);
 
 			// find out total pages
 			totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
@@ -602,7 +602,7 @@ public final class ViewMatch extends Action {
 
 			// get match list
 			matchList = MatchUtils.getMatches(isactivetrace, agent_station, status, mbr, ohd_id,
-					rowsperpage, currpage, sort);
+					rowsperpage, currpage, sort, true);
 
 			if (matchList != null) {
 				for (int i = 0; i < matchList.size(); i++) {

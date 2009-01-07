@@ -110,6 +110,10 @@ public class TaskUtils {
 		}
 	}
 
+	public static int getActiveTaskCount(int station_id) {
+		return getActiveTaskCount(station_id, false);
+	}
+	
 	/**
 	 * Used for the task manager only, assumes -1
 	 * 
@@ -117,11 +121,17 @@ public class TaskUtils {
 	 * @param task_status_id
 	 * @return
 	 */
-	public static int getActiveTaskCount(int station_id) {
+	public static int getActiveTaskCount(int station_id, boolean dirtyRead) {
 		Session sess = null;
 
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			
 			String sql = "select count(task.task_id) from " + "com.bagnet.nettracer.tracing.db.Task task where 1=1 ";
 			sql += " and task.station.station_ID = :station_ID";
 			sql += " and task.status.status_ID != :deleted_status";

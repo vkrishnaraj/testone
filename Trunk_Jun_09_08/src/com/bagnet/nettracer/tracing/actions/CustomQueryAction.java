@@ -223,7 +223,7 @@ public class CustomQueryAction extends Action {
 		}
 
 
-		if ((resultlist = bs.customQuery(daform, user, 0, 0, true, searchtype)) == null
+		if ((resultlist = bs.customQuery(daform, user, 0, 0, true, searchtype, true)) == null
 				|| resultlist.size() <= 0) {
 			ActionMessages errors = new ActionMessages();
 			ActionMessage error = new ActionMessage("error.nosearchresult");
@@ -262,7 +262,7 @@ public class CustomQueryAction extends Action {
 					request.setAttribute("currpage", "0");
 				}
 
-				resultlist = bs.customQuery(daform, user, rowsperpage, currpage, false, searchtype);
+				resultlist = bs.customQuery(daform, user, rowsperpage, currpage, false, searchtype, true);
 
 				if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 				if (totalpages > 1) {

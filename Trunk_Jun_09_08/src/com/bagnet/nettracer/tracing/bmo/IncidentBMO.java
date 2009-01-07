@@ -33,7 +33,6 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -43,7 +42,6 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
-import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -56,7 +54,6 @@ import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
-import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
@@ -146,7 +143,7 @@ public class IncidentBMO {
 
 			// check to see if we closed the report, if we did, then close all matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
-				MatchUtils.closeMatches(iDTO.getIncident_ID(), null);
+				MatchUtils.closeMatches(iDTO.getIncident_ID(), null, true);
 			}
 
 			// association report
@@ -637,7 +634,7 @@ public class IncidentBMO {
 		
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getDirtySession().openSession();
 			Query q = sess.createQuery(queryString);
 			q.setDate("incCutoff", incCutoff);
 			q.setTime("incTimeCutoff", incCutoff);
@@ -662,7 +659,17 @@ public class IncidentBMO {
 	}
 	
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		return findIncident(siDTO, user, rowsperpage, currpage, iscount, false);
+	}
+	
+	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead) throws HibernateException {
+		Session sess = null;
+		if(dirtyRead) {
+			sess = HibernateWrapper.getDirtySession().openSession();
+		}
+		else {
+			sess = HibernateWrapper.getSession().openSession();
+		}
 		Query q = null;
 		try {
 			StringBuffer s = new StringBuffer(512);
@@ -1052,6 +1059,10 @@ public class IncidentBMO {
 			sess.close();
 		}
 	}
+	
+	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, String searchType) throws HibernateException {
+		return customQuery(siDTO, user, rowsperpage, currpage, iscount, searchType, false);
+	}
 
 	/**
 	 * custom query script
@@ -1064,8 +1075,16 @@ public class IncidentBMO {
 	 * @return @throws
 	 *         HibernateException
 	 */
-	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, String searchType) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, String searchType, boolean dirtyRead) throws HibernateException {
+		Session sess = null;
+		
+		if(dirtyRead) {
+			sess = HibernateWrapper.getDirtySession().openSession();
+		}
+		else {
+			sess = HibernateWrapper.getSession().openSession();
+		}
+
 		Query q = null;
 		try {
 			StringBuffer s = new StringBuffer(512);
@@ -1475,9 +1494,9 @@ public class IncidentBMO {
 		List<String> list = null;
 
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getDirtySession().openSession();
 
-			SQLQuery query = sess.createSQLQuery("SELECT * FROM INCIDENT WHERE itemtype_ID = :itemType " +
+			SQLQuery query = sess.createSQLQuery("SELECT Incident_ID FROM INCIDENT WHERE itemtype_ID = :itemType " +
 					"AND faultstation_id = :faultStation AND loss_code = :lossCode AND status_ID = :statusId");
 			
 			query.addScalar("Incident_ID", Hibernate.STRING);

@@ -89,7 +89,7 @@ public class WorldTracerAFAction extends Action {
 		if (request.getParameter("ahl_id") != null
 				&& request.getParameter("rawtext") != null) {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request
-					.getParameter("ahl_id"));
+					.getParameter("ahl_id"), true);
 			if (foundinc == null) {
 				String result = SpringUtils.getWorldTracerConnector().findAHL(request.getParameter("ahl_id"));
 //				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ahl_id"));

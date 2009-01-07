@@ -873,7 +873,7 @@ public class OnHandAction extends Action {
 			}
 
 			if(selections.get("matches") != null) {
-				List matches = MatchUtils.getMatchWithOHD(form.getOhd_id());
+				List matches = MatchUtils.getMatchWithOHD(form.getOhd_id(), true);
 				if(matches != null && matches.size() > 0) {
 					parameters.put("match_detail_report", ReportBMO.getCompiledReport("match_detail_report", sc
 							.getRealPath("/")));

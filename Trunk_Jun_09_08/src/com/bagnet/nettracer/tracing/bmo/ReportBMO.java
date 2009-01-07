@@ -151,7 +151,7 @@ public class ReportBMO {
 
 	
 	private String create_mbr_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
 			parameters.put("title", reporttitle);
@@ -427,7 +427,7 @@ public class ReportBMO {
 
 
 	private String create_passboarding_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			if (srDTO.getBoarded() <= 0)
 				return null;
@@ -628,7 +628,7 @@ public class ReportBMO {
 	 *         HibernateException
 	 */
 	private String create_flt_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
 			parameters.put("title", reporttitle);
@@ -847,7 +847,7 @@ public class ReportBMO {
 	 *         HibernateException
 	 */
 	private String create_exp_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
 			parameters.put("title", reporttitle);
@@ -1092,7 +1092,7 @@ public class ReportBMO {
 	 *         HibernateException
 	 */
 	private String create_station2_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			boolean hasb = false, hasc = false;
 
@@ -1457,7 +1457,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 	
 	private String create_station_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			boolean hasb = false, hasc = false;
 
@@ -1780,7 +1780,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	 *         HibernateException
 	 */
 	private String create_recovery_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
 			
@@ -1947,13 +1947,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 						if (sr.getStationcode().equals((String) o2[ss2])
 								&& DateUtils.formatDate((Date) o[0], TracingConstants.DB_DATEFORMAT, null, null).equals(
 										DateUtils.formatDate((Date) o2[0], TracingConstants.DB_DATEFORMAT, null, null))) {
-							numclose = ((Integer) o2[ss2 + 1]).intValue();
+							numclose = ((Long) o2[ss2 + 1]).intValue();
 							break;
 
 						}
 					} else {
 						if (sr.getStationcode().equals((String) o2[ss2])) {
-							numclose = ((Integer) o2[ss2 + 1]).intValue();
+							numclose = ((Long) o2[ss2 + 1]).intValue();
 							break;
 						}
 
@@ -2007,7 +2007,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	 *         HibernateException
 	 */
 	private String create_crecovery_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
 			
@@ -2231,7 +2231,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	}
 	
 	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle, boolean earlyBag) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
 			parameters.put("title", reporttitle);
@@ -2500,7 +2500,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	}
 	
 	public Status getStatus(int status_ID) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Status status where status_ID= :status_ID");
 			q.setInteger("status_ID", status_ID);

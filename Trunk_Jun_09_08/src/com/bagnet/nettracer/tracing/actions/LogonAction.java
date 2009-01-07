@@ -245,55 +245,55 @@ public class LogonAction extends Action {
 
 				int entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
-					int x = TaskUtils.getActiveTaskCount(s.getStation_ID());
+					int x = TaskUtils.getActiveTaskCount(s.getStation_ID(), true);
 					if (x != -1)
 						entries = x;
 				} else {
 					if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_BAGS_TO_LZ)) {
 						if (!s.isThisOhdLz()) {
-							int x = OHDUtils.getBagsToLZedCount(s.getStation_ID());
+							int x = OHDUtils.getBagsToLZedCount(s.getStation_ID(), true);
 							if (x != -1)
 								entries = x;
 						}
 					} else {
 						if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_BAGS)) {
-							int x = OHDUtils.getIncomingBagsCount(s.getStation_ID(), new ViewIncomingRequestForm());
+							int x = OHDUtils.getIncomingBagsCount(s.getStation_ID(), new ViewIncomingRequestForm(), true);
 							if (x != -1)
 								entries = x;
 						} else {
 							if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS)) {
-								int x = OHDUtils.getIncomingIncidentsCount(s.getStation_ID(), new SearchIncidentForm());
+								int x = OHDUtils.getIncomingIncidentsCount(s.getStation_ID(), new SearchIncidentForm(), true);
 								if (x != -1)
 									entries = x;
 							} else {
 								if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_CREATED_REQUESTS)) {
-									int x = OHDUtils.getCreatedRequestsCount(s.getStation_ID());
+									int x = OHDUtils.getCreatedRequestsCount(s.getStation_ID(), true);
 									if (x != -1)
 										entries = x;
 								} else {
 									if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_MATCHES)) {
-										entries = MatchUtils.getMatchRowCount(false, s, null, null, null);
+										entries = MatchUtils.getMatchRowCount(false, s, null, null, null, true);
 										if (entries == -1)
 											entries = 0;
 									} else {
 										if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_INCOMING_REQUEST)) {
-											int x = OHDUtils.getRequestsCount(s.getStation_ID(), new ViewRequestForm());
+											int x = OHDUtils.getRequestsCount(s.getStation_ID(), new ViewRequestForm(), true);
 											if (x != -1)
 												entries = x;
 										} else {
 											if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MY_INBOX)) {
-												int x = MessageUtils.getMessagesCount("" + s.getStation_ID(), -1, null, null, null, null, null, null);
+												int x = MessageUtils.getMessagesCount("" + s.getStation_ID(), -1, null, null, null, null, null, null, true);
 												if (x != -1)
 													entries = x;
 											} else {
 												if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TEMPORARY_ON_HAND)) {
 													int x = ((Long) OHDUtils.getOHDs(agent, "", new ViewTemporaryOnHandsForm(), "" + TracingConstants.OHD_STATUS_TEMP,
-															"" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
+															"" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
 													if (x != -1)
 														entries = x;
 												} else {
 													if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIMS_TO_BE_PROCESSED)) {
-														int x = IncidentUtils.retrieveClaimsListCount(new ClaimsToBeProcessedForm(), agent);
+														int x = IncidentUtils.retrieveClaimsListCount(new ClaimsToBeProcessedForm(), agent, true);
 														if (x != -1)
 															entries = x;
 													} else {
@@ -303,7 +303,7 @@ public class LogonAction extends Action {
 															daform.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 															daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
 															daform.setStationassigned_ID(s.getStation_ID());
-															List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false);
+															List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false, true);
 															if (resultlist != null && resultlist.size() > 0)
 																entries = ((Long) resultlist.get(0)).intValue();
 														} else {
@@ -312,28 +312,28 @@ public class LogonAction extends Action {
 																SearchIncidentForm daform = new SearchIncidentForm();
 																daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
 																daform.setStationassigned_ID(s.getStation_ID());
-																List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true);
+																List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true, true);
 																if (resultlist != null && resultlist.size() > 0)
 																	entries = ((Long) resultlist.get(0)).intValue();
 	
 															} else {
 																if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TEMPORARY_REPORTS)) {
 																	int x = ((Long) IncidentUtils.getIncidents(agent, "", new ViewTemporaryReportsForm(),
-																			"" + TracingConstants.MBR_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
+																			"" + TracingConstants.MBR_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
 																	;
 																	if (x != -1)
 																		entries = x;
 																} else {
 																	if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MASS_ON_HANDS)) {
 																		int x = ((Long) OHDUtils.getOHDsByTypeStatus(agent, "", "" + TracingConstants.MASS_OHD_TYPE,
-																				new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true).get(0)).intValue();
+																				new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
 																		;
 																		if (x != -1)
 																			entries = x;
 																	} else {
 																		if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INTERIM_EXPENSE_REQUESTS)) {
 																			int x = ((Long) ExpenseUtils.getPendingInterimExpenses(true,
-																					s.getCompany().getCompanyCode_ID(), new InterimExpenseRequestForm(), "", 0, 0).get(0))
+																					s.getCompany().getCompanyCode_ID(), new InterimExpenseRequestForm(), "", 0, 0, true).get(0))
 																					.intValue();
 																			;
 																			if (x != -1)
@@ -341,7 +341,7 @@ public class LogonAction extends Action {
 																		} else {
 																			if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CREATED_INTERIM_EXPENSE_REQUESTS)) {
 																				int x = ((Long) ExpenseUtils.getCreateInterimExpenses(true,
-																						s.getStation_ID(), new CreatedInterimExpenseRequestForm(), "", 0, 0).get(
+																						s.getStation_ID(), new CreatedInterimExpenseRequestForm(), "", 0, 0, true).get(
 																						0)).intValue();
 																				;
 																				if (x != -1)

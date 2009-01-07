@@ -481,6 +481,11 @@ public class WorldTracerUtils {
 		return 7;
 	}
 
+	public static Incident findIncidentByWTID(String wt_id)
+		throws HibernateException {
+		return findIncidentByWTID(wt_id, false);
+	}
+	
 	/**
 	 * find incident by using the worldtracer id column to determine if the
 	 * incident is new or not
@@ -489,9 +494,16 @@ public class WorldTracerUtils {
 	 * @return
 	 * @throws HibernateException
 	 */
-	public static Incident findIncidentByWTID(String wt_id)
+	public static Incident findIncidentByWTID(String wt_id, boolean dirtyRead)
 			throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
+		
+		if(dirtyRead) {
+			sess = HibernateWrapper.getDirtySession().openSession();
+		}
+		else {
+			sess = HibernateWrapper.getSession().openSession();
+		}
 
 		try {
 			Query q = sess

@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -88,6 +89,24 @@ public class LostDelayReceipt {
 		parameters.put("prettydate", prettyDate);
 
 		Passenger pa = (Passenger) theform.getPassenger(0);
+		
+		parameters.put("creditfile_amt", "0.00");
+		parameters.put("creditfile_exp", "");
+		parameters.put("incidental_amt", "0.00");
+		for(ExpensePayout payout : (Iterable<ExpensePayout>)theform.getExpenselist()) {
+			if(payout.getVoucheramt() > 0.05) {
+				parameters.put("creditfile_amt", String.format("%01.2f", payout.getVoucheramt()));
+			}
+			if(payout.getVoucherExpirationDate() != null) {
+				parameters.put("creditfile_exp", DateUtils.formatDate(payout.getVoucherExpirationDate(), user.getDateformat().getFormat(), user.getCurrentlocale(), TimeZone.getTimeZone(user.getCurrenttimezone())));
+			}
+			if(payout.getIncidentalAmountAuth() > 0.05) {
+				parameters.put("incidental_amt", String.format("%01.2f", payout.getIncidentalAmountAuth()));
+			}
+			if(payout.getCurrency_ID() != null && payout.getCurrency_ID().trim().length() > 0) {
+				parameters.put("currency_id", payout.getCurrency_ID());
+			}
+		}
 
 		parameters.put("createdate", theform.getDispcreatetime());
 		parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
@@ -101,7 +120,7 @@ public class LostDelayReceipt {
 		parameters.put("address1", pa.getAddress(0).getAddress1());
 		parameters.put("address2", pa.getAddress(0).getAddress2());
 		parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
-				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : "")
+				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
 				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
 		
 		if (pa.getAddress(0).getIs_permanent() == 1) {

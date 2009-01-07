@@ -165,6 +165,30 @@ public class LostDelayAction extends Action {
 		if(MBRActionUtils.actionChangeAssignedStation(theform, request)) {
 			return (mapping.findForward(TracingConstants.AJAX_AGENTASSIGNED));
 		}
+		// AJAX CALL
+		if(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
+			List faultstationlist = null;
+			List faultCompanyList = null;
+			if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
+				// If the user has limited permission, 
+				if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+					faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+					faultCompanyList = new ArrayList();
+					faultCompanyList.add(user.getStation().getCompany());
+				} else {
+					faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+					faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+				}
+				request.setAttribute("faultstationlist", faultstationlist);
+				request.setAttribute("faultCompanyList", faultCompanyList);
+			} 
+
+				if (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals("")) {
+					theform.setFaultstation_id(0);
+				}
+
+			return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
+		}
 
 		IncidentUtils.manageIncidentEmailing(user.getStation().getCompany(), request);
 
@@ -178,7 +202,19 @@ public class LostDelayAction extends Action {
 
 		ServletContext sc = getServlet().getServletContext();
 		String realpath = sc.getRealPath("/");
-
+		
+		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
+			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
+				request.setAttribute("faultstationlist", UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY));
+				ArrayList faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
+				request.setAttribute("faultCompanyList", faultCompanyList);
+			}
+			else {
+				request.setAttribute("faultstationlist", TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id()));
+				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
+			}
+		}
 		// / confirm matching and unmatching
 		error = MBRActionUtils.actionMatching(theform, request, user, realpath);
 
@@ -209,11 +245,6 @@ public class LostDelayAction extends Action {
 		if(MBRActionUtils.actionClose(theform, request, user, errors)) {
 			saveMessages(request, errors);
 
-			// AJAX CALL
-			if(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1")) {
-				return (mapping.findForward(TracingConstants.AJAX_FAULTSTATION));
-			}
-			else {
 				int currentStatus = -1;
 				boolean canSave = UserPermissions.hasIncidentSavePermission(user, form_incident_id);
 				if(!canSave) {
@@ -234,20 +265,8 @@ public class LostDelayAction extends Action {
 				else {
 					return (mapping.findForward(TracingConstants.LD_CLOSE));
 				}
-			}
 		}
-		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
-			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
-				request.setAttribute("faultstationlist", UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY));
-				ArrayList faultCompanyList = new ArrayList();
-				faultCompanyList.add(user.getStation().getCompany());
-				request.setAttribute("faultCompanyList", faultCompanyList);
-			}
-			else {
-				request.setAttribute("faultstationlist", TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id()));
-				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
-			}
-		}
+
 
 		if(MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
@@ -782,7 +801,7 @@ public class LostDelayAction extends Action {
 			}
 
 			if(selections.get("matches") != null) {
-				List matches = MatchUtils.getMatchWithMBR(form.getIncident_ID());
+				List matches = MatchUtils.getMatchWithMBR(form.getIncident_ID(), true);
 				if(matches != null && matches.size() > 0) {
 					parameters.put("match_detail_report", ReportBMO.getCompiledReport("match_detail_report", sc
 							.getRealPath("/")));

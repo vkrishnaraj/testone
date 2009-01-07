@@ -74,7 +74,7 @@ public class CustomReportBMO implements
 		parameters.put("showdetail", "1");
 		Agent user = (Agent) request.getSession().getAttribute("user");
 		
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			
 			HashMap<String, TimeZone> hm = new HashMap<String, TimeZone>();

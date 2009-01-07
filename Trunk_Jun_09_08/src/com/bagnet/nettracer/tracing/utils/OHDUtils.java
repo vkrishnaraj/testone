@@ -104,11 +104,20 @@ public class OHDUtils {
 			}
 		}
 	}
-
+	
 	public static int getRequestsCount(int station_id, ViewRequestForm form) {
+		return getRequestsCount(station_id, form, false);
+	}
+
+	public static int getRequestsCount(int station_id, ViewRequestForm form, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			String sql = "select count(request.ohd_request_id) from "
 					+ "com.bagnet.nettracer.tracing.db.OHDRequest request where 1=1 ";
 			sql += " and request.ohd.holdingStation.station_ID = :station_ID";
@@ -338,9 +347,19 @@ public class OHDUtils {
 	}
 
 	public static int getCreatedRequestsCount(int station_id) {
+		return getCreatedRequestsCount(station_id, false);
+	}
+	
+	
+	public static int getCreatedRequestsCount(int station_id, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			String sql = "select count(request.ohd_request_id) from "
 					+ "com.bagnet.nettracer.tracing.db.OHDRequest request where 1=1 ";
 			sql += " and request.requestForStation.station_ID = :station_ID";
@@ -495,6 +514,10 @@ public class OHDUtils {
 	}
 
 	public static int getBagsToLZedCount(int station_id) {
+		return getBagsToLZedCount(station_id, false);
+	}
+	
+	public static int getBagsToLZedCount(int station_id, boolean dirtyRead) {
 		Session sess = null;
 
 		Station s = StationBMO.getStation("" + station_id);
@@ -510,7 +533,12 @@ public class OHDUtils {
 					- (1000 * 60 * 60 * 24 * s.getCompany().getVariable().getOhd_to_lz_days());
 			Date xDaysPrior = new Date(xDaysAgo);
 
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			String sql = "select count(ohd.OHD_ID) from "
 					+ "com.bagnet.nettracer.tracing.db.OHD ohd where 1=1 ";
 			sql += " and ohd.holdingStation.station_ID = :station_ID";
@@ -644,11 +672,20 @@ public class OHDUtils {
 			}
 		}
 	}
-
+	
 	public static int getIncomingBagsCount(int station_id, ViewIncomingRequestForm form) {
+		return getIncomingBagsCount(station_id, form, false);
+	}
+
+	public static int getIncomingBagsCount(int station_id, ViewIncomingRequestForm form, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			String sql = "select count(log.OHDLog_ID) from "
 					+ "com.bagnet.nettracer.tracing.db.OHD_Log log where 1=1 ";
 			sql += " and log.destStationCode = :station_ID";
@@ -703,11 +740,20 @@ public class OHDUtils {
 			}
 		}
 	}
-
+	
 	public static int getIncomingIncidentsCount(int station_id, SearchIncidentForm form) {
+		return getIncomingIncidentsCount(station_id, form, false);
+	}
+
+	public static int getIncomingIncidentsCount(int station_id, SearchIncidentForm form, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			String sql = "select count(incident.incident_ID) from "
 					+ "com.bagnet.nettracer.tracing.db.Incident incident where 1=1 ";
 			sql += " and incident.stationassigned.station_ID = :station_ID";
@@ -792,6 +838,11 @@ public class OHDUtils {
 
 	public static List getOHDs(Agent user, String sort, ViewTemporaryOnHandsForm form,
 			String status_ID, String station_id, int rowsperpage, int currpage, boolean isCount) {
+		return getOHDs(user, sort, form, status_ID, station_id, rowsperpage, currpage, isCount, false);
+	}
+	
+	public static List getOHDs(Agent user, String sort, ViewTemporaryOnHandsForm form,
+			String status_ID, String station_id, int rowsperpage, int currpage, boolean isCount, boolean dirtyRead) {
 		OHD ret = null;
 		Session sess = null;
 		try {
@@ -799,7 +850,12 @@ public class OHDUtils {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 			
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			StringBuffer sql = new StringBuffer(512);
 
 			if (isCount) sql
@@ -901,12 +957,21 @@ public class OHDUtils {
 
 	public static List getOHDsByTypeStatus(Agent user, String sort, String ohd_type,
 			ViewMassOnHandsForm form, String station_id, int rowsperpage, int currpage, boolean isCount) {
+		return getOHDsByTypeStatus(user, sort, ohd_type, form, station_id, rowsperpage, currpage, isCount, false);
+	}
+	public static List getOHDsByTypeStatus(Agent user, String sort, String ohd_type,
+			ViewMassOnHandsForm form, String station_id, int rowsperpage, int currpage, boolean isCount, boolean dirtyRead) {
 		OHD ret = null;
 		Session sess = null;
 		try {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 			
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			StringBuffer sql = new StringBuffer(512);
 
 			if (isCount) sql
@@ -1036,9 +1101,17 @@ public class OHDUtils {
 	}
 
 	public static List getOhdStatusList(String locale) {
+		return getOhdStatusList(locale, false);
+	}
+	public static List getOhdStatusList(String locale, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("locale", locale)).add(
 					Expression.eq("table_ID", new Integer(TracingConstants.TABLE_ON_HAND)));
 			return cri.list();

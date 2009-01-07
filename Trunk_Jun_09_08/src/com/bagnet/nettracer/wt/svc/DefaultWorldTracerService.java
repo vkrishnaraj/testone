@@ -274,13 +274,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		ROH_FIELD_RULES.put(WorldTracerField.FI, new BasicRule(1, 57, 1, Format.FREE_FLOW));
 		ROH_FIELD_RULES.put(WorldTracerField.TX, new BasicRule(5, 9, 10, Format.ALPHA_NUMERIC));
 		
+		
 		REQ_QOH_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
 		REQ_QOH_FIELD_RULES.put(WorldTracerField.TN, new BasicRule(8, 10, 10, Format.ALPHA_NUMERIC, false, true));
 		REQ_QOH_FIELD_RULES.put(WorldTracerField.AG, new BasicRule(1, 12, 1, Format.FREE_FLOW, false, true));
 		REQ_QOH_FIELD_RULES.put(WorldTracerField.NM, new BasicRule(2, 16, 1, Format.ALPHA_NUMERIC, false, true));
 		REQ_QOH_FIELD_RULES.put(WorldTracerField.FI, new BasicRule(1, 57, 1, Format.FREE_FLOW, false, true));
 		REQ_QOH_FIELD_RULES.put(WorldTracerField.TX, new BasicRule(5, 9, 10, Format.ALPHA_NUMERIC, false, true));
-
 
 		AMEND_AHL_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CT, new NumberedLinesRule(7, 7, 10, Format.ALPHA_NUMERIC, false));
@@ -795,7 +795,8 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				}
 				else {
 					fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getDepartdate());
-				}				addIncidentFieldEntry(WorldTracerField.FO, fd, result);
+				}
+				addIncidentFieldEntry(WorldTracerField.FO, fd, result);
 				fw = itin.getLegto() + itin.getAirline();
 				addIncidentFieldEntry(WorldTracerField.FW, fw, result);
 			}
@@ -830,11 +831,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		else {
 			colorType = ohd.getColor().trim();
 		}
+		
 		String type = ohd.getType().trim();
 		if(!VALID_BAG_TYPES.contains(type)) {
 			type = DEFAULT_BAG_TYPE;
 		}
 		colorType += type;
+
 		
 		String desc1 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1()));
 		String desc2 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2()));
@@ -1149,7 +1152,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				}
 			}
 		}
-addIncidentFieldEntry(WorldTracerField.PB, "0000", result);
+		addIncidentFieldEntry(WorldTracerField.PB, "0000", result);
 		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ntIncident.getAgent()),
 				result);
 		return result;
@@ -1296,7 +1299,8 @@ addIncidentFieldEntry(WorldTracerField.PB, "0000", result);
 	protected void getItineraryInfo(Itinerary itin, Map<WorldTracerField, List<String>> result) {
 
 		// make sure it's a valid itinerary
-if(itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getLegfrom() == null				|| itin.getLegfrom().trim().length() <= 0 || itin.getLegto() == null
+		if(itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getLegfrom() == null
+				|| itin.getLegfrom().trim().length() <= 0 || itin.getLegto() == null
 				|| itin.getLegto().trim().length() <= 0 || itin.getDepartdate() == null) {
 			return;
 		}
@@ -1310,7 +1314,8 @@ if(itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.g
 			fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getDepartdate());
 		}
 		
-		if(itin.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING) {			addIncidentFieldEntry(WorldTracerField.BR, fd, result);
+		if(itin.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING) {
+			addIncidentFieldEntry(WorldTracerField.BR, fd, result);
 		}
 		else if(itin.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
 			addIncidentFieldEntry(WorldTracerField.FD, fd, result);

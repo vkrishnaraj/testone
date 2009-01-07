@@ -156,7 +156,7 @@ public class BDOAction extends Action {
 		}
 
 		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform
-				.getStation().getStation_ID()));
+				.getStation().getStation_ID(), true));
 		if (list != null)
 			request.setAttribute("delivercompanies", list);
 

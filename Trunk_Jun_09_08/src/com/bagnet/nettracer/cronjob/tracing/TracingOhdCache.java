@@ -36,11 +36,10 @@ public class TracingOhdCache{
 		reCacheDate = killCacheDate;
 	}
 	
-	public void reset(List<Object[]> validOhdList) {
+	public void reset(List<String> validOhdList) {
 		ConcurrentHashMap<String, TraceOHD> newMap = new ConcurrentHashMap<String, TraceOHD>(3000);
 		
-		for (Object[] obj: validOhdList) {
-			String ohdId = (String) obj[0];
+		for (String ohdId: validOhdList) {
 			if (ohdMap.containsKey(ohdId)) {
 				newMap.put(ohdId, ohdMap.get(ohdId));
 			}

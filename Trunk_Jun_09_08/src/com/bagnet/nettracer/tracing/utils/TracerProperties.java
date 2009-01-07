@@ -36,6 +36,8 @@ public class TracerProperties {
 	public static final String EMAIL_REPORT_DAM_DISABLE_IMAGE = "inc.receipt.email.dam.disableimg";
 	public static final String EMAIL_REPORT_PIL_DISABLE_IMAGE = "inc.receipt.email.pil.disableimg";
 
+	public static final String FRENCH_STATIONS = "french.stations";
+
 	static {
 		try {
 			properties.load(HibernateWrapper.class

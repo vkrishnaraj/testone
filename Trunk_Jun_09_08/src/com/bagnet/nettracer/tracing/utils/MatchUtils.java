@@ -58,12 +58,22 @@ public class MatchUtils {
 			}
 		}
 	}
-
+	
 	public static int getMatchRowCount(boolean isactive, Station station, String[] status,
 			String incident_id, String ohd_id) {
+		return getMatchRowCount(isactive, station, status, incident_id, ohd_id, false);
+	}
+
+	public static int getMatchRowCount(boolean isactive, Station station, String[] status,
+			String incident_id, String ohd_id, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 
 			int station_id = station.getStation_ID();
 			double min_percent = station.getCompany().getVariable().getMin_match_percent();
@@ -141,6 +151,12 @@ public class MatchUtils {
 			}
 		}
 	}
+	
+	public static List getMatches(boolean isactive, Station station, String[] status,
+			String incident_id, String ohd_id, int rowsperpage, int currpage, String sort) {
+		return getMatches(isactive, station, status, incident_id, ohd_id, rowsperpage, currpage, sort, false);
+	}
+	
 
 	/**
 	 * get passive tracing matches
@@ -149,11 +165,15 @@ public class MatchUtils {
 	 * @return
 	 */
 	public static List getMatches(boolean isactive, Station station, String[] status,
-			String incident_id, String ohd_id, int rowsperpage, int currpage, String sort) {
+			String incident_id, String ohd_id, int rowsperpage, int currpage, String sort, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
-
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			int station_id = station.getStation_ID();
 			double min_percent = station.getCompany().getVariable().getMin_match_percent();
 
@@ -240,11 +260,19 @@ public class MatchUtils {
 	}
 
 	public static Match getMatchWithID(String match_ID) {
+		return getMatchWithID(match_ID, false);
+	}
+
+	public static Match getMatchWithID(String match_ID, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Match.class).add(
-					Expression.eq("match_id", new Integer(match_ID)));
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			Criteria cri = sess.createCriteria(Match.class).add(Expression.eq("match_id", new Integer(match_ID)));
 			List temp = cri.list();
 			if (temp == null || temp.size() == 0) return null;
 			return (Match) temp.get(0);
@@ -293,16 +321,24 @@ public class MatchUtils {
 		}
 	}
 
+	public static List getMatchWithOHD(String OHD_ID) {
+		return getMatchWithOHD(OHD_ID, false);
+	}
 	/**
 	 * this method is to give all the matches associated with an ohd_id
 	 * 
 	 * @param OHD_ID
 	 * @return
 	 */
-	public static List getMatchWithOHD(String OHD_ID) {
+	public static List getMatchWithOHD(String OHD_ID, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			Criteria cri = sess.createCriteria(Match.class);
 			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", OHD_ID));
 			cri.addOrder(Order.asc("match_id"));
@@ -321,16 +357,25 @@ public class MatchUtils {
 		}
 	}
 
+	
+	public static List getMatchWithMBR(String Incident_ID) {
+		return getMatchWithMBR(Incident_ID, false);
+	}
 	/**
 	 * this method is to give all the matches associated with an ohd_id
 	 * 
 	 * @param OHD_ID
 	 * @return
 	 */
-	public static List getMatchWithMBR(String Incident_ID) {
+	public static List getMatchWithMBR(String Incident_ID, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			Criteria cri = sess.createCriteria(Match.class);
 			cri.createCriteria("mbr").add(Expression.eq("incident_ID", Incident_ID));
 			cri.addOrder(Order.asc("match_id"));
@@ -468,18 +513,27 @@ public class MatchUtils {
 		}
 	}
 
+	
+	public static void closeMatches(String incident_id, String ohd_id) {
+		closeMatches(incident_id, ohd_id, false);
+	}
 	/**
 	 * close all open matches with that incident id or ohd_id
 	 * 
 	 * @param incident_id
 	 * @param ohd_id
 	 */
-	public static void closeMatches(String incident_id, String ohd_id) {
+	public static void closeMatches(String incident_id, String ohd_id, boolean dirtyRead) {
 		Session sess = null;
 		Transaction t = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
-
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			
 			Criteria cri = null;
 			List al = null;
 			Match match = null;

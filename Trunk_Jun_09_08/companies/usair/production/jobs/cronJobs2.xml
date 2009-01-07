@@ -9,7 +9,6 @@
 		<property name="triggers">
 			<list>
 				<ref bean="cronWtQueueTrigger" />
-				<ref bean="cronOldPassiveTracerTrigger" />
 				<ref bean="cronMoveToWtTrigger" />
 			</list>
 		</property>

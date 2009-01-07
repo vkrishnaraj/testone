@@ -75,7 +75,7 @@ public class ViewOnhands extends Action {
 		List resultlist = null;
 
 		// get number of records found
-		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, true)) == null
+		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, true, true)) == null
 				|| resultlist.size() <= 0) {
 			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
 					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
@@ -115,7 +115,7 @@ public class ViewOnhands extends Action {
 
 			//find the paginated on hand bags
 			List searchList = bs.findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage,
-					false, true);
+					false, true, true);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {

@@ -19,6 +19,7 @@ import com.bagnet.nettracer.cronjob.tracing.dto.ConsumerDTO;
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.cronjob.tracing.dto.Score;
 import com.bagnet.nettracer.cronjob.tracing.dto.SettingsDTO;
+import com.bagnet.nettracer.cronjob.tracing.dto.UpdateDTO;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -38,12 +39,16 @@ public class TracingConsumer implements Runnable {
 	private SettingsDTO settings = null;
 	private Logger logger = null;
 	private Session sess = null;
+  private Session dirtySess = null;
+	private BlockingQueue<UpdateDTO> updateQueue = null;
+
 
 	public TracingConsumer(BlockingQueue<ConsumerDTO> queue,
-			SettingsDTO settings) {
+			SettingsDTO settings, BlockingQueue<UpdateDTO> updateQueue) {
 		this.queue = queue;
 		this.settings = settings;
 		this.logger = settings.getLogger();
+		this.updateQueue  = updateQueue;
 	}
 
 	public void run() {
@@ -53,6 +58,10 @@ public class TracingConsumer implements Runnable {
 				
 				if (sess == null) {
 					sess = HibernateWrapper.getSession().openSession();
+				}
+				
+				if (dirtySess == null) {
+					dirtySess = HibernateWrapper.getDirtySession().openSession();
 				}
 				
 				ConsumerDTO dto = queue.take();
@@ -77,7 +86,7 @@ public class TracingConsumer implements Runnable {
 
 					String matchExistsSQL = "SELECT COUNT(*) as COUNT FROM MATCH_HISTORY WHERE MBR_NUMBER= :incident_ID AND OHD_ID = :ohd_ID AND MATCH_PERCENT = :matchPercent";
 
-					SQLQuery matchExistsQuery = sess.createSQLQuery(matchExistsSQL);
+					SQLQuery matchExistsQuery = dirtySess.createSQLQuery(matchExistsSQL);
 					matchExistsQuery.setString("incident_ID", incident
 							.getIncident_ID());
 					matchExistsQuery.setString("ohd_ID", ohd.getOHD_ID());
@@ -141,23 +150,7 @@ public class TracingConsumer implements Runnable {
 
 					incident.setOhd_lasttraced(lastTraced);
 					
-					Transaction t = sess.beginTransaction();
-
-					try {
-						String updateQuery = "UPDATE INCIDENT SET ohd_lasttraced = :lastTraced where incident_ID = :incidentId";
-						SQLQuery updateIncidentQuery = sess.createSQLQuery(updateQuery);
-						updateIncidentQuery.setString("lastTraced", lastTraced);
-						updateIncidentQuery.setString("incidentId", incident
-								.getIncident_ID());
-						
-						updateIncidentQuery.executeUpdate();
-						t.commit();
-					} catch (Exception e) {
-						t.rollback();
-						logger.error("Exception updating incident ohd_lasttraced value: ", e);
-						sess.close();
-						sess = null;
-					}
+					updateQueue.put(new UpdateDTO(incident.getIncident_ID(),lastTraced));
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -165,6 +158,11 @@ public class TracingConsumer implements Runnable {
 				if (sess != null) {
 					sess.close();
 					sess = null;	
+				}
+				
+				if (dirtySess != null) {
+					dirtySess.close();
+					dirtySess = null;	
 				}
 				
 				settings.getLogger().error(message, e);
@@ -182,6 +180,12 @@ public class TracingConsumer implements Runnable {
 					sess.close();
 					sess = null;	
 				}
+				
+				if (dirtySess != null) {
+					dirtySess.close();
+					dirtySess = null;	
+				}
+				
 				settings.getLogger().error(message, e);
 				settings.getErrorHandler().sendEmail(message + "<br /><br />", e,
 						false, false);

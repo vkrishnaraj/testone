@@ -661,12 +661,19 @@ public class BDOUtils {
 			}
 		}
 	}
-
+	
 	public static List getDeliveryCompanies(int station_ID) {
-		return getDeliveryCompanies(station_ID, null);
+		return getDeliveryCompanies(station_ID, false);
+	}
+
+	public static List getDeliveryCompanies(int station_ID, boolean dirtyRead) {
+		return getDeliveryCompanies(station_ID, null, false);
 	}
 
 	public static List getDeliveryCompanies(int station_ID, DeliverCompany dc) {
+		return getDeliveryCompanies(station_ID, dc, false);
+	}
+	public static List getDeliveryCompanies(int station_ID, DeliverCompany dc, boolean dirtyRead) {
 		Session sess = null;
 		try {
 

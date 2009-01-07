@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -191,6 +192,27 @@ public class DateUtils {
 	
 	public static Date convertGMTDateToLocalTime(Date date) {
 		return new Date(date.getTime() - date.getTimezoneOffset()*1000*60);
+	}
+	
+	public static Date floorDate(Date x) {
+		GregorianCalendar a = new GregorianCalendar();
+		a.setTime(x);
+		a.set(Calendar.SECOND, 0);
+		a.set(Calendar.MILLISECOND, 0);
+		a.set(Calendar.MINUTE, 0);
+		a.set(Calendar.HOUR_OF_DAY, 0);
+		return a.getTime();
+	}
+	
+	public static Date addDays(Date x, int y) {
+		GregorianCalendar a = new GregorianCalendar();
+		a.setTime(x);
+		a.add(Calendar.DAY_OF_MONTH, y);
+		return a.getTime();
+	}
+	
+	public static Date addOneDay(Date x) {
+		return addDays(x, 1);
 	}
 	
 

@@ -248,13 +248,23 @@ public class MessageUtils {
 		msg.setRecipients(new HashSet(newRecpList));
 		HibernateUtils.save(msg);
 	}
-
+	
 	public static int getMessagesCount(String stationId, int status_id, String s_date, String e_date,
 			String search_sub, String search_file, Agent user, String sort) {
+		return getMessagesCount(stationId, status_id, s_date, e_date, search_sub, search_file, user, sort, false);
+	}
+
+	public static int getMessagesCount(String stationId, int status_id, String s_date, String e_date,
+			String search_sub, String search_file, Agent user, String sort, boolean dirtyRead) {
 		Session sess = null;
 
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 
 			String sql = "select count(message.message_copy_id) from "
 					+ "com.bagnet.nettracer.tracing.db.MessageCopy message where 1=1 ";

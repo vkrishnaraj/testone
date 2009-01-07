@@ -32,6 +32,7 @@ public class TracingProducer implements Runnable {
 	private static final int OHD_DATE_INDEX = 1;
 
 	private Session sess = null;
+	private Session dirtySess = null;
 
 	public TracingProducer(ArrayBlockingQueue<ProducerDTO> queue,
 			ArrayBlockingQueue<ConsumerDTO> consumerQueue, SettingsDTO settings) {
@@ -48,6 +49,9 @@ public class TracingProducer implements Runnable {
 			try {
 				if (sess == null) {
 					sess = HibernateWrapper.getSession().openSession();
+				}
+				if(dirtySess == null) {
+					dirtySess = HibernateWrapper.getDirtySession().openSession();
 				}
 				dto = queue.take();
 
@@ -100,12 +104,12 @@ public class TracingProducer implements Runnable {
 
 					String dateRange = " FOUNDDATE >= :beginDateRange AND FOUNDDATE <= :endDateRange ";
 
-					String sql = "SELECT * FROM OHD WHERE "
+					String sql = "SELECT OHD_ID, lastupdated FROM OHD WHERE "
 							+ "(STATUS_ID = :status1 or STATUS_ID = :status2) AND "
 							+ dateRange + " AND " + lastUpdatedStr
 							+ " ORDER BY LASTUPDATED ASC";
 
-					SQLQuery query = sess.createSQLQuery(sql);
+					SQLQuery query = dirtySess.createSQLQuery(sql);
 					query.setInteger("status1", TracingConstants.OHD_STATUS_OPEN);
 					query.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
 					query.setTimestamp("beginDateRange", beginDateRange);
@@ -141,7 +145,15 @@ public class TracingProducer implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (HibernateException e) {
-				sess = null;
+				
+				if(sess != null) {
+					sess.close();
+					sess = null;
+				}
+				if(dirtySess != null) {
+					dirtySess.close();
+					dirtySess = null;
+				}
 				settings.getLogger().error(message, e);
 				settings.getErrorHandler().sendEmail(message + "<br /><br />", e,
 						false, true);
@@ -153,7 +165,14 @@ public class TracingProducer implements Runnable {
 					e1.printStackTrace();
 				}
 			} catch (Exception e) {
-				sess = null;
+				if(sess != null) {
+					sess.close();
+					sess = null;
+				}
+				if(dirtySess != null) {
+					dirtySess.close();
+					dirtySess = null;
+				}
 				settings.getLogger().error(message, e);
 				settings.getErrorHandler().sendEmail(message + "<br /><br />", e,
 						false, false);

@@ -143,7 +143,7 @@ public class SearchIncidentAction extends Action {
 			int rowcount = -1;
 
 			// get number of records found
-			if ((resultlist = bs.findIncident(daform, user, 0, 0, true)) == null || resultlist.size() <= 0) {
+			if ((resultlist = bs.findIncident(daform, user, 0, 0, true, true)) == null || resultlist.size() <= 0) {
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.nosearchresult");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -184,7 +184,7 @@ public class SearchIncidentAction extends Action {
 						request.setAttribute("currpage", "0");
 					}
 
-					resultlist = bs.findIncident(daform, user, rowsperpage, currpage, false);
+					resultlist = bs.findIncident(daform, user, rowsperpage, currpage, false, true);
 
 					if (currpage + 1 == totalpages)
 						request.setAttribute("end", "1");

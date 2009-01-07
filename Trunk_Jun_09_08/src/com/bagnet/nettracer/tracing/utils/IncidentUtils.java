@@ -236,13 +236,22 @@ public class IncidentUtils {
 	
 	public static List getIncidents(Agent user, String sort, ViewTemporaryReportsForm form,
 			String status_ID, String station_id, int rowsperpage, int currpage, boolean isCount) {
+		return getIncidents(user, sort, form, status_ID, station_id, rowsperpage, currpage, isCount, false);
+	}
+	public static List getIncidents(Agent user, String sort, ViewTemporaryReportsForm form,
+			String status_ID, String station_id, int rowsperpage, int currpage, boolean isCount, boolean dirtyRead) {
 		OHD ret = null;
 		Session sess = null;
 		try {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 			
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			StringBuffer sql = new StringBuffer(512);
 
 			if (isCount) sql
@@ -341,8 +350,11 @@ public class IncidentUtils {
 			}
 		}
 	}
-
 	public static int retrieveClaimsListCount(ClaimsToBeProcessedForm form, Agent a) {
+		return retrieveClaimsListCount(form, a, false);
+	}
+
+	public static int retrieveClaimsListCount(ClaimsToBeProcessedForm form, Agent a, boolean dirtyRead) {
 		Session sess = null;
 
 		try {
@@ -353,7 +365,12 @@ public class IncidentUtils {
 			Date stime = null; // time to compare (04:00 if eastern, for example)
 			String dateq = "";
 			
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 
 			StringBuffer sql = new StringBuffer();
 			sql.append("from " + "com.bagnet.nettracer.tracing.db.Incident incident where 1=1 ");

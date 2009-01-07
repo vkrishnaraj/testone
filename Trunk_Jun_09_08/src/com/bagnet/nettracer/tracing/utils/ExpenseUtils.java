@@ -56,12 +56,22 @@ public class ExpenseUtils {
 			}
 		}
 	}
-
+	
 	public static List getPendingInterimExpenses(boolean count, String companyCode_ID,
 			InterimExpenseRequestForm form, String sort, int rowsperpage, int currpage) {
+		return getPendingInterimExpenses(count, companyCode_ID, form, sort, rowsperpage, currpage, false);
+	}
+
+	public static List getPendingInterimExpenses(boolean count, String companyCode_ID,
+			InterimExpenseRequestForm form, String sort, int rowsperpage, int currpage, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 
 			String sql = "";
 			if (count) sql += "select count(*) from "
@@ -105,12 +115,22 @@ public class ExpenseUtils {
 			}
 		}
 	}
-
+	
 	public static List getCreateInterimExpenses(boolean count, int station_ID,
 			CreatedInterimExpenseRequestForm form, String sort, int rowsperpage, int currpage) {
+		return getCreateInterimExpenses(count, station_ID, form, sort, rowsperpage, currpage, false);
+	}
+
+	public static List getCreateInterimExpenses(boolean count, int station_ID,
+			CreatedInterimExpenseRequestForm form, String sort, int rowsperpage, int currpage, boolean dirtyRead) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			String sql = "";
 			if (count) sql += "select count(*) from "
 					+ "com.bagnet.nettracer.tracing.db.ExpensePayout expense where 1=1 ";
