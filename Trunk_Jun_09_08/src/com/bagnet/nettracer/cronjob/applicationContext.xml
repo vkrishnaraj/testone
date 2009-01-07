@@ -76,6 +76,8 @@
 		<constructor-arg value="${lz.move.type}" />
 	</bean>
 	
+	<bean id="CronUtils" class="com.bagnet.nettracer.cronjob.utilities.CronUtils" />
+	
 	<bean id="moveToWt" class="com.bagnet.nettracer.cronjob.wt.MoveToWorldTracer" >
 		<constructor-arg value="${default.wt.agent}" />
 		<constructor-arg value="${company.code}" />
