@@ -109,7 +109,7 @@
 							</td>
 							<td>
 								<div id="searchButtonContainer">
-									<input type="submit" class="button" tabindex="3" />
+									<input type="submit" class="button" tabindex="3" value='<spring:message code="submit.query"/>' />
 								</div>
 							</td>
 						</tr>
