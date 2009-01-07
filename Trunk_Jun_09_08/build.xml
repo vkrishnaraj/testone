@@ -696,7 +696,6 @@
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/tracer/pvlogo.gif" />
 		<copy todir="${basedir}/src" file="companies/westjet/custom_ui.properties" />
 		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
