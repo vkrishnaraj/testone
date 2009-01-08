@@ -121,10 +121,6 @@
 						height="20" style="float: left; margin: 0 10px 100px 0;" />
 					<spring:message code="notice2" />
 				</p>
-				<p>
-					<strong><spring:message code="system.service" />
-					</strong>: 1-800-965-2107 x8900.
-				</p>
 			</div>
 			<!-- /content -->
 			<div id="footer">
