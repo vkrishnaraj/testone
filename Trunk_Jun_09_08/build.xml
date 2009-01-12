@@ -690,6 +690,7 @@
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email_fr.html" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt.jrxml" />

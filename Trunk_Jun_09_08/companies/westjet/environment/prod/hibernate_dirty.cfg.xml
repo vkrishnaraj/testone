@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD 2.0//EN"
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 
- "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd"        [
+ "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"        [
         <!ENTITY mappings SYSTEM "classpath://hibernate.mappings.xml">
         ]>
 
@@ -11,18 +11,19 @@
     <session-factory>	
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/nettracer_westjet</property>
+		<property name="hibernate.connection.url">jdbc:mysql://10.16.247.6:3306/nettracer_westjet</property>
 		<property name="hibernate.connection.username">nettracer</property>
 		<property name="hibernate.connection.password">nettracer</property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="hibernate.dialect">net.sf.hibernate.dialect.MySQLDialect</property>
-		<property name="company.code">DA</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="company.code">WS</property>
+		<property name="hibernate.connection.isolation">1</property>
 			
 		<!-- c3p0 -->
-		<property name="hibernate.c3p0.acquire_increment">1</property> 
+		<property name="hibernate.c3p0.acquire_increment">2</property> 
 		<property name="hibernate.c3p0.idle_test_period">100</property> <!-- seconds --> 
 		<property name="hibernate.c3p0.max_size">100</property> 
 		<property name="hibernate.c3p0.max_statements">0</property> 
