@@ -45,7 +45,7 @@
 						stretchType="RelativeToTallestObject"/>
 					<box></box>
 					<graphicElement stretchType="RelativeToTallestObject"/>
-					<imageExpression class="java.lang.String"><![CDATA["C:\\Documents and Settings\\Noah\\My Documents\\My Pictures\\grid3.gif"]]></imageExpression>
+					<imageExpression class="java.lang.String"><![CDATA[$P{grid3}]]></imageExpression>
 				</image>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
