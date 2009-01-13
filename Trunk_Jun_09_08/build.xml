@@ -1263,9 +1263,9 @@
 	</target>
 
 	<target name="usair-build-cron-prod2">
-		<property name="ant_project_name" value="usair" />
-		<property name="jarprefix" value="prod2-" />
-		<property name="sub_path" value="production/" />
+		<property name="ant_project_name" value="usair"/>
+		<property name="jarprefix" value="prod2-"/>
+		<property name="sub_path" value="production/"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs2.xml" />
 		<antcall target="build-cron-service" />
 	</target>

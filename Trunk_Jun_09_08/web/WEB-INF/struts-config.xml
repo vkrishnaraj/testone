@@ -29,6 +29,9 @@
 		<form-bean name="viewIncomingRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm" />
 		<form-bean name="viewOHDLZedForm" type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm" />
 		<form-bean name="claimForm" type="com.bagnet.nettracer.tracing.forms.ClaimForm" />
+		<!--  HERE  -->
+		<form-bean name="claimSettlementForm" type="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm" />
+		
 		<form-bean name="claimToBeProcessedForm" type="com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm" />
 		<form-bean name="claimProrateForm" type="com.bagnet.nettracer.tracing.forms.ClaimProrateForm" />
 		<form-bean name="statReportForm" type="com.bagnet.nettracer.tracing.forms.StatReportForm" />
@@ -242,6 +245,13 @@
 		<forward name="massonhandsuccess" path="mass_onhand_success" />
 		<forward name="claimmain" path="claim_resolution" />
 		<forward name="claimprorate" path="claim_prorate" />
+		
+		<forward name="claimsettlement" path="claim_settlement" />
+		<forward name="claimsettlement1" path="claim_settlement1" />
+		<forward name="claimsettlement2" path="claim_settlement2" />
+		<forward name="claimsettlement3" path="claim_settlement3" />
+		<forward name="claimsettlement4" path="claim_settlement4" />
+		
 		<forward name="claimactivity" path="claim_activity" />
 		<forward name="forwardonhandsuccess" path="forward_onhandsuccess" />
 		<forward name="forwardwtbagsuccess" path="forward_wt_bag_success" />
@@ -439,6 +449,8 @@
 		<action path="/claim_resolution" type="com.bagnet.nettracer.tracing.actions.ClaimAction" name="claimForm" scope="session" validate="false"></action>
 
 		<action path="/claim_prorate" type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction" name="claimProrateForm" scope="session" validate="false"></action>
+		
+		<action path="/claim_settlement" type="com.bagnet.nettracer.tracing.actions.ClaimSettlementAction" name="claimSettlementForm" scope="request" validate="false"></action>
 
 		<!-- Forwarding bags -->
 		<action path="/forward_on_hand" type="com.bagnet.nettracer.tracing.actions.ForwardOnHandAction" name="forwardOnHandForm" scope="session" validate="false"></action>

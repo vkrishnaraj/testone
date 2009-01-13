@@ -172,6 +172,23 @@
         <put name="center"   value="/pages/claims/claim.jsp"/>
     </definition>
 
+    <definition name="claim_settlement" extends="user_menu">
+        <put name="center"   value="/pages/claims/claimsettlement.jsp"/>
+    </definition>    
+    <definition name="claim_settlement1" extends="user_menu">
+        <put name="center"   value="/pages/claims/claimsettlement1.jsp"/>
+    </definition>
+    <definition name="claim_settlement2" extends="user_menu">
+        <put name="center"   value="/pages/claims/claimsettlement2.jsp"/>
+    </definition>
+    <definition name="claim_settlement3" extends="user_menu">
+        <put name="center"   value="/pages/claims/claimsettlement3.jsp"/>
+    </definition>
+    <definition name="claim_settlement4" extends="user_menu">
+        <put name="center"   value="/pages/claims/claimsettlement4.jsp"/>
+    </definition>
+
+
     <definition name="claim_prorate" extends="user_menu">
         <put name="center"   value="/pages/claims/claim_prorate.jsp"/>
     </definition>
