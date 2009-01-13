@@ -169,6 +169,7 @@
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}_web/classes" />
 			</classpath>
+			<include name="**/*.jrxml"/>
 		</jrc>
 
 	</target>
