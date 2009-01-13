@@ -49,6 +49,7 @@ public class ReportingConstants {
 	public final static int BDO_RECEIPT_RPT = 16;
 	public final static int DAMAGE_RECEPIT_RPT = 17;
 	public final static int MISSING_RECEPIT_RPT = 18;
+	public static final int PPLC_RPT = 19;
 	
 	// report titles
 	public static String CLAIM_PAYOUT_TITLE = "Claim Payout";
@@ -71,5 +72,6 @@ public class ReportingConstants {
 	public static final int RPT_20_CUSTOM_3 = 3;
 	public static final int RPT_20_CUSTOM_4 = 4;
 	public static final int RPT_20_CUSTOM_5 = 5;
+
 
 }

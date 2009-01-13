@@ -159,7 +159,9 @@ public class ReportOutputServlet extends HttpServlet {
 						bytes = readBytes(BDOReceipt.createReport(bdoform, sc, request, outputtype,
 								language), sc, response);
 						break;
-						
+					case ReportingConstants.PPLC_RPT:
+						IncidentForm theform4 = (IncidentForm) session.getAttribute("incidentForm");
+						bytes = readBytes(PPLCReport.createReport(theform4, sc, request, language), sc, response);
 					default:
 						break;
 				}

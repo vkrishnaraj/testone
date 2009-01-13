@@ -2864,4 +2864,18 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			}
 		}
 	}
+
+	public JasperPrint getJasperPrint(Map<String, Object> parameters,
+			String reportName, String rootPath, JRBeanCollectionDataSource ds) throws Exception {
+		// TODO Auto-generated method stub
+		JasperReport jasperReport = getCompiledReport(reportName, rootPath);
+		if(ds == null) {
+		return JasperFillManager.fillReport(jasperReport, parameters);
+		}
+		else {
+			return JasperFillManager.fillReport(jasperReport, parameters, ds);
+		}
+		
+	}
+
 }
