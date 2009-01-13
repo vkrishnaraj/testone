@@ -464,3 +464,8 @@ div#maincontent li.loginlinks {
 	font-weight: bold;
 }
 
+div#notablelines table td {
+	border:0px solid #fff;
+	padding:0px;
+	vertical-align:top;
+}

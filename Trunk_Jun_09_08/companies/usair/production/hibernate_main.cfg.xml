@@ -10,7 +10,7 @@
     <session-factory>	
     
 		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-		<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod;sendStringParametersAsUnicode=false</property>
 		<property name="connection.username">nettracerprod</property>
 		<property name="connection.password">E74Liq!prod</property>
 		<property name="jdbc.fetch_size">50</property> 

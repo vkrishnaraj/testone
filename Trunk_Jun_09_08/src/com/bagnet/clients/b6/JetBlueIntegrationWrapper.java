@@ -2,7 +2,7 @@ package com.bagnet.clients.b6;
 
 import org.apache.log4j.Logger;
 
-import servicemanager.uddi_f5410361_cab6_11dd_b417_a18226e1080a.BaggageService_vs3_0Stub;
+import servicemanager.uddi_5413d78d_d06a_11dd_9aaf_9cc8f268cf20.BaggageService_vs3_0_BP_NT_DEVStub;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -30,6 +30,13 @@ public class JetBlueIntegrationWrapper {
 	private String signature = PropertyBMO.getValue("jetblue.reservation.signature");
 	private String token = PropertyBMO.getValue("jetblue.reservation.token");
 	private ReservationDetail reservationDetail = null;
+	
+	public JetBlueIntegrationWrapper () {
+		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\ntcerts");
+    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
+    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\ntkeys.ks");
+    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
+	}
 
 
 	
@@ -91,7 +98,8 @@ public class JetBlueIntegrationWrapper {
 			
 			AuthorizationHeaderDocument authDoc = getAuthorizationHeader();
 
-			BaggageService_vs3_0Stub stub = new BaggageService_vs3_0Stub(endpoint);
+			BaggageService_vs3_0_BP_NT_DEVStub stub = new BaggageService_vs3_0_BP_NT_DEVStub(endpoint);
+			
 			
 			BagNumberRequestDocument requestDoc = BagNumberRequestDocument.Factory.newInstance();
 			BagNumberRequest request = requestDoc.addNewBagNumberRequest();
@@ -117,7 +125,8 @@ public class JetBlueIntegrationWrapper {
 
 	private ReservationDetail getBookingByPnr(String recordLocator) {
 		try {
-			BaggageService_vs3_0Stub stub = new BaggageService_vs3_0Stub(endpoint);
+			System.out.println("Endpoint: " + endpoint);
+			BaggageService_vs3_0_BP_NT_DEVStub stub = new BaggageService_vs3_0_BP_NT_DEVStub(endpoint);
 			
 			RecordLocatorRequestDocument requestDoc = RecordLocatorRequestDocument.Factory.newInstance();
 			RecordLocatorRequest recordRequest = requestDoc.addNewRecordLocatorRequest();
@@ -128,6 +137,7 @@ public class JetBlueIntegrationWrapper {
 			ReservationDetailResponseDocument responseDoc = stub.GetReservationDetailByRecordLocator(requestDoc, authDoc);
 			return responseDoc.getReservationDetailResponse().getReservationDetail();
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Exception thrown in JetBlue Integration Wrapper", e);
 			
 		}

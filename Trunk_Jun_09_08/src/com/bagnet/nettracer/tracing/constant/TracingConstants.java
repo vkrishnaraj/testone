@@ -71,6 +71,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CLAIMS = "Claims";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION = "Claim Resolution";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_PRORATE = "Claim Prorate";
+	public final static String SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT = "Claim Settlement";
 	public final static String SYSTEM_COMPONENT_NAME_CBRO_VIEW = "CBRO View";
 	public final static String SYSTEM_COMPONENT_NAME_CBRO_MGMT = "CBRO Management";
 	public final static String SYSTEM_COMPONENT_NAME_BY_PASSENGER_BOARDINGS = "By Passenger Boardings";
@@ -374,6 +375,11 @@ public class TracingConstants {
 	public final static String VIEW_OHD_MAIN = "viewohdmain";
 	// claim payout main page
 	public final static String CLAIM_PAY_MAIN = "claimmain";
+	public final static String CLAIM_SETTLEMENT = "claimsettlement";
+	public final static String CLAIM_SETTLEMENT1 = "claimsettlement1";
+	public final static String CLAIM_SETTLEMENT2 = "claimsettlement2";
+	public final static String CLAIM_SETTLEMENT3 = "claimsettlement3";
+	public final static String CLAIM_SETTLEMENT4 = "claimsettlement4";
 	// claim prorate main page
 	public final static String CLAIM_PRORATE_MAIN = "claimprorate";
 	// claim address check main page

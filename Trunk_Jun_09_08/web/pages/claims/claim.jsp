@@ -165,7 +165,66 @@
                         </dd>
 <%
                       }
+                      if (session.getAttribute("claimsettlementon")==null) {
 %>
+               
+                      <dd>
+                        <a href="claim_settlement.do"><span class="aa">&nbsp;
+                            <br />
+                            &nbsp;</span>
+                          <span class="bb"><bean:message key="menu.claim_settlement" /></span>
+                          <span class="cc">&nbsp;
+                            <br />
+                            &nbsp;</span></a>
+                      </dd>
+<%
+                      } else {
+%>
+
+
+                    <dd>
+                       <a href="claim_settlement.do?screen=1"><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_process" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+                    
+                    <dd>
+                      <a href="claim_settlement.do?screen=2"><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_customer" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+
+                    <dd>
+                      <a href="claim_settlement.do?screen=3"><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_baggage" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+                    
+                                        <dd>
+                      <a href="claim_settlement.do?screen=4"><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_summary" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+<%
+                      }
+%>
+
                     </logic:notPresent>
                   </dl>
                 </div>
