@@ -880,7 +880,7 @@ function gotoHistoricalReport() {
         <tr>
           <td colspan="4"><html:submit styleId="button"
             property="deleteBag" indexed="true">
-            <bean:message key="button.delete_bag_itinerary" />
+            <bean:message key="button.delete_ohd_itinerary" />
           </html:submit></td>
         </tr>
       </table>

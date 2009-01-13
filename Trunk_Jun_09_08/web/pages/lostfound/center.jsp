@@ -145,7 +145,7 @@ function gotoHistoricalReport() {
                   </div>
                 </td>
                 <td>
-                  <bean:message key="colname.disposal_status" />
+                  <bean:message key="colname.item_status" />
                   <br>
    
                    <html:select name="LostAndFoundForm" property="disposal_status.status_ID" styleClass="dropdown">

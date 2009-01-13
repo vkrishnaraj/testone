@@ -106,7 +106,7 @@ function updatePagination() {
                   </html:select>
                 </td>
                 <td>
-                  <bean:message key="colname.disposal_status" />
+                  <bean:message key="colname.item_status" />
                   <br>
                   <html:select property="disposal_status_ID" styleClass="dropdown">
                     <html:option value="">
