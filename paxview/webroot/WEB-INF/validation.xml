@@ -7,7 +7,7 @@
 				<arg0 key="field.claimnumber"/>
 				<var>
 					<var-name>mask</var-name>
-					<var-value>^\s*\w{5}0*[1-9]+\s*$</var-value>
+					<var-value>^\s*\w{5}[0-9]*[1-9][0-9]*\s*$</var-value>
 				</var>
 			</field>
 			<field property="lastname" depends="required">
