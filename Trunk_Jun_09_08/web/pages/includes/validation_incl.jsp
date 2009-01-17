@@ -367,6 +367,7 @@
 		      }
 		    }
 		 	}
+		 	 if (!validateWTCompanyForward(form)) return false;
 		 	 return true;
   }
   function validateForwardOHD (form)

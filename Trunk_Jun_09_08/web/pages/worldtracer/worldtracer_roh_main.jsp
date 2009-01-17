@@ -5,7 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-
+<jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="worldtracerroh.do" method="post">
 
   <SCRIPT LANGUAGE="JavaScript">
@@ -72,8 +72,9 @@
               <td colspan="2" align="center">
                 <INPUT id="button" type="button" value="Back" onClick="history.back()">
                 &nbsp;
-                <html:submit styleId="button" property="save">
+                <html:submit styleId="button" property="save" onclick="return validatereqOHDFields(this.form);">
                   <bean:message key="button.request" />
+                   
                 </html:submit>
               </td>
             </tr>

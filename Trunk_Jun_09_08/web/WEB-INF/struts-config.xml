@@ -488,6 +488,7 @@
 		<action path="/worldtracerqoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerReqQOHAction" name="worldTracerReqQOHForm" scope="session" validate="false"></action>
 		
 		<action path="/worldtracerfoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerFOHAction" name="worldTracerFOHForm" scope="session" validate="false">
+			<forward name="use_general" path="/worldtracerfwd.do"></forward>
 		</action>
 
 		<action path="/worldtracerroh" type="com.bagnet.nettracer.tracing.actions.WorldTracerROHAction" name="worldTracerROHForm" scope="request" validate="false"></action>

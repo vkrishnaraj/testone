@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-
+<jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="worldtracerqoh.do" method="post" onsubmit="return validateWorldTracerReqQOHForm(this);">
 	<html:javascript formName="worldTracerReqQOHForm" />
 
@@ -75,7 +75,7 @@
               <td colspan="4" align="center">
                 <INPUT id="button" type="button" value="Back" onClick="history.back()">
                 &nbsp;
-                <html:submit styleId="button" property="save">
+                <html:submit styleId="button" property="save"  onclick="return validatereqOHDFields(this.form);" >
                   <bean:message key="button.request" />
                 </html:submit>
               </td>
