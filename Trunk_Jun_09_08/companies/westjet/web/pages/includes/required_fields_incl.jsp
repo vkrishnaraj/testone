@@ -15,11 +15,74 @@
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
  
+ function  validatereqOHDFields(form) {
+ 
+    for (var j=0;j<form.length;j++) {
+       currentElement = form.elements[j];
+	   currentElementName=currentElement.name;
+	   if (currentElementName.indexOf("teletype_address1") != -1) {
+		      if (currentElement.value.length < 1) {
+		         alert("<%=(String) myMessages.getMessage(myLocale,
+							"Teletype_Address")%>" + " <%=(String) myMessages.getMessage(myLocale,
+							"error.validation.isRequired")%>");
+		         currentElement.focus();
+		         return false;
+		      }
+		}
+		if (currentElementName.indexOf("teletype[0]") != -1) {
+		      if (currentElement.value.length < 1) {
+		         alert("<%=(String) myMessages.getMessage(myLocale,
+							"Teletype_Address")%>" + " <%=(String) myMessages.getMessage(myLocale,
+							"error.validation.isRequired")%>");
+		         currentElement.focus();
+		         return false;
+		      }
+		}
+	}
+	return true;
+ }
+ 
   function validatereq(form)
   {
     return true;
   }
   
+  function validateWTCompanyForward(form) {
+ 	 for (var j=0;j<form.length;j++) {
+		  	currentElement = form.elements[j];
+	    	currentElementName=currentElement.name;
+			if (currentElementName.indexOf("bagtag") != -1)
+		    {
+		      if (currentElement.value.length < 1)
+		      {
+		         alert("<%=(String) myMessages.getMessage(myLocale, "Tag_Number")%>" + " <%=(String) myMessages.getMessage(myLocale,
+							"error.validation.isRequired")%>");
+		         currentElement.focus();
+		         return false;
+		      }
+		        
+		      else if (!checkClaimCheck(currentElement.value))
+		      {
+		        alert("<%=(String) myMessages.getMessage(myLocale, "Tag_Number")%>" + " <%=(String) myMessages.getMessage(myLocale,
+							"error.validation.expedite")%>");
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("teletype_address1") != -1)
+		    {
+		      if (currentElement.value.length < 1)
+		      {
+		         alert("<%=(String) myMessages.getMessage(myLocale,
+							"Teletype_Address")%>" + " <%=(String) myMessages.getMessage(myLocale,
+							"error.validation.isRequired")%>");
+		         currentElement.focus();
+		         return false;
+		      }
+		     }
+	 }
+		    return true;
+  }
   function validatereqFields(form, formType)
   {
     returnValue = true;
@@ -253,6 +316,9 @@
     }
 
     return true;
+  }
+  function validateReqForward(form) {
+  	return true;
   }
   // -->
 </script>

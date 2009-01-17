@@ -851,6 +851,9 @@ public class WTOHD {
 			// get wt_id
 			wt_id = StringUtils.ParseWTString2(wtdata, "WM DOH ", "\r");
 			if (wt_id == null) {
+				wt_id = StringUtils.ParseWTString2(wtdata, "WT DOH ", "\r");
+			}
+			if(wt_id == null) {
 				throw new WorldTracerException("unable to import OHD.  no wt_id was parsed");
 			}
 			System.out.println(wt_id);
@@ -872,7 +875,7 @@ public class WTOHD {
 			String thes = wt_id.substring(0,3);
 			String thec = wt_id.substring(3,5);
 			Company c = null;
-			Station s = TracerUtils.getStationByCode(thes, thec);
+			Station s = TracerUtils.getStationByWtCode(thes, thec);
 			if (s == null) {
 				// no station, create the station into the database, if no company, go ahead and create the company as well
 				c = AdminUtils.getCompany(thec);
@@ -927,11 +930,15 @@ public class WTOHD {
 			// date
 			String datetimestr = StringUtils.ParseWTString2(wtdata, "BAG CREATED ", "\n");
 			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "BAGS CREATED ", "\n");
+			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "CREATED ", "\n");
 				
 			if (datetimestr != null) {
 				String datestr = datetimestr.substring(0,7);
 				String timestr = datetimestr.substring(8,12);
 				Date thedate = DateUtils.convertToDate(datestr + "/" + timestr, "ddMMMyy/HHmm", null);
+				if(thedate == null) {
+					throw new WorldTracerException("unable to import WT OHD.  Unable to parse create date");
+				}
 				ohd.setFounddate(thedate);
 				ohd.setFoundtime(thedate);
 			} else {
@@ -1028,6 +1035,8 @@ public class WTOHD {
 			String contentstring = null;
 
 			itemstring = StringUtils.ParseWTString2(wtdata, "/BAG01/", "/RTI/");
+			if(itemstring == null) itemstring = StringUtils.ParseWTString2(wtdata, "/BAG01/", "/OSI/");
+			if(itemstring == null) itemstring = StringUtils.ParseWTString2(wtdata, "/BAG01/", "/HIS/");
 
 
 			bagtag = StringUtils.ParseWTString2(itemstring, "TN01 ", ".CT01");
@@ -1082,7 +1091,9 @@ public class WTOHD {
 			boolean keepgoing = true;
 			if (ccat_id == 0 && (cdesc == null || cdesc.length()== 0)) keepgoing = false;
 			////// content2 - x
-			while (keepgoing) {
+			int itincount = 0;
+			while (keepgoing && itincount < 10) {
+				itincount ++;
 				ii = new OHD_Inventory();
 				contentstring = StringUtils.ParseWTString2(itemstring, cdesc, null);
 				if (contentstring == null || contentstring.length() == 0) keepgoing = false;

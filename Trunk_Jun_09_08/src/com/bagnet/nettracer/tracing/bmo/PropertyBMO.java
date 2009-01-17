@@ -27,6 +27,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_BOOKING_ENDPOINT = "booking.endpoint";
 	public static final String PROPERTY_DEFAULT_COUNTRY = "default.country";
 	public static final String PROPERTY_NUM_CONTENT_FIELDS = "num.content.fields";
+	public static final String PROPERTY_WT_FWD_ONLY = "wt.fwd.only";
 
 	/**
 	 * Retrieves the value of the property from the database.

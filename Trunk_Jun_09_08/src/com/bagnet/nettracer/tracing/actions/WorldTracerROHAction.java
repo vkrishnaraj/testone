@@ -81,7 +81,7 @@ public class WorldTracerROHAction extends Action {
 				// check to see if this ahl is in current user's station
 				String as = ahl_id.substring(0,3).toUpperCase();
 				String aa = ahl_id.substring(3,5).toUpperCase();
-				if (!aa.equals(user.getCompanycode_ID()) || !as.equals(user.getStation().getStationcode())) {
+				if (!aa.equals(user.getCompanycode_ID()) || !as.equals(user.getStation().getWt_stationcode())) {
 					ActionMessage error = new ActionMessage("error.wt_err_invalid_ahl_id_same_station");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);

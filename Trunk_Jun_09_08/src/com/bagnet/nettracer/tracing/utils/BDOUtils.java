@@ -47,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.SystemPermission;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.SearchBDOForm;
@@ -447,7 +448,7 @@ public class BDOUtils {
 				bdo.setOhd(ohd);
 			}
 
-			if (!insertBDOtoDB(bdo))
+			if (!insertBDOtoDB(bdo, agent))
 				return false;
 
 		} catch (Exception e) {
@@ -705,7 +706,7 @@ public class BDOUtils {
 		}
 	}
 
-	public static boolean insertBDOtoDB(BDO bdo) {
+	public static boolean insertBDOtoDB(BDO bdo, Agent user) {
 		Transaction t = null;
 		Session sess = null;
 		try {
@@ -740,8 +741,8 @@ public class BDOUtils {
 			}
 			
 			if(isnew) {
-				if((bdo.getIncident() != null && bdo.getIncident().getWtFile() != null) ||
-						(bdo.getOhd() != null && bdo.getOhd().getWtFile() != null)) {
+				if(((bdo.getIncident() != null && bdo.getIncident().getWtFile() != null) ||
+						(bdo.getOhd() != null && bdo.getOhd().getWtFile() != null)) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO, user)) {
 					WtqCreateBdo wtq = new WtqCreateBdo();
 					wtq.setAgent(bdo.getAgent());
 					wtq.setBdo(bdo);

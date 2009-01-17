@@ -1305,6 +1305,38 @@ public class TracerUtils {
 			}
 		}
 	}
+	
+	public static Station getStationByWtCode(String stationcode,
+			String companycode_id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+			String sql = "select station from com.bagnet.nettracer.tracing.db.Station station where "
+					+ "station.wt_stationcode = :stationcode and station.company.companyCode_ID = :companycode_id";
+
+			Query q = sess.createQuery(sql);
+			q.setParameter("stationcode", stationcode);
+			q.setParameter("companycode_id", companycode_id);
+
+			List list = q.list();
+			if (list != null && list.size() > 0)
+				return (Station) list.get(0);
+			else
+				return getStationByCode(stationcode, companycode_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	public static Station getStationByCode(String stationcode,
 			String companycode_id) {

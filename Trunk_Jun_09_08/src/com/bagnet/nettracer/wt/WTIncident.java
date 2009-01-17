@@ -2,6 +2,7 @@ package com.bagnet.nettracer.wt;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,6 +51,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditCompanyUtils;
 import com.bagnet.nettracer.ws.core.WSCoreUtil;
@@ -973,10 +975,12 @@ public class WTIncident {
 			int loc;
 			HashSet hash = new HashSet();
 			ArrayList list = new ArrayList();
-			
-			// get wt_id
 			wt_id = StringUtils.ParseWTString2(wtdata, "WM DAH ", "\r");
+			// get wt_id
 			if (wt_id == null) {
+				wt_id = StringUtils.ParseWTString2(wtdata, "WT DAH ", "\r");
+			}
+			if(wt_id == null) {
 				throw new WorldTracerException("unable to retrieve worldtraer id, wt content is bad");
 			}
 			
@@ -998,7 +1002,7 @@ public class WTIncident {
 			String thes = wt_id.substring(0,3);
 			String thec = wt_id.substring(3,5);
 			Company c = null;
-			Station s = TracerUtils.getStationByCode(thes, thec);
+			Station s = TracerUtils.getStationByWtCode(thes, thec);
 			if (s == null) {
 				// no station, create the station into the database, if no company, go ahead and create the company as well
 				c = AdminUtils.getCompany(thec);
@@ -1054,6 +1058,7 @@ public class WTIncident {
 				String remarktext = Action_file.getAction_file_text();
 				rm.setAgent(ntuser);
 				rm.setRemarktype(1);
+				rm.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
 				rm.setIncident(incident);
 				rm.setRemarktext(remarktext);
 				remark_set.add(rm);
@@ -1066,11 +1071,15 @@ public class WTIncident {
 			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "BAGS CREATED ", "/ " + thes + " CONTROL");
 			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "BAG CREATED ", "\n");
 			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "BAGS CREATED ", "\n");
+			if (datetimestr == null) datetimestr = StringUtils.ParseWTString2(wtdata, "CREATED ", "\n");
 			
 			if (datetimestr != null) {
 				String datestr = datetimestr.substring(0,7);
 				String timestr = datetimestr.substring(8,12);
 				Date thedate = DateUtils.convertToDate(datestr + "/" + timestr, "ddMMMyy/HHmm", null);
+				if(thedate == null) {
+					throw new WorldTracerException("unable to import WT file.  Unable to parse create date");
+				}
 				incident.setCreatedate(thedate);
 				incident.setCreatetime(thedate);
 			} else {

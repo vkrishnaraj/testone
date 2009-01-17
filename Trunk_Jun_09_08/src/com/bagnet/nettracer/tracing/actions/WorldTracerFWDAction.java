@@ -128,6 +128,7 @@ public class WorldTracerFWDAction extends Action {
 
 		if (theform == null || request.getParameter("clear") != null) {
 			this.clear(mapping, user, session, request);
+			
 		}
 		// Add itinerary item is clicked.
 		if (request.getParameter("additinerary") != null) {
@@ -165,6 +166,22 @@ public class WorldTracerFWDAction extends Action {
 	private ActionForward clear(ActionMapping mapping, Agent user,
 			HttpSession session, HttpServletRequest request) {
 		WorldTracerFWDForm theform = new WorldTracerFWDForm();
+		
+		if (request.getParameter("ohd_id") != null && request.getParameter("ohd_id").trim().length() > 0) {
+			OHD ohd = OHDUtils.getOHD(request.getParameter("ohd_id"));
+			if(ohd != null) {
+				
+			theform.setOhd_ID(ohd.getOHD_ID());
+			if (ohd.getWt_id() != null)
+				theform.setWt_id(ohd.getWt_id());
+			if (ohd.getClaimnum() != null)
+				theform.setBagtag(ohd.getClaimnum());
+
+			if(ohd.getLastname() !=null)
+				theform.setPassenger1(ohd.getLastname());
+			}
+
+		}
 
 		theform.addSegment();
 		session.setAttribute("worldTracerFWDForm", theform);
@@ -205,6 +222,18 @@ public class WorldTracerFWDAction extends Action {
 		}
 		if(theform.getPassenger3() != null && theform.getPassenger3().trim().length() > 0) {
 			fwd.getFwdName().add(theform.getPassenger3().trim());
+		}
+		if(theform.getTeletype_address1() != null && theform.getTeletype_address1().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address1());
+		}
+		if(theform.getTeletype_address2() != null && theform.getTeletype_address2().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address2());
+		}
+		if(theform.getTeletype_address3() != null && theform.getTeletype_address3().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address3());
+		}
+		if(theform.getTeletype_address4() != null && theform.getTeletype_address4().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address4());
 		}
 		try {
 			WorldTracerQueueUtils.createOrReplaceQueue(fwd);

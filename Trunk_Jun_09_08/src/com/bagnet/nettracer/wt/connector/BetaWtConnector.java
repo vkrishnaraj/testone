@@ -42,8 +42,10 @@ import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
+import com.bagnet.nettracer.wt.svc.RuleMapper;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
+import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 public class BetaWtConnector implements WorldTracerConnector {
@@ -53,11 +55,15 @@ public class BetaWtConnector implements WorldTracerConnector {
 	private static final String ALREADY_REINSTATED = "ALREADY REINSTATED";
 
 	private String wtCompanycode;
+	
+	public static enum UserType {WM, WT};
+	
+	private UserType userType = UserType.WT;
 
 	private static final Logger logger = Logger.getLogger(BetaWtConnector.class);
 	
-	private static final Pattern ahl_patt = Pattern.compile("(?:(?:\\s|/)(?:AHL\\s+|A/))(\\w{5}\\d{5})\\b");
-	private static final Pattern ohd_patt = Pattern.compile("(?:(?:\\s|/)(?:OHD\\s+|O/))(\\w{5}\\d{5})\\b");
+	private static final Pattern ahl_patt = Pattern.compile("(?:(?:\\s|/)(?:AHL\\s+|A/|FILE\\s+))(\\w{5}\\d{5})\\b");
+	private static final Pattern ohd_patt = Pattern.compile("(?:(?:\\s|/)(?:OHD\\s+|O/|ON-HAND\\s+))(\\w{5}\\d{5})\\b");
 	private static final Pattern percent_patt = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
 	private static final Pattern itemNum_patt = Pattern.compile("^\\s*(\\d+)/", Pattern.MULTILINE);
 	private static final Pattern qoh_success = Pattern.compile("rohOK\\s*\\(\\s*[01]\\s*\\)");
@@ -67,6 +73,8 @@ public class BetaWtConnector implements WorldTracerConnector {
 	private HttpClient client;
 	
 	private static Map<String, BetaWtConnector> _instanceMap = new HashMap<String, BetaWtConnector>();
+	
+	private RuleMapper wtRuleMap;
 
 	private BetaWtConnector(String companyCode) {
 		this.wtCompanycode = companyCode;
@@ -113,13 +121,15 @@ public class BetaWtConnector implements WorldTracerConnector {
 	public String amendAhl(Map<WorldTracerField, List<String>> fieldMap, String wt_ahl_id) throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseAAH"));
-		sb.append("A2=WM");
+		sb.append("A2=" + userType.name());
+		
 		sb.append("FR="+ wt_ahl_id);
 		sb.append("AAH=");
 		sb.append(DefaultWorldTracerService.FIELD_SEP);
 		
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.AMEND_AHL_FIELD_RULES.entrySet()) {
+//		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.AMEND_AHL_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.AMEND_AHL).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -165,12 +175,13 @@ public class BetaWtConnector implements WorldTracerConnector {
 	public String amendOhd(Map<WorldTracerField, List<String>> fieldMap, String wt_ohd_id) throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseAOH"));
+		sb.append("&A2=" + userType.name());
 		sb.append("&FR="+ wt_ohd_id);
 		sb.append("&AOH=");
 		sb.append(DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.AMEND_OHD_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.AMEND_OHD).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -214,6 +225,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 	throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseROH"));
+		sb.append("A2=" + userType.name());
 		sb.append("T1="+wt_ahl_id);
 		sb.append("STN="+fromStation);
 		sb.append("ARL="+fromAirline);
@@ -221,7 +233,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		sb.append(DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.REQ_QOH_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.REQUEST_QOH).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -261,12 +273,13 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseROH"));
+		sb.append("A2=" + userType.name());
 		sb.append("T1="+wt_ahl_id);
 		sb.append("ROH=");
 		sb.append(DefaultWorldTracerService.FIELD_SEP + "OHD " + wt_ohd_id + DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.ROH_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.REQUEST_OHD).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -285,8 +298,9 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
 		}
 		
-		if( responseBody.toUpperCase().contains("ROH MESSAGE SENT")) {
-			return "ROH MESSAGE SENT";
+		Matcher m1 = qoh_success.matcher(responseBody);
+		if(( responseBody.toUpperCase().split("ROH MESSAGE SENT").length >= 3) || m1.find()) {
+			return "QOH Requested";
 		}
 		else {
 			String errorString;
@@ -306,14 +320,14 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("AHL"));
-		sb.append("&A2=WM&STNARL=");
+		sb.append("&A2=" + userType.name() + "&STNARL=");
 		sb.append(stationCode.toUpperCase());
 		sb.append(companyCode.toUpperCase());
 		sb.append("&AHL=");
 		sb.append(DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.INC_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.CREATE_AHL).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -336,9 +350,15 @@ public class BetaWtConnector implements WorldTracerConnector {
 		String errorString = null;
 		Pattern success_patt = Pattern.compile("AHL\\s+(\\w{3}\\w{2}\\d{5})");
 		Matcher m = success_patt.matcher(responseBody);
+		Pattern success2_patt = Pattern.compile("WT\\s+DAH\\s+(\\w{3}\\w{2}\\d{5})");
+		Matcher m2 = success2_patt .matcher(responseBody);
 		if (m.find()) {
 			wt_id = m.group(1);
-		} else {
+		} 
+		else if(m2.find()) {
+			wt_id = m2.group(1);
+		}
+		else {
 			Pattern error_patt = Pattern.compile("<body.*>.*/-(.*?)-/.*</body>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 			m = error_patt.matcher(responseBody);
 			if (m.find()) {
@@ -359,11 +379,12 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseCAH"));
+		sb.append("A2=" + userType.name());
 		sb.append("FR=" + wt_id);
 		sb.append("CAH=" + DefaultWorldTracerService.FIELD_SEP);
 		
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.CAH_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.CLOSE_AHL).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -402,13 +423,13 @@ public class BetaWtConnector implements WorldTracerConnector {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("FWD"));
-		sb.append("A2=WMSTNARL=");
+		sb.append("A2=" + userType.name() + "STNARL=");
 		sb.append(stationCode.toUpperCase());
 		sb.append(companyCode.toUpperCase());
 		sb.append("FWD=" + DefaultWorldTracerService.FIELD_SEP);
 		
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.FWD_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.FWD_GENERAL).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -448,13 +469,13 @@ public class BetaWtConnector implements WorldTracerConnector {
 			throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("OHD"));
-		sb.append("&A2=WM&STNARL=");
+		sb.append("&A2=" + userType.name() + "&STNARL=");
 		sb.append(stationCode.toUpperCase());
 		sb.append(companyCode.toUpperCase());
 		sb.append("&OHD=" + DefaultWorldTracerService.FIELD_SEP);
 
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.OHD_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.CREATE_OHD).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -475,7 +496,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		}
 		String wt_id = null;
 		String errorString = null;
-		Pattern success_patt = Pattern.compile("WMT1=(\\w{3}\\w{2}\\d{5})\\b");
+		Pattern success_patt = Pattern.compile("W(?:M|T)T1=(\\w{3}\\w{2}\\d{5})\\b");
 		Matcher m = success_patt.matcher(responseBody);
 		if (m.find()) {
 			wt_id = m.group(1);
@@ -499,11 +520,12 @@ public class BetaWtConnector implements WorldTracerConnector {
 	public String closeOhd(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap, String wt_id, String wt_stationcode) throws WorldTracerException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(buildUrlStart("ResponseCOH"));
+		sb.append("A2=" + userType.name());
 		sb.append("T1=" + wt_id);
 		sb.append("COH=" + DefaultWorldTracerService.FIELD_SEP);
 		
 		ArrayList<String> temp = new ArrayList<String>();
-		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : DefaultWorldTracerService.COH_FIELD_RULES.entrySet()) {
+		for (Map.Entry<WorldTracerService.WorldTracerField, WorldTracerRule<String>> entry : wtRuleMap.getRule(TxType.CLOSE_OHD).entrySet()) {
 			if (fieldMap.containsKey(entry.getKey())) {
 				temp.add(entry.getValue().getFieldString(entry.getKey(), fieldMap.get(entry.getKey())));
 			}
@@ -552,7 +574,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		method.addParameter("DAY", "D" + day);
 		method.addParameter("ITEM", Integer.toString(itemNum));
 		method.addParameter("submit" , "EXF");
-		method.addParameter("A2", "WM");
+		method.addParameter("A2", userType.name());
 		
 		try {
 			responseBody = sendRequest(method);
@@ -620,7 +642,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 
 	public String findAHL(String wt_id) throws WorldTracerException {
-		GetMethod method = new GetMethod( buildUrlStart("DAH") + "T1=" + wt_id.toUpperCase());
+		GetMethod method = new GetMethod( buildUrlStart("DAH") + "A2=" + userType.name() + "T1=" + wt_id.toUpperCase());
 		try {
 			return sendRequest(method);
 		} catch (Exception e) {
@@ -629,7 +651,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 	}
 
 	public String findOHD(String wt_id) throws WorldTracerException {
-		GetMethod method = new GetMethod( buildUrlStart("DOH") + "T1=" + wt_id.toUpperCase());
+		GetMethod method = new GetMethod( buildUrlStart("DOH") + "A2=" + userType.name() + "T1=" + wt_id.toUpperCase());
 		try {
 			return sendRequest(method);
 		} catch (Exception e) {
@@ -690,7 +712,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		method.addParameter("AREA", actionFileType.name());
 		method.addParameter("DAY", "D" + day);
 		method.addParameter("submit", "DXF");
-		method.addParameter("A2", "WM");
+		method.addParameter("A2", userType.name());
 		return method;
 	}
 
@@ -885,7 +907,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		
 		PostMethod method = new PostMethod(sb.toString());
 		method.addParameter("A1", wtCompanycode.toUpperCase());
-		method.addParameter("A2", "WM");
+		method.addParameter("A2", userType.name());
 		method.addParameter("ACTION", action + "1");
 		method.addParameter("TYP1", type);
 		method.addParameter("FR1", wt_id.toLowerCase());
@@ -1124,7 +1146,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		if(ahl_id != null) {
 			PostMethod method = new PostMethod(sb.toString());
 			
-			method.addParameter("LINE1", String.format("WM BDO/I AHL %1$s /%2$tI%2$tMGMT/%2$td%2$tb%2$ty", ahl_id, now));
+			method.addParameter("LINE1", String.format("%s BDO/I AHL %1$s /%2$tI%2$tMGMT/%2$td%2$tb%2$ty", userType.name(), ahl_id, now));
 			
 			int index = 0;
 			for(index = 0; index < lines.size(); index++) {
@@ -1159,7 +1181,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		if(ohd_id != null) {
 			PostMethod method = new PostMethod(sb.toString());
 			
-			method.addParameter("LINE1", String.format("WM BDO/I OHD %1$s /%2$tI%2$tMGMT/%2$td%2$tb%2$ty", ohd_id, now));
+			method.addParameter("LINE1", String.format("%s BDO/I OHD %1$s /%2$tI%2$tMGMT/%2$td%2$tb%2$ty", userType.name(), ohd_id, now));
 			
 			int index = 0;
 			for(index = 0; index < lines.size(); index++) {
@@ -1199,7 +1221,13 @@ public class BetaWtConnector implements WorldTracerConnector {
 	
 	}
 
+	public void setWtRuleMap(RuleMapper wtRuleMap) {
+		this.wtRuleMap = wtRuleMap;
+	}
 
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
 
 }
 

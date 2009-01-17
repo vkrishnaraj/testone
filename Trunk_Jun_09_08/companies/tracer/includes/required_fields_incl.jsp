@@ -19,7 +19,13 @@
   {
     return true;
   }
-  
+    function validateWTCompanyForward(form) {
+ 	
+		    return true;
+  }
+    function  validatereqOHDFields(form) {
+		     return true;
+ }
   function validatereqFields(form, formType)
   {
     returnValue = true;

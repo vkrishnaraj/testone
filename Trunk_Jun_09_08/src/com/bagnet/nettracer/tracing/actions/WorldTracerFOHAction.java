@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -57,6 +58,11 @@ public class WorldTracerFOHAction extends Action {
 		if (!UserPermissions.hasPermission(
 				TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_FWD, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		
+		if(PropertyBMO.getValue(PropertyBMO.PROPERTY_WT_FWD_ONLY) != null) {
+			return (mapping.findForward("use_general"));
+		}
 
 		ActionMessages errors = new ActionMessages();
 
@@ -178,6 +184,17 @@ public class WorldTracerFOHAction extends Action {
 		}
 		if(theform.getPassenger3() != null && theform.getPassenger3().trim().length() > 0) {
 			fwd.getFwdName().add(theform.getPassenger3().trim());
+		}
+		if(theform.getTeletype_address1() != null && theform.getTeletype_address1().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address1());
+		}if(theform.getTeletype_address2() != null && theform.getTeletype_address2().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address2());
+		}
+		if(theform.getTeletype_address3() != null && theform.getTeletype_address3().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address3());
+		}
+		if(theform.getTeletype_address4() != null && theform.getTeletype_address4().trim().length() > 0) {
+			fwd.getTeletypes().add(theform.getTeletype_address4());
 		}
 		fwd.setOhd(OHDUtils.getOHD(theform.getOhd_ID()));
 		try {

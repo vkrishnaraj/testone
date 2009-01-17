@@ -757,7 +757,7 @@ public class MBRActionUtils {
 							// if bdo created, then set bdo to ohd instead
 							bdo.setIncident(null);
 							item.setBdo(null);
-							BDOUtils.insertBDOtoDB(bdo);
+							BDOUtils.insertBDOtoDB(bdo, user);
 						}
 						
 						// clear bag ohd and claimcheck
@@ -816,7 +816,7 @@ public class MBRActionUtils {
 					// if bdo created, then set bdo to ohd instead
 					bdo.setIncident(null);
 					item.setBdo(null);
-					BDOUtils.insertBDOtoDB(bdo);
+					BDOUtils.insertBDOtoDB(bdo, user);
 				}
 				
 				//empty out bag ohd and claimcheck

@@ -85,6 +85,9 @@ public class SearchIncidentAction extends Action {
 				WorldTracerService wts = SpringUtils.getWorldTracerService();
 				try {
 					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE);
+					if(foundinc != null) {
+						incident = foundinc.getIncident_ID();
+					}
 				}
 				catch (WorldTracerException e) {
 					ActionMessages errors = new ActionMessages();
