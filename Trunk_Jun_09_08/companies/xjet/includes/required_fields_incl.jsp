@@ -16,6 +16,13 @@
   {
   	return true;
   } 
+      function validateWTCompanyForward(form) {
+ 	
+		    return true;
+  }
+    function  validatereqOHDFields(form) {
+		     return true;
+ }
   function validatereq(form)
   {
   	var theindex = 0;
