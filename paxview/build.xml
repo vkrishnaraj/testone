@@ -115,6 +115,21 @@
 		</antcall> 	
 	</target>
 	
+	<target name="build-azul-training">
+		<property name="company.name" value="azul" />
+		<property name="environment.name" value="training" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-azul-prod">
+		<property name="company.name" value="azul" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+			
+	
 	<target name="clean" depends="init">
 		<delete dir="${build.dir}" defaultexcludes="false" includeemptydirs="true" />
 		<delete dir="${dist.dir}" defaultexcludes="false" includeemptydirs="true" />
