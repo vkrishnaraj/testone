@@ -1,306 +1,676 @@
 package com.bagnet.nettracer.tracing.db.claims;
 
+import java.util.ArrayList;
 import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Incident;
 
+@Entity
+@Table(name = "z_b6_claim_settlement")
+@Proxy(lazy = false)
 public class ClaimSettlement {
-	int claimId;
 
-	private String incident_ID;
+	@Id
+	@GeneratedValue
+	private long claimSettlementId;
 
-	// To be populated from object at time of creation
-	// TODO: Determine PK
-	private String claimSettlementNumber;
+	@Column(name = "address1", length = 40)
+	private String address1;
 
-	private Incident incident;
+	@Column(name = "address2", length = 40)
+	private String address2;
 
+	@Column(name = "amountClaimed", length = 10)
+	private String amountClaimed = "0.00";
+
+	@Column(name = "amountOffered", length = 10)
+	private String amountOffered = "0.00";
+
+	@Column(name = "auditVOOffered", length = 10)
+	private String auditVOOffered = "0.00";
+
+	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.Agent.class)
+	@JoinColumn(name="claimSettlementId", nullable = false)
+	private ArrayList<ClaimSettlementBag> bagList;
+
+	@Column(length = 25)
+	private String businessPhone;
+
+	@Column(length = 50)
+	private String city;
+
+	@Column(length = 25)
 	private String claimAgent;
-	private Date dateTakeover;
+
+	@Column(length = 25)
 	private String claimType;
-	private Date firstContact;
-	private Date secondContact;
-	private Date pplcSent;
-	private Date pplcDue;
-	private Date pplcReceived;
-	private Date depreciationDue;
-	private Date depreciationComplete;
-	private Date offerDue;
 
-	private boolean verifyAddress;
-	private boolean verifyPhone;
-	private boolean verifyEmail;
-	private boolean verifyBagColor;
-	private boolean verifyBrand;
-	private boolean verifyContents;
-	private boolean verifyFraudCC;
-	private boolean verifyFraudPhone;
-	private boolean verifyFraudName;
-	private boolean verifyTrace1;
-	private boolean verifyTrace2;
-	private boolean verifyTrace3;
-
+	@Basic
 	private String comments;
-	private String newComment;
-	private String pplcVia;
 
-	private String lastName;
+	@Column(length = 2)
+	private String countryCode_ID;
+
+	@Basic
+	private Date dateStatusChange;
+
+	@Basic
+	private Date dateTakeover;
+
+	@Basic
+	private Date depreciationComplete;
+
+	@Basic
+	private Date depreciationDue;
+
+	@Column(length = 50)
+	private String email;
+
+	@Column(length = 25)
+	private String fax;
+
+	@Basic
+	private Date firstContact;
+
+	@Column(length = 20)
 	private String firstName;
 
-	public int getClaimId() {
-		return claimId;
+	@Column(length = 25)
+	private String homePhone;
+
+	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class)
+	@JoinColumn(name = "incident_id", nullable = false)
+	private Incident incident;
+
+	@Column(length = 25)
+	private String language;
+
+	@Column(length = 20)
+	private String lastName;
+
+	@Column(length = 20)
+	private String membership;
+
+	@Column(length = 25)
+	private String mobilePhone;
+
+	@Basic
+	private String newComment;
+
+	@Basic
+	private Date offerDue;
+
+	@Basic
+	private Date offerSent;
+
+	@Column(length = 20)
+	private String offerSentVia;
+
+	@Column(length = 25)
+	private String pager;
+
+	@Basic
+	private Date pplcDue;
+
+	@Basic
+	private Date pplcReceived;
+
+	@Column(name = "pplcSent")
+	private Date pplcSent;
+
+	@Column(length = 20)
+	private String pplcVia;
+
+	@Column(length = 100)
+	private String province;
+
+	@Basic
+	private Date releaseDue;
+
+	@Column(length = 20)
+	private String revisitedBy;
+
+	@Column(name = "revisitRequested")
+	private Date revisitRequested;
+
+	@Basic
+	private int salutation;
+
+	@Column(name = "secondContact")
+	private Date secondContact;
+
+	@Column(length = 2)
+	private String state_ID;
+
+	@Column(length = 10)
+	private String totalPaid = "0.00";
+
+	@Column(length = 10)
+	private String totalPaidCertif = "0.00";
+
+	@Column(length = 10)
+	private String totalPaidVouchers = "0.00";
+
+	@Basic
+	private boolean verifyAddress;
+
+	@Basic
+	private boolean verifyBagColor;
+
+	@Basic
+	private boolean verifyBrand;
+
+	@Basic
+	private boolean verifyContents;
+
+	@Basic
+	private boolean verifyEmail;
+
+	@Basic
+	private boolean verifyFraudCC;
+
+	@Basic
+	private boolean verifyFraudName;
+
+	@Basic
+	private boolean verifyFraudPhone;
+
+	@Basic
+	private boolean verifyPhone;
+
+	@Basic
+	private boolean verifyTrace1;
+
+	@Basic
+	private boolean verifyTrace2;
+
+	@Basic
+	private boolean verifyTrace3;
+
+	@Column(length = 9)
+	private String zip;
+
+	public String getAddress1() {
+		return address1;
 	}
 
-	public void setClaimId(int claimId) {
-		this.claimId = claimId;
+	public String getAddress2() {
+		return address2;
 	}
 
-	public String getIncident_ID() {
-		return incident_ID;
+	public String getAmountClaimed() {
+		return amountClaimed;
 	}
 
-	public void setIncident_ID(String incident_ID) {
-		this.incident_ID = incident_ID;
+	public String getAmountOffered() {
+		return amountOffered;
 	}
 
-	public String getClaimSettlementNumber() {
-		return claimSettlementNumber;
+	public String getAuditVOOffered() {
+		return auditVOOffered;
 	}
 
-	public void setClaimSettlementNumber(String claimSettlementNumber) {
-		this.claimSettlementNumber = claimSettlementNumber;
+	public ArrayList<ClaimSettlementBag> getBagList() {
+		return bagList;
 	}
 
-	public Incident getIncident() {
-		return incident;
+	public String getBusinessPhone() {
+		return businessPhone;
 	}
 
-	public void setIncident(Incident incident) {
-		this.incident = incident;
+	public String getCity() {
+		return city;
 	}
 
 	public String getClaimAgent() {
 		return claimAgent;
 	}
 
-	public void setClaimAgent(String claimAgent) {
-		this.claimAgent = claimAgent;
-	}
-
-	public Date getDateTakeover() {
-		return dateTakeover;
-	}
-
-	public void setDateTakeover(Date dateTakeover) {
-		this.dateTakeover = dateTakeover;
-	}
-
 	public String getClaimType() {
 		return claimType;
-	}
-
-	public void setClaimType(String claimType) {
-		this.claimType = claimType;
-	}
-
-	public Date getFirstContact() {
-		return firstContact;
-	}
-
-	public void setFirstContact(Date firstContact) {
-		this.firstContact = firstContact;
-	}
-
-	public Date getSecondContact() {
-		return secondContact;
-	}
-
-	public void setSecondContact(Date secondContact) {
-		this.secondContact = secondContact;
-	}
-
-	public Date getPplcSent() {
-		return pplcSent;
-	}
-
-	public void setPplcSent(Date pplcSent) {
-		this.pplcSent = pplcSent;
-	}
-
-	public Date getPplcDue() {
-		return pplcDue;
-	}
-
-	public void setPplcDue(Date pplcDue) {
-		this.pplcDue = pplcDue;
-	}
-
-	public Date getPplcReceived() {
-		return pplcReceived;
-	}
-
-	public void setPplcReceived(Date pplcReceived) {
-		this.pplcReceived = pplcReceived;
-	}
-
-	public Date getDepreciationDue() {
-		return depreciationDue;
-	}
-
-	public void setDepreciationDue(Date depreciationDue) {
-		this.depreciationDue = depreciationDue;
-	}
-
-	public Date getDepreciationComplete() {
-		return depreciationComplete;
-	}
-
-	public void setDepreciationComplete(Date depreciationComplete) {
-		this.depreciationComplete = depreciationComplete;
-	}
-
-	public Date getOfferDue() {
-		return offerDue;
-	}
-
-	public void setOfferDue(Date offerDue) {
-		this.offerDue = offerDue;
-	}
-
-	public boolean isVerifyAddress() {
-		return verifyAddress;
-	}
-
-	public void setVerifyAddress(boolean verifyAddress) {
-		this.verifyAddress = verifyAddress;
-	}
-
-	public boolean isVerifyPhone() {
-		return verifyPhone;
-	}
-
-	public void setVerifyPhone(boolean verifyPhone) {
-		this.verifyPhone = verifyPhone;
-	}
-
-	public boolean isVerifyEmail() {
-		return verifyEmail;
-	}
-
-	public void setVerifyEmail(boolean verifyEmail) {
-		this.verifyEmail = verifyEmail;
-	}
-
-	public boolean isVerifyBagColor() {
-		return verifyBagColor;
-	}
-
-	public void setVerifyBagColor(boolean verifyBagColor) {
-		this.verifyBagColor = verifyBagColor;
-	}
-
-	public boolean isVerifyBrand() {
-		return verifyBrand;
-	}
-
-	public void setVerifyBrand(boolean verifyBrand) {
-		this.verifyBrand = verifyBrand;
-	}
-
-	public boolean isVerifyContents() {
-		return verifyContents;
-	}
-
-	public void setVerifyContents(boolean verifyContents) {
-		this.verifyContents = verifyContents;
-	}
-
-	public boolean isVerifyFraudCC() {
-		return verifyFraudCC;
-	}
-
-	public void setVerifyFraudCC(boolean verifyFraudCC) {
-		this.verifyFraudCC = verifyFraudCC;
-	}
-
-	public boolean isVerifyFraudPhone() {
-		return verifyFraudPhone;
-	}
-
-	public void setVerifyFraudPhone(boolean verifyFraudPhone) {
-		this.verifyFraudPhone = verifyFraudPhone;
-	}
-
-	public boolean isVerifyFraudName() {
-		return verifyFraudName;
-	}
-
-	public void setVerifyFraudName(boolean verifyFraudName) {
-		this.verifyFraudName = verifyFraudName;
-	}
-
-	public boolean isVerifyTrace1() {
-		return verifyTrace1;
-	}
-
-	public void setVerifyTrace1(boolean verifyTrace1) {
-		this.verifyTrace1 = verifyTrace1;
-	}
-
-	public boolean isVerifyTrace2() {
-		return verifyTrace2;
-	}
-
-	public void setVerifyTrace2(boolean verifyTrace2) {
-		this.verifyTrace2 = verifyTrace2;
-	}
-
-	public boolean isVerifyTrace3() {
-		return verifyTrace3;
-	}
-
-	public void setVerifyTrace3(boolean verifyTrace3) {
-		this.verifyTrace3 = verifyTrace3;
 	}
 
 	public String getComments() {
 		return comments;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
+	public String getCountryCode_ID() {
+		return countryCode_ID;
 	}
 
-	public String getNewComment() {
-		return newComment;
+	public Date getDateStatusChange() {
+		return dateStatusChange;
 	}
 
-	public void setNewComment(String newComment) {
-		this.newComment = newComment;
+	public Date getDateTakeover() {
+		return dateTakeover;
 	}
 
-	public String getPplcVia() {
-		return pplcVia;
+	public Date getDepreciationComplete() {
+		return depreciationComplete;
 	}
 
-	public void setPplcVia(String pplcVia) {
-		this.pplcVia = pplcVia;
+	public Date getDepreciationDue() {
+		return depreciationDue;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public String getFax() {
+		return fax;
+	}
+
+	public Date getFirstContact() {
+		return firstContact;
 	}
 
 	public String getFirstName() {
 		return firstName;
 	}
 
+	public String getHomePhone() {
+		return homePhone;
+	}
+
+	public Incident getIncident() {
+		return incident;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getMembership() {
+		return membership;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public String getNewComment() {
+		return newComment;
+	}
+
+	public Date getOfferDue() {
+		return offerDue;
+	}
+
+	public Date getOfferSent() {
+		return offerSent;
+	}
+
+	public String getOfferSentVia() {
+		return offerSentVia;
+	}
+
+	public String getPager() {
+		return pager;
+	}
+
+	public Date getPplcDue() {
+		return pplcDue;
+	}
+
+	public Date getPplcReceived() {
+		return pplcReceived;
+	}
+
+	public Date getPplcSent() {
+		return pplcSent;
+	}
+
+	public String getPplcVia() {
+		return pplcVia;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public Date getReleaseDue() {
+		return releaseDue;
+	}
+
+	public String getRevisitedBy() {
+		return revisitedBy;
+	}
+
+	public Date getRevisitRequested() {
+		return revisitRequested;
+	}
+
+	public Date getSecondContact() {
+		return secondContact;
+	}
+
+	public String getState_ID() {
+		return state_ID;
+	}
+
+	public String getTotalPaid() {
+		return totalPaid;
+	}
+
+	public String getTotalPaidCertif() {
+		return totalPaidCertif;
+	}
+
+	public String getTotalPaidVouchers() {
+		return totalPaidVouchers;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public boolean isVerifyAddress() {
+		return verifyAddress;
+	}
+
+	public boolean isVerifyBagColor() {
+		return verifyBagColor;
+	}
+
+	public boolean isVerifyBrand() {
+		return verifyBrand;
+	}
+
+	public boolean isVerifyContents() {
+		return verifyContents;
+	}
+
+	public boolean isVerifyEmail() {
+		return verifyEmail;
+	}
+
+	public boolean isVerifyFraudCC() {
+		return verifyFraudCC;
+	}
+
+	public boolean isVerifyFraudName() {
+		return verifyFraudName;
+	}
+
+	public boolean isVerifyFraudPhone() {
+		return verifyFraudPhone;
+	}
+
+	public boolean isVerifyPhone() {
+		return verifyPhone;
+	}
+
+	public boolean isVerifyTrace1() {
+		return verifyTrace1;
+	}
+
+	public boolean isVerifyTrace2() {
+		return verifyTrace2;
+	}
+
+	public boolean isVerifyTrace3() {
+		return verifyTrace3;
+	}
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	public void setAmountClaimed(String amountClaimed) {
+		this.amountClaimed = amountClaimed;
+	}
+
+	public void setAmountOffered(String amountOffered) {
+		this.amountOffered = amountOffered;
+	}
+
+	public void setAuditVOOffered(String auditVOOffered) {
+		this.auditVOOffered = auditVOOffered;
+	}
+
+	public void setBagList(ArrayList<ClaimSettlementBag> bagList) {
+		this.bagList = bagList;
+	}
+
+	public void setBusinessPhone(String businessPhone) {
+		this.businessPhone = businessPhone;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public void setClaimAgent(String claimAgent) {
+		this.claimAgent = claimAgent;
+	}
+
+	public void setClaimType(String claimType) {
+		this.claimType = claimType;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public void setCountryCode_ID(String countryCode_ID) {
+		this.countryCode_ID = countryCode_ID;
+	}
+
+	public void setDateStatusChange(Date dateStatusChange) {
+		this.dateStatusChange = dateStatusChange;
+	}
+
+	public void setDateTakeover(Date dateTakeover) {
+		this.dateTakeover = dateTakeover;
+	}
+
+	public void setDepreciationComplete(Date depreciationComplete) {
+		this.depreciationComplete = depreciationComplete;
+	}
+
+	public void setDepreciationDue(Date depreciationDue) {
+		this.depreciationDue = depreciationDue;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
+
+	public void setFirstContact(Date firstContact) {
+		this.firstContact = firstContact;
+	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+
+	public void setHomePhone(String homePhone) {
+		this.homePhone = homePhone;
+	}
+
+	public void setIncident(Incident incident) {
+		this.incident = incident;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setMembership(String membership) {
+		this.membership = membership;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+	public void setNewComment(String newComment) {
+		this.newComment = newComment;
+	}
+
+	public void setOfferDue(Date offerDue) {
+		this.offerDue = offerDue;
+	}
+
+	public void setOfferSent(Date offerSent) {
+		this.offerSent = offerSent;
+	}
+
+	public void setOfferSentVia(String offerSentVia) {
+		this.offerSentVia = offerSentVia;
+	}
+
+	public void setPager(String pager) {
+		this.pager = pager;
+	}
+
+	public void setPplcDue(Date pplcDue) {
+		this.pplcDue = pplcDue;
+	}
+
+	public void setPplcReceived(Date pplcReceived) {
+		this.pplcReceived = pplcReceived;
+	}
+
+	public void setPplcSent(Date pplcSent) {
+		this.pplcSent = pplcSent;
+	}
+
+	public void setPplcVia(String pplcVia) {
+		this.pplcVia = pplcVia;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public void setReleaseDue(Date releaseDue) {
+		this.releaseDue = releaseDue;
+	}
+
+	public void setRevisitedBy(String revisitedBy) {
+		this.revisitedBy = revisitedBy;
+	}
+
+	public void setRevisitRequested(Date revisitRequested) {
+		this.revisitRequested = revisitRequested;
+	}
+
+	public void setSecondContact(Date secondContact) {
+		this.secondContact = secondContact;
+	}
+
+	public void setState_ID(String state_ID) {
+		this.state_ID = state_ID;
+	}
+
+	public void setTotalPaid(String totalPaid) {
+		this.totalPaid = totalPaid;
+	}
+
+	public void setTotalPaidCertif(String totalPaidCertif) {
+		this.totalPaidCertif = totalPaidCertif;
+	}
+
+	public void setTotalPaidVouchers(String totalPaidVouchers) {
+		this.totalPaidVouchers = totalPaidVouchers;
+	}
+
+	public void setVerifyAddress(boolean verifyAddress) {
+		this.verifyAddress = verifyAddress;
+	}
+
+	public void setVerifyBagColor(boolean verifyBagColor) {
+		this.verifyBagColor = verifyBagColor;
+	}
+
+	public void setVerifyBrand(boolean verifyBrand) {
+		this.verifyBrand = verifyBrand;
+	}
+
+	public void setVerifyContents(boolean verifyContents) {
+		this.verifyContents = verifyContents;
+	}
+
+	public void setVerifyEmail(boolean verifyEmail) {
+		this.verifyEmail = verifyEmail;
+	}
+
+	public void setVerifyFraudCC(boolean verifyFraudCC) {
+		this.verifyFraudCC = verifyFraudCC;
+	}
+
+	public void setVerifyFraudName(boolean verifyFraudName) {
+		this.verifyFraudName = verifyFraudName;
+	}
+
+	public void setVerifyFraudPhone(boolean verifyFraudPhone) {
+		this.verifyFraudPhone = verifyFraudPhone;
+	}
+
+	public void setVerifyPhone(boolean verifyPhone) {
+		this.verifyPhone = verifyPhone;
+	}
+
+	public void setVerifyTrace1(boolean verifyTrace1) {
+		this.verifyTrace1 = verifyTrace1;
+	}
+
+	public void setVerifyTrace2(boolean verifyTrace2) {
+		this.verifyTrace2 = verifyTrace2;
+	}
+
+	public void setVerifyTrace3(boolean verifyTrace3) {
+		this.verifyTrace3 = verifyTrace3;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public int getSalutation() {
+		return salutation;
+	}
+
+	public void setSalutation(int salutation) {
+		this.salutation = salutation;
+	}
+
+	public long getClaimSettlementId() {
+		return claimSettlementId;
+	}
+
+	public void setClaimSettlementId(long claimSettlementId) {
+		this.claimSettlementId = claimSettlementId;
 	}
 
 }
