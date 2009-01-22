@@ -38,6 +38,7 @@
 			<fileset dir="${webroot.dir}" >
 				<include name="WEB-INF/**/*"/>
 				<include name="META-INF/**/*"/>
+				<include name="index.jsp" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dir}/${company.name}-war/WEB-INF/classes" overwrite="true">
