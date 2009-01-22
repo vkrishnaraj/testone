@@ -163,3 +163,10 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.datafeed.DataFeedLog" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
 		<mapping class="com.bagnet.nettracer.tracing.db.Report" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.ClaimSettlement" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.SettlementBagInventory" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlementBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlement" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditSettlementBagInventory" />
+		

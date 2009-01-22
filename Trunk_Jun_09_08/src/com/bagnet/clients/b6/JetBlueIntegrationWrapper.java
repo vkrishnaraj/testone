@@ -1,8 +1,12 @@
 package com.bagnet.clients.b6;
 
+import org.apache.axis2.client.Options;
+import org.apache.axis2.client.ServiceClient;
 import org.apache.log4j.Logger;
+import org.datacontract.schemas._2004._07.jetblue_telnet_pnr.CommentType;
 
 import servicemanager.uddi_5413d78d_d06a_11dd_9aaf_9cc8f268cf20.BaggageService_vs3_0_BP_NT_DEVStub;
+import servicemanager.uddi_6605bbea_dcf6_11dd_9aaf_9cc8f268cf20.PNRService_vs3_0_BP_NT_DEVStub;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -17,6 +21,8 @@ import com.jetblue.schemas._2008._03.framework.services.baggage.PassengerDetailR
 import com.jetblue.schemas._2008._03.framework.services.baggage.RecordLocatorRequest;
 import com.jetblue.schemas._2008._03.framework.services.baggage.RecordLocatorRequestDocument;
 import com.jetblue.schemas._2008._03.framework.services.baggage.ReservationDetailResponseDocument;
+import com.jetblue.schemas._2008._09.telnet.services.pnr.AddCommentDocument;
+import com.jetblue.schemas._2008._09.telnet.services.pnr.Comment;
 
 public class JetBlueIntegrationWrapper {
 
@@ -26,6 +32,8 @@ public class JetBlueIntegrationWrapper {
 	
 	private Logger logger = Logger.getLogger(JetBlueIntegrationWrapper.class);
 	private String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_BOOKING_ENDPOINT);
+	private String commentEndpoint = PropertyBMO.getValue("comments.endpoint");
+	
 	private String consumerId = PropertyBMO.getValue("jetblue.reservation.consumerId");
 	private String signature = PropertyBMO.getValue("jetblue.reservation.signature");
 	private String token = PropertyBMO.getValue("jetblue.reservation.token");
@@ -44,7 +52,24 @@ public class JetBlueIntegrationWrapper {
 		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
 				&& recordLocator != null && recordLocator.trim().length() == 6) {
 			try {
-
+				
+				PNRService_vs3_0_BP_NT_DEVStub stub = new PNRService_vs3_0_BP_NT_DEVStub(commentEndpoint);
+				ServiceClient sc = stub._getServiceClient();
+				Options opts = sc.getOptions();
+				opts.setTimeOutInMilliSeconds(60*1000);
+				
+				AddCommentDocument addDoc = AddCommentDocument.Factory.newInstance();
+				
+				Comment com = addDoc.addNewAddComment().addNewComment();
+				com.setCommentText(comment);
+				com.setRecordLocator(recordLocator);
+				com.setCommentType(CommentType.FREE_FORM);
+				
+				//AddCommentResponseDocument responseDoc = stub.AddComment(addDoc);
+				DoNothingCallbackHandler cb = new DoNothingCallbackHandler();
+				stub.startAddComment(addDoc, cb);
+			
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				setErrorMessage("Error calling webservice: " + e.toString());

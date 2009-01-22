@@ -52,10 +52,6 @@ public class ClaimAction extends Action {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		
-		if (request.getParameter("createclaimsettlement") != null) {
-			session.setAttribute("claimsettlementon", "claimssettlement");
-		}
 
 		// only check permission if it is not interim
 		if (request.getParameter("addnewinterim") == null) {
