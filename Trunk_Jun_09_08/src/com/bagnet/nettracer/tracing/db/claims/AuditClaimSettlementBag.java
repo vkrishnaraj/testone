@@ -14,9 +14,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "z_b6_claim_settlement_bag")
+@Table(name = "z_b6_audit_claim_settlement_bag")
 @Proxy(lazy = false)
-public class ClaimSettlementBag {
+public class AuditClaimSettlementBag {
 
 	@Id
 	@GeneratedValue
@@ -32,11 +32,11 @@ public class ClaimSettlementBag {
 	private String manufacturer;
 
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.claims.ClaimSettlement.class)
-	@JoinColumn(name = "claimSettlementId", nullable = false)
-	private ClaimSettlement claimSettlement;
+	@JoinColumn(name = "auditClaimSettlementId", nullable = false)
+	private AuditClaimSettlement claimSettlement;
 
 	@OneToMany(mappedBy = "claimSettlementBag")
-	private Set<SettlementBagInventory> inventory;
+	private Set<AuditSettlementBagInventory> inventory;
 
 	public String getColor() {
 		return color;
@@ -62,14 +62,6 @@ public class ClaimSettlementBag {
 		this.manufacturer = manufacturer;
 	}
 
-	public ClaimSettlement getClaimSettlement() {
-		return claimSettlement;
-	}
-
-	public void setClaimSettlement(ClaimSettlement claimSettlement) {
-		this.claimSettlement = claimSettlement;
-	}
-
 	public long getBagId() {
 		return bagId;
 	}
@@ -78,11 +70,19 @@ public class ClaimSettlementBag {
 		this.bagId = bagId;
 	}
 
-	public Set<SettlementBagInventory> getInventory() {
+	public AuditClaimSettlement getClaimSettlement() {
+		return claimSettlement;
+	}
+
+	public void setClaimSettlement(AuditClaimSettlement claimSettlement) {
+		this.claimSettlement = claimSettlement;
+	}
+
+	public Set<AuditSettlementBagInventory> getInventory() {
 		return inventory;
 	}
 
-	public void setInventory(Set<SettlementBagInventory> inventory) {
+	public void setInventory(Set<AuditSettlementBagInventory> inventory) {
 		this.inventory = inventory;
 	}
 

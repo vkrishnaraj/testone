@@ -165,18 +165,20 @@
                         </dd>
 <%
                       }
-                      if (session.getAttribute("claimsettlementon")==null) {
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT, a)) {
+                        if (session.getAttribute("claimsettlementon")==null) {
+                      	
 %>
                
-                      <dd>
-                        <a href="claim_settlement.do"><span class="aa">&nbsp;
-                            <br />
-                            &nbsp;</span>
-                          <span class="bb"><bean:message key="menu.claim_settlement" /></span>
-                          <span class="cc">&nbsp;
-                            <br />
-                            &nbsp;</span></a>
-                      </dd>
+                        <dd>
+                          <a href='claim_settlement.do?incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
+                              <br />
+                              &nbsp;</span>
+                            <span class="bb"><bean:message key="menu.claim_settlement" /></span>
+                            <span class="cc">&nbsp;
+                              <br />
+                              &nbsp;</span></a>
+                        </dd>
 <%
                       } else {
 %>
@@ -223,6 +225,7 @@
                     </dd>
 <%
                       }
+                    }
 %>
 
                     </logic:notPresent>

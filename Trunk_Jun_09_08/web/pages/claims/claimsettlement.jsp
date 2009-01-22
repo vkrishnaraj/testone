@@ -83,11 +83,11 @@
                 <!-- MAIN BODY -->
                 <div id="maincontent">
   
-          <html:form action="claim_resolution.do" method="post">
+          <html:form action="claim_settlement.do" method="post">
           <h1 class="green">Create Claim Settlement</h1>
           
           <p/>&nbsp;
-          
+            <html:hidden name="claimSettlementForm" property="incident_ID"/>
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td align="center" valign="top">

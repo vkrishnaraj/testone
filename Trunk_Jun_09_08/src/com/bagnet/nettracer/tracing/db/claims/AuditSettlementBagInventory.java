@@ -11,9 +11,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "z_b6_claim_settlement_inventory")
+@Table(name = "z_b6_audit_claim_settlement_inventory")
 @Proxy(lazy = false)
-public class SettlementBagInventory {
+public class AuditSettlementBagInventory {
 
 	@Id
 	@GeneratedValue
@@ -21,7 +21,7 @@ public class SettlementBagInventory {
 
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag.class)
 	@JoinColumn(name = "bagId", nullable = false)
-	private ClaimSettlementBag claimSettlementBag;
+	private AuditClaimSettlementBag claimSettlementBag;
 
 	@Basic
 	private int categoryType_ID;
@@ -53,11 +53,12 @@ public class SettlementBagInventory {
 		this.categoryType_ID = categoryType_ID;
 	}
 
-	public ClaimSettlementBag getClaimSettlementBag() {
+	public AuditClaimSettlementBag getClaimSettlementBag() {
 		return claimSettlementBag;
 	}
 
-	public void setClaimSettlementBag(ClaimSettlementBag claimSettlementBag) {
+	public void setClaimSettlementBag(AuditClaimSettlementBag claimSettlementBag) {
 		this.claimSettlementBag = claimSettlementBag;
 	}
+
 }
