@@ -153,7 +153,7 @@ window.addEvent('domready', function() {
         <table cellspacing="4" cellpadding="0" id="baggageTrackingSummary">
           <c:forEach items="${incident.items}" var="item" varStatus="status" >
           <tr>
-            <td class="rightAlign"><spring:message code="bag" />Bag ${status.index + 1}</td>
+            <td class="rightAlign"><spring:message code="bag" /> ${status.index + 1}</td>
           </tr>
     <c:if test="${!empty incident.items[status.index].claimchecknum}" >
           <tr>
