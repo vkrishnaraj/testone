@@ -24,11 +24,21 @@
 
     // -->
   </SCRIPT>
+    <tr>
+      <td colspan="3" id="pageheadercell">
+        <div id="pageheaderleft">
+          <h1>
+            <bean:message key="claimsettlement.header.baggageInformation" />
+          </h1>
+        </div>
+      </td>
+    </tr>
+
 <tr>
   <td colspan="3" id="navmenucell">
   <div class="menu">
   <dl>
-    <dd><a href='searchIncident.do?incident='><span class="aa">&nbsp;
+    <dd><a href='searchIncident.do?incident=<bean:write name="claimSettlementForm" property="incident_ID"/>'><span class="aa">&nbsp;
     <br />
     &nbsp;</span> <span class="bb"><bean:message
       key="menu.incident_info" /></span> <span class="cc">&nbsp; <br />
@@ -97,7 +107,7 @@
           type="com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag">
           <p />&nbsp;
           <h1 class="green"><bean:message
-      key="claimsettlement.bagNumber" />: <%=i%></h1>
+      key="claimsettlement.bagNumber" />: <%=i.intValue() + 1%></h1>
 
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
@@ -127,8 +137,8 @@
             <tr>
               <td width=33%><bean:message
                 key="claimsettlement.manufacturer" /></td>
-              <td width=66%><html:text name="settlementBag"
-                property="manufacturer" size="15" maxlength="100" /></td>
+              <td width=66%><html:text name="theBag"
+                indexed="true" property="manufacturer" size="15" maxlength="100" /></td>
             </tr>
             <tr>
               <td colspan="2" class="header"><strong><bean:message key="claimsettlement.contents" /></strong>
@@ -137,12 +147,18 @@
             <tr>
               <td colspan="2">
               <table width="100%">
-                <logic:iterate id="contents" name="theBag" property="inventory" indexId="j">
-                  
+          <logic:iterate id="theContent" name="claimSettlementForm" property="contentsList" indexId="j"
+                    type="com.bagnet.nettracer.tracing.db.claims.SettlementBagInventory">
                 
+    <% 
+    
+    if (theContent.getClaimSettlementBag().getBagId() == theBag.getBagId() && !theContent.isFlaggedForRemoval()) {
+
+    %>
+    
                 <tr>
                   <td><bean:message key="claimsettlement.category" /><br>
-                    <html:select indexed="true" name="contents" property="categoryType_ID" styleClass="dropdown">
+                    <html:select indexed="true" name="theContent" property="categoryType_ID" styleClass="dropdown">
                       <html:option value="">
                         <bean:message key="select.please_select" />
                       </html:option>
@@ -152,22 +168,22 @@
 </td>
                   <td><bean:message key="claimsettlement.contentDescription" /><br>
                   
-                  <html:text indexed="true" name="contents" property="description" size="60" maxlength="255"/>
+                  <html:text indexed="true" name="theContent" property="description" size="60" maxlength="255" styleId="textfield"/>
 
                   </td>
                   <td align="center">&nbsp;<br>
-                    <html:submit indexed="true" styleId="button" property="deleteBag[<%=i %>].content[<%=j %>]">
-                      <bean:message key="claimsettlement.deleteContent" />
-                    </html:submit>
-                </tr>
+                    <input type="submit" name="deleteBag[<%=i %>].content[<%=j %>][0]" value='<bean:message key="claimsettlement.deleteContent" />' id="button">
+      </tr>
+      <%
+    }
+    %>
+                
                 </logic:iterate>
               </table>
 
 
               <center>
-          <html:submit indexed="true" styleId="button" property="theBag[<%=i%>].addContents">
-                  <bean:message key="claimsettlement.addContents" />
-                </html:submit>
+              <input type="submit" name="addContents[<%=i%>][0]" value='<bean:message key="claimsettlement.addContents" />' id="button">
               </center>
 
               </td>
@@ -175,10 +191,6 @@
 
 
           </table>
-
-          <center><input type="submit" name="addinventory[]"
-            value="Add Additional Content" id="button"></center>
-
 
     </logic:iterate>
    

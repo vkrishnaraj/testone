@@ -29,7 +29,7 @@
 		<form-bean name="viewIncomingRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm" />
 		<form-bean name="viewOHDLZedForm" type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm" />
 		<form-bean name="claimForm" type="com.bagnet.nettracer.tracing.forms.ClaimForm" />
-		<!--  HERE  -->
+		
 		<form-bean name="claimSettlementForm" type="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm" />
 		
 		<form-bean name="claimToBeProcessedForm" type="com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm" />
@@ -450,7 +450,7 @@
 
 		<action path="/claim_prorate" type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction" name="claimProrateForm" scope="session" validate="false"></action>
 		
-		<action path="/claim_settlement" type="com.bagnet.nettracer.tracing.actions.ClaimSettlementAction" name="claimSettlementForm" scope="request" validate="false"></action>
+		<action path="/claim_settlement" type="com.bagnet.nettracer.tracing.actions.ClaimSettlementAction" name="claimSettlementForm" scope="session" validate="false"></action>
 
 		<!-- Forwarding bags -->
 		<action path="/forward_on_hand" type="com.bagnet.nettracer.tracing.actions.ForwardOnHandAction" name="forwardOnHandForm" scope="session" validate="false"></action>

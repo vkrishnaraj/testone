@@ -24,11 +24,21 @@
 
     // -->
   </SCRIPT>
+    <tr>
+      <td colspan="3" id="pageheadercell">
+        <div id="pageheaderleft">
+          <h1>
+            <bean:message key="claimsettlement.header.disposition" />
+          </h1>
+        </div>
+      </td>
+    </tr>
+
 <tr>
   <td colspan="3" id="navmenucell">
   <div class="menu">
   <dl>
-    <dd><a href='searchIncident.do?incident='><span class="aa">&nbsp;
+    <dd><a href='searchIncident.do?incident=<bean:write name="claimSettlementForm" property="incident_ID"/>'><span class="aa">&nbsp;
     <br />
     &nbsp;</span> <span class="bb"><bean:message
       key="menu.incident_info" /></span> <span class="cc">&nbsp; <br />
@@ -111,7 +121,7 @@
         <tr>
           <td><bean:message key="claimsettlement.offerSentVia" /><br />
           <html:select name="claimSettlementForm"
-            property="offerSentVia">
+            property="offerSentVia" styleId="dropdown">
             <html:option value="">
               <bean:message key="select.please_select" />
             </html:option>
@@ -155,13 +165,6 @@
             id="itcalendar2" name="itcalendar2" height="15" width="20"
             border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.claimSettlementForm, 'revisitRequested','itcalendar2','MM/dd/yyyy'); return false;">
-          </td>
-          <td><bean:message key="claimsettlement.claimStatus" /><br />
-          <input type="text" size="10" value="Open" disabled /></td>
-
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
           <td><bean:message key="claimsettlement.revisitedBy" /><br />
           <html:text name="claimSettlementForm" property="revisitedBy"
             size="20" maxlength="20" styleClass="textfield" /></td>
@@ -174,7 +177,6 @@
             border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.claimSettlementForm, 'dateStatusChange','itcalendar3','MM/dd/yyyy'); return false;">
           </td>
-          <td>&nbsp;</td>
         </tr>
       </table>
 

@@ -60,10 +60,13 @@ public class ClaimSettlementBMO {
 			t = sess.beginTransaction();
 			sess.saveOrUpdate(claim);
 			t.commit();
+			
+			// TODO: Add Auditing
 		} catch (Exception e) {
 			if (t != null) {
 				t.rollback();
 			}
+			e.printStackTrace();
 			throw new RuntimeException("Unable to save claim settlement object.");
 		} finally {
 			if (sessionNull) {
@@ -71,5 +74,13 @@ public class ClaimSettlementBMO {
 			}
 		}
 		return claim;
+	}
+	
+	public static boolean doesClaimSettlementClaimExist(String incidentId) {
+		
+		if (getClaimSettlement(incidentId, null) != null) {
+			return true;
+		}
+		return false;
 	}
 }

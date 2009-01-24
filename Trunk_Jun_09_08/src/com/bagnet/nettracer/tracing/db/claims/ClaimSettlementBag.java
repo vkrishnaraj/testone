@@ -1,9 +1,12 @@
 package com.bagnet.nettracer.tracing.db.claims;
 
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -21,6 +25,9 @@ public class ClaimSettlementBag {
 	@Id
 	@GeneratedValue
 	private long bagId;
+	
+	@Basic
+	private int position;
 
 	@Column(length = 2)
 	private String color;
@@ -35,8 +42,9 @@ public class ClaimSettlementBag {
 	@JoinColumn(name = "claimSettlementId", nullable = false)
 	private ClaimSettlement claimSettlement;
 
-	@OneToMany(mappedBy = "claimSettlementBag")
-	private Set<SettlementBagInventory> inventory;
+	@OneToMany(mappedBy = "claimSettlementBag", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@IndexColumn(name="position")
+	private List<SettlementBagInventory> inventory;
 
 	public String getColor() {
 		return color;
@@ -78,12 +86,19 @@ public class ClaimSettlementBag {
 		this.bagId = bagId;
 	}
 
-	public Set<SettlementBagInventory> getInventory() {
+	public List<SettlementBagInventory> getInventory() {
 		return inventory;
 	}
 
-	public void setInventory(Set<SettlementBagInventory> inventory) {
+	public void setInventory(List<SettlementBagInventory> inventory) {
 		this.inventory = inventory;
 	}
 
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
 }

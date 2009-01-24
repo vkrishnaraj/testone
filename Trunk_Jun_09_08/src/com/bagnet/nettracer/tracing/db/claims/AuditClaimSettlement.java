@@ -1,12 +1,13 @@
 package com.bagnet.nettracer.tracing.db.claims;
 
 import java.util.Date;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -14,20 +15,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
-import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 
 @Entity
-@Table(name = "z_b6_audit_claim_settlement")
+@Table(name = "z_b6_claim_settlement")
 @Proxy(lazy = false)
 public class AuditClaimSettlement {
 
 	@Id
 	@GeneratedValue
+	private long auditClaimSettlementId;
+	
 	private long claimSettlementId;
-
+	
 	@Column(name = "address1", length = 40)
 	private String address1;
 
@@ -43,8 +46,9 @@ public class AuditClaimSettlement {
 	@Column(name = "auditVOOffered", length = 10)
 	private String auditVOOffered = "0.00";
 
-	@OneToMany(mappedBy = "claimSettlement")
-	private Set<AuditClaimSettlementBag> bagList;
+	@OneToMany(mappedBy = "auditClaimSettlement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@IndexColumn(name = "position")
+	private List<AuditClaimSettlementBag> bagList;
 
 	@Column(length = 25)
 	private String businessPhone;
@@ -202,20 +206,6 @@ public class AuditClaimSettlement {
 
 	@Column(length = 9)
 	private String zip;
-
-	private String _DATEFORMAT; // current login agent's date format
-	private String _TIMEFORMAT; // current login agent's time format
-	private TimeZone _TIMEZONE;
-
-	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.Agent.class)
-	@JoinColumn(name = "modify_agent_id", nullable = false)
-	private Agent modify_agent;
-
-	@Basic
-	private Date modify_time;
-
-	@Column(length = 255)
-	private String modify_reason;
 
 	public String getAddress1() {
 		return address1;
@@ -677,63 +667,24 @@ public class AuditClaimSettlement {
 		return claimSettlementId;
 	}
 
-	public void setClaimSettlementId(long claimSettlementId) {
+	public void setClaimSettlementId(long auditClaimSettlementId) {
 		this.claimSettlementId = claimSettlementId;
 	}
 
-	public Set<AuditClaimSettlementBag> getBagList() {
+	public List<AuditClaimSettlementBag> getBagList() {
 		return bagList;
 	}
 
-	public void setBagList(Set<AuditClaimSettlementBag> bagList) {
+	public void setBagList(List<AuditClaimSettlementBag> bagList) {
 		this.bagList = bagList;
 	}
 
-	public String get_DATEFORMAT() {
-		return _DATEFORMAT;
+	public long getAuditClaimSettlementId() {
+		return auditClaimSettlementId;
 	}
 
-	public void set_DATEFORMAT(String _dateformat) {
-		_DATEFORMAT = _dateformat;
+	public void setAuditClaimSettlementId(long auditClaimSettlementId) {
+		this.auditClaimSettlementId = auditClaimSettlementId;
 	}
 
-	public String get_TIMEFORMAT() {
-		return _TIMEFORMAT;
-	}
-
-	public void set_TIMEFORMAT(String _timeformat) {
-		_TIMEFORMAT = _timeformat;
-	}
-
-	public TimeZone get_TIMEZONE() {
-		return _TIMEZONE;
-	}
-
-	public void set_TIMEZONE(TimeZone _timezone) {
-		_TIMEZONE = _timezone;
-	}
-
-	public Agent getModify_agent() {
-		return modify_agent;
-	}
-
-	public void setModify_agent(Agent modify_agent) {
-		this.modify_agent = modify_agent;
-	}
-
-	public Date getModify_time() {
-		return modify_time;
-	}
-
-	public void setModify_time(Date modify_time) {
-		this.modify_time = modify_time;
-	}
-
-	public String getModify_reason() {
-		return modify_reason;
-	}
-
-	public void setModify_reason(String modify_reason) {
-		this.modify_reason = modify_reason;
-	}
 }

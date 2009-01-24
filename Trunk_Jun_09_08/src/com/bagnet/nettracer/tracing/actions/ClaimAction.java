@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
@@ -62,7 +63,17 @@ public class ClaimAction extends Action {
 		BagService bs = new BagService();
 		ClaimForm cform = (ClaimForm) form;
 		IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
-		if (theform != null) request.setAttribute("incident", theform.getIncident_ID());
+		if (theform != null) {
+			request.setAttribute("incident", theform.getIncident_ID());
+			if (ClaimSettlementBMO.getClaimSettlement(theform.getIncident_ID(), null) != null) {
+				request.setAttribute("claimSettlementExists", "1");
+			}
+		} else {
+			System.out.println("get incident ID here");
+		}
+		
+		
+		
 
 		request.setAttribute("CLAIM_PAYOUT_RPT", Integer.toString(ReportingConstants.CLAIM_PAYOUT_RPT));
 

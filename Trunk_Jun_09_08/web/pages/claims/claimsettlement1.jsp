@@ -26,12 +26,23 @@
 
     // -->
   </SCRIPT>
+    </SCRIPT>
+    <tr>
+      <td colspan="3" id="pageheadercell">
+        <div id="pageheaderleft">
+          <h1>
+            <bean:message key="claimsettlement.header.process" />
+          </h1>
+        </div>
+      </td>
+    </tr>
+  
 <tr>
   <td colspan="3" id="navmenucell">
   <div class="menu">
   <dl>
     <dd>
-    <a href='searchIncident.do?incident='><span class="aa">&nbsp;
+    <a href='searchIncident.do?incident=<bean:write name="claimSettlementForm" property="incident_ID"/>'><span class="aa">&nbsp;
     <br />
     &nbsp;</span> <span class="bb"><bean:message
       key="menu.incident_info" /></span> <span class="cc">&nbsp; <br />
@@ -120,7 +131,7 @@
             onClick="cal1xx.select2(document.claimSettlementForm, 'dateTakeover','itcalendar0','MM/dd/yyyy'); return false;">
           </td>
           <td colspan="2"><bean:message key="claimsettlement.claimType" /><br />
-          <html:select name="claimSettlementForm" property="claimType">
+          <html:select name="claimSettlementForm" property="claimType" styleClass="dropdown">
             <html:option value="claimsettlement.domestic"><bean:message key="claimsettlement.domestic" /></html:option>
             <html:option value="claimsettlement.mc99"><bean:message key="claimsettlement.mc99" /></html:option>
           </html:select>         
@@ -181,7 +192,7 @@
         <tr>
           <td align="center" colspan="2">
           <%
-            String thisIncidentId = ((ClaimSettlementForm)request.getAttribute("claimSettlementForm")).getIncident_ID();
+            String thisIncidentId = ((ClaimSettlementForm)session.getAttribute("claimSettlementForm")).getIncident_ID();
           %>                    
           <input type="button" id="button" onclick="openReportWindow('searchIncident.do?receipt=1&toprint=19&incident=<%= thisIncidentId %>','LostReceipt',800,600);return false;" value="<bean:message key="link.print.pplc" />">
 
@@ -202,7 +213,7 @@
         <tr>
           <td><bean:message key="claimsettlement.pplcVia" /></td>
           <td>
-            <html:select name="claimSettlementForm" property="pplcVia">
+            <html:select name="claimSettlementForm" property="pplcVia" styleClass="dropdown">
               <html:option value="mail"><bean:message key="claimsettlement.mail" /></html:option>
               <html:option value="email"><bean:message key="claimsettlement.email" /></html:option>
             </html:select>
@@ -263,14 +274,11 @@
       <table cellspacing="0" cellpadding="0" class="form2">
         <tr>
           <td><bean:message key="claimsettlement.comments" /><br />
-          <textarea name="claimSettlementForm" property="comments" cols="70" rows="10"
-            onkeydown="textCounter(this,this,255);"
-            onkeyup="textCounter(this,this,255);" disabled />
-</textarea> <br />
+          <html:textarea name="claimSettlementForm" property="comments" cols="70" rows="10" disabled="true"></html:textarea>
+      <br />
           <bean:message key="claimsettlement.newComment" /><br />
-          <textarea name="claimSettlementForm" property="newComment" cols="70" rows="3"
-            onkeydown="textCounter(this,this,255);"
-            onkeyup="textCounter(this,this,255);" /></textarea>
+          <html:textarea name="claimSettlementForm" property="newComment" cols="70" rows="3"></html:textarea>
+
           </td>
         </tr>
       </table>

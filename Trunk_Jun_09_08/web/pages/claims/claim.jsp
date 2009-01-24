@@ -166,8 +166,7 @@
 <%
                       }
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT, a)) {
-                        if (session.getAttribute("claimsettlementon")==null) {
-                      	
+                        if (request.getAttribute("claimSettlementExists")==null) {
 %>
                
                         <dd>
@@ -185,7 +184,7 @@
 
 
                     <dd>
-                       <a href="claim_settlement.do?screen=1"><span class="aa">&nbsp;
+                       <a href='claim_settlement.do?screen=1&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                           <br />
                           &nbsp;</span>
                         <span class="bb"><bean:message key="menu.claim_process" /></span>
@@ -195,7 +194,7 @@
                     </dd>
                     
                     <dd>
-                      <a href="claim_settlement.do?screen=2"><span class="aa">&nbsp;
+                      <a href='claim_settlement.do?screen=2&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                           <br />
                           &nbsp;</span>
                         <span class="bb"><bean:message key="menu.claim_customer" /></span>
@@ -205,7 +204,7 @@
                     </dd>
 
                     <dd>
-                      <a href="claim_settlement.do?screen=3"><span class="aa">&nbsp;
+                      <a href='claim_settlement.do?screen=3&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                           <br />
                           &nbsp;</span>
                         <span class="bb"><bean:message key="menu.claim_baggage" /></span>
@@ -215,7 +214,7 @@
                     </dd>
                     
                                         <dd>
-                      <a href="claim_settlement.do?screen=4"><span class="aa">&nbsp;
+                      <a href='claim_settlement.do?screen=4&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                           <br />
                           &nbsp;</span>
                         <span class="bb"><bean:message key="menu.claim_summary" /></span>

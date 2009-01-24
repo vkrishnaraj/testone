@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
@@ -18,6 +19,12 @@ public class SettlementBagInventory {
 	@Id
 	@GeneratedValue
 	private long inventoryId;
+
+	@Basic
+	private int position;
+	
+	@Transient
+	private boolean flaggedForRemoval;
 
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag.class)
 	@JoinColumn(name = "bagId", nullable = false)
@@ -59,5 +66,21 @@ public class SettlementBagInventory {
 
 	public void setClaimSettlementBag(ClaimSettlementBag claimSettlementBag) {
 		this.claimSettlementBag = claimSettlementBag;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public boolean isFlaggedForRemoval() {
+		return flaggedForRemoval;
+	}
+
+	public void setFlaggedForRemoval(boolean flaggedForRemoval) {
+		this.flaggedForRemoval = flaggedForRemoval;
 	}
 }

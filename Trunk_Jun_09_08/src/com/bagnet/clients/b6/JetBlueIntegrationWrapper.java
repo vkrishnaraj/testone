@@ -65,10 +65,9 @@ public class JetBlueIntegrationWrapper {
 				com.setRecordLocator(recordLocator);
 				com.setCommentType(CommentType.FREE_FORM);
 				
-				//AddCommentResponseDocument responseDoc = stub.AddComment(addDoc);
-				DoNothingCallbackHandler cb = new DoNothingCallbackHandler();
-				stub.startAddComment(addDoc, cb);
-			
+				stub.AddComment(addDoc);
+				
+				System.out.println("Writing Comments Complete...");
 				
 			} catch (Exception e) {
 				e.printStackTrace();

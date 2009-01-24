@@ -315,12 +315,10 @@ public class ReservationIntegrationImpl extends
 	public ArrayList<String> writeCommentToPNR(String comment,
 			String recordLocator) {
 
-		/*
-		SharesIntegrationWrapper wrapper = new SharesIntegrationWrapper();
-		wrapper.writeCommentToPNR(recordLocator, comment);
-		return new ArrayList<String>();
-		*/
+		WriteThreadPool thread = new WriteThreadPool(recordLocator, comment);
+		new Thread(thread).start();
 		return null;
+		
 	}
 
 	private void populateIncidentFormInner(IncidentForm form,

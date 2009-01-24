@@ -25,12 +25,22 @@
 
     // -->
   </SCRIPT>
+    <tr>
+      <td colspan="3" id="pageheadercell">
+        <div id="pageheaderleft">
+          <h1>
+            <bean:message key="claimsettlement.header.customerInfo" />
+          </h1>
+        </div>
+      </td>
+    </tr>
+
   <jsp:include page="/pages/includes/validation_incl.jsp" />
 <tr>
   <td colspan="3" id="navmenucell">
   <div class="menu">
   <dl>
-    <dd><a href='searchIncident.do?incident='><span class="aa">&nbsp;
+    <dd><a href='searchIncident.do?incident=<bean:write name="claimSettlementForm" property="incident_ID"/>'><span class="aa">&nbsp;
     <br />
     &nbsp;</span> <span class="bb"><bean:message
       key="menu.incident_info" /></span> <span class="cc">&nbsp; <br />
@@ -88,7 +98,7 @@
     <div id="maincontent"><html:form action="claim_settlement.do"
       method="post">
 
-      <h1 class="green">Customer Information</h1>
+      <h1 class="green"><bean:message key="claimsettlement.header.customerInfo" /></h1>
 
       <table class="form2" cellspacing="0" cellpadding="0">
         <tr>

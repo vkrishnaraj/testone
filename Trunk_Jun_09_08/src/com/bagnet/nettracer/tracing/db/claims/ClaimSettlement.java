@@ -1,11 +1,13 @@
 package com.bagnet.nettracer.tracing.db.claims;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -42,8 +45,9 @@ public class ClaimSettlement {
 	private String auditVOOffered = "0.00";
 
 	
-	@OneToMany(mappedBy = "claimSettlement")
-	private Set<ClaimSettlementBag> bagList;
+	@OneToMany(mappedBy = "claimSettlement", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@IndexColumn(name="position")
+	private List<ClaimSettlementBag> bagList;
 
 	@Column(length = 25)
 	private String businessPhone;
@@ -666,16 +670,15 @@ public class ClaimSettlement {
 		this.claimSettlementId = claimSettlementId;
 	}
 
-	public Set<ClaimSettlementBag> getBagList() {
+	public List<ClaimSettlementBag> getBagList() {
 		return bagList;
 	}
 
-	public void setBagList(Set<ClaimSettlementBag> bagList) {
+	public void setBagList(List<ClaimSettlementBag> bagList) {
 		this.bagList = bagList;
 	}
 	
 	public ClaimSettlement() {}
-
 
 
 }

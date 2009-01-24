@@ -1,10 +1,12 @@
 package com.bagnet.nettracer.tracing.forms;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
 import com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag;
+import com.bagnet.nettracer.tracing.db.claims.SettlementBagInventory;
 
 public final class ClaimSettlementForm extends ActionForm {
 
@@ -20,7 +22,6 @@ public final class ClaimSettlementForm extends ActionForm {
 
 	// To be populated from object at time of creation
 	private String claimSettlementId;
-	private String incidentId;
 
 	private String claimAgent;
 	private String dateTakeover;
@@ -86,7 +87,9 @@ public final class ClaimSettlementForm extends ActionForm {
 	private String dateStatusChange; // date
 	private String revisitedBy; // 20 characters
 
-	private ArrayList<ClaimSettlementBag> bagList;
+	private List<ClaimSettlementBag> bagList;
+
+	private ArrayList<SettlementBagInventory> contentList;
 
 	public String getIncident_ID() {
 		return incident_ID;
@@ -142,14 +145,6 @@ public final class ClaimSettlementForm extends ActionForm {
 
 	public void setClaimSettlementId(String claimSettlementId) {
 		this.claimSettlementId = claimSettlementId;
-	}
-
-	public String getIncidentId() {
-		return incidentId;
-	}
-
-	public void setIncidentId(String incidentId) {
-		this.incidentId = incidentId;
 	}
 
 	public String getClaimAgent() {
@@ -488,11 +483,11 @@ public final class ClaimSettlementForm extends ActionForm {
 		this.countrycode_ID = countrycode_ID;
 	}
 
-	public ArrayList<ClaimSettlementBag> getBagList() {
+	public List<ClaimSettlementBag> getBagList() {
 		return bagList;
 	}
 
-	public void setBagList(ArrayList<ClaimSettlementBag> bagList) {
+	public void setBagList(List<ClaimSettlementBag> bagList) {
 		this.bagList = bagList;
 	}
 
@@ -606,6 +601,56 @@ public final class ClaimSettlementForm extends ActionForm {
 
 	public void setSalutation(int salutation) {
 		this.salutation = salutation;
+	}
+	
+	public void setTheBag(int index,ClaimSettlementBag bag)
+	{
+		bagList.set(index,bag);
+	}
+
+	public ClaimSettlementBag getTheBag(int i)
+	{
+	int listObjSize = bagList.size();
+		// check if object exists at specified index
+		if ((i + 1) > listObjSize)
+		{
+			//add objects
+			for (int j = listObjSize; j < i + 1; j++)
+			{
+				ClaimSettlementBag beanObj =
+					new ClaimSettlementBag();
+				bagList.add(j, beanObj);
+			}
+		}
+		// get and return object at this index
+		return (ClaimSettlementBag) bagList.get(i);
+	}
+
+	public List<SettlementBagInventory> getContentsList() {
+		ArrayList<SettlementBagInventory> list = new ArrayList<SettlementBagInventory>();
+		
+		for (ClaimSettlementBag bag: bagList) {
+			for (SettlementBagInventory inv : bag.getInventory()) {
+				list.add(inv);
+			}
+		}
+		contentList = list;
+		return list;
+	}
+
+	public void setContentsList(List<SettlementBagInventory> contentsList) {
+		System.out.println("Do nothing...");
+	}
+	
+	public void setTheContent(int index,SettlementBagInventory inv)
+	{
+		contentList.set(index,inv);
+	}
+
+	public SettlementBagInventory getTheContent(int i)
+	{
+		// get and return object at this index
+		return (SettlementBagInventory) contentList.get(i);
 	}
 
 }
