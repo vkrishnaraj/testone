@@ -25,6 +25,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
+import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 
 /**
@@ -160,7 +161,7 @@ public class ReportOutputServlet extends HttpServlet {
 								language), sc, response);
 						break;
 					case ReportingConstants.PPLC_RPT:
-						IncidentForm theform4 = (IncidentForm) session.getAttribute("incidentForm");
+						ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
 						bytes = readBytes(PPLCReport.createReport(theform4, sc, request, language), sc, response);
 					default:
 						break;

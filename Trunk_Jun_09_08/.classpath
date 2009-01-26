@@ -58,7 +58,6 @@
 	<classpathentry kind="lib" path="lib/jars/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="lib/jars/mail-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jars/mex-impl-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jars/mysql-connector-java-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/neethi-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/orchestra.jar"/>
 	<classpathentry kind="lib" path="lib/jars/soapmonitor-1.3.jar"/>
@@ -86,6 +85,7 @@
 	<classpathentry kind="lib" path="lib/jars/jasperreports-3.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="lib" path="lib/client-us/us-scanhistory.jar"/>
+	<classpathentry kind="lib" path="lib/jars/mysql-connector-java-5.1.6-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>

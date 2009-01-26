@@ -269,8 +269,14 @@
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#analytical_reports/onhand.htm');return false;">
           </logic:equal>
           <logic:equal name="reportnum" scope="request" value="20">
-        	<bean:message key="header.reportnum.20" />
-
+          	<c:choose>
+	          	<c:when test="${!empty customreportnum}">
+		          	<bean:message key="header.customreportnum.${customreportnum}" />
+		        </c:when>
+		        <c:otherwise>
+		        	<bean:message key="header.reportnum.20" />
+	        	</c:otherwise>
+        	</c:choose>
           </logic:equal>
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#analytical_reports/analytical_reports_summary.htm');return false;">
         	<img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0">

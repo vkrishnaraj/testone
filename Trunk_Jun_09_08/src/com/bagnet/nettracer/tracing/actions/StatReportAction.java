@@ -100,6 +100,9 @@ public class StatReportAction extends Action {
 
 				reportfile = rBMO.createReport(reportpath, srDTO, user);
 			}
+			else {
+				rBMO.setErrormsg("error.missingRequired");
+			}
 			
 			if (reportfile == null || reportfile.equals("")) {
 				

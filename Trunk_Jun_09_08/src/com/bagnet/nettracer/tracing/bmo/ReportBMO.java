@@ -58,6 +58,7 @@ import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.datasources.JRIncidentDataSource;
 import com.bagnet.nettracer.datasources.JROnhandDataSource;
+import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.other.JRGovernedFileVirtualizer;
 import com.bagnet.nettracer.other.JRMaxFilesException;
@@ -145,7 +146,12 @@ public class ReportBMO {
 			default:
 				return null;
 			}
-		} catch (Exception e) {
+		} 
+		catch(MissingRequiredFieldsException e) {
+			setErrormsg("error.missingRequired");
+			return null;
+		}
+		catch (Exception e) {
 			logger.error("hibernate exception: " + e);
 			return null;
 		}
@@ -2831,7 +2837,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	public static List<Report> getAllCustomReports() {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getDirtySession().openSession();
 			Criteria cri = sess.createCriteria(Report.class);
 			return cri.list();
 		} catch (Exception e) {
@@ -2851,7 +2857,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	public static Report getCustomReport(int number) {
 		Session sess = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getDirtySession().openSession();
 			Criteria cri = sess.createCriteria(Report.class).add(
 					Expression.eq("number", new Integer(number)));
 			

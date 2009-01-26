@@ -24,17 +24,26 @@ import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
 
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class PPLCReport {
 	
-	public static String createReport(IncidentForm theform, ServletContext sc,
+	public static String createReport(ClaimSettlementForm theform, ServletContext sc,
 			HttpServletRequest request, String language) throws Exception {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		
-		parameters.put("paxName", "Noah Rawlins");
+		parameters.put("paxName", theform.getFirstName() + " " + theform.getLastName());
+		parameters.put("homeAddress", theform.getAddress1() + "\n" + theform.getAddress2());
+		parameters.put("city", theform.getCity());
+		parameters.put("state", theform.getState_ID());
+		parameters.put("zip", theform.getZip());
+		parameters.put("homePhone", theform.getHomePhone());
+		parameters.put("primaryPhone", theform.getBusinessPhone());
+		parameters.put("membershipNum", theform.getMembership());
+		parameters.put("claimNum", theform.getIncident_ID());
 		
 		parameters.put("REPORT_RESOURCE_BUNDLE", ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language)));
 		File logo = new File(sc.getRealPath("/") + "reports/images/logo.gif");

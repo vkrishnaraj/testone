@@ -21,7 +21,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.db.Incident;
 
 @Entity
-@Table(name = "z_b6_claim_settlement")
+@Table(name = "z_b6_audit_claim_settlement")
 @Proxy(lazy = false)
 public class AuditClaimSettlement {
 
