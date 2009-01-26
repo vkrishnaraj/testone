@@ -122,7 +122,12 @@ function fillzero(o,maxlen) {
             zeros += "0";
         }
         
-        var parts = str.match(/(^.*?[A-Z])(\d+)$/i);
+        //jetblue specific test
+        var parts = currval.match(/(\w{2,5}B6)(\d+)$/i);
+        
+        if(parts == null) {
+        	parts = str.match(/(^.*?[A-Z])(\d+)$/i);
+        }
         
         if(parts != null) {
         	o.value = (parts[1] + zeros + parts[2]).toUpperCase();
