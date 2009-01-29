@@ -33,6 +33,14 @@ body {
 	background: url(../images/header.png) no-repeat;
 }
 
+#header_fr {
+	position: relative;
+	margin: 0;
+	width: 918px;
+	height: 96px;
+	background: url(../images/header_fr.png) no-repeat;
+}
+
 #content {
 	position: relative;
 	margin: 0;
@@ -140,7 +148,7 @@ table#Definitions {
 td.rightAlign {
 		text-align: right;
 	font-weight: bold;
-	width: 150px;
+	width: 160px;
 }
 
 label {
@@ -161,20 +169,13 @@ td.formField {
 	margin-bottom: 8px;
 }
 
-.errors {
-	width: 150px;
-	margin-left: 10px;
+.formError {
+	width: 220px;
 	text-align: left;
+	margin-bottom: 8px;
 	color: #FF0000;
 }
 
-.formError {
-	width: 150px;
-	margin-left: 10px;
-	text-align: left;
-	color: #FF0000;
-}
-	
 
 .smallFormText {
 	font-size: 85%;
