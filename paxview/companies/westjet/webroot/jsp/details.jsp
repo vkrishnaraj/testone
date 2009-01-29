@@ -169,7 +169,28 @@ window.addEvent('domready', function() {
     </c:if>
           <tr>
             <td class="rightAlign"><spring:message code="bag.status" />:</td>
-            <td><c:out value="${incident.items[status.index].bagstatus}" /></td>
+            <td>						
+            <c:choose>
+							<c:when test="${item.bagstatus == 'Open' }">
+								<spring:message code="bag.status.open"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'Matched' }">
+									<spring:message code="bag.status.matched"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'In Transit' }">
+									<spring:message code="bag.status.inTransit"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'To Be Delivered' }">
+									<spring:message code="bag.status.toBeDelivered"/>
+							</c:when>
+							<c:when test="${item.bagstatus == 'Process For Delivery' }">
+									<spring:message code="bag.status.procForDelivery"/>
+							</c:when>
+							<c:otherwise>
+								<spring:message code="unknown"/>
+							</c:otherwise>
+						</c:choose>
+						</td>
     </tr>
     <c:if test="${!empty incident.items[status.index].address1}">
           <tr>
