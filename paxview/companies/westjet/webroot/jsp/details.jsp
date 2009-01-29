@@ -8,11 +8,7 @@
 <head>
 <link href="css/master.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="css/niftyCorners.css" type="text/css" />
-<link href="css/sIFR-screen.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="css/sIFR-print.css" rel="stylesheet" type="text/css" media="print" />
 <script type="text/javascript" src="js/niftycube.js"></script>
-<script type="text/javascript" src="js/sifr.js"></script>
-<script type="text/javascript" src="js/sifr-addons.js"></script>
 <script type="text/javascript" src="js/mootools.js"></script>
 
 <script type="text/javascript">
@@ -60,10 +56,20 @@ window.addEvent('domready', function() {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><spring:message code="page.title" /></title>
 </head>
-<body onload="initStaticClaim()">
+<body>
 <div id="container">
   <div id="wrapper">
-    <div id="header"></div>
+   				<c:choose>
+						<c:when test="${siteLanguage == 'fr'}">
+							<div id="header_fr"></div>
+						</c:when>
+						<c:when		test="${(empty siteLanguage) and cookie.userLanguage.value == 'fr'}">
+							<div id="header_fr"></div>
+						</c:when>
+						<c:otherwise>
+							<div id="header"></div>
+						</c:otherwise>
+					</c:choose>	
     <!-- /header -->
     <div id="content">
       <h1><spring:message code="bag.track.summary" /></h1>
@@ -258,13 +264,6 @@ window.addEvent('domready', function() {
 window.onload=function(){
 Nifty("#content_resultsRightCol","big");
 }
-
-if(typeof sIFR == "function"){
-
-// This is the preferred "named argument" syntax
-
-	sIFR.replaceElement("h1", named({sFlashSrc: "flash/din.swf", sColor: "#00285e", sWmode: "transparent"}));
-};
 </script>
 </body>
 </html>
