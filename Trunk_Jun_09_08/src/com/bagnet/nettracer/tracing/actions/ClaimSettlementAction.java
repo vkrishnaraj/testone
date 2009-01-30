@@ -82,7 +82,7 @@ public class ClaimSettlementAction extends Action {
 		
 		// Create new claim settlement objects from incident
 		if (request.getParameter("createclaimsettlement") != null) {
-			claimObject = generateClaimObjectsFromIncidentId(incidentId);
+			claimObject = generateClaimObjectsFromIncidentId(incidentId, user);
 			num = 1;
 		} else if (request.getParameter("save1") != null) {
 			saveClaimObject(form, 1, request);
@@ -226,7 +226,13 @@ public class ClaimSettlementAction extends Action {
 		
 		if (inc.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY) {
 			for (Incident_Claimcheck ch: (Set<Incident_Claimcheck>)inc.getClaimchecks()) {
-				if (ch.getOHD_ID() != null) {
+				if (ch.getOHD_ID() != null && ch.getOHD_ID().trim().length() > 0) {
+					form.setMatchDetected("YES");
+				}
+			}
+			
+			for (Item item: (List<Item>)inc.getItemlist()) {
+				if (item.getOHD_ID() != null && item.getOHD_ID().trim().length() > 0) {
 					form.setMatchDetected("YES");
 				}
 			}
@@ -430,12 +436,15 @@ public class ClaimSettlementAction extends Action {
 			sess.merge(cs);
 			
 			t.commit();
+			ClaimSettlementBMO.auditClaimSettlement(cs, sess, a);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (t != null) {
 				t.rollback();
 			}
 		}
+		
+		
 		
 		sess.close();
 		
@@ -452,7 +461,7 @@ public class ClaimSettlementAction extends Action {
 
 	}
 
-	private ClaimSettlement generateClaimObjectsFromIncidentId(String incidentId) {
+	private ClaimSettlement generateClaimObjectsFromIncidentId(String incidentId, Agent agent) {
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 		Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
@@ -524,7 +533,8 @@ public class ClaimSettlementAction extends Action {
 			
 		}
 		
-		ClaimSettlementBMO.saveClaimSettlement(cs, sess);
+		
+		ClaimSettlementBMO.saveClaimSettlement(cs, sess, agent);
 		
 		sess.close();
 		return cs;
