@@ -106,7 +106,7 @@ function openReportWindow(url,name,w,h)
 function fillzero(o,maxlen) {
     var currval = o.value;
 
-    if(currval.indexof('%') != -1) {
+    if(currval.indexOf('%') != -1) {
     	return false;
     }
     
@@ -126,7 +126,7 @@ function fillzero(o,maxlen) {
         var parts = currval.match(/(\w{2,5}B6)(\d+)$/i);
         
         if(parts == null) {
-        	parts = str.match(/(^.*?[A-Z])(\d+)$/i);
+        	parts = currval.match(/(^.*?[A-Z])(\d+)$/i);
         }
         
         if(parts != null) {
