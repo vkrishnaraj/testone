@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -40,6 +41,9 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * Preferences - Java - Code Style - Code Templates
  */
 public class ClaimAction extends Action {
+	
+	private static final Logger logger = Logger.getLogger(ClaimAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -69,12 +73,9 @@ public class ClaimAction extends Action {
 				request.setAttribute("claimSettlementExists", "1");
 			}
 		} else {
-			System.out.println("get incident ID here");
+			//TODO get incident ID here.
 		}
 		
-		
-		
-
 		request.setAttribute("CLAIM_PAYOUT_RPT", Integer.toString(ReportingConstants.CLAIM_PAYOUT_RPT));
 
 		/** ****************** handle requests ******************** */
@@ -151,7 +152,7 @@ public class ClaimAction extends Action {
 			incident_id = request.getParameter("incidentid");
 			if (incident_id != null && incident_id.length() > 0) {
 				theform = new IncidentForm();
-				if (bs.findIncidentByID(incident_id, theform, user, TracingConstants.MISSING_ARTICLES) != null) {
+				if (bs.findIncidentByID(incident_id, theform, user, TracingConstants.MISSING_ARTICLES) == null) {
 					ActionMessage error = new ActionMessage("error.noincident");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
