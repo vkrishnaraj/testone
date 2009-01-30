@@ -1,14 +1,23 @@
 package com.bagnet.nettracer.tracing.bmo.claims;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlement;
+import com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlementBag;
+import com.bagnet.nettracer.tracing.db.claims.AuditSettlementBagInventory;
 import com.bagnet.nettracer.tracing.db.claims.ClaimSettlement;
+import com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag;
+import com.bagnet.nettracer.tracing.db.claims.SettlementBagInventory;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 
 public class ClaimSettlementBMO {
@@ -48,7 +57,7 @@ public class ClaimSettlementBMO {
 		}
 	}
 	
-	public static ClaimSettlement saveClaimSettlement(ClaimSettlement claim, Session sess) {
+	public static ClaimSettlement saveClaimSettlement(ClaimSettlement claim, Session sess, Agent agent) {
 		boolean sessionNull = (sess == null);
 		Transaction t = null;
 		
@@ -60,8 +69,8 @@ public class ClaimSettlementBMO {
 			t = sess.beginTransaction();
 			sess.saveOrUpdate(claim);
 			t.commit();
-			
-			// TODO: Add Auditing
+			auditClaimSettlement(claim, sess, agent);
+
 		} catch (Exception e) {
 			if (t != null) {
 				t.rollback();
@@ -83,4 +92,49 @@ public class ClaimSettlementBMO {
 		}
 		return false;
 	}
+	
+
+	public static void auditClaimSettlement(ClaimSettlement cs, Session sess, Agent a) {
+		Transaction t = null;
+		try {
+			t = sess.beginTransaction();
+			
+			AuditClaimSettlement acs = new AuditClaimSettlement();
+			acs.setModifyingAgent(a);
+			acs.setTime_modified(TracerDateTime.getGMTDate());
+			ArrayList<AuditClaimSettlementBag> bagList = new ArrayList<AuditClaimSettlementBag>();
+			acs.setAuditBagList(bagList);
+			// Claim Settlement
+			BeanUtils.copyProperties(acs, cs);
+
+			// Bags
+			for (ClaimSettlementBag bag: cs.getBagList()) {
+				AuditClaimSettlementBag aBag = new AuditClaimSettlementBag();
+				aBag.setAuditClaimSettlement(acs);
+				ArrayList<AuditSettlementBagInventory> invList = new ArrayList<AuditSettlementBagInventory>();
+				aBag.setAuditInventory(invList);
+				BeanUtils.copyProperties(aBag, bag);
+				bagList.add(aBag);
+				
+				for (SettlementBagInventory inv: bag.getInventory()) {
+					AuditSettlementBagInventory aInv = new AuditSettlementBagInventory();
+					aInv.setAuditClaimSettlementBag(aBag);
+					BeanUtils.copyProperties(aInv, inv);
+					invList.add(aInv);
+				}
+			}
+			
+			sess.save(acs);
+			
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				t.rollback();
+			}
+		}
+	}
+
 }
+
+

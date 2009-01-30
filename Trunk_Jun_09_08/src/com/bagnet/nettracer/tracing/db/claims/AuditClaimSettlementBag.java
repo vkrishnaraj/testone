@@ -24,8 +24,8 @@ public class AuditClaimSettlementBag {
 
 	@Id
 	@GeneratedValue
-	private long bagId;
-	
+	private long auditBagId;
+
 	@Basic
 	private int position;
 
@@ -42,9 +42,9 @@ public class AuditClaimSettlementBag {
 	@JoinColumn(name = "auditClaimSettlementId", nullable = false)
 	private AuditClaimSettlement auditClaimSettlement;
 
-	@OneToMany(mappedBy = "auditClaimSettlementBag", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@IndexColumn(name="position")
-	private List<AuditSettlementBagInventory> inventory;
+	@OneToMany(mappedBy = "auditClaimSettlementBag", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@IndexColumn(name = "position")
+	private List<AuditSettlementBagInventory> auditInventory;
 
 	public String getColor() {
 		return color;
@@ -70,28 +70,12 @@ public class AuditClaimSettlementBag {
 		this.manufacturer = manufacturer;
 	}
 
-	public AuditClaimSettlement getClaimSettlement() {
-		return auditClaimSettlement;
+	public long getAuditBagId() {
+		return auditBagId;
 	}
 
-	public void setClaimSettlement(AuditClaimSettlement claimSettlement) {
-		this.auditClaimSettlement = claimSettlement;
-	}
-
-	public long getBagId() {
-		return bagId;
-	}
-
-	public void setBagId(long bagId) {
-		this.bagId = bagId;
-	}
-
-	public List<AuditSettlementBagInventory> getInventory() {
-		return inventory;
-	}
-
-	public void setInventory(List<AuditSettlementBagInventory> inventory) {
-		this.inventory = inventory;
+	public void setAuditBagId(long auditBagId) {
+		this.auditBagId = auditBagId;
 	}
 
 	public int getPosition() {
@@ -100,5 +84,21 @@ public class AuditClaimSettlementBag {
 
 	public void setPosition(int position) {
 		this.position = position;
+	}
+
+	public AuditClaimSettlement getAuditClaimSettlement() {
+		return auditClaimSettlement;
+	}
+
+	public void setAuditClaimSettlement(AuditClaimSettlement auditClaimSettlement) {
+		this.auditClaimSettlement = auditClaimSettlement;
+	}
+
+	public List<AuditSettlementBagInventory> getAuditInventory() {
+		return auditInventory;
+	}
+
+	public void setAuditInventory(List<AuditSettlementBagInventory> auditInventory) {
+		this.auditInventory = auditInventory;
 	}
 }

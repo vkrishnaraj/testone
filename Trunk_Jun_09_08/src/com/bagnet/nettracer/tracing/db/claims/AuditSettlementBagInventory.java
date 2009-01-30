@@ -18,17 +18,17 @@ public class AuditSettlementBagInventory {
 
 	@Id
 	@GeneratedValue
-	private long inventoryId;
+	private long auditInventoryId;
 
 	@Basic
 	private int position;
-	
+
 	@Transient
 	private boolean flaggedForRemoval;
 
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlementBag.class)
-	@JoinColumn(name = "bagId", nullable = false)
-	private AuditClaimSettlementBag claimSettlementBag;
+	@JoinColumn(name = "auditBagId", nullable = false)
+	private AuditClaimSettlementBag auditClaimSettlementBag;
 
 	@Basic
 	private int categoryType_ID;
@@ -36,12 +36,12 @@ public class AuditSettlementBagInventory {
 	@Basic
 	private String description;
 
-	public long getInventoryId() {
-		return inventoryId;
+	public long getAuditInventoryId() {
+		return auditInventoryId;
 	}
 
-	public void setInventoryId(long inventoryId) {
-		this.inventoryId = inventoryId;
+	public void setAuditInventoryId(long auditInventoryId) {
+		this.auditInventoryId = auditInventoryId;
 	}
 
 	public String getDescription() {
@@ -60,14 +60,6 @@ public class AuditSettlementBagInventory {
 		this.categoryType_ID = categoryType_ID;
 	}
 
-	public AuditClaimSettlementBag getClaimSettlementBag() {
-		return claimSettlementBag;
-	}
-
-	public void setClaimSettlementBag(AuditClaimSettlementBag claimSettlementBag) {
-		this.claimSettlementBag = claimSettlementBag;
-	}
-
 	public int getPosition() {
 		return position;
 	}
@@ -82,5 +74,14 @@ public class AuditSettlementBagInventory {
 
 	public void setFlaggedForRemoval(boolean flaggedForRemoval) {
 		this.flaggedForRemoval = flaggedForRemoval;
+	}
+
+	public AuditClaimSettlementBag getAuditClaimSettlementBag() {
+		return auditClaimSettlementBag;
+	}
+
+	public void setAuditClaimSettlementBag(
+			AuditClaimSettlementBag auditClaimSettlementBag) {
+		this.auditClaimSettlementBag = auditClaimSettlementBag;
 	}
 }

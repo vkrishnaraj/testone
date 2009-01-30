@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 
 @Entity
@@ -48,7 +49,7 @@ public class AuditClaimSettlement {
 
 	@OneToMany(mappedBy = "auditClaimSettlement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@IndexColumn(name = "position")
-	private List<AuditClaimSettlementBag> bagList;
+	private List<AuditClaimSettlementBag> auditBagList;
 
 	@Column(length = 25)
 	private String businessPhone;
@@ -206,6 +207,15 @@ public class AuditClaimSettlement {
 
 	@Column(length = 9)
 	private String zip;
+	
+
+	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.Agent.class)
+	@JoinColumn(name = "modifyingAgent", nullable = false)
+	private Agent modifyingAgent;
+	
+	private Date time_modified;
+	
+	private String reason_modified;
 
 	public String getAddress1() {
 		return address1;
@@ -671,12 +681,12 @@ public class AuditClaimSettlement {
 		this.claimSettlementId = claimSettlementId;
 	}
 
-	public List<AuditClaimSettlementBag> getBagList() {
-		return bagList;
+	public List<AuditClaimSettlementBag> getAuditBagList() {
+		return auditBagList;
 	}
 
-	public void setBagList(List<AuditClaimSettlementBag> bagList) {
-		this.bagList = bagList;
+	public void setAuditBagList(List<AuditClaimSettlementBag> auditBagList) {
+		this.auditBagList = auditBagList;
 	}
 
 	public long getAuditClaimSettlementId() {
@@ -685,6 +695,30 @@ public class AuditClaimSettlement {
 
 	public void setAuditClaimSettlementId(long auditClaimSettlementId) {
 		this.auditClaimSettlementId = auditClaimSettlementId;
+	}
+
+	public Agent getModifyingAgent() {
+		return modifyingAgent;
+	}
+
+	public void setModifyingAgent(Agent modifyingAgent) {
+		this.modifyingAgent = modifyingAgent;
+	}
+
+	public Date getTime_modified() {
+		return time_modified;
+	}
+
+	public void setTime_modified(Date time_modified) {
+		this.time_modified = time_modified;
+	}
+
+	public String getReason_modified() {
+		return reason_modified;
+	}
+
+	public void setReason_modified(String reason_modified) {
+		this.reason_modified = reason_modified;
 	}
 
 }
