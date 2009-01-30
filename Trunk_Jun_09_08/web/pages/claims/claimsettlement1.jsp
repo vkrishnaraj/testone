@@ -214,8 +214,9 @@
           <td><bean:message key="claimsettlement.pplcVia" /></td>
           <td>
             <html:select name="claimSettlementForm" property="pplcVia" styleClass="dropdown">
-              <html:option value="mail"><bean:message key="claimsettlement.mail" /></html:option>
               <html:option value="email"><bean:message key="claimsettlement.email" /></html:option>
+              <html:option value="mail"><bean:message key="claimsettlement.mail" /></html:option>
+              <html:option value="fax"><bean:message key="claimsettlement.fax" /></html:option>
             </html:select>
           </td>
         </tr>

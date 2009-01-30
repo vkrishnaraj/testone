@@ -137,7 +137,7 @@ function sortMass(sortOrder) {
               </td>
               <td>
                 <a href="#" onclick="sortMass('createdate');"><strong>
-                    <bean:message key="colname.incident_create_date" /></a>
+                    <bean:message key="colname.ohd_create_date" /></a>
                 </strong>
               </td>
               <td>
