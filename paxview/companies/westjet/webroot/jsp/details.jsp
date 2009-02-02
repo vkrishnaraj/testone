@@ -178,13 +178,13 @@ window.addEvent('domready', function() {
 									<spring:message code="bag.status.matched"/>
 							</c:when>
 							<c:when test="${item.bagstatus == 'In Transit' }">
-									<spring:message code="bag.status.inTransit"/>
+									<spring:message code="bag.status.transit"/>
 							</c:when>
 							<c:when test="${item.bagstatus == 'To Be Delivered' }">
-									<spring:message code="bag.status.toBeDelivered"/>
+									<spring:message code="bag.status.tobe.delivered"/>
 							</c:when>
 							<c:when test="${item.bagstatus == 'Process For Delivery' }">
-									<spring:message code="bag.status.procForDelivery"/>
+									<spring:message code="bag.status.proc.delivery"/>
 							</c:when>
 							<c:otherwise>
 								<spring:message code="unknown"/>
