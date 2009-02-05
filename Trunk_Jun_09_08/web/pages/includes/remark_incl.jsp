@@ -119,7 +119,7 @@
 %>
             	</td>
 <%
-			} else if( ((IncidentForm)session.getAttribute("incidentForm")).getReadonly() != 1) {
+			} else  {
 %>
 				<td valign="top" colspan=3>
                   <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" 
