@@ -15,24 +15,29 @@
 	<parameter name="membershipNum" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="claimNum" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="logo" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="grid1" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="grid1" class="java.lang.String"/>
 	<parameter name="grid2" class="java.lang.String" isForPrompting="false"/>
 	<background>
-		<band/>
+		<band height="750">
+			<image scaleImage="RetainShape" hAlign="Center" onErrorType="Icon" hyperlinkType="None">
+				<reportElement key="image-1" x="0" y="0" width="552" height="65"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<image hAlign="Center" hyperlinkType="None">
+				<reportElement key="image-2" stretchType="RelativeToTallestObject" x="0" y="186" width="552" height="360"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{grid1}]]></imageExpression>
+			</image>
+			<image hyperlinkType="None">
+				<reportElement key="image-3" stretchType="RelativeToTallestObject" x="0" y="551" width="552" height="112" isRemoveLineWhenBlank="true"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{grid2}]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
 		<band/>
 	</title>
 	<pageHeader>
 		<band height="750">
-			<image hAlign="Center" hyperlinkType="None">
-				<reportElement key="image-2" stretchType="RelativeToTallestObject" x="0" y="186" width="552" height="360"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{grid1}]]></imageExpression>
-			</image>
-			<image scaleImage="RetainShape" hAlign="Center" onErrorType="Icon" hyperlinkType="None">
-				<reportElement key="image-1" x="0" y="0" width="552" height="65"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
-			</image>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="pplc.title" positionType="FixRelativeToBottom" x="0" y="65" width="552" height="26"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
@@ -88,10 +93,6 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.notice2}]]></textFieldExpression>
 			</textField>
-			<image hyperlinkType="None">
-				<reportElement key="image-3" stretchType="RelativeToTallestObject" x="0" y="551" width="552" height="112" isRemoveLineWhenBlank="true"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{grid2}]]></imageExpression>
-			</image>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-31" x="8" y="193" width="120" height="13"/>
 				<textElement verticalAlignment="Middle"/>

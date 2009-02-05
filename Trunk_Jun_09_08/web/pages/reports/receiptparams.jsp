@@ -13,6 +13,11 @@
 
 
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+
+<%
+boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.getParameter("toprint"));
+ %>
+ 
 <SCRIPT LANGUAGE="JavaScript">
   <!--
 	
@@ -80,14 +85,34 @@
           <!-- MAIN BODY -->
           <div id="maincontent">
             <h1 class="green">
+            <% 
+            if (isPPLC) {
+             %>
+            	<bean:message key="header.pplc_options" />
+            	<%
+            	} else {
+            	 %>
               <bean:message key="header.receipt_options" />
+              <%
+              }
+               %>
               <a href="#"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
             </h1>
             <FORM NAME="xyz" method="post" action="" onSubmit="">
               <table class="form2" cellspacing="0" cellpadding="0">
                 <tr>
                   <td>
+                   <% 
+            if (isPPLC) {
+             %>
+            	<bean:message key="colname.pplc_output_type" />
+            	<%
+            	} else {
+            	 %>
                     <bean:message key="colname.receipt_output_type" />
+                    <%
+              }
+               %>
                     :
                   </td>
                   <td>
@@ -112,7 +137,15 @@
                 </tr>
                 <tr>
                   <td>
+                  <%
+                   if (isPPLC) {
+             %>
+            	<bean:message key="colname.pplc_language" />
+            	<%
+            	} else {
+            	 %>
                     <bean:message key="colname.receipt_language" />
+                    <% } %>
                     :
                   </td>
                   <td>
@@ -131,7 +164,13 @@
                 </tr>
                 <tr>
                   <td align="center" colspan="2">
+                  <%
+                   if (isPPLC) {
+             %>
+             <INPUT type='button' value='<bean:message key="button.createpplc"/>' id="button" onClick="generateReceipt(this.form);">
+             <% } else { %>
                     <INPUT type='button' value='<bean:message key="button.createreceipt"/>' id="button" onClick="generateReceipt(this.form);">
+                     <% } %>
                   </td>
                 </tr>
               </table>
