@@ -162,7 +162,7 @@ public class ReportOutputServlet extends HttpServlet {
 						break;
 					case ReportingConstants.PPLC_RPT:
 						ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
-						bytes = readBytes(PPLCReport.createReport(theform4, sc, request, language), sc, response);
+						bytes = readBytes(PPLCReport.createReport(theform4, sc, request, language, outputtype), sc, response);
 					default:
 						break;
 				}

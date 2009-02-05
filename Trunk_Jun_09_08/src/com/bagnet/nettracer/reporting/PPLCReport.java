@@ -32,7 +32,7 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 public class PPLCReport {
 	
 	public static String createReport(ClaimSettlementForm theform, ServletContext sc,
-			HttpServletRequest request, String language) throws Exception {
+			HttpServletRequest request, String language, int outputtype) throws Exception {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		
 		parameters.put("paxName", theform.getFirstName() + " " + theform.getLastName());
@@ -76,15 +76,13 @@ public class PPLCReport {
 		
 		String outfile = "PPLC" + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
 		
-		int outputtype;
-		
-		if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
-			outputtype = TracingConstants.REPORT_OUTPUT_PDF;
-			outfile += ".pdf";
-		} else {
+		if (TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML) || (outputtype == TracingConstants.REPORT_OUTPUT_HTML) ) {
 			outfile += ".html";
 			outputtype = TracingConstants.REPORT_OUTPUT_HTML;
 			request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+		} else {
+			outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+			outfile += ".pdf";
 		}
 		
 		String outputpath = rootPath + ReportingConstants.REPORT_TMP_PATH + outfile;
