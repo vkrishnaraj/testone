@@ -426,7 +426,9 @@ public class ManageMessage extends Action {
 						.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 				theForm.setDate(date);
 				theForm.getRecp_list().clear();
-				theForm.getRecp_list().add(new Recipient());
+				Recipient r = new Recipient();
+				r.setCompany_code(user.getCompanycode_ID());
+				theForm.getRecp_list().add(r);
 				theForm.setBody("");
 				theForm.setSubject("");
 				theForm.setAgentName(user.getUsername());
