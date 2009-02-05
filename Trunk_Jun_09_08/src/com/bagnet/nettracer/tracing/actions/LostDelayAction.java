@@ -130,7 +130,7 @@ public class LostDelayAction extends Action {
 				request.setAttribute("prepopOhdList", prepopOhdList);
 			}
 			
-			if (prepopIncList == null || prepopOhdList == null) {
+			if (prepopIncList == null && prepopOhdList == null) {
 				ActionMessage error = new ActionMessage("prepop.search.nodata");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
