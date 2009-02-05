@@ -2,6 +2,7 @@ package com.bagnet.nettracer.wt.svc;
 
 import java.util.List;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -92,7 +93,7 @@ public interface WorldTracerService {
 	
 	String insertBdo(BDO bdo) throws WorldTracerException;
 
-	Incident getIncidentForAHL(String wt_id, WTStatus status) throws WorldTracerException;
+	Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user) throws WorldTracerException;
 	
 	OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException;
 

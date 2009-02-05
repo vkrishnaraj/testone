@@ -62,69 +62,6 @@ public class WorldTracerUtils {
 	private static String error;
 	private static Logger logger = Logger.getLogger(WorldTracerUtils.class);
 
-	public static String SendTty(HttpClient client, String companycode,
-			ArrayList ttylist) {
-		String responseBody = null;
-		wt_http = WorldTracerUtils.getWt_url(companycode);
-		wt_url = "http://" + wt_http + "/";
-		String cgiexe = "cgi-bin/bagTTY.exe";
-		String getstring = wt_url + cgiexe;
-		getstring = getstring.replace(" ", "+");
-
-		PostMethod method = new PostMethod(getstring);
-		method.setDoAuthentication(true);
-		method.addParameter("A1", companycode.toLowerCase());
-		method.addParameter("A2", "WM");
-		method.addParameter("TX1", ttylist.get(0).toString());
-		method.addParameter("TX2", ttylist.get(1).toString());
-		method.addParameter("TX3", ttylist.get(2).toString());
-		method.addParameter("TX4", ttylist.get(3).toString());
-		method.addParameter("OA", ttylist.get(4).toString());
-		method.addParameter("CA", ttylist.get(5).toString());
-		method.addParameter("FTYP1", ttylist.get(6).toString());
-		method.addParameter("FTYP2", ttylist.get(7).toString());
-		method.addParameter("FTYP3", ttylist.get(8).toString());
-		method.addParameter("FTYP4", ttylist.get(9).toString());
-		method.addParameter("FREF1", ttylist.get(10).toString());
-		method.addParameter("FREF2", ttylist.get(11).toString());
-		method.addParameter("FREF3", ttylist.get(12).toString());
-		method.addParameter("FREF4", ttylist.get(13).toString());
-		method.addParameter("TTYTXT", ttylist.get(14).toString());
-
-		// Provide custom retry handler is necessary
-		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-				new DefaultHttpMethodRetryHandler(3, false));
-		try {
-			
-			String requestInfo = WorldTracerUtils.getWtRequest(wt_url, cgiexe);
-			// Execute the method.
-			int statusCode = client.executeMethod(method);
-
-			if (statusCode != HttpStatus.SC_OK) {
-				System.err.println("Method failed: " + method.getStatusLine());
-			}
-
-			// Read the response body.
-			responseBody = method.getResponseBodyAsString();
-			int start = responseBody.indexOf("---- TYPE A ACCESS - CRT ----");
-			int end = responseBody.indexOf("---- TYPE B ACCESS - TTY ----");
-			if (start > 0 && end > 0) {
-				responseBody = responseBody.substring(start
-						+ "---- TYPE A ACCESS - CRT ----".length(), end);
-			}
-			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
-		} catch (HttpException e) {
-			System.err.println("Fatal protocol violation: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.err.println("Fatal transport error: " + e.getMessage());
-			e.printStackTrace();
-		} finally {
-			// Release the connection.
-			method.releaseConnection();
-		}
-		return responseBody;
-	}
 
 	/**
 	 * get the NT agent to use for wt inserts

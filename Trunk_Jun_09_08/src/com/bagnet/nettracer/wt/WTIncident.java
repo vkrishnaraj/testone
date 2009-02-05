@@ -965,10 +965,13 @@ public class WTIncident {
 	 * @return
 	 * @throws WorldTracerException 
 	 */
-	public static Incident parseWTIncident(String wtdata, WTStatus wtStatus) throws WorldTracerException {
+	public static Incident parseWTIncident(String wtdata, WTStatus wtStatus, Agent agent) throws WorldTracerException {
 		try {
 			// first figure out if this incident is new or already existing through
 			// WT_column
+			if (agent == null) {
+				throw new WorldTracerException("Unable to import incident, not default worldtracer agent found");
+			}
 			Incident incident = null;
 
 			String wt_id;
@@ -1043,11 +1046,11 @@ public class WTIncident {
 			incident.setItemtype(itype);
 			
 			// agent
-			Agent ntuser = WorldTracerUtils.getWTAgent(incident.getStationcreated().getStation_ID(),thec);
-			if (ntuser == null) {
+			//Agent ntuser = WorldTracerUtils.getWTAgent(incident.getStationcreated().getStation_ID(),thec);
+			if (agent == null) {
 				throw new WorldTracerException("Unable to import incident, not default worldtracer agent found");
 			}
-			incident.setAgent(ntuser);
+			incident.setAgent(agent);
 			
 			// remarks
 			Remark  rm = new Remark();			
@@ -1056,7 +1059,7 @@ public class WTIncident {
 				Worldtracer_Actionfiles Action_file = null;
 				Action_file = WorldTracerUtils.findActionFileByIncidentID((wt_id));
 				String remarktext = Action_file.getAction_file_text();
-				rm.setAgent(ntuser);
+				rm.setAgent(agent);
 				rm.setRemarktype(1);
 				rm.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
 				rm.setIncident(incident);

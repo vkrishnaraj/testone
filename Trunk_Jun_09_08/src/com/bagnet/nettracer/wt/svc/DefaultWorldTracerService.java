@@ -338,9 +338,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.IMPORT_AHL)
-	public Incident getIncidentForAHL(String wt_id, WTStatus status) throws WorldTracerException {
+	public Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user) throws WorldTracerException {
 		String result = wtConnector.findAHL(wt_id);
-		Incident foundinc = WTIncident.parseWTIncident(result, status);
+		Incident foundinc = WTIncident.parseWTIncident(result, status, user);
 		return foundinc;
 	}
 
