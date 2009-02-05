@@ -1,8 +1,4 @@
-<%
-response.addHeader("Pragma", "No-cache");
-response.addHeader("Cache-Control", "no-cache");
-response.addDateHeader("Expires", -1);
-%>
+<jsp:include page="/pages/includes/cache_headers.jsp" />
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
@@ -46,6 +42,7 @@ response.addDateHeader("Expires", -1);
 <!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
 </logic:present>
 <link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/deployment/main/css/company_styles.css" rel="stylesheet" type="text/css">
 <link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
 
 
