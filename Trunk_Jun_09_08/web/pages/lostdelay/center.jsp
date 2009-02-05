@@ -470,7 +470,7 @@
               <td><logic:notEqual name="incidentForm"
                 property="incident_ID" value="">
                 <logic:notEmpty name="claimcheck" property="OHD_ID">
-                  <a
+                  <a class="matchlink" 
                     href='addOnHandBag.do?ohd_ID=<bean:write name="claimcheck" property="OHD_ID"/>'><bean:write
                     name="claimcheck" property="OHD_ID" /></a>
                     &nbsp;

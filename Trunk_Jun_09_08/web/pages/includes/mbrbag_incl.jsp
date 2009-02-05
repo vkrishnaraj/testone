@@ -124,7 +124,7 @@
                   <bean:message key="colname.matched_ohd" />
                   <br>
                   <logic:notEmpty name="theitem" property="OHD_ID">
-                    <a href='addOnHandBag.do?ohd_ID=<bean:write name="theitem" property="OHD_ID"/>'><bean:write name="theitem" property="OHD_ID" /></a>
+                    <a class="matchlink" href='addOnHandBag.do?ohd_ID=<bean:write name="theitem" property="OHD_ID"/>'><bean:write name="theitem" property="OHD_ID" /></a>
                     &nbsp;
                     <logic:notPresent name="cantmatch" scope="request">
                       <input type="submit" name="unmatchbag<%= i %>" value='<bean:message key="button.un_match"/>' id="button">

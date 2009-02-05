@@ -8,6 +8,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass;
@@ -281,14 +282,31 @@
                 <bean:message key="colname.status" />
                 <br>
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
-                  <div id="tohide1">
-	                  <html:select property="status_ID" styleClass="dropdown">
+                  
+                  	<logic:equal name="incidentForm" property="status_ID" value="<%= "" + TracingConstants.MBR_STATUS_CLOSED %>">
+                  		<% if ((report_type == 1 &&  UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REOPEN_LOSTDELAY, a))
+                  				 || (report_type == 0 &&  UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REOPEN_DAMAGED_BAG, a))
+                  				|| (report_type == 2 &&  UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REOPEN_MISSING_ARTICLES, a)))
+                  				{ %>
+                  				<div id="tohide1">
+                 	 <html:select property="status_ID" styleClass="dropdown">
 	                    <html:options collection="statuslist" property="status_ID" labelProperty="description" />
 	                  </html:select>
-	              </div>
+	                  </div>
+	                  <% } else { %>
+	                  	<input type=text class="textfield" size=10 value="<bean:message key="incidentForm.closed_status"/>" disabled="disabled">
+	                  <% } %>
+	                  </logic:equal>
+                  	<logic:notEqual name="incidentForm" property="status_ID" value="<%= "" + TracingConstants.MBR_STATUS_CLOSED %>">
+                  	<div id="tohide1">
+                  		<html:select property="status_ID" styleClass="dropdown">
+	                    <html:options collection="statuslist" property="status_ID" labelProperty="description" />
+	                  </html:select>
+	                  </div>
+                  	</logic:notEqual>
                 </logic:notEqual>
                 <logic:equal name="incidentForm" property="incident_ID" value="">
-                  <input type=text class="textfield" size=10 value="<bean:message key="incidentForm.new_status"/>" disabled>
+                  <input type=text class="textfield" size=10 value="<bean:message key="incidentForm.new_status"/>" disabled="disabled">
                 </logic:equal>
               </td>
               
@@ -628,32 +646,7 @@
                           <td>
                             <bean:message key="colname.bag_loc" />
                             <br>
-                            <html:select property="checkedlocation" styleClass="dropdown">
-                              <html:option value="0">
-                                <bean:message key="select.please_select" />
-                              </html:option>
-                              <html:option value="1">
-                                <bean:message key="select.curb_side" />
-                              </html:option>
-                              <html:option value="2">
-                                <bean:message key="select.ticket_counter" />
-                              </html:option>
-                              <html:option value="3">
-                                <bean:message key="select.gate" />
-                              </html:option>
-                              <html:option value="4">
-                                <bean:message key="select.remote" />
-                              </html:option>
-                              <html:option value="5">
-                                <bean:message key="select.plane_side" />
-                              </html:option>
-                              <html:option value="6">
-                                <bean:message key="select.unchecked" />
-                              </html:option>
-                              <html:option value="7">
-                                <bean:message key="select.kiosk" />
-                              </html:option>
-                            </html:select>
+                            <jsp:include page="/pages/includes/checkedlocation_incl.jsp" />
                           </td>
                           <td>
                             <bean:message key="colname.courtesy_report" />
