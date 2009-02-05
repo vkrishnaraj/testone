@@ -43,25 +43,7 @@
     &nbsp;</span> <span class="bb"><bean:message
       key="menu.incident_info" /></span> <span class="cc">&nbsp; <br />
     &nbsp;</span></a></dd>
-
-    <dd><a href="claim_resolution.do"><span class="aa">&nbsp;
-    <br />
-    &nbsp;</span> <span class="bb"><bean:message key="menu.claim_payout" /></span>
-    <span class="cc">&nbsp; <br />
-    &nbsp;</span></a></dd>
-    <%
-      if (UserPermissions.hasPermission(
-          TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
-    %>
-    <dd><a href="claim_prorate.do"><span class="aa">&nbsp;
-    <br />
-    &nbsp;</span> <span class="bb"><bean:message
-      key="menu.claim_prorate" /></span> <span class="cc">&nbsp; <br />
-    &nbsp;</span></a></dd>
-    <%
-      }
-    %>
-
+            
     <dd><a href="claim_settlement.do?screen=1"><span class="aa">&nbsp;
     <br />
     &nbsp;</span> <span class="bb"><bean:message
@@ -78,12 +60,27 @@
     &nbsp;</span> <span class="bbb"><bean:message
       key="menu.claim_baggage" /></span> <span class="ccb">&nbsp; <br />
     &nbsp;</span></a></dd>
+    
+    <dd><a href="claim_resolution.do"><span class="aa">&nbsp;
+    <br />
+    &nbsp;</span> <span class="bb"><bean:message key="menu.claim_payout" /></span>
+    <span class="cc">&nbsp; <br />
+    &nbsp;</span></a></dd>
 
-    <dd><a href="claim_settlement.do?screen=4"><span class="aa">&nbsp;
+    
+    <%
+      if (UserPermissions.hasPermission(
+          TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
+    %>
+    <dd><a href="claim_prorate.do"><span class="aa">&nbsp;
     <br />
     &nbsp;</span> <span class="bb"><bean:message
-      key="menu.claim_summary" /></span> <span class="cc">&nbsp; <br />
+      key="menu.claim_prorate" /></span> <span class="cc">&nbsp; <br />
     &nbsp;</span></a></dd>
+    <%
+      }
+    %>
+    
 
   </dl>
 

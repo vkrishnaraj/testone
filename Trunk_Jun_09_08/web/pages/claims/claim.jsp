@@ -26,7 +26,8 @@
   </SCRIPT>
   <!-- calendar stuff ends here -->
   <logic:present name="noincident" scope="request">
-    <html:form action="claim_resolution.do" method="post">
+    <html:form action="claim_resolution.do" method="post" focus="incident_ID">
+    	<html:javascript formName="claimForm" />
     <!-- search for claim from report number-->
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -142,29 +143,9 @@
                       </dd>
                     </logic:present>
                     <logic:notPresent name="editinterim" scope="request">
-                      <dd>
-                        <a href="#"><span class="aab">&nbsp;
-                            <br />
-                            &nbsp;</span>
-                          <span class="bbb"><bean:message key="menu.claim_payout" /></span>
-                          <span class="ccb">&nbsp;
-                            <br />
-                            &nbsp;</span></a>
-                      </dd>
-<%
-                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
-%>
-                        <dd>
-                          <a href="claim_prorate.do"><span class="aa">&nbsp;
-                              <br />
-                              &nbsp;</span>
-                            <span class="bb"><bean:message key="menu.claim_prorate" /></span>
-                            <span class="cc">&nbsp;
-                              <br />
-                              &nbsp;</span></a>
-                        </dd>
-<%
-                      }
+
+
+                      <%
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT, a)) {
                         if (request.getAttribute("claimSettlementExists")==null) {
 %>
@@ -212,20 +193,34 @@
                           <br />
                           &nbsp;</span></a>
                     </dd>
-                    
-                                        <dd>
-                      <a href='claim_settlement.do?screen=4&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
-                          <br />
-                          &nbsp;</span>
-                        <span class="bb"><bean:message key="menu.claim_summary" /></span>
-                        <span class="cc">&nbsp;
-                          <br />
-                          &nbsp;</span></a>
-                    </dd>
 <%
                       }
                     }
 %>
+                      <dd>
+                        <a href="#"><span class="aab">&nbsp;
+                            <br />
+                            &nbsp;</span>
+                          <span class="bbb"><bean:message key="menu.claim_payout" /></span>
+                          <span class="ccb">&nbsp;
+                            <br />
+                            &nbsp;</span></a>
+                      </dd>
+<%
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
+%>
+                        <dd>
+                          <a href="claim_prorate.do"><span class="aa">&nbsp;
+                              <br />
+                              &nbsp;</span>
+                            <span class="bb"><bean:message key="menu.claim_prorate" /></span>
+                            <span class="cc">&nbsp;
+                              <br />
+                              &nbsp;</span></a>
+                        </dd>
+<%
+                      }
+                      %>
 
                     </logic:notPresent>
                   </dl>

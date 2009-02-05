@@ -47,29 +47,7 @@
     &nbsp;</span> <span class="bb"><bean:message
       key="menu.incident_info" /></span> <span class="cc">&nbsp; <br />
     &nbsp;</span></a></dd>
-
-    <dd><a href="claim_resolution.do"><span class="aa">&nbsp;
-    <br />
-    &nbsp;</span> <span class="bb"><bean:message key="menu.claim_payout" /></span>
-    <span class="cc">&nbsp; <br />
-    &nbsp;</span></a></dd>
-
-<%
-                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
-%>
-                        <dd>
-                          <a href="claim_prorate.do"><span class="aa">&nbsp;
-                              <br />
-                              &nbsp;</span>
-                            <span class="bb"><bean:message key="menu.claim_prorate" /></span>
-                            <span class="cc">&nbsp;
-                              <br />
-                              &nbsp;</span></a>
-                        </dd>
-<%
-                      }
-%>
-
+    
     <dd><a href="#"><span class="aab">&nbsp; <br />
     &nbsp;</span> <span class="bbb"><bean:message
       key="menu.claim_process" /></span> <span class="ccb">&nbsp; <br />
@@ -85,10 +63,24 @@
       key="menu.claim_baggage" /></span> <span class="cc">&nbsp; <br />
     &nbsp;</span></a></dd>
 
-    <dd><a href="claim_settlement.do?screen=4"><span class="aa">&nbsp; <br />
-    &nbsp;</span> <span class="bb"><bean:message
-      key="menu.claim_summary" /></span> <span class="cc">&nbsp; <br />
+    <dd><a href="claim_resolution.do"><span class="aa">&nbsp;
+    <br />
+    &nbsp;</span> <span class="bb"><bean:message key="menu.claim_payout" /></span>
+    <span class="cc">&nbsp; <br />
     &nbsp;</span></a></dd>
+    
+        <%
+    	if (UserPermissions.hasPermission(
+    			TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
+    %>
+    <dd><a href="claim_prorate.do"><span class="aa">&nbsp;
+    <br />
+    &nbsp;</span> <span class="bb"><bean:message
+      key="menu.claim_prorate" /></span> <span class="cc">&nbsp; <br />
+    &nbsp;</span></a></dd>
+    <%
+    	}
+    %>
 
   </dl>
 
@@ -155,7 +147,7 @@
             border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.claimSettlementForm, 'firstContact','itcalendar1','MM/dd/yyyy'); return false;">
           </td>
-          <td rowspan="14"><strong><bean:message key="claimsettlement.contentChecks" /></strong><br />
+          <td rowspan="19"><strong><bean:message key="claimsettlement.contentChecks" /></strong><br />
           <html:checkbox name="claimSettlementForm" property="verifyAddress"><bean:message key="claimsettlement.address" /></html:checkbox><br />
           <html:checkbox name="claimSettlementForm" property="verifyPhone"><bean:message key="claimsettlement.phone" /></html:checkbox><br />
           <html:checkbox name="claimSettlementForm" property="verifyEmail"><bean:message key="claimsettlement.email" /></html:checkbox><br />
@@ -269,8 +261,54 @@
             border="0" onmouseover="this.style.cursor='hand'"
             onClick="cal1xx.select2(document.claimSettlementForm, 'offerDue','itcalendar8','MM/dd/yyyy'); return false;"></td>
         </tr>
-
-
+        <tr>
+        	<td>
+        		<bean:message key="claimsettlement.offerSent" />
+        	</td>
+        	<td>
+        		<html:text name="claimSettlementForm" property="offerSent" size="12" maxlength="11" styleClass="textfield" />
+        		<img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar0" name="itcalendar0"
+        			height="15" width="20" border="0" onmouseover="this.style.cursor='hand'"
+        			onClick="cal1xx.select2(document.claimSettlementForm, 'offerSent','itcalendar0','MM/dd/yyyy'); return false;" />
+        	</td>
+        </tr>
+        <tr>
+        	<td>
+        		<bean:message key="claimsettlement.offerSentVia" />
+        	</td>
+        	<td>
+        		<html:select name="claimSettlementForm" property="offerSentVia" styleId="dropdown">
+            		<html:option value=""><bean:message key="select.please_select" /></html:option>
+                    <html:option value="email"><bean:message key="claimsettlement.email" /></html:option>
+              		<html:option value="mail"><bean:message key="claimsettlement.mail" /></html:option>
+              		<html:option value="fax"><bean:message key="claimsettlement.fax" /></html:option>
+          		</html:select>
+        	</td>
+        </tr>
+        <tr>
+        	<td><bean:message key="claimsettlement.releaseDue" /></td>
+        	<td>
+        		<html:text name="claimSettlementForm" property="releaseDue" size="12" maxlength="11" styleClass="textfield" />
+        		<img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar1" name="itcalendar1"
+        			height="15" width="20" border="0" onmouseover="this.style.cursor='hand'"
+            		onClick="cal1xx.select2(document.claimSettlementForm, 'releaseDue','itcalendar1','MM/dd/yyyy'); return false;" />
+        	</td>
+        </tr>
+        <tr>
+        	<td><bean:message key="claimsettlement.revisitRequested" /></td>
+        	<td>
+        		<html:text name="claimSettlementForm" property="revisitRequested" size="12" maxlength="11" styleClass="textfield" />
+            	<img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar2" name="itcalendar2"
+            		height="15" width="20" border="0" onmouseover="this.style.cursor='hand'"
+            		onClick="cal1xx.select2(document.claimSettlementForm, 'revisitRequested','itcalendar2','MM/dd/yyyy'); return false;" />
+        	</td>
+        </tr>
+        <tr>
+        	<td><bean:message key="claimsettlement.revisitedBy" /></td>
+        	<td>
+        		<html:text name="claimSettlementForm" property="revisitedBy" size="20" maxlength="20" styleClass="textfield" />
+        	</td>
+        </tr>
       </table>
       <table cellspacing="0" cellpadding="0" class="form2">
         <tr>

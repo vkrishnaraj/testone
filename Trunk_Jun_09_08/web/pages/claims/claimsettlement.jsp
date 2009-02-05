@@ -37,6 +37,16 @@
                           <br />
                           &nbsp;</span></a>
                     </dd>
+                    
+                    <dd>
+                      <a href="#"><span class="aab">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bbb"><bean:message key="menu.claim_settlement" /></span>
+                        <span class="ccb">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
 
                     <dd>
                       <a href="claim_resolution.do"><span class="aa">&nbsp;
@@ -63,15 +73,7 @@
                       }
 %>
 
-                    <dd>
-                      <a href="#"><span class="aab">&nbsp;
-                          <br />
-                          &nbsp;</span>
-                        <span class="bbb"><bean:message key="menu.claim_settlement" /></span>
-                        <span class="ccb">&nbsp;
-                          <br />
-                          &nbsp;</span></a>
-                    </dd>
+
                   </dl>
 
             
