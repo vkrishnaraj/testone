@@ -1,0 +1,29 @@
+<%@ page language="java" %>
+
+function validateLdClose(form, doCheck)
+{
+    for (var j=0;j<form.length;j++) {
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+      if (currentElementName.indexOf("arrivedonairline_ID") != -1) { 
+        if (currentElement.value.length == 0) {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.arr_airline_id") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          currentElement.focus();
+          return false;
+        }
+      } else if (currentElementName.indexOf("arrivedonflightnum") != -1) {
+        if (currentElement.value.length == 0) {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.arr_flight_num") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          currentElement.focus();
+          return false;
+        }
+      } else if (currentElementName.indexOf("disarrivedondate") != -1) {
+        if (currentElement.value.length == 0) {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.arr_date") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          currentElement.focus();
+          return false;
+        }
+      } 
+    }
+	return true;
+}
