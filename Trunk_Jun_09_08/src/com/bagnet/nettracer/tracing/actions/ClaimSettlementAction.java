@@ -294,12 +294,6 @@ public class ClaimSettlementAction extends Action {
 		form.setReleaseDue(convertDate(cs.getReleaseDue(), a));
 		form.setRevisitRequested(convertDate(cs.getRevisitRequested(), a));
 		form.setDateStatusChange(convertDate(cs.getDateStatusChange(), a));
-		form.setAmountClaimed(cs.getAmountClaimed());
-		form.setAmountOffered(cs.getAmountOffered());
-		form.setAuditVOOffered(cs.getAuditVOOffered());
-		form.setTotalPaid(cs.getTotalPaid());
-		form.setTotalPaidCertif(cs.getTotalPaidCertif());
-		form.setTotalPaidVouchers(cs.getTotalPaidVouchers());
 		form.setRevisitedBy(cs.getRevisitedBy());
 		
 		
@@ -397,16 +391,10 @@ public class ClaimSettlementAction extends Action {
 				cs.setBagList(bagList);
 				break;
 			case 4:
-				cs.setAmountClaimed(form.getAmountClaimed());
-				cs.setAmountOffered(form.getAmountClaimed());
-				cs.setAuditVOOffered(form.getAuditVOOffered());
 				cs.setDateStatusChange(convertDate(form.getDateStatusChange(), a));
 				cs.setOfferSent(convertDate(form.getOfferSent(), a));
 				cs.setOfferSentVia(form.getOfferSentVia());
 				cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
-				cs.setTotalPaid(form.getTotalPaid());
-				cs.setTotalPaidCertif(form.getTotalPaidCertif());
-				cs.setTotalPaidVouchers(form.getTotalPaidVouchers());
 				cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
 				cs.setRevisitedBy(form.getRevisitedBy());
 				break;

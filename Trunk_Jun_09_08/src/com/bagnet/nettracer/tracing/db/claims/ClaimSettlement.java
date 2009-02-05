@@ -35,16 +35,6 @@ public class ClaimSettlement {
 	@Column(name = "address2", length = 40)
 	private String address2;
 
-	@Column(name = "amountClaimed", length = 10)
-	private String amountClaimed = "0.00";
-
-	@Column(name = "amountOffered", length = 10)
-	private String amountOffered = "0.00";
-
-	@Column(name = "auditVOOffered", length = 10)
-	private String auditVOOffered = "0.00";
-
-	
 	@OneToMany(mappedBy = "claimSettlement", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@IndexColumn(name="position")
 	private List<ClaimSettlementBag> bagList;
@@ -158,15 +148,6 @@ public class ClaimSettlement {
 	@Column(length = 2)
 	private String state_ID;
 
-	@Column(length = 10)
-	private String totalPaid = "0.00";
-
-	@Column(length = 10)
-	private String totalPaidCertif = "0.00";
-
-	@Column(length = 10)
-	private String totalPaidVouchers = "0.00";
-
 	@Basic
 	private boolean verifyAddress;
 
@@ -212,18 +193,6 @@ public class ClaimSettlement {
 
 	public String getAddress2() {
 		return address2;
-	}
-
-	public String getAmountClaimed() {
-		return amountClaimed;
-	}
-
-	public String getAmountOffered() {
-		return amountOffered;
-	}
-
-	public String getAuditVOOffered() {
-		return auditVOOffered;
 	}
 
 	public String getBusinessPhone() {
@@ -366,18 +335,6 @@ public class ClaimSettlement {
 		return state_ID;
 	}
 
-	public String getTotalPaid() {
-		return totalPaid;
-	}
-
-	public String getTotalPaidCertif() {
-		return totalPaidCertif;
-	}
-
-	public String getTotalPaidVouchers() {
-		return totalPaidVouchers;
-	}
-
 	public String getZip() {
 		return zip;
 	}
@@ -436,18 +393,6 @@ public class ClaimSettlement {
 
 	public void setAddress2(String address2) {
 		this.address2 = address2;
-	}
-
-	public void setAmountClaimed(String amountClaimed) {
-		this.amountClaimed = amountClaimed;
-	}
-
-	public void setAmountOffered(String amountOffered) {
-		this.amountOffered = amountOffered;
-	}
-
-	public void setAuditVOOffered(String auditVOOffered) {
-		this.auditVOOffered = auditVOOffered;
 	}
 
 	public void setBusinessPhone(String businessPhone) {
@@ -588,18 +533,6 @@ public class ClaimSettlement {
 
 	public void setState_ID(String state_ID) {
 		this.state_ID = state_ID;
-	}
-
-	public void setTotalPaid(String totalPaid) {
-		this.totalPaid = totalPaid;
-	}
-
-	public void setTotalPaidCertif(String totalPaidCertif) {
-		this.totalPaidCertif = totalPaidCertif;
-	}
-
-	public void setTotalPaidVouchers(String totalPaidVouchers) {
-		this.totalPaidVouchers = totalPaidVouchers;
 	}
 
 	public void setVerifyAddress(boolean verifyAddress) {

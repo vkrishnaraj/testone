@@ -76,13 +76,7 @@ public final class ClaimSettlementForm extends ActionForm {
 
 	private String offerSent; // date
 	private String offerSentVia; // string
-	private String totalPaid = "0.00";
-	private String totalPaidVouchers = "0.00";
 	private String releaseDue; // date
-	private String amountClaimed = "0.00";
-	private String amountOffered = "0.00";
-	private String auditVOOffered = "0.00";
-	private String totalPaidCertif = "0.00";
 	private String revisitRequested; // date
 	private String dateStatusChange; // date
 	private String revisitedBy; // 20 characters
@@ -507,52 +501,12 @@ public final class ClaimSettlementForm extends ActionForm {
 		this.offerSentVia = offerSentVia;
 	}
 
-	public String getTotalPaid() {
-		return totalPaid;
-	}
-
-	public void setTotalPaid(String totalPaid) {
-		this.totalPaid = totalPaid;
-	}
-
-	public String getTotalPaidVouchers() {
-		return totalPaidVouchers;
-	}
-
-	public void setTotalPaidVouchers(String totalPaidVouchers) {
-		this.totalPaidVouchers = totalPaidVouchers;
-	}
-
 	public String getReleaseDue() {
 		return releaseDue;
 	}
 
 	public void setReleaseDue(String releaseDue) {
 		this.releaseDue = releaseDue;
-	}
-
-	public String getAmountOffered() {
-		return amountOffered;
-	}
-
-	public void setAmountOffered(String amountOffered) {
-		this.amountOffered = amountOffered;
-	}
-
-	public String getAuditVOOffered() {
-		return auditVOOffered;
-	}
-
-	public void setAuditVOOffered(String auditVOOffered) {
-		this.auditVOOffered = auditVOOffered;
-	}
-
-	public String getTotalPaidCertif() {
-		return totalPaidCertif;
-	}
-
-	public void setTotalPaidCertif(String totalPaidCertif) {
-		this.totalPaidCertif = totalPaidCertif;
 	}
 
 	public String getRevisitRequested() {
@@ -585,14 +539,6 @@ public final class ClaimSettlementForm extends ActionForm {
 
 	public void setState_ID(String state_ID) {
 		this.state_ID = state_ID;
-	}
-
-	public String getAmountClaimed() {
-		return amountClaimed;
-	}
-
-	public void setAmountClaimed(String amountClaimed) {
-		this.amountClaimed = amountClaimed;
 	}
 
 	public int getSalutation() {
