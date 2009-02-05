@@ -279,13 +279,11 @@
 		<property name="ant_project_name" value="tracer" />
 		<property name="ant_war_name" value="tracer" />
 		<property name="include.demo" value="1" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/tracer/nettracerstyles1.css" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/tracer/formstyles.css" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/tracer/header_bg.gif" />
@@ -318,13 +316,11 @@
 		<property name="include.fl" value="1" />
 		<property name="include.demo" value="1" />
 		<antcall target="airtran-libraries-create" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/airtran/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/airtran/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/airtran/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/airtran/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/airtran/nettracerstyles1.css" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/airtran/formstyles.css" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/airtran/header_bg.gif" />
@@ -356,13 +352,11 @@
 	</target>
 
 	<target name="build-xjet" depends="delete">
-		<copy todir="${basedir}/web/pages/includes" file="companies/xjet/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/xjet/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/xjet/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/xjet/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/xjet/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/xjet/nettracerstyles1.css" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/xjet/formstyles.css" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/xjet/header_bg.gif" />
@@ -403,14 +397,12 @@
 		<property name="include.us" value="1" />
 		<antcall target="usair-libraries-create" />
 
-		<copy todir="${basedir}/web/pages/includes" file="companies/usair/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/usair/nettracerstyles1.css" />
 		<copy todir="${basedir}/web/deployment/main/css" file="companies/usair/formstyles.css" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/usair/header_bg.gif" />
@@ -521,7 +513,6 @@
 	</target>
 
 	<target name="donotrun-build-spirit">
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/MissingReceipt.jrxml" />
@@ -538,7 +529,6 @@
 		<copy todir="${basedir}/web/reports" file="companies/spirit/bdo/bdologo.gif" />
 		<!-- Login page based on environment -->
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
 		<copy todir="${basedir}/web/pages/passengerview" file="companies/spirit/passengerview/passengerview.jsp" />
 		<copy todir="${basedir}/web/pages/includes" file="companies/spirit/includes/required_fields_incl.jsp" />
@@ -620,13 +610,11 @@
 	<target name="donotrun-build-jetblue" if="jetblue.init.complete">
 		<property name="include.b6" value="1" />
 		<antcall target="jetblue-libraries-create" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
-
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
+		
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/tracer/pvlogo.gif" />
 		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/receipt/logo.jpg" />
@@ -696,7 +684,6 @@
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email_fr.html" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt.jrxml" />
@@ -717,7 +704,6 @@
 
 
 	<target name="build-southwest" depends="delete">
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
@@ -730,7 +716,6 @@
 		<copy todir="${basedir}/web/reports" file="companies/southwest/receipt/logo.jpg" />
 		<copy todir="${basedir}/web/reports" file="companies/southwest/bdo/bdologo.gif" />
 
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
 		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
@@ -748,7 +733,6 @@
 
 
 	<target name="build-virginamerica" depends="delete">
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 
@@ -761,7 +745,7 @@
 
 		<copy todir="${basedir}/web/reports" file="companies/tracer/receipt/logo.jpg" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo/bdologo.gif" />
-		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/tracer/layouts/main_layout.jsp" />
+
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
 		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
@@ -778,8 +762,6 @@
 	</target>
 
 	<target name="delete">
-		<delete file="${basedir}/web/pages/includes/ldclose.jsp" />
-		<delete file="${basedir}/web/deployment/main/layouts/main_layout.jsp" />
 		<delete file="${basedir}/web/deployment/main/css/nettracerstyles1.css" />
 		<delete file="${basedir}/web/deployment/main/css/formstyles.css" />
 		<delete file="${basedir}/web/deployment/main/images/nettracer/header_bg.gif" />
