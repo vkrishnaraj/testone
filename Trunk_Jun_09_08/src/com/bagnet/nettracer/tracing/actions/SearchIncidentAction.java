@@ -84,7 +84,7 @@ public class SearchIncidentAction extends Action {
 			if (foundinc == null) {
 				WorldTracerService wts = SpringUtils.getWorldTracerService();
 				try {
-					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE);
+					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE, user);
 					if(foundinc != null) {
 						incident = foundinc.getIncident_ID();
 					}
