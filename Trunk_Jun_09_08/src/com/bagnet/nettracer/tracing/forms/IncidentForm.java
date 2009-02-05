@@ -211,7 +211,12 @@ public final class IncidentForm extends ValidatorForm {
 		if (this.passengerlist.size() <= index) {
 			Passenger a = new Passenger();
 			if (index == 0) a.setIsprimary(1);
-			a.setMembership(new AirlineMembership());
+			AirlineMembership am = new AirlineMembership();
+			String setDefault = PropertyBMO.PROPERTY_SET_DEFAULT_MEMBERSHIP;
+			if(setDefault != null && !setDefault.equalsIgnoreCase("false")) {
+				am.setCompanycode_ID(agent.getCompanycode_ID());
+			}
+			a.setMembership(am);
 			Address addr = new Address();
 			addr.set_DATEFORMAT(get_DATEFORMAT());
 			addr.setCountrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
@@ -222,7 +227,12 @@ public final class IncidentForm extends ValidatorForm {
 			// prevent null membership
 			Passenger pa = (Passenger) this.passengerlist.get(index);
 			if (pa.getMembership() == null) {
-				pa.setMembership(new AirlineMembership());
+				AirlineMembership am = new AirlineMembership();
+				String setDefault = PropertyBMO.PROPERTY_SET_DEFAULT_MEMBERSHIP;
+				if(setDefault != null && !setDefault.equalsIgnoreCase("false")) {
+					am.setCompanycode_ID(agent.getCompanycode_ID());
+				}
+				pa.setMembership(am);
 				this.passengerlist.set(index,pa);
 			}
 		}

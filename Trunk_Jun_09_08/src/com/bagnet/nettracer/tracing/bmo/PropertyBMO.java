@@ -29,6 +29,8 @@ public class PropertyBMO {
 	public static final String PROPERTY_NUM_CONTENT_FIELDS = "num.content.fields";
 	public static final String PROPERTY_WT_FWD_ONLY = "wt.fwd.only";
 
+	public static final String PROPERTY_SET_DEFAULT_MEMBERSHIP = "set.default.membership";
+
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 
