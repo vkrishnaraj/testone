@@ -99,6 +99,9 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_DAMAGE_LOSS_CODES = "Update Damage Loss Codes";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES = "Update Missing Loss Codes";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_REMARKS = "Update Remarks";
+	public final static String SYSTEM_COMPONENT_NAME_REOPEN_LOSTDELAY = "Reopen Lost Delayed";
+	public final static String SYSTEM_COMPONENT_NAME_REOPEN_DAMAGED_BAG = "Reopen Damaged";
+	public final static String SYSTEM_COMPONENT_NAME_REOPEN_MISSING_ARTICLES= "Reopen Pilferage";
 	
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER = "WorldTracer";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES = "WorldTracer Action Files";
