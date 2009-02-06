@@ -1,4 +1,18 @@
-<%@ page language="java" %>
+<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Station"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+
+<%@ page language="java"%>
+
+<%
+	Agent a = (Agent) session.getAttribute("user");
+org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request.getAttribute("org.apache.struts.action.MESSAGE");
+java.util.Locale  myLocale   = (java.util.Locale)session.getAttribute(
+"org.apache.struts.action.LOCALE");
+%>
 
 function validateLdClose(form, doCheck)
 {
