@@ -2,21 +2,20 @@ package com.bagnet.clients.us;
 
 import org.apache.log4j.Logger;
 
-import phx_52n_gr90.sharesws.services_asmx.AddBookingCommentsDocument;
-import phx_52n_gr90.sharesws.services_asmx.AddBookingCommentsResponseDocument;
-import phx_52n_gr90.sharesws.services_asmx.Booking;
-import phx_52n_gr90.sharesws.services_asmx.GetBookingInformationDocument;
-import phx_52n_gr90.sharesws.services_asmx.GetBookingInformationResponseDocument;
-import phx_52n_gr90.sharesws.services_asmx.GetPnrContentsDocument;
-import phx_52n_gr90.sharesws.services_asmx.GetPnrContentsResponseDocument;
-import phx_52n_gr90.sharesws.services_asmx.SendPrintMessageDocument;
-import phx_52n_gr90.sharesws.services_asmx.SendPrintMessageResponseDocument;
-import phx_52n_gr90.sharesws.services_asmx.ServicesStub;
-
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+import com.usairways.lcc.aat_sharesws.services_asmx.AddBookingCommentsDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.AddBookingCommentsResponseDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.Booking;
+import com.usairways.lcc.aat_sharesws.services_asmx.GetBookingInformationDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.GetBookingInformationResponseDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.GetPnrContentsDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.GetPnrContentsResponseDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.SendPrintMessageDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.SendPrintMessageResponseDocument;
+import com.usairways.lcc.aat_sharesws.services_asmx.ServicesStub;
 
 public class SharesIntegrationWrapper {
 

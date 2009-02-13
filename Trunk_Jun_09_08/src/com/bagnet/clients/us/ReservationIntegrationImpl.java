@@ -8,13 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import phx_52n_gr90.sharesws.services_asmx.Baggage;
-import phx_52n_gr90.sharesws.services_asmx.Booking;
-import phx_52n_gr90.sharesws.services_asmx.Itinerary;
-import phx_52n_gr90.sharesws.services_asmx.Passenger;
-import phx_52n_gr90.sharesws.services_asmx.PassengerAddress;
-import phx_52n_gr90.sharesws.services_asmx.Segment;
-
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -25,6 +18,12 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
+import com.usairways.lcc.aat_sharesws.services_asmx.Baggage;
+import com.usairways.lcc.aat_sharesws.services_asmx.Booking;
+import com.usairways.lcc.aat_sharesws.services_asmx.Itinerary;
+import com.usairways.lcc.aat_sharesws.services_asmx.Passenger;
+import com.usairways.lcc.aat_sharesws.services_asmx.PassengerAddress;
+import com.usairways.lcc.aat_sharesws.services_asmx.Segment;
 
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements

@@ -1,5 +1,9 @@
 package com.bagnet.clients.b6;
 
+import java.util.ArrayList;
+
+import com.bagnet.nettracer.tracing.utils.StringUtils;
+
 public class WriteThreadPool implements Runnable {
 
 	private String pnr = "";
@@ -12,7 +16,10 @@ public class WriteThreadPool implements Runnable {
 	
 	public void run() {
 		JetBlueIntegrationWrapper wrapper = new JetBlueIntegrationWrapper();
-		wrapper.writeCommentToPNR(pnr, comment);
+		ArrayList<String> list = StringUtils.splitOnWordBreak(comment, 45);
+		for (String str: list) {
+			wrapper.writeCommentToPNR(pnr, str);
+		}
 	}
 
 }

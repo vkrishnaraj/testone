@@ -317,6 +317,7 @@ public class ReservationIntegrationImpl extends
 
 		WriteThreadPool thread = new WriteThreadPool(recordLocator, comment);
 		new Thread(thread).start();
+		logger.info("Wrote to PNR: " + comment);
 		return null;
 		
 	}

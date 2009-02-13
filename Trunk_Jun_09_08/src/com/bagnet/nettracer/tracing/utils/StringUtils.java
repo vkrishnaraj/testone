@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
@@ -232,6 +233,33 @@ public class StringUtils {
       } catch (IOException excpt) {
           throw new Error("StringBuilder should not throw IOExceptions!");
       }
+  }
+  
+  public static ArrayList<String> splitOnWordBreak(String srcWord, int maxLength) {
+  	ArrayList<String> list = new ArrayList<String>();
+  	maxLength +=1;
+  	int divide = 0;
+  	int endIndex = 0;
+  	for (int i=0; i<srcWord.length();) {
+  		endIndex = java.lang.Math.min(i + maxLength, srcWord.length());
+  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), " ", maxLength - 1);
+  		list.add(srcWord.trim().substring(i, i+divide).trim());
+  		i += divide;
+  	}
+  	
+  	return list;
+  }
+  
+  private static int getIndexToDivide(String srcStr, String delimiter, int maxLength) {
+  	if (srcStr.length() < maxLength) {
+  		return srcStr.length();
+  	}
+  	int index = srcStr.lastIndexOf(delimiter);
+  	if (index > 0) {
+  		return index;
+  	} else {
+  		return srcStr.length() - 1;
+  	}
   }
     
 }
