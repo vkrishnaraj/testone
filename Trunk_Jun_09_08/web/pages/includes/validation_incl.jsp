@@ -2,7 +2,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="org.apache.struts.action.Action" %>
 
-<jsp:include page="required_fields_incl.jsp" />
+<jsp:include page="/pages/includes/required_fields_incl.jsp" />
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
