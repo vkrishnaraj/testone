@@ -81,15 +81,12 @@
               <bean:define id="expenselocation" name="expenselist" property="expenselocation" type="com.bagnet.nettracer.tracing.db.Station" />
 <%
               i++;
-%>
-              <logic:equal name="expensetype" property="expensetype_ID" value="<%= "" + TracingConstants.EXPENSEPAYOUT_INTERIM %>">
-<%
                 checktotal   += expenselist.getCheckamt();
 								if (lastcurrency == "") lastcurrency = expenselist.getCurrency_ID();
 								if (!lastcurrency.equals(expenselist.getCurrency_ID())) samecurrency = false;
 								
                 vouchertotal += expenselist.getVoucheramt();
-		cctotal += expenselist.getMileageamt();
+		cctotal += expenselist.getCreditCardRefund();
 		if(expenselist.getIncidentalAmountClaimed() > 0.01) {
 			incTotal += expenselist.getIncidentalAmountClaimed();
 		}
@@ -152,7 +149,6 @@
                     </td>
                   </logic:notEqual>
                 </tr>
-              </logic:equal>
             </logic:iterate>
             <tr>
               <td>
