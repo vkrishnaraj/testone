@@ -38,7 +38,7 @@ public class Address implements Serializable {
 	private String altphone;
 	private String email;
 	private int addresstype;
-	private int is_permanent;
+	private boolean permanent;
 	private String state_ID;
 	private String countrycode_ID;
 	private String province;
@@ -132,21 +132,20 @@ public class Address implements Serializable {
 		this.addresstype = addresstype;
 	}
 
+
 	/**
 	 * @return Returns the is_permanent.
 	 * 
-	 * @hibernate.property type="integer" length="1"
+	 * @hibernate.property type="boolean" column="is_permanent"
 	 */
-	public int getIs_permanent() {
-		return is_permanent;
+	public boolean isPermanent() {
+		return permanent;
 	}
-	/**
-	 * @param is_permanent The is_permanent to set.
-	 */
-	public void setIs_permanent(int is_permanent) {
-		this.is_permanent = is_permanent;
+
+	public void setPermanent(boolean permanent) {
+		this.permanent = permanent;
 	}
-	
+
 	/**
 	 * @return Returns the address_ID.
 	 * 

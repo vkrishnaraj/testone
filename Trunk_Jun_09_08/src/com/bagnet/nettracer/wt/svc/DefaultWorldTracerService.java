@@ -813,7 +813,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				getPassengerInfo(p, result);
 				Address a = p.getAddress(0);
 				if (a != null) {
-					if (a.getIs_permanent() == 1) {
+					if (a.isPermanent()) {
 						permAdds.add(a);
 					} else if (p.getLastname() == null || p.getLastname().trim().length() <= 0) {
 						tempAdds.add(a);

@@ -62,7 +62,7 @@ public class ReservationIntegrationImpl extends
 		address.setCity("Atlanta");
 		address.setState_ID("GA");
 		address.setZip("30339");
-		address.setIs_permanent(1);
+		address.setPermanent(true);
 		address.setHomephone("555-555-5555");
 		
 		ia.setAirline("US");

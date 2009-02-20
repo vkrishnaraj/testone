@@ -123,32 +123,39 @@ public final class IncidentForm extends ValidatorForm {
 
 	private int email_customer;
 
-	/*
-	public void reset(ActionMapping mapping,
-      javax.servlet.http.HttpServletRequest request) {
-		if (request.getMethod().equals("POST")) {
-			// clear all value
-			getPassenger(0);
-			itinerarylist = new ArrayList();
-			remarklist = new ArrayList();
-			articlelist = new ArrayList();
-			claimchecklist = new ArrayList();
-			
-			Item i = getItem(0, 1);
-			i.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
-			i.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
-			i.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
-			i.setBagnumber(0);
+	@Override
+	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
+		super.reset(mapping, request);
+		if (passengerlist != null) {
+			for (Passenger p : (List<Passenger>) passengerlist) {
+				if (p.getAddresses() != null) {
+					for (Address a : (Iterable<Address>) p.getAddresses()) {
+						a.setPermanent(false);
+					}
+				}
+			}
 		}
-		
-		for (int i=0;i<getPassengerlist().size();i++) {
-			Passenger pa = getPassenger(i);
-			Address ad = pa.getAddress(0);
-			ad.setIs_permanent(0);
-		}
-		
 	}
-	*/
+
+	/*
+	 * public void reset(ActionMapping mapping,
+	 * javax.servlet.http.HttpServletRequest request) { if
+	 * (request.getMethod().equals("POST")) { // clear all value
+	 * getPassenger(0); itinerarylist = new ArrayList(); remarklist = new
+	 * ArrayList(); articlelist = new ArrayList(); claimchecklist = new
+	 * ArrayList();
+	 * 
+	 * Item i = getItem(0, 1);
+	 * i.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+	 * i.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+	 * i.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X); i.setBagnumber(0);
+	 * }
+	 * 
+	 * for (int i=0;i<getPassengerlist().size();i++) { Passenger pa =
+	 * getPassenger(i); Address ad = pa.getAddress(0); ad.setIs_permanent(0); }
+	 * 
+	 * }
+	 */
 
 	/**
 	 * @return Returns the version. just a place holder for versioning

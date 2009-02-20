@@ -123,7 +123,7 @@ public class LostDelayReceipt {
 				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
 				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
 		
-		if (pa.getAddress(0).getIs_permanent() == 1) {
+		if (pa.getAddress(0).isPermanent()) {
 			parameters.put("valid_until", "Permanent");
 		} else {
 			if (pa.getAddress(0).getValid_edate() != null) {

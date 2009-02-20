@@ -272,7 +272,7 @@ public class WSCoreIncidentUtil {
 					paarr.setPager(addr.getPager());
 					paarr.setAltphone(addr.getAltphone());
 					paarr.setEmail(addr.getEmail());
-					paarr.setIsPermanent(addr.getIs_permanent());
+					paarr.setIsPermanent(addr.isPermanent() ? 1 : 0);
 					paarr.setStateID(addr.getState_ID());
 					paarr.setProvince(addr.getProvince());
 					paarr.setCountrycodeID(addr.getCountrycode_ID());
