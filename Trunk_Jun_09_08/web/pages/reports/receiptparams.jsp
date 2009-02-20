@@ -116,8 +116,14 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
                     :
                   </td>
                   <td>
-                    <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
-                       <input type="radio" value="0" name="outputtype" checked>
+                   <%
+                   if (isPPLC) {
+             %>
+                       <input type="radio" value="0" name="outputtype" checked="checked">
+	                   <bean:message key="radio.pdf" />
+	                   <%} %>
+                    <% else if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                       <input type="radio" value="0" name="outputtype" checked="checked">
 	                   <bean:message key="radio.pdf" />
                       <input type="radio" value="1" name="outputtype">          
                       <bean:message key="radio.html" />
@@ -130,7 +136,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
     	                  <bean:message key="radio.xml" />
                         </logic:present>
                     <% } else { %>
-                      <input type="radio" value="1" name="outputtype" checked>          
+                      <input type="radio" value="1" name="outputtype" checked="checked">          
                       <bean:message key="radio.html" />
                     <% } %>
                   </td>
