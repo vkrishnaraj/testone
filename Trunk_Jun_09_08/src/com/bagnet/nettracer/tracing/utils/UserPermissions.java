@@ -190,7 +190,7 @@ public class UserPermissions {
 
 			//--Change made by Ankur for Hibernate..
 
-			sql.append(" order by policy.component.sort_order asc ");
+			sql.append(" order by policy.component.sort_group, policy.component.sort_order asc ");
 
 			Query q = sess.createQuery(sql.toString());
 			q.setInteger("parent_ID", parent_id);
