@@ -104,6 +104,9 @@ function openReportWindow(url,name,w,h)
 }
 
 function fillzero(o,maxlen) {
+	if(o == null) {
+		return false;
+	}
     var currval = o.value;
 
     if(currval.indexOf('%') != -1) {

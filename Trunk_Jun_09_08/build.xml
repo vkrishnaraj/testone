@@ -597,13 +597,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/MissingReceipt.jrxml" />
 		<antcall target="jasper_compile" />
 		
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/tracer/pvlogo.gif" />
 		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
-		<copy todir="${basedir}/web/reports" file="companies/jetblue/receipt/logo.jpg" />
-		<copy todir="${basedir}/web/reports" file="companies/jetblue/bdo/bdologo.gif" />
-		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/required_fields_incl.jsp" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/analytics.jsp" />
 		
 		<antcall target="combineResourceFiles">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
