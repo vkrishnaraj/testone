@@ -450,7 +450,7 @@
 	document.location.href="#editpayout";
 	</logic:empty>
 	<logic:present name="index" scope="request">
-	document.claimForm.paycode.focus();
+	document.claimForm.draft.focus();
 	</logic:present>
 	//-->
                       </script>
