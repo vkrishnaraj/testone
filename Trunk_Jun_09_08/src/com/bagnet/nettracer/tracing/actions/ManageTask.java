@@ -113,8 +113,8 @@ public class ManageTask extends Action {
 		//Task is ready to be saved.
 		if (request.getParameter("done") != null) {
 			ArrayList al = new ArrayList();
-			al.add(new LabelValueBean("On-hand", "0"));
-			al.add(new LabelValueBean("Report", "1"));
+			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
+			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
 
 			Task task = null;
 			if (request.getParameter("task_id") != null && (!request.getParameter("task_id").equals("0"))) {
@@ -152,9 +152,9 @@ public class ManageTask extends Action {
 				if (dispduetime != null && !dispduetime.equals("")) {
 					duedate = DateUtils.convertToGMTDate(dispduedate + " " + dispduetime, user
 							.getDateformat().getFormat()
-							+ " " + user.getTimeformat().getFormat());
+							+ " " + user.getTimeformat().getFormat(), TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone()));
 				} else {
-					duedate = DateUtils.convertToGMTDate(dispduedate, user.getDateformat().getFormat());
+					duedate = DateUtils.convertToGMTDate(dispduedate, user.getDateformat().getFormat(), TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone()));
 				}
 				task.setDue_date_time(duedate);
 			}
@@ -163,10 +163,10 @@ public class ManageTask extends Action {
 				if (dispremindertime != null && !dispremindertime.equals("")) {
 					reminderdate = DateUtils.convertToGMTDate(dispreminderdate + " " + dispremindertime, user
 							.getDateformat().getFormat()
-							+ " " + user.getTimeformat().getFormat());
+							+ " " + user.getTimeformat().getFormat(), TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone()));
 				} else {
 					reminderdate = DateUtils.convertToGMTDate(dispreminderdate, user.getDateformat()
-							.getFormat());
+							.getFormat(), TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone()));
 				}
 				task.setReminder_date_time(reminderdate);
 			}
@@ -279,8 +279,8 @@ public class ManageTask extends Action {
 		//Create a new task.
 		if (request.getParameter("create") != null) {
 			ArrayList al = new ArrayList();
-			al.add(new LabelValueBean("On-hand", "0"));
-			al.add(new LabelValueBean("Report", "1"));
+			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
+			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
 
 			Task task = new Task();
 			task.setAssigningAgent(user);
@@ -312,15 +312,15 @@ public class ManageTask extends Action {
 					.getTimezone()));
 
 			ArrayList al = new ArrayList();
-			al.add(new LabelValueBean("On-hand", "0"));
-			al.add(new LabelValueBean("Report", "1"));
+			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
+			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
 
 			request.setAttribute("task", task);
 			request.setAttribute("typelist", al);
 			return mapping.findForward(TracingConstants.VIEW_TASK);
 		}
 
-		int task_status_id = Task.ALL_TASKS;
+		int task_status_id = Task.ACTIVE_TASKS;
 		if (request.getParameter("task_status") != null) task_status_id = Integer.parseInt(request
 				.getParameter("task_status"));
 		else if (mapping.getParameter() != null && mapping.getParameter().equals("active")) {

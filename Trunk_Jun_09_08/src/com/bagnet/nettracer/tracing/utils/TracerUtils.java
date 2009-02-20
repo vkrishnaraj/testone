@@ -1524,10 +1524,7 @@ public class TracerUtils {
 	}
 	
 	public static String getResourcePropertyText(String key, Agent user) {
-		ResourceBundle myResources = ResourceBundle.getBundle(
-				"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user
-						.getCurrentlocale()));
-		return myResources.getString(key);
+		return messages.getMessage(new Locale(user.getCurrentlocale()), key);
 	}
 
 }

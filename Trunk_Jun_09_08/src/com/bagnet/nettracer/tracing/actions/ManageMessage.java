@@ -85,8 +85,8 @@ public class ManageMessage extends Action {
 		request.setAttribute("message_status_list", statusList);
 
 		ArrayList ax = new ArrayList();
-		ax.add(new LabelValueBean("On-hand", "0"));
-		ax.add(new LabelValueBean("Report", "1"));
+		ax.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
+		ax.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
 		request.setAttribute("typelist", ax);
 
 		//		 menu highlite
