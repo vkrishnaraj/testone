@@ -302,8 +302,8 @@
 
 
 	<target name="build-airtran" depends="delete">
-		<property name="ant_project_name" value="tracer" />
-		<property name="ant_war_name" value="tracer" />
+		<property name="ant_project_name" value="airtran" />
+		<property name="ant_war_name" value="airtran" />
 		<property name="include.fl" value="1" />
 		<property name="include.demo" value="1" />
 		<antcall target="airtran-libraries-create" />
@@ -335,11 +335,9 @@
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<antcall target="fast_all">
-			<param name="ant_project_name" value="tracer" />
-		</antcall>
+		<antcall target="fast_all" />
 		<antcall target="delete" />
-		<antcall target="airtran-libraries-cleanup" />
+		<antcall target="airtran-libraries-cleanup"/>
 	</target>
 
 	<target name="build-xjet" depends="delete">
@@ -458,39 +456,115 @@
 		<copy todir="${basedir}/web/WEB-INF" file="companies/usair/context.xml" />
 		<antcall target="build-usair-common" />
 	</target>
+	
+
+	<target name="build-azul-training" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul-training" />
+
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_dirty.cfg.xml" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+
+	<target name="build-azul-prod" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul-prod" />
+
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_dirty.cfg.xml" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+
+	<target name="donotrun-build-azul">
+		<copy todir="${basedir}/web/pages/login" file="companies/azul/login/center.jsp" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/azul/header_bg.gif" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/azul/header_bg_noconf.gif" />
+
+		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/ldclose.jsp" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/azul/nettracerstyles1.css" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/azul/formstyles.css" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/azul/header_bg.gif" />
+		<!-- Image based on environment -->
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/azul/receipt/logo.jpg" />
+		<copy todir="${basedir}/src" file="companies/azul/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/report_email.html" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/receipt/logo.jpg" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/bdo/bdologo.gif" />
+		<!-- Login page based on environment -->
+
+		<copy todir="${basedir}/web/deployment/main/layouts" file="companies/azul/layouts/main_layout.jsp" />
+		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
+		<copy todir="${basedir}/web/pages/passengerview" file="companies/azul/passengerview/passengerview.jsp" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/azul/includes/required_fields_incl.jsp" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<antcall target="combineResourceFiles">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/azul/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</antcall>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
 
 	<target name="build-spirit-dev" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-dev" />
+
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/production/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/production/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_dirty.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
 	<target name="build-spirit-test" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-test" />
+
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/spirittest/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/spirittest/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/tracer.properties" />
 		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_dirty.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
 	<target name="build-spirit-qa" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-qa" />
+
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/spiritqa/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/spiritqa/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/tracer.properties" />
 		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_dirty.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
 	<target name="build-spirit-prod" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-prod" />
+
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/production/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/production/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
 		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_dirty.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
@@ -1244,9 +1318,8 @@
 		<property name="cron.job.config.file" value="companies/airtran/jobs/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
-	
 	<target name="dev-build-cron">
-		<property name="ant_project_name" value="tracer" />
+		<property name="ant_project_name" value="tracer"/>
 		<antcall target="build-cron-service" />
 	</target>
 
@@ -1333,20 +1406,20 @@
 		</antcall>
 
 	</target>
-
+	
 	<target name="airtran-libraries-create">
 		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-fl/navitaire_newskies.jar" />
 	</target>
-
+	
 	<target name="airtran-libraries-cleanup">
 		<delete file="${basedir}/lib/jars/navitaire_newskies" />
 	</target>
-
+	
 	<target name="usair-libraries-create">
 		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-shares.jar" />
 		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-scanhistory.jar" />
 	</target>
-
+	
 	<target name="usair-libraries-cleanup">
 		<delete file="${basedir}/lib/jars/us-shares.jar" />
 		<delete file="${basedir}/lib/jars/us-scanhistory.jar" />
