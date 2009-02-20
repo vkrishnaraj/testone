@@ -25,7 +25,7 @@ import com.cci.utils.parser.ElementNode;
 public class Articles implements Serializable {
 	private int Articles_ID;
 	private String article;
-	private String description;
+	private String description = "";
 	private Date purchasedate;
 	private double cost;
 	private String currency_ID;

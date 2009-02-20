@@ -210,13 +210,14 @@ public class ReservationIntegrationImpl extends
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
 						
+						/*
 						boolean includeSegment = false;
 						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
 							includeSegment = true;
 						}
+						*/
 						
-						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
-								(timeDifference > -HOURS_FORWARD_ITINERARY && includeSegment)) {
+						if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
@@ -378,14 +379,14 @@ public class ReservationIntegrationImpl extends
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
 						
+						/*
 						boolean includeSegment = false;
 						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
 							includeSegment = true;
 						}
+						*/
 						
-						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
-								(timeDifference > -HOURS_FORWARD_ITINERARY && includeSegment)) {
-
+						if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
 
 							// Create carrier in database in not present.
 							CompanyBMO.createCompany(seg.getCarrierCode(), session);
@@ -440,13 +441,14 @@ public class ReservationIntegrationImpl extends
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
 						
+						/*
 						boolean includeSegment = false;
 						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
 							includeSegment = true;
 						}
+						*/
 						
-						if ((timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) ||
-								(timeDifference > -HOURS_FORWARD_ITINERARY && includeSegment)) {
+						if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
 							com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);							
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());

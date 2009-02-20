@@ -32,9 +32,49 @@
     <!--
         
     function gotoHistoricalReport(form) {
-      o = document.incidentForm;
+        o = document.incidentForm;
     	o.historical_report.value = "1";
     	o.submit();
+    }
+    
+    function disableButton(aButton) {
+    	aButton.disabled = true;
+    	aButton.value= "<bean:message key='ajax.please_wait' />";
+    }
+    
+    function enableButton(aButton, label) {
+    	aButton.disabled = false;
+    	aButton.value=label;
+    }
+    
+     function disableButtons() {
+     	if(document.incidentForm.savetracingButton) {
+	   disableButton(document.incidentForm.savetracingButton);
+     	}
+     	if(document.incidentForm.saveButton) {
+	   disableButton(document.incidentForm.saveButton);
+     	}
+     	if(document.incidentForm.savetowtButton) {
+	   disableButton(document.incidentForm.savetowtButton);
+     	}
+     	if(document.incidentForm.amendWTButton) {
+	   disableButton(document.incidentForm.amendWTButton);
+     	}
+    }
+    
+    function enableButtons() {
+     if(document.incidentForm.savetracingButton) {
+        enableButton(document.incidentForm.savetracingButton, "<bean:message key='button.savetracing' />");
+     }
+     if(document.incidentForm.saveButton) {
+        enableButton(document.incidentForm.saveButton, "<bean:message key='button.save' />");
+     }
+     if(document.incidentForm.savetowtButton) {
+        enableButton(document.incidentForm.savetowtButton, "<bean:message key='button.savetoWT' />");
+     }
+     if(document.incidentForm.amendWTButton) {
+        enableButton(document.incidentForm.amendWTButton, "<bean:message key='button.amendWT' />");
+     }
     }
     
     // -->
@@ -511,7 +551,6 @@
         <jsp:include page="/pages/includes/mbrbag_incl.jsp" />
         <jsp:include page="/pages/includes/remark_incl.jsp" />
         </div>
-        
         <logic:notEqual name="incidentForm" property="readonly"
           value="1">
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -519,10 +558,11 @@
               <td align="center" valign="top"><br>
               <logic:notEqual name="incidentForm" property="incident_ID"
                 value="">
-                <html:submit property="save" styleId="button"
-                  onclick="return validatereqFields(this.form, 'lostdelay');">
+		<html:hidden property="save" value="" disabled="true" />
+                <html:button property="saveButton" styleId="button"
+			onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                   <bean:message key="button.save" />
-                </html:submit>
+                </html:button>
 
                 <%
                 	if (UserPermissions.hasPermission(
@@ -540,10 +580,11 @@
 				<c:if test="${empty pendingWtAction}">
 					<c:if test="${(incidentForm.wt_id == '') || (incidentForm.wt_id == null)}" > 
 					<% if (stationAss != null && stationAss.getWt_stationcode() != null && stationAss.getWt_stationcode().trim().length() > 0) { %>
-						<html:submit styleId="button" property="savetowt"
-                        onclick="return validatereqFields(this.form, 'lostdelay');">
+			<html:hidden property="savetowt" value="" disabled="true" />
+						<html:button styleId="button" property="savetowtButton"
+							onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false) {this.form.savetowt.disabled = false; this.form.submit();} else {enableButtons(); this.form.savetowt.disabled = true; return false;}">
                         <bean:message key="button.savetoWT" />
-                      	</html:submit>
+                      	</html:button>
                       	<% } %>
 					</c:if>
  
@@ -551,10 +592,11 @@
                 	if (!a.getStation().getCompany().getVariable().isAuto_wt_amend()) {
                 %>
                     <c:if test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
-                      <html:submit styleId="button" property="amendWT"
-                        onclick="return validatereqFields(this.form, 'lostdelay');">
+			<html:hidden property="amendWT" value="" disabled="true" />
+                      <html:button styleId="button" property="amendWTButton"
+			      onclick="disableButtons(); if( validatereqFields(this.form, 'lostdelay') != false) {this.form.amendWT.disabled = false; this.form.submit();} else {enableButtons(); this.form.amendWT.disabled = true; return false;}">
                         <bean:message key="button.amendWT" />
-                      </html:submit>
+                      </html:button>
                     </c:if>
                 <%
                 	}
@@ -579,9 +621,11 @@
                 &nbsp;&nbsp;&nbsp;
                 <% } %>
 
-                <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');">
+		<%-- <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');"> --%>
+			<html:hidden property="savetracing" value="" disabled="true" />
+                <html:button property="savetracingButton" styleId="button" onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false) {this.form.savetracing.disabled = false; this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
                   <bean:message key="button.savetracing" />
-                </html:submit>
+                </html:button>
 
               </logic:equal></td>
             </tr>
@@ -596,9 +640,11 @@
                 <td align="center" valign="top"><br>
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
-                  <html:submit property="save" styleId="button">
-                    <bean:message key="button.saveremark" />
-                  </html:submit>
+		<html:hidden property="save" value="" disabled="true" />
+                <html:button property="saveButton" styleId="button"
+			onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+                  <bean:message key="button.save" />
+                </html:button>
                 </logic:notEqual></td>
               </tr>
             </table>

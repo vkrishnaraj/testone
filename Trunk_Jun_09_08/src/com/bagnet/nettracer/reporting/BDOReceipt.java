@@ -57,6 +57,7 @@ public class BDOReceipt {
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			parameters.put("bdo_id",theform.getBDO_ID_ref());
+						
 			
 			//parameters.put("paragraph_1", messages.getMessage(new
 			// Locale(language),"lostdelay.receipt.paragraph_1"));
@@ -78,6 +79,7 @@ public class BDOReceipt {
 				brd.setCity(pa.getCity());
 				brd.setState(pa.getState_ID());
 				brd.setZip(pa.getZip());
+				brd.setRefNum(theform.getIncident_ID());
 
 				String phno = pa.getHomephone();
 				if (phno == null || phno.length() == 0)

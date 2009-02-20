@@ -9,6 +9,8 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
+
 /**
  * @author Administrator
  * 
@@ -18,7 +20,8 @@ public class Agent implements Serializable {
 
 	private int Agent_ID;
 	private Station station;
-	private UserGroup group;
+
+	private int usergroup_id;
 	private String firstname;
 	private String mname;
 	private String lastname;
@@ -47,6 +50,8 @@ public class Agent implements Serializable {
 	private boolean web_enabled;
 	private boolean ws_enabled;
 	private int max_ws_sessions;
+	
+	
 	
 	
 	/**
@@ -355,12 +360,27 @@ public class Agent implements Serializable {
 	}
 
 	/**
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.UserGroup"
-	 *                        column="usergroup_ID"
+   * @hibernate.property type="integer"
+	 * @return Returns the group.
+	 */
+	public int getUsergroup_id() {
+		return usergroup_id;
+	}
+
+	/**
+	 * @param group
+	 *          The group to set.
+	 */
+	public void setUsergroup_id(int usergroup_id) {
+		this.usergroup_id = usergroup_id;
+	}
+	
+	
+	/**
 	 * @return Returns the group.
 	 */
 	public UserGroup getGroup() {
-		return group;
+		return UsergroupBMO.getUsergroup(this.usergroup_id);
 	}
 
 	/**
@@ -368,7 +388,7 @@ public class Agent implements Serializable {
 	 *          The group to set.
 	 */
 	public void setGroup(UserGroup group) {
-		this.group = group;
+		this.usergroup_id = group.getUserGroup_ID();
 	}
 
 	/**

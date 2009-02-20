@@ -340,7 +340,7 @@ td.white{
 }
 
 td.header{
-	background-color:#B90010;
+	background-color:#313F8A;
 	color:#fff;
 }
 
@@ -459,10 +459,4 @@ div#maincontent li.loginlinks {
 }
 .bold {
 	font-weight: bold;
-}
-
-div#notablelines table td {
-	border:0px solid #fff;
-	padding:0px;
-	vertical-align:top;
 }

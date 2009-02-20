@@ -1268,7 +1268,9 @@ public class WTIncident {
 				boolean keepgoing = true;
 				if (ccat_id == 0 && (cdesc == null || cdesc.length()== 0)) keepgoing = false;
 				////// content2 - x
-				while (keepgoing) {
+				int itincount = 0;
+				while (keepgoing && itincount < 10) {
+					itincount ++;
 					ii = new Item_Inventory();
 					contentstring = StringUtils.ParseWTString2(itemstring, cdesc, null);
 					if (contentstring == null || contentstring.length() == 0) keepgoing = false;

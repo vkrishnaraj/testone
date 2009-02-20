@@ -35,7 +35,7 @@ public class TracerProperties {
 	public static final String EMAIL_REPORT_LD_DISABLE_IMAGE = "inc.receipt.email.ld.disableimg";
 	public static final String EMAIL_REPORT_DAM_DISABLE_IMAGE = "inc.receipt.email.dam.disableimg";
 	public static final String EMAIL_REPORT_PIL_DISABLE_IMAGE = "inc.receipt.email.pil.disableimg";
-
+	public static final String PROPERTY_REPORT_MAX_ROWS = "reports.max.rows";
 	public static final String FRENCH_STATIONS = "french.stations";
 
 	static {
@@ -61,4 +61,12 @@ public class TracerProperties {
 			return false;
 		}
 	}
+	
+
+
+	public static int getMaxReportRows() {
+		return Integer.parseInt(TracerProperties.get(PROPERTY_REPORT_MAX_ROWS));
+		//return Integer.parseInt(PropertyBMO.getValue(PropertyBMO.PROPERTY_REPORT_MAX_ROWS));
+	}
+	
 }

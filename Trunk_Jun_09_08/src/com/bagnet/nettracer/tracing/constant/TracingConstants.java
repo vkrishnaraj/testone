@@ -18,6 +18,7 @@ public class TracingConstants {
 	public final static String OWENS_GROUP = "OW";
 	public final static boolean LIMIT_FAULT_AIRLINE = true;
 	//System components
+	public final static String SYSTEM_COMPONENT_NAME_BDOS_FOR_STATIONS = "BDOs For Stations";
 	public final static String SYSTEM_COMPONENT_NAME_AUDIT_ON_HAND = "Audit On hand";
 	public final static String SYSTEM_COMPONENT_NAME_VIEW_MATCHES = "View Matches";
 	public final static String SYSTEM_COMPONENT_NAME_VIEW_INCOMING_REQUEST = "View Incoming Request";

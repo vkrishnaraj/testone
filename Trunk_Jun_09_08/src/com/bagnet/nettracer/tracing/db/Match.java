@@ -52,6 +52,10 @@ public class Match implements Serializable {
 	public String getReportNumber() {
 		return mbr.getIncident_ID();
 	}
+	
+	public String getOhdNumber() {
+		return ohd.getOHD_ID();
+	}
 
 	public List getDisplayDetails() {
 		if (details == null || details.size() < 1) return null;

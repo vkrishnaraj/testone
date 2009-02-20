@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -46,6 +47,7 @@ import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WTIncident;
@@ -133,10 +135,33 @@ public class SearchIncidentAction extends Action {
 				try {			
 					int outputType = new Integer(request.getParameter("outputtype")).intValue();
 					String reportPath = getServlet().getServletContext().getRealPath("/");
-					ArrayList<Incident> incidentArray = bs.findIncident(daform, user, 0, 0, false);
-					String reportFile = ReportBMO.createSearchIncidentReport(incidentArray, request, outputType, user.getCurrentlocale(), reportPath);
-					request.setAttribute("reportfile", reportFile);
-					request.setAttribute("outputtype", outputType);
+					
+					
+					ArrayList countArray = bs.findIncident(daform, user, 0, 0, true, true);
+					int rc = ((Long) countArray.get(0)).intValue();
+					int maxRc = TracerProperties.getMaxReportRows(); 
+						
+
+					if (rc < maxRc) {
+						ArrayList<Incident> incidentArray = bs.findIncident(daform, user, 0, 0, false, true);
+						ReportBMO rbmo = new ReportBMO(request);
+						String reportFile = ReportBMO.createSearchIncidentReport(incidentArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
+						
+						if (rbmo.getErrormsg() != null) {
+							ActionMessages errors = new ActionMessages();
+							ActionMessage error = new ActionMessage(rbmo.getErrormsg());
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						} else {
+							request.setAttribute("reportfile", reportFile);
+							request.setAttribute("outputtype", outputType);
+						}
+					} else {
+						ActionMessages errors = new ActionMessages();
+						ActionMessage error = new ActionMessage("error.maxdata");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					}
 				} catch (Exception e) {
 					logger.error(e.getStackTrace());
 				} 

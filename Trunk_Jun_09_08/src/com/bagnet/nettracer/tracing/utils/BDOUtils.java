@@ -147,7 +147,12 @@ public class BDOUtils {
 			theform.setAgent(user);
 			theform.setCompanycode_ID(iDTO.getStationassigned().getCompany()
 					.getCompanyCode_ID());
-			theform.setStation(iDTO.getStationassigned());
+			
+			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BDOS_FOR_STATIONS, user)) {
+				theform.setStation(user.getStation());
+			} else {
+				theform.setStation(iDTO.getStationassigned());
+			}
 
 			// loop through passenger and put all info into passengerlist
 			Passenger p = null;

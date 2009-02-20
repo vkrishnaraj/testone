@@ -6,16 +6,17 @@
 <hibernate-configuration>
 
     <session-factory>	
-    
-		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-		<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_beta</property>
+        	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
+		<property name="connection.url">jdbc:mysql://192.168.2.127/jetblue_training</property>
 		<property name="connection.username">nettracer</property>
 		<property name="connection.password">nettracer</property>
+		<property name="show_sql">false</property>
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
-		<property name="company.code">US</property>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="company.code">B6</property>
+
 
 		<!-- c3p0 -->
 		<property name="hibernate.c3p0.acquire_increment">1</property> 
@@ -99,6 +100,8 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Remark.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Itinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_CategoryType.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_ItemType.hbm.xml"/>
@@ -130,6 +133,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Claimcheck.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/DbLocale.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/ReceiptDbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log_Itinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Work_Shift.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Message.hbm.xml"/>
@@ -171,6 +175,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd" />
@@ -178,9 +183,19 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction" />
 		<mapping class="com.bagnet.nettracer.tracing.db.OtherSystemInformation" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
+		<mapping class="com.bagnet.nettracer.tracing.db.datafeed.FlightInfo" />
+		<mapping class="com.bagnet.nettracer.tracing.db.datafeed.DataFeedLog" />
+		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
+		<mapping class="com.bagnet.nettracer.tracing.db.Report" />
+		
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.ClaimSettlement" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.SettlementBagInventory" />
+		
     </session-factory>
 
 </hibernate-configuration>

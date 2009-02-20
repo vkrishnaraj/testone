@@ -24,6 +24,40 @@ function gotoHistoricalReport() {
 	o.historical_report.value = "1";
 	o.submit();
 }
+function disableButton(aButton) {
+    	aButton.disabled = true;
+    	aButton.value= "<bean:message key='ajax.please_wait' />";
+    }
+    
+    function enableButton(aButton, label) {
+    	aButton.disabled = false;
+    	aButton.value=label;
+    }
+    
+     function disableButtons() {
+     	if(document.incidentForm.saveButton) {
+ 	   disableButton(document.incidentForm.saveButton); 
+     	}
+     	if(document.incidentForm.saveremarkButton) {
+ 	   disableButton(document.incidentForm.saveremarkButton); 
+     	}
+    }
+    
+    function enableButtons() {
+     if(document.incidentForm.saveButton) {
+
+      <logic:notEqual name="incidentForm" property="incident_ID" value="">
+        enableButton(document.incidentForm.saveButton, "<bean:message key='button.save' />");
+                </logic:notEqual>
+                <logic:equal name="incidentForm" property="incident_ID" value="">
+        enableButton(document.incidentForm.saveButton, "<bean:message key='button.saveincident' />");
+                </logic:equal>
+     	
+     }
+     if(document.incidentForm.saveremarkButton) {
+        enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
+     }
+    }
 // -->
   </script>
 <logic:present name="prepopulate" scope="request">
@@ -256,15 +290,16 @@ function gotoHistoricalReport() {
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
               <td align="center" valign="top"><br>
-              <html:submit property="save" styleId="button"
-                onclick="return validatereqFields(this.form, 'damaged');">
+		<html:hidden property="save" value="" disabled="true" />
+              <html:button property="saveButton" styleId="button"
+		      onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.save" />
                 </logic:notEqual>
                 <logic:equal name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.saveincident" />
                 </logic:equal>
-              </html:submit></td>
+              </html:button></td>
             </tr>
           </table>
         </logic:notEqual> <logic:equal name="incidentForm" property="readonly" value="1">
@@ -276,9 +311,10 @@ function gotoHistoricalReport() {
                 <td align="center" valign="top"><br>
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
-                  <html:submit property="save" styleId="button">
+		<html:hidden property="save" value="" disabled="true" />
+                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; this.form.submit();">
                     <bean:message key="button.saveremark" />
-                  </html:submit>
+                  </html:button>
                 </logic:notEqual></td>
               </tr>
             </table>

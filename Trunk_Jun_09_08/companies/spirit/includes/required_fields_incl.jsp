@@ -15,13 +15,7 @@
   function validatereq(form) {
   	return true;
   }
-    function validateWTCompanyForward(form) {
- 	
-		    return true;
-  }
-  function  validatereqOHDFields(form) {
-		     return true;
- }
+  
   function validatereqFields(form, formType)
   {
   	var theindex = 0;

@@ -9,19 +9,29 @@ import com.bagnet.nettracer.wt.WorldTracerException;
 
 public class ContentRule extends BasicRule {
     
+	
+
+    private int contentLines = 2;
+    private static final int CATEGORY_LENGTH = 12;
+    private static final int CONTENT_LENGTH = 43;
+    private static final Format CONTENT_FORMAT = Format.CONTENT_FIELD;
+    private static final int MAX_CATEGORIES = 10;
+    
     public ContentRule() {
         super();
     }
 
     public ContentRule(int minLength, int maxLength, int maxAllowed, Format format) {
         super(minLength, maxLength, maxAllowed, format);
+        
 
     }
+    
+    public ContentRule(int minLength, int maxLength, int maxAllowed, Format format, int contentLines) {
+        super(minLength, maxLength, maxAllowed, format);
+        this.contentLines = contentLines;
+    }
 
-    private static final int CATEGORY_LENGTH = 12;
-    private static final int CONTENT_LENGTH = 43;
-    private static final Format CONTENT_FORMAT = Format.FREE_FLOW;
-    private static final int MAX_CATEGORIES = 10;
 
     private static String formatField(String field, int maxLength, String replaceChar) {
         if(field == null) return null;

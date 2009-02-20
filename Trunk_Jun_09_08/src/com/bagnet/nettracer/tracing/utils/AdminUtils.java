@@ -1203,7 +1203,7 @@ public class AdminUtils {
 			String agentType = null;
 			
 			StringBuffer sql = new StringBuffer(512);
-			sql.append("select distinct agent from com.bagnet.nettracer.tracing.db.Agent agent where 1=1 ");
+			sql.append("select distinct agent from com.bagnet.nettracer.tracing.db.Agent agent join com.bagnet.nettracer.tracing.db.UserGroup group on agent.usergroup_id = group.userGroup_ID where 1=1 and ");
 			if (stationId != null && stationId.length() > 0)
 				sql.append(" and agent.station.station_ID = :station_ID ");
 
@@ -1256,7 +1256,7 @@ public class AdminUtils {
 							sql.append(" order by agent.username asc ");
 						} else {
 							if (sort.equalsIgnoreCase("group")) {
-								sql.append(" order by agent.group.description asc ");
+								sql.append(" order by group.description asc ");
 							} else {
 								if (sort.equalsIgnoreCase("station")) {
 									sql.append(" order by agent.station.stationcode asc ");
@@ -1323,7 +1323,7 @@ public class AdminUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			StringBuffer sql = new StringBuffer(512);
 			sql.append("select distinct agent from com.bagnet.nettracer.tracing.db.Agent agent where 1=1 ");
-			sql.append(" and agent.group.userGroup_ID = :userGroup_ID ");
+			sql.append(" and agent.usergroup_id = :userGroup_ID ");
 
 			if (sort != null && sort.length() > 0) {
 				if (sort.equalsIgnoreCase("lastname")) {
@@ -1335,12 +1335,8 @@ public class AdminUtils {
 						if (sort.equalsIgnoreCase("username")) {
 							sql.append(" order by agent.username asc ");
 						} else {
-							if (sort.equalsIgnoreCase("group")) {
-								sql.append(" order by agent.group.description asc ");
-							} else {
-								if (sort.equalsIgnoreCase("station")) {
-									sql.append(" order by agent.station.stationcode asc ");
-								}
+							if (sort.equalsIgnoreCase("station")) {
+								sql.append(" order by agent.station.stationcode asc ");
 							}
 						}
 					}

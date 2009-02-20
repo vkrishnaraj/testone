@@ -45,7 +45,7 @@ public class ReservationIntegrationImpl extends
 
 	public ArrayList<String> populateIncidentForm(HttpServletRequest request, IncidentForm form,
 			int incidentType) {
-		ArrayList<String> errors = null;
+		ArrayList<String> errors = new ArrayList<String>();
 		try {
 
 				if (form.getRecordlocator() == null || form.getRecordlocator().trim().length() == 0) {
@@ -66,6 +66,8 @@ public class ReservationIntegrationImpl extends
 					} else {
 						Booking book = aiw.getThebook();
 						populateIncident(form, request, incidentType, book);
+						HttpSession session = request.getSession();
+						session.setAttribute("incidentForm", form);
 					}
 
 					request.setAttribute("newform", "1");

@@ -38,10 +38,9 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class CustomReportBMO implements
 		com.bagnet.nettracer.integrations.reports.CustomReportBMO {
 	private static Logger logger = Logger.getLogger(CustomReportBMO.class);
-	private static String rootpath;
+	private String rootpath;
 	private Agent user;
-	private HttpServletRequest req;
-	private String errormsg = "";
+
 
 
 	/*****************************************************************************
@@ -319,6 +318,8 @@ public class CustomReportBMO implements
 			HttpServletRequest request, Agent user, String rootpath) {
 		MessageResources messages = MessageResources
 				.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		this.rootpath = rootpath;
+		this.user = user;
 
 		switch (srDTO.getCustomreportnum()) {
 		case ReportingConstants.RPT_20_CUSTOM_1:

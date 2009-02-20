@@ -1,6 +1,10 @@
 package com.bagnet.nettracer.cronjob.tracing;
 
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -48,11 +52,24 @@ public class TraceTest {
 	}
 	*/
 	
-	@Test
+	
 	public void testTraceing() {
 		PassiveTrace.startPassiveTracing("US", "Test Instance", PassiveTrace.PTMode.OLD);
 	}
 	
-	
+	@Test
+	public void test() {
+		Date x = new Date();
+		GregorianCalendar a = new GregorianCalendar();
+		a.setTime(x);
+		a.set(Calendar.SECOND, 0);
+		a.set(Calendar.MILLISECOND, 0);
+		a.set(Calendar.MINUTE, 0);
+		a.set(Calendar.HOUR_OF_DAY, 0);
+		Date y = a.getTime();
+		
+		int z = 1;
+		
+	}
 	
 }

@@ -189,7 +189,18 @@ function updatePagination() {
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.ticket" />
+                      <bean:message key="colname.color" />
+                    </b>
+                  </td>
+                  <td>
+                    <b>
+                      <bean:message key="colname.bagtype" />
+                    </b>
+                  </td>
+                  
+                  <td>
+                    <b>
+                      <bean:message key="colname.itinerary" />
                     </b>
                   </td>
                   <logic:notEmpty name="searchIncidentForm" property="flightnum">
@@ -237,12 +248,45 @@ function updatePagination() {
                     <td>
                       <bean:write name="results" property="status.description" />
                     </td>
+                    
                     <td>
-                      <logic:empty name="results" property="ticketnumber">
-                        &nbsp;
-                      </logic:empty>
-                      <bean:write name="results" property="ticketnumber" />
+                      <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+                        <logic:present name="item_list" property="color">
+                          <logic:notEqual name="item_list" property="color" value="">
+                            <bean:write name="item_list" property="color" />
+                            <br>
+                          </logic:notEqual>
+                        </logic:present>
+                      </logic:iterate>
+                      &nbsp;
                     </td>
+
+                    <td >
+                      <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+                        <logic:present name="item_list" property="bagtype">
+                          <logic:notEqual name="item_list" property="bagtype" value="">
+                            <bean:write name="item_list" property="bagtype" />
+                            <br>
+                          </logic:notEqual>
+                        </logic:present>
+                      </logic:iterate>
+                      &nbsp;
+                    </td>
+
+
+                    <td nowrap>
+                      <logic:iterate id="itin_list" name="itinerary" type="com.bagnet.nettracer.tracing.db.Itinerary">
+                          <logic:equal name="itin_list" property="itinerarytype" value="0">
+                          <bean:write name="itin_list" property="airline" />
+                          <bean:write name="itin_list" property="flightnum" />
+                          <bean:write name="itin_list" property="departdate" />
+                            <br>
+                          </logic:equal>
+                      </logic:iterate>
+                      &nbsp;
+                    </td>
+
+
                     <logic:notEmpty name="searchIncidentForm" property="flightnum">
                       <td>
                         <bean:write name="searchIncidentForm" property="airline" />
@@ -301,7 +345,7 @@ function updatePagination() {
                   </tr>
                 </logic:iterate>
                 <tr>
-                  <td colspan="<logic:notEmpty name="searchIncidentForm" property="flightnum">11</logic:notEmpty> <logic:empty name="searchIncidentForm" property="flightnum">10</logic:empty>">
+                  <td colspan="<logic:notEmpty name="searchIncidentForm" property="flightnum">13</logic:notEmpty> <logic:empty name="searchIncidentForm" property="flightnum">12</logic:empty>">
                     <!-- pagination -->
                     <jsp:include page="/pages/includes/pagination_incl.jsp" />
                     <!-- eof pagination -->

@@ -7,7 +7,7 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
-public class ContentAmendRule extends ContentRule{
+public class ContentAmendRule extends ContentRule {
 
 	private boolean useNums;
 
@@ -26,30 +26,31 @@ public class ContentAmendRule extends ContentRule{
 		if (resultSet == null || resultSet.size() == 0) {
 			return null;
 		}
-		if(resultSet.size() > this.getMaxAllowed()) {
+		if (resultSet.size() > this.getMaxAllowed()) {
 			workingSet = resultSet.subList(0, this.getMaxAllowed());
-		}
-		else {
+		} else {
 			workingSet = resultSet;
 		}
-		
-		//ok, reformat the strings
+
+		// ok, reformat the strings
 		ArrayList<String> temp = new ArrayList<String>();
 		for (String result : workingSet) {
-			//strip off the number at the frontA
+			// strip off the number at the frontA
 			String num = "";
 			String stuff = "";
-			if(useNums) {
-				num = result.substring(0,2);
+			if (useNums) {
+				num = result.substring(0, 2);
 				stuff = result.substring(2, result.length());
-			}
-			else {
+			} else {
 				stuff = result;
 			}
-			
-			String[] pieces = stuff.split(DefaultWorldTracerService.FIELD_SEP + DefaultWorldTracerService.CONTINUATION);
+
+			String[] pieces = stuff.split("\\" + DefaultWorldTracerService.FIELD_SEP + DefaultWorldTracerService.CONTINUATION);
 			for (String piece : pieces) {
-				temp.add(field.name() + (useNums ? num : "") + formatEntry(piece));
+				//skip continuation lines
+				if (!piece.matches("^\\s*/.*$")) {
+					temp.add(field.name() + (useNums ? num : "") + formatEntry(piece));
+				}
 			}
 		}
 		return StringUtils.join(temp, DefaultWorldTracerService.FIELD_SEP);

@@ -7,6 +7,7 @@ package com.bagnet.nettracer.reporting;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -87,7 +88,6 @@ public class ReportOutputServlet extends HttpServlet {
 			throws ServletException, java.io.IOException {
 		
 		String language = TracingConstants.DEFAULT_LOCALE;
-		
 		int outputtype = TracingConstants.REPORT_OUTPUT_UNDECLARED;
 		
 		try {
@@ -110,87 +110,99 @@ public class ReportOutputServlet extends HttpServlet {
 				response.sendRedirect("logoff.do");
 				return;
 			}
-			
-			byte[] bytes = null;
+
+
 			ServletContext sc = getServletContext();
 
 			// file already generated
 			String file = null;
+			File iFile = null;
 			
 
 			if ((file = request.getParameter("reportfile")) != null) {
-				bytes = readBytes(file, sc, response);
-				if (bytes == null || bytes.length == 0) response.sendRedirect("statReport.do?error=print");
-			}
-
-			// print receipt or claim forms
-			if ((request.getParameter("print")) != null) {
-				int type = Integer.parseInt(request.getParameter("print"));
-				switch (type) {
-					case ReportingConstants.CLAIM_PAYOUT_RPT:
-						ClaimForm cform = (ClaimForm) session.getAttribute("claimForm");
-						bytes = readBytes(ClaimPayoutRpt.createReport(cform.getClaim_ID(), sc, request), sc,
-								response);
-						break;
-					case ReportingConstants.CLAIM_PRORATE_RPT:
-						ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
-						bytes = readBytes(ClaimProrateRpt.createReport(cpform, sc, request), sc, response);
-						break;
-					case ReportingConstants.LOST_RECEIPT_RPT:
-						IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
-						
-						bytes = readBytes(LostDelayReceipt.createReport(theform, sc, request, outputtype,
-								language), sc, response);
-						break;
-					case ReportingConstants.DAMAGE_RECEPIT_RPT:
-						IncidentForm theform2 = (IncidentForm) session.getAttribute("incidentForm");
-						
-						bytes = readBytes(DamageReceipt.createReport(theform2, sc, request, outputtype,
-								language), sc, response);
-						break;
-					case ReportingConstants.MISSING_RECEPIT_RPT:
-						IncidentForm theform3 = (IncidentForm) session.getAttribute("incidentForm");
-						
-						bytes = readBytes(MissingReceipt.createReport(theform3, sc, request, outputtype,
-								language), sc, response);
-						break;
-					case ReportingConstants.BDO_RECEIPT_RPT:
-						BDOForm bdoform = (BDOForm) session.getAttribute("BDOForm");
-						
-						bytes = readBytes(BDOReceipt.createReport(bdoform, sc, request, outputtype,
-								language), sc, response);
-						break;
-					case ReportingConstants.PPLC_RPT:
-						ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
-						bytes = readBytes(PPLCReport.createReport(theform4, sc, request, language, outputtype), sc, response);
-					default:
-						break;
-				}
-
-				if (bytes == null || bytes.length == 0) {
-					response.sendRedirect("claim_resolution.do?error=nodata");
-					return;
+				iFile = getFile(file, sc);
+				if (iFile == null) response.sendRedirect("statReport.do?error=print");
+			} else {
+	
+				// print receipt or claim forms
+				if ((request.getParameter("print")) != null) {
+					int type = Integer.parseInt(request.getParameter("print"));
+					switch (type) {
+						case ReportingConstants.CLAIM_PAYOUT_RPT:
+							ClaimForm cform = (ClaimForm) session.getAttribute("claimForm");
+							iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim_ID(), sc, request), sc);
+							break;
+						case ReportingConstants.CLAIM_PRORATE_RPT:
+							ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
+							iFile = getFile(ClaimProrateRpt.createReport(cpform, sc, request), sc);
+							break;
+						case ReportingConstants.LOST_RECEIPT_RPT:
+							IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
+							
+							iFile = getFile(LostDelayReceipt.createReport(theform, sc, request, outputtype,
+									language), sc);
+							break;
+						case ReportingConstants.DAMAGE_RECEPIT_RPT:
+							IncidentForm theform2 = (IncidentForm) session.getAttribute("incidentForm");
+							
+							iFile = getFile(DamageReceipt.createReport(theform2, sc, request, outputtype,
+									language), sc);
+							break;
+						case ReportingConstants.MISSING_RECEPIT_RPT:
+							IncidentForm theform3 = (IncidentForm) session.getAttribute("incidentForm");
+							
+							iFile = getFile(MissingReceipt.createReport(theform3, sc, request, outputtype,
+									language), sc);
+							break;
+						case ReportingConstants.BDO_RECEIPT_RPT:
+							BDOForm bdoform = (BDOForm) session.getAttribute("BDOForm");
+							
+							iFile = getFile(BDOReceipt.createReport(bdoform, sc, request, outputtype,
+									language), sc);
+							break;
+						case ReportingConstants.PPLC_RPT:
+							ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
+							
+							iFile = getFile(PPLCReport.createReport(theform4, sc, request, language, outputtype), sc);
+							break;
+						default:
+							break;
+					}
 				}
 			}
 
-			if (bytes != null && bytes.length > 0) {
-				if (outputtype == TracingConstants.REPORT_OUTPUT_PDF) response
-						.setContentType("application/pdf");
-				else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) response
-						.setContentType("text/html");
-				else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) response
-						.setContentType("application/vnd.ms-excel");
-				else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) response
-						.setContentType("text/plain");
-				else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) response
-						.setContentType("text/xml");
-
-				response.setContentLength(bytes.length);
-				OutputStream ouputStream = response.getOutputStream();
-				ouputStream.write(bytes, 0, bytes.length);
-				ouputStream.flush();
-				ouputStream.close();
+			if (iFile == null || iFile.length() == 0) {
+				response.sendRedirect("claim_resolution.do?error=nodata");
+				return;
 			}
+			
+			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF) response
+					.setContentType("application/pdf");
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) response
+					.setContentType("text/html");
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) response
+					.setContentType("application/vnd.ms-excel");
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) response
+					.setContentType("text/plain");
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) response
+					.setContentType("text/xml");
+
+			int length = 0;
+			
+			
+			response.setContentLength((int) iFile.length());
+			
+			FileInputStream is = new FileInputStream(iFile);
+			OutputStream ouputStream = response.getOutputStream();
+			
+			int current = -1;
+			
+		  while ((current = is.read()) > -1) {
+		  	ouputStream.write(current);
+		  }
+
+			ouputStream.flush();
+			ouputStream.close();
 
 		} catch (Exception e) {
 			logger.error("print report error:" + e);
@@ -199,35 +211,19 @@ public class ReportOutputServlet extends HttpServlet {
 		}
 	}
 
-	private byte[] readBytes(String filepath, ServletContext sc, HttpServletResponse response)
-			throws Exception {
-		filepath = sc.getRealPath("/") + ReportingConstants.REPORT_TMP_PATH + filepath;
+
+	private File getFile(String filepath, ServletContext sc) {
+		filepath = sc.getRealPath("/") + ReportingConstants.REPORT_TMP_PATH
+				+ filepath;
 		File f = new File(filepath);
+
 		if (!f.exists()) {
 			logger.error("no report file exists");
 			return null;
+		} else {
+			return f;
 		}
-		InputStream is = new FileInputStream(f);
-		long length = f.length();
-
-		byte[] bytes = new byte[(int) length];
-
-		/*
-		 * is.read( data, 0, size ); // read into byte array is.close();
-		 */
-
-		// Read in the bytes
-		int offset = 0;
-		int numRead = 0;
-		while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
-			offset += numRead;
-		}
-
-		// Ensure all the bytes have been read in
-		if (offset < bytes.length) {
-			logger.error("error reading file into bytes");
-			return null;
-		}
-		return bytes;
 	}
+
+
 }

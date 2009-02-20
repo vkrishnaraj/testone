@@ -46,6 +46,7 @@ function gotoHistoricalReport() {
   </SCRIPT>
   <!-- calendar stuff ends here -->
   <jsp:include page="/pages/includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/validation_lf.jsp" />
 <%
   String found = (String)request.getAttribute("found");
 %>

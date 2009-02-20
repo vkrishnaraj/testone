@@ -441,7 +441,13 @@ public class BagService {
 			if(theform.getFaultstation_id() == 0) {
 				// default to assigned station
 				iDTO.setFaultstation(new Station());
-				iDTO.getFaultstation().setStation_ID(iDTO.getStationassigned().getStation_ID());
+				
+				if(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_station_code() > 0) {
+					iDTO.getFaultstation().setStation_ID(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_station_code());
+				}	else {
+					iDTO.getFaultstation().setStation_ID(iDTO.getStationassigned().getStation_ID());
+				}
+				
 				// set losscode
 				if(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_loss_code() > 0)
 					iDTO.setLoss_code(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_loss_code());

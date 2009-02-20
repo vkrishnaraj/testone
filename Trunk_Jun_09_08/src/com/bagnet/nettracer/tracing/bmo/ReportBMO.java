@@ -568,6 +568,7 @@ public class ReportBMO {
 				q.setString("agent_username", srDTO.getAgent());
 
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			
 			List list = q.list();
 
 			if (list.size() == 0) {
@@ -708,6 +709,7 @@ public class ReportBMO {
 			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
 				q.setParameterList("station_ID", srDTO.getStation_ID());
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			
 			List stationlist = q.list();
 			if (stationlist.size() == 0) {
 				logger.debug("no data for report");
@@ -1357,6 +1359,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				q.setDate("arrivedate", adate);
 
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			
 			List list = q.list();
 			if (list.size() == 0) {
 				logger.debug("no data for report");
@@ -1632,7 +1635,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					+ " i_a.incident.createdate,i_a.incident.createtime,i_a.incident.status.description,i_a.incident.itemtype.description " + sqlselect
 					+ mbrtypeq + stationq + faultq + losscodeq + statusq + agentq + dateq + traveldateq + companylimit
 					+ " order by i_a.incident.itemtype.itemType_ID, i_a.incident.incident_ID ";
+			
 			Query q = sess.createQuery(sql);
+			
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
 			if (srDTO.getStatus_ID() >= 1)
@@ -1671,9 +1676,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				q.setDate("arrivedate", adate);
 
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			
+			q.setMaxResults(TracerProperties.getMaxReportRows()+1);
 			List list = q.list();
 			if (list.size() == 0) {
 				logger.debug("no data for report");
+				return "";
+			} else if (list.size() == TracerProperties.getMaxReportRows() +1) {
+				this.setErrormsg("error.maxdata");
 				return "";
 			}
 			// populate station and status
@@ -2137,10 +2147,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (cedate != null) q.setDate("cenddate", cedate);
 
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			q.setMaxResults(TracerProperties.getMaxReportRows()+1);
 			List alllist = q.list();
 
 			if (alllist.size() == 0) {
 				logger.debug("no data for report");
+				return "";
+			} else if (alllist.size() == TracerProperties.getMaxReportRows()+1){
+				this.setErrormsg("error.maxdata");
 				return "";
 			}
 			
@@ -2159,7 +2173,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			for (int i = 0; i < alllist.size(); i++) {
 				o = (Object[]) alllist.get(i);
 				temps = (String) o[0];
-				num = ((Integer) o[1]).intValue();
+				num = ((Long) o[1]).intValue();
 
 				if (breakdown.length() > 0) {
 					tempc = DateUtils.formatDate((String) o[2], TracingConstants.DB_DATETIMEFORMAT, TracingConstants.DB_DATEFORMAT, null, tz);
@@ -2573,9 +2587,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		
 		try {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
-
+	
 			virtualizer.setReadOnly(true);
-
+	
 			if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
 				outfile += ".html";
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
@@ -2587,7 +2601,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
 					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
 				}
-			
+				
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS)
 				outfile += ".xls";
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV)
@@ -2605,33 +2619,33 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
 				}
 			}
-
-			
-
+				
+	
 			String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
 			JRExporter exporter = null;
-
+	
 			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
 				JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
 				exporter = new JRHtmlExporter();
-
+	
 				Map imagesMap = new HashMap();
-			
+				
 				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
-
+	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
 				//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
 				// Boolean.TRUE);
 				exporter.exportReport();
 			}
-
+	
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
 				exporter = new JRXlsExporter();
+	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
 				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
@@ -2639,11 +2653,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				exporter.exportReport();
 			} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
 				exporter = new JRCsvExporter();
+	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
 				exporter.exportReport();
 			} else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) {
 				exporter = new JRXmlExporter();
+	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
 				exporter.exportReport();
@@ -2754,7 +2770,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		return al;
 	}
 
-	public static String createSearchIncidentReport(ArrayList incidentArray, HttpServletRequest request, int outputtype, String language, String reportPath) {
+	public static String createSearchIncidentReport(ArrayList incidentArray, HttpServletRequest request, int outputtype, String language, String reportPath, ReportBMO rbmo) {
 		try {
 			
 			Map parameters = new HashMap();			
@@ -2768,8 +2784,6 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			IncidentBMO bmo = new IncidentBMO();
 			BagService bs = new BagService();
 			
-
-			ReportBMO rbmo = new ReportBMO(request);
 			JasperReport jasperReport = getCompiledReport(ReportingConstants.SEARCH_INCIDENT_RPT_NAME, reportPath);
 			JRDataSource ds = new JRIncidentDataSource(jasperReport, incidentArray, (Agent) request.getSession().getAttribute("user"));
 			return rbmo.getReportFile(jasperReport, ds, parameters, ReportingConstants.SEARCH_INCIDENT_RPT_NAME, reportPath, outputtype);
@@ -2781,7 +2795,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		}
 	}
 	
-	public static String createSearchOnhandReport(List onhandArray, HttpServletRequest request, int outputtype, String language, String reportPath) {
+	public static String createSearchOnhandReport(List onhandArray, HttpServletRequest request, int outputtype, String language, String reportPath, ReportBMO rbmo) {
 		try {
 			
 			Map parameters = new HashMap();			
@@ -2796,7 +2810,6 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			IncidentBMO bmo = new IncidentBMO();
 			BagService bs = new BagService();
 
-			ReportBMO rbmo = new ReportBMO(request);
 			JasperReport jasperReport = getCompiledReport(ReportingConstants.SEARCH_ONHAND_RPT_NAME, reportPath);
 			JRDataSource ds = new JROnhandDataSource(jasperReport, onhandArray, (Agent) request.getSession().getAttribute("user"));
 			return rbmo.getReportFile(jasperReport, ds, parameters, ReportingConstants.SEARCH_ONHAND_RPT_NAME, reportPath, outputtype);

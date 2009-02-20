@@ -129,7 +129,7 @@ public class IncidentBMO {
 				if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
 					String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DB_DATETIMEFORMAT, null, iDTO.get_TIMEZONE());
 
-					SpringUtils.getReservationIntegration().writeCommentToPNR("Baggage Claim (" + iDTO.getIncident_ID() + ") created for this customer on "
+					SpringUtils.getReservationIntegration().writeCommentToPNR("Baggage Claim (" + iDTO.getIncident_ID() + ") created on "
 							+ formateddatetime, iDTO.getRecordlocator());
 				}
 				

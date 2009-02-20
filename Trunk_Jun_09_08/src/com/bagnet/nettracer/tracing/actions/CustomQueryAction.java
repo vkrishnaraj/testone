@@ -22,17 +22,19 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 /**
@@ -206,16 +208,35 @@ public class CustomQueryAction extends Action {
 				String reportPath = getServlet().getServletContext().getRealPath("/");
 				int outputType = new Integer(request.getParameter("outputtype")).intValue();
 				String reportFile = null;
-				ArrayList resultArray = bs.customQuery(daform, user, 0, 0, false, searchtype);
 				
-				if (searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4")) {
-					reportFile = ReportBMO.createSearchIncidentReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath);
+				ArrayList countArray = bs.customQuery(daform, user, 0, 0, true, searchtype, true);
+				int rc = ((Long) countArray.get(0)).intValue();
+				int maxRc = TracerProperties.getMaxReportRows(); 
+
+				if (rc < maxRc) {
+					ArrayList resultArray = bs.customQuery(daform, user, 0, 0, false, searchtype, true);
+					
+					ReportBMO rbmo = new ReportBMO(request);
+					if (searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4")) {
+						reportFile = ReportBMO.createSearchIncidentReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
+					} else {
+						reportFile = ReportBMO.createSearchOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
+					}
+					if (rbmo.getErrormsg() != null) {
+						ActionMessages errors = new ActionMessages();
+						ActionMessage error = new ActionMessage(rbmo.getErrormsg());
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					} else {
+						request.setAttribute("reportfile", reportFile);
+						request.setAttribute("outputtype", outputType);
+					} 
 				} else {
-					reportFile = ReportBMO.createSearchOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath);
+					ActionMessages errors = new ActionMessages();
+					ActionMessage error = new ActionMessage("error.maxdata");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
 				}
-				
-				request.setAttribute("reportfile", reportFile);
-				request.setAttribute("outputtype", outputType);
 				
 			} catch (Exception e) {
 				logger.error(e.getStackTrace());

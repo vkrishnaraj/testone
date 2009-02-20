@@ -36,6 +36,35 @@ function gotoHistoricalReport() {
 	o.historical_report.value = "1";
 	o.submit();
 }
+function disableButton(aButton) {
+    	aButton.disabled = true;
+    	aButton.value= "<bean:message key='ajax.please_wait' />";
+    }
+    function enableButton(aButton, label) {
+    	aButton.disabled = false;
+    	aButton.value=label;
+    }
+     function disableButtons() {
+     	if(document.incidentForm.saveButton) {
+ 	   disableButton(document.incidentForm.saveButton); 
+     	}
+     	if(document.incidentForm.saveremarkButton) {
+ 	   disableButton(document.incidentForm.saveremarkButton); 
+     	}
+    }
+    function enableButtons() {
+     if(document.incidentForm.saveButton) {
+      <logic:notEqual name="incidentForm" property="incident_ID" value="">
+        enableButton(document.incidentForm.saveButton, "<bean:message key='button.save' />");
+                </logic:notEqual>
+                <logic:equal name="incidentForm" property="incident_ID" value="">
+        enableButton(document.incidentForm.saveButton, "<bean:message key='button.saveincident' />");
+                </logic:equal>
+     }
+     if(document.incidentForm.saveremarkButton) {
+        enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
+     }
+    }
 // -->
   </script>
 
@@ -276,7 +305,7 @@ function gotoHistoricalReport() {
           width="20" height="21" border="0"></a></h1>
         <span class="reqfield">*</span> <bean:message
           key="message.required" /> <logic:iterate id="article"
-          indexId="i" name="incidentForm" property="articlelist">
+          indexId="i" name="incidentForm" property="articlelist" type="com.bagnet.nettracer.tracing.db.Articles">
           <table class="<%=cssFormClass %>" cellspacing="0"
             cellpadding="0">
             <tr>
@@ -307,9 +336,16 @@ function gotoHistoricalReport() {
             </tr>
             <tr>
               <td colspan=4><bean:message key="colname.desc" /> <br>
-              <html:textarea name="article" property="description"
-                cols="80" rows="5" styleClass="textarea_medium"
-                indexed="true" /></td>
+<%
+            String remarkDescription = "article[" + i + "].description";
+            String remarkText        = "this.form.elements['" + remarkDescription + "']";
+            String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
+%>
+              <textarea name="<%= remarkDescription %>"
+                cols="80" rows="5" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,255);"
+                onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,255);"><%= article.getDescription() %></textarea>
+              <input name="<%= remarkDescription + "2" %>" type="text" value="255" size="4" maxlength="4" disabled="true" />
+                </td>
             </tr>
             <tr>
               <td colspan=4><html:submit styleId="button"
@@ -335,15 +371,16 @@ function gotoHistoricalReport() {
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
               <td align="center" valign="top"><br>
-              <html:submit property="save" styleId="button"
-                onclick="return validatereqFields(this.form, 'pilfered');">
+		<html:hidden property="save" value="" disabled="true" />
+              <html:button property="saveButton" styleId="button"
+		      onclick="disableButtons(); if(validatereqFields(this.form, 'pilfered') != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.save" />
                 </logic:notEqual>
                 <logic:equal name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.saveincident" />
                 </logic:equal>
-              </html:submit></td>
+              </html:button></td>
             </tr>
           </table>
           <br>
@@ -356,9 +393,10 @@ function gotoHistoricalReport() {
                 <td align="center" valign="top"><br>
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
-                  <html:submit property="save" styleId="button">
+		<html:hidden property="save" value="" disabled="true" />
+                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; this.form.submit();">
                     <bean:message key="button.saveremark" />
-                  </html:submit>
+                  </html:button>
                 </logic:notEqual></td>
               </tr>
             </table>
