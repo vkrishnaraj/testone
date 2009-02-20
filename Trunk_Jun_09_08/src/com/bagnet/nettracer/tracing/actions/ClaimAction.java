@@ -191,6 +191,7 @@ public class ClaimAction extends Action {
 
 			cform.setMod_claim_reason("");
 			cform.setMod_exp_reason("");
+			cform.setExpense(ep);
 			request.setAttribute("edit", "1");
 			if (index >= 0) {
 				request.setAttribute("index", Integer.toString(index));
