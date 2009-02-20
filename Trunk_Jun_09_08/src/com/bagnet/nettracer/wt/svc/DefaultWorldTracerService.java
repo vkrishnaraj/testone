@@ -385,7 +385,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 		addIncidentFieldEntry(WorldTracerField.RC, fwd.getLossComments(), fieldMap);
 
-		String result = wtConnector.sendFwd(fieldMap, fwd.getAgent().getStation().getStationcode(), fwd.getAgent()
+		String result = wtConnector.sendFwd(fieldMap, fwd.getAgent().getStation().getWt_stationcode(), fwd.getAgent()
 				.getCompanycode_ID());
 		return result;
 	}
@@ -445,7 +445,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			throw new WorldTracerException("Unable to request QOH. BagTag, Airline, and Station are required");
 		}
 		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(wtq);
-		addIncidentFieldEntry(WorldTracerField.TN, wtq.getBagTagNumber(), fieldMap);
+		addConvertedTag(wtq.getBagTagNumber(), WorldTracerField.TN, fieldMap, wtq.getAgent().getCompanycode_ID());
 
 		return wtConnector.requestQoh(wtq.getFromStation().toUpperCase(), wtq.getFromAirline().toUpperCase(), wtq
 				.getIncident().getWt_id(), fieldMap);
@@ -509,7 +509,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
 		addIncidentFieldEntry(WorldTracerField.AG, getAgentEntry(fwd.getAgent()), result);
 
-		addIncidentFieldEntry(WorldTracerField.XT, fwd.getFwdExpediteNum(), result);
+		addConvertedTag(fwd.getFwdExpediteNum(), WorldTracerField.XT, result, fwd.getAgent().getCompanycode_ID());
 
 		if (fwd.getFwdName() != null) {
 			for (String name : fwd.getFwdName()) {
@@ -997,26 +997,30 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	private void addClaimCheckNum(String claimCheck, Map<WorldTracerField, List<String>> result, String companyCode) {
+		addConvertedTag(claimCheck, WorldTracerField.TN, result, companyCode);
+	}
+	
+	private void addConvertedTag(String tag, WorldTracerField field, Map<WorldTracerField, List<String>> result, String companyCode) {
 		String bagTagString = null;
 		try {
-			bagTagString = LookupAirlineCodes.getTwoCharacterBagTag(claimCheck.trim());
+			bagTagString = LookupAirlineCodes.getTwoCharacterBagTag(tag.trim());
 		} catch (BagtagException e) {
 			// couldn't figure out the tag.
 			Pattern wt_patt = Pattern.compile("([a-zA-Z0-9]{2})(\\d{1,6})");
-			Matcher m = wt_patt.matcher(claimCheck.trim());
+			Matcher m = wt_patt.matcher(tag.trim());
 			if (m.find() && LookupAirlineCodes.getThreeDigitTicketingCode(m.group(1)) != null) {
 				bagTagString = String.format("%s%06d", m.group(1), Integer.parseInt(m.group(2)));
 			} else {
 				Pattern base_patt = Pattern.compile("(\\d{1,6})(\\D|$)");
-				m = base_patt.matcher(claimCheck.trim());
+				m = base_patt.matcher(tag.trim());
 				if (m.find()) {
 					bagTagString = companyCode + m.group(1);
 				}
 			}
 		}
 		if (bagTagString != null && bagTagString.matches(".*[1-9].*")) {
-			if (result.get(WorldTracerField.TN) == null || !(result.get(WorldTracerField.TN).contains(bagTagString))) {
-				addIncidentFieldEntry(WorldTracerField.TN, bagTagString, result);
+			if (result.get(field) == null || !(result.get(field).contains(bagTagString))) {
+				addIncidentFieldEntry(field, bagTagString, result);
 			}
 		}
 	}

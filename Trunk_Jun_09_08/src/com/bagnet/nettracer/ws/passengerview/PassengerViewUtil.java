@@ -179,9 +179,14 @@ public class PassengerViewUtil {
 			
 			Incident iDTO = null;
 			
-			if (authorizeName == true)
-				iDTO = iBMO.findIncidentForPVO(incident_ID.trim().toUpperCase(), name);
-			else
+			/*
+			 * there are whitespace issues with the way a pax enters a name and an agent enters a name
+			 * that cause pax view webservice not to work. it is easier to do white space agnostic name
+			 * verification in the Java below than in the query (see isNameMatch(String, String))
+			 */
+			//if (authorizeName == true)
+				//iDTO = iBMO.findIncidentForPVO(incident_ID.trim().toUpperCase(), name);
+			//else
 				iDTO = iBMO.findIncidentByID(incident_ID.trim().toUpperCase());
 
 			if (iDTO == null)
@@ -210,11 +215,16 @@ public class PassengerViewUtil {
 					break;
 				}
 				
-				if (!authorizeName || (authorizeName && wsp.getLastname().equalsIgnoreCase(name))) {
+				if (!authorizeName || (authorizeName && isNameMatch(wsp.getLastname(), name))) {
 					si.addNewPassengers();
 					si.setPassengersArray(k, wsp);
 					++k;
 				}
+			}
+			
+			if(authorizeName && k == 0) {
+				//didn't find name in incident
+				return null;
 			}
 
 			si.setIncidentID(iDTO.getIncident_ID());
@@ -262,5 +272,15 @@ public class PassengerViewUtil {
 			return null;
 		}
 	}
+
+private boolean isNameMatch(String lastname, String name) {
+	// TODO Auto-generated method stub
+	if(lastname == null || name == null) { 
+		return false;
+	}
+	lastname = lastname.trim().replaceAll("\\s+", " ");
+	name = name.trim().replaceAll("\\s+", "");
+	return lastname.equalsIgnoreCase(name); 
+}
  	
 }

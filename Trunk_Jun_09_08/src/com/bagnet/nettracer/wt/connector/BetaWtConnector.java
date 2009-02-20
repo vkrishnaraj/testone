@@ -300,7 +300,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 		
 		Matcher m1 = qoh_success.matcher(responseBody);
 		if(( responseBody.toUpperCase().split("ROH MESSAGE SENT").length >= 3) || m1.find()) {
-			return "QOH Requested";
+			return "OHD Requested";
 		}
 		else {
 			String errorString;
