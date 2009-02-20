@@ -52,7 +52,7 @@ function sortClaims(sortOrder) {
 
 // -->
   </script>
-  <html:form action="claims.do" method="post">
+  <html:form action="claims.do" method="post" onsubmit="fillzero(this.inc_num, 13); return true;">
 <%
     String sort = (String)request.getAttribute("sort");
 

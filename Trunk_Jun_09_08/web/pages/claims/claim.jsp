@@ -26,7 +26,7 @@
   </SCRIPT>
   <!-- calendar stuff ends here -->
   <logic:present name="noincident" scope="request">
-    <html:form action="claim_resolution.do" method="post" focus="incident_ID">
+    <html:form action="claim_resolution.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13);">
     	<html:javascript formName="claimForm" />
     <!-- search for claim from report number-->
     <tr>

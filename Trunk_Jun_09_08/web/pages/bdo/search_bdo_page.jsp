@@ -50,7 +50,7 @@ function updatePagination() {
 // -->
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="searchbdo.do" method="post" focus="incident_ID" onsubmit="return validateSearch(this);">
+  <html:form action="searchbdo.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13); fillzero(this.ohd_ID, 13);return validateSearch(this);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">

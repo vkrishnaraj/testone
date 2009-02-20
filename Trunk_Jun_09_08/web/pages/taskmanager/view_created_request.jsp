@@ -36,7 +36,7 @@ function updatePagination() {
 // -->
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="viewCreatedROH.do" method="post" onsubmit="return validateRest(this);">
+  <html:form action="viewCreatedROH.do" method="post" onsubmit="fillzero(this.ohd_num, 13); fillzero(this.incident_ID, 13); return validateRest(this);">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <!-- MIDDLE COLUMN -->

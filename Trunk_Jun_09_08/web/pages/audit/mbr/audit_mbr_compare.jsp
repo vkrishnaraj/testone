@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
@@ -256,6 +257,21 @@ function updatePagination() {
             <logic:iterate id="audit_incident" name="compareList" scope="request">
               <td>
                 <bean:write name="audit_incident" property="stationassigned.stationcode" />
+              </td>
+            </logic:iterate>
+          </tr>
+          <tr>
+          <td>
+              <bean:message key="colname.agentassigned_nobr" />
+            </td>
+            <logic:iterate id="audit_incident" name="compareList" scope="request">
+              <td>
+              <c:choose>
+              	<c:when test="${!empty audit_incident.agentassigned.username}" >
+              		<bean:write name="audit_incident" property="agentassigned.username" />
+              	</c:when>
+              	<c:otherwise>&nbsp;</c:otherwise>
+              </c:choose>
               </td>
             </logic:iterate>
           </tr>

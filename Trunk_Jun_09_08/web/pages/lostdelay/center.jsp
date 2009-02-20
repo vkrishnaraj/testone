@@ -491,7 +491,7 @@
                       indexed="true" onblur="fillzero(this,13);" />
                     <input type="submit" name="matchclaim<%= i %>"
                       value='<bean:message key="button.do_match"/>'
-                      id="button">
+                      id="button" onclick="fillzero(document.incidentForm.tempOHD_ID, 13); return true;">
                   </logic:empty>
                 </logic:notPresent>
               </logic:notEqual>&nbsp;</td>

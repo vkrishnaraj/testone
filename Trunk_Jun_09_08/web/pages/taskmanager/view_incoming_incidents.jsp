@@ -51,7 +51,7 @@ function updatePagination() {
   </script>
   
   <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="incomingReports.do" method="post" focus="incident_ID" onsubmit="return validateSearch(this);">
+  <html:form action="incomingReports.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13); return validateSearch(this);">
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   

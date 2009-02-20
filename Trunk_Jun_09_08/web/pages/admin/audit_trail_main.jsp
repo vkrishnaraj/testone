@@ -129,7 +129,7 @@ function updatePagination() {
               </tr>
               <tr>
                 <td colspan="6" align="center" valign="top">
-                  <html:submit property="search" styleId="button">
+                  <html:submit property="search" styleId="button" onclick="fillzero(document.auditTrailForm.auditParam, 13); return true;">
                     <bean:message key="button.retrieve" />
                   </html:submit>
                   &nbsp;

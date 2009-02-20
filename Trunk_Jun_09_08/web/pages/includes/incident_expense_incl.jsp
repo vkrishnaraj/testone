@@ -78,12 +78,14 @@
               <bean:define id="expenselocation" name="expenselist" property="expenselocation" type="com.bagnet.nettracer.tracing.db.Station" />
 <%
               i++;
+              if(expenselist.getStatus().getStatus_ID() != TracingConstants.EXPENSEPAYOUT_STATUS_DENIED) {
                 checktotal   += expenselist.getCheckamt();
 								if (lastcurrency == "") lastcurrency = expenselist.getCurrency_ID();
 								if (!lastcurrency.equals(expenselist.getCurrency_ID())) samecurrency = false;
 								
                 vouchertotal += expenselist.getVoucheramt();
                 mileagetotal += expenselist.getMileageamt();
+                }
 %>
                 <tr>
                   <td>

@@ -35,7 +35,7 @@ function updatePagination() {
 }
 // -->
   </script>
-  <form name="matchform" action="viewMatches.do" method="post">
+  <form name="matchform" action="viewMatches.do" method="post" onsubmit="fillzero(this.incident_ID, 13); fillzero(this.ohd_ID, 13); return true;">
 
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>

@@ -40,7 +40,7 @@ function sortInterimExpense(sortOrder) {
 
 // -->
   </script>
-  <html:form action="expenseRequests.do" method="post">
+  <html:form action="expenseRequests.do" method="post" onsubmit="fillzero(this.incident_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <%
     String sort = (String)request.getAttribute("sort");

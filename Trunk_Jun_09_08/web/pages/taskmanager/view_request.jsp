@@ -41,7 +41,7 @@ function sortIncomingRequests(sortOrder) {
 
 // -->
   </script>
-  <html:form action="viewROH.do" method="post">
+  <html:form action="viewROH.do" method="post" onsubmit="fillzero(this.ohd_num, 13); fillzero(this.incident_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <%
     String sort = (String)request.getAttribute("sort");

@@ -52,7 +52,7 @@ function updatePagination() {
 }
 // -->
   </script>
-  <html:form action="retrieveLostFound.do" method="post">
+  <html:form action="retrieveLostFound.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return true;">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">

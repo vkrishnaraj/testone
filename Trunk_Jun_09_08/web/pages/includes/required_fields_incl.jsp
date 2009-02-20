@@ -63,5 +63,9 @@
 
     return true;
   }
+  
+  function validateReqForward(form) {
+  	return true;
+  }
   // -->
 </script>

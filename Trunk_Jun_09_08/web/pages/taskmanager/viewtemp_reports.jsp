@@ -58,7 +58,7 @@ function sortReports(sortOrder) {
 // -->
   </script>
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
-  <html:form action="temporaryReports.do" method="post">
+  <html:form action="temporaryReports.do" method="post" onsubmit="fillzero(this.incident_num, 13); return true;">
 <%
     String sort = (String)request.getAttribute("sort");
 

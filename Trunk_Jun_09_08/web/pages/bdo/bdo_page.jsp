@@ -120,7 +120,7 @@
               </td>
               <tr>
                 <td align="center" valign="top" colspan="12">
-                  <html:submit property="get_incident" styleId="button">
+                  <html:submit property="get_incident" styleId="button" onclick="fillzero(document.BDOForm.mbr_id, 13); return true;">
                     <bean:message key="button.search" />
                   </html:submit>
                 </td>
@@ -146,7 +146,7 @@
                     </td>
                     <tr>
                       <td align="center" valign="top" colspan="12">
-                        <html:submit property="get_ohd" styleId="button">
+                        <html:submit property="get_ohd" styleId="button" onclick="fillzero(document.BDOForm.ohd_id, 13); return true;">
                           <bean:message key="button.search" />
                         </html:submit>
                       </td>

@@ -55,7 +55,7 @@ function updatePagination() {
 // -->
   </script>
 <jsp:include page="/pages/includes/validation_incl.jsp" />
-<html:form action="worldtracerlog.do" method="post" focus="txType">
+<html:form action="worldtracerlog.do" method="post" focus="txType" onsubmit="fillzero(this.incident_id, 13); fillzero(this.ohd_id, 13); return true;">
 	<tr>
 		<td colspan="3" id="pageheadercell">
 		<div id="pageheaderleft">

@@ -133,7 +133,7 @@
                   <logic:empty name="theitem" property="OHD_ID">
                     <logic:notPresent name="cantmatch" scope="request">
                       <html:text name="theitem" property="tempOHD_ID" size="13" maxlength="13" styleClass="textfield" indexed="true" onblur="fillzero(this,13);" />
-                      <input type="submit" name="matchbag<%= i %>" value='<bean:message key="button.do_match"/>' id="button">
+                      <input type="submit" name="matchbag<%= i %>" value='<bean:message key="button.do_match"/>' id="button" onclick="fillzero(document.incidentForm.tempOHD_ID, 13); return true;">
                     </logic:notPresent>
                   </logic:empty>
                 </td>

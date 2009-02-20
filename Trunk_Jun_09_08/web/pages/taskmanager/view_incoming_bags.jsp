@@ -40,7 +40,7 @@ function sortIncomingBags(sortOrder) {
 
 // -->
   </script>
-  <html:form action="incomingBags.do" method="post">
+  <html:form action="incomingBags.do" method="post" onsubmit="fillzero(this.ohd_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <%
     String sort = (String)request.getAttribute("sort");

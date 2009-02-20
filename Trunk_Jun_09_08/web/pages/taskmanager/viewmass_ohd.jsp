@@ -59,7 +59,7 @@ function sortMass(sortOrder) {
 // -->
   </script>
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
-  <html:form action="massOnhands.do" method="post">
+  <html:form action="massOnhands.do" method="post" onsubmit="fillzero(this.ohd_num, 13); return true;">
 <%
     String sort = (String)request.getAttribute("sort");
 

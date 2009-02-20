@@ -53,7 +53,7 @@ function sortAgents(sortOrder) {
   </SCRIPT>
   <!-- calendar stuff ends here -->
   <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="otherTasks.do" method="post" onsubmit="return validateRest(this);">
+  <html:form action="otherTasks.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateRest(this);">
     <logic:present name="file_type" scope="request">
       <html:hidden property="file_type" value="<%= (String)request.getAttribute("file_type") %>" />
     </logic:present>
@@ -96,11 +96,11 @@ function sortAgents(sortOrder) {
               </td>
               <td>
                 <html:select property="task_status" styleClass="dropdown">
-                  <html:option value="-1">
-                    <bean:message key="select.all" />
-                  </html:option>
                   <html:option value="-2">
                     <bean:message key="select.all_active" />
+                  </html:option>
+                  <html:option value="-1">
+                    <bean:message key="select.all" />
                   </html:option>
                   <html:options collection="task_status_list" property="status_ID" labelProperty="description" />
                 </html:select>

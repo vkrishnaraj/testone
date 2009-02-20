@@ -53,7 +53,7 @@ function updatePagination() {
 }
 // -->
   </script>
-  <html:form action="searchOnHand.do" method="post">
+  <html:form action="searchOnHand.do" method="post" onsubmit="fillzero(this.incident_ID, 13); return true;">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">

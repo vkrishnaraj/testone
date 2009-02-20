@@ -173,9 +173,9 @@
 	    } 
 	 	}
 	 	
-	 	if (form.name == "forwardMessageForm"){
+	 if (form.name == "forwardMessageForm"){
     	if (!validatereqBEORN(form)) return false;
-    }
+     }
     
    
     if (expediteElement.value.length == 0 && bagTagElement.value.length ==0) {
