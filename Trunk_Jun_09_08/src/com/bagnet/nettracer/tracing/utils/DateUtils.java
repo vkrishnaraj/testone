@@ -141,6 +141,10 @@ public class DateUtils {
 	}
 
 	public static Date convertToDate(String str, String instyle, String inloc) {
+		return convertToDate(str, instyle, inloc, null);
+	}
+	
+	public static Date convertToDate(String str, String instyle, String inloc, TimeZone startTZ) {
 		try {
 			Locale locale = null;
 			if (inloc == null) locale = Locale.US;
@@ -150,6 +154,9 @@ public class DateUtils {
 			if (str == null || str.length() <= 0) return null;
 
 			SimpleDateFormat df = new SimpleDateFormat(instyle, locale);
+			if(startTZ != null) {
+				df.setTimeZone(startTZ);
+			}
 			Date mydate = df.parse(str);
 			Calendar c = Calendar.getInstance();
 			c.setTime(mydate);
@@ -178,7 +185,11 @@ public class DateUtils {
 	}
 
 	public static Date convertToGMTDate(String str, String instyle) {
-		Date now = convertToDate(str, instyle, null);
+		return convertToGMTDate(str, instyle, null);
+	}
+	
+	public static Date convertToGMTDate(String str, String instyle, TimeZone startTZ) {
+		Date now = convertToDate(str, instyle, null, startTZ);
 		return convertToGMTDate(now);
 	}
 	
