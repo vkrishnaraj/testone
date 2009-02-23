@@ -39,6 +39,8 @@
 	  currentElement = form.elements[j];
 	  currentElementName=currentElement.name;
 	  if (currentElementName.indexOf("].color") != -1) {
+		 var left = currentElementName.indexOf("[");
+       	 var right = currentElementName.indexOf("]");
     	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
 
       }
