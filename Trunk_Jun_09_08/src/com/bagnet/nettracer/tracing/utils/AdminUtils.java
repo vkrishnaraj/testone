@@ -1203,7 +1203,7 @@ public class AdminUtils {
 			String agentType = null;
 			
 			StringBuffer sql = new StringBuffer(512);
-			sql.append("select distinct agent from com.bagnet.nettracer.tracing.db.Agent agent join com.bagnet.nettracer.tracing.db.UserGroup group on agent.usergroup_id = group.userGroup_ID where 1=1 and ");
+			sql.append("select distinct agent from com.bagnet.nettracer.tracing.db.Agent agent, com.bagnet.nettracer.tracing.db.UserGroup ug where agent.usergroup_id = ug.userGroup_ID ");
 			if (stationId != null && stationId.length() > 0)
 				sql.append(" and agent.station.station_ID = :station_ID ");
 
@@ -1256,7 +1256,7 @@ public class AdminUtils {
 							sql.append(" order by agent.username asc ");
 						} else {
 							if (sort.equalsIgnoreCase("group")) {
-								sql.append(" order by group.description asc ");
+								sql.append(" order by agent..description asc ");
 							} else {
 								if (sort.equalsIgnoreCase("station")) {
 									sql.append(" order by agent.station.stationcode asc ");

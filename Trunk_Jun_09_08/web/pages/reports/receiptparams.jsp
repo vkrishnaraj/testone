@@ -121,8 +121,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
              %>
                        <input type="radio" value="0" name="outputtype" checked="checked">
 	                   <bean:message key="radio.pdf" />
-	                   <%} %>
-                    <% else if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+	                   <%} else if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                        <input type="radio" value="0" name="outputtype" checked="checked">
 	                   <bean:message key="radio.pdf" />
                       <input type="radio" value="1" name="outputtype">          
