@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="generic" default="default">
+<project name="generic" default="buildEscrow">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -78,6 +78,7 @@
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}_web/classes" />
 			</classpath>
+			<include name="**/*.jrxml"/>
 		</jrc>
 	</target>
 	
@@ -89,6 +90,7 @@
 			<exclude name="com/bagnet/clients/us/**" unless="include.us"/>
 			<exclude name="com/bagnet/clients/demo/**" unless="include.demo"/>
 			<exclude name="com/bagnet/clients/ws/**" unless="include.ws"/>
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
 		</javac>
 	</target>
 
