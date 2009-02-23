@@ -239,7 +239,7 @@
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].dispvalid_edate" %>' size="20" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].dispvalid_edate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                 <td>
-            			<html:checkbox property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].permanent" %>' styleClass="textfield" value="1"/>  <b><bean:message key="colname.is_permanent" /></b>
+            			<html:checkbox property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].permanent" %>' styleClass="textfield" />  <b><bean:message key="colname.is_permanent" /></b>
             		</td>
               </tr>
               <tr>
@@ -270,21 +270,29 @@
                 </td>
               </tr>
               <tr>
-                <td colspan=2 width=50%>
+                <td colspan="2" width="50%">
                   <bean:message key="colname.hotel" />
                   <br>
                   <html:text property="<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].hotel" %>" size="45" maxlength="50" styleClass="textfield" />
                 </td>
-                <td colspan=3 width=50%>
+                
+                <logic:equal name="incidentForm" property="incident_ID" value="">
+                <td colspan="2" width="33%">
+                  <bean:message key="colname.email" />
+                  <br>
+                  <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].email" %>' size="42" maxlength="100" styleClass="textfield" />
+                  </logic:equal>
+                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
+                <td colspan="3" width="50%">
                   <bean:message key="colname.email" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].email" %>' size="45" maxlength="100" styleClass="textfield" />
+                  </logic:notEqual>
                   <logic:equal name="incidentForm" property="incident_ID" value="">
 <%
-                    if (i.intValue() == 0) {
-                    	if (request.getAttribute("companyDoesntEmail") == null) {
+                    if (i.intValue() == 0 && request.getAttribute("companyDoesntEmail") == null) {
 %>
-                      <br>
+                      <br />
                       <input type="checkbox" name="email_customer" value="1"
                       <logic:equal name="incidentForm" property="email_customer" value="1">
                         checked="checked"
@@ -305,6 +313,13 @@
 <%
 	}
 %>
+ </td>
+                      <td width="17%">
+                      <bean:message key="colname.email.language" />
+                      <br />
+                      <html:select name="incidentForm" property="language" styleClass="dropdown">
+                      	<html:options collection="receiptLocaleList" property="value" labelProperty="label"/>
+                    </html:select>
 <%
                     	}
                     }

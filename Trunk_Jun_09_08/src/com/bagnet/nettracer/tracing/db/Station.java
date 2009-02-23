@@ -37,6 +37,7 @@ public class Station implements Serializable {
 	
 	private boolean active;
 	private String wt_stationcode;
+	private String emailLanguage;
 
 	/**
 	 * @hibernate.property type="string"
@@ -414,4 +415,17 @@ public class Station implements Serializable {
 	public boolean isThisOhdLz() {
 		return (this.Station_ID == this.getCompany().getVariable().getOhd_lz());
 	}
+
+	/**
+	 * @hibernate.property type="string" length="3" column="email_language"
+	 */
+	public String getEmailLanguage() {
+		// TODO Auto-generated method stub
+		return emailLanguage;
+	}
+
+	public void setEmailLanguage(String emailLanguage) {
+		this.emailLanguage = emailLanguage;
+	}
+	
 }

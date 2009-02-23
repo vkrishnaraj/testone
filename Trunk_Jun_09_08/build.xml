@@ -620,6 +620,7 @@
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/dev/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/dev/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6dev" />
 		<property name="jetblue.init.complete" value="true" />
@@ -632,6 +633,7 @@
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6qa" />
 		<property name="jetblue.init.complete" value="true" />
@@ -644,6 +646,7 @@
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6training" />
 		<property name="jetblue.init.complete" value="true" />
@@ -656,6 +659,7 @@
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6prod" />
 		<property name="jetblue.init.complete" value="true" />
@@ -684,6 +688,7 @@
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 		<antcall target="jetblue-libraries-cleanup" />
+		<delete file="${basedir}/src/report_email_es.html" />
 	</target>
 
 	<target name="build-westjet-all">

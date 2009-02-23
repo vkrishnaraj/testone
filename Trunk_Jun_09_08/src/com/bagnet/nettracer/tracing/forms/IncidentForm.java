@@ -77,6 +77,7 @@ public final class IncidentForm extends ValidatorForm {
 	private int nonrevenue;
 	private Date printedreceipt;
 	private String bagTagNumber;
+	private String language;
 
 	// airline membership
 	private Company company;
@@ -126,6 +127,12 @@ public final class IncidentForm extends ValidatorForm {
 	@Override
 	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
 		super.reset(mapping, request);
+		Agent agent = (Agent)request.getSession().getAttribute("user");
+		if(agent != null) {
+			if(agent.getStation() != null) {
+				language = agent.getStation().getEmailLanguage();
+			}
+		}
 		if (passengerlist != null) {
 			for (Passenger p : (List<Passenger>) passengerlist) {
 				if (p.getAddresses() != null) {
@@ -180,6 +187,15 @@ public final class IncidentForm extends ValidatorForm {
 	}
 
 	
+	
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	/**
 	 * @return Returns the allow_remark_update.
 	 */

@@ -704,7 +704,6 @@ public class BagService {
 						// send email
 						try {
 							HtmlEmail he = new HtmlEmail();
-							boolean useFrench = false;
 							he.setHostName(theform.getAgent().getStation().getCompany().getVariable().getEmail_host());
 							he.setSmtpPort(theform.getAgent().getStation().getCompany().getVariable().getEmail_port());
 
@@ -712,22 +711,9 @@ public class BagService {
 
 							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
 							
-							if ("WS".equalsIgnoreCase(theform.getAgent().getCompanycode_ID())) {
-								String temp = PropertyBMO.getValue(TracerProperties.FRENCH_STATIONS);
-								List<String> frenchStations = null;
-								if(temp != null) {
-									frenchStations = Arrays.asList(temp.split(","));
-									if(frenchStations.contains(theform.getStationcreated().getStationcode().toUpperCase())) {
-										useFrench = true;
-									}
-								}
-							}
+							String currentLocale = theform.getLanguage();
 							
-							String currentLocale;
-							if(useFrench) {
-								currentLocale = "fr";
-							}
-							else {
+							if(currentLocale == null || currentLocale.trim().length() < 1) {
 								currentLocale = iDTO.getAgent().getCurrentlocale();
 							}
 
@@ -757,6 +743,7 @@ public class BagService {
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_LD);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.receipt.title"));
+								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
 							}
 							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
 								h.put("REPORT_TYPE", messages.getMessage(
@@ -764,6 +751,7 @@ public class BagService {
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_DAM);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.receipt.title"));
+								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged")));
 							} 
 							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
 								h.put("REPORT_TYPE", messages.getMessage(
@@ -771,13 +759,14 @@ public class BagService {
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_PIL);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.receipt.title"));
+								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing")));
 							}
 						
 							if (tmpHtmlFileName != null) {
 								htmlFileName = tmpHtmlFileName;
 							}
-							if(useFrench) {
-								htmlFileName = htmlFileName.replaceFirst("\\.html$", "_fr.html");
+							if(currentLocale != null && !currentLocale.equalsIgnoreCase("en")) {
+								htmlFileName = htmlFileName.replaceFirst("\\.html$", "_" + currentLocale.toLowerCase() + ".html");
 							}
 
 							h.put("REPORT_NUMBER", iDTO.getIncident_ID());

@@ -154,7 +154,10 @@ public class TracerUtils {
 		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
 		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
 				user.getDefaulttimezone()).getTimezone()));
-
+		
+		if(user != null && user.getStation() != null) {
+		theform.setLanguage(user.getStation().getEmailLanguage());
+		}
 		session.setAttribute("incidentForm", theform);
 
 		// session
