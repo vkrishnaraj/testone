@@ -73,7 +73,7 @@ public class ViewCreatedInterimExpenseRequests extends Action {
 		request.setAttribute("highlite",
 				TracingConstants.SYSTEM_COMPONENT_NAME_CREATED_INTERIM_EXPENSE_REQUESTS);
 
-		List expenseList = ExpenseUtils.getCreateInterimExpenses(true, agent_station.getStation_ID(), theform, sort, 0, 0);
+		List expenseList = ExpenseUtils.getCreateInterimExpenses(true, agent_station.getStation_ID(), theform, sort, 0, 0, true);
 		if (expenseList != null && ((Long) expenseList.get(0)).intValue() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -101,7 +101,7 @@ public class ViewCreatedInterimExpenseRequests extends Action {
 				request.setAttribute("currpage", "0");
 			}
 
-			expenseList = ExpenseUtils.getCreateInterimExpenses(false, agent_station.getStation_ID(), theform, sort, rowsperpage, currpage);
+			expenseList = ExpenseUtils.getCreateInterimExpenses(false, agent_station.getStation_ID(), theform, sort, rowsperpage, currpage, true);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
