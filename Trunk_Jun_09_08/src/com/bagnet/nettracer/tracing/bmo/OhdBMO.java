@@ -593,7 +593,7 @@ public class OhdBMO {
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
 					|| oDTO.getMiddlename().trim().length() > 0) {
-				sql.append(" join ohd.passengers passengers ");
+				sql.append(" left outer join ohd.passengers passengers ");
 			}
 
 			if ((oDTO.getOHD_categorytype_ID() != null && !oDTO.getOHD_categorytype_ID().equals("0"))
@@ -634,15 +634,15 @@ public class OhdBMO {
 			}
 
 			if (oDTO.getFirstname() != null && oDTO.getFirstname().trim().length() > 0) {
-				sql.append(" and passengers.firstname like :firstname ");
+				sql.append(" and (passengers.firstname like :firstname or ohd.firstname like :firstname) ");
 			}
 
 			if (oDTO.getLastname() != null && oDTO.getLastname().trim().length() > 0) {
-				sql.append(" and passengers.lastname like :lastname ");
+				sql.append(" and (passengers.lastname like :lastname or ohd.lastname like :lastname) ");
 			}
 
 			if (oDTO.getMiddlename() != null && oDTO.getMiddlename().trim().length() > 0) {
-				sql.append(" and passengers.middlename like :middlename ");
+				sql.append(" and (passengers.middlename like :middlename or ohd.middlename like :middlename)");
 			}
 
 			//check if description is not empty
@@ -850,8 +850,8 @@ public class OhdBMO {
 					|| siDTO.getCity().length() > 0 || (siDTO.getState_ID() != null && siDTO.getState_ID().length() > 0) || (siDTO.getProvince() != null && siDTO.getProvince().length() > 0) || siDTO.getCountrycode_ID().length() > 0
 					|| siDTO.getZip().length() > 0 || siDTO.getPhone().length() > 0
 					|| siDTO.getEmail().length() > 0) {
-				s.append(" join ohd.passengers passenger ");
-				s.append(" join passenger.addresses address");
+				s.append(" left outer join ohd.passengers passenger ");
+				s.append(" left outer join passenger.addresses address");
 			}
 
 			s.append(" where 1=1 ");
@@ -890,9 +890,14 @@ public class OhdBMO {
 			// passenger
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
 					|| siDTO.getLastname().length() > 0) {
-				s.append(" and passenger.firstname like :firstname");
+				s.append(" and (");
+				s.append(" ( passenger.firstname like :firstname");
 				s.append(" and passenger.middlename like :middlename");
-				s.append(" and passenger.lastname like :lastname");
+				s.append(" and passenger.lastname like :lastname)");
+				s.append(" or ( ohd.firstname like :firstname");
+				s.append(" and ohd.middlename like :middlename");
+				s.append(" and ohd.lastname like :lastname)");
+				s.append(" )");
 			}
 
 			if (siDTO.getCompanycode_ID().length() > 0 || siDTO.getMembershipnum().length() > 0) {
