@@ -307,7 +307,7 @@
 %>
                       <b><bean:message key="colname.report_email_cus" /></b>
 <%
-    } else if (report_type == 1) {
+    } else if (report_type == 2) {
 %>
                       <b><bean:message key="colname.pilferage_email_cus" /></b>
 <%
@@ -322,7 +322,6 @@
                     </html:select>
 <%
                     	}
-                    }
 %>
                   </logic:equal>
                 </td>

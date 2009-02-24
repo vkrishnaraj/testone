@@ -278,15 +278,11 @@ function gotoHistoricalReport() {
         %>
       </c:if>
       <%
-         } else if(a.getCompanycode_ID().equals(onHandForm.getHolding_company()) 
-        		 && !a.getStation().getStationcode().equals(onHandForm.getHolding_station())) {
+         } else if(!a.getStation().getStationcode().equals(onHandForm.getHolding_station())) {
       %>
       <a href='request_on_hand.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>'><b><bean:message
         key="colname.requestThisBag" /></b></a>
-     <%
-        } else {
-     %>
-      <c:if test="${!empty OnHandForm.wt_id }">
+              <c:if test="${!empty OnHandForm.wt_id }">
         <%
            if (UserPermissions.hasPermission(
                                 TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_ROH, a)) {
@@ -299,6 +295,7 @@ function gotoHistoricalReport() {
            }
         %>
       </c:if>
+
       <%
          }
       %>
