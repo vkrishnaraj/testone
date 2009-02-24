@@ -8,7 +8,7 @@ width:65px;
 */
 div#maincontent input.textfield,
 div#maincontent input.disabledtextfield {
-	height:15px;
+	height:16px;
 	border:1px solid #569ECD;
 	margin:2px 0px 1px 0px;
 	padding: 0px;
