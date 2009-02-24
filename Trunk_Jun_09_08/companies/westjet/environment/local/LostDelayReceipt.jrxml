@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LostDelayReceipt" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LostDelayReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="airline" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["AmericaWest AirLines"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["WestJet"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="createdate" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="pass_name" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="file_reference" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="claim_check_num" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="airline_addr" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["Central Baggage Services\nP.O.Box 36663\nDallas, Texas 75235-1663"]]></defaultValueExpression>
-	</parameter>
+	<parameter name="airline_addr" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="phone" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="address1" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="address2" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="city_st_zip" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="station" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["ATL"]]></defaultValueExpression>
-	</parameter>
+	<parameter name="station" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="station_city" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="station_phone" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="airline_phone" class="java.lang.String" isForPrompting="false"/>
@@ -148,7 +144,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.paragraph_1}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-34" mode="Opaque" x="49" y="321" width="469" height="44" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -196,7 +192,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.paragraph_2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-39" mode="Opaque" x="295" y="441" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -209,7 +205,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-40" mode="Opaque" x="479" y="441" width="47" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -222,8 +218,8 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-41" mode="Opaque" x="138" y="441" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement key="textField-41" mode="Opaque" x="129" y="441" width="119" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -235,7 +231,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-42" mode="Opaque" x="155" y="465" width="159" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -248,7 +244,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
-			<textField pattern="(###)###-####" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="(###)###-####" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-43" mode="Opaque" x="155" y="485" width="159" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -261,8 +257,8 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-44" mode="Opaque" x="175" y="566" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement key="textField-44" mode="Opaque" x="175" y="575" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -274,8 +270,8 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-45" mode="Opaque" x="175" y="586" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement key="textField-45" mode="Opaque" x="175" y="596" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -287,8 +283,8 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-46" mode="Opaque" x="175" y="607" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement key="textField-46" mode="Opaque" x="175" y="617" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -300,8 +296,8 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-47" mode="Opaque" x="175" y="629" width="188" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement key="textField-47" mode="Opaque" x="175" y="638" width="188" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -353,7 +349,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.station} + ":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-51" mode="Opaque" x="42" y="441" width="94" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-51" mode="Opaque" x="33" y="441" width="94" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -392,7 +388,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.phone}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-54" mode="Opaque" x="33" y="566" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-54" mode="Opaque" x="33" y="575" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -405,7 +401,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.address1}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-55" mode="Opaque" x="33" y="607" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-55" mode="Opaque" x="33" y="617" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -418,7 +414,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.city_state_zip}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-56" mode="Opaque" x="33" y="629" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-56" mode="Opaque" x="33" y="638" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -431,7 +427,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.bagtag}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-57" mode="Opaque" x="33" y="586" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-57" mode="Opaque" x="33" y="596" width="142" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -443,7 +439,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.address2}+":"]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-58" mode="Opaque" x="463" y="472" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -456,7 +452,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{creditfile_amt}]]></textFieldExpression>
 			</textField>
-			<textField pattern="(###)###-####" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="(###)###-####" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-59" mode="Opaque" x="463" y="509" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -469,7 +465,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{creditfile_exp}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-60" mode="Opaque" x="463" y="546" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
