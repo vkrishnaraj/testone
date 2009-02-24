@@ -235,7 +235,7 @@ public final class IncidentForm extends ValidatorForm {
 			Passenger a = new Passenger();
 			if (index == 0) a.setIsprimary(1);
 			AirlineMembership am = new AirlineMembership();
-			String setDefault = PropertyBMO.PROPERTY_SET_DEFAULT_MEMBERSHIP;
+			String setDefault = PropertyBMO.getValue(PropertyBMO.PROPERTY_SET_DEFAULT_MEMBERSHIP);
 			if(setDefault != null && !setDefault.equalsIgnoreCase("false")) {
 				am.setCompanycode_ID(agent.getCompanycode_ID());
 			}
