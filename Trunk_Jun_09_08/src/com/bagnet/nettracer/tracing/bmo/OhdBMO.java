@@ -114,6 +114,9 @@ public class OhdBMO {
 				if (isnew) sess.save(iDTO);
 				else {
 					// delete first then insert
+					if(oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
+						iDTO.setWtFile(oldinc.getWtFile());
+					}
 					sess.delete(oldinc);
 					iDTO = clearOHDIds(iDTO);
 					sess.save(iDTO);
