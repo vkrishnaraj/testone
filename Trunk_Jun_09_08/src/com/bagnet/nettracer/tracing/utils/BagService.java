@@ -742,7 +742,7 @@ public class BagService {
 								
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_LD);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
-								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.receipt.title"));
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
 								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
 							}
 							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
@@ -750,7 +750,7 @@ public class BagService {
 										new Locale(currentLocale), "email.damaged"));
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_DAM);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
-								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.receipt.title"));
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title"));
 								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged")));
 							} 
 							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
@@ -758,7 +758,7 @@ public class BagService {
 										new Locale(currentLocale), "email.missing"));
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_PIL);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
-								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.receipt.title"));
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title"));
 								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing")));
 							}
 						
@@ -795,7 +795,7 @@ public class BagService {
 							}
 							h.put("CLAIM_CHECKS", sb.toString());
 							
-							he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
+							//he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
 
 							//he.setSubject("Report for your " + h.get("REPORT_TYPE") + " has been filed.");
 
@@ -806,10 +806,11 @@ public class BagService {
 								h.put("BANNER_IMAGE", img1);
 							}
 								
-							String msg = EmailParser.parse(configpath + htmlFileName, h);
+							String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
 							
 							if(msg != null) {
 								he.setHtmlMsg(msg);
+								he.setCharset("UTF-8");
 								he.send();
 							}
 							else {
