@@ -77,12 +77,6 @@
 			</fileset>
 		</copy>
 
-		<!--
-        <mkdir dir="${app.deploy.dir}/tracer.war" />
-        <unwar src="${build.dir}/dist/web/tracer.war" dest="${app.deploy.dir}/tracer.war">
-        </unwar>
-                -->
-
 	</target>
 
 	<target name="build" depends="init,compile-web" />
@@ -329,11 +323,11 @@
 		<!--<copy todir="${basedir}/web/WEB-INF" file="companies/airtran/context.xml" />-->
 		<copy todir="${basedir}/src" file="companies/airtran/hibernate_main.cfg.xml" />
 
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/airtran/ApplicationResources.properties" />
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -353,11 +347,11 @@
 		<copy todir="${basedir}/src" file="companies/xjet/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/xjet/hibernate_main.cfg.xml" />
 
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/xjet/ApplicationResources.properties" />
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 
 		<antcall target="fast_all">
 			<param name="ant_project_name" value="tracer" />
@@ -365,97 +359,6 @@
 		<antcall target="delete" />
 	</target>
 
-
-	<target name="build-usair-all">
-		<antcall target="build-usair-dev" />
-		<antcall target="build-usair-beta" />
-		<antcall target="build-usair-prod" />
-		<antcall target="build-usair" />
-	</target>
-
-	<target name="build-usair-common">
-		<property name="include.us" value="1" />
-		<antcall target="usair-libraries-create" />
-
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt.jrxml" />
-		<antcall target="jasper_compile" />
-
-
-		<copy todir="${basedir}/web/deployment/main/css" file="companies/usair/nettracerstyles1.css" />
-		<copy todir="${basedir}/web/deployment/main/css" file="companies/usair/formstyles.css" />
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/usair/header_bg.gif" />
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/usair/header_bg_noconf.gif" />
-		<copy todir="${basedir}/src" file="companies/usair/custom_ui.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/report_email_ld.html" />
-		<copy todir="${basedir}/src" file="companies/usair/report_email_dam.html" />
-		<copy todir="${basedir}/src" file="companies/usair/report_email_pil.html" />
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/receipt/logo.jpg" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/bdo/bdologo.gif" />
-		<copy todir="${basedir}/web/pages/includes" file="companies/usair/includes/required_fields_incl.jsp" />
-
-		<antcall target="combineResourceFiles">
-			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
-			<param name="overrideResource" value="${basedir}/companies/usair/ApplicationResources.properties" />
-			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
-
-		<antcall target="fast_all" />
-		<antcall target="delete" />
-
-		<delete file="${basedir}/src/report_email_ld.html" />
-		<delete file="${basedir}/src/report_email_dam.html" />
-		<delete file="${basedir}/src/report_email_pil.html" />
-
-		<antcall target="usair-libraries-cleanup" />
-
-	</target>
-
-	<target name="build-usair" depends="delete">
-		<property name="ant_project_name" value="usair" />
-		<property name="ant_war_name" value="tracer" />
-		<copy todir="${basedir}/web/pages/login" file="companies/usair/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/usair/hibernate_dirty.cfg.xml" />
-		
-		<antcall target="build-usair-common" />
-	</target>
-
-	<target name="build-usair-dev" depends="delete">
-		<property name="ant_project_name" value="usair" />
-		<property name="ant_war_name" value="usair-dev" />
-		<copy todir="${basedir}/web/pages/login" file="companies/usair/dev/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/dev/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_dirty.cfg.xml" />
-		<antcall target="build-usair-common" />
-	</target>
-
-	<target name="build-usair-beta" depends="delete">
-		<property name="ant_project_name" value="usair" />
-		<property name="ant_war_name" value="usair-beta" />
-		<copy todir="${basedir}/web/pages/login" file="companies/usair/beta/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/beta/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/beta/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/usair/beta/hibernate_dirty.cfg.xml" />
-		<antcall target="build-usair-common" />
-	</target>
-
-	<target name="build-usair-prod" depends="delete">
-		<property name="ant_project_name" value="usair" />
-		<property name="ant_war_name" value="usair-prod" />
-		<copy todir="${basedir}/web/pages/login" file="companies/usair/production/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/web/WEB-INF" file="companies/usair/context.xml" />
-		<antcall target="build-usair-common" />
-	</target>
-	
 
 	<target name="build-azul-training" depends="delete">
 		<property name="ant_project_name" value="azul" />
@@ -506,11 +409,11 @@
 
 		<!-- Hibernate main dependent on environment -->
 
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/azul/ApplicationResources.properties" />
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -592,11 +495,11 @@
 		<copy todir="${basedir}/src" file="companies/spirit/hibernate_qa.cfg.xml" />
 		<!-- Hibernate main dependent on environment -->
 
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/spirit/ApplicationResources.properties" />
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 
 		<antcall target="fast_all">
 			<param name="ant_project_name" value="tracer" />
@@ -676,11 +579,11 @@
 		
 		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
 		
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/jetblue/ApplicationResources.properties" />
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 		
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/jetblue/ApplicationResources_es.properties" />
 		
@@ -744,11 +647,11 @@
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/westjet/custom_ui.properties" />
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/westjet/ApplicationResources.properties" />
 			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/westjet/ApplicationResources_fr.properties" />
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -815,26 +718,7 @@
 	</target>
 
 	<target name="delete">
-		<delete file="${basedir}/src/custom_ui.properties" />
-		<delete file="${basedir}/src/report_email.html" />
-		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_es.properties" />
-		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_fr.properties" />
-		<delete file="${basedir}/web/WEB-INF/jboss-app.xml" />
-		<delete file="${basedir}/web/pages/login/center.jsp" />
-		<delete file="${basedir}/web/WEB-INF/context.xml" />
-		<delete file="${basedir}/src/hibernate_main.cfg.xml" />
-		<delete file="${basedir}/src/hibernate_dirty.cfg.xml" />
-		<delete file="${basedir}/src/hibernate_demo.cfg.xml" />
-		<delete file="${basedir}/src/hibernate_qa.cfg.xml" />
-		<delete file="${basedir}/src/tracer.properties" />
-		<delete file="${basedir}/web/reports/LostDelayReceipt.jrxml" />
-		<delete file="${basedir}/web/reports/LostDelayReceipt.jasper" />
-		<delete file="${basedir}/web/reports/DamageReceipt.jrxml" />
-		<delete file="${basedir}/web/reports/DamageReceipt.jasper" />
-		<delete file="${basedir}/web/reports/MissingReceipt.jrxml" />
-		<delete file="${basedir}/web/reports/MissingReceipt.jasper" />
-
+		<ant target="delete" antfile="build-gen.xml"/>
 	</target>
 
 
@@ -1125,11 +1009,7 @@
 		<delete dir="${build.dir}/webservices/passengerview/src" />
 	</target>
 
-	<target name="combineResourceFiles">
-		<java classname="CombineResources" classpath="${basedir}/utils">
-			<arg line="${defaultResource} ${overrideResource} ${destinationResource}" />
-		</java>
-	</target>
+
 
 	<target name="simplifyResourceFiles">
 		<java classname="SimplifyResources" classpath="${basedir}/utils">
@@ -1202,11 +1082,11 @@
 
 	<target name="build-cron-jar" depends="hibernate_generate_core,compile-core,compile-cron">
 		<mkdir dir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" />
-		<antcall target="combineResourceFiles">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<param name="overrideResource" value="${basedir}/companies/${ant_project_name}/ApplicationResources.properties" />
 			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
-		</antcall>
+		</ant>
 
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}tracer.properties" overwrite="true" />
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="generic" default="buildEscrow">
+<project name="generic" default="hibernate_generate">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -8,6 +8,23 @@
 	<property name="buildlib" value="lib/build-client" />
 	<property name="artifact.dir" value="${build.dir}/artifacts/"/>
 
+	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
+		<hibernatedoclet>
+			<fileset dir="src">
+				<include name="com/bagnet/nettracer/tracing/db/*.java" />
+				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+			</fileset>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
+		</hibernatedoclet>
+
+		<replace dir="src" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
+			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
+			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
+			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
+		</replace>
+
+	</target>
+	
 	<path id="cron-class-path">
 		<fileset dir="${lib.build-client.dir}" id="cronjar1">
 			<patternset refid="jar.files" />
@@ -39,25 +56,14 @@
 		<classpath refid="project.classpath" />
 	</taskdef>
 
-	
 	<target name="delete">
-		<delete file="${basedir}/web/pages/includes/ldclose.jsp" />
-		<delete file="${basedir}/web/deployment/main/layouts/main_layout.jsp" />
-		<delete file="${basedir}/web/deployment/main/css/nettracerstyles1.css" />
-		<delete file="${basedir}/web/deployment/main/css/formstyles.css" />
-		<delete file="${basedir}/web/deployment/main/images/nettracer/header_bg.gif" />
-		<delete file="${basedir}/web/deployment/main/images/nettracer/header_bg_noconf.gif" />
 		<delete file="${basedir}/src/custom_ui.properties" />
 		<delete file="${basedir}/src/report_email.html" />
 		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_es.properties" />
+		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_fr.properties" />
 		<delete file="${basedir}/web/WEB-INF/jboss-app.xml" />
 		<delete file="${basedir}/web/pages/login/center.jsp" />
-		<delete file="${basedir}/web/pages/includes/required_fields_incl.jsp" />
-		<delete file="${basedir}/web/pages/includes/analytics.jsp" />
-		<delete file="${basedir}/web/pages/passengerview/passengerview.jsp" />
-		<delete file="${basedir}/web/reports/logo.jpg" />
-		<delete file="${basedir}/web/reports/bdologo.gif" />
 		<delete file="${basedir}/web/WEB-INF/context.xml" />
 		<delete file="${basedir}/src/hibernate_main.cfg.xml" />
 		<delete file="${basedir}/src/hibernate_dirty.cfg.xml" />
@@ -70,6 +76,7 @@
 		<delete file="${basedir}/web/reports/DamageReceipt.jasper" />
 		<delete file="${basedir}/web/reports/MissingReceipt.jrxml" />
 		<delete file="${basedir}/web/reports/MissingReceipt.jasper" />
+
 	</target>
 	
 	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile-web">
@@ -146,12 +153,46 @@
 		<delete dir="other" />
 	</target>
 
-	<target name="combineResourceFiles">
+	<target name="combineResourceFilesOld">
 		<java classname="CombineResources" classpath="${basedir}/utils">
 			<arg line="${defaultResource} ${overrideResource} ${destinationResource}" />
 		</java>
 	</target>
 
+	<target name="combineResourceFiles">
+		<condition property="useBasic">
+			<not>
+				<isset property="tertiaryResource"/>
+			</not>
+		</condition>
+
+		<condition property="useTertiary">
+			<isset property="tertiaryResource"/>
+		</condition>
+
+		<antcall target="combineTwoResourceFiles" />
+		<antcall target="combineThreeResourceFiles" />
+	</target>
+
+	
+	<target name="combineTwoResourceFiles" if="useBasic">
+		<java classname="CombineResources" classpath="${basedir}/utils">
+			<arg line="${defaultResource} ${overrideResource} ${destinationResource}" />
+		</java>
+	</target>
+
+	<target name="combineThreeResourceFiles" if="useTertiary">
+		<property name="tmpResource" value="${basedir}/utils/tmp.txt" />
+		<java classname="CombineResources" classpath="${basedir}/utils">
+			<arg line="${defaultResource} ${overrideResource} ${tmpResource}" />
+		</java>
+		<java classname="CombineResources" classpath="${basedir}/utils">
+			<arg line="${tmpResource} ${tertiaryResource} ${destinationResource}" />
+		</java>
+		<delete file="${tmpResource}" />
+	</target>
+
+	
 	<target name="fast_all" depends="package-web2">
 		<delete dir="${app.deploy.dir}/tracer.war" failonerror="false"/>
 		<delete file="${app.deploy.dir}/tracer.war" failonerror="false"/>
@@ -161,12 +202,7 @@
 				<include name="${ant_war_name}.war" />
 			</fileset>
 		</copy>
-		
-		<!--
-        <mkdir dir="${app.deploy.dir}/tracer.war" />
-        <unwar src="${build.dir}/dist/web/tracer.war" dest="${app.deploy.dir}/tracer.war">
-        </unwar>
-                -->
+
         
 	</target>
 
