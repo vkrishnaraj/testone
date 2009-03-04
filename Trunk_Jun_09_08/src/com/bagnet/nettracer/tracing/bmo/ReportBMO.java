@@ -1540,9 +1540,26 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			// fault station and loss code
 			String faultq = "";
+			/*
 			if (srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
 				faultq = " and i_a.incident.faultstation.station_ID in (:fault_ID) ";
+			}*/
+			
+			// BEGIN NEW
+			String intc = "";
+			if (srDTO.getFaultstation_ID() != null) {
+				for (int i = 0; i < srDTO.getFaultstation_ID().length; i++) {
+					intc += srDTO.getFaultstation_ID()[i] + ",";
+				}
 			}
+
+			if (intc.length() > 0 && srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
+				intc = intc.substring(0,intc.length() - 1);
+				faultq += " and i_a.incident.faultstation.station_ID in (" + intc + ") ";
+			}
+			// END NEW
+			
+			
 			String losscodeq = "";
 			if (srDTO.getLoss_code() > 0) {
 				losscodeq = " and i_a.incident.loss_code = :loss_code";
@@ -1649,8 +1666,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (srDTO.getE_stationcode() != null && srDTO.getE_stationcode().length() > 0)
 				q.setString("e_stationcode", srDTO.getE_stationcode());
 
-			if (srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0"))
-				q.setParameterList("fault_ID", srDTO.getFaultstation_ID());
+			//if (srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0"))
+			//	q.setParameterList("fault_ID", srDTO.getFaultstation_ID());
 			if (srDTO.getLoss_code() > 0)
 				q.setInteger("loss_code", srDTO.getLoss_code());
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0)
