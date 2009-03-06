@@ -24,26 +24,27 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ControlLog;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
-import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for viewing
@@ -85,6 +86,7 @@ public class ViewIncomingBags extends Action {
 
 		//		 menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_BAGS);
+		boolean deliveredFlag = false;
 
 		if (request.getParameter("close") != null || request.getParameter("close1") != null
 				&& request.getParameter("ohd_ID") != null && request.getParameter("ohd_ID").length() > 0) {
@@ -100,17 +102,22 @@ public class ViewIncomingBags extends Action {
 						Date gmtDate = TracerDateTime.getGMTDate();
 						String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(gmtDate);
 
-						if (user.getStation().isThisOhdLz()) {
-							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-						} else {
-							if (ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT) {
-								ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
-							} else {
-								ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-							}
-							//Update the close date on the file as well.
-							ohd.setClose_date(gmtDate);
+						
+						Incident tmpIncident = null;
+						
+						if (ohd.getMatched_incident() != null) {
+							tmpIncident = IncidentBMO.getIncidentByID(ohd.getMatched_incident(), null);
 						}
+						
+						if (tmpIncident != null && tmpIncident.getStationassigned().getStation_ID() == user.getStation().getStation_ID()) {
+							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
+							deliveredFlag = true;
+						} else {
+							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+						}
+						
+						//Update the close date on the file as well.
+						ohd.setClose_date(gmtDate);
 
 						//Update the holding status for this ohd and also add a remark.
 						ControlLog log = ohd.getLastLog();
@@ -180,6 +187,9 @@ public class ViewIncomingBags extends Action {
 					}
 				}
 				request.setAttribute("ohd_ID", ohd_ID);
+				if (deliveredFlag) {
+					request.setAttribute("deliveredFlag", true);
+				}
 				return mapping.findForward(TracingConstants.CLOSE_ON_HAND_SUCCESS);
 			} else {
 				OHD ohd = OHDUtils.getOHD(ohd_ID);
@@ -189,18 +199,21 @@ public class ViewIncomingBags extends Action {
 					Date gmtDate = TracerDateTime.getGMTDate();
 					String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(gmtDate);
 
-					if (user.getStation().isThisOhdLz()) {
-						ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-
-					} else {
-						if (ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT) {
-							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
-						} else {
-							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-						}
-						//Update the close date on the file as well.
-						ohd.setClose_date(gmtDate);
+					Incident tmpIncident = null;
+					
+					if (ohd.getMatched_incident() != null) {
+						tmpIncident = IncidentBMO.getIncidentByID(ohd.getMatched_incident(), null);
 					}
+					
+					if (tmpIncident != null && tmpIncident.getStationassigned().getStation_ID() == user.getStation().getStation_ID()) {
+						ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
+						deliveredFlag = true;
+					} else {
+						ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+					}
+
+					//Update the close date on the file as well.
+					ohd.setClose_date(gmtDate);
 
 					//Update the holding status for this ohd and also add a remark.
 					ControlLog log = ohd.getLastLog();
@@ -270,7 +283,9 @@ public class ViewIncomingBags extends Action {
 					
 				}
 				request.setAttribute("ohd_ID", ohd_ID);
-
+				if (deliveredFlag) {
+					request.setAttribute("deliveredFlag", true);
+				}
 				return mapping.findForward(TracingConstants.CLOSE_ON_HAND_SUCCESS);
 			}
 		}

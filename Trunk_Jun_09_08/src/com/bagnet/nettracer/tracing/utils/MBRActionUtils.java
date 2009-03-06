@@ -651,11 +651,13 @@ public class MBRActionUtils {
 				ic.setOHD_ID(ohd); // new uppercased and spaced removed ohd_id
 
 				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user)) == null) {
-					// update ohd status to be delivered if it is in this station
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
 						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user.getDefaultlocale().toString()));
-						oBMO.insertOHD(ohd_obj, theform.getAgent());
+					} else if (ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
+						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT, user.getDefaultlocale().toString()));
 					}
+					ohd_obj.setMatched_incident(theform.getIncident_ID());
+					oBMO.insertOHD(ohd_obj, theform.getAgent());
 				} else {
 					return error;
 				}
@@ -680,7 +682,7 @@ public class MBRActionUtils {
 					//request.setAttribute("item", Integer.toString(i));
 					return error;
 				} else {
-					if (ohd_obj.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_OPEN) {
+					if (!(ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN || ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT || ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT)) {
 						// ohd is not open
 						item.setOHD_ID("");
 						error = new ActionMessage("error.match_noonhand");
@@ -719,13 +721,14 @@ public class MBRActionUtils {
 					// update ohd status to be delivered if it is in this station
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
 						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user.getDefaultlocale().toString()));
-						oBMO.insertOHD(ohd_obj, theform.getAgent());
+					} else if (ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
+						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT, user.getDefaultlocale().toString()));
 					}
+					ohd_obj.setMatched_incident(theform.getIncident_ID());
+					oBMO.insertOHD(ohd_obj, theform.getAgent());
 				} else {
 					return error;
 				}
-
-				oBMO.insertOHD(ohd_obj, theform.getAgent());
 
 				request.setAttribute("item", Integer.toString(i));
 				return new ActionMessage("");
@@ -785,7 +788,7 @@ public class MBRActionUtils {
 				//empty out claim ohd
 				ic.setOHD_ID("");
 				// call unmatch to clear out match history
-				MatchUtils.unmatchOHD(ohd);
+				MatchUtils.unmatchTheOHD(ohd, user);
 
 				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user);
 				request.setAttribute("claimcheck", "1");
@@ -837,7 +840,7 @@ public class MBRActionUtils {
 				}
 
 				// call unmatch to clear out match history
-				MatchUtils.unmatchOHD(ohd);
+				MatchUtils.unmatchTheOHD(ohd, user);
 
 				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user);
 
