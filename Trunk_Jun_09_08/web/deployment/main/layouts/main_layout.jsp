@@ -27,6 +27,7 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -288,7 +289,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
       <tr><td><div id="copyright">
       <bean:message key="copyright.line1"/><br/>
     <bean:message key="copyright.line2"/></div></td> 
-      <td align=right width=1><bean:message key="footer.current_version"/></td>
+      <td align=right width=1><bean:message key="footer.current_version"/><%=TracerProperties.getInstanceLabel() %></td>
       </tr>
       </table>
     </td>

@@ -122,6 +122,33 @@ public class LookupAirlineCodes {
 		return getFullBagTag(bagTag, null);
 	}
 	
+	public static boolean areBagTagsSame(String bagTag1, String bagTag2) {
+		
+		String convBagTag1 = null;
+		String convBagTag2 = null;
+		
+		if (bagTag1.equals(bagTag2)) {
+			return true;
+		}
+		
+		// Convert to 10 digit and ignore first digit
+		try {
+			convBagTag1 = LookupAirlineCodes.getFullBagTag(bagTag1);
+			convBagTag1 = convBagTag1.substring(1);
+		} catch (BagtagException e) {
+			convBagTag1 = bagTag1;
+		}
+		
+		try {
+			convBagTag2 = LookupAirlineCodes.getFullBagTag(bagTag2);
+			convBagTag2 = convBagTag2.substring(1);
+		} catch (BagtagException e) {
+			convBagTag2 = bagTag2;
+		}
+		
+		return convBagTag1.equals(convBagTag2);
+	}
+	
 	public static String getFullBagTag(String bagTag, ConcurrentHashMap<String, String> cachedMap) throws BagtagException {
 
 		Pattern tenDigitPattern = Pattern.compile(PATTERN_10_DIGIT_BAG_TAG);

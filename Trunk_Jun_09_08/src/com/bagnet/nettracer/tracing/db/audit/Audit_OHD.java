@@ -62,6 +62,7 @@ public class Audit_OHD implements Serializable {
 	private Set controlLog;
 	private Set itinerary;
 	private Date close_date;
+	private String matched_incident;
 
 	private String wt_id;
 	
@@ -862,6 +863,19 @@ public class Audit_OHD implements Serializable {
 	 */
 	public void setLoss_code(int loss_code) {
 		this.loss_code = loss_code;
+	}
+
+
+	/**
+	 * @hibernate.property type="string" length="13"
+	 * @return Returns the claimnum.
+	 */
+	public String getMatched_incident() {
+		return matched_incident;
+	}
+
+	public void setMatched_incident(String matched_incident) {
+		this.matched_incident = matched_incident;
 	}
 
 

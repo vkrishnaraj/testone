@@ -254,6 +254,9 @@ function gotoHistoricalReport() {
       </div>
       <div id="pageheaderright">
     <logic:notEqual name="OnHandForm" property="ohd_id" value="">
+      <c:if test="${!empty OnHandForm.matched_incident}" >
+        <b><bean:message key="message.matched_to" /> <a href='searchIncident.do?incident=<c:out value="${OnHandForm.matched_incident}" />'><c:out value="${OnHandForm.matched_incident}" /></a></b><br />
+      </c:if>
       <%
          if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) {
                   if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())

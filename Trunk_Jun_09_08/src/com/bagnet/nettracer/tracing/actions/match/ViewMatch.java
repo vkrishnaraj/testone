@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -110,7 +109,6 @@ public final class ViewMatch extends Action {
 					MatchUtils.updateMatch(tempmatch);
 				} else if (request.getParameter("multiunreject") != null) {
 					status_obj = new Status();
-					// TODO, if ohd matched already, change to close instead of open
 					status_obj.setStatus_ID(TracingConstants.MATCH_STATUS_OPEN);
 					tempmatch.setStatus(status_obj);
 					MatchUtils.updateMatch(tempmatch);
@@ -204,14 +202,8 @@ public final class ViewMatch extends Action {
 						&& match.getClaimchecknum().length() > 0) {
 					for (Iterator i = incident.getClaimchecks().iterator(); i.hasNext();) {
 						ic = (Incident_Claimcheck) i.next();
-						String bagTag = ic.getClaimchecknum();
-						String tenDigitCode = null;
-						try {
-							tenDigitCode = LookupAirlineCodes.getFullBagTag(bagTag);
-						} catch (BagtagException e) {
-							// Ignore-  we couldn't convert the number.
-						}
-						if (bagTag.equals(match.getClaimchecknum()) || (tenDigitCode != null && tenDigitCode.equals(match.getClaimchecknum()))) {
+						
+						if (LookupAirlineCodes.areBagTagsSame(ic.getClaimchecknum(),  match.getClaimchecknum())) {
 							ic.setOHD_ID(ohd.getOHD_ID());
 						}
 					}
@@ -248,7 +240,7 @@ public final class ViewMatch extends Action {
 
 				// match done
 				// update match history database
-				MatchUtils.matchedOHD(Integer.parseInt(match_ID), ohd.getOHD_ID());
+				MatchUtils.matchToOhd(Integer.parseInt(match_ID), ohd, user);
 				match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 						.getDefaultlocale().toString()));
 				
@@ -268,14 +260,8 @@ public final class ViewMatch extends Action {
 						// no bags at all in report, match claim check automatically
 						for (Iterator i = incident.getClaimchecks().iterator(); i.hasNext();) {
 							ic = (Incident_Claimcheck) i.next();
-							String bagTag = ic.getClaimchecknum();
-							String tenDigitCode = null;
-							try {
-								tenDigitCode = LookupAirlineCodes.getFullBagTag(bagTag);
-							} catch (BagtagException e) {
-								// Ignore-  we couldn't convert the number.
-							}
-							if (bagTag.equals(match.getClaimchecknum()) || (tenDigitCode != null && tenDigitCode.equals(match.getClaimchecknum()))) {
+
+							if (LookupAirlineCodes.areBagTagsSame(ic.getClaimchecknum(),  match.getClaimchecknum())) {
 								ic.setOHD_ID(ohd.getOHD_ID());
 							}
 						}
@@ -283,7 +269,7 @@ public final class ViewMatch extends Action {
 						// update matching database
 						has_matched = true;
 						iBMO.updateIncidentNoAudit(incident);
-						MatchUtils.matchedOHD(Integer.parseInt(match_ID), ohd.getOHD_ID());
+						MatchUtils.matchToOhd(Integer.parseInt(match_ID), ohd, user);
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
@@ -318,7 +304,8 @@ public final class ViewMatch extends Action {
 						// update matching database
 						has_matched = true;
 						iBMO.updateIncidentNoAudit(incident);
-						MatchUtils.matchedOHD(Integer.parseInt(match_ID), ohd.getOHD_ID());
+						MatchUtils.matchToOhd(Integer.parseInt(match_ID), ohd, user);
+						
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED, user
 								.getDefaultlocale().toString()));
 						//if has the wt_id,close wt
@@ -350,14 +337,8 @@ public final class ViewMatch extends Action {
 			if (match.getClaimchecknum() != null && match.getClaimchecknum().length() > 0) {
 				for (int i = 0; i < incident.getClaimcheck_list().size(); i++) {
 					ic = (Incident_Claimcheck) incident.getClaimcheck_list().get(i);
-					String bagTag = ic.getClaimchecknum();
-					String tenDigitCode = null;
-					try {
-						tenDigitCode = LookupAirlineCodes.getFullBagTag(bagTag);
-					} catch (BagtagException e) {
-						// Ignore-  we couldn't convert the number.
-					}
-					if (bagTag.equals(match.getClaimchecknum()) || (tenDigitCode != null && tenDigitCode.equals(match.getClaimchecknum()))) {
+					
+					if (LookupAirlineCodes.areBagTagsSame(ic.getClaimchecknum(),  match.getClaimchecknum())) {
 						ohd_id = ic.getOHD_ID();
 						// find the bag associated with this
 						for (int j = 0; j < incident.getItemlist().size(); j++) {
@@ -384,7 +365,7 @@ public final class ViewMatch extends Action {
 						}
 
 						// call unmatch to clear out match history
-						MatchUtils.unmatchOHD(ohd_id);
+						MatchUtils.unmatchTheOHD(ohd_id, user);
 
 						ic.setOHD_ID(null);
 
@@ -431,7 +412,7 @@ public final class ViewMatch extends Action {
 				}
 
 				// call unmatch to clear out match history
-				MatchUtils.unmatchOHD(ohd_id);
+				MatchUtils.unmatchTheOHD(ohd_id, user);
 				// if undomatch ,delete the wt_id in ohd/incident
 /*				if(ohd.getWt_id() != null){
 					ohd.setWt_id(null);
@@ -450,14 +431,19 @@ public final class ViewMatch extends Action {
 		}
 
 		// update ohd if it's status changed
-		if ((ohd != null && incident != null)
-				&& ohd.getHoldingStation().getStation_ID() == incident.getStationassigned().getStation_ID()) {
-			if (has_matched) {
-				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user
-						.getDefaultlocale().toString()));
-				oBMO.insertOHD(ohd, user);
-			} else if (has_unmatched) {
-				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, user
+		if (ohd != null && incident != null) {
+			if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned().getStation_ID()) {
+				if (has_matched) {
+					ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED, user
+							.getDefaultlocale().toString()));
+					oBMO.insertOHD(ohd, user);
+				} else if (has_unmatched) {
+					ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, user
+							.getDefaultlocale().toString()));
+					oBMO.insertOHD(ohd, user);
+				}
+			} else if (has_matched && ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
+				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT, user
 						.getDefaultlocale().toString()));
 				oBMO.insertOHD(ohd, user);
 			}

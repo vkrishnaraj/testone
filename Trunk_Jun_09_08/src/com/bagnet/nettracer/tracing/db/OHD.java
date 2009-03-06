@@ -53,6 +53,7 @@ public class OHD implements Serializable {
 	private Status status;
 	private Status disposal_status;
 	private boolean earlyBag;
+	private String matched_incident;
 
 	private Set items;
 	private Set remarks;
@@ -915,5 +916,17 @@ public class OHD implements Serializable {
 	public String format(String val) {
 		if (val == null) return " ";
 		else return val + " ";
+	}
+
+	/**
+	 * @hibernate.property type="string" length="13"
+	 * @return Returns the claimnum.
+	 */
+	public String getMatched_incident() {
+		return matched_incident;
+	}
+
+	public void setMatched_incident(String matchedIncident) {
+		this.matched_incident = matchedIncident;
 	}
 }

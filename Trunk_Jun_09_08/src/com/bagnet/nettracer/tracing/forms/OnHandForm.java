@@ -74,6 +74,7 @@ public final class OnHandForm extends ValidatorForm {
 	private int allow_remark_update=0;
 	private String recordlocator;
 	private Boolean earlyBag;
+	private String matched_incident;
 	
 	// forward log
 	private String forwarded_station;
@@ -922,5 +923,13 @@ public final class OnHandForm extends ValidatorForm {
 
 	public void setEarlyBag(Boolean earlyBag) {
 		this.earlyBag = earlyBag;
+	}
+
+	public String getMatched_incident() {
+		return matched_incident;
+	}
+
+	public void setMatched_incident(String matched_incident) {
+		this.matched_incident = matched_incident;
 	}
 }

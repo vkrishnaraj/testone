@@ -18,16 +18,17 @@ import org.hibernate.criterion.Order;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Match;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 
 /**
  * @author Ankur Gupta
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class MatchUtils {
 	private static Logger logger = Logger.getLogger(MatchUtils.class);
@@ -400,8 +401,10 @@ public class MatchUtils {
 	 * 
 	 * @param ohd_ID
 	 */
-	public static void matchedOHD(int match_ID, String ohd_id) {
+	private static String matchedOHD(int match_ID, OHD ohd) {
+		String ohd_id = ohd.getOHD_ID();
 		Session sess = null;
+		String returnVal = null;
 		Transaction t = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -419,6 +422,7 @@ public class MatchUtils {
 					status_obj = new Status();
 					status_obj.setStatus_ID(TracingConstants.MATCH_STATUS_MATCHED);
 					match.setStatus(status_obj);
+					returnVal = match.getMbr().getIncident_ID();
 				} else {
 					status_obj = new Status();
 					status_obj.setStatus_ID(TracingConstants.MATCH_STATUS_CLOSED);
@@ -428,7 +432,6 @@ public class MatchUtils {
 				t = sess.beginTransaction();
 				sess.saveOrUpdate(match);
 				t.commit();
-
 			}
 
 		} catch (Exception e) {
@@ -441,6 +444,7 @@ public class MatchUtils {
 				}
 			}
 		}
+		return returnVal;
 	}
 
 	/**
@@ -587,7 +591,7 @@ public class MatchUtils {
 		}
 	}
 
-	public static void unmatchOHD(String ohd_id) {
+	private static void unmatchOHD(String ohd_id) {
 		Session sess = null;
 		Transaction t = null;
 		try {
@@ -625,5 +629,29 @@ public class MatchUtils {
 				}
 			}
 		}
+	}
+
+	public static void matchToOhd(int matchId, OHD ohd, Agent agent) {
+		String incidentId = MatchUtils.matchedOHD(matchId, ohd);
+
+		if (incidentId != null) {
+			Session sess = HibernateWrapper.getSession().openSession();
+			OHD myOhd = OhdBMO.getOHDByID(ohd.getOHD_ID(), sess);
+			myOhd.setMatched_incident(incidentId);
+			OhdBMO.updateOHD(myOhd, agent, sess);
+			sess.close();
+			
+		}
+	}
+
+	public static void unmatchTheOHD(String ohd_id, Agent agent) {
+		unmatchOHD(ohd_id);
+
+		Session sess = HibernateWrapper.getSession().openSession();
+		OHD myOhd = OhdBMO.getOHDByID(ohd_id, sess);
+		myOhd.setMatched_incident(null);
+		OhdBMO.updateOHD(myOhd, agent, sess);
+		sess.close();
+			
 	}
 }

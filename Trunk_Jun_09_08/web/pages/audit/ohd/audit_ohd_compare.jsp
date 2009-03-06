@@ -263,6 +263,16 @@ function updatePagination() {
             </tr>
             <tr>
               <td>
+                <bean:message key="colname.matchedincident" />
+              </td>
+              <logic:iterate id="audit_ohd" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_ohd" property="matched_incident" />
+                </td>
+              </logic:iterate>
+            </tr>
+            <tr>
+              <td>
                 <bean:message key="colname.name_on_bag" />
               </td>
               <logic:iterate id="audit_ohd" name="compareList" scope="request">

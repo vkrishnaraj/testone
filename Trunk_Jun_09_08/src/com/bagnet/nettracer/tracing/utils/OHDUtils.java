@@ -1128,8 +1128,16 @@ public class OHDUtils {
 			}
 		}
 	}
+	
+	public static String getMBRReportNum(OHD ohd, String destCode) {
+		if (ohd.getMatched_incident() != null) {
+			return ohd.getMatched_incident();
+		} else {
+			return getMBRReportNum(ohd.getOHD_ID() , destCode);
+		}
+	}
 
-	public static String getMBRReportNum(String ohd_id, String destCode) {
+	private static String getMBRReportNum(String ohd_id, String destCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();

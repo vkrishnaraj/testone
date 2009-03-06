@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.utils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -37,11 +38,13 @@ public class TracerProperties {
 	public static final String EMAIL_REPORT_PIL_DISABLE_IMAGE = "inc.receipt.email.pil.disableimg";
 	public static final String PROPERTY_REPORT_MAX_ROWS = "reports.max.rows";
 	public static final String FRENCH_STATIONS = "french.stations";
-
+	public static final String SAVE_ON_CLOSE_PAGE = "display.closepage.save.while.open";
+	
 	static {
 		try {
 			properties.load(HibernateWrapper.class
 					.getResourceAsStream("/tracer.properties"));
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,11 +65,17 @@ public class TracerProperties {
 		}
 	}
 	
-
-
 	public static int getMaxReportRows() {
 		return Integer.parseInt(TracerProperties.get(PROPERTY_REPORT_MAX_ROWS));
 		//return Integer.parseInt(PropertyBMO.getValue(PropertyBMO.PROPERTY_REPORT_MAX_ROWS));
+	}
+	
+	public static String getInstanceLabel() {
+		String instanceRef = System.getProperty("instance.ref");
+		if (instanceRef != null) {
+			return instanceRef;
+		}
+		return "";
 	}
 	
 }
