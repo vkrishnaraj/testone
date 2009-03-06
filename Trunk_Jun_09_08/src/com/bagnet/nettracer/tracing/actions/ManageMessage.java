@@ -102,6 +102,9 @@ public class ManageMessage extends Action {
 			theForm.setDate(message.getDisp_send_date());
 			theForm.setBody(message.getBody());
 			theForm.setAgentName(message.getAgent().getUsername());
+			theForm.setFile_ref_number(message.getParent_message().getFile_ref_number());
+			theForm.setFile_type(Integer.toString(message.getParent_message().getFile_type()));
+			
 			//update the \n with "<br>" so that it could be displayed correctly as
 			// html.
 			//theForm.setBody(StringEscapeUtils.escapeHtml(theForm.getBody()));
