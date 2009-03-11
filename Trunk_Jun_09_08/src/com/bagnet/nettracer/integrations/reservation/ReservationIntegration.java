@@ -10,6 +10,7 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 public interface ReservationIntegration {
 
 	public boolean isWriteCommentToPnrOn();
+	public boolean isWriteExpensesToPnrOn();
 	public boolean isPopulateIncidentFormOn();	
 	public boolean isPopulateOhdFormOn();
 	

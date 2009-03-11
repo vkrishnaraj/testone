@@ -31,6 +31,10 @@ public class ReservationIntegrationImpl implements
 		return TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON);
 	}
 	
+	public boolean isWriteExpensesToPnrOn() {
+		return TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_EXPENSES_ON);
+	}
+	
 	public boolean isPopulateOhdFormOn() {
 		return TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON);
 	}
