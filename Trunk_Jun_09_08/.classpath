@@ -102,7 +102,6 @@
 	<classpathentry kind="lib" path="lib/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/provided/classes12.jar"/>
 	<classpathentry kind="lib" path="lib/provided/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/provided/hibernate2.1.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jaxb-api-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jaxb-impl-2.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jaxb-xjc-2.0.5.jar"/>
