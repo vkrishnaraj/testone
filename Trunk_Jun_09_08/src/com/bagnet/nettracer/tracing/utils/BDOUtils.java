@@ -5,6 +5,7 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.SystemPermission;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo;
@@ -726,9 +728,39 @@ public class BDOUtils {
 				bdo.setIntegrationDelivercompany_ID(oldBdo
 						.getIntegrationDelivercompany_ID());
 			}
+			
 
+			
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
+			if(isnew) {
+				Incident inc = bdo.getIncident();
+				Remark rem = null;
+				if(inc != null) {
+					rem = new Remark();
+					rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+					rem.setAgent(user);
+					rem.setIncident(inc);
+					String temp = "";
+					for(Item item : (Iterable<Item>)bdo.getItems()) {
+						temp += " " + Integer.toString(item.getBagnumber() + 1);
+					}
+					rem.setRemarktext(TracerUtils.getResourcePropertyText("bdo.created.bagnum", user) + temp);
+					rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+					inc.getRemarks().add(rem);
+					sess.save(rem);
+				}
+				OHD ohd = bdo.getOhd();
+				if(ohd != null) {
+					rem = new Remark();
+					rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+					rem.setAgent(user);
+					rem.setOhd(ohd);
+					rem.setRemarktext(TracerUtils.getResourcePropertyText("bdo.created", user));
+					ohd.getRemarks().add(rem);
+					sess.save(rem);
+				}
+			}
 			sess.saveOrUpdate(bdo);
 			t.commit();
 

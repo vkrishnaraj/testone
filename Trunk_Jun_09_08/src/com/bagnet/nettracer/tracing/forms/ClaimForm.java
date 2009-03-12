@@ -42,8 +42,7 @@ public final class ClaimForm extends ActionForm {
 	private String commonnum;
 	private String countryofissue;
 	
-	private ExpensePayout expense;
-	private List expenselist = new ArrayList();
+	private List<ExpensePayout> expenselist = new ArrayList<ExpensePayout>();
 	private int expensetype_ID;
 	private int expenselocation_ID;
 	private int expensestatus_ID;
@@ -57,11 +56,11 @@ public final class ClaimForm extends ActionForm {
 	private String _TIMEFORMAT;
 	private java.util.TimeZone _TIMEZONE;
 
-	public void setExpenselist(List expenselist) {
+	public void setExpenselist(List<ExpensePayout> expenselist) {
 		this.expenselist = expenselist;
 	}
 
-	public List getExpenselist() {
+	public List<ExpensePayout> getExpenselist() {
 		return expenselist;
 	}
 
@@ -80,33 +79,6 @@ public final class ClaimForm extends ActionForm {
 		this.claimprorate = claimprorate;
 	}
 
-	/**
-	 * @return Returns the expense.
-	 */
-	public ExpensePayout getExpense() {
-		return expense;
-	}
-
-	/**
-	 * @param expense
-	 *          The expense to set.
-	 */
-	public void setExpense(ExpensePayout expense) {
-		this.expense = expense;
-	}
-
-	public ExpensePayout getExpense(int index) {
-		// get the expense to be modified
-		if (index >= 0 && index < expenselist.size()) {
-			this.expense = (ExpensePayout) expenselist.get(index);
-			return this.expense;
-		}
-
-		// create a new expense object
-		this.expense = new ExpensePayout();
-		this.expense.setCreatedate(new Date());
-		return expense;
-	}
 
 	/**
 	 * @return Returns the incident_ID.
@@ -325,209 +297,6 @@ public final class ClaimForm extends ActionForm {
 		setTotal(TracerUtils.convertToDouble(s));
 	}
 
-	/** ***** starts with expense table ****** */
-	public int getExpensetype_ID() {
-		if (expense == null || expense.getExpensetype() == null) return expensetype_ID;
-		return expense.getExpensetype().getExpensetype_ID();
-	}
-
-	public void setExpensetype_ID(int expensetype_ID) {
-		if (expense == null || expense.getExpensetype() == null) this.expensetype_ID = expensetype_ID;
-		else expense.getExpensetype().setExpensetype_ID(expensetype_ID);
-	}
-
-	public String getExpensetypedesc() {
-		return expense.getExpensetype().getDescription();
-	}
-
-	public int getExpenselocation_ID() {
-		if (expense == null || expense.getExpenselocation() == null) return expenselocation_ID;
-		return expense.getExpenselocation().getStation_ID();
-	}
-
-	public void setExpenselocation_ID(int expenselocation_ID) {
-		if (expense == null || expense.getExpenselocation() == null) this.expenselocation_ID = expenselocation_ID;
-		else expense.getExpenselocation().setStation_ID(expenselocation_ID);
-	}
-
-	public String getExpenselocationdesc() {
-		return expense.getExpenselocation().getStationcode();
-	}
-
-	/**
-	 * @return Returns the amount.
-	 */
-	public double getCheckamt() {
-		return expense.getCheckamt();
-	}
-
-	/**
-	 * @param amount
-	 *          The amount to set.
-	 */
-	public void setCheckamt(double amount) {
-		expense.setCheckamt(amount);
-	}
-
-	public String getDischeckamt() {
-		return TracingConstants.DECIMALFORMAT.format(getCheckamt());
-	}
-
-	public void setDischeckamt(String s) {
-		setCheckamt(TracerUtils.convertToDouble(s));
-	}
-
-	/**
-	 * @param amount
-	 *          The amount to set.
-	 */
-	public void setVoucheramt(double amount) {
-		expense.setVoucheramt(amount);
-	}
-
-	public double getVoucheramt() {
-		return expense.getVoucheramt();
-	}
-
-	public String getDisvoucheramt() {
-		return TracingConstants.DECIMALFORMAT.format(getVoucheramt());
-	}
-
-	public void setDisvoucheramt(String s) {
-		setVoucheramt(TracerUtils.convertToDouble(s));
-	}
-
-	/**
-	 * @param amount
-	 *          The amount to set.
-	 */
-	public void setMileageamt(int amount) {
-		expense.setMileageamt(amount);
-	}
-
-	public int getMileageamt() {
-		return expense.getMileageamt();
-	}
-
-	/**
-	 * @param currency_ID
-	 *          The currency_ID to set.
-	 */
-	public void setCurrency_ID(String currency_ID) {
-		expense.setCurrency_ID(currency_ID);
-	}
-
-	public String getCurrency_ID() {
-		return expense.getCurrency_ID();
-	}
-
-	/**
-	 * @return Returns the comments.
-	 */
-	public String getComments() {
-		return expense.getComments();
-	}
-
-	/**
-	 * @param comments
-	 *          The comments to set.
-	 */
-	public void setComments(String comments) {
-		expense.setComments(comments);
-	}
-
-	public int getExpensestatus_ID() {
-		return expense.getStatus().getStatus_ID();
-	}
-
-	public void setExpensestatus_ID(int expensestatus_ID) {
-		if (expense == null || expense.getStatus() == null) this.expensestatus_ID = expensestatus_ID;
-		else expense.getStatus().setStatus_ID(expensestatus_ID);
-	}
-
-	/**
-	 * @return Returns the date.
-	 */
-	public String getCreatedate() {
-		return DateUtils.formatDate(expense.getCreatedate(), _DATEFORMAT, null, _TIMEZONE);
-	}
-
-	/**
-	 * @return Returns the draft.
-	 */
-	public String getDraft() {
-		return expense.getDraft();
-	}
-
-	/**
-	 * @param draft
-	 *          The draft to set.
-	 */
-	public void setDraft(String draft) {
-		expense.setDraft(draft);
-	}
-
-	/**
-	 * @return Returns the display draftpaiddate.
-	 */
-	public String getDisdraftpaiddate() {
-		return DateUtils.formatDate(expense.getDraftpaiddate(), _DATEFORMAT, null, null);
-	}
-
-	public Date getDraftpaiddate() {
-		return expense.getDraftpaiddate();
-	}
-
-	/**
-	 * @param draftpaiddate
-	 *          The draftpaiddate to set.
-	 */
-	public void setDisdraftpaiddate(String draftpaiddate) {
-		expense.setDraftpaiddate(DateUtils.convertToDate(draftpaiddate, _DATEFORMAT, null));
-	}
-
-	/**
-	 * @return Returns the draftreqdate.
-	 */
-	public String getDisdraftreqdate() {
-		return DateUtils.formatDate(expense.getDraftreqdate(), _DATEFORMAT, null, null);
-	}
-
-	public Date getDraftreqdate() {
-		return expense.getDraftreqdate();
-	}
-
-	/**
-	 * @param draftreqdate
-	 *          The draftreqdate to set.
-	 */
-	public void setDisdraftreqdate(String draftreqdate) {
-		expense.setDraftreqdate(DateUtils.convertToDate(draftreqdate, _DATEFORMAT, null));
-	}
-
-	/**
-	 * @return Returns the paycode.
-	 */
-	public String getPaycode() {
-		return expense.getPaycode();
-	}
-
-	/**
-	 * @param paycode
-	 *          The paycode to set.
-	 */
-	public void setPaycode(String paycode) {
-		expense.setPaycode(paycode);
-	}
-
-	public String getExpcreateagent() {
-		return expense.getAgent().getUsername();
-	}
-
-	public String getExpcreatestation() {
-		return expense.getStation().getStationcode();
-	}
-
 	/**
 	 * @return Returns the incident.
 	 */
@@ -617,37 +386,4 @@ public final class ClaimForm extends ActionForm {
 	public void set_TIMEZONE(java.util.TimeZone _timezone) {
 		_TIMEZONE = _timezone;
 	}
-
-	public String getIncidentalAmountAuth() {
-		return TracingConstants.DECIMALFORMAT.format(expense.getIncidentalAmountAuth());
-	}
-
-	public void setIncidentalAmountAuth(String incidentalAmountAuth) {
-		expense.setIncidentalAmountAuth(TracerUtils.convertToDouble(incidentalAmountAuth));
-	}
-	
-	public String getIncidentalAmountClaimed() {
-		return TracingConstants.DECIMALFORMAT.format(expense.getIncidentalAmountClaimed());
-	}
-
-	public void setIncidentalAmountClaimed(String incidentalAmountClaimed) {
-		expense.setIncidentalAmountClaimed(TracerUtils.convertToDouble(incidentalAmountClaimed));
-	}
-
-	public String getVoucherExpirationDate() {
-		return DateUtils.formatDate(expense.getVoucherExpirationDate(), _DATEFORMAT, null, null);
-	}
-
-	public void setVoucherExpirationDate(String voucherExpiration) {
-		expense.setVoucherExpirationDate(DateUtils.convertToDate(voucherExpiration, _DATEFORMAT, null));
-	}
-	
-	public String getCreditCardRefund() {
-		return TracingConstants.DECIMALFORMAT.format(expense.getCreditCardRefund());
-	}
-
-	public void setCreditCardRefund(String creditCardRefund) {
-		expense.setCreditCardRefund(TracerUtils.convertToDouble(creditCardRefund));
-	}
-
 }

@@ -14,6 +14,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.Proxy;
+
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -21,11 +40,10 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 /**
  * @author Administrator
  * 
- * @hibernate.class table="Incident"
- * @hibernate.typedef name="worldTracerStatus" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClassname"
- * 			value="com.bagnet.nettracer.tracing.db.WorldTracerFile$WTStatus"
  */
+@Entity
+@Table(name = "Incident")
+@Proxy(lazy = false)
 public class Incident implements Serializable {
 
 	private int version;
@@ -38,7 +56,7 @@ public class Incident implements Serializable {
 	private Agent agentassigned;
 	private Date createdate;
 	private Date createtime;
-	private String closedate;
+	private Date closedate;
 	private String recordlocator;
 	private String manualreportnum;
 	private String ticketnumber;
@@ -60,30 +78,33 @@ public class Incident implements Serializable {
 	
 	private Date lastupdated;
 	
-	private String ohd_lasttraced;
+	private Date ohd_lasttraced;
 	
 	private WorldTracerFile wtFile;	//world tracer id
-	private Set passengers;
+	private Set<Passenger> passengers;
 
-	private List itemlist;
-	private Set articles;
-	private Set remarks;
-	private Set itinerary;
-	private Set claims;
+	private List<Item> itemlist;
+	private Set<Articles> articles;
+	private Set<Remark> remarks;
+	private Set<Itinerary> itinerary;
+	private Claim claim = new Claim();
 
-	private Set claimchecks;
+	private Set<Incident_Claimcheck> claimchecks;
 
-	private ArrayList itinerary_list; // for displaying to the search incident
+	private List<Itinerary> itinerary_list; // for displaying to the search incident
 	// page
-	private ArrayList claimcheck_list; // for display to the search incident page
-	private ArrayList passenger_list; // for displaying to the search incident
+	private List<Incident_Claimcheck> claimcheck_list; // for display to the search incident page
+	private List<Passenger> passenger_list; // for displaying to the search incident
 	// page
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+	
+	private Set<ExpensePayout> expenses;
+	private List<ExpensePayout>expenselist;
 
-
+	@Transient
 	public String getReportMethodString(int val) {
 		if (val == 0)
 			return "In Person";
@@ -97,28 +118,20 @@ public class Incident implements Serializable {
 			return "Kiosk";
 	}
 
-	/**
-	 * @return Returns the version.
-	 * @hibernate.version
-	 */
+	@Version
 	public int getVersion() {
 		return version;
 	}
-
-	/**
-	 * @param version
-	 *          The version to set.
-	 */
-	public void setVersion(int version) {
+	
+	private void setVersion(int version) {
 		this.version = version;
 	}
 
 	/**
-	 * @return Returns the status.
-	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Status"
-	 *                        column="status_ID"
+	 * @return returns status of incident
 	 */
+	@ManyToOne
+	@JoinColumn(name = "status_ID", nullable = false)
 	public Status getStatus() {
 		return status;
 	}
@@ -134,9 +147,9 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the itemtype.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.ItemType"
-	 *                        column="itemType_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name = "itemType_ID", nullable = false)
 	public ItemType getItemtype() {
 		return itemtype;
 	}
@@ -150,11 +163,11 @@ public class Incident implements Serializable {
 	}
 
 	/**
-	 * @return Returns the agent.
+	 * @return Returns the agent that created this incident.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
-	 *                        column="agent_ID"  foreign-key="agent_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name = "agent_ID", nullable = false)
 	public Agent getAgent() {
 		return agent;
 	}
@@ -167,16 +180,30 @@ public class Incident implements Serializable {
 		this.agent = agent;
 	}
 
+	/**
+	 * 
+	 * @return set of expense payouts for this claim
+	 */
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "createdate")
+	public Set<ExpensePayout> getExpenses() {
+		return expenses;
+	}
+
+	public void setExpenses(Set<ExpensePayout> expenses) {
+		this.expenses = expenses;
+	}
 	
 	/**
-	 * @return Returns the agent.
+	 * @return Returns the agent assigned to this incident
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
-	 *                        column="agentassigned_ID" foreign-key="agent_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name  = "agentassigned_ID", nullable = true)
 	public Agent getAgentassigned() {
 		return agentassigned;
 	}
+	
 	/**
 	 * @param agentassigned The agentassigned to set.
 	 */
@@ -186,9 +213,9 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the stationassigned.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Station"
-	 *                        column="stationassigned_ID" foreign-key="station_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name = "stationassigned_ID", nullable = false)
 	public Station getStationassigned() {
 		return stationassigned;
 	}
@@ -204,9 +231,9 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the stationcreated.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Station"
-	 *                        column="stationcreated_ID" foreign-key="station_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name = "stationcreated_ID", nullable = false)
 	public Station getStationcreated() {
 		return stationcreated;
 	}
@@ -222,9 +249,9 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the faultstation.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Station"
-	 *                        column="faultstation_ID" foreign-key="station_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name = "faultstation_ID", nullable = true)
 	public Station getFaultstation() {
 		return faultstation;
 	}
@@ -240,11 +267,10 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the claimchecks.
 	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="claimcheck_ID"
-	 * @hibernate.key column="incident_ID" 
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Incident_Claimcheck"
 	 */
-	public Set getClaimchecks() {
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause="claimcheck_ID")
+	public Set<Incident_Claimcheck> getClaimchecks() {
 		return claimchecks;
 	}
 
@@ -252,21 +278,18 @@ public class Incident implements Serializable {
 	 * @param claimchecks
 	 *          The claimchecks to set.
 	 */
-	public void setClaimchecks(Set claimchecks) {
+	public void setClaimchecks(Set<Incident_Claimcheck> claimchecks) {
 		this.claimchecks = claimchecks;
-		this.claimcheck_list = (claimchecks != null ? new ArrayList(claimchecks) : new ArrayList());
+		//this.claimcheck_list = (claimchecks != null ? new ArrayList<Incident_Claimcheck>(claimchecks) : new ArrayList<Incident_Claimcheck>());
 	}
 
 	/**
 	 * @return Returns the itemlist.
-	 * @hibernate.list cascade="all" inverse="true"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item"
-	 * @hibernate.index column="bagnumber"
-	 * @hibernate.key column="incident_ID"
 	 *  
 	 */
-
-	public List getItemlist() {
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.IndexColumn(name = "bagnumber")
+	public List<Item> getItemlist() {
 		return itemlist;
 	}
 
@@ -274,19 +297,18 @@ public class Incident implements Serializable {
 	 * @param itemlist
 	 *          The itemlist to set.
 	 */
-	public void setItemlist(List itemlist) {
+	public void setItemlist(List<Item> itemlist) {
 		this.itemlist = itemlist;
 	}
 
 	/**
 	 * @return Returns the articles.
 	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="articles_ID DESC"
-	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Articles"
 	 *  
 	 */
-	public Set getArticles() {
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "articles_ID DESC")
+	public Set<Articles> getArticles() {
 		return articles;
 	}
 
@@ -294,17 +316,16 @@ public class Incident implements Serializable {
 	 * @param articles
 	 *          The articles to set.
 	 */
-	public void setArticles(Set articles) {
+	public void setArticles(Set<Articles> articles) {
 		this.articles = articles;
 	}
 
 	/**
-	 * @hibernate.set cascade="all" inverse="true" order-by="passenger_id"
-	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Passenger"
 	 * @return Returns the passengers.
 	 */
-	public Set getPassengers() {
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "passenger_id")
+	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
 
@@ -312,20 +333,19 @@ public class Incident implements Serializable {
 	 * @param passengers
 	 *          The passengers to set.
 	 */
-	public void setPassengers(Set passengers) {
+	public void setPassengers(Set<Passenger> passengers) {
 		this.passengers = passengers;
-		this.passenger_list = (passengers != null ? new ArrayList(passengers) : new ArrayList());
+		//this.passenger_list = (passengers != null ? new ArrayList<Passenger>(passengers) : new ArrayList<Passenger>());
 	}
 
 	/**
 	 * @return Returns the remarks.
 	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="createtime"
-	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Remark"
 	 *  
 	 */
-	public Set getRemarks() {
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause="createtime")
+	public Set<Remark> getRemarks() {
 		return remarks;
 	}
 
@@ -333,19 +353,13 @@ public class Incident implements Serializable {
 	 * @param remarks
 	 *          The remarks to set.
 	 */
-	public void setRemarks(Set remarks) {
+	public void setRemarks(Set<Remark> remarks) {
 		this.remarks = remarks;
 	}
 
-	/**
-	 * @return Returns the itinerary.
-	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="departdate,schdeparttime,itinerary_ID"
-	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Itinerary"
-	 *  
-	 */
-	public Set getItinerary() {
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "departdate, schdeparttime, itinerary_ID")
+	public Set<Itinerary> getItinerary() {
 		return itinerary;
 	}
 
@@ -353,16 +367,18 @@ public class Incident implements Serializable {
 	 * @param itinerary
 	 *          The itinerary to set.
 	 */
-	public void setItinerary(Set itinerary) {
+	public void setItinerary(Set<Itinerary> itinerary) {
 		this.itinerary = itinerary;
-		this.itinerary_list = (itinerary != null ? new ArrayList(itinerary) : new ArrayList());
+		//this.itinerary_list = (itinerary != null ? new ArrayList<Itinerary>(itinerary) : new ArrayList<Itinerary>());
 	}
+	
+	
 
 	/**
 	 * @return Returns the checkedlocation.
 	 * 
-	 * @hibernate.property type="string" length="1"
 	 */
+	@Column(length = 1)
 	public String getCheckedlocation() {
 		return checkedlocation;
 	}
@@ -378,8 +394,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the courtesyreport.
 	 * 
-	 * @hibernate.property type="int"
 	 */
+	@Basic
 	public int getCourtesyreport() {
 		return courtesyreport;
 	}
@@ -395,8 +411,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the createdate.
 	 * 
-	 * @hibernate.property type="date"
 	 */
+	@Temporal(value = TemporalType.DATE)
 	public Date getCreatedate() {
 		return createdate;
 	}
@@ -413,8 +429,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the lastupdated.
 	 * 
-	 * @hibernate.property type="timestamp"
 	 */
+	@Temporal(value = TemporalType.TIMESTAMP)
 	public Date getLastupdated() {
 		return lastupdated;
 	}
@@ -428,8 +444,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the createtime.
 	 * 
-	 * @hibernate.property type="time"
 	 */
+	@Temporal(value = TemporalType.TIME)
 	public Date getCreatetime() {
 		return createtime;
 	}
@@ -442,32 +458,31 @@ public class Incident implements Serializable {
 		this.createtime = createtime;
 	}
 
+	@Transient
 	public String getDisplaydate() {
 		Date completedate = DateUtils.convertToDate(getCreatedate().toString() + " " + getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT,
 				null);
 		return DateUtils.formatDate(completedate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 	
+	@Transient
 	public Date getFullCreateDate() {
 		return DateUtils.convertToDate(getCreatedate().toString() + " " + getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT,
 				null);
 	}
 	
+	@Transient
 	public Date getFullCloseDate() {
-		if (getClosedate() != null) {
-			return DateUtils.convertToDate(getClosedate().toString(), TracingConstants.DB_DATETIMEFORMAT,
-				null);
-		} else {
-			return null;
-		}
+		return getClosedate();
 	}
 
 	/**
 	 * @return Returns the closedate.
 	 * 
-	 * @hibernate.property type="string" column="close_date"
 	 */
-	public String getClosedate() {
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "close_date")
+	public Date getClosedate() {
 		return closedate;
 	}
 
@@ -475,13 +490,14 @@ public class Incident implements Serializable {
 	 * @param closedate
 	 *          The closedate to set.
 	 */
-	public void setClosedate(String closedate) {
+	public void setClosedate(Date closedate) {
 		this.closedate = closedate;
 	}
 
 	/**
 	 * @return Returns the _DATEFORMAT.
 	 */
+	@Transient
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
 	}
@@ -497,6 +513,7 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the _TIMEFORMAT.
 	 */
+	@Transient
 	public String get_TIMEFORMAT() {
 		return _TIMEFORMAT;
 	}
@@ -512,6 +529,7 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the _TIMEZONE.
 	 */
+	@Transient
 	public TimeZone get_TIMEZONE() {
 		return _TIMEZONE;
 	}
@@ -527,8 +545,9 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the incident_ID.
 	 * 
-	 * @hibernate.id generator-class="assigned" type="string" column="Incident_ID"
 	 */
+	@Id
+	@Column(name = "Incident_ID", length=13)
 	public String getIncident_ID() {
 		return Incident_ID;
 	}
@@ -544,8 +563,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the numbagchecked.
 	 * 
-	 * @hibernate.property type="integer" length="4"
 	 */
+	@Column(length = 4)
 	public int getNumbagchecked() {
 		return numbagchecked;
 	}
@@ -561,8 +580,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the numbagreceived.
 	 * 
-	 * @hibernate.property type="integer" length="4"
 	 */
+	@Column(length = 4)
 	public int getNumbagreceived() {
 		return numbagreceived;
 	}
@@ -578,8 +597,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the numpassengers.
 	 * 
-	 * @hibernate.property type="integer" length="4"
 	 */
+	@Column(length = 4)
 	public int getNumpassengers() {
 		return numpassengers;
 	}
@@ -595,8 +614,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the reportmethod.
 	 * 
-	 * @hibernate.property type="integer" length="4"
 	 */
+	@Column(length = 4)
 	public int getReportmethod() {
 		return reportmethod;
 	}
@@ -612,8 +631,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the ticketnumber.
 	 * 
-	 * @hibernate.property type="string" length="14"
 	 */
+	@Column(length = 14)
 	public String getTicketnumber() {
 		return ticketnumber;
 	}
@@ -629,8 +648,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the tsachecked.
 	 * 
-	 * @hibernate.property type="integer"
 	 */
+	@Column(length = 1)
 	public int getTsachecked() {
 		return tsachecked;
 	}
@@ -645,8 +664,8 @@ public class Incident implements Serializable {
 
 	/**
 	 * @return Returns the customcleared.
-	 * @hibernate.property type="integer"
 	 */
+	@Column(length = 1)
 	public int getCustomcleared() {
 		return customcleared;
 	}
@@ -662,8 +681,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the voluntaryseparation.
 	 * 
-	 * @hibernate.property type="integer"
 	 */
+	@Column(length = 1)
 	public int getVoluntaryseparation() {
 		return voluntaryseparation;
 	}
@@ -679,8 +698,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the manualreportnum.
 	 * 
-	 * @hibernate.property type="string" length="20"
 	 */
+	@Column(length = 20)
 	public String getManualreportnum() {
 		return manualreportnum;
 	}
@@ -696,8 +715,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the recordlocator.
 	 * 
-	 * @hibernate.property type="string"
 	 */
+	@Column(length = 10)
 	public String getRecordlocator() {
 		return recordlocator;
 	}
@@ -713,8 +732,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the nonrevenue.
 	 * 
-	 * @hibernate.property type="integer" length="1"
 	 */
+	@Column(length = 1)
 	public int getNonrevenue() {
 		return nonrevenue;
 	}
@@ -730,9 +749,9 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the ohd_lasttraced.
 	 * 
-	 * @hibernate.property type="string"
 	 */
-	public String getOhd_lasttraced() {
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getOhd_lasttraced() {
 		return ohd_lasttraced;
 	}
 
@@ -740,34 +759,34 @@ public class Incident implements Serializable {
 	 * @param ohd_lasttraced
 	 *          The ohd_lasttraced to set.
 	 */
-	public void setOhd_lasttraced(String ohd_lasttraced) {
+	public void setOhd_lasttraced(Date ohd_lasttraced) {
 		this.ohd_lasttraced = ohd_lasttraced;
 	}
 
 	/**
 	 * @return Returns the claim.
 	 * 
-	 * @hibernate.set cascade="all" order-by="claim_ID" inverse="true"
-	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Claim"
 	 *  
 	 */
-	public Set getClaims() {
-		return claims;
+	@OneToOne(mappedBy = "incident")
+	public Claim getClaim() {
+		return claim;
 	}
 
 	/**
 	 * @param claims
 	 *          The claims to set.
 	 */
-	public void setClaims(Set claims) {
-		this.claims = claims;
+	public void setClaim(Claim claim) {
+		this.claim = claim;
 	}
+	
+	
 
 	/**
-	 * @hibernate.property type="integer"
 	 * @return Returns the loss_code.
 	 */
+	@Basic
 	public int getLoss_code() {
 		return loss_code;
 	}
@@ -783,8 +802,8 @@ public class Incident implements Serializable {
 	/**
 	 * @return the wt_id
 	 * 
-	 * @hibernate.component class="com.bagnet.nettracer.tracing.db.WorldTracerFile" lazy="false"
 	 */
+	@Embedded
 	public WorldTracerFile getWtFile() {
 		return wtFile;
 	}
@@ -797,6 +816,7 @@ public class Incident implements Serializable {
 		this.wtFile = wtFile;
 	}
 	
+	@Transient
 	public String getWt_id() {
 		if(wtFile != null) {
 			return wtFile.getWt_id();
@@ -804,43 +824,73 @@ public class Incident implements Serializable {
 		return null;
 	}
 
-	public ArrayList getItinerary_list() {
-		return itinerary_list;
+	@Transient
+	public List<Itinerary> getItinerary_list() {
+		return (itinerary == null ? new ArrayList<Itinerary>() : new ArrayList<Itinerary>(itinerary));
+	}
+	
+	public void setItinerary_list(List<Itinerary> itinList) {
+		this.itinerary_list = itinList;
 	}
 
-	public ArrayList getClaimcheck_list() {
-		return claimcheck_list;
+	@Transient
+	public List<Incident_Claimcheck> getClaimcheck_list() {
+		return claimchecks != null ? new ArrayList<Incident_Claimcheck>(claimchecks) : new ArrayList<Incident_Claimcheck>();
+	}
+	
+	public void setClaimcheck_list(List<Incident_Claimcheck> cc_list) {
+		this.claimcheck_list = cc_list;
+	}
+	
+	@Transient
+	public List<ExpensePayout> getExpenselist() {
+		return expenses != null ? new ArrayList<ExpensePayout>(expenses) : new ArrayList<ExpensePayout>();
 	}
 
-	public ArrayList getPassenger_list() {
-		return passenger_list;
+	public void setExpenselist(List<ExpensePayout> expenselist) {
+		this.expenselist = expenselist;
 	}
 
+	@Transient
+	public List<Passenger> getPassenger_list() {
+		return passengers != null ? new ArrayList<Passenger>(passengers) : new ArrayList<Passenger>();
+	}
+
+	public void setPassenger_list(List<Passenger> paxList) {
+		this.passenger_list = paxList;
+	}
 	/** * for reporting ** */
+	@Transient
 	public int getItemtype_ID() {
 		return itemtype.getItemType_ID();
 	}
 
+	@Transient
 	public String getTypedesc() {
 		return itemtype.getDescription();
 	}
 
+	@Transient
 	public String getStatusdesc() {
 		return status.getDescription();
 	}
 
+	@Transient
 	public String getStationcode() {
 		return stationassigned.getStationcode();
 	}
 
+	@Transient
 	public int getStation_ID() {
 		return stationassigned.getStation_ID();
 	}
 
+	@Transient
 	public String getAgent_username() {
 		return agent.getUsername();
 	}
 
+	@Transient
 	public String getFaultstationcode() {
 		return (faultstation == null ? "" : faultstation.getStationcode());
 	}
@@ -848,11 +898,12 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the printedreceipt.
 	 * 
-	 * @hibernate.property type="timestamp"
 	 */
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getPrintedreceipt() {
 		return printedreceipt;
 	}
+	
 	/**
 	 * @param printedreceipt The printedreceipt to set.
 	 */
@@ -860,17 +911,19 @@ public class Incident implements Serializable {
 		this.printedreceipt = printedreceipt;
 	}
 
-	
+	@Transient
 	public String getRcreatedate() {
 		Date completedate = DateUtils.convertToDate(getCreatedate().toString(), TracingConstants.DB_DATEFORMAT, null);
 		return DateUtils.formatDate(completedate, _DATEFORMAT, null, _TIMEZONE);
 	}
 
+	@Transient
 	public String getRcreatetime() {
 		Date completedate = DateUtils.convertToDate(getCreatetime().toString(), TracingConstants.DB_TIMEFORMAT, null);
 		return DateUtils.formatDate(completedate, _TIMEFORMAT, null, _TIMEZONE);
 	}
 
+	@Transient
 	public String getText() {
 
 		StringBuffer ret = new StringBuffer(1096);
@@ -891,9 +944,7 @@ public class Incident implements Serializable {
 		ret.append(format(this.getStatus().getDescription()));
 
 		if (this.getPassengers() != null && this.getPassengers().size() > 0) {
-			for (Iterator i = this.getPassengers().iterator(); i.hasNext();) {
-				Passenger pass = (Passenger) i.next();
-
+			for (Passenger pass : this.getPassengers()) {
 				ret.append(format(pass.getFirstname()));
 				ret.append(format(pass.getMiddlename()));
 				ret.append(format(pass.getLastname()));
@@ -930,15 +981,13 @@ public class Incident implements Serializable {
 		}
 
 		if (this.getRemarks() != null && this.getRemarks().size() > 0) {
-			for (Iterator i = this.getRemarks().iterator(); i.hasNext();) {
-				Remark remark = (Remark) i.next();
+			for (Remark remark : this.getRemarks()) {
 				ret.append(format(remark.getRemarktext()));
 			}
 		}
 
 		if (this.getItinerary() != null && this.getItinerary().size() > 0) {
-			for (Iterator i = this.getItinerary().iterator(); i.hasNext();) {
-				Itinerary itinerary = (Itinerary) i.next();
+			for (Itinerary itinerary : this.getItinerary()) {
 				ret.append(format(itinerary.getAirline()));
 				ret.append(format(itinerary.getFlightnum()));
 				ret.append(format(itinerary.getLegfrom()));
@@ -947,16 +996,13 @@ public class Incident implements Serializable {
 		}
 
 		if (this.getClaimchecks() != null && this.getClaimchecks().size() > 0) {
-			for (Iterator i = this.getClaimchecks().iterator(); i.hasNext();) {
-				Incident_Claimcheck ccheck = (Incident_Claimcheck) i.next();
+			for (Incident_Claimcheck ccheck : this.getClaimchecks()) {
 				ret.append(format(ccheck.getClaimchecknum()));
 			}
 		}
 
 		if (this.getItemlist() != null && this.getItemlist().size() > 0) {
-			for (Iterator i = this.getItemlist().iterator(); i.hasNext();) {
-				Item item = (Item) i.next();
-
+			for (Item item : this.getItemlist()) {
 				ret.append(format(item.getColor()));
 				ret.append(format(item.getBagtype()));
 				ret.append(format(item.getXdescelement1()));
@@ -981,9 +1027,7 @@ public class Incident implements Serializable {
 		}
 
 		if (this.getArticles() != null && this.getArticles().size() > 0) {
-			for (Iterator i = this.getArticles().iterator(); i.hasNext();) {
-				Articles artcl = (Articles) i.next();
-
+			for (Articles artcl : this.getArticles()) {
 				ret.append(format(artcl.getArticle()));
 				ret.append(format(artcl.getDescription()));
 			}
@@ -991,6 +1035,7 @@ public class Incident implements Serializable {
 		return ret.toString();
 	}
 
+	@Transient
 	public Station getDispStationAssigned() {
 		Station ret = null;
 
@@ -1000,11 +1045,32 @@ public class Incident implements Serializable {
 		return ret;
 	}
 
-	public String format(String val) {
+	private String format(String val) {
 		if (val == null)
 			return " ";
 		else
 			return val + " ";
+	}
+	
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		int result = 23;
+		result = 37 * result + (Incident_ID == null ? 0 : Incident_ID.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object otherObject) {
+		// TODO Auto-generated method stub
+		if(this == otherObject) return true;
+		if(otherObject == null) return false;
+		if(!(otherObject instanceof Incident)) return false;
+		
+		if(Incident_ID == null) return false;
+		
+		Incident o = (Incident) otherObject;
+		return Incident_ID.equals(o.getIncident_ID());
 	}
 
 }

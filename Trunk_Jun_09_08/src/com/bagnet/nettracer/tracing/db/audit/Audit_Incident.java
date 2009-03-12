@@ -38,7 +38,7 @@ public class Audit_Incident implements Serializable {
 	private Agent agentassigned;
 	private Date createdate;
 	private Date createtime;
-	private String closedate;
+	private Date closedate;
 	private String recordlocator;
 	private String manualreportnum;
 	private String ticketnumber;
@@ -56,7 +56,7 @@ public class Audit_Incident implements Serializable {
 	private Status status;
 	private int loss_code;
 
-	private String ohd_lasttraced;
+	private Date ohd_lasttraced;
 	
 	private String wt_id;
 
@@ -484,9 +484,9 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the closedate.
 	 * 
-	 * @hibernate.property type="string" column="close_date"
+	 * @hibernate.property type="timestamp" column="close_date"
 	 */
-	public String getClosedate() {
+	public Date getClosedate() {
 		return closedate;
 	}
 
@@ -494,13 +494,12 @@ public class Audit_Incident implements Serializable {
 	 * @param closedate
 	 *          The closedate to set.
 	 */
-	public void setClosedate(String closedate) {
+	public void setClosedate(Date closedate) {
 		this.closedate = closedate;
 	}
 
 	public String getDispclosedate() {
-		return DateUtils.formatDate(getClosedate(), TracingConstants.DB_DATETIMEFORMAT,
-				get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
+		return DateUtils.formatDate(getClosedate(), get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
 	}
 
 	/**
@@ -754,9 +753,9 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the ohd_lasttraced.
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.property @hibernate.property type="timestamp"
 	 */
-	public String getOhd_lasttraced() {
+	public Date getOhd_lasttraced() {
 		return ohd_lasttraced;
 	}
 
@@ -764,7 +763,7 @@ public class Audit_Incident implements Serializable {
 	 * @param ohd_lasttraced
 	 *          The ohd_lasttraced to set.
 	 */
-	public void setOhd_lasttraced(String ohd_lasttraced) {
+	public void setOhd_lasttraced(Date ohd_lasttraced) {
 		this.ohd_lasttraced = ohd_lasttraced;
 	}
 

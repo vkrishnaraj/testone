@@ -14,8 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.aop.WorldTracerTx;
 import com.bagnet.nettracer.exceptions.BagtagException;
@@ -29,7 +27,6 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -45,34 +42,24 @@ import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
-import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
-import com.bagnet.nettracer.wt.svc.WorldTracerRule.Format;
-import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 public class DefaultWorldTracerService implements WorldTracerService {
 
@@ -89,8 +76,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	private WorldTracerConnector wtConnector;
 
 	private String wtCompanyCode;
-
-	private WtTransactionBmo txBmo;
 
 	private static final List<String> wt_mats = Arrays.asList("D", "L", "M", "R", "T");
 	private static final List<String> wt_descs = Arrays.asList("D", "L", "M", "R", "T", "B", "K", "C", "H", "S", "W",
@@ -372,7 +357,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.FWD_GENERAL)
-	public String sendFwdMsg(WtqFwdGeneral fwd) throws WorldTracerException {
+	public String sendFwdMsg(WtqFwdGeneral fwd, Agent defaultAgent) throws WorldTracerException {
 		Map<WorldTracerField, List<String>> fieldMap = createFwdFieldMap(fwd);
 
 		if (fieldMap == null) {
@@ -384,8 +369,13 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		}
 
 		addIncidentFieldEntry(WorldTracerField.RC, fwd.getLossComments(), fieldMap);
+		
+		String from_station = fwd.getFrom_station();
+		if(from_station == null || from_station.trim().length() < 1) {
+			from_station = defaultAgent.getStation().getWt_stationcode();
+		}
 
-		String result = wtConnector.sendFwd(fieldMap, fwd.getAgent().getStation().getWt_stationcode(), fwd.getAgent()
+		String result = wtConnector.sendFwd(fieldMap, from_station, fwd.getAgent()
 				.getCompanycode_ID());
 		return result;
 	}
@@ -808,7 +798,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		List<Address> namedAdds = new ArrayList<Address>();
 		List<Address> tempAdds = new ArrayList<Address>();
 		if (ntIncident.getPassenger_list() != null) {
-			for (Passenger p : (List<Passenger>) ntIncident.getPassenger_list()) {
+			for (Passenger p : ntIncident.getPassenger_list()) {
 
 				getPassengerInfo(p, result);
 				Address a = p.getAddress(0);
@@ -839,7 +829,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		addIncidentFieldEntry(WorldTracerField.PR, ntIncident.getRecordlocator(), result);
 
 		if (ntIncident.getItinerary_list() != null) {
-			for (Itinerary i : (List<Itinerary>) ntIncident.getItinerary_list()) {
+			for (Itinerary i : ntIncident.getItinerary_list()) {
 				getItineraryInfo(i, result);
 			}
 		}
@@ -854,7 +844,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		}
 
 		if (ntIncident.getClaimcheck_list() != null) {
-			for (Incident_Claimcheck ic : (List<Incident_Claimcheck>) ntIncident.getClaimcheck_list()) {
+			for (Incident_Claimcheck ic : ntIncident.getClaimcheck_list()) {
 				if (ic.getClaimchecknum() != null && ic.getClaimchecknum().trim().length() > 0) {
 					addClaimCheckNum(ic.getClaimchecknum(), result, ntIncident.getStationassigned().getCompany()
 							.getCompanyCode_ID());
@@ -867,7 +857,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		// you can have 12 total categories (see ContentRule class)
 		if (ntIncident.getItemlist() != null) {
 			int bagCount = 1;
-			for (Item i : (List<Item>) ntIncident.getItemlist()) {
+			for (Item i : ntIncident.getItemlist()) {
 				getItemInfo(i, result);
 				if (i.getInventorylist() != null) {
 
@@ -903,32 +893,30 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
 		String cs_fmt = "%02d %s/%s%1.2f";
 		int claimCount = 0;
-		if (incident.getClaims() != null) {
+		if (incident.getClaim() != null) {
 			String cost;
 
-			for (Claim claim : (Iterable<Claim>) incident.getClaims()) {
-				if (claim.getExpenses() != null) {
-					for (ExpensePayout expense : (Iterable<ExpensePayout>) claim.getExpenses()) {
-						if (expense.getApproval_date() != null && expense.getCurrency_ID() != null) {
-							claimCount++;
-							if ("ADV".equals(expense.getPaycode())) {
-								cost = String.format(cs_fmt, claimCount, "A", expense.getCurrency_ID(), expense
-										.getCheckamt());
-							} else if ("DEL".equals(expense.getPaycode())) {
-								cost = String.format(cs_fmt, claimCount, "D", expense.getCurrency_ID(), expense
-										.getCheckamt());
-							} else if ("FIN".equals(expense.getPaycode())) {
-								cost = String.format(cs_fmt, claimCount, "F", expense.getCurrency_ID(), expense
-										.getCheckamt());
-							} else if ("INS".equals(expense.getPaycode())) {
-								cost = String.format(cs_fmt, claimCount, "I", expense.getCurrency_ID(), expense
-										.getCheckamt());
-							} else {
-								cost = String.format(cs_fmt, claimCount, "X", expense.getCurrency_ID(), expense
-										.getCheckamt());
-							}
-							addIncidentFieldEntry(WorldTracerField.CS, cost, result);
+			if (incident.getExpenses() != null) {
+				for (ExpensePayout expense : incident.getExpenses()) {
+					if (expense.getApproval_date() != null && expense.getCurrency_ID() != null) {
+						claimCount++;
+						if ("ADV".equals(expense.getPaycode())) {
+							cost = String.format(cs_fmt, claimCount, "A", expense.getCurrency_ID(), expense
+									.getCheckamt());
+						} else if ("DEL".equals(expense.getPaycode())) {
+							cost = String.format(cs_fmt, claimCount, "D", expense.getCurrency_ID(), expense
+									.getCheckamt());
+						} else if ("FIN".equals(expense.getPaycode())) {
+							cost = String.format(cs_fmt, claimCount, "F", expense.getCurrency_ID(), expense
+									.getCheckamt());
+						} else if ("INS".equals(expense.getPaycode())) {
+							cost = String.format(cs_fmt, claimCount, "I", expense.getCurrency_ID(), expense
+									.getCheckamt());
+						} else {
+							cost = String.format(cs_fmt, claimCount, "X", expense.getCurrency_ID(), expense
+									.getCheckamt());
 						}
+						addIncidentFieldEntry(WorldTracerField.CS, cost, result);
 					}
 				}
 			}

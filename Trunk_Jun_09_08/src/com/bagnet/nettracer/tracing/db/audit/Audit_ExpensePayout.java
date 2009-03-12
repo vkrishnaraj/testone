@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.db.audit;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -36,7 +37,7 @@ public class Audit_ExpensePayout implements Serializable {
 	private String currency_ID;
 	private Station expenselocation;
 	private ExpenseType expensetype;
-	private String comments;
+	private String auditComments;
 	private Status status;
 	private double incidentalAmountAuth;
 	private double incidentalAmountClaimed;
@@ -52,8 +53,6 @@ public class Audit_ExpensePayout implements Serializable {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
-
-	private String modify_reason;
 	
 	private Audit_Claim audit_claim;
 
@@ -73,22 +72,6 @@ public class Audit_ExpensePayout implements Serializable {
 	 */
 	public void setAudit_claim(Audit_Claim audit_claim) {
 		this.audit_claim = audit_claim;
-	}
-	/**
-	 * @return Returns the modify_reason.
-	 * 
-	 * @hibernate.property type="string"
-	 */
-	public String getModify_reason() {
-		return modify_reason;
-	}
-
-	/**
-	 * @param modify_reason
-	 *          The modify_reason to set.
-	 */
-	public void setModify_reason(String modify_reason) {
-		this.modify_reason = modify_reason;
 	}
 
 	/**
@@ -362,10 +345,10 @@ public class Audit_ExpensePayout implements Serializable {
 	/**
 	 * @return Returns the comments.
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.property type="string" column="comments"
 	 */
-	public String getComments() {
-		return comments;
+	public String getAuditComments() {
+		return auditComments;
 	}
 
 	/**
@@ -390,8 +373,8 @@ public class Audit_ExpensePayout implements Serializable {
 	 * @param comments
 	 *          The comments to set.
 	 */
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setAuditComments(String comments) {
+		this.auditComments = comments;
 	}
 
 	/**

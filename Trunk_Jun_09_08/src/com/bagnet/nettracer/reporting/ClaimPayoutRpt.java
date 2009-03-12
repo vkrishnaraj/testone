@@ -42,10 +42,10 @@ public class ClaimPayoutRpt {
 		try {
 			ClaimBMO cBMO = new ClaimBMO();
 			Claim claim = cBMO.findClaimByID(claim_ID);
-			if (claim == null || claim.getExpenses() == null) {
+			if (claim == null || claim.getIncident() == null || claim.getIncident().getExpenses() == null) {
 				return null;
 			}
-			List expenselist = new ArrayList(claim.getExpenses());
+			List expenselist = new ArrayList(claim.getIncident().getExpenses());
 
 			Map parameters = new HashMap();
 			parameters.put("title", ReportingConstants.CLAIM_PAYOUT_TITLE);

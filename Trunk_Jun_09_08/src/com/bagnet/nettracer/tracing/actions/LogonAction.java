@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -30,6 +31,7 @@ import com.bagnet.nettracer.tracing.dto.ActivityDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
 import com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm;
 import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
+import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm;
@@ -347,7 +349,18 @@ public class LogonAction extends Action {
 																				if (x != -1)
 																					entries = x;
 																			}
+																			else {
+																				if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVED_EXPENSES)) {
+																					SearchExpenseForm form = new SearchExpenseForm();
+																					form.setStatusId(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
+																					int x = ExpensePayoutBMO.countExpenses(form, agent);
+																					if(x != -1) {
+																						entries = x;
+																					}
+																				}
+																			}
 																		}
+																		
 																	}
 																}
 															}

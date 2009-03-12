@@ -29,6 +29,8 @@
 		<form-bean name="viewIncomingRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm" />
 		<form-bean name="viewOHDLZedForm" type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm" />
 		<form-bean name="claimForm" type="com.bagnet.nettracer.tracing.forms.ClaimForm" />
+		<form-bean name="expensePayoutForm" type="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm" />
+		<form-bean name="searchExpenseForm" type="com.bagnet.nettracer.tracing.forms.SearchExpenseForm" />
 		
 		<form-bean name="claimSettlementForm" type="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm" />
 		
@@ -220,6 +222,7 @@
 		<forward name="success" path="user_menu" />
 		<forward name="error" path="error_page" />
 		<forward name="insertsuccess" path="insert_success" />
+		<forward name="invalidtoken" path="invalid_token" />
 		<forward name="searchincident" path="search_incident" />
 		<forward name="searchOnHand" path="search_onhand" />
 		<forward name="customquery" path="custom_query" />
@@ -451,6 +454,29 @@
 		<action path="/claim_prorate" type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction" name="claimProrateForm" scope="session" validate="false"></action>
 		
 		<action path="/claim_settlement" type="com.bagnet.nettracer.tracing.actions.ClaimSettlementAction" name="claimSettlementForm" scope="session" validate="false"></action>
+		
+		<!-- Expense Actions -->
+		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="false" >
+			<forward name="create_success" path="create_expense"></forward>
+			<forward name="edit_success" path="edit_expense"></forward>
+			<forward name="update_success" path="claim_resolution.do" redirect="true" ></forward>
+			<forward name="save_success" path="claim_resolution.do" redirect="true"></forward>
+		</action>
+		
+		<action path="/BatchApproveExpenses" parameter="BatchApprove" type="com.bagnet.nettracer.tracing.actions.expense.BatchApproveExpenseAction" name="interimExpenseRequestForm" scope="request" validate="false" >
+		</action>
+		
+		<action path="/SearchExpenses" parameter="Search" type="com.bagnet.nettracer.tracing.actions.expense.SearchExpenseAction" name="searchExpenseForm" scope="request" validate="false" >
+			<forward name="success" path="search_expense"></forward>
+		</action>
+		
+		<action path="/PendingExpenses" parameter="Search" type="com.bagnet.nettracer.tracing.actions.expense.PendingExpensesAction" name="searchExpenseForm" scope="request" validate="false" >
+			<forward name="success" path="search_expense" />
+		</action>
+		
+		<action path="/ApprovedExpenses" parameter="Search" type="com.bagnet.nettracer.tracing.actions.expense.ApprovedExpenseAction" name="searchExpenseForm" scope="request" validate="false" >
+			<forward name="success" path="search_expense" />
+		</action>
 
 		<!-- Forwarding bags -->
 		<action path="/forward_on_hand" type="com.bagnet.nettracer.tracing.actions.ForwardOnHandAction" name="forwardOnHandForm" scope="session" validate="false"></action>
@@ -623,6 +649,14 @@
 
 	<!-- ========== Plug-ins Configuration ================================== -->
 	<plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
+	
+	<!-- 
+	<plug-in className="formdef.plugin.FormDefPlugIn">
+        <set-property property="pathnames"
+                value="/WEB-INF/form-defs.xml"/>
+    </plug-in>
+	-->
+	
 	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
 		<set-property property="pathnames" value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml" />
 	</plug-in>

@@ -318,6 +318,7 @@ public class SearchIncidentAction extends Action {
 							request.setAttribute("pendingWtAction", TracingConstants.WT_PENDING_CLOSE);
 						}
 					}
+					saveToken(request);
 					return (mapping.findForward(TracingConstants.LD_MAIN));
 				case TracingConstants.DAMAGED_BAG:
 					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
@@ -335,6 +336,7 @@ public class SearchIncidentAction extends Action {
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
 						theform.setAllow_remark_update(1);
 					request.setAttribute("damaged", "1");
+					saveToken(request);
 					return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 				case TracingConstants.MISSING_ARTICLES:
 					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
@@ -352,6 +354,7 @@ public class SearchIncidentAction extends Action {
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user))
 						theform.setAllow_remark_update(1);
 					request.setAttribute("missing", "1");
+					saveToken(request);
 					return (mapping.findForward(TracingConstants.MISSING_MAIN));
 				default:
 					return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));

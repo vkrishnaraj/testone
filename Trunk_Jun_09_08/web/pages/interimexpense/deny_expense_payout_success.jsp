@@ -15,7 +15,7 @@
         <td>
           <h1 class="green">
             <bean:message key="message.success.expense.deny" />
-            <p>
+            <br /> <br />
 <%
               String inc_id = (String)request.getAttribute("incident_id");
               String pay_id = (String)request.getAttribute("payout_id");
@@ -29,14 +29,12 @@
                   String payout_id   = (String)st2.nextToken();
 %>	
 									<a href='searchIncident.do?incident=<%= incident_id %>'><%= incident_id %></a>
-                  <!--<a href='claim_resolution.do?approveinterim=1&incident_id=<%= incident_id %>&exp_id=<%= payout_id %>'><%= incident_id %></a>-->
                   <br>
 <%
                 }
               } else {
 %>
 								<a href='searchIncident.do?incident=<%= inc_id %>'><%= inc_id %></a>
-                <!--<a href='claim_resolution.do?approveinterim=1&incident_id=<%= inc_id %>&exp_id=<%= pay_id %>'><%= inc_id %></a>-->
 <%
               }
 %>

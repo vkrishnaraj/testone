@@ -8,6 +8,8 @@ package com.bagnet.nettracer.tracing.bmo;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,6 +18,7 @@ import org.hibernate.Transaction;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 
@@ -27,13 +30,21 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 public class ClaimBMO {
 	private static Logger logger = Logger.getLogger(ClaimBMO.class);
 
-	public boolean insertClaim(Claim cDTO, Audit_Claim acDTO) throws HibernateException {
+	public boolean insertClaim(Claim cDTO, Audit_Claim acDTO, String incident_ID) throws HibernateException {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 
 			t = sess.beginTransaction();
+			
+			if(cDTO.getIncident() == null) {
+				Incident inc = (Incident) sess.get(Incident.class, incident_ID);
+				cDTO.setIncident(inc);
+				inc.setClaim(cDTO);
+				sess.update(inc);
+			}
 			sess.saveOrUpdate(cDTO);
+			
 			t.commit();
 
 			//check if audit is enabled for this company....
@@ -58,28 +69,39 @@ public class ClaimBMO {
 		return true;
 	}
 
+	/**
+	 * find a claim using a one off session
+	 * @param claim_ID
+	 * @return
+	 * @throws HibernateException
+	 */
 	public Claim findClaimByID(int claim_ID) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-
-			Query q = sess.createQuery("select claim from com.bagnet.nettracer.tracing.db.Claim claim "
-					+ "where claim.claim_ID= :claim_ID");
-			q.setParameter("claim_ID", new Integer(claim_ID));
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find claim: " + claim_ID);
-				return null;
-			}
-			Claim cDTO = (Claim) list.get(0);
-
-			return cDTO;
+			return (Claim) sess.get(Claim.class, claim_ID);
 		} catch (Exception e) {
-			logger.error("unable to retrieve claim: " + e);
-			e.printStackTrace();
+			logger.error("unexpected error retreiving claim: " + e);
 			return null;
 		} finally {
-			sess.close();
+			if(sess != null) sess.close();
+		}
+	}
+		
+	/**
+	 * finds a claim using a passed in session, when used as part of a larger transaction
+	 * 
+	 * @param claim_ID
+	 * @param sess
+	 * @return
+	 */
+	public Claim findClaimByID(int claim_ID, Session sess) {
+		if(sess == null) return null;
+		
+		try {
+			return (Claim) sess.get(Claim.class, claim_ID);
+		} catch (Exception e) {
+			logger.error("unexpected error retrieving claim: " + e);
+			return null;
 		}
 	}
 
@@ -106,4 +128,5 @@ public class ClaimBMO {
 		}
 		return true;
 	}
+
 }

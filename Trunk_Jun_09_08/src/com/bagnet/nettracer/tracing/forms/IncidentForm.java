@@ -2,10 +2,7 @@ package com.bagnet.nettracer.tracing.forms;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.struts.validator.ValidatorForm;
@@ -16,9 +13,10 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company;
-import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
@@ -61,7 +59,7 @@ public final class IncidentForm extends ValidatorForm {
 	private Status status;
 	private Date createdate;
 	private Date createtime;
-	private String closedate;
+	private Date closedate;
 	private String ticketnumber;
 	private String recordlocator;
 	private String manualreportnum;
@@ -98,25 +96,25 @@ public final class IncidentForm extends ValidatorForm {
 	public void setWtFile(WorldTracerFile wtFile) {
 		this.wtFile = wtFile;
 	}
-	private List passengerlist = new ArrayList();
+	private List<Passenger> passengerlist = new ArrayList<Passenger>();
 	// addresses
 	//private List addresses = new ArrayList();
 	//remark table
-	private List remarklist = new ArrayList();
+	private List<Remark> remarklist = new ArrayList<Remark>();
 	//item table
-	private List itemlist = new ArrayList();
+	private List<Item> itemlist = new ArrayList<Item>();
 	// articles table
-	private List articlelist = new ArrayList();
+	private List<Articles> articlelist = new ArrayList<Articles>();
 	//itinerary table
 	// passenger itinerary itinerarytype = 0 ; bag itinerarytype = 1
-	private List itinerarylist = new ArrayList();
+	private List<Itinerary> itinerarylist = new ArrayList<Itinerary>();
 
-	private List claimchecklist = new ArrayList();
+	private List<Incident_Claimcheck> claimchecklist = new ArrayList<Incident_Claimcheck>();
 
-	private Set claims;
-	private List expenselist = new ArrayList();
+	private Claim claim;
+	private List<ExpensePayout> expenselist = new ArrayList<ExpensePayout>();
 	
-	private List bdo_passengerlist = new ArrayList();
+	private List<BDO_Passenger> bdo_passengerlist = new ArrayList<BDO_Passenger>();
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -134,7 +132,7 @@ public final class IncidentForm extends ValidatorForm {
 			}
 		}
 		if (passengerlist != null) {
-			for (Passenger p : (List<Passenger>) passengerlist) {
+			for (Passenger p : passengerlist) {
 				if (p.getAddresses() != null) {
 					for (Address a : (Iterable<Address>) p.getAddresses()) {
 						a.setPermanent(false);
@@ -221,11 +219,11 @@ public final class IncidentForm extends ValidatorForm {
 	 * ************** beginning of the custom code *************
 	 */
 
-	public List getPassengerlist() {
+	public List<Passenger> getPassengerlist() {
 		return passengerlist;
 	}
 
-	public void setPassengerlist(List passengerlist) {
+	public void setPassengerlist(List<Passenger> passengerlist) {
 		this.passengerlist = passengerlist;
 	}
 
@@ -260,7 +258,7 @@ public final class IncidentForm extends ValidatorForm {
 			}
 		}
 
-		return (Passenger) this.passengerlist.get(index);
+		return this.passengerlist.get(index);
 	}
 
 	public Address getAddresses(int addressIdx) {
@@ -273,15 +271,15 @@ public final class IncidentForm extends ValidatorForm {
 
 
 	
-	public List getBdo_passengerlist() {
+	public List<BDO_Passenger> getBdo_passengerlist() {
 		return bdo_passengerlist;
 	}
 
-	public void setBdo_passengerlist(List bdo_passengerlist) {
+	public void setBdo_passengerlist(List<BDO_Passenger> bdo_passengerlist) {
 		this.bdo_passengerlist = bdo_passengerlist;
 	}
 
-	public List getRemarklist() {
+	public List<Remark> getRemarklist() {
 		return remarklist;
 	}
 
@@ -307,15 +305,15 @@ public final class IncidentForm extends ValidatorForm {
 		return (Remark) this.remarklist.get(index);
 	}
 
-	public void setRemarklist(List remarklist) {
+	public void setRemarklist(List<Remark> remarklist) {
 		this.remarklist = remarklist;
 	}
 
-	public List getItemlist() {
+	public List<Item> getItemlist() {
 		return itemlist;
 	}
 
-	public void setItemlist(List itemlist) {
+	public void setItemlist(List<Item> itemlist) {
 		this.itemlist = itemlist;
 	}
 
@@ -373,7 +371,7 @@ public final class IncidentForm extends ValidatorForm {
 	/**
 	 * @return Returns the claimchecklist.
 	 */
-	public List getClaimchecklist() {
+	public List<Incident_Claimcheck> getClaimchecklist() {
 		return claimchecklist;
 	}
 
@@ -381,7 +379,7 @@ public final class IncidentForm extends ValidatorForm {
 	 * @param claimchecklist
 	 *          The claimchecklist to set.
 	 */
-	public void setClaimchecklist(List claimchecklist) {
+	public void setClaimchecklist(List<Incident_Claimcheck> claimchecklist) {
 		this.claimchecklist = claimchecklist;
 	}
 
@@ -393,17 +391,15 @@ public final class IncidentForm extends ValidatorForm {
 		return (Incident_Claimcheck) this.claimchecklist.get(index);
 	}
 
-	public List getItinerarylist() {
+	public List<Itinerary> getItinerarylist() {
 		return itinerarylist;
 	}
 
-	public List getBagItineraryList() {
+	public List<Itinerary> getBagItineraryList() {
 
-		List bagList = new ArrayList();
+		List<Itinerary> bagList = new ArrayList<Itinerary>();
 		if (this.getItinerarylist() != null && this.getItinerarylist().size() > 0) {
-			for (Iterator i = itinerarylist.iterator(); i.hasNext();) {
-				Itinerary itin = (Itinerary) i.next();
-
+			for (Itinerary itin : itinerarylist) {
 				if (itin.getItinerarytype() == 1) {
 					bagList.add(itin);
 				}
@@ -413,13 +409,11 @@ public final class IncidentForm extends ValidatorForm {
 		return bagList;
 	}
 
-	public List getPassItineraryList() {
+	public List<Itinerary> getPassItineraryList() {
 
-		List passList = new ArrayList();
+		List<Itinerary> passList = new ArrayList<Itinerary>();
 		if (this.getItinerarylist() != null && this.getItinerarylist().size() > 0) {
-			for (Iterator i = itinerarylist.iterator(); i.hasNext();) {
-				Itinerary itin = (Itinerary) i.next();
-
+			for (Itinerary itin : itinerarylist) {
 				if (itin.getItinerarytype() == 0) {
 					passList.add(itin);
 				}
@@ -429,7 +423,7 @@ public final class IncidentForm extends ValidatorForm {
 		return passList;
 	}
 
-	public void setItinerarylist(List itinerarylist) {
+	public void setItinerarylist(List<Itinerary> itinerarylist) {
 		this.itinerarylist = itinerarylist;
 	}
 
@@ -438,7 +432,7 @@ public final class IncidentForm extends ValidatorForm {
 		while (this.itinerarylist.size() <= index) {
 			this.itinerarylist.add(new Itinerary());
 		}
-		return (Itinerary) itinerarylist.get(index);
+		return itinerarylist.get(index);
 	}
 
 	public Itinerary getItinerary(int index, int type) {
@@ -469,14 +463,14 @@ public final class IncidentForm extends ValidatorForm {
 
 		}
 
-		return (Itinerary) this.itinerarylist.get(index);
+		return this.itinerarylist.get(index);
 	}
 
-	public List getArticlelist() {
+	public List<Articles> getArticlelist() {
 		return articlelist;
 	}
 
-	public void setArticlelist(List articlelist) {
+	public void setArticlelist(List<Articles> articlelist) {
 		this.articlelist = articlelist;
 	}
 
@@ -524,7 +518,7 @@ public final class IncidentForm extends ValidatorForm {
 	/**
 	 * @return Returns the closedate.
 	 */
-	public String getClosedate() {
+	public Date getClosedate() {
 		return closedate;
 	}
 
@@ -532,7 +526,7 @@ public final class IncidentForm extends ValidatorForm {
 	 * @param closedate
 	 *          The closedate to set.
 	 */
-	public void setClosedate(String closedate) {
+	public void setClosedate(Date closedate) {
 		this.closedate = closedate;
 	}
 
@@ -546,8 +540,7 @@ public final class IncidentForm extends ValidatorForm {
 	}
 
 	public String getDispclosedate() {
-		return DateUtils.formatDate(getClosedate(), TracingConstants.DB_DATETIMEFORMAT,
-				get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
+		return DateUtils.formatDate(getClosedate(),	get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
 	}
 
 	public void setAgent(Agent agent) {
@@ -1026,41 +1019,23 @@ public final class IncidentForm extends ValidatorForm {
 	/**
 	 * @return Returns the claims.
 	 */
-	public Set getClaims() {
-		return claims;
+	public Claim getClaim() {
+		return claim;
 	}
 
 	/**
 	 * @param claims
 	 *          The claims to set.
 	 */
-	public void setClaims(Set claims) {
-		this.claims = claims;
-	}
-
-	public Claim getClaim(int index) {
-		ArrayList claimlist = new ArrayList(getClaims());
-		if (claimlist == null || claimlist.size() == 0) {
-			Claim claim = new Claim();
-			Incident incident = new Incident();
-			incident.setIncident_ID(Incident_ID);
-			claim.setIncident(incident);
-			return claim;
-		}
-		return (Claim) claimlist.get(index);
-	}
-
 	public void setClaim(Claim claim) {
-		Set claims = new HashSet();
-		claims.add(claim);
-		this.claims = claims;
+		this.claim = claim;
 	}
 
-	public void setExpenselist(List expenselist) {
+	public void setExpenselist(List<ExpensePayout> expenselist) {
 		this.expenselist = expenselist;
 	}
 
-	public List getExpenselist() {
+	public List<ExpensePayout> getExpenselist() {
 		return expenselist;
 	}
 

@@ -24,7 +24,6 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ControlLog;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
@@ -49,7 +48,6 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringType;
 
 /**
  * This class provides utility methods for on-hand related functionality.

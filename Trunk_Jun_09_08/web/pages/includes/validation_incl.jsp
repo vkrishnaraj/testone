@@ -923,9 +923,9 @@
 			var checked = 0;
     	var received="";
     
-    	for (var j=0;j<document.interimExpenseRequestForm.length;j++) 
+    	for (var j=0;j<document.searchExpenseForm.length;j++) 
     	{
-      	currentElement = document.interimExpenseRequestForm.elements[j];
+      	currentElement = document.searchExpenseForm.elements[j];
        	if (currentElement.type=="checkbox")
        	{
         	if (currentElement.checked)
@@ -944,9 +944,9 @@
      	}
     	else
      	{
-     		document.interimExpenseRequestForm.approve1.value="1";
-				document.interimExpenseRequestForm.payout_ID.value=received;
-      	document.interimExpenseRequestForm.submit();
+     		document.searchExpenseForm.approve1.value="1";
+			document.searchExpenseForm.payout_ID.value=received;
+      		document.searchExpenseForm.submit();
     	}
   	}
   } 
@@ -959,9 +959,9 @@
 			var checked = 0;
     	var received="";
     
-    	for (var j=0;j<document.interimExpenseRequestForm.length;j++) 
+    	for (var j=0;j<document.searchExpenseForm.length;j++) 
     	{
-      	currentElement = document.interimExpenseRequestForm.elements[j];
+      	currentElement = document.searchExpenseForm.elements[j];
        	if (currentElement.type=="checkbox")
        	{
         	if (currentElement.checked)
@@ -980,9 +980,9 @@
      	}
     	else
      	{
-     		document.interimExpenseRequestForm.deny1.value="1";
-				document.interimExpenseRequestForm.payout_ID.value=received;
-      	document.interimExpenseRequestForm.submit();
+     		document.searchExpenseForm.deny1.value="1";
+				document.searchExpenseForm.payout_ID.value=received;
+      	document.searchExpenseForm.submit();
     	}
   	}
   } 

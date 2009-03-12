@@ -195,7 +195,7 @@ public class Worldtracer_Actionfiles implements Serializable {
 	//these have to be down here or they muss up the xdoclet hibernate mapping generator.
 	public static enum ActionFileType {
 		AA, AP, CM, EM, FW, LM, PR, SP, WM, XX
-	}
+	};
 
 	public String generateId() {
 		return String.format("%s-%s-%s-%d-%d", airline, this.wt_station, this.action_file_type.name(), this.day, this.item_number);

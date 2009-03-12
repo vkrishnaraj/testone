@@ -33,7 +33,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class ClaimProrateAction extends Action {
+public class ClaimProrateAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -49,6 +49,10 @@ public class ClaimProrateAction extends Action {
 
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) return (mapping
 				.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
 
 		BagService bs = new BagService();
 		ClaimProrateForm cpform = (ClaimProrateForm) form;
@@ -80,7 +84,7 @@ public class ClaimProrateAction extends Action {
 		// save claim prorate notice
 		if (request.getParameter("save") != null) {
 			Claim cDTO = new Claim();
-			if (bs.insertClaimProrate(cDTO, cpform, session)) {
+			if (bs.insertClaimProrate(cDTO, cpform, session, theform.getIncident_ID())) {
 				theform.setClaim(cDTO);
 				request.setAttribute("success", "1");
 			} else {

@@ -98,20 +98,19 @@ public class InterimExpenseAction extends Action {
 				ExpensePayout payout = ExpenseUtils.getExpensePayout(token);
 				Status s = new Status();
 				s.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-				payout.setApproval_date(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+				payout.setApproval_date(TracerDateTime.getGMTDate());
 				payout.setStatus(s);
 				HibernateUtils.save(payout);
 				
 				Audit_ExpensePayout a_ep = new Audit_ExpensePayout();
 				BeanUtils.copyProperties(a_ep, payout);
-				a_ep.setModify_reason("interim approved");
 				HibernateUtils.save(a_ep);
 				
 				if (!incident_id.equals("")) {
 					incident_id += ",";
 				}
 
-				incident_id += payout.getClaim().getIncident().getIncident_ID();
+				incident_id += payout.getIncident().getIncident_ID();
 			}
 
 			request.setAttribute("incident_id", incident_id);
@@ -137,14 +136,13 @@ public class InterimExpenseAction extends Action {
 				
 				Audit_ExpensePayout a_ep = new Audit_ExpensePayout();
 				BeanUtils.copyProperties(a_ep, payout);
-				a_ep.setModify_reason("interim denied");
 				HibernateUtils.save(a_ep);
 
 				if (!incident_id.equals("")) {
 					incident_id += ",";
 				}
 
-				incident_id += payout.getClaim().getIncident().getIncident_ID();
+				incident_id += payout.getIncident().getIncident_ID();
 
 				//Put in the send box.
 				Message msg = new Message();
@@ -152,7 +150,7 @@ public class InterimExpenseAction extends Action {
 				msg.setSend_station(user.getStation());
 				msg.setMessage("Interim Expense Denied");
 				msg.setSubject("Interim Expense Request Denied");
-				msg.setFile_ref_number(payout.getClaim().getIncident().getIncident_ID());
+				msg.setFile_ref_number(payout.getIncident().getIncident_ID());
 				msg.setFile_type(1);
 				msg.setAgent(user);
 

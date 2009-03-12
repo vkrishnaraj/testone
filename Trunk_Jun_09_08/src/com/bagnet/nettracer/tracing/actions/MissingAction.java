@@ -53,7 +53,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * 
  * @author Matt
  */
-public class MissingAction extends Action {
+public class MissingAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
@@ -69,6 +69,10 @@ public class MissingAction extends Action {
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
 
 		//the company specific codes..
 		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, user

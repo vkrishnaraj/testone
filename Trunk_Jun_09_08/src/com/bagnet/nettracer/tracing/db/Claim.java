@@ -7,20 +7,31 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Set;
 
-import com.bagnet.nettracer.tracing.utils.NumberUtils;
-import com.cci.utils.parser.ElementNode;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Proxy;
 
 /**
- * @author Administrator
+ * @author noah
  * 
- * @hibernate.class table = "Claim"
  */
+@Entity
+@Table(name = "Claim")
+@Proxy(lazy = false)
 public class Claim implements Serializable {
 	private int Claim_ID;
 	private double claimamount;
@@ -34,116 +45,16 @@ public class Claim implements Serializable {
 	
 	private Incident incident;
 	private Status status;
-	private Set expenses;
 	private ClaimProrate claimprorate;
 
-	public String toXML() {
-		StringBuffer sb = new StringBuffer();
 
-		sb.append("<claim>");
-		sb.append("<Claim_ID>" + Claim_ID + "</Claim_ID>");
-		sb.append("<claimamount>" + claimamount + "</claimamount>");
-		sb.append("<claimcurrency_ID>" + claimcurrency_ID + "</claimcurrency_ID>");
-		sb.append("<total>" + total + "</total>");
-		sb.append("<ssn>" + ssn + "</ssn>");
-		sb.append("<driverslicense>" + driverslicense + "</driverslicense>");
-		sb.append("<dlstate>" + dlstate + "</dlstate>");
-		sb.append("<status_ID>" + status.getStatus_ID() + "</status_ID>");
-		sb.append("<status>" + status.getDescription() + "</status>");
-
-		sb.append("<expensepayouts>");
-		if (this.getExpenses() != null && this.getExpenses().size() > 0) {
-			for (Iterator i = this.getExpenses().iterator(); i.hasNext();) {
-				ExpensePayout exp = (ExpensePayout) i.next();
-				sb.append(exp.toXML());
-			}
-		}
-		sb.append("</expensepayouts>");
-
-		sb.append((claimprorate != null ? claimprorate.toXML() : ""));
-
-		sb.append("</claim>");
-
-		return sb.toString();
-	}
-	
-	public static Claim XMLtoObject(ElementNode root) {
-		Claim obj = new Claim();
-
-		ElementNode child = null, grandchild = null, ggrandchild = null, gggrandchild = null;
-
-
-		boolean break_main = false;
-
-		Station st = new Station();
-		for (ListIterator i = root.get_children().listIterator(); i.hasNext();) {
-			child = (ElementNode) i.next();
-			if (child.getType().equals("Claim_ID")) {
-				obj.setClaim_ID(NumberUtils.parseInt(child.getTextContents()));
-			} else if (child.getType().equals("claimamount")) {
-				obj.setClaimamount(NumberUtils.parseDouble(child.getTextContents()));
-			} else if (child.getType().equals("claimcurrency_ID")) {
-				obj.setClaimcurrency_ID(child.getTextContents());
-			} else if (child.getType().equals("total")) {
-				obj.setTotal(NumberUtils.parseDouble(child.getTextContents()));
-			} else if (child.getType().equals("ssn")) {
-				obj.setSsn(child.getTextContents());
-			} else if (child.getType().equals("driverslicense")) {
-				obj.setDriverslicense(child.getTextContents());
-			} else if (child.getType().equals("dlstate")) {
-				obj.setDlstate(child.getTextContents());
-			} else if (child.getType().equals("commonnumber")) {
-				obj.setCommonnum(child.getTextContents());
-			} else if (child.getType().equals("countryofissue")) {
-				obj.setCountryofissue(child.getTextContents());
-			} else if (child.getType().equals("status_ID")) {
-				Status stat = new Status();
-				stat.setStatus_ID(NumberUtils.parseInt(child.getTextContents()));
-				obj.setStatus(stat);
-			} else if (child.getType().equals("expensepayouts")) {
-				ArrayList al = new ArrayList();
-				ArrayList c = (ArrayList)child.getChildren();
-				for (int z=0;z<c.size();z++) {
-					al.add(ExpensePayout.XMLtoObject((ElementNode)c.get(z)));
-				}
-				obj.setExpenses(new HashSet(al));
-			}
-			obj.setClaimprorate(ClaimProrate.XMLtoObject(root));
-			
-
-		}
-
-		return obj;
-	}
-
-	/**
-	 * @return Returns the expenses.
-	 * 
-	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="createdate"
-	 * @hibernate.key column="claim_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.ExpensePayout"
-	 *  
-	 */
-	public Set getExpenses() {
-		return expenses;
-	}
-
-	/**
-	 * @param expenses
-	 *          The expenses to set.
-	 */
-	public void setExpenses(Set expenses) {
-		this.expenses = expenses;
-	}
 
 	/**
 	 * @return Returns the claimprorate.
 	 * 
-	 * @hibernate.many-to-one cascade="all"
-	 *                        class="com.bagnet.nettracer.tracing.db.ClaimProrate"
-	 *                        column="claimprorate_ID"
 	 */
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "claimprorate_ID")
 	public ClaimProrate getClaimprorate() {
 		return claimprorate;
 	}
@@ -159,9 +70,9 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the incident.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Incident"
-	 *                        column="incident_ID" not-null="true"
 	 */
+	@OneToOne
+	@JoinColumn(name = "incident_id")
 	public Incident getIncident() {
 		return incident;
 	}
@@ -177,9 +88,9 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the status.
 	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Status"
-	 *                        column="status_ID"
 	 */
+	@ManyToOne
+	@JoinColumn(name = "status_ID", nullable = false)
 	public Status getStatus() {
 		return status;
 	}
@@ -195,12 +106,9 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the claim_ID.
 	 * 
-	 * @hibernate.id generator-class="native" type="integer" column="Claim_ID"
-	 *               unsaved-value="0"
-	 * @hibernate.generator-param name="sequence" value="claim_0"
-	 * 
-	 *  
 	 */
+	@Id
+	@GeneratedValue
 	public int getClaim_ID() {
 		return Claim_ID;
 	}
@@ -216,8 +124,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the claimamount.
 	 * 
-	 * @hibernate.property type="double"
 	 */
+	@Basic
 	public double getClaimamount() {
 		return claimamount;
 	}
@@ -233,8 +141,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the total.
 	 * 
-	 * @hibernate.property type="double"
 	 */
+	@Basic
 	public double getTotal() {
 		return total;
 	}
@@ -250,8 +158,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the ssn.
 	 * 
-	 * @hibernate.property type="string"
 	 */
+	@Column(length = 9)
 	public String getSsn() {
 		return ssn;
 	}
@@ -267,8 +175,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the dlstate.
 	 * 
-	 * @hibernate.property type="string" length="2"
 	 */
+	@Column(length = 2)
 	public String getDlstate() {
 		return dlstate;
 	}
@@ -284,8 +192,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the driverslicense.
 	 * 
-	 * @hibernate.property type="string" length="10"
 	 */
+	@Column(length = 10)
 	public String getDriverslicense() {
 		return driverslicense;
 	}
@@ -301,8 +209,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the commonnum.
 	 * 
-	 * @hibernate.property type="string" length="20"
 	 */
+	@Column(length = 20)
 	public String getCommonnum() {
 		return commonnum;
 	}
@@ -318,8 +226,8 @@ public class Claim implements Serializable {
 	/**
 	 * @return Returns the countryofissue.
 	 * 
-	 * @hibernate.property type="string" length="3"
 	 */
+	@Column(length = 3)
 	public String getCountryofissue() {
 		return countryofissue;
 	}
@@ -334,8 +242,8 @@ public class Claim implements Serializable {
 	
 	/**
 	 * @return Returns the claimcurrency_ID.
-	 * @hibernate.property type="string" column="currency_ID"
 	 */
+	@Column(length = 3, name = "currency_ID")
 	public String getClaimcurrency_ID() {
 		return claimcurrency_ID;
 	}

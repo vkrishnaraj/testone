@@ -59,6 +59,8 @@
 	<target name="delete">
 		<delete file="${basedir}/src/custom_ui.properties" />
 		<delete file="${basedir}/src/report_email.html" />
+		<delete file="${basedir}/src/report_email_es.html" />
+		<delete file="${basedir}/src/report_email_fr.html" />
 		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_es.properties" />
 		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_fr.properties" />
@@ -76,7 +78,6 @@
 		<delete file="${basedir}/web/reports/DamageReceipt.jasper" />
 		<delete file="${basedir}/web/reports/MissingReceipt.jrxml" />
 		<delete file="${basedir}/web/reports/MissingReceipt.jasper" />
-
 	</target>
 	
 	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile-web">

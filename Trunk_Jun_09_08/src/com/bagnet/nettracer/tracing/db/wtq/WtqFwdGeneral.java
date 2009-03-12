@@ -17,6 +17,7 @@ public class WtqFwdGeneral extends WtqFwd {
 
 	private String lossComments;
 	private int lossCode;
+	private String from_station;
 
 
 
@@ -36,6 +37,15 @@ public class WtqFwdGeneral extends WtqFwd {
 	
 	public void setLossCode(int lossCode) {
 		this.lossCode = lossCode;
+	}
+
+	@Column(length = 5)
+	public String getFrom_station() {
+		return from_station;
+	}
+
+	public void setFrom_station(String from_station) {
+		this.from_station = from_station;
 	}
 
 }

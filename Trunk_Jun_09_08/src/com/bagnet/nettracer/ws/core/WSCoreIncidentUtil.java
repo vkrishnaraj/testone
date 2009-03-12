@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles;
-import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
@@ -529,7 +527,7 @@ public class WSCoreIncidentUtil {
 		String datetimestr = null;
 		
 		Date tmpDate = ws.getClosedate().getTime();
-		inc.setClosedate(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(tmpDate));
+		inc.setClosedate(tmpDate);
 		inc.setRecordlocator(ws.getRecordlocator());
 		inc.setTicketnumber(ws.getTicketnumber());
 		inc.setReportmethod(IncidentUtils.getReportMethod(ws.getReportmethod()));

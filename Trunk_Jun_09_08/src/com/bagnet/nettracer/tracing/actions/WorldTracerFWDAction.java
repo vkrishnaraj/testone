@@ -88,19 +88,16 @@ public class WorldTracerFWDAction extends Action {
 		// add to the loss codes
 		request.setAttribute("losscodes", codes);
 
-		OHD ohd_id = OHDUtils.getOHD(theform.getOhd_ID());
-		if (ohd_id != null) {
+		OHD ohd = OHDUtils.getOHD(theform.getOhd_ID());
+		if (ohd != null) {
 			theform.setWt_id("");
 			theform.setBagtag("");
 			theform.setPassenger1("");
 			theform.setPassenger2("");
 			theform.setPassenger3("");
-			OHD ohd = OHDUtils.getOHD(theform.getOhd_ID());
 			if (ohd.getWt_id() != null)
-
 				theform.setWt_id(ohd.getWt_id());
 			if (ohd.getClaimnum() != null)
-
 				theform.setBagtag(ohd.getClaimnum());
 			Set passengers = ohd.getPassengers();
 
@@ -123,7 +120,6 @@ public class WorldTracerFWDAction extends Action {
 				}
 				// }
 			}
-
 		}
 
 		if (theform == null || request.getParameter("clear") != null) {
@@ -140,8 +136,14 @@ public class WorldTracerFWDAction extends Action {
 				saveMessages(request, errors);
 			} else {
 				// Do the insert wt forward and wt_queue into database
-
-				if (this.InsertWtFwd(theform, user)) {
+				String from_station = null;
+				if(ohd != null && ohd.getHoldingStation().getWt_stationcode() != null && ohd.getHoldingStation().getWt_stationcode().trim().length() > 0) {
+					from_station = ohd.getHoldingStation().getWt_stationcode();
+				}
+				else if (user.getStation().getWt_stationcode() != null && user.getStation().getWt_stationcode().trim().length() > 0) {
+					from_station = user.getStation().getWt_stationcode();
+				}
+				if (this.InsertWtFwd(theform, user, from_station)) {
 					return (mapping.findForward(TracingConstants.FORWARD_WT_BAG_SUCCESS));
 				}
 				else {
@@ -189,7 +191,7 @@ public class WorldTracerFWDAction extends Action {
 	}
 
 	// Insert worldtracer forward to database
-	private boolean InsertWtFwd(WorldTracerFWDForm theform, Agent user) {
+	private boolean InsertWtFwd(WorldTracerFWDForm theform, Agent user, String from_station) {
 		WtqFwdGeneral fwd = new WtqFwdGeneral();
 		fwd.setAgent(user);
 		fwd.setCreatedate(TracerDateTime.getGMTDate());
@@ -197,6 +199,7 @@ public class WorldTracerFWDAction extends Action {
 		fwd.setSupInfo(theform.getSupplementary_information());
 		fwd.setFwdDestinationAirline(theform.getDestinationAirline());
 		fwd.setFwdDestinationStation(theform.getDestinationStation());
+		fwd.setFrom_station(from_station);
 		for(FwdFormSegment seg : theform.getItinerarylist()) {
 			WtqSegment wtqSeg = new WtqSegment();
 			wtqSeg.setAirline(seg.getAirline());

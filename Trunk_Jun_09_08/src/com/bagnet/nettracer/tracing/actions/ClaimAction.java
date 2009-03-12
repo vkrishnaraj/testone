@@ -40,7 +40,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class ClaimAction extends Action {
+public class ClaimAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(ClaimAction.class);
 	
@@ -58,10 +58,11 @@ public class ClaimAction extends Action {
 			return null;
 		}
 
-		// only check permission if it is not interim
-		if (request.getParameter("addnewinterim") == null) {
-			if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user))
-				return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION, user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
 		}
 
 		BagService bs = new BagService();
@@ -99,12 +100,16 @@ public class ClaimAction extends Action {
 			}
 		}
 
-		if (request.getParameter("getclaim") != null || request.getParameter("getclaimfa") != null) {
+		if (request.getParameter("getclaim") != null || request.getParameter("getclaimfa") != null || session.getAttribute("getclaimfa") != null) {
 
 			if (request.getParameter("getclaim") != null)
 				incident_id = cform.getIncident_ID();
 			if (request.getParameter("getclaimfa") != null)
 				incident_id = request.getParameter("incidentid");
+			if (request.getSession().getAttribute("getclaimfa") != null) {
+				incident_id = (String) session.getAttribute("incidentid");
+				request.getSession().removeAttribute("getclaimfa");
+			}
 
 			if (incident_id != null && incident_id.length() > 0) {
 				if (theform == null)
@@ -165,16 +170,6 @@ public class ClaimAction extends Action {
 			cform = TracerUtils.populateClaim(cform, theform, request);
 
 			int index = -1;
-			int expid = Integer.parseInt(request.getParameter("exp_id"));
-			if (expid != 0) {
-				// get expense
-				for (int i = 0; i < cform.getExpenselist().size(); i++) {
-					if (cform.getExpense(i).getExpensepayout_ID() == expid) {
-						ep = cform.getExpense(i);
-						index = i;
-					}
-				}
-			}
 
 			if (index == -1) {
 				// unable to find the payout
@@ -191,7 +186,6 @@ public class ClaimAction extends Action {
 
 			cform.setMod_claim_reason("");
 			cform.setMod_exp_reason("");
-			cform.setExpense(ep);
 			request.setAttribute("edit", "1");
 			if (index >= 0) {
 				request.setAttribute("index", Integer.toString(index));
@@ -215,89 +209,12 @@ public class ClaimAction extends Action {
 		if ((request.getParameter("modifyinterim")) != null)
 			request.setAttribute("editinterim", "1");
 
-		if (request.getParameter("modify") != null || request.getParameter("modifyinterim") != null) {
-			cform = TracerUtils.populateClaim(cform, theform, request);
-			int index = Integer.parseInt(request.getParameter("index"));
-			ep = cform.getExpense(index);
-			Status st = ep.getStatus();
-			if (st.getDescription() == null || st.getDescription().length() == 0)
-				ep.setStatus(StatusBMO.getStatus(st.getStatus_ID(), st.getLocale()));
-			if (ep.getExpensetype().getExpensetype_ID() == TracingConstants.EXPENSEPAYOUT_INTERIM) {
-				request.setAttribute("editinterim", "1");
-			}
-			cform.setMod_claim_reason("");
-			cform.setMod_exp_reason("");
-			request.setAttribute("edit", "1");
-			if (index >= 0) {
-				request.setAttribute("index", Integer.toString(index));
-			}
-			return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-		}
-
-		// create a new payout form
-		if (request.getParameter("addnew") != null) {
-			// create a new expense object;
-			ExpensePayout ex = cform.getExpense(-1);
-			Status st = new Status();
-			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-			ex.setStatus(st);
-			ex.setAgent(user);
-			ex.setStation(user.getStation());
-			cform.setCurrency_ID(user.getDefaultcurrency());
-			cform.setMod_claim_reason("");
-			cform.setMod_exp_reason("");
-			request.setAttribute("edit", "1");
-			return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-		}
-
-		if (request.getParameter("addnewinterim") != null) {
-
-			cform = TracerUtils.populateClaim(cform, theform, request);
-
-			// create a new expense object;
-			ExpensePayout ex = cform.getExpense(-1);
-			cform.setCurrency_ID(user.getDefaultcurrency());
-			cform.setMod_claim_reason("");
-			cform.setMod_exp_reason("");
-			ex.setExpenselocation(user.getStation());
-			ExpenseType et = new ExpenseType();
-			et.setExpensetype_ID(TracingConstants.EXPENSEPAYOUT_INTERIM);
-			et.setDescription("Interim");
-			ex.setExpensetype(et);
-			Status st = new Status();
-			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
-			ex.setStatus(st);
-			ex.setAgent(user);
-			ex.setStation(user.getStation());
-
-			request.setAttribute("edit", "1");
-			request.setAttribute("editinterim", "1");
-
-			return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-		}
-
-		// approve claim
-		boolean dosave = false;
-		if (request.getParameter("saveapproveinterim") != null) {
-			cform.setExpensestatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-			dosave = true;
-		}
-		if (request.getParameter("savedenyinterim") != null) {
-			cform.setExpensestatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_DENIED);
-			dosave = true;
-		}
-		if (dosave) {
-			bs.saveExpense(cform, user, true);
-			bs.findClaimByID(cform.getClaim_ID(), cform, theform);
-			cform = TracerUtils.populateClaim(cform, theform, request);
-			return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-		}
 
 		// save claim amount
 		if (request.getParameter("saveclaim") != null) {
 			Claim cDTO = new Claim();
-			cform.setExpense(null);
-			if (bs.insertClaim(cDTO, cform, session, false)) {
+
+			if (bs.insertClaim(cDTO, cform, session, false, theform.getIncident_ID())) {
 				theform.setClaim(cDTO);
 				cform.setClaim_ID(cDTO.getClaim_ID());
 				request.setAttribute("success", "1");
@@ -312,14 +229,10 @@ public class ClaimAction extends Action {
 		// save claim expense payout
 		boolean savedclaim = false;
 		if (request.getParameter("save") != null) {
-			if (cform.getClaim_ID() <= 0 || cform.getExpense().getClaim() == null) {
-				Claim cDTO = new Claim();
-				if (bs.insertClaim(cDTO, cform, session, false))
-					savedclaim = true;
-			} else {
-				if (bs.saveExpense(cform, user, true))
-					savedclaim = true;
-			}
+			Claim cDTO = new Claim();
+			if (bs.insertClaim(cDTO, cform, session, false, theform.getIncident_ID()))
+				savedclaim = true;
+
 			
 			if (savedclaim) {
 				bs.findClaimByID(cform.getClaim_ID(), cform, theform);
@@ -335,13 +248,8 @@ public class ClaimAction extends Action {
 		if (request.getParameter("saveinterim") != null) {
 			
 			Claim cDTO = new Claim();
-			if (cform.getClaim_ID() <= 0 || cform.getExpense().getClaim() == null) {
-				if (bs.insertClaim(cDTO, cform, session, true))
-					savedclaim = true;
-			} else {
-				if (bs.saveExpense(cform, user, false))
-					savedclaim = true;
-			}
+			if (bs.insertClaim(cDTO, cform, session, true, theform.getIncident_ID()))
+				savedclaim = true;
 
 			if (savedclaim) {
 				bs.findClaimByID(cDTO.getClaim_ID(), cform, theform);

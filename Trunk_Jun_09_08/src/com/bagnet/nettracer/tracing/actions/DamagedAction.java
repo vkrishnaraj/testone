@@ -64,7 +64,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class DamagedAction extends Action {
+public class DamagedAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -81,6 +81,10 @@ public class DamagedAction extends Action {
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
 
 		ActionMessages errors = new ActionMessages();
 

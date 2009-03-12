@@ -113,6 +113,7 @@ public class Lz implements Serializable {
 		return isUsed;
 	}
 	
+	@Override
 	public boolean equals (Object a) {
 		
 		if (!(a instanceof Lz))
@@ -124,6 +125,7 @@ public class Lz implements Serializable {
 		return false;
 	}
 	
+	@Override
 	public int hashCode() {
 		return this.lz_id;
 	}

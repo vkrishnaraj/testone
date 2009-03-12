@@ -1256,7 +1256,7 @@ public class AdminUtils {
 							sql.append(" order by agent.username asc ");
 						} else {
 							if (sort.equalsIgnoreCase("group")) {
-								sql.append(" order by agent..description asc ");
+								sql.append(" order by ug.description asc ");
 							} else {
 								if (sort.equalsIgnoreCase("station")) {
 									sql.append(" order by agent.station.stationcode asc ");

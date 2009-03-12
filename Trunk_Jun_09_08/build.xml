@@ -140,6 +140,9 @@
 			<fileset dir="src">
 				<include name="com/bagnet/nettracer/tracing/db/*.java" />
 				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
 			</fileset>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
 		</hibernatedoclet>
@@ -517,53 +520,33 @@
 	
 
 	<target name="build-jetblue-dev" depends="delete">
-		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/prod/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/dev/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/dev/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email.html" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6dev" />
 		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="dev"/>
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 	
 	<target name="build-jetblue-qa" depends="delete">
-		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/qa/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/report_email.html" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/qa/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6qa" />
 		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="qa"/>
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 
 	<target name="build-jetblue-training" depends="delete">
-		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/training/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/report_email.html" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/training/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6training" />
+		<property name="environment.name" value="training"/>
 		<property name="jetblue.init.complete" value="true" />
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 
 	<target name="build-jetblue-prod" depends="delete">
-		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/prod/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email.html" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/prod/report_email_es.html" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6prod" />
+		<property name="environment.name" value="prod"/>
 		<property name="jetblue.init.complete" value="true" />
 		<antcall target="donotrun-build-jetblue" />
 	</target>
@@ -571,6 +554,11 @@
 
 	<target name="donotrun-build-jetblue" if="jetblue.init.complete">
 		<property name="include.b6" value="1" />
+		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/jetblue/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/report_email_es.html" />
 		<antcall target="jetblue-libraries-create" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/DamageReceipt.jrxml" />
@@ -580,9 +568,16 @@
 		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
 		
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
-			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
-			<param name="overrideResource" value="${basedir}/companies/jetblue/ApplicationResources.properties" />
-			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/jetblue/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/jetblue/tracer.properties" />
+			<property name="tertiaryResource" value="${basedir}/companies/jetblue/environment/${environment.name}/tracer.properties"/>
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 		
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/jetblue/ApplicationResources_es.properties" />

@@ -39,7 +39,8 @@ public class TracerProperties {
 	public static final String PROPERTY_REPORT_MAX_ROWS = "reports.max.rows";
 	public static final String FRENCH_STATIONS = "french.stations";
 	public static final String SAVE_ON_CLOSE_PAGE = "display.closepage.save.while.open";
-	
+	public static final String RESERVATION_UPDATE_EXPENSES_ON = "updatecomment.expenses.is_on";
+
 	static {
 		try {
 			properties.load(HibernateWrapper.class

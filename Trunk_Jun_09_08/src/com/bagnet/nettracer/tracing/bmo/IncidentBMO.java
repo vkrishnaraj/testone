@@ -5,16 +5,22 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -32,6 +38,8 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.ClaimProrate;
+import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
@@ -43,11 +51,16 @@ import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
+import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
+import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
@@ -58,6 +71,7 @@ import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
@@ -1397,16 +1411,15 @@ public class IncidentBMO {
 	 */
 	public Incident clearIncidentIds(Incident inc) {
 		if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
-			for (Iterator i = inc.getPassengers().iterator(); i.hasNext();) {
-				Passenger o = (Passenger) i.next();
+			for (Passenger o : inc.getPassengers()) {
 				o.setPassenger_ID(0);
 				if (o.getMembership() != null) {
 					o.getMembership().setMembership_ID(0);
 				}
 
 				if (o.getAddresses() != null && o.getAddresses().size() > 0) {
-					for (Iterator j = o.getAddresses().iterator(); j.hasNext();) {
-						Address o2 = (Address) j.next();
+					for (Iterator<Address> j = o.getAddresses().iterator(); j.hasNext();) {
+						Address o2 = j.next();
 						o2.setAddress_ID(0);
 					}
 				}
@@ -1414,33 +1427,30 @@ public class IncidentBMO {
 		}
 
 		if (inc.getItinerary() != null && inc.getItinerary().size() > 0) {
-			for (Iterator i = inc.getItinerary().iterator(); i.hasNext();) {
-				Itinerary o = (Itinerary) i.next();
+			for (Itinerary o : inc.getItinerary()) {
 				o.setItinerary_ID(0);
 			}
 		}
 
 		if (inc.getClaimchecks() != null && inc.getClaimchecks().size() > 0) {
-			for (Iterator i = inc.getClaimchecks().iterator(); i.hasNext();) {
-				Incident_Claimcheck o = (Incident_Claimcheck) i.next();
-				o.setClaimcheck_ID(0);
+			for (Incident_Claimcheck cc : inc.getClaimchecks()) {
+				cc.setClaimcheck_ID(0);
 			}
 		}
 
 		if (inc.getItemlist() != null && inc.getItemlist().size() > 0) {
-			for (Iterator i = inc.getItemlist().iterator(); i.hasNext();) {
-				Item o = (Item) i.next();
-				o.setItem_ID(0);
+			for (Item item : inc.getItemlist()) {
+				item.setItem_ID(0);
 
-				if (o.getInventory() != null && o.getInventory().size() > 0) {
-					for (Iterator j = o.getInventory().iterator(); j.hasNext();) {
+				if (item.getInventory() != null && item.getInventory().size() > 0) {
+					for (Iterator j = item.getInventory().iterator(); j.hasNext();) {
 						Item_Inventory o2 = (Item_Inventory) j.next();
 						o2.setInventory_ID(0);
 					}
 				}
 
-				if (o.getPhotoes() != null && o.getPhotoes().size() > 0) {
-					for (Iterator j = o.getPhotoes().iterator(); j.hasNext();) {
+				if (item.getPhotoes() != null && item.getPhotoes().size() > 0) {
+					for (Iterator j = item.getPhotoes().iterator(); j.hasNext();) {
 						Item_Photo o2 = (Item_Photo) j.next();
 						o2.setPhoto_ID(0);
 					}
@@ -1450,30 +1460,20 @@ public class IncidentBMO {
 		}
 
 		if (inc.getArticles() != null && inc.getArticles().size() > 0) {
-			for (Iterator i = inc.getArticles().iterator(); i.hasNext();) {
-				Articles o = (Articles) i.next();
-				o.setArticles_ID(0);
+			for (Articles a : inc.getArticles()) {
+				a.setArticles_ID(0);
 			}
 		}
 
 		if (inc.getRemarks() != null && inc.getRemarks().size() > 0) {
-			for (Iterator i = inc.getRemarks().iterator(); i.hasNext();) {
-				Remark o = (Remark) i.next();
-				o.setRemark_ID(0);
+			for (Remark remark : inc.getRemarks()) {
+				remark.setRemark_ID(0);
 			}
 		}
 		
-		if (inc.getClaims() != null && inc.getClaims().size() > 0) {
-			for (Iterator i = inc.getClaims().iterator(); i.hasNext();) {
-				Claim o = (Claim) i.next();
-				o.setClaim_ID(0);
-				
-				if (o.getExpenses() != null && o.getExpenses().size() > 0) {
-					for (Iterator j = o.getExpenses().iterator(); j.hasNext();) {
-						ExpensePayout m = (ExpensePayout) j.next();
-						m.setExpensepayout_ID(0);
-					}
-				}
+		if (inc.getExpenses() != null ) {
+			for(ExpensePayout ep  : inc.getExpenses()) {
+				ep.setExpensepayout_ID(0);
 			}
 		}
 
@@ -1567,5 +1567,109 @@ public class IncidentBMO {
 				}
 			}
 		}
+	}
+
+	public ActionMessage saveExpense(ExpensePayout ep, String incident_ID, Agent agent) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		Transaction tx = sess.beginTransaction();
+		try {
+			Incident inc = (Incident) sess.get(Incident.class, incident_ID);
+			if (inc == null) {
+				return new ActionMessage("invalid.claim.info");
+			}
+			
+			ep.setIncident(inc);
+			inc.getExpenses().add(ep);
+			if(inc.getClaim() == null) {
+				Claim c = new Claim();
+				c.setIncident(inc);
+				c.setClaimcurrency_ID(inc.getAgent().getDefaultcurrency());
+				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
+				Status st = new Status();
+				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+				c.setStatus(st);
+				inc.setClaim(c);
+				sess.save(c);
+			}
+			sess.save(ep);
+			sess.update(inc);
+			tx.commit();
+			Transaction tx2 = sess.beginTransaction();
+			try {
+				auditClaim(inc.getClaim(), TracerUtils.getResourcePropertyText("claim.created.with.expense", agent), agent, sess);
+				tx2.commit();
+			} catch (Exception e) {
+				tx2.rollback();
+				logger.error("unable to audit claim entry");
+			}
+			
+			
+		} catch (Exception e) {
+			logger.error("unable to save new expense to a claim", e);
+			if(tx != null) {	
+				try {
+					tx.rollback();
+				} catch (Exception e1) {
+					logger.debug("error rolling back transaction in saveExpense", e1);
+				}
+			}
+			return new ActionMessage("database.error");
+		} 
+		finally {
+			if (sess != null)
+				sess.close();
+		}
+		return null;
+	}
+
+	public static void auditClaim(Claim claim, String reasonForAudit, Agent user, Session sess) throws Exception {
+		Audit_Claim ac = new Audit_Claim();
+		ac.setExpenses(new HashSet());
+		
+		ClaimProrate cp = claim.getClaimprorate();
+		if(cp != null) {
+			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
+			BeanUtils.copyProperties(a_cp, cp);
+			Prorate_Itinerary pi = null;
+			Audit_Prorate_Itinerary a_pi = null;
+			ArrayList pilist = new ArrayList();
+			if(cp.getProrate_itineraries() != null) {
+				for(int i = 0; i < cp.getPi_list().size(); i++) {
+					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
+					a_pi = new Audit_Prorate_Itinerary();
+					BeanUtils.copyProperties(a_pi, pi);
+					pi.setClaimprorate(cp);
+					a_pi.setAudit_claimprorate(a_cp);
+					pilist.add(a_pi);
+				}
+				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
+			}
+			ac.setAudit_claimprorate(a_cp);
+		}
+
+		ac.setModify_time(TracerDateTime.getGMTDate());
+		ac.setModify_agent(user);
+		ac.setModify_reason(reasonForAudit);
+		ac.setClaim_ID(claim.getClaim_ID());
+		ac.setIncident(claim.getIncident());
+		Status st = new Status();
+		st.setStatus_ID(claim.getStatus().getStatus_ID());
+		ac.setStatus(st);
+		
+		Incident inc = claim.getIncident();
+		
+		for(ExpensePayout ep : inc.getExpenses()) {
+			Audit_ExpensePayout aep = new Audit_ExpensePayout();
+			BeanUtils.copyProperties(aep, ep);
+			String temp = "";
+			SimpleDateFormat sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
+			for(Comment comment : ep.getComments()) {
+				temp += String.format("\r\n%s %s %s", comment.getAgent().getUsername(), sdf.format(comment.getCreateDate()), comment.getContent());
+			}
+			aep.setAuditComments(temp);
+			ac.getExpenses().add(aep);
+			aep.setAudit_claim(ac);
+		}
+		sess.save(ac);
 	}
 }

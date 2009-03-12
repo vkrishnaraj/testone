@@ -867,7 +867,7 @@ public class ReportBMO {
 			// mbr report type
 			String mbrtypeq = "";
 			if (srDTO.getItemType_ID() >= 1) {
-				mbrtypeq = " and exp.claim.incident.itemtype.itemType_ID = :itemType_ID ";
+				mbrtypeq = " and exp.incident.itemtype.itemType_ID = :itemType_ID ";
 			}
 			String stationq = "";
 			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
@@ -881,12 +881,12 @@ public class ReportBMO {
 			}
 			String losscodeq = "";
 			if (srDTO.getLoss_code() > 0) {
-				losscodeq = " and exp.claim.incident.loss_code = :loss_code";
+				losscodeq = " and exp.incident.loss_code = :loss_code";
 			}
 
 			String statusq = "";
 			if (srDTO.getStatus_ID() >= 1) {
-				statusq = " and exp.claim.incident.status.status_ID= :status_ID ";
+				statusq = " and exp.incident.status.status_ID= :status_ID ";
 			}
 
 			String agentq = "";
@@ -894,7 +894,7 @@ public class ReportBMO {
 				agentq = " and exp.agent.username like :agent_username ";
 			}
 
-			String companylimit = " and exp.claim.incident.stationassigned.company.companyCode_ID = :companyCode_ID ";
+			String companylimit = " and exp.incident.stationassigned.company.companyCode_ID = :companyCode_ID ";
 			
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
@@ -914,24 +914,24 @@ public class ReportBMO {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
 					// need to add the timezone diff here
-					dateq = " and ((exp.claim.incident.createdate= :startdate and exp.claim.incident.createtime >= :starttime) "
-							+ " or (exp.claim.incident.createdate= :startdate1 and exp.claim.incident.createtime <= :starttime))";
+					dateq = " and ((exp.incident.createdate= :startdate and exp.incident.createtime >= :starttime) "
+							+ " or (exp.incident.createdate= :startdate1 and exp.incident.createtime <= :starttime))";
 
 					edate = null;
 				} else {
 
 					// first get the beginning and end dates using date and time, then get
 					// dates in between
-					dateq = " and ((exp.claim.incident.createdate= :startdate and exp.claim.incident.createtime >= :starttime) "
-							+ " or (exp.claim.incident.createdate= :enddate1 and exp.claim.incident.createtime <= :starttime)"
-							+ " or (exp.claim.incident.createdate > :startdate and exp.claim.incident.createdate <= :enddate))";
+					dateq = " and ((exp.incident.createdate= :startdate and exp.incident.createtime >= :starttime) "
+							+ " or (exp.incident.createdate= :enddate1 and exp.incident.createtime <= :starttime)"
+							+ " or (exp.incident.createdate > :startdate and exp.incident.createdate <= :enddate))";
 
 					parameters.put("edate", srDTO.getEndtime());
 				}
 			} else if (sdate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
-				dateq = " and ((exp.claim.incident.createdate= :startdate and exp.claim.incident.createtime >= :starttime) "
-						+ " or (exp.claim.incident.createdate= :startdate1 and exp.claim.incident.createtime <= :starttime))";
+				dateq = " and ((exp.incident.createdate= :startdate and exp.incident.createtime >= :starttime) "
+						+ " or (exp.incident.createdate= :startdate1 and exp.incident.createtime <= :starttime))";
 				edate = null;
 			}
 
@@ -971,13 +971,13 @@ public class ReportBMO {
 
 			String addspart = "";
 			if (srDTO.getStatus_ID() >= 1) {
-				addspart = "exp.claim.incident.status.description,";
+				addspart = "exp.incident.status.description,";
 			}
 			String sql = "SELECT sum(exp.checkamt), exp.currency_ID, sum(exp.voucheramt), sum(exp.mileageamt),"
 					+ " exp.expensetype.description, exp.expenselocation.station_ID,exp.expenselocation.stationcode,exp.draftpaiddate,"
 					+ addspart
-					+ " fault.station_ID,fault.stationcode, exp.claim.incident.loss_code,exp.agent.username "
-					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.claim.incident.faultstation fault where 1=1 "
+					+ " fault.station_ID,fault.stationcode, exp.incident.loss_code,exp.agent.username "
+					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.incident.faultstation fault where 1=1 "
 					+ mbrtypeq
 					+ stationq
 					+ faultq
@@ -988,7 +988,7 @@ public class ReportBMO {
 					+ typeq
 					+ companylimit
 					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.expensetype.description,exp.draftpaiddate, "
-					+ addspart + " exp.currency_ID, exp.claim.incident.loss_code,exp.agent.username "
+					+ addspart + " exp.currency_ID, exp.incident.loss_code,exp.agent.username "
 					+ " order by exp.expenselocation.stationcode,exp.expensetype.description";
 			Query q = sess.createQuery(sql);
 			if (srDTO.getItemType_ID() >= 1)

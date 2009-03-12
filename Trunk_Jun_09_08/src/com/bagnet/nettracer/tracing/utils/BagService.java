@@ -36,7 +36,6 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -93,8 +92,6 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * @author Matt
@@ -459,10 +456,8 @@ public class BagService {
 
 			// closedate
 			if(theform.getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
-				if(iDTO.getClosedate() == null || iDTO.getClosedate().length() == 0
-						|| iDTO.getClosedate().equals("0000-00-00 00:00:00")) {
-					iDTO.setClosedate(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime
-							.getGMTDate()));
+				if(iDTO.getClosedate() == null) {
+					iDTO.setClosedate(TracerDateTime.getGMTDate());
 					changedStatus = true;
 				}
 
@@ -991,29 +986,6 @@ public class BagService {
 			if (!UserPermissions.hasIncidentSavePermission(user, iDTO)) {
 				theform.setReadonly(1);
 				theform.setAllow_remark_update(1);
-			}
-
-			Claim claim = null;
-			if((claim = theform.getClaim(0)) != null) {
-				if(claim.getExpenses() != null)
-					theform.setExpenselist(new ArrayList(claim.getExpenses()));
-
-				ExpensePayout ep = null;
-				for(int i = 0; i < theform.getExpenselist().size(); i++) {
-					ep = (ExpensePayout) theform.getExpenselist().get(i);
-					if(ep.getStatus() == null) {
-						Status st = new Status();
-						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-						ep.setStatus(st);
-					}
-					if(ep.getAgent() == null)
-						ep.setAgent(iDTO.getAgent());
-					if(ep.getStation() == null)
-						ep.setStation(iDTO.getStationcreated());
-
-					ep.set_DATEFORMAT(user.getDateformat().getFormat());
-					ep.set_TIMEFORMAT(user.getTimeformat().getFormat());
-				}
 			}
 
 			// get associating reports
@@ -1717,99 +1689,19 @@ public class BagService {
 	 * 
 	 *         create date - Aug 3, 2004
 	 */
-	public boolean insertClaim(Claim cDTO, ClaimForm cform, HttpSession session, boolean isinterim) {
+	public boolean insertClaim(Claim cDTO, ClaimForm cform, HttpSession session, boolean isinterim, String incident_ID) {
 		try {
 			Agent user = (Agent) session.getAttribute("user");
 			ClaimBMO cBMO = new ClaimBMO(); // init claim pojo or ejb
 			Audit_Claim acDTO = null;
 			Audit_ExpensePayout aeDTO = null;
 
-			/** **** update expense list ***** */
-			if(cform.getExpense() != null) {
-				cform.getExpense().setClaim(cDTO);
-
-				// set the expense location and type;
-				if(!isinterim) {
-					Station el = new Station();
-					el.setStation_ID(cform.getExpenselocation_ID());
-					ExpenseType et = new ExpenseType();
-					et.setExpensetype_ID(cform.getExpensetype_ID());
-					cform.getExpense().setExpenselocation(el);
-					cform.getExpense().setExpensetype(et);
-					cform.getExpense().setApproval_date(
-							new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT)
-									.format(TracerDateTime.getGMTDate()));
-				}
-
-				// add expense payout filled out by the agent to the list
-				// if this is an edit, dont' add to the list,
-				if(cform.getExpense().getExpensepayout_ID() <= 0) {
-					cform.getExpenselist().add(cform.getExpense());
-				}
-
-				// if interim, check to see if it is above the minimum
-				if(isinterim) {
-					if((user.getStation().getCompany().getVariable().getMin_interim_approval_check() <= -1.0 || cform
-							.getExpense().getCheckamt() <= user.getStation().getCompany().getVariable()
-							.getMin_interim_approval_check())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_voucher() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_incidental() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_cc_refund() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform
-									.getExpense().getMileageamt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_miles())) {
-						// don't need approval
-						Status st = new Status();
-						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-						cform.getExpense().setStatus(st);
-						cform.getExpense().setApproval_date(
-								new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime
-										.getGMTDate()));
-					}
-					else {
-						cform.getExpense().setApproval_date(null);
-					}
-				}
-
-			}
 			/** ******* update claim amount for main claim ******** */
 			BeanUtils.copyProperties(cDTO, cform);
-
-			cDTO.setExpenses(new LinkedHashSet(cform.getExpenselist()));
 
 			// AUDIT: copy into audit claim bean
 			acDTO = new Audit_Claim();
 			BeanUtils.copyProperties(acDTO, cform);
-
-			ExpensePayout ep = null;
-			Audit_ExpensePayout a_ep = null;
-			ArrayList eplist = new ArrayList();
-			if(cform.getExpenselist() != null) {
-				for(int i = 0; i < cform.getExpenselist().size(); i++) {
-					ep = (ExpensePayout) cform.getExpenselist().get(i);
-					ep.setClaim(cDTO);
-
-					a_ep = new Audit_ExpensePayout();
-					a_ep.setAudit_claim(acDTO);
-
-					BeanUtils.copyProperties(a_ep, ep);
-					if(cform.getExpense() != null
-							&& ep.getExpensepayout_ID() == cform.getExpense().getExpensepayout_ID()) {
-						// retrieve modify reason cause this expensepayout was
-						// modified just
-						// now
-						a_ep.setModify_reason(cform.getMod_exp_reason());
-					}
-					eplist.add(a_ep);
-				}
-				acDTO.setExpenses(new LinkedHashSet(eplist));
-			}
 
 			// AUDIT: copy prorate into audit claim bean
 			ClaimProrate cp = cDTO.getClaimprorate();
@@ -1837,7 +1729,7 @@ public class BagService {
 			acDTO.setModify_agent(user);
 			acDTO.setModify_reason(cform.getMod_claim_reason());
 
-			boolean result = cBMO.insertClaim(cDTO, acDTO);
+			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
 			cform.setClaim_ID(cDTO.getClaim_ID());
 			if(!result)
 				return false;
@@ -1866,7 +1758,7 @@ public class BagService {
 		}
 	}
 
-	public boolean insertClaimProrate(Claim cDTO, ClaimProrateForm cpform, HttpSession session) {
+	public boolean insertClaimProrate(Claim cDTO, ClaimProrateForm cpform, HttpSession session, String incident_ID) {
 		try {
 			Agent user = (Agent) session.getAttribute("user");
 			ClaimBMO cBMO = new ClaimBMO(); // init claim pojo or ejb
@@ -1874,9 +1766,9 @@ public class BagService {
 			ClaimProrate cp = new ClaimProrate();
 			BeanUtils.copyProperties(cp, cpform);
 			cp.setProrate_itineraries(new LinkedHashSet(cpform.getItinerarylist()));
-			if(theform.getClaim(0) != null) {
+			if(theform.getClaim() != null) {
 				// has claim object already, attach prorate to it
-				Claim tempC = (Claim) theform.getClaim(0);
+				Claim tempC = (Claim) theform.getClaim();
 				BeanUtils.copyProperties(cDTO, tempC);
 			}
 			cDTO.setClaimprorate(cp);
@@ -1904,25 +1796,10 @@ public class BagService {
 
 			acDTO.setAudit_claimprorate(a_cp);
 
-			// need to set expense to audit_expense as well
-			ExpensePayout ep = null;
-			Audit_ExpensePayout a_ep = null;
-			ArrayList eplist = new ArrayList();
-			if(cDTO.getExpenses() != null) {
-				ArrayList expenses = new ArrayList(cDTO.getExpenses());
-				for(int i = 0; i < expenses.size(); i++) {
-					ep = (ExpensePayout) expenses.get(i);
-					a_ep = new Audit_ExpensePayout();
-					BeanUtils.copyProperties(a_ep, ep);
-					eplist.add(a_ep);
-				}
-				acDTO.setExpenses(new LinkedHashSet(eplist));
-			}
-
 			acDTO.setModify_time(TracerDateTime.getGMTDate());
 			acDTO.setModify_agent(user);
 
-			boolean result = cBMO.insertClaim(cDTO, acDTO);
+			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
 			if(!result)
 				return false;
 			else
@@ -1969,114 +1846,5 @@ public class BagService {
 		return true;
 	}
 
-	public boolean saveExpense(ClaimForm cform, Agent user, boolean is_approveInterim) {
-		try {
-			ClaimBMO cBMO = new ClaimBMO();
-			ExpensePayout payout = cform.getExpense();
-			Audit_ExpensePayout a_ep = new Audit_ExpensePayout();
-
-			if(is_approveInterim) {
-				payout.setApproval_date(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime
-						.getGMTDate()));
-			}
-			else {
-				// for interim if below limit, approve automatically
-				if(payout.getExpensetype().getExpensetype_ID() == TracingConstants.EXPENSEPAYOUT_INTERIM) {
-
-					if((user.getStation().getCompany().getVariable().getMin_interim_approval_check() <= -1.0 || cform
-							.getExpense().getCheckamt() <= user.getStation().getCompany().getVariable()
-							.getMin_interim_approval_check())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_voucher() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_incidental() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_cc_refund() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-							&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform
-									.getExpense().getMileageamt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_miles())) {
-						// don't need approval
-						Status st = new Status();
-						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-						payout.setStatus(st);
-						payout.setApproval_date(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT)
-								.format(TracerDateTime.getGMTDate()));
-					}
-					else { // need approval, set to pending
-						Status st = new Status();
-						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
-						payout.setStatus(st);
-						payout.setApproval_date(null);
-					}
-
-				}
-				else { // if not interim, approve automatically
-					Status st = new Status();
-					st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-					payout.setStatus(st);
-					payout.setApproval_date(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT)
-							.format(TracerDateTime.getGMTDate()));
-				}
-
-			}
-
-			BeanUtils.copyProperties(a_ep, payout);
-			a_ep.setModify_reason(cform.getMod_exp_reason());
-
-			String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
-					TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
-							user.getDefaulttimezone()).getTimezone()));
-
-			boolean result = cBMO.saveExpense(payout, a_ep);
-			if (result && SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
-				if (is_approveInterim) {
-					if (payout.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_DENIED) {
-						// deny
-						SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_DENIED_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
-					} else {
-						// approve
-						SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_APPROVED_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
-					}
-				}
-				else {
-					if(payout.getExpensetype().getExpensetype_ID() == TracingConstants.EXPENSEPAYOUT_INTERIM) {
-						if((user.getStation().getCompany().getVariable().getMin_interim_approval_check() <= -1.0 || cform
-								.getExpense().getCheckamt() <= user.getStation().getCompany().getVariable()
-								.getMin_interim_approval_check())
-								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_voucher() <= -1.0 || cform
-										.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-										.getMin_interim_approval_voucher())
-								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_incidental() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_cc_refund() <= -1.0 || cform
-									.getExpense().getVoucheramt() <= user.getStation().getCompany().getVariable()
-									.getMin_interim_approval_voucher())
-								&& (user.getStation().getCompany().getVariable().getMin_interim_approval_miles() <= -1.0 || cform
-										.getExpense().getMileageamt() <= user.getStation().getCompany().getVariable()
-										.getMin_interim_approval_miles())) {
-							// under limit, auto approve
-							SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_CREATE_INTERIM_UNDERLIMIT + formateddatetime,cform.getIncident().getRecordlocator());
-						} else {
-							// over limit, pending
-							SpringUtils.getReservationIntegration().writeCommentToPNR(TracingConstants.CMT_CREATE_INTERIM + formateddatetime,cform.getIncident().getRecordlocator());
-						}
-
-					}
-				}
-
-			}
-
-			return result;
-		}
-		catch (Exception e) {
-			logger.error("unable to insert expensepayout due to bean copyproperties error: " + e);
-			e.printStackTrace();
-			return false;
-		}
-	}
 
 }

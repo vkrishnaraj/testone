@@ -31,9 +31,9 @@ public class HibernateResultDS implements JRDataSource {
 	public Object getFieldValue(JRField field) throws JRException {
 		Object value = null;
 		try {
-			Method fld = currentValue.getClass().getMethod("get" + field.getName(), null);
+			Method fld = currentValue.getClass().getMethod("get" + field.getName(), (Class<Object>)null);
 			//System.out.println(fld.getName());
-			value = fld.invoke(currentValue, null);
+			value = fld.invoke(currentValue, (Object)null);
 			//System.out.println(value);
 		} catch (IllegalAccessException iae) {
 			iae.printStackTrace();

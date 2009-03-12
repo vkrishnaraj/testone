@@ -56,7 +56,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Agent_Logger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Passenger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Address.hbm.xml"/>
-		<mapping resource="com/bagnet/nettracer/tracing/db/Incident.hbm.xml"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Incident"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Station.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Resolution.hbm.xml"/>
@@ -83,8 +83,8 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Assoc.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
-		<mapping resource="com/bagnet/nettracer/tracing/db/Claim.hbm.xml"/>
-		<mapping resource="com/bagnet/nettracer/tracing/db/ExpensePayout.hbm.xml"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Claim"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.ExpensePayout"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
 
 		<mapping resource="com/bagnet/nettracer/tracing/db/LogEvent.hbm.xml"/>
@@ -125,6 +125,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Lz.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Rule.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Property.hbm.xml"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Comment"/>
 		
 		<!-- WorldTracer Stuff -->
 		<mapping resource="com/bagnet/nettracer/tracing/db/Worldtracer_Actionfiles.hbm.xml"/>

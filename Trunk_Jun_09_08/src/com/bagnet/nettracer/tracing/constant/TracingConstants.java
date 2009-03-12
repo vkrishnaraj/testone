@@ -73,6 +73,10 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION = "Claim Resolution";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_PRORATE = "Claim Prorate";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT = "Claim Settlement";
+	public final static String SYSTEM_COMPONENT_NAME_CREATE_EXPENSE = "Create Expense";
+	public final static String SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE = "Approve Expense";
+	public final static String SYSTEM_COMPONENT_NAME_APPROVED_EXPENSES = "Approved Payments";
+	public final static String SYSTEM_COMPONENT_NAME_PAY_EXPENSE = "Pay Expense";
 	public final static String SYSTEM_COMPONENT_NAME_CBRO_VIEW = "CBRO View";
 	public final static String SYSTEM_COMPONENT_NAME_CBRO_MGMT = "CBRO Management";
 	public final static String SYSTEM_COMPONENT_NAME_BY_PASSENGER_BOARDINGS = "By Passenger Boardings";
@@ -115,6 +119,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_LOG = "WorldTracer Log";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_AUTO_AMEND = "WorldTracer Auto Amend";
 	public static final String SYSTEM_COMPONENT_NAME_WORLD_TRACER_REQ_QOH = "WorldTracer Request QOH";
+	
 
 	public final static String SYSTEM_COMPONENT_NAME_BDO = "Baggage Delivery Order";
 
@@ -669,6 +674,7 @@ public class TracingConstants {
 	public static final String WT_PENDING_REINSTATE = "WT_PENDING_REINSTATE";
 	public static final String WT_PENDING_CLOSE = "WT_PENDING_CLOSE";
 	public static final Object WT_PENDING_FOH = "WT_PENDING_FOH";
+	public static final String INVALID_TOKEN = "invalidtoken";
 
 
 

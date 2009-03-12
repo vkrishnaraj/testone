@@ -406,7 +406,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			}
 			else if(queue instanceof WtqFwdGeneral) {
 				try {
-					String result = wtService.sendFwdMsg((WtqFwdGeneral) queue);
+					String result = wtService.sendFwdMsg((WtqFwdGeneral) queue, defaultWtAgent);
 				}
 				catch (WorldTracerException ex) {
 					// TODO

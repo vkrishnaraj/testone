@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -15,6 +16,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm;
+import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
 
 /**
@@ -89,9 +91,9 @@ public class ExpenseUtils {
 
 			//check if incident id is enterd.
 			if (form != null && form.getIncident_num() != null && form.getIncident_num().length() > 0) {
-				sql += " and expense.claim.incident.incident_ID like '" + form.getIncident_num() + "'";
+				sql += " and expense.incident.incident_ID like '" + form.getIncident_num() + "'";
 			}
-			if (!count) sql += " order by expense.claim.incident.incident_ID asc ";
+			if (!count) sql += " order by expense.incident.incident_ID asc ";
 
 			Query q = sess.createQuery(sql);
 			if (rowsperpage > 0) {
@@ -148,10 +150,10 @@ public class ExpenseUtils {
 
 			//check if incident id is enterd.
 			if (form != null && form.getIncident_num() != null && form.getIncident_num().length() > 0) {
-				sql += " and expense.claim.incident.incident_ID like '" + form.getIncident_num() + "'";
+				sql += " and expense.incident.incident_ID like '" + form.getIncident_num() + "'";
 			}
 
-			if (!count) sql += " order by expense.claim.incident.incident_ID asc ";
+			if (!count) sql += " order by expense.incident.incident_ID asc ";
 
 			Query q = sess.createQuery(sql);
 			if (rowsperpage > 0) {

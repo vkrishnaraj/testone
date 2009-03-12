@@ -67,7 +67,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
-public class LostDelayAction extends Action {
+public class LostDelayAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -87,6 +87,15 @@ public class LostDelayAction extends Action {
 		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if (!(request.getParameter("changeassignedstation") != null
+				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
+				.getStationassigned_ID() > 0)
+				&& !(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1"))) {
+			if (!manageToken(request)) {
+				return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+			}
+		}
 
 		BagService bs = new BagService();
 		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();

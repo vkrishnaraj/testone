@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
@@ -129,7 +130,7 @@
                   </td>
                   <logic:notEqual name="incidentForm" property="readonly" value="1">
                     <td>
-                      <a href="claim_resolution.do?modifyinterim=1&index=<%= i %>"><bean:message key="colname.modify" /></a>
+                      <a href="EditExpense.do?expense_id=<bean:write name='expenselist' property='expensepayout_ID'/>"><bean:message key="colname.modify" /></a>
                     </td>
                   </logic:notEqual>
                 </tr>
@@ -161,7 +162,8 @@
                   <logic:notEqual name="incidentForm" property="readonly" value="1">
                     <tr>
                       <td align="center" valign="top" colspan="12">
-                        <html:button property="addnewexpense" styleId="button" onclick="document.location.href='claim_resolution.do?addnewinterim=1'">
+                        <html:button property="addnewexpense" styleId="button" 
+                        	onclick="document.location.href='CreateExpense.do'">
                           <bean:message key="button.add_payout" />
                         </html:button>
                       </td>

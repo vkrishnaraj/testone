@@ -1137,7 +1137,7 @@ public class OHDUtils {
 		}
 	}
 
-	private static String getMBRReportNum(String ohd_id, String destCode) {
+	public static String getMBRReportNum(String ohd_id, String destCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();

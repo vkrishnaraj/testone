@@ -47,6 +47,10 @@
         <put name="center"   value="/pages/others/insertsuccess.jsp"/>
     </definition>
     
+    <definition name="invalid_token" extends="user_menu">
+        <put name="center"   value="/pages/others/invalid_token.jsp"/>
+    </definition>
+    
     <definition name="search_incident" extends="user_menu">
         <put name="center"   value="/pages/others/searchincident.jsp"/>
     </definition>
@@ -69,6 +73,10 @@
          
     <definition name="search_lostfound" extends="user_menu">
         <put name="center"   value="/pages/lostfound/searchlostfound.jsp"/>
+    </definition>
+    
+    <definition name="search_expense" extends="user_menu">
+        <put name="center"   value="/pages/expenses/search_expenses.jsp"/>
     </definition>
     
     <definition name="lost_found_success" extends="user_menu">
@@ -101,6 +109,14 @@
     
     <definition name="ma_close_ro" extends="user_menu">
         <put name="center"   value="/pages/missingarticles/maclose_ro.jsp"/>
+    </definition>
+    
+    <definition name="create_expense" extends="user_menu">
+    	<put name="center"   value="/pages/expenses/create_expense_center.jsp"/>
+    </definition>
+    
+    <definition name="edit_expense" extends="user_menu">
+    	<put name="center" value="/pages/expenses/update_expense_center.jsp" />
     </definition>
     
     <definition name="damagedbag" extends="user_menu">

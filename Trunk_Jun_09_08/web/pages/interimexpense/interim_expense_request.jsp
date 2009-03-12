@@ -40,7 +40,7 @@ function sortInterimExpense(sortOrder) {
 
 // -->
   </script>
-  <html:form action="expenseRequests.do" method="post" onsubmit="fillzero(this.incident_num, 13); return true;">
+  <html:form action="BatchApproveExpenses.do" method="post" onsubmit="fillzero(this.incident_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <%
     String sort = (String)request.getAttribute("sort");
@@ -199,10 +199,10 @@ function sortInterimExpense(sortOrder) {
                     </td>
                   </logic:notPresent>
                   <td>
-                    <a href='searchIncident.do?incident=<bean:write name="expenselist" property="claim.incident.incident_ID"/>'><bean:write name="expenselist" property="claim.incident.incident_ID" /></a>
+                    <a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
                   </td>
                   <td>
-                    <a href='claim_resolution.do?approveinterim=1&incidentid=<bean:write name="expenselist" property="claim.incident.incident_ID"/>&exp_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
+                    <a href='EditExpense.do?exp_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
                   </td>
                   <td>
                     <bean:write name="expenselist" property="draft" />
@@ -230,9 +230,9 @@ function sortInterimExpense(sortOrder) {
                       if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
 %>
                         <td>
-                          <a href="expenseRequests.do?approve=1&payout_ID=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="approve" /></a>
+                          <a href="ApproveExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="approve" /></a>
                           &nbsp;
-                          <a href="expenseRequests.do?deny=1&payout_ID=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="deny" /></a>
+                          <a href="DenyExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="deny" /></a>
                         </td>
 <%
                       }
@@ -240,9 +240,9 @@ function sortInterimExpense(sortOrder) {
                     </logic:present>
                     <logic:notPresent name="cbroStationID" scope="session">
                       <td>
-                        <a href="expenseRequests.do?approve=1&payout_ID=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="approve" /></a>
+                        <a href="ApproveExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="approve" /></a>
                         &nbsp;
-                        <a href="expenseRequests.do?deny=1&payout_ID=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="deny" /></a>
+                        <a href="DenyExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="deny" /></a>
                       </td>
                     </logic:notPresent>
                   </logic:equal>

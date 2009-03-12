@@ -342,6 +342,12 @@
         		<arg key="colname.claim_amount"/>
 	   		</field>  	
 	  	</form>
+	  	
+	  	<form name="expensePayoutForm">
+	  		<field property="newComment" depends="required">
+	  			<arg key="colname.expense_comment"/>
+	  		</field>
+	  	</form>
   	
   	  	<form name="billingForm">
 			<field property="tran_value" depends="required,float">

@@ -8,16 +8,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 /**
- * @author Administrator
- * 
- * @hibernate.typedef name="worldTracerStatus" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClassname"
- * 			value="com.bagnet.nettracer.tracing.db.WorldTracerFile$WTStatus"
+ * @author noah
  */
+@Embeddable
 public class WorldTracerFile implements Serializable{
 
-	
+	@Enumerated(EnumType.STRING)
 	private WTStatus status;
+	
+	@Column(length = 15)
 	private String wt_id;
 	
 	public WorldTracerFile() {}
@@ -32,10 +31,7 @@ public class WorldTracerFile implements Serializable{
 		this.status = wtStatus;
 	}
 
-	/**
-	 * 
-	 * @hibernate.property type="worldTracerStatus"
-	 */
+
 	public WTStatus getWt_status() {
 		return status;
 	}
@@ -43,11 +39,7 @@ public class WorldTracerFile implements Serializable{
 		this.status = status;
 	}
 	
-	/**
-	 * @return Returns the numpassengers.
-	 * 
-	 * @hibernate.property type="string"
-	 */
+
 	public String getWt_id() {
 		return wt_id;
 	}

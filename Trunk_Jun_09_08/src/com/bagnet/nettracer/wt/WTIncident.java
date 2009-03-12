@@ -1312,6 +1312,7 @@ public class WTIncident {
 				item.setXdescelement_ID_3(xdesc3);
 				item.setInventory(ii_set);
 				item.setIncident(incident);
+				item.setItemtype_ID(TracingConstants.LOST_DELAY);
 				itemlist.add(item);
 			}
 			incident.setItemlist(itemlist);

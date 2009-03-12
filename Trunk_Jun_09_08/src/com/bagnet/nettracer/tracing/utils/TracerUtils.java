@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -331,6 +330,10 @@ public class TracerUtils {
 				.getAttribute("mbrreporttypes") : retrieveRecords(locale,
 				"com.bagnet.nettracer.tracing.db.ItemType", "itemtype",
 				"locale", null));
+		
+		
+		session.setAttribute("expenseStatusList", session.getAttribute("expenseStatusList") != null ? session
+				.getAttribute("expenseStatusList") : ExpenseUtils.getStatusList(user.getCurrentlocale()));
 
 		session.setAttribute("statelist",
 				session.getAttribute("statelist") != null ? session
@@ -478,47 +481,27 @@ public class TracerUtils {
 					.getAttribute("claimstatuslist") : getStatusList(user
 					.getCurrentlocale(), TracingConstants.TABLE_CLAIM));
 
-			if ((claim = theform.getClaim(0)) != null) {
+			if ((claim = theform.getClaim()) != null) {
 				BeanUtils.copyProperties(cform, claim);
-
-				Passenger pa = (Passenger) theform.getPassenger(0);
-				String passengername = pa.getFirstname() + " "
-						+ pa.getLastname();
-				cform.setPassengername(passengername);
-
-				if (claim.getExpenses() != null)
-					cform.setExpenselist(new ArrayList(claim.getExpenses()));
-
-				ExpensePayout ep = null;
-				for (int i = 0; i < cform.getExpenselist().size(); i++) {
-					ep = (ExpensePayout) cform.getExpenselist().get(i);
-					if (ep.getStatus() == null) {
-						Status st = new Status();
-						st
-								.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-						ep.setStatus(st);
-					}
-					if (ep.getAgent() == null)
-						ep.setAgent(theform.getAgent());
-					if (ep.getStation() == null)
-						ep.setStation(theform.getStationcreated());
-
-					ep.set_DATEFORMAT(user.getDateformat().getFormat());
-					ep.set_TIMEFORMAT(user.getTimeformat().getFormat());
-				}
-
-				cform.set_DATEFORMAT(user.getDateformat().getFormat());
-				cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
-				cform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils
-						.getTimeZoneById(user.getDefaulttimezone())
-						.getTimezone()));
-
-				if (cform.getClaimcurrency_ID() == null)
-					cform.setClaimcurrency_ID(user.getDefaultcurrency());
-
-				session.setAttribute("claimForm", cform);
-
 			}
+
+			Passenger pa = (Passenger) theform.getPassenger(0);
+			String passengername = pa.getFirstname() + " " + pa.getLastname();
+			cform.setPassengername(passengername);
+
+			if (theform.getExpenselist() != null)
+				cform.setExpenselist(theform.getExpenselist());
+
+			cform.set_DATEFORMAT(user.getDateformat().getFormat());
+			cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			cform.set_TIMEZONE(TimeZone
+					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+
+			if (cform.getClaimcurrency_ID() == null)
+				cform.setClaimcurrency_ID(user.getDefaultcurrency());
+
+			session.setAttribute("claimForm", cform);
+
 
 			if (cform.getStatus() == null) {
 				Status status = new Status();
@@ -544,7 +527,7 @@ public class TracerUtils {
 			// cpform = new ClaimProrateForm();
 			// session.setAttribute("claimForm", cpform);
 			boolean createnewprorate = false;
-			if ((claim = theform.getClaim(0)) != null) {
+			if ((claim = theform.getClaim()) != null) {
 				ClaimProrate cp = claim.getClaimprorate();
 				if (cp == null) { // no previous prorate
 					cpform = new ClaimProrateForm();

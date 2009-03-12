@@ -134,8 +134,8 @@ public class AuditTrailUtils {
 					.append("select audit_exp from com.bagnet.nettracer.tracing.db.Audit_ExpensePayout audit_exp ");
 
 			s
-					.append(" where audit_exp.expensepayout.claim.incident.stationassigned.company.companyCode_ID = :companyCode_ID "
-							+ " and audit_exp.expensepayout.claim.incident.incident_ID = :incident_ID ");
+					.append(" where audit_exp.expensepayout.incident.stationassigned.company.companyCode_ID = :companyCode_ID "
+							+ " and audit_exp.expensepayout.incident.incident_ID = :incident_ID ");
 
 			/*
 			 * Date sdate = null, edate = null; if (siDTO.getS_createtime().length() >

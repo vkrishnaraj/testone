@@ -75,7 +75,7 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
  * 
  * @author Ankur Gupta
  */
-public class OnHandAction extends Action {
+public class OnHandAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -92,6 +92,10 @@ public class OnHandAction extends Action {
 		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_OH, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
 
 		ActionMessages errors = new ActionMessages();
 		BagService bs = new BagService();

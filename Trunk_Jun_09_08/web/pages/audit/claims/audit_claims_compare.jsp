@@ -286,6 +286,10 @@ function updatePagination() {
                   :
                   <bean:write name="expenselist" property="discreatedate" />
                   <br>
+                  <bean:message key="colname.expense.status" />
+                  :
+                  <bean:write name="expenselist" property="status.description" />
+                  <br> 
                   <bean:message key="colname.expense_loc" />
                   :
                   <bean:write name="expenselist" property="expenselocation.stationcode" />
@@ -336,12 +340,7 @@ function updatePagination() {
                   <br>
                   <bean:message key="colname.comments" />
                   :
-                  <bean:write name="expenselist" property="comments" />
-                  <br>
-                  <bean:message key="colname.reason" />
-                  :
-                  <br>
-                  <bean:write name="expenselist" property="modify_reason" />
+                  <bean:write name="expenselist" property="auditComments" />
                   <br>
                   <br>
                 </logic:iterate>

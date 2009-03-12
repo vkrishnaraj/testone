@@ -78,7 +78,7 @@ public interface WorldTracerService {
 	
 	String reinstateOhd(OHD ohd) throws WorldTracerException;
 
-	String sendFwdMsg(WtqFwdGeneral fwd) throws WorldTracerException;
+	String sendFwdMsg(WtqFwdGeneral fwd, Agent defaultWtAgent) throws WorldTracerException;
 	
 	String forwardOhd(WtqFwdOhd fwd) throws WorldTracerException;
 	
