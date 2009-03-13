@@ -31,7 +31,7 @@ public class TraceIncident implements Serializable {
 
 	private Date lastupdated;
 
-	private String ohd_lasttraced;
+	private Date ohd_lasttraced;
 
 	private Set passengers;
 
@@ -294,9 +294,9 @@ public class TraceIncident implements Serializable {
 	/**
 	 * @return Returns the ohd_lasttraced.
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.property type="timestamp"
 	 */
-	public String getOhd_lasttraced() {
+	public Date getOhd_lasttraced() {
 		return ohd_lasttraced;
 	}
 
@@ -304,7 +304,7 @@ public class TraceIncident implements Serializable {
 	 * @param ohd_lasttraced
 	 *          The ohd_lasttraced to set.
 	 */
-	public void setOhd_lasttraced(String ohd_lasttraced) {
+	public void setOhd_lasttraced(Date ohd_lasttraced) {
 		this.ohd_lasttraced = ohd_lasttraced;
 	}
 

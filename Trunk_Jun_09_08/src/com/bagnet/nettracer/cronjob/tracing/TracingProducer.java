@@ -116,9 +116,7 @@ public class TracingProducer implements Runnable {
 					query.setTimestamp("endDateRange", endDateRange);
 
 					if (incident.getOhd_lasttraced() != null) {
-						Date ohdLastTraced = DateUtils.convertToDate(incident
-								.getOhd_lasttraced(), TracingConstants.DB_DATETIMEFORMAT, null);
-						query.setTimestamp("lastUpdated", ohdLastTraced);
+						query.setTimestamp("lastUpdated", incident.getOhd_lasttraced());
 					}
 
 					query.addScalar("OHD_ID", Hibernate.STRING);

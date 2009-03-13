@@ -179,7 +179,7 @@ public class PassiveTrace {
 					String incidentId = (String) incidentList.get(i)[INCIDENT_INDEX];
 					ProducerDTO prodDto = new ProducerDTO();
 					prodDto.setIncidentId(incidentId);
-					prodDto.setOhdLastTraced((String) incidentList.get(i)[TRACED_INDEX]);
+					prodDto.setOhdLastTraced((Date) incidentList.get(i)[TRACED_INDEX]);
 					producerQueue.put(prodDto);
 				}
 				

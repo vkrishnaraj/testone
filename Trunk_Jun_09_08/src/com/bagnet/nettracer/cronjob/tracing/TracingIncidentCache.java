@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.cronjob.tracing;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,7 +46,7 @@ public class TracingIncidentCache{
 	}
 	
 
-	public TraceIncident loadIncident(String incidentId, String lastTracedDate, Session sess) {
+	public TraceIncident loadIncident(String incidentId, Date lastTracedDate, Session sess) {
 		TraceIncident tmp = null;
 		boolean containsKey = incMap.containsKey(incidentId);
 		if (lastTracedDate != null && containsKey) {

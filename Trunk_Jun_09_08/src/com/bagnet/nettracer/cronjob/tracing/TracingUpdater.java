@@ -47,7 +47,7 @@ public class TracingUpdater implements Runnable {
 				UpdateDTO updateDto = queue.take();
 				if (updateDto != null) {
 					trans = sess.beginTransaction();
-					updateQuery.setString("lastTraced", updateDto
+					updateQuery.setTimestamp("lastTraced", updateDto
 							.getOhdLastTraced());
 					updateQuery.setString("incidentId", updateDto
 							.getIncidentId());

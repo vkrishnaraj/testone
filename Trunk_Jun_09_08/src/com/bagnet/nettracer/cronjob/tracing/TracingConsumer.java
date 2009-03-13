@@ -3,6 +3,7 @@ package com.bagnet.nettracer.cronjob.tracing;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
@@ -140,17 +141,12 @@ public class TracingConsumer implements Runnable {
 					}
 				}
 
-				if (dto.isLastIncident() == true) {
-					GregorianCalendar now = new GregorianCalendar();
-					now.setTime(ohd.getLastupdated());
-					now.add(Calendar.SECOND, 1);
-
-					String lastTraced = DateUtils.formatDate(now.getTime(),
-							TracingConstants.DB_DATETIMEFORMAT, null, null);
-
-					incident.setOhd_lasttraced(lastTraced);
+				if (dto.isLastIncident() == true) {				
+					Date lt = ohd.getLastupdated();
+					lt.setTime(lt.getTime() + 1000);
+					incident.setOhd_lasttraced(lt);
 					
-					updateQueue.put(new UpdateDTO(incident.getIncident_ID(),lastTraced));
+					updateQueue.put(new UpdateDTO(incident.getIncident_ID(),lt));
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

@@ -1,8 +1,10 @@
 package com.bagnet.nettracer.cronjob.tracing.dto;
 
+import java.util.Date;
+
 public class ProducerDTO {
 	private String incidentId;
-	private String ohdLastTraced;
+	private Date ohdLastTraced;
 
 	public String getIncidentId() {
 		return incidentId;
@@ -12,11 +14,11 @@ public class ProducerDTO {
 		this.incidentId = incidentId;
 	}
 
-	public String getOhdLastTraced() {
+	public Date getOhdLastTraced() {
 		return ohdLastTraced;
 	}
 
-	public void setOhdLastTraced(String ohdLastTraced) {
+	public void setOhdLastTraced(Date ohdLastTraced) {
 		this.ohdLastTraced = ohdLastTraced;
 	}
 }
