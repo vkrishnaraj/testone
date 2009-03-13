@@ -69,9 +69,14 @@ public class MissingAction extends CheckedAction {
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
-		if(!manageToken(request)) {
-			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+
+		if (!(request.getParameter("changeassignedstation") != null
+				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
+				.getStationassigned_ID() > 0)
+				&& !(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1"))) {
+			if (!manageToken(request)) {
+				return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+			}
 		}
 
 		//the company specific codes..
