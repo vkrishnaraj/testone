@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimeZone;
 
-import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
-import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
-
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
+
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 
 /**
  * @author Byron
@@ -31,7 +32,7 @@ public class JRIncidentDataSource implements JRDataSource {
 	private String STATIONASSIGNED_NAME = "stationAssigned";
 	private String DATE_NAME = "date";
 	private String STATUS_NAME = "status";
-	private String TICKETNUMBER_NAME = "ticketNumber";
+	private String COLOR_TYPE = "color";
 	private String CLAIMCHECK_NAME = "claimCheck";
 	private String PASSENGER_NAME = "passengerName";
 	
@@ -86,8 +87,6 @@ public class JRIncidentDataSource implements JRDataSource {
 				return currentObject.getDisplaydate();
 			} else if (fieldName.equals(STATUS_NAME)) {
 				return currentObject.getStatus().getDescription();
-			} else if (fieldName.equals(TICKETNUMBER_NAME)) {
-				return currentObject.getTicketnumber();
 			}
 		}
 			
@@ -102,6 +101,12 @@ public class JRIncidentDataSource implements JRDataSource {
 			if (currentElement < currentObject.getPassenger_list().size()) {
 				Passenger tmp = (Passenger) currentObject.getPassenger_list().get(currentElement);
 				return  tmp.getLastname() + ", " + tmp.getFirstname() + " " + tmp.getMiddlename();
+			}
+			return null;
+		}  else if (fieldName.equals(COLOR_TYPE)) {
+			if (currentElement < currentObject.getItemlist().size()) {
+				Item tmp = (Item) currentObject.getItemlist().get(currentElement);
+				return  tmp.getColor() + " " + tmp.getBagtype();
 			}
 			return null;
 		} else {
@@ -122,7 +127,7 @@ public class JRIncidentDataSource implements JRDataSource {
 			currentElement = 0;
 			totalElements = java.lang.Math.max(currentObject.getPassenger_list().size(), 
 					currentObject.getClaimcheck_list().size());
-			
+			totalElements = java.lang.Math.max(totalElements, currentObject.getItemlist().size());
 			return true;
 		} else {
 			// There are no remaining incidents to return.

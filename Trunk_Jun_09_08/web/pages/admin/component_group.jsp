@@ -39,7 +39,35 @@
 	}
 // -->
   </script>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
+  
+  
+  
+<%
+  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+                                                               request.getAttribute("org.apache.struts.action.MESSAGE");
+  java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+                                                               "org.apache.struts.action.LOCALE");
+%>
+
+<script language="javascript">
+  <!--
+
+
+  function deleteGroup (groupName,groupId)
+  {
+    if (confirm("<%= (String)myMessages.getMessage(myLocale, "check.delete") %>" + groupName + "?"))
+    {  
+      document.groupForm.delete1.value="1";
+      document.groupForm.groupID.value=groupId;
+      document.groupForm.submit();
+    }
+  } 
+
+  // -->
+</script>
+
+  
   <html:form action="createGroup.do" method="post">
     <tr>
       <td colspan="3" id="pageheadercell">

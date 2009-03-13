@@ -13,6 +13,12 @@
 	Agent a = (Agent) session.getAttribute("user");
     String ohd_id = request.getParameter("ohd_id");
 %>
+<%
+  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+                                                               request.getAttribute("org.apache.struts.action.MESSAGE");
+  java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+                                                               "org.apache.struts.action.LOCALE");
+%>
 <SCRIPT LANGUAGE="JavaScript">
     function textCounter(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
@@ -26,6 +32,104 @@
         document.worldTracerFOHForm.deleteSegment.value = segNum;
         document.worldTracerFOHForm.submit();
     }
+    
+  function validateWtFoh(form) {
+	  for (var j=0;j<form.length;j++) {
+		  	currentElement = form.elements[j];
+	    	currentElementName=currentElement.name;
+	    	
+			if (currentElementName.indexOf("expeditenum") != -1)
+		    {
+		      if (currentElement.value.length < 1)
+		      {
+		         alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+		         currentElement.focus();
+		         return false;
+		      }
+		        
+		      else if (!checkExpedite(currentElement.value))
+		      {
+		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("matchingAhl") != -1)
+		    {
+		      if (currentElement.value.length < 1)
+		      {
+		         alert("<%= (String)myMessages.getMessage(myLocale, "FWD.matching.ahl") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+		         currentElement.focus();
+		         return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("destinationAirline") != -1)
+		    {
+		      if (currentElement.value.length < 1)
+		      {
+		         alert("<%= (String)myMessages.getMessage(myLocale, "colname.airlineForwardTo") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+		         currentElement.focus();
+		         return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("destinationStation") != -1)
+		    {
+		      if (currentElement.value.length < 1)
+		      {
+		         alert("<%= (String)myMessages.getMessage(myLocale, "colname.stationForwardTo") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+		         currentElement.focus();
+		         return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("legfrom") != -1)
+		    {
+		      if (currentElement.value.length < 1 || !checkLegFrom(currentElement.value))
+		      {
+		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>");
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("legto") != -1)
+		    {
+		      if (currentElement.value.length < 1 || !checkLegFrom(currentElement.value))
+		      {
+		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>"); 
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("airline") != -1)
+		    {
+		      if (currentElement.value.length < 1 || !checkFlightNum(currentElement.value))
+		      {
+		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.flightNum") %>");
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("flightnum") != -1)
+		    {
+		      if (currentElement.value.length < 1 || !checkFlightNum(currentElement.value))
+		      {
+		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.flightNum") %>");
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		    else if (currentElementName.indexOf("departdate") != -1)
+		    {
+		      if (currentElement.value.length < 1 || !checkDate(currentElement.value))
+		      {
+		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
+		        currentElement.focus();
+		        return false;
+		      }
+		    }
+		 	}
+		 	 return true;
+  }
+    
     // End -->
   </SCRIPT>
 <!-- Calendar includes -->

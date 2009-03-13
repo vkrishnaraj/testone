@@ -6,7 +6,7 @@
 <struts-config>
 	<!-- ========== Form Bean Definitions =================================== -->
 	<form-beans>
-		<form-bean name="logonForm" type="org.apache.struts.validator.DynaValidatorForm">
+		<form-bean name="logonForm" type="org.apache.struts.action.DynaActionForm">
 			<form-property name="username" type="java.lang.String" />
 			<form-property name="password" type="java.lang.String" />
 		</form-bean>

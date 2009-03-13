@@ -68,6 +68,7 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int ohd_lz;
 	private int scannerDefaultBack;
 	private int scannerDefaultForward;
+	private boolean autoCloseOhd;
 
 	private boolean auto_wt_amend;
 	
@@ -857,6 +858,19 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	}
 	public void setEmail_customer(boolean email_customer) {
 		this.email_customer = email_customer;
+	}
+	
+	/**
+	 * @return Returns the email_customer.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isAutoCloseOhd() {
+		return autoCloseOhd;
+	}
+	
+	public void setAutoCloseOhd(boolean autoCloseOhd) {
+		this.autoCloseOhd = autoCloseOhd;
 	}
 	
 	

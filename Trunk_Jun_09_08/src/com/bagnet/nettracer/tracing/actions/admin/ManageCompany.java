@@ -124,6 +124,7 @@ public final class ManageCompany extends Action {
 					dForm.setDefault_station_code("" + cmpny.getVariable().getDefault_station_code());
 					dForm.setDefault_loss_code("" + cmpny.getVariable().getDefault_loss_code());
 					dForm.setEmail_customer(cmpny.getVariable().isEmail_customer());
+					dForm.setAutoCloseOhd(cmpny.getVariable().isAutoCloseOhd());
 					dForm.setEmail_host("" + cmpny.getVariable().getEmail_host());
 					dForm.setEmail_port("" + cmpny.getVariable().getEmail_port());
 					dForm.setEmail_from("" + cmpny.getVariable().getEmail_from());
@@ -312,6 +313,7 @@ public final class ManageCompany extends Action {
 						var.setDefault_loss_code(Integer.parseInt((String) dForm.getDefault_loss_code()));
 					}
 					var.setEmail_customer(dForm.isEmail_customer());
+					var.setAutoCloseOhd(dForm.isAutoCloseOhd());
 					var.setEmail_host((String) dForm.getEmail_host());
 					var.setEmail_port(Integer.parseInt((String) dForm.getEmail_port()));
 					var.setEmail_from((String) dForm.getEmail_from());

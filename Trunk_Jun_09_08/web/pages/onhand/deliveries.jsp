@@ -126,10 +126,8 @@ function updatePagination() {
                   <td>
                     <!-- Try to obtain the lost delay information for this on-hand if supporting mbr found 
     			with matching -->
-<%
-                    String ohd_id = ((OHD)ohd).getOHD_ID();
-%>
-                    <a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum(ohd_id, "" + a.getStation().getStation_ID()) %>'><%= OHDUtils.getMBRReportNum(ohd_id, "" + a.getStation().getStation_ID()) %></a>
+
+                    <a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %></a>
                     &nbsp;
                   </td>
                   <td>

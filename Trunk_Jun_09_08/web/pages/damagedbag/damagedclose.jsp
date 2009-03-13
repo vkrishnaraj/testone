@@ -9,10 +9,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <html:form action="damaged.do" method="post" enctype="multipart/form-data">
+  
+<html:form action="damaged.do" method="post" enctype="multipart/form-data">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
@@ -86,13 +88,21 @@
               <tr>
                 <td align="center" valign="top">
                   <br>
-                  <html:submit property="save" styleId="button">
-                    <bean:message key="button.save" />
-                  </html:submit>
+                  <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+                    <html:submit property="save" styleId="button">
+                      <bean:message key="button.save" />
+                    </html:submit>
+                  </logic:equal>
                   <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-                  <html:submit property="doclose" styleId="button">
-                    <bean:message key="button.closereport" />
-                  </html:submit>
+
+                    <% if (TracerProperties.isTrue(TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
+                      <html:submit property="save" styleId="button">
+                        <bean:message key="button.save" />
+                      </html:submit>
+                    <% } %>
+                    <html:submit property="doclose" styleId="button">
+                      <bean:message key="button.closereport" />
+                    </html:submit>
                   </logic:notEqual>
                 </td>
               </tr>

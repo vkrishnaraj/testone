@@ -9,8 +9,6 @@
                  com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
-<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
-  <div id=mainlogin>
 <%
     List companies = AdminUtils.getCompaniesByName(0, 0);
 %>
@@ -83,6 +81,3 @@
                     </td>
                   </tr>
                 </table>
-              </div>
-            </html:form>
-            <html:javascript formName="logonForm" />

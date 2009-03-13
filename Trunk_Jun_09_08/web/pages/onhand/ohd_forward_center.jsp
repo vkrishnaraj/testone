@@ -9,6 +9,10 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+request.getAttribute("org.apache.struts.action.MESSAGE");
+java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+"org.apache.struts.action.LOCALE");
 %>
   <SCRIPT LANGUAGE="JavaScript">
     function textCounter(field, countfield, maxlimit) {
@@ -18,6 +22,126 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
+    
+  function validateForwardOHD (form)
+	{
+		 for (var j=0;j<form.length;j++) {
+	  	currentElement = form.elements[j];
+    	currentElementName=currentElement.name;
+	    if (currentElementName.indexOf("expedite") != -1 && currentElement.type != "hidden")
+	    {
+	      if (currentElement.value.length < 1)
+	      {
+	         alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	         currentElement.focus();
+	         return false;
+	      }
+	        
+	      if (currentElement.value.length > 0 && !checkExpedite(currentElement.value))
+	      {
+            alert("Contents: " + currentElement.value);
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("destStation") != -1)
+	    {
+	      if (currentElement.value.length < 1)
+	      {
+	         alert("<%= (String)myMessages.getMessage(myLocale, "colname.stationForwardTo") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	         currentElement.focus();
+	         return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("legfrom") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("legto") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>"); 
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("flightnum") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkFlightNum(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.flightNum") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("dispBagArriveDate") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_arrived_date") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("disdepartdate") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("disarrivedate") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.arrdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>"); 
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("disschdeparttime") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkTime(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.schdeptime") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.time") %>"); 
+	        currentElement.focus();
+	        return false;
+	      }
+	    }
+	    else if (currentElementName.indexOf("disscharrivetime") != -1)
+	    {
+	      if (currentElement.value.length > 0 && !checkTime(currentElement.value))
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.scharrtime") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.time") %>"); 
+	        currentElement.focus();
+	        return false;
+	      }
+	    } 
+	 	}
+    if (!validateReqForward(form)) return false;
+	 	 return true;
+  }
+
+
+  function checkDate(strng)
+  {
+    return isDate(strng,'<%= a.getDateformat().getFormat() %>');
+  }
+  
+  function checkTime(strng)
+  {
+    return isDate(strng,'<%= a.getTimeformat().getFormat() %>');
+  }
+    
     // End -->
   </SCRIPT>
   <!-- Calendar includes -->
@@ -32,7 +156,8 @@
 // -->
   </SCRIPT>
   <!-- calendar stuff ends here -->
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  <jsp:include page="/pages/includes/required_fields_incl.jsp" />
+  
   <html:form action="forward_on_hand.do" method="post" onsubmit="return (validateForwardOHD(this) && setExpediteNum(this)); ">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>

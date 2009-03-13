@@ -27,9 +27,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.MessageResources;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
@@ -423,7 +425,7 @@ public class BagService {
 	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, String realpath,
 			Agent mod_agent, boolean checkClosedStatus) {
 		try {
-			boolean changedStatus = false;
+			boolean setToClosedStatus = false;
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
@@ -458,7 +460,7 @@ public class BagService {
 			if(theform.getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
 				if(iDTO.getClosedate() == null) {
 					iDTO.setClosedate(TracerDateTime.getGMTDate());
-					changedStatus = true;
+					setToClosedStatus = true;
 				}
 
 			}
@@ -617,7 +619,7 @@ public class BagService {
 				}
 			}
 			else {
-				if(changedStatus && checkClosedStatus) {
+				if(setToClosedStatus && checkClosedStatus) {
 					result = iBMO.insertIncident(iDTO, theform.getAssoc_ID(), mod_agent, true);
 				}
 				else {
@@ -822,6 +824,43 @@ public class BagService {
 				}
 				if(result == 2)
 					return new ActionMessage("error.unable_to_close_incident");
+				
+				/*
+				 * If the file is set to closed status AND the file is a L/D incident
+				 * we need to close the matched OHDs when saving.
+				 */
+				if (mod_agent.getStation().getCompany().getVariable().isAutoCloseOhd() && setToClosedStatus) {
+					
+					HashSet<String> ohdIds = new HashSet<String>();
+					
+					
+					for (Incident_Claimcheck tmp: (ArrayList<Incident_Claimcheck>)iDTO.getClaimcheck_list()) {
+						ohdIds.add(tmp.getOHD_ID());
+					}
+					
+					for (Item tmp: (List<Item>) iDTO.getItemlist()) {
+						ohdIds.add(tmp.getOHD_ID());
+					}
+					
+					for (String ohdId: ohdIds) {
+						if (ohdId != null) {
+							try {
+								Session sess = HibernateWrapper.getSession().openSession();
+								
+								OHD ohd = OhdBMO.getOHDByID(ohdId, sess);
+								Status newStatus = new Status();
+								newStatus.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+								ohd.setStatus(newStatus);
+								OhdBMO.updateOHD(ohd, mod_agent, sess);
+								
+								sess.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					
+				}
 
 				return null;
 			}

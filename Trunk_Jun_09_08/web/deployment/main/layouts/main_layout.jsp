@@ -3,16 +3,13 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-
 <%@ page import="java.util.TimeZone" %>
 <%@ page import="java.util.Iterator,java.util.LinkedHashMap" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.TracerDateTime" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.AdminUtils" %>
-
 <% LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
    Agent agent = (Agent)session.getAttribute("user");
    int total_menu = 0;
@@ -24,7 +21,6 @@
    } else {
 
 %>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -35,7 +31,6 @@
 
 
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/designScripts.js"></script>
-
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/date.js"></script>
 <logic:present name="user" scope="session">
@@ -43,8 +38,8 @@
 <!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
 </logic:present>
 <link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
-<link href="<%=request.getContextPath()%>/deployment/main/css/company_styles.css" rel="stylesheet" type="text/css">
 <link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/deployment/main/css/styles.css" rel="stylesheet" type="text/css">
 
 
 <logic:present name="user" scope="session">
@@ -102,9 +97,36 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 	<%
 	} else {
 	%>
-  
-  <tiles:insert attribute="center"/>
 
+<script language="javascript">
+  <!--
+
+    function validateLogonForm(form) {
+      var usernameElement = document.getElementsByName("username")[0];                          
+      var passwordElement = document.getElementsByName("password")[0];
+      if (usernameElement.value.length <= 0) {
+        alert('<bean:message key="prompt.username" /> <bean:message key="error.validation.isRequired" />');
+        usernameElement.focus();
+        return false;
+      } else if (passwordElement.value.length <= 0) {
+        passwordElement.focus('<bean:message key="prompt.password" /> <bean:message key="error.validation.isRequired" />');
+        
+        return false;
+      } else {
+        return true;
+      }
+    } 
+  // -->
+</script>
+
+
+<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
+  <div id=mainlogin>
+
+    <tiles:insert attribute="center"/>
+                
+              </div>
+            </html:form>
 	<% 
 	} 
 	%>
@@ -578,16 +600,10 @@ document.onkeydown = function(){
 		return false; 
 	}
 }
-
-
-
-
 //-->
 </script>
 </logic:present>
-
 <jsp:include page="/pages/includes/analytics.jsp" />
-
 </body>
 </html>
 <% } %>

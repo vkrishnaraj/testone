@@ -15,7 +15,8 @@
   String cssFormClass = "form2_ld";
 %>
   <!-- Calendar includes -->
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -143,10 +144,19 @@
               <tr>
                 <td align="center" valign="top">
                   <br>
-                  <html:submit property="save" styleId="button">
-                    <bean:message key="button.save" />
-                  </html:submit>
+                  <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+                    <html:submit property="save" styleId="button">
+                      <bean:message key="button.save" />
+                    </html:submit>
+                  </logic:equal>
                   <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+                  
+                  <% if (TracerProperties.isTrue(TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
+                    <html:submit property="save" styleId="button">
+                      <bean:message key="button.save" />
+                    </html:submit>
+                  <% } %>
+
                   &nbsp;
                   
                   <html:submit property="doclose" styleId="button" onclick="doCheck = 1;">
@@ -161,9 +171,9 @@
                 		   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)){
                   %>
                   
-                  <html:submit property="doclosewt" styleId="button">
-                    <bean:message key="button.closetoWT" />
-                  </html:submit>
+                    <html:submit property="doclosewt" styleId="button">
+                      <bean:message key="button.closetoWT" />
+                    </html:submit>
                   <%
                 		   }
                 	   }

@@ -80,7 +80,9 @@
 		<constructor-arg value="${lz.move.type}" />
 	</bean>
 	
-	<bean id="CronUtils" class="com.bagnet.nettracer.cronjob.utilities.CronUtils" />
+	<bean id="CronUtils" class="com.bagnet.nettracer.cronjob.utilities.CronUtils" >
+		<constructor-arg value="${company.code}" />
+	</bean>
 	
 	<bean id="moveToWt" class="com.bagnet.nettracer.cronjob.wt.MoveToWorldTracer" >
 		<constructor-arg value="${default.wt.agent}" />
@@ -139,6 +141,13 @@
 		<property name="targetMethod" value="moveFiles" />
 		<property name="concurrent" value="false" />
 	</bean>
+	
+	<bean id="SendMonthlyBillingReportJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="emailPreviousMonthsBillingReport" />
+		<property name="concurrent" value="false" />
+	</bean>
+
 
 	<!--  The Schedule they should run on -->
 	<bean id="cronWtQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
@@ -174,6 +183,12 @@
 	<bean id="cronMoveToLzTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="moveToLzJob" />
 		<property name="cronExpression" value="${lz.move.cron}" />
+	</bean>
+	
+		
+	<bean id="BillingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="SendMonthlyBillingReportJob" />
+		<property name="cronExpression" value="${monthlybilling}" />
 	</bean>
 	
 	<!-- Aspects and advice -->

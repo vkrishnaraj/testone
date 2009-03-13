@@ -1,26 +1,45 @@
 package com.bagnet.nettracer.cronjob.utilities;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.mail.internet.InternetAddress;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.actions.BillingAction;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.dto.BillingDTO;
+import com.bagnet.nettracer.tracing.forms.BillingForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class CronUtils {
 	
 	private static Logger logger = Logger.getLogger(CronUtils.class);
+	private static String companyCode = null;
+	
+	public CronUtils(String companyCode) {
+		this.companyCode = companyCode;
+	}
 	
 	/**
 	 * Cron process to close old mass on-hands that:
@@ -136,6 +155,99 @@ public class CronUtils {
 			} catch (Exception e) {
 				logger.error("closeUSAirOldMassOhdsInSQLServer: Exception encountered", e);
 			}
+		}
+	}
+	
+	public void emailPreviousMonthsBillingReport() {
+		Agent user = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		System.out.println(user.getUsername());
+		BillingForm form = new BillingForm();
+
+		// Determine Dates
+		Calendar a = new GregorianCalendar();
+		System.out.println("Current date: " + a.getTime());
+		
+		int previousMonth = a.get(Calendar.MONTH) - 1;
+		a.set(Calendar.MONTH, previousMonth);
+		a.set(Calendar.DAY_OF_MONTH, a.getActualMinimum(Calendar.DAY_OF_MONTH));
+		
+		String starttime = new SimpleDateFormat(TracingConstants.DISPLAY_DATEFORMAT).format(a.getTime());
+		
+		a.set(Calendar.DAY_OF_MONTH, a.getActualMaximum(Calendar.DAY_OF_MONTH));
+		String endtime = new SimpleDateFormat(TracingConstants.DISPLAY_DATEFORMAT).format(a.getTime());
+		
+		System.out.println("Starttime: " + starttime);
+		System.out.println("Endtime: " + endtime);
+		
+		// Generate The Report
+		form.setCompanycode_ID(companyCode);
+		form.setStarttime(starttime);
+		form.setEndtime(endtime);
+		form.setItemType_ID(0);
+		
+		//String output = BillingAction.createReport("", form, user, null);
+		Session sess = HibernateWrapper.getSession().openSession();
+		Query q = BillingAction.generateQuery(form, sess, user);
+		
+		if (q == null) {
+			System.out.println("Exception...");
+			return;
+		}
+		
+		List results = q.list();
+		ArrayList<BillingDTO> reportList = new ArrayList<BillingDTO>();
+		Company company = CompanyBMO.getCompany(companyCode);
+		String companyName = company.getCompanydesc();
+		String messageHeader = "Automated Monthly Billing Report for: " + companyName;
+		
+		StringBuilder mb = new StringBuilder();
+		mb.append("<strong>Automated Monthly Billing Report for: " + companyName + "</strong><p />");
+		
+		mb.append("<table border=\"1\" width=\"350\">");
+		mb.append("<tr><th colspan=\"2\"  bgcolor=\"lightgrey\"><strong>Billing Criteria</strong></th></tr>");
+		mb.append("<tr><td width=\"200\">Company:</td><td>" + companyName +"</td></tr>");
+		mb.append("<tr><td width=\"200\">Start Date:</td><td>" + starttime +"</td></tr>");
+		mb.append("<tr><td width=\"200\">End Date:</td><td>" + endtime +"</td></tr>");
+		mb.append("</table>");
+		
+		
+		long sum = 0;
+
+		mb.append("<p /><table border=\"1\" width=\"350\">");
+		mb.append("<tr><th colspan=\"2\" bgcolor=\"lightgrey\"><strong>Incidents Created</strong></th></tr>");
+
+		for (int i = 0; i < results.size(); i++) {
+			Object[] b = (Object[]) results.get(i);
+
+			mb.append("<tr><td width=\"200\">" + IncidentUtils.retrieveItemTypeWithId(((Integer) b[1]).intValue(),
+					user.getCurrentlocale()).getDescription() + ": " + "</td><td>" + ((Long) b[2]).longValue() +"</td></tr>");
+			
+			sum += ((Long) b[2]).longValue();
+		}
+		
+		mb.append("<tr bgcolor=\"lightgreen\"><td width=\"200\"><strong>Sum Total:</strong></td><td><strong>" + sum +"</strong></td></tr>");
+		mb.append("</table>");
+
+		System.out.println(mb.toString());
+		
+		
+		
+		try {
+			HtmlEmail he = new HtmlEmail();
+			System.out.println(company.getVariable().getEmail_host());
+			he.setHostName(company.getVariable().getEmail_host());
+			he.setSmtpPort(company.getVariable().getEmail_port());
+			he.setFrom("support@nettracer.aero");
+			ArrayList toList = new ArrayList();
+			toList.add(new InternetAddress("support@nettracer.aero"));
+			he.setTo(toList);
+			he.setSubject(messageHeader);
+			he.setHtmlMsg(mb.toString());
+			he.setCharset("UTF-8");
+			he.send();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Errors...");
 		}
 	}
 }

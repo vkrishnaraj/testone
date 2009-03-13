@@ -35,7 +35,57 @@
 	}
 // -->
 </script>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
+
+
+<%
+  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+                                                               request.getAttribute("org.apache.struts.action.MESSAGE");
+  java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+                                                               "org.apache.struts.action.LOCALE");
+%>
+
+<script language="javascript">
+  <!--
+
+  function deleteCode()
+  {
+    if (confirm("<%= (String)myMessages.getMessage(myLocale, "check.delete") %>?"))
+    {  
+      var checked = 0;
+      var codes="";
+    
+      for (var j=0;j<document.codeForm.length;j++) 
+      {
+        currentElement = document.codeForm.elements[j];
+        if (currentElement.type=="checkbox")
+        {
+          if (currentElement.checked)
+          {
+            if (checked > 0) 
+              codes += ",";
+            checked +=1;
+            codes +=currentElement.value;
+          }
+        }
+      }
+
+      if (checked < 1)
+      {
+        alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.missingCodes") %>");
+      }
+      else
+      {
+        document.codeForm.delete1.value="1";
+        document.codeForm.loss_code.value=codes;
+        document.codeForm.submit();
+      }
+    }
+  } 
+
+  // -->
+</script>
+
 <html:form action="codeAdmin.do" method="post">
   <tr>
     <td colspan="3" id="pageheadercell">

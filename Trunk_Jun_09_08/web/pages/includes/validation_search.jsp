@@ -1,11 +1,18 @@
 <%@ page language="java" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="org.apache.struts.action.Action" %>
+
+<%
+  Agent a = (Agent)session.getAttribute("user");
+%>
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
 <%
   org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
                                                                request.getAttribute("org.apache.struts.action.MESSAGE");
   java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
                                                                "org.apache.struts.action.LOCALE");
 %>
-
   <script language="javascript">
     <!--
 
@@ -18,34 +25,34 @@
   {
     return isDate(strng,'<%= a.getTimeformat().getFormat() %>');
   }
-
-  function validateLostFound(form)
-  {
+  
+  function validateSearch(form) {
     for (var j=0;j<form.length;j++) {
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
-      if (currentElementName.indexOf("dispDateFoundLost") != -1)
+      if (currentElementName.indexOf("s_createtime") != -1)
       {
         if (currentElement.value.length > 0 && !checkDate(currentElement.value))
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.date") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>"); 
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.date_range") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
           currentElement.focus();
           return false;
         }
       }
-      else if (currentElementName.indexOf("email") != -1 )
+      
+      else if (currentElementName.indexOf("e_createtime") != -1)
       {
-        //is email address valid??
-        if (currentElement.value.length > 0 && !checkEmail(currentElement.value))
+        if (currentElement.value.length > 0 && !checkDate(currentElement.value))
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.email") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.email") %>");
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.date_range") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
           currentElement.focus();
           return false;
         }
       }
     }
-    return true;
+     return true;
   }
-  
+
+
 // -->
   </script>

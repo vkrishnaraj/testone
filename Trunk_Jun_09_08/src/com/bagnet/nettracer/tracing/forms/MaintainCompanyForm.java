@@ -37,6 +37,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String default_station_code;
 	private String default_loss_code;
 	private boolean email_customer;
+	private boolean autoCloseOhd;
 	private String email_host;
 	private String email_port;
 	private String email_from;
@@ -366,6 +367,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setMin_interim_approval_incidental(String min_interim_approval_incidental) {
 		this.min_interim_approval_incidental = min_interim_approval_incidental;
+	}
+
+	public boolean isAutoCloseOhd() {
+		return autoCloseOhd;
+	}
+
+	public void setAutoCloseOhd(boolean autoCloseOhd) {
+		this.autoCloseOhd = autoCloseOhd;
 	}
 
 

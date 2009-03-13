@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +23,13 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.IATA_irregularity_code;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
@@ -700,5 +701,37 @@ public class IncidentUtils {
 		}
 			
 	}
+
+	public static boolean promptToCloseFile(String incident_id,
+			HttpServletRequest request) {
+		if (incident_id != null) {
+			Incident inc = IncidentBMO.getIncidentByID(incident_id, null);
+			return promptToCloseFile(inc, request);
+		}
+		return false;
+	}
+
+	public static boolean promptToCloseFile(Incident incident, HttpServletRequest request) {
+		boolean promptToClose = true;
+		
+		if (incident.getStatus().getStatus_ID() != TracingConstants.MBR_STATUS_CLOSED && incident.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY) {
+			for (Item item: (List<Item>)incident.getItemlist()) {
+				if (item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY) {
+					promptToClose = false;
+				}
+			}
+			
+			if (promptToClose) {
+				if (request != null) {
+					request.setAttribute("promptToCloseFile", "1");
+				}
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
+	
 
 }

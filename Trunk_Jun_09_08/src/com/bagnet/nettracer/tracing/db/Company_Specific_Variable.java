@@ -29,6 +29,7 @@ public class Company_Specific_Variable implements Serializable {
 	private int default_station_code;
 	private int default_loss_code;
 	private boolean email_customer; // send email to customer after report creation or
+	private boolean autoCloseOhd;
 	private double min_interim_approval_check;
 	private double min_interim_approval_miles;
 	private double min_interim_approval_voucher;
@@ -993,6 +994,19 @@ public class Company_Specific_Variable implements Serializable {
 	}
 	public void setEmail_customer(boolean email_customer) {
 		this.email_customer = email_customer;
+	}
+	
+	/**
+	 * @return Returns the email_customer.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isAutoCloseOhd() {
+		return autoCloseOhd;
+	}
+	
+	public void setAutoCloseOhd(boolean autoCloseOhd) {
+		this.autoCloseOhd = autoCloseOhd;
 	}
 	
 	

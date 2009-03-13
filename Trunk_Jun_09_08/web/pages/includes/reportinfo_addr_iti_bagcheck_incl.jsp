@@ -24,7 +24,9 @@
   }
 %>
   <!-- Calendar includes -->
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -66,6 +68,27 @@
   }
 %>
   <div id="maincontent">
+  
+    
+    <c:if test="${!empty incidentForm.incident_ID}">
+     <% 
+     IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
+     if (IncidentUtils.promptToCloseFile(myform.getIncident_ID(), null)) { %>
+       <table border="1" align="center">
+          <tr>
+            <td align="center">
+              <bean:message key="no.outstanding.items" /><p />
+              
+              <input type="button" value="<bean:message key="button.close_file" />" id="button" 
+              onclick="window.location = 'lostDelay.do?incident=<bean:write name="incidentForm" property="incident_ID"/>&close=1'
+              "/>      
+        
+            </td>
+          </tr>
+        </table>
+      <% } %>
+    </c:if>
+  
     <a name="incidentinfo"></a>
     <div id="pageheaderleft">
     <h1 class="green">

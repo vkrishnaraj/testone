@@ -13,6 +13,32 @@
 %>
 
 
+<%
+  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+                                                               request.getAttribute("org.apache.struts.action.MESSAGE");
+  java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+                                                               "org.apache.struts.action.LOCALE");
+%>
+
+<script language="javascript">
+  <!--
+
+
+   function deleteAgent (userName,agentId,stationId)
+  {
+    if (confirm("<%= (String)myMessages.getMessage(myLocale, "check.delete") %>" + userName + "?"))
+    {  
+      document.agentForm.stationId.value=stationId;
+      document.agentForm.delete1.value="1";
+      document.agentForm.agentId.value=agentId;
+      document.agentForm.submit();
+    }
+  }
+
+  // -->
+</script>
+
+
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <script language="javascript">
   <!--
@@ -47,7 +73,7 @@
     }
   // -->
 </script>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 <html:form action="agentAdmin.do" method="post">
   <tr>
     <td colspan="3" id="pageheadercell">

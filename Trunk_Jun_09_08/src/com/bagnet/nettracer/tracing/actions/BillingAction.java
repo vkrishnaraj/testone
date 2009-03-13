@@ -86,82 +86,17 @@ public class BillingAction extends Action {
 		return (mapping.findForward(TracingConstants.BILLING_REPORT));
 	}
 
-	private String createReport(String reportpath, BillingForm daform, Agent user,
+	public static String createReport(String reportpath, BillingForm daform, Agent user,
 			HttpServletRequest req) {
 
 		Session sess = null;
 		try {
-			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
-
 			
 			sess = HibernateWrapper.getSession().openSession();
-			String sql = " SELECT billing.companyCode, incident.itemtype.itemType_ID, count(distinct billing.incident.incident_ID) ";
-			sql += " from com.bagnet.nettracer.tracing.db.Billing billing";
-			sql += " join billing.incident incident ";
-			sql += " join billing.incident.itemtype itemtype ";
-
-			sql += " where 1=1 ";
-			if (daform.getCompanycode_ID() != null && !daform.getCompanycode_ID().equals("0")) sql += " and billing.companyCode = '"
-					+ daform.getCompanycode_ID() + "' ";
-			if (daform.getItemType_ID() != 0) sql += " and incident.itemtype.itemType_ID = "
-					+ daform.getItemType_ID();
+			Query q = generateQuery(daform, sess, user);
 			
-			
-			
-			Date sdate = null, edate = null;
-			Date sdate1 = null, edate1 = null; // add one for timezone
-			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
-			
-			StatReportDTO srDTO = new StatReportDTO();
-			srDTO.setStarttime(daform.getStarttime());
-			srDTO.setEndtime(daform.getEndtime());
-			
-			ArrayList dateal = null;
-			if ((dateal = ReportBMO.calculateDateDiff(srDTO,tz,user)) == null) {
+			if (q == null) {
 				return null;
-			} 
-			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
-			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
-			stime = (Date)dateal.get(4);
-
-
-			if (sdate != null && edate != null) {
-				if (sdate.equals(edate)) {
-					// need to add the timezone diff here
-					dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-							+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
-
-					edate = null;
-				} else {
-
-					// first get the beginning and end dates using date and time, then get
-					// dates in between
-					dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-							+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
-							+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))";
-				}
-			} else if (sdate != null) {
-				dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-						+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
-				edate = null;
-			}
-			
-			
-			if (!dateq.equals("")) sql += dateq;
-			//sql += " and billing.status_change_time is not null ";
-			sql += " group by billing.companyCode, incident.itemtype.itemType_ID ";
-			sql += " order by billing.companyCode, incident.itemtype.itemType_ID ";
-			Query q = sess.createQuery(sql);
-			
-			if (sdate != null) {
-				q.setDate("startdate", sdate);
-				if (edate == null) q.setDate("startdate1", sdate1);
-				q.setTime("starttime", stime);
-			}
-			if (edate != null) {
-				q.setDate("enddate1", edate1);
-				q.setDate("enddate", edate);
 			}
 			
 			List alllist = q.list();
@@ -172,8 +107,10 @@ public class BillingAction extends Action {
 
 				BillingDTO dto = new BillingDTO();
 				dto.setCompanyCode("" + a[0]);
-				dto.setReportType(IncidentUtils.retrieveItemTypeWithId(((Integer) a[1]).intValue(),
-						user.getCurrentlocale()).getDescription());
+				dto.setReportType(
+						IncidentUtils.retrieveItemTypeWithId(((Integer) a[1]).intValue(),
+						user.getCurrentlocale()).getDescription()
+				);
 				dto.setCount("" + ((Long) a[2]).longValue());
 
 				reportList.add(dto);
@@ -204,5 +141,77 @@ public class BillingAction extends Action {
 				}
 			}
 		}
+	}
+
+	public static Query generateQuery(BillingForm daform, Session sess, Agent user) {
+		StatReportDTO srDTO = new StatReportDTO();
+		srDTO.setStarttime(daform.getStarttime());
+		srDTO.setEndtime(daform.getEndtime());
+
+		
+		ArrayList dateal = null;
+		
+		TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+		if ((dateal = ReportBMO.calculateDateDiff(srDTO,tz,user)) == null) {
+			return null;
+		}
+		String sql = " SELECT billing.companyCode, incident.itemtype.itemType_ID, count(distinct billing.incident.incident_ID) ";
+		sql += " from com.bagnet.nettracer.tracing.db.Billing billing";
+		sql += " join billing.incident incident ";
+		sql += " join billing.incident.itemtype itemtype ";
+		sql += " where 1=1 ";
+
+		if (daform.getCompanycode_ID() != null && !daform.getCompanycode_ID().equals("0")) sql += " and billing.companyCode = '"
+				+ daform.getCompanycode_ID() + "' ";
+		if (daform.getItemType_ID() != 0) sql += " and incident.itemtype.itemType_ID = "
+				+ daform.getItemType_ID();
+		Date sdate = null, edate = null;
+		Date sdate1 = null, edate1 = null; // add one for timezone
+		Date stime = null; // time to compare (04:00 if eastern, for example)
+		String dateq = "";
+		
+		sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
+		edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
+		stime = (Date)dateal.get(4);
+
+
+		if (sdate != null && edate != null) {
+			if (sdate.equals(edate)) {
+				// need to add the timezone diff here
+				dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
+						+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
+
+				edate = null;
+			} else {
+
+				// first get the beginning and end dates using date and time, then get
+				// dates in between
+				dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
+						+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
+						+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))";
+			}
+		} else if (sdate != null) {
+			dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
+					+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
+			edate = null;
+		}
+		
+		
+		if (!dateq.equals("")) sql += dateq;
+		//sql += " and billing.status_change_time is not null ";
+		sql += " group by billing.companyCode, incident.itemtype.itemType_ID ";
+		sql += " order by billing.companyCode, incident.itemtype.itemType_ID ";
+		Query q = sess.createQuery(sql);
+		
+		if (sdate != null) {
+			q.setDate("startdate", sdate);
+			if (edate == null) q.setDate("startdate1", sdate1);
+			q.setTime("starttime", stime);
+		}
+		if (edate != null) {
+			q.setDate("enddate1", edate1);
+			q.setDate("enddate", edate);
+		}
+		return q;
 	}
 }

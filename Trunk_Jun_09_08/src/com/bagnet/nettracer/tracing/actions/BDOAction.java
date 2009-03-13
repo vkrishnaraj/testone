@@ -28,6 +28,7 @@ import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
+import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -218,7 +219,7 @@ public class BDOAction extends Action {
 			ohd = theform.getOHD_ID(); // we will either have ohd or incident
 			incident = theform.getIncident_ID();
 
-			request.setAttribute("inserted", "1");
+			request.setAttribute("inserted", bdo.getBDO_ID());
 			request.setAttribute("showprint", "1");
 				
 			// Perform delivery integration if necessary.
@@ -308,6 +309,9 @@ public class BDOAction extends Action {
 				request.setAttribute("showbdolist", "1");
 			}
 		}
+		
+		//IncidentUtils.promptToCloseFile(incident, request);
+		IncidentUtils.promptToCloseFile(incident, request);
 
 		return (mapping.findForward(TracingConstants.BDO_MAIN));
 	}

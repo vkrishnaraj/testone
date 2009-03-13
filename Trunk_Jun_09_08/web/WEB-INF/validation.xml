@@ -323,19 +323,6 @@
 	         </field>
 		</form>
 
-		<form name="logonForm">
- 	        <field property="username"
-         	   depends="required">
-         	     <arg key="prompt.username"/>
-	         </field>
-         	
-         	<field property="password"
-         	   depends="required">
-         	     <arg key="prompt.password"/>
-	         </field>
-	         
-		</form>
-
 
 		<form name="claimForm">
 			<field property="disclaimamount" depends="float">

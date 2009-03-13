@@ -48,6 +48,16 @@
           currentElement.focus();
           return false;
         }
+      }
+      else if (currentElementName.indexOf(".email") != -1) {  
+        if (!checkEmail(currentElement.value))
+        {
+          alert("<%=(String) myMessages.getMessage(myLocale,
+              "ld_pass_email")%>" + " <%=(String) myMessages.getMessage(myLocale,
+              "error.validation.email")%>");
+          currentElement.focus();
+          return false;
+        }
       } 
       else if (currentElementName.indexOf(".disarrivedate") != -1) {  
         if (currentElement.value.length == 0)

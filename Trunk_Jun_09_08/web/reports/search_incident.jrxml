@@ -37,6 +37,7 @@
 	<field name="ticketNumber" class="java.lang.String"/>
 	<field name="claimCheck" class="java.lang.String"/>
 	<field name="passengerName" class="java.lang.String"/>
+	<field name="color" class="java.lang.String"/>
 
 	<variable name="totalNumberRecords" class="java.lang.Integer" resetType="Report" calculation="DistinctCount">
 		<variableExpression><![CDATA[$F{incidentId}]]></variableExpression>
@@ -1031,7 +1032,7 @@
 						mode="Opaque"
 						x="165"
 						y="7"
-						width="116"
+						width="95"
 						height="16"
 						forecolor="#000000"
 						backcolor="#CCCCCC"
@@ -1047,7 +1048,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="335"
+						x="316"
 						y="2"
 						width="48"
 						height="35"
@@ -1065,7 +1066,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="285"
+						x="266"
 						y="2"
 						width="46"
 						height="34"
@@ -1083,7 +1084,7 @@
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="387"
+						x="368"
 						y="7"
 						width="37"
 						height="16"
@@ -1103,7 +1104,7 @@
 						mode="Opaque"
 						x="428"
 						y="7"
-						width="95"
+						width="67"
 						height="16"
 						forecolor="#000000"
 						backcolor="#CCCCCC"
@@ -1114,7 +1115,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[Ticket Number]]></text>
+				<text><![CDATA[Color & Type]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -1188,7 +1189,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="287"
+						x="268"
 						y="4"
 						width="46"
 						height="16"
@@ -1203,7 +1204,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="334"
+						x="315"
 						y="4"
 						width="48"
 						height="16"
@@ -1220,7 +1221,7 @@
 					<reportElement
 						x="166"
 						y="4"
-						width="116"
+						width="95"
 						height="16"
 						key="textField-10">
 							<printWhenExpression><![CDATA[new Boolean($F{date} != null ? true : false)]]></printWhenExpression>
@@ -1233,7 +1234,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="386"
+						x="367"
 						y="4"
 						width="37"
 						height="16"
@@ -1245,21 +1246,6 @@
 						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="427"
-						y="4"
-						width="95"
-						height="16"
-						key="textField-12">
-							<printWhenExpression><![CDATA[new Boolean($F{ticketNumber} != null ? true : false)]]></printWhenExpression>
-						</reportElement>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement>
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ticketNumber}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1291,6 +1277,22 @@
 						<font/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{passengerName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="427"
+						y="4"
+						width="72"
+						height="16"
+						key="textField-83"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean($F{color} != null ? true : false)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{color}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

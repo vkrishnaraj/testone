@@ -91,37 +91,18 @@ function checkZip( strValue ) {
 var whitespace = " \t\n\r";
 
 function checkEmail (s)
-{   if (isEmpty(s)) 
+{   if (isEmpty1(s)) 
        return true;
    
     // is s whitespace?
     if (isWhitespace(s)) return true;
     
-    // there must be >= 1 character before @, so we
-    // start looking at character position 1 
-    // (i.e. second character)
-    var i = 1;
-    var sLength = s.length;
+	var objRegExp  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	return objRegExp.test(s);
 
-    // look for @
-    while ((i < sLength) && (s.charAt(i) != "@"))
-    { i++
-    }
-
-    if ((i >= sLength) || (s.charAt(i) != "@")) return false;
-    else i += 2;
-
-    // look for .
-    while ((i < sLength) && (s.charAt(i) != "."))
-    { i++
-    }
-
-    // there must be at least one character after the .
-    if ((i >= sLength - 1) || (s.charAt(i) != ".")) return false;
-    else return true;
 }
 
-function isEmpty(s)
+function isEmpty1(s)
 {   return ((s == null) || (s.length == 0))
 }
 
@@ -130,7 +111,7 @@ function isWhitespace (s)
 {   var i;
 
     // Is s empty?
-    if (isEmpty(s)) return true;
+    if (isEmpty1(s)) return true;
 
     // Search through string's characters one by one
     // until we find a non-whitespace character.
@@ -147,3 +128,45 @@ function isWhitespace (s)
     // All characters are whitespace.
     return true;
 }
+
+	function checkstate(var1,o,statefield, province_field) {
+	
+		pos = var1.name.indexOf(".");
+		if (pos <=0) addr = "";
+		else addr = var1.name.substring(0,pos+1);
+		state = addr + statefield;
+		province = addr + province_field;
+			
+		if (!var1.value) {
+			//no country, both state and province enabled
+			o.elements[province].className = 'textfield';
+			o.elements[province].disabled = false;
+			
+			o.elements[state].disabled = false;
+			
+		} else if (var1.value == 'US') {
+			//US - enable state, disable province
+			o.elements[state].disabled = false;
+			o.elements[province].disabled = true;
+			o.elements[province].className = 'disabledtextfield';
+		} else {
+			//International - disable state, enable province
+			o.elements[state].disabled = true;
+			o.elements[province].className = 'textfield';
+			o.elements[province].disabled = false;
+		}
+	}
+	
+	function updateCountryUS(var1, myform, countryField, provinceField) {
+		if (var1.value) {
+			pos = var1.name.indexOf(".");
+			if (pos <=0) addr = "";
+			else addr = var1.name.substring(0,pos+1);
+			country = addr + countryField;
+			province = addr + provinceField;
+		
+			myform.elements[province].disabled = true;
+			myform.elements[province].className = 'disabledtextfield';
+			myform.elements[country].value = 'US';
+		}
+	}

@@ -8,8 +8,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+request.getAttribute("org.apache.struts.action.MESSAGE");
+java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+"org.apache.struts.action.LOCALE");
 %>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <script language="javascript">
     <!--
 function goprev() {
@@ -37,6 +41,42 @@ function sortIncomingBags(sortOrder) {
 	o.sort.value = sortOrder;
 	o.submit();
 }
+
+
+  function batchReceive()
+  {
+    if (confirm("<%= (String)myMessages.getMessage(myLocale, "check.receive") %>?"))
+    {  
+      var checked = 0;
+      var received="";
+    
+      for (var j=0;j<document.viewIncomingRequestForm.length;j++) 
+      {
+        currentElement = document.viewIncomingRequestForm.elements[j];
+        if (currentElement.type=="checkbox")
+        {
+          if (currentElement.checked)
+          {
+            if (checked > 0) 
+              received += ",";
+            checked +=1;
+            received +=currentElement.value;
+          }
+        }
+      }
+
+      if (checked < 1)
+      {
+        alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.missingBags") %>");
+      }
+      else
+      {
+        document.viewIncomingRequestForm.close1.value="1";
+        document.viewIncomingRequestForm.ohd_ID.value=received;
+        document.viewIncomingRequestForm.submit();
+      }
+    }
+  } 
 
 // -->
   </script>

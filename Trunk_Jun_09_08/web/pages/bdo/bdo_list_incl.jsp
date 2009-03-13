@@ -3,16 +3,18 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.BDOForm" %>
-
+<%@ page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%
   int i = 0;
 %>
-  <tr>
+  
+<tr>
     <td colspan="3" id="navmenucell">
       <div class="menu">
         <dl>
@@ -66,24 +68,38 @@
           <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
         </font>
         
-        <logic:present name="integrationResponse" scope="request">
-          <table border="1" width="400" align="center">
+        <c:if test="${!empty integrationResponse or !empty inserted or !empty promptToCloseFile}">
+         <table border="1" width="400" align="center">
             <tr>
               <td align="center">
-                <bean:write name="integrationResponse" scope="request" filter="false"/>
+                <c:if test="${!empty inserted}">
+                  <font color="green">
+                  <bean:message key="prompt.bdo_insert_success" /><p />
+                  <input type="button" value="<bean:message key="button.print_bdo" />" id="button" 
+                  onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="inserted" scope="request"/>','BDOReceipt',800,600);return false;"/>            
+                  </font>
+                </c:if>
+                <c:if test="${!empty promptToCloseFile}">
+                  <c:if test="${!empty inserted}">
+                    <p />
+                  </c:if>
+                  <bean:message key="no.outstanding.items" /><p />
+                  
+                  <input type="button" value="<bean:message key="button.close_file" />" id="button" 
+                  onclick="window.location = 'lostDelay.do?incident=<bean:write name="BDOForm" property="incident_ID"/>&close=1'
+                  "/>      
+                </c:if>
+                <c:if test="${!empty integrationResponse}">
+                  <c:if test="${!empty inserted or !empty promptToCloseFile}">
+                    <p />
+                  </c:if>
+                  <bean:write name="integrationResponse" scope="request" filter="false"/>
+                </c:if>              
               </td>
             </tr>
           </table>
-        </logic:present>
-        
-
-        <logic:present name="inserted" scope="request">
-          <br>
-          <center><font color=green>
-            <bean:message key="prompt.bdo_insert_success" />
-          </font></center>
-        </logic:present>
-
+        </c:if>
+                
         <br>
         <logic:present name="bdo_list" scope="request">
           <table class="form2" cellspacing="0" cellpadding="0">
@@ -114,6 +130,9 @@
               </td>
               <td>
                 <b><bean:message key="colname.bagcount" /></b>
+              </td>
+              <td>
+                <b><bean:message key="button.bdo_sendprint" /></b>
               </td>
             </tr>
             <logic:iterate id="bdos" name="bdo_list" scope="request" type="com.bagnet.nettracer.tracing.db.BDO">
@@ -157,6 +176,10 @@
                 <td nowrap>
                   <bean:write name="bdos" property="bagcount" />
                   &nbsp;
+                </td>
+                <td nowrap>
+                  <input type="button" value="<bean:message key="button.bdo_sendprint" />" id="button" 
+                              onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="bdos" property="BDO_ID"/>','BDOReceipt',800,600);return false;"/>
                 </td>
               </tr>
             </logic:iterate>

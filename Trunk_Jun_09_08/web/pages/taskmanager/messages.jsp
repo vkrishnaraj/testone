@@ -8,6 +8,10 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+request.getAttribute("org.apache.struts.action.MESSAGE");
+java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+"org.apache.struts.action.LOCALE");
 %>
   <!-- Calendar includes -->
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -48,6 +52,42 @@ function sortAgents(sortOrder) {
 	o.sort.value = sortOrder;
 	o.submit();
 }
+
+  function batchMessageDelete()
+  {
+      if (confirm("<%= (String)myMessages.getMessage(myLocale, "check.message.delete") %>?"))
+      {  
+      var checked = 0;
+        var received="";
+      
+        for (var j=0;j<document.composeForm.length;j++) 
+        {
+            currentElement = document.composeForm.elements[j];
+            if (currentElement.type=="checkbox")
+            {
+              if (currentElement.checked)
+              {
+                if (checked > 0) 
+                  received += ",";
+                checked +=1;
+                received +=currentElement.value;
+              }
+            }
+        }
+  
+        if (checked < 1)
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.missingMessages") %>");
+        }
+        else
+        {
+          document.composeForm.delete1.value="1";
+        document.composeForm.message_ids.value=received;
+            document.composeForm.submit();
+        }
+    }
+  } 
+
 // -->
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
@@ -233,8 +273,19 @@ function sortAgents(sortOrder) {
                   </TD>
                 </TR>
               </logic:iterate>
+              <tr>
+                <td colspan="11">
+			<input name="checkAll" type="button" id="button" onClick="
+			  var x = document.getElementsByName('mcopy');
+				    for (i=0; i<x.length; i++){
+				      x[i].checked = true;
+				    }			  
+                  " value="Select All" />
+                  <input type="hidden" name="inbox" value="1">
+                </td>
+              </tr>
               <!-- pagination -->
-              <input type="hidden" name="inbox" value="1">
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />

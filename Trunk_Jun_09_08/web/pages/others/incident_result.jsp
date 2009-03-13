@@ -58,9 +58,15 @@
     </td>
     <td>
       <strong>
-        <bean:message key="colname.ticket" />
+        <bean:message key="colname.color" />
       </strong>
     </td>
+    <td>
+      <strong>
+        <bean:message key="colname.bagtype" />
+      </strong>
+    </td>
+
     <td>
       <strong>
         <bean:message key="colname.claimnum" />
@@ -105,10 +111,26 @@
         <bean:write name="results" property="status.description" />
       </td>
       <td>
-        <logic:empty name="results" property="ticketnumber">
-          &nbsp;
-        </logic:empty>
-        <bean:write name="results" property="ticketnumber" />
+        <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+          <logic:present name="item_list" property="color">
+            <logic:notEqual name="item_list" property="color" value="">
+              <bean:write name="item_list" property="color" />
+              <br>
+            </logic:notEqual>
+          </logic:present>
+        </logic:iterate>
+        &nbsp;
+      </td>
+      <td>
+        <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+          <logic:present name="item_list" property="bagtype">
+            <logic:notEqual name="item_list" property="bagtype" value="">
+              <bean:write name="item_list" property="bagtype" />
+              <br>
+            </logic:notEqual>
+          </logic:present>
+        </logic:iterate>
+        &nbsp;
       </td>
       <td>
         <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">

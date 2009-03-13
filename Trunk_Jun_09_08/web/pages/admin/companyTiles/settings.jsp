@@ -194,6 +194,25 @@
 	              <html:text styleClass="textfield" name="companyForm" property="max_image_file_size" size="5" maxlength="5" />
 	            </td>
 	    </tr>
+	          <tr>
+	            <td>
+	              <bean:message key="colname.autoclose" />
+	              <font color=red>
+	                *
+	              </font>
+	              :
+	            </td>
+	            <td>
+	              <html:select name="companyForm" property="autoCloseOhd" style="dropdown">
+ 					<html:option value="true">
+                  		<bean:message key="select.yes" />
+                  	</html:option>
+                  	<html:option value="false">
+                  		<bean:message key="select.no" />
+                  	</html:option>
+                  </html:select>
+	            </td>
+	          </tr>
             <jsp:include page="/pages/includes/payment_minumums_incl.jsp" />
             <%
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, user)) {
