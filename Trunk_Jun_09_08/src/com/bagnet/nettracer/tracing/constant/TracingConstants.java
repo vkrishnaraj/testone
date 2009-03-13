@@ -652,10 +652,10 @@ public class TracingConstants {
 	//public final static String DEFAULT_AIRLINE = "FL";
 	
 	// update comment integration with airtran
-	public final static String CMT_CREATE_INTERIM = "Interim expense requested, pending approval on ";
-	public final static String CMT_CREATE_INTERIM_UNDERLIMIT = "Interim expense created, under limit auto approved on ";
-	public final static String CMT_APPROVED_INTERIM = "Interim expense approved on ";
-	public final static String CMT_DENIED_INTERIM = "Interim expense denied on ";
+	public final static String CMT_CREATE_INTERIM = "Expense requested, pending approval on ";
+	public final static String CMT_CREATE_INTERIM_UNDERLIMIT = "Expense created, under limit auto approved on ";
+	public final static String CMT_APPROVED_INTERIM = "Expense approved on ";
+	public final static String CMT_DENIED_INTERIM = "Expense denied on ";
 	public final static String CMT_CREATE_EXPENSE = "Baggage expense created on ";
 	
 	//suspend and RIT

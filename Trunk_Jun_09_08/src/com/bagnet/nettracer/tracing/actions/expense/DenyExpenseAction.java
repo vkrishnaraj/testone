@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
+import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +16,10 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 public class DenyExpenseAction extends BaseExpenseAction {
 	@Override
@@ -41,6 +47,15 @@ public class DenyExpenseAction extends BaseExpenseAction {
 		if(ExpensePayoutBMO.updateExpense(ep, user)) {
 			request.getSession().setAttribute("getclaimfa", "1");
 			request.getSession().setAttribute("incidentid", ep.getIncident().getIncident_ID());
+			if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()
+					&& SpringUtils.getReservationIntegration().isWriteExpensesToPnrOn()) {
+				String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
+						TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+								user.getDefaulttimezone()).getTimezone()));
+				SpringUtils.getReservationIntegration().writeCommentToPNR(
+						TracingConstants.CMT_DENIED_INTERIM + formateddatetime,
+						ep.getIncident().getRecordlocator());
+			}	
 			return mapping.findForward(UPDATE_SUCCESS);
 		}
 		else {

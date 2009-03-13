@@ -23,7 +23,10 @@ import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class ExpensePayoutBMO {
@@ -218,6 +221,15 @@ public class ExpensePayoutBMO {
 			ep.setApproval_date(new Date());
 			sess.update(ep);
 			tx1.commit();
+			if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()
+					&& SpringUtils.getReservationIntegration().isWriteExpensesToPnrOn()) {
+				String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
+						TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+								user.getDefaulttimezone()).getTimezone()));
+				SpringUtils.getReservationIntegration().writeCommentToPNR(
+						TracingConstants.CMT_APPROVED_INTERIM + formateddatetime,
+						ep.getIncident().getRecordlocator());
+			}
 			return true;
 		} catch (Exception e) {
 			logger.error("unable to approve expenses " + payout_id);
@@ -241,6 +253,15 @@ public class ExpensePayoutBMO {
 			ep.setStatus(st);
 			sess.update(ep);
 			tx1.commit();
+			if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()
+					&& SpringUtils.getReservationIntegration().isWriteExpensesToPnrOn()) {
+				String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
+						TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+								user.getDefaulttimezone()).getTimezone()));
+				SpringUtils.getReservationIntegration().writeCommentToPNR(
+						TracingConstants.CMT_APPROVED_INTERIM + formateddatetime,
+						ep.getIncident().getRecordlocator());
+			}
 			return true;
 		} catch (Exception e) {
 			logger.error("unable to deny expense" + payout_id);

@@ -78,23 +78,22 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 /**
  * @author Administrator
  * 
- * create date - Jul 15, 2004
+ *         create date - Jul 15, 2004
  */
 public class IncidentBMO {
 	private static Logger logger = Logger.getLogger(IncidentBMO.class);
 
-
-	
 	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent) throws HibernateException {
 		return insertIncident(iDTO, assoc_ID, mod_agent, false);
 	}
-	
-	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus) throws HibernateException {
+
+	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus)
+			throws HibernateException {
 		boolean oldStatusKept = false;
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			
+
 			Incident oldinc = null;
 			String incident_id = iDTO.getIncident_ID();
 			boolean isnew = false;
@@ -106,7 +105,7 @@ public class IncidentBMO {
 				if (oldinc == null)
 					isnew = true;
 			}
-			
+
 			t = sess.beginTransaction();
 
 			// save incident
@@ -121,11 +120,11 @@ public class IncidentBMO {
 						iDTO.setClosedate(oldinc.getClosedate());
 						oldStatusKept = true;
 					}
-					
-					if(oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
+
+					if (oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
 						iDTO.setWtFile(oldinc.getWtFile());
 					}
-					
+
 					// delete first then insert
 					sess.delete(oldinc);
 					iDTO = clearIncidentIds(iDTO);
@@ -141,21 +140,25 @@ public class IncidentBMO {
 			if (isnew) {
 				// update airtran
 				if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
-					String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DB_DATETIMEFORMAT, null, iDTO.get_TIMEZONE());
+					String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
+							TracingConstants.DB_DATETIMEFORMAT, null, iDTO.get_TIMEZONE());
 
-					SpringUtils.getReservationIntegration().writeCommentToPNR("Baggage Claim (" + iDTO.getIncident_ID() + ") created on "
-							+ formateddatetime, iDTO.getRecordlocator());
+					SpringUtils.getReservationIntegration().writeCommentToPNR(
+							"Baggage Claim (" + iDTO.getIncident_ID() + ") created on " + formateddatetime,
+							iDTO.getRecordlocator());
 				}
-				
+
 			}
 
-			// check to see if we opened the report, if we did, then open all matches
-			//if (iDTO.getStatus().getStatus_ID() ==
+			// check to see if we opened the report, if we did, then open all
+			// matches
+			// if (iDTO.getStatus().getStatus_ID() ==
 			// TracingConstants.MBR_STATUS_OPEN) {
-			//	MatchUtils.openMatches(iDTO.getIncident_ID(), null);
-			//}
+			// MatchUtils.openMatches(iDTO.getIncident_ID(), null);
+			// }
 
-			// check to see if we closed the report, if we did, then close all matches
+			// check to see if we closed the report, if we did, then close all
+			// matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
 				MatchUtils.closeMatches(iDTO.getIncident_ID(), null, true);
 			}
@@ -176,13 +179,13 @@ public class IncidentBMO {
 				t.commit();
 			}
 
-			//check if audit is enabled for this company....
-			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation().getCompany().getVariable()
-					.getAudit_lost_delayed() == 1)
-					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent().getStation().getCompany().getVariable()
-							.getAudit_damaged() == 1)
-					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent().getStation().getCompany().getVariable()
-							.getAudit_missing_articles() == 1)) {
+			// check if audit is enabled for this company....
+			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+					.getCompany().getVariable().getAudit_lost_delayed() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
 				Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, mod_agent);
 
 				if (audit_dto != null) {
@@ -217,6 +220,7 @@ public class IncidentBMO {
 	/**
 	 * 
 	 * insert incident for worldtracer
+	 * 
 	 * @param iDTO
 	 * @return
 	 * @throws HibernateException
@@ -225,7 +229,7 @@ public class IncidentBMO {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			
+
 			Incident oldinc = null;
 			String incident_id = iDTO.getIncident_ID();
 			boolean isnew = false;
@@ -237,7 +241,7 @@ public class IncidentBMO {
 				if (oldinc == null)
 					isnew = true;
 			}
-			
+
 			t = sess.beginTransaction();
 
 			// save incident
@@ -256,7 +260,8 @@ public class IncidentBMO {
 				return 0;
 			}
 
-			// check to see if we closed the report, if we did, then close all matches
+			// check to see if we closed the report, if we did, then close all
+			// matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
 				MatchUtils.closeMatches(iDTO.getIncident_ID(), null);
 			}
@@ -274,13 +279,13 @@ public class IncidentBMO {
 				t.commit();
 			}
 
-			//check if audit is enabled for this company....
-			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation().getCompany().getVariable()
-					.getAudit_lost_delayed() == 1)
-					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent().getStation().getCompany().getVariable()
-							.getAudit_damaged() == 1)
-					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent().getStation().getCompany().getVariable()
-							.getAudit_missing_articles() == 1)) {
+			// check if audit is enabled for this company....
+			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+					.getCompany().getVariable().getAudit_lost_delayed() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
 				Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, iDTO.getAgent());
 
 				if (audit_dto != null) {
@@ -308,7 +313,7 @@ public class IncidentBMO {
 		}
 		return 1;
 	}
-	
+
 	public boolean updateIncidentNoAudit(Incident iDTO) throws HibernateException {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -335,7 +340,7 @@ public class IncidentBMO {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			
+
 			Incident oldinc = null;
 			if (incident_id == null || incident_id.length() <= 0) {
 				return -1;
@@ -344,7 +349,7 @@ public class IncidentBMO {
 				if (oldinc == null)
 					return -1;
 			}
-			
+
 			t = sess.beginTransaction();
 			// save incident
 			if (oldinc.getIncident_ID() != null) {
@@ -365,13 +370,13 @@ public class IncidentBMO {
 				return 0;
 			}
 
-			//check if audit is enabled for this company....
-			if ((oldinc.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && oldinc.getAgent().getStation().getCompany().getVariable()
-					.getAudit_lost_delayed() == 1)
-					|| (oldinc.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && oldinc.getAgent().getStation().getCompany().getVariable()
-							.getAudit_damaged() == 1)
-					|| (oldinc.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && oldinc.getAgent().getStation().getCompany().getVariable()
-							.getAudit_missing_articles() == 1)) {
+			// check if audit is enabled for this company....
+			if ((oldinc.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && oldinc.getAgent().getStation()
+					.getCompany().getVariable().getAudit_lost_delayed() == 1)
+					|| (oldinc.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && oldinc.getAgent()
+							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+					|| (oldinc.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && oldinc.getAgent()
+							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
 				Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(oldinc, mod_agent);
 
 				if (audit_dto != null) {
@@ -399,11 +404,11 @@ public class IncidentBMO {
 		}
 		return 1;
 	}
-	
+
 	/**
-	 * This is to be used solely by the tag number trace feature that may
-	 * occur when an agent selects to search by bag tag number from the 
-	 * Lost/Delay prepopulation screen.
+	 * This is to be used solely by the tag number trace feature that may occur
+	 * when an agent selects to search by bag tag number from the Lost/Delay
+	 * prepopulation screen.
 	 * 
 	 * @param tagNumber
 	 * @return
@@ -413,7 +418,7 @@ public class IncidentBMO {
 		if (tagNumber == null || tagNumber.trim().length() == 0) {
 			return null;
 		}
-		
+
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -424,23 +429,22 @@ public class IncidentBMO {
 			queryString.append(" where ");
 			queryString.append(" incident.status.status_ID <> :closed");
 			queryString.append(" and incident.itemtype.itemType_ID = :lostdelay ");
-			
+
 			String fullTag = null;
 			String basicTag = null;
 
-			
 			try {
 				fullTag = LookupAirlineCodes.getFullBagTag(tagNumber);
 			} catch (BagtagException e) {
 				// Ignore
 			}
-			
+
 			try {
 				basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
 			} catch (BagtagException e) {
 				// Ignore
 			}
-			
+
 			if (fullTag != null && basicTag != null) {
 				queryString.append(" and ((item.claimchecknum like :fullTag");
 				queryString.append(" or claimcheck.claimchecknum like :fullTag) ");
@@ -453,26 +457,26 @@ public class IncidentBMO {
 				queryString.append(" and (item.claimchecknum like :basicTag");
 				queryString.append(" or claimcheck.claimchecknum like :basicTag) ");
 			}
-			
+
 			Query q = sess.createQuery(queryString.toString());
-			
+
 			q.setInteger("closed", TracingConstants.MBR_STATUS_CLOSED);
 			q.setInteger("lostdelay", TracingConstants.LOST_DELAY);
-			
+
 			if (basicTag != null) {
 				q.setParameter("basicTag", basicTag);
 			}
 			if (fullTag != null) {
 				q.setParameter("fullTag", fullTag);
 			}
-			
+
 			List<Incident> list = (List<Incident>) q.list();
 
 			if (list.size() == 0) {
 				// No matching incidents found
 				return null;
 			}
-			
+
 			return list;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
@@ -485,11 +489,9 @@ public class IncidentBMO {
 				logger.error("unable to close connection: " + e);
 			}
 		}
-	
-		
 
 	}
-	
+
 	public static Incident getIncidentByID(String incident_ID, Session sess) {
 		boolean sessionNull = (sess == null);
 
@@ -497,7 +499,8 @@ public class IncidentBMO {
 			if (sessionNull) {
 				sess = HibernateWrapper.getSession().openSession();
 			}
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
+			Query q = sess
+					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
 
@@ -523,13 +526,13 @@ public class IncidentBMO {
 		}
 	}
 
-	
 	public Incident findIncidentByID(String incident_ID) {
 		Session sess = null;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
+			Query q = sess
+					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
 
@@ -554,13 +557,14 @@ public class IncidentBMO {
 			}
 		}
 	}
-	
+
 	public TraceIncident findTraceIncidentByID(String incident_ID) {
 		Session sess = null;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.TraceIncident incident where incident.incident_ID= :incident_ID");
+			Query q = sess
+					.createQuery("from com.bagnet.nettracer.tracing.db.TraceIncident incident where incident.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
 
@@ -591,8 +595,7 @@ public class IncidentBMO {
 	 * 
 	 * @param incident_ID
 	 * @param name
-	 * @return @throws
-	 *         HibernateException
+	 * @return @throws HibernateException
 	 */
 	public Incident findIncidentForPVO(String incident_ID, String name) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -601,8 +604,9 @@ public class IncidentBMO {
 			if (name == null || name.length() == 0)
 				return null;
 
-			Query q = sess.createQuery("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident join incident.passengers passenger"
-					+ " where incident.incident_ID= :incident_ID and (passenger.lastname like :name or passenger.firstname like :name)");
+			Query q = sess
+					.createQuery("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident join incident.passengers passenger"
+							+ " where incident.incident_ID= :incident_ID and (passenger.lastname like :name or passenger.firstname like :name)");
 			q.setString("incident_ID", incident_ID);
 			q.setString("name", name);
 			List list = q.list();
@@ -624,8 +628,10 @@ public class IncidentBMO {
 	}
 
 	/**
-	 * @param hours the number of hours old the incident must be to move to wt
-	 * @param companyCode company whose incidents are to be moved to wt
+	 * @param hours
+	 *            the number of hours old the incident must be to move to wt
+	 * @param companyCode
+	 *            company whose incidents are to be moved to wt
 	 * @return list of Incidents that need to be moved to world tracer
 	 */
 	public List<Incident> findMoveToWtInc(int hours, String companyCode) {
@@ -634,18 +640,21 @@ public class IncidentBMO {
 		}
 		Calendar c = new GregorianCalendar();
 		c.setTime(TracerDateTime.getGMTDate());
-		c.add(Calendar.HOUR, (0-hours));
+		c.add(Calendar.HOUR, (0 - hours));
 		Date incCutoff = c.getTime();
 
-		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where " +
-		" inc.wtFile is null " +  //no worldtracer file already
-		//" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)" +
-		" and ((inc.createdate < :incCutoff) or (inc.createdate = :incCutoff and inc.createtime < :incTimeCutoff))  " + //old enough
-		" and inc.status.status_ID = :status " + // only open
-		" and inc.stationassigned.company.companyCode_ID = :companyCode " +
-		" and inc.itemtype.itemType_ID = :itemType " +
-		" order by inc.createdate asc ";
-		
+		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where "
+				+ " inc.wtFile is null "
+				+ // no worldtracer file already
+				// " and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)"
+				// +
+				" and ((inc.createdate < :incCutoff) or (inc.createdate = :incCutoff and inc.createtime < :incTimeCutoff))  "
+				+ // old enough
+				" and inc.status.status_ID = :status "
+				+ // only open
+				" and inc.stationassigned.company.companyCode_ID = :companyCode "
+				+ " and inc.itemtype.itemType_ID = :itemType " + " order by inc.createdate asc ";
+
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getDirtySession().openSession();
@@ -654,11 +663,10 @@ public class IncidentBMO {
 			q.setTime("incTimeCutoff", incCutoff);
 			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
 			q.setParameter("companyCode", companyCode);
-			//q.setParameter("qStatus", WtqStatus.PENDING);
+			// q.setParameter("qStatus", WtqStatus.PENDING);
 			q.setParameter("itemType", TracingConstants.LOST_DELAY);
 			return q.list();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("unable to get move to WT Incident list: " + e);
 			return null;
 		} finally {
@@ -671,26 +679,26 @@ public class IncidentBMO {
 			}
 		}
 	}
-	
-	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount) throws HibernateException {
+
+	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount)
+			throws HibernateException {
 		return findIncident(siDTO, user, rowsperpage, currpage, iscount, false);
 	}
-	
-	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead) throws HibernateException {
+
+	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
+			boolean dirtyRead) throws HibernateException {
 		Session sess = null;
-		if(dirtyRead) {
+		if (dirtyRead) {
 			sess = HibernateWrapper.getDirtySession().openSession();
-		}
-		else {
+		} else {
 			sess = HibernateWrapper.getSession().openSession();
 		}
 		Query q = null;
 		try {
 			StringBuffer s = new StringBuffer(512);
-			
+
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
-			
 			if (iscount)
 				s.append("select count(incident.incident_ID) from com.bagnet.nettracer.tracing.db.Incident incident ");
 			else
@@ -702,8 +710,9 @@ public class IncidentBMO {
 				s.append(" join incident.itinerary itinerary ");
 			if (siDTO.getClaimchecknum().length() > 0)
 				s.append(" left outer join incident.claimchecks claimcheck ");
-			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0
-					|| siDTO.getCompanycode_ID().length() > 0 || siDTO.getMembershipnum().length() > 0)
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
+					|| siDTO.getLastname().length() > 0 || siDTO.getCompanycode_ID().length() > 0
+					|| siDTO.getMembershipnum().length() > 0)
 				s.append(" join incident.passengers passenger ");
 
 			s.append(" where 1=1 ");
@@ -717,8 +726,8 @@ public class IncidentBMO {
 			if (siDTO.getItemType_ID() > 0) {
 				s.append(" and incident.itemtype.itemType_ID = :itemType_ID ");
 			}
-			
-			if(siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
+
+			if (siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
 				s.append(" and incident.recordlocator like :recordlocator");
 			}
 
@@ -739,27 +748,27 @@ public class IncidentBMO {
 				s.append(" and incident.status.status_ID in " + sb.toString());
 			}
 
-			
-			
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
-			Date stime = null; // time to compare (04:00 if eastern, for example)
+			Date stime = null; // time to compare (04:00 if eastern, for
+								// example)
 			String dateq = "";
-			
+
 			ArrayList dateal = null;
-			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(),siDTO.getE_createtime(),tz,user)) == null) {
+			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(), siDTO.getE_createtime(), tz, user)) == null) {
 				return null;
-			} 
-			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
-			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
-			stime = (Date)dateal.get(4);
-			
-			
+			}
+			sdate = (Date) dateal.get(0);
+			sdate1 = (Date) dateal.get(1);
+			edate = (Date) dateal.get(2);
+			edate1 = (Date) dateal.get(3);
+			stime = (Date) dateal.get(4);
+
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
 					s.append(" and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-						+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
-						+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))");
+							+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
+							+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))");
 
 				} else {
 					s.append(" and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
@@ -776,7 +785,8 @@ public class IncidentBMO {
 			if (siDTO.getAgentassigned() != null && siDTO.getAgentassigned().trim().length() > 0)
 				s.append(" and incident.agentassigned.username like :agentassigned");
 
-			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0) {
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
+					|| siDTO.getLastname().length() > 0) {
 				s.append(" and passenger.firstname like :firstname");
 				s.append(" and passenger.middlename like :middlename");
 				s.append(" and passenger.lastname like :lastname");
@@ -798,11 +808,10 @@ public class IncidentBMO {
 			if (siDTO.getFlightnum().length() > 0) {
 				s.append(" and itinerary.flightnum like :flightnum");
 			}
-			
+
 			if (siDTO.getNoAssignedAgent() == 1) {
 				s.append(" and incident.agentassigned is null");
 			}
-			
 
 			if (!iscount)
 				s.append(" order by incident.incident_ID");
@@ -822,7 +831,7 @@ public class IncidentBMO {
 			if (siDTO.getItemType_ID() > 0) {
 				q.setInteger("itemType_ID", siDTO.getItemType_ID());
 			}
-			if(siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
+			if (siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
 				q.setString("recordlocator", siDTO.getRecordlocator());
 			}
 			if (siDTO.getStatus_ID() > 0) {
@@ -834,15 +843,14 @@ public class IncidentBMO {
 				}
 
 			}
-			
-			
+
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
 					q.setDate("startdate", sdate);
 					q.setTime("starttime", stime);
 					q.setDate("enddate", edate);
 					q.setDate("enddate1", edate1);
-					
+
 				} else {
 					q.setDate("startdate", sdate);
 					q.setDate("startdate1", sdate1);
@@ -862,7 +870,8 @@ public class IncidentBMO {
 			if (siDTO.getTicketnumber() != null & !siDTO.getTicketnumber().equals(""))
 				q.setString("ticketnumber", siDTO.getTicketnumber());
 
-			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0) {
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
+					|| siDTO.getLastname().length() > 0) {
 
 				String a = siDTO.getFirstname().length() == 0 ? "%" : siDTO.getFirstname();
 				String b = siDTO.getMiddlename().length() == 0 ? "%" : siDTO.getMiddlename();
@@ -891,7 +900,7 @@ public class IncidentBMO {
 
 			if (siDTO.getAgent().length() > 0)
 				q.setString("agent", siDTO.getAgent());
-			
+
 			List results = q.list();
 			return results;
 		} catch (Exception e) {
@@ -902,13 +911,14 @@ public class IncidentBMO {
 			sess.close();
 		}
 	}
-	
+
 	public Incident findIncidentByWtId(String wt_id) {
 		Session sess = null;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wtFile.wt_id= :wt_id");
+			Query q = sess
+					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wtFile.wt_id= :wt_id");
 			q.setParameter("wt_id", wt_id);
 			List list = q.list();
 
@@ -933,8 +943,6 @@ public class IncidentBMO {
 			}
 		}
 	}
-	
-
 
 	/**
 	 * automatically generate 10 character incident number 3 alpha/7 numeric
@@ -968,8 +976,9 @@ public class IncidentBMO {
 			}
 
 			// get the last record with this companycode_ID;
-			Query q = sess.createQuery("select count(incident_range.current_num) from com.bagnet.nettracer.tracing.db.Incident_Range incident_range "
-					+ "where incident_range.companycode_ID = :companycode_ID group by incident_range.companycode_ID");
+			Query q = sess
+					.createQuery("select count(incident_range.current_num) from com.bagnet.nettracer.tracing.db.Incident_Range incident_range "
+							+ "where incident_range.companycode_ID = :companycode_ID group by incident_range.companycode_ID");
 
 			q.setString("companycode_ID", companycode);
 
@@ -980,9 +989,10 @@ public class IncidentBMO {
 				newnum = 1;
 			} else {
 				newnum = ((Long) list.get(0)).intValue();
-				// get the next incident_ID number (-1 because not counting this newly
+				// get the next incident_ID number (-1 because not counting this
+				// newly
 				// inserted one)
-				//newnum = ((Long) o[0]).longValue() - 1;
+				// newnum = ((Long) o[0]).longValue() - 1;
 			}
 
 			StringBuffer s = new StringBuffer();
@@ -991,7 +1001,8 @@ public class IncidentBMO {
 			String num = Long.toString(newnum);
 			// padd new number to # digits that total length will equal to
 			// tracingconstants.incident_len
-			for (int i = 0; i < TracingConstants.INCIDENT_LEN - companycode.length() - stationcode.length() - num.length(); i++) {
+			for (int i = 0; i < TracingConstants.INCIDENT_LEN - companycode.length() - stationcode.length()
+					- num.length(); i++) {
 				s.append("0");
 			}
 			s.append(num);
@@ -999,7 +1010,8 @@ public class IncidentBMO {
 
 			// making sure there isn't another incident id in the table already
 			// this would have never happen in production
-			q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident " + "where incident.incident_ID = :incident_ID");
+			q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident "
+					+ "where incident.incident_ID = :incident_ID");
 
 			q.setString("incident_ID", incident_num);
 
@@ -1023,7 +1035,8 @@ public class IncidentBMO {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 
-			Query q = sess.createQuery("select station from com.bagnet.nettracer.tracing.db.Station station " + "where station.station_ID= :station_ID");
+			Query q = sess.createQuery("select station from com.bagnet.nettracer.tracing.db.Station station "
+					+ "where station.station_ID= :station_ID");
 			q.setParameter("station_ID", new Integer(station_ID));
 
 			List list = q.list();
@@ -1047,7 +1060,8 @@ public class IncidentBMO {
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		try {
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident_Assoc a " + "where a.incident_ID= :incident_ID");
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident_Assoc a "
+					+ "where a.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
 			List list = q.list();
 
@@ -1056,7 +1070,8 @@ public class IncidentBMO {
 				return null;
 			}
 			Incident_Assoc ia = (Incident_Assoc) list.get(0);
-			q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident_Assoc a " + "where a.assoc_ID= :assoc_ID");
+			q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident_Assoc a "
+					+ "where a.assoc_ID= :assoc_ID");
 			q.setParameter("assoc_ID", ia.getAssoc_ID());
 			list = q.list();
 
@@ -1073,8 +1088,9 @@ public class IncidentBMO {
 			sess.close();
 		}
 	}
-	
-	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, String searchType) throws HibernateException {
+
+	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
+			String searchType) throws HibernateException {
 		return customQuery(siDTO, user, rowsperpage, currpage, iscount, searchType, false);
 	}
 
@@ -1086,35 +1102,34 @@ public class IncidentBMO {
 	 * @param rowsperpage
 	 * @param currpage
 	 * @param iscount
-	 * @return @throws
-	 *         HibernateException
+	 * @return @throws HibernateException
 	 */
-	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount, String searchType, boolean dirtyRead) throws HibernateException {
+	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
+			String searchType, boolean dirtyRead) throws HibernateException {
 		Session sess = null;
-		
-		if(dirtyRead) {
+
+		if (dirtyRead) {
 			sess = HibernateWrapper.getDirtySession().openSession();
-		}
-		else {
+		} else {
 			sess = HibernateWrapper.getSession().openSession();
 		}
 
 		Query q = null;
 		try {
 			StringBuffer s = new StringBuffer(512);
-			
+
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
-			
 			if (iscount)
 				s.append("select count(incident.incident_ID) from com.bagnet.nettracer.tracing.db.Incident incident ");
 			else
 				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
-			
 
-			if (siDTO.getClaimchecknum().length() > 0 || siDTO.getColor().length() > 0 || siDTO.getBagtype().length() > 0
-					|| siDTO.getXdescelement_ID1() > 0 || siDTO.getXdescelement_ID2() > 0 || siDTO.getXdescelement_ID3() > 0 || siDTO.getManufacturer_ID() > 0
-					|| siDTO.getCategory_ID() > 0 || siDTO.getDescription().length() > 0)
+			if (siDTO.getClaimchecknum().length() > 0 || siDTO.getColor().length() > 0
+					|| siDTO.getBagtype().length() > 0 || siDTO.getXdescelement_ID1() > 0
+					|| siDTO.getXdescelement_ID2() > 0 || siDTO.getXdescelement_ID3() > 0
+					|| siDTO.getManufacturer_ID() > 0 || siDTO.getCategory_ID() > 0
+					|| siDTO.getDescription().length() > 0)
 				s.append(" join incident.itemlist item ");
 			if (siDTO.getCategory_ID() > 0 || siDTO.getDescription().length() > 0)
 				s.append(" join item.inventory inventory ");
@@ -1122,9 +1137,13 @@ public class IncidentBMO {
 				s.append(" join incident.itinerary itinerary ");
 			if (siDTO.getClaimchecknum().length() > 0)
 				s.append(" left outer join incident.claimchecks claimcheck ");
-			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0
-					|| siDTO.getCompanycode_ID().length() > 0 || siDTO.getMembershipnum().length() > 0 || siDTO.getAddress1().length() > 0 || siDTO.getAddress2().length() > 0
-					|| siDTO.getCity().length() > 0 || (siDTO.getState_ID() != null && siDTO.getState_ID().length() > 0) || (siDTO.getProvince() != null && siDTO.getProvince().length() > 0) || siDTO.getZip().length() > 0 || siDTO.getPhone().length() > 0 || siDTO.getCountrycode_ID().length() > 0
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
+					|| siDTO.getLastname().length() > 0 || siDTO.getCompanycode_ID().length() > 0
+					|| siDTO.getMembershipnum().length() > 0 || siDTO.getAddress1().length() > 0
+					|| siDTO.getAddress2().length() > 0 || siDTO.getCity().length() > 0
+					|| (siDTO.getState_ID() != null && siDTO.getState_ID().length() > 0)
+					|| (siDTO.getProvince() != null && siDTO.getProvince().length() > 0) || siDTO.getZip().length() > 0
+					|| siDTO.getPhone().length() > 0 || siDTO.getCountrycode_ID().length() > 0
 					|| siDTO.getEmail().length() > 0) {
 				s.append(" join incident.passengers passenger ");
 				s.append(" join passenger.addresses address");
@@ -1132,11 +1151,9 @@ public class IncidentBMO {
 
 			if (searchType.equals("1")) {
 				s.append(" where 1=1 and incident.itemtype.itemType_ID = " + TracingConstants.LOST_DELAY);
-			}
-			else if (searchType.equals("2")) {
+			} else if (searchType.equals("2")) {
 				s.append(" where 1=1 and incident.itemtype.itemType_ID = " + TracingConstants.DAMAGED_BAG);
-			}
-			else if (searchType.equals("3")) {
+			} else if (searchType.equals("3")) {
 				s.append(" where 1=1 and incident.itemtype.itemType_ID = " + TracingConstants.MISSING_ARTICLES);
 			} else {
 				// Includes searchType 4.
@@ -1145,23 +1162,25 @@ public class IncidentBMO {
 
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
-			Date stime = null; // time to compare (04:00 if eastern, for example)
+			Date stime = null; // time to compare (04:00 if eastern, for
+								// example)
 			String dateq = "";
-			
+
 			ArrayList dateal = null;
-			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(),siDTO.getE_createtime(),tz,user)) == null) {
+			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(), siDTO.getE_createtime(), tz, user)) == null) {
 				return null;
-			} 
-			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
-			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
-			stime = (Date)dateal.get(4);
-			
-			
+			}
+			sdate = (Date) dateal.get(0);
+			sdate1 = (Date) dateal.get(1);
+			edate = (Date) dateal.get(2);
+			edate1 = (Date) dateal.get(3);
+			stime = (Date) dateal.get(4);
+
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
 					s.append(" and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-						+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
-						+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))");
+							+ " or (incident.createdate= :enddate1 and incident.createtime <= :starttime)"
+							+ " or (incident.createdate > :startdate and incident.createdate <= :enddate))");
 
 				} else {
 					s.append(" and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
@@ -1173,9 +1192,10 @@ public class IncidentBMO {
 			if (siDTO.getRecordlocator().length() > 0) {
 				s.append(" and incident.recordlocator like :recordlocator");
 			}
-			
+
 			// passenger
-			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0) {
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
+					|| siDTO.getLastname().length() > 0) {
 				s.append(" and passenger.firstname like :firstname");
 				s.append(" and passenger.middlename like :middlename");
 				s.append(" and passenger.lastname like :lastname");
@@ -1204,8 +1224,9 @@ public class IncidentBMO {
 			if (siDTO.getZip().length() > 0)
 				s.append(" and address.zip like :zip");
 			if (siDTO.getPhone().length() > 0)
-				s.append(" and (address.homephone like :phone or address.workphone like :phone "
-						+ " or address.mobile like :phone or address.pager like :phone or address.altphone like :phone)");
+				s
+						.append(" and (address.homephone like :phone or address.workphone like :phone "
+								+ " or address.mobile like :phone or address.pager like :phone or address.altphone like :phone)");
 			if (siDTO.getEmail().length() > 0)
 				s.append(" and address.email like :email");
 
@@ -1220,11 +1241,14 @@ public class IncidentBMO {
 			if (siDTO.getBagtype().length() > 0)
 				s.append(" and item.bagtype like :bagtype");
 			if (siDTO.getXdescelement_ID1() > 0)
-				s.append(" and (item.xdescelement_ID_1 = :xdesc1 or item.xdescelement_ID_2 = :xdesc1 or item.xdescelement_ID_3 = :xdesc1)");
+				s
+						.append(" and (item.xdescelement_ID_1 = :xdesc1 or item.xdescelement_ID_2 = :xdesc1 or item.xdescelement_ID_3 = :xdesc1)");
 			if (siDTO.getXdescelement_ID2() > 0)
-				s.append(" and (item.xdescelement_ID_1 = :xdesc2 or item.xdescelement_ID_2 = :xdesc2 or item.xdescelement_ID_3 = :xdesc2)");
+				s
+						.append(" and (item.xdescelement_ID_1 = :xdesc2 or item.xdescelement_ID_2 = :xdesc2 or item.xdescelement_ID_3 = :xdesc2)");
 			if (siDTO.getXdescelement_ID3() > 0)
-				s.append(" and (item.xdescelement_ID_1 = :xdesc3 or item.xdescelement_ID_2 = :xdesc3 or item.xdescelement_ID_3 = :xdesc3)");
+				s
+						.append(" and (item.xdescelement_ID_1 = :xdesc3 or item.xdescelement_ID_2 = :xdesc3 or item.xdescelement_ID_3 = :xdesc3)");
 			if (siDTO.getManufacturer_ID() > 0)
 				s.append(" and item.manufacturer_ID = :manu_ID");
 			if (siDTO.getManufacturer_other().length() > 0)
@@ -1235,9 +1259,10 @@ public class IncidentBMO {
 
 			if (siDTO.getDescription().length() > 0) {
 
-				//String[] words =
+				// String[] words =
 				// StringUtils.removePronouns(siDTO.getDescription()).split("\\s");
-				String[] words = StringUtils.removePronouns(siDTO.getDescription().trim()).replace(' ', ',').split("\\,");
+				String[] words = StringUtils.removePronouns(siDTO.getDescription().trim()).replace(' ', ',').split(
+						"\\,");
 				int tempx = 0;
 				for (int x = 0; x < words.length; x++) {
 					if (words[x].trim().length() > 0) {
@@ -1258,7 +1283,7 @@ public class IncidentBMO {
 
 			if (siDTO.getAirline().length() > 0)
 				s.append(" and itinerary.airline like :airline");
-			
+
 			if (siDTO.getStatus_ID() > 0)
 				s.append(" and incident.status.status_ID = :status_ID");
 
@@ -1279,22 +1304,23 @@ public class IncidentBMO {
 					q.setTime("starttime", stime);
 					q.setDate("enddate", edate);
 					q.setDate("enddate1", edate1);
-					
+
 				} else {
 					q.setDate("startdate", sdate);
 					q.setDate("startdate1", sdate1);
 					q.setTime("starttime", stime);
 				}
 			}
-			
+
 			if (siDTO.getStatus_ID() > 0)
 				q.setInteger("status_ID", siDTO.getStatus_ID());
-			
+
 			if (siDTO.getRecordlocator().length() > 0) {
 				q.setString("recordlocator", siDTO.getRecordlocator());
 			}
 
-			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0 || siDTO.getLastname().length() > 0) {
+			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
+					|| siDTO.getLastname().length() > 0) {
 
 				String a = siDTO.getFirstname().length() == 0 ? "%" : siDTO.getFirstname();
 				String b = siDTO.getMiddlename().length() == 0 ? "%" : siDTO.getMiddlename();
@@ -1349,9 +1375,10 @@ public class IncidentBMO {
 			if (siDTO.getCategory_ID() > 0)
 				q.setInteger("category_ID", siDTO.getCategory_ID());
 			if (siDTO.getDescription().length() > 0) {
-				//String[] words =
+				// String[] words =
 				// StringUtils.removePronouns(siDTO.getDescription()).split("\\s");
-				String[] words = StringUtils.removePronouns(siDTO.getDescription().trim()).replace(' ', ',').split("\\,");
+				String[] words = StringUtils.removePronouns(siDTO.getDescription().trim()).replace(' ', ',').split(
+						"\\,");
 				for (int x = 0; x < words.length; x++) {
 					if (words[x].trim().length() > 0) {
 						q.setString("description" + x, "%" + (words[x]).trim() + "%");
@@ -1470,16 +1497,16 @@ public class IncidentBMO {
 				remark.setRemark_ID(0);
 			}
 		}
-		
-		if (inc.getExpenses() != null ) {
-			for(ExpensePayout ep  : inc.getExpenses()) {
+
+		if (inc.getExpenses() != null) {
+			for (ExpensePayout ep : inc.getExpenses()) {
 				ep.setExpensepayout_ID(0);
 			}
 		}
 
 		return inc;
 	}
-	
+
 	public void incrementPrintedReceipt(String incident_id) {
 		Incident inc = this.findIncidentByID(incident_id);
 		if (inc.getPrintedreceipt() == null) {
@@ -1487,18 +1514,18 @@ public class IncidentBMO {
 			this.updateIncidentNoAudit(inc);
 		}
 	}
-	
+
 	public static List<String> queryForFaultCode(ItemType iType, int faultStation, int lossCode) {
-		
+
 		Session sess = null;
 		List<String> list = null;
 
 		try {
 			sess = HibernateWrapper.getDirtySession().openSession();
 
-			SQLQuery query = sess.createSQLQuery("SELECT Incident_ID FROM INCIDENT WHERE itemtype_ID = :itemType " +
-					"AND faultstation_id = :faultStation AND loss_code = :lossCode AND status_ID = :statusId");
-			
+			SQLQuery query = sess.createSQLQuery("SELECT Incident_ID FROM INCIDENT WHERE itemtype_ID = :itemType "
+					+ "AND faultstation_id = :faultStation AND loss_code = :lossCode AND status_ID = :statusId");
+
 			query.addScalar("Incident_ID", Hibernate.STRING);
 			query.setInteger("itemType", iType.getItemType_ID());
 			query.setInteger("faultStation", faultStation);
@@ -1526,22 +1553,23 @@ public class IncidentBMO {
 		if (incEarlyHours <= 0) {
 			return null;
 		}
-		
+
 		Calendar c = new GregorianCalendar();
 		c.setTime(TracerDateTime.getGMTDate());
-		c.add(Calendar.HOUR, (0-incEarlyHours));
+		c.add(Calendar.HOUR, (0 - incEarlyHours));
 		Date incCutoff = c.getTime();
-		
-		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where " +
-		" inc.wtFile is null " +  //no worldtracer file already
-		" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)" +
-		" and inc.createdate <= :incCutoff " + //old enough
-		" and inc.status.status_ID = :status " + // only open
-		" and inc.stationassigned.company.companyCode_ID = :companyCode " +
-		" and inc.itemtype.itemType_ID = :itemType " +
-		" and inc.stationassigned.stationcode in (:earlyStationList) " +
-		" order by inc.createdate asc ";
-		
+
+		String queryString = "select inc from com.bagnet.nettracer.tracing.db.Incident inc where "
+				+ " inc.wtFile is null "
+				+ // no worldtracer file already
+				" and inc.incident_ID not in (select q.incident.incident_ID from WtqIncidentAction q where q.status = :qStatus)"
+				+ " and inc.createdate <= :incCutoff "
+				+ // old enough
+				" and inc.status.status_ID = :status "
+				+ // only open
+				" and inc.stationassigned.company.companyCode_ID = :companyCode "
+				+ " and inc.itemtype.itemType_ID = :itemType "
+				+ " and inc.stationassigned.stationcode in (:earlyStationList) " + " order by inc.createdate asc ";
 
 		Session sess = null;
 		try {
@@ -1554,8 +1582,7 @@ public class IncidentBMO {
 			q.setParameter("itemType", TracingConstants.LOST_DELAY);
 			q.setParameterList("earlyStationList", earlyMoveStations, Hibernate.STRING);
 			return q.list();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			logger.error("unable to get move to WT Incident list: " + e);
 			return null;
 		} finally {
@@ -1577,10 +1604,10 @@ public class IncidentBMO {
 			if (inc == null) {
 				return new ActionMessage("invalid.claim.info");
 			}
-			
+
 			ep.setIncident(inc);
 			inc.getExpenses().add(ep);
-			if(inc.getClaim() == null) {
+			if (inc.getClaim() == null) {
 				Claim c = new Claim();
 				c.setIncident(inc);
 				c.setClaimcurrency_ID(inc.getAgent().getDefaultcurrency());
@@ -1594,19 +1621,36 @@ public class IncidentBMO {
 			sess.save(ep);
 			sess.update(inc);
 			tx.commit();
+			if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()
+					&& SpringUtils.getReservationIntegration().isWriteExpensesToPnrOn()) {
+				String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
+						TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+								agent.getDefaulttimezone()).getTimezone()));
+				if (ep.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
+					// under limit, auto approve
+					SpringUtils.getReservationIntegration().writeCommentToPNR(
+							TracingConstants.CMT_CREATE_INTERIM_UNDERLIMIT + formateddatetime,
+							ep.getIncident().getRecordlocator());
+				} else {
+					// over limit, pending
+					SpringUtils.getReservationIntegration().writeCommentToPNR(
+							TracingConstants.CMT_CREATE_INTERIM + formateddatetime,
+							ep.getIncident().getRecordlocator());
+				}
+			}
 			Transaction tx2 = sess.beginTransaction();
 			try {
-				auditClaim(inc.getClaim(), TracerUtils.getResourcePropertyText("claim.created.with.expense", agent), agent, sess);
+				auditClaim(inc.getClaim(), TracerUtils.getResourcePropertyText("claim.created.with.expense", agent),
+						agent, sess);
 				tx2.commit();
 			} catch (Exception e) {
 				tx2.rollback();
 				logger.error("unable to audit claim entry");
 			}
-			
-			
+
 		} catch (Exception e) {
 			logger.error("unable to save new expense to a claim", e);
-			if(tx != null) {	
+			if (tx != null) {
 				try {
 					tx.rollback();
 				} catch (Exception e1) {
@@ -1614,8 +1658,7 @@ public class IncidentBMO {
 				}
 			}
 			return new ActionMessage("database.error");
-		} 
-		finally {
+		} finally {
 			if (sess != null)
 				sess.close();
 		}
@@ -1625,16 +1668,16 @@ public class IncidentBMO {
 	public static void auditClaim(Claim claim, String reasonForAudit, Agent user, Session sess) throws Exception {
 		Audit_Claim ac = new Audit_Claim();
 		ac.setExpenses(new HashSet());
-		
+
 		ClaimProrate cp = claim.getClaimprorate();
-		if(cp != null) {
+		if (cp != null) {
 			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
 			BeanUtils.copyProperties(a_cp, cp);
 			Prorate_Itinerary pi = null;
 			Audit_Prorate_Itinerary a_pi = null;
 			ArrayList pilist = new ArrayList();
-			if(cp.getProrate_itineraries() != null) {
-				for(int i = 0; i < cp.getPi_list().size(); i++) {
+			if (cp.getProrate_itineraries() != null) {
+				for (int i = 0; i < cp.getPi_list().size(); i++) {
 					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
 					a_pi = new Audit_Prorate_Itinerary();
 					BeanUtils.copyProperties(a_pi, pi);
@@ -1655,16 +1698,17 @@ public class IncidentBMO {
 		Status st = new Status();
 		st.setStatus_ID(claim.getStatus().getStatus_ID());
 		ac.setStatus(st);
-		
+
 		Incident inc = claim.getIncident();
-		
-		for(ExpensePayout ep : inc.getExpenses()) {
+
+		for (ExpensePayout ep : inc.getExpenses()) {
 			Audit_ExpensePayout aep = new Audit_ExpensePayout();
 			BeanUtils.copyProperties(aep, ep);
 			String temp = "";
 			SimpleDateFormat sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
-			for(Comment comment : ep.getComments()) {
-				temp += String.format("\r\n%s %s %s", comment.getAgent().getUsername(), sdf.format(comment.getCreateDate()), comment.getContent());
+			for (Comment comment : ep.getComments()) {
+				temp += String.format("\r\n%s %s %s", comment.getAgent().getUsername(), sdf.format(comment
+						.getCreateDate()), comment.getContent());
 			}
 			aep.setAuditComments(temp);
 			ac.getExpenses().add(aep);
