@@ -303,7 +303,7 @@ public class BagService {
 		oDTO.setHoldingStation(oDTO.getAgent().getStation());
 		oDTO.setItinerary(new HashSet(form.getBagitinerarylist()));
 
-		if(!form.getFaultStation().equals("0")) {
+		if(form.getFaultStation() != null && !form.getFaultStation().equals("")) {
 			Station faultStation = StationBMO.getStation(form.getFaultStation());
 			oDTO.setFaultstation_ID(faultStation.getStation_ID());
 			faultStationName = faultStation.getStationcode();
