@@ -243,15 +243,13 @@
 								<%
 									}
 											}
-								else if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID) {
-												if (canEdit || canPay || canApprove) {
+								else if (canEdit || canPay || canApprove) {
 								%>
 								<html:submit property="updateRemarkOnly" styleId="button">
 									<bean:message key="button.updateCommenOnly" />
 								</html:submit>
 								<%
 												}
-								}
 								%>
 							</td>
 						</tr>
