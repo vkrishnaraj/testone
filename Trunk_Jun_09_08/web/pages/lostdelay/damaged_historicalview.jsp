@@ -358,8 +358,6 @@ function CBG_check(obj) {
             <tr>
               <td colspan="2" align="center" valign="top" bgcolor=white>
                 <br>
-                <INPUT type="button" value="Back" id="button" onClick="history.back()">
-                &nbsp;
                 <html:submit property="create" onclick="generateHistoricalView('outputtype')" styleId="button">
                   <bean:message key="button.createreport" />
                 </html:submit>
