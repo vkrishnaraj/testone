@@ -75,22 +75,11 @@ public class DamagedAction extends CheckedAction {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		
+	
 		Agent user = (Agent) session.getAttribute("user");
-		
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
-			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		if (!(request.getParameter("changeassignedstation") != null
-				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
-				.getStationassigned_ID() > 0)
-				&& !(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1"))) {
-			if (!manageToken(request)) {
-				return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-			}
-		}
 		ActionMessages errors = new ActionMessages();
-
+		IncidentForm theform = (IncidentForm) form;
+		
 		//the company specific codes..
 		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, user
 				.getCurrentlocale(), true, user);
@@ -98,21 +87,16 @@ public class DamagedAction extends CheckedAction {
 		request.setAttribute("losscodes", codes);
 
 		BagService bs = new BagService();
-		IncidentForm theform = (IncidentForm) form;
+		
 		request.setAttribute("damaged", "1");
 
 		if (request.getParameter("express") != null)
 			request.setAttribute("express", "1");
-
-		// readonly
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG, user))
-			theform.setReadonly(1);
-
-		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
-			theform.setAllow_remark_update(1);
-
-		/** ****************** handle requests ******************** */
-
+		
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
 		if (request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
 			request.setAttribute("outputtype", "0");
 			return (mapping.findForward(TracingConstants.DAMAGED_HISTORICAL));
@@ -129,6 +113,26 @@ public class DamagedAction extends CheckedAction {
 
 			return mapping.findForward(TracingConstants.DAMAGED_HISTORICAL);
 		}
+		
+		if (!(request.getParameter("changeassignedstation") != null
+				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
+				.getStationassigned_ID() > 0)
+				&& !(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1"))) {
+			if (!manageToken(request)) {
+				return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+			}
+		}
+
+		// readonly
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG, user))
+			theform.setReadonly(1);
+
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
+			theform.setAllow_remark_update(1);
+
+		/** ****************** handle requests ******************** */
+
+		
 
 		// ajax call to change assigned agent dropdown
 		if (MBRActionUtils.actionChangeAssignedStation(theform, request)) {

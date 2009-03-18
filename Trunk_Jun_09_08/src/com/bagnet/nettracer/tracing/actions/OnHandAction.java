@@ -88,24 +88,13 @@ public class OnHandAction extends CheckedAction {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
+		OnHandForm theform = (OnHandForm) form;
+		ActionMessages errors = new ActionMessages();
 
 		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_OH, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
-		if(!manageToken(request)) {
-			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-		}
-
-		ActionMessages errors = new ActionMessages();
-		BagService bs = new BagService();
-		OnHandForm theform = (OnHandForm) form;
-
-		// Status pertaining to the on hand file
-		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
-		request.setAttribute("oStatusList", oStatusList);
-		request.setAttribute("onhand", "1");
-
 		if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
 			request.setAttribute("outputtype", "0");
 			return (mapping.findForward(TracingConstants.OHD_HISTORICAL));
@@ -125,8 +114,23 @@ public class OnHandAction extends CheckedAction {
 
 			return mapping.findForward(TracingConstants.OHD_HISTORICAL);
 		}
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
+
+
+		BagService bs = new BagService();
+		
+
+		// Status pertaining to the on hand file
+		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
+		request.setAttribute("oStatusList", oStatusList);
+		request.setAttribute("onhand", "1");
+
+
 		// add new remark box -- set new remark with current gmt time
-		else if(request.getParameter("addremark") != null) {
+		if(request.getParameter("addremark") != null) {
 			Remark r = theform.getRemark(theform.getRemarklist().size());
 			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
 			r.setAgent(user);

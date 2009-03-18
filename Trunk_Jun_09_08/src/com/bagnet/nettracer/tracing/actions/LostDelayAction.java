@@ -81,13 +81,33 @@ public class LostDelayAction extends CheckedAction {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-
+		IncidentForm theform = (IncidentForm) form;
+		
 		Agent user = (Agent) session.getAttribute("user");
 
 		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
+		if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
+			request.setAttribute("outputtype", "0");
+			return (mapping.findForward(TracingConstants.LD_HISTORICAL));
+		}
+		else if(request.getParameter("viewhistoryreport") != null
+				&& request.getParameter("viewhistoryreport").length() > 0) {
+			String reportfile = getReportFile(theform, user, request);
+
+			if(reportfile == null || reportfile.equals("")) {
+				ActionMessage error = new ActionMessage("message.nodata");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}
+			else {
+				request.setAttribute("reportfile", reportfile);
+			}
+
+			return mapping.findForward(TracingConstants.LD_HISTORICAL);
+		}
+
 		if (!(request.getParameter("changeassignedstation") != null
 				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
 				.getStationassigned_ID() > 0)
@@ -99,7 +119,7 @@ public class LostDelayAction extends CheckedAction {
 
 		BagService bs = new BagService();
 		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
-		IncidentForm theform = (IncidentForm) form;
+
 
 		//the company specific codes..
 		
@@ -147,26 +167,7 @@ public class LostDelayAction extends CheckedAction {
 			
 			request.setAttribute("prepopulate", new Integer("1"));
 			return (mapping.findForward(TracingConstants.LD_MAIN));
-		}	else if(request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
-			request.setAttribute("outputtype", "0");
-			return (mapping.findForward(TracingConstants.LD_HISTORICAL));
 		}
-		else if(request.getParameter("viewhistoryreport") != null
-				&& request.getParameter("viewhistoryreport").length() > 0) {
-			String reportfile = getReportFile(theform, user, request);
-
-			if(reportfile == null || reportfile.equals("")) {
-				ActionMessage error = new ActionMessage("message.nodata");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
-			}
-			else {
-				request.setAttribute("reportfile", reportfile);
-			}
-
-			return mapping.findForward(TracingConstants.LD_HISTORICAL);
-		}
-
 
 		ActionMessage error = null;
 

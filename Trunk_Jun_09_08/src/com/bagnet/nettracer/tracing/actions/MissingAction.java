@@ -70,15 +70,11 @@ public class MissingAction extends CheckedAction {
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
-		if (!(request.getParameter("changeassignedstation") != null
-				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
-				.getStationassigned_ID() > 0)
-				&& !(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1"))) {
-			if (!manageToken(request)) {
-				return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-			}
-		}
+		/** ****************** handle requests ******************** */
 
+		IncidentForm theform = (IncidentForm) form;
+		ActionMessages errors = new ActionMessages();
+		
 		//the company specific codes..
 		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, user
 				.getCurrentlocale(), true, user);
@@ -86,7 +82,7 @@ public class MissingAction extends CheckedAction {
 		request.setAttribute("losscodes", codes);
 
 		BagService bs = new BagService();
-		IncidentForm theform = (IncidentForm) form;
+
 		request.setAttribute("missing", "1");
 
 		if (request.getParameter("express") != null)
@@ -97,11 +93,7 @@ public class MissingAction extends CheckedAction {
 
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user))
 			theform.setAllow_remark_update(1);
-
-		ActionMessages errors = new ActionMessages();
-
-		/** ****************** handle requests ******************** */
-
+		
 		if (request.getParameter("historical_report") != null && request.getParameter("historical_report").length() > 0) {
 			request.setAttribute("outputtype", "0");
 			return (mapping.findForward(TracingConstants.MA_HISTORICAL));
@@ -117,6 +109,15 @@ public class MissingAction extends CheckedAction {
 			}
 
 			return mapping.findForward(TracingConstants.MA_HISTORICAL);
+		}
+		
+		if (!(request.getParameter("changeassignedstation") != null
+				&& request.getParameter("changeassignedstation").equals("1") && ((IncidentForm) form)
+				.getStationassigned_ID() > 0)
+				&& !(request.getParameter("getstation") != null && request.getParameter("getstation").equals("1"))) {
+			if (!manageToken(request)) {
+				return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+			}
 		}
 
 		// ajax call to change assigned agent dropdown
