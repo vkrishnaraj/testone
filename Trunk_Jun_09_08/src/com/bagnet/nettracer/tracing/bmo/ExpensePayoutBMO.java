@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.bmo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -265,6 +266,33 @@ public class ExpensePayoutBMO {
 			return true;
 		} catch (Exception e) {
 			logger.error("unable to deny expense" + payout_id);
+			return false;
+		} finally {
+			if (sess != null) sess.close();
+		}
+		
+	}
+
+	public static boolean addComment(int epId, Agent user, String key,
+			String content) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		Transaction tx1 = sess.beginTransaction();
+		try {
+			ExpensePayout ep = (ExpensePayout) sess.load(ExpensePayout.class, epId);
+			Comment com = new Comment(user);
+			String tmp = TracerUtils.getResourcePropertyText(key, user);
+			tmp += content != null ? content : "";
+			com.setContent(tmp);
+
+			if(ep.getComments() == null){
+				ep.setComments(new HashSet<Comment>());
+			}
+			ep.getComments().add(com);
+			sess.update(ep);
+			tx1.commit();
+			return true;
+		} catch (Exception e) {
+			logger.error("unable to add comment to expense" + epId);
 			return false;
 		} finally {
 			if (sess != null) sess.close();

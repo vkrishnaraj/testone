@@ -183,7 +183,9 @@
 								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;<fmt:formatDate value="${comment.createDate}" />&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
 							</td>
 						</tr>
-
+					<% 
+					if (canEdit || canApprove || canPay) {
+						%>
 						<tr>
 							<td colspan=3>
 								<bean:message key="colname.new.comments" />
@@ -195,6 +197,9 @@
 									size="4" maxlength="4" disabled="disabled" />
 							</td>
 						</tr>
+						<% 
+						}
+					%>
 						<tr>
 							<td align="center" valign="top" colspan=3>
 								<%
@@ -222,20 +227,31 @@
 								<%
 									}
 											} else if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
-												if (canPay) {
+												if (canEdit || canPay || canApprove) {
+								%>
+								<html:submit property="updateExpense" styleId="button">
+									<bean:message key="button.updatePayment" />
+								</html:submit>&nbsp;
+								
+								<%
+									}
+									if (canPay) {
 								%>
 								<html:submit property="payExpense" styleId="button">
 									<bean:message key="button.payExpense" />
 								</html:submit>
 								<%
-									} else if (canEdit) {
-								%>
-								<html:submit property="updateExpense" styleId="button">
-									<bean:message key="button.updatePayment" />
-								</html:submit>
-								<%
 									}
 											}
+								else if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID) {
+												if (canEdit || canPay || canApprove) {
+								%>
+								<html:submit property="updateRemarkOnly" styleId="button">
+									<bean:message key="button.updateCommenOnly" />
+								</html:submit>
+								<%
+												}
+								}
 								%>
 							</td>
 						</tr>

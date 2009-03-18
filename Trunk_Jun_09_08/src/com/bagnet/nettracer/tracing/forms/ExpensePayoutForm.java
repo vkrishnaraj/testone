@@ -60,6 +60,7 @@ public class ExpensePayoutForm extends ActionForm {
 	//locale info
 	private String dateFormat;
 	private String tz;
+	private String updateRemarkOnly;
 	
 	public String getIncident_ID() {
 		return incident_ID;
@@ -361,5 +362,11 @@ public class ExpensePayoutForm extends ActionForm {
 	
 	public void setPayExpense(String payexpense) {
 		this.payExpense = payexpense;
+	}
+	public String getUpdateRemarkOnly() {
+		return updateRemarkOnly;
+	}
+	public void setUpdateRemarkOnly(String updateRemarkOnly) {
+		this.updateRemarkOnly = updateRemarkOnly;
 	}
 }

@@ -54,6 +54,14 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		} else if (expenseForm.getPayExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
 			addComment(ep, user, "expense.comment.paid", expenseForm.getNewComment());
+		} else if (expenseForm.getUpdateRemarkOnly() != null) {
+			int epId = ep.getExpensepayout_ID();
+			if(ExpensePayoutBMO.addComment(epId, user, "expense.comment.comment", expenseForm.getNewComment())) {
+				return mapping.findForward(UPDATE_SUCCESS);
+			}
+			else {
+				return mapping.findForward(ERROR);
+			}
 		}
 
 		ep.setStatus(st);
