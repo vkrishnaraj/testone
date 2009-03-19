@@ -1196,6 +1196,8 @@
 	</target>
 	<target name="dev-build-cron">
 		<property name="ant_project_name" value="tracer"/>
+		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/tracer/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
 
