@@ -101,25 +101,4 @@ public class Incident_Claimcheck implements Serializable {
 		this.tempOHD_ID = tempOHD_ID;
 	}
 	
-	@Override
-	public boolean equals(Object otherObject) {
-		// TODO Auto-generated method stub
-		if(this == otherObject) return true;
-		if(otherObject == null) return false;
-		if(!(otherObject instanceof Incident_Claimcheck)) return false;
-		
-		if(incident == null || claimchecknum == null) return false;
-		
-		Incident_Claimcheck o = (Incident_Claimcheck) otherObject;
-		return (claimchecknum.equals(o.getClaimchecknum()) && incident.equals(o.getIncident()));
-	}
-	
-	@Override
-	public int hashCode() {
-		int result = 23;
-		result = 37 * result + (incident == null ? 0 : incident.hashCode());
-		result = 37 * result + (claimchecknum == null ? 0 : claimchecknum.hashCode());
-		return result;
-	}
-	
 }

@@ -61,8 +61,6 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 /**
  * @author Matt
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class DamagedAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -92,6 +90,11 @@ public class DamagedAction extends CheckedAction {
 
 		if (request.getParameter("express") != null)
 			request.setAttribute("express", "1");
+		
+		if (request.getParameter("email_customer") != null)
+			theform.setEmail_customer(1);
+		else
+			theform.setEmail_customer(0);
 		
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
@@ -301,13 +304,6 @@ public class DamagedAction extends CheckedAction {
 			Incident iDTO = new Incident();
 			if (theform.getIncident_ID() == null || theform.getIncident_ID().length() == 0)
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
-
-			
-
-			if (request.getParameter("email_customer") != null)
-				theform.setEmail_customer(1);
-			else
-				theform.setEmail_customer(0);
 
 			ActionMessage error = null;
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {

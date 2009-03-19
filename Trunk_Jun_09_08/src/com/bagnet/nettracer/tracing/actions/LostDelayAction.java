@@ -83,6 +83,11 @@ public class LostDelayAction extends CheckedAction {
 		}
 		IncidentForm theform = (IncidentForm) form;
 		
+		if(request.getParameter("email_customer") != null)
+			theform.setEmail_customer(1);
+		else
+			theform.setEmail_customer(0);
+		
 		Agent user = (Agent) session.getAttribute("user");
 
 		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
@@ -308,11 +313,6 @@ public class LostDelayAction extends CheckedAction {
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_TEMP);
 
 			// if just save, then don't do anything.
-
-			if(request.getParameter("email_customer") != null)
-				theform.setEmail_customer(1);
-			else
-				theform.setEmail_customer(0);
 
 			if(request.getParameter("savetowt") != null && theform.getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
 				error = new ActionMessage("error.wt_save_closed");

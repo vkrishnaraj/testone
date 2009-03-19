@@ -7,7 +7,6 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -39,9 +38,6 @@ public class TraceIncident implements Serializable {
 	private Set itinerary;
 	private Set claimchecks;
 
-	private ArrayList itinerary_list; // for displaying to the search incident
-	private ArrayList claimcheck_list; // for display to the search incident page
-	private ArrayList passenger_list; // for displaying to the search incident
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -80,8 +76,6 @@ public class TraceIncident implements Serializable {
 	 */
 	public void setClaimchecks(Set claimchecks) {
 		this.claimchecks = claimchecks;
-		this.claimcheck_list = (claimchecks != null ? new ArrayList(claimchecks)
-				: new ArrayList());
 	}
 
 	/**
@@ -121,8 +115,6 @@ public class TraceIncident implements Serializable {
 	 */
 	public void setPassengers(Set passengers) {
 		this.passengers = passengers;
-		this.passenger_list = (passengers != null ? new ArrayList(passengers)
-				: new ArrayList());
 	}
 
 	/**
@@ -144,8 +136,6 @@ public class TraceIncident implements Serializable {
 	 */
 	public void setItinerary(Set itinerary) {
 		this.itinerary = itinerary;
-		this.itinerary_list = (itinerary != null ? new ArrayList(itinerary)
-				: new ArrayList());
 	}
 
 	/**
@@ -306,18 +296,6 @@ public class TraceIncident implements Serializable {
 	 */
 	public void setOhd_lasttraced(Date ohd_lasttraced) {
 		this.ohd_lasttraced = ohd_lasttraced;
-	}
-
-	public ArrayList getItinerary_list() {
-		return itinerary_list;
-	}
-
-	public ArrayList getClaimcheck_list() {
-		return claimcheck_list;
-	}
-
-	public ArrayList getPassenger_list() {
-		return passenger_list;
 	}
 
 	public String getRcreatedate() {

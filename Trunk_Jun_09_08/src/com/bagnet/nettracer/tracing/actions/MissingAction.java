@@ -73,6 +73,12 @@ public class MissingAction extends CheckedAction {
 		/** ****************** handle requests ******************** */
 
 		IncidentForm theform = (IncidentForm) form;
+
+		if (request.getParameter("email_customer") != null)
+			theform.setEmail_customer(1);
+		else
+			theform.setEmail_customer(0);
+		
 		ActionMessages errors = new ActionMessages();
 		
 		//the company specific codes..
@@ -197,11 +203,6 @@ public class MissingAction extends CheckedAction {
 
 			if (theform.getIncident_ID() == null || theform.getIncident_ID().length() == 0)
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
-
-			if (request.getParameter("email_customer") != null)
-				theform.setEmail_customer(1);
-			else
-				theform.setEmail_customer(0);
 
 			ActionMessage error = null; 
 
