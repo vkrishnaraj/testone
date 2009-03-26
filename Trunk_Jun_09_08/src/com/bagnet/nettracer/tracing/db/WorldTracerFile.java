@@ -13,10 +13,8 @@ import javax.persistence.Enumerated;
 @Embeddable
 public class WorldTracerFile implements Serializable{
 
-	@Enumerated(EnumType.STRING)
 	private WTStatus status;
 	
-	@Column(length = 15)
 	private String wt_id;
 	
 	public WorldTracerFile() {}
@@ -31,7 +29,7 @@ public class WorldTracerFile implements Serializable{
 		this.status = wtStatus;
 	}
 
-
+	@Enumerated(EnumType.STRING)
 	public WTStatus getWt_status() {
 		return status;
 	}
@@ -39,7 +37,7 @@ public class WorldTracerFile implements Serializable{
 		this.status = status;
 	}
 	
-
+	@Column(length = 15)
 	public String getWt_id() {
 		return wt_id;
 	}
