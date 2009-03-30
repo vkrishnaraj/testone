@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
@@ -40,6 +42,7 @@ public class AuditClaimSettlement {
 
 	@OneToMany(mappedBy = "auditClaimSettlement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@IndexColumn(name = "position")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<AuditClaimSettlementBag> auditBagList;
 
 	@Column(length = 25)

@@ -92,6 +92,10 @@ public class SearchExpenseAction extends BaseExpenseAction {
 			if (totalpages <= currpage) {
 				request.setAttribute("currpage", "0");
 			}
+			else if(currpage + 1 == totalpages) {
+				request.setAttribute("end", "1");
+			}
+			
 			if (totalpages > 1) {
 				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {

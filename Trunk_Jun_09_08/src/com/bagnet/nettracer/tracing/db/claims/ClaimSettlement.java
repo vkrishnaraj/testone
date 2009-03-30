@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
@@ -37,6 +39,7 @@ public class ClaimSettlement {
 
 	@OneToMany(mappedBy = "claimSettlement", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@IndexColumn(name="position")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<ClaimSettlementBag> bagList;
 
 	@Column(length = 25)

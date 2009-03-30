@@ -29,6 +29,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
@@ -77,6 +79,7 @@ public class ExpensePayout implements Serializable {
 	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
 	@JoinTable(name = "expense_comment", joinColumns = @JoinColumn(name = "expensepayout_ID"))
 	@org.hibernate.annotations.OrderBy(clause = "createDate asc")
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<Comment> comments = new HashSet<Comment>();
 
 	@ManyToOne

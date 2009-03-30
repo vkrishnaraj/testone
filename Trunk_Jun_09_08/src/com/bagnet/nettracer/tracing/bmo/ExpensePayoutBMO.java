@@ -85,26 +85,14 @@ public class ExpensePayoutBMO {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Criteria crit = getSearchCriteria(form, user, sess);
-			crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			crit.addOrder(Order.asc("st.status_ID"));
-			List<ExpensePayout> foo = crit.list();
+			crit.addOrder(Order.asc("incident.incident_ID"));
 			int startRow = form.getCurrentPage() * form.getRowsPerPage();
 			int rows = form.getRowsPerPage();
-			if (foo != null) {
-				if (foo.size() >= startRow + rows) {
-					return foo.subList(startRow, startRow + rows);
-				}	
-				else if(foo.size() > startRow) {
-					return foo.subList(startRow, foo.size());
-				}
-				else if(foo.size() >= rows) {
-					return foo.subList(0, rows);
-				}
-				else {
-					return foo;
-				}
-			}
-			return null;
+			crit.setFirstResult(startRow);
+			crit.setMaxResults(rows);
+			List<ExpensePayout> foo = crit.list();
+			return foo;
 		} catch (Exception e) {
 
 			logger.error("unable to find expenses ", e);

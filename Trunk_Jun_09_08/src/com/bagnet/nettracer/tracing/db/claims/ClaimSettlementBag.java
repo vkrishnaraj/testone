@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Proxy;
 
@@ -44,6 +46,7 @@ public class ClaimSettlementBag {
 
 	@OneToMany(mappedBy = "claimSettlementBag", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@IndexColumn(name="position")
+	@Fetch(FetchMode.SUBSELECT)
 	private List<SettlementBagInventory> inventory;
 
 	public String getColor() {

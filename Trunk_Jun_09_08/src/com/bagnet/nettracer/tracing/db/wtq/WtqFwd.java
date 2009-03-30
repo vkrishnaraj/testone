@@ -6,19 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -32,10 +27,10 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	private Collection<WtqSegment> itinerary = new ArrayList<WtqSegment>();
 	
 	private String fwdExpediteNum = null;
-	
+
 	private String fwdDestinationAirline;
 	private String fwdDestinationStation;
-	
+
 	private String matchingAhl;
 
 	private Set<String> teletypes = new HashSet<String>();
@@ -50,21 +45,23 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	public void setFwdHandleCopy(String handleCopy) {
 		this.handleCopy = handleCopy;
 	}
-	
-	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch=FetchType.EAGER)
-	@JoinTable(name = "wtq_name", joinColumns=@JoinColumn(name="wt_queue_id"))
-	@Column(name = "pax_name", nullable = false, length=20)
+
+	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "wtq_name", joinColumns = @JoinColumn(name = "wt_queue_id"))
+	@Column(name = "pax_name", nullable = false, length = 20)
+	@Fetch(FetchMode.SUBSELECT)
 	public Set<String> getFwdName() {
 		return name;
 	}
-	
+
 	public void setFwdName(Set<String> name) {
 		this.name = name;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(fetch=FetchType.EAGER)
+	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
 	@JoinTable(name = "WTQ_SEGMENT", joinColumns = @JoinColumn(name = "segment_id"))
 	@org.hibernate.annotations.OrderBy(clause = "departdate asc, departureTime asc")
+	@Fetch(FetchMode.SUBSELECT)
 	public Collection<WtqSegment> getItinerary() {
 		return itinerary;
 	}
@@ -73,7 +70,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 		this.itinerary = itinerary;
 	}
 
-	@Column(length=20)
+	@Column(length = 20)
 	public String getFwdExpediteNum() {
 		return fwdExpediteNum;
 	}
@@ -81,18 +78,17 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	public void setFwdExpediteNum(String expediteNum) {
 		this.fwdExpediteNum = expediteNum;
 	}
-	
-	@Column(length=3)
+
+	@Column(length = 3)
 	public String getFwdDestinationAirline() {
 		return fwdDestinationAirline;
 	}
 
-	
 	public void setFwdDestinationAirline(String fwdDestinationAirline) {
 		this.fwdDestinationAirline = fwdDestinationAirline;
 	}
 
-	@Column(length=4)
+	@Column(length = 4)
 	public String getFwdDestinationStation() {
 		return fwdDestinationStation;
 	}
@@ -101,9 +97,10 @@ public abstract class WtqFwd extends WorldTracerQueue {
 		this.fwdDestinationStation = fwdDestinationStation;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch=FetchType.EAGER)
-	@JoinTable(name = "wtq_teletype", joinColumns=@JoinColumn(name="wt_queue_id"))
+	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "wtq_teletype", joinColumns = @JoinColumn(name = "wt_queue_id"))
 	@Column(name = "ttype_address", nullable = false)
+	@Fetch(FetchMode.SUBSELECT)
 	public Set<String> getTeletypes() {
 		return teletypes;
 	}
@@ -111,17 +108,17 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	public void setTeletypes(Set<String> teletypes) {
 		this.teletypes = teletypes;
 	}
-	
-	@Column(length=60)
+
+	@Column(length = 60)
 	public String getSupInfo() {
 		return supInfo;
 	}
-	
+
 	public void setSupInfo(String supInfo) {
 		this.supInfo = supInfo;
 	}
 
-	@Column(length=20)
+	@Column(length = 20)
 	public String getMatchingAhl() {
 		return matchingAhl;
 	}
@@ -133,7 +130,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	@Override
 	@Transient
 	public Object[] getExistsParameters() {
-		return new Object[] {this.getFwdExpediteNum(), this.getStatus()};
+		return new Object[] { this.getFwdExpediteNum(), this.getStatus() };
 	}
 
 	@Override
@@ -141,5 +138,5 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	public String getExistsQuery() {
 		return "from WtqFwd fwd where fwd.fwdExpediteNum = ? and fwd.status = ?";
 	}
-	
+
 }
