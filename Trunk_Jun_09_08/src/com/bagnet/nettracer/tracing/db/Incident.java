@@ -31,6 +31,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -186,6 +188,7 @@ public class Incident implements Serializable {
 	 */
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "createdate")
+	@Fetch(FetchMode.SELECT)
 	public Set<ExpensePayout> getExpenses() {
 		return expenses;
 	}
@@ -270,6 +273,7 @@ public class Incident implements Serializable {
 	 */
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause="claimcheck_ID")
+	@Fetch(FetchMode.SELECT)
 	public Set<Incident_Claimcheck> getClaimchecks() {
 		return claimchecks;
 	}
@@ -289,6 +293,7 @@ public class Incident implements Serializable {
 	 */
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.IndexColumn(name = "bagnumber")
+	@Fetch(FetchMode.SELECT)
 	public List<Item> getItemlist() {
 		return itemlist;
 	}
@@ -308,6 +313,7 @@ public class Incident implements Serializable {
 	 */
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "articles_ID DESC")
+	@Fetch(FetchMode.SELECT)
 	public Set<Articles> getArticles() {
 		return articles;
 	}
@@ -325,6 +331,7 @@ public class Incident implements Serializable {
 	 */
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "passenger_id")
+	@Fetch(FetchMode.SELECT)
 	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
@@ -345,6 +352,7 @@ public class Incident implements Serializable {
 	 */
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause="createtime")
+	@Fetch(FetchMode.SELECT)
 	public Set<Remark> getRemarks() {
 		return remarks;
 	}
@@ -359,6 +367,7 @@ public class Incident implements Serializable {
 
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "departdate, schdeparttime, itinerary_ID")
+	
 	public Set<Itinerary> getItinerary() {
 		return itinerary;
 	}
