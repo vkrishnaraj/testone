@@ -148,13 +148,13 @@
 									<spring:message code="bag.status.matched"/>
 							</c:when>
 							<c:when test="${item.bagstatus == 'In Transit' }">
-									<spring:message code="claim.status.inTransit"/>
+									<spring:message code="bag.status.inTransit"/>
 							</c:when>
 							<c:when test="${item.bagstatus == 'To Be Delivered' }">
-									<spring:message code="claim.status.toBeDelivered"/>
+									<spring:message code="bag.status.toBeDelivered"/>
 							</c:when>
 							<c:when test="${item.bagstatus == 'Process For Delivery' }">
-									<spring:message code="claim.status.procForDelivery"/>
+									<spring:message code="bag.status.procForDelivery"/>
 							</c:when>
 							<c:otherwise>
 								<spring:message code="unknown"/>
