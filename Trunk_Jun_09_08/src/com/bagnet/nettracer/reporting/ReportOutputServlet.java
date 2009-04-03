@@ -178,9 +178,12 @@ public class ReportOutputServlet extends HttpServlet {
 			
 			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF) response
 					.setContentType("application/pdf");
-			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) response
-					.setContentType("text/html");
-			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) response
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
+				response.setContentType("text/html");
+				response.addHeader("Pragma", "No-cache");
+				response.addHeader("Cache-Control", "no-cache");
+				response.addDateHeader("Expires", -1);				
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) response
 					.setContentType("application/vnd.ms-excel");
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) response
 					.setContentType("text/plain");
@@ -189,6 +192,7 @@ public class ReportOutputServlet extends HttpServlet {
 
 			int length = 0;
 			
+
 			
 			response.setContentLength((int) iFile.length());
 			
