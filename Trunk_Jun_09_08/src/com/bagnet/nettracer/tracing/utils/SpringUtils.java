@@ -8,6 +8,7 @@ import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
+import com.bagnet.nettracer.wt.svc.ActionFileManager;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class SpringUtils {
@@ -23,6 +24,8 @@ public class SpringUtils {
 	private static final String WORLDTRACER_CONNECTOR = "wtConnector";
 
 	private static final String WORLDTRACER_TX_BMO = "wtTx-bmo";
+
+	private static final String ACTIONFILE_MANAGER = "actionFileManager";
 	
 	static {
 		try {
@@ -61,5 +64,10 @@ public class SpringUtils {
 
 	public static WtTransactionBmo getWtTxBmo() {
 		return (WtTransactionBmo) getBean(WORLDTRACER_TX_BMO);
+	}
+
+	public static ActionFileManager getActionFileManager() {
+		// TODO Auto-generated method stub
+		return (ActionFileManager) getBean(ACTIONFILE_MANAGER);
 	}
 }

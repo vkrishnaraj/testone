@@ -36,4 +36,5 @@ public interface WorldTracerRule<T> {
 	 * @throws WorldTracerException 
 	 */
 	String getFieldString(WorldTracerField field, List<String> list) throws WorldTracerException;
+	int getMaxAllowed();
 }

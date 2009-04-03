@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1227,6 +1229,27 @@ public class BetaWtConnector implements WorldTracerConnector {
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
+	}
+
+	@Override
+	public EnumMap<ActionFileType, int[]> getActionFileCounts(
+			String companyCode, String wtStation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getActionFileDetails(String companyCode, String stationCode,
+			ActionFileType type, int day, int itemNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<Worldtracer_Actionfiles> getActionFileSummary(
+			String companyCode, String stationCode, ActionFileType type, int day) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

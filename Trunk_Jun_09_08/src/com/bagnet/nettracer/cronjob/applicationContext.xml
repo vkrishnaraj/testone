@@ -48,7 +48,7 @@
 	
 	<bean id="wtRuleMap" class="${wt.rules}"/>
 	
-	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.BetaWtConnector">
+	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector">
 		<constructor-arg value="${company.code}" />
 		<property name="wtRuleMap" ref="wtRuleMap" />
 		<property name="userType" value="${wt.user.type}" />

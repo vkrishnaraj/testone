@@ -170,4 +170,6 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlementBag" />
 		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlement" />
 		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditSettlementBagInventory" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wt.ActionFileStation" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wt.ActionFileCount" />
 		

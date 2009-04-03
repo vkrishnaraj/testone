@@ -8,8 +8,10 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +47,8 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wt.ActionFileCount;
+import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
@@ -63,7 +67,7 @@ import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 
 public class DefaultWorldTracerService implements WorldTracerService {
 
-	private static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM");
+	private static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
 
 	private static final Logger logger = Logger.getLogger(DefaultWorldTracerService.class);
 
@@ -103,15 +107,12 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		String wt_id = null;
 
 		try {
-			Map<WorldTracerField, List<String>> fieldMap = createFieldMap(incident);
+			Map<WorldTracerField, List<String>> fieldMap = createFieldMap(incident);  //Create error, corrected field IT
 
 			if (fieldMap == null) {
 				throw new WorldTracerException("Unable to generate incident mapping");
 			}
-
-			wt_id = wtConnector.insertIncident(fieldMap,
-					incident.getStationassigned().getCompany().getCompanyCode_ID(), incident.getStationassigned()
-							.getWt_stationcode());
+			wt_id = wtConnector.insertIncident(fieldMap,incident.getStationassigned().getCompany().getCompanyCode_ID(), incident.getStationassigned().getWt_stationcode());
 
 		} catch (Exception e) {
 			if (e instanceof WorldTracerException) {
@@ -325,7 +326,8 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	@WorldTracerTx(type = TxType.IMPORT_AHL)
 	public Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user) throws WorldTracerException {
 		String result = wtConnector.findAHL(wt_id);
-		Incident foundinc = WTIncident.parseWTIncident(result, status, user);
+		//Incident foundinc = WTIncident.parseWTIncident(result, status, user);
+		Incident foundinc = WTIncident.newParseWTIncident(result, status, user);
 		return foundinc;
 	}
 
@@ -333,7 +335,8 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	public OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException {
 		String result = wtConnector.findOHD(wt_id);
 		// for now show all as active
-		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
+		//OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
+		OHD foundohd = WTOHD.newParseWTOHD(result, WTStatus.ACTIVE);
 		return foundohd;
 	}
 
@@ -1177,6 +1180,35 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	public void setWtCompanyCode(String wtCompanyCode) {
 		this.wtCompanyCode = wtCompanyCode;
+	}
+
+	public ActionFileStation getActionFileCount(String companyCode,	String wtStation) {
+		EnumMap<ActionFileType, int[]> result;
+		try {
+			result = this.wtConnector.getActionFileCounts(companyCode, wtStation);
+		} catch (WorldTracerException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+		ActionFileStation afStation = new ActionFileStation();
+		afStation.setCompanyCode(companyCode);
+		afStation.setStationCode(wtStation);
+		Map<ActionFileType, ActionFileCount> countMap = new EnumMap<ActionFileType, ActionFileCount>(ActionFileType.class);
+		if (result != null) {
+			for (Entry<ActionFileType, int[]> entry : result.entrySet()) {
+				ActionFileCount afCount = new ActionFileCount();
+				afCount.setDayOne(entry.getValue()[0]);
+				afCount.setDayTwo(entry.getValue()[1]);
+				afCount.setDayThree(entry.getValue()[2]);
+				afCount.setDayFour(entry.getValue()[3]);
+				afCount.setDayFive(entry.getValue()[4]);
+				afCount.setDaySix(entry.getValue()[5]);
+				afCount.setDaySeven(entry.getValue()[6]);
+				countMap.put(entry.getKey(), afCount);
+			}
+		}
+		afStation.setCountMap(countMap);
+		return afStation;
 	}
 
 }

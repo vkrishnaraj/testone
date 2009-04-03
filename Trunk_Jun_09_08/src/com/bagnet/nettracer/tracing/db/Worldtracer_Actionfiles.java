@@ -6,6 +6,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hibernate.Session;
+
 /**
  * 
  * @author matt
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 public class Worldtracer_Actionfiles implements Serializable {
 	private int id;
 	private ActionFileType action_file_type;
+	private String action_file_summary;
 	private String action_file_text;
 	private int day;
 	private String wt_station;
@@ -191,11 +194,7 @@ public class Worldtracer_Actionfiles implements Serializable {
 	public void setItem_number(int item_number) {
 		this.item_number = item_number;
 	}
-	
-	//these have to be down here or they muss up the xdoclet hibernate mapping generator.
-	public static enum ActionFileType {
-		AA, AP, CM, EM, FW, LM, PR, SP, WM, XX
-	};
+
 
 	public String generateId() {
 		return String.format("%s-%s-%s-%d-%d", airline, this.wt_station, this.action_file_type.name(), this.day, this.item_number);
@@ -214,7 +213,32 @@ public class Worldtracer_Actionfiles implements Serializable {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	
 
+	/**
+	 * hibernate.property type=string
+	 * hibernate.column length=512
+	 * @return
+	 */
+	public String getAction_file_summary() {
+		return action_file_summary;
+	}
+
+	public void setAction_file_summary(String action_file_summary) {
+		this.action_file_summary = action_file_summary;
+	}
+	
+	//these have to be down here or they muss up the xdoclet hibernate mapping generator.
+	public static enum ActionFileType {
+		FW("fm"), AA("am"), WM("sm"), EM("em"), SP("sp"), AP("ap"), CM("cm"), LM("lm"), PR("pr");
+		
+		private String htmlId;
+		
+		private ActionFileType(String htmlId) {
+			this.htmlId = htmlId;
+		}
+		
+		public String htmlId() {
+			return htmlId;
+		}
+	};
 }

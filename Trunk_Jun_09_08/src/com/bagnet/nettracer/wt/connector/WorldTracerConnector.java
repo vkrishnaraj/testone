@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.wt.connector;
 
+import java.util.Collection;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -129,5 +131,12 @@ public interface WorldTracerConnector {
 	
 	public String requestQoh(String fromStation, String fromAirline, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
 	throws WorldTracerException;
+
+	EnumMap<ActionFileType, int[]> getActionFileCounts(String companyCode, String wtStation) throws WorldTracerException;
+	
+	Collection<Worldtracer_Actionfiles> getActionFileSummary(String companyCode, String stationCode, ActionFileType type, int day);
+
+	String getActionFileDetails(String companyCode, String stationCode, ActionFileType type, int day, int itemNumber);
+
 
 }

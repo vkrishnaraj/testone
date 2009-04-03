@@ -10,6 +10,7 @@ import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
@@ -100,5 +101,7 @@ public interface WorldTracerService {
 	String amendAhl(Incident incident) throws WorldTracerException;
 	
 	String amendOhd(OHD ohd) throws WorldTracerException;
+
+	ActionFileStation getActionFileCount(String companyCode, String wtStation);
 
 }

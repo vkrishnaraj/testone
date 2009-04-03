@@ -667,6 +667,8 @@ public class TracingConstants {
 	
 	public final static int MOVETOLZ_MODE_ASSIGNMENT = 1;
 	public final static int MOVETOLZ_MODE_PERCENTAGE = 2;
+	public static final String NEW_DEFAULT_WT_URL="wtrweb.worldtracer.aero";
+	
 	public static final String DEFAULT_WT_URL = "www.worldtracer.aero";
 	public static final String WT_PENDING_CREATE = "WT_PENDING_CREATE";
 	public static final String WT_PENDING_AMEND = "WT_PENDING_AMEND";

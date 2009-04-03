@@ -84,7 +84,7 @@
                 &nbsp;</span></a>
           </dd>
           <dd>
-            <a href="worldtracercount.do?viewaction=cw"><span class="aa<%= cw %>">&nbsp;
+            <a href="actionFileCount.do"><span class="aa<%= cw %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= cw %>"><bean:message key="menu.wt_count" /></span>
@@ -93,7 +93,7 @@
                 &nbsp;</span></a>
          	</dd>
            <dd>
-            <a href="worldtraceraf.do?viewaction=fw<%=addon %>"><span class="aa<%= fw %>">&nbsp;
+            <a href="actionFileSummary.do?category=fw"><span class="aa<%= fw %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= fw %>"><bean:message key="menu.wt_fw" /></span>
@@ -102,7 +102,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=aa<%=addon %>"><span class="aa<%= aa %>">&nbsp;
+            <a href="actionFileSummary.do?category=aa"><span class="aa<%= aa %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= aa %>"><bean:message key="menu.wt_aa" /></span>
@@ -111,7 +111,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=wm<%=addon %>"><span class="aa<%= wm %>">&nbsp;
+            <a href="actionFileSummary.do?category=wm"><span class="aa<%= wm %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= wm %>"><bean:message key="menu.wt_wm" /></span>
@@ -120,7 +120,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=em<%=addon %>"><span class="aa<%= em %>">&nbsp;
+            <a href="actionFileSummary.do?category=em"><span class="aa<%= em %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= em %>"><bean:message key="menu.wt_em" /></span>
@@ -129,7 +129,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=sp<%=addon %>"><span class="aa<%= sp %>">&nbsp;
+            <a href="actionFileSummary.do?category=sp"><span class="aa<%= sp %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= sp %>"><bean:message key="menu.wt_sp" /></span>
@@ -138,7 +138,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=ap<%=addon %>"><span class="aa<%= ap %>">&nbsp;
+            <a href="actionFileSummary.do?category=ap"><span class="aa<%= ap %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= ap %>"><bean:message key="menu.wt_ap" /></span>
@@ -147,7 +147,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=cm<%=addon %>"><span class="aa<%= cm %>">&nbsp;
+            <a href="actionFileSummary.do?category=cm"><span class="aa<%= cm %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= cm %>"><bean:message key="menu.wt_cm" /></span>
@@ -156,7 +156,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=lm<%=addon %>"><span class="aa<%= lm %>">&nbsp;
+            <a href="actionFileSummary.do?category=lm"><span class="aa<%= lm %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= lm %>"><bean:message key="menu.wt_lm" /></span>
@@ -165,7 +165,7 @@
                 &nbsp;</span></a>
          	</dd>
          	<dd>
-            <a href="worldtraceraf.do?viewaction=pr<%=addon %>"><span class="aa<%= pr %>">&nbsp;
+            <a href="actionFileSummary.do?category=pr"><span class="aa<%= pr %>">&nbsp;
                 <br />
                 &nbsp;</span>
               <span class="bb<%= pr %>"><bean:message key="menu.wt_pr" /></span>
