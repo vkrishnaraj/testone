@@ -3,6 +3,8 @@ package com.bagnet.nettracer.wt.utils;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.EnumMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
@@ -14,13 +16,18 @@ import org.htmlparser.filters.RegexFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.wt.WorldTracerException;
 
 public class ParsingUtils {
 
+	private static final Pattern AHL_PATT = Pattern.compile("(?:\\bAHL\\s+|A/|FILE\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern OHD_PATT = Pattern.compile("(?:\\bOHD\\s+|O/|ON-HAND\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern PERCENT_PATT = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
 	public static EnumMap<ActionFileType, int[]> parseActionFileCounts(InputStream inStream, String encoding) throws UnsupportedEncodingException, ParserException {
 
 		Parser parser = new Parser(new Lexer(new Page(inStream, encoding)));
@@ -71,5 +78,54 @@ public class ParsingUtils {
 			if(i >= result.length) break;
 		}
 		return result;
+	}
+
+	public static String parseAhlId(String content) {
+		Matcher m = AHL_PATT.matcher(content);
+		if(m.find()) {
+			return m.group(1);
+		}
+		return "";
+	}
+
+	public static String parseOhdId(String content) {
+		Matcher m = OHD_PATT.matcher(content);
+		if(m.find()) {
+			return m.group(1);
+		}
+		return "";
+	}
+
+	public static String[] parseActionFileDetail(InputStream inStream,
+			String encoding) throws Exception {
+		Parser parser = new Parser(new Lexer(new Page(inStream, encoding)));
+		NodeFilter inputTagFilter = new TagNameFilter("input");
+		NodeFilter nameAttrFilter = new HasAttributeFilter("name", "detailedViewVO.searchMessageId");
+		NodeFilter idFilter = new AndFilter(new NodeFilter[] {inputTagFilter, nameAttrFilter});
+		NodeList idResult = parser.extractAllNodesThatMatch(idFilter);
+		if(idResult.size() < 0) {
+			throw new WorldTracerException("unable to parse message id in action file detail display");
+		}
+		String itemNum = ((TagNode)idResult.elementAt(0)).getAttribute("value");
+		
+		parser.reset();
+		NodeFilter taTagFilter = new TagNameFilter("textarea");
+		NodeFilter f2 = new HasAttributeFilter("id", "messageText");
+		NodeFilter contentFilter = new AndFilter(new NodeFilter[] {taTagFilter, f2});
+		NodeList contentResult = parser.extractAllNodesThatMatch(contentFilter);
+		if(contentResult.size() < 0) {
+			throw new WorldTracerException("unable to parse content in action file detail display");
+		}
+		String content = contentResult.elementAt(0).getChildren().elementAt(0).getText();
+		
+		return new String[] {itemNum, content};
+	}
+
+	public static Double parsePercentMAtch(String content) {
+		Matcher m = PERCENT_PATT.matcher(content);
+		if(m.find()) {
+			return Double.parseDouble(m.group(1));
+		}
+		return 0.0D;
 	}
 }

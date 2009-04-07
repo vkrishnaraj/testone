@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.wt.connector;
 
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +30,6 @@ public interface WorldTracerConnector {
 
 	void eraseActionFile(String station_id, String companyCode, ActionFileType area, int day, int itemNum)
 			throws WorldTracerException;
-
-	List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day) throws WorldTracerException;
-	
-	List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day, int startItem, int endItem) throws WorldTracerException;
-	
-	Worldtracer_Actionfiles getActionFile(String airline, String station, ActionFileType actionFileType, int day, int itemNum) throws WorldTracerException;
 
 	String findAHL(String wt_id) throws WorldTracerException;
 
@@ -128,15 +121,18 @@ public interface WorldTracerConnector {
 	 */
 	String createBdo(Map<WorldTracerField, List<String>> fieldMap, String ahl_id, String ohd_id,
 			DeliverCompany delivercompany, Station station) throws WorldTracerException;
-	
+
 	public String requestQoh(String fromStation, String fromAirline, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
 	throws WorldTracerException;
-
-	EnumMap<ActionFileType, int[]> getActionFileCounts(String companyCode, String wtStation) throws WorldTracerException;
 	
-	Collection<Worldtracer_Actionfiles> getActionFileSummary(String companyCode, String stationCode, ActionFileType type, int day);
+	public EnumMap<ActionFileType, int[]> getActionFileCounts(
+			String companyCode, String wtStation) throws WorldTracerException;
+	
+	public List<Worldtracer_Actionfiles> getActionFiles(String companyCode,
+			String stationCode, ActionFileType afType, int day, int count) throws WorldTracerException;
 
-	String getActionFileDetails(String companyCode, String stationCode, ActionFileType type, int day, int itemNumber);
+	void logout();
 
+	public void initialize() throws Exception;
 
 }

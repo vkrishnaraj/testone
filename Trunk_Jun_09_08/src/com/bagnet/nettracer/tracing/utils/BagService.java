@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -881,153 +882,167 @@ public class BagService {
 			if(iDTO == null)
 				return null;
 
-			BeanUtils.copyProperties(theform, iDTO);
-			// make sure separate stationcreate and stationassigned and
-			// faultstation
-			// into different station object
-			// hibernate makes all stations into one object for some unknown
-			// reason
-			// todo later
-			Station stationcreated = new Station();
-			stationcreated.setStation_ID(iDTO.getStationcreated().getStation_ID());
-			stationcreated.setStationcode(iDTO.getStationcreated().getStationcode());
-			theform.setStationassigned(new Station());
-			theform.setStationassigned_ID(iDTO.getStationassigned().getStation_ID());
-			theform.getStationassigned().setCompany(iDTO.getStationassigned().getCompany());
-			theform.getStationassigned().setCity(iDTO.getStationassigned().getCity());
-			theform.getStationassigned().setPhone(iDTO.getStationassigned().getPhone());
+			populateIncidentFormFromIncidentObj(incident_ID, theform, user, itemtype, iBMO, iDTO, false);
 
-			// make sure agentassigned <> agentcreated
-			if(theform.getAgentassigned() != null && theform.getAgentassigned_ID() == theform.getAgent().getAgent_ID()) {
-				Agent newagentassigned = new Agent();
-				BeanUtils.copyProperties(newagentassigned, theform.getAgentassigned());
-				theform.setAgentassigned(null);
-				theform.setAgentassigned(newagentassigned);
-			}
+			return iDTO;
+		}
+		catch (Exception e) {
+			logger.error("unable to find incident due to bean copyproperties error: " + e);
+			return null;
+		}
+	}
 
-			theform.setFaultstation(new Station());
-			if(iDTO.getFaultstation() != null) {
-				theform.setFaultstation_id(iDTO.getFaultstation().getStation_ID());
-				theform.setFaultcompany_id(iDTO.getFaultstation().getCompany().getCompanyCode_ID());
-			}
+	public void populateIncidentFormFromIncidentObj(String incident_ID, IncidentForm theform, Agent user,
+			int itemtype, IncidentBMO iBMO, Incident iDTO, boolean doNotEmail)
+			throws IllegalAccessException, InvocationTargetException {
+		BeanUtils.copyProperties(theform, iDTO);
+		
+		// make sure separate stationcreate and stationassigned and
+		// faultstation
+		// into different station object
+		// hibernate makes all stations into one object for some unknown
+		// reason
+		// todo later
+		Station stationcreated = new Station();
+		stationcreated.setStation_ID(iDTO.getStationcreated().getStation_ID());
+		stationcreated.setStationcode(iDTO.getStationcreated().getStationcode());
+		theform.setStationassigned(new Station());
+		theform.setStationassigned_ID(iDTO.getStationassigned().getStation_ID());
+		theform.getStationassigned().setCompany(iDTO.getStationassigned().getCompany());
+		theform.getStationassigned().setCity(iDTO.getStationassigned().getCity());
+		theform.getStationassigned().setPhone(iDTO.getStationassigned().getPhone());
 
-			Item item = null;
-			// incase there are no bags, put one there anyways
-			if(theform.getItemlist().size() == 0) {
-				item = (Item) theform.getItem(0, iDTO.getItemtype_ID());
-				// item.setItem_ID(0); // for hibernate insert only
-				item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
-				item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
-				item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
-				item.set_DATEFORMAT(user.getDateformat().getFormat());
-				item.setCurrency_ID(user.getDefaultcurrency());
-				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
-				Item_Inventory ii = new Item_Inventory();
-				ii.setItem(item);
-				item.getInventorylist().add(ii);
-			}
-			else {
-				int bagnumber = 0;
-				for(int i = 0; i < theform.getItemlist().size(); i++) {
-					item = (Item) theform.getItemlist().get(i);
-					if(item == null) {
-						theform.getItemlist().remove(i);
-						i--;
+		// make sure agentassigned <> agentcreated
+		if(theform.getAgentassigned() != null && theform.getAgentassigned_ID() == theform.getAgent().getAgent_ID()) {
+			Agent newagentassigned = new Agent();
+			BeanUtils.copyProperties(newagentassigned, theform.getAgentassigned());
+			theform.setAgentassigned(null);
+			theform.setAgentassigned(newagentassigned);
+		}
+
+		theform.setFaultstation(new Station());
+		if(iDTO.getFaultstation() != null) {
+			theform.setFaultstation_id(iDTO.getFaultstation().getStation_ID());
+			theform.setFaultcompany_id(iDTO.getFaultstation().getCompany().getCompanyCode_ID());
+		}
+
+		Item item = null;
+		// incase there are no bags, put one there anyways
+		if(theform.getItemlist().size() == 0) {
+			item = (Item) theform.getItem(0, iDTO.getItemtype_ID());
+			// item.setItem_ID(0); // for hibernate insert only
+			item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+			item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+			item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
+			item.set_DATEFORMAT(user.getDateformat().getFormat());
+			item.setCurrency_ID(user.getDefaultcurrency());
+			item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+			Item_Inventory ii = new Item_Inventory();
+			ii.setItem(item);
+			item.getInventorylist().add(ii);
+		}
+		else {
+			int bagnumber = 0;
+			for(int i = 0; i < theform.getItemlist().size(); i++) {
+				item = (Item) theform.getItemlist().get(i);
+				if(item == null) {
+					theform.getItemlist().remove(i);
+					i--;
+				}
+				else {
+					if(item.getItemtype_ID() <= 0)
+						item.setItemtype_ID(iDTO.getItemtype_ID());
+					if(item.getStatus() == null)
+						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
+								.getCurrentlocale()));
+					item.set_DATEFORMAT(user.getDateformat().getFormat());
+					item.setBagnumber(bagnumber);
+					bagnumber++;
+					if(item.getInventorylist().size() == 0) {
+						Item_Inventory ii = new Item_Inventory();
+						ii.setItem(item);
+						item.getInventorylist().add(ii);
 					}
-					else {
-						if(item.getItemtype_ID() <= 0)
-							item.setItemtype_ID(iDTO.getItemtype_ID());
-						if(item.getStatus() == null)
-							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN, user
-									.getCurrentlocale()));
-						item.set_DATEFORMAT(user.getDateformat().getFormat());
-						item.setBagnumber(bagnumber);
-						bagnumber++;
-						if(item.getInventorylist().size() == 0) {
-							Item_Inventory ii = new Item_Inventory();
-							ii.setItem(item);
-							item.getInventorylist().add(ii);
-						}
-					}
 				}
 			}
+		}
 
-			if(itemtype == TracingConstants.MISSING_ARTICLES) {
-				ArrayList al = new ArrayList(iDTO.getArticles());
-				if(al.size() <= 0)
-					theform.getArticle(0);
-				else
-					theform.setArticlelist(al);
+		if(itemtype == TracingConstants.MISSING_ARTICLES) {
+			ArrayList al = new ArrayList(iDTO.getArticles());
+			if(al.size() <= 0)
+				theform.getArticle(0);
+			else
+				theform.setArticlelist(al);
+		}
+		theform.setClaimchecklist(new ArrayList(iDTO.getClaimchecks()));
+		if(theform.getClaimchecklist().size() == 0) {
+			theform.getClaimcheck(0);
+		}
+
+		theform.setPassengerlist(new ArrayList(iDTO.getPassengers()));
+
+		Passenger p = null;
+		Address addr = null;
+		AirlineMembership am = null;
+		for(int i = 0; i < theform.getPassengerlist().size(); i++) {
+			p = theform.getPassenger(i);
+			if(p.getMembership() == null) {
+				p.setMembership(new AirlineMembership());
 			}
-			theform.setClaimchecklist(new ArrayList(iDTO.getClaimchecks()));
-			if(theform.getClaimchecklist().size() == 0) {
-				theform.getClaimcheck(0);
+			for(int j = 0; j < p.getAddresses().size(); j++) {
+				addr = (Address) p.getAddress(j);
+				addr.set_DATEFORMAT(user.getDateformat().getFormat());
 			}
+		}
 
-			theform.setPassengerlist(new ArrayList(iDTO.getPassengers()));
-
-			Passenger p = null;
-			Address addr = null;
-			AirlineMembership am = null;
-			for(int i = 0; i < theform.getPassengerlist().size(); i++) {
-				p = theform.getPassenger(i);
-				if(p.getMembership() == null) {
-					p.setMembership(new AirlineMembership());
-				}
-				for(int j = 0; j < p.getAddresses().size(); j++) {
-					addr = (Address) p.getAddress(j);
-					addr.set_DATEFORMAT(user.getDateformat().getFormat());
-				}
-			}
-
-			// set datetime format
-			theform.setRemarklist(new ArrayList(iDTO.getRemarks()));
-			Remark remark = null;
-			for(int i = 0; i < theform.getRemarklist().size(); i++) {
-				remark = (Remark) theform.getRemarklist().get(i);
-				remark.set_DATEFORMAT(user.getDateformat().getFormat());
-				remark.set_TIMEFORMAT(user.getTimeformat().getFormat());
-				remark.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
-						.getTimezone()));
-				if(remark.getRemarktype() <= 0)
-					remark.setRemarktype(TracingConstants.REMARK_REGULAR);
-
-			}
-
-			theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
-			Itinerary iti = null;
-
-			for(int i = 0; i < theform.getItinerarylist().size(); i++) {
-				iti = (Itinerary) theform.getItinerarylist().get(i);
-				iti.set_DATEFORMAT(user.getDateformat().getFormat());
-				iti.set_TIMEFORMAT(user.getTimeformat().getFormat());
-			}
-
-			theform.set_DATEFORMAT(user.getDateformat().getFormat());
-			theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
-			theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+		// set datetime format
+		theform.setRemarklist(new ArrayList(iDTO.getRemarks()));
+		Remark remark = null;
+		for(int i = 0; i < theform.getRemarklist().size(); i++) {
+			remark = (Remark) theform.getRemarklist().get(i);
+			remark.set_DATEFORMAT(user.getDateformat().getFormat());
+			remark.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			remark.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
 					.getTimezone()));
+			if(remark.getRemarktype() <= 0)
+				remark.setRemarktype(TracingConstants.REMARK_REGULAR);
 
-			// convert to complete date + time for formatting purposes
-			Date completedate = DateUtils.convertToDate(iDTO.getCreatedate().toString() + " "
-					+ iDTO.getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
-			theform.setCreatedate(completedate);
-			theform.setCreatetime(completedate);
+		}
 
-			// determine readonly or not, if current user is from a different
-			// company,
-			// readonly
-			if(!user.getStation().getCompany().getCompanyCode_ID().equals(
-					iDTO.getStationcreated().getCompany().getCompanyCode_ID())) {
-				theform.setReadonly(1);
-			}
-			
-			if (!UserPermissions.hasIncidentSavePermission(user, iDTO)) {
-				theform.setReadonly(1);
-				theform.setAllow_remark_update(1);
-			}
+		theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
+		Itinerary iti = null;
 
-			// get associating reports
+		for(int i = 0; i < theform.getItinerarylist().size(); i++) {
+			iti = (Itinerary) theform.getItinerarylist().get(i);
+			iti.set_DATEFORMAT(user.getDateformat().getFormat());
+			iti.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		}
+
+		theform.set_DATEFORMAT(user.getDateformat().getFormat());
+		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+				.getTimezone()));
+
+		// convert to complete date + time for formatting purposes
+		Date completedate = DateUtils.convertToDate(iDTO.getCreatedate().toString() + " "
+				+ iDTO.getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
+		theform.setCreatedate(completedate);
+		theform.setCreatetime(completedate);
+
+		// determine readonly or not, if current user is from a different
+		// company,
+		// readonly
+		if(!user.getStation().getCompany().getCompanyCode_ID().equals(
+				iDTO.getStationcreated().getCompany().getCompanyCode_ID())) {
+			theform.setReadonly(1);
+		}
+		
+		if (!UserPermissions.hasIncidentSavePermission(user, iDTO)) {
+			theform.setReadonly(1);
+			theform.setAllow_remark_update(1);
+		}
+
+		if (incident_ID != null) {
 			ArrayList al = iBMO.getAssocReports(incident_ID);
 			Incident_Assoc ia = null;
 			if(al != null && al.size() > 0) {
@@ -1043,15 +1058,11 @@ public class BagService {
 						theform.setAssoc_ID(ia.getAssoc_ID());
 				}
 			}
-
-			Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
-			theform.setEmail_customer(csv.isEmail_customer() ? 1 : 0);
-
-			return iDTO;
 		}
-		catch (Exception e) {
-			logger.error("unable to find incident due to bean copyproperties error: " + e);
-			return null;
+
+		Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
+		if (!doNotEmail) {
+			theform.setEmail_customer(csv.isEmail_customer() ? 1 : 0);
 		}
 	}
 
@@ -1604,7 +1615,16 @@ public class BagService {
 		OHD iDTO = oBMO.findOHDByID(ohd_ID);
 		if(iDTO == null)
 			return null;
-		theform.setOhd_id(ohd_ID);
+		theform.setOhd_id(iDTO.getOHD_ID());
+		fillTheOhdForm(iDTO, theform, user);
+
+
+		return iDTO;
+	}
+	
+	public void fillTheOhdForm(OHD iDTO, OnHandForm theform, Agent user)
+			throws IllegalAccessException, InvocationTargetException {
+
 		theform.setAgent_initials(iDTO.getAgent().getUsername());
 		theform.setBagColor(iDTO.getColor());
 		theform.setBagTagNumber(iDTO.getClaimnum());
@@ -1659,9 +1679,24 @@ public class BagService {
 			theform.getPassenger(theform.getPassengerList().size());
 		}
 
-		theform.setPhotoList(new ArrayList(iDTO.getPhotos()));
-		theform.setTaskList(new ArrayList(iDTO.getTasks()));
-		theform.setControlList(new ArrayList(iDTO.getControlLog()));
+		// TODO: HERE
+		if (iDTO.getPhotos() != null) {
+			theform.setPhotoList(new ArrayList(iDTO.getPhotos()));
+		} else {
+			theform.setPhotoList(new ArrayList());
+		}
+		
+		if (iDTO.getTasks() != null) {
+			theform.setTaskList(new ArrayList(iDTO.getTasks()));
+		} else {
+			theform.setTaskList(new ArrayList());
+		}
+		
+		if (iDTO.getControlLog() != null) {
+			theform.setControlList(new ArrayList(iDTO.getControlLog()));
+		} else {
+			theform.setControlList(new ArrayList());
+		}
 
 		theform.setItemlist(new ArrayList(iDTO.getItems()));
 		if(theform.getItemlist().size() < 1) {
@@ -1691,7 +1726,11 @@ public class BagService {
 				remark.setRemarktype(TracingConstants.REMARK_REGULAR);
 		}
 
-		theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
+		if (theform.getItinerarylist() != null) {
+			theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
+		} else {
+			theform.setItinerarylist(new ArrayList());
+		}
 
 		if(theform.getItinerarylist().size() < 1) {
 			theform.getItinerary(theform.getItinerarylist().size());
@@ -1704,21 +1743,19 @@ public class BagService {
 		}
 
 		// get forward log
-		OHD_Log ol = OHDUtils.getLastLog(iDTO.getOHD_ID());
-		if(ol != null) {
-			theform.setForwarded_agent(ol.getForwarding_agent().getUsername());
-			theform.setForwarded_date(ol.getForward_time());
-			theform.setForwarded_station(ol.getDestCompany() + " " + ol.getDestStation());
+		if (iDTO.getOHD_ID() != null) {
+			OHD_Log ol = OHDUtils.getLastLog(iDTO.getOHD_ID());
+			if (ol != null) {
+				theform.setForwarded_agent(ol.getForwarding_agent().getUsername());
+				theform.setForwarded_date(ol.getForward_time());
+				theform.setForwarded_station(ol.getDestCompany() + " "
+						+ ol.getDestStation());
+			} else {
+				theform.setForwarded_agent(null);
+				theform.setForwarded_date(null);
+				theform.setForwarded_station(null);
+			}
 		}
-		else {
-			theform.setForwarded_agent(null);
-			theform.setForwarded_date(null);
-			theform.setForwarded_station(null);
-		}
-		
-
-
-		return iDTO;
 	}
 
 	/**

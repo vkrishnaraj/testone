@@ -718,7 +718,7 @@ function gotoHistoricalReport() {
                                        + (i.intValue() * 20 + k
                                              .intValue())
                                        + "].zip"%>'
-                size="15" maxlength="11" styleClass="textfield" /></td>
+                size="15" maxlength="9" styleClass="textfield" /></td>
               <td><bean:message key="colname.country" /> <br>
               <html:select
                 property='<%="addresses["

@@ -273,16 +273,8 @@
     	<put name="center" value="/pages/worldtracer/worldtracer_viewaf_main.jsp"/>
     </definition>
     
-    <definition name="view_actionfile_count" extends="user_menu">
-    	<put name="center" value="/pages/worldtracer/actionfile_count.jsp"/>
-    </definition>
-    
-     <definition name="view_actionfile_summary" extends="user_menu">
-    	<put name="center" value="/pages/worldtracer/actionfile_summary.jsp"/>
-    </definition>
-    
-     <definition name="view_actionfile_detail" extends="user_menu">
-    	<put name="center" value="/pages/worldtracer/actionfile_detail.jsp"/>
+    <definition name="view_worldtracer_count" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_count.jsp"/>
     </definition>
 
     

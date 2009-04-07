@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -36,10 +35,8 @@ import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
-import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
@@ -71,33 +68,6 @@ public class SearchOnHandAction extends Action {
 		request.setAttribute("oStatusList", oStatusList);
 		
 		SearchIncidentForm daform = (SearchIncidentForm) form;
-		
-		// user passed in worldtracer id, so find it in db or retrieve it from worldtracer
-		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
-			OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
-			if (foundohd == null) {
-				WorldTracerService wts = SpringUtils.getWorldTracerService();
-				try {
-					foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE);
-					if (foundohd != null) response.sendRedirect("addOnHandBag.do?ohd_ID=" + foundohd.getOHD_ID());
-					else {
-						ActionMessages errors = new ActionMessages();
-						ActionMessage error = new ActionMessage("error.wt_nostation");
-						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-						saveMessages(request, errors);
-					}
-				}
-				catch (WorldTracerException e) {
-					ActionMessages errors = new ActionMessages();
-					ActionMessage error = new ActionMessage("error.wt_nostation");
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					saveMessages(request, errors);
-				}
-
-			} else {
-				response.sendRedirect("addOnHandBag.do?ohd_ID=" + foundohd.getOHD_ID());
-			}
-		}
 		
 		
 		if (request.getParameter("search") == null && request.getParameter("generateReport") == null) {

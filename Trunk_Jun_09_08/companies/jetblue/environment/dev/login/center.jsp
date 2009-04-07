@@ -36,7 +36,7 @@
             </td>
             <td>
               <SELECT NAME="companyCode" class="dropdown">
-              	<option value="B6" selected="selected">JetBlue QA</option>
+              	<option value="US" selected="selected">WTTest</option>
               	<option value="OW">Owens Group</option>
               </SELECT>
             </td>

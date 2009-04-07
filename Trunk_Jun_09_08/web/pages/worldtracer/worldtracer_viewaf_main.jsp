@@ -198,7 +198,8 @@ function updatePagination() {
 						</c:when>
 						<c:when test="${!empty actionData.wt_incident_id}">
 						<bean:message key="worldtracer.id" />:&nbsp;
-						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}','wtrawtext',500,600);return false;">${actionData.wt_incident_id}</a>
+						<a href="searchIncident.do?wt_id=${actionData.wt_incident_id}">${actionData.wt_incident_id}</a>
+            
 						</c:when>
 						<c:otherwise>
 							<c:url	value="/lostDelay.do" var="incidentLink">
@@ -220,7 +221,7 @@ function updatePagination() {
 						</c:when>
 						<c:when test="${!empty actionData.wt_ohd_id}">
 						<bean:message key="worldtracer.id" />:&nbsp;
-						<a href="javascript:void(0);" onclick="openWindow('worldtraceraf.do?rawtext=1&ohd_id=${actionData.wt_ohd_id}','wtrawtext',500,600);return false;">${actionData.wt_ohd_id}</a>
+						<a href="addOnHandBag.do?wt_id=${actionData.wt_ohd_id}">${actionData.wt_ohd_id}</a>
 						</c:when>
 						<c:otherwise>
 							<c:url	value="/addOnHandBag.do" var="ohdLink">

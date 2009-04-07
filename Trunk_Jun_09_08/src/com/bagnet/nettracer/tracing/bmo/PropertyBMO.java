@@ -28,8 +28,9 @@ public class PropertyBMO {
 	public static final String PROPERTY_DEFAULT_COUNTRY = "default.country";
 	public static final String PROPERTY_NUM_CONTENT_FIELDS = "num.content.fields";
 	public static final String PROPERTY_WT_FWD_ONLY = "wt.fwd.only";
-
 	public static final String PROPERTY_SET_DEFAULT_MEMBERSHIP = "set.default.membership";
+	public static final String WT_PRODUCTION_MODE = "wt.production.mode";
+	public static final String PROPERTY_WT_QUEUE_ATTEMPTS = "wt.queue.attempts";
 
 	/**
 	 * Retrieves the value of the property from the database.

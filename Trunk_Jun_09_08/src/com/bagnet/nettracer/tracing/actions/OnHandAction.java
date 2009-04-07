@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -67,7 +68,11 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
+import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for
@@ -76,6 +81,8 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
  * @author Ankur Gupta
  */
 public class OnHandAction extends CheckedAction {
+    private static Logger logger = Logger.getLogger(OnHandAction.class);
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -271,8 +278,8 @@ public class OnHandAction extends CheckedAction {
 					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 				}
 				else if (request.getParameter("savetracing") != null) {
-					if(oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED) &&
-							UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_AUTO_AMEND, user)) {
+					if(oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED) && 
+							user.getStation().getCompany().getVariable().isAuto_wt_amend()) {
 						WtqOhdAction wtq = new WtqAmendOhd();
 						wtq.setAgent(user);
 						wtq.setCreatedate(TracerDateTime.getGMTDate());
@@ -425,6 +432,57 @@ public class OnHandAction extends CheckedAction {
 				if(remarkList != null)
 					remarkList.remove(Integer.parseInt(index));
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
+			}
+			else if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
+				OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
+				
+				if (foundohd == null) {
+					logger.info("About to import OHD from WT...");
+					WorldTracerService wts = SpringUtils.getWorldTracerService();
+					
+					try {
+						wts.getWtConnector().initialize();
+						foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE);
+						if (foundohd == null) {
+							errors = new ActionMessages();
+							ActionMessage error = new ActionMessage("error.wt_nostation");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						}
+					}
+					catch (WorldTracerRecordNotFoundException ex) {
+						errors = new ActionMessages();
+						ActionMessage error = new ActionMessage("error.wt.no.ohd");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					}
+					catch (WorldTracerException ex) {
+						logger.error("Error", ex);
+						errors = new ActionMessages();
+						ActionMessage error = new ActionMessage("error.wt_nostation");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					} finally {
+						wts.getWtConnector().logout();
+					}
+
+				}
+				if(errors.size() > 0) {
+					return (mapping.findForward(TracingConstants.SEARCH_ONHAND));
+				}
+
+				TracerUtils.populateOnHand(theform, request);
+				bs.fillTheOhdForm(foundohd, theform, user);
+				theform.setFoundDate(TracerDateTime.getGMTDate());
+				theform.setFoundTime(TracerDateTime.getGMTDate());
+				session.setAttribute("OnHandForm", theform);
+				
+				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_ON_HAND_BAG, user)) {
+					theform.setReadonly(0);
+				}
+				
+				return mapping.findForward(TracingConstants.OHD_MAIN);
+				
 			}
 			else {
 				String onhand_id = request.getParameter("ohd_ID");

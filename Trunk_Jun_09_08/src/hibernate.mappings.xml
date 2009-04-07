@@ -172,4 +172,5 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditSettlementBagInventory" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wt.ActionFileStation" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wt.ActionFileCount" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount" />
 		

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -31,16 +30,15 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
-import com.bagnet.nettracer.wt.connector.BetaWtConnector;
-import com.ctc.wstx.util.StringUtil;
+import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 
 /**
  * @author matt
@@ -91,8 +89,18 @@ public class WorldTracerAFAction extends Action {
 			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request
 					.getParameter("ahl_id"), true);
 			if (foundinc == null) {
-				String result = SpringUtils.getWorldTracerConnector().findAHL(request.getParameter("ahl_id"));
-//				String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ahl_id"));
+				WorldTracerConnector wtc;
+				String result = null;
+				wtc = SpringUtils.getWorldTracerConnector();
+				try {
+					wtc.initialize();
+					result = wtc.findAHL(request.getParameter("ahl_id"));
+				} catch (RuntimeException e) {
+
+					e.printStackTrace();
+				} finally {
+					wtc.logout();
+				}
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
@@ -107,8 +115,21 @@ public class WorldTracerAFAction extends Action {
 			OHD foundinc = WorldTracerUtils.findOHDByWTID(request
 					.getParameter("ohd_id"));
 			if (foundinc == null) {
-				String result = SpringUtils.getWorldTracerConnector().findOHD(request.getParameter("ohd_id"));
-				//String result = BetaWtConnector.getInstance(user.getCompanycode_ID()).findAHL(request.getParameter("ohd_id"));
+				WorldTracerConnector wtc = SpringUtils.getWorldTracerConnector();
+				String result = null;
+				try {
+					wtc.initialize();
+					result = wtc.findOHD(request.getParameter("ohd_id"));
+					
+				} catch (WorldTracerRecordNotFoundException ex) {
+					logger.error("ohd not found");
+				}
+				catch (RuntimeException e) {
+					logger.error("error getting wt ohd", e);
+				} finally {
+					wtc.logout();
+				}
+
 				request.setAttribute("wt_raw", result);
 			} else {
 				request.setAttribute("wt_raw_hasinc", "1");
@@ -158,7 +179,7 @@ public class WorldTracerAFAction extends Action {
 			}
 
 			if (!deleted) {
-				ActionMessage error = new ActionMessage("message.nodata");
+				ActionMessage error = new ActionMessage("message.no_action_file");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			} else {

@@ -509,22 +509,6 @@
 		<!-- View World Tracer Integration functions -->
 		<action path="/worldtraceraf" type="com.bagnet.nettracer.tracing.actions.WorldTracerAFAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
-		<action path="/actionFileCount" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileCountAction" name="worldtracerafForm" scope="request" validate="false">
-			<forward name="success" path="view_actionfile_count"></forward>
-		</action>
-
-		<action path="/actionFileSummary" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileSummaryAction" name="worldtracerafForm" scope="request" validate="false">
-			<forward name="success" path="view_actionfile_summary"></forward>
-		</action>
-
-		<action path="/actionFileDetail" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileDetailAction" name="worldtracerafForm" scope="request" validate="false">
-			<forward name="success" path="view_actionfile_detail"></forward>
-		</action>
-
-		<action path="/actionFileDelete" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileDeleteAction" name="worldtracerafForm" scope="request" validate="false">
-			<forward name="success" path="view_actionfile_count"></forward>
-		</action>
-
 		<action path="/worldtracerfwd" type="com.bagnet.nettracer.tracing.actions.WorldTracerFWDAction" name="worldTracerFWDForm" scope="session" validate="false"></action>
 		
 		<action path="/worldtracerqoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerReqQOHAction" name="worldTracerReqQOHForm" scope="session" validate="false"></action>
@@ -665,14 +649,6 @@
 
 	<!-- ========== Plug-ins Configuration ================================== -->
 	<plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
-	
-	<!-- 
-	<plug-in className="formdef.plugin.FormDefPlugIn">
-        <set-property property="pathnames"
-                value="/WEB-INF/form-defs.xml"/>
-    </plug-in>
-	-->
-	
 	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
 		<set-property property="pathnames" value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml" />
 	</plug-in>

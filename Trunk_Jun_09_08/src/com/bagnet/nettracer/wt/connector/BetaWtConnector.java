@@ -1231,25 +1231,44 @@ public class BetaWtConnector implements WorldTracerConnector {
 		this.userType = userType;
 	}
 
-	@Override
+
 	public EnumMap<ActionFileType, int[]> getActionFileCounts(
 			String companyCode, String wtStation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String getActionFileDetails(String companyCode, String stationCode,
 			ActionFileType type, int day, int itemNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+
 	public Collection<Worldtracer_Actionfiles> getActionFileSummary(
 			String companyCode, String stationCode, ActionFileType type, int day) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public List<Worldtracer_Actionfiles> getActionFiles(String companyCode,
+			String stationCode, ActionFileType afType, int day, int count)
+			throws WorldTracerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void initialize() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void logout() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

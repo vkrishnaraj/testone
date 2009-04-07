@@ -3,12 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
 		http://www.springframework.org/schema/aop 
-		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="file:../config/cron.properties" />
@@ -43,19 +46,33 @@
 	<bean id="datafeed-log-bmo" class="com.bagnet.nettracer.cronjob.bmo.DataFeedLogBmo" >
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<bean id="worldTracerAccountBmo" class="com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<!-- services used by the workers-->
 	
 	<bean id="wtRuleMap" class="${wt.rules}"/>
 	
-	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector">
+	<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
+		<constructor-arg  ref="worldTracerAccountBmo"/>
 		<constructor-arg value="${company.code}" />
-		<property name="wtRuleMap" ref="wtRuleMap" />
-		<property name="userType" value="${wt.user.type}" />
+		<constructor-arg value="${training.mode}" />
 	</bean>
 	
-	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService">
-		<property name="wtConnector" ref="wtConnector" />
+	<bean id="wtConn" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector" scope="prototype">
+		<constructor-arg ref="wtConnectionPool" />
+		<constructor-arg value="${company.code}" />
+	</bean>
+	
+	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService" scope="prototype" >
+		<property name="wtConnector">
+			<bean class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector">
+				<constructor-arg ref="wtConnectionPool" />
+				<constructor-arg value="${training.mode}" />
+			</bean>
+		</property>		
 		<property name="wtCompanyCode" value="${company.code}" />
 	</bean>
 
@@ -66,13 +83,11 @@
 		<constructor-arg value="${company.code}" />
 		<property name="wtqBmo" ref="wtq-bmo" />
 		<property name="wafBmo" ref="wtaf-bmo" />
-		<property name="wtService" ref="wtService" />
 	</bean>
-
+	
 	<bean id="wtActionFiles" class="com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles">
 		<constructor-arg value="${company.code}" />
 		<constructor-arg value="${cron.instance.label}" />
-		<property name="wtService" ref="wtService" />
 		<property name="wafBmo" ref="wtaf-bmo" />
 	</bean>
 
@@ -174,10 +189,10 @@
 		<property name="startDelay" value="30000"/>
 	</bean>
 
-	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="wtActionFileJob" />
-		<property name="repeatCount" value="0" />
-		<property name="startDelay" value="5000" />
+		<property name="cronExpression" value="${wtaf.cron}" />
+		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
 	</bean>
 
 	<bean id="cronMoveToLzTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
@@ -193,6 +208,7 @@
 	
 	<!-- Aspects and advice -->
 	<aop:aspectj-autoproxy />
+	<context:spring-configured />
 	
 	<!--  world tracer transaction logging -->
 	<bean id="wtLogging" class="com.bagnet.nettracer.aop.WorldTracerLogger">

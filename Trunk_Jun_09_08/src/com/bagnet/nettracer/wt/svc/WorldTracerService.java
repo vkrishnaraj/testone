@@ -1,12 +1,9 @@
 package com.bagnet.nettracer.wt.svc;
 
-import java.util.List;
-
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
@@ -16,6 +13,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 
 public interface WorldTracerService {
 
@@ -28,7 +26,7 @@ public interface WorldTracerService {
 				"reason.loss"), RC("loss.comments"), SL("storage.location"), XT("expidite.tag"), FO("fwd.date"), FW(
 				"fwd.stations"), FB("fwd.bag.count"), FT("fault.terminal"), SI("sup.info"), TX("teletype.address"), FI("further.info"),
 				TA("temp.address"), CC("contents"), DD("deliver.date"), LD("local.delivery.inst"), DA("delivery.address"), TI("text.info"), 
-				NF("new.flight"), NR("new.routing");
+				NF("new.flight"), NR("new.routing"), STATE("web.state"), ZIP("web.zip");
 	
 		private String description_id;
 	
@@ -88,9 +86,6 @@ public interface WorldTracerService {
 	String requestQoh(WtqRequestQoh qoh) throws WorldTracerException;
 
 	void eraseActionFile(Worldtracer_Actionfiles waf) throws WorldTracerException;
-
-	List<Worldtracer_Actionfiles> getActionFiles(String airline, String station, ActionFileType actionFileType, int day)
-			throws WorldTracerException;
 	
 	String insertBdo(BDO bdo) throws WorldTracerException;
 
@@ -101,7 +96,8 @@ public interface WorldTracerService {
 	String amendAhl(Incident incident) throws WorldTracerException;
 	
 	String amendOhd(OHD ohd) throws WorldTracerException;
+	
+	public ActionFileStation getActionFileCount(String companyCode,	String wtStation);
 
-	ActionFileStation getActionFileCount(String companyCode, String wtStation);
-
+	WorldTracerConnector getWtConnector();
 }

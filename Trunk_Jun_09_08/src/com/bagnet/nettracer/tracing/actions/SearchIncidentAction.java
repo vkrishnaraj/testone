@@ -10,13 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -26,14 +23,13 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
@@ -41,20 +37,19 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
-import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
-import com.bagnet.nettracer.wt.connector.BetaWtConnector;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
@@ -79,23 +74,31 @@ public class SearchIncidentAction extends Action {
 		
 		BagService bs = new BagService();
 		IncidentForm theform = new IncidentForm();
+		Incident foundinc = null;
 		
 		// user passed in worldtracer id, so find it in db or retrieve it from worldtracer
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
-			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
+			foundinc = WorldTracerUtils.findIncidentByWTID(request.getParameter("wt_id"));
 			if (foundinc == null) {
 				WorldTracerService wts = SpringUtils.getWorldTracerService();
 				try {
+					wts.getWtConnector().initialize();
 					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE, user);
-					if(foundinc != null) {
-						incident = foundinc.getIncident_ID();
-					}
+				}
+				catch(WorldTracerRecordNotFoundException ex) {
+					ActionMessages errors = new ActionMessages();
+					ActionMessage error = new ActionMessage("error.wt.no.ahl");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
 				}
 				catch (WorldTracerException e) {
+					logger.error("Unable to import incident:", e);
 					ActionMessages errors = new ActionMessages();
 					ActionMessage error = new ActionMessage("error.wt_nostation");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
+				} finally {
+					wts.getWtConnector().logout();
 				}
 			} else {
 				incident = foundinc.getIncident_ID();
@@ -103,7 +106,7 @@ public class SearchIncidentAction extends Action {
 		}
 
 		// just display the search screen if incident parameter is not passed in
-		if (incident == null || incident.length() == 0) {
+		if ((incident == null || incident.length() == 0) && foundinc == null) {
 			
 
 			if (request.getParameter("generateReport") == null && request.getParameter("search") == null && request.getParameter("update") == null
@@ -241,7 +244,7 @@ public class SearchIncidentAction extends Action {
 
 		// go to specific MBR report based on the incident id from parameter or from
 		// the search result
-		if (incident != null && incident.length() > 0) {
+		if ((incident != null && incident.length() > 0) || foundinc != null) {
 
 			//special case for prompt for print receipt
 			if (request.getParameter("receipt") != null) {
@@ -249,7 +252,16 @@ public class SearchIncidentAction extends Action {
 				return (mapping.findForward(TracingConstants.RECEIPT_PARAMS));
 			}
 
-			Incident inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
+			Incident inc = foundinc;
+			if (foundinc == null) {
+				inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
+			} else {
+				IncidentBMO iBMO = new IncidentBMO();
+				TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
+				bs.populateIncidentFormFromIncidentObj(null, theform, user, TracingConstants.LOST_DELAY, iBMO, foundinc, true);
+				theform.setCreatedate(TracerDateTime.getGMTDate());
+				theform.setCreatetime(TracerDateTime.getGMTDate());
+			}
 			
 			if (inc == null) {
 				ActionMessages errors = new ActionMessages();

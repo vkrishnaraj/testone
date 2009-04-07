@@ -16,7 +16,7 @@ public interface WorldTracerRule<T> {
 		ALPHA("[^a-zA-Z\\s/]"),
 		ALPHA_NUMERIC("[^a-zA-Z\\s0-9/]"),
 		FREE_FLOW("[\\.#\"><%]"),
-		CONTENT_FIELD("[\\.#\"><%-]"),
+		CONTENT_FIELD("[\\.#\"><%!@$%^&*()_+-]"),
 		ALL(null);
 		
 		private String replaceChars;
@@ -36,5 +36,6 @@ public interface WorldTracerRule<T> {
 	 * @throws WorldTracerException 
 	 */
 	String getFieldString(WorldTracerField field, List<String> list) throws WorldTracerException;
+	String formatEntry(String string) throws WorldTracerException;
 	int getMaxAllowed();
 }

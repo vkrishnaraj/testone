@@ -229,16 +229,21 @@ public class Worldtracer_Actionfiles implements Serializable {
 	
 	//these have to be down here or they muss up the xdoclet hibernate mapping generator.
 	public static enum ActionFileType {
-		FW("fm"), AA("am"), WM("sm"), EM("em"), SP("sp"), AP("ap"), CM("cm"), LM("lm"), PR("pr");
+		FW("fm", "FORWARD_AREA"), AA("am", "ACTION_AREA"), WM("sm", "SYSTEM_MATCH_AREA"), EM("em", "EXTENDED_MATCH_AREA"), SP("sp", "SYSTEM_PROMPT_AREA"), AP("ap", "ADDITIONAL_PROMPT_AREA"), CM("cm", "CLAIMS_MATCH_AREA"), LM("lm", "LOCAL_MESSAGE_AREA"), PR("pr", "RETIRED_AREA");
 		
 		private String htmlId;
+		private String areaId;
 		
-		private ActionFileType(String htmlId) {
+		private ActionFileType(String htmlId, String areaId) {
 			this.htmlId = htmlId;
+			this.areaId = areaId;
 		}
 		
 		public String htmlId() {
 			return htmlId;
+		}
+		public String areaId() {
+			return areaId;
 		}
 	};
 }

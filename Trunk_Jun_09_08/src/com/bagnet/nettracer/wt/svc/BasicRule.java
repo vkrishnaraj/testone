@@ -36,7 +36,7 @@ public class BasicRule implements WorldTracerRule<String> {
 		this.addSpace  = addSpace;
 	}
 
-	protected String formatEntry(String entry) throws WorldTracerException {
+	public String formatEntry(String entry) throws WorldTracerException {
 		if(entry == null) return null;
 		
 		String result;

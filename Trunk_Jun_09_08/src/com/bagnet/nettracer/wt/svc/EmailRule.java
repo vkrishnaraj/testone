@@ -16,7 +16,7 @@ public class EmailRule extends BasicRule {
 	}
 	
 	@Override
-	protected String formatEntry(String entry) throws WorldTracerException {
+	public String formatEntry(String entry) throws WorldTracerException {
 		String result = entry.replace("@", "/A/").replace(".", "/D/").replace("_", "/U/").replace("~", "/T/").replace("+",
 		"/P/");
 		return super.formatEntry(entry);

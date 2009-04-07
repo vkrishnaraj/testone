@@ -40,8 +40,6 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 /**
  * @author Matt
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
  */
 public class CustomQueryAction extends Action {
 	private static Logger logger = Logger.getLogger(CustomQueryAction.class);
