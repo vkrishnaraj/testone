@@ -6,22 +6,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
@@ -30,14 +25,13 @@ import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
-import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
+import com.bagnet.nettracer.wt.svc.WorldTracerConnection;
 import com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
@@ -132,7 +126,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	private static final Object ALREADY_SUSPENDED = "ALREADY SUSPENDED";
 
-	private HttpClient client;
+	private WorldTracerConnection client;
 	
 	private WorldTracerRule<String> BASIC_RULE = DefaultWorldTracerService.BASIC_RULE;
 
@@ -142,7 +136,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	}
 	
 	public void initialize() throws Exception {
-		this.client = (HttpClient) pool.borrowObject();
+		this.client = (WorldTracerConnection) pool.borrowObject();
 	}
 
 	public String insertIncident(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,String companyCode, String stationCode) throws WorldTracerException {
@@ -156,7 +150,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			startFlow.setQueryString(p1);
 			startFlow.setFollowRedirects(false);
 			try {
-				client.executeMethod(startFlow);
+				client.executeMethodWithPause(startFlow, "INSERT INCIDENT: START FLOW (1)");
 			}
 			catch (HttpException e) {
 				logger.error("error", e);
@@ -439,7 +433,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			search.setParameter("_eventId", "submit");
 			try {
 				debugOut(search, "insertIncident");
-				client.executeMethod(search);
+				client.executeMethodWithPause(search, "INSERT INCIDENT: INSERT (2)");
 				if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 					newLocation = search.getResponseHeader("location").getValue();
 				}
@@ -462,7 +456,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			//redirect to submit result page and get wt_id
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "INSERT INCIDENT: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 				//System.out.println("response body:" + responseBody);
 				//return true;
@@ -524,7 +518,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "AMEND AHL: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -555,7 +549,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		getAhl.setParameter("_eventId", "update");
 		try {
 			debugOut(getAhl, "amendAhl");
-			client.executeMethod(getAhl);
+			client.executeMethod(getAhl, "AMEND AHL: GET AHL (2)");
 			if(getAhl.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getAhl.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = getAhl.getResponseHeader("location").getValue();
 			}else{
@@ -577,7 +571,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		GetMethod getWtDetails = new GetMethod(newLocation);
 		try {
 			logger.debug(getWtDetails.getQueryString());
-			client.executeMethod(getWtDetails);
+			client.executeMethod(getWtDetails, "AMEND AHL: REDIRECT (3)");
 			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				logger.error("getWtDetails method redirect again!");
 				throw new WorldTracerException("unable to amend incident");
@@ -932,7 +926,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		try{
 			debugOut(amendMethod, "");
-			client.executeMethod(amendMethod);
+			client.executeMethodWithPause(amendMethod, "AMEND AHL: AMEND (4)");
 			if(amendMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || amendMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = amendMethod.getResponseHeader("location").getValue();
 			}else{
@@ -952,7 +946,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "AMEND AHL: REDIRECT (5)");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 		}
 		catch (HttpException e) {
@@ -996,7 +990,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "AMEND OHD: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -1028,7 +1022,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		getOnhand.setParameter("_eventId", "update");
 		try {
 			debugOut(getOnhand, "");
-			client.executeMethod(getOnhand);
+			client.executeMethod(getOnhand, "AMEND OHD: LOAD OHD (2)");
 			if(getOnhand.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getOnhand.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = getOnhand.getResponseHeader("location").getValue();
 			}else{
@@ -1049,7 +1043,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod getWtDetails = new GetMethod(newLocation);
 		try {
-			client.executeMethod(getWtDetails);
+			client.executeMethod(getWtDetails, "AMEND OHD: REDIRECT (3)");
 			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				logger.error("GetWtDetails method redirect again!");
 				throw new WorldTracerException("unable to amend ohd");
@@ -1253,7 +1247,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		amendMethod.setParameter("_flowExecutionKey", flowKey);
 		try{
 			debugOut(amendMethod, "");
-			client.executeMethod(amendMethod);
+			client.executeMethodWithPause(amendMethod, "AMEND OHD: AMEND (4)");
 			if(amendMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY 
 					|| amendMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = amendMethod.getResponseHeader("location").getValue();
@@ -1274,7 +1268,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "AMEND OHD: REDIRECT (5)");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 		}
 		catch (HttpException e) {
@@ -1320,7 +1314,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setFollowRedirects(false);
 		try {
 			
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "REQUEST QOH: STARTFLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -1353,7 +1347,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		getAhl.setParameter("_eventId", "continue");
 		try {
 			debugOut(getAhl, "");
-			client.executeMethod(getAhl);
+			client.executeMethod(getAhl, "REQUEST QOH: REDIRECT (2)");
 			if(getAhl.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getAhl.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = getAhl.getResponseHeader("location").getValue();
 				flowKey = newLocation.split("=")[1];
@@ -1375,7 +1369,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod getWtDetails = new GetMethod(newLocation);
 		try {
-			client.executeMethod(getWtDetails);
+			client.executeMethod(getWtDetails, "REQUEST QOH: AHL (3)");
 			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				logger.error("GetWtDetails method redirect again!");
 				return null;
@@ -1434,7 +1428,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		try {
 			debugOut(requestMethod, "");
-			client.executeMethod(requestMethod);
+			client.executeMethodWithPause(requestMethod, "REQUEST QOH: REQUEST (4)");
 			if(requestMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || requestMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = requestMethod.getResponseHeader("location").getValue();
 			}
@@ -1456,10 +1450,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "REQUEST QOH: REDIRECT (5)");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
-			//System.out.println("response body:" + responseBody);
-			//return true;
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -1472,7 +1464,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		finally {
 			redirect.releaseConnection();
 		}
-		//Matcher m1 = qoh_success.matcher(responseBody);
+
+
 		if (responseBody.toUpperCase().contains("BAG REQUESTED SUCCESSFULLY")) {
 			return "QOH Requested";
 		} else {
@@ -1504,7 +1497,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "REQUEST OHD: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -1537,7 +1530,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		getAhl.setParameter("_eventId", "continue");
 		try {
 			debugOut(getAhl, "");
-			client.executeMethod(getAhl);
+			client.executeMethod(getAhl, "REQUEST OHD: GET AHL (2)");
 			if(getAhl.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getAhl.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = getAhl.getResponseHeader("location").getValue();
 				flowKey = newLocation.split("=")[1];
@@ -1559,7 +1552,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod getWtDetails = new GetMethod(newLocation);
 		try {
-			client.executeMethod(getWtDetails);
+			client.executeMethod(getWtDetails, "REQUEST OHD: GET DETAILS (3)");
 			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				System.out.println("getWtDetails method redirect again!");
 				throw new WorldTracerException("unable to request ohd");
@@ -1612,14 +1605,11 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 		try {
 			debugOut(requestMethod, "");
-			client.executeMethod(requestMethod);
+			client.executeMethodWithPause(requestMethod, "REQUEST OHD: REQUEST (4)");
 			if(requestMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || requestMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = requestMethod.getResponseHeader("location").getValue();
 			}
 			else{
-				//newLocation = "";
-				//responseBody = getStringFromInputStream(forwardMethod.getResponseBodyAsStream());
-				//System.out.println("forward method: " + responseBody);
 				throw new WorldTracerException("request method not redirect!");
 			}
 		}
@@ -1636,10 +1626,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "REQUEST OHD: GET DETAILS (5)");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
-			//System.out.println("response body:" + responseBody);
-			//return true;
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -1652,7 +1640,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		finally {
 			redirect.releaseConnection();
 		}
-		//Matcher m1 = qoh_success.matcher(responseBody);
+		
 		if (responseBody.toUpperCase().contains("BAG REQUESTED SUCCESSFULLY")) {
 			return "QOH Requested";
 		} else {
@@ -1716,7 +1704,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "CLOSE INCIDENT: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -1756,7 +1744,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "CLOSE INCIDENT: SEARCH (2)");
 			if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || 
 					search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = search.getResponseHeader("location").getValue();
@@ -1782,7 +1770,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if(!"".equals(newLocation)){
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethodWithPause(redirect, "CLOSE INCIDENT: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 				//System.out.println("close incident result:" + responseBody);
 			}
@@ -1805,173 +1793,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			return null;
 		}
 	}
-
-/*	public String sendFwd(
-			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
-			String stationCode, String companyCode) throws WorldTracerException {
-		
-		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
-		NameValuePair[] p1 = { 
-				new NameValuePair("_flowId", "sendmessage-flow"),
-				new NameValuePair("isHDQ", "N"),
-				};
-		startFlow.setQueryString(p1);
-		startFlow.setFollowRedirects(false);
-		try {
-			client.executeMethod(startFlow);
-		}
-		catch (HttpException e) {
-			logger.error("error", e);;
-		}
-		catch (IOException e) {
-			logger.error("error", e);;
-		}
-		finally {
-			startFlow.releaseConnection();
-		}
-		if(startFlow.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && startFlow.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
-			logger.error("start forward message flow not redirect!");
-			return null;
-		}
-		//get flow key
-		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
-		String responseBody = null;
-		//add params to forward
-		PostMethod forwardMethod = new PostMethod("/WorldTracerWeb/wtwflow.do");
-		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
-		forwardMethod.setQueryString(p2);
-		
-		forwardMethod.setParameter("_eventId", "Send");
-		forwardMethod.setParameter("isHDQ", "yes");
-		forwardMethod.setParameter("sendMessageActionVO.sendToDestination", "ACTION_AREA_ADDRESSES");
-		forwardMethod.setParameter("_sendMessageActionVO.schedule", "on");
-		if (fieldMap.containsKey(WorldTracerField.FW)) {
-			String fwdStation = fieldMap.get(WorldTracerField.FW).get(0);
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].stationCode", fwdStation.substring(0, 3));
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].airlineCode", fwdStation.substring(3));
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].actionAreaType", "FORWARD_AREA");
-		}
-		//Teletype format important in WorldTracer
-		//Should contain sequence of three alphabetic characters followed with                  //ABC
-		//sequence of two alphanumeric characters and                                           //AB or 12
-		//sequence of three alphabetic characters or sequence of two alpha numeric characters.  //ABC or AB or 12
-		//tty:/^([a-zA-Z]{3}[a-zA-Z0-9]{2}[a-zA-Z0-9]{2}|[a-zA-Z]{3}[a-zA-Z0-9]{2}[a-zA-Z]{3})$/
-		if (fieldMap.containsKey(WorldTracerField.TX)) {
-			List<String> ttList = fieldMap.get(WorldTracerField.TX);
-			for(int i = 0; i < ttList.size() && i < 4; i++) {
-				String tty = ttList.get(i);
-				Pattern pat = Pattern.compile("^([a-zA-Z]{3}[a-zA-Z0-9]{2}[a-zA-Z0-9]{2}|[a-zA-Z]{3}[a-zA-Z0-9]{2}[a-zA-Z]{3})$");
-				Matcher mat = pat.matcher(tty);
-				if(mat.matches()){
-					forwardMethod.setParameter("sendMessageActionVO.ttyAddresses["+ i +"]", tty);
-				}else{
-					logger.error("Teletype Address error!");
-					throw new WorldTracerException("Teletype Address error!");
-				}
-			}
-		}
-		//Expedite Number: aaaa; Passenger Name: xxx xxx xxx; From/To: xxx/xxx; 
-		//Airline/Flight Number: us176; Depart Date: 03/26/2009; Tag Number: 12345; 
-		//Reason for Loss: xx; Supplementary Information: xxx; 
-		StringBuilder messageSB = new StringBuilder();
-		if (fieldMap.containsKey(WorldTracerField.XT)) {
-			messageSB.append("Expedite Number: ");
-			messageSB.append(fieldMap.get(WorldTracerField.XT).get(0));
-			messageSB.append("; ");
-		}
-		if (fieldMap.containsKey(WorldTracerField.NM)) {
-			messageSB.append("Passenger Name:");
-			List<String> nameList = fieldMap.get(WorldTracerField.NM);
-			for(int i=0; i<nameList.size(); i++){
-				messageSB.append(" " + nameList.get(i));
-			}
-			messageSB.append("; ");
-		}
-		if (fieldMap.containsKey(WorldTracerField.NR)) {
-			messageSB.append("From/To:");
-			List<String> routingList = fieldMap.get(WorldTracerField.NR);
-			for(int i = 0; i < routingList.size(); i++){
-				messageSB.append(" " + routingList.get(i));
-			}
-			messageSB.append("; ");
-		}
-		if (fieldMap.containsKey(WorldTracerField.NF)) {
-			messageSB.append("Flight Number:");
-			List<String> flightList = fieldMap.get(WorldTracerField.NF);
-			for(int i = 0; i < flightList.size(); i++){
-				messageSB.append(" " + flightList.get(i).split("/")[0]);
-			}
-			messageSB.append("; Depart Date:");
-			for(int i = 0; i < flightList.size(); i++){
-				messageSB.append(" " + flightList.get(i).split("/")[1]);
-			}
-			messageSB.append("; ");
-		}
-		if (fieldMap.containsKey(WorldTracerField.RL)) {
-			messageSB.append("Reason for Loss: " + fieldMap.get(WorldTracerField.NR).get(0));
-			messageSB.append("; ");
-		}
-		if (fieldMap.containsKey(WorldTracerField.SI)) {
-			messageSB.append("Supplementary Information: " + fieldMap.get(WorldTracerField.SI).get(0));
-			messageSB.append("; ");
-		}
-		if(messageSB.length() > 2){
-			messageSB.delete(messageSB.length()-2, messageSB.length());
-		}else{
-			messageSB.append("no message");
-		}
-		forwardMethod.setParameter("wtrActionAreaWriteRequest.message", messageSB.toString());
-
-		try {
-			client.executeMethod(forwardMethod);
-			if(forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
-				newLocation = forwardMethod.getResponseHeader("location").getValue();
-			}
-			else{
-				throw new WorldTracerException("forward message method not redirect!");
-			}
-		}
-		catch (HttpException e) {
-			logger.error("error", e);;
-		}
-		catch (IOException e) {
-			logger.error("error", e);;
-		}
-		finally {
-			forwardMethod.releaseConnection();
-		}
-		//redirect to submit result page and get message
-		GetMethod redirect = new GetMethod(newLocation);
-		try {
-			client.executeMethod(redirect);
-			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
-		}
-		catch (HttpException e) {
-			logger.error("error", e);;
-		}
-		catch (IOException e) {
-			logger.error("error", e);;
-		}
-		finally {
-			redirect.releaseConnection();
-		}
-		String errorString;
-		Pattern error_patt = Pattern.compile("error = '([^<>']+)'", 
-				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-		Matcher m = error_patt.matcher(responseBody);
-		if (m.find()) {
-			errorString = m.group(1);
-			logger.error(errorString);
-		} else {
-			errorString = OK;
-		}
-		if (OK.equals(errorString)) {
-			return errorString;
-		}
-		throw new WorldTracerException(errorString);
-	}
-	*/
 	
 	public String sendFwd(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
@@ -1985,7 +1806,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "SEND FORWARD: START FLOW (1)");
 		} catch (HttpException e) {
 			logger.error("error", e);
 			throw new WorldTracerConnectionException("unable to send fwd", e);
@@ -2150,7 +1971,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		search.addParameter("bagType", "Rush");
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethodWithPause(search, "SEND FORWARD: SEND (2)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 				newLocation = search.getResponseHeader("location").getValue();
@@ -2172,7 +1993,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if (!"".equals(newLocation)) {
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "SEND FORWARD: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect
 						.getResponseBodyAsStream());
 				// System.out.println("close incident result:" + responseBody);
@@ -2230,7 +2051,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			startFlow.setQueryString(p1);
 			startFlow.setFollowRedirects(false);
 			try {
-				client.executeMethod(startFlow);
+				client.executeMethodWithPause(startFlow, "INSERT OHD: START FLOW (1)");
 			}
 			catch (HttpException e) {
 				logger.error("error", e);
@@ -2401,7 +2222,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			
 			try {
 				debugOut(search, "");
-				client.executeMethod(search);
+				client.executeMethodWithPause(search, "INSERT OHD: INSERT (2)");
 				if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 					newLocation = search.getResponseHeader("location").getValue();
 				}
@@ -2425,7 +2246,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "INSERT OHD: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 				//System.out.println("response body:" + responseBody);
 				//return true;
@@ -2481,7 +2302,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			startFlow.setQueryString(p1);
 			startFlow.setFollowRedirects(false);
 			try {
-				client.executeMethod(startFlow);
+				client.executeMethodWithPause(startFlow, "CLOSE OHD: START FLOW (1)");
 			}
 			catch (HttpException e) {
 				logger.error("error", e);
@@ -2521,7 +2342,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			
 			try {
 				debugOut(search, "");
-				client.executeMethod(search);
+				client.executeMethodWithPause(search, "CLOSE OHD: CLOSE (2)");
 				if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 					newLocation = search.getResponseHeader("location").getValue();
 				}
@@ -2546,7 +2367,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			if(!"".equals(newLocation)){
 				GetMethod redirect = new GetMethod(newLocation);
 				try {
-					client.executeMethod(redirect);
+					client.executeMethod(redirect, "CLOSE OHD: REDIRECT (3)");
 					responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 					//System.out.println("close onHandBag result:" + responseBody);
 				}
@@ -2585,7 +2406,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "ERASE AF: START FLOW (1)");
 		} catch (HttpException e) {
 			logger.error("error", e);
 			throw new WorldTracerException("unable to erase action file", e);
@@ -2620,7 +2441,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "ERASE AF: GET AF (2)");
 			if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = search.getResponseHeader("location").getValue();
 				flowKey = newLocation.split("=")[1];
@@ -2645,7 +2466,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		//not sure i need to do this
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "ERASE AF: REDIRECT (3)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -2677,7 +2498,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethodWithPause(search, "ERASE AF: ERASE (4)");
 			if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = search.getResponseHeader("location").getValue();
 			}
@@ -2709,7 +2530,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethod(startFlow, "FIND AHL (FRONTEND): START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -2742,7 +2563,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "FIND AHL (FRONTEND): SEARCH AHL (2)");
 			if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = search.getResponseHeader("location").getValue();
 			}
@@ -2767,7 +2588,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if(!"".equals(newLocation)){
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "FIND AHL (FRONTEND): REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 				//System.out.println("close onHandBag result:" + responseBody);
 			}
@@ -2788,8 +2609,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			throw new WorldTracerRecordNotFoundException(wt_id);
 		} else {
 			return responseBody;
-		}
-		
+		}	
 	}
 
 	public String findOHD(String wt_id) throws WorldTracerException {
@@ -2800,7 +2620,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethod(startFlow, "FIND OHD (FRONTEND): START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -2833,7 +2653,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "FIND OHD (FRONTEND): SEARCH (2)");
 			if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = search.getResponseHeader("location").getValue();
 			}
@@ -2858,7 +2678,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if(!"".equals(newLocation)){
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "FIND OHD (FRONTEND): REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 				//System.out.println("close onHandBag result:" + responseBody);
 			}
@@ -2878,8 +2698,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			logger.error("Not exists OHD!");
 			throw new WorldTracerRecordNotFoundException();
 		} else {
-//			logger.error("Close onHand bag error");
-//			throw new WorldTracerException();
 			return responseBody;
 		}
 	}
@@ -2989,7 +2807,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setFollowRedirects(false);
 		try {
 			
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "SUSRIT: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -3029,7 +2847,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		try {
 			debugOut(amend, "");
-			client.executeMethod(amend);
+			client.executeMethodWithPause(amend, "SUSRIT: PERFORM ACTION (2)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -3049,7 +2867,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		newLocation = amend.getResponseHeader("location").getValue();
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "SUSRIT: REDIRECT (3");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 		}
 		catch (HttpException e) {
@@ -3075,7 +2893,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "FORWARD OHD: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -3107,7 +2925,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		getOnhand.setParameter("_eventId", "continue");
 		try {
 			debugOut(getOnhand, "");
-			client.executeMethod(getOnhand);
+			client.executeMethodWithPause(getOnhand, "FORWARD OHD: LOAD OHD (2)");
 			if(getOnhand.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getOnhand.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = getOnhand.getResponseHeader("location").getValue();
 				flowKey = newLocation.split("=")[1];
@@ -3129,7 +2947,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod getWtDetails = new GetMethod(newLocation);
 		try {
-			client.executeMethod(getWtDetails);
+			client.executeMethod(getWtDetails, "FORWARD OHD: GET DETAILS (3)");
 			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || 
 					getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				logger.error("getWtDetails method redirect again!");
@@ -3202,17 +3020,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if (fieldMap.containsKey(WorldTracerField.SI)) {
 			forwardMethod.setParameter("wtrForwardRequest.supplementaryInfo[0]", fieldMap.get(WorldTracerField.SI).get(0).replace(".", "&#46;"));
 		}
-//		if (fieldMap.containsKey(WorldTracerField.TX)) {
-//			List<String> ttList = fieldMap.get(WorldTracerField.TX);
-//			for (int i = 0; i < ttList.size() && i < 4; i++) {
-//				String tt = ttList.get(i);
-//				method.addParameter("TX" + (i + 1), tt);
-//			}
-//		}
 
 		try {
 			debugOut(forwardMethod, "");
-			client.executeMethod(forwardMethod);
+			client.executeMethodWithPause(forwardMethod, "FORWARD OHD: FORWARD (4)");
 			if(forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = forwardMethod.getResponseHeader("location").getValue();
 			}
@@ -3235,7 +3046,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "FORWARD OHD: REDIRECT (5)");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 			//System.out.println("response body:" + responseBody);
 			//return true;
@@ -3287,7 +3098,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "CREATE BDO: START FLOW (1)");
 		} catch (HttpException e) {
 			logger.error("error", e);
 			throw new WorldTracerException("unable to create bdo", e);
@@ -3324,7 +3135,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethodWithPause(search, "CREATE BDO: PREPARE AHL DELIVERY (2)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 				newLocation = search.getResponseHeader("location").getValue();
@@ -3346,7 +3157,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if (!"".equals(newLocation)) {
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "CREATE BDO: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect
 						.getResponseBodyAsStream());
 				// System.out.println("close incident result:" + responseBody);
@@ -3424,7 +3235,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		search.setParameter("_eventId", "submit");
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethodWithPause(search, "CREATE BDO: BDO (4)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 				newLocation = search.getResponseHeader("location").getValue();
@@ -3446,7 +3257,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if (!"".equals(newLocation)) {
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "CREATE BDO: REDIRECT (6)");
 				responseBody = getStringFromInputStream(redirect
 						.getResponseBodyAsStream());
 				logger.debug("Create BDO result result:" + responseBody);
@@ -3482,7 +3293,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethodWithPause(startFlow, "AMEND BEFORE CLOSE: START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -3580,7 +3391,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		amendMethod.setParameter("flowExecutionKey_Claim", flowKey);
 		try{
 			debugOut(amendMethod, "");
-			client.executeMethod(amendMethod);
+			client.executeMethodWithPause(amendMethod, "AMEND BEFORE CLOSE: AMEND (2)");
 			if(amendMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || amendMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = amendMethod.getResponseHeader("location").getValue();
 			}else{
@@ -3600,7 +3411,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "AMEND BEFORE CLOSE: REDIRECT (3)");
 			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
 		}
 		catch (HttpException e) {
@@ -3651,7 +3462,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		startFlow.setQueryString(p1);
 		startFlow.setFollowRedirects(false);
 		try {
-			client.executeMethod(startFlow);
+			client.executeMethod(startFlow, "GET AF COUNTS (FRONTEND): START FLOW (1)");
 		}
 		catch (HttpException e) {
 			logger.error("error", e);
@@ -3685,7 +3496,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		search.setParameter("_eventId", "refresh");
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "GET AF COUNTS (FRONTEND): GET COUNTS (2)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 				newLocation = search.getResponseHeader("location").getValue();
@@ -3708,7 +3519,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			flowKey = newLocation.split("=")[1];
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "GET AF COUNTS (FRONTEND): REDIRECT (3)");
 				inStream = redirect.getResponseBodyAsStream();
 				lastFlowKey = flowKey;
 				return ParsingUtils.parseActionFileCounts(inStream, "ISO-8859-1");
@@ -3757,7 +3568,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		String newLocation = null;
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "GET ACTIONFILES (FRONTEND): START FLOW (1)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 				newLocation = search.getResponseHeader("location").getValue();
@@ -3780,7 +3591,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			flowKey = newLocation.split("=")[1];
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "GET ACTIONFILES (FRONTEND): AF (2)");
 				inStream = redirect.getResponseBodyAsStream();
 				lastFlowKey = flowKey;
 				details = ParsingUtils.parseActionFileDetail(inStream, "ISO-8859-1");
@@ -3830,7 +3641,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			search.setParameter("successMessage", "4");
 			try {
 				debugOut(search, "");
-				client.executeMethod(search);
+				client.executeMethod(search, "GET ACTIONFILES (FRONTEND): GET ACTION FILE (3)");
 				if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 						|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 					newLocation = search.getResponseHeader("location").getValue();
@@ -3851,7 +3662,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			flowKey = newLocation.split("=")[1];
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
-				client.executeMethod(redirect);
+				client.executeMethod(redirect, "GET ACTIONFILES (FRONTEND): REDIRECT (4)");
 				inStream = redirect.getResponseBodyAsStream();
 				lastFlowKey = flowKey;
 				details = ParsingUtils.parseActionFileDetail(inStream, "ISO-8859-1");
@@ -3918,7 +3729,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		search.setParameter("successMessage", "4");
 		try {
 			debugOut(search, "");
-			client.executeMethod(search);
+			client.executeMethod(search, "GET ACTIONFILES (FRONTEND): COUNT SCREEN (5)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
 					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
 				newLocation = search.getResponseHeader("location").getValue();
@@ -3940,7 +3751,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		lastFlowKey = flowKey;
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
-			client.executeMethod(redirect);
+			client.executeMethod(redirect, "GET ACTIONFILES (FRONTEND): REDIRECT (7)");
 		} catch (Exception e) {
 			throw new WorldTracerException(e);
 		} finally {

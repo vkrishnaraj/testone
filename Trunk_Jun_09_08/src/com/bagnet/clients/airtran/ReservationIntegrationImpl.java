@@ -274,7 +274,7 @@ public class ReservationIntegrationImpl extends
 					for (int j = 0; j < baggages.length; j++) {
 
 						Baggage bag = baggages[j];
-						deptime = (bag.getOSTagDate().getTime().getTime()) / 3600000;
+						deptime = (bag.getCreatedDate().getTime().getTime()) / 3600000;
 						nowtime = ((new Date()).getTime()) / 3600000;
 						if (nowtime - deptime <= 24 && nowtime >= deptime) {
 

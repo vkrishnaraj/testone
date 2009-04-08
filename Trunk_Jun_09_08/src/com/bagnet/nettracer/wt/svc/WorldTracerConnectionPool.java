@@ -37,7 +37,7 @@ public class WorldTracerConnectionPool extends GenericObjectPool {
 		WorldTracerConnectionFactory factory = new WorldTracerConnectionFactory(
 				accounts, mode, host);
 
-		this.setLifo(false);
+		this.setLifo(true);
 		this.setMaxActive(accounts.size());
 		this.setMaxWait(1000 * 15);
 		this.setWhenExhaustedAction(WHEN_EXHAUSTED_BLOCK);

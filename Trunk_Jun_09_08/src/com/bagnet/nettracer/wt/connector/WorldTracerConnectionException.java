@@ -2,6 +2,8 @@ package com.bagnet.nettracer.wt.connector;
 
 public class WorldTracerConnectionException extends RuntimeException {
 
+	private static final long serialVersionUID = -3155435867769385979L;
+
 	public WorldTracerConnectionException() {
 	}
 

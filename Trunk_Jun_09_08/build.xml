@@ -64,6 +64,7 @@
 		<antcall target="delete" />
 		<delete dir="other" />
 	</target>
+	
 
 	<target name="all" depends="clean,package-web" />
 
@@ -1241,10 +1242,14 @@
 		</hibernatetool>
 	</target>
 	
-	<target name="tracerSchema">
+	<target name="mysqlSchema">
 		<property name="ant_project_name" value="tracer" />
 		<antcall target="schemaexport" />
 	</target>
+	<target name="sqlServerSchema">
+			<property name="ant_project_name" value="usair" />
+			<antcall target="schemaexport" />
+		</target>
 
 	<target name="schemaexport" depends="compile-core,hibernate_generate_core" description="Exports a generated schema to DB and file">
 		<hibernatetool destdir="${build.dir}/${ant_project_name}/ddl">
@@ -1252,7 +1257,7 @@
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}/classes" />
 			</classpath>
-			<annotationconfiguration configurationfile="companies/tracer/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="companies/usair/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>

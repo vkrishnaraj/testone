@@ -23,7 +23,7 @@ public class WorldTracerAccount implements Serializable {
 
 	@Column(length = 2)
 	private String companyCode;
-	
+
 	@Column(length = 20)
 	private String instanceName;
 
@@ -83,5 +83,4 @@ public class WorldTracerAccount implements Serializable {
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
 	}
-
 }

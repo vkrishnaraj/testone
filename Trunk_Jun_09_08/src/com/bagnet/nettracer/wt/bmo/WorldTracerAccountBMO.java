@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
@@ -20,5 +21,10 @@ public class WorldTracerAccountBMO extends HibernateDaoSupport {
 		q.setString("companyCode", companyCode);
 		q.setString("instanceName", INSTANCE_NAME);
 		return (List<WorldTracerAccount>)q.list();
+	}
+	
+	public static WorldTracerAccount getAccount(long id) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		return (WorldTracerAccount) sess.load(WorldTracerAccount.class, id);
 	}
 }

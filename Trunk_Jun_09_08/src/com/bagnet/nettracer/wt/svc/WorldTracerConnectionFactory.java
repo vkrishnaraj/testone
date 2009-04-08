@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.wt.svc;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.pool.BasePoolableObjectFactory;
@@ -13,6 +14,8 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	private String host;
 	private volatile int itemsUsed = 0;
 	private String mode;
+	
+	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 18000;
 	
 	private static final Logger logger = Logger.getLogger(WorldTracerConnectionFactory.class);
 	
@@ -41,13 +44,22 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 
 	@Override
 	public void activateObject(Object obj) throws Exception {
-		logger.info("Activating Object...");
-		((WorldTracerConnection) obj).login();
+		logger.debug("Activating Object...");
+		WorldTracerConnection connection = (WorldTracerConnection) obj;
+		
+		GregorianCalendar cal = new GregorianCalendar();
+		long diff = cal.getTimeInMillis() - connection.getLastUsed().getTimeInMillis();
+		
+		if (diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
+			logger.info("Logging in...");
+			connection.login();
+		}
 	}
 	
 	@Override
 	public void passivateObject(Object obj) throws Exception {		
-		logger.info("Passivating Object...");
-		((WorldTracerConnection) obj).logout();
+		logger.debug("Passivating Object...");
+		//No longer logging out because we want the connection to remain logged in.
+		//((WorldTracerConnection) obj).logout();
 	}
 }

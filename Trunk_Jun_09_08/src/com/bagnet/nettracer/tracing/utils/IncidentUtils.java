@@ -716,7 +716,7 @@ public class IncidentUtils {
 		
 		if (incident.getStatus().getStatus_ID() != TracingConstants.MBR_STATUS_CLOSED && incident.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY) {
 			for (Item item: (List<Item>)incident.getItemlist()) {
-				if (item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY) {
+				if (item.getStatus() == null || item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY) {
 					promptToClose = false;
 				}
 			}

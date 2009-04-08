@@ -311,7 +311,16 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
       <tr><td><div id="copyright">
       <bean:message key="copyright.line1"/><br/>
     <bean:message key="copyright.line2"/></div></td> 
-      <td align=right width=1><bean:message key="footer.current_version"/><%= TracerProperties.getInstanceLabel() %></td>
+      <td align=right width=1>
+        <logic:present name="user" scope="session">
+          <a href="speedtest.do">
+            <bean:message key="footer.current_version"/>-<%= TracerProperties.getInstanceLabel() %>
+          </a>
+        </logic:present>
+        <logic:notPresent name="user" scope="session">
+          <bean:message key="footer.current_version"/>-<%= TracerProperties.getInstanceLabel() %>
+        </logic:notPresent>
+      </td>
       </tr>
       </table>
     </td>

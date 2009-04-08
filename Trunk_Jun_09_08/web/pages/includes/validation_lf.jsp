@@ -4,9 +4,11 @@
                                                                request.getAttribute("org.apache.struts.action.MESSAGE");
   java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
                                                                "org.apache.struts.action.LOCALE");
+  Agent a = (Agent)session.getAttribute("user");
 %>
 
-  <script language="javascript">
+  <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<script language="javascript">
     <!--
 
   function checkDate(strng)
