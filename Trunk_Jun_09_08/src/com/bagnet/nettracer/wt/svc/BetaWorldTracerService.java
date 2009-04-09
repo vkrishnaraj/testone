@@ -503,13 +503,13 @@ public class BetaWorldTracerService implements WorldTracerService {
 		return null;
 	}
 
-	@WorldTracerTx(type = TxType.IMPORT_OHD)
-	public OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException {
-		String result = wtConnector.findOHD(wt_id);
-		// for now show all as active
-		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
-		return foundohd;
-	}
+//	@WorldTracerTx(type = TxType.IMPORT_OHD)
+//	public OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException {
+//		String result = wtConnector.findOHD(wt_id);
+//		// for now show all as active
+//		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
+//		return foundohd;
+//	}
 
 	@WorldTracerTx(type = TxType.FWD_OHD)
 	public String forwardOhd(WtqFwdOhd fwd) throws WorldTracerException {
@@ -1391,6 +1391,13 @@ public class BetaWorldTracerService implements WorldTracerService {
 		}
 		afStation.setCountMap(countMap);
 		return afStation;
+	}
+
+	@Override
+	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent agent)
+			throws WorldTracerException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -53,8 +53,6 @@ import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;
-import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -78,6 +76,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
@@ -1355,6 +1354,10 @@ public class BagService {
 			return false;
 		}
 	}
+	
+	public boolean insertOnHand(OHD oDTO, OnHandForm theform, ArrayList list, Agent mod_agent) {
+		return insertOnHand(oDTO, theform, list, mod_agent, null, null, null);
+	}
 
 	/**
 	 * 
@@ -1362,7 +1365,7 @@ public class BagService {
 	 * @param theform
 	 * @return @throws Exception
 	 */
-	public boolean insertOnHand(OHD oDTO, OnHandForm theform, ArrayList list, Agent mod_agent) {
+	public boolean insertOnHand(OHD oDTO, OnHandForm theform, ArrayList list, Agent mod_agent, String foundStation, String foundCompany, WorldTracerFile file) {
 		try {
 			boolean escape = false;
 			boolean mass = false;
@@ -1394,7 +1397,15 @@ public class BagService {
 				// oDTO.setOHD_ID(theform.getOhd_id());
 				oDTO.setFoundtime(theform.getFoundTime());
 				oDTO.setFounddate(theform.getFoundDate());
-				oDTO.setFoundAtStation(oDTO.getAgent().getStation());
+				if (foundStation == null || foundCompany == null) {
+					oDTO.setFoundAtStation(oDTO.getAgent().getStation());
+				} else {
+					oDTO.setFoundAtStation(StationBMO.getStationByCode(foundStation, foundCompany));
+				}
+				
+				if (file != null) {
+					oDTO.setWtFile(file);
+				}
 
 				if(oDTO.getHoldingStation() == null || oDTO.getHoldingStation().getStation_ID() == 0) {
 					oDTO.setHoldingStation(oDTO.getAgent().getStation());

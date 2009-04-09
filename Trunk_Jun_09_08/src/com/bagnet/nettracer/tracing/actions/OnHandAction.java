@@ -24,7 +24,6 @@ import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -267,7 +266,7 @@ public class OnHandAction extends CheckedAction {
 			else if(request.getParameter("savetracing") != null || request.getParameter("savetowt") != null  || request.getParameter("amendtowt") != null) {
 
 				//in all situations we save the nettracer copy of the file
-				rohd = bs.insertOnHand(oDTO, theform, list, user);
+				rohd = bs.insertOnHand(oDTO, theform, list, user, theform.getFound_station(), theform.getFound_company(), theform.getWtFile());
 				
 				//they did a save of any kind and the status is now closed, we need to close the WT file
 				if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED && oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED)) {
@@ -442,7 +441,8 @@ public class OnHandAction extends CheckedAction {
 					
 					try {
 						wts.getWtConnector().initialize();
-						foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE);
+						foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE, user);
+						
 						if (foundohd == null) {
 							errors = new ActionMessages();
 							ActionMessage error = new ActionMessage("error.wt_nostation");

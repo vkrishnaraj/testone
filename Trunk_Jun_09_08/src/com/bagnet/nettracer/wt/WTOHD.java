@@ -49,7 +49,7 @@ public class WTOHD {
 	 * @return
 	 * @throws WorldTracerException
 	 */
-	public static OHD parseWTOHD(String wtdata, WTStatus wtstatus)
+	public static OHD parseWTOHD(String wtdata, WTStatus wtstatus, Agent agent)
 			throws WorldTracerException {
 		try {
 			if (wtdata == null) {
@@ -142,13 +142,17 @@ public class WTOHD {
 			ohd.setHoldingStation(s);
 
 			// agent
-			Agent ntuser = WorldTracerUtils.getWTAgent(ohd.getFoundAtStation()
-					.getStation_ID(), thec);
-			if (ntuser == null) {
-				throw new WorldTracerException(
-						"Unable to import OHD, not default worldtracer agent found");
+			
+			if (agent == null) {
+				Agent ntuser = WorldTracerUtils.getWTAgent(ohd.getFoundAtStation().getStation_ID(), thec);
+				if (ntuser == null) {
+					throw new WorldTracerException(
+							"Unable to import OHD, not default worldtracer agent found");
+				}
+				agent = ntuser;
 			}
-			ohd.setAgent(ntuser);
+			ohd.setAgent(agent);
+			
 
 			// date
 			String datetimestr = ohdMap.get("CreatedDate");
@@ -501,7 +505,7 @@ public class WTOHD {
 				if (Action_file != null) {
 					String remarktext = Action_file.getAction_file_text();
 					rm = new Remark();
-					rm.setAgent(ntuser);
+					rm.setAgent(agent);
 					rm.setRemarktype(1);
 					rm.setCreatetime(DateUtils.formatDate(new Date(),
 							TracingConstants.DB_DATETIMEFORMAT, null, null));
@@ -510,13 +514,13 @@ public class WTOHD {
 					remark_set.add(rm);
 				}
 			}
-			if (ntuser != null) {
+			if (agent != null) {
 				while (hasmorerem) {
 					rm = new Remark();
 					// Free Form Text max 9 items
 					rmtxt = ohdMap.get("Free_Form_Text." + i);
 					if (rmtxt != null) {
-						rm.setAgent(ntuser);
+						rm.setAgent(agent);
 						rm.setRemarktext(rmtxt);
 						rm.setRemarktype(1);
 						rm

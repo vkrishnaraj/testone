@@ -91,7 +91,7 @@ public interface WorldTracerService {
 
 	Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user) throws WorldTracerException;
 	
-	OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException;
+	OHD getOhdforOhd(String wt_id, WTStatus status, Agent agent) throws WorldTracerException;
 
 	String amendAhl(Incident incident) throws WorldTracerException;
 	

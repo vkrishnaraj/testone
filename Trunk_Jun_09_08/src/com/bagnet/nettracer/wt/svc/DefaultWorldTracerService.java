@@ -293,11 +293,11 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.IMPORT_OHD)
-	public OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException {
+	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent agent) throws WorldTracerException {
 		String result = wtConnector.findOHD(wt_id);
 		// for now show all as active
 		//OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
-		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
+		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, agent);
 		return foundohd;
 	}
 
