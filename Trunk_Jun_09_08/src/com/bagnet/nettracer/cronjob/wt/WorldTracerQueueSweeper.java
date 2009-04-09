@@ -22,7 +22,7 @@ public class WorldTracerQueueSweeper {
 	
 	private static final Logger logger = Logger.getLogger(WorldTracerQueueSweeper.class);
 	
-	public static final int MAX_ATTEMPTS = 5;
+	public static final int MAX_ATTEMPTS = 2;
 
 	public static final String WT_QUEUE_WORKERS = "wt.queue.workers";
 	
