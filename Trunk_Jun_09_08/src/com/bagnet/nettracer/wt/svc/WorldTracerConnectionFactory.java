@@ -50,8 +50,8 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 		GregorianCalendar cal = new GregorianCalendar();
 		long diff = cal.getTimeInMillis() - connection.getLastUsed().getTimeInMillis();
 		
-		if (diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
-			logger.info("Logging in...");
+		if (connection.isValidConnection() == false || diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
+			logger.debug("Logging in...");
 			connection.login();
 		}
 	}
@@ -59,7 +59,5 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	@Override
 	public void passivateObject(Object obj) throws Exception {		
 		logger.debug("Passivating Object...");
-		//No longer logging out because we want the connection to remain logged in.
-		//((WorldTracerConnection) obj).logout();
 	}
 }

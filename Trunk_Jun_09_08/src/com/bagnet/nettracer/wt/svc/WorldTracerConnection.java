@@ -12,9 +12,16 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.SSLProtocolSocketFactory;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO;
 
 public class WorldTracerConnection extends HttpClient {
@@ -22,9 +29,6 @@ public class WorldTracerConnection extends HttpClient {
 	private static final Logger logger = Logger
 			.getLogger(WorldTracerConnection.class);
 	
-	private static final Logger hitCounter = Logger
-	.getLogger("WORLD_TRACER_HIT_LOG");
-
 	private String host = null;
 	private String mode = null;
 	private WorldTracerAccount account = null;
@@ -43,9 +47,19 @@ public class WorldTracerConnection extends HttpClient {
 	}
 	
 	public int executeMethod(HttpMethod method, String functionName) throws IOException, HttpException {
-		hitCounter.info(account.getUsername() + "\t" + functionName + "\t" + method.getURI());
+		writeToLog(functionName, method.getURI().toString());
 		lastUsed = new GregorianCalendar();
-		return super.executeMethod(method);
+		int returnVal;
+		try {
+			returnVal = super.executeMethod(method);
+		} catch (HttpException e) {
+			validConnection = false;
+			throw e;
+		} catch (IOException e) {
+			validConnection = false;
+			throw e;
+		}
+		return returnVal;
 	}
 
 	public int executeMethodWithPause(HttpMethod method, String functionName) throws IOException,
@@ -166,5 +180,42 @@ public class WorldTracerConnection extends HttpClient {
 
 	public Calendar getLastUsed() {
 		return lastUsed;
+	}
+	
+	public void writeToLog(String description, String uri) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		Transaction t = sess.beginTransaction();
+		try {
+			SQLQuery query = sess.createSQLQuery("INSERT INTO WT_WEB_TRANS_LOG (gmttime, username, description, uri) VALUES (?, ?, ?, ?)");
+			query.setTimestamp(0, TracerDateTime.getGMTDate());
+			query.setString(1, account.getUsername());
+			query.setString(2, truncate(description, 60));
+			query.setString(3, truncate(uri, 100));
+			query.executeUpdate();
+			t.commit();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (HibernateException e1) {
+				// Ignore
+			}
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
+	}
+	
+	private static String truncate(String str, int maxLen) {
+		return StringUtils.substring(str, 0, maxLen);
+	}
+
+	public boolean isValidConnection() {
+		return validConnection;
+	}
+
+	public void setValidConnection(boolean validConnection) {
+		this.validConnection = validConnection;
 	}
 }
