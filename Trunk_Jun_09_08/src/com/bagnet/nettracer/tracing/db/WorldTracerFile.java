@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
  * @author noah
  */
 @Embeddable
+
 public class WorldTracerFile implements Serializable{
 
 	private WTStatus status;
@@ -29,6 +30,10 @@ public class WorldTracerFile implements Serializable{
 		this.status = wtStatus;
 	}
 
+	/**
+	 * 
+	 * @hibernate.property type="worldTracerStatus"
+	 */
 	@Enumerated(EnumType.STRING)
 	public WTStatus getWt_status() {
 		return status;
@@ -37,6 +42,11 @@ public class WorldTracerFile implements Serializable{
 		this.status = status;
 	}
 	
+	/**
+	 * @return Returns the numpassengers.
+	 * 
+	 * @hibernate.property type="string"
+	 */
 	@Column(length = 15)
 	public String getWt_id() {
 		return wt_id;

@@ -134,6 +134,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/WT_TTY.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/WT_FWD_Log.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/WT_FWD_Log_Itinerary.hbm.xml"/>
+				
 		<!-- Java5 Annotated Classes -->
 		<mapping class="com.bagnet.nettracer.tracing.db.WorldTracerFile" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue"/>

@@ -15,7 +15,7 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	private volatile int itemsUsed = 0;
 	private String mode;
 	
-	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 18000;
+	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1080000;
 	
 	private static final Logger logger = Logger.getLogger(WorldTracerConnectionFactory.class);
 	
