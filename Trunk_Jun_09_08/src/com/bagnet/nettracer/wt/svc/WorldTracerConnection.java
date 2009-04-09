@@ -136,7 +136,9 @@ public class WorldTracerConnection extends HttpClient {
 			try {
 				this.executeMethod(redirect, "LOGGING IN: REDIRECT");
 				if (redirect.getStatusCode() == HttpStatus.SC_OK) {
+					validConnection = true;
 					return true;
+					
 				} else {
 					return false;
 				}

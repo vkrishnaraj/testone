@@ -53,6 +53,7 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 		if (connection.isValidConnection() == false || diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
 			logger.debug("Logging in...");
 			connection.login();
+			
 		}
 	}
 	
