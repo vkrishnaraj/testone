@@ -22,6 +22,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
+
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -3795,45 +3797,46 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		NameValuePair[] summaryQueryParams = {new NameValuePair("_flowExecutionKey", flowKey)};
 
 		PostMethod method = new PostMethod("/WorldTracerWeb/wtwflow.do");
+		method.setFollowRedirects(false);
 		InputStream inStream = null;
 		method.setQueryString(summaryQueryParams);
 		method.setParameter("wtrActionAreaReadRequest.stationCode", stationCode);
 		method.setParameter("wtrActionAreaReadRequest.airlineCode", companyCode);
-		method.setParameter("searchMessagesVO.startNumber", "");
-		method.setParameter("searchMessagesVO.endNumber", "");
+		method.setParameter("searchMessagesVO.startNumber", "1");
+		method.setParameter("searchMessagesVO.endNumber", "99");
 		method.setParameter("_eventId", "Refresh");
 		method.setParameter("wtrActionAreaReadRequest.actionAreaName.actionAreaType", afType.areaId());
 		method.setParameter("wtrActionAreaReadRequest.actionAreaDayNumber", "DAY_" + day);
-		method.setParameter("_eventId", "");
-		method.setParameter("copyMessageActionVO.destinationType", "teleType");
-		method.setParameter("copyMessageActionVO.ttyAddresses[0]", "");
-		method.setParameter("copyMessageActionVO.ttyAddresses[1]", "");
-		method.setParameter("copyMessageActionVO.ttyAddresses[2]", "");
-		method.setParameter("copyMessageActionVO.ttyAddresses[3]", "");
-		method.setParameter("copyMessageActionVO.ttyAddresses[4]", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].stationCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].airlineCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].actionAreaType", "ADDITIONAL_PROMPT_AREA");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].stationCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].airlineCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].actionAreaType", "ADDITIONAL_PROMPT_AREA");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].stationCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].airlineCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].actionAreaType", "ADDITIONAL_PROMPT_AREA");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].stationCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].airlineCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].actionAreaType", "ADDITIONAL_PROMPT_AREA");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].stationCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].airlineCode", "");
-		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].actionAreaType", "ADDITIONAL_PROMPT_AREA");
-		method.setParameter("afterDMFService", "0");
-		method.setParameter("notValidDMF", "false");
-		method.setParameter("containsOHDRecord", "false");
-		method.setParameter("wtrActionAreaTransferReadRequest.recordType", "");
-		method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.stationCode", "");
-		method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.airlineCode", companyCode);
-		method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.recordId", "");
-		method.setParameter("successMessage", "BEGIN");
+		//method.setParameter("_eventId", "");
+		//method.setParameter("copyMessageActionVO.destinationType", "teleType");
+		//method.setParameter("copyMessageActionVO.ttyAddresses[0]", "");
+//		method.setParameter("copyMessageActionVO.ttyAddresses[1]", "");
+//		method.setParameter("copyMessageActionVO.ttyAddresses[2]", "");
+//		method.setParameter("copyMessageActionVO.ttyAddresses[3]", "");
+//		method.setParameter("copyMessageActionVO.ttyAddresses[4]", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].stationCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].airlineCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].stationCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].airlineCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].stationCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].airlineCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].stationCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].airlineCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].stationCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].airlineCode", "");
+//		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+		//method.setParameter("afterDMFService", "0");
+		//method.setParameter("notValidDMF", "false");
+		//method.setParameter("containsOHDRecord", "false");
+		//method.setParameter("wtrActionAreaTransferReadRequest.recordType", "");
+		//method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.stationCode", "");
+		//method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.airlineCode", companyCode);
+		//method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.recordId", "");
+		//method.setParameter("successMessage", "BEGIN");
 
 		
 		executeMethod(method, "ACTION FILE SUMMARY (2)", false, 0L);
@@ -3869,6 +3872,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			redirect.releaseConnection();
 		}
+		
 	}
 
 	private void startFlow(NameValuePair[] getParams, String flowName, int stepNum) throws WorldTracerException {
@@ -3899,8 +3903,11 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		Matcher m = FLOW_PATTERN.matcher(newLocation);
 		if(m.find()) {
 			flowKey = m.group(1).trim();
+			GetMethod gm = new GetMethod(newLocation);
+			executeMethod(gm, "startflow redirect", false, 0);
 			return;
 		}
+		
 		throw new WorldTracerException(functionName + " redirected to " + newLocation);
 
 	}

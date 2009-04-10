@@ -138,16 +138,6 @@ public class ParsingUtils {
 	}
 
 	public static List<ActionFileDto> parseActionFileSummary(InputStream inStream,	String encoding) throws Exception {
-		StringBuilder replySB = new StringBuilder();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
-		String tempString = "";
-		while((tempString = reader.readLine())!=null){
-			replySB.append(tempString);
-		}
-		reader.close();
-		//is.close();
-		
-		logger.info(new String(replySB));
 		
 		Parser parser = new Parser(new Lexer(new Page(inStream, encoding)));
 		
