@@ -468,6 +468,10 @@ public class BagService {
 				// remove close date
 				iDTO.setClosedate(null);
 			}
+			
+			if (theform.getWtFile() != null) {
+				iDTO.setWtFile(theform.getWtFile());
+			}
 
 			// set itemtype to incident
 			ItemType it = new ItemType();
@@ -995,6 +999,9 @@ public class BagService {
 		}
 
 		// set datetime format
+		if (iDTO.getRemarks() == null) {
+			iDTO.setRemarks(new HashSet());
+		}
 		theform.setRemarklist(new ArrayList(iDTO.getRemarks()));
 		Remark remark = null;
 		for(int i = 0; i < theform.getRemarklist().size(); i++) {
@@ -1008,6 +1015,9 @@ public class BagService {
 
 		}
 
+		if (iDTO.getItinerary() == null) {
+			iDTO.setItinerary(new HashSet());
+		}
 		theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
 		Itinerary iti = null;
 
@@ -1400,7 +1410,10 @@ public class BagService {
 				if (foundStation == null || foundCompany == null) {
 					oDTO.setFoundAtStation(oDTO.getAgent().getStation());
 				} else {
-					oDTO.setFoundAtStation(StationBMO.getStationByCode(foundStation, foundCompany));
+					// Set found and holding stations -- this is primarily for use when importing WT OHDs.
+					Station locatedAt = StationBMO.getStationByCode(foundStation, foundCompany);
+					oDTO.setFoundAtStation(locatedAt);
+					oDTO.setHoldingStation(locatedAt);
 				}
 				
 				if (file != null) {

@@ -761,6 +761,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
 			WorldTracerConnector conn = wtService.getWtConnector();

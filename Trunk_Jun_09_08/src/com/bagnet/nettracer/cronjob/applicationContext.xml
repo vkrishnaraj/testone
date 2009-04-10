@@ -52,7 +52,9 @@
 	</bean>
 
 	<!-- services used by the workers-->
+
 	
+
 	<bean id="wtRuleMap" class="${wt.rules}"/>
 	
 	<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
@@ -61,20 +63,17 @@
 		<constructor-arg value="${training.mode}" />
 	</bean>
 	
-	<bean id="wtConn" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector" scope="prototype">
+	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector" scope="prototype">
 		<constructor-arg ref="wtConnectionPool" />
-		<constructor-arg value="${company.code}" />
+		<constructor-arg value="${company.code" />
+		<property name="wtRuleMap" ref="wtRuleMap" />
 	</bean>
 	
-	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService" scope="prototype" >
-		<property name="wtConnector">
-			<bean class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector">
-				<constructor-arg ref="wtConnectionPool" />
-				<constructor-arg value="${training.mode}" />
-			</bean>
-		</property>		
-		<property name="wtCompanyCode" value="${company.code}" />
+	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService" scope="prototype">
+		<property name="wtConnector" ref="wtConnector" />
+		<property name="wtCompanyCode" value="${company.code" />
 	</bean>
+	
 
 	<!--  Worker beans that have the methods to be scheduled -->
 
@@ -83,6 +82,7 @@
 		<constructor-arg value="${company.code}" />
 		<property name="wtqBmo" ref="wtq-bmo" />
 		<property name="wafBmo" ref="wtaf-bmo" />
+		<property name="wtService" ref="wtService" />
 	</bean>
 	
 	<bean id="wtActionFiles" class="com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles">

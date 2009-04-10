@@ -32,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_Info;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -916,6 +917,30 @@ public class WorldTracerUtils {
 		String requestinfo = sb.toString();
 		return requestinfo;
 	}
+	
+
+	public static int getContentCategory(String code) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			code = code.replace("/", "");
+			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(Expression.like("wtCategory", code)).add(Expression.eq("locale", "en"));
+			OHD_CategoryType oc = (OHD_CategoryType) cri.list().get(0);
+			return oc.getOHD_CategoryType_ID();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	/*
 	public static String getPostWtRequest(GetMethod method,String cgiexe)
 	{

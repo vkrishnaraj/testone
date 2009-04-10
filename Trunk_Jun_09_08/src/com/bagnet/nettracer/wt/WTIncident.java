@@ -400,7 +400,7 @@ public class WTIncident {
 							cdesc = cstr.substring(cstr.indexOf(" ") + 1);
 						}
 						if (ccat != null) {
-							ccat_id = WSCoreUtil.getContentCategory(ccat);
+							ccat_id = WorldTracerUtils.getContentCategory(ccat);
 						}
 						// if wt category is not found, then keep the category in the string
 						if (ccat_id == 0) cdesc = cstr;
