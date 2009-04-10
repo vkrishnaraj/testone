@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -37,16 +39,20 @@ import com.bagnet.nettracer.wt.svc.WorldTracerRule;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
+import com.bagnet.nettracer.wt.utils.ActionFileDto;
 import com.bagnet.nettracer.wt.utils.ParsingUtils;
 
 public class NewWorldTracerConnector implements WorldTracerConnector {
+	
+	private static final Pattern FLOW_PATTERN = Pattern.compile("_flowExecutionKey=(.*)$");
+
 	private static final String OK = "OK";
 
 	private static final String ALREADY_REINSTATED = "ALREADY REINSTATED";
 
 	private String wtCompanycode;
 	
-	private String lastFlowKey = null;
+	private String flowKey = null;
 	
 	WorldTracerConnectionPool pool = null;
 	
@@ -142,7 +148,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String insertIncident(Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,String companyCode, String stationCode) throws WorldTracerException {
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_AHL);
 		
-		lastFlowKey = null;
 		String responseBody = null;
 		try {
 			GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
@@ -170,7 +175,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			//get flow key
 			String newLocation = startFlow.getResponseHeader("location").getValue();
-			String flowKey = newLocation.split("=")[1];
+			flowKey = newLocation.split("=")[1];
 			//submit form by post method
 			PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 			List<String> bagsList = fieldMap.get(WorldTracerService.WorldTracerField.CC);  //for bagTag.airlineCode and bagTag.tagNum
@@ -510,7 +515,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public String amendAhl(Map<WorldTracerField, List<String>> fieldMap,
 			String wt_ahl_id) throws WorldTracerException {
-		lastFlowKey = null;
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.AMEND_AHL);
 		//start
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
@@ -537,7 +541,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		String responseBody = null;
 		//if exists this wt_id
 		PostMethod getAhl = new PostMethod(newLocation);
@@ -983,7 +987,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public String amendOhd(Map<WorldTracerField, List<String>> fieldMap,
 			String wt_ohd_id) throws WorldTracerException {
-		lastFlowKey = null;
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.AMEND_OHD);
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p1 = { new NameValuePair("_flowId", "editonhandbagrecord-flow")};
@@ -1009,7 +1012,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		String responseBody = null;
 		//if exists this wt_id
 		PostMethod getOnhand = new PostMethod(newLocation);
@@ -1305,7 +1308,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
 			throws WorldTracerException {
 		
-		lastFlowKey = null;
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.REQUEST_QOH);
 		
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
@@ -1333,7 +1335,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		String responseBody = null;
 		//if wt_ahl_id exists
 		PostMethod getAhl = new PostMethod(newLocation);
@@ -1489,7 +1491,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			Map<WorldTracerField, List<String>> fieldMap)
 			throws WorldTracerException {
 
-		lastFlowKey = null;
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.REQUEST_QOH);
 		
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
@@ -1516,7 +1517,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		String responseBody = null;
 		//if wt_ahl_id exists
 		PostMethod getAhl = new PostMethod(newLocation);
@@ -1662,7 +1663,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String closeIncident(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
 			String wt_id, String stationCode) throws WorldTracerException {
-		lastFlowKey = null;
 		if(wt_id == null || wt_id.trim().length() < 1){
 			return null;
 		}
@@ -1697,7 +1697,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String closeInc(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
 			String wt_id, String stationCode) throws WorldTracerException{
-		lastFlowKey = null;
 		String responseBody = null;
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p1 = { new NameValuePair("_flowId", "closedelayedbagrecord-flow")};
@@ -1723,7 +1722,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		//submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
@@ -1797,7 +1796,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String sendFwd(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
 			String stationCode, String companyCode) throws WorldTracerException {
-		lastFlowKey = null;
 		Pattern itinPatt = Pattern.compile("(\\w{2})(\\w+)/(\\w+)", Pattern.CASE_INSENSITIVE);
 		String responseBody = null;
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
@@ -1823,7 +1821,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		// get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		// submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
@@ -2042,7 +2040,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String insertOhd(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
 			String companyCode, String stationCode) throws WorldTracerException {
-		lastFlowKey = null;
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_OHD);
 		String responseBody = null;
 		try {
@@ -2072,7 +2069,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			//get flow key
 			String newLocation = startFlow.getResponseHeader("location").getValue();
-			String flowKey = newLocation.split("=")[1];
+			flowKey = newLocation.split("=")[1];
 			//submit form by post method
 			PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 			for(Map.Entry<WorldTracerService.WorldTracerField, List<String>> fieldEntry : fieldMap.entrySet()){
@@ -2291,7 +2288,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String closeOhd(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
 			String wt_id, String wt_stationcode) throws WorldTracerException {
-		lastFlowKey = null;
 		if(wt_id == null || wt_id.trim().length() < 1){
 			return null;
 		}
@@ -2321,7 +2317,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			//get flow key
 			String newLocation = startFlow.getResponseHeader("location").getValue();
-			String flowKey = newLocation.split("=")[1];
+			flowKey = newLocation.split("=")[1];
 			//submit close form by post method
 			PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 			NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
@@ -2423,7 +2419,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			
 		}
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		// find the file
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
@@ -2523,7 +2519,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	}
 
 	public String findAHL(String wt_id) throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = null;
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p1 = { new NameValuePair("_flowId", "displaydelayedbagrecord-flow")};
@@ -2549,7 +2544,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		//submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
@@ -2613,7 +2608,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	}
 
 	public String findOHD(String wt_id) throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = null;
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p1 = { new NameValuePair("_flowId", "displayonhandbagrecord-flow")};
@@ -2639,7 +2633,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		//submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
@@ -2705,7 +2699,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public void suspendAHL(String wt_id, String agent)
 			throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = susritItem(wt_id, "SUS", "AHL", agent);
 		String errorString;
 		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
@@ -2724,7 +2717,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public void suspendOHD(String wt_id, String agent)
 			throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = susritItem(wt_id, "SUS", "OHD", agent);
 		String errorString;
 		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
@@ -2743,7 +2735,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public void reinstateAHL(String wt_id, String agent)
 			throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = susritItem(wt_id, "RIT", "AHL", agent);
 		String errorString;
 		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
@@ -2762,7 +2753,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public void reinstateOHD(String wt_id, String agent)
 			throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = susritItem(wt_id, "RIT", "OHD", agent);
 		String errorString;
 		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
@@ -2781,7 +2771,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	private String susritItem(String wt_id, String action, String type,
 			String agent) throws WorldTracerException {
-		lastFlowKey = null;
 		String responseBody = null;
 		String flowId = null;
 		String amendOption = null;
@@ -2826,7 +2815,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		//submit to suspend/reinstate
 		PostMethod amend = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p = {new NameValuePair("_flowExecutionKey", flowKey)};
@@ -2887,7 +2876,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public String forwardOhd(Map<WorldTracerField, List<String>> fieldMap,
 			String ohd_id, String ahl_id) throws WorldTracerException {
-		lastFlowKey = null;
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p1 = { new NameValuePair("_flowId", "forwardbag-flow")};
 		startFlow.setQueryString(p1);
@@ -2912,7 +2900,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		String responseBody = null;
 		//if wt_ohd_id exists
 		PostMethod getOnhand = new PostMethod(newLocation);
@@ -3086,7 +3074,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String createBdo(Map<WorldTracerField, List<String>> fieldMap,
 			String ahl_id, String ohd_id, DeliverCompany delivercompany,
 			Station station) throws WorldTracerException {
-		lastFlowKey = null;
 		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_BDO);
 		
 		String responseBody = null;
@@ -3113,7 +3100,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		// get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		// submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
@@ -3285,7 +3272,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String amendBeforeClose(
 			Map<WorldTracerService.WorldTracerField, List<String>> fieldMap,
 			String wt_id, String stationCode) throws WorldTracerException{
-		lastFlowKey = null;
 		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p1 = { new NameValuePair("_flowId", "editdelayedbagrecord-flow")};
 		startFlow.setQueryString(p1);
@@ -3310,7 +3296,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		//redirect to update incident page and get flow key
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		String responseBody = null;
 		//The field starts with avoidBinding... means no change in WorldTracer. So it is not necessory to retrieve details.
 		PostMethod amendMethod = new PostMethod("/WorldTracerWeb/wtwflow.do");
@@ -3437,7 +3423,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	 * @throws IOException
 	 */
 	public String getStringFromInputStream(InputStream is) throws IOException{
-		lastFlowKey = null;
 		if(is == null){
 			return null;
 		}
@@ -3478,7 +3463,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			throw new WorldTracerException("unable to get action file counts");
 		}
 		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+		flowKey = newLocation.split("=")[1];
 		// submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
@@ -3519,7 +3504,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			try {
 				client.executeMethod(redirect, "GET AF COUNTS (FRONTEND): REDIRECT (3)");
 				inStream = redirect.getResponseBodyAsStream();
-				lastFlowKey = flowKey;
 				return ParsingUtils.parseActionFileCounts(inStream, "ISO-8859-1");
 				// System.out.println("close incident result:" + responseBody);
 			} catch (HttpException e) {
@@ -3546,9 +3530,12 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	}
 
 
+
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.wt.connector.WorldTracerConnector#getActionFiles(java.lang.String, java.lang.String, com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType, int, int)
+	 */
 	public List<Worldtracer_Actionfiles> getActionFiles(String companyCode,
 			String stationCode, ActionFileType afType, int day, int count) throws WorldTracerException {
-		String flowKey = lastFlowKey;
 		ArrayList<Worldtracer_Actionfiles> afList = new ArrayList<Worldtracer_Actionfiles>();
 		// submit close form by post method
 		PostMethod search = new PostMethod("/WorldTracerWeb/wtwflow.do");
@@ -3591,7 +3578,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			try {
 				client.executeMethod(redirect, "GET ACTIONFILES (FRONTEND): AF (2)");
 				inStream = redirect.getResponseBodyAsStream();
-				lastFlowKey = flowKey;
 				details = ParsingUtils.parseActionFileDetail(inStream, "ISO-8859-1");
 				Worldtracer_Actionfiles af = new Worldtracer_Actionfiles();
 				af.setAction_file_text(details[1]);
@@ -3662,7 +3648,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			try {
 				client.executeMethod(redirect, "GET ACTIONFILES (FRONTEND): REDIRECT (4)");
 				inStream = redirect.getResponseBodyAsStream();
-				lastFlowKey = flowKey;
 				details = ParsingUtils.parseActionFileDetail(inStream, "ISO-8859-1");
 				Worldtracer_Actionfiles af = new Worldtracer_Actionfiles();
 				af.setAction_file_text(details[1]);
@@ -3746,7 +3731,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			search.releaseConnection();
 		}
 		flowKey = newLocation.split("=")[1];
-		lastFlowKey = flowKey;
 		GetMethod redirect = new GetMethod(newLocation);
 		try {
 			client.executeMethod(redirect, "GET ACTIONFILES (FRONTEND): REDIRECT (7)");
@@ -3779,6 +3763,157 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public void setWtRuleMap(RuleMapper wtRuleMap) {
 		this.wtRuleMap = wtRuleMap;
+	}
+
+
+	public String getActionFileDetails(String companyCode, String stationCode,
+			ActionFileType afType, int day, int itemNum)
+			throws WorldTracerException {
+		NameValuePair[] startParams = {
+				new NameValuePair("_flowId", "actionfilestation-flow"),
+				new NameValuePair("isHDQ", "N")
+		};
+		startFlow(startParams, "ACTION FILE DETAIL", 1, false);
+		
+		NameValuePair[] detailQueryParams = {new NameValuePair("_flowExecutionKey", flowKey)};
+		NameValuePair[] detailPostParams = {
+		};
+		return null;
+	}
+
+	public List<ActionFileDto> getActionFileSummary(
+			String companyCode, String stationCode, ActionFileType afType,
+			int day) throws WorldTracerException {
+		NameValuePair[] startFlowParams = {
+				new NameValuePair("_flowId", "searchmessages-flow"), 
+				new NameValuePair("isHDQ", "N"), 
+				new NameValuePair("isSubflow", "No")
+				};
+		
+		startFlow(startFlowParams, "ACTION FILE SUMMARY", 1, false);
+		
+		NameValuePair[] summaryQueryParams = {new NameValuePair("_flowExecutionKey", flowKey)};
+
+		PostMethod method = new PostMethod("/WorldTracerWeb/wtwflow.do");
+		InputStream inStream = null;
+		method.setQueryString(summaryQueryParams);
+		method.setParameter("wtrActionAreaReadRequest.stationCode", stationCode);
+		method.setParameter("wtrActionAreaReadRequest.airlineCode", companyCode);
+		method.setParameter("_eventId", "Refresh");
+		method.setParameter("wtrActionAreaReadRequest.actionAreaName.actionAreaType", afType.areaId());
+		method.setParameter("wtrActionAreaReadRequest.actionAreaDayNumber", "DAY_" + day);
+		method.setParameter("searchMessagesVO.startNumber", "");
+		method.setParameter("searchMessagesVO.endNumber", "");
+		method.setParameter("_searchMessagesVO.messageListItems[0].checked", "on");
+		method.setParameter("_searchMessagesVO.messageListItems[1].checked", "on");
+		method.setParameter("_searchMessagesVO.messageListItems[2].checked", "on");
+		method.setParameter("copyMessageActionVO.destinationType", "teleType");
+		method.setParameter("copyMessageActionVO.actionMessageAddresses[0].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+		method.setParameter("copyMessageActionVO.actionMessageAddresses[1].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+		method.setParameter("copyMessageActionVO.actionMessageAddresses[2].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+		method.setParameter("copyMessageActionVO.actionMessageAddresses[3].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+		method.setParameter("copyMessageActionVO.actionMessageAddresses[4].actionAreaType", "ADDITIONAL_PROMPT_AREA");
+		method.setParameter("afterDMFService", "0");
+		method.setParameter("notValidDMF", "false");
+		method.setParameter("containsOHDRecord", "false");
+		method.setParameter("wtrActionAreaTransferReadRequest.searchByRecordReference.airlineCode", companyCode);
+		method.setParameter("successMessage", "BEGIN");
+		
+		executeMethod(method, "ACTION FILE SUMMARY (2)", false, 0L);
+		
+		if(method.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && 
+				method.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.debug("ACTION FILE SUMMARY (2) did not redirect");
+			throw new WorldTracerException("ACTION FILE SUMMARY (2) not redirected");
+		}
+		
+		String newLocation = method.getResponseHeader("location").getValue();
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		
+		GetMethod redirect = new GetMethod(newLocation);
+		
+		try {
+			executeMethod(redirect, "REDIR for: ACTION FILE SUMMARY (2)", false, 0, false);
+			inStream = redirect.getResponseBodyAsStream();
+			return ParsingUtils.parseActionFileSummary(inStream, "ISO-8859-1");
+		} catch (Exception e) {
+			logger.error("unable to parse action file summary", e);
+			throw new WorldTracerException("unable to parse action files summary", e);
+		} finally {
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+					//pass
+				}
+			}
+			redirect.releaseConnection();
+		}
+	}
+
+	private void startFlow(NameValuePair[] getParams, String flowName, int stepNum) throws WorldTracerException {
+		startFlow(getParams, flowName, stepNum, true, 0L);
+	}
+	
+	private void startFlow(NameValuePair[] getParams, String flowName,
+			int stepNum, boolean usePause) throws WorldTracerException {
+		startFlow(getParams, flowName, stepNum, usePause, 0L);
+	}
+
+	private void startFlow(NameValuePair[] getParams, String flowName,
+			int stepNum, boolean usePause, long pauseInMillis) throws WorldTracerException {
+		GetMethod method = new GetMethod("/WorldTracerWeb/wtwflow.do");
+		String functionName = String.format("%s: START FLOW (%d)", flowName,
+				stepNum);
+		method.setQueryString(getParams);
+		method.setFollowRedirects(false);
+
+		executeMethod(method, functionName, usePause, pauseInMillis);
+		
+		if(method.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && 
+				method.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.debug(functionName + " did not redirect");
+			throw new WorldTracerException(functionName + " not redirected");
+		}
+		String newLocation = method.getResponseHeader("location").getValue();
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+			return;
+		}
+		throw new WorldTracerException(functionName + " redirected to " + newLocation);
+
+	}
+
+	private void executeMethod(HttpMethod method, String functionName,
+			boolean usePause, long pauseInMillis) throws WorldTracerException {
+		executeMethod(method, functionName, usePause, pauseInMillis, true);
+	}
+	private void executeMethod(HttpMethod method, String functionName,
+			boolean usePause, long pauseInMillis, boolean doRelease) throws WorldTracerException {
+		try {
+			if (usePause) {
+				if (pauseInMillis > 0) {
+					client.executeMethodWithPause(method, pauseInMillis,
+							functionName);
+				} else {
+					client.executeMethodWithPause(method, functionName);
+				}
+			} else {
+				client.executeMethod(method, functionName);
+			}
+		} catch (Exception e) {
+			String errorMsg = String.format("Error executing %s, Cause: %s", functionName, e.getMessage());
+			logger.error(errorMsg, e);
+			throw new WorldTracerException(errorMsg, e);
+		} finally {
+			if(doRelease) {
+				method.releaseConnection();
+			}
+		}
 	}
 
 	

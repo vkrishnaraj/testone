@@ -63,6 +63,7 @@ import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule.Format;
+import com.bagnet.nettracer.wt.utils.ActionFileDto;
 
 @Configurable("wtService")
 public class DefaultWorldTracerService implements WorldTracerService {
@@ -293,11 +294,11 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.IMPORT_OHD)
-	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent agent) throws WorldTracerException {
+	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent user) throws WorldTracerException {
 		String result = wtConnector.findOHD(wt_id);
 		// for now show all as active
 		//OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
-		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, agent);
+		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, user);
 		return foundohd;
 	}
 
@@ -584,7 +585,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		if (ohd.getItems() != null) {
 			Map<String, List<String>> temp = new HashMap<String, List<String>>();
 			for (OHD_Inventory inv : (Iterable<OHD_Inventory>) ohd.getItems()) {
-				// TODO update for ContentRule
 				OHD_CategoryType cat = CategoryBMO.getCategory(inv.getOHD_categorytype_ID());
 				if (cat == null) {
 					continue;
@@ -1147,16 +1147,14 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		this.wtCompanyCode = wtCompanyCode;
 	}
 
-	public ActionFileStation getActionFileCount(String companyCode,	String wtStation) {
+	@WorldTracerTx(type = TxType.AF_COUNT)
+	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user) {
 		EnumMap<ActionFileType, int[]> result;
 		try {
 			result = this.wtConnector.getActionFileCounts(companyCode, wtStation);
 		} catch (WorldTracerException e) {
 			return null;
 		}
-		ActionFileStation afStation = new ActionFileStation();
-		afStation.setCompanyCode(companyCode);
-		afStation.setStationCode(wtStation);
 		Map<ActionFileType, ActionFileCount> countMap = new EnumMap<ActionFileType, ActionFileCount>(ActionFileType.class);
 		if (result != null) {
 			for (Entry<ActionFileType, int[]> entry : result.entrySet()) {
@@ -1171,12 +1169,49 @@ public class DefaultWorldTracerService implements WorldTracerService {
 				countMap.put(entry.getKey(), afCount);
 			}
 		}
-		afStation.setCountMap(countMap);
-		return afStation;
+		return countMap;
+	}
+	
+	@WorldTracerTx(type = TxType.AF_SUMMARY)
+	public List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode,
+			String wtStation, ActionFileType afType, int day, Agent user) throws WorldTracerException {
+		List<ActionFileDto> stuff;
+		stuff = wtConnector.getActionFileSummary(companyCode, wtStation, afType, day);
+		
+		if(stuff == null || stuff.size() < 1) return null;
+		
+		List<Worldtracer_Actionfiles> result = new ArrayList<Worldtracer_Actionfiles>();
+		for (ActionFileDto afd : stuff) {
+			Worldtracer_Actionfiles wa = new Worldtracer_Actionfiles();
+			wa.setAction_file_summary(afd.getSummary());
+			wa.setAction_file_text(afd.getDetails());
+			wa.setAction_file_type(afType);
+			wa.setAirline(companyCode);
+			wa.setDay(day);
+			wa.setDeleted(false);
+			wa.setItem_number(afd.getItemNumber());
+			wa.setPercent_match(afd.getPercentMatch());
+			wa.setStation(wtStation);
+			wa.setWt_incident_id(afd.getAhlId());
+			wa.setWt_ohd_id(afd.getOhdId());
+			result.add(wa);
+		}
+		
+		return result;
 	}
 
 	public WorldTracerConnector getWtConnector() {
 		return wtConnector;
 	}
+
+	@Override
+	@WorldTracerTx(type = TxType.AF_DETAIL)
+	public String getActionFileDetail(String companyCode,
+			String wtStation, ActionFileType afType, int day, int itemNum,
+			Agent user) throws WorldTracerException {
+		String result = wtConnector.getActionFileDetails(companyCode, wtStation, afType, day, itemNum);
+		return result;
+	}
+
 
 }

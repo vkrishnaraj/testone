@@ -11,6 +11,7 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
+import com.bagnet.nettracer.wt.utils.ActionFileDto;
 
 public interface WorldTracerConnector {
 
@@ -122,14 +123,25 @@ public interface WorldTracerConnector {
 	String createBdo(Map<WorldTracerField, List<String>> fieldMap, String ahl_id, String ohd_id,
 			DeliverCompany delivercompany, Station station) throws WorldTracerException;
 
-	public String requestQoh(String fromStation, String fromAirline, String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap)
-	throws WorldTracerException;
+	String requestQoh(String fromStation, String fromAirline,
+			String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap) throws WorldTracerException;
 	
-	public EnumMap<ActionFileType, int[]> getActionFileCounts(
-			String companyCode, String wtStation) throws WorldTracerException;
+	EnumMap<ActionFileType, int[]> getActionFileCounts(String companyCode, String wtStation) throws WorldTracerException;
 	
-	public List<Worldtracer_Actionfiles> getActionFiles(String companyCode,
-			String stationCode, ActionFileType afType, int day, int count) throws WorldTracerException;
+	/**
+	 * @param companyCode
+	 * @param stationCode
+	 * @param afType
+	 * @param day
+	 * @param count
+	 * @return Returns a list of action file objects with details already set.
+	 * @throws WorldTracerException
+	 */
+	List<Worldtracer_Actionfiles> getActionFiles(String companyCode, String stationCode, ActionFileType afType, int day, int count) throws WorldTracerException;
+	
+	List<ActionFileDto> getActionFileSummary(String companyCode, String stationCode, ActionFileType afType, int day) throws WorldTracerException;
+	
+	String getActionFileDetails(String companyCode, String stationCode, ActionFileType afType, int day, int itemNum ) throws WorldTracerException;
 
 	void logout();
 

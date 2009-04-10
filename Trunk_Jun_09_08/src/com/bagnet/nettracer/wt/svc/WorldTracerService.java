@@ -1,5 +1,8 @@
 package com.bagnet.nettracer.wt.svc;
 
+import java.util.List;
+import java.util.Map;
+
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -7,6 +10,7 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wt.ActionFileCount;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
@@ -43,7 +47,7 @@ public interface WorldTracerService {
 		SUSPEND_AHL("wt.suspend_ahl"), REINSTATE_AHL("wt.reinstate_ahl"), CREATE_OHD("wt.create_ohd"), CLOSE_OHD("wt.close_ohd"),
 		SUSPEND_OHD("wt.suspend_ohd"), REINSTATE_OHD("wt.reinstate_ohd"), FWD_GENERAL("wt.fwd_gen"), FWD_OHD("wt.fwd_ohd"),
 		REQUEST_OHD("wt.request_ohd"), AMEND_AHL("wt.amend_ahl"), AMEND_OHD("wt.amend_ohd"), IMPORT_AHL("wt.import_ahl"),
-		IMPORT_OHD("wt.import_ohd"), CREATE_BDO("wt.create_bdo"), ERASE_AF("wt.erase_actionfile"), REQUEST_QOH("wt.request.qoh");
+		IMPORT_OHD("wt.import_ohd"), CREATE_BDO("wt.create_bdo"), ERASE_AF("wt.erase_actionfile"), REQUEST_QOH("wt.request.qoh"), AF_COUNT("wt.af.count"), AF_SUMMARY("wt.af.summary"), AF_DETAIL("wt.af.detail");
 	
 		private String messageKey;
 		
@@ -97,7 +101,11 @@ public interface WorldTracerService {
 	
 	String amendOhd(OHD ohd) throws WorldTracerException;
 	
-	public ActionFileStation getActionFileCount(String companyCode,	String wtStation);
+	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user);
+	
+	List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode, String wtStation, ActionFileType afType, int day, Agent user) throws WorldTracerException;
+	
+	String getActionFileDetail(String companyCode, String wtStation, ActionFileType afType, int day, int itemNum, Agent user) throws WorldTracerException;
 
 	WorldTracerConnector getWtConnector();
 }

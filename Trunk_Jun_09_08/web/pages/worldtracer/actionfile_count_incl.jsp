@@ -9,106 +9,106 @@
 <table class="form2" cellspacing="0" cellpadding="0">
 	<tr>
 		<td><b><bean:message key="column.file_type" /> </b></td>
-		<td>Day1</td>
-		<td>Day2</td>
-		<td>Day3</td>
-		<td>Day4</td>
-		<td>Day5</td>
-		<td>Day6</td>
-		<td>Day7</td>
+		<td align="center">Day1</td>
+		<td align="center">Day2</td>
+		<td align="center">Day3</td>
+		<td align="center">Day4</td>
+		<td align="center">Day5</td>
+		<td align="center">Day6</td>
+		<td align="center">Day7</td>
 	</tr>
 	<c:if test="${empty afCounts}" >
 		<tr>
-		<td colspan="8">
+		<td colspan="8"  align="center">
 			<bean:message key="no.actionFiles"/>
 		</td>
 		</tr>
 	</c:if>
-	<c:forEach var="entry" items="${afCounts}">
+	<c:forEach var="aftype" items="${afTypes}">
 		<tr>
-			<td><bean:message key="actionfile.${entry.key}" /></td>
-				<td><c:choose>
-					<c:when test="${entry.value.dayOne == 0}">
-											0
+			<td><bean:message key="actionfile.${aftype}" /></td>
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].dayOne) or  afCounts[aftype].dayOne == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="1" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.dayTwo} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].dayOne} </a>
 					</c:otherwise>
 				</c:choose></td>
-				<td><c:choose>
-					<c:when test="${entry.value.dayOne == 0}">
-											0
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].dayTwo) or  afCounts[aftype].dayTwo == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="2" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.dayTwo} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].dayTwo} </a>
 					</c:otherwise>
 				</c:choose></td>
-				<td><c:choose>
-					<c:when test="${entry.value.dayThree == 0}">
-											0
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].dayThree) or  afCounts[aftype].dayThree == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="3" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.dayThree} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].dayThree} </a>
 					</c:otherwise>
 				</c:choose></td>
-				<td><c:choose>
-					<c:when test="${entry.value.dayFour == 0}">
-											0
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].dayFour) or  afCounts[aftype].dayFour == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="4" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.dayFour} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].dayFour} </a>
 					</c:otherwise>
 				</c:choose></td>
-				<td><c:choose>
-					<c:when test="${entry.value.dayFive == 0}">
-											0
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].dayFive) or  afCounts[aftype].dayFive == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="5" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.dayFive} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].dayFive} </a>
 					</c:otherwise>
 				</c:choose></td>
-				<td><c:choose>
-					<c:when test="${entry.value.daySix == 0}">
-											0
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].daySix) or  afCounts[aftype].daySix == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="6" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.daySix} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].daySix} </a>
 					</c:otherwise>
 				</c:choose></td>
-				<td><c:choose>
-					<c:when test="${entry.value.daySeven == 0}">
-											0
+				<td align="center"><c:choose>
+					<c:when test="${(empty afCounts[aftype].daySeven) or  afCounts[aftype].daySeven == 0}">
+											&nbsp;
 										</c:when>
 					<c:otherwise>
-						<c:url value="/actionfileSummary.do" var="actionFileLink">
-							<c:param name="category" value="${entry.key}" />
+						<c:url value="/actionFileSummary.do" var="actionFileLink">
+							<c:param name="category" value="${aftype}" />
 							<c:param name="day" value="7" />
 						</c:url>
-						<a href="${actionFileLink}"> ${entry.value.daySeven} </a>
+						<a href="${actionFileLink}"> ${afCounts[aftype].daySeven} </a>
 					</c:otherwise>
 				</c:choose></td>
 		</tr>

@@ -49,6 +49,7 @@ import com.bagnet.nettracer.wt.svc.WorldTracerRule;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
+import com.bagnet.nettracer.wt.utils.ActionFileDto;
 
 public class BetaWtConnector implements WorldTracerConnector {
 
@@ -1245,7 +1246,7 @@ public class BetaWtConnector implements WorldTracerConnector {
 	}
 
 
-	public Collection<Worldtracer_Actionfiles> getActionFileSummary(
+	public List<ActionFileDto> getActionFileSummary(
 			String companyCode, String stationCode, ActionFileType type, int day) {
 		// TODO Auto-generated method stub
 		return null;

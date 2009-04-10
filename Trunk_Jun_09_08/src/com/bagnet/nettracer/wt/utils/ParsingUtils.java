@@ -1,11 +1,17 @@
 package com.bagnet.nettracer.wt.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -28,6 +34,8 @@ public class ParsingUtils {
 	private static final Pattern AHL_PATT = Pattern.compile("(?:\\bAHL\\s+|A/|FILE\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private static final Pattern OHD_PATT = Pattern.compile("(?:\\bOHD\\s+|O/|ON-HAND\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private static final Pattern PERCENT_PATT = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
+	private static final Logger logger = Logger.getLogger(ParsingUtils.class);
+	
 	public static EnumMap<ActionFileType, int[]> parseActionFileCounts(InputStream inStream, String encoding) throws UnsupportedEncodingException, ParserException {
 
 		Parser parser = new Parser(new Lexer(new Page(inStream, encoding)));
@@ -121,11 +129,76 @@ public class ParsingUtils {
 		return new String[] {itemNum, content};
 	}
 
-	public static Double parsePercentMAtch(String content) {
+	public static double parsePercentMatch(String content) {
 		Matcher m = PERCENT_PATT.matcher(content);
 		if(m.find()) {
 			return Double.parseDouble(m.group(1));
 		}
 		return 0.0D;
+	}
+
+	public static List<ActionFileDto> parseActionFileSummary(InputStream inStream,	String encoding) throws Exception {
+		StringBuilder replySB = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+		String tempString = "";
+		while((tempString = reader.readLine())!=null){
+			replySB.append(tempString);
+		}
+		reader.close();
+		//is.close();
+		
+		logger.info(new String(replySB));
+		
+		Parser parser = new Parser(new Lexer(new Page(inStream, encoding)));
+		
+		//get the parent div node
+		NodeFilter divFilter = new TagNameFilter("div");
+		NodeFilter classFilter = new HasAttributeFilter("id", "filterdiv");
+		NodeFilter f1 = new AndFilter(divFilter, classFilter);
+		
+		NodeList temp1 = parser.extractAllNodesThatMatch(f1);
+		if(temp1 == null || temp1.size() < 1 ) {
+			return null;
+		}
+		
+		Node theDiv = temp1.elementAt(0);
+		
+		NodeList temp2 = new NodeList();
+		NodeFilter tdFilter = new TagNameFilter("td");
+		theDiv.collectInto(temp2, tdFilter);
+		
+		Node[] nodeArray = temp2.toNodeArray();
+		ArrayList<ActionFileDto> result = new ArrayList<ActionFileDto>();
+		ActionFileDto adto= null;
+		for (int i = 0; i < nodeArray.length; i++) {
+			if(i % 3 == 0) continue;
+			Node node = nodeArray[i];
+			if(i % 3 == 1) {
+				adto = new ActionFileDto();
+				int itemNum;
+				String tmp = node.getChildren().elementAt(0).getText().trim();
+				try {
+				itemNum = Integer.parseInt(tmp);
+				} catch (NumberFormatException e) {
+					logger.error("could not parse action file summary item number");
+					continue;
+				}
+				adto.setItemNumber(itemNum);
+			}
+			else if(i % 3 == 2) {
+				if(adto == null) continue;
+				String tmp = node.getChildren().elementAt(0).getText().trim();
+				tmp = tmp.replaceAll("<\\s*/\\s*br\\s*>", "\n").replaceAll("&nbsp;", " ").replaceAll(" +", " ").trim();
+				adto.setSummary(tmp);
+				if(!tmp.endsWith("...")) {
+					adto.setDetails(tmp);
+				}
+				adto.setPercentMatch(parsePercentMatch(tmp));
+				adto.setAhlId(parseAhlId(tmp));
+				adto.setOhdId(parseOhdId(tmp));
+				result.add(adto);
+			}
+		}
+		return result;
 	}
 }

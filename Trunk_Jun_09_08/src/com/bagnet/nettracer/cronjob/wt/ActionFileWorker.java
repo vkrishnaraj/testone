@@ -69,7 +69,7 @@ public class ActionFileWorker implements Runnable {
 									String ahl_id = ParsingUtils.parseAhlId(af.getAction_file_text()) == null ? "" : ParsingUtils.parseAhlId(af.getAction_file_text());
 									
 									String ohd_id = ParsingUtils.parseOhdId(af.getAction_file_text()) == null ? "" : ParsingUtils.parseOhdId(af.getAction_file_text()); ;
-									Double percent = ParsingUtils.parsePercentMAtch(af.getAction_file_text());
+									Double percent = ParsingUtils.parsePercentMatch(af.getAction_file_text());
 									af.setWt_incident_id(ahl_id);
 									af.setWt_ohd_id(ohd_id);
 									af.setPercent_match(percent == null ? 0.0D : percent);

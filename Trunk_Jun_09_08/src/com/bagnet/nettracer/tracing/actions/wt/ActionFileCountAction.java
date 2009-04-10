@@ -16,6 +16,7 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -95,13 +96,14 @@ public class ActionFileCountAction extends Action {
 		}
 
 		try {
-			afStation = afm.getCounts(companyCode, wtStation);
+			afStation = afm.getCounts(companyCode, wtStation, user);
 			request.setAttribute("afStation", afStation);
 			if (afStation == null || afStation.getCountMap() == null) {
 				request.setAttribute("afCounts", null);
 			} else {
 				request.setAttribute("afCounts", afStation.getCountMap());
 			}
+			request.setAttribute("afTypes", ActionFileType.values());
 		} catch (WorldTracerDisabledException e) {
 			ActionMessage error = new ActionMessage("message.wt.disabled");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);

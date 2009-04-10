@@ -15,14 +15,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.aop.WorldTracerTx;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -30,7 +27,6 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -46,36 +42,25 @@ import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
-import com.bagnet.nettracer.tracing.db.WT_FWD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileCount;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
-import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
-import com.bagnet.nettracer.wt.connector.BetaWtConnector;
-import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule.Format;
-import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
 
 @Deprecated
 public class BetaWorldTracerService implements WorldTracerService {
@@ -503,13 +488,13 @@ public class BetaWorldTracerService implements WorldTracerService {
 		return null;
 	}
 
-//	@WorldTracerTx(type = TxType.IMPORT_OHD)
-//	public OHD getOhdforOhd(String wt_id, WTStatus status) throws WorldTracerException {
-//		String result = wtConnector.findOHD(wt_id);
-//		// for now show all as active
-//		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
-//		return foundohd;
-//	}
+	@WorldTracerTx(type = TxType.IMPORT_OHD)
+	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent user) throws WorldTracerException {
+		String result = wtConnector.findOHD(wt_id);
+		// for now show all as active
+		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, user);
+		return foundohd;
+	}
 
 	@WorldTracerTx(type = TxType.FWD_OHD)
 	public String forwardOhd(WtqFwdOhd fwd) throws WorldTracerException {
@@ -1393,9 +1378,26 @@ public class BetaWorldTracerService implements WorldTracerService {
 		return afStation;
 	}
 
+	
 	@Override
-	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent agent)
+	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,
+			String wtStation, Agent user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getActionFileDetail(String companyCode, String wtStation,
+			ActionFileType afType, int day, int itemNum, Agent user)
 			throws WorldTracerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Worldtracer_Actionfiles> getActionFileSummary(
+			String companyCode, String wtStation, ActionFileType afType,
+			int day, Agent user) throws WorldTracerException {
 		// TODO Auto-generated method stub
 		return null;
 	}

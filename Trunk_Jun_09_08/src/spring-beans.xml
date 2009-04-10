@@ -21,6 +21,7 @@
 	<bean id="customReportBmo"
 		class="com.bagnet.clients.${report.class.path}.CustomReportBMO" />
 
+
 	<bean id="reservationIntegration"
 		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />
 		
@@ -47,6 +48,10 @@
 	</bean>
 	
 	<bean id="worldTracerAccountBmo" class="com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="lockBMO" class="com.bagnet.nettracer.tracing.bmo.LockBMO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
@@ -80,7 +85,7 @@
 	
 	<bean id="actionFileManager" class="com.bagnet.nettracer.wt.svc.ActionFileManagerImpl" factory-method="getInstance">
 		<property name="afsBmo" ref="actionFileStationBmo" />
-		<property name="wtService" ref="wtService" />
+		<property name="lockBmo" ref="lockBMO" />
 	</bean>
 	
 </beans>
