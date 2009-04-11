@@ -3,6 +3,7 @@ package com.bagnet.nettracer.wt.bmo;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,6 +21,8 @@ import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class ActionFileStationBMO extends HibernateDaoSupport {
 
+	private static final String GET_COUNT = "select count(*) from Worldtracer_Actionfiles where action_file_type=? and day=? and airline=? and station=? and deleted = false";
+	
 	@Transactional(readOnly=true)
 	public ActionFileStation getAfStation(String companyCode, String wtStation) {
 		Session sess = getSession(false);
@@ -32,6 +35,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 	@Transactional
 	public ActionFileStation updateStation(String companyCode, String wtStation, Agent user) throws Exception {
 		ActionFileStation afStation = getAfStation(companyCode, wtStation);
+		Session sess = getSession(false);
 		if (!isCurrent(afStation)) {
 			WorldTracerService wtService = SpringUtils.getWorldTracerService();
 			Map<ActionFileType, ActionFileCount> countMap;
@@ -48,13 +52,89 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 			}
 			afStation.setCountMap(countMap);
 			afStation.setLastUpdated(new Date());
-			Session sess = getSession(false);
 			Query q = sess.createQuery(WT_ActionFileBmo.DELETE_BY_STATION);
 			q.setString("airline", companyCode);
 			q.setString("station", wtStation);
 			q.executeUpdate();
-			sess.saveOrUpdate(afStation);
+			
 		}
+		Map<ActionFileType, ActionFileCount> countMap = afStation.getCountMap();
+		
+		for (Entry<ActionFileType, ActionFileCount> entry : countMap.entrySet()) {
+			ActionFileType type = entry.getKey();
+			ActionFileCount count = entry.getValue();
+			if(count.isDayOneLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 1);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDayOne(finalCount);
+			}
+			if(count.isDayTwoLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 2);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDayTwo(finalCount);
+			}
+			if(count.isDayThreeLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 3);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDayThree(finalCount);
+			}
+			if(count.isDayFourLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 4);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDayFour(finalCount);
+			}
+			if(count.isDayFiveLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 5);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDayFive(finalCount);
+			}
+			if(count.isDaySixLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 6);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDaySix(finalCount);
+			}
+			if(count.isDaySevenLoaded()) {
+				Query query = sess.createQuery(GET_COUNT);
+				query.setParameter(0, type);
+				query.setParameter(1, 7);
+				query.setParameter(2, companyCode);
+				query.setParameter(3, wtStation);
+				String string_count=query.uniqueResult().toString();
+				int finalCount = Integer.parseInt(string_count);
+				count.setDaySeven(finalCount);
+			}
+		}
+		sess.saveOrUpdate(afStation);
 		return afStation;
 	}
 
@@ -134,6 +214,48 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 			wtService.getWtConnector().logout();
 		}
 
+	}
+
+	@Transactional
+	public Worldtracer_Actionfiles eraseActionFile(String companyCode, String wtStation,
+			ActionFileType category, int day, int fileNum, ActionFileStation afs) {
+		Session sess = getSession(false);
+		Query q = sess.createQuery(WT_ActionFileBmo.FIND_WAF);
+		q.setParameter("airline", companyCode);
+		q.setParameter("afType", category);
+		q.setParameter("wtStation", wtStation);
+		q.setInteger("day", day);
+		q.setInteger("itemNum", fileNum);
+		Worldtracer_Actionfiles waf = (Worldtracer_Actionfiles) q.uniqueResult();
+		sess.delete(waf);
+		ActionFileCount count = afs.getCountMap().get(category);
+		switch(day){
+		case 1:
+			count.setDayOne(count.getDayOne() - 1 >= 0 ? count.getDayOne() - 1 : 0);
+			break;
+		case 2:
+			count.setDayTwo(count.getDayTwo() - 1 >= 0 ? count.getDayTwo() - 1 : 0);
+			break;
+		case 3:
+			count.setDayThree(count.getDayThree() - 1 >= 0 ? count.getDayThree() - 1 : 0);
+			break;
+		case 4:
+			count.setDayFour(count.getDayFour() - 1 >= 0 ? count.getDayFour() - 1 : 0);
+			break;
+		case 5:
+			count.setDayFive(count.getDayFive() - 1 >= 0 ? count.getDayFive() - 1 : 0);
+			break;
+		case 6:
+			count.setDaySix(count.getDaySix() - 1 >= 0 ? count.getDaySix() - 1 : 0);
+			break;
+		case 7:
+			count.setDaySeven(count.getDaySeven() - 1 >= 0 ? count.getDaySeven() - 1 : 0);
+			break;
+			default:
+				break;
+		}
+		sess.saveOrUpdate(afs);
+		return waf;
 	}
 
 }

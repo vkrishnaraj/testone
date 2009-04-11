@@ -33,7 +33,7 @@
 		<td id="middlecolumn"><!-- MAIN BODY -->
 		<div id="maincontent">
 		<h1 class="green">
-		<bean:message key='header.wt_<c:out value="${afType}"/>' />
+		<bean:message key="header.wt_<c:out value='${afType}'/>" />
  	&nbsp;<bean:message key="header.wt_day"/>&nbsp;<c:out value="${day}" default="1" />
   <a href="#"
 			onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img
@@ -58,22 +58,22 @@
 						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=1">Day
 					1:</a></td>
 					<td><a
-						href="actionFileSummary.do?viewaction=<c:out value='${afType}'/>&day=2">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=2">Day
 					2:</a></td>
 					<td><a
-						href="actionFileSummary.do?viewaction=<c:out value='${afType}'/>&day=3">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=3">Day
 					3:</a></td>
 					<td><a
-						href="actionFileSummary.do?viewaction=<c:out value='${afType}'/>&day=4">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=4">Day
 					4:</a></td>
 					<td><a
-						href="actionFileSummary.do?viewaction=<c:out value='${afType}'/>&day=5">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=5">Day
 					5:</a></td>
 					<td><a
-						href="actionFileSummary.do?viewaction=<c:out value='${afType}'/>&day=6">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=6">Day
 					6:</a></td>
 					<td><a
-						href="actionFileSummary.do?viewaction=<c:out value='${afType}'/>&day=7">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=7">Day
 					7:</a></td>
 				</tr>
 			</table>
@@ -138,19 +138,21 @@
 						</c:choose>
 					</td>
 					<td>
-						<c:out value="${actionData.af_text}" escapeXml="false"/>
+						<c:choose>
+							<c:when test="${empty actionData.af_text}">
+								<c:out value="${actionData.af_summary}" escapeXml="false" />
+							</c:when>
+							<c:otherwise>
+								<c:out value="${actionData.af_text}" escapeXml="false" />
+							</c:otherwise>
+						</c:choose>
+						
 					</td>
 					<td><a
 							href="actionFileDelete.do?category=<c:out value='${afType}'/>&day=<c:out value='${day}'/>&itemNum=<c:out value='${actionData.item_number}'/>">Delete</a>
 					</td>
 					</tr>
 				</c:forEach>
-				<tr>
-					<td colspan="3"><!-- pagination --> <jsp:include
-						page="/pages/includes/pagination_incl.jsp" /> <!-- eof pagination -->
-					</td>
-				</tr>
-				<!-- end pagination -->
 			</table>
 		</logic:present> 
 </html:form>

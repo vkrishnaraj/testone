@@ -1,10 +1,8 @@
 package com.bagnet.nettracer.wt.svc;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.ApplicationContextAware;
 
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.exceptions.WorldTracerDisabledException;
@@ -15,9 +13,11 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
-import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.bmo.ActionFileStationBMO;
 
 public class ActionFileManagerImpl implements ActionFileManager {
@@ -131,8 +131,14 @@ public class ActionFileManagerImpl implements ActionFileManager {
 	}
 
 	public boolean eraseActionFile(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum) {
-		// TODO Auto-generated method stub
+			ActionFileType category, int day, int fileNum, Agent user) throws Exception {
+		ActionFileStation afs = this.getCounts(companyCode, wtStation, user);
+		Worldtracer_Actionfiles waf = afsBmo.eraseActionFile(companyCode, wtStation, category, day, fileNum, afs);
+		WtqEraseActionFile wq = new WtqEraseActionFile();
+		wq.setAgent(user);
+		wq.setCreatedate(TracerDateTime.getGMTDate());
+		wq.setAf_id(waf.generateId());
+		WorldTracerQueueUtils.createOrReplaceQueue(wq);
 		return false;
 	}
 

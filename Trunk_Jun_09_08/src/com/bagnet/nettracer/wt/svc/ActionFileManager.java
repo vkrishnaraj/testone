@@ -16,6 +16,8 @@ public interface ActionFileManager {
 	List<Worldtracer_Actionfiles> getSummary(String companyCode, String wtStation, ActionFileType category, int day, Agent user) throws Exception;
 	
 	Worldtracer_Actionfiles getDetails(String companyCode, String wtStation, ActionFileType category, int day, int fileNum);
-	
-	boolean eraseActionFile(String companyCode, String wtStation, ActionFileType category, int day, int fileNum);
+
+	boolean eraseActionFile(String companyCode, String wtStation,
+			ActionFileType category, int day, int fileNum, Agent user)
+			throws Exception;
 }

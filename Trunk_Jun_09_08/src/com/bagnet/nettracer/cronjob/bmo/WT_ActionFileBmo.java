@@ -23,7 +23,9 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 
 	public static final String FIND_TEXT_FOR_WAF = "select action_file_text from Worldtracer_Actionfiles where airline = :airline and station = :station and day = :day and action_file_type = :actionFileType and item_number = :item_number";
 	
-	public static final String FIND_WAF_SUMMARY = "from Worldtracer_Actionfiles where airline = :airline and station = :wtStation and actionFileType = :afType and day = :day";
+	public static final String FIND_WAF_SUMMARY = "from Worldtracer_Actionfiles where airline = :airline and station = :wtStation and action_file_type = :afType and day = :day";
+	
+	public static final String FIND_WAF = "from Worldtracer_Actionfiles where airline = :airline and station = :wtStation and action_file_type = :afType and day = :day and item_number = :itemNum";
 
 	@Transactional
 	public void saveActionFile(Worldtracer_Actionfiles waf) {

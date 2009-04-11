@@ -54,6 +54,10 @@
 	<bean id="lockBMO" class="com.bagnet.nettracer.tracing.bmo.LockBMO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
+	<bean id="wafBmo" class="com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<!-- services used by the workers-->
 		<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
@@ -86,6 +90,7 @@
 	<bean id="actionFileManager" class="com.bagnet.nettracer.wt.svc.ActionFileManagerImpl" factory-method="getInstance">
 		<property name="afsBmo" ref="actionFileStationBmo" />
 		<property name="lockBmo" ref="lockBMO" />
+		<property name="wafBmo" ref="wafBmo" />
 	</bean>
 	
 </beans>
