@@ -106,7 +106,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 						Thread.sleep(1000L);
 					} catch (InterruptedException e) {
 						throw new WorldTracerException(
-								"unable to acquire count lock", e);
+								"unable to acquire summary lock", e);
 					}
 				}
 			} while (lock == null && i < 4);

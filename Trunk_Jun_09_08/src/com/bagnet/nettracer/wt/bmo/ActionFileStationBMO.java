@@ -227,7 +227,8 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 		q.setInteger("day", day);
 		q.setInteger("itemNum", fileNum);
 		Worldtracer_Actionfiles waf = (Worldtracer_Actionfiles) q.uniqueResult();
-		sess.delete(waf);
+		waf.setDeleted(true);
+		sess.update(waf);
 		ActionFileCount count = afs.getCountMap().get(category);
 		switch(day){
 		case 1:
