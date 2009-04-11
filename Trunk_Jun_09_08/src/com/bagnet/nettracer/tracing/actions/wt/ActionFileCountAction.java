@@ -22,6 +22,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.WorldTracerLockException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 
@@ -104,7 +105,14 @@ public class ActionFileCountAction extends Action {
 				request.setAttribute("afCounts", afStation.getCountMap());
 			}
 			request.setAttribute("afTypes", ActionFileType.values());
-		} catch (WorldTracerDisabledException e) {
+		} catch (WorldTracerLockException ex) {
+			ActionMessage error = new ActionMessage("message.wt.af.lock.error");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
+			mapping.findForward("error");
+		}
+
+		catch (WorldTracerDisabledException e) {
 			ActionMessage error = new ActionMessage("message.wt.disabled");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
