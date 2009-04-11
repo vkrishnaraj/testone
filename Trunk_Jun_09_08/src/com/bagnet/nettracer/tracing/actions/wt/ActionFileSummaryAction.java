@@ -103,10 +103,52 @@ public class ActionFileSummaryAction extends Action {
 		int day = Integer.parseInt(request.getParameter("day"));
 		ActionFileType aft = ActionFileType.valueOf(catName);
 		List<Worldtracer_Actionfiles> result= afm.getSummary(companyCode, wtStation, aft, day, user);
+		int rowcount = result.size();
+
+
+		/** ************ pagination ************* */
+		int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
+				.parseInt(request.getParameter("rowsperpage"))
+				: TracingConstants.ROWS_PER_PAGE;
+		if (rowsperpage < 1)
+			rowsperpage = TracingConstants.ROWS_PER_PAGE;
+		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+		int totalpages = 0;
+
+		int currpage = request.getParameter("currpage") != null ? Integer
+				.parseInt(request.getParameter("currpage")) : 0;
+		if (request.getParameter("nextpage") != null
+				&& request.getParameter("nextpage").equals("1"))
+			currpage++;
+		if (request.getParameter("prevpage") != null
+				&& request.getParameter("prevpage").equals("1"))
+			currpage--;
+
+		request.setAttribute("currpage", Integer.toString(currpage));
+
+		// find out total pages
+		totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+
+		if (totalpages <= currpage) {
+			currpage = 0;
+			request.setAttribute("currpage", "0");
+		}
+
+		if (currpage + 1 == totalpages)
+			request.setAttribute("end", "1");
+		if (totalpages > 1) {
+			ArrayList al = new ArrayList();
+			for (int i = 0; i < totalpages; i++) {
+				al.add(Integer.toString(i));
+			}
+			request.setAttribute("pages", al);
+		}
 		
-		List<ActionData> displayList = null;
+		List<Worldtracer_Actionfiles> tempList = result.subList(currpage * rowsperpage, ((currpage* rowsperpage) + rowsperpage) > result.size() ? result.size() : ((currpage* rowsperpage) + rowsperpage));
+		
+		List<com.bagnet.nettracer.tracing.actions.wt.ActionFileSummaryAction.ActionData> displayList = null;
 		if (result  != null) {
-			displayList = createDisplayList(result);
+			displayList  = createDisplayList(tempList);
 		}
 		request.setAttribute("afList", displayList);
 		request.setAttribute("afType", aft);

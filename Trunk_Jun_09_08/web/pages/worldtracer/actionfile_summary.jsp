@@ -9,6 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
+	String headerKey = "header.wt_" + request.getAttribute("afType");
 %>
 <!-- Calendar includes -->
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -22,7 +23,34 @@
 // -->
   </SCRIPT>
 <!-- calendar stuff ends here -->
+<script language="javascript">
+    <!--
+function goprev() {
+  o = document.worldtracerafForm;
+  o.prevpage.value = "1";
+  o.pagination.value="1";
+  o.submit();
+}
 
+function gonext() {
+  o = document.worldtracerafForm;
+  o.nextpage.value="1";
+  o.pagination.value="1";
+  o.submit();
+}
+
+function gopage(i) {
+  o = document.worldtracerafForm;
+  o.currpage.value = i;
+  o.pagination.value="1";
+  o.submit();
+
+}
+function updatePagination() {
+    return true;
+}
+// -->
+  </script>
 <html:form action="actionFileSummary.do" method="post">
 	<jsp:include page="worldtracer_viewaf_header.jsp" />
 
@@ -33,7 +61,7 @@
 		<td id="middlecolumn"><!-- MAIN BODY -->
 		<div id="maincontent">
 		<h1 class="green">
-		<bean:message key="header.wt_<c:out value='${afType}'/>" />
+		<bean:message key="<%= headerKey %>" />
  	&nbsp;<bean:message key="header.wt_day"/>&nbsp;<c:out value="${day}" default="1" />
   <a href="#"
 			onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img
@@ -152,6 +180,11 @@
 					</td>
 					</tr>
 				</c:forEach>
+				<tr>
+					<td colspan="3"><!-- pagination --> <jsp:include
+						page="/pages/includes/pagination_incl.jsp" /> <!-- eof pagination -->
+					</td>
+				</tr>
 			</table>
 		</logic:present> 
 </html:form>

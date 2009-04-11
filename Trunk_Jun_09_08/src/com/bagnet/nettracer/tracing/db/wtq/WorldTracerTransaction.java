@@ -189,6 +189,9 @@ public class WorldTracerTransaction implements Serializable {
 
 	public void successTransaction(String data) {
 		this.result = Result.SUCCESS;
+		if(data != null && data.length() > 1000) {
+			data = data.substring(0, 1000);
+		}
 		this.setTxOutputData(data);
 	}
 	public void failTransaction(Throwable e) {
