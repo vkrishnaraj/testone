@@ -11,9 +11,11 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -248,6 +250,30 @@ public class CronUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Errors...");
+		}
+	}
+	
+	public void expireGlobalLocks() {
+		Session writeSession = HibernateWrapper.getSession().openSession();
+		Date now = new Date();
+		Transaction tx = writeSession.beginTransaction();
+		try {
+			tx.begin();
+			Query q = writeSession
+					.createQuery("delete Lock lock where lock.expirationDate < :now");
+			q.setTimestamp("now", now);
+			q.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Throwable e1) {
+					//pass
+				}
+			}
+		} finally {
+			writeSession.close();
 		}
 	}
 }
