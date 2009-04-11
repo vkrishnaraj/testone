@@ -9,7 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
-	String headerKey = "header.wt_" + request.getAttribute("afType");
+	String headerKey = ("header.wt_" + request.getAttribute("afType")).toLowerCase();
 %>
 <!-- Calendar includes -->
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -186,5 +186,8 @@ function updatePagination() {
 					</td>
 				</tr>
 			</table>
-		</logic:present> 
+		</logic:present>
+		<input type="hidden" name="category" value='<%=request.getParameter("category") %>' />
+		<input type="hidden" name="day" value='<%=request.getParameter("day") %>' />
+
 </html:form>

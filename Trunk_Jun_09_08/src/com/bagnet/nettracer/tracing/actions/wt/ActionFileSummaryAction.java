@@ -29,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.WorldTracerLockException;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 
 public class ActionFileSummaryAction extends Action {
@@ -102,7 +103,16 @@ public class ActionFileSummaryAction extends Action {
 		String catName = request.getParameter("category");
 		int day = Integer.parseInt(request.getParameter("day"));
 		ActionFileType aft = ActionFileType.valueOf(catName);
-		List<Worldtracer_Actionfiles> result= afm.getSummary(companyCode, wtStation, aft, day, user);
+		List<Worldtracer_Actionfiles> result = null;
+		try {
+			result= afm.getSummary(companyCode, wtStation, aft, day, user);
+		}
+		catch (WorldTracerLockException ex) {
+			ActionMessage error = new ActionMessage("message.wt.af.lock.error");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
+			mapping.findForward("error");
+		}
 		int rowcount = result.size();
 
 
