@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionRedirect;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -93,6 +94,10 @@ public class ActionFileDeleteAction extends Action {
 		ActionFileManager afm = SpringUtils.getActionFileManager();
 		afm.eraseActionFile(companyCode, wtStation, aft, day, itemNum, user);
 
-		return mapping.findForward("success");
+		ActionRedirect redirect = new ActionRedirect(mapping.findForward("success"));
+		redirect.addParameter("category", catName);
+		redirect.addParameter("day", Integer.toString(day));
+		redirect.addParameter("deleted", 1);
+		return redirect;
 	}
 }

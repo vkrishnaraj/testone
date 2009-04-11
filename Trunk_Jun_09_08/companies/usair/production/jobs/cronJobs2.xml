@@ -10,6 +10,7 @@
 			<list>
 				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronMoveToWtTrigger" />
+				<ref bean="LockCleanupTrigger" />
 			</list>
 		</property>
 	</bean>

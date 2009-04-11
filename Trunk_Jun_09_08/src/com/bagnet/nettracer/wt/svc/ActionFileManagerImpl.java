@@ -14,11 +14,13 @@ import com.bagnet.nettracer.tracing.db.Lock.LockType;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.bmo.ActionFileStationBMO;
+import com.bagnet.nettracer.wt.utils.ParsingUtils;
 
 public class ActionFileManagerImpl implements ActionFileManager {
 
@@ -55,7 +57,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			do {
 				i++;
 				try {
-					lock = lockBmo.createLock(LockType.AF_COUNT, companyCode+ wtStation, 5000L);
+					lock = lockBmo.createLock(LockType.AF_COUNT, companyCode+ wtStation, 10000L);
 				} catch (Exception ex) {
 					logger.info("counts for " + companyCode + wtStation
 							+ " alreaedy locked, waiting..");
@@ -96,7 +98,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			do {
 				i++;
 				try {
-					lock = lockBmo.createLock(LockType.AF_SUMMARY, companyCode+ wtStation + category.name() + day, 5000L);
+					lock = lockBmo.createLock(LockType.AF_SUMMARY, companyCode+ wtStation + category.name() + day, 10000L);
 				} catch (Exception ex) {
 					logger.info("counts for " + companyCode + wtStation
 							+ " alreaedy locked, waiting..");
@@ -121,9 +123,27 @@ public class ActionFileManagerImpl implements ActionFileManager {
 		}
 	}
 
-	public Worldtracer_Actionfiles getDetails(String companyCode,
-			String wtStation, ActionFileType category, int day, int fileNum) {
-		return null;
+	public void updateDetails(String companyCode, String wtStation,
+			ActionFileType category, int day, int fileNum, Agent user)
+			throws WorldTracerException {
+		WorldTracerService wtService = SpringUtils.getWorldTracerService();
+		try {
+			wtService.getWtConnector().initialize();
+
+			String result = wtService.getActionFileDetail(companyCode,
+					wtStation, category, day, fileNum, user);
+			String ahl_id = ParsingUtils.parseAhlId(result);
+			String ohd_id = ParsingUtils.parseOhdId(result);
+			double percent = ParsingUtils.parsePercentMatch(result);
+			if (result != null && result.trim().length() > 0) {
+				wafBmo.updateDetails(companyCode, wtStation, category, day,
+						fileNum, result, ahl_id, ohd_id, percent);
+			}
+		} catch (Exception e) {
+			throw new WorldTracerException(e);
+		} finally {
+			wtService.getWtConnector().logout();
+		}
 	}
 
 	public void setAfsBmo(ActionFileStationBMO afsBmo) {

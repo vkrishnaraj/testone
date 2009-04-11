@@ -18,6 +18,8 @@ import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
 import org.htmlparser.filters.HasAttributeFilter;
 import org.htmlparser.filters.HasChildFilter;
+import org.htmlparser.filters.NotFilter;
+import org.htmlparser.filters.OrFilter;
 import org.htmlparser.filters.RegexFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.lexer.Lexer;
@@ -89,6 +91,7 @@ public class ParsingUtils {
 	}
 
 	public static String parseAhlId(String content) {
+		if(content == null) return null;
 		Matcher m = AHL_PATT.matcher(content);
 		if(m.find()) {
 			return m.group(1);
@@ -97,6 +100,7 @@ public class ParsingUtils {
 	}
 
 	public static String parseOhdId(String content) {
+		if(content == null) return null;
 		Matcher m = OHD_PATT.matcher(content);
 		if(m.find()) {
 			return m.group(1);
@@ -124,12 +128,13 @@ public class ParsingUtils {
 		if(contentResult.size() < 0) {
 			throw new WorldTracerException("unable to parse content in action file detail display");
 		}
-		String content = contentResult.elementAt(0).getChildren().elementAt(0).getText();
+		String content = contentResult.elementAt(0).getChildren().elementAt(0).getText().trim();
 		
 		return new String[] {itemNum, content};
 	}
 
 	public static double parsePercentMatch(String content) {
+		if(content == null) return 0.0D;
 		Matcher m = PERCENT_PATT.matcher(content);
 		if(m.find()) {
 			return Double.parseDouble(m.group(1));
@@ -177,11 +182,24 @@ public class ParsingUtils {
 			}
 			else if(i % 3 == 2) {
 				if(adto == null) continue;
-				String tmp = node.getChildren().elementAt(0).getText().trim();
-				tmp = tmp.replaceAll("<\\s*/\\s*br\\s*>", "\n").replaceAll("&nbsp;", " ").replaceAll(" +", " ").trim();
+				String tmp = "";
+				NodeFilter f2 = new TagNameFilter("br");
+				NodeFilter f3 = new TagNameFilter("td");
+				NodeFilter f4 = new OrFilter(f2, f3);
+				NodeFilter f5 = new NotFilter(f4);
+				NodeList nl = new NodeList();
+				node.collectInto(nl, f5);
+				for(Node aNode : nl.toNodeArray()) {
+					tmp += aNode.getText() + "\n";
+				}
+				tmp = tmp.replaceAll("/br|/td", "").replaceAll("&nbsp;", " ").replaceAll("( |\\t)+", " ").replaceAll("(\\n|\\r)+", "\n").replaceAll("\\n+", "\n").trim();
+				
 				adto.setSummary(tmp);
 				if(!tmp.endsWith("...")) {
 					adto.setDetails(tmp);
+				}
+				else {
+					adto.setDetails("");
 				}
 				adto.setPercentMatch(parsePercentMatch(tmp));
 				adto.setAhlId(parseAhlId(tmp));

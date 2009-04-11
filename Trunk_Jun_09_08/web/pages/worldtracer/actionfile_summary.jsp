@@ -48,7 +48,7 @@
 				<bean:write name="msg" />
 				<br />
 			</html:messages>
-		</logic:messagesPresent> </font> <logic:equal name="afdeleted" value="1" scope="request">
+		</logic:messagesPresent> </font> <logic:equal name="deleted" value="1" scope="request">
 			<p align="center"><font color="green"><bean:message
 				key="colname.af_del" /></font></p>
 		</logic:equal>
@@ -137,19 +137,18 @@
 						</c:otherwise>
 						</c:choose>
 					</td>
-					<td>
-						<c:choose>
+						<td><c:choose>
 							<c:when test="${empty actionData.af_text}">
 								<c:out value="${actionData.af_summary}" escapeXml="false" />
+								&nbsp;
+								<a href="actionFileDetail.do?category=<c:out value='${afType}'/>&day=<c:out value='${day}'/>&itemNum=<c:out value='${actionData.item_number}'/>"><bean:message key="wt.af.details" /></a>
 							</c:when>
 							<c:otherwise>
 								<c:out value="${actionData.af_text}" escapeXml="false" />
 							</c:otherwise>
-						</c:choose>
-						
-					</td>
-					<td><a
-							href="actionFileDelete.do?category=<c:out value='${afType}'/>&day=<c:out value='${day}'/>&itemNum=<c:out value='${actionData.item_number}'/>">Delete</a>
+						</c:choose></td>
+						<td><a
+							href="actionFileDelete.do?category=<c:out value='${afType}'/>&day=<c:out value='${day}'/>&itemNum=<c:out value='${actionData.item_number}'/>"><bean:message key="wt.af.delete" /></a>
 					</td>
 					</tr>
 				</c:forEach>

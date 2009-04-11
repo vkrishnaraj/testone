@@ -518,11 +518,11 @@
 		</action>
 
 		<action path="/actionFileDetail" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileDetailAction" name="worldtracerafForm" scope="request" validate="false">
-			<forward name="success" path="view_actionfile_detail"></forward>
+			<forward name="success" path="actionFileSummary.do" redirect="true" ></forward>
 		</action>
 
 		<action path="/actionFileDelete" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileDeleteAction" name="worldtracerafForm" scope="request" validate="false">
-			<forward name="success" path="/actionFileSummary" redirect="true" ></forward>
+			<forward name="success" path="actionFileSummary.do" redirect="true" ></forward>
 		</action>
 
 		<action path="/worldtracerfwd" type="com.bagnet.nettracer.tracing.actions.WorldTracerFWDAction" name="worldTracerFWDForm" scope="session" validate="false"></action>

@@ -116,4 +116,24 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		return result;
 	}
 
+	@Transactional
+	public void updateDetails(String companyCode, String wtStation,
+			ActionFileType category, int day, int fileNum, String result, String ahl_id, String ohd_id, double percent) {
+		Session sess = getSession(false);
+		Query q = sess.createQuery(WT_ActionFileBmo.FIND_WAF);
+		q.setParameter("airline", companyCode);
+		q.setParameter("afType", category);
+		q.setParameter("wtStation", wtStation);
+		q.setInteger("day", day);
+		q.setInteger("itemNum", fileNum);
+		Worldtracer_Actionfiles waf = (Worldtracer_Actionfiles) q.uniqueResult();
+		if(waf == null) return;
+		waf.setAction_file_text(result);
+		waf.setPercent_match(percent);
+		waf.setWt_incident_id(ahl_id);
+		waf.setWt_ohd_id(ohd_id);
+		sess.update(waf);
+		return;
+	}
+
 }

@@ -3771,15 +3771,109 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public String getActionFileDetails(String companyCode, String stationCode,
 			ActionFileType afType, int day, int itemNum)
 			throws WorldTracerException {
-		NameValuePair[] startParams = {
-				new NameValuePair("_flowId", "actionfilestation-flow"),
-				new NameValuePair("isHDQ", "N")
-		};
-		startFlow(startParams, "ACTION FILE DETAIL", 1, false);
+		NameValuePair[] startFlowParams = {
+				new NameValuePair("_flowId", "searchmessages-flow"), 
+				new NameValuePair("isHDQ", "N"), 
+				new NameValuePair("isSubflow", "No")
+				};
 		
-		NameValuePair[] detailQueryParams = {new NameValuePair("_flowExecutionKey", flowKey)};
-		NameValuePair[] detailPostParams = {
-		};
+		startFlow(startFlowParams, "ACTION FILE DETAIL", 1, false);
+		
+		NameValuePair[] queryParams = {new NameValuePair("_flowExecutionKey", flowKey)};
+		
+		PostMethod method = new PostMethod("/WorldTracerWeb/wtwflow.do");
+		method.setFollowRedirects(false);
+		
+		method.setQueryString(queryParams);
+		method.setParameter("wtrActionAreaReadRequest.stationCode", stationCode);
+		method.setParameter("wtrActionAreaReadRequest.airlineCode", companyCode);
+		method.setParameter("searchMessagesVO.startNumber", Integer.toString(itemNum));
+		method.setParameter("searchMessagesVO.endNumber", Integer.toString(itemNum));
+		method.setParameter("_eventId", "Refresh");
+		method.setParameter("wtrActionAreaReadRequest.actionAreaName.actionAreaType", afType.areaId());
+		method.setParameter("wtrActionAreaReadRequest.actionAreaDayNumber", "DAY_" + day);
+		
+		executeMethod(method, "ACTION FILE DETAIL (2)", false, 0L);
+		
+		if(method.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && 
+				method.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.debug("ACTION FILE DETAIL (2) did not redirect");
+			throw new WorldTracerException("ACTION FILE DETAIL (2) not redirected");
+		}
+		
+		String newLocation = method.getResponseHeader("location").getValue();
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		
+		GetMethod redirect = new GetMethod(newLocation);
+		
+		try {
+			executeMethod(redirect, "REDIR for: ACTION FILE DETAIL (2)", false, 0, false);
+		} catch (Exception e) {
+			logger.error("unable to parse action file summary", e);
+			throw new WorldTracerException("unable to parse action files summary", e);
+		} finally {
+			redirect.releaseConnection();
+		}
+		
+		queryParams[0] = new NameValuePair("_flowExecutionKey", flowKey);
+		
+		method = new PostMethod("/WorldTracerWeb/wtwflow.do");
+		method.setFollowRedirects(false);
+		
+		method.setQueryString(queryParams);
+		method.setParameter("wtrActionAreaReadRequest.stationCode", stationCode);
+		method.setParameter("wtrActionAreaReadRequest.airlineCode", companyCode);
+		method.setParameter("wtrActionAreaReadRequest.searchByRecordReference.stationCode", "");
+		method.setParameter("wtrActionAreaReadRequest.searchByRecordReference.airlineCode", "");
+		method.setParameter("wtrActionAreaReadRequest.searchByRecordReference.recordId", "");
+		method.setParameter("searchMessagesVO.startNumber", Integer.toString(itemNum));
+		method.setParameter("searchMessagesVO.endNumber", Integer.toString(itemNum));
+		method.setParameter("_eventId", "DetailedView");
+		method.setParameter("wtrActionAreaReadRequest.actionAreaName.actionAreaType", afType.areaId());
+		method.setParameter("wtrActionAreaReadRequest.actionAreaDayNumber", "DAY_" + day);
+		method.setParameter("1[]", "checkbox");
+		method.setParameter("searchMessagesVO.messageListItems[0].checked", "true");
+		method.setParameter("_searchMessagesVO.messageListItems[0].checked", "on");
+		
+		executeMethod(method, "ACTION FILE DETAIL (3)", false, 0L);
+		
+		if(method.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && 
+				method.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.debug("ACTION FILE DETAIL (3) did not redirect");
+			throw new WorldTracerException("ACTION FILE DETAIL (3) not redirected");
+		}
+		
+		newLocation = method.getResponseHeader("location").getValue();
+		m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		
+		redirect = new GetMethod(newLocation);
+		
+		InputStream inStream = null;
+		try {
+			executeMethod(redirect, "REDIR for: ACTION FILE SUMMARY (2)", false, 0, false);
+			inStream = redirect.getResponseBodyAsStream();
+			String[] result = ParsingUtils.parseActionFileDetail(inStream, "ISO-8859-1");
+			if(result != null)
+				return result[1];
+		} catch (Exception e) {
+			logger.error("unable to parse action file summary", e);
+			throw new WorldTracerException("unable to parse action files summary", e);
+		} finally {
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+					//pass
+				}
+			}
+			redirect.releaseConnection();
+		}
 		return null;
 	}
 

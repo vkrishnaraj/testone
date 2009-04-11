@@ -215,8 +215,8 @@ public class Worldtracer_Actionfiles implements Serializable {
 	}
 
 	/**
-	 * hibernate.property type=string
-	 * hibernate.column length=512
+	 * @hibernate.property type="string"
+	 * @hibernate.column length="512" name="summary"
 	 * @return
 	 */
 	public String getAction_file_summary() {

@@ -112,6 +112,9 @@ public class ActionFileSummaryAction extends Action {
 		request.setAttribute("afType", aft);
 		request.setAttribute("day", day);
 		
+		if(request.getParameter("deleted") != null) {
+			request.setAttribute("deleted", 1);
+		}
 		return mapping.findForward("success");
 	}
 	
