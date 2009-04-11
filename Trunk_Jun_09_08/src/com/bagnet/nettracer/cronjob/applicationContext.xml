@@ -163,6 +163,11 @@
 		<property name="concurrent" value="false" />
 	</bean>
 
+	<bean id="lockCleanupJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="expireGlobalLocks" />
+		<property name="concurrent" value="false" />
+	</bean>
 
 	<!--  The Schedule they should run on -->
 	<bean id="cronWtQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
@@ -204,6 +209,11 @@
 	<bean id="BillingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="SendMonthlyBillingReportJob" />
 		<property name="cronExpression" value="${monthlybilling}" />
+	</bean>
+	
+	<bean id="LockCleanupTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lockCleanupJob" />
+		<property name="cronExpression" value="${lockCleanup}" />
 	</bean>
 	
 	<!-- Aspects and advice -->
