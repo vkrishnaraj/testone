@@ -81,6 +81,8 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.ActiveTracingForm;
@@ -94,6 +96,7 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
  * @author Matt
@@ -856,8 +859,14 @@ public class BagService {
 								newStatus.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
 								ohd.setStatus(newStatus);
 								OhdBMO.updateOHD(ohd, mod_agent, sess);
-								
 								sess.close();
+								
+								WtqOhdAction wtq = new WtqCloseOhd();
+								wtq.setAgent(mod_agent);
+								wtq.setCreatedate(TracerDateTime.getGMTDate());
+								wtq.setOhd(ohd);
+								WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+								
 							} catch (Exception e) {
 								e.printStackTrace();
 							}

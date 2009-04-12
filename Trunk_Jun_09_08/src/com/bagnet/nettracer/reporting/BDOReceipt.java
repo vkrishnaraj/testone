@@ -47,21 +47,18 @@ public class BDOReceipt {
 
 	public static String createReport(BDOForm theform, ServletContext sc, HttpServletRequest request, int outputtype, String language) {
 		try {
-
-			HttpSession session = request.getSession();
-			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+			
+			// If a BDO_ID is explicitly provided, populate the form with it.
+			if (request.getParameter("bdo_id") != null) {
+				BDOUtils.findBDO(Integer.parseInt(request.getParameter("bdo_id")), theform, request);
+				theform = (BDOForm) request.getSession().getAttribute("BDOForm");
+			}
 
 			Map parameters = new HashMap();
-
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
-
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			parameters.put("bdo_id",theform.getBDO_ID_ref());
 						
-			
-			//parameters.put("paragraph_1", messages.getMessage(new
-			// Locale(language),"lostdelay.receipt.paragraph_1"));
-
 			File logo = new File(sc.getRealPath("/") + "reports/bdologo.gif");
 			if (logo.exists()) {
 				parameters.put("logo", logo.getAbsolutePath());

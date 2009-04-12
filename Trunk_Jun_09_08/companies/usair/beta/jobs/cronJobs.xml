@@ -9,12 +9,11 @@
 		<property name="triggers">
 			<list>
 				<ref bean="cronWtQueueTrigger" />
-				<ref bean="cronRetrieveAfTrigger" />
 				<ref bean="cronMoveToLzTrigger" />
 				<ref bean="cronNewPassiveTracerTrigger" />
 				<ref bean="cronOldPassiveTracerTrigger" />
-				<ref bean="cronMoveToWtTrigger" />
 				<ref bean="RemoveMassOhdTrigger" />
+				<ref bean="LockCleanupTrigger" />
 			</list>
 		</property>
 	</bean>

@@ -33,7 +33,17 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
 		toprint = '<%=ReportingConstants.LOST_DELAY_RECEIPT%>';
 	<%
 		}
+  
+        if (request.getParameter("bdo_id") != null ) {
 	%>
+        ref_id = '&bdo_id=<%=(String) request.getParameter("bdo_id") %>';
+    <%
+        } else {
+    %>
+        ref_id = '';
+    <%
+        }
+    %>
 		var output = "";
         var language = "";
     
@@ -54,7 +64,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
         }
     
         
-		openWindowWithBar('reporting?print=' + toprint + '&outputtype=' + output + "&language=" + language,'Receipt',800,600);
+		openWindowWithBar('reporting?print=' + toprint + '&outputtype=' + output + "&language=" + language + ref_id,'Receipt',800,600);
         
 		return self.close();
 		
