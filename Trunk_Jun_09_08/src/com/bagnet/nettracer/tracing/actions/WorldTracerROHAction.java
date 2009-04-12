@@ -23,6 +23,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.WT_ROH;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -106,11 +107,22 @@ public class WorldTracerROHAction extends Action {
 			}
 		} else {
 			// new form, check to see if form has ohd wt_id with it.
-			if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
-				OHD foundohd = WorldTracerUtils.findOHDByWTID(request.getParameter("wt_id"));
-				if (foundohd != null) {
-					dForm.set("wt_ohd_id", foundohd.getWt_id());
-					
+			if (request.getParameter("wt_ohd_id") != null && request.getParameter("wt_ohd_id").length() == 10) {
+				dForm.set("wt_ohd_id", request.getParameter("wt_ohd_id"));
+			}
+			if (request.getParameter("wt_ahl_id") != null
+					&& request.getParameter("wt_ahl_id").length() == 10) {
+				String ahlId = request.getParameter("wt_ahl_id");
+				dForm.set("wt_ahl_id", ahlId);
+				IncidentBMO ibmo = new IncidentBMO();
+				Incident inc = ibmo.findIncidentByWtId(ahlId);
+				if (inc != null && inc.getPassenger_list() != null) {
+					for (Passenger pax : inc.getPassenger_list()) {
+						if (pax.getLastname() != null
+								&& pax.getLastname().trim().length() > 0) {
+							dForm.set("lname", pax.getLastname().trim());
+						}
+					}
 				}
 			}
 			dForm.set("ag", user.getUsername() + "/" + user.getCompanycode_ID());

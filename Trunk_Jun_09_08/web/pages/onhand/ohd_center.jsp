@@ -292,7 +292,7 @@ function gotoHistoricalReport() {
         %>
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
-            <a href="worldtracerroh.do?wt_id=${OnHandForm.wt_id}">Request from WT</a>
+            <a href="worldtracerroh.do?wt_id=${OnHandForm.wt_id}"><bean:message key="wt.request.ohd"/></a>
         </logic:notEqual>
         <%
            }

@@ -558,11 +558,13 @@ public class WorldTracerQueueWorker implements Runnable {
 						// an ohd
 						// then we need to map them up...
 						ohd = WorldTracerUtils.findOHDByWTID(wtq.getWt_ohd());
+						/*
 						if(ohd == null) {
 							// need to import
 							ohd = wtService.getOhdforOhd(wtq.getWt_ohd(), WTStatus.ACTIVE, null);
 							ohdBmo.insertOHD(ohd, defaultWtAgent);
 						}
+						*/
 						String result = wtService.requestOhd(wtq);
 					}
 					catch (WorldTracerException ex) {

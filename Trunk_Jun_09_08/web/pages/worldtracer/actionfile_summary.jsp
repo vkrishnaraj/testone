@@ -146,23 +146,28 @@ function updatePagination() {
 					</td>
 					<td>
 						<c:choose>
-						<c:when test="${!empty actionData.ohd_id}">
-							<c:url	value="/addOnHandBag.do" var="ohdLink">
-								<c:param name="ohd_ID" value="${actionData.ohd_id}" />
-							</c:url>
-							<bean:message key="nettracer.id" />:&nbsp;<a href="${ohdLink}">${actionData.ohd_id}</a>
-							<br /><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_ohd_id}
+							<c:when test="${!empty actionData.ohd_id}">
+								<c:url value="/addOnHandBag.do" var="ohdLink">
+									<c:param name="ohd_ID" value="${actionData.ohd_id}" />
+								</c:url>
+								<bean:message key="nettracer.id" />:&nbsp;<a href="${ohdLink}">${actionData.ohd_id}</a>
+								<br />
+								<bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_ohd_id}
+								<br />
+							<a href="worldtracerroh.do?wt_ohd_id=${actionData.wt_ohd_id}&wt_ahl_id=${actionData.wt_incident_id}"><bean:message key="wt.request.ohd"/></a>
 						</c:when>
-						<c:when test="${!empty actionData.wt_ohd_id}">
-						<bean:message key="worldtracer.id" />:&nbsp;
+							<c:when test="${!empty actionData.wt_ohd_id}">
+								<bean:message key="worldtracer.id" />:&nbsp;
 						<a href="addOnHandBag.do?wt_id=${actionData.wt_ohd_id}">${actionData.wt_ohd_id}</a>
-						</c:when>
-						<c:otherwise>
-							<c:url	value="/addOnHandBag.do" var="ohdLink">
-								<c:param name="wt_af_id" value="${actionData.af_id}" />
-							</c:url>
-							<a href="${ohdLink}"><bean:message key="no.wt_ohd.id" /></a>
-						</c:otherwise>
+						<br />
+						<a href="worldtracerroh.do?wt_ohd_id=${actionData.wt_ohd_id}&wt_ahl_id=${actionData.wt_incident_id}"><bean:message key="wt.request.ohd"/></a>
+							</c:when>
+							<c:otherwise>
+								<c:url value="/addOnHandBag.do" var="ohdLink">
+									<c:param name="wt_af_id" value="${actionData.af_id}" />
+								</c:url>
+								<a href="${ohdLink}"><bean:message key="no.wt_ohd.id" /></a>
+							</c:otherwise>
 						</c:choose>
 					</td>
 						<td><c:choose>

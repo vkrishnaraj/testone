@@ -64,7 +64,7 @@
             </tr>
             <tr>
               <td><bean:message key="colname.wt_roh_passname" />:</td>
-              <td><html:text property="lname" size="40"/></td>
+              <td><html:text property="lname" size="40" readonly="readonly"/></td>
             </tr>
 
 
