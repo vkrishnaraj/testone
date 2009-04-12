@@ -65,13 +65,13 @@
 	
 	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector" scope="prototype">
 		<constructor-arg ref="wtConnectionPool" />
-		<constructor-arg value="${company.code" />
+		<constructor-arg value="${company.code}" />
 		<property name="wtRuleMap" ref="wtRuleMap" />
 	</bean>
 	
 	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService" scope="prototype">
 		<property name="wtConnector" ref="wtConnector" />
-		<property name="wtCompanyCode" value="${company.code" />
+		<property name="wtCompanyCode" value="${company.code}" />
 	</bean>
 	
 
