@@ -101,6 +101,8 @@ public class ActionFileDetailAction extends Action {
 		ActionRedirect redirect = new ActionRedirect(mapping.findForward("success"));
 		redirect.addParameter("category", catName);
 		redirect.addParameter("day", Integer.toString(day));
+		redirect.addParameter("currpage", request.getParameter("currpage"));
+		redirect.addParameter("rowsperpage", request.getParameter("rowsperpage"));
 		return redirect;
 	}
 }

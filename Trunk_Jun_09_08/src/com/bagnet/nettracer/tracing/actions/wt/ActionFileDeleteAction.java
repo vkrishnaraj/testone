@@ -98,6 +98,8 @@ public class ActionFileDeleteAction extends Action {
 		redirect.addParameter("category", catName);
 		redirect.addParameter("day", Integer.toString(day));
 		redirect.addParameter("deleted", 1);
+		redirect.addParameter("currpage", request.getParameter("currpage"));
+		redirect.addParameter("rowsperpage", request.getParameter("rowsperpage"));
 		return redirect;
 	}
 }

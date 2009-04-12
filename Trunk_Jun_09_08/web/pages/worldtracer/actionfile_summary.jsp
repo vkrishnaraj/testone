@@ -174,14 +174,14 @@ function updatePagination() {
 							<c:when test="${empty actionData.af_text}">
 								<c:out value="${actionData.af_summary}" escapeXml="false" />
 								&nbsp;
-								<a href="actionFileDetail.do?category=<c:out value='${afType}'/>&day=<c:out value='${day}'/>&itemNum=<c:out value='${actionData.item_number}'/>"><bean:message key="wt.af.details" /></a>
+								<a href="actionFileDetail.do?category=${afType}&day=${day}&itemNum=${actionData.item_number}&currpage=${currpage}&rowsperpage=${rowsperpage}"><bean:message key="wt.af.details" /></a>
 							</c:when>
 							<c:otherwise>
 								<c:out value="${actionData.af_text}" escapeXml="false" />
 							</c:otherwise>
 						</c:choose></td>
 						<td><a
-							href="actionFileDelete.do?category=<c:out value='${afType}'/>&day=<c:out value='${day}'/>&itemNum=<c:out value='${actionData.item_number}'/>"><bean:message key="wt.af.delete" /></a>
+							href="actionFileDelete.do?category=${afType}&day=${day}&itemNum=${actionData.item_number}&currpage=${currpage}&rowsperpage=${rowsperpage}"><bean:message key="wt.af.delete" /></a>
 					</td>
 					</tr>
 				</c:forEach>
