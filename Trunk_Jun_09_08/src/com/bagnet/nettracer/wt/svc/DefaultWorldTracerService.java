@@ -214,8 +214,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			throw new WorldTracerException("BDO station " + bdo.getStation().getStationcode()
 					+ " does not have a world tracer station");
 		}
-		if ((bdo.getOhd() == null || bdo.getOhd().getWt_id() == null)
-				&& (bdo.getIncident() == null || bdo.getIncident().getWt_id() == null)) {
+		if (bdo.getIncident() == null || bdo.getIncident().getWt_id() == null) {
 			throw new WorldTracerException("Cannot export BDO: " + bdo.getBDO_ID()
 					+ " - no associated WorldTracer Files");
 		}

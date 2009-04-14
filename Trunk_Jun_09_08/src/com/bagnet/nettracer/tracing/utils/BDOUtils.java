@@ -778,13 +778,12 @@ public class BDOUtils {
 			}
 			
 			if(isnew) {
-				if(((bdo.getIncident() != null && bdo.getIncident().getWtFile() != null) ||
-						(bdo.getOhd() != null && bdo.getOhd().getWtFile() != null)) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO, user)) {
+				if((bdo.getIncident() != null && bdo.getIncident().getWtFile() != null) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_BDO, user)) {
 					WtqCreateBdo wtq = new WtqCreateBdo();
 					wtq.setAgent(bdo.getAgent());
 					wtq.setBdo(bdo);
 					try {
-					WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+						WorldTracerQueueUtils.createOrReplaceQueue(wtq);
 					}
 					catch(Exception e) {
 						logger.error("unable to queue Worldtracer Bdo", e);
