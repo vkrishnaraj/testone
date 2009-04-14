@@ -11,6 +11,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
@@ -142,7 +143,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 		if(afStation == null) return false;
 		
 		Date now = new Date();
-		if ((now.getTime() - afStation.getLastUpdated().getTime()) < 1800000) {
+		if ((now.getTime() - afStation.getLastUpdated().getTime()) < 60*1000*Integer.parseInt(PropertyBMO.getValue(PropertyBMO.PROPERTY_WT_AF_EXPIRE))) {
 			return true;
 		}
 		return false;

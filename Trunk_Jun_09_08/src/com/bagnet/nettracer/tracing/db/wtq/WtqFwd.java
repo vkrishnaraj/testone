@@ -49,7 +49,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "wtq_name", joinColumns = @JoinColumn(name = "wt_queue_id"))
 	@Column(name = "pax_name", nullable = false, length = 20)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	public Set<String> getFwdName() {
 		return name;
 	}
@@ -61,7 +61,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
 	@JoinTable(name = "WTQ_SEGMENT", joinColumns = @JoinColumn(name = "segment_id"))
 	@org.hibernate.annotations.OrderBy(clause = "departdate asc, departureTime asc")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	public Collection<WtqSegment> getItinerary() {
 		return itinerary;
 	}
@@ -100,7 +100,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "wtq_teletype", joinColumns = @JoinColumn(name = "wt_queue_id"))
 	@Column(name = "ttype_address", nullable = false)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	public Set<String> getTeletypes() {
 		return teletypes;
 	}

@@ -42,7 +42,7 @@ public class AuditClaimSettlement {
 
 	@OneToMany(mappedBy = "auditClaimSettlement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@IndexColumn(name = "position")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<AuditClaimSettlementBag> auditBagList;
 
 	@Column(length = 25)

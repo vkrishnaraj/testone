@@ -39,7 +39,7 @@ public class ClaimSettlement {
 
 	@OneToMany(mappedBy = "claimSettlement", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@IndexColumn(name="position")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<ClaimSettlementBag> bagList;
 
 	@Column(length = 25)

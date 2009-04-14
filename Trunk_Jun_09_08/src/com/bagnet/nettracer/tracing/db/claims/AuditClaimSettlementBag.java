@@ -46,7 +46,7 @@ public class AuditClaimSettlementBag {
 
 	@OneToMany(mappedBy = "auditClaimSettlementBag", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@IndexColumn(name = "position")
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	private List<AuditSettlementBagInventory> auditInventory;
 
 	public String getColor() {

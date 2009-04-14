@@ -64,7 +64,7 @@ public class WtqRequestOhd extends WtqIncidentAction {
 	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch=FetchType.EAGER)
 	@JoinTable(name = "wtq_teletype", joinColumns=@JoinColumn(name="wt_queue_id"))
 	@Column(name = "ttype_address", nullable = false)
-	@Fetch(FetchMode.SUBSELECT)
+	@Fetch(FetchMode.SELECT)
 	public Set<String> getTeletypes() {
 		return teletypes;
 	}
