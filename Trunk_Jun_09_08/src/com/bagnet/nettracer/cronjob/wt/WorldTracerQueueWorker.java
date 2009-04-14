@@ -754,6 +754,9 @@ public class WorldTracerQueueWorker implements Runnable {
 					finally {
 						try {
 							eraseTask.setAttempts(eraseTask.getAttempts() + 1);
+							if(eraseTask.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								eraseTask.setStatus(WtqStatus.FAIL);
+							}
 							wtqBmo.updateQueue(eraseTask);
 						}
 						catch (Exception e) {
