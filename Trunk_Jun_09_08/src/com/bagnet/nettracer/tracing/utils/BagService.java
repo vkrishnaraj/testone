@@ -861,11 +861,13 @@ public class BagService {
 								OhdBMO.updateOHD(ohd, mod_agent, sess);
 								sess.close();
 								
-								WtqOhdAction wtq = new WtqCloseOhd();
-								wtq.setAgent(mod_agent);
-								wtq.setCreatedate(TracerDateTime.getGMTDate());
-								wtq.setOhd(ohd);
-								WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+								if (ohd.getWtFile() != null) {
+									WtqOhdAction wtq = new WtqCloseOhd();
+									wtq.setAgent(mod_agent);
+									wtq.setCreatedate(TracerDateTime.getGMTDate());
+									wtq.setOhd(ohd);
+									WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+								}
 								
 							} catch (Exception e) {
 								e.printStackTrace();
