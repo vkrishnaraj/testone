@@ -14,6 +14,7 @@
 			<form-property name="password1" type="java.lang.String" />
 			<form-property name="password2" type="java.lang.String" />
 		</form-bean>
+		<form-bean name="manualQueueForm" type="com.bagnet.nettracer.tracing.forms.ManualQueueForm" />
 		<form-bean name="incidentForm" type="com.bagnet.nettracer.tracing.forms.IncidentForm" />
 		<form-bean name="forwardOnHandForm" type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
 		<form-bean name="forwardMessageForm" type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
@@ -248,6 +249,8 @@
 		<forward name="massonhandsuccess" path="mass_onhand_success" />
 		<forward name="claimmain" path="claim_resolution" />
 		<forward name="claimprorate" path="claim_prorate" />
+		
+		<forward name="manualQueue" path="manualQueue" />
 		
 		<forward name="claimsettlement" path="claim_settlement" />
 		<forward name="claimsettlement1" path="claim_settlement1" />

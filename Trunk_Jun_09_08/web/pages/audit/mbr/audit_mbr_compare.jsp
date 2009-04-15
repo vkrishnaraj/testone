@@ -597,85 +597,87 @@ function updatePagination() {
             <logic:iterate id="audit_incident" name="compareList" scope="request">
               <td>
                 <logic:iterate id="theitem" name="audit_incident" property="itemlist" indexId="i" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item">
-                  <logic:notPresent name="ld" scope="request">
-                    <bean:message key="colname.claimnum" />
+                  <logic:notEmpty name="theitem">
+                    <logic:notPresent name="ld" scope="request">
+                      <bean:message key="colname.claimnum" />
+                      :
+                      <bean:write name="theitem" property="claimchecknum" />
+                      <br>
+                    </logic:notPresent>
+                    <logic:present name="ld" scope="request">
+                      <bean:message key="colname.matched_ohd" />
+                      :
+                      <bean:write name="theitem" property="OHD_ID" />
+                      <br>
+                    </logic:present>
+                    <bean:message key="colname.name_on_bag" />
                     :
-                    <bean:write name="theitem" property="claimchecknum" />
+                    <bean:write name="theitem" property="lnameonbag" />
+                    ,
+                    <bean:write name="theitem" property="fnameonbag" />
+                    <bean:write name="theitem" property="mnameonbag" />
                     <br>
-                  </logic:notPresent>
-                  <logic:present name="ld" scope="request">
-                    <bean:message key="colname.matched_ohd" />
+                    <bean:message key="colname.color" />
                     :
-                    <bean:write name="theitem" property="OHD_ID" />
+                    <bean:write name="theitem" property="color" />
                     <br>
-                  </logic:present>
-                  <bean:message key="colname.name_on_bag" />
-                  :
-                  <bean:write name="theitem" property="lnameonbag" />
-                  ,
-                  <bean:write name="theitem" property="fnameonbag" />
-                  <bean:write name="theitem" property="mnameonbag" />
-                  <br>
-                  <bean:message key="colname.color" />
-                  :
-                  <bean:write name="theitem" property="color" />
-                  <br>
-                  <bean:message key="colname.bagtype" />
-                  :
-                  <bean:write name="theitem" property="bagtype" />
-                  <br>
-                  <bean:message key="colname.x_desc" />
-                  :
-                  <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <bean:write name="theitem" property="xdescelement1" />
-                  <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <bean:write name="theitem" property="xdescelement2" />
-                  <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <bean:write name="theitem" property="xdescelement3" />
-                  <br>
-                  <bean:message key="colname.manufacturer" />
-                  :
-                  <bean:write name="theitem" property="manufacturer" />
-                  <br>
-                  <bean:message key="colname.key_contents" />:
-                  <br>
-                  <logic:iterate id="inventories" name="theitem" property="inventorylist" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item_Inventory">
-                  &nbsp;&nbsp;<bean:write name="inventories"  property="description" /><br>
-                  </logic:iterate>
-                  <br>
-                  <bean:message key="colname.bag_status" />
-                  :
-                  <bean:write name="theitem" property="status.description" />
-                  <logic:present name="damaged" scope="request">
-                    <br>
-                    <bean:message key="colname.damagedesc" />
+                    <bean:message key="colname.bagtype" />
                     :
-                    <bean:write name="theitem" property="damage" />
+                    <bean:write name="theitem" property="bagtype" />
                     <br>
-                    <bean:message key="colname.lvldamage" />
-                    :
-                    <bean:write name="theitem" property="lvlofdamage" />
-                    <br>
-                    <bean:message key="colname.cost" />
-                    :
-                    <bean:write name="theitem" property="discost" />
-                    <bean:write name="theitem" property="currency_ID" />
-                    <br>
-                    <bean:message key="colname.resolutiondesc" />
-                    :
-                    <bean:write name="theitem" property="resolutiondesc" />
-                    <br>
-                    <bean:message key="header.photos" />
+                    <bean:message key="colname.x_desc" />
                     :
                     <br>
-                    <logic:iterate indexId="j" id="photo" name="theitem" property="photolist" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item_Photo"><img src='showImage?ID=<bean:write name="photo" property="thumbpath"/>'><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <bean:write name="theitem" property="xdescelement1" />
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <bean:write name="theitem" property="xdescelement2" />
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <bean:write name="theitem" property="xdescelement3" />
+                    <br>
+                    <bean:message key="colname.manufacturer" />
+                    :
+                    <bean:write name="theitem" property="manufacturer" />
+                    <br>
+                    <bean:message key="colname.key_contents" />:
+                    <br>
+                    <logic:iterate id="inventories" name="theitem" property="inventorylist" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item_Inventory">
+                    &nbsp;&nbsp;<bean:write name="inventories"  property="description" /><br>
                     </logic:iterate>
-                  </logic:present>
-                  <br>
-                  <br>
+                    <br>
+                    <bean:message key="colname.bag_status" />
+                    :
+                    <bean:write name="theitem" property="status.description" />
+                    <logic:present name="damaged" scope="request">
+                      <br>
+                      <bean:message key="colname.damagedesc" />
+                      :
+                      <bean:write name="theitem" property="damage" />
+                      <br>
+                      <bean:message key="colname.lvldamage" />
+                      :
+                      <bean:write name="theitem" property="lvlofdamage" />
+                      <br>
+                      <bean:message key="colname.cost" />
+                      :
+                      <bean:write name="theitem" property="discost" />
+                      <bean:write name="theitem" property="currency_ID" />
+                      <br>
+                      <bean:message key="colname.resolutiondesc" />
+                      :
+                      <bean:write name="theitem" property="resolutiondesc" />
+                      <br>
+                      <bean:message key="header.photos" />
+                      :
+                      <br>
+                      <logic:iterate indexId="j" id="photo" name="theitem" property="photolist" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item_Photo"><img src='showImage?ID=<bean:write name="photo" property="thumbpath"/>'><br>
+                      </logic:iterate>
+                    </logic:present>
+                    <br>
+                    <br>
+                    </logic:notEmpty>
                 </logic:iterate>
                 &nbsp;
               </td>

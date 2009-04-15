@@ -120,13 +120,12 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 </script>
 
 
-<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
+
   <div id=mainlogin>
 
     <tiles:insert attribute="center"/>
                 
               </div>
-            </html:form>
 	<% 
 	} 
 	%>

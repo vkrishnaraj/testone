@@ -22,9 +22,9 @@ public class B6Test {
     System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
 
 		
-		String recordLocator = "S364AA";
+		String recordLocator = "BC81AF";
     //String tagNumber = "0279955858";
-    String tagNumber = "0279660953";
+    //String tagNumber = "0279660953";
     
 		ArrayList<String> errors = new ArrayList<String>();
 		ReservationDetail booking = null;
@@ -32,8 +32,8 @@ public class B6Test {
 			JetBlueIntegrationWrapper wrapper = new JetBlueIntegrationWrapper();
 			
 			boolean result = true;
-			//result = wrapper.getBookingByKey(recordLocator, null);
-			result = wrapper.getBookingByKey(null, tagNumber);
+			result = wrapper.getBookingByKey(recordLocator, null);
+			//result = wrapper.getBookingByKey(null, tagNumber);
 			
 			if (!result) {
 				System.out.println("error");

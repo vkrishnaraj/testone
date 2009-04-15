@@ -359,10 +359,12 @@ function updatePagination() {
                     </td>
                     <td>
                       <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
-                        <logic:notEqual name="item_list" property="claimchecknum" value="">
-                          <bean:write name="item_list" property="claimchecknum" />
-                          <br>
-                        </logic:notEqual>
+                        <logic:notEmpty name="item_list">
+                          <logic:notEqual name="item_list" property="claimchecknum" value="">
+                            <bean:write name="item_list" property="claimchecknum" />
+                            <br>
+                          </logic:notEqual>
+                        </logic:notEmpty>
                       </logic:iterate>
                       <logic:iterate id="claimcheck_list" name="claimchecks" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
                         <logic:notEqual name="claimcheck_list" property="claimchecknum" value="">
