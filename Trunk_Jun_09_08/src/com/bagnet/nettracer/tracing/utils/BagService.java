@@ -850,25 +850,28 @@ public class BagService {
 					}
 					
 					for (String ohdId: ohdIds) {
-						if (ohdId != null) {
+						if (ohdId != null && ohdId.trim().length() > 0) {
 							try {
 								Session sess = HibernateWrapper.getSession().openSession();
 								
 								OHD ohd = OhdBMO.getOHDByID(ohdId, sess);
-								Status newStatus = new Status();
-								newStatus.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
-								ohd.setStatus(newStatus);
-								OhdBMO.updateOHD(ohd, mod_agent, sess);
-								sess.close();
-								
-								if (ohd.getWtFile() != null) {
-									WtqOhdAction wtq = new WtqCloseOhd();
-									wtq.setAgent(mod_agent);
-									wtq.setCreatedate(TracerDateTime.getGMTDate());
-									wtq.setOhd(ohd);
-									WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+								if (ohd == null) {
+									logger.error("BagService.java line 859: Should not have null ohd for: " + ohdId);
+								} else {
+									Status newStatus = new Status();
+									newStatus.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+									ohd.setStatus(newStatus);
+									OhdBMO.updateOHD(ohd, mod_agent, sess);
+									sess.close();
+									
+									if (ohd.getWtFile() != null) {
+										WtqOhdAction wtq = new WtqCloseOhd();
+										wtq.setAgent(mod_agent);
+										wtq.setCreatedate(TracerDateTime.getGMTDate());
+										wtq.setOhd(ohd);
+										WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+									}
 								}
-								
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
