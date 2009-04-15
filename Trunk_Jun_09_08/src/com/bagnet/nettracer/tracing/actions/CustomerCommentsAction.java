@@ -64,11 +64,11 @@ public class CustomerCommentsAction extends Action {
 			
 			HibernateUtils.save(comment, sess);
 			
-			Audit_CustomerViewableComment auditComment = new Audit_CustomerViewableComment();
-			BeanUtils.copyProperties(auditComment, comment);
-			auditComment.setModifying_agent(user);
-			auditComment.setTime_modified(TracerDateTime.getGMTDate());
-			HibernateUtils.save(auditComment, sess);
+//			Audit_CustomerViewableComment auditComment = new Audit_CustomerViewableComment();
+//			BeanUtils.copyProperties(auditComment, comment);
+//			auditComment.setModifying_agent(user);
+//			auditComment.setTime_modified(TracerDateTime.getGMTDate());
+//			HibernateUtils.save(auditComment, sess);
 
 			
 			//OtherSystemInformationBMO.saveOsi(inc, osi);
