@@ -113,6 +113,12 @@ public class ActionFileSummaryAction extends Action {
 			saveMessages(request, errors);
 			mapping.findForward("error");
 		}
+		if(result == null || result.size() < 1) {
+			ActionMessage error = new ActionMessage("message.wt.af.nofiles.error");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
+			mapping.findForward("success");
+		}
 		int rowcount = result.size();
 
 

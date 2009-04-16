@@ -220,4 +220,9 @@ public class WorldTracerConnection extends HttpClient {
 	public void setValidConnection(boolean validConnection) {
 		this.validConnection = validConnection;
 	}
+
+	public WorldTracerAccount getAccount() {
+		return account;
+	}
+	
 }
