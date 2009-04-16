@@ -18,6 +18,7 @@
     o = document.groupForm;
     o.prevpage.value = "1";
     o.pagination.value="1";
+    o.edit.value="1";
     o.submit();
   }
 
@@ -25,6 +26,7 @@
     o = document.groupForm;
     o.nextpage.value="1";
     o.pagination.value="1";
+    o.edit.value="1";
     o.submit();
   }
 
@@ -32,12 +34,15 @@
     o = document.groupForm;
     o.currpage.value = i;
     o.pagination.value="1";
+    o.edit.value="1";
     o.submit();
 
   }
   function updatePagination() {
-	    return true;
-	}
+	  o = document.groupForm;
+	  o.edit.value="1";
+	  o.submit();
+  }
 // -->
   </script>
   <html:form action="createGroup.do" method="post" onsubmit="return validateGroupForm(this);">
@@ -78,7 +83,7 @@
             <tr>
               <td>
                 <bean:message key="header.groupName" />
-                <font color=red>
+                <font color="red">
                   *
                 </font>
                 :
@@ -86,6 +91,7 @@
               <td>
                 <logic:present name="groupForm" property="groupID">
                   <html:hidden name="groupForm" property="groupID" />
+                  <html:hidden name="groupForm" property="edit" value=""/>
                 </logic:present>
                 <html:text styleClass="textfield" name="groupForm" property="groupName" size="53" maxlength="50" />
               </td>
@@ -93,7 +99,7 @@
             <tr>
               <td>
                 <bean:message key="header.groupDesc" />
-                <font color=red>
+                <font color="red">
                   *
                 </font>
                 :
@@ -195,7 +201,13 @@
                     </logic:notEqual>
                   </td>
                 </tr>
+                
               </logic:iterate>
+              <tr>
+                  <td colspan="8">
+                      <jsp:include page="/pages/includes/pagination_incl.jsp" />
+                  </td>
+              </tr>
               <tr>
                 <td colspan="8">
                   &nbsp;
@@ -208,6 +220,7 @@
                   </html:submit>
                 </td>
               </tr>
+
             </table>
           </logic:present>
         </html:form>

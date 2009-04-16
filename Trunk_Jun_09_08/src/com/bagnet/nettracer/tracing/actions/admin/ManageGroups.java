@@ -47,8 +47,9 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditGroupUtils;
  * @author Ankur Gupta
  */
 public final class ManageGroups extends Action {
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		HttpSession session = request.getSession();
 
 		// check session
@@ -56,7 +57,8 @@ public final class ManageGroups extends Action {
 
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+		if (sort != null && sort.length() > 0)
+			request.setAttribute("sort", sort);
 
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -64,34 +66,40 @@ public final class ManageGroups extends Action {
 			return null;
 		}
 
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) return (mapping
-				.findForward(TracingConstants.NO_PERMISSION));
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
+				+ ".do", user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
 		ActionMessages errors = new ActionMessages();
 		DynaValidatorForm dForm = (DynaValidatorForm) form;
 
 		String companyCode = "";
-		if (request.getParameter("edit") != null || request.getParameter("addAgents") != null) {
-		UserGroup group = AdminUtils.getGroup(request.getParameter("groupID"));
+		if ((request.getParameter("edit") != null && request.getParameter("edit").trim().length() > 0)
+				|| request.getParameter("addAgents") != null) {
+			UserGroup group = AdminUtils.getGroup(request
+					.getParameter("groupID"));
 			dForm.set("groupID", "" + group.getUserGroup_ID());
 			dForm.set("companyCode", group.getCompanycode_ID());
 			dForm.set("groupName", group.getDescription());
 			dForm.set("groupDesc", group.getDescription2());
 
-			//check if adding agents to this group
+			// check if adding agents to this group
 			if (request.getParameter("addAgents") != null) {
 				HashMap selectedAgents = new HashMap();
-				String[] agentsSelected = request.getParameterValues("agent_ID");
+				String[] agentsSelected = request
+						.getParameterValues("agent_ID");
 				if (agentsSelected != null) {
 					for (int i = 0; i < agentsSelected.length; i++) {
 						Agent a = AdminUtils.getAgent(agentsSelected[i]);
 						selectedAgents.put("" + a.getAgent_ID(), "1");
 						a.setGroup(group);
-						//change association for the agent.
+						// change association for the agent.
 						HibernateUtils.save(a);
-						
-						if (AdminUtils.getCompVariable(a.getCompanycode_ID()).getAudit_agent() == 1) {
-							Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(a, user);
+
+						if (AdminUtils.getCompVariable(a.getCompanycode_ID())
+								.getAudit_agent() == 1) {
+							Audit_Agent audit_agent = AuditAgentUtils
+									.getAuditAgent(a, user);
 							if (audit_agent != null) {
 								HibernateUtils.saveNew(audit_agent);
 							}
@@ -99,36 +107,44 @@ public final class ManageGroups extends Action {
 
 					}
 				}
-				//Get all the agents for this station.
+				// Get all the agents for this station.
 				String station_id = null;
-				//get the station id from the request
-				if (request.getParameter("station_id") != null) station_id = request
-						.getParameter("station_id");
+				// get the station id from the request
+				if (request.getParameter("station_id") != null)
+					station_id = request.getParameter("station_id");
 
-				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-						.getParameter("currpage")) : 0;
+				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
+						.parseInt(request.getParameter("rowsperpage"))
+						: TracingConstants.ROWS_PER_PAGE;
+				int currpage = request.getParameter("currpage") != null ? Integer
+						.parseInt(request.getParameter("currpage"))
+						: 0;
 
-				
 				List agents = null;
-				if (!station_id.equals("-1")) agents = AdminUtils.getAgentsByStation(station_id, sort,
-						null, rowsperpage, currpage);
-				else agents = AdminUtils.getAgents(group.getCompanycode_ID(), sort, null, rowsperpage, currpage);
+				if (!station_id.equals("-1"))
+					agents = AdminUtils.getAgentsByStation(station_id, sort,
+							null, rowsperpage, currpage);
+				else
+					agents = AdminUtils.getAgents(group.getCompanycode_ID(),
+							sort, null, rowsperpage, currpage);
 
-				UserGroup guest = AdminUtils.getGuestGroup(group.getCompanycode_ID());
-				
+				UserGroup guest = AdminUtils.getGuestGroup(group
+						.getCompanycode_ID());
+
 				for (Iterator i = agents.iterator(); i.hasNext();) {
 					Agent a = (Agent) i.next();
-					if (a.getGroup().getUserGroup_ID() == group.getUserGroup_ID()) {
-						//check if it has been selected. if so.leave as is
+					if (a.getGroup().getUserGroup_ID() == group
+							.getUserGroup_ID()) {
+						// check if it has been selected. if so.leave as is
 						if (selectedAgents.get("" + a.getAgent_ID()) == null) {
-							//not selected..move the user to the guest group.
+							// not selected..move the user to the guest group.
 							a.setGroup(guest);
 							HibernateUtils.save(a);
-							
-							if (AdminUtils.getCompVariable(a.getCompanycode_ID()).getAudit_agent() == 1) {
-								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(a, user);
+
+							if (AdminUtils.getCompVariable(
+									a.getCompanycode_ID()).getAudit_agent() == 1) {
+								Audit_Agent audit_agent = AuditAgentUtils
+										.getAuditAgent(a, user);
 								if (audit_agent != null) {
 									HibernateUtils.saveNew(audit_agent);
 								}
@@ -138,23 +154,30 @@ public final class ManageGroups extends Action {
 				}
 			}
 
-			//get the list of the agents for the group.
-			List agents = AdminUtils.getAgentsByGroup("" + group.getUserGroup_ID(), sort, 0, 0);
+			// get the list of the agents for the group.
+			List agents = AdminUtils.getAgentsByGroup(""
+					+ group.getUserGroup_ID(), sort, 0, 0);
 			if (agents != null && agents.size() > 0) {
 				/** ************ pagination ************* */
 				int rowcount = -1;
-				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-				if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
-				request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
+						.parseInt(request.getParameter("rowsperpage"))
+						: TracingConstants.ROWS_PER_PAGE;
+				if (rowsperpage < 1)
+					rowsperpage = TracingConstants.ROWS_PER_PAGE;
+				request.setAttribute("rowsperpage", Integer
+						.toString(rowsperpage));
 				int totalpages = 0;
 
-				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-						.getParameter("currpage")) : 0;
+				int currpage = request.getParameter("currpage") != null ? Integer
+						.parseInt(request.getParameter("currpage"))
+						: 0;
 				if (request.getParameter("nextpage") != null
-						&& request.getParameter("nextpage").equals("1")) currpage++;
+						&& request.getParameter("nextpage").equals("1"))
+					currpage++;
 				if (request.getParameter("prevpage") != null
-						&& request.getParameter("prevpage").equals("1")) currpage--;
+						&& request.getParameter("prevpage").equals("1"))
+					currpage--;
 
 				request.setAttribute("currpage", Integer.toString(currpage));
 
@@ -162,17 +185,19 @@ public final class ManageGroups extends Action {
 				rowcount = agents.size();
 
 				// find out total pages
-				totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+				totalpages = (int) Math.ceil((double) rowcount
+						/ (double) rowsperpage);
 
 				if (totalpages <= currpage) {
 					currpage = 0;
 					request.setAttribute("currpage", "0");
 				}
 
-				agents = AdminUtils.getAgentsByGroup("" + group.getUserGroup_ID(), sort, rowsperpage,
-						currpage);
+				agents = AdminUtils.getAgentsByGroup(""
+						+ group.getUserGroup_ID(), sort, rowsperpage, currpage);
 
-				if (currpage + 1 == totalpages) request.setAttribute("end", "1");
+				if (currpage + 1 == totalpages)
+					request.setAttribute("end", "1");
 				if (totalpages > 1) {
 					ArrayList al = new ArrayList();
 					for (int i = 0; i < totalpages; i++) {
@@ -183,24 +208,31 @@ public final class ManageGroups extends Action {
 				/** ************ end of pagination ************* */
 				request.setAttribute("agentList", agents);
 			} else {
-				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-				if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
-				request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
+						.parseInt(request.getParameter("rowsperpage"))
+						: TracingConstants.ROWS_PER_PAGE;
+				if (rowsperpage < 1)
+					rowsperpage = TracingConstants.ROWS_PER_PAGE;
+				request.setAttribute("rowsperpage", Integer
+						.toString(rowsperpage));
 
-				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-						.getParameter("currpage")) : 0;
+				int currpage = request.getParameter("currpage") != null ? Integer
+						.parseInt(request.getParameter("currpage"))
+						: 0;
 				request.setAttribute("currpage", Integer.toString(currpage));
 			}
 			return mapping.findForward(TracingConstants.EDIT_GROUP);
 		}
 
-		if (request.getParameter("companyCode") != null) companyCode = request
-				.getParameter("companyCode");
+		if (request.getParameter("companyCode") != null)
+			companyCode = request.getParameter("companyCode");
 		else {
-			if (dForm.get("companyCode") != null && ((String) dForm.get("companyCode")).length() > 0) companyCode = (String) dForm
-					.get("companyCode");
-			else companyCode = user.getStation().getCompany().getCompanyCode_ID();
+			if (dForm.get("companyCode") != null
+					&& ((String) dForm.get("companyCode")).length() > 0)
+				companyCode = (String) dForm.get("companyCode");
+			else
+				companyCode = user.getStation().getCompany()
+						.getCompanyCode_ID();
 		}
 		dForm.set("companyCode", companyCode);
 
@@ -209,78 +241,95 @@ public final class ManageGroups extends Action {
 		}
 
 		if (request.getParameter("addNewAgent") != null) {
-			UserGroup group = AdminUtils.getGroup(request.getParameter("groupID"));
+			UserGroup group = AdminUtils.getGroup(request
+					.getParameter("groupID"));
 			dForm.set("groupID", "" + group.getUserGroup_ID());
 			dForm.set("companyCode", group.getCompanycode_ID());
 			dForm.set("groupName", group.getDescription());
 
-			//Get the station List for the company.
-			List stationList = AdminUtils.getStations(null, group.getCompanycode_ID(), 0, 0);
+			// Get the station List for the company.
+			List stationList = AdminUtils.getStations(null, group
+					.getCompanycode_ID(), 0, 0);
 			if (stationList != null) {
 				List x2 = new ArrayList();
-				//Station first = null;
+				// Station first = null;
 				for (Iterator i = stationList.iterator(); i.hasNext();) {
 					Station station = (Station) i.next();
-					//if (first == null)
-					//	first = station;
-					x2.add(new LabelValueBean(station.getStationcode(), "" + station.getStation_ID()));
+					// if (first == null)
+					// first = station;
+					x2.add(new LabelValueBean(station.getStationcode(), ""
+							+ station.getStation_ID()));
 				}
 				request.setAttribute("stationList", stationList);
 
 				String station_id = null;
 
-				//get the station id from the request
+				// get the station id from the request
 				if (request.getParameter("station_id") != null) {
 					station_id = request.getParameter("station_id");
 				} else {
-					station_id = "-1";//+ first.getStation_ID();
+					station_id = "-1";// + first.getStation_ID();
 				}
 
 				if (station_id != null) {
 					List agents = null;
 					int path = -1;
 					if (!station_id.equals("-1")) {
-						agents = AdminUtils.getAgentsByStation(station_id, sort, null, 0, 0);
+						agents = AdminUtils.getAgentsByStation(station_id,
+								sort, null, 0, 0);
 						path = 0;
 					} else {
 						path = 1;
-						agents = AdminUtils.getAgents(group.getCompanycode_ID(), sort, null, 0, 0);
+						agents = AdminUtils.getAgents(
+								group.getCompanycode_ID(), sort, null, 0, 0);
 					}
 					if (agents != null && agents.size() > 0) {
 						/** ************ pagination ************* */
 						int rowcount = -1;
 						int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
-								.parseInt(request.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-						if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
-						request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+								.parseInt(request.getParameter("rowsperpage"))
+								: TracingConstants.ROWS_PER_PAGE;
+						if (rowsperpage < 1)
+							rowsperpage = TracingConstants.ROWS_PER_PAGE;
+						request.setAttribute("rowsperpage", Integer
+								.toString(rowsperpage));
 						int totalpages = 0;
 
-						int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-								.getParameter("currpage")) : 0;
+						int currpage = request.getParameter("currpage") != null ? Integer
+								.parseInt(request.getParameter("currpage"))
+								: 0;
 						if (request.getParameter("nextpage") != null
-								&& request.getParameter("nextpage").equals("1")) currpage++;
+								&& request.getParameter("nextpage").equals("1"))
+							currpage++;
 						if (request.getParameter("prevpage") != null
-								&& request.getParameter("prevpage").equals("1")) currpage--;
+								&& request.getParameter("prevpage").equals("1"))
+							currpage--;
 
-						request.setAttribute("currpage", Integer.toString(currpage));
+						request.setAttribute("currpage", Integer
+								.toString(currpage));
 
 						// get row count
 						rowcount = agents.size();
 
 						// find out total pages
-						totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+						totalpages = (int) Math.ceil((double) rowcount
+								/ (double) rowsperpage);
 
 						if (totalpages <= currpage) {
 							currpage = 0;
 							request.setAttribute("currpage", "0");
 						}
 
-						if (path == 0) agents = AdminUtils.getAgentsByStation(station_id, sort, null,
-								rowsperpage, currpage);
-						else agents = AdminUtils.getAgents(group.getCompanycode_ID(), "", null, rowsperpage,
-								currpage);
+						if (path == 0)
+							agents = AdminUtils.getAgentsByStation(station_id,
+									sort, null, rowsperpage, currpage);
+						else
+							agents = AdminUtils.getAgents(group
+									.getCompanycode_ID(), "", null,
+									rowsperpage, currpage);
 
-						if (currpage + 1 == totalpages) request.setAttribute("end", "1");
+						if (currpage + 1 == totalpages)
+							request.setAttribute("end", "1");
 						if (totalpages > 1) {
 							ArrayList al = new ArrayList();
 							for (int i = 0; i < totalpages; i++) {
@@ -294,13 +343,18 @@ public final class ManageGroups extends Action {
 						request.setAttribute("agentList", agents);
 					} else {
 						int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
-								.parseInt(request.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-						if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
-						request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+								.parseInt(request.getParameter("rowsperpage"))
+								: TracingConstants.ROWS_PER_PAGE;
+						if (rowsperpage < 1)
+							rowsperpage = TracingConstants.ROWS_PER_PAGE;
+						request.setAttribute("rowsperpage", Integer
+								.toString(rowsperpage));
 
-						int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-								.getParameter("currpage")) : 0;
-						request.setAttribute("currpage", Integer.toString(currpage));
+						int currpage = request.getParameter("currpage") != null ? Integer
+								.parseInt(request.getParameter("currpage"))
+								: 0;
+						request.setAttribute("currpage", Integer
+								.toString(currpage));
 					}
 
 					dForm.set("station_id", station_id);
@@ -309,21 +363,23 @@ public final class ManageGroups extends Action {
 			return mapping.findForward(TracingConstants.EDIT_AGENT_GROUP);
 		}
 
-		if (request.getParameter("delete1") != null && !request.getParameter("delete1").equals("")) {
+		if (request.getParameter("delete1") != null
+				&& !request.getParameter("delete1").equals("")) {
 			String groupId = request.getParameter("groupID");
 
 			UserGroup grp = AdminUtils.getGroup(groupId);
 
-			//check if agents belong to a group.
+			// check if agents belong to a group.
 			ActionMessage error = null;
-			if (AdminUtils.getAgentsByGroup("" + grp.getUserGroup_ID(), "", 0, 0).size() > 0) {
+			if (AdminUtils.getAgentsByGroup("" + grp.getUserGroup_ID(), "", 0,
+					0).size() > 0) {
 				error = new ActionMessage("error.deleting.group.agents");
 			}
-			//else
-			//{
-			//	if (grp.getComponentPolicies().size() > 0)
-			//		error = new ActionMessage("error.deleting.group.permissions");
-			//}
+			// else
+			// {
+			// if (grp.getComponentPolicies().size() > 0)
+			// error = new ActionMessage("error.deleting.group.permissions");
+			// }
 
 			if (error != null) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -334,25 +390,32 @@ public final class ManageGroups extends Action {
 				/*
 				 * //delete the permissions first and then the group.
 				 * 
-				 * Set permissions = grp.getComponentPolicies(); if (permissions != null &&
-				 * permissions.size() > 0) { for (Iterator
-				 * i=permissions.iterator();i.hasNext();) { GroupComponentPolicy policy =
-				 * (GroupComponentPolicy)i.next(); HibernateUtils.delete(policy); } }
+				 * Set permissions = grp.getComponentPolicies(); if (permissions
+				 * != null && permissions.size() > 0) { for (Iterator
+				 * i=permissions.iterator();i.hasNext();) { GroupComponentPolicy
+				 * policy = (GroupComponentPolicy)i.next();
+				 * HibernateUtils.delete(policy); } }
 				 */
 				HibernateUtils.delete(grp);
 
-				if (user.getStation().getCompany().getVariable().getAudit_group() == 1) {
-					Audit_UserGroup audit_group = AuditGroupUtils.getAuditGroup(grp, user);
+				if (user.getStation().getCompany().getVariable()
+						.getAudit_group() == 1) {
+					Audit_UserGroup audit_group = AuditGroupUtils
+							.getAuditGroup(grp, user);
 					if (audit_group != null) {
 
 						audit_group.setReason_modified("Deleted");
 						HibernateUtils.saveNew(audit_group);
 
-						//check to see if there were component policies with this group
-						//Component policies need to recopied.
-						if (grp.getComponentPolicies() != null && grp.getComponentPolicies().size() > 0) {
-							for (Iterator i = grp.getComponentPolicies().iterator(); i.hasNext();) {
-								GroupComponentPolicy policy = (GroupComponentPolicy) i.next();
+						// check to see if there were component policies with
+						// this group
+						// Component policies need to recopied.
+						if (grp.getComponentPolicies() != null
+								&& grp.getComponentPolicies().size() > 0) {
+							for (Iterator i = grp.getComponentPolicies()
+									.iterator(); i.hasNext();) {
+								GroupComponentPolicy policy = (GroupComponentPolicy) i
+										.next();
 								Audit_GroupComponentPolicy plicy2 = new Audit_GroupComponentPolicy();
 								BeanUtils.copyProperties(plicy2, policy);
 								plicy2.setAudit_usergroup(audit_group);
@@ -377,20 +440,28 @@ public final class ManageGroups extends Action {
 				HibernateUtils.saveGroup(g, groupId, user);
 
 				UserGroup objRef;
-				if (groupId == null || groupId.length() < 1) objRef = g;
-				else objRef = AdminUtils.getGroup(groupId);
+				if (groupId == null || groupId.length() < 1)
+					objRef = g;
+				else
+					objRef = AdminUtils.getGroup(groupId);
 
-				if (user.getStation().getCompany().getVariable().getAudit_group() == 1) {
-					Audit_UserGroup audit_group = AuditGroupUtils.getAuditGroup(objRef, user);
+				if (user.getStation().getCompany().getVariable()
+						.getAudit_group() == 1) {
+					Audit_UserGroup audit_group = AuditGroupUtils
+							.getAuditGroup(objRef, user);
 					if (audit_group != null) {
 						HibernateUtils.saveNew(audit_group);
 					}
 
-					//check to see if there were component policies with this group
-					//Component policies need to recopied.
-					if (objRef.getComponentPolicies() != null && objRef.getComponentPolicies().size() > 0) {
-						for (Iterator i = objRef.getComponentPolicies().iterator(); i.hasNext();) {
-							GroupComponentPolicy policy = (GroupComponentPolicy) i.next();
+					// check to see if there were component policies with this
+					// group
+					// Component policies need to recopied.
+					if (objRef.getComponentPolicies() != null
+							&& objRef.getComponentPolicies().size() > 0) {
+						for (Iterator i = objRef.getComponentPolicies()
+								.iterator(); i.hasNext();) {
+							GroupComponentPolicy policy = (GroupComponentPolicy) i
+									.next();
 							Audit_GroupComponentPolicy plicy2 = new Audit_GroupComponentPolicy();
 							BeanUtils.copyProperties(plicy2, policy);
 							plicy2.setAudit_usergroup(audit_group);
@@ -408,16 +479,22 @@ public final class ManageGroups extends Action {
 		if (groupList != null && groupList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
+					.parseInt(request.getParameter("rowsperpage"))
+					: TracingConstants.ROWS_PER_PAGE;
+			if (rowsperpage < 1)
+				rowsperpage = TracingConstants.ROWS_PER_PAGE;
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 
-			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-					.getParameter("currpage")) : 0;
-			if (request.getParameter("nextpage") != null && request.getParameter("nextpage").equals("1")) currpage++;
-			if (request.getParameter("prevpage") != null && request.getParameter("prevpage").equals("1")) currpage--;
+			int currpage = request.getParameter("currpage") != null ? Integer
+					.parseInt(request.getParameter("currpage")) : 0;
+			if (request.getParameter("nextpage") != null
+					&& request.getParameter("nextpage").equals("1"))
+				currpage++;
+			if (request.getParameter("prevpage") != null
+					&& request.getParameter("prevpage").equals("1"))
+				currpage--;
 
 			request.setAttribute("currpage", Integer.toString(currpage));
 
@@ -425,16 +502,19 @@ public final class ManageGroups extends Action {
 			rowcount = groupList.size();
 
 			// find out total pages
-			totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+			totalpages = (int) Math.ceil((double) rowcount
+					/ (double) rowsperpage);
 
 			if (totalpages <= currpage) {
 				currpage = 0;
 				request.setAttribute("currpage", "0");
 			}
 
-			groupList = AdminUtils.getGroups(dForm, companyCode, rowsperpage, currpage);
+			groupList = AdminUtils.getGroups(dForm, companyCode, rowsperpage,
+					currpage);
 
-			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
+			if (currpage + 1 == totalpages)
+				request.setAttribute("end", "1");
 			if (totalpages > 1) {
 				ArrayList al = new ArrayList();
 				for (int i = 0; i < totalpages; i++) {
@@ -446,13 +526,15 @@ public final class ManageGroups extends Action {
 			/** ************ end of pagination ************* */
 			request.setAttribute("groupList", groupList);
 		} else {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
+					.parseInt(request.getParameter("rowsperpage"))
+					: TracingConstants.ROWS_PER_PAGE;
+			if (rowsperpage < 1)
+				rowsperpage = TracingConstants.ROWS_PER_PAGE;
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
-			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-					.getParameter("currpage")) : 0;
+			int currpage = request.getParameter("currpage") != null ? Integer
+					.parseInt(request.getParameter("currpage")) : 0;
 			request.setAttribute("currpage", Integer.toString(currpage));
 		}
 
