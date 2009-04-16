@@ -1421,18 +1421,21 @@ public class BagService {
 				// oDTO.setOHD_ID(theform.getOhd_id());
 				oDTO.setFoundtime(theform.getFoundTime());
 				oDTO.setFounddate(theform.getFoundDate());
-				if (foundStation == null || foundCompany == null) {
-					oDTO.setFoundAtStation(oDTO.getAgent().getStation());
-				} else {
-					// Set found and holding stations -- this is primarily for use when importing WT OHDs.
-					Station locatedAt = StationBMO.getStationByCode(foundStation, foundCompany);
-					oDTO.setFoundAtStation(locatedAt);
-					oDTO.setHoldingStation(locatedAt);
+				
+				if(oDTO.getFoundAtStation() == null || oDTO.getFoundAtStation().getStation_ID() == 0) {
+					if (foundStation == null || foundCompany == null) {
+						oDTO.setFoundAtStation(oDTO.getAgent().getStation());
+					} else {
+						Station locatedAt = StationBMO.getStationByCode(foundStation, foundCompany);
+						oDTO.setFoundAtStation(locatedAt);
+						oDTO.setHoldingStation(locatedAt);
+					}
 				}
 				
 				if (file != null) {
 					oDTO.setWtFile(file);
 				}
+				
 
 				if(oDTO.getHoldingStation() == null || oDTO.getHoldingStation().getStation_ID() == 0) {
 					oDTO.setHoldingStation(oDTO.getAgent().getStation());
