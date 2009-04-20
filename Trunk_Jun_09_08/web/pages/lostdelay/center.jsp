@@ -263,11 +263,17 @@
         <tr>
           <logic:notEqual name="incidentForm" property="incident_ID"
             value="">
+            <%
+            if(!PropertyBMO.isTrue(PropertyBMO.DISABLE_INC_REPORT)) {
+            %>
             <td><a href='javascript:window.print();'><img
               src="deployment/main/images/nettracer/icon_printrpt.gif"
               width="12" height="12"></a></td>
             <td><a href="javascript:window.print();"><bean:message
               key="print_report" /></a> &nbsp;</td>
+           <%
+            }
+           %>
             <td><a href='#'
               onclick="openReportWindow('searchIncident.do?receipt=1&toprint=<%=ReportingConstants.LOST_RECEIPT_RPT%>&incident=<bean:write name="incidentForm" property="incident_ID" />','LostReceipt',800,600);return false;"><img
               src="deployment/main/images/nettracer/icon_printrecpt.gif"

@@ -32,6 +32,7 @@ public class PropertyBMO {
 	public static final String WT_PRODUCTION_MODE = "wt.production.mode";
 	public static final String PROPERTY_WT_QUEUE_ATTEMPTS = "wt.queue.attempts";
 	public static final String PROPERTY_WT_AF_EXPIRE = "wt.af.expire";
+	public static final String DISABLE_INC_REPORT = "disable.inc.report";
 
 	/**
 	 * Retrieves the value of the property from the database.
