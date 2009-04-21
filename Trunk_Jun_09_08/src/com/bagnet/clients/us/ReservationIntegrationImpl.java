@@ -1,5 +1,6 @@
 package com.bagnet.clients.us;
 
+import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.bagnet.clients.defaul.DefaultFormFieldMapper;
+import com.bagnet.clients.defaul.DefaultFormFieldMapper.NetTracerField;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -34,6 +37,7 @@ public class ReservationIntegrationImpl extends
 	private final int HOURS_BACK_ITINERARY = 24;
 	private final int HOURS_FORWARD_ITINERARY = 12;
 	private String pnrContents;
+	private DefaultFormFieldMapper fMap = new DefaultFormFieldMapper();
 
 
 	private ArrayList<String> getBooking(HttpServletRequest request,
@@ -165,29 +169,29 @@ public class ReservationIntegrationImpl extends
 			
 				com.bagnet.nettracer.tracing.db.OHD_Passenger fPax = form.getPassenger(i);
 				
-				fPax.setFirstname(pax.getFirstName());
-				fPax.setMiddlename(pax.getMiddleName());
-				fPax.setLastname(pax.getLastName());
+				fPax.setFirstname(fMap.mapString(NetTracerField.PAX_FIRST_NAME, pax.getFirstName()));
+				fPax.setMiddlename(fMap.mapString(NetTracerField.PAX_MIDDLE_NAME, pax.getMiddleName()));
+				fPax.setLastname(fMap.mapString(NetTracerField.PAX_LAST_NAME, pax.getLastName()));
 				
 				com.bagnet.nettracer.tracing.db.OHD_Address fAddr = fPax.getAddress(0);
-				fAddr.setEmail(pax.getEmailAddress());
+				fAddr.setEmail(fMap.mapString(NetTracerField.OHD_ADDR_EMAIL, pax.getEmailAddress()));
 				
 				PassengerAddress[] pAddrs = pax.getPassengerAddresses().getPassengerAddressArray();
 				for (int j=0; j<pAddrs.length; ++j) {
 					PassengerAddress pAddr = pAddrs[j];
-					fAddr.setAddress1(pAddr.getAddressLine1());
-					fAddr.setAddress2(pAddr.getAddressLine2() + " " + pAddr.getAddressLine3());
-					fAddr.setCity(pAddr.getCity());
-					fAddr.setCountrycode_ID(pAddr.getCountryCode());
+					fAddr.setAddress1(fMap.mapString(NetTracerField.ADDRESS1, pAddr.getAddressLine1()));
+					fAddr.setAddress2(fMap.mapString(NetTracerField.ADDRESS2, pAddr.getAddressLine2() + " " + pAddr.getAddressLine3()));
+					fAddr.setCity(fMap.mapString(NetTracerField.ADDR_CITY, pAddr.getCity()));
+					fAddr.setCountrycode_ID(fMap.mapString(NetTracerField.ADDR_COUNTRY, pAddr.getCountryCode()));
 					if (!pAddr.getPhone().equals("000-")) {
-						fAddr.setHomephone(pAddr.getPhone());
+						fAddr.setHomephone(fMap.mapString(NetTracerField.OHD_ADDR_PHONE, pAddr.getPhone()));
 					}
 					
-					fAddr.setZip(pAddr.getPostalCode());
+					fAddr.setZip(fMap.mapString(NetTracerField.ADDR_ZIP, pAddr.getPostalCode()));
 					if (fAddr.getCountrycode_ID().equals(TracingConstants.US_COUNTRY_CODE)) {
-						fAddr.setState_ID(pAddr.getProvinceState());					
+						fAddr.setState_ID(fMap.mapString(NetTracerField.ADDR_STATE, pAddr.getProvinceState()));					
 					} else {
-						fAddr.setProvince(pAddr.getProvinceState());
+						fAddr.setProvince(fMap.mapString(NetTracerField.ADDR_PROVINCE, pAddr.getProvinceState()));
 					}				
 				}
 			}
@@ -290,9 +294,9 @@ public class ReservationIntegrationImpl extends
 			
 				com.bagnet.nettracer.tracing.db.Passenger fPax = form.getPassenger(i);
 				
-				fPax.setFirstname(pax.getFirstName());
-				fPax.setMiddlename(pax.getMiddleName());
-				fPax.setLastname(pax.getLastName());
+				fPax.setFirstname(fMap.mapString(NetTracerField.PAX_FIRST_NAME, pax.getFirstName()));
+				fPax.setMiddlename(fMap.mapString(NetTracerField.PAX_MIDDLE_NAME, pax.getMiddleName()));
+				fPax.setLastname(fMap.mapString(NetTracerField.PAX_LAST_NAME, pax.getLastName()));
 	
 				AirlineMembership fMem = new AirlineMembership();
 				fMem.setMembershipnum(pax.getFrequentFlierNumber());
@@ -303,23 +307,23 @@ public class ReservationIntegrationImpl extends
 				// pax.getSuffix();
 				
 				com.bagnet.nettracer.tracing.db.Address fAddr = fPax.getAddress(0);
-				fAddr.setEmail(pax.getEmailAddress());
+				fAddr.setEmail(fMap.mapString(NetTracerField.ADDR_EMAIL, pax.getEmailAddress()));
 				
 				PassengerAddress[] pAddrs = pax.getPassengerAddresses().getPassengerAddressArray();
 				for (int j=0; j<pAddrs.length; ++j) {
 					PassengerAddress pAddr = pAddrs[j];
-					fAddr.setAddress1(pAddr.getAddressLine1());
-					fAddr.setAddress2(pAddr.getAddressLine2() + " " + pAddr.getAddressLine3());
-					fAddr.setCity(pAddr.getCity());
-					fAddr.setCountrycode_ID(pAddr.getCountryCode());
+					fAddr.setAddress1(fMap.mapString(NetTracerField.ADDRESS1, pAddr.getAddressLine1()));
+					fAddr.setAddress2(fMap.mapString(NetTracerField.ADDRESS2, pAddr.getAddressLine2() + " " + pAddr.getAddressLine3()));
+					fAddr.setCity(fMap.mapString(NetTracerField.ADDR_CITY, pAddr.getCity()));
+					fAddr.setCountrycode_ID(fMap.mapString(NetTracerField.ADDR_COUNTRY, pAddr.getCountryCode()));
 					if (!pAddr.getPhone().trim().equals("000-")) {
-						fAddr.setHomephone(pAddr.getPhone());
+						fAddr.setHomephone(fMap.mapString(NetTracerField.ADDR_PHONE, pAddr.getPhone()));
 					}
-					fAddr.setZip(pAddr.getPostalCode());
+					fAddr.setZip(fMap.mapString(NetTracerField.ADDR_ZIP, pAddr.getPostalCode()));
 					if (fAddr.getCountrycode_ID().equals(TracingConstants.US_COUNTRY_CODE)) {
-						fAddr.setState_ID(pAddr.getProvinceState());					
+						fAddr.setState_ID(fMap.mapString(NetTracerField.ADDR_STATE, pAddr.getProvinceState()));					
 					} else {
-						fAddr.setProvince(pAddr.getProvinceState());
+						fAddr.setProvince(fMap.mapString(NetTracerField.ADDR_PROVINCE, pAddr.getProvinceState()));
 					}				
 				}
 				

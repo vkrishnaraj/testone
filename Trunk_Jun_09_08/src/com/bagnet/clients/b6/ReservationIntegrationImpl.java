@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.jetblue_framework_contracts_baggage.BagStatus;
 
+import com.bagnet.clients.defaul.DefaultFormFieldMapper;
+import com.bagnet.clients.defaul.DefaultFormFieldMapper.NetTracerField;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -33,8 +35,10 @@ import com.jetblue.schemas._2008._03.framework.baggage.ReservationDetail;
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
 		ReservationIntegration {
-	private Logger logger = Logger.getLogger(ReservationIntegrationImpl.class);
+	private static final Logger logger = Logger.getLogger(ReservationIntegrationImpl.class);
 	private ReservationDetail booking = null;
+	
+	private DefaultFormFieldMapper fMap = new DefaultFormFieldMapper();
 	
 	private final int HOURS_BACK_ITINERARY = 48;
 	private final int HOURS_FORWARD_ITINERARY = 24;
@@ -178,12 +182,13 @@ public class ReservationIntegrationImpl extends
 		String otherPhone = null;
 		if (booking.getContactPhoneNumbers().getPhoneArray() != null) {
 			for (Phone phone: booking.getContactPhoneNumbers().getPhoneArray()) {
+				String newNumber = fMap.mapString(NetTracerField.OHD_ADDR_PHONE, phone.getNumber());
 				if (phone.getPhoneType().equals("HOME")) {
-					homePhone = phone.getNumber();
+					homePhone = newNumber;
 				} else if (phone.getPhoneType().equals("FAX")) {
-					faxPhone = phone.getNumber();
+					faxPhone = newNumber;
 				} else if (phone.getPhoneType().equals("OTHER")) {
-					otherPhone = phone.getNumber();
+					otherPhone = newNumber;
 				}
 				
 			}
@@ -203,9 +208,9 @@ public class ReservationIntegrationImpl extends
 				for (PassengerDetail pax: paxArray) {
 					com.bagnet.nettracer.tracing.db.OHD_Passenger fPax = form.getPassenger(paxNumber);
 					
-					fPax.setFirstname(pax.getPassengerName().getFirstName());
-					fPax.setMiddlename(pax.getPassengerName().getMiddleName());
-					fPax.setLastname(pax.getPassengerName().getLastName());
+					fPax.setFirstname(fMap.mapString(NetTracerField.PAX_FIRST_NAME, pax.getPassengerName().getFirstName()));
+					fPax.setMiddlename(fMap.mapString(NetTracerField.PAX_MIDDLE_NAME, pax.getPassengerName().getMiddleName()));
+					fPax.setLastname(fMap.mapString(NetTracerField.PAX_LAST_NAME, pax.getPassengerName().getLastName()));
 					
 					String fullName = pax.getPassengerName().getFirstName() + " " + pax.getPassengerName().getLastName();
 					if (fullName.equalsIgnoreCase(contactNameString) && address != null) {
@@ -213,10 +218,10 @@ public class ReservationIntegrationImpl extends
 						com.bagnet.nettracer.tracing.db.OHD_Address fAddr = fPax.getAddress(0);
 						
 						if (email != null) {
-							fAddr.setEmail(email);
+							fAddr.setEmail(fMap.mapString(NetTracerField.OHD_ADDR_EMAIL, email));
 						}
 						
-						fAddr.setAddress1(address.getLine1());
+						fAddr.setAddress1(fMap.mapString(NetTracerField.ADDRESS1, address.getLine1()));
 
 						String addressLine2 = "";
 						if (address.getLine2() != null) {
@@ -226,16 +231,17 @@ public class ReservationIntegrationImpl extends
 						if (address.getLine3() != null) {
 							addressLine2 += " " + address.getLine3();
 						}
-						fAddr.setAddress2(addressLine2.trim());
-						fAddr.setCity(address.getCity());
-						fAddr.setZip(address.getPostalCode());
-						fAddr.setCountrycode_ID(address.getCountry());
+						fAddr.setAddress2(fMap.mapString(NetTracerField.ADDRESS2, addressLine2.trim()));
+						fAddr.setCity(fMap.mapString(NetTracerField.ADDR_CITY, address.getCity()));
+						fAddr.setZip(fMap.mapString(NetTracerField.ADDR_ZIP, address.getPostalCode()));
+						fAddr.setCountrycode_ID(fMap.mapString(NetTracerField.ADDR_COUNTRY, address.getCountry()));
 						if (address.getCountry() == null || address.getCountry().equals("US")) {
-							fAddr.setState_ID(address.getStateProvince());
+							fAddr.setState_ID(fMap.mapString(NetTracerField.ADDR_STATE, address.getStateProvince()));
 						} else {
-							fAddr.setProvince(address.getStateProvince());
+							fAddr.setProvince(fMap.mapString(NetTracerField.ADDR_PROVINCE, address.getStateProvince()));
 						}
 						
+						//phone fields already truncated above
 						if (homePhone != null) {
 							fAddr.setHomephone(homePhone);
 						}
@@ -350,12 +356,13 @@ public class ReservationIntegrationImpl extends
 		String otherPhone = null;
 		if (booking.getContactPhoneNumbers().getPhoneArray() != null) {
 			for (Phone phone: booking.getContactPhoneNumbers().getPhoneArray()) {
+				String newNumber = fMap.mapString(NetTracerField.ADDR_PHONE, phone.getNumber());
 				if (phone.getPhoneType().equals("HOME")) {
-					homePhone = phone.getNumber();
+					homePhone = newNumber;
 				} else if (phone.getPhoneType().equals("FAX")) {
-					faxPhone = phone.getNumber();
+					faxPhone = newNumber;
 				} else if (phone.getPhoneType().equals("OTHER")) {
-					otherPhone = phone.getNumber();
+					otherPhone = newNumber;
 				}
 				
 			}
@@ -378,9 +385,9 @@ public class ReservationIntegrationImpl extends
 				for (PassengerDetail pax: paxArray) {
 					com.bagnet.nettracer.tracing.db.Passenger fPax = form.getPassenger(paxNumber);
 					
-					fPax.setFirstname(pax.getPassengerName().getFirstName());
-					fPax.setMiddlename(pax.getPassengerName().getMiddleName());
-					fPax.setLastname(pax.getPassengerName().getLastName());
+					fPax.setFirstname(fMap.mapString(NetTracerField.PAX_FIRST_NAME, pax.getPassengerName().getFirstName()));
+					fPax.setMiddlename(fMap.mapString(NetTracerField.PAX_MIDDLE_NAME, pax.getPassengerName().getMiddleName()));
+					fPax.setLastname(fMap.mapString(NetTracerField.PAX_LAST_NAME, pax.getPassengerName().getLastName()));
 					
 					String fullName = pax.getPassengerName().getFirstName() + " " + pax.getPassengerName().getLastName();
 					if (fullName.equalsIgnoreCase(contactNameString) && address != null) {
@@ -388,10 +395,10 @@ public class ReservationIntegrationImpl extends
 						com.bagnet.nettracer.tracing.db.Address fAddr = fPax.getAddress(0);
 						
 						if (email != null) {
-							fAddr.setEmail(email);
+							fAddr.setEmail(fMap.mapString(NetTracerField.ADDR_EMAIL, email));
 						}
 						
-						fAddr.setAddress1(address.getLine1());
+						fAddr.setAddress1(fMap.mapString(NetTracerField.ADDRESS1, address.getLine1()));
 
 						String addressLine2 = "";
 						if (address.getLine2() != null) {
@@ -401,16 +408,17 @@ public class ReservationIntegrationImpl extends
 						if (address.getLine3() != null) {
 							addressLine2 += " " + address.getLine3();
 						}
-						fAddr.setAddress2(addressLine2.trim());
-						fAddr.setCity(address.getCity());
-						fAddr.setZip(address.getPostalCode());
-						fAddr.setCountrycode_ID(address.getCountry());
+						fAddr.setAddress2(fMap.mapString(NetTracerField.ADDRESS2, addressLine2.trim()));
+						fAddr.setCity(fMap.mapString(NetTracerField.ADDR_CITY, address.getCity()));
+						fAddr.setZip(fMap.mapString(NetTracerField.ADDR_ZIP, address.getPostalCode()));
+						fAddr.setCountrycode_ID(fMap.mapString(NetTracerField.ADDR_COUNTRY, address.getCountry()));
 						if (address.getCountry() == null || address.getCountry().equals("US")) {
-							fAddr.setState_ID(address.getStateProvince());
+							fAddr.setState_ID(fMap.mapString(NetTracerField.ADDR_STATE, address.getStateProvince()));
 						} else {
-							fAddr.setProvince(address.getStateProvince());
+							fAddr.setProvince(fMap.mapString(NetTracerField.ADDR_PROVINCE, address.getStateProvince()));
 						}
 						
+						//phone numbers already mapped above
 						if (homePhone != null) {
 							fAddr.setHomephone(homePhone);
 						}
