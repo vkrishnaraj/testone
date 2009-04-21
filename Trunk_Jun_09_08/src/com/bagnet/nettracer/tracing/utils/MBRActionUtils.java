@@ -271,6 +271,11 @@ public class MBRActionUtils {
 	}
 	
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
+		String incident = request.getParameter("incident_ID");
+		if(incident != null && incident.length() > 0 && request.getParameter("close") != null) {
+			BagService bs = new BagService();
+			bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY);
+		}
 
 		List faultstationlist = null;
 		List faultCompanyList = null;

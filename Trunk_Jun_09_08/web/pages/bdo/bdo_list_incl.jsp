@@ -86,7 +86,7 @@
                   <bean:message key="no.outstanding.items" /><p />
                   
                   <input type="button" value="<bean:message key="button.close_file" />" id="button" 
-                  onclick="window.location = 'lostDelay.do?incident=<bean:write name="BDOForm" property="incident_ID"/>&close=1'
+                  onclick="window.location = 'lostDelay.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>&close=1'
                   "/>      
                 </c:if>
                 <c:if test="${!empty integrationResponse}">
