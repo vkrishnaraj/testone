@@ -35,7 +35,9 @@ public class WorldTracerAccountBMO extends HibernateDaoSupport {
 			logger.error("unable to get a account info for id " + id, e);
 			return null;
 		} finally {
-			sess.close();
+			if(sess != null) {
+				sess.close();
+			}
 		}
 	}
 }
