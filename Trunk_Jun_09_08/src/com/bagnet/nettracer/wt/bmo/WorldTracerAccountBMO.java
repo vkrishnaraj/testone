@@ -2,6 +2,7 @@ package com.bagnet.nettracer.wt.bmo;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -13,6 +14,7 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class WorldTracerAccountBMO extends HibernateDaoSupport {
 	private static String INSTANCE_NAME = TracerProperties.getInstanceLabel();
+	private static final Logger logger = Logger.getLogger(WorldTracerAccountBMO.class);
 	
 	@Transactional(readOnly=true)
 	public List<WorldTracerAccount> getAccountNames(String companyCode) {
@@ -24,7 +26,16 @@ public class WorldTracerAccountBMO extends HibernateDaoSupport {
 	}
 	
 	public static WorldTracerAccount getAccount(long id) {
+		
 		Session sess = HibernateWrapper.getSession().openSession();
-		return (WorldTracerAccount) sess.load(WorldTracerAccount.class, id);
+		try {
+			return (WorldTracerAccount) sess.load(WorldTracerAccount.class, id);
+		}
+		catch (Exception e) {
+			logger.error("unable to get a account info for id " + id, e);
+			return null;
+		} finally {
+			sess.close();
+		}
 	}
 }
