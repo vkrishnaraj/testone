@@ -48,7 +48,6 @@ import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
-import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -393,12 +392,6 @@ public class TracerUtils {
 						.getAttribute("airportlist") : getAirportList(locale,
 						user.getCompanycode_ID()));
 
-		// set ohd_itemtypes (photoalum,etc....)
-		/*
-		 * session.setAttribute("itemtypelist", session
-		 * .getAttribute("itemtypelist") != null ? session
-		 * .getAttribute("itemtypelist") : getItemTypeList(locale));
-		 */
 
 		// set status list for mbr reports
 		session.setAttribute("statuslist",
@@ -446,14 +439,6 @@ public class TracerUtils {
 				.getAttribute("prioritylist") != null ? session
 				.getAttribute("prioritylist") : getPriorityList(locale));
 
-		// set expense location list
-		/*
-		 * session.setAttribute("expenselocationlist",
-		 * session.getAttribute("expenselocationlist") != null ?
-		 * session.getAttribute("expenselocationlist") : retrieveRecords(locale,
-		 * "com.bagnet.nettracer.tracing.db.ExpenseLocation", "expenselocation",
-		 * "locale", "description"));
-		 */
 	}
 
 	public static void populateCompanyLists(HttpSession session) {
