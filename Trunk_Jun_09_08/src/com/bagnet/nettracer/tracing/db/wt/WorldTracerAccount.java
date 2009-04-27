@@ -11,7 +11,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Proxy;
+
 @Entity
+@Proxy(lazy = false)
 @Table(name = "world_tracer_account")
 public class WorldTracerAccount implements Serializable {
 
