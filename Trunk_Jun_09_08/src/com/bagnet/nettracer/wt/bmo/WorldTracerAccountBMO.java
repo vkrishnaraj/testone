@@ -34,7 +34,7 @@ public class WorldTracerAccountBMO extends HibernateDaoSupport {
 	@Transactional(readOnly = true)
 	public int getNumAccounts(String companyCode) {
 		Session sess = getSession(false);
-		Query q = sess.createQuery(FIND_BY_COMPANY_INSTANCE);
+		Query q = sess.createQuery(COUNT_BY_COMPANY_INSTANCE);
 		q.setString("companyCode", companyCode);
 		q.setString("instanceName", INSTANCE_NAME);
 		return (Integer)q.uniqueResult();
