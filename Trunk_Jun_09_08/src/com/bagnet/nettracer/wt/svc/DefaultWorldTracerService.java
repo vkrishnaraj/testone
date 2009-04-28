@@ -1203,7 +1203,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		return wtConnector;
 	}
 
-	@Override
 	@WorldTracerTx(type = TxType.AF_DETAIL)
 	public String getActionFileDetail(String companyCode,
 			String wtStation, ActionFileType afType, int day, int itemNum,

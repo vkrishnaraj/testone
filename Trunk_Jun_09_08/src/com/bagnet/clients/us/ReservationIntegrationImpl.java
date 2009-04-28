@@ -1,6 +1,5 @@
 package com.bagnet.clients.us;
 
-import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.Date;
 

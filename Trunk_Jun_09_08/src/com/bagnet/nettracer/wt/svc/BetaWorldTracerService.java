@@ -1378,15 +1378,12 @@ public class BetaWorldTracerService implements WorldTracerService {
 		return afStation;
 	}
 
-	
-	@Override
 	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,
 			String wtStation, Agent user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String getActionFileDetail(String companyCode, String wtStation,
 			ActionFileType afType, int day, int itemNum, Agent user)
 			throws WorldTracerException {
@@ -1394,7 +1391,6 @@ public class BetaWorldTracerService implements WorldTracerService {
 		return null;
 	}
 
-	@Override
 	public List<Worldtracer_Actionfiles> getActionFileSummary(
 			String companyCode, String wtStation, ActionFileType afType,
 			int day, Agent user) throws WorldTracerException {

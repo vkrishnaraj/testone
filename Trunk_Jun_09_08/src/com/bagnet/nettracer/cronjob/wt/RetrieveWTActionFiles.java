@@ -128,7 +128,6 @@ public class RetrieveWTActionFiles implements ApplicationContextAware {
 		doneSignal.await();
 	}
 
-	@Override
 	public void setApplicationContext(ApplicationContext ctx)
 			throws BeansException {
 		this.applicationContext = ctx;
