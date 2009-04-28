@@ -37,6 +37,6 @@ public class WorldTracerAccountBMO extends HibernateDaoSupport {
 		Query q = sess.createQuery(COUNT_BY_COMPANY_INSTANCE);
 		q.setString("companyCode", companyCode);
 		q.setString("instanceName", INSTANCE_NAME);
-		return (Integer)q.uniqueResult();
+		return ((Long)q.uniqueResult()).intValue();
 	}
 }
