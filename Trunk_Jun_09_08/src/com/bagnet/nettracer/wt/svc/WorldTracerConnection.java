@@ -34,6 +34,7 @@ public class WorldTracerConnection extends HttpClient {
 	private WorldTracerAccount account = null;
 	private Calendar lastUsed = new GregorianCalendar();
 	private boolean validConnection = false;
+	private WorldTracerAccountBMO wtaBmo = null;
 
 	private static final int DEFAULT_MILLISECOND_WAIT = 2000;
 
@@ -83,20 +84,21 @@ public class WorldTracerConnection extends HttpClient {
 	}
 
 	public WorldTracerConnection(WorldTracerAccount account, String host,
-			String mode) {
+			String mode, WorldTracerAccountBMO wtaBmo) {
 		super();
 		this.host = host;
 		this.mode = mode;
 		this.account = account;
 		org.apache.commons.httpclient.protocol.ProtocolSocketFactory ssl = new SSLProtocolSocketFactory();
 		Protocol https = new Protocol("https", ssl, 443);
+		this.wtaBmo = wtaBmo;
 		this.getHostConfiguration().setHost(this.host, 443, https);
 		logger.debug("Creating connection to WorldTracer for: "
 				+ account.getUsername());
 	}
 
 	public boolean login() {
-		WorldTracerAccount a = WorldTracerAccountBMO.getAccount(account.getId());
+		WorldTracerAccount a = wtaBmo.getAccount(account.getId());
 		if (a != null && !account.getPassword().equals(a.getPassword())) {
 			account = a;
 		}
@@ -223,6 +225,10 @@ public class WorldTracerConnection extends HttpClient {
 
 	public WorldTracerAccount getAccount() {
 		return account;
+	}
+
+	public void setWtaBmo(WorldTracerAccountBMO wtaBmo) {
+		this.wtaBmo = wtaBmo;
 	}
 	
 }

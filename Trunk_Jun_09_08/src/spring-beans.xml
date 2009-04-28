@@ -10,9 +10,15 @@
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 		
-	<bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="resource:/tracer.properties" />
+		<property name="properties">
+			<props>
+				<prop key="wt.host">wtrweb.worldtracer.aero</prop>
+				<prop key="training.mode">TRAINING</prop>
+				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
+			</props>
+		</property>
 	</bean>
 
 	<bean id="scannerDataSource"
@@ -60,10 +66,22 @@
 	</bean>
 
 	<!-- services used by the workers-->
-		<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
-		<constructor-arg ref="worldTracerAccountBmo" />
+	
+	
+	<bean id="wtConnectionFactory" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionFactory">
 		<constructor-arg value="${wt.company.code}" />
-		<constructor-arg value="${training.mode}" />
+		<constructor-arg value="${wt.host}" />
+		<constructor-arg ref="worldTracerAccountBmo" />
+		<property name="mode" value="${training.mode}" />
+	</bean>
+	
+	<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
+		<constructor-arg value="${wt.company.code}" />
+		<constructor-arg ref="worldTracerAccountBmo" />
+		<property name="factory" ref="wtConnectionFactory" />
+		<property name="lifo" value="true" />
+		<property name="maxWait" value="15000" />
+		<property name="whenExhaustedAction" value="WHEN_EXHAUSTED_BLOCK" />
 	</bean>
 	
 	<bean id="wtRuleMap" class="${wt.rules}"/>

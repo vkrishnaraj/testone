@@ -15,6 +15,13 @@
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="file:../config/cron.properties" />
+		<property name="properties">
+			<props>
+				<prop key="wt.host">wtrweb.worldtracer.aero</prop>
+				<prop key="training.mode">TRAINING</prop>
+				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
+			</props>
+		</property>
 	</bean>
 
 	<!-- Hibernate config -->
@@ -53,14 +60,22 @@
 
 	<!-- services used by the workers-->
 
-	
-
 	<bean id="wtRuleMap" class="${wt.rules}"/>
 	
-	<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
-		<constructor-arg  ref="worldTracerAccountBmo"/>
+	<bean id="wtConnectionFactory" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionFactory">
 		<constructor-arg value="${company.code}" />
-		<constructor-arg value="${training.mode}" />
+		<constructor-arg value="${wt.host}" />
+		<constructor-arg ref="worldTracerAccountBmo" />
+		<property name="mode" value="${training.mode}" />
+	</bean>
+	
+	<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
+		<constructor-arg value="${company.code}" />
+		<constructor-arg ref="worldTracerAccountBmo" />
+		<property name="factory" ref="wtConnectionFactory" />
+		<property name="lifo" value="true" />
+		<property name="maxWait" value="15000" />
+		<property name="whenExhaustedAction" value="WHEN_EXHAUSTED_BLOCK" />
 	</bean>
 	
 	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector" scope="prototype">
@@ -84,12 +99,6 @@
 		<property name="wafBmo" ref="wtaf-bmo" />
 		<property name="wtService" ref="wtService" />
 	</bean>
-	
-	<bean id="wtActionFiles" class="com.bagnet.nettracer.cronjob.wt.RetrieveWTActionFiles">
-		<constructor-arg value="${company.code}" />
-		<constructor-arg value="${cron.instance.label}" />
-		<property name="wafBmo" ref="wtaf-bmo" />
-	</bean>
 
 	<bean id="moveToLz" class="com.bagnet.nettracer.cronjob.lz.MoveToLZThread">
 		<constructor-arg value="${lz.move.type}" />
@@ -105,7 +114,8 @@
 		<property name="qbmo" ref="wtq-bmo" />
 	</bean>
 
-	<!-- passive tracer just runs constantly so just creating this bean will kick it off -->
+	<!-- passive tracer just runs constantly so just creating this bean will kick it off
+-->
 		
 	<bean id="newPassiveTracer" class="com.bagnet.nettracer.cronjob.tracing.PassiveTracingWrapper" lazy-init="false">
 		<constructor-arg value="${company.code}" />
@@ -137,14 +147,7 @@
 		<property name="targetMethod" value="processWtQueue" />
 		<property name="concurrent" value="false" />
 	</bean>
-
-	<bean id="wtActionFileJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetBeanName" value="wtActionFiles" />
-		<property name="targetMethod" value="manageActionFiles" />
-		<property name="concurrent" value="false" />
-	</bean>
-
-
+	
 	<bean id="moveToLzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="moveToLz" />
 		<property name="targetMethod" value="moveToLz" />
@@ -194,17 +197,10 @@
 		<property name="startDelay" value="30000"/>
 	</bean>
 
-	<bean id="cronRetrieveAfTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="wtActionFileJob" />
-		<property name="cronExpression" value="${wtaf.cron}" />
-		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_DO_NOTHING" />
-	</bean>
-
 	<bean id="cronMoveToLzTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="moveToLzJob" />
 		<property name="cronExpression" value="${lz.move.cron}" />
 	</bean>
-	
 		
 	<bean id="BillingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="SendMonthlyBillingReportJob" />
