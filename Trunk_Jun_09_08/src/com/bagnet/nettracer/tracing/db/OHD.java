@@ -71,9 +71,8 @@ public class OHD implements Serializable {
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
 
-	
-	private int faultStation;
-	private int loss_code;
+	private int faultStation = 0;
+	private int loss_code = 0;
 	
 
 	public String getDisplaydate() {
@@ -759,7 +758,7 @@ public class OHD implements Serializable {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return Returns the faultStation.
 	 * @hibernate.property type="integer"

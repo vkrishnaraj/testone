@@ -34,6 +34,10 @@ public class PropertyBMO {
 	public static final String PROPERTY_WT_AF_EXPIRE = "wt.af.expire";
 	public static final String DISABLE_INC_REPORT = "disable.inc.report";
 
+	public static final String PROPERTY_LIMIT_OHD_STATIONS = "losscode.ohd.limitstations";
+
+	public static final String PROPERTY_LIMIT_OHD_ADDSTATIONS = "losscode.ohd.addstations";
+
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 

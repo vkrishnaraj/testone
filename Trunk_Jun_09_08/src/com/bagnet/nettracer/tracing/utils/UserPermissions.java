@@ -232,7 +232,6 @@ public class UserPermissions {
 				}
 			}
 		}
-
 		return ret;
 	}
 
@@ -296,6 +295,9 @@ public class UserPermissions {
 				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_ALL;
 				limitedPermission = (PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_MISSING_STATIONS).equals("1"));
 				break;
+			case TracingConstants.OHD:
+				componentNameAll = TracingConstants.SYSTEM_COMPONENT_NAME_OHD_UPDATE_ALL;
+				limitedPermission = PropertyBMO.isTrue(PropertyBMO.PROPERTY_LIMIT_OHD_STATIONS);
 		}
 		
 		// If the user has full permission, allow it to be edited.
@@ -354,6 +356,8 @@ public class UserPermissions {
 		
 		return stationList;
 	}
+	
+	
 	
 	public static boolean hasIncidentSavePermission(Agent a, String incident_ID) {
 		IncidentBMO ibmo = new IncidentBMO();

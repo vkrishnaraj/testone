@@ -1485,6 +1485,8 @@ public class BagService {
 					oDTO.setControlLog(new LinkedHashSet(theform.getControlList()));
 					oDTO.setItinerary(new LinkedHashSet(theform.getItinerarylist()));
 					oDTO.setPassengers(new LinkedHashSet(theform.getPassengerList()));
+					oDTO.setFaultstation_ID(theform.getFaultstation_ID());
+					oDTO.setLoss_code(theform.getLoss_code());
 
 					// set the ohd objects into each hibernate object
 					for(Iterator i = oDTO.getItems().iterator(); i.hasNext();) {

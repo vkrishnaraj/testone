@@ -103,6 +103,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES = "Update Loss Codes";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_DAMAGE_LOSS_CODES = "Update Damage Loss Codes";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES = "Update Missing Loss Codes";
+	public final static String SYSTEM_COMPONENT_NAME_UPDATE_OHD_LOSS_CODES = "Update OHD Loss Codes";
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_REMARKS = "Update Remarks";
 	public final static String SYSTEM_COMPONENT_NAME_REOPEN_LOSTDELAY = "Reopen Lost Delayed";
 	public final static String SYSTEM_COMPONENT_NAME_REOPEN_DAMAGED_BAG = "Reopen Damaged";
@@ -204,6 +205,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_LOST_DELAY_REMARK = "Remark Update LostDelay";
 	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_REMARK = "Remark Update Missing";
 	public final static String SYSTEM_COMPONENT_NAME_DAMAGED_BAG_REMARK = "Remark Update Damaged";
+	public static final String SYSTEM_COMPONENT_NAME_OHD_UPDATE_ALL = "Update OHD";
 	
 	
 	// itinerary types
@@ -678,9 +680,6 @@ public class TracingConstants {
 	public static final Object WT_PENDING_FOH = "WT_PENDING_FOH";
 	public static final String INVALID_TOKEN = "invalidtoken";
 	public static final String MANUAL_QUEUE = "manualQueue";
-
-
-
 	
 	
 	public static String getDBDateFormat(Properties properties) {

@@ -12,7 +12,10 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils" %>
 <%@ page import="java.util.List" %>
 <!-- Calendar includes -->
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+
+<%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.db.audit.Audit_OHD"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -553,6 +556,39 @@ function updatePagination() {
                   </logic:iterate>
                   &nbsp;
                 </td>
+              </logic:iterate>
+            </tr>
+            <tr>
+            	<td>
+                <bean:message key="header.ohd.fault" />
+              </td>
+                            <logic:iterate id="audit_ohd" name="compareList" scope="request">
+                            <td>
+                           
+                <bean:message key="colname.faultstation" />
+                    :
+                     <%
+                            if(((Audit_OHD)audit_ohd).getFaultstation_ID() != 0) {  	
+                     %>
+                    <%= StationBMO.getStation(((Audit_OHD)audit_ohd).getFaultstation_ID()).getStationcode() %>
+                    <% } 
+                        else {
+                        	%>
+					<bean:message key="none"/>
+					<% } %>
+                    <br />
+                    <bean:message key="colname.closereport.losscode" />
+                    :
+                    <%
+                            if(((Audit_OHD)audit_ohd).getLoss_code() != 0) {  	
+                     %>
+                    	<%= LossCodeBMO.getCode(((Audit_OHD)audit_ohd).getLoss_code()).getDescription() %>
+                      <% } 
+                        else {
+                        	%>
+                        	<bean:message key="none"/>
+					<% } %>
+                    </td>
               </logic:iterate>
             </tr>
             <tr>

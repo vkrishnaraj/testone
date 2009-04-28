@@ -83,6 +83,9 @@ public final class OnHandForm extends ValidatorForm {
 
 	private WorldTracerFile wtFile;
 	
+	private int faultStation = 0;
+	private int lossCode = 0;
+	
 	/**
 	 * @return Returns the ohd_type.
 	 */
@@ -932,4 +935,22 @@ public final class OnHandForm extends ValidatorForm {
 	public void setMatched_incident(String matched_incident) {
 		this.matched_incident = matched_incident;
 	}
+
+	public int getFaultstation_ID() {
+		return faultStation;
+	}
+
+	public void setFaultstation_ID(int faultStation) {
+		this.faultStation = faultStation;
+	}
+
+	public int getLoss_code() {
+		return lossCode;
+	}
+
+	public void setLoss_code(int lossCode) {
+		this.lossCode = lossCode;
+	}
+	
+	
 }

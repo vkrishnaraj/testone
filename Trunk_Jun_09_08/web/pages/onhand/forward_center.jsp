@@ -238,7 +238,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 			      <html:option value="0">
 			        <bean:message key="select.please_select" />
 			      </html:option>
-				  <html:options collection="losscodes" property="loss_code" labelProperty="combination"/>
+				  <html:options collection="losscodes" property="code_id" labelProperty="combination"/>
 			    </html:select>
 			  </td>
 			</tr>

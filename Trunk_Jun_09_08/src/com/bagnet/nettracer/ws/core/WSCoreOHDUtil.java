@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.integrations.events.BeornDTO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -23,6 +24,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Inventory;
@@ -215,7 +217,8 @@ public class WSCoreOHDUtil {
 			so.setFaultStation(fs.getStationcode());
 		}
 		
-		so.setLossCode(oDTO.getLoss_code());
+		Company_specific_irregularity_code code = LossCodeBMO.getCode(oDTO.getLoss_code());
+		so.setLossCode(code != null ? code.getLoss_code() : 0);
 		
 		so.setFounddatetime(tmpCal);
 		so.setBagarrivedate(WSCoreUtil.formatDatetoString(oDTO.getBagarrivedate(),null));

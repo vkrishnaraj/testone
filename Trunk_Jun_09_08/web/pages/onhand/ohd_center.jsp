@@ -999,6 +999,34 @@ function gotoHistoricalReport() {
     <%
        }
     %>
+    <h1 class="green"><bean:message key="header.ohd.fault" />
+    <a href="#"
+      onclick="openHelp('pages/WebHelp/nettracerhelp.htm#on-hand_reports');return false;"><img
+      src="deployment/main/images/nettracer/button_help.gif" width="20"
+      height="21" border="0"></a>
+    </h1>
+    <% 
+    if (a.getCompanycode_ID().equals(onHandForm.getHolding_company()) && (UserPermissions.hasPermission(
+            TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_OHD_LOSS_CODES, a) || onHandForm.getOhd_id() == null || onHandForm.getOhd_id().trim().length() < 1
+            || (onHandForm.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_CLOSED && onHandForm.getReadonly() != 1))) { %>
+    	<jsp:include page="/pages/includes/ohd_fault_incl.jsp">
+    		<jsp:param value="form2_ohd" name="tableClass"/>
+    	</jsp:include>
+    <%
+    }
+    else {
+    %>
+    	<jsp:include page="/pages/includes/ohd_fault_incl_ro.jsp" >
+    		<jsp:param value="form2_ohd" name="tableClass"/>
+    	</jsp:include>
+    <%
+    }
+    %>
+    <br />
+    <br />
+    &nbsp;&nbsp;&uarr; <a href="#"><bean:message key="link.to_top" /></a>
+    <br />
+    <br />
     <h1 class="green"><bean:message key="header.remarks" /> <a
       href="#"
       onclick="openHelp('pages/WebHelp/nettracerhelp.htm#on-hand_reports/work_with_remarks_(oh).htm#add remarks');return false;"><img

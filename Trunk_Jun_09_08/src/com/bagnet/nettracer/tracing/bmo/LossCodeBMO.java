@@ -10,6 +10,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
@@ -29,6 +30,9 @@ public class LossCodeBMO {
 	public static Company_specific_irregularity_code getLossCode(int loss_code, int report_type, String locale, Company company) {
 		Session sess = null;
 		try {
+			if(report_type == TracingConstants.OHD) {
+				report_type = TracingConstants.LOST_DELAY;
+			}
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Expression.eq("loss_code", new Integer(loss_code))).add(
 					Expression.eq("report_type", new Integer(report_type))).add(Expression.eq("locale", locale)).add(Expression.eq("company", company));
@@ -176,7 +180,7 @@ public class LossCodeBMO {
 	 * @param locale
 	 * @return list of codes null in case of exception
 	 */
-	public static List getLocaleCompanyCodes(String companyCode, int report_type, String locale, boolean limit, Agent user) {
+	public static List<Company_specific_irregularity_code> getLocaleCompanyCodes(String companyCode, int report_type, String locale, boolean limit, Agent user) {
 		Session sess = null;
 		boolean limitQuery = false;
 		
@@ -190,7 +194,12 @@ public class LossCodeBMO {
 			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class);
 			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
 			if (report_type > 0) {
-				cri.add(Expression.eq("report_type", new Integer(report_type)));
+				if(report_type == TracingConstants.OHD){
+					cri.add(Expression.eq("report_type", new Integer(TracingConstants.LOST_DELAY)));
+				}
+				else {
+					cri.add(Expression.eq("report_type", new Integer(report_type)));
+				}
 			}
 			
 			if (limitQuery) {
@@ -199,6 +208,25 @@ public class LossCodeBMO {
 			cri.add(Expression.eq("locale", locale));
 			cri.addOrder(Order.asc("loss_code"));
 			return cri.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+
+	public static Company_specific_irregularity_code getCode(int code_id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			return (Company_specific_irregularity_code) sess.get(Company_specific_irregularity_code.class, code_id);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;

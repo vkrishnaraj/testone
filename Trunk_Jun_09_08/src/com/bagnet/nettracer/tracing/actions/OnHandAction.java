@@ -31,9 +31,18 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
+import sun.management.resources.agent;
+
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
@@ -43,6 +52,7 @@ import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.OHD_Photo;
 import com.bagnet.nettracer.tracing.db.Remark;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
@@ -72,6 +82,9 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for
@@ -80,7 +93,8 @@ import com.bagnet.nettracer.wt.svc.WorldTracerService;
  * @author Ankur Gupta
  */
 public class OnHandAction extends CheckedAction {
-    private static Logger logger = Logger.getLogger(OnHandAction.class);
+    private static final String FAULT_STATION_LIST = "faultStationList";
+	private static Logger logger = Logger.getLogger(OnHandAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -134,6 +148,8 @@ public class OnHandAction extends CheckedAction {
 		request.setAttribute("oStatusList", oStatusList);
 		request.setAttribute("onhand", "1");
 
+		request.setAttribute(FAULT_STATION_LIST, createFaultStationList(theform, user));
+		request.setAttribute("lossCodes", createLossCodeList(theform, user));
 
 		// add new remark box -- set new remark with current gmt time
 		if(request.getParameter("addremark") != null) {
@@ -227,6 +243,12 @@ public class OnHandAction extends CheckedAction {
 			if(oDTO == null) {
 				oDTO = new OHD();
 				oDTO.setAgent(user);
+			}
+			if(oDTO.getFaultstation_ID() != 0) {
+				addFaultStation((List<Station>) request.getAttribute(FAULT_STATION_LIST), oDTO.getFaultstation_ID());
+			}
+			if(oDTO.getLoss_code() != 0) {
+				addLossCode((List<Company_specific_irregularity_code>) request.getAttribute("lossCodes"), oDTO.getLoss_code());
 			}
 			Status s = new Status();
 
@@ -473,6 +495,8 @@ public class OnHandAction extends CheckedAction {
 
 				TracerUtils.populateOnHand(theform, request);
 				bs.fillTheOhdForm(foundohd, theform, user);
+				addFaultStation((List<Station>) request.getAttribute(FAULT_STATION_LIST), foundohd.getFaultstation_ID());
+				addLossCode((List<Company_specific_irregularity_code>) request.getAttribute("lossCodes"), foundohd.getLoss_code());
 				theform.setFoundDate(TracerDateTime.getGMTDate());
 				theform.setFoundTime(TracerDateTime.getGMTDate());
 				session.setAttribute("OnHandForm", theform);
@@ -598,6 +622,96 @@ public class OnHandAction extends CheckedAction {
 
 			}
 		}
+	}
+
+	private void addLossCode(List<Company_specific_irregularity_code> codeList, int loss_code) {
+		boolean addLossCode = false;
+
+		if (loss_code > 0) {
+			addLossCode = true;
+			for (Company_specific_irregularity_code code : codeList) {
+				if (code.getCode_id() == loss_code) {
+					addLossCode = false;
+					break;
+				}
+			}
+		}
+		if (addLossCode) {
+			codeList.add(LossCodeBMO.getCode(loss_code));
+		}
+		
+	}
+
+	private void addFaultStation(List<Station> stationList, int faultstation_ID) {
+		boolean addStation = false;
+		
+		if(faultstation_ID > 0) {
+			addStation = true;
+			for(Station st: stationList) {
+				if(st.getStation_ID() == faultstation_ID) {
+					addStation = false;
+					break;
+				}
+			}
+		}
+		if(addStation){
+			stationList.add(StationBMO.getStation(faultstation_ID));
+		}
+	}
+
+	private List<Company_specific_irregularity_code> createLossCodeList(OnHandForm theform, Agent user) {
+		List<Company_specific_irregularity_code> result = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.OHD, user.getCurrentlocale(), true, user);
+		
+		boolean addFormCode = false;
+		if (theform.getLoss_code() > 0) {
+			addFormCode = true;
+			for (Company_specific_irregularity_code code : result) {
+				if (code.getCode_id() == theform.getLoss_code()) {
+					addFormCode = false;
+					break;
+				}
+			}
+		
+		}
+		if(addFormCode) {
+			result.add(LossCodeBMO.getCode(theform.getLoss_code()));
+		}
+		return result;
+	}
+
+	private List<Station> createFaultStationList(OnHandForm theform, Agent user) {
+		List<Station> result = new ArrayList<Station>();
+		if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.OHD)) {
+			String stations = PropertyBMO.getValue(PropertyBMO.PROPERTY_LIMIT_OHD_ADDSTATIONS);
+			if(stations != null) {
+				List<String> foo = Arrays.asList(stations.split(","));
+				result.addAll(StationBMO.getStationListByCode(foo, user.getCompanycode_ID()));
+				
+			}
+			if(!result.contains(user.getStation())) {
+				result.add(user.getStation());
+			}
+			return result;
+		}
+		else {
+			result.addAll(TracerUtils.getStationList(user.getCurrentlocale(), user.getCompanycode_ID()));
+		}
+		
+		boolean addUserStation = true;
+		boolean addFormStation = theform.getFaultstation_ID() > 0;
+		for(Station foo : result) {
+			if(foo.getStation_ID() == user.getStation().getStation_ID()) {
+				addUserStation = false;
+			}
+			if(theform.getFaultstation_ID() == foo.getStation_ID()) {
+				addFormStation = false;
+			}
+			if(!addFormStation && !addUserStation) break;
+		}
+		if(addFormStation) result.add(StationBMO.getStation(theform.getFaultstation_ID()));
+		if(addUserStation) result.add(user.getStation());
+		
+		return result;
 	}
 
 	private String getReportFile(OnHandForm theform, Agent user, HttpServletRequest request) {

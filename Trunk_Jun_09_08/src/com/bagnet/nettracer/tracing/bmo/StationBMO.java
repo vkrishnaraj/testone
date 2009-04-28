@@ -153,4 +153,31 @@ public class StationBMO {
 		}
 		return s;
 	}
+
+	public static List<Station> getStationListByCode(List<String> stationList, String companyCode) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class).add(
+					Expression.in("stationcode", stationList));
+			if (companyCode != null) {
+				cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			}
+			if (cri.list().size() > 0)
+				return cri.list();
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }
