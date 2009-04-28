@@ -241,6 +241,34 @@ public class LossCodeBMO {
 		}
 	}
 
+	public static Company_specific_irregularity_code getLossCode(int loss_code, int report_type, Company company) {
+		Session sess = null;
+		try {
+			if(report_type == TracingConstants.OHD) {
+				report_type = TracingConstants.LOST_DELAY;
+			}
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Expression.eq("loss_code", new Integer(loss_code))).add(
+					Expression.eq("report_type", new Integer(report_type))).add(Expression.eq("company", company));
+			List list = cri.list();
+			if (list != null && list.size() > 0){
+				return (Company_specific_irregularity_code) cri.list().get(0);
+			}
+			return null;
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+
 
 
 }

@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.integrations.events.BeornDTO;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -785,7 +786,11 @@ public class WSCoreOHDUtil {
 		  		
 		  		// Fault reason
 		  		int lossCode = si.getLossCode();
-		  		onhand.setLoss_code(lossCode);
+		  		Company_specific_irregularity_code code = LossCodeBMO.getLossCode(lossCode, TracingConstants.OHD, CompanyBMO.getCompany(agent.getCompanycode_ID()));
+		  		if(code != null) {
+		  			onhand.setLoss_code(lossCode);
+		  		}
+		  		
 	  		}
 	  		
 	  		// Save forward log
