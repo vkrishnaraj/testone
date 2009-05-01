@@ -1,211 +1,204 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    version="2.4">
-
-  <display-name>NetTracer</display-name>
-
-  <!-- Action Servlet Configuration -->
-  <servlet>
-    <servlet-name>action</servlet-name>
-    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class> 
-
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+ <display-name>NetTracer</display-name>
+ <filter>
+  <filter-name>ExpiresHeaderFilter</filter-name>
+  <filter-class>com.bagnet.nettracer.tracing.web.ExpiresHeaderFilter</filter-class>
+  <init-param>
+   <param-name>js-expires-minutes</param-name>
+   <param-value>60</param-value>
+  </init-param>
+  <init-param>
+   <param-name>css-expires-minutes</param-name>
+   <param-value>60</param-value>
+  </init-param>
     <init-param>
-      <param-name>config</param-name>
-      <param-value>/WEB-INF/struts-config.xml</param-value>
-    </init-param>
-    
+   <param-name>jpg-expires-minutes</param-name>
+   <param-value>60</param-value>
+  </init-param>
     <init-param>
-      <param-name>validate</param-name>
-      <param-value>true</param-value>
-    </init-param>
+   <param-name>gif-expires-minutes</param-name>
+   <param-value>60</param-value>
+  </init-param>
     <init-param>
-      <param-name>debug</param-name>
-      <param-value>2</param-value>
-    </init-param>
-    <init-param>
-      <param-name>detail</param-name>
-      <param-value>2</param-value>
-    </init-param>
-      <!-- Added as a trick for a bug in Struts -->
-    <init-param>
-      <param-name>application</param-name>
-      <param-value>com.bagnet.nettracer.tracing.resources.ApplicationResources</param-value>
-    </init-param>  
-	
-	<load-on-startup>2</load-on-startup>
-  
-  </servlet>
-  
-   <!-- report servlet Configuration -->
-  <servlet>
-	<servlet-name>reporting servlet</servlet-name>
-	<servlet-class>com.bagnet.nettracer.reporting.ReportOutputServlet</servlet-class> 
-  </servlet>
-  <servlet>
-  	<display-name>ImageServlet</display-name>
-	<servlet-name>ImageServlet</servlet-name>
-	<servlet-class>com.bagnet.nettracer.reporting.ImageServlet</servlet-class>
-  </servlet>
-  
-  <servlet>
-      <description>view log</description>
-      <display-name>view log</display-name>
-    <servlet-name>ViewLog</servlet-name>
-    <servlet-class>com.bagnet.nettracer.logging.ViewLog</servlet-class>
-  </servlet>
-  
-    <!-- AJAX Servlet to retrieve messages -->
-  <servlet>
- 	<servlet-name>checkmessages</servlet-name>
-    <servlet-class>com.bagnet.nettracer.servlets.ajax.CheckMessages</servlet-class>
-    <load-on-startup>2</load-on-startup>
-  </servlet>
- 
-  <!-- web service client for testing -->
-
-  
-  <servlet>
-    <servlet-name>showImage</servlet-name>
-    <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>log4j-init</servlet-name>
-    <servlet-class>com.bagnet.nettracer.logging.Log4jInit</servlet-class>
-
-    <init-param>
-      <param-name>log4j-init-file</param-name>
-      <param-value>WEB-INF/classes/log4j.properties</param-value>
-    </init-param>
-
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  
-  <!-- web services -->
-  <servlet>
-        <display-name>Apache-Axis Servlet</display-name>
-        <servlet-name>AxisServlet</servlet-name>
-
-        <servlet-class>
-            org.apache.axis2.transport.http.AxisServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AxisServlet</servlet-name>
-    <url-pattern>/services/*</url-pattern>
-  </servlet-mapping>
-
-  
-  <servlet-mapping>
-    <servlet-name>checkmessages</servlet-name>
-    <url-pattern>/checkMessages.view</url-pattern>
-  </servlet-mapping> 
-
-  
-  
-  
-  
-  <!-- Action Servlet Mapping -->
-  <servlet-mapping>
-    <servlet-name>action</servlet-name>
-    <url-pattern>*.do</url-pattern>
-  </servlet-mapping>
-  
-  <!-- report Servlet Mapping -->
-  <servlet-mapping>
-    <servlet-name>reporting servlet</servlet-name>
-    <url-pattern>/reporting</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-	<servlet-name>ImageServlet</servlet-name>
-	<url-pattern>/image</url-pattern>
-  </servlet-mapping>
-  
-  <servlet-mapping>
-    <servlet-name>showImage</servlet-name>
-    <url-pattern>/showImage</url-pattern>
-  </servlet-mapping>
-  
-  
-  <servlet-mapping>
-    <servlet-name>ViewLog</servlet-name>
-    <url-pattern>/ViewLog</url-pattern>
-  </servlet-mapping>
-  
-  
- 
-  
-  
-    <!-- currently the W3C havent settled on a media type for WSDL;
+   <param-name>png-expires-minutes</param-name>
+   <param-value>60</param-value>
+  </init-param>
+ </filter>
+ <filter-mapping>
+  <filter-name>ExpiresHeaderFilter</filter-name>
+  <url-pattern>*.js</url-pattern>
+ </filter-mapping>
+ <filter-mapping>
+  <filter-name>ExpiresHeaderFilter</filter-name>
+  <url-pattern>*.css</url-pattern>
+ </filter-mapping>
+  <filter-mapping>
+  <filter-name>ExpiresHeaderFilter</filter-name>
+  <url-pattern>*.jpg</url-pattern>
+ </filter-mapping>
+  <filter-mapping>
+  <filter-name>ExpiresHeaderFilter</filter-name>
+  <url-pattern>*.gif</url-pattern>
+ </filter-mapping>
+  <filter-mapping>
+  <filter-name>ExpiresHeaderFilter</filter-name>
+  <url-pattern>*.png</url-pattern>
+ </filter-mapping>
+ <!-- Action Servlet Configuration -->
+ <servlet>
+  <servlet-name>action</servlet-name>
+  <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+  <init-param>
+   <param-name>config</param-name>
+   <param-value>/WEB-INF/struts-config.xml</param-value>
+  </init-param>
+  <init-param>
+   <param-name>validate</param-name>
+   <param-value>true</param-value>
+  </init-param>
+  <init-param>
+   <param-name>debug</param-name>
+   <param-value>2</param-value>
+  </init-param>
+  <init-param>
+   <param-name>detail</param-name>
+   <param-value>2</param-value>
+  </init-param>
+  <!-- Added as a trick for a bug in Struts -->
+  <init-param>
+   <param-name>application</param-name>
+   <param-value>com.bagnet.nettracer.tracing.resources.ApplicationResources</param-value>
+  </init-param>
+  <load-on-startup>2</load-on-startup>
+ </servlet>
+ <!-- report servlet Configuration -->
+ <servlet>
+  <servlet-name>reporting servlet</servlet-name>
+  <servlet-class>com.bagnet.nettracer.reporting.ReportOutputServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>ImageServlet</display-name>
+  <servlet-name>ImageServlet</servlet-name>
+  <servlet-class>com.bagnet.nettracer.reporting.ImageServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <description>view log</description>
+  <display-name>view log</display-name>
+  <servlet-name>ViewLog</servlet-name>
+  <servlet-class>com.bagnet.nettracer.logging.ViewLog</servlet-class>
+ </servlet>
+ <!-- AJAX Servlet to retrieve messages -->
+ <servlet>
+  <servlet-name>checkmessages</servlet-name>
+  <servlet-class>com.bagnet.nettracer.servlets.ajax.CheckMessages</servlet-class>
+  <load-on-startup>2</load-on-startup>
+ </servlet>
+ <!-- web service client for testing -->
+ <servlet>
+  <servlet-name>showImage</servlet-name>
+  <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>log4j-init</servlet-name>
+  <servlet-class>com.bagnet.nettracer.logging.Log4jInit</servlet-class>
+  <init-param>
+   <param-name>log4j-init-file</param-name>
+   <param-value>WEB-INF/classes/log4j.properties</param-value>
+  </init-param>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <!-- web services -->
+ <servlet>
+  <display-name>Apache-Axis Servlet</display-name>
+  <servlet-name>AxisServlet</servlet-name>
+  <servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>AxisServlet</servlet-name>
+  <url-pattern>/services/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>checkmessages</servlet-name>
+  <url-pattern>/checkMessages.view</url-pattern>
+ </servlet-mapping>
+ <!-- Action Servlet Mapping -->
+ <servlet-mapping>
+  <servlet-name>action</servlet-name>
+  <url-pattern>*.do</url-pattern>
+ </servlet-mapping>
+ <!-- report Servlet Mapping -->
+ <servlet-mapping>
+  <servlet-name>reporting servlet</servlet-name>
+  <url-pattern>/reporting</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ImageServlet</servlet-name>
+  <url-pattern>/image</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>showImage</servlet-name>
+  <url-pattern>/showImage</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>ViewLog</servlet-name>
+  <url-pattern>/ViewLog</url-pattern>
+ </servlet-mapping>
+ <!-- currently the W3C havent settled on a media type for WSDL;
     http://www.w3.org/TR/2003/WD-wsdl12-20030303/#ietf-draft
     for now we go with the basic 'it's XML' response -->
-  <mime-mapping>
-    <extension>wsdl</extension>
-     <mime-type>text/xml</mime-type>
-  </mime-mapping>
-  
-
-  <mime-mapping>
-    <extension>xsd</extension>
-    <mime-type>text/xml</mime-type>
-  </mime-mapping>
-  
-  
-  <!-- The Welcome File List -->
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
-  
-  
-  <!-- error pages -->
-  <error-page>
-    <error-code>400</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
-  
-  <error-page>
-    <error-code>403</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
-  
-  <error-page>
-    <error-code>404</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
-
-  <error-page>
-    <error-code>500</error-code>
-    <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
-  </error-page>
-  <!-- Struts Tag Library Descriptor -->
-  <jsp-config>
-	  <taglib>
-	  	<taglib-uri>/tags/struts-bean</taglib-uri>
-	  	<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
-	  </taglib>
-	
-	  <taglib>
-	  	<taglib-uri>/tags/struts-html</taglib-uri>
-	  	<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
-	  </taglib>
-	
-	  <taglib>
-	  	<taglib-uri>/tags/struts-logic</taglib-uri>
-	  	<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
-	  </taglib>
-	
-	  <taglib>
-	  	<taglib-uri>/tags/struts-nested</taglib-uri>
-	  	<taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
-	  </taglib>
-	
-	  <taglib>
-	  	<taglib-uri>/tags/struts-tiles</taglib-uri>
-	  	<taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
-	  </taglib>
-  </jsp-config>
-
+ <mime-mapping>
+  <extension>wsdl</extension>
+  <mime-type>text/xml</mime-type>
+ </mime-mapping>
+ <mime-mapping>
+  <extension>xsd</extension>
+  <mime-type>text/xml</mime-type>
+ </mime-mapping>
+ <!-- The Welcome File List -->
+ <welcome-file-list>
+  <welcome-file>index.jsp</welcome-file>
+ </welcome-file-list>
+ <!-- error pages -->
+ <error-page>
+  <error-code>400</error-code>
+  <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+ </error-page>
+ <error-page>
+  <error-code>403</error-code>
+  <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+ </error-page>
+ <error-page>
+  <error-code>404</error-code>
+  <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+ </error-page>
+ <error-page>
+  <error-code>500</error-code>
+  <location>/deployment/main/layouts/main_layout.jsp?errortype=500</location>
+ </error-page>
+ <!-- Struts Tag Library Descriptor -->
+ <jsp-config>
+  <taglib>
+   <taglib-uri>/tags/struts-bean</taglib-uri>
+   <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+  </taglib>
+  <taglib>
+   <taglib-uri>/tags/struts-html</taglib-uri>
+   <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+  </taglib>
+  <taglib>
+   <taglib-uri>/tags/struts-logic</taglib-uri>
+   <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+  </taglib>
+  <taglib>
+   <taglib-uri>/tags/struts-nested</taglib-uri>
+   <taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+  </taglib>
+  <taglib>
+   <taglib-uri>/tags/struts-tiles</taglib-uri>
+   <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+  </taglib>
+ </jsp-config>
 </web-app>
