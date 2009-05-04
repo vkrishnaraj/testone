@@ -14,6 +14,7 @@ request.getAttribute("org.apache.struts.action.MESSAGE");
 java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
 "org.apache.struts.action.LOCALE");
 %>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
     function textCounter(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
@@ -39,7 +40,6 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 	        
 	      if (currentElement.value.length > 0 && !checkExpedite(currentElement.value))
 	      {
-            alert("Contents: " + currentElement.value);
 	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
 	        currentElement.focus();
 	        return false;

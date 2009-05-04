@@ -11,10 +11,14 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.OHDUtils" %>
 <%
-  Agent a = (Agent)session.getAttribute("user");
+	Agent a = (Agent) session.getAttribute("user");
+	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
+			.getAttribute("org.apache.struts.action.MESSAGE");
+	java.util.Locale myLocale = (java.util.Locale) session.getAttribute("org.apache.struts.action.LOCALE");
 %>
-  <script language="javascript">
-    <!--
+
+<script language="javascript">
+
 function goprev() {
   o = document.deliverForm;
   o.prevpage.value = "1";
@@ -39,7 +43,36 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
+function submitForwardForm()
+{
+  var checked = 0;
+  var ohd_id="";
+  
+  for (var j=0;j<document.deliverForm.length;j++) {
+    
+    currentElement = document.deliverForm.elements[j];
+     if (currentElement.type=="checkbox")
+     {
+      if (currentElement.checked)
+       {
+        if (checked > 0) ohd_id += ",";
+        checked +=1;
+        ohd_id +=currentElement.value;
+       }
+     }
+   }
+
+   if (checked < 1)
+   {
+     alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.missingForward") %>");
+   }
+   else
+   {
+    document.forwardOnHandForm.batch_id.value=ohd_id;
+    document.forwardOnHandForm.submit();
+  }
+}
   </script>
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
@@ -74,12 +107,17 @@ function updatePagination() {
               <tr>
                 <td>
                   <strong>
-                    <bean:message key="colname.ld_report_num" />
+                    <bean:message key="colname.forwardOhd" />
                   </strong>
                 </td>
                 <td>
                   <strong>
                     <bean:message key="colname.on_hand_report_number" />
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    <bean:message key="colname.ld_report_num" />
                   </strong>
                 </td>
                 <td>
@@ -123,16 +161,31 @@ function updatePagination() {
                   </strong>
                 </td>
               </tr>
-              <logic:iterate id="ohd" name="onhandlist">
+              <logic:iterate id="ohd" name="onhandlist" type="com.bagnet.nettracer.tracing.db.OHD">
                 <tr>
                   <td>
-                    <!-- Try to obtain the lost delay information for this on-hand if supporting mbr found 
-    			with matching -->
-                    <a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%=OHDUtils.getMBRReportNum(((OHD)ohd), "" + a.getStation().getStation_ID()) %></a>
-                    &nbsp;
+                    <%
+                        
+                    	if (ohd != null && 
+                          ohd.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_IN_TRANSIT &&
+                          ohd.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
+                        ) {
+                    %>
+                      <input type="checkbox" name="ohd" value="<bean:write name="ohd" property="OHD_ID"/>">
+                    <%
+                    	} else {
+                    %>
+                      &nbsp;
+                    <%
+                    	}
+                    %>
                   </td>
                   <td>
                     <A HREF="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="OHD_ID"/>"><bean:write name="ohd" property="OHD_ID" /></a>
+                  </td>
+                  <td>
+                    <a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%=OHDUtils.getMBRReportNum(((OHD) ohd), "" + a.getStation().getStation_ID())%></a>
+                    &nbsp;
                   </td>
                   <td>
                     <bean:write name="ohd" property="displaydate" />
@@ -188,7 +241,31 @@ function updatePagination() {
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+               <tr>
+                        <td colspan="11">
+                          &nbsp;
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="11" align="center">
+                          <logic:present name="cbroStationID" scope="session">
+          <%
+                            if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
+          %>
+                              <input type="button" name="batch" value="<bean:message key="button.batchForward" />" Id="button" onClick="submitForwardForm()">
+          <%
+                            }
+          %>
+                          </logic:present>
+                          <logic:notPresent name="cbroStationID" scope="session">
+                            <input type="button" name="batch" value="<bean:message key="button.batchForward" />" Id="button" onClick="submitForwardForm()">
+                          </logic:notPresent>
+                        </td>
+                      </tr>
             </table>
           </logic:present>
+        </html:form>
+        <html:form action="forward_on_hand.do" method="post">
+          <input type="hidden" name="batch" value="1">
+          <input type="hidden" name="batch_id" value="">
         </html:form>

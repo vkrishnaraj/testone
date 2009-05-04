@@ -203,13 +203,13 @@
 <%
                   if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
 %>
-                    <input type="button" name="batch" value="Batch Forward" Id="button" onClick="submitLzedform()">
+                    <input type="button" name="batch" value="<bean:message key="button.batchForward" />" Id="button" onClick="submitLzedform()">
 <%
                   }
 %>
                 </logic:present>
                 <logic:notPresent name="cbroStationID" scope="session">
-                  <input type="button" name="batch" value="Batch Forward" Id="button" onClick="submitLzedform()">
+                  <input type="button" name="batch" value="<bean:message key="button.batchForward" />" Id="button" onClick="submitLzedform()">
                 </logic:notPresent>
               </td>
             </tr>
