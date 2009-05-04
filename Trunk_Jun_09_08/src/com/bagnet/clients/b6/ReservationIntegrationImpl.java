@@ -202,7 +202,7 @@ public class ReservationIntegrationImpl extends
 			
 			if (paxArray != null && paxArray.length > 0) {
 				int paxNumber = 0;
-				int baggageRoutingCount = 0;
+				
 				
 				
 				for (PassengerDetail pax: paxArray) {
@@ -261,6 +261,7 @@ public class ReservationIntegrationImpl extends
 					
 						if (flightArray != null && flightArray.length > 0) {
 							for (PassengerFlight flight: flightArray) {
+								boolean used = false;
 								FlightKey key = flight.getFlightKey();
 								Calendar flightDate = key.getFlightDate();
 								
@@ -284,8 +285,8 @@ public class ReservationIntegrationImpl extends
 												bagTable.put(bag.getBagNumber(), new Integer(0));
 												
 												bagIndex++;
-												if (paxNumber==0 && baggageRoutingCount == 0) {
-													
+												if (paxNumber==0 && used == false) {
+													used = true;
 													OHD_Itinerary bagItin = form.getItinerary(itinCount);
 													++itinCount;
 													++bagItinCount;
@@ -379,7 +380,6 @@ public class ReservationIntegrationImpl extends
 			if (paxArray != null && paxArray.length > 0) {
 				form.setNumpassengers(paxArray.length);
 				int paxNumber = 0;
-				int baggageRoutingCount = 0;
 				
 				
 				for (PassengerDetail pax: paxArray) {
@@ -468,6 +468,7 @@ public class ReservationIntegrationImpl extends
 									
 									FlightBag[] flightBags = flight.getBagNumbers().getFlightBagArray();
 									if (flightBags != null && flightBags.length > 0)  {
+										boolean used = false;
 										for (FlightBag bag: flightBags) {
 											
 											if (bag.getStatus().equals(BagStatus.CHECKED_IN) && !bagTable.containsKey(bag.getBagNumber())) {
@@ -494,8 +495,8 @@ public class ReservationIntegrationImpl extends
 												bagIndex++;
 												form.setNumbagchecked(bagIndex);												
 
-												if (paxNumber==0 && baggageRoutingCount == 0) {
-													
+												if (paxNumber==0 && used == false) {
+													used = true;
 
 													Itinerary bagItin = form.getItinerary(itinCount, TracingConstants.BAGGAGE_ROUTING);
 													++itinCount;
