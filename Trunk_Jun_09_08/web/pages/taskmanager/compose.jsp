@@ -13,10 +13,10 @@
       countfield.value = maxlimit - field.value.length;
     }
   }
-  // End -->
+
 </SCRIPT>
 <script language="javascript">
-  <!--
+  
 function goprev() {
   o = document.composeForm;
   o.prevpage.value = "1";
@@ -38,14 +38,14 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
 </script>
 <html:form action="message.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return true;">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.compose" />

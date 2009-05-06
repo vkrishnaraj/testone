@@ -12,7 +12,7 @@
   Agent a = (Agent)session.getAttribute("user");
   boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, a);
 %>
-  <!-- Calendar includes -->
+  
   <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
@@ -22,14 +22,14 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.searchExpenseForm;
   o.prevpage.value = "1";
@@ -55,7 +55,7 @@ function updatePagination() {
     return true;
 }
 
-// -->
+
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="SearchExpenses.do" method="post" onsubmit="fillzero(this.incident_id, 13);">
@@ -81,11 +81,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -308,12 +308,12 @@ function updatePagination() {
               </logic:iterate>
                 <tr>
                   <td colspan="10">
-                    <!-- pagination -->
+                    
                     <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                    <!-- eof pagination -->
+                    
                   </td>
                 </tr>
-                <!-- end pagination -->
+                
                 <%
                       if (canApprove) {
 %>
@@ -329,9 +329,9 @@ function updatePagination() {
                      %>
               </table>
               <script language=javascript>
-                <!--
+                
   document.location.href="#result";
-  //-->
+
               </script>
             </logic:present>
           </html:form>

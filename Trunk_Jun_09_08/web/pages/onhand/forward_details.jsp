@@ -8,9 +8,9 @@
 <html:form action="forward_on_hand.do" method="post">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.forward_on_hand_title" />

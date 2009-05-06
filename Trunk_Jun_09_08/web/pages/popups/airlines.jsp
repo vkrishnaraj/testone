@@ -27,7 +27,7 @@
       <link href="<%= path %>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
       <link href="<%= path %>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
       <script language="javascript">
-        <!--
+        
 function choosetype(o) {
 	var field = null;
 
@@ -65,7 +65,7 @@ function returnFalse(e)
 
 document.oncontextmenu = returnFalse;
 
-//-->
+
       </script>
     </head>
     <body>
@@ -75,9 +75,9 @@ document.oncontextmenu = returnFalse;
             <td id="topcell">
               <table cellspacing="0" id="toplayouttable">
                 <tr>
-                  <!-- MIDDLE COLUMN -->
+                  
                   <td id="middlecolumn">
-                    <!-- MAIN BODY -->
+                    
                     <div id="maincontent">
                       <h1 class="green">
                         Airlines
@@ -86,13 +86,13 @@ document.oncontextmenu = returnFalse;
                       <table class="form2" cellspacing="0" cellpadding="0">
                         <tr>
                           <td nowrap>
-                            <b><!-- us -->
+                            <b>
 <%
                             String firstletter = null;
 %>
                             <p>
                               <hr height="1" color="black">
-                              <!--<a name="us"><b>US Airports</b></a>-->
+                              
                               <p>
                                 <a href="#USA">A</a>
                                 &nbsp;|&nbsp;
@@ -173,16 +173,16 @@ document.oncontextmenu = returnFalse;
                                         <bean:write name="airlines" property="companyCode_ID" /></a>
                                       <br>
                                     </logic:iterate>
-                                    <!-- eof us -->
+                                    
                                   </td>
                                 </tr>
                               </table>
                             </div>
                             <br>
                             <center><INPUT Id="button" type="button" value="<bean:message key="button.close"/>" onClick="self.close();">
-                            <!-- END MAIN BODY -->
+                            
                           </td>
-                          <!-- END MIDDLE COLUMN -->
+                          
                         </tr>
                       </table>
                     </td>

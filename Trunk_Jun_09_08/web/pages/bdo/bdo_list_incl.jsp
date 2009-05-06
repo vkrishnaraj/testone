@@ -53,11 +53,11 @@
       </div>
     </td>
   </tr>
-  <!-- END ICONS MENU -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.bdo_list" />

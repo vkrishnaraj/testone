@@ -8,9 +8,9 @@
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
 <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <tr>
-  <!-- MIDDLE COLUMN -->
+  
   <td id="middlecolumn">
-    <!-- MAIN BODY -->
+    
     <div id="maincontent">
       <html:form action="/logon">
         <input type="hidden" name="taskmanager" value="1">

@@ -27,7 +27,7 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <logic:present name="prepopulate" scope="request">
    <script language="javascript">
-   <!--
+   
       var buttonSelected = null;
 
       function validateThis(form) {
@@ -38,12 +38,12 @@
          } 
          return true;
       }
-   // -->
+
    </script>
   
   <html:form action="addOnHandBag.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/validation_incl.jsp" />
-    <!-- search for record locator-->
+    
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">
@@ -76,17 +76,17 @@
 </logic:present>
 
 <logic:notPresent name="prepopulate" scope="request">
-<!-- Calendar includes -->
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-  <!--
+  
     var cal1xx = new CalendarPopup();    
-    //cal1xx.showNavigationDropdowns();
+
     
-        // show manufacturer
+
     function showmanu(o) {
         if (o.value == <%=TracingConstants.MANUFACTURER_OTHER_ID%>) {
             document.getElementById("manu_other").style.visibility = "visible";
@@ -95,17 +95,17 @@
         }
     }
     
-// -->
+
   </SCRIPT>
-<!-- calendar stuff ends here -->
+
 <script language="javascript">
-  <!--
+  
 function gotoHistoricalReport() {
   o = document.OnHandForm;
     o.historical_report.value = "1";
     o.submit();
 }
-// -->
+
   </script>
 <SCRIPT LANGUAGE="JavaScript">
   function textCounter2(field, countfield, maxlimit) {
@@ -115,7 +115,7 @@ function gotoHistoricalReport() {
     countfield.value = maxlimit - field.value.length;
     }
   }
-  // End -->
+
   </SCRIPT>
 <jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="addOnHandBag.do" method="post"
@@ -147,8 +147,8 @@ function gotoHistoricalReport() {
     </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
-  <!-- ICONS MENU -->
+  
+  
   <tr>
     <td colspan="3" id="navmenucell">
     <div class="menu">
@@ -232,10 +232,10 @@ function gotoHistoricalReport() {
   <input type="hidden" name="wtq_reinstate" value="" />
   <input type="hidden" name="historical_report" value="" />
   <input type="hidden" name="hidden_ohd_id" value="" />
-  <!-- END ICONS MENU -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
-    <td id="middlecolumn"><!-- MAIN BODY -->
+    
+    <td id="middlecolumn">
     <div id="maincontent"><a name="baginfo"></a>
     <div id="pageheaderleft">
     <h1 class="green"><bean:message key="header.bag_info" /> <a
@@ -1175,9 +1175,9 @@ function gotoHistoricalReport() {
     </logic:equal>
 </html:form>
 <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 
-    // happens after load
+
 
     if (document.OnHandForm.manufacturer_ID.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
         document.getElementById("manu_other").style.visibility = "visible";
@@ -1209,6 +1209,6 @@ function gotoHistoricalReport() {
   document.location.href="#photos";
 </logic:present>
 
-//-->
+
   </SCRIPT>
 </logic:notPresent>

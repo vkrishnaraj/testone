@@ -9,7 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.AdminUtils" %>
 <script language="javascript">
-  <!--
+  
   function goprev() {
     o = document.codeForm;
     o.prevpage.value = "1";
@@ -33,7 +33,7 @@
   function updatePagination() {
 	    return true;
 	}
-// -->
+
 </script>
 
 
@@ -46,7 +46,7 @@
 %>
 
 <script language="javascript">
-  <!--
+  
 
   function deleteCode()
   {
@@ -83,7 +83,7 @@
     }
   } 
 
-  // -->
+
 </script>
 
 <html:form action="codeAdmin.do" method="post">
@@ -106,7 +106,7 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
 <%
   String sort = (String)request.getAttribute("sort");
 
@@ -121,9 +121,9 @@
   }
 %>
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.search_codes" />
@@ -227,7 +227,7 @@
                 </td>
               </tr>
             </logic:iterate>
-            <!-- pagination -->
+            
             <tr>
               <td colspan="6">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />

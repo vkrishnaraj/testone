@@ -22,17 +22,17 @@
     }
   }
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+
 	
-		// show manufacturer
+
 	function showmanu(o) {
 	
   	var pos = o.name.indexOf("[");
@@ -46,9 +46,9 @@
 		}
 	}
 	
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
 <%
   int report_type = 0;
 
@@ -61,7 +61,7 @@
   }
 %>
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
       <div id="maincontent">
         <h1 class="green">
@@ -200,7 +200,7 @@
 <%
                 if (report_type == 1) {
 %>
-                  <!-- claimcheck numbers -->
+                  
                   <a name="claimcheck"></a>
                   <a name='addclaimcheck'></a>
                   <h1 class="green">
@@ -239,7 +239,7 @@
 <%
                 }
 %>
-                <!-- bag section --->
+                
                 <a name="baginfo"></a>
                 <h1 class="green">
 <%
@@ -461,9 +461,9 @@
                       <bean:message key="button.add_bag" />
                     </html:submit></center>
                     <SCRIPT LANGUAGE="JavaScript">
-                      <!--
+                      
 
-	// happens after load
+
  for (var j=0;j<document.incidentForm.length;j++) {
     currentElement = document.incidentForm.elements[j];
     currentElementName=currentElement.name;
@@ -484,7 +484,7 @@
 	}
 
 	
-// -->
+
                     </SCRIPT>
                     <br>
                     <br>
@@ -495,7 +495,7 @@
 <%
                     if (report_type == 2) {
 %>
-                      <!-- missing articles -->
+                      
                       <a name="missingarticles"></a>
                       <h1 class="green">
                         <bean:message key="header.ma" />

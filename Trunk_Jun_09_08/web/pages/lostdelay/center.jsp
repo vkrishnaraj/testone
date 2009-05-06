@@ -29,7 +29,7 @@
 
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%><script language="javascript">
-    <!--
+    
         
     function gotoHistoricalReport(form) {
         o = document.incidentForm;
@@ -77,7 +77,7 @@
      }
     }
     
-    // -->
+
   </script>
   
 
@@ -85,7 +85,7 @@
 <logic:present name="prepopulate" scope="request">
 
   <script language="javascript">
-    <!--
+    
     var buttonSelected = null;
     function validateThis(form) {
       if (buttonSelected == null) {
@@ -95,12 +95,12 @@
       } 
       return true;
     }
-    // -->
+
   </script>
   
   <html:form action="lostDelay.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/validation_incl.jsp" />
-    <!-- search for record locator-->
+    
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">
@@ -240,7 +240,7 @@
   
   
 </logic:present>
-<!-- regular incident -->
+
 <logic:notPresent name="prepopulate" scope="request">
 
 
@@ -291,12 +291,12 @@
       </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <logic:present name="express" scope="request">
-      <!-- express input //-->
+      
       <jsp:include page="/pages/includes/mbrexpress_incl.jsp" />
-      <!-- eof express input //-->
+      
     </logic:present>
     <logic:notPresent name="express" scope="request">
       <tr>
@@ -480,13 +480,13 @@
         </div>
         </td>
       </tr>
-      <!-- END ICONS MENU -->
+      
       <tr>
-        <!-- MIDDLE COLUMN -->
+        
         <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
-        <!-- claimcheck numbers -->
+        
         <a name="claimcheck"></a>
         <a name='addclaimcheck'></a>
         <h1 class="green"><bean:message key="colname.claimnum" />
@@ -657,9 +657,9 @@
           </logic:equal>
         </logic:equal>
     </logic:notPresent>
-    <!-- this not present is for non express inputs //-->
+    
     <script language="javascript">
-      <!--
+      
 
 
 <logic:present name="passit" scope="request">
@@ -691,7 +691,7 @@
 	document.location.href="#addremark<bean:write name="remark" scope="request" />";
 </logic:present>
 
-//-->
+
     </script>
   </html:form>
 

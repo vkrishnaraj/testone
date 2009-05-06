@@ -11,22 +11,22 @@
 %>
   <html:form action="billing.do" method="post" onsubmit="return validateBillingForm(this);">
     <html:javascript formName="billingForm" />
-    <!-- Calendar includes -->
+    
     <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
     <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
     <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
     <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
     <SCRIPT LANGUAGE="JavaScript">
-      <!--
+      
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
     </SCRIPT>
-    <!-- calendar stuff ends here -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.billing_report" />
@@ -123,7 +123,7 @@
                 </td>
               </tr>
               <logic:present name="reportfile" scope="request">
-              <!-- result -->
+              
               <tr>
                 <td colspan=2 align=center bgcolor=white>
                   <br>
@@ -137,11 +137,11 @@
             </table>
             <logic:present name="reportfile" scope="request">
               <script language=javascript>
-                <!--
+                
 
 openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
 
-//-->
+
               </script>
             </logic:present>
           </html:form>

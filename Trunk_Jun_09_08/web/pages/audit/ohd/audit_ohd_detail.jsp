@@ -13,7 +13,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.auditOHDForm;
   o.prevpage.value = "1";
@@ -38,7 +38,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="audit_ohd.do" method="post">
@@ -63,7 +63,7 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -194,9 +194,9 @@ function updatePagination() {
       </td>
     </tr>
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
 <%
           String ohd_id = (String)request.getAttribute("ohd_ID");
@@ -209,7 +209,7 @@ function updatePagination() {
           }
 %>
           <logic:present name="auditonhandlist" scope="request">
-          <!-- result -->
+          
           <a name="result"></a>
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
@@ -255,7 +255,7 @@ function updatePagination() {
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
               </td>
             </tr>
-            <!-- end pagination -->
+            
             <tr>
               <td colspan="11">
                 &nbsp;

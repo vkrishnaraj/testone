@@ -147,8 +147,7 @@
  		return true;
   }
   
-  
-  /******************* ohd *****************/
+
   function validatereqOHDForm(form) {
   	return true;
   }
@@ -192,8 +191,6 @@
 	  return true;
 	}
 	
-	
-	/***************** BEoRN ****************/
 	function validatereqBEORN(form)
   {
   	var theindex = 0;

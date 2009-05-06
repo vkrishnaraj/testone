@@ -17,9 +17,9 @@
       <input type="hidden" name="match_ID" value='<bean:write name="match" property="match_id" scope="request"/>'>
       <jsp:include page="/pages/includes/taskmanager_header.jsp" />
       <tr>
-        <!-- MIDDLE COLUMN -->
+        
         <td id="middlecolumn">
-          <!-- MAIN BODY -->
+          
           <div id="maincontent">
             <h1 class="green">
               <bean:message key="header.view_match" />
@@ -128,8 +128,8 @@
                 </tr>
               </logic:iterate>
             </table>
-            <!-- display claim check list or bag list -->
-            <!-- claim check list -->
+            
+            
             <logic:present name="choose_claimcheck" scope="request">
               <input type="hidden" name="detailedmatch" value="1">
               <input type="hidden" name="chooseclaimcheck" value="1">
@@ -184,8 +184,8 @@
                 </tr>
               </table>
             </logic:present>
-            <!-- / end claimcheck list -->
-            <!-- bag list -->
+            
+            
             <logic:present name="choose_bags" scope="request">
               <input type="hidden" name="detailedmatch" value="1">
               <input type="hidden" name="choosebag" value="1">
@@ -308,7 +308,7 @@
                 </table>
               </logic:iterate>
             </logic:present>
-            <!-- /bag section -->
+            
             <table class="form2" cellspacing="0" cellpadding="0">
               <logic:equal name="match" property="status.status_ID" scope="request" value="<%= "" + TracingConstants.MATCH_STATUS_MATCHED %>">
                 <tr>

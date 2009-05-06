@@ -3,9 +3,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <tr>
-  <!-- MIDDLE COLUMN -->
+  
   <td id="middlecolumn">
-    <!-- MAIN BODY -->
+    
     <h1 class="green">
       <bean:message key="error.error_noperm" />
     </h1>

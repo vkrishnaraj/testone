@@ -92,7 +92,7 @@
 	</td>
 </tr>
 <logic:present name="reportfile" scope="request">
-	<!-- result -->
+	
 	<tr>
 		<td colspan=2 align=center bgcolor=white>
 			<br>

@@ -9,18 +9,18 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <html:form action="activeTracing.do" method="post" focus="incident_ID">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -41,11 +41,11 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -108,7 +108,7 @@
             </tr>
           </table>
           <logic:present name="result" scope="request">
-          <!-- result -->
+          
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
               <td valign="top">

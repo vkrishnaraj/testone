@@ -65,7 +65,6 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <% } %>
 
 <logic:notPresent name="user" scope="session">
-<!-- login //-->
 
 
 <table cellspacing="0" id="bodytable"> 
@@ -175,7 +174,6 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
         </div>
       </td> 
         </tr> 
-
 
 
 <tr>

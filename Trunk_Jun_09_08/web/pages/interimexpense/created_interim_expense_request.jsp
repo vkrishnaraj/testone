@@ -11,7 +11,7 @@
 %>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <script language="javascript">
-    <!--
+    
 
 function goprev() {
   o = document.createdInterimExpenseForm;
@@ -39,7 +39,7 @@ function sortInterimExpense(sortOrder) {
 	o.submit();
 }
 
-// -->
+
   </script>
   <html:form action="createdExpenseRequests.do" method="post" onsubmit="fillzero(this.incident_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
@@ -57,9 +57,9 @@ function sortInterimExpense(sortOrder) {
     }
 %>
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_created_interim_expense" />
@@ -185,13 +185,13 @@ function sortInterimExpense(sortOrder) {
                   </td>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </logic:present>
             <tr>
               <td colspan="11" align="center">

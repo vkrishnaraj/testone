@@ -24,7 +24,7 @@
   }
 %>
 
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -35,15 +35,15 @@
       field.value = field.value.substring(0, maxlimit);
     } 
   }
-  // End -->
+
 </SCRIPT>
 
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+
 	
-	// show manufacturer
+
 	function showmanu(o) {
 	
   	var pos = o.name.indexOf("[");
@@ -57,9 +57,9 @@
 		}
 	}
 	
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
 <%
   int report_type = 0;
 
@@ -71,7 +71,7 @@
     }
   }
 %>
-  <!-- bag section --->
+  
   <a name="baginfo"></a>
   <h1 class="green">
 <%
@@ -407,9 +407,9 @@
       <bean:message key="button.add_bag" />
     </html:submit></center>
     <SCRIPT LANGUAGE="JavaScript">
-      <!--
+      
 
-	// happens after load
+
  for (var j=0;j<document.incidentForm.length;j++) {
     currentElement = document.incidentForm.elements[j];
     currentElementName=currentElement.name;
@@ -430,7 +430,7 @@
 	}
 
 	
-// -->
+
     </SCRIPT>
     <br>
     <br>

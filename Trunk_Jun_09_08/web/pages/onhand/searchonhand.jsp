@@ -12,21 +12,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
 
-// -->
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.searchIncidentForm;
   o.prevpage.value = "1";
@@ -51,7 +50,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <html:form action="searchOnHand.do" method="post" onsubmit="fillzero(this.incident_ID, 13); return true;">
     <tr>
@@ -73,11 +72,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -216,7 +215,7 @@ function updatePagination() {
               </tr>
             </table>
             <logic:present name="onhandlist" scope="request">
-            <!-- result -->
+            
             <div id="pageheaderleft">
               <h1 class="green">
                 <bean:message key="header.search_result" />
@@ -237,9 +236,7 @@ function updatePagination() {
               <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
               <logic:present name="reportfile" scope="request">
                 <script language="javascript">
-                  <!--
                     openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
-                  //-->
                 </script>
               </logic:present>
             </div>
@@ -432,12 +429,10 @@ function updatePagination() {
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </table>
             <script language="javascript">
-              <!--
   document.location.href="#result";
-  //-->
             </script>
           </logic:present>
         </html:form>

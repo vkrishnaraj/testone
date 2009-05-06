@@ -10,7 +10,7 @@
 <%
 	Agent a = (Agent) session.getAttribute("user");
 %>
-<!-- Calendar includes -->
+
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
@@ -19,14 +19,14 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-<!-- calendar stuff ends here -->
+
 <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.searchWtLogsForm;
   o.prevpage.value = "1";
@@ -52,7 +52,7 @@ function updatePagination() {
     return true;
 }
 
-// -->
+
   </script>
 <jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="worldtracerlog.do" method="post" focus="txType" onsubmit="fillzero(this.incident_id, 13); fillzero(this.ohd_id, 13); return true;">
@@ -73,10 +73,10 @@ function updatePagination() {
 		</div>
 		</td>
 	</tr>
-	<!-- END PAGE HEADER/SEARCH -->
+	
 	<tr>
-		<!-- MIDDLE COLUMN -->
-		<td id="middlecolumn"><!-- MAIN BODY -->
+		
+		<td id="middlecolumn">
 		<div id="maincontent">
 		<h1 class="green"><bean:message key="header.search_criteria" />
 		<a href="#"
@@ -195,16 +195,16 @@ function updatePagination() {
 					</tr>
 				</c:forEach>
 				<tr>
-					<td colspan="6"><!-- pagination --> <jsp:include
-						page="/pages/includes/pagination_incl.jsp" /> <!-- eof pagination -->
+					<td colspan="6"> <jsp:include
+						page="/pages/includes/pagination_incl.jsp" /> 
 					</td>
 				</tr>
-				<!-- end pagination -->
+				
 			</table>
 			<script language=javascript>
-                <!--
+                
   document.location.href="#result";
-  //-->
+
               </script>
 		</c:if>
 </html:form>

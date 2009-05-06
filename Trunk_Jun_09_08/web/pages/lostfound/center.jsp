@@ -23,28 +23,28 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
-    // End -->
+
   </SCRIPT>
   <script language="javascript">
-    <!--
+    
 function gotoHistoricalReport() {
   o = document.LostAndFoundForm;
 	o.historical_report.value = "1";
 	o.submit();
 }
-// -->
+
   </script>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <jsp:include page="/pages/includes/validation_lf.jsp" />
 <%
@@ -90,12 +90,12 @@ function gotoHistoricalReport() {
           </div>
         </td>
       </tr>
-      <!-- END PAGE HEADER/SEARCH -->
-      <!-- ICONS MENU -->
+      
+      
       <tr>
-        <!-- MIDDLE COLUMN -->
+        
         <td id="middlecolumn">
-          <!-- MAIN BODY -->
+          
           <div id="maincontent">
             <h1 class="green">
               <bean:message key="header.item_info" />

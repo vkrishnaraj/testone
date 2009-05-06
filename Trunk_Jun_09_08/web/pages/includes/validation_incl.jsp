@@ -15,7 +15,7 @@
                                                                "org.apache.struts.action.LOCALE");
 %>
   <script language="javascript">
-    <!--
+    
 
   function checkDate(strng)
   {
@@ -34,7 +34,7 @@
     currentElementName=currentElement.name;
     if (currentElementName.indexOf("email") != -1 && currentElementName.indexOf("email_") == -1)
     {
-      //is email address valid??
+
       if (currentElement.value.length > 0 && !checkEmail(currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.email") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.email") %>");
@@ -60,7 +60,7 @@
     }
     else if (currentElementName.indexOf("pnr") != -1)
     {  
-      //is record locator valid??
+
       if (currentElement.value.length > 0 && !checkPnr(""+currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.pnr") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.pnr") %>");
@@ -70,7 +70,7 @@
     }
      else if (currentElementName.indexOf("recordlocator") != -1)
     {  
-      //is record locator valid??
+
       if (currentElement.value.length > 0 && !checkPnr(""+currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.recordlocator") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.pnr") %>");
@@ -80,7 +80,7 @@
     }
      else if (currentElementName.indexOf("ssn") != -1)
     {  
-      //is ssn valid??
+
       if (currentElement.value.length > 0 && !checkSSN(""+currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.ssn") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.ssn") %>");
@@ -90,7 +90,7 @@
     }
    	else if (currentElementName.indexOf("numpassengers") != -1)
     {  
-      //is email address valid??
+
       if (currentElement.value.length > 0 && !checkInteger(currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.num_pass") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.num_passengers") %>");
@@ -100,7 +100,7 @@
     }
     else if (currentElementName.indexOf("numbagchecked") != -1)
     {  
-      //is email address valid??
+
       if (currentElement.value.length > 0 && !checkInteger(currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.num_bag_checked") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.num_bag_checked") %>");
@@ -110,7 +110,7 @@
     }
     else if (currentElementName.indexOf("numbagreceived") != -1)
     {  
-      //is email address valid??
+
       if (currentElement.value.length > 0 && !checkInteger(currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.bags_rec") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.num_bag_recd") %>");
@@ -120,8 +120,8 @@
     } 
     
     else if (currentElementName.indexOf("dlstate") != -1) {
-        // have to enter dl state if driver license number is entered 
-        // get index
+
+
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "driverslicense";
 
@@ -133,7 +133,7 @@
     } 
       
     else if (currentElementName.indexOf("countryofissue") != -1) {
-        // have to enter country if common number is entered
+
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "commonnum";
 
@@ -146,7 +146,7 @@
 
      
     else if (currentElementName.indexOf("companyCode_ID") != -1) {
-        // have to enter airline if frequent flyer number is entered
+
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "membership.membershipnum";
 
@@ -158,7 +158,7 @@
     }   
     else if (currentElementName.indexOf("zip") != -1)
     {
-      //is email address valid??
+
       if (currentElement.value.length > 0 && !checkZip(currentElement.value))
       {
         alert("<%= (String)myMessages.getMessage(myLocale, "colname.zip") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.zipcode") %>");
@@ -304,7 +304,7 @@
       }
     }
    
-   	// report section
+
     else if (currentElementName.indexOf("s_createtime") != -1)
     {
       if (currentElement.value.length > 0 && !checkDate(currentElement.value))
@@ -326,7 +326,7 @@
     }
     }
     
-    // required fields validation
+
     if (form.name == "incidentForm"){
     	if (!validatereq(form)) return false;
     } else if (form.name == "OnHandForm") {
@@ -576,7 +576,7 @@
         }
       }
     }
-    //No Bag tag number supplied.
+
     if (bagtagnumbers == "")
     {
       alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.missingBagTag") %>");
@@ -1057,7 +1057,7 @@
         }
       }
       
-      // Require City
+
       else if (currentElementName.indexOf("city") != -1)
       {
         if (currentElement.value.length < 1)
@@ -1112,5 +1112,5 @@
   }
 
 
-// -->
+
   </script>

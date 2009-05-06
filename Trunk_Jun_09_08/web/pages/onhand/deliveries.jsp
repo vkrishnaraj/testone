@@ -14,7 +14,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.deliverForm;
   o.prevpage.value = "1";
@@ -39,7 +39,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <html:form action="deliver.do" method="post">
     <tr>
@@ -61,11 +61,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <logic:present name="onhandlist" scope="request">
             <table class="form2" cellspacing="0" cellpadding="0">
@@ -124,8 +124,6 @@ function updatePagination() {
               <logic:iterate id="ohd" name="onhandlist">
                 <tr>
                   <td>
-                    <!-- Try to obtain the lost delay information for this on-hand if supporting mbr found 
-    			with matching -->
 
                     <a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %></a>
                     &nbsp;
@@ -187,7 +185,7 @@ function updatePagination() {
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </table>
           </logic:present>
         </html:form>

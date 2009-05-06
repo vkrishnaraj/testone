@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <script language=javascript>
-  <!--
+  
 
 function toggledc(o) {
 	o.changeservice.value = "1";
@@ -34,7 +34,7 @@ function toggledc(o) {
 
 
 
-//-->
+
 </script>
 
 <%
@@ -79,11 +79,11 @@ function toggledc(o) {
       </div>
     </td>
   </tr>
-  <!-- END ICONS MENU -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.bdo_general" />
@@ -377,7 +377,7 @@ function toggledc(o) {
         </logic:equal>
         <logic:equal name="BDOForm" property="incident_ID" value="">
           <logic:notEqual name="BDOForm" property="OHD_ID" value="">
-          <!-- on hand -->
+          
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td valign=top>
@@ -419,7 +419,7 @@ function toggledc(o) {
               </td>
             </tr>
           </table>
-          <!-- eof on hand -->
+          
         </logic:notEqual>
       </logic:equal>
       <logic:notEqual name="BDOForm" property="incident_ID" value="">
@@ -450,7 +450,7 @@ function toggledc(o) {
             <tr>
               <td valign=top>
                 <b><logic:equal name="BDOForm" property="choosebags" value="1">
-                <!-- choose bag for bdo from mbr-->
+                
                 <input type="checkbox" name="bagchosen" value="<%= theitem.getBagnumber() %>">
               </logic:equal>
               <bean:message key="colname.bag_number" />
@@ -522,4 +522,4 @@ function toggledc(o) {
       </td>
     </tr>
   </table>
-  <!-- ---------end of show bdo------------ -->
+  

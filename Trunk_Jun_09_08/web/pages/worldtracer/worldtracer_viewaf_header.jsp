@@ -26,8 +26,8 @@
     </div>
   </td>
 </tr>
-<!-- END PAGE HEADER/SEARCH -->
-<!-- ICONS MENU -->
+
+
 <logic:present name="activityList" scope="session">
   <tr>
     <td colspan="3" id="navmenucell">
@@ -180,4 +180,4 @@
     </td>
   </tr>
 </logic:present>
-<!-- END ICONS MENU -->
+

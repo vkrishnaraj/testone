@@ -10,7 +10,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.viewRequestForm;
   o.prevpage.value = "1";
@@ -39,7 +39,7 @@ function sortIncomingRequests(sortOrder) {
 }
 
 
-// -->
+
   </script>
   <html:form action="viewROH.do" method="post" onsubmit="fillzero(this.ohd_num, 13); fillzero(this.incident_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
@@ -57,9 +57,9 @@ function sortIncomingRequests(sortOrder) {
     }
 %>
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_incoming_requests" />
@@ -200,14 +200,14 @@ function sortIncomingRequests(sortOrder) {
                 </tr>
               </logic:iterate>
             </logic:present>
-            <!-- pagination -->
+            
             <tr>
               <td colspan="6">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                <!-- eof pagination -->
+                
               </td>
             </tr>
-            <!-- end pagination -->
+            
             <tr>
               <td colspan="6" align="center">
                 <INPUT type="button" value="Back" onClick="history.back()" Id="button">

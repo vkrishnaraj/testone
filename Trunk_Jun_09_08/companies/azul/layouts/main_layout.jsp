@@ -437,8 +437,6 @@ function godown() {
 
 document.onkeydown = function(){
 	var currentFocus = document.activeElement.id;
-	
-	/*********** quick cuts to different pages ************/
 
 	if (window.event && window.event.keyCode == 117 ) {
 		window.event.keyCode = 505;
@@ -477,9 +475,6 @@ document.onkeydown = function(){
 		return;
 	}		
 	
-	
-	/*********************** menu pull downs *******************/	
-
 	if (window.event && window.event.keyCode == 77 && window.event.ctrlKey) {
 		hasurlfocus(0);
 	}

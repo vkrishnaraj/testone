@@ -211,6 +211,10 @@
 				<exclude name="WEB-INF/classes/**/*.*" />
 			</fileset>
 		</copy>
+		
+		<replaceregexp match="\s+" replace=" " flags="g" byline="false">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
+		</replaceregexp>
 
 		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />

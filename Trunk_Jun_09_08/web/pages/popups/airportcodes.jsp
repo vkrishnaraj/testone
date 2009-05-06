@@ -39,7 +39,7 @@
       <link href="<%= path %>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
       <link href="<%= path %>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
       <script language="javascript">
-        <!--
+        
 function choosetype(o) {
 	var field = null;
 
@@ -70,7 +70,7 @@ function returnFalse(e)
 
 document.oncontextmenu = returnFalse;
 
-//-->
+
       </script>
     </head>
     <body>
@@ -80,9 +80,9 @@ document.oncontextmenu = returnFalse;
             <td id="topcell">
               <table cellspacing="0" id="toplayouttable">
                 <tr>
-                  <!-- MIDDLE COLUMN -->
+                  
                   <td id="middlecolumn">
-                    <!-- MAIN BODY -->
+                    
                     <div id="maincontent">
                       <h1 class="green">
                         Airport Codes
@@ -115,7 +115,7 @@ document.oncontextmenu = returnFalse;
 <% 
 							if (country == 0) {
 %>
-                            <b><!-- us -->
+                            <b>
 <%
                             String firstletter = null;
 %>
@@ -206,11 +206,11 @@ document.oncontextmenu = returnFalse;
                                       </logic:equal>
                                     </logic:iterate>
                                </logic:present>
-                                    <!-- eof us -->
+                                    
 <% 
 							} else if (country == 1) {
 %>
-                                    <!-- canada -->
+                                    
 <%
                                     String firstletter = null;
 %>
@@ -301,11 +301,11 @@ document.oncontextmenu = returnFalse;
                                       </logic:equal>
                                     </logic:iterate>
                                </logic:present>
-                                            <!-- eof canada -->
+                                            
 <% 
 							} else if (country == 2) {
 %>
-                                            <!-- international -->
+                                            
 <%
                                             String firstletter = null;
 %>
@@ -396,7 +396,7 @@ document.oncontextmenu = returnFalse;
                                       </logic:equal>
                                     </logic:iterate>
                                </logic:present>
-                                                    <!-- eof international -->
+                                                    
 <% 
 							}
 %>
@@ -406,9 +406,9 @@ document.oncontextmenu = returnFalse;
                                             </div>
                                             <br>
                                             <center><INPUT Id="button" type="button" value="<bean:message key="button.close"/>" onClick="self.close();">
-                                            <!-- END MAIN BODY -->
+                                            
                                           </td>
-                                          <!-- END MIDDLE COLUMN -->
+                                          
                                         </tr>
                                       </table>
                                     </td>

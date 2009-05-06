@@ -9,7 +9,7 @@
 
   <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <script language="javascript">
-    <!--
+    
 
   function checkDate(strng)
   {
@@ -37,7 +37,7 @@
       }
       else if (currentElementName.indexOf("email") != -1 )
       {
-        //is email address valid??
+
         if (currentElement.value.length > 0 && !checkEmail(currentElement.value))
         {
           alert("<%= (String)myMessages.getMessage(myLocale, "colname.email") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.email") %>");
@@ -49,5 +49,5 @@
     return true;
   }
   
-// -->
+
   </script>

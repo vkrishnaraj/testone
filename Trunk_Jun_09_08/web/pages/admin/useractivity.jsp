@@ -11,20 +11,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.UserActivityForm;
   o.prevpage.value = "1";
@@ -48,7 +48,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <html:form action="useractivity.do" method="post">
     <tr>
@@ -70,11 +70,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -174,6 +174,6 @@ function updatePagination() {
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </table>
           </html:form>

@@ -12,20 +12,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.viewMassOnHandsForm;
   o.prevpage.value = "1";
@@ -56,7 +56,7 @@ function sortMass(sortOrder) {
 	o.submit();
 }
 
-// -->
+
   </script>
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <html:form action="massOnhands.do" method="post" onsubmit="fillzero(this.ohd_num, 13); return true;">
@@ -74,9 +74,9 @@ function sortMass(sortOrder) {
     }
 %>
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_mass_on_hand" />
@@ -165,11 +165,11 @@ function sortMass(sortOrder) {
             <input type="hidden" name="search" value="1">
             <tr>
               <td colspan="11">
-                <!-- pagination -->
+                
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                <!-- eof pagination -->
+                
               </td>
             </tr>
-            <!-- end pagination -->
+            
           </table>
         </html:form>

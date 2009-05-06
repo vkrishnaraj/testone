@@ -76,12 +76,12 @@ function goinc() {
 <tr>
 	<td nowrap>
 		<script language="javascript">
-		<!--
+		
 		function gopage(url) {
 			window.opener.location.href=url;
 			self.close();
 		}
-		//-->
+
 		</script>
 		
 		<logic:present name="wt_raw_incident" scope="request">

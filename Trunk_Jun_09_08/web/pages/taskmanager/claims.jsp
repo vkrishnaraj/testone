@@ -9,20 +9,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.claimToBeProcessedForm;
   o.prevpage.value = "1";
@@ -50,7 +50,7 @@ function sortClaims(sortOrder) {
 	o.submit();
 }
 
-// -->
+
   </script>
   <html:form action="claims.do" method="post" onsubmit="fillzero(this.inc_num, 13); return true;">
 <%
@@ -68,9 +68,9 @@ function sortClaims(sortOrder) {
 %>
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_claims" />
@@ -142,14 +142,14 @@ function sortClaims(sortOrder) {
                   </td>
                 </TR>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                  <!-- eof pagination -->
+                  
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </logic:present>
             <tr>
               <td colspan="2" align="center">

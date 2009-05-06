@@ -15,7 +15,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 %>
   
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.viewIncomingRequestForm;
   o.prevpage.value = "1";
@@ -78,7 +78,7 @@ function sortIncomingBags(sortOrder) {
     }
   } 
 
-// -->
+
   </script>
   <html:form action="incomingBags.do" method="post" onsubmit="fillzero(this.ohd_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
@@ -98,9 +98,9 @@ function sortIncomingBags(sortOrder) {
     <input type=hidden name=close1 value="">
     <input type=hidden name=ohd_ID value="">
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_incoming_bags" />
@@ -261,14 +261,14 @@ function sortIncomingBags(sortOrder) {
                   </logic:notPresent>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                  <!-- eof pagination -->
+                  
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </logic:present>
             <tr>
               <td colspan="11" align="center">

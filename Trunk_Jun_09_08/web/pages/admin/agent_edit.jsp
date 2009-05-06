@@ -37,11 +37,11 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="agent" />
@@ -442,18 +442,18 @@
         </table>
       </html:form>
   <script language="javascript">
-    <!--
-	// non us countries don't get state drop down
+    
+
 	function validateStation() {
 		var element = (document.getElementsByName('station_id'))[0];
 		if (element.value != '') {
 			return true;
 		} else {
 			alert("No station has been selected.  This may result from the agent's present station being disabled.");
-			// element.focus();
+
 		}
 		return false;
 	}
-    -->
+    
 	</script>
       

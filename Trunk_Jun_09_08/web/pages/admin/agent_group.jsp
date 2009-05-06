@@ -13,7 +13,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.groupForm;
   o.prevpage.value = "1";
@@ -46,7 +46,7 @@ function updatePagination() {
     return true;
 }
 
-// -->
+
   </script>
   <html:form action="createGroup.do" method="post">
     <tr>
@@ -68,11 +68,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <span class="bold"><bean:message key="groupDescriptionText" />
@@ -192,13 +192,13 @@ function updatePagination() {
                   </td>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="9">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+              
               <tr>
                 <td colspan="9" align="center">
                   &nbsp;

@@ -11,7 +11,7 @@
 			.getAttribute("org.apache.struts.action.LOCALE");
 %>
 <script language="javascript">
-  <!--
+  
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
  
@@ -67,5 +67,5 @@
   function validateReqForward(form) {
   	return true;
   }
-  // -->
+
 </script>

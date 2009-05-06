@@ -13,7 +13,7 @@
 <%
   Agent a = (Agent) session.getAttribute("user");
 %>
-<!-- Calendar includes -->
+
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -21,10 +21,10 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
   var cal1xx = new CalendarPopup(); 
 
-    // -->
+
   </SCRIPT>
     </SCRIPT>
     <tr>
@@ -86,10 +86,10 @@
 
 
 
-  <!-- END ICONS MENU -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
-    <td id="middlecolumn"><!-- MAIN BODY -->
+    
+    <td id="middlecolumn">
     <div id="maincontent"><html:form action="claim_settlement.do"
       method="post">
 

@@ -19,16 +19,16 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
-    // End -->
+
   </SCRIPT>
 
 
 
 
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.wt.request_qoh_title" />

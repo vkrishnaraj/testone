@@ -11,18 +11,18 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <html:form action="claim_prorate.do" method="post">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -52,8 +52,8 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -95,11 +95,11 @@
         </div>
       </td>
     </tr>
-    <!-- END ICONS MENU -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <center><h1 class="green">
             <bean:write name="claimProrateForm" property="companyName" />
@@ -363,7 +363,7 @@
           </table>
         </html:form>
         <script language="javascript">
-          <!--
+          
 function calculatetotal(o) {
 	var percenttotal = 0;
 	var sharetotal = 0;
@@ -386,5 +386,5 @@ function calculatetotal(o) {
 
 }
 
-//-->
+
         </script>

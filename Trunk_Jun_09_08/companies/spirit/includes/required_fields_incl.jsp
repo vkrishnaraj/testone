@@ -154,7 +154,6 @@
  		return true;
   }
 	
- /******************* ohd *****************/
  function validatereqOHDForm(form) {
    	var theindex = 0;
   	for (var j=0;j<form.length;j++) {
@@ -185,8 +184,6 @@
 
 	}
 	
-	
-	/***************** BEoRN ****************/
 	function validatereqBEORN(form)
   {
 	  return true;

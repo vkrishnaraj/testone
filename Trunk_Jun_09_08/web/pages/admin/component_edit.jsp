@@ -13,7 +13,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
   function goprev() {
     o = document.groupForm;
     o.prevpage.value = "1";
@@ -43,7 +43,7 @@
 	  o.edit.value="1";
 	  o.submit();
   }
-// -->
+
   </script>
   <html:form action="createGroup.do" method="post" onsubmit="return validateGroupForm(this);">
     <html:javascript formName="groupForm" />
@@ -66,11 +66,11 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="group" />

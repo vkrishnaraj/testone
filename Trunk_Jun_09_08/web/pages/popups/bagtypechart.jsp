@@ -17,7 +17,7 @@
         <%= messages.getMessage(new Locale(a.getDefaultlocale()), "title.bagchart") %>
       </title>
       <script language="javascript">
-<!--
+
 function choosexdescelement(o) {
 	var xdescelementfield;
     var xdescelement_ID;
@@ -97,7 +97,7 @@ function choosexdescelement(o) {
 self.close();
 }
 
-//select color,bagtype downlist
+
 function choosetype(o) {
 	var field;
 	var type;
@@ -159,7 +159,7 @@ function returnFalse(e)
 
 document.oncontextmenu = returnFalse;
 
-//-->
+
       </script>
 
       <map name="FPMap0">
@@ -169,7 +169,7 @@ document.oncontextmenu = returnFalse;
               <area href="javascript:choosetype('05');" shape="rect" coords="297,17,389,100">
                 <area href="javascript:choosetype('06');" shape="rect" coords="2,107,95,190">
                   <area href="javascript:choosetype('07');" shape="rect" coords="298,106,389,189">
-                  <!--<area href="javascript:choosetype('-1');" shape="rect" coords="247, 158, 353, 263">//-->
+                  
                   <area href="javascript:choosetype('08');" shape="rect" coords="4,197,96,279">
                     <area href="javascript:choosetype('09');" shape="rect" coords="101,197,194,279">
                       <area href="javascript:choosetype('10');" shape="rect" coords="200,197,292,279">
@@ -181,7 +181,7 @@ document.oncontextmenu = returnFalse;
                                 <area href="javascript:choosetype('22');" shape="rect" coords="715,16,797,98">
                                   <area href="javascript:choosetype('23');" shape="rect" coords="411,107,512,188">
                                     <area href="javascript:choosetype('25');" shape="rect" coords="697,106,798,189">
-                                    <!--<area href="javascript:choosetype('-2');" shape="rect" coords="619, 160, 834, 264">//-->
+                                    
                                     <area href="javascript:choosetype('26');" shape="rect" coords="410,197,501,280">
                                       <area href="javascript:choosetype('27');" shape="rect" coords="506,196,601,278">
                                         <area href="javascript:choosetype('28');" shape="rect" coords="607,197,699,279">

@@ -11,7 +11,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
 	o = document.matchform;
 	o.prevpage.value = "1";
@@ -33,15 +33,15 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <form name="matchform" action="viewMatches.do" method="post" onsubmit="fillzero(this.incident_ID, 13); fillzero(this.ohd_ID, 13); return true;">
 
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -190,12 +190,10 @@ function updatePagination() {
 %>
                           <a href='viewMatches.do?showMatch=1&match_ID=<bean:write name="matches" property="match_id"/>'><bean:message key="colname.forwardOhd_nobr" /></A>
                           
-                          <% /* <A HREF="forward_on_hand.do?ohd_ID=<bean:write name="matches" property="ohd.OHD_ID"/>"><bean:message key="colname.forwardOhd_nobr" /></A> */ %>
 <%
                         } else {
 %>
                           <a href='viewMatches.do?showMatch=1&match_ID=<bean:write name="matches" property="match_id"/>'><bean:message key="colname.init_roh" /></A>
-                          <% /* <A HREF='request_on_hand.do?ohd_ID=<bean:write name="matches" property="ohd.OHD_ID"/>&mbr_ID=<bean:write name="matches" property="mbr.incident_ID"/>&match_ID=<bean:write name="matches" property="match_id"/>'><bean:message key="colname.init_roh" /></A> */ %>
 <%
                         }
 %>
@@ -219,13 +217,11 @@ function updatePagination() {
                       if (a.getStation().getStation_ID() == matches.getOhd().getHoldingStation().getStation_ID()) {
 %>
                         <a href='viewMatches.do?showMatch=1&match_ID=<bean:write name="matches" property="match_id"/>'><bean:message key="colname.forwardOhd_nobr" /></A>
-                        <% /* <A HREF="forward_on_hand.do?ohd_ID=<bean:write name="matches" property="ohd.OHD_ID"/>"><bean:message key="colname.forwardOhd_nobr" /></A> */ %>
                         
 <%
                       } else {
 %>
                         <a href='viewMatches.do?showMatch=1&match_ID=<bean:write name="matches" property="match_id"/>'><bean:message key="colname.init_roh" /></A>
-                        <% /* <A HREF='request_on_hand.do?ohd_ID=<bean:write name="matches" property="ohd.OHD_ID"/>&mbr_ID=<bean:write name="matches" property="mbr.incident_ID"/>&match_ID=<bean:write name="matches" property="match_id"/>'><bean:message key="colname.init_roh" /></A> */ %>
 <%
                       }
 %>
@@ -244,7 +240,7 @@ function updatePagination() {
               </logic:iterate>
               <tr>
                 <td colspan="8">
-                  <!-- pagination -->
+                  
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>

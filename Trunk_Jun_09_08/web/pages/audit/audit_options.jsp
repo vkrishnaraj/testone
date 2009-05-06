@@ -29,8 +29,8 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -160,5 +160,5 @@
         </div>
       </td>
     </tr>
-    <!-- END ICONS MENU -->
+    
   </html:form>

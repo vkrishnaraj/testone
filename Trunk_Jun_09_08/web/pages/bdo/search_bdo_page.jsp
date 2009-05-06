@@ -9,20 +9,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.searchBDOForm;
   o.prevpage.value = "1";
@@ -47,7 +47,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <jsp:include page="/pages/includes/validation_search.jsp" />
   <html:form action="searchbdo.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13); fillzero(this.ohd_ID, 13);return validateSearch(this);">
@@ -70,11 +70,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -254,7 +254,7 @@ function updatePagination() {
                     <jsp:include page="/pages/includes/pagination_incl.jsp" />
                   </td>
                 </tr>
-                <!-- end pagination -->
+                
               </table>
             </logic:present>
           </html:form>

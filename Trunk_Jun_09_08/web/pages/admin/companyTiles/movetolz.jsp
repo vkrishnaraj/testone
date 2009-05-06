@@ -7,7 +7,7 @@
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.LzUtils"%>
 <script language="javascript">
-  <!--
+  
     function goprev() {
       o = document.companyForm;
       o.prevpage.value = "1";
@@ -35,7 +35,7 @@
         return true;
     }
     
-  // -->
+
 </script>
 		  <% 
 
@@ -52,23 +52,23 @@
       function changeMode(newMode) {
       	form = document.forms[0];
       	
-      	// If was assignment and changed to percent
+
     	if (currentMode == 1 && newMode == 2) {
       		currentMode = 2;
 
-			// enable percent fields      		
+
       		for (i=0; i<lzs; ++i) {
       			element = document.getElementsByName("lz[" + i + "].percent")[0];
       			element.disabled=false;
       		}
       		
-      		// Disable defaultLz radio
+
       		elements = document.getElementsByName("defaultLz");
       		for (i=0; i<elements.length; ++i) {
       			elements[i].disabled=true;
       		}
 
-			// Enable delete checkboxes
+
       		for (i=0; i<lzs; ++i) {
       			element = document.getElementsByName("lz[" + i + "].delete")[0];
       			element.disabled=false;
@@ -77,17 +77,17 @@
 	     } 
       	
       	
-      	// If was percent and changed to assignment
+
       	if (currentMode == 2 && newMode == 1) {
       		currentMode = 1;
       		
-			// Disable percent fields      		
+
       		for (i=0; i<lzs; ++i) {
       			element = document.getElementsByName("lz[" + i + "].percent")[0];
       			element.disabled=true;
       		}
       		
-      		// Enable defaultLz radio
+
       		elements = document.getElementsByName("defaultLz");
       		for (i=0; i<elements.length; ++i) {
       			elements[i].disabled=false;
@@ -334,9 +334,9 @@
 		  </logic:iterate>
           <tr>
             <td colspan="2">
-                <!-- pagination -->
+                
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                <!-- eof pagination -->
+                
             </td>
           </tr>
 	      <tr>

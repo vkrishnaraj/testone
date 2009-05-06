@@ -11,7 +11,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.auditTrailForm;
   o.prevpage.value = "1";
@@ -36,7 +36,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <html:form action="auditTrail.do" method="post">
     <html:hidden property="auditType" />
@@ -59,8 +59,8 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -105,11 +105,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END ICONS MENU -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -146,11 +146,11 @@ function updatePagination() {
               <logic:equal name="auditTrailForm" property="auditType" value="<%= new Integer(AuditTrailUtils.AUD_PAYOUT).toString() %>">
                 <jsp:include page="/pages/includes/audit/audit_payout_incl.jsp" />
               </logic:equal>
-              <!-- pagination -->
+              
               <jsp:include page="/pages/includes/pagination_incl.jsp" />
             </td>
           </tr>
-          <!-- end pagination -->
+          
         </table>
       </logic:present>
     </html:form>

@@ -58,8 +58,8 @@ request.setAttribute("lossCode", lc);
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -86,11 +86,11 @@ request.setAttribute("lossCode", lc);
         </div>
       </td>
     </tr>
-    <!-- END ICONS MENU -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>

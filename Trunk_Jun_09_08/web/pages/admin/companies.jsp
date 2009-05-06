@@ -7,7 +7,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
 <script language="javascript">
-  <!--
+  
   function goprev() {
     o = document.companyForm;
     o.prevpage.value = "1";
@@ -32,7 +32,7 @@
   function updatePagination() {
 	    return true;
 	}
-// -->
+
 </script>
 <jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="companyAdmin.do" method="post">
@@ -55,7 +55,7 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
 <%
   String sort = (String)request.getAttribute("sort");
 
@@ -70,9 +70,9 @@
   }
 %>
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.search_companies" />
@@ -178,7 +178,7 @@
                 </td>
               </tr>
             </logic:iterate>
-            <!-- pagination -->
+            
             <tr>
               <td colspan="9">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />

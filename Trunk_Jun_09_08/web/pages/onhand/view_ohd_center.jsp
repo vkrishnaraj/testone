@@ -13,14 +13,14 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function gotoHistoricalReport() {
   o = document.OnHandForm;
 	o.historical_report.value = "1";
 	o.submit();
 	
 }
-// -->
+
   </script>
   <html:form action="addOnHandBag.do" method="post">
     <input type="hidden" name="historical_report" value="">
@@ -43,8 +43,8 @@ function gotoHistoricalReport() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -142,11 +142,11 @@ function gotoHistoricalReport() {
         </div>
       </td>
     </tr>
-    <!-- END ICONS MENU -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <a name="baginfo"></a>
           <h1 class="green">

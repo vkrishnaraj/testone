@@ -14,7 +14,7 @@
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass = "form2_ld";
 %>
-  <!-- Calendar includes -->
+  
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
@@ -22,15 +22,15 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+
 	var doCheck = 0;
 	<jsp:include page="/pages/includes/ldclose.jsp" />
 	<% %>
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -56,8 +56,8 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -84,11 +84,11 @@
         </div>
       </td>
     </tr>
-    <!-- END ICONS MENU -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <span class="reqfield">*</span>
           <bean:message key="message.required" />

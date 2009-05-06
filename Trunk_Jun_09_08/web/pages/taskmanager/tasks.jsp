@@ -10,7 +10,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.taskForm;
   o.prevpage.value = "1";
@@ -38,20 +38,20 @@ function sortAgents(sortOrder) {
 	o.submit();
 }
 
-// -->
+
   </script>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="otherTasks.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateRest(this);">
     <logic:present name="file_type" scope="request">
@@ -61,9 +61,9 @@ function sortAgents(sortOrder) {
     <input type=hidden name="delete1" value="">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
 <%
           String sort = (String)request.getAttribute("sort");
@@ -272,11 +272,11 @@ function sortAgents(sortOrder) {
                   </td>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                  <!-- eof pagination -->
+                  
                 </td>
               </tr>
             </logic:present>

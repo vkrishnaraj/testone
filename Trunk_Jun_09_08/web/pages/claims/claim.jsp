@@ -13,22 +13,22 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <logic:present name="noincident" scope="request">
     <html:form action="claim_resolution.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13);">
     	<html:javascript formName="claimForm" />
-    <!-- search for claim from report number-->
+    
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
@@ -72,7 +72,7 @@
             </table>
           </html:form>
         </logic:present>
-        <!-- regular claim -->
+        
         <logic:notPresent name="noincident" scope="request">
           <html:form action="claim_resolution.do" method="post" onsubmit="return validateClaimForm(this);">
             <html:javascript formName="claimForm" />
@@ -116,8 +116,8 @@
                 </div>
               </td>
             </tr>
-            <!-- END PAGE HEADER/SEARCH -->
-            <!-- ICONS MENU -->
+            
+            
             <tr>
               <td colspan="3" id="navmenucell">
                 <div class="menu">
@@ -227,11 +227,11 @@
                 </div>
               </td>
             </tr>
-            <!-- END ICONS MENU -->
+            
             <tr>
-              <!-- MIDDLE COLUMN -->
+              
               <td id="middlecolumn">
-                <!-- MAIN BODY -->
+                
                 <div id="maincontent">
                   <logic:notPresent name="editinterim" scope="request">
                     <a name="claimamount"></a>
@@ -444,15 +444,15 @@
                         </tr>
                       </table>
                       <script language=javascript>
-                        <!--
+                        
 	<logic:empty name="index" scope="request">
-	//document.claimForm.expensetype_ID.focus();
+
 	document.location.href="#editpayout";
 	</logic:empty>
 	<logic:present name="index" scope="request">
 	document.claimForm.draft.focus();
 	</logic:present>
-	//-->
+
                       </script>
                     </logic:present>
                   </html:form>

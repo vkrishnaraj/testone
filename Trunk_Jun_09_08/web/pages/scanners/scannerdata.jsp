@@ -7,7 +7,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
 
-<!--SCANNERDATA.JSP-->
+
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -15,7 +15,7 @@
   <tr>
     <td colspan="3" id="pageheadercell">
       
-      <!-- Calendar includes -->
+      
       <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
       <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
       <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
@@ -23,12 +23,12 @@
       <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
       <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
       <SCRIPT LANGUAGE="JavaScript">
-      <!--
+      
       var cal1xx = new CalendarPopup(); 
       
-      // -->
+
       </SCRIPT>
-      <!-- calendar stuff ends here -->
+      
       
       
       <div id="pageheaderleft">
@@ -120,9 +120,9 @@
               <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
               <logic:present name="reportfile" scope="request">
                 <script language=javascript>
-                  <!--
+                  
                     openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
-                  //-->
+
                 </script>
               </logic:present>
           </div>
@@ -213,4 +213,4 @@ width:expression(60 + "px");
     </td>
   </tr>
 </html:form>
-<!--END OF SCANNERDATA.JSP-->
+

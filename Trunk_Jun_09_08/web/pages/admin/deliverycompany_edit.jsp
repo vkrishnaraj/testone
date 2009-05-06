@@ -39,11 +39,11 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="deliveryCompany" />
@@ -123,7 +123,7 @@
             </table>
             <br>
             
-            <!-- Service Levels -->
+            
             <logic:greaterThan name="MaintainDeliveryCompanyForm" property="delivercompany_ID" value="0">
               <h1 class="green">
                 <bean:message key="header.deliverycompany_servicelevels" />
@@ -166,7 +166,7 @@
             </logic:greaterThan>
             <br>
             
-            <!-- Stations -->
+            
             <logic:greaterThan name="MaintainDeliveryCompanyForm" property="delivercompany_ID" value="0">
               <h1 class="green">
                 <bean:message key="header.deliverycompany_stations" />

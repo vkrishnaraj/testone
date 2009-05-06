@@ -39,17 +39,17 @@ if ((curp <= (i.intValue() + 15)) && (curp >=(i.intValue() - 15))) {
   </logic:notPresent>
   <br>
 </logic:present>
-<!-- end pagination -->
+
 <input type="text" name="rowsperpage" value='<bean:write name="rowsperpage" scope="request"/>' size=3 maxlength=2 class="textfield">
 &nbsp;
 <bean:message key="RowsPerPage" />
 &nbsp;&nbsp;
 <input type="submit" name="update" value='<bean:message key="update" />' Id="button" onclick="return updatePagination();">
-<!-- pagination -->
+
 <input type="hidden" name="currpage" value='<bean:write name="currpage" scope="request"/>'>
 <input type="hidden" name="nextpage"/>
 <input type="hidden" name="prevpage"/>
 <input type="hidden" name="pagination"/>
 <input type="hidden" name="update_pagination"/>
-<!-- eof pagination -->
+
 

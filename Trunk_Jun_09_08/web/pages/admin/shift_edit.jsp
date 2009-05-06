@@ -27,11 +27,11 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="shift" />

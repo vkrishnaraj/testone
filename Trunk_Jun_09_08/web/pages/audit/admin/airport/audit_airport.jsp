@@ -12,20 +12,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.auditAirportForm;
   o.prevpage.value = "1";
@@ -50,7 +50,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   <html:form action="audit_airport.do" method="post">
     <tr>
@@ -72,7 +72,7 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -203,9 +203,9 @@ function updatePagination() {
       </td>
     </tr>
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -251,7 +251,7 @@ function updatePagination() {
                 </tr>
               </table>
               <logic:present name="airportList" scope="request">
-              <!-- result -->
+              
               <h1 class="green">
                 <bean:message key="header.search_result" />
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -299,17 +299,17 @@ function updatePagination() {
                 <input type="hidden" name="search" value="1">
                 <tr>
                   <td colspan="11">
-                    <!-- pagination -->
+                    
                     <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                    <!-- eof pagination -->
+                    
                   </td>
                 </tr>
-                <!-- end pagination -->
+                
               </table>
               <script language=javascript>
-                <!--
+                
   document.location.href="#result";
-  //-->
+
               </script>
             </logic:present>
           </html:form>

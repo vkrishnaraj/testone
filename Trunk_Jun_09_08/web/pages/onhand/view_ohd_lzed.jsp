@@ -10,7 +10,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
   function goprev() {
     o = document.viewOHDLZedForm;
     o.prevpage.value = "1";
@@ -35,15 +35,15 @@
   function updatePagination() {
 	    return true;
 	}
-// -->
+
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="forwardBag.do" method="post">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.forward_ohd" />
@@ -183,7 +183,7 @@
                   </logic:notPresent>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />

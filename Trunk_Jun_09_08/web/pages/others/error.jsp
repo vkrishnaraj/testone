@@ -5,9 +5,9 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <tr>
-  <!-- MIDDLE COLUMN -->
+  
   <td id="middlecolumn">
-    <!-- MAIN BODY -->
+    
     <table class="form2" cellspacing="0" cellpadding="0">
       <tr>
         <td>

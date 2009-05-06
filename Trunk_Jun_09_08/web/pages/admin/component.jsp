@@ -11,7 +11,7 @@
                  com.bagnet.nettracer.tracing.dto.ComponentDTO" %>
 <jsp:useBean id="systemMap" scope="request" type="java.util.TreeMap" />
 <script type="text/javascript" language="Javascript1.1">
-  <!--
+  
 
 function CheckBoxGroup() {
   this.controlBox=null;
@@ -24,12 +24,12 @@ function CheckBoxGroup() {
   this.checkboxNames=new Array();
   this.totalBoxes=0;
   this.totalSelected=0;
-  // Public methods
+
   this.setControlBox=CBG_setControlBox;
   this.setMaxAllowed=CBG_setMaxAllowed;
-  this.setMasterBehavior=CBG_setMasterBehavior; // all, some
+  this.setMasterBehavior=CBG_setMasterBehavior;
   this.addToGroup=CBG_addToGroup;
-  // Private methods
+
   this.expandWildcards=CBG_expandWildcards;
   this.addWildcardCheckboxes=CBG_addWildcardCheckboxes;
   this.addArrayCheckboxes=CBG_addArrayCheckboxes;
@@ -37,22 +37,22 @@ function CheckBoxGroup() {
   this.check=CBG_check;
   }
 
-// Set the master control checkbox name
+
 function CBG_setControlBox(name) { this.controlBox=name; }
 
-// Set the maximum number of checked boxes in the set, and optionally
-// the message to popup when the max is reached.
+
+
 function CBG_setMaxAllowed(num,msg) {
   this.maxAllowed=num;
   if (msg!=null&&msg!="") { this.maxAllowedMessage=msg; }
   }
 
-// Set the behavior for the checkbox group master checkbox
-//  All: all boxes must be checked for the master to be checked
-//  Some: one or more of the boxes can be checked for the master to be checked
+
+
+
 function CBG_setMasterBehavior(b) { this.masterBehavior = b.toLowerCase(); }
 
-// Add checkbox wildcards to the checkboxes array
+
 function CBG_addToGroup() {
   if (arguments.length>0) {
     for (var i=0;i<arguments.length;i++) {
@@ -61,7 +61,7 @@ function CBG_addToGroup() {
     }
   }
 
-// Expand the wildcard checkbox names given in the addToGroup method
+
 function CBG_expandWildcards() {
   if (this.formRef==null) {alert("ERROR: No form element has been passed.  Cannot extract form name!"); return false; }
   for (var i=0; i<this.checkboxWildcardNames.length;i++) {
@@ -83,7 +83,7 @@ function CBG_expandWildcards() {
   }
 
 
-// Add checkboxes to the group which match a pattern
+
 function CBG_addWildcardCheckboxes(name) {
   var i=name.indexOf("*");
   if ((i==0) || (i==name.length-1)) {
@@ -100,7 +100,7 @@ function CBG_addWildcardCheckboxes(name) {
     }
   }
 
-// Add checkboxes to the group which all have the same name
+
 function CBG_addArrayCheckboxes(name) {
   if((CBG_nameIsArray(this.formRef[name])) && (this.formRef[name].length>0)) {
     for (var i=0; i<this.formRef[name].length; i++) { this.addSingleCheckbox(this.formRef[name][i]); }
@@ -117,7 +117,7 @@ function CBG_addSingleCheckbox(obj) {
     }
   }
 
-// Runs whenever a checkbox in the group is clicked
+
 function CBG_check(obj) {
   var checked=obj.checked;
   if (this.formRef==null) {
@@ -137,7 +137,7 @@ function CBG_check(obj) {
       
     for (i=0;i<this.checkboxNames.length;i++) { 
     	this.checkboxNames[i].checked=checked;
-    	// added the following lines by matt
+
     	if (this.checkboxNames[i].disabled) {
     		if (this.checkboxNames[i].checked) {
     			this.formRef[this.checkboxNames[i].name].value = 1;
@@ -147,11 +147,6 @@ function CBG_check(obj) {
 		}
     this.totalSelected=(checked)?this.checkboxNames.length:0;
     
-    /* if (!checked) {
-        obj.checked = (this.totalSelected>0)?true:false;
-        obj.blur();
-        }
-    */
       }
     }
   else {
@@ -239,7 +234,7 @@ function CBG_nameIsArray(obj) {
                 }
 %>
 
-  // -->
+
 </script>
 <html:form action="componentAdmin.do" method="post">
   <tr>
@@ -261,11 +256,11 @@ function CBG_nameIsArray(obj) {
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="permissions" />

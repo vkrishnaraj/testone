@@ -14,7 +14,7 @@
                                                                "org.apache.struts.action.LOCALE");
 %>
   <script language="javascript">
-    <!--
+    
 
   function checkDate(strng)
   {
@@ -54,5 +54,5 @@
   }
 
 
-// -->
+
   </script>

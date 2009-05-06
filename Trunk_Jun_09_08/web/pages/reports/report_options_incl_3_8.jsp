@@ -96,7 +96,7 @@
 
                   <logic:notEqual name="reportnum" scope="request" value="5">
                     <logic:notEqual name="reportnum" scope="request" value="8">
-                    <!-- fault station and loss code -->
+                    
                     <tr>
                       <td>
                         <bean:message key="colname.faultstation" />
@@ -318,7 +318,7 @@
                   </tr>
                 </logic:equal>
                 <logic:equal name="reportnum" scope="request" value="8">
-                <!-- break down by total or 24 hour period //-->
+                
                 <tr>
                   <td>
                     <bean:message key="colname.date_break_down" />

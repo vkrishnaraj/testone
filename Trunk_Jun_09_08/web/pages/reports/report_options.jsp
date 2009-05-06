@@ -16,13 +16,13 @@
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <html:form action="statReport.do" method="post">
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
 	
 	function changebutton() {
@@ -32,9 +32,9 @@
 		document.statReportForm.submit();
 	}
 	
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <html:hidden property="reportnum" />
   <html:hidden property="customreportnum" />
   <input type="hidden" name="create" value="">
@@ -57,8 +57,8 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
-  <!-- ICONS MENU -->
+  
+  
   <tr>
     <td colspan="3" id="navmenucell">
       <div class="menu">
@@ -233,11 +233,11 @@
       </div>
     </td>
   </tr>
-  <!-- END ICONS MENU -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <logic:equal name="reportnum" scope="request" value="3">
@@ -289,10 +289,10 @@
                   </font>
                   <br>
                   
-                  <!-- custom reporting //-->
+                  
                   <logic:equal name="reportnum" scope="request" value="20">
                   
-                  <!-- custom report 1 MBR report -->
+                  
                   
                   
                   <c:if test="${!empty customreportnum}">
@@ -330,7 +330,7 @@
                   </logic:notPresent>
                   
                   </logic:equal>
-                  <!-- ----------------end of custom reporting------------------------ //-->
+                  
                   
                   <table class="form2" cellspacing="0" cellpadding="0">
                   
@@ -380,7 +380,7 @@
 	                </td>
 	              </tr>
 	              <logic:present name="reportfile" scope="request">
-	              <!-- result -->
+	              
 	              <tr>
 	                <td colspan=2 align=center bgcolor=white>
 	                  <br>
@@ -392,16 +392,16 @@
 	                </tr>
 	              </logic:present>
 
-	            </logic:notEqual> <!-- end of not equal custom report //-->
+	            </logic:notEqual> 
 	            </table>
             
             <logic:present name="reportfile" scope="request">
               <script language=javascript>
-                <!--
+                
 
 openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
 
-//-->
+
               </script>
             </logic:present>
           </html:form>

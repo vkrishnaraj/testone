@@ -23,7 +23,7 @@
     }
   }
 %>
-  <!-- Calendar includes -->
+  
   <%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -32,7 +32,7 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
 
 	
@@ -53,9 +53,9 @@
 	theform.submit();
 	}
 
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
 <%
   int report_type = 0;
 
@@ -403,9 +403,9 @@
           <a href="#"><bean:message key="link.to_top" /></a>
           <br>
           <br>
-          <!-- contact info -->
+          
           <jsp:include page="/pages/includes/contactinfo_incl.jsp" />
-          <!-- eof contact info -->
+          
           <a name="passit"></a>
           <h1 class="green">
             <bean:message key="header.itinerary" />
@@ -686,23 +686,8 @@
                               </html:option>
                             </html:select>
                           </td>
-                          <!--
-                          <td>
-                            <bean:message key="colname.tsa" />
-                            <br>
-                            <html:select property="tsachecked" styleClass="dropdown">
-                              <html:option value="">
-                                <bean:message key="select.please_select" />
-                              </html:option>
-                              <html:option value="1">
-                                <bean:message key="select.yes" />
-                              </html:option>
-                              <html:option value="0">
-                                <bean:message key="select.no" />
-                              </html:option>
-                            </html:select>
-                          </td>
-                          -->
+                          
+                          
                           <td>
                             <bean:message key="colname.custom" />
                             <br>

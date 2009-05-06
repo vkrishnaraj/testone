@@ -21,7 +21,7 @@
 %>
 
 <script language="javascript">
-  <!--
+  
 
 
    function deleteAgent (userName,agentId,stationId)
@@ -35,13 +35,13 @@
     }
   }
 
-  // -->
+
 </script>
 
 
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <script language="javascript">
-  <!--
+  
     function goprev() {
       o = document.agentForm;
       o.prevpage.value = "1";
@@ -71,7 +71,7 @@
     function updatePagination() {
         return true;
     }
-  // -->
+
 </script>
 
 <html:form action="agentAdmin.do" method="post">
@@ -94,11 +94,11 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.search_agents" />
@@ -288,7 +288,7 @@
                 </td>
               </tr>
             </logic:iterate>
-            <!-- pagination -->
+            
             <tr>
               <td colspan="9">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />

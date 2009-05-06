@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <script language="javascript">
-  <!--
+  
   function goprev() {
     o = document.stationForm;
     o.prevpage.value = "1";
@@ -41,7 +41,7 @@
   function updatePagination() {
 	    return true;
 	}
-// -->
+
 </script>
 
 <%
@@ -70,11 +70,11 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="station" />
@@ -400,13 +400,13 @@
                       </td>
                     </tr>
                   </logic:iterate>
-	              <!-- pagination -->
+	              
 	              <tr>
 	                <td colspan="8">
   	                <jsp:include page="/pages/includes/pagination_incl.jsp" />
 	                </td>
 	              </tr>
-	              <!-- end pagination -->
+	              
                 </logic:present>
                 <tr>
                   <td colspan="8" align="center">

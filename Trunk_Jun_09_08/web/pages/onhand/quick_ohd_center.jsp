@@ -12,15 +12,15 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+
 	
 	function showmanu(o) {
 		if (o.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
@@ -30,9 +30,9 @@
 		}
 	}
 	
-// -->
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <SCRIPT LANGUAGE="JavaScript">
     function textCounter2(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
@@ -41,7 +41,7 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
-    // End -->
+
   </SCRIPT>
   <html:form action="addOnHandBag.do" method="post" enctype="multipart/form-data" onsubmit="return validateRest(this);">
     <input type="hidden" name="express" value="1">
@@ -64,13 +64,13 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
-    <!-- END ICONS MENU -->
+    
+    
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <a name="baginfo"></a>
           <h1 class="green">
@@ -449,9 +449,9 @@
         </table>
       </html:form>
       <script language="javascript">
-        <!--
+        
 
-	// happens after load
+
 
 	if (document.OnHandForm.manufacturer_ID.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
 		document.getElementById("manu_other").style.visibility = "visible";
@@ -481,5 +481,5 @@
   document.location.href="#photos";
 </logic:present>
 
-//-->
+
       </script>

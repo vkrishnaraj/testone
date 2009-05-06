@@ -9,7 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
-<!-- Calendar includes -->
+
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
@@ -17,7 +17,7 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-  <!--
+  
 	var cal1xx = new CalendarPopup();	
   
     function changebutton() {
@@ -32,9 +32,9 @@
       document.BDOForm.save.disabled = true;
     }
 
-// -->
+
 </SCRIPT>
-<!-- calendar stuff ends here -->
+
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
@@ -103,7 +103,7 @@
       </td>
     </tr>
     <logic:present name="mbr" scope="request">
-    <!-- -----begin enter mbr number----- -->
+    
     <tr>
       <td id="middlecolumn">
         <div id="maincontent">
@@ -126,10 +126,10 @@
                 </td>
               </tr>
             </table>
-            <!-- -----end enter mbr number----- -->
+            
           </logic:present>
           <logic:present name="onhand" scope="request">
-          <!-- -----begin enter ohd number----- -->
+          
           <tr>
             <td id="middlecolumn">
               <div id="maincontent">
@@ -152,17 +152,17 @@
                       </td>
                     </tr>
                   </table>
-                  <!-- -----end enter ohd number----- -->
+                  
                 </logic:present>
                 <logic:present name="showbdolist" scope="request">
-                <!-- list of bdos for this report -->
+                
                 <jsp:include page="bdo_list_incl.jsp" />
               </logic:present>
               <logic:notPresent name="showbdolist" scope="request">
                 <logic:present name="showbdo" scope="request">
-                <!-- -------- has id entered so show bdo --------- -->
+                
                 <jsp:include page="edit_bdo_incl.jsp" />
-                <!-- ---------end of show bdo------------ -->
+                
               </logic:present>
             </logic:notPresent>
           </html:form>

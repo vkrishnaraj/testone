@@ -13,20 +13,20 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils" %>
 <%@ page import="java.util.List" %>
-<!-- Calendar includes -->
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-  <!--
+  
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
 </SCRIPT>
-<!-- calendar stuff ends here -->
+
 <script language="javascript">
-  <!--
+  
 function goprev() {
   o = document.auditMBRForm;
   o.prevpage.value = "1";
@@ -51,7 +51,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
 </script>
 <html:form action="audit_claims.do" method="post">
   <tr>
@@ -76,7 +76,7 @@ function updatePagination() {
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <tr>
     <td colspan="3" id="navmenucell">
       <div class="menu">
@@ -207,9 +207,9 @@ function updatePagination() {
     </td>
   </tr>
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <table class="form2" cellspacing="0" cellpadding="0">
           <tr>

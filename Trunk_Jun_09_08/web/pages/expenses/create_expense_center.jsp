@@ -11,19 +11,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
-<!-- Calendar includes -->
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-<!-- calendar stuff ends here -->
-<!-- regular claim -->
+
+
 <%
 	Agent a = (Agent)request.getSession().getAttribute("user");
 	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
@@ -60,8 +60,8 @@
 				</div>
 			</td>
 		</tr>
-		<!-- END PAGE HEADER/SEARCH -->
-		<!-- ICONS MENU -->
+		
+		
 		<tr>
 			<td colspan="3" id="navmenucell">
 				<div class="menu">
@@ -84,11 +84,11 @@
 				</div>
 			</td>
 		</tr>
-		<!-- END ICONS MENU -->
+		
 		<tr>
-			<!-- MIDDLE COLUMN -->
+			
 			<td id="middlecolumn">
-				<!-- MAIN BODY -->
+				
 				<div id="maincontent">
 					<br />
 					<a name="editpayout"></a>

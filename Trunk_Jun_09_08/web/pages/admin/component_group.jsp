@@ -12,7 +12,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <script language="javascript">
-    <!--
+    
   function goprev() {
     o = document.groupForm;
     o.prevpage.value = "1";
@@ -37,7 +37,7 @@
   function updatePagination() {
 	    return true;
 	}
-// -->
+
   </script>
   
   
@@ -51,7 +51,7 @@
 %>
 
 <script language="javascript">
-  <!--
+  
 
 
   function deleteGroup (groupName,groupId)
@@ -64,7 +64,7 @@
     }
   } 
 
-  // -->
+
 </script>
 
   
@@ -88,7 +88,7 @@
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
 <%
     String sort = (String)request.getAttribute("sort");
 
@@ -103,9 +103,9 @@
     }
 %>
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_groups" />
@@ -199,7 +199,7 @@
                   </td>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="5">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />

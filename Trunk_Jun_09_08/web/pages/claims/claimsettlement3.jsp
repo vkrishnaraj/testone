@@ -13,16 +13,16 @@
 <%
   Agent a = (Agent) session.getAttribute("user");
 %>
-<!-- Calendar includes -->
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
   var cal1xx = new CalendarPopup(); 
 
-    // -->
+
   </SCRIPT>
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -86,10 +86,10 @@
 
 
 
-  <!-- END ICONS MENU -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
-    <td id="middlecolumn"><!-- MAIN BODY -->
+    
+    <td id="middlecolumn">
     <div id="maincontent"><html:form action="claim_settlement.do"
       method="post">
 

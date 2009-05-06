@@ -10,20 +10,20 @@
 <%
 	Agent a = (Agent) session.getAttribute("user");
 %>
-<!-- Calendar includes -->
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-<!-- calendar stuff ends here -->
+
 <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.worldtracerafForm;
   o.prevpage.value = "1";
@@ -48,7 +48,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
 
 <html:form action="worldtraceraf.do" method="post">
@@ -56,10 +56,10 @@ function updatePagination() {
 	<jsp:include page="worldtracer_viewaf_header.jsp" />
 
 
-	<!-- END PAGE HEADER/SEARCH -->
+	
 	<tr>
-		<!-- MIDDLE COLUMN -->
-		<td id="middlecolumn"><!-- MAIN BODY -->
+		
+		<td id="middlecolumn">
 		<div id="maincontent">
 		<h1 class="green">
 		<%
@@ -239,11 +239,11 @@ function updatePagination() {
 					</td>
 				</c:forEach>
 				<tr>
-					<td colspan="3"><!-- pagination --> <jsp:include
-						page="/pages/includes/pagination_incl.jsp" /> <!-- eof pagination -->
+					<td colspan="3"> <jsp:include
+						page="/pages/includes/pagination_incl.jsp" /> 
 					</td>
 				</tr>
-				<!-- end pagination -->
+				
 			</table>
 
 		</logic:present> <input type="hidden" name="viewaction"

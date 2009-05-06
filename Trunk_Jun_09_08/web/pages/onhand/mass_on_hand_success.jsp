@@ -7,9 +7,9 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="java.util.*;" %>
 <tr>
-  <!-- MIDDLE COLUMN -->
+  
   <td id="middlecolumn">
-    <!-- MAIN BODY -->
+    
     <table class="form2" cellspacing="0" cellpadding="0">
       <tr>
         <td>

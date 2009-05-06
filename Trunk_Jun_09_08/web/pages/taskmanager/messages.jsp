@@ -13,20 +13,20 @@ request.getAttribute("org.apache.struts.action.MESSAGE");
 java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
 "org.apache.struts.action.LOCALE");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.composeForm;
   o.prevpage.value = "1";
@@ -88,7 +88,7 @@ function sortAgents(sortOrder) {
     }
   } 
 
-// -->
+
   </script>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="message.do" method="post" onsubmit="fillzero(this.search_file_ref, 13); return true;">
@@ -109,9 +109,9 @@ function sortAgents(sortOrder) {
 %>
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_messages" />
@@ -284,15 +284,15 @@ function sortAgents(sortOrder) {
                   <input type="hidden" name="inbox" value="1">
                 </td>
               </tr>
-              <!-- pagination -->
+              
               
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                  <!-- eof pagination -->
+                  
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </logic:present>
             <tr>
               <td colspan="11" align="center">

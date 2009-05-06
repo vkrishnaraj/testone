@@ -34,7 +34,6 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
 %>
 <html:form action="companyAdmin.do" method="post" onsubmit="return validateThisForm(this);">
   <html:javascript formName="companyForm" />
-  <% // BELOW JAVASCRIPT OVER-RIDES DEFAULT VALIDATOR CODE  %>
   <script type="text/javascript">
       var buttonSelected = null;
       var numberOfLzs = 0;
@@ -74,7 +73,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
 	      			if (value.length > 0) {
 	      			
 	                    var tempArray = value.split('.');
-	                    //Strip off leading '0'
+
 	                    var zeroIndex = 0;
 	                    var joinedString= tempArray.join('');
 	                    while (joinedString.charAt(zeroIndex) == '0') {
@@ -122,8 +121,8 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
             var field = form[oRequired[x][0]];
 
             if (!jcv_isFieldPresent(field)) {
-                //fields[i++] = oRequired[x][1];
-                //isValid=false;
+
+
             } else if ((field.type == 'hidden' ||
                 field.type == 'text' ||
                 field.type == 'textarea' ||
@@ -134,7 +133,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
                 field.type == 'password')) {
 
                 var value = '';
-                // get field's value
+
                 if (field.type == "select-one") {
                     var si = field.selectedIndex;
                     if (si >= 0) {
@@ -178,7 +177,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
                 for (loop=0;loop < field.length;loop++) {
                     if (field[loop].checked) {
                         isChecked=loop;
-                        break; // only one needs to be checked
+                        break;
                     }
                 }
                 if (isChecked < 0) {
@@ -196,7 +195,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
         return isValid;
     }
     
-    // Trim whitespace from left and right sides of s.
+
     function trim(s) {
         return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
     }
@@ -286,7 +285,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
 	                &nbsp;</span></a>
 	          </dd>
 	          <%
-	          	//if (true) {
+
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, loginuser)) {
 			  %>
 	          
@@ -309,11 +308,11 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
     </td>
   </tr>
   
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
 
           <logic:equal name="pageState" scope="request" value="1">

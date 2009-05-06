@@ -9,7 +9,7 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
@@ -19,14 +19,14 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.searchIncidentForm;
   o.prevpage.value = "1";
@@ -52,7 +52,7 @@ function updatePagination() {
     return true;
 }
 
-// -->
+
   </script>
   <jsp:include page="/pages/includes/validation_search.jsp" />
   <html:form action="searchIncident.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13); return validateSearch(this);">
@@ -75,11 +75,11 @@ function updatePagination() {
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_criteria" />
@@ -280,9 +280,9 @@ function updatePagination() {
                 <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
                 <logic:present name="reportfile" scope="request">
                   <script language=javascript>
-                    <!--
+                    
                       openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
-                    //-->
+
                   </script>
                 </logic:present>
               </div>
@@ -491,17 +491,17 @@ function updatePagination() {
                 </logic:iterate>
                 <tr>
                   <td colspan="<logic:notEmpty name="searchIncidentForm" property="flightnum">11</logic:notEmpty> <logic:empty name="searchIncidentForm" property="flightnum">10</logic:empty>">
-                    <!-- pagination -->
+                    
                     <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                    <!-- eof pagination -->
+                    
                   </td>
                 </tr>
-                <!-- end pagination -->
+                
               </table>
               <script language=javascript>
-                <!--
+                
   document.location.href="#result";
-  //-->
+
               </script>
             </logic:present>
           </html:form>

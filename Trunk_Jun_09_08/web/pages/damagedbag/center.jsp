@@ -19,7 +19,7 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%><script language="javascript">
-    <!--
+    
 function gotoHistoricalReport() {
   o = document.incidentForm;
 	o.historical_report.value = "1";
@@ -59,12 +59,12 @@ function disableButton(aButton) {
         enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
      }
     }
-// -->
+
   </script>
 <logic:present name="prepopulate" scope="request">
 
   <script language="javascript">
-    <!--
+    
     var buttonSelected = null;
     function validateThis(form) {
       if (buttonSelected == null) {
@@ -74,12 +74,12 @@ function disableButton(aButton) {
       } 
       return true;
     }
-    // -->
+
   </script>
   
   <html:form action="damaged.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/validation_incl.jsp" />
-    <!-- search for record locator-->
+    
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">
@@ -110,7 +110,7 @@ function disableButton(aButton) {
       <jsp:include page="/pages/includes/incident_population.jsp" />
   </html:form>
 </logic:present>
-<!-- regular incident -->
+
 <logic:notPresent name="prepopulate" scope="request">
 
 
@@ -162,31 +162,18 @@ function disableButton(aButton) {
       </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
-    <!-- ICONS MENU -->
+    
+    
     <logic:present name="express" scope="request">
-      <!-- express input //-->
+      
       <jsp:include page="/pages/includes/mbrexpress_incl.jsp" />
-      <!-- eof express input //-->
+      
     </logic:present>
     <logic:notPresent name="express" scope="request">
       <tr>
         <td colspan="3" id="navmenucell">
         <div class="menu">
         <dl>
-          <%
-          	/*
-          																																		           <dd>
-          																																		             <a href="#incidentinfo"><span class="aa">&nbsp;
-          																																		                 <br />
-          																																		                 &nbsp;</span>
-          																																		               <span class="bb"><bean:message key="menu.incident_info" /></span>
-          																																		               <span class="cc">&nbsp;
-          																																		                 <br />
-          																																		                 &nbsp;</span></a>
-          																																		           </dd>
-          				 */
-          %>
           <dd><a href="#contact"><span class="aa">&nbsp;
           <br />
           &nbsp;</span> <span class="bb"><bean:message
@@ -197,7 +184,7 @@ function disableButton(aButton) {
           &nbsp;</span> <span class="bb"><bean:message
             key="menu.itinerary" /></span> <span class="cc">&nbsp; <br />
           &nbsp;</span></a></dd>
-          <!--<dd><a href="#checkedbaggage"><span class="aa">&nbsp;<br />&nbsp;</span><span class="bb"><bean:message key="menu.checked_bag_info"/></span><span class="cc">&nbsp;<br />&nbsp;</span></a></dd>-->
+          
           <dd><a href="#checkedbaggage"><span class="aa">&nbsp;
           <br />
           &nbsp;</span> <span class="bb"><bean:message
@@ -287,10 +274,10 @@ function disableButton(aButton) {
         </div>
         </td>
       </tr>
-      <!-- END ICONS MENU -->
+      
       <tr>
-        <!-- MIDDLE COLUMN -->
-        <td id="middlecolumn"><!-- MAIN BODY --> <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
+        
+        <td id="middlecolumn"> <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
         <jsp:include page="/pages/includes/mbrbag_incl.jsp" /> <jsp:include
           page="/pages/includes/remark_incl.jsp" /> <logic:notEqual
           name="incidentForm" property="readonly" value="1">
@@ -328,9 +315,9 @@ function disableButton(aButton) {
           </logic:equal>
         </logic:equal>
     </logic:notPresent>
-    <!-- this not present is for non express inputs //-->
+    
     <script language="javascript">
-      <!--
+      
 
 <logic:present name="passit" scope="request">
 	document.location.href="#passit";
@@ -360,7 +347,7 @@ function disableButton(aButton) {
 	document.location.href='#upload<bean:write name="upload" scope="request" />';
 </logic:present>
 
-//-->
+
     </script>
   </html:form>
 

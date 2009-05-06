@@ -11,7 +11,7 @@
 %>
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.interimExpenseRequestForm;
   o.prevpage.value = "1";
@@ -38,7 +38,7 @@ function sortInterimExpense(sortOrder) {
 	o.submit();
 }
 
-// -->
+
   </script>
   <html:form action="BatchApproveExpenses.do" method="post" onsubmit="fillzero(this.incident_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
@@ -59,9 +59,9 @@ function sortInterimExpense(sortOrder) {
     <input type=hidden name=payout_ID value="">
     <input type=hidden name=deny1 value="">
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_interim_expense" />
@@ -253,13 +253,13 @@ function sortInterimExpense(sortOrder) {
                   </logic:notEqual>
                 </tr>
               </logic:iterate>
-              <!-- pagination -->
+              
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
-              <!-- end pagination -->
+              
             </logic:present>
             <tr>
               <td colspan="11" align="center">

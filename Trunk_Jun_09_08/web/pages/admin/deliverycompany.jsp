@@ -7,7 +7,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm" %>
 <script language="javascript">
-  <!--
+  
   function goprev() {
     o = document.MaintainDeliveryCompanyForm;
     o.prevpage.value = "1";
@@ -32,7 +32,7 @@
   function updatePagination() {
 	    return true;
 	}
-// -->
+
 </script>
 <jsp:include page="/pages/includes/validation_incl.jsp" />
 <html:form action="bdoAdmin.do" method="post">
@@ -55,7 +55,7 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
+  
   <input type="hidden" name="delete1" value="" />
   <input type="hidden" name="deleteDeliveryCompanyId" value="" />
 <%
@@ -72,9 +72,9 @@
   }
 %>
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.search_delivery_companies" />
@@ -146,14 +146,14 @@
                 </td>
               </tr>
             </logic:iterate>
-            <!-- pagination -->
+            
             <tr>
               <td colspan="3">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
 
               </td>
             </tr>
-            <!-- end pagination -->
+            
           </logic:present>
           <tr>
             <td colspan="3">

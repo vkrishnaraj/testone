@@ -27,13 +27,13 @@
       </div>
     </td>
   </tr>
-  <!-- END PAGE HEADER/SEARCH -->
-  <!-- ICONS MENU -->
-  <!-- END ICONS MENU -->
+  
+  
+  
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="colname.bag_tag_number" />

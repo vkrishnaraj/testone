@@ -19,7 +19,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
  %>
  
 <SCRIPT LANGUAGE="JavaScript">
-  <!--
+  
 	
 	function generateReceipt(frm) {
 	
@@ -70,7 +70,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
 		
 
 	}
-// -->
+
 </SCRIPT>
 <link href="deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
 <link href="deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
@@ -84,15 +84,15 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
             <div id="headercontent"></div>
           </td>
         </tr>
-        <!-- HORIZONTAL MENU -->
+        
         <tr>
           <td colspan="3" id="headermenucell"></td>
         </tr>
-        <!-- END HORIZONTAL MENU -->
-        <!-- PAGE HEADER/SEARCH -->
-        <!-- MIDDLE COLUMN -->
+        
+        
+        
         <td id="middlecolumn" width=760>
-          <!-- MAIN BODY -->
+          
           <div id="maincontent">
             <h1 class="green">
             <% 
@@ -191,9 +191,9 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
               </table>
             </FORM>
           </div>
-          <!-- END MAIN BODY -->
+          
         </td>
-        <!-- END MIDDLE COLUMN -->
+        
       </tr>
     </table>
   </td>

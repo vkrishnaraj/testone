@@ -9,20 +9,20 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
-    <!--
+    
 function goprev() {
   o = document.searchIncidentForm;
   o.prevpage.value = "1";
@@ -47,7 +47,7 @@ function gopage(i) {
 function updatePagination() {
     return true;
 }
-// -->
+
   </script>
   
   <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -55,11 +55,11 @@ function updatePagination() {
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_incoming_incidents" />
@@ -346,17 +346,17 @@ function updatePagination() {
                 </logic:iterate>
                 <tr>
                   <td colspan="<logic:notEmpty name="searchIncidentForm" property="flightnum">13</logic:notEmpty> <logic:empty name="searchIncidentForm" property="flightnum">12</logic:empty>">
-                    <!-- pagination -->
+                    
                     <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                    <!-- eof pagination -->
+                    
                   </td>
                 </tr>
-                <!-- end pagination -->
+                
               </table>
               <script language=javascript>
-                <!--
+                
   document.location.href="#result";
-  //-->
+
               </script>
             </logic:present>
           </html:form>

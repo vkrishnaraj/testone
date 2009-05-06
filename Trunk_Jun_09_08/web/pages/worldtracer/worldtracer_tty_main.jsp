@@ -18,20 +18,20 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
-    // End -->
+
   </SCRIPT>
-<!-- Calendar includes -->
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <script language="javascript">
 
 function getreason(choose){
@@ -42,14 +42,14 @@ function getreason(choose){
 </script>
 
   
-<!-- calendar stuff ends here -->
+
 
 <html:form action="worldtracertty.do" method="post"
 	onsubmit="return (validateForwardOHD(this) && setExpediteNum(this)); ">
 
 	<tr>
-		<!-- MIDDLE COLUMN -->
-		<td id="middlecolumn"><!-- MAIN BODY -->
+		
+		<td id="middlecolumn">
 		<div id="maincontent">
 		<h1 class="green"><bean:message
 			key="header.tty_to_worldtracer_title" /> </h1>

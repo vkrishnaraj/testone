@@ -6,9 +6,9 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <tr>
-  <!-- MIDDLE COLUMN -->
+  
   <td id="middlecolumn">
-    <!-- MAIN BODY -->
+    
     <table class="form2" cellspacing="0" cellpadding="0">
       <tr>
         <td>

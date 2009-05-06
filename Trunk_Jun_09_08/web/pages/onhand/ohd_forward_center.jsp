@@ -142,28 +142,28 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
     return isDate(strng,'<%= a.getTimeformat().getFormat() %>');
   }
     
-    // End -->
+
   </SCRIPT>
-  <!-- Calendar includes -->
+  
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-    <!--
+    
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
-// -->
+
+
   </SCRIPT>
-  <!-- calendar stuff ends here -->
+  
   <jsp:include page="/pages/includes/required_fields_incl.jsp" />
   
   <html:form action="forward_on_hand.do" method="post" onsubmit="return (validateForwardOHD(this) && setExpediteNum(this)); ">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.forward_on_hand_title" />
@@ -265,13 +265,13 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
               if (!batch) {
 %>
                 <script language="javascript">
-                  <!--
+                  
         function setExpediteNum(form)
         { 
         return true;
         }
 
-      //-->
+
                 </script>
                 <tr>
                   <td>
@@ -289,7 +289,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
               } else {
 %>
                 <script language="javascript">
-                  <!--
+                  
         function setExpediteNum(form)
         {
             var expediteNum = "";
@@ -308,7 +308,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
             return true;
         }
 
-      //-->
+
                 </script>
                 <input type="hidden" name="expediteNumber" value="a">
 <%

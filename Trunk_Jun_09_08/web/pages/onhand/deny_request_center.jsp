@@ -13,16 +13,16 @@
       countfield.value = maxlimit - field.value.length;
     }
   }
-  // End -->
+
 </SCRIPT>
 <html:form action="request_on_hand.do" method="post">
   <input type="hidden" name="request_ID" value='<%= request.getAttribute("request_ID") %>'>
   <input type="hidden" name="deny" value="1">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
-    <!-- MIDDLE COLUMN -->
+    
     <td id="middlecolumn">
-      <!-- MAIN BODY -->
+      
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.request_deny_title" />

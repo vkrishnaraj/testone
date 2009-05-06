@@ -142,7 +142,7 @@
 			var toggleLinks = document.getElementsByClassName('statClaimToggle');
 			var contentBlocks = document.getElementsByClassName('statClaimContent');
 			
-			//accordion effect
+
 			var contentFX = new fx.Accordion(toggleLinks, contentBlocks, { opacity: false });
 		}
 		function submitform() {
@@ -174,7 +174,7 @@
   	</td>
   </tr>
   <tr> 
-    <td id="topcell" colspan="2"> <!-- here -->
+    <td id="topcell" colspan="2"> 
     
 <bean:define id="theform" name="IncidentForm" scope="request" />
 

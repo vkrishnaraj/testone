@@ -28,7 +28,7 @@
   	} else if (request.getAttribute("missing") != null) {
      		 itemType = 2;
     }	
-  	//String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+
     lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getCurrentlocale(), a.getStation().getCompany());
   } else {
     lc = null;
@@ -45,7 +45,7 @@
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <script langugage="javascript">
-  <!--
+  
 	function getstations() {
 		o = document.incidentForm;
 		o.getstation.value="1";
@@ -56,7 +56,7 @@
 		});
 	}
 
-//-->
+
 </script>
 <tr>
   <td nowrap width=20%>

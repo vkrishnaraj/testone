@@ -96,11 +96,11 @@ function submitForwardForm()
         </div>
       </td>
     </tr>
-    <!-- END PAGE HEADER/SEARCH -->
+    
     <tr>
-      <!-- MIDDLE COLUMN -->
+      
       <td id="middlecolumn">
-        <!-- MAIN BODY -->
+        
         <div id="maincontent">
           <logic:present name="onhandlist" scope="request">
             <table class="form2" cellspacing="0" cellpadding="0">
