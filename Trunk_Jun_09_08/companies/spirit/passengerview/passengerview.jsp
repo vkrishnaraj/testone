@@ -134,7 +134,7 @@
 			var toggleLinks = document.getElementsByClassName('statClaimToggle');
 			var contentBlocks = document.getElementsByClassName('statClaimContent');
 			
-			//accordion effect
+
 			var contentFX = new fx.Accordion(toggleLinks, contentBlocks, { opacity: false });
 		}
 		function submitform() {
@@ -150,9 +150,9 @@
 
 <img src="<%=request.getContextPath()%>/deployment/main/images/nettracer/logo.jpg"/>
 
-<table cellspacing="0" id="bodytable"> <!-- here -->
+<table cellspacing="0" id="bodytable"> 
   <tr> 
-    <td id="topcell"> <!-- here -->
+    <td id="topcell"> 
     
 <bean:define id="theform" name="IncidentForm" scope="request" />
 

@@ -13,7 +13,7 @@
 %>
 
 <script language="javascript">
-  <!--
+  
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
  
@@ -118,7 +118,7 @@
         }
       }
       else if (currentElementName.indexOf("[0].state_ID") != -1) {  
-        // check country
+
         var pos = currentElementName.indexOf(".");
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
   
@@ -285,7 +285,7 @@
       
       
       
-    } // End FOR LOOP
+    }
     
 
     var mobile = document.getElementById("addresses[0].mobile");
@@ -440,5 +440,5 @@
 
     return true;
   }
-  // -->
+
 </script>

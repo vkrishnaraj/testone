@@ -11,7 +11,7 @@
 			.getAttribute("org.apache.struts.action.LOCALE");
 %>
 <script language="javascript">
-  <!--
+  
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
  
@@ -158,7 +158,7 @@
 
       }
         
-    } // End FOR LOOP
+    } 
     
     for (var j=0;j<addressIndices.length;j++) {
       var index = addressIndices[0];
@@ -320,5 +320,5 @@
   function validateReqForward(form) {
   	return true;
   }
-  // -->
+
 </script>

@@ -37,14 +37,14 @@
       		<div id="headercontent">      </div>
     		</td> 
       </tr> 
-      <!-- HORIZONTAL MENU --> 
+       
       <tr> 
         <td id="headermenucell">
       
     		</td>
       </tr> 
-        <!-- END HORIZONTAL MENU -->
-    <!-- PAGE HEADER/SEARCH --> 
+        
+     
     
 
 		  <tr>
@@ -56,16 +56,16 @@
 		      </div>
 		    </td>
 		  </tr>
-		  <!-- END PAGE HEADER/SEARCH -->
-		  <!--- search -->
+		  
+		  
   
     	
         
       <logic:notPresent name="incident" scope="request">
       <tr>
-      <!-- MIDDLE COLUMN -->
+      
       	<td id="middlecolumn" >
-        <!-- MAIN BODY -->
+        
 	      
 	      <div id="maincontent">
 	        <font color=red>
@@ -124,7 +124,7 @@
       </logic:notPresent>
         
        <logic:present name="incident" scope="request">
-        <!-- ICONS MENU -->
+        
         <tr>
           <td colspan="3" id="navmenucell">
             <div class="menu">
@@ -180,12 +180,12 @@
             </div>
           </td>
         </tr>
-        <!-- END ICONS MENU -->
-        <!-- END ICONS MENU -->
+        
+        
         <tr>
-          <!-- MIDDLE COLUMN -->
+          
           <td id="middlecolumn">
-            <!-- MAIN BODY -->
+            
             <div id="maincontent">
               <a name="incidentinfo"></a>
               <h1 class="green">
@@ -522,7 +522,7 @@
               <br>
               <br>
               <logic:present name="lostdelay" scope="request">
-              <!-- claimcheck numbers -->
+              
               <a name="claimcheck"></a>
               <h1 class="green">
                 <bean:message key="colname.claimnum" />
@@ -683,7 +683,7 @@
             <br>
             <br>
             <logic:present name="missing" scope="request">
-            <!-- missing articles -->
+            
             <a name="missingarticles"></a>
             <h1 class="green">
               <bean:message key="header.ma" />
@@ -722,9 +722,9 @@
    	</logic:present>
 
     <SCRIPT LANGUAGE="JavaScript">
-      <!--
+      
 
-	// happens after load
+
  for (var j=0;j<document.searchform.length;j++) {
     currentElement = document.searchform.elements[j];
     currentElementName=currentElement.name;
@@ -745,7 +745,7 @@
 	}
 
 	
-// -->
+
     </SCRIPT>
     
     </table>

@@ -12,7 +12,7 @@
 %>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <script language="javascript">
-  <!--
+  
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
  
@@ -120,7 +120,7 @@
           return false;
         }
       }
-    } // End FOR LOOP
+    }
     
 
     var mobile = document.getElementById("addresses[0].mobile");
@@ -325,5 +325,5 @@
 
     return true;
   }
-  // -->
+
 </script>

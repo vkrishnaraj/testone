@@ -10,7 +10,7 @@
                                                                "org.apache.struts.action.LOCALE");
 %>
   <script language="javascript">
-  <!--
+  
   
   function validatereq(form) {
   	return true;
@@ -57,7 +57,7 @@
 	        return false;
 	      } 
 	    } else if (currentElementName.indexOf("].state_ID") != -1) {  
-	    	// check country
+
 	    	var pos = currentElementName.indexOf(".");
 	        var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
 	
@@ -191,5 +191,5 @@
   {
 	  return true;
 	}
-	// -->
+
 </script>

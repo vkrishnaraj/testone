@@ -60,7 +60,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <% } %>
 
 <logic:notPresent name="user" scope="session">
-<!-- login //-->
+
 
 
 <table cellspacing="0" id="bodytable"> 
@@ -72,20 +72,20 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
         	<div id="headercontent">      </div>
       		</td> 
         </tr> 
-        <!-- HORIZONTAL MENU --> 
+         
         <tr> 
           <td colspan="3" id="headermenucell">
         
       		</td>
         </tr> 
-        <!-- END HORIZONTAL MENU -->
-    <!-- PAGE HEADER/SEARCH --> 
+        
+     
 
 
 
-  <!-- MIDDLE COLUMN --> 
+   
   <td id="middlecolumn"> 
-  <!-- MAIN BODY -->   
+     
 	<div id="maincontent">
 
 	<h1 class="green">Welcome to NetTracer&#8482;</h1>
@@ -114,14 +114,14 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 
 
-<!-- eof login //-->
+
 </logic:notPresent>
 
 
 
 
 <logic:present name="user" scope="session">
-<!-- regular pages //-->
+
 
 
 
@@ -154,10 +154,10 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
         </div>
       </td> 
         </tr> 
-        <!-- HORIZONTAL MENU --> 
+         
 
           
-      <!-- headermenucell2 //-->
+      
 
 <tr>
   <td colspan="3" id="headermenucell">  
@@ -168,7 +168,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
           <tr> 
             <td align=left>
    
-<!--------------------- new menu ---------------------- //-->
+
 <div id="mainMenu">
 	<ul id="menuList">
 <%
@@ -217,12 +217,12 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 				}
 %>
-				</ul> <!-- ends internal row //-->
+				</ul> 
 					
 <%
 			}
 %>
-</li> <!-- ends one column //-->
+</li> 
 
 <%
 			if (i.hasNext()) {
@@ -238,7 +238,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
   </ul>
 </div>
 
-<!--------------------- end new menu ------------------- //-->   
+   
    
    
         
@@ -250,8 +250,8 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
       </td>
   </tr> 
 
-  <!-- END HORIZONTAL MENU -->
-  <!-- PAGE HEADER/SEARCH --> 
+  
+   
   
   <%
   
@@ -273,9 +273,9 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 
 
-      <!-- END MAIN BODY -->         
+               
       </td> 
-          <!-- END MIDDLE COLUMN --> 
+           
         </tr> 
       </table>
   </td> 
@@ -299,7 +299,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
 
 <script language="javascript">
-<!--
+
 function hasurlfocus(col) {
 
 	
@@ -439,38 +439,38 @@ document.onkeydown = function(){
 	var currentFocus = document.activeElement.id;
 	
 	/*********** quick cuts to different pages ************/
-	// f6
+
 	if (window.event && window.event.keyCode == 117 ) {
 		window.event.keyCode = 505;
 		document.location.href="<%=request.getContextPath()%>/lostDelay.do?express=1";
 		return;
 	}
-	// f7
+
 	if (window.event && window.event.keyCode == 118 ) {
 		window.event.keyCode = 505;
 		document.location.href="<%=request.getContextPath()%>/damaged.do?express=1";
 		return;
 	}
-	// f8
+
 	if (window.event && window.event.keyCode == 119 ) {
 		window.event.keyCode = 505;
 		document.location.href="<%=request.getContextPath()%>/missing.do?express=1";
 		return;
 	}	
-	// f9
+
 	if (window.event && window.event.keyCode == 120 ) {
 		window.event.keyCode = 505;
 		document.location.href="<%=request.getContextPath()%>/expressOnHandBag.do?express=1";
 		return;
 	}	
-	// f10 to add lost delayed page
+
 	if (window.event && window.event.keyCode == 121 ) {
 		window.event.keyCode = 505;
 		document.location.href="<%=request.getContextPath()%>/logon.do?taskmanager=1";
 		return;
 	}		
 
-	// f12 to add lost delayed page
+
 	if (window.event && window.event.keyCode == 123 ) {
 		window.event.keyCode = 505;
 		openHelp('pages/WebHelp/nettracerhelp.htm');
@@ -479,7 +479,7 @@ document.onkeydown = function(){
 	
 	
 	/*********************** menu pull downs *******************/	
-	// capture ctrl-m key for taskmanager
+
 	if (window.event && window.event.keyCode == 77 && window.event.ctrlKey) {
 		hasurlfocus(0);
 	}
@@ -488,81 +488,81 @@ document.onkeydown = function(){
       return false;
     }
     
-	// e
+
 	if (window.event && window.event.keyCode == 69 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(1);
 	}
-	// g
+
  	if (window.event && window.event.keyCode == 71 && window.event.ctrlKey) {
  		window.event.keyCode = 505;
 		nourlfocus(2);
 	}
-	// i
+
 	if (window.event && window.event.keyCode == 73 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(3);
 	}
-	// o
+
 	if (window.event && window.event.keyCode == 79 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(4);
 	}
-	// u
+
 	if (window.event && window.event.keyCode == 85 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(5);
 	}
-	// s
+
 	if (window.event && window.event.keyCode == 83 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(6);
 	}
-	// t
+
 	if (window.event && window.event.keyCode == 84 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(6);
 	}
-	// r
+
 	if (window.event && window.event.keyCode == 82 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(7);
 	}
-	// d
+
 	if (window.event && window.event.keyCode == 68 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(8);
 	}
-	// l
+
 	if (window.event && window.event.keyCode == 76 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(9);
 	}
 			
-	// Capture and remap left only if focused
+
 	if(window.event && window.event.keyCode == 37 && currentFocus.indexOf("menucol") >= 0) { 
 		window.event.keyCode = 505;
 		goleft();
 	}
 	
-		// Capture and remap right only if focused
+
 	if(window.event && window.event.keyCode == 39 && currentFocus.indexOf("menucol") >= 0) { 
 		window.event.keyCode = 505;
 		goright();
 	}
 	
-		// Capture and remap up only if focused
+
 	if(window.event && window.event.keyCode == 38 && currentFocus.indexOf("menucol") >= 0) { 
 		window.event.keyCode = 505;
 		goup();
 	}	
-	// Capture and remap downkey only if focused
+
 	if(window.event && window.event.keyCode == 40 && currentFocus.indexOf("menucol") >= 0) { 
 		window.event.keyCode = 505;
 		godown();
 	}
 	
-	// escape key hides all menus
+
 	if (window.event && window.event.keyCode == 27) {
 		var root = document.getElementById("menuList");
 		hideAllMenus(root,root);
@@ -570,7 +570,7 @@ document.onkeydown = function(){
 
 
 	
-	// remapped
+
 	if(window.event && window.event.keyCode == 505) { 
 		return false; 
 	}
@@ -579,7 +579,7 @@ document.onkeydown = function(){
 
 
 
-//-->
+
 </script>
 </logic:present>
 

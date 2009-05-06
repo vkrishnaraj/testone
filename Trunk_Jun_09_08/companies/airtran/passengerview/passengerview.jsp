@@ -50,7 +50,7 @@
 			var toggleLinks = document.getElementsByClassName('statClaimToggle');
 			var contentBlocks = document.getElementsByClassName('statClaimContent');
 			
-			//accordion effect
+
 			var contentFX = new fx.Accordion(toggleLinks, contentBlocks, { opacity: false });
 		}
 		function submitform() {
@@ -64,8 +64,8 @@
 
 <BODY onload="initStaticClaim()" style="BORDER-RIGHT: #f5f5f5 4px solid; BORDER-TOP: #f5f5f5 4px solid; BACKGROUND: url(http://www.airtran.com/Common/images/content_back.gif) repeat-y; BORDER-LEFT: #f5f5f5 4px solid; BORDER-BOTTOM: #f5f5f5 4px solid; HEIGHT: 3000px; TEXT-ALIGN: left" leftMargin=0 topMargin=0>
 
-<!-- ================================================== -->
-<!-- header =========================================== -->
+
+
 <img src="http://www.airtran.com/Common/images/logo_print.gif" width="215" height="64" id="plogo" />
 
 
@@ -75,15 +75,15 @@
     
 <bean:define id="theform" name="IncidentForm" scope="request" />
 
-<!--- search -->
+
 <logic:notPresent name="incident" scope="request">
 		
 		<form method="post" action="passengerviewonly.do" name="searchform">
 		
 		<div id="content" style="WIDTH: 525px">
 		
-		<!-- ================================================== -->
-		<!-- content ========================================== -->
+		
+		
 		
 		<p><h3>Delayed Baggage</h3>
 		<p>If you have notified an AirTran Airways Crew Member of your delayed baggage, enter your claim number below to check the current status of your baggage.</p>
@@ -115,9 +115,9 @@
 					</td><td width="2%"></td>
 				</tr>
 				
-		<!-- ================================================================ -->		
-		<!-- =======This button has space holder code PLEASE CHANGE AS NEEDED========== -->		
-		<!-- ================================================================ -->		
+				
+				
+				
 				<tr>
 		
 					<td>&nbsp;</td><td><span class="button" style="width:100px; "><span><input type="submit" name="search" value="&nbsp;&nbsp;&nbsp;Search" align="absmiddle"></span></span><td width="2%"></td>
@@ -138,18 +138,18 @@
 		
 		
 		
-		<!-- result -->
 		
-		<!--<div id="main">-->
+		
+		
 		<table summary="">
 		<tr>
 		<td>
 		<div id="content" style="WIDTH: 525px">
 		
-		<!-- ================================================== -->
-		<!-- content ========================================== -->
-		<!--<h1></h1>-->
-		<!--<h2></h2>-->
+		
+		
+		
+		
 		
 		
 		<p>								
@@ -159,9 +159,9 @@
 		background-image: none; 
 		}	
 		</style>
-		<!--=====================================================================--> 
-		<!-- THE RETURNED INFORMATION SHOULD NOT BE IN ANY BOXES OR CELLS THAT ARE VISIBLE TO THE USER – THE RESULTS SHOULD IN NO WAY LOOK LIKE A FORM TO BE FILLED OUT AND SHOULD HAVE NORMAL SPACING BETWEEN WORDS. -->									
-		<!--=====================================================================--> 	
+		 
+											
+		 	
 		
 		<div id="wrapper">
 		<table width="520"><tr><td>
@@ -284,9 +284,9 @@
 					</td>
 					
 				</tr>	
-		<!-- ================================================================ -->		
-		<!-- =======This button has space holder code PLEASE CHANGE========== -->		
-		<!-- ================================================================ -->		
+				
+				
+				
 										
 				<tr>
 					<td>&nbsp;</td><td><p><span class="button" style="width:100px; "><span><a href="passengerviewonly.do" target="_self">new search</a></span></span></span></p></td>
@@ -329,9 +329,9 @@
 		</td>
 		
 		<td>
-		<!-- ================================================== -->
 		
-		<!-- right features =================================== -->
+		
+		
 		
 		
 		    
@@ -344,10 +344,10 @@
 
 </logic:present>
 
-<!-- ****************** Begin HitBox (HBX) ***************** -->
+
 <script LANGUAGE="javascript" SRC="http://www.airtran.com/Common/HitBox/environment.js"></script>
 <script LANGUAGE="javascript" SRC="http://www.airtran.com/Common/HitBox/hbx_page_code_redesign.js"></script>
 <script LANGUAGE="javascript" defer="defer" SRC="http://www.airtran.com/Common/HitBox/hbx.js"></script>
-<!-- ****************** End HitBox (HBX) ***************** -->
+
 </body>
 </html>
