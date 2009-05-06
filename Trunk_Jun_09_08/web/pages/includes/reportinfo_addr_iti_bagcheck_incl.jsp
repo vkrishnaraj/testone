@@ -34,7 +34,7 @@
   <SCRIPT LANGUAGE="JavaScript">
     <!--
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+
 	
 
 	function getagentassigned() {
@@ -111,7 +111,7 @@
         </h1>
         <span class="reqfield">*</span>
         <bean:message key="message.required" />
-        <font color=red>
+        <font color="red">
           <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
         </font>
         <br>
@@ -166,7 +166,7 @@
 
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-            <td nowrap=>
+            <td nowrap="nowrap">
 <%
       if (report_type == 0) {
 %>
@@ -194,12 +194,12 @@
               <input type="hidden" name="wtq_reinstate" value="" />
               <input type="hidden" name="incident_ID" value="<c:out value='${incident_ID}'/>" />
             </td>
-            <td nowrap>
+            <td nowrap="nowrap">
               <bean:message key="colname.incident_create_date" />
               <br>
               <html:text property="dispcreatetime" size="20" styleClass="textfield" disabled="true" />
             </td>
-            <td nowrap>
+            <td nowrap="nowrap">
             <%
       if (report_type == 0) {
 %>
@@ -219,7 +219,7 @@
               <br>
               <html:text property="agentinit" size="4" styleClass="textfield" disabled="true" />
             </td>
-            <td nowrap>
+            <td nowrap="nowrap">
               <bean:message key="colname.stationcreated_nobr" />
               <br>
               <html:text property="stationcreatedcode" size="4" styleClass="textfield" disabled="true" />
@@ -236,7 +236,7 @@
           </tr>
           <logic:notEqual name="incidentForm" property="assoc_ID" value="">
             <tr>
-              <td nowrap colspan="6">
+              <td nowrap="nowrap" colspan="6">
                 <bean:message key="colname.assoc_report" />
                 : &nbsp;&nbsp;
                 <logic:notPresent name="lostdelay" scope="request">
@@ -301,7 +301,7 @@
           </table>
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
             <tr>
-              <td nowrap>
+              <td nowrap="nowrap">
                 <bean:message key="colname.status" />
                 <br>
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
@@ -317,7 +317,7 @@
 	                  </html:select>
 	                  </div>
 	                  <% } else { %>
-	                  	<input type=text class="textfield" size=10 value="<bean:message key="incidentForm.closed_status"/>" disabled="disabled">
+	                  	<input type="text" class="textfield" size="10" value="<bean:message key="incidentForm.closed_status"/>" disabled="disabled">
 	                  <% } %>
 	                  </logic:equal>
                   	<logic:notEqual name="incidentForm" property="status_ID" value="<%= "" + TracingConstants.MBR_STATUS_CLOSED %>">
@@ -329,11 +329,11 @@
                   	</logic:notEqual>
                 </logic:notEqual>
                 <logic:equal name="incidentForm" property="incident_ID" value="">
-                  <input type=text class="textfield" size=10 value="<bean:message key="incidentForm.new_status"/>" disabled="disabled">
+                  <input type="text" class="textfield" size="10" value="<bean:message key="incidentForm.new_status"/>" disabled="disabled">
                 </logic:equal>
               </td>
               
-              <td nowrap>
+              <td nowrap="nowrap">
                 <bean:message key="colname.non_revenue" /><br>
                 <div id="tohide2">
 	                <html:select property="nonrevenue" styleClass="dropdown">
@@ -377,7 +377,7 @@
                 <br>
                 <html:text property="ticketnumber" size="18" maxlength="14" styleClass="textfield" />
               </td>
-              <td nowrap>
+              <td nowrap="nowrap">
                 <bean:message key="colname.stationassigned_nobr" />
                 <br>
                 <input type="hidden" name="changeassignedstation">
@@ -385,7 +385,7 @@
                   <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
                 </html:select>
               </td>
-              <td nowrap>
+              <td nowrap="nowrap">
               	<div id="agentassigneddiv">
                 <bean:message key="colname.agentassigned_nobr" />
                 <br>
@@ -434,10 +434,10 @@
                         <bean:message key="colname.pax.fromto.req" />
                         <br>
                         <html:text name="theitinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-                        <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
+                        <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
                         /
                         <html:text name="theitinerary" property="legto" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-                        <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
+                        <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
                       </td>
                       <td>
                       
@@ -457,13 +457,13 @@
                   			&nbsp;
                         <html:text name="theitinerary" property="flightnum" size="4" maxlength="4" styleClass="textfield" indexed="true" />
                       </td>
-                      <td nowrap>
+                      <td nowrap="nowrap">
                         <bean:message key="colname.pax.departdate.req" />
                         (
                         <%= a.getDateformat().getFormat() %>)
                         <br>
                         <html:text name="theitinerary" property="disdepartdate" size="11" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar<%= k %>" name="itcalendar<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitinerary[" + k + "].disdepartdate" %>','itcalendar<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-                      <td nowrap>
+                      <td nowrap="nowrap">
                         <bean:message key="colname.pax.arrdate.req" />
                         (
                         <%= a.getDateformat().getFormat() %>)
@@ -501,7 +501,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td colspan=4>
+                      <td colspan="4">
                         <html:submit styleId="button" property="deletePassit" indexed="true">
                           <bean:message key="button.delete_pass_itinerary" />
                         </html:submit>
@@ -544,10 +544,10 @@
                             <bean:message key="colname.bag.fromto.req" />
                             <br>
                             <html:text name="theitinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-                            <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
+                            <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
                             /
                             <html:text name="theitinerary" property="legto" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-                            <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
+                            <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
                           </td>
                           <td>
                             <bean:message key="colname.bag.flightnum.req" />
@@ -566,13 +566,13 @@
 					                  &nbsp;
                             <html:text name="theitinerary" property="flightnum" size="4" maxlength="4" styleClass="textfield" indexed="true" />
                           </td>
-                          <td nowrap>
+                          <td nowrap="nowrap">
                             <bean:message key="colname.bag.departdate.req" />
                             (
                             <%= a.getDateformat().getFormat() %>)
                             <br>
                             <html:text name="theitinerary" property="disdepartdate" size="11" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3<%= k %>" name="calendar3<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitinerary[" + k + "].disdepartdate" %>','calendar3<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-                          <td nowrap>
+                          <td nowrap="nowrap">
                             <bean:message key="colname.bag.arrdate.req" />
                             (
                             <%= a.getDateformat().getFormat() %>)
@@ -610,7 +610,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td colspan=4>
+                          <td colspan="4">
                             <html:submit styleId="button" property="deleteBagit" indexed="true">
                               <bean:message key="button.delete_bag_itinerary" />
                             </html:submit>
