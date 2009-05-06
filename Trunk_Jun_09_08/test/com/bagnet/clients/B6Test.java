@@ -22,7 +22,7 @@ public class B6Test {
     System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
 
 		
-		String recordLocator = "BC81AF";
+		String recordLocator = "M43VAV";
     //String tagNumber = "0279955858";
     //String tagNumber = "0279660953";
     
