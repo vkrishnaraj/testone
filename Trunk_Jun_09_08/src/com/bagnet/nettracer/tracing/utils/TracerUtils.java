@@ -879,32 +879,39 @@ public class TracerUtils {
 			throws HibernateException {
 		return getStatusList(table_ID, locale, null);
 	}
-
-	public static ArrayList getTypeList(String locale) {
-		ArrayList al = new ArrayList();
-		
+	
+	public static ArrayList<LabelValueBean> getTypeList(String locale) {
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
 		al.add(new KeyValueBean("select.please_select", "", locale));
-		al.add(new KeyValueBean("BAG_TYPE_KEY_1", "-1", locale));
-				
-		for (int i = 1; i < 10; i++) {
-			al.add(new LabelValueBean("0" + i, "0" + i));
-		}
+
+		al.add(new KeyValueBean("BAG_TYPE_KEY_1", "", locale));
+		al.add(new LabelValueBean("01", "01"));
+		al.add(new LabelValueBean("02", "02"));
+		al.add(new LabelValueBean("03", "03"));
+		//no 4
+		al.add(new LabelValueBean("05", "05"));
+		al.add(new LabelValueBean("06", "06"));
+		al.add(new LabelValueBean("07", "07"));
+		al.add(new LabelValueBean("08", "08"));
+		al.add(new LabelValueBean("09", "09"));
 		al.add(new LabelValueBean("10", "10"));
-		al.add(new LabelValueBean("11", "11"));
+		//no 11
 		al.add(new LabelValueBean("12", "12"));
-		
-		al.add(new KeyValueBean("BAG_TYPE_KEY_2", "-2", locale));
-		//al.add(new LabelValueBean("Zippered type bags (20-29)", "-2"));
-		
+
+		al.add(new KeyValueBean("BAG_TYPE_KEY_2", "", locale));
 		for (int i = 20; i <= 29; i++) {
+			if(i == 24 || i == 21) {
+				continue;
+			}
 			al
 					.add(new LabelValueBean(Integer.toString(i), Integer
 							.toString(i)));
 		}
-		
-		al.add(new KeyValueBean("BAG_TYPE_KEY_3", "-3", locale));
-		//al.add(new LabelValueBean("Miscellaneous Articles (50-99)", "-3"));
+		al.add(new KeyValueBean("BAG_TYPE_KEY_3", "", locale));
 		for (int i = 50; i <= 99; i++) {
+			if(i == 70 || i == 76 || i == 77 || i == 78 || i == 79 || i == 80 || i == 84 || i == 86 || i == 87 || i == 88 || i == 91) {
+				continue;
+			}
 			al
 					.add(new LabelValueBean(Integer.toString(i), Integer
 							.toString(i)));
@@ -912,9 +919,8 @@ public class TracerUtils {
 		return al;
 	}
 
-	
-	public static ArrayList getColorList(boolean forsearch, Agent user) {
-		ArrayList al = new ArrayList();
+	public static ArrayList<LabelValueBean> getColorList(boolean forsearch, Agent user) {
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
 
 		if (forsearch)
 			al.add(new KeyValueBean("select.all", "", user));

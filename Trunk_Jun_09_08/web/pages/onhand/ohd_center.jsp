@@ -63,7 +63,7 @@
     </tr>
     <tr>
       <td id="middlecolumn">
-      <div id="maincontent" align="center"><font color=red>
+      <div id="maincontent" align="center"><font color="red">
       <logic:messagesPresent message="true">
         <html:messages id="msg" message="true">
           <br />
@@ -244,7 +244,7 @@ function gotoHistoricalReport() {
       src="deployment/main/images/nettracer/button_help.gif" width="20"
       height="21" border="0"></a></h1>
           <span class="reqfield">*</span> <bean:message key="Required" /> <font
-      color=red> <logic:messagesPresent message="true">
+      color="red"> <logic:messagesPresent message="true">
       <html:messages id="msg" message="true">
         <br />
         <bean:write name="msg" />
@@ -433,13 +433,13 @@ function gotoHistoricalReport() {
         <html:text property="agent_initials" size="4"
           styleClass="textfield" disabled="true" /></td>
         <td><bean:message key="colname.found_station_nobr" /> <br>
-        <input type=text size=10 class="textfield"
+        <input type="text" size="10" class="textfield"
           value="<bean:write name="OnHandForm" property="found_company"/> <bean:write name="OnHandForm" property="found_station"/>"
-          disabled></td>
+          disabled="disabled"></td>
         <td><bean:message key="colname.holding_station_nobr" /> <br>
-        <input type=text size=10 class="textfield"
+        <input type="text" size="10" class="textfield"
           value="<bean:write name="OnHandForm" property="holding_company"/> <bean:write name="OnHandForm" property="holding_station"/>"
-          disabled></td>
+          disabled="disabled"></td>
         <logic:notEmpty name="OnHandForm" property="status">
           <logic:equal name="OnHandForm" property="status.status_ID"
             value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
@@ -523,8 +523,7 @@ function gotoHistoricalReport() {
         <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&type=bagType',800,370,230);return false;"><bean:message key="chart2" /></a>
         <br>
         <html:select property="bagType" styleClass="dropdown">
-          <html:options collection="typelist" property="value"
-            labelProperty="label" />
+          <html:options collection="typelist"  property="value" labelProperty="label"  />
         </html:select></td>
         <td valign="top"><bean:message key="colname.x_desc" /> <br>
         <html:select property="XDesc1" styleClass="dropdown">
@@ -826,7 +825,7 @@ function gotoHistoricalReport() {
             styleClass="textfield" indexed="true" /> <a href="#"
             onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerarylist[<%=k%>].legto','airportcode',500,600);return false;"><img
             src="deployment/main/images/nettracer/airport_codes.gif"
-            border=0></a></td>
+            border="0"></a></td>
           <td><bean:message key="colname.ohd.flightnum.req" /> <br>
           
           <logic:empty name="itinerarylist" property="airline">
@@ -967,7 +966,7 @@ function gotoHistoricalReport() {
                 <%
                    }
                 %>
-                <td align=center><a
+                <td align="center"><a
                   href='showImage?ID=<bean:write name="photo" property="picpath"/>'
                   target="top"><img
                   src='showImage?ID=<bean:write name="photo" property="thumbpath"/>'></a>
@@ -1064,7 +1063,7 @@ function gotoHistoricalReport() {
             </logic:present></td>
           </tr>
           <tr>
-            <td valign="top" colspan=3>
+            <td valign="top" colspan="3">
             <%
                if (a.getGroup().getDescription().equalsIgnoreCase("Admin")
                                     || remark.getRemark_ID() == 0) {

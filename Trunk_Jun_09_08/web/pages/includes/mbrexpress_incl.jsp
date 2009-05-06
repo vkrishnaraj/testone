@@ -82,7 +82,7 @@
             </h1>
             <span class="reqfield">*</span>
             <bean:message key="message.required" />
-            <font color=red>
+            <font color="red">
               <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             </font>
             <br>
@@ -92,7 +92,7 @@
                   <bean:message key="colname.recordlocator.req" />
                   :
                 </td>
-                <td colspan=2>
+                <td colspan="2">
                   <bean:message key="colname.ticket" />
                   :
                 </td>
@@ -102,7 +102,7 @@
                   <input type="hidden" name="express" value="1">
                   <html:text property="recordlocator" size="30" maxlength="10" styleClass="textfield" />
                 </td>
-                <td colspan=2>
+                <td colspan="2">
                   <html:text property="ticketnumber" size="30" maxlength="14" styleClass="textfield" />
                 </td>
               </tr>
@@ -158,10 +158,10 @@
                         <td>
                           <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
                           <html:text name="theitinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-                          <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
+                          <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
                           /
                           <html:text name="theitinerary" property="legto" size="3" maxlength="3" styleClass="textfield" indexed="true" />
-                          <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
+                          <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
                         </td>
                         <td>
                           <html:select name="theitinerary" property="airline" styleClass="dropdown" indexed="true">
@@ -179,7 +179,7 @@
                           <html:text name="theitinerary" property="disarrivedate" size="10" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar2<%= k %>" name="itcalendar2<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitinerary[" + k + "].disarrivedate" %>','itcalendar2<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                       </tr>
                       <tr>
-                        <td colspan=4>
+                        <td colspan="4">
                           <html:submit styleId="button" property="deletePassit" indexed="true">
                             <bean:message key="button.delete_pass_itinerary" />
                           </html:submit>
@@ -210,7 +210,7 @@
                   <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
                     <logic:iterate id="claimcheck" indexId="i" name="incidentForm" property="claimchecklist">
                       <tr>
-                        <td width=30% nowrap>
+                        <td width="30%" nowrap="nowrap">
                           <bean:message key="colname.claimnum" />
                           :
                         </td>
@@ -219,7 +219,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td colspan=2>
+                        <td colspan="2">
                           <html:submit styleId="button" property="deleteClaimcheck" indexed="true">
                             <bean:message key="button.delete_claim" />
                           </html:submit>
@@ -268,12 +268,12 @@
                             <b><a name='additem<%= i %>'></a>
                             <bean:message key="colname.bag_number" />
                             : &nbsp;&nbsp;
-                            <%= theitem.getBagnumber() + 1 %>
+                            <%= theitem.getBagnumber() + 1 %></b>
                           </td>
 <%
                           if (report_type != 1) {
 %>
-                            <td colspan=2>
+                            <td colspan="2">
                               <bean:message key="colname.claimnum2" />
                               :
                               <html:text name="theitem" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
@@ -281,7 +281,7 @@
 <%
                           } else {
 %>
-                            <td colspan=2>
+                            <td colspan="2">
                               &nbsp;
                             </td>
 <%
@@ -289,7 +289,7 @@
 %>
                         </tr>
                         <tr>
-                          <td valign=top>
+                          <td valign="top">
                             <bean:message key="colname.color.req" />
                             :
                             <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&key=theitem[<%= i %>].color&type=color',800,30,230);return false;"><bean:message key="chart3" /></a>
@@ -308,7 +308,7 @@
                               <html:options collection="typelist" property="value" labelProperty="label" />
                             </html:select>
                           </td>
-                          <td valign=top>
+                          <td valign="top">
                             <bean:message key="colname.x_desc" />
                             <br>
                             <html:select name="theitem" property="xdescelement_ID_1" styleClass="dropdown" indexed="true">
@@ -335,7 +335,7 @@
                             </html:select>
                              <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_3&type=xdescelement_ID_3',800,30,230);return false;"><bean:message key="chart4" /></a>
                           </td>
-                          <td valign=top>
+                          <td valign="top">
                             <bean:message key="colname.manufacturer" />
                             <br>
                             <html:select name="theitem" property="manufacturer_ID" styleClass="dropdown" indexed="true" onchange='showmanu(this);return true;'>
@@ -351,7 +351,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td colspan=3>
+                          <td colspan="3">
                             <bean:message key="colname.key_contents" />
 														<a name='<%= "inventory" + i %>'></a>
 							              <bean:define id="inventories" name="theitem" property="inventorylist" />
@@ -415,10 +415,10 @@
                             </td>
                           </tr>
                           <tr>
-                            <td valign=top>
+                            <td valign="top">
                               <html:text name="theitem" property="damage" size="30" maxlength="255" styleClass="textfield_wide" indexed="true" />
                             </td>
-                            <td valign=top>
+                            <td valign="top">
                               <html:select name="theitem" property="lvlofdamage" styleClass="dropdown" indexed="true">
                                 <html:option value="">
                                   <bean:message key="select.please_select" />
@@ -434,7 +434,7 @@
                                 </html:option>
                               </html:select>
                             </td>
-                            <td valign=top nowrap>
+                            <td valign="top" nowrap="nowrap">
                               <html:text name="theitem" property="discost" size="13" maxlength="12" styleClass="textfield" indexed="true" />
                               &nbsp;
                               <bean:message key="colname.currency" />
@@ -449,7 +449,7 @@
                         }
 %>
                         <tr>
-                          <td colspan=3>
+                          <td colspan="3">
                             <html:submit styleId="button" property="deleteItem" indexed="true">
                               <bean:message key="button.delete_item" />
                             </html:submit>
@@ -516,7 +516,7 @@
                             </td>
                           </tr>
                           <tr>
-                            <td valign=top>
+                            <td valign="top">
                               <bean:message key="colname.desc" />
                               :
                             </td>

@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
@@ -96,16 +97,16 @@
       <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-            <td valign=top>
+            <td valign="top">
               <b><a name='additem<%= i %>'></a>
               <bean:message key="colname.bag_number" />
               : &nbsp;&nbsp;
-              <%= theitem.getBagnumber() + 1 %>
+              <%= theitem.getBagnumber() + 1 %></b>
             </td>
 <%
             if (report_type != 1) {
 %>
-              <td colspan=2>
+              <td colspan="2">
                 <bean:message key="colname.claimnum.req2" />
                 <br>
                 <html:text name="theitem" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
@@ -139,7 +140,7 @@
                 </td>
               </logic:notEqual>
               <logic:equal name="incidentForm" property="incident_ID" value="">
-                <td colspan=2>
+                <td colspan="2">
                   &nbsp;
                 </td>
               </logic:equal>
@@ -165,7 +166,7 @@
             </td>
           </tr>
           <tr>
-            <td valign=top>
+            <td valign="top">
               <bean:message key="colname.color.req" />
             
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&key=theitem[<%= i %>].color&type=color',800,10,230);return false;"><bean:message key="chart3" /></a>
@@ -183,7 +184,7 @@
                 <html:options collection="typelist" property="value" labelProperty="label" />
               </html:select>
             </td>
-            <td valign=top>
+            <td valign="top">
               <bean:message key="colname.x_desc" />
               <br>
             
@@ -211,7 +212,7 @@
               </html:select>
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_3&type=xdescelement_ID_3',800,30,230);return false;"><bean:message key="chart4" /></a>
             </td>
-            <td valign=top>
+            <td valign="top">
               <bean:message key="colname.manufacturer" />
               <br>
               <html:select name="theitem" property="manufacturer_ID" styleClass="dropdown" indexed="true" onchange='showmanu(this);return true;'>
@@ -227,7 +228,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan=3>
+            <td colspan="3">
 
               <bean:message key="colname.key_contents" />
 							<a name='<%= "inventory" + i %>'></a>
@@ -273,7 +274,7 @@
           
           
           <tr>
-            <td colspan=3>
+            <td colspan="3">
             	<% 
             	if (report_type == 0) { 
             	%>
@@ -334,7 +335,7 @@
               </td>
             </tr>
             <tr>
-              <td colspan=3>
+              <td colspan="3">
               
               
 
@@ -347,7 +348,7 @@
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_PHOTOS, a)) {
 %>
               <tr>
-                <td colspan=3>
+                <td colspan="3">
                   <bean:message key="header.photos" />
                   :
                   <br>
@@ -366,7 +367,7 @@
 <%
                           }
 %>
-                          <td align=center>
+                          <td align="center">
                             <a href='showImage?ID=<bean:write name="photolist" property="picpath"/>' target="top"><img src='showImage?ID=<bean:write name="photolist" property="thumbpath"/>'></a>
                             <br>
                             <input type="submit" name="removePhoto_<%= i %>_<%= j %>" id="button" value="<bean:message key="button.delete_photo"/>">
@@ -388,7 +389,7 @@
                 &nbsp;
                 <html:submit property="uploadPhoto" indexed="true" styleId="button">
                   <bean:message key="header.addPhotos" />
-                </html:submit>
+                </html:submit></center>
               </td>
             </tr>
 <%
@@ -396,7 +397,7 @@
         }
 %>
         <tr>
-          <td colspan=3>
+          <td colspan="3">
             <html:submit styleId="button" property="deleteItem" indexed="true">
               <bean:message key="button.delete_item" />
             </html:submit>
