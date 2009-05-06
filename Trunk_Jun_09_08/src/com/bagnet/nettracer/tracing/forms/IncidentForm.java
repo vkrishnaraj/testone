@@ -27,6 +27,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 /**
  * @author Ankur Gupta
@@ -84,7 +85,13 @@ public final class IncidentForm extends ValidatorForm {
 	private String otherSystemInformation;
 	
 	private WorldTracerFile wtFile;
-	
+	{
+		String defChecked = TracerProperties.get(TracerProperties.DEFAULT_CHECKED_LOCATION);
+		if(defChecked != null) {
+			checkedlocation = defChecked;
+		}
+	}
+
 	public String getWt_id() {
 		return wtFile != null ? wtFile.getWt_id() : null;
 	}
@@ -139,6 +146,10 @@ public final class IncidentForm extends ValidatorForm {
 					}
 				}
 			}
+		}
+		String defChecked = TracerProperties.get(TracerProperties.DEFAULT_CHECKED_LOCATION);
+		if(defChecked != null) {
+			checkedlocation = defChecked;
 		}
 	}
 

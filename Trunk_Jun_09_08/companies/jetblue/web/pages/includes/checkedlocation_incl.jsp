@@ -1,6 +1,6 @@
 <%@ page language="java"%>
-<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
-<%@ taglib uri="/tags/struts-html" prefix="html"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean"%>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 
 <html:select property="checkedlocation" styleClass="dropdown">
 	<html:option value="0">
@@ -9,7 +9,7 @@
 	<html:option value="1">
 		<bean:message key="select.curb_side" />
 	</html:option>
-	<html:option value="2">
+	<html:option value="2" >
 		<bean:message key="select.ticket_counter" />
 	</html:option>
 	<html:option value="3">
