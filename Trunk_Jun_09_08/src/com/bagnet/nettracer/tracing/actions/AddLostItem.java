@@ -79,7 +79,7 @@ public class AddLostItem extends Action {
 			return mapping.findForward(TracingConstants.LOST_HISTORICAL);
 		}
 
-		List oStatusList = TracerUtils.getStatusList(user.getCurrentlocale(),TracingConstants.TABLE_LOST_FOUND);
+		List oStatusList = TracerUtils.getStatusList(TracingConstants.TABLE_LOST_FOUND, user.getCurrentlocale());
 		request.setAttribute("oStatusList", oStatusList);
 
 
@@ -147,9 +147,9 @@ public class AddLostItem extends Action {
 			parameters.put("company_station", format(""
 					+ form.getCreate_station().getCompany().getCompanyCode_ID())
 					+ " " + format("" + form.getCreate_station().getStationcode()));
-			parameters.put("status", format("" + form.getReport_status().getDescription()));
+			parameters.put("status", format("" + TracerUtils.getText(form.getReport_status().getKey(), user)));
 			if (form.getDisposal_status() != null) {
-				parameters.put("disposal_status", format("" + form.getDisposal_status().getDescription()));
+				parameters.put("disposal_status", format("" + TracerUtils.getText(form.getDisposal_status().getKey(), user)));
 			}
 			parameters.put("dispCloseDateTime", format("" + form.getDispCloseDateTime()));
 			if (form.getClosing_agent() != null) parameters.put("closing_agent_username", format(""

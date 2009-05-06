@@ -81,7 +81,7 @@ function sortInterimExpense(sortOrder) {
                   <html:option value="-1">
                     All
                   </html:option>
-                  <html:options collection="expense_status_list" property="status_ID" labelProperty="description" />
+                  <html:options collection="expenseStatusList" property="status_ID" labelProperty="description" />
                 </html:select>
               </td>
             </tr>
@@ -161,7 +161,7 @@ function sortInterimExpense(sortOrder) {
                     <a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
                   </td>
                   <td>
-                    <a href='EditExpense.do?exp_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
+                    <a href='EditExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
                   </td>
                   <td>
                     <bean:write name="expenselist" property="draft" />
@@ -181,7 +181,7 @@ function sortInterimExpense(sortOrder) {
                     <bean:write name="expenselist" property="mileageamt" />
                   </td>
                   <td>
-                    <bean:write name="expenselist" property="status.description" />
+                    <bean:message name="expenselist" property="status.key" />
                   </td>
                 </tr>
               </logic:iterate>

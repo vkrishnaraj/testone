@@ -194,7 +194,7 @@ public final class ClaimForm extends ActionForm {
 
 	public String getDispdlstate() {
 		if (dlstate != null && dlstate.length() > 0) {
-			return TracerUtils.getState(dlstate, "en").getState();
+			return TracerUtils.getState(dlstate).getState();
 		}
 		return "";
 	}

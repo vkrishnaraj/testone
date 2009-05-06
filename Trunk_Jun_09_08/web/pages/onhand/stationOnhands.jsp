@@ -200,7 +200,7 @@ function submitForwardForm()
                     &nbsp;
                   </td>
                   <td>
-                    <bean:write name="ohd" property="status.description" />
+                    <bean:message name="ohd" property="status.key" />
                   </td>
                   <td>
                     <logic:empty name="ohd" property="color">

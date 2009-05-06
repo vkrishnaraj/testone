@@ -29,11 +29,11 @@ public class CurrencyUtils {
 	 * @param currpage
 	 * @return shifts within a company
 	 */
-	public static Currency getCurrency(String currency_id, String locale) {
+	public static Currency getCurrency(String currency_id) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Currency.class).add(Expression.eq("locale", locale)).add(
+			Criteria cri = sess.createCriteria(Currency.class).add(
 					Expression.eq("currency_ID", currency_id));
 
 			return (Currency) cri.list().get(0);

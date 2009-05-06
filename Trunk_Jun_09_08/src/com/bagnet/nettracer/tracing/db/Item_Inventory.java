@@ -43,7 +43,7 @@ public class Item_Inventory implements Serializable {
 	public String getCategory() {
 		String category = null;
 		if (categorytype_ID != 0) {
-			category = CategoryBMO.getCategory("" + categorytype_ID, "en").getCategorytype();
+			category = CategoryBMO.getCategory(categorytype_ID, "en").getDescription();
 		}
 
 		if (category == null) category = "";
@@ -51,7 +51,15 @@ public class Item_Inventory implements Serializable {
 
 	}
 
-			
+	public String getCategoryKey() {
+		String category = null;
+		if (categorytype_ID != 0) {
+			category = CategoryBMO.getCategory(categorytype_ID, null).getKey();
+		}
+
+		if (category == null) category = "";
+		return category;
+	}
 
 	/**
 	 * @return Returns the description.

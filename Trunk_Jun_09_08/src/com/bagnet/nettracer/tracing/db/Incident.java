@@ -879,10 +879,10 @@ public class Incident implements Serializable {
 		return itemtype.getDescription();
 	}
 
-	@Transient
-	public String getStatusdesc() {
-		return status.getDescription();
-	}
+//	@Transient
+//	public String getStatusdesc(Agent a) {
+//		return status.getTextDescription(a);
+//	}
 
 	@Transient
 	public String getStationcode() {
@@ -932,117 +932,117 @@ public class Incident implements Serializable {
 		return DateUtils.formatDate(completedate, _TIMEFORMAT, null, _TIMEZONE);
 	}
 
-	@Transient
-	public String getText() {
-
-		StringBuffer ret = new StringBuffer(1096);
-		ret.append(format(this.getIncident_ID()));
-		if (this.getStationcreated() != null) {
-			ret.append(format(this.getStationcreated().getStationcode()));
-		}
-		if (this.getDispStationAssigned() != null) {
-			ret.append(format(this.getDispStationAssigned().getStationcode()));
-		}
-		if (this.getAgent() != null) {
-			ret.append(format(this.getAgent().getUsername()));
-		}
-		ret.append(format(this.getRecordlocator()));
-		ret.append(format(this.getTicketnumber()));
-		ret.append(format(this.getReportMethodString(this.getReportmethod())));
-		ret.append(format(this.getCheckedlocation()));
-		ret.append(format(this.getStatus().getDescription()));
-
-		if (this.getPassengers() != null && this.getPassengers().size() > 0) {
-			for (Passenger pass : this.getPassengers()) {
-				ret.append(format(pass.getFirstname()));
-				ret.append(format(pass.getMiddlename()));
-				ret.append(format(pass.getLastname()));
-				ret.append(format(pass.getJobtitle()));
-				ret.append(format(pass.getDriverslicense()));
-				ret.append(format(pass.getDispdlstate()));
-				ret.append(format(pass.getCommonnum()));
-				ret.append(format(pass.getDispcountryofissue()));
-				if (pass.getMembership() != null) {
-					ret.append(format(pass.getMembership().getMembershipnum()));
-				}
-
-				if (pass.getAddresses() != null && pass.getAddresses().size() > 0) {
-					for (Iterator j = pass.getAddresses().iterator(); j.hasNext();) {
-						Address addr = (Address) j.next();
-
-						ret.append(format(addr.getAddress1()));
-						ret.append(format(addr.getAddress2()));
-						ret.append(format(addr.getCity()));
-						ret.append(format(addr.getZip()));
-						ret.append(format(addr.getHotel()));
-						ret.append(format(addr.getHomephone()));
-						ret.append(format(addr.getWorkphone()));
-						ret.append(format(addr.getMobile()));
-						ret.append(format(addr.getPager()));
-						ret.append(format(addr.getAltphone()));
-						ret.append(format(addr.getEmail()));
-						ret.append(format(addr.getState()));
-						ret.append(format(addr.getCountry()));
-						ret.append(format(addr.getProvince()));
-					}
-				}
-			}
-		}
-
-		if (this.getRemarks() != null && this.getRemarks().size() > 0) {
-			for (Remark remark : this.getRemarks()) {
-				ret.append(format(remark.getRemarktext()));
-			}
-		}
-
-		if (this.getItinerary() != null && this.getItinerary().size() > 0) {
-			for (Itinerary itinerary : this.getItinerary()) {
-				ret.append(format(itinerary.getAirline()));
-				ret.append(format(itinerary.getFlightnum()));
-				ret.append(format(itinerary.getLegfrom()));
-				ret.append(format(itinerary.getLegto()));
-			}
-		}
-
-		if (this.getClaimchecks() != null && this.getClaimchecks().size() > 0) {
-			for (Incident_Claimcheck ccheck : this.getClaimchecks()) {
-				ret.append(format(ccheck.getClaimchecknum()));
-			}
-		}
-
-		if (this.getItemlist() != null && this.getItemlist().size() > 0) {
-			for (Item item : this.getItemlist()) {
-				ret.append(format(item.getColor()));
-				ret.append(format(item.getBagtype()));
-				ret.append(format(item.getXdescelement1()));
-				ret.append(format(item.getXdescelement2()));
-				ret.append(format(item.getXdescelement3()));
-				ret.append(format(item.getManufacturer()));
-				ret.append(format(item.getManufacturer_other()));
-				
-				if (item.getInventory() != null && item.getInventory().size() > 0) {
-					for (Iterator ii = item.getInventory().iterator(); ii.hasNext();) {
-						Item_Inventory iin = (Item_Inventory) ii.next();
-						ret.append(format(iin.getDescription()));
-					}
-				}
-				ret.append(format(item.getResolutiondesc()));
-				ret.append(format(item.getFnameonbag()));
-				ret.append(format(item.getMnameonbag()));
-				ret.append(format(item.getLnameonbag()));
-				ret.append(format(item.getDamage()));
-				ret.append(format(item.getDisplvlofdamage()));
-			}
-		}
-
-		if (this.getArticles() != null && this.getArticles().size() > 0) {
-			for (Articles artcl : this.getArticles()) {
-				ret.append(format(artcl.getArticle()));
-				ret.append(format(artcl.getDescription()));
-			}
-		}
-		return ret.toString();
-	}
+//	@Transient
+//	public String getText() {
+//
+//		StringBuffer ret = new StringBuffer(1096);
+//		ret.append(format(this.getIncident_ID()));
+//		if (this.getStationcreated() != null) {
+//			ret.append(format(this.getStationcreated().getStationcode()));
+//		}
+//		if (this.getDispStationAssigned() != null) {
+//			ret.append(format(this.getDispStationAssigned().getStationcode()));
+//		}
+//		if (this.getAgent() != null) {
+//			ret.append(format(this.getAgent().getUsername()));
+//		}
+//		ret.append(format(this.getRecordlocator()));
+//		ret.append(format(this.getTicketnumber()));
+//		ret.append(format(this.getReportMethodString(this.getReportmethod())));
+//		ret.append(format(this.getCheckedlocation()));
+//		ret.append(format(this.getStatus().getTextDescription()));
+//
+//		if (this.getPassengers() != null && this.getPassengers().size() > 0) {
+//			for (Passenger pass : this.getPassengers()) {
+//				ret.append(format(pass.getFirstname()));
+//				ret.append(format(pass.getMiddlename()));
+//				ret.append(format(pass.getLastname()));
+//				ret.append(format(pass.getJobtitle()));
+//				ret.append(format(pass.getDriverslicense()));
+//				ret.append(format(pass.getDispdlstate()));
+//				ret.append(format(pass.getCommonnum()));
+//				ret.append(format(pass.getDispcountryofissue()));
+//				if (pass.getMembership() != null) {
+//					ret.append(format(pass.getMembership().getMembershipnum()));
+//				}
+//
+//				if (pass.getAddresses() != null && pass.getAddresses().size() > 0) {
+//					for (Iterator j = pass.getAddresses().iterator(); j.hasNext();) {
+//						Address addr = (Address) j.next();
+//
+//						ret.append(format(addr.getAddress1()));
+//						ret.append(format(addr.getAddress2()));
+//						ret.append(format(addr.getCity()));
+//						ret.append(format(addr.getZip()));
+//						ret.append(format(addr.getHotel()));
+//						ret.append(format(addr.getHomephone()));
+//						ret.append(format(addr.getWorkphone()));
+//						ret.append(format(addr.getMobile()));
+//						ret.append(format(addr.getPager()));
+//						ret.append(format(addr.getAltphone()));
+//						ret.append(format(addr.getEmail()));
+//						ret.append(format(addr.getState()));
+//						ret.append(format(addr.getCountry()));
+//						ret.append(format(addr.getProvince()));
+//					}
+//				}
+//			}
+//		}
+//
+//		if (this.getRemarks() != null && this.getRemarks().size() > 0) {
+//			for (Remark remark : this.getRemarks()) {
+//				ret.append(format(remark.getRemarktext()));
+//			}
+//		}
+//
+//		if (this.getItinerary() != null && this.getItinerary().size() > 0) {
+//			for (Itinerary itinerary : this.getItinerary()) {
+//				ret.append(format(itinerary.getAirline()));
+//				ret.append(format(itinerary.getFlightnum()));
+//				ret.append(format(itinerary.getLegfrom()));
+//				ret.append(format(itinerary.getLegto()));
+//			}
+//		}
+//
+//		if (this.getClaimchecks() != null && this.getClaimchecks().size() > 0) {
+//			for (Incident_Claimcheck ccheck : this.getClaimchecks()) {
+//				ret.append(format(ccheck.getClaimchecknum()));
+//			}
+//		}
+//
+//		if (this.getItemlist() != null && this.getItemlist().size() > 0) {
+//			for (Item item : this.getItemlist()) {
+//				ret.append(format(item.getColor()));
+//				ret.append(format(item.getBagtype()));
+//				ret.append(format(item.getXdescelement1()));
+//				ret.append(format(item.getXdescelement2()));
+//				ret.append(format(item.getXdescelement3()));
+//				ret.append(format(item.getManufacturer()));
+//				ret.append(format(item.getManufacturer_other()));
+//				
+//				if (item.getInventory() != null && item.getInventory().size() > 0) {
+//					for (Iterator ii = item.getInventory().iterator(); ii.hasNext();) {
+//						Item_Inventory iin = (Item_Inventory) ii.next();
+//						ret.append(format(iin.getDescription()));
+//					}
+//				}
+//				ret.append(format(item.getResolutiondesc()));
+//				ret.append(format(item.getFnameonbag()));
+//				ret.append(format(item.getMnameonbag()));
+//				ret.append(format(item.getLnameonbag()));
+//				ret.append(format(item.getDamage()));
+//				ret.append(format(item.getDisplvlofdamage()));
+//			}
+//		}
+//
+//		if (this.getArticles() != null && this.getArticles().size() > 0) {
+//			for (Articles artcl : this.getArticles()) {
+//				ret.append(format(artcl.getArticle()));
+//				ret.append(format(artcl.getDescription()));
+//			}
+//		}
+//		return ret.toString();
+//	}
 
 	@Transient
 	public Station getDispStationAssigned() {

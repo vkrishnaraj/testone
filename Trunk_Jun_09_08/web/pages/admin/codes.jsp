@@ -210,7 +210,7 @@
                   <A HREF="codeAdmin.do?edit=1&code_id=<bean:write name="code" property="code_id"/>"><bean:write name="code" property="loss_code" /></A>
                 </td>
 <%
-                String report_desc = AdminUtils.getReportDescription(code.getReport_type(), code.getLocale());
+                String report_desc = AdminUtils.getReportDescription(code.getReport_type());
 %>
                 <td>
                   &nbsp;

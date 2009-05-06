@@ -111,7 +111,6 @@
 			<form-property name="companyCode" type="java.lang.String" />
 			<form-property name="stationCode" type="java.lang.String" />
 			<form-property name="stationDesc" type="java.lang.String" />
-			<form-property name="locale" type="java.lang.String" />
 			<form-property name="addr1" type="java.lang.String" />
 			<form-property name="addr2" type="java.lang.String" />
 			<form-property name="city" type="java.lang.String" />
@@ -663,7 +662,6 @@
 	</controller>
 
 	<!-- ========== Message Resources Definitions =========================== -->
-	<message-resources parameter="com.bagnet.nettracer.tracing.resources.ApplicationResources_es" null="false" />
 	<message-resources parameter="com.bagnet.nettracer.tracing.resources.ApplicationResources" null="false" />
 
 	<!-- ========== Plug-ins Configuration ================================== -->

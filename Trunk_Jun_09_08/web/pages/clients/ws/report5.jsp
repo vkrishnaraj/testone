@@ -70,7 +70,7 @@
         <html:option value="0">
           <bean:message key="select.all" />
         </html:option>
-        <html:options collection="oStatusList" property="status_ID" labelProperty="description" />
+        <html:options collection="ohdStatusList" property="status_ID" labelProperty="description" />
       </html:select>
     </td>
   </tr>

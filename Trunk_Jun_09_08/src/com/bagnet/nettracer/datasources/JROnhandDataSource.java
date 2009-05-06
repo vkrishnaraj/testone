@@ -48,10 +48,11 @@ public class JROnhandDataSource implements JRDataSource {
 
 	private int totalElements = 0;
 	private int currentElement = 0;
+	private Agent currentUser = null;
 	
 	public JROnhandDataSource(JasperReport jasperReport, List<OHD> OHDs, Agent user) {
 		super();
-
+		this.currentUser = user;
 		// Instantiate OHD Queue
 		this.OHDQueue = OHDs;
 		
@@ -87,7 +88,7 @@ public class JROnhandDataSource implements JRDataSource {
 				currentObject.set_TIMEZONE(timeZone);
 				return currentObject.getDisplaydate();
 			} else if (fieldName.equals(STATUS_NAME)) {
-				return currentObject.getStatus().getDescription();
+				return currentObject.getStatus().getTextDescription(currentUser);
 			} else if (fieldName.equals(COLOR_NAME)) {
 				return currentObject.getColor();
 			} else if (fieldName.equals(BAGTAGNUMBER_NAME)) {

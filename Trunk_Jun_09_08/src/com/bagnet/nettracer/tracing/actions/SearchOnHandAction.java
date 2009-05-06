@@ -66,9 +66,6 @@ public class SearchOnHandAction extends Action {
 		
 		Agent user = (Agent) session.getAttribute("user");
 		
-		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale(), true);
-		request.setAttribute("oStatusList", oStatusList);
-		
 		SearchIncidentForm daform = (SearchIncidentForm) form;
 		
 		

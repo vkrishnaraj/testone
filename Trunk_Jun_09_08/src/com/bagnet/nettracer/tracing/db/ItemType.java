@@ -8,32 +8,16 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 
+import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
+
 /**
  * @author Administrator
  * 
  * @hibernate.class table="ItemType"
  */
-public class ItemType implements Serializable {
+public class ItemType extends LocaleBasedObject implements Serializable {
 	private int ItemType_ID;
-	private String description;
-	private String locale;
-
-	/**
-	 * @return Returns the description.
-	 * 
-	 * @hibernate.property type="string" length="10"
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *          The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	private static String MSG_KEY = "ITEMTYPE_";
 
 	/**
 	 * @return Returns the itemType_ID.
@@ -53,21 +37,13 @@ public class ItemType implements Serializable {
 	public void setItemType_ID(int itemType_ID) {
 		ItemType_ID = itemType_ID;
 	}
-
-	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
+	
+	public String getKey() {
+		return MSG_KEY + ItemType_ID;
+	}
+	
+	public static String getKey(int id) {
+		return MSG_KEY + id;
 	}
 
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
 }

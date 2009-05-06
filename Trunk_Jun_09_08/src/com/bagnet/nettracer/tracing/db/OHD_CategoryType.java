@@ -8,49 +8,34 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 
+import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
+
 /**
  * @author Administrator
  * 
  * @hibernate.class table="OHD_CategoryType"
  */
-public class OHD_CategoryType implements Serializable {
+public class OHD_CategoryType extends LocaleBasedObject implements Serializable {
 	private int OHD_CategoryType_ID;
-	private String categorytype;
-	private String locale;
+	private String categoryKey;
 	private String wtCategory;
+	private String MSG_KEY = "CATEGORY_";	
+
 
 	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
+	 * @return Returns the categoryKey.
+	 * @hibernate.property type="string" column="categorytype" length="10"
 	 */
-	public String getLocale() {
-		return locale;
+	public String getCategoryKey() {
+		return categoryKey;
 	}
 
 	/**
-	 * @param locale
-	 *          The locale to set.
+	 * @param categoryKey
+	 *          The categoryKey to set.
 	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-
-	/**
-	 * @return Returns the categorytype.
-	 * 
-	 * @hibernate.property type="string" length="10"
-	 */
-	public String getCategorytype() {
-		return categorytype;
-	}
-
-	/**
-	 * @param categorytype
-	 *          The categorytype to set.
-	 */
-	public void setCategorytype(String categorytype) {
-		this.categorytype = categorytype;
+	public void setCategoryKey(String categoryKey) {
+		this.categoryKey = categoryKey;
 	}
 
 	/**
@@ -88,5 +73,9 @@ public class OHD_CategoryType implements Serializable {
 		this.wtCategory = wtCategory;
 	}
 	
+	public String getKey() {
+		return MSG_KEY + getCategoryKey();
+	}
+
 	
 }

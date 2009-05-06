@@ -362,7 +362,7 @@
               :
             </td>
             <td>
-              <html:select name="agentForm" property="currLocale" onchange="submit()" styleClass="dropdown">
+              <html:select name="agentForm" property="currLocale" styleClass="dropdown">
                 <html:options collection="localelist" property="value" labelProperty="label" />
               </html:select>
             </td>

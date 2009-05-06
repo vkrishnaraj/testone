@@ -27,9 +27,9 @@
 	<field name="bagtype" class="java.lang.String"/>
 	<field name="manufacturer" class="java.lang.String"/>
 	<field name="dispstatus" class="java.lang.String"/>
-	<field name="xdescelement1" class="java.lang.String"/>
-	<field name="xdescelement2" class="java.lang.String"/>
-	<field name="xdescelement3" class="java.lang.String"/>
+	<field name="xdescelement1Key" class="java.lang.String"/>
+	<field name="xdescelement2Key" class="java.lang.String"/>
+	<field name="xdescelement3Key" class="java.lang.String"/>
 	<field name="inventoriesForReport" class="java.lang.Object"/>
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -347,7 +347,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dispstatus}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[str($F{dispstatus})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
 						mode="Opaque"
@@ -387,7 +387,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{xdescelement1}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[str($F{xdescelement1Key})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
 						mode="Opaque"
@@ -427,7 +427,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{xdescelement3}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[str($F{xdescelement3Key})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None" >					<reportElement
 						mode="Opaque"
@@ -447,7 +447,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{xdescelement2}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[str($F{xdescelement2Key})]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement

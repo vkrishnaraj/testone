@@ -9,7 +9,8 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<jsp:include page="/pages/includes/validation_incl.jsp" />
   <script language="javascript">
     
 function goprev() {
@@ -90,7 +91,7 @@ function sortInterimExpense(sortOrder) {
                   <html:option value="-1">
                     All
                   </html:option>
-                  <html:options collection="expense_status_list" property="status_ID" labelProperty="description" />
+                  <html:options collection="expenseStatusList" property="status_ID" labelProperty="description" />
                 </html:select>
               </td>
             </tr>
@@ -181,7 +182,7 @@ function sortInterimExpense(sortOrder) {
                     if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
 %>
                       <td>
-                        <logic:equal name="expenselist" property="status.description" value="Pending">
+                        <logic:equal name="expenselist" property="status.status_ID" value="<%=TracingConstants.EXPENSEPAYOUT_STATUS_PENDING%>">
                           <input type="checkbox" name="code" value="<bean:write name="expenselist" property="expensepayout_ID"/>">
                         </logic:equal>
                         &nbsp;
@@ -202,7 +203,7 @@ function sortInterimExpense(sortOrder) {
                     <a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
                   </td>
                   <td>
-                    <a href='EditExpense.do?exp_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
+                    <a href='EditExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
                   </td>
                   <td>
                     <bean:write name="expenselist" property="draft" />

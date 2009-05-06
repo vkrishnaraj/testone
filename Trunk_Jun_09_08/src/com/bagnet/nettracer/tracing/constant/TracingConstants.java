@@ -151,6 +151,13 @@ public class TracingConstants {
 	public final static int TABLE_CLAIM = 7;
 	public final static int TABLE_ITEM = 10;
 	public final static int TABLE_EXPENSEPAYOUT = 11;
+	public final static int TABLE_MESSAGE = 5;
+	public final static int TABLE_TASK = 4;
+	
+	public final static int PRIORITY_LOW = 1;
+	public final static int PRIORITY_MEDIUM = 2;
+	public final static int PRIORITY_HIGH = 3;
+	
 
 
 

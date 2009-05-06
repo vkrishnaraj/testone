@@ -16,10 +16,10 @@
 	if (request.getParameter("changeStatuses").equals("" + TracingConstants.AJAX_STATUS_OHD)) {
 		isOhd = true;
 		headerKey = "colname.ohd_status";
-		ar = (ArrayList)request.getAttribute("oStatusList");
+		ar = (ArrayList)session.getAttribute("ohdStatusList");
 	}
 	else {
-		ar = (ArrayList)request.getAttribute("statusList");
+		ar = (ArrayList)session.getAttribute("statuslist");
 	}
 %>
 		<bean:message key="<%= headerKey %>" />

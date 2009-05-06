@@ -259,7 +259,7 @@ public class Articles implements Serializable {
 		String ret = "";
 
 		if (currency_ID != null && currency_ID.length() > 0 && !currency_ID.equals("0")) {
-			ret = CurrencyUtils.getCurrency(currency_ID, locale).getDescription();
+			ret = CurrencyUtils.getCurrency(currency_ID).getDescription();
 		}
 
 		return ret;

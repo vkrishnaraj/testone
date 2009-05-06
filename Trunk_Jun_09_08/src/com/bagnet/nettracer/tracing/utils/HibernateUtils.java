@@ -218,7 +218,6 @@ public class HibernateUtils {
 								csCode.setCompany(obj);
 								csCode.setDescription(code.getDescription());
 								csCode.setLoss_code(code.getLoss_code());
-								csCode.setLocale(code.getLocale());
 								csCode.setReport_type(itemType.getItemType_ID());
 								comp_irr_codes.add(csCode);
 								
@@ -235,7 +234,6 @@ public class HibernateUtils {
 				Station s = new Station();
 				s.setStationcode("LZ");
 				s.setStationdesc("Default LZ station for " + obj.getCompanyCode_ID());
-				s.setLocale("en");
 				s.setCompany(obj);
 				s.setActive(true);
 				
@@ -250,7 +248,6 @@ public class HibernateUtils {
 				Station s1 = new Station();
 				s1.setStationcode("CLAIM");
 				s1.setStationdesc("Default CLAIM station for " + obj.getCompanyCode_ID());
-				s1.setLocale("en");
 				s1.setCompany(obj);
 				s1.setActive(true);
 

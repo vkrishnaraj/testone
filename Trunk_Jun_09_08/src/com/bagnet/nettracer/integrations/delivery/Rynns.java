@@ -33,7 +33,7 @@ public class Rynns implements BDOIntegration {
 
 	public DeliveryIntegrationResponse integrate(BDO bdo, Agent agent) {
 		DeliveryIntegrationResponse response = new DeliveryIntegrationResponse();
-		String responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.rynns.success", agent);
+		String responseText = TracerUtils.getText("delivercompany.integration.rynns.success", agent);
 		String integrationId = null;
 		boolean success = true;
 		
@@ -130,7 +130,7 @@ public class Rynns implements BDOIntegration {
 				integrationId = new Integer(orderId).toString();
 			} else {
 				success = false;
-				responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.rynns.failure", agent);
+				responseText = TracerUtils.getText("delivercompany.integration.rynns.failure", agent);
 				ErrorCode.Enum[] a = resDoc.getBDOAddResponse().getBDOAddResult().getErrorCodes().getErrorCodeArray();
 				for (ErrorCode.Enum enumeration: a) {
 					logger.error("Invalid: " + enumeration.toString());
@@ -140,7 +140,7 @@ public class Rynns implements BDOIntegration {
 		} catch (Exception e) {
 			e.printStackTrace();
 			success = false;
-			responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.rynns.failure", agent);
+			responseText = TracerUtils.getText("delivercompany.integration.rynns.failure", agent);
 		}
 			
 		/*********************************/

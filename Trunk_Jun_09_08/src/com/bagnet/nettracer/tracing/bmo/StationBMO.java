@@ -147,7 +147,6 @@ public class StationBMO {
 			s.setCompany(c);
 			s.setStationcode(stationCode.toUpperCase());
 			s.setStationdesc(stationCode.toUpperCase());
-			s.setLocale(TracingConstants.DEFAULT_LOCALE);
 			s.setActive(true);
 			HibernateUtils.save(s);
 		}

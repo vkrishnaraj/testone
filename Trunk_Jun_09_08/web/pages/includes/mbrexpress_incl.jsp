@@ -364,7 +364,7 @@
 								                    <html:option value="">
 								                      <bean:message key="select.please_select" />
 								                    </html:option>
-								                    <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="categorytype" />
+								                    <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="description" />
 								                  </html:select>
 								                </td>
 								                <td>

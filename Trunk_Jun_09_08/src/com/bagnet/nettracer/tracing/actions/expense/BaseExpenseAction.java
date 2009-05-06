@@ -179,7 +179,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 	protected void addComment(ExpensePayout ep, Agent user, String key, String content) {
 		// create a comment
 		Comment com = new Comment(user);
-		String tmp = TracerUtils.getResourcePropertyText(key, user);
+		String tmp = TracerUtils.getText(key, user);
 		tmp += content != null ? content : "";
 		com.setContent(tmp);
 

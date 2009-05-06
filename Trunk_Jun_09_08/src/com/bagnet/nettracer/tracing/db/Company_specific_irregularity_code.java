@@ -17,7 +17,6 @@ import java.io.Serializable;
 public class Company_specific_irregularity_code implements Serializable {
 	private int code_id;
 	private int loss_code;
-	private String locale;
 	private String description;
 	private int report_type;
 	private boolean show_to_limited_users;
@@ -78,22 +77,6 @@ public class Company_specific_irregularity_code implements Serializable {
 	 */
 	public void setCompany(Company company) {
 		this.company = company;
-	}
-
-	/**
-	 * @hibernate.property type="string"
-	 * @return Returns the locale.
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
 	}
 
 	/**

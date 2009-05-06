@@ -236,7 +236,7 @@ function updatePagination() {
             </td>
             <logic:iterate id="audit_incident" name="compareList" scope="request">
               <td>
-                <bean:write name="audit_incident" property="status.description" />
+                <bean:message name="audit_incident" property="status.key" />
               </td>
             </logic:iterate>
           </tr>
@@ -629,13 +629,13 @@ function updatePagination() {
                     :
                     <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <bean:write name="theitem" property="xdescelement1" />
+                    <bean:message name="theitem" property="xdescelement1Key" />
                     <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <bean:write name="theitem" property="xdescelement2" />
+                    <bean:message name="theitem" property="xdescelement2Key" />
                     <br>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <bean:write name="theitem" property="xdescelement3" />
+                    <bean:message name="theitem" property="xdescelement3Key" />
                     <br>
                     <bean:message key="colname.manufacturer" />
                     :
@@ -649,7 +649,7 @@ function updatePagination() {
                     <br>
                     <bean:message key="colname.bag_status" />
                     :
-                    <bean:write name="theitem" property="status.description" />
+                    <bean:message name="theitem" property="status.key" />
                     <logic:present name="damaged" scope="request">
                       <br>
                       <bean:message key="colname.damagedesc" />

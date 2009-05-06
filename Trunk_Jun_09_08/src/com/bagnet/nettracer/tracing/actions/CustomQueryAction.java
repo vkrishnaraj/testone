@@ -70,10 +70,6 @@ public class CustomQueryAction extends Action {
 			request.setAttribute("ohd", "1");
 		}
 		
-		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
-		request.setAttribute("oStatusList", oStatusList);
-		request.setAttribute("statusList", TracerUtils.getStatusList(user.getCurrentlocale(), TracingConstants.AJAX_STATUS_INC));
-
 		IncidentForm theform = new IncidentForm();
 		OnHandForm ohdform = new OnHandForm();
 

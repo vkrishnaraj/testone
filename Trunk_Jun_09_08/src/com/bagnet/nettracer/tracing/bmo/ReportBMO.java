@@ -38,14 +38,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
-import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
@@ -162,6 +159,9 @@ public class ReportBMO {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			parameters.put("title", reporttitle);
 			//Criteria cri = sess.createCriteria(Incident.class);
 
@@ -174,13 +174,13 @@ public class ReportBMO {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
 			String sql = "select incident.stationassigned_ID,s1.stationcode as ascode,faultstation_ID,s2.stationcode as fscode, "
-					 + "incident.incident_ID,incident.itemtype_ID,incident.loss_code,incident.createdate,incident.createtime,status.description as stdesc,itemtype.description as itdesc, "
+					 + "incident.incident_ID,incident.itemType_ID,incident.loss_code,incident.createdate,incident.createtime,status.status_ID as stdesc,itemtype.description as itdesc, "
 					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum "
 					 + "from station s1,station s2,status,itemtype,agent,incident " 
 					 + "left outer join passenger p on p.incident_ID = incident.incident_ID "
 					 + "left outer join itinerary it on it.incident_ID = incident.incident_ID and it.itinerarytype = 0 "
 					 + "where s1.station_ID = incident.stationassigned_ID and s2.station_ID = incident.faultstation_ID "
-					 + "and status.status_ID = incident.status_ID and agent.Agent_ID = incident.agent_ID and itemtype.ItemType_ID = incident.itemtype_ID and "
+					 + "and status.status_ID = incident.status_ID and agent.Agent_ID = incident.agent_ID and itemtype.ItemType_ID = incident.itemType_ID and "
 					 + "s1.companycode_ID = '" + user.getStation().getCompany().getCompanyCode_ID() + "' ";
 	
 			if (srDTO.getItemType_ID() >= 1)
@@ -235,7 +235,7 @@ public class ReportBMO {
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -325,7 +325,11 @@ public class ReportBMO {
 					sr.setLoss_code(rs.getInt("loss_code"));
 					sr.setCreatedate(rs.getDate("createdate"));
 					sr.setCreatetime(rs.getTime("createtime"));
-					sr.setStatusdesc(rs.getString("stdesc"));
+					
+					Status a= new Status();
+					a.setStatus_ID(rs.getInt("stdesc"));
+					a.setLocale(user);
+					sr.setStatusdesc(a.getDescription());
 					sr.setTypedesc(rs.getString("itdesc"));
 					
 					// passenger
@@ -414,7 +418,7 @@ public class ReportBMO {
 				if (sr != null)
 					parameters.put("status", sr.getStatusdesc());
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 
 			// summary or detail; summary = 0; detail = 1
@@ -440,6 +444,9 @@ public class ReportBMO {
 			if (srDTO.getBoarded() <= 0)
 				return null;
 			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			parameters.put("title", reporttitle);
 
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
@@ -488,7 +495,7 @@ public class ReportBMO {
 
 			long numdays = 0;
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -599,7 +606,7 @@ public class ReportBMO {
 			if (srDTO.getStatus_ID() >= 1) {
 				parameters.put("status", "");
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 			// passenger boarding calculation
 			int boarded = srDTO.getBoarded();
@@ -640,6 +647,9 @@ public class ReportBMO {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			parameters.put("title", reporttitle);
 			
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
@@ -673,7 +683,7 @@ public class ReportBMO {
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 	
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -826,9 +836,9 @@ public class ReportBMO {
 			}
 			// populate status
 			if (srDTO.getStatus_ID() >= 1) {
-				parameters.put("status", getStatus(srDTO.getStatus_ID()).getDescription());
+				parameters.put("status", getStatus(srDTO.getStatus_ID()).getTextDescription(user));
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 
 			if (list.size() == 0) {
@@ -860,6 +870,9 @@ public class ReportBMO {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			parameters.put("title", reporttitle);
 			
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
@@ -909,7 +922,7 @@ public class ReportBMO {
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -948,7 +961,7 @@ public class ReportBMO {
 				if (pedate == null) // invalid date
 					return null;
 			}
-			parameters.put("psdate", "All Dates");
+			parameters.put("psdate", TracerUtils.getText("reports.dates", user));
 			if (psdate != null && pedate != null) {
 				parameters.put("psdate", srDTO.getCstarttime());
 				if (psdate.equals(pedate)) {
@@ -973,8 +986,8 @@ public class ReportBMO {
 			if (srDTO.getStatus_ID() >= 1) {
 				addspart = "exp.incident.status.description,";
 			}
-			String sql = "SELECT sum(exp.checkamt), exp.currency_ID, sum(exp.voucheramt), sum(exp.mileageamt),"
-					+ " exp.expensetype.description, exp.expenselocation.station_ID,exp.expenselocation.stationcode,exp.draftpaiddate,"
+			String sql = "SELECT sum(exp.checkamt), exp.currency, sum(exp.voucheramt), sum(exp.mileageamt),"
+					+ " exp.expensetype.expensetype_ID, exp.expenselocation.station_ID,exp.expenselocation.stationcode,exp.draftpaiddate,"
 					+ addspart
 					+ " fault.station_ID,fault.stationcode, exp.incident.loss_code,exp.agent.username "
 					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.incident.faultstation fault where 1=1 "
@@ -987,9 +1000,9 @@ public class ReportBMO {
 					+ dateq
 					+ typeq
 					+ companylimit
-					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.expensetype.description,exp.draftpaiddate, "
-					+ addspart + " exp.currency_ID, exp.incident.loss_code,exp.agent.username "
-					+ " order by exp.expenselocation.stationcode,exp.expensetype.description";
+					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.expensetype.expensetype_ID,exp.draftpaiddate, "
+					+ addspart + " exp.currency, exp.incident.loss_code,exp.agent.username "
+					+ " order by exp.expenselocation.stationcode,exp.expensetype.expensetype_ID";
 			Query q = sess.createQuery(sql);
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
@@ -1039,10 +1052,10 @@ public class ReportBMO {
 				o = (Object[]) templist.get(i);
 				exp = new StatReport_ExpDTO();
 				exp.setCheckamt(((Double) o[0]).doubleValue());
-				exp.setCurrency_ID((String) o[1]);
+				exp.setCurrency_ID(((java.util.Currency) o[1]).getCurrencyCode());
 				exp.setVoucheramt(((Double) o[2]).doubleValue());
 				exp.setMileageamt(((Long) o[3]).intValue());
-				exp.setTypedesc((String) o[4]);
+				exp.setExpenseType_ID((Integer) o[4]);
 
 				Station st = new Station();
 				st.setStation_ID(((Integer) o[5]).intValue());
@@ -1054,7 +1067,7 @@ public class ReportBMO {
 				int j = 8;
 				if (srDTO.getStatus_ID() >= 1) {
 					Status st1 = new Status();
-					st1.setDescription((String) o[7]);
+					//st1.setDescription((String) o[7]);
 					exp.setStatus(st1);
 					j = 9;
 				}
@@ -1077,9 +1090,9 @@ public class ReportBMO {
 				parameters.put("showsubtotal", "show");
 			}
 			if (srDTO.getStatus_ID() >= 1) {
-				parameters.put("status", exp.getStatus().getDescription());
+				parameters.put("status", exp.getStatus().getTextDescription(user));
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
 		} catch (Exception e) {
@@ -1257,7 +1270,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -1453,7 +1466,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				if (sr != null)
 					parameters.put("status", sr.getStatusdesc());
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 
 			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
@@ -1475,6 +1488,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			parameters.put("title", reporttitle);
 			String sqlselect = "from com.bagnet.nettracer.tracing.db.Itinerary i_a where 1=1 ";
 			String companylimit = " and i_a.incident.stationassigned.company.companyCode_ID = :companyCode_ID ";
@@ -1589,7 +1605,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -1649,7 +1665,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			String sql = "select distinct i_a.incident.stationassigned.station_ID,i_a.incident.stationassigned.stationcode,"
 					+ " i_a.incident.faultstation.station_ID,i_a.incident.faultstation.stationcode,"
 					+ " i_a.incident.incident_ID, i_a.incident.itemtype.itemType_ID,i_a.incident.loss_code,"
-					+ " i_a.incident.createdate,i_a.incident.createtime,i_a.incident.status.description,i_a.incident.itemtype.description " + sqlselect
+					+ " i_a.incident.createdate,i_a.incident.createtime,i_a.incident.status.status_ID,i_a.incident.itemtype.itemType_ID " + sqlselect
 					+ mbrtypeq + stationq + faultq + losscodeq + statusq + agentq + dateq + traveldateq + companylimit
 					+ " order by i_a.incident.itemtype.itemType_ID, i_a.incident.incident_ID ";
 			
@@ -1731,8 +1747,10 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				sr.setLoss_code(((Integer) o[6]).intValue());
 				sr.setCreatedate((Date) o[7]);
 				sr.setCreatetime((Date) o[8]);
-				sr.setStatusdesc((String) o[9]);
-				sr.setTypedesc((String) o[10]);
+				
+				
+				sr.setStatusdesc(TracerUtils.getText(Status.getKey((Integer) o[9]), user));
+				sr.setTypedesc(TracerUtils.getText(ItemType.getKey((Integer) o[10]), user));
 
 				// get passengers
 				sql = "select passenger.lastname,passenger.firstname " + " from com.bagnet.nettracer.tracing.db.Passenger passenger where "
@@ -1791,7 +1809,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				if (sr != null)
 					parameters.put("status", sr.getStatusdesc());
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 
 			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
@@ -1818,7 +1836,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
-			
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 			// mbr report type
@@ -1852,7 +1872,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -1883,7 +1903,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (srDTO.getSumordet() == 1) {
 				parameters.put("showdetail", "1");
 				breakdown = " incident.createdate, ";
-				parameters.put("title", reporttitle + " (By 24 Hour Periods)");
+				parameters.put("title", reporttitle + " (" + TracerUtils.getText("reports.by24hour", user) + ")");
 			} else {
 				parameters.put("title", reporttitle);
 			}
@@ -2002,7 +2022,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				sr.setReportstaken(num);
 				sr.setReportsclosed(numclose);
 				if (srDTO.getItemType_ID() >= 1) {
-					ItemType it = IncidentUtils.retrieveItemTypeWithId(srDTO.getItemType_ID(), user.getStation().getLocale());
+					ItemType it = IncidentUtils.retrieveItemTypeWithId(srDTO.getItemType_ID(), user.getCurrentlocale());
 					reporttype = it.getDescription();
 				}
 
@@ -2016,7 +2036,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			// populate station and status
 			sr = (StatReport_RecoveryDTO) list.get(0);
 			if (srDTO.getStation_ID() == null || srDTO.getStation_ID()[0].equals("0")) {
-				parameters.put("station", "All Stations");
+				parameters.put("station", TracerUtils.getText("reports.stations", user));
 			}
 
 			if (reporttype != null)
@@ -2045,7 +2065,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
-			
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 			
@@ -2083,7 +2104,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -2116,7 +2137,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			
 			csdate = (Date)dateal.get(5);cedate = (Date)dateal.get(6);
 
-			parameters.put("csdate", "All Dates");
+			parameters.put("csdate", TracerUtils.getText("reports.dates", user));
 			if (csdate != null) {
 				parameters.put("csdate", srDTO.getCstarttime());
 				cdateq = " and incident.closedate between :cstartdate and :cenddate ";
@@ -2245,7 +2266,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			// populate station and status
 			if (list != null && list.size() > 0) {
 				if (srDTO.getStation_ID() == null || srDTO.getStation_ID()[0].equals("0")) {
-					parameters.put("station", "All Stations");
+					parameters.put("station", TracerUtils.getText("reports.stations", user));
 				}
 			}
 
@@ -2273,6 +2294,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
 			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
 			parameters.put("title", reporttitle);
 			//Criteria cri = sess.createCriteria(Incident.class);
 
@@ -2344,7 +2368,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
 			
-			parameters.put("sdate", "All Dates");
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
@@ -2520,7 +2544,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				if (sr != null)
 					parameters.put("status", sr.getStatusdesc());
 			} else {
-				parameters.put("status", "All Status");
+				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 
 			// summary or detail; summary = 0; detail = 1

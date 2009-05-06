@@ -224,7 +224,7 @@ public class WSCoreIncidentUtil {
 		si.setCustomcleared(iDTO.getCustomcleared());
 		si.setNonrevenue(iDTO.getNonrevenue());
 		si.setItemtype(iDTO.getItemtype().getDescription());
-		si.setStatus(iDTO.getStatusdesc());
+		si.setStatus(iDTO.getStatus().getTextDescription(null));
 		si.setLossCode(iDTO.getLoss_code());
 		
 		
@@ -296,7 +296,7 @@ public class WSCoreIncidentUtil {
 				
 				itemarr.setItemtype(iDTO.getItemtype().getDescription());
 				
-				itemarr.setBagstatus(item.getStatus() != null ? item.getStatus().getDescription() : null);
+				itemarr.setBagstatus(item.getStatus() != null ? item.getStatus().getTextDescription(null) : null);
 				
 				String claimCheckNum = item.getClaimchecknum();
 				

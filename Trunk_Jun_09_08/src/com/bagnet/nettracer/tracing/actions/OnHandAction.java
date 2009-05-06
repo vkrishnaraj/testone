@@ -137,7 +137,6 @@ public class OnHandAction extends CheckedAction {
 		BagService bs = new BagService();	
 
 		// Status pertaining to the on hand file
-		request.setAttribute("oStatusList", session.getAttribute("onhandStatusList"));
 		request.setAttribute("onhand", "1");
 
 		request.setAttribute(FAULT_STATION_LIST, createFaultStationList(theform, user));
@@ -655,7 +654,7 @@ public class OnHandAction extends CheckedAction {
 	}
 
 	private List<Company_specific_irregularity_code> createLossCodeList(OnHandForm theform, Agent user) {
-		List<Company_specific_irregularity_code> result = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.OHD, user.getCurrentlocale(), true, user);
+		List<Company_specific_irregularity_code> result = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.OHD,  true, user);
 		
 		boolean addFormCode = false;
 		if (theform.getLoss_code() > 0) {
@@ -689,7 +688,7 @@ public class OnHandAction extends CheckedAction {
 			return result;
 		}
 		else {
-			result.addAll(TracerUtils.getStationList(user.getCurrentlocale(), user.getCompanycode_ID()));
+			result.addAll(TracerUtils.getStationList(user.getCompanycode_ID()));
 		}
 		
 		boolean addUserStation = true;
@@ -838,21 +837,23 @@ public class OnHandAction extends CheckedAction {
 			parameters.put("file_reference", format("" + form.getOhd_id()));
 			parameters.put("holding_company", format("" + form.getHolding_company()));
 			parameters.put("found_at_station", format("" + form.getFound_station()));
-			parameters.put("status", format("" + form.getStatus().getDescription()));
+			parameters.put("status", format("" + form.getStatus().getTextDescription(user)));
+			
+			
 			if(form.getXDesc1() > 0) {
-				parameters.put("ede1", format("" + TracerUtils.getXdescelement(form.getXDesc1()).getDescription()));
+				parameters.put("ede1", format("" + TracerUtils.getXdescelement(form.getXDesc1()).getTextDescription(user)));
 			}
 			else {
 				parameters.put("ede1", "");
 			}
 			if(form.getXDesc2() > 0) {
-				parameters.put("ede2", format("" + TracerUtils.getXdescelement(form.getXDesc2()).getDescription()));
+				parameters.put("ede2", format("" + TracerUtils.getXdescelement(form.getXDesc2()).getTextDescription(user)));
 			}
 			else {
 				parameters.put("ede2", "");
 			}
 			if(form.getXDesc3() > 0) {
-				parameters.put("ede3", format("" + TracerUtils.getXdescelement(form.getXDesc3()).getDescription()));
+				parameters.put("ede3", format("" + TracerUtils.getXdescelement(form.getXDesc3()).getTextDescription(user)));
 			}
 			else {
 				parameters.put("ede3", "");

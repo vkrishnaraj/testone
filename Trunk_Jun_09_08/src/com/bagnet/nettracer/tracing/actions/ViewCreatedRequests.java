@@ -61,22 +61,26 @@ public class ViewCreatedRequests extends Action {
 
 		Status s = new Status();
 		s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-		s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_STATUS_OPEN));
+		s.setLocale(user.getCurrentlocale());
+		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_STATUS_OPEN));
 		ohd_request_status_list.add(s);
 
 		s = new Status();
 		s.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
-		s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_STATUS_CLOSED));
+		s.setLocale(user.getCurrentlocale());
+		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_STATUS_CLOSED));
 		ohd_request_status_list.add(s);
 
 		s = new Status();
 		s.setStatus_ID(TracingConstants.OHD_REQUEST_STATUS_FORWARDED);
-		s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_REQUEST_STATUS_FORWARDED));
+		s.setLocale(user.getCurrentlocale());
+		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_REQUEST_STATUS_FORWARDED));
 		ohd_request_status_list.add(s);
 
 		s = new Status();
 		s.setStatus_ID(TracingConstants.OHD_REQUEST_STATUS_DENIED);
-		s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_REQUEST_STATUS_DENIED));
+		s.setLocale(user.getCurrentlocale());
+		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_REQUEST_STATUS_DENIED));
 		ohd_request_status_list.add(s);
 
 		request.setAttribute("ohd_request_status_list", ohd_request_status_list);

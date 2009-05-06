@@ -124,7 +124,6 @@ public class WTOHD {
 						s.setStationcode(thes.toUpperCase());
 						s.setStationdesc(thes.toUpperCase());
 						s.setActive(true);
-						s.setLocale(TracingConstants.DEFAULT_LOCALE);
 						HibernateUtils.save(s);
 					}
 

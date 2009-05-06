@@ -43,7 +43,7 @@ public class OHD_Inventory implements Serializable {
 	public String getCategory() {
 		String category = null;
 		if (OHD_categorytype_ID != 0) {
-			category = CategoryBMO.getCategory("" + OHD_categorytype_ID, "en").getCategorytype();
+			category = CategoryBMO.getCategory("" + OHD_categorytype_ID, "en").getDescription();
 		}
 
 		if (category == null) category = "";
@@ -51,6 +51,16 @@ public class OHD_Inventory implements Serializable {
 
 	}
 
+
+	public String getCategoryKey() {
+		String category = null;
+		if (OHD_categorytype_ID != 0) {
+			category = CategoryBMO.getCategory(OHD_categorytype_ID, null).getKey();
+		}
+
+		if (category == null) category = "";
+		return category;
+	}
 
 	/**
 	 * @return Returns the description.

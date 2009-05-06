@@ -218,7 +218,7 @@ public class ClaimSettlementAction extends Action {
 		
 		form.setIncident_ID(inc.getIncident_ID());
 		form.setIncidentItemType(inc.getItemtype().getDescription());
-		form.setIncidentStatus(inc.getStatusdesc());
+		form.setIncidentStatus(inc.getStatus().getTextDescription(a));
 		form.setIncidentCreateDate(inc.getDisplaydate());
 		form.setComments(cs.getComments());
 		form.setClaimAgent(cs.getClaimAgent());

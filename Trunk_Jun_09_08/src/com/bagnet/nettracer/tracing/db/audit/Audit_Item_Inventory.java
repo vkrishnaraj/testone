@@ -28,7 +28,7 @@ public class Audit_Item_Inventory implements Serializable {
 	public String getCategory() {
 		String category = null;
 		if (categorytype_ID != 0) {
-			category = CategoryBMO.getCategory("" + categorytype_ID, "en").getCategorytype();
+			category = CategoryBMO.getCategory("" + categorytype_ID, "en").getDescription();
 		}
 
 		if (category == null) category = "";

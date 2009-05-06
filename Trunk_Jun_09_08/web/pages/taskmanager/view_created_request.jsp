@@ -149,10 +149,10 @@ function updatePagination() {
                   </logic:equal>
                   <td>
                     <logic:equal name="req" property="status.status_ID" value="<%= "" + TracingConstants.OHD_REQUEST_STATUS_FORWARDED %>">
-                      <A HREF="forward_on_hand.do?showForward=1&forward_id=<bean:write name="req" property="forward_id"/>"><bean:write name="req" property="status.description" /></a>
+                      <A HREF="forward_on_hand.do?showForward=1&forward_id=<bean:write name="req" property="forward_id"/>"><bean:message name="req" property="status.key" /></a>
                     </logic:equal>
                     <logic:notEqual name="req" property="status.status_ID" value="<%= "" + TracingConstants.OHD_REQUEST_STATUS_FORWARDED %>">
-                      <bean:write name="req" property="status.description" />
+                      <bean:message name="req" property="status.key" />
                     </logic:notEqual>
                   </td>
                   <td>

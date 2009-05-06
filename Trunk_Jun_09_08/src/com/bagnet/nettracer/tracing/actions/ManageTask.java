@@ -107,14 +107,14 @@ public class ManageTask extends Action {
 			request.setAttribute("file_type",file_type);
 		}
 
-		List statusList = TaskUtils.getTaskStatusList(user.getCurrentlocale());
+		List statusList = TracerUtils.getStatusList(TracingConstants.TABLE_TASK, user.getCurrentlocale(), "status_ID") ;
 		request.setAttribute("task_status_list", statusList);
 
 		//Task is ready to be saved.
 		if (request.getParameter("done") != null) {
 			ArrayList al = new ArrayList();
-			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
-			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
+			al.add(new LabelValueBean(TracerUtils.getText("ohd.short", user), "0"));
+			al.add(new LabelValueBean(TracerUtils.getText("incident_cap", user), "1"));
 
 			Task task = null;
 			if (request.getParameter("task_id") != null && (!request.getParameter("task_id").equals("0"))) {
@@ -279,15 +279,20 @@ public class ManageTask extends Action {
 		//Create a new task.
 		if (request.getParameter("create") != null) {
 			ArrayList al = new ArrayList();
-			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
-			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
+			al.add(new LabelValueBean(TracerUtils.getText("ohd.short", user), "0"));
+			al.add(new LabelValueBean(TracerUtils.getText("incident_cap", user), "1"));
 
 			Task task = new Task();
 			task.setAssigningAgent(user);
 			task.setStation(user.getStation());
 
-			task.setPriority(TaskUtils.getPriority(user.getCurrentlocale(), "Medium"));
-			task.setStatus(TaskUtils.getStatusByDesc(user.getCurrentlocale(), "Not Started"));
+			Priority priority = new Priority();
+			priority.setPriority_ID(TracingConstants.PRIORITY_MEDIUM);
+			task.setPriority(priority);
+			
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.TASK_STATUS_NOT_STARTED);
+			task.setStatus(status);
 
 			if (request.getParameter("file_ref_number") != null
 					&& !request.getParameter("file_ref_number").equals("")) {
@@ -312,8 +317,8 @@ public class ManageTask extends Action {
 					.getTimezone()));
 
 			ArrayList al = new ArrayList();
-			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
-			al.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
+			al.add(new LabelValueBean(TracerUtils.getText("ohd.short", user), "0"));
+			al.add(new LabelValueBean(TracerUtils.getText("incident_cap", user), "1"));
 
 			request.setAttribute("task", task);
 			request.setAttribute("typelist", al);

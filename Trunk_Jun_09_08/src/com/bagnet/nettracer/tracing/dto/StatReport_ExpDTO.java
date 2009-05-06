@@ -7,6 +7,7 @@ package com.bagnet.nettracer.tracing.dto;
 
 import java.sql.Date;
 
+import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 
@@ -27,7 +28,7 @@ public class StatReport_ExpDTO {
 	private double voucheramt;
 	private int mileageamt;
 	private String currency_ID;
-	private String typedesc;
+	private int expenseType_ID;
 	private Station station;
 	private Status status;
 	private Station faultstation;
@@ -138,19 +139,12 @@ public class StatReport_ExpDTO {
 		this.status = status;
 	}
 
+	
 	/**
 	 * @return Returns the typedesc.
 	 */
 	public String getTypedesc() {
-		return typedesc;
-	}
-
-	/**
-	 * @param typedesc
-	 *          The typedesc to set.
-	 */
-	public void setTypedesc(String typedesc) {
-		this.typedesc = typedesc;
+		return ExpenseType.MSG_KEY + expenseType_ID;
 	}
 
 	/**
@@ -202,5 +196,13 @@ public class StatReport_ExpDTO {
 	 */
 	public void setDraftpaiddate(Date draftpaiddate) {
 		this.draftpaiddate = draftpaiddate;
+	}
+
+	public int getExpenseType_ID() {
+		return expenseType_ID;
+	}
+
+	public void setExpenseType_ID(int expenseType_ID) {
+		this.expenseType_ID = expenseType_ID;
 	}
 }

@@ -315,14 +315,14 @@ public class Audit_Company implements Serializable {
 
 	public String getState() {
 		if (state_ID != null && state_ID.length() > 0) {
-			return TracerUtils.getState(state_ID, "en").getState();
+			return TracerUtils.getState(state_ID).getState();
 		}
 		return "";
 	}
 
 	public String getCountry() {
 		if (countrycode_ID != null && countrycode_ID.length() > 0) {
-			return TracerUtils.getCountry(countrycode_ID, "en").getCountry();
+			return TracerUtils.getCountry(countrycode_ID).getCountry();
 		}
 		return "";
 	}

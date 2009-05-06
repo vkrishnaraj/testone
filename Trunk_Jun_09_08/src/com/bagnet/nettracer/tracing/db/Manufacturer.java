@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class Manufacturer implements Serializable {
 	private int Manufacturer_ID;
 	private String description;
-	private String locale;
+	
 
 	/**
 	 * @return Returns the description.
@@ -35,22 +35,6 @@ public class Manufacturer implements Serializable {
 		this.description = description;
 	}
 
-	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
 
 	/**
 	 * @return Returns the manufacturer_ID.

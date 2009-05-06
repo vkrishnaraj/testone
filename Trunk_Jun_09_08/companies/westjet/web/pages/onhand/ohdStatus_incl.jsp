@@ -11,7 +11,7 @@
 	<bean:message key="colname.ohd_status" /> <br />
 	<logic:notEqual name="OnHandForm" property="ohd_id" value="">
 		<html:select name="OnHandForm" property="status.status_ID" styleClass="dropdown">
-			<html:options collection="oStatusList" property="status_ID" labelProperty="description" />
+			<html:options collection="ohdStatusList" property="status_ID" labelProperty="description" />
 		</html:select>
 		</div>
 		<div style="float: left;margin-left: 15px;display:table-cell;vertical-align:middle">

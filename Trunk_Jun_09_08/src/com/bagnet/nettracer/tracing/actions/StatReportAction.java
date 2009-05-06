@@ -56,7 +56,7 @@ public class StatReportAction extends Action {
 				.findForward(TracingConstants.NO_PERMISSION));
 
 		List codes = AdminUtils.getDistinctLocaleCompanyCodes(user.getStation().getCompany()
-				.getCompanyCode_ID(), 0, user.getCurrentlocale());
+				.getCompanyCode_ID(), 0);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
@@ -71,17 +71,10 @@ public class StatReportAction extends Action {
 
 		if (reportnum == null) reportnum = Integer.toString(ReportingConstants.RPT_3);
 		
-		if ((Integer.parseInt(reportnum) ==  ReportingConstants.RPT_10) ||
-				(Integer.parseInt(reportnum) == ReportingConstants.RPT_20 && customreportnum != null && Integer.parseInt(customreportnum) == ReportingConstants.RPT_20_CUSTOM_5)){
-			List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
-			request.setAttribute("oStatusList", oStatusList);
-		}
-		
 		request.setAttribute("reportnum", reportnum);
 		
 		request.setAttribute("customReports", ReportBMO.getAllCustomReports());
 		request.setAttribute("company", user.getStation().getCompany().getCompanyCode_ID().toLowerCase());
-
 
 		if (customreportnum != null) request.setAttribute("customreportnum", customreportnum);
 		

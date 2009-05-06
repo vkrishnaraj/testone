@@ -284,8 +284,7 @@ public class SearchIncidentAction extends Action {
 				request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
 
 				//the company specific codes..
-				List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), itemType, user
-						.getCurrentlocale(), false, user);
+				List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), itemType, false, user);
 				//add to the loss codes
 				request.setAttribute("losscodes", codes);
 				
@@ -302,7 +301,7 @@ public class SearchIncidentAction extends Action {
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());
 					} else {
-						faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+						faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
 						faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
 					}
 					request.setAttribute("faultstationlist", faultstationlist);
@@ -338,7 +337,7 @@ public class SearchIncidentAction extends Action {
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());
 					} else {
-						faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+						faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
 						faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
 					}
 					request.setAttribute("faultstationlist", faultstationlist);
@@ -356,7 +355,7 @@ public class SearchIncidentAction extends Action {
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());
 					} else {
-						faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id());
+						faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
 						faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
 					}
 					request.setAttribute("faultstationlist", faultstationlist);

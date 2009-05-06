@@ -732,4 +732,22 @@ public class Audit_Item implements Serializable {
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getDescription();
 	}
+	
+	public String getXdescelement1Key() {
+		if (xdescelement_ID_1 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
+		return xd.getKey();
+	}
+
+	public String getXdescelement2Key() {
+		if (xdescelement_ID_2 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_2);
+		return xd.getKey();
+	}
+
+	public String getXdescelement3Key() {
+		if (xdescelement_ID_3 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
+		return xd.getKey();
+	}
 }

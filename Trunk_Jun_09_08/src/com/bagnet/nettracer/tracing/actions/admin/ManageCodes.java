@@ -150,8 +150,7 @@ public final class ManageCodes extends Action {
 			String code_id = request.getParameter("code_id");
 			if (code_id == null || code_id.length() < 1) {
 				Company_specific_irregularity_code code = LossCodeBMO.getLossCode(new Integer( (String)dForm
-						.get("loss_code")).intValue(), new Integer( (String) dForm.get("report_type")).intValue(), (String) dForm.get("locale"),
-						AdminUtils.getCompany(companyCode));
+						.get("loss_code")).intValue(), new Integer( (String) dForm.get("report_type")).intValue(), AdminUtils.getCompany(companyCode));
 				if (code != null) {
 					ActionMessage error = new ActionMessage("error.creating.losscode.exists");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -167,7 +166,7 @@ public final class ManageCodes extends Action {
 					String loss_code = request.getParameter("loss_code");
 					s.setLoss_code(Integer.parseInt(loss_code));
 					s.setReport_type(Integer.parseInt(request.getParameter("report_type")));
-					s.setLocale(request.getParameter("locale"));
+					
 
 					Company comp = new Company();
 					comp.setCompanyCode_ID(companyCode);

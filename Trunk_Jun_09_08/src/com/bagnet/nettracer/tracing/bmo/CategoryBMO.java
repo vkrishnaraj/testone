@@ -11,7 +11,7 @@ import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 
 public class CategoryBMO {
 
-	public static OHD_CategoryType getCategory(int code) {
+	public static OHD_CategoryType getCategory(int code, String locale) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -20,7 +20,9 @@ public class CategoryBMO {
 			List retList = cri.list();
 			
 			if (retList.size() == 1) {
-				return (OHD_CategoryType) cri.list().get(0);
+				OHD_CategoryType tmp = (OHD_CategoryType) cri.list().get(0);
+				tmp.setLocale(locale);
+				return tmp;
 			}
 			return null;
 		} catch (Exception e) {
@@ -42,9 +44,10 @@ public class CategoryBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(
-					Expression.eq("OHD_CategoryType_ID", new Integer(code)))
-					.add(Expression.eq("locale", locale));
-			return (OHD_CategoryType) cri.list().get(0);
+					Expression.eq("OHD_CategoryType_ID", new Integer(code)));
+			OHD_CategoryType tmp = (OHD_CategoryType) cri.list().get(0);
+			tmp.setLocale(locale);
+			return tmp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -313,7 +313,7 @@
 					
 				<tr>
 					<td class="label"><span><bean:message key="pv17" />:</span></td>
-					<td align="left"><strong><bean:write name="theform" property="status.description" /></strong></td>
+					<td align="left"><strong><bean:message name="theform" property="status.key" /></strong></td>
 				</tr>		
 					
 					
@@ -336,7 +336,7 @@
 		
 				<tr>
 					<td class="label"><span class="label"><bean:message key="pv19" />:</span></td>
-					<td><strong><bean:write name="theitem" property="status.description" /></strong></td>
+					<td><strong><bean:message name="theitem" property="status.key" /></strong></td>
 				</tr>
 				<tr>
 					<td colspan="2"><hr size="1px" width="275px" /></td>

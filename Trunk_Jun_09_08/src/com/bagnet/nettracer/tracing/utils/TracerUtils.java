@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.Globals;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
@@ -54,6 +55,7 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.ReceiptDbLocale;
@@ -63,6 +65,8 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.XDescElement;
+import com.bagnet.nettracer.tracing.db.i8n.KeyValueBean;
+import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
@@ -219,8 +223,7 @@ public class TracerUtils {
 		i.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 		i.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 		i.setBagnumber(0);
-		i.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN,
-				user.getCurrentlocale()));
+		i.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 
 		// set new claimcheck
 		Incident_Claimcheck ic = theform.getClaimcheck(0);
@@ -321,23 +324,26 @@ public class TracerUtils {
 	public static void populateLists(HttpSession session)
 			throws HibernateException {
 		Agent user = (Agent) session.getAttribute("user");
+		Locale userLocale = new Locale(user.getCurrentlocale());
+		session.setAttribute(Globals.LOCALE_KEY, userLocale);
 		String locale = user.getCurrentlocale();
 		Company company = user.getStation().getCompany();
 		// set mbr report types
+		
+		
 		session.setAttribute("mbrreporttypes", session
 				.getAttribute("mbrreporttypes") != null ? session
-				.getAttribute("mbrreporttypes") : retrieveRecords(locale,
+				.getAttribute("mbrreporttypes") : retrieveLocaleBasedRecords(
 				"com.bagnet.nettracer.tracing.db.ItemType", "itemtype",
-				"locale", null));
+				"itemType_ID", locale));
 		
 		
 		session.setAttribute("expenseStatusList", session.getAttribute("expenseStatusList") != null ? session
-				.getAttribute("expenseStatusList") : ExpenseUtils.getStatusList(user.getCurrentlocale()));
+				.getAttribute("expenseStatusList") : getStatusList(TracingConstants.TABLE_EXPENSEPAYOUT, locale, "status_ID"));
 
 		session.setAttribute("statelist",
 				session.getAttribute("statelist") != null ? session
-						.getAttribute("statelist") : getStatelist(user
-						.getCurrentlocale()));
+						.getAttribute("statelist") : getStatelist());
 
 		session.setAttribute("localelist",
 				session.getAttribute("localelist") != null ? session
@@ -350,38 +356,38 @@ public class TracerUtils {
 		// set country
 		session.setAttribute("countrylist",
 				session.getAttribute("countrylist") != null ? session
-						.getAttribute("countrylist") : getCountryList(user
-						.getCurrentlocale()));
+						.getAttribute("countrylist") : getCountryList());
 		// set color
 		session.setAttribute("colorlist",
 				session.getAttribute("colorlist") != null ? session
-						.getAttribute("colorlist") : getColorList(false));
+						.getAttribute("colorlist") : getColorList(false, user));
 		// set color for search
 		session.setAttribute("colorlistforsearch", session
 				.getAttribute("colorlistforsearch") != null ? session
-				.getAttribute("colorlistforsearch") : getColorList(true));
+				.getAttribute("colorlistforsearch") : getColorList(true, user));
 		// set bag type
 		session.setAttribute("typelist",
 				session.getAttribute("typelist") != null ? session
-						.getAttribute("typelist") : getTypeList());
+						.getAttribute("typelist") : getTypeList(locale));
 		// set xdescelementlist
 		session.setAttribute("xdescelementlist", session
 				.getAttribute("xdescelementlist") != null ? session
-				.getAttribute("xdescelementlist") : retrieveRecords(locale,
+				.getAttribute("xdescelementlist") : retrieveLocaleBasedRecords(
 				"com.bagnet.nettracer.tracing.db.XDescElement", "xdescelement",
-				"locale", "description"));
+				"description", locale));
+		
 		// set manufacturer
 		session.setAttribute("manufacturerlist", session
 				.getAttribute("manufacturerlist") != null ? session
-				.getAttribute("manufacturerlist") : retrieveRecords(locale,
+				.getAttribute("manufacturerlist") : retrieveBasicRecords(
 				"com.bagnet.nettracer.tracing.db.Manufacturer", "manufacturer",
-				"locale", "description"));
+				"description"));
 		// set currency
 		session.setAttribute("currencylist", session
 				.getAttribute("currencylist") != null ? session
-				.getAttribute("currencylist") : retrieveRecords(locale,
+				.getAttribute("currencylist") : retrieveBasicRecords(
 				"com.bagnet.nettracer.tracing.db.Currency", "currency",
-				"locale", "description"));
+				"description"));
 
 		session.setAttribute("categorylist", session
 				.getAttribute("categorylist") != null ? session
@@ -389,43 +395,39 @@ public class TracerUtils {
 
 		session.setAttribute("airportlist",
 				session.getAttribute("airportlist") != null ? session
-						.getAttribute("airportlist") : getAirportList(locale,
+						.getAttribute("airportlist") : getAirportList(
 						user.getCompanycode_ID()));
 
+		// set status list for mbr reports
+		session.setAttribute("ohdStatusList",
+				session.getAttribute("ohdStatusList") != null ? session
+						.getAttribute("ohdStatusList") : getStatusList(TracingConstants.TABLE_ON_HAND, locale));
 
+		
 		// set status list for mbr reports
 		session.setAttribute("statuslist",
 				session.getAttribute("statuslist") != null ? session
-						.getAttribute("statuslist") : getStatusList(locale,
-						TracingConstants.TABLE_INCIDENT));
-		
-		session.setAttribute("onhandStatusList",
-				session.getAttribute("onhandStatusList") != null ? session
-						.getAttribute("statuslist") : getStatusList(locale,
-						TracingConstants.TABLE_ON_HAND));
+						.getAttribute("statuslist") : getStatusList(TracingConstants.TABLE_INCIDENT, locale));
 
 		// set status list for mbr reports
 		session.setAttribute("dStatusList",
 				session.getAttribute("dStatusList") != null ? session
-						.getAttribute("dStatusList") : getStatusList(locale,
-						TracingConstants.TABLE_DISPOSAL_LOST_FOUND));
+						.getAttribute("dStatusList") : getStatusList(TracingConstants.TABLE_DISPOSAL_LOST_FOUND, locale));
 
 		// set station list
 		session.setAttribute("stationlist",
 				session.getAttribute("stationlist") != null ? session
-						.getAttribute("stationlist") : getStationList(locale,
-						company.getCompanyCode_ID()));
+						.getAttribute("stationlist") : getStationList(company.getCompanyCode_ID()));
 		session.setAttribute("allstationlist", session
 				.getAttribute("allstationlist") != null ? session
-				.getAttribute("allstationlist") : getStationList(locale, null));
+				.getAttribute("allstationlist") : getStationList(null));
 		session
 				.setAttribute(
 						"airlineallstationlist",
 						session.getAttribute("airlineallstationlist") != null ? session
 								.getAttribute("airlineallstationlist")
-								: getStationList(locale, company
-										.getCompanyCode_ID(),
-										TracingConstants.AgentActiveStatus.ALL));
+								: getStationList(company
+										.getCompanyCode_ID(), TracingConstants.AgentActiveStatus.ALL));
 
 		// set company lists
 		if (session.getAttribute("companylistByName") == null
@@ -436,14 +438,15 @@ public class TracerUtils {
 		// set expense type list
 		session.setAttribute("expensetypelist", session
 				.getAttribute("expensetypelist") != null ? session
-				.getAttribute("expensetypelist") : retrieveRecords(locale,
+				.getAttribute("expensetypelist") : retrieveLocaleBasedRecords(
 				"com.bagnet.nettracer.tracing.db.ExpenseType", "expensetype",
-				"locale", "description"));
+				"description", locale));
 
 		session.setAttribute("prioritylist", session
 				.getAttribute("prioritylist") != null ? session
-				.getAttribute("prioritylist") : getPriorityList(locale));
-
+				.getAttribute("prioritylist") :  retrieveLocaleBasedRecords(
+						"com.bagnet.nettracer.tracing.db.Priority", "priority",
+						"priority_ID", locale));
 	}
 
 	public static void populateCompanyLists(HttpSession session) {
@@ -468,8 +471,7 @@ public class TracerUtils {
 
 			session.setAttribute("claimstatuslist", session
 					.getAttribute("claimstatuslist") != null ? session
-					.getAttribute("claimstatuslist") : getStatusList(user
-					.getCurrentlocale(), TracingConstants.TABLE_CLAIM));
+					.getAttribute("claimstatuslist") : getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
 
 			if ((claim = theform.getClaim()) != null) {
 				BeanUtils.copyProperties(cform, claim);
@@ -496,6 +498,7 @@ public class TracerUtils {
 			if (cform.getStatus() == null) {
 				Status status = new Status();
 				status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+				status.setLocale(user);
 				cform.setStatus(status);
 			}
 
@@ -574,11 +577,8 @@ public class TracerUtils {
 			Passenger pa = (Passenger) theform.getPassenger(0);
 			cpform.setPassname(pa.getFirstname() + " " + pa.getLastname());
 			// set incidenttype
-			String locale = user.getCurrentlocale();
-			Company company = user.getStation().getCompany();
-			ArrayList al = retrieveRecords(locale,
-					"com.bagnet.nettracer.tracing.db.ItemType", "itemtype",
-					"locale", "description");
+			List al = (List) session.getAttribute("mbrreporttypes");
+			
 			for (int i = 0; i < al.size(); i++) {
 				ItemType it = (ItemType) al.get(i);
 				if (it.getItemType_ID() == theform.getItem(0, 0)
@@ -614,8 +614,7 @@ public class TracerUtils {
 		}
 	}
 
-	public static ArrayList getStationList(String locale, String company,
-			TracingConstants.AgentActiveStatus status) throws HibernateException {
+	public static ArrayList getStationList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
 
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -626,19 +625,18 @@ public class TracerUtils {
 			String sql = "";
 			if (company != null) {
 				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where "
-						+ "station.locale = :locale and station.company.companyCode_ID = :company ";
+						+ "station.company.companyCode_ID = :company ";
 				if (status != TracingConstants.AgentActiveStatus.ALL)
 					sql += " and station.active = :active ";
 				sql += " order by stationcode";
 
 			} else {
-				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where station.locale = :locale ";
+				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where 1 = 1 ";
 				if (status != TracingConstants.AgentActiveStatus.ALL)
 					sql += " and station.active = :active ";
 				sql += " order by stationcode";
 			}
 			Query q = sess.createQuery(sql);
-			q.setParameter("locale", locale);
 			if (status != TracingConstants.AgentActiveStatus.ALL)
 				if (status == TracingConstants.AgentActiveStatus.ACTIVE)
 					q.setParameter("active", true);
@@ -675,10 +673,9 @@ public class TracerUtils {
 		}
 	}
 
-	public static ArrayList getStationList(String locale, String company)
+	public static ArrayList getStationList(String company)
 			throws HibernateException {
-		return getStationList(locale, company,
-				TracingConstants.AgentActiveStatus.ACTIVE);
+		return getStationList(company, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 
 	public static ArrayList<ArrayList<Company>> getCompanyLists()
@@ -738,6 +735,7 @@ public class TracerUtils {
 		}
 	}
 
+	@Deprecated
 	public static ArrayList retrieveRecords(String instr, String obj,
 			String tablename, String colname, String orderColumn)
 			throws HibernateException {
@@ -780,19 +778,92 @@ public class TracerUtils {
 			sess.close();
 		}
 	}
+	
+	public static ArrayList retrieveBasicRecords(String obj,
+			String tablename, String orderColumn)
+			throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			Query q = null;
 
-	public static ArrayList getStatusList(String locale, int table_ID)
+			String sql = "from " + obj + " " + tablename + " where 1=1 ";
+			if (orderColumn != null && !orderColumn.equals("")) {
+				sql += " order by " + orderColumn + " asc";
+			}
+
+			q = sess.createQuery(sql);
+
+			List list = q.list();
+
+			if (list == null || list.size() == 0) {
+				logger.debug("unable to find " + tablename);
+				return null;
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve " + tablename + " from database: "
+					+ e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+	
+	public static ArrayList retrieveLocaleBasedRecords(String obj,
+			String tablename, String orderColumn, String setLocale)
+			throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			Query q = null;
+
+			String sql = "from " + obj + " " + tablename + " where 1=1 ";
+			if (orderColumn != null && !orderColumn.equals("")) {
+				sql += " order by " + orderColumn + " asc";
+			}
+
+			q = sess.createQuery(sql);
+			List<LocaleBasedObject> list = q.list();
+
+			if (list == null || list.size() == 0) {
+				logger.debug("unable to find " + tablename);
+				return null;
+			} else {
+				for (LocaleBasedObject object: list) {
+					object.setLocale(setLocale);
+				}
+			}
+			return (ArrayList) list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve " + tablename + " from database: "
+					+ e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+
+
+	public static ArrayList getStatusList(int table_ID, String locale, String orderBy)
 			throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Criteria cri = sess.createCriteria(Status.class).add(
-					Expression.eq("locale", locale)).add(
 					Expression.eq("table_ID", new Integer(table_ID)));
-			List list = cri.list();
-
+			if (orderBy != null) {
+				cri.addOrder(Order.asc(orderBy));
+			}
+			List<Status> list = cri.list();
+			
 			if (list == null || list.size() == 0) {
 				logger.debug("unable to find status");
 				return null;
+			} else {
+				for (Status status: list) {
+					status.setLocale(locale);
+				}
 			}
 			return (ArrayList) list;
 		} catch (Exception e) {
@@ -804,24 +875,35 @@ public class TracerUtils {
 		}
 	}
 
-	public static ArrayList getTypeList() {
+	public static ArrayList getStatusList(int table_ID, String locale)
+			throws HibernateException {
+		return getStatusList(table_ID, locale, null);
+	}
+
+	public static ArrayList getTypeList(String locale) {
 		ArrayList al = new ArrayList();
-		al.add(new LabelValueBean(messages.getMessage(new Locale(
-				TracingConstants.DEFAULT_LOCALE), "select.please_select"), ""));
-		al.add(new LabelValueBean("Non-Zippered type bags (01-12)", "-1"));
+		
+		al.add(new KeyValueBean("select.please_select", "", locale));
+		al.add(new KeyValueBean("BAG_TYPE_KEY_1", "-1", locale));
+				
 		for (int i = 1; i < 10; i++) {
 			al.add(new LabelValueBean("0" + i, "0" + i));
 		}
 		al.add(new LabelValueBean("10", "10"));
 		al.add(new LabelValueBean("11", "11"));
 		al.add(new LabelValueBean("12", "12"));
-		al.add(new LabelValueBean("Zippered type bags (20-29)", "-2"));
+		
+		al.add(new KeyValueBean("BAG_TYPE_KEY_2", "-2", locale));
+		//al.add(new LabelValueBean("Zippered type bags (20-29)", "-2"));
+		
 		for (int i = 20; i <= 29; i++) {
 			al
 					.add(new LabelValueBean(Integer.toString(i), Integer
 							.toString(i)));
 		}
-		al.add(new LabelValueBean("Miscellaneous Articles (50-99)", "-3"));
+		
+		al.add(new KeyValueBean("BAG_TYPE_KEY_3", "-3", locale));
+		//al.add(new LabelValueBean("Miscellaneous Articles (50-99)", "-3"));
 		for (int i = 50; i <= 99; i++) {
 			al
 					.add(new LabelValueBean(Integer.toString(i), Integer
@@ -830,49 +912,50 @@ public class TracerUtils {
 		return al;
 	}
 
-	public static ArrayList getColorList(boolean forsearch) {
+	
+	public static ArrayList getColorList(boolean forsearch, Agent user) {
 		ArrayList al = new ArrayList();
 
 		if (forsearch)
-			al.add(new LabelValueBean(messages.getMessage(new Locale(
-					TracingConstants.DEFAULT_LOCALE), "select.all"), ""));
+			al.add(new KeyValueBean("select.all", "", user));
 		else
-			al.add(new LabelValueBean(messages.getMessage(new Locale(
-					TracingConstants.DEFAULT_LOCALE), "select.please_select"),
-					""));
+			al.add(new KeyValueBean("select.please_select", "", user));
 
-		al.add(new LabelValueBean("WT = white/clear", "WT"));
-		al.add(new LabelValueBean("BK = black", "BK"));
-		al.add(new LabelValueBean("GY = grey", "GY"));
-		al.add(new LabelValueBean("BU = blue", "BU"));
-		al.add(new LabelValueBean("BE = beige", "BE"));
-		al.add(new LabelValueBean("RD = red", "RD"));
-		al.add(new LabelValueBean("YW = yellow", "YW"));
-		al.add(new LabelValueBean("BN = brown", "BN"));
-		al.add(new LabelValueBean("GN = green", "GN"));
-		al.add(new LabelValueBean("PU = Purple", "PU"));
-		al.add(new LabelValueBean("MC = multi colors, 2 or more solid colors",
-				"MC"));
-		al.add(new LabelValueBean("TD = tweed", "TD"));
-		al.add(new LabelValueBean("PR = pattern", "PR"));
+		al.add(new KeyValueBean("COLOR_KEY_WT", "WT", user));
+		al.add(new KeyValueBean("COLOR_KEY_BK", "BK", user));
+		al.add(new KeyValueBean("COLOR_KEY_GY", "GY", user));
+		al.add(new KeyValueBean("COLOR_KEY_BU", "BU", user));
+		al.add(new KeyValueBean("COLOR_KEY_BE", "BE", user));
+		al.add(new KeyValueBean("COLOR_KEY_RD", "RD", user));
+		al.add(new KeyValueBean("COLOR_KEY_YW", "YW", user));
+		al.add(new KeyValueBean("COLOR_KEY_BN", "BN", user));
+		al.add(new KeyValueBean("COLOR_KEY_GN", "GN", user));
+		al.add(new KeyValueBean("COLOR_KEY_PU", "PU", user));
+		al.add(new KeyValueBean("COLOR_KEY_MC", "MC", user));
+		al.add(new KeyValueBean("COLOR_KEY_TD", "TD", user));
+		al.add(new KeyValueBean("COLOR_KEY_PR", "PR", user));
 
 		return al;
 	}
 
+	
 	public static ArrayList getCategoryList(String locale) {
 
 		Session sess = null;
 		try {
-			String query = "select ohd_categorytype from com.bagnet.nettracer.tracing.db.OHD_CategoryType ohd_categorytype where "
-					+ "ohd_categorytype.locale = :locale order by ohd_categorytype.categorytype";
+			String query = "select ohd_categorytype from com.bagnet.nettracer.tracing.db.OHD_CategoryType ohd_categorytype "
+					+ "order by ohd_categorytype.categoryKey";
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			q.setString("locale", locale);
 			List list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find category type");
 				return null;
+			} else {
+				for (LocaleBasedObject x: (List<OHD_CategoryType>) list) {
+					x.setLocale(locale);
+				}
 			}
 			return (ArrayList) list;
 		} catch (Exception e) {
@@ -894,7 +977,7 @@ public class TracerUtils {
 		 */
 	}
 
-	public static ArrayList getAirportList(String locale, String companycode) {
+	public static ArrayList getAirportList(String companycode) {
 
 		Session sess = null;
 		try {
@@ -902,14 +985,13 @@ public class TracerUtils {
 			String sql = "select airport from "
 					+ "com.bagnet.nettracer.tracing.db.Airport airport where 1=1 ";
 
-			sql += " and airport.locale = :locale";
 			sql += " and airport.companyCode_ID = :companycode";
 
 			sql += " order by airport.country,airport.airport_desc";
 
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			q.setString("locale", locale);
+			
 			q.setString("companycode", companycode);
 
 			List list = q.list();
@@ -933,79 +1015,6 @@ public class TracerUtils {
 		}
 	}
 
-	public static ArrayList getPriorityList(String locale) {
-
-		Session sess = null;
-		try {
-			String query = "select priority from com.bagnet.nettracer.tracing.db.Priority priority where "
-					+ "priority.locale = :locale";
-			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(query);
-			q.setString("locale", locale);
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find priority");
-				return null;
-			}
-			return (ArrayList) list;
-		} catch (Exception e) {
-			logger.error("unable to retrieve priority from database: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			try {
-				if (sess != null)
-					sess.close();
-			} catch (Exception e) {
-				logger.error("unable to close session: " + e);
-				e.printStackTrace();
-			}
-		}
-
-		/*
-		 * ArrayList al = new ArrayList(); al.add(new LabelValueBean("Please
-		 * Select", "")); al.add(new LabelValueBean("Photo Album", "1")); return
-		 * al;
-		 */
-	}
-
-	public static ArrayList getItemTypeList(String locale) {
-
-		Session sess = null;
-		try {
-			String query = "select ohd_itemtype from com.bagnet.nettracer.tracing.db.OHD_ItemType ohd_itemtype where "
-					+ "ohd_itemtype.locale = :locale";
-			sess = HibernateWrapper.getSession().openSession();
-
-			Query q = sess.createQuery(query);
-			q.setString("locale", locale);
-			List list = q.list();
-			if (list.size() == 0) {
-				logger.debug("unable to find item type");
-				return null;
-			}
-			return (ArrayList) list;
-		} catch (Exception e) {
-			logger.error("unable to retrieve station from database: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			try {
-				if (sess != null)
-					sess.close();
-			} catch (Exception e) {
-				logger.error("unable to close session: " + e);
-				e.printStackTrace();
-			}
-		}
-
-		/*
-		 * ArrayList al = new ArrayList(); al.add(new LabelValueBean("Please
-		 * Select", "")); al.add(new LabelValueBean("Photo Album", "1")); return
-		 * al;
-		 */
-	}
 	
 	/**
 	 * @return Returns the localelist.
@@ -1042,7 +1051,7 @@ public class TracerUtils {
 	/**
 	 * @return Returns the statelist.
 	 */
-	public static ArrayList getStatelist(String locale) {
+	public static ArrayList getStatelist() {
 
 		ArrayList al = new ArrayList();
 		List retrieval = null;
@@ -1050,8 +1059,7 @@ public class TracerUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(State.class).add(
-					Expression.eq("locale", locale));
+			Criteria cri = sess.createCriteria(State.class);
 			cri.addOrder(Order.asc("state"));
 			retrieval = cri.list();
 		} catch (Exception e) {
@@ -1077,15 +1085,14 @@ public class TracerUtils {
 		return al;
 	}
 
-	public static ArrayList getCountryList(String locale) {
+	public static ArrayList getCountryList() {
 		ArrayList al = new ArrayList();
 		List retrieval = null;
 
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(CountryCode.class).add(
-					Expression.eq("locale", locale));
+			Criteria cri = sess.createCriteria(CountryCode.class);
 			cri.addOrder(Order.asc("country"));
 			retrieval = cri.list();
 		} catch (Exception e) {
@@ -1238,13 +1245,12 @@ public class TracerUtils {
 		}
 	}
 
-	public static CountryCode getCountry(String code, String locale) {
+	public static CountryCode getCountry(String code) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(CountryCode.class).add(
-					Expression.eq("countryCode_ID", code)).add(
-					Expression.eq("locale", locale));
+					Expression.eq("countryCode_ID", code));
 			return (CountryCode) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1260,13 +1266,12 @@ public class TracerUtils {
 		}
 	}
 
-	public static State getState(String code, String locale) {
+	public static State getState(String code) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(State.class).add(
-					Expression.eq("state_ID", code)).add(
-					Expression.eq("locale", locale));
+					Expression.eq("state_ID", code));
 			return (State) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1499,8 +1504,23 @@ public class TracerUtils {
 		return flag;
 	}
 	
-	public static String getResourcePropertyText(String key, Agent user) {
-		return messages.getMessage(new Locale(user.getCurrentlocale()), key);
+
+	public static String getText(String key, String locale) {
+		String thisLocale = locale;
+		if (thisLocale == null) {
+			thisLocale = TracingConstants.DEFAULT_LOCALE;
+		}
+			
+		return messages.getMessage(new Locale(thisLocale), key);
+	}
+	
+	
+	public static String getText(String key, Agent user) {
+		String locale = TracingConstants.DEFAULT_LOCALE;
+		if (user != null) {
+			locale = user.getCurrentlocale();
+		}
+		return messages.getMessage(new Locale(locale), key);
 	}
 
 }

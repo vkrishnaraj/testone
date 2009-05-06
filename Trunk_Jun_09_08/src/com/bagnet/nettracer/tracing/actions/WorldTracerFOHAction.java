@@ -83,16 +83,16 @@ public class WorldTracerFOHAction extends Action {
 		if (UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
 			faultstationlist = UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY);
 		} else {
-			faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
+			faultstationlist = TracerUtils.getStationList(user.getStation().getCompany().getCompanyCode_ID());
 		}
 		request.setAttribute("faultstationlist", faultstationlist);
 
 
 
 		// the company specific codes..
-		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation()
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation()
 				.getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY,
-				user.getCurrentlocale(), true, user);
+				true, user);
 		// add to the loss codes
 		request.setAttribute("losscodes", codes);
 

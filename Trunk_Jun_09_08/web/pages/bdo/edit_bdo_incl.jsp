@@ -9,6 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.BDOForm"%>
 <script language=javascript>
   
 
@@ -40,6 +41,7 @@ function toggledc(o) {
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
+  <bean:define id="ohd" name="BDOForm" property="ohd" type="com.bagnet.nettracer.tracing.db.OHD"/>
   <tr>
     <td colspan="3" id="navmenucell">
       <div class="menu">
@@ -387,7 +389,7 @@ function toggledc(o) {
               <td valign=top colspan=2>
                 <bean:message key="colname.bag_status" />
                 <br>
-                <html:text property="ohd.status.description" size="25" styleClass="textfield" readonly="true" />
+                <input type="text" name = "ohd.status.description" value="<bean:message name="ohd" property="status.key" />" size="25" maxlength="25" styleClass="textfield" readonly="true"/>
               </td>
             </tr>
             <tr>
@@ -460,7 +462,7 @@ function toggledc(o) {
             <td valign=top>
               <bean:message key="colname.bag_status" />
               <br>
-              <html:text name="theitem" property="status.description" size="25" styleClass="textfield" readonly="true" />
+              <input type="text" name = "theitem[<%=i %>].status.description" value="<bean:message name="ohd" property="status.key" />" size="25" maxlength="25" styleClass="textfield" readonly="true"/>
             </td>
             <td valign=top>
               <bean:message key="colname.claimnum" />

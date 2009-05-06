@@ -17,7 +17,6 @@ public class Station implements Serializable {
 	private int lz;
 	private String stationcode;
 	private String stationdesc;
-	private String locale;
 
 	private String address1;
 	private String address2;
@@ -253,23 +252,6 @@ public class Station implements Serializable {
 	}
 	
 	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-
-	/**
 	 * @return Returns the station_ID.
 	 * 
 	 * @hibernate.id generator-class="native" type="integer" column="Station_ID"
@@ -397,7 +379,7 @@ public class Station implements Serializable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer(200);
 		sb.append("Station ID=" + this.getStation_ID() + " station code=" + this.getStationcode()
-				+ " station desc=" + this.getStationdesc() + " locale=" + locale);
+				+ " station desc=" + this.getStationdesc());
 		return sb.toString();
 	}
 

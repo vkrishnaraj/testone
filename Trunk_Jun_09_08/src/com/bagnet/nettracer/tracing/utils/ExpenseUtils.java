@@ -29,35 +29,6 @@ import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
 public class ExpenseUtils {
 
 	private static Logger logger = Logger.getLogger(ExpenseUtils.class);
-
-	/**
-	 * Get task status list
-	 * 
-	 * @param locale
-	 *          the default locale
-	 * @return the status list
-	 */
-	public static List getStatusList(String locale) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("locale", locale)).add(
-					Expression.eq("table_ID", new Integer(TracingConstants.TABLE_EXPENSEPAYOUT))).addOrder(
-					Order.asc("status_ID"));
-			return cri.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 	
 	public static List getPendingInterimExpenses(boolean count, String companyCode_ID,
 			InterimExpenseRequestForm form, String sort, int rowsperpage, int currpage) {
@@ -204,33 +175,4 @@ public class ExpenseUtils {
 			}
 		}
 	}
-
-	/**
-	 * Get task status list
-	 * 
-	 * @param locale
-	 *          the default locale
-	 * @return the status list
-	 */
-	public static List getExpenseStatusList(String locale) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("locale", locale)).add(
-					Expression.eq("table_ID", new Integer(TracingConstants.TABLE_EXPENSEPAYOUT))).addOrder(Order.asc("status_ID"));
-			return cri.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 }

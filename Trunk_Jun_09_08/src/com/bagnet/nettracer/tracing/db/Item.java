@@ -146,7 +146,7 @@ public class Item implements Serializable {
 		String ret = "";
 
 		if (currency_ID != null && currency_ID.length() > 0 && !currency_ID.equals("0")) {
-			ret = CurrencyUtils.getCurrency(currency_ID, locale).getDescription();
+			ret = CurrencyUtils.getCurrency(currency_ID).getDescription();
 		}
 
 		return ret;
@@ -156,7 +156,7 @@ public class Item implements Serializable {
 		String ret = "";
 
 		if (status != null)
-			ret = status.getDescription();
+			ret = status.getKey();
 
 		return ret;
 	}
@@ -855,6 +855,24 @@ public class Item implements Serializable {
 		if (xdescelement_ID_3 <= 0) return "";
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getDescription();
+	}
+	
+	public String getXdescelement1Key() {
+		if (xdescelement_ID_1 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
+		return xd.getKey();
+	}
+
+	public String getXdescelement2Key() {
+		if (xdescelement_ID_2 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_2);
+		return xd.getKey();
+	}
+
+	public String getXdescelement3Key() {
+		if (xdescelement_ID_3 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
+		return xd.getKey();
 	}
 	
 }

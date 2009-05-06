@@ -885,32 +885,6 @@ public class OHDUtils {
 		}
 	}
 	
-	public static String getStatusDesc(int status_id) {
-		String ret = "";
-
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Status.class).add(
-					Expression.eq("status_ID", new Integer(status_id)));
-			List retList = cri.list();
-			if (retList != null && retList.size() > 0) {
-				Status s = (Status) retList.get(0);
-				ret = s.getDescription();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return ret;
-	}
 
 	public static OHDRequest getRequest(String request_id) {
 		OHDRequest ret = null;
@@ -1198,34 +1172,6 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getOhdStatusList(String locale) {
-		return getOhdStatusList(locale, false);
-	}
-	public static List getOhdStatusList(String locale, boolean dirtyRead) {
-		Session sess = null;
-		try {
-			if(dirtyRead) {
-				sess = HibernateWrapper.getDirtySession().openSession();
-			}
-			else {
-				sess = HibernateWrapper.getSession().openSession();
-			}
-			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("locale", locale)).add(
-					Expression.eq("table_ID", new Integer(TracingConstants.TABLE_ON_HAND)));
-			return cri.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 	
 	public static String getMBRReportNum(OHD ohd, String destCode) {
 		if (ohd.getMatched_incident() != null) {

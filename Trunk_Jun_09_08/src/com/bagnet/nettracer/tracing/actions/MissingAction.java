@@ -82,8 +82,7 @@ public class MissingAction extends CheckedAction {
 		ActionMessages errors = new ActionMessages();
 		
 		//the company specific codes..
-		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, user
-				.getCurrentlocale(), true, user);
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, true, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
@@ -175,7 +174,7 @@ public class MissingAction extends CheckedAction {
 				request.setAttribute("faultCompanyList", faultCompanyList);
 			}
 			else {
-				request.setAttribute("faultstationlist", TracerUtils.getStationList(user.getCurrentlocale(), theform.getFaultcompany_id()));
+				request.setAttribute("faultstationlist", TracerUtils.getStationList(theform.getFaultcompany_id()));
 				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
 			}
 		}
@@ -378,7 +377,7 @@ public class MissingAction extends CheckedAction {
 			report_info.put("agentinit", form.getAgentinit());
 			report_info.put("stationcreatedcode", form.getStationcreated().getStationcode());
 			report_info.put("dispclosedate", form.getDispclosedate());
-			report_info.put("status", form.getStatus().getDescription());
+			report_info.put("status", TracerUtils.getText(form.getStatus().getKey(), user));
 			report_info.put("stationassigned", StationBMO.getStation("" + form.getStationassigned_ID()).getStationcode());
 			report_info.put("nonrevenue", form.getNonrevenue() == 0 ? "no" : "yes");
 

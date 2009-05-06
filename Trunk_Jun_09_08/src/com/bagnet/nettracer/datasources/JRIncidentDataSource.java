@@ -47,9 +47,11 @@ public class JRIncidentDataSource implements JRDataSource {
 
 	private int totalElements = 0;
 	private int currentElement = 0;
+	private Agent currentUser = null;
 	
 	public JRIncidentDataSource(JasperReport jasperReport, ArrayList<Incident> incidents, Agent user) {
 		super();
+		this.currentUser = user;
 
 		// Instantiate Incident Queue
 		this.incidentQueue = incidents;
@@ -86,7 +88,7 @@ public class JRIncidentDataSource implements JRDataSource {
 				currentObject.set_TIMEZONE(timeZone);
 				return currentObject.getDisplaydate();
 			} else if (fieldName.equals(STATUS_NAME)) {
-				return currentObject.getStatus().getDescription();
+				return currentObject.getStatus().getTextDescription(currentUser);
 			}
 		}
 			

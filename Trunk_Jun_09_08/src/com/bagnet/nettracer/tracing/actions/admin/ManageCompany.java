@@ -83,8 +83,7 @@ public final class ManageCompany extends Action {
 		List fullStationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
 	  request.setAttribute("fullStationList", fullStationList);
 		
-		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
-				.getCurrentlocale(), false, user);
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
@@ -211,7 +210,7 @@ public final class ManageCompany extends Action {
 			Company cmpny = AdminUtils.getCompany(companyCode);
 
 			ActionMessage error = null;
-			if (TracerUtils.getStationList(user.getCurrentlocale(),companyCode) != null) error = new ActionMessage(
+			if (TracerUtils.getStationList(companyCode) != null) error = new ActionMessage(
 					"error.deleting.company.station");
 			else if (AdminUtils.getGroups(companyCode) != null) error = new ActionMessage(
 					"error.deleting.company.group");

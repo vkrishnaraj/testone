@@ -68,9 +68,9 @@ public class ForwardOnHandAction extends Action {
 		
 		List stationList = null;
 		if (theform.getCompanyCode() != null && !theform.getCompanyCode().equals("")) stationList = TracerUtils
-				.getStationList(user.getCurrentlocale(), theform.getCompanyCode());
+				.getStationList(theform.getCompanyCode());
 		else stationList = TracerUtils
-				.getStationList(user.getCurrentlocale(), user.getCompanycode_ID());
+				.getStationList(user.getCompanycode_ID());
 
 		if (stationList == null || stationList.size() == 0) {
 			theform.setDestStation("");

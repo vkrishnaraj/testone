@@ -86,14 +86,14 @@ public class Audit_LostAndFoundIncident implements Serializable {
 
 	public String getState() {
 		if (customer_state_ID != null && customer_state_ID.length() > 0) {
-			return TracerUtils.getState(customer_state_ID, "en").getState();
+			return TracerUtils.getState(customer_state_ID).getState();
 		}
 		return "";
 	}
 
 	public String getCountry() {
 		if (customer_countrycode_ID != null && customer_countrycode_ID.length() > 0) {
-			return TracerUtils.getCountry(customer_countrycode_ID, "en").getCountry();
+			return TracerUtils.getCountry(customer_countrycode_ID).getCountry();
 		}
 		return "";
 	}

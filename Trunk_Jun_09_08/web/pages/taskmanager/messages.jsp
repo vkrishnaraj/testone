@@ -269,7 +269,7 @@ function sortAgents(sortOrder) {
                     <bean:write name="message" property="disp_send_date" />
                   </TD>
                   <TD>
-                    <bean:write name="message" property="status.description" />
+                    <bean:message name="message" property="status.key" />
                   </TD>
                 </TR>
               </logic:iterate>

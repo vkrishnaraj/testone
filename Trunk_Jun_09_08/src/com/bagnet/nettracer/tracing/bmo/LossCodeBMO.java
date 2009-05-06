@@ -27,7 +27,7 @@ public class LossCodeBMO {
 	 * @param loss_code
 	 * @return the irregularity code null if exception or not found
 	 */
-	public static Company_specific_irregularity_code getLossCode(int loss_code, int report_type, String locale, Company company) {
+	public static Company_specific_irregularity_code getLossCode(int loss_code, int report_type, Company company) {
 		Session sess = null;
 		try {
 			if(report_type == TracingConstants.OHD) {
@@ -35,7 +35,7 @@ public class LossCodeBMO {
 			}
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Expression.eq("loss_code", new Integer(loss_code))).add(
-					Expression.eq("report_type", new Integer(report_type))).add(Expression.eq("locale", locale)).add(Expression.eq("company", company));
+					Expression.eq("report_type", new Integer(report_type))).add(Expression.eq("company", company));
 			List list = cri.list();
 			if (list != null && list.size() > 0){
 				return (Company_specific_irregularity_code) cri.list().get(0);
@@ -174,13 +174,12 @@ public class LossCodeBMO {
 	}
 
 	/**
-	 * Get the company specific irregularity codes based on locale
+	 * Get the company specific irregularity codes
 	 * 
 	 * @param companyCode
-	 * @param locale
 	 * @return list of codes null in case of exception
 	 */
-	public static List<Company_specific_irregularity_code> getLocaleCompanyCodes(String companyCode, int report_type, String locale, boolean limit, Agent user) {
+	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user) {
 		Session sess = null;
 		boolean limitQuery = false;
 		
@@ -205,7 +204,7 @@ public class LossCodeBMO {
 			if (limitQuery) {
 				cri.add(Expression.eq("show_to_limited_users", true));
 			}
-			cri.add(Expression.eq("locale", locale));
+			
 			cri.addOrder(Order.asc("loss_code"));
 			return cri.list();
 		} catch (Exception e) {
@@ -240,35 +239,5 @@ public class LossCodeBMO {
 			}
 		}
 	}
-
-	public static Company_specific_irregularity_code getLossCode(int loss_code, int report_type, Company company) {
-		Session sess = null;
-		try {
-			if(report_type == TracingConstants.OHD) {
-				report_type = TracingConstants.LOST_DELAY;
-			}
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Expression.eq("loss_code", new Integer(loss_code))).add(
-					Expression.eq("report_type", new Integer(report_type))).add(Expression.eq("company", company));
-			List list = cri.list();
-			if (list != null && list.size() > 0){
-				return (Company_specific_irregularity_code) cri.list().get(0);
-			}
-			return null;
-		} catch (Exception e) {
-			logger.fatal(e.getMessage());
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					logger.fatal(e.getMessage());
-				}
-			}
-		}
-	}
-
-
 
 }

@@ -55,7 +55,7 @@ public class ExpensePayoutBMO {
 			tx.commit();
 			Transaction tx2 = sess.beginTransaction();
 			try {
-				IncidentBMO.auditClaim(ep.getIncident().getClaim(), TracerUtils.getResourcePropertyText(
+				IncidentBMO.auditClaim(ep.getIncident().getClaim(), TracerUtils.getText(
 						"updating.expense.audit", user), user, sess);
 				tx2.commit();
 			} catch (Exception e) {
@@ -204,7 +204,7 @@ public class ExpensePayoutBMO {
 			Status st = new Status();
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
 			Comment comment = new Comment(user);
-			comment.setContent(TracerUtils.getResourcePropertyText("expense.comment.approved", user));
+			comment.setContent(TracerUtils.getText("expense.comment.approved", user));
 			ep.getComments().add(comment);
 			ep.setStatus(st);
 			ep.setApproval_date(new Date());
@@ -237,7 +237,7 @@ public class ExpensePayoutBMO {
 			Status st = new Status();
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_DENIED);
 			Comment comment = new Comment(user);
-			comment.setContent(TracerUtils.getResourcePropertyText("expense.comment.denied", user));
+			comment.setContent(TracerUtils.getText("expense.comment.denied", user));
 			ep.getComments().add(comment);
 			ep.setStatus(st);
 			sess.update(ep);
@@ -268,7 +268,7 @@ public class ExpensePayoutBMO {
 		try {
 			ExpensePayout ep = (ExpensePayout) sess.load(ExpensePayout.class, epId);
 			Comment com = new Comment(user);
-			String tmp = TracerUtils.getResourcePropertyText(key, user);
+			String tmp = TracerUtils.getText(key, user);
 			tmp += content != null ? content : "";
 			com.setContent(tmp);
 

@@ -771,7 +771,7 @@ public class BetaWorldTracerService implements WorldTracerService {
 			Map<String, List<String>> temp = new HashMap<String, List<String>>();
 			for(OHD_Inventory inv : (Iterable<OHD_Inventory>) ohd.getItems()) {
 				// TODO update for ContentRule
-				OHD_CategoryType cat = CategoryBMO.getCategory(inv.getOHD_categorytype_ID());
+				OHD_CategoryType cat = CategoryBMO.getCategory(inv.getOHD_categorytype_ID(), TracingConstants.DEFAULT_LOCALE);
 				if(cat == null) {
 					continue;
 				}
@@ -1015,7 +1015,7 @@ public class BetaWorldTracerService implements WorldTracerService {
 
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
 					for(Item_Inventory inv : (List<Item_Inventory>) i.getInventorylist()) {
-						String category = CategoryBMO.getCategory(inv.getCategorytype_ID()).getWtCategory();
+						String category = CategoryBMO.getCategory(inv.getCategorytype_ID(), TracingConstants.DEFAULT_LOCALE).getWtCategory();
 						String contents = inv.getDescription().trim().toUpperCase();
 						if(category == null || contents == null || category.trim().length() == 0
 								|| contents.trim().length() == 0)
@@ -1087,7 +1087,7 @@ public class BetaWorldTracerService implements WorldTracerService {
 		if(incident.getLoss_code() != 0) {
 			addIncidentFieldEntry(WorldTracerField.RL, Integer.toString(incident.getLoss_code()), result);
 			Company_specific_irregularity_code csic = LossCodeBMO.getLossCode(incident.getLoss_code(),
-					TracingConstants.LOST_DELAY, TracingConstants.DEFAULT_LOCALE, AdminUtils.getCompany(wtCompanyCode));
+					TracingConstants.LOST_DELAY, AdminUtils.getCompany(wtCompanyCode));
 			addIncidentFieldEntry(WorldTracerField.RC, csic.getDescription(), result);
 		}
 		else {

@@ -55,7 +55,7 @@ public class DSI implements BDOIntegration {
 
 	public DeliveryIntegrationResponse integrate(BDO bdo, Agent agent) {
 		DeliveryIntegrationResponse response = new DeliveryIntegrationResponse();
-		String responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.success", agent);
+		String responseText = TracerUtils.getText("delivercompany.integration.dsi.success", agent);
 		String integrationId = null;
 		boolean success = true;
 		
@@ -63,7 +63,7 @@ public class DSI implements BDOIntegration {
 		
 		if (endpoint == null || endpoint.trim().length() == 0) {
 			success = false;
-			responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.notconfigured", agent);
+			responseText = TracerUtils.getText("delivercompany.integration.dsi.notconfigured", agent);
 		} else {
 
 			
@@ -177,7 +177,7 @@ public class DSI implements BDOIntegration {
 					// logger.info("DSI BDO Submission Status: " + status.getCode().toString());
 					if (deliveredOrNot.equals(new BigInteger("0003"))) {
 						// Already delivered
-						responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.bdoClosed", agent);
+						responseText = TracerUtils.getText("delivercompany.integration.dsi.bdoClosed", agent);
 						integrationId = fullId;
 					} else if (status.getMessage().equals("OK")) {
 						//Success
@@ -191,7 +191,7 @@ public class DSI implements BDOIntegration {
 		
 					} else {
 						success = false;
-						responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.failure", agent);
+						responseText = TracerUtils.getText("delivercompany.integration.dsi.failure", agent);
 						integrationId = fullId;
 					}
 					
@@ -336,14 +336,14 @@ public class DSI implements BDOIntegration {
 		
 					} else {
 						success = false;
-						responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.failure", agent);
+						responseText = TracerUtils.getText("delivercompany.integration.dsi.failure", agent);
 					}
 				}
 	
 			} catch (Exception e) {
 				e.printStackTrace();
 				success = false;
-				responseText = TracerUtils.getResourcePropertyText("delivercompany.integration.dsi.failure", agent);
+				responseText = TracerUtils.getText("delivercompany.integration.dsi.failure", agent);
 			}
 		}
 		

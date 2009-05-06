@@ -8,17 +8,18 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 
+import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
+
 /**
  * @author Administrator
  * 
  * @hibernate.class table="XDescElement"
  */
-public class XDescElement implements Serializable {
+public class XDescElement extends LocaleBasedObject  implements Serializable {
 	private int XDesc_ID;
 	private String code;
-	private String description;
-	private String locale;
 
+	private String MSG_KEY = "DESCELEMENT_";
 	/**
 	 * @return Returns the xDesc_ID.
 	 * 
@@ -54,38 +55,8 @@ public class XDescElement implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	/**
-	 * @return Returns the description.
-	 * 
-	 * @hibernate.property type="string" length="50"
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *          The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
+	
+	public String getKey() {
+		return MSG_KEY + code;
 	}
 }

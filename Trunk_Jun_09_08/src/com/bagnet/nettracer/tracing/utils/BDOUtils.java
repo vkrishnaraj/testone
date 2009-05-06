@@ -399,7 +399,7 @@ public class BDOUtils {
 					
 					if (bagchosen == null || (bagchosen != null && bagsChosen.contains(Integer.toString(item.getBagnumber())))) {
 						item.setStatus(StatusBMO.getStatus(
-								TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
+								TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY));
 						item.setBdo(bdo);
 
 						// find out if this l/d bag is matched to ohd
@@ -424,7 +424,7 @@ public class BDOUtils {
 					// matched so insert incident id into bdo
 					bdo.setIncident(item.getIncident());
 					item.setStatus(StatusBMO.getStatus(
-							TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY, null));
+							TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY));
 					item.setBdo(bdo);
 					theform.getItemlist().add(item);
 					bdo.setItems(new HashSet(theform.getItemlist()));
@@ -450,7 +450,7 @@ public class BDOUtils {
 			// Find out if this l/d bag is matched to OHD
 			if (ohd != null) {
 				ohd.setStatus(StatusBMO.getStatus(
-						TracingConstants.OHD_STATUS_PROCESSFORDELIVERY, null));
+						TracingConstants.OHD_STATUS_PROCESSFORDELIVERY));
 				oBMO.insertOHD(ohd, agent);
 				bdo.setOhd(ohd);
 			}
@@ -745,7 +745,7 @@ public class BDOUtils {
 					for(Item item : (Iterable<Item>)bdo.getItems()) {
 						temp += " " + Integer.toString(item.getBagnumber() + 1);
 					}
-					rem.setRemarktext(TracerUtils.getResourcePropertyText("bdo.created.bagnum", user) + temp);
+					rem.setRemarktext(TracerUtils.getText("bdo.created.bagnum", user) + temp);
 					rem.setRemarktype(TracingConstants.REMARK_REGULAR);
 					inc.getRemarks().add(rem);
 					sess.save(rem);
@@ -756,7 +756,7 @@ public class BDOUtils {
 					rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
 					rem.setAgent(user);
 					rem.setOhd(ohd);
-					rem.setRemarktext(TracerUtils.getResourcePropertyText("bdo.created", user));
+					rem.setRemarktext(TracerUtils.getText("bdo.created", user));
 					ohd.getRemarks().add(rem);
 					sess.save(rem);
 				}

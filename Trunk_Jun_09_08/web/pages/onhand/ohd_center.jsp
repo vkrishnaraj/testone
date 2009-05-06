@@ -918,7 +918,7 @@ function gotoHistoricalReport() {
             </html:option>
             <html:options collection="categorylist"
               property="OHD_CategoryType_ID"
-              labelProperty="categorytype" />
+              labelProperty="description" />
           </html:select></td>
           <td><bean:message key="colname.ohd.description.req" /> <br>
           <html:text name="itemlist" property="description" size="70"

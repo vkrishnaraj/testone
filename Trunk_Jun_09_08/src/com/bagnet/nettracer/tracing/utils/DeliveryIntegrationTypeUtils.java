@@ -110,7 +110,7 @@ public class DeliveryIntegrationTypeUtils {
 				if (currentDeliveryCompany.getDelivercompany_ID() != integrationDeliveryCompany.getDelivercompany_ID()) {
 					response = new DeliveryIntegrationResponse();
 					response.setSuccess(false);
-					noticeText = TracerUtils.getResourcePropertyText("delivercompany.integration.alreadysubmitted.html", agent);
+					noticeText = TracerUtils.getText("delivercompany.integration.alreadysubmitted.html", agent);
 				}
 			}
 			

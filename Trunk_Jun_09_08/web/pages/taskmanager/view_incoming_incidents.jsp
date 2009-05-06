@@ -231,7 +231,7 @@ function updatePagination() {
                       <a href='searchIncident.do?incident=<bean:write name="results" property="incident_ID"/>'><bean:write name="results" property="incident_ID" /></a>
                     </td>
                     <td>
-                      <bean:write name="results" property="itemtype.description" />
+                      <bean:message name="results" property="itemtype.key" />
                     </td>
                     <td>
                       <bean:write name="results" property="displaydate" />
@@ -246,7 +246,7 @@ function updatePagination() {
                       <bean:write name="results" property="stationassigned.stationcode" />
                     </td>
                     <td>
-                      <bean:write name="results" property="status.description" />
+                      <bean:message name="results" property="status.key"/>
                     </td>
                     
                     <td>

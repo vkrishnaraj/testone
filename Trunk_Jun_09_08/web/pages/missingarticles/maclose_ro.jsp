@@ -25,7 +25,7 @@ Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
 Company_specific_irregularity_code lc = null;
 if (lossCodeInt != 0 && inc != null) { 
   int itemType = inc.getItemtype().getItemType_ID();
-  lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getCurrentlocale(), a.getStation().getCompany());
+  lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getStation().getCompany());
 } else {
   lc = null;
   }

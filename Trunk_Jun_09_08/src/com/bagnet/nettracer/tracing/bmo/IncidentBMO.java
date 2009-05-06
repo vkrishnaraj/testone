@@ -217,102 +217,6 @@ public class IncidentBMO {
 		return 1;
 	}
 
-	/**
-	 * 
-	 * insert incident for worldtracer
-	 * 
-	 * @param iDTO
-	 * @return
-	 * @throws HibernateException
-	 */
-	public int insertIncidentForWT(Incident iDTO) throws HibernateException {
-		Transaction t = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-
-			Incident oldinc = null;
-			String incident_id = iDTO.getIncident_ID();
-			boolean isnew = false;
-			if (incident_id == null || incident_id.length() <= 0) {
-				isnew = true;
-				iDTO.setIncident_ID(getIncidentID(iDTO.getStationcreated()));
-			} else {
-				oldinc = findIncidentByID(incident_id);
-				if (oldinc == null)
-					isnew = true;
-			}
-
-			t = sess.beginTransaction();
-
-			// save incident
-			if (iDTO.getIncident_ID() != null) {
-				iDTO.setLastupdated(TracerDateTime.getGMTDate());
-				if (isnew)
-					sess.save(iDTO);
-				else {
-					// delete first then insert
-					sess.delete(oldinc);
-					iDTO = clearIncidentIds(iDTO);
-					sess.save(iDTO);
-				}
-				t.commit();
-			} else {
-				return 0;
-			}
-
-			// check to see if we closed the report, if we did, then close all
-			// matches
-			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
-				MatchUtils.closeMatches(iDTO.getIncident_ID(), null);
-			}
-
-			Incident_Assoc ia = new Incident_Assoc();
-			ia.setAssoc_ID(iDTO.getIncident_ID());
-			ia.setIncident_ID(iDTO.getIncident_ID());
-			ia.setItemtype_ID(iDTO.getItemtype().getItemType_ID());
-
-			List list = sess.createCriteria(Incident_Assoc.class).add(Example.create(ia)).list();
-
-			if (list == null || list.size() == 0) {
-				t = sess.beginTransaction();
-				sess.save(ia);
-				t.commit();
-			}
-
-			// check if audit is enabled for this company....
-			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
-					.getCompany().getVariable().getAudit_lost_delayed() == 1)
-					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
-							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
-					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
-							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
-				Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, iDTO.getAgent());
-
-				if (audit_dto != null) {
-					t = sess.beginTransaction();
-					sess.save(audit_dto);
-					t.commit();
-				}
-			}
-
-		} catch (StaleObjectStateException e) {
-			logger.error("unable to insert into database because someone else updated the table already: " + e);
-
-			if (t != null)
-				t.rollback();
-			return -1;
-		} catch (Exception e) {
-			logger.error("unable to insert into database: " + e);
-
-			if (t != null)
-				t.rollback();
-			return 0;
-		} finally {
-
-			sess.close();
-		}
-		return 1;
-	}
 
 	public boolean updateIncidentNoAudit(Incident iDTO) throws HibernateException {
 		Transaction t = null;
@@ -1640,7 +1544,7 @@ public class IncidentBMO {
 			}
 			Transaction tx2 = sess.beginTransaction();
 			try {
-				auditClaim(inc.getClaim(), TracerUtils.getResourcePropertyText("claim.created.with.expense", agent),
+				auditClaim(inc.getClaim(), TracerUtils.getText("claim.created.with.expense", agent),
 						agent, sess);
 				tx2.commit();
 			} catch (Exception e) {

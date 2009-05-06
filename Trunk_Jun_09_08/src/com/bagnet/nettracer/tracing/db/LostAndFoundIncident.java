@@ -570,49 +570,13 @@ public class LostAndFoundIncident implements Serializable {
 
 	public String getState() {
 		if (customer_state_ID != null && customer_state_ID.length() > 0) {
-			return TracerUtils.getState(customer_state_ID, "en").getState();
+			return TracerUtils.getState(customer_state_ID).getState();
 		}
 		return "";
 	}
 
 	public String getCountry() {
-		return TracerUtils.getCountry(getCustomer_countrycode_ID(), "en").getCountry();
-	}
-
-	public String getText() {
-
-		StringBuffer ret = new StringBuffer(1096);
-
-		ret.append(format(this.getFile_ref_number()));
-		if (this.getFiling_agent() != null) ret.append(format(this.getFiling_agent().getUsername()));
-
-		ret.append(format(this.getFinding_agent_name()));
-		ret.append(format(this.getCustomer_firstname()));
-		ret.append(format(this.getCustomer_mname()));
-		ret.append(format(this.getCustomer_lastname()));
-		ret.append(format(this.getCustomer_address1()));
-		ret.append(format(this.getCustomer_address2()));
-		ret.append(format(this.getCustomer_city()));
-		ret.append(format(this.getState()));
-		ret.append(format(this.getCountry()));
-		ret.append(format(this.getCustomer_province()));
-		ret.append(format(this.getCustomer_zip()));
-		ret.append(format(this.getCustomer_email()));
-		ret.append(format(this.getCustomer_tel()));
-		ret.append(format(this.getLocation()));
-		ret.append(format(this.getItem_description()));
-
-		if (this.getDisposal_status() != null) ret.append(format(this.getDisposal_status()
-				.getDescription()));
-
-		if (this.getClosing_agent() != null) ret.append(format(this.getClosing_agent().getUsername()));
-
-		if (this.getCreate_station() != null) ret.append(format(this.getCreate_station()
-				.getStationcode()));
-
-		ret.append(format(this.getRemark()));
-
-		return ret.toString();
+		return TracerUtils.getCountry(getCustomer_countrycode_ID()).getCountry();
 	}
 
 	public String format(String val) {

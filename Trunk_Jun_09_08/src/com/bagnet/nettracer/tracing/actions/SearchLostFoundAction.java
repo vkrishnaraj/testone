@@ -48,7 +48,7 @@ public class SearchLostFoundAction extends Action {
 			return null;
 		}
 		
-		List oStatusList = TracerUtils.getStatusList(user.getCurrentlocale(), TracingConstants.TABLE_LOST_FOUND);
+		List oStatusList = TracerUtils.getStatusList(TracingConstants.TABLE_LOST_FOUND, user.getCurrentlocale());
 		request.setAttribute("oStatusList", oStatusList);
 
 		

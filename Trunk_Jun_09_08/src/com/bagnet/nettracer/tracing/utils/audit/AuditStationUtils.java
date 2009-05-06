@@ -223,7 +223,6 @@ public class AuditStationUtils {
 		audit_station.setCity(station.getCity());
 		audit_station.setCompanycode_ID(station.getCompany().getCompanyCode_ID());
 		audit_station.setCountrycode_ID(station.getCountrycode_ID());
-		audit_station.setLocale(station.getLocale());
 		audit_station.setOperation_hours(station.getOperation_hours());
 		audit_station.setPhone(station.getPhone());
 		audit_station.setState_ID(station.getState_ID());

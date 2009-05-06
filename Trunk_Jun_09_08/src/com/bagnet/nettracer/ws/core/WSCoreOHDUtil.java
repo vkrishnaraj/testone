@@ -203,7 +203,7 @@ public class WSCoreOHDUtil {
 		com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD so = com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD.Factory.newInstance();
 		
 		so.setOHDID(oDTO.getOHD_ID());
-		so.setStatus(oDTO.getStatus().getDescription());
+		so.setStatus(oDTO.getStatus().getTextDescription(null));
 		so.setFoundAtStation(oDTO.getFoundAtStation().getStationcode());
 		so.setHoldingStation(oDTO.getHoldingStation().getStationcode());
 		so.setStorageLocation(oDTO.getStorage_location());
@@ -239,7 +239,7 @@ public class WSCoreOHDUtil {
 		if (oDTO.getXdescelement_ID_3() > 0)
 			so.setXdescelement3(TracerUtils.getXdescelement(oDTO.getXdescelement_ID_3()).getCode());
 		so.setManufacturer(oDTO.getManufacturer());
-		if (oDTO.getDisposal_status() != null) so.setDisposalStatus(oDTO.getDisposal_status().getDescription());
+		if (oDTO.getDisposal_status() != null) so.setDisposalStatus(oDTO.getDisposal_status().getTextDescription(null));
 		so.setCloseDate(WSCoreUtil.formatDatetoString(oDTO.getClose_date(),null));
 		int c = 0;
 		
@@ -923,8 +923,7 @@ public class WSCoreOHDUtil {
 		ohd.setFoundtime(foundDate);
 		ohd.setHoldingStation(foundStation);
 		ohd.setOhd_type(TracingConstants.MASS_OHD_TYPE);
-		ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN, agent
-				.getDefaultlocale().toString()));
+		ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
 		
 		Remark r = new Remark();
 		r.setAgent(agent);

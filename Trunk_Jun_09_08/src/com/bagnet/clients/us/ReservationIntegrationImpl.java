@@ -355,7 +355,7 @@ public class ReservationIntegrationImpl extends
 						theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 						theitem.setBagnumber(bagIndex);
 						theitem.setStatus(StatusBMO.getStatus(
-								TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+								TracingConstants.ITEM_STATUS_OPEN));
 	
 						bagIndex++;
 						form.setNumbagchecked(bagIndex);

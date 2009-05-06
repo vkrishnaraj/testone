@@ -65,7 +65,7 @@ public class Audit_OHD_Inventory implements Serializable {
 	public String getCategory() {
 		String category = null;
 		if (OHD_categorytype_ID != 0) {
-			category = CategoryBMO.getCategory("" + OHD_categorytype_ID, "en").getCategorytype();
+			category = CategoryBMO.getCategory("" + OHD_categorytype_ID, "en").getDescription();
 		}
 
 		if (category == null) category = "";

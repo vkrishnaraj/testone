@@ -265,10 +265,10 @@ function sortAgents(sortOrder) {
                     </logic:empty>
                   </td>
                   <td>
-                    <bean:write name="taskDTO" property="status.description" />
+                    <bean:message name="taskDTO" property="status.key" />
                   </td>
                   <td>
-                    <a href="otherTasks.do?edit_task_id=<bean:write name="taskDTO" property="task_id"/>">Edit</a>
+                    <a href="otherTasks.do?edit_task_id=<bean:write name="taskDTO" property="task_id"/>"><bean:message property="edit" /></a>
                   </td>
                 </tr>
               </logic:iterate>

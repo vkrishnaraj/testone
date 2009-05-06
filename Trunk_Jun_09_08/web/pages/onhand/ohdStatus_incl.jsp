@@ -10,7 +10,7 @@
 <logic:notEqual name="OnHandForm" property="ohd_id" value="">
 	<html:select name="OnHandForm" property="status.status_ID"
 		styleClass="dropdown">
-		<html:options collection="oStatusList" property="status_ID"
+		<html:options collection="ohdStatusList" property="status_ID"
 			labelProperty="description" />
 	</html:select>
 </logic:notEqual> <logic:equal name="OnHandForm" property="ohd_id" value="">

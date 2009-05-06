@@ -313,7 +313,7 @@
                   				{ %>
                   				<div id="tohide1">
                  	 <html:select property="status_ID" styleClass="dropdown">
-	                    <html:options collection="statuslist" property="status_ID" labelProperty="description" />
+	                    <html:options collection="statuslist" property="status_ID" labelProperty="description"  />
 	                  </html:select>
 	                  </div>
 	                  <% } else { %>

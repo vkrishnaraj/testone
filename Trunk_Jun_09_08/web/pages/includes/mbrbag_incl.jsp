@@ -241,7 +241,7 @@
 	                    <html:option value="">
 	                      <bean:message key="select.please_select" />
 	                    </html:option>
-	                    <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="categorytype" />
+	                    <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="description" />
 	                  </html:select>
 	                </td>
 	                <td>
@@ -286,7 +286,8 @@
               } 
               %>
               <br>
-              <html:text name="theitem" property="status.description" size="25" maxlength="25" styleClass="textfield" indexed="true" readonly="true" />
+		      <input type="text" name = "theitem[<%=i %>].status.description" value="<bean:message name="theitem" property="status.key" />" size="25" maxlength="25" styleClass="textfield" readonly="true"/>
+
               &nbsp;&nbsp;&nbsp;&nbsp;
               <logic:present name="theitem" property="bdo">
               <bean:message key="header.bdo" />: <a href="bdo.do?bdo_id=<bean:write name="theitem" property="bdo.BDO_ID" />"><bean:write name="theitem" property="bdo.BDO_ID_ref" /></a>

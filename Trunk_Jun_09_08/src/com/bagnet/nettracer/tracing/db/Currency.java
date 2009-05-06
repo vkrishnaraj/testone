@@ -17,8 +17,7 @@ import java.io.Serializable;
 public class Currency implements Serializable {
 	private String Currency_ID;
 	private String description;
-	private String locale;
-	private String id_desc;
+
 
 	/**
 	 * @return Returns the currency_ID.
@@ -55,22 +54,6 @@ public class Currency implements Serializable {
 		this.description = description;
 	}
 
-	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
 
 	/**
 	 * for displaying

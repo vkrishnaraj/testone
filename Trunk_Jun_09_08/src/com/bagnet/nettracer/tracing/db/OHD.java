@@ -15,7 +15,6 @@ import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 /**
@@ -555,10 +554,6 @@ public class OHD implements Serializable {
 		this.passengers = passengers;
 	}
 
-	public boolean isClosed() {
-		return status.getDescription().trim().toLowerCase().equals("closed");
-	}
-
 	/**
 	 * @hibernate.set cascade="all" inverse="true" order-by="Photo_ID"
 	 * @hibernate.key column="OHD_ID"
@@ -803,112 +798,6 @@ public class OHD implements Serializable {
 		this.earlyBag = earlyBag;
 	}
 
-	public String getText() {
-		StringBuffer ret = new StringBuffer(1096);
-
-		ret.append(format(this.getOHD_ID()));
-
-		ret.append(format(this.getFoundAtStation().getStationcode()));
-		ret.append(format(this.getHoldingStation().getStationcode()));
-		ret.append(format(this.getStorage_location()));
-		ret.append(format(this.getAgent().getUsername()));
-		ret.append(format(this.getClaimnum()));
-		ret.append(format(this.getColor()));
-		ret.append(format(this.getType()));
-
-		ret.append(format(this.getLastname()));
-		ret.append(format(this.getFirstname()));
-		ret.append(format(this.getMiddlename()));
-
-		if (this.getMembership() != null) {
-			ret.append(format(this.getMembership().getMembershipnum()));
-		}
-
-		ret.append(format(this.getManufacturer()));
-
-		ret.append(format(this.getRecord_locator()));
-
-		if (this.getXdescelement_ID_1() > 0) {
-			ret.append(format(TracerUtils.getXdescelement(this.getXdescelement_ID_1())
-					.getDescription()));
-		}
-
-		if (this.getXdescelement_ID_2() > 0) {
-			ret.append(format(TracerUtils.getXdescelement(this.getXdescelement_ID_2())
-					.getDescription()));
-		}
-
-		if (this.getXdescelement_ID_3() > 0) {
-			ret.append(format(TracerUtils.getXdescelement(this.getXdescelement_ID_3())
-					.getDescription()));
-		}
-
-		ret.append(format(OHDUtils.getStatusDesc(this.getStatus().getStatus_ID())));
-
-		if (this.getItems() != null && this.getItems().size() > 0) {
-			for (Iterator i = this.getItems().iterator(); i.hasNext();) {
-				OHD_Inventory inv = (OHD_Inventory) i.next();
-				ret.append(format(inv.getCategory()));
-				ret.append(format(inv.getDescription()));
-			}
-		}
-
-		if (this.getRemarks() != null && this.getRemarks().size() > 0) {
-			for (Iterator i = this.getRemarks().iterator(); i.hasNext();) {
-				Remark remark = (Remark) i.next();
-				ret.append(format(remark.getRemarktext()));
-			}
-		}
-
-		if (this.getPassengers() != null && this.getPassengers().size() > 0) {
-			for (Iterator i = this.getPassengers().iterator(); i.hasNext();) {
-				OHD_Passenger pass = (OHD_Passenger) i.next();
-				ret.append(format(pass.getFirstname()));
-				ret.append(format(pass.getMiddlename()));
-				ret.append(format(pass.getLastname()));
-
-				if (pass.getAddresses() != null && pass.getAddresses().size() > 0) {
-					for (Iterator j = pass.getAddresses().iterator(); j.hasNext();) {
-						OHD_Address addr = (OHD_Address) j.next();
-
-						ret.append(format(addr.getAddress1()));
-						ret.append(format(addr.getAddress2()));
-						ret.append(format(addr.getAltphone()));
-						ret.append(format(addr.getCity()));
-						ret.append(format(addr.getCountry()));
-						ret.append(format(addr.getEmail()));
-						ret.append(format(addr.getHomephone()));
-						ret.append(format(addr.getMobile()));
-						ret.append(format(addr.getPager()));
-						ret.append(format(addr.getProvince()));
-						ret.append(format(addr.getState()));
-						ret.append(format(addr.getWorkphone()));
-						ret.append(format(addr.getZip()));
-					}
-				}
-			}
-		}
-
-		if (this.getItinerary() != null && this.getItinerary().size() > 0) {
-			for (Iterator i = this.getItinerary().iterator(); i.hasNext();) {
-				OHD_Itinerary itinerary = (OHD_Itinerary) i.next();
-
-				ret.append(format(itinerary.getAirline()));
-				ret.append(format(itinerary.getFlightnum()));
-				ret.append(format(itinerary.getLegfrom()));
-				ret.append(format(itinerary.getLegto()));
-			}
-		}
-
-		/*
-		 * if (this.getControlLog() != null && this.getControlLog().size() > 0) {
-		 * for (Iterator i = this.getControlLog().iterator(); i.hasNext();) {
-		 * ControlLog log = (ControlLog) i.next();
-		 * ret.append(format(log.getControlling_station().getStationcode())); } }
-		 */
-
-		return ret.toString();
-	}
 
 
 
@@ -927,5 +816,23 @@ public class OHD implements Serializable {
 
 	public void setMatched_incident(String matchedIncident) {
 		this.matched_incident = matchedIncident;
+	}
+	
+	public String getXdescelement2() {
+		if (xdescelement_ID_2 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_2);
+		return xd.getDescription();
+	}
+
+	public String getXdescelement3() {
+		if (xdescelement_ID_3 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
+		return xd.getDescription();
+	}
+	
+	public String getXdescelement1Key() {
+		if (xdescelement_ID_1 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
+		return xd.getKey();
 	}
 }

@@ -265,13 +265,12 @@ public class AdminUtils {
 		}
 	}
 
-	public static String getReportDescription(int type_id, String locale) {
+	public static String getReportDescription(int type_id) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(ItemType.class);
 			cri.add(Expression.eq("itemType_ID", new Integer(type_id)));
-			cri.add(Expression.eq("locale", locale));
 			return ((ItemType) cri.list().get(0)).getDescription();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -792,17 +791,17 @@ public class AdminUtils {
 	 * @param locale
 	 * @return list of codes null in case of exception
 	 */
-	public static List getDistinctLocaleCompanyCodes(String companyCode, int report_type, String locale) {
+	public static List getDistinctLocaleCompanyCodes(String companyCode, int report_type) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			String query = "select distinct co.loss_code,co.description from Company_specific_irregularity_code co "
-					+ " where co.company.companyCode_ID = :companycode_ID and co.locale = :locale";
+					+ " where co.company.companyCode_ID = :companycode_ID ";
 			if (report_type > 0)
 				query += " and report_type = :report_type";
 			query += " order by loss_code";
 			Query q = sess.createQuery(query);
-			q.setString("locale", locale);
+			
 			q.setString("companycode_ID", companyCode);
 			if (report_type > 0)
 				q.setInteger("report_type", report_type);

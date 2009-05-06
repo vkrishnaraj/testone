@@ -250,7 +250,7 @@ function updatePagination() {
                       if (canApprove) {
 %>
                     <td>
-                      <logic:equal name="expenselist" property="status.description" value="Pending">
+                      <logic:equal name="expenselist" property="status.status_ID" value="<%=TracingConstants.EXPENSEPAYOUT_STATUS_PENDING%>">
                         <input type="checkbox" name="code" value="<bean:write name="expenselist" property="expensepayout_ID"/>">
                       </logic:equal>
                       &nbsp;
@@ -282,12 +282,13 @@ function updatePagination() {
                     <bean:write name="expenselist" property="mileageamt" />
                   </td>
                   <td align="left">
-                    <bean:write name="expenselist" property="status.description" />
+                    <bean:message name="expenselist" property="status.key" />
                   </td>
                   <%
                       if (canApprove) {
+                        if (expenselist.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
 %>
-                  <logic:equal name="expenselist" property="status.description" value="Pending">
+
 
                         <td>
                           <a href="ApproveExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="approve" /></a>
@@ -295,13 +296,15 @@ function updatePagination() {
                           <a href="DenyExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>"><bean:message key="deny" /></a>
                         </td>
 
-                  </logic:equal>
-                  <logic:notEqual name="expenselist" property="status.description" value="Pending">
+                  
+                  <% } else {
+                  %>
                     <td>
                       N/A
                     </td>
-                  </logic:notEqual>
+
                   <%
+                  }
                       }
 %>
                 </tr>

@@ -138,7 +138,7 @@ public class Passenger implements Serializable {
 
 	public String getDispcountryofissue() {
 		if (countryofissue != null && countryofissue.length() > 0) {
-			return TracerUtils.getCountry(countryofissue, "en").getCountry();
+			return TracerUtils.getCountry(countryofissue).getCountry();
 		}
 		return "";
 	}
@@ -343,7 +343,7 @@ public class Passenger implements Serializable {
 	
 	public String getDispdlstate() {
 		if (dlstate != null && dlstate.length() > 0) {
-			return TracerUtils.getState(dlstate, "en").getState();
+			return TracerUtils.getState(dlstate).getState();
 		}
 		return "";
 	}

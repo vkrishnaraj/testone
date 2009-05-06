@@ -236,7 +236,7 @@ function updatePagination() {
               </td>
               <logic:iterate id="audit_lfi" name="compareList" scope="request">
                 <td>
-                  <bean:write name="audit_lfi" property="report_status.description" />
+                  <bean:message name="audit_lfi" property="report_status.key" />
                   &nbsp;
                 </td>
               </logic:iterate>
@@ -248,7 +248,7 @@ function updatePagination() {
               <logic:iterate id="audit_lfi" name="compareList" scope="request">
                 <td>
                   <logic:present name="audit_lfi" property="disposal_status">
-                    <bean:write name="audit_lfi" property="disposal_status.description" />
+                    <bean:message name="audit_lfi" property="disposal_status.key" />
                   </logic:present>
                   &nbsp;
                 </td>

@@ -80,7 +80,6 @@ public final class ManageStation extends Action {
 			dForm.set("stationId", "" + station.getStation_ID());
 			dForm.set("stationCode", station.getStationcode());
 			dForm.set("companyCode", station.getCompany().getCompanyCode_ID());
-			dForm.set("locale", station.getLocale());
 			dForm.set("stationDesc", station.getStationdesc());
 			dForm.set("addr1", station.getAddress1());
 			dForm.set("addr2", station.getAddress2());
@@ -355,7 +354,6 @@ public final class ManageStation extends Action {
 					dForm.set("stationId", "" + station.getStation_ID());
 					dForm.set("stationCode", station.getStationcode());
 					dForm.set("companyCode", station.getCompany().getCompanyCode_ID());
-					dForm.set("locale", station.getLocale());
 					dForm.set("stationDesc", station.getStationdesc());
 					dForm.set("addr1", station.getAddress1());
 					dForm.set("addr2", station.getAddress2());
@@ -423,7 +421,6 @@ public final class ManageStation extends Action {
 			
 			s.setStationcode((String) dForm.get("stationCode"));
 			s.setStationdesc((String) dForm.get("stationDesc"));
-			s.setLocale((String) dForm.get("locale"));
 			s.setAddress1((String) dForm.get("addr1"));
 			s.setAddress2((String) dForm.get("addr2"));
 			s.setCity((String) dForm.get("city"));

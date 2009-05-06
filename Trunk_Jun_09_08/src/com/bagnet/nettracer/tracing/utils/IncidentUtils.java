@@ -714,7 +714,7 @@ public class IncidentUtils {
 	public static boolean promptToCloseFile(Incident incident, HttpServletRequest request) {
 		boolean promptToClose = true;
 		
-		if (incident.getStatus().getStatus_ID() != TracingConstants.MBR_STATUS_CLOSED && incident.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY) {
+		if (incident != null && incident.getStatus().getStatus_ID() != TracingConstants.MBR_STATUS_CLOSED && incident.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY) {
 			for (Item item: (List<Item>)incident.getItemlist()) {
 				if (item != null && (item.getStatus() == null || item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY)) {
 					promptToClose = false;

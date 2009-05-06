@@ -118,7 +118,7 @@ public class PassengerViewUtil {
 
 			si.setIncidentID(iDTO.getIncident_ID());
 			si.setDispcreatetime(iDTO.getDisplaydate());
-			si.setIncidentStatus(iDTO.getStatus().getDescription());
+			si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
 
 			Item item = null;
 			if (iDTO.getItemlist() != null) {
@@ -131,7 +131,7 @@ public class PassengerViewUtil {
 					siarr = si.addNewItems();
 
 					item = (Item) iDTO.getItemlist().get(i);
-					siarr.setBagstatus(item.getStatus().getDescription());
+					siarr.setBagstatus(item.getStatus().getTextDescription(null));
 					siarr.setClaimchecknum(item.getClaimchecknum());
 
 					bdo = item.getBdo();
@@ -229,7 +229,7 @@ public class PassengerViewUtil {
 
 			si.setIncidentID(iDTO.getIncident_ID());
 			si.setDispcreatetime(iDTO.getDisplaydate());
-			si.setIncidentStatus(iDTO.getStatus().getDescription());
+			si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
 
 			Item item = null;
 			if (iDTO.getItemlist() != null) {
@@ -242,7 +242,7 @@ public class PassengerViewUtil {
 					siarr = si.addNewItems();
 
 					item = (Item) iDTO.getItemlist().get(i);
-					siarr.setBagstatus(item.getStatus().getDescription());
+					siarr.setBagstatus(item.getStatus().getTextDescription(null));
 					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0)
 						siarr.setClaimchecknum(item.getClaimchecknum());
 
@@ -274,7 +274,6 @@ public class PassengerViewUtil {
 	}
 
 private boolean isNameMatch(String lastname, String name) {
-	// TODO Auto-generated method stub
 	if(lastname == null || name == null) { 
 		return false;
 	}

@@ -75,7 +75,7 @@
         <bean:write name="lfd" property="create_station.stationcode" />
       </td>
       <td>
-        <bean:write name="lfd" property="report_status.description" />
+        <bean:message name="lfd" property="report_status.key" />
       </td>
     </tr>
   </logic:iterate>

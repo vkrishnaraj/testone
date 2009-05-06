@@ -297,7 +297,7 @@ public class ReservationIntegrationImpl extends
 							theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 							theitem.setBagnumber(allindex);
 							theitem.setStatus(StatusBMO.getStatus(
-									TracingConstants.ITEM_STATUS_OPEN, user.getCurrentlocale()));
+									TracingConstants.ITEM_STATUS_OPEN));
 
 							allindex++;
 						}
@@ -315,8 +315,7 @@ public class ReservationIntegrationImpl extends
 			theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
 			theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
 			theitem.setBagnumber(allindex);
-			theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN,
-					user.getCurrentlocale()));
+			theitem.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 		}
 
 		// set number of bags checked in

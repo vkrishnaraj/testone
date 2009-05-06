@@ -82,7 +82,7 @@
                 :
               </td>
               <td>
-                <bean:write name="ohd_request" property="status.description" />
+                <bean:message name="ohd_request" property="status.key" />
               </td>
             </tr>
             <tr>

@@ -81,12 +81,12 @@ public class ManageMessage extends Action {
 
 		ActionMessages errors = new ActionMessages();
 
-		List statusList = MessageUtils.getTaskStatusList(user.getCurrentlocale());
+		List statusList = TracerUtils.getStatusList(TracingConstants.TABLE_MESSAGE, user.getCurrentlocale(), "status_ID") ;
 		request.setAttribute("message_status_list", statusList);
 
 		ArrayList ax = new ArrayList();
-		ax.add(new LabelValueBean(TracerUtils.getResourcePropertyText("ohd.short", user), "0"));
-		ax.add(new LabelValueBean(TracerUtils.getResourcePropertyText("incident_cap", user), "1"));
+		ax.add(new LabelValueBean(TracerUtils.getText("ohd.short", user), "0"));
+		ax.add(new LabelValueBean(TracerUtils.getText("incident_cap", user), "1"));
 		request.setAttribute("typelist", ax);
 
 		//		 menu highlite
@@ -252,7 +252,7 @@ public class ManageMessage extends Action {
 						newRecpList.add(recp);
 					} else {
 						if (recp.getStation_id() == -1) {
-							List stations = TracerUtils.getStationList(user.getCurrentlocale(), recp
+							List stations = TracerUtils.getStationList(recp
 									.getCompany_code());
 							if (stations != null && stations.size() > 0) {
 								for (Iterator j = stations.iterator(); j.hasNext();) {
@@ -445,7 +445,7 @@ public class ManageMessage extends Action {
 		for (Iterator i = recpList.iterator(); i.hasNext();) {
 			Recipient recpt = (Recipient) i.next();
 			if (recpt.getCompany_code().length() > 0) {
-				recpt.setStationList(TracerUtils.getStationList(user.getCurrentlocale(), recpt
+				recpt.setStationList(TracerUtils.getStationList(recpt
 						.getCompany_code()));
 				if (recpt.getStationList() != null && recpt.getStationList().size() > 0) {
 					boolean exists_station_id = false;

@@ -180,9 +180,12 @@ public class ClaimAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 			}
 
+			// Commented out because there is no more status description
+			/*
 			Status st = ep.getStatus();
 			if (st.getDescription() == null || st.getDescription().length() == 0)
-				ep.setStatus(StatusBMO.getStatus(st.getStatus_ID(), st.getLocale()));
+				ep.setStatus(StatusBMO.getStatus(st.getStatus_ID()));
+			*/
 
 			cform.setMod_claim_reason("");
 			cform.setMod_exp_reason("");

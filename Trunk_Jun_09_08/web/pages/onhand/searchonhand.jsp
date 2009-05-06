@@ -106,7 +106,7 @@ function updatePagination() {
                     <html:option value="<%= Integer.toString(TracingConstants.OHD_STATUS_ACTIVE) %>">
                       <bean:message key="select.all_active" />
                     </html:option>
-                    <html:options collection="oStatusList" property="status_ID" labelProperty="description" />
+                    <html:options collection="ohdStatusList" property="status_ID" labelProperty="description" />
                   </html:select>
                 </td>
                 <td>
@@ -330,7 +330,7 @@ function updatePagination() {
                     &nbsp;
                   </td>
                   <td>
-                    <bean:write name="ohd" property="status.description" />
+                    <bean:message name="ohd" property="status.key" />
                   </td>
                   <td>
                     <logic:empty name="ohd" property="color">

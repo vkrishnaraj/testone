@@ -390,6 +390,7 @@
 	</target>
 
 	<target name="build-azul-prod" depends="delete">
+		<antcall target="hibernate_generate" />
 		<property name="ant_project_name" value="azul" />
 		<property name="ant_war_name" value="azul-prod" />
 		<property name="environment" value="production" />
@@ -401,7 +402,7 @@
 	</target>
 
 	<target name="donotrun-build-azul">
-
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/azul/ApplicationResources_pt.properties" />
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment}/tracer.properties" />

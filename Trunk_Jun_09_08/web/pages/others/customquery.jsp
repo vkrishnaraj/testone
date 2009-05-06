@@ -196,7 +196,7 @@ function updatePagination() {
 <%
 	ArrayList ar = null;
 	if (request.getAttribute("ohd") != null) {
-		ar = (ArrayList)request.getAttribute("oStatusList");
+		ar = (ArrayList)session.getAttribute("ohdStatusList");
 		%>
 		<bean:message key="colname.ohd_status" />
 		<%
@@ -480,7 +480,7 @@ function updatePagination() {
                     <html:option value="0">
                       <bean:message key="select.all" />
                     </html:option>
-                    <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="categorytype" />
+                    <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="description" />
                   </html:select>
                 </td>
                 <td colspan="2">
@@ -661,7 +661,7 @@ function updatePagination() {
                         &nbsp;
                       </td>
                       <td>
-                        <bean:write name="results" property="status.description" />
+                        <bean:message name="results" property="status.key" />
                       </td>
                       <logic:notEmpty name="searchIncidentForm" property="flightnum">
                         <td>
@@ -795,7 +795,7 @@ function updatePagination() {
                             &nbsp;
                           </td>
                           <td>
-                            <bean:write name="ohd" property="status.description" />
+                            <bean:message name="ohd" property="status.key" />
                           </td>
                           <td>
                             <logic:empty name="ohd" property="color">

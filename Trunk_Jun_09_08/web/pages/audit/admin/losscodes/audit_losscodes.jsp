@@ -290,7 +290,7 @@ function updatePagination() {
                       <A HREF="audit_losscode.do?detail=1&code_id=<bean:write name="code" property="code_id"/>"><bean:write name="code" property="loss_code" /></a>
                     </td>
 <%
-                    String report_desc = AdminUtils.getReportDescription(code.getReport_type(), code.getLocale());
+                    String report_desc = AdminUtils.getReportDescription(code.getReport_type());
 %>
                     <td>
                       &nbsp;

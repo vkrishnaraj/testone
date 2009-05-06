@@ -48,10 +48,6 @@ public class OHDRequest implements Serializable {
 		return requestingAgent.getUsername();
 	}
 
-	public String getRequestStatus() {
-		return status.getDescription();
-	}
-
 	public String getTimeRequested() {
 		return DateUtils.formatDate(this.getRequestTime(), _DATEFORMAT + " " + _TIMEFORMAT, null,
 				_TIMEZONE);

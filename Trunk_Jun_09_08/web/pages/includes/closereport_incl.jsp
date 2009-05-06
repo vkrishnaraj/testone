@@ -28,8 +28,8 @@
   	} else if (request.getAttribute("missing") != null) {
      		 itemType = 2;
     }	
-
-    lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getCurrentlocale(), a.getStation().getCompany());
+    
+    lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getStation().getCompany());
   } else {
     lc = null;
   }

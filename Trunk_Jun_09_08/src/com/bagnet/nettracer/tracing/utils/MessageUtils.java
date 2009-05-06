@@ -78,33 +78,6 @@ public class MessageUtils {
 		}
 	}
 
-	/**
-	 * Get task status list
-	 * 
-	 * @param locale
-	 *          the default locale
-	 * @return the status list
-	 */
-	public static List getTaskStatusList(String locale) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Status.class).add(Expression.eq("locale", locale)).add(
-					Expression.eq("table_ID", new Integer(5))).addOrder(Order.asc("status_ID"));
-			return cri.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 
 	public static MessageCopy getMessageCopy(String messagecopyId) {
 		Session sess = null;

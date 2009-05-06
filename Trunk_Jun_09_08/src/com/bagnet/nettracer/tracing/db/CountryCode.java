@@ -16,7 +16,6 @@ import java.io.Serializable;
 public class CountryCode implements Serializable {
 	private String CountryCode_ID;
 	private String country;
-	private String locale;
 
 	/**
 	 * @return Returns the country.
@@ -53,20 +52,4 @@ public class CountryCode implements Serializable {
 		CountryCode_ID = countryCode_ID;
 	}
 
-	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
 }

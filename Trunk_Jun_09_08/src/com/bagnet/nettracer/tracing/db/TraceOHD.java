@@ -440,13 +440,6 @@ public class TraceOHD implements Serializable {
 		this.passengers = passengers;
 	}
 
-	public boolean isClosed() {
-		return status.getDescription().trim().toLowerCase().equals("closed");
-	}
-
-
-
-
 
 	/**
 	 * @hibernate.property type="date"

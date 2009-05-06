@@ -21,7 +21,6 @@ public class Audit_Station implements Serializable {
 	private String companycode_ID;
 	private String stationcode;
 	private String stationdesc;
-	private String locale;
 	private String address1;
 	private String address2;
 	private String city;
@@ -111,14 +110,14 @@ public class Audit_Station implements Serializable {
 
 	public String getState() {
 		if (state_ID != null && state_ID.length() > 0) {
-			return TracerUtils.getState(state_ID, "en").getState();
+			return TracerUtils.getState(state_ID).getState();
 		}
 		return "";
 	}
 
 	public String getCountry() {
 		if (countrycode_ID != null && countrycode_ID.length() > 0) {
-			return TracerUtils.getCountry(countrycode_ID, "en").getCountry();
+			return TracerUtils.getCountry(countrycode_ID).getCountry();
 		}
 		return "";
 	}
@@ -345,23 +344,6 @@ public class Audit_Station implements Serializable {
 	 */
 	public void setZip(String zip) {
 		this.zip = zip;
-	}
-
-	/**
-	 * @return Returns the locale.
-	 * 
-	 * @hibernate.property type="string" length="2"
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
 	}
 
 	/**

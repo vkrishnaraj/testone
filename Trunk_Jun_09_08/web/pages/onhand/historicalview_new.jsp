@@ -482,7 +482,7 @@ function gotoHistoricalReport() {
                     :
                   </td>
                   <td>
-                    <bean:write name="OnHandForm" property="status.description" />
+                    <bean:message name="OnHandForm" property="status.key" />
                   </td>
                 </tr>
                 <tr>
@@ -933,7 +933,7 @@ function gotoHistoricalReport() {
                             <html:option value="">
                               <bean:message key="select.please_select" />
                             </html:option>
-                            <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="categorytype" />
+                            <html:options collection="categorylist" property="OHD_CategoryType_ID" labelProperty="description" />
                           </html:select>
                         </td>
                       </tr>

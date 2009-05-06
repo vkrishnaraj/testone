@@ -59,9 +59,6 @@ public class ViewCreatedInterimExpenseRequests extends Action {
 
 		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
 
-		List statusList = ExpenseUtils.getExpenseStatusList(user.getCurrentlocale());
-		request.setAttribute("expense_status_list", statusList);
-
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {
 			agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));

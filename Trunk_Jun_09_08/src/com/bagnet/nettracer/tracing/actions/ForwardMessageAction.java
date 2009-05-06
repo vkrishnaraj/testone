@@ -66,20 +66,19 @@ public class ForwardMessageAction extends Action {
 		else companyCode = user.getCompanycode_ID();
 
 		theform.setCompanyCode(companyCode);
-		stationList = TracerUtils.getStationList(user.getCurrentlocale(), companyCode);
+		stationList = TracerUtils.getStationList(companyCode);
 
 		if (stationList == null || stationList.size() == 0) {
 			theform.setDestStation("");
 		}
 		request.setAttribute("stationList", stationList);
 		
-		List codes = LossCodeBMO.getLocaleCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, user
-				.getCurrentlocale(), false, user);
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
 		List faultstationlist = null;
-		faultstationlist = TracerUtils.getStationList(user.getCurrentlocale(), user.getStation().getCompany().getCompanyCode_ID());
+		faultstationlist = TracerUtils.getStationList(user.getStation().getCompany().getCompanyCode_ID());
 		request.setAttribute("faultstationlist", faultstationlist);
 		
 		

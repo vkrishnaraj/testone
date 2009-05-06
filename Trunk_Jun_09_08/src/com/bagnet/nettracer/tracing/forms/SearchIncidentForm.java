@@ -657,7 +657,7 @@ public final class SearchIncidentForm extends ValidatorForm {
 	 * @return Visual representation of status information.
 	 */
 	public String getStatusString() {
-		return StatusBMO.getStatus(status_ID).getDescription();
+		return StatusBMO.getStatus(status_ID).getTextDescription(null);
 	}
 	
 	/**
@@ -678,7 +678,7 @@ public final class SearchIncidentForm extends ValidatorForm {
 	 * @return Visual representation of category information.
 	 */
 	public String getCategoryString() {
-		return CategoryBMO.getCategory(category_ID).getCategorytype();
+		return CategoryBMO.getCategory(category_ID, null).getDescription();
 	}
 	
 	/**

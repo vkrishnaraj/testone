@@ -121,7 +121,7 @@
                     <bean:write name="expenselist" property="mileageamt" />
                   </td>
                   <td valign="top">
-                    <bean:write name="expenselist" property="status.description" />
+                    <bean:message name="expenselist" property="status.key" />
                     &nbsp;
                   </td>
                   <td>

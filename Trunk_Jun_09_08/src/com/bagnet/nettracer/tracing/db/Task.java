@@ -63,11 +63,6 @@ public class Task implements Serializable {
 		else return "";
 	}
 
-	public String getStatusString() {
-		if (status != null) return status.getDescription();
-		else return "";
-	}
-
 	public String getPriorityString() {
 		if (priority != null) return priority.getDescription();
 		else return "";

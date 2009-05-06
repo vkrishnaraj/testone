@@ -16,23 +16,6 @@ import java.io.Serializable;
 public class State implements Serializable {
 	private String State_ID;
 	private String state;
-	private String locale;
-
-	/**
-	 * @hibernate.property type="string"
-	 * @return Returns the locale.
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
 
 	/**
 	 * @return Returns the state.
