@@ -31,17 +31,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
-import sun.management.resources.agent;
-
-import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Company;
-import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -82,7 +77,6 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -140,17 +134,19 @@ public class OnHandAction extends CheckedAction {
 		}
 
 
-		BagService bs = new BagService();
-		
+		BagService bs = new BagService();	
 
 		// Status pertaining to the on hand file
-		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
-		request.setAttribute("oStatusList", oStatusList);
+		request.setAttribute("oStatusList", session.getAttribute("onhandStatusList"));
 		request.setAttribute("onhand", "1");
 
 		request.setAttribute(FAULT_STATION_LIST, createFaultStationList(theform, user));
 		request.setAttribute("lossCodes", createLossCodeList(theform, user));
 
+		if (request.getParameter("cancelFwd") != null && request.getParameter("ohd_ID") != null) {
+			OHDUtils.cancelForward(request.getParameter("ohd_ID"), user);
+		}
+		
 		// add new remark box -- set new remark with current gmt time
 		if(request.getParameter("addremark") != null) {
 			Remark r = theform.getRemark(theform.getRemarklist().size());
@@ -233,8 +229,7 @@ public class OnHandAction extends CheckedAction {
 				saveMessages(request, errors);
 			}
 			return (mapping.findForward(TracingConstants.OHD_MAIN));
-		}
-		// save temporary.
+		}		// save temporary.
 		else if((request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
 				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null || request.getParameter("amendtowt") != null) {
 			OHD oDTO = null;

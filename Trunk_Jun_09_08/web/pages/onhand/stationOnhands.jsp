@@ -160,6 +160,11 @@ function submitForwardForm()
                     <bean:message key="colname.name" />
                   </strong>
                 </td>
+                <td>
+                  <strong>
+                    <bean:message key="header.action" />
+                  </strong>
+                </td>
               </tr>
               <logic:iterate id="ohd" name="onhandlist" type="com.bagnet.nettracer.tracing.db.OHD">
                 <tr>
@@ -233,21 +238,34 @@ function submitForwardForm()
                       &nbsp;
                     </logic:empty>
                   </td>
+                  <td>
+                    <%
+                        
+                      if (ohd != null && 
+                          ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT ||
+                          ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
+                        ) {
+                    %>
+                      <a href="onhands.do?ohd_ID=<bean:write name="ohd" property="OHD_ID"/>&cancelFwd=1" ><bean:message key="link.cancelForward" /></a>
+                    <% } else {%>
+                      &nbsp;
+                    <% } %> 
+                  </td>
                 </tr>
               </logic:iterate>
               <input type="hidden" name="search" value="1">
               <tr>
-                <td colspan="11">
+                <td colspan="12">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
                <tr>
-                        <td colspan="11">
+                        <td colspan="12">
                           &nbsp;
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="11" align="center">
+                        <td colspan="12" align="center">
                           <logic:present name="cbroStationID" scope="session">
           <%
                             if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {

@@ -29,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -61,6 +62,10 @@ public class ViewOnhands extends Action {
 			agent_station = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 		} else {
 			agent_station = user.getStation();
+		}
+		
+		if (request.getParameter("cancelFwd") != null && request.getParameter("ohd_ID") != null) {
+			OHDUtils.cancelForward(request.getParameter("ohd_ID"), user);
 		}
 
 		//		 menu highlite

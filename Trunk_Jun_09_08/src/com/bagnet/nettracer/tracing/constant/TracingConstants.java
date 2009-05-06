@@ -265,6 +265,7 @@ public class TracingConstants {
 	
 	public final static int LOG_NOT_RECEIVED = 0;
 	public final static int LOG_RECEIVED = 1;
+	public final static int LOG_CANCELLED = 2;
 
 	public final static int TASK_STATUS_NOT_STARTED = 16;
 	public final static int TASK_STATUS_IN_PROGRESS = 17;

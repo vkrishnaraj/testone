@@ -386,7 +386,11 @@ function gotoHistoricalReport() {
       <bean:message key="message.forwarded_on" />
       <b><bean:write name="OnHandForm" property="dispForwarded_date" /></b>
       <bean:message key="message.forwarded_by" />
-      <b><bean:write name="OnHandForm" property="forwarded_agent" /></b>
+      <b><bean:write name="OnHandForm" property="forwarded_agent" /></b>&nbsp;
+
+      <a href="addOnHandBag.do?ohd_ID=<bean:write name="OnHandForm" property="ohd_id"/>&cancelFwd=1" ><bean:message key="link.cancelForward" /></a>       
+      
+      
       <%
          }
                }

@@ -7,25 +7,32 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
@@ -568,6 +575,95 @@ public class OHDUtils {
 			}
 		}
 	}
+	
+	
+	
+
+	public static void cancelForward(String ohd_id, Agent a) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		
+		Status openStatus = new Status();
+		openStatus.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);		
+		
+		Transaction t = null;
+		try {
+			
+			// GET ID TO BE UPDATED
+			Query q = sess.createQuery("select distinct OHDLog_ID from OHD_Log where ohd.OHD_ID = :ohd_ID and log_status = :status");
+			q.setString("ohd_ID", ohd_id);
+			q.setInteger("status", TracingConstants.LOG_NOT_RECEIVED);		
+			List<Integer> logList = (List<Integer>) q.list();
+					
+			t = sess.beginTransaction();
+					
+			for (Integer logId: logList) {
+
+				OHD_Log log = (OHD_Log) sess.load(OHD_Log.class, logId);
+				log.setLog_status(TracingConstants.LOG_CANCELLED);
+				sess.update(log);
+				
+				// UPDATE REQUEST IF NECESSARY
+				if (log.getOhd_request_id() != 0) {
+					OHDRequest req = (OHDRequest) sess.load(OHDRequest.class, log.getOhd_request_id());
+					req.setStatus(openStatus);
+				}
+			
+			}
+			
+			t.commit();
+			sess.close();
+			sess = null;
+			
+			OHD ohd = OhdBMO.getOHDByID(ohd_id, null);
+			ohd.setStatus(openStatus);
+			
+			Remark r = new Remark();
+			
+			MessageResources messages = MessageResources
+			.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+			
+			r.setAgent(a);
+			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime
+					.getGMTDate()));
+			r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()),
+					"bagForwardCancelMessage")
+					+ " "
+					+ a.getStation().getCompany().getCompanyCode_ID()
+					+ messages.getMessage(new Locale(a.getCurrentlocale()), "aposS")
+					+ " "
+					+ a.getStation().getStationcode() + " station.");
+			r.setRemarktype(TracingConstants.REMARK_REGULAR);
+			r.setOhd(ohd);
+			
+			if (ohd.getRemarks() == null) 
+				ohd.setRemarks(new HashSet());
+			ohd.getRemarks().add(r);
+			
+			OhdBMO ohdBmo = new OhdBMO();
+			ohdBmo.insertOHD(ohd, a);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
 
 	/**
 	 * update ohd_log table to set all status to received for this ohd id
@@ -581,7 +677,7 @@ public class OHDUtils {
 		Statement stmt = conn.createStatement();
 		
 		String sql = "update ohd_log set log_status = " +
-			TracingConstants.LOG_RECEIVED + " where ohd_id = '" + ohd_id + "'";
+			TracingConstants.LOG_RECEIVED + " where ohd_id = '" + ohd_id + "' and log_status = " + TracingConstants.LOG_NOT_RECEIVED;
 		stmt.execute(sql);
 		stmt.close();
 		sess.close();
@@ -606,6 +702,7 @@ public class OHDUtils {
 			sql += " and log.destStationCode = :station_ID";
 			sql += " and (log.ohd.status.status_ID = :status_ID or log.ohd.status.status_ID = :status_ID2)";
 			sql += " and log.log_status <> " + TracingConstants.LOG_RECEIVED;
+			sql += " and log.log_status <> " + TracingConstants.LOG_CANCELLED;
 
 			if (form.getExpedite() != null && form.getExpedite().length() > 0) {
 				sql += " and log.expeditenum like :expeditenum";
@@ -691,6 +788,7 @@ public class OHDUtils {
 			sql += " and log.destStationCode = :station_ID";
 			sql += " and (log.ohd.status.status_ID = :status_ID or log.ohd.status.status_ID = :status_ID2)";
 			sql += " and log.log_status <> " + TracingConstants.LOG_RECEIVED;
+			sql += " and log.log_status <> " + TracingConstants.LOG_CANCELLED;
 
 			if (form.getExpedite() != null && form.getExpedite().length() > 0) {
 				sql += " and log.expeditenum like :expeditenum";

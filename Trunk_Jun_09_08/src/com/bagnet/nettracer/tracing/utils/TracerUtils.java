@@ -398,6 +398,11 @@ public class TracerUtils {
 				session.getAttribute("statuslist") != null ? session
 						.getAttribute("statuslist") : getStatusList(locale,
 						TracingConstants.TABLE_INCIDENT));
+		
+		session.setAttribute("onhandStatusList",
+				session.getAttribute("onhandStatusList") != null ? session
+						.getAttribute("statuslist") : getStatusList(locale,
+						TracingConstants.TABLE_ON_HAND));
 
 		// set status list for mbr reports
 		session.setAttribute("dStatusList",
