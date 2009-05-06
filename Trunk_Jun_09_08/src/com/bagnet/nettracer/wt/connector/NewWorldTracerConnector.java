@@ -30,6 +30,7 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerInitializationException;
+import com.bagnet.nettracer.wt.WorldTracerLoggedOutException;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
@@ -155,12 +156,14 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		String responseBody = null;
 		String newLocation = null;
+		int fdCount = 0;
+		int brCount = 0;
 		try {
 			NameValuePair[] p1 = { new NameValuePair("_flowId", "createdelayedbagrecord-flow") };
 			newLocation = startFlow(p1, "INSERT INCIDENT", 1);
 
 			PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
-			List<String> bagsList = fieldMap.get(WorldTracerService.WorldTracerField.CC);  //for bagTag.airlineCode and bagTag.tagNum
+			List<String> bagsList = fieldMap.get(WorldTracerService.WorldTracerField.CT);  //for bagTag.airlineCode and bagTag.tagNum
 			for(Map.Entry<WorldTracerService.WorldTracerField, List<String>> fieldEntry : fieldMap.entrySet()){
 				List<String> fieldList = fieldEntry.getValue();
 				//add bag type
@@ -180,16 +183,21 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				//add passenger itinerary
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.FD){
 					if(fieldList != null){
-						for(int i = 0; i < fieldList.size(); i++){
+						WorldTracerRule<String> rule = RULES.get(WorldTracerService.WorldTracerField.FD);
+						for(int i = 0; i < fieldList.size() && i < rule.getMaxAllowed(); i++){
 							String paxIntinery = fieldList.get(i);
-							String[] inti = paxIntinery.split("/");
-							String airlineCode = inti[0].substring(0, 2);
-							String flightNumber = inti[0].substring(2);
-							String flightDate = inti[1];
+							String[] itin = paxIntinery.split("/");
+							String airlineCode = itin[0].substring(0, 2);
+							String flightNumber = itin[0].substring(2);
+							String flightDate = itin[1];
 							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].airlineCode", airlineCode);
 							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightNumber", flightNumber);
-							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);							
+							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);
+							fdCount++;
 						}
+					}
+					if(fdCount == 0) {
+						throw new WorldTracerException("No Passenger Itinerary");
 					}
 				}
 				//add passenger initials
@@ -222,10 +230,16 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				}
 				//add passenger names
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.NM){
+					WorldTracerRule<String> rule = RULES.get(WorldTracerField.NM);
+					int nameCount = 0;
 					if(fieldList != null){
-						for(int i = 0; i < fieldList.size(); i++){
-							String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(i));					
-							search.setParameter("delayedBagRecord.passenger.names[" + i +"]", name);
+						for(int i = 0; i < fieldList.size() && nameCount < rule.getMaxAllowed(); i++){
+							String[] tmpName = fieldList.get(i).split("/");				
+							for (int j = 0; j < tmpName.length && nameCount < rule.getMaxAllowed(); j++) {
+								String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(tmpName[j]);					
+								search.setParameter("delayedBagRecord.passenger.names[" + nameCount +"]", name);
+								nameCount ++;
+							}
 						}
 					}
 				}
@@ -354,7 +368,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				//add bag itinerary
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.BR){
 					if(fieldList != null){
-						for(int i = 0; i < fieldList.size(); i++){
+						WorldTracerRule<String> rule = RULES.get(WorldTracerService.WorldTracerField.BR);
+						for(int i = 0; i < fieldList.size() && i < rule.getMaxAllowed(); i++){
 							String bagIntinery = fieldList.get(i);
 							String[] inti = bagIntinery.split("/");
 							String airlineCode = inti[0].substring(0, 2);
@@ -363,6 +378,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].airlineCode", airlineCode);
 							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightNumber", flightNumber);
 							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightDate", flightDate);
+							brCount++;
 						}
 					}
 				}
@@ -590,7 +606,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			else if(fields[k] == WorldTracerService.WorldTracerField.FD){
 				int i = 0;
 				if(fieldList != null){
-					for(i = 0; i < fieldList.size(); i++){
+					for(i = 0; i < fieldList.size() && i < 4; i++){
 						String paxIntinery = fieldList.get(i);
 						String[] inti = paxIntinery.split("/");
 						String airlineCode = inti[0].substring(0, 2);
@@ -647,9 +663,15 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			//add passenger names
 			else if(fields[k] == WorldTracerService.WorldTracerField.NM){
 				if(fieldList != null){
-					for(int i = 0; i < fieldList.size(); i++){
-						String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(i));
-						amendMethod.setParameter("delayedBagRecord.passenger.names[" + i +"]", name);
+					WorldTracerRule<String> rule = RULES.get(WorldTracerField.NM);
+					int nameCount = 0;
+					for(int i = 0; i < fieldList.size() && nameCount < rule.getMaxAllowed(); i++){
+						String[] tmpName = fieldList.get(i).split("/");				
+						for (int j = 0; j < tmpName.length && nameCount < rule.getMaxAllowed(); j++) {
+							String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
+							amendMethod.setParameter("delayedBagRecord.passenger.names[" + nameCount +"]", name);
+							nameCount++;
+						}
 					}
 				}
 			}
@@ -938,9 +960,9 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				errorString = m.group(1);
 			} else {
 				errorString = "Unable to amend AHL. See logs for details";
-				logger.error("amend Ahl result:"+responseBody);
+				logger.error("amend Ahl error result: "+responseBody);
 			}
-			if (errorString.toUpperCase().contains("FILE CLOSED")) {
+			if (errorString.trim().toUpperCase().endsWith("/CLOSED")) {
 				throw new WorldTracerAlreadyClosedException(errorString);
 			}
 			throw new WorldTracerException(errorString);
@@ -1029,7 +1051,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			else if(fields[k] == WorldTracerService.WorldTracerField.FD){
 				int i = 0;
 				if(fieldList != null){
-					for(i = 0; i < fieldList.size(); i++){
+					for(i = 0; i < fieldList.size() && i < 4; i++){
 						String paxIntinery = fieldList.get(i);
 						String[] inti = paxIntinery.split("/");
 						String airlineCode = inti[0].substring(0, 2);
@@ -1931,7 +1953,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				//add bag(passenger) itinerary
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.FD){
 					if(fieldList != null){
-						for(int i = 0; i < fieldList.size(); i++){
+						WorldTracerRule<String> rule = RULES.get(WorldTracerField.FD);
+						for(int i = 0; i < fieldList.size() && i < rule.getMaxAllowed(); i++){
 							String paxIntinery = fieldList.get(i);
 							String[] inti = paxIntinery.split("/");
 							String airlineCode = inti[0].substring(0, 2);
@@ -1971,8 +1994,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				}
 				//add passenger name
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.NM){
+				
 					if(fieldList != null && fieldList.size() >= 1){
-						String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(0));
+						String name = fieldList.get(0).split("/")[0];
+						name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(name);
 						search.setParameter("onHandBagRecord.passenger.names[0]", name);
 					}
 				}
@@ -3648,7 +3673,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			attempts ++;
 		} while (attempts < 3);
-		throw new WorldTracerException("unable to start: " + flowName + " after 3 attempts");
+		throw new WorldTracerLoggedOutException("unable to start: " + flowName + " after 3 attempts");
 	}
 
 	private void startFlowWithRedirect(NameValuePair[] getParams, String flowName, int stepNum) throws WorldTracerException {

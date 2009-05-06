@@ -23,6 +23,7 @@
 				<prop key="wt.host">wtrweb.worldtracer.aero</prop>
 				<prop key="training.mode">TRAINING</prop>
 				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
+				<prop key="cron.from.email">DONOTREPLY@support.nettracer.aero</prop>
 			</props>
 		</property>
 	</bean>
@@ -96,6 +97,16 @@
 	
 
 	<!--  Worker beans that have the methods to be scheduled -->
+	<bean id="parentErrorHandler" class="com.bagnet.nettracer.cronjob.BaseErrorHandler" abstract="true">
+		<constructor-arg value="${company.code}" />
+		<property name="emailTo" value="support@nettracer.aero" />
+		<property name="instanceName" value="${cron.instance.label}" />
+		<property name="emailFrom" value="${cron.from.email}" />
+	</bean>
+
+	<bean id="wtqErrorHandler" parent="parentErrorHandler" >	
+		<property name="processName" value="WT Queue" />
+	</bean>
 
 	<bean id="wtProcessQueue" class="com.bagnet.nettracer.cronjob.wt.WorldTracerQueueSweeper">
 		<constructor-arg value="${default.wt.agent}" />
@@ -103,6 +114,7 @@
 		<property name="wtqBmo" ref="wtq-bmo" />
 		<property name="wafBmo" ref="wtaf-bmo" />
 		<property name="wtService" ref="wtService" />
+		<property name="errorHandler" ref="wtqErrorHandler" />
 	</bean>
 
 	<bean id="moveToLz" class="com.bagnet.nettracer.cronjob.lz.MoveToLZThread">
@@ -226,4 +238,15 @@
 		<constructor-arg ref="wtTx-bmo" />
 	</bean>
 	
+	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter"
+		lazy-init="false">
+		<property name="beans">
+			<map>
+				<entry key="NetTracer:name=ntManagementBean" value-ref="ntManagementBean" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="ntManagementBean" class="com.bagnet.nettracer.jmx.NetTracerManagementBean" >
+	</bean>
 </beans>

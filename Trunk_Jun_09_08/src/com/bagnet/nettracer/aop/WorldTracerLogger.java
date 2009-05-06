@@ -10,6 +10,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
+import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
@@ -71,6 +72,15 @@ public class WorldTracerLogger {
 			Object retVal = pjp.proceed();
 			wttx.successTransaction(retVal != null ? retVal.toString() : null);
 			return retVal;
+		}
+		catch (WorldTracerAlreadyClosedException ex) {
+			if(type.equals(TxType.AMEND_AHL)) {
+				wttx.successTransaction("Already Closed");
+			}
+			else {
+				wttx.failTransaction(ex);
+			}
+			throw ex;
 		}
 		catch (Throwable e) {
 			wttx.failTransaction(e);

@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import static org.hibernate.criterion.Restrictions.*;
@@ -19,7 +20,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 public class WTQueueBmo extends HibernateDaoSupport {
 	
 	private static final String FIND_TASKS_BY_COMPANY_HQL =
-		"from WorldTracerQueue wq where wq.agent.companycode_ID = :company and wq.status = :status";
+		"select wq.wt_queue_id from WorldTracerQueue wq where wq.agent.companycode_ID = :company and wq.status = :status";
 
 	@Transactional
 	public void updateQueue(WorldTracerQueue queue) {
@@ -28,21 +29,23 @@ public class WTQueueBmo extends HibernateDaoSupport {
 	}
 
 	@Transactional(readOnly=true)
-	public List<WorldTracerQueue> findAllPendingTasks(String company) {
+	public List<Long> findAllPendingTasks(String company) {
 		return findPendingTasksByType(company, WorldTracerQueue.class);
 	}
 	
-	@Transactional(readOnly=true)
-	public List<WtqEraseActionFile> findPendingEraseActionFiles(String company) {
-		return findPendingTasksByType(company, WtqEraseActionFile.class);
-	}
-	
-	private <T extends WorldTracerQueue> List<T> findPendingTasksByType(String company, Class<T> queueClass) {
+	private <T extends WorldTracerQueue> List<Long> findPendingTasksByType(String company, Class<T> queueClass) {
 		Session sess = getSession(false);
 		Criteria cri = sess.createCriteria(queueClass);
 		cri.createCriteria("agent").add(Restrictions.eq("companycode_ID", company));
 		cri.add(Restrictions.eq("status", WtqStatus.PENDING));
+		cri.setProjection(Projections.property("wt_queue_id"));
 		return cri.list();
+	}
+
+	@Transactional(readOnly = true)
+	public WorldTracerQueue findById(Long queue_id) {
+		Session sess = getSession(false);
+		return (WorldTracerQueue) sess.get(WorldTracerQueue.class, queue_id);
 	}
 
 

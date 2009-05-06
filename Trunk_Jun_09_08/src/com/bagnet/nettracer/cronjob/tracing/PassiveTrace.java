@@ -15,6 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.cronjob.tracing.dto.ConsumerDTO;
 import com.bagnet.nettracer.cronjob.tracing.dto.ProducerDTO;
 import com.bagnet.nettracer.cronjob.tracing.dto.SettingsDTO;
@@ -81,7 +82,7 @@ public class PassiveTrace {
 		String emailTo = var.getEmail_to();
 		int port = var.getEmail_port();
 
-		PassiveTraceErrorHandler errorHandler = new PassiveTraceErrorHandler(
+		ErrorHandler errorHandler = new PassiveTraceErrorHandler(
 				emailHost, emailFrom, emailTo, port, instanceName);
 		
 		

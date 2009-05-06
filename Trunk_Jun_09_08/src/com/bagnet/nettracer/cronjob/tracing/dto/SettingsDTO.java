@@ -2,7 +2,7 @@ package com.bagnet.nettracer.cronjob.tracing.dto;
 
 import org.apache.log4j.Logger;
 
-import com.bagnet.nettracer.cronjob.tracing.PassiveTraceErrorHandler;
+import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.cronjob.tracing.RuleSet;
 import com.bagnet.nettracer.cronjob.tracing.TracingIncidentCache;
 import com.bagnet.nettracer.cronjob.tracing.TracingOhdCache;
@@ -13,14 +13,14 @@ public class SettingsDTO {
 	int daysForward;
 	double minimumScore;
 	RuleSet ruleSet;
-	PassiveTraceErrorHandler errorHandler;
+	ErrorHandler errorHandler;
 	TracingOhdCache ohdCache;
 	TracingIncidentCache incidentCache;
 	Logger logger;
 
 	public SettingsDTO(String companyCode, int daysBack, int daysForward,
 			double minimumScore, RuleSet ruleSet,
-			PassiveTraceErrorHandler errorHandler, TracingOhdCache ohdCache,
+			ErrorHandler errorHandler, TracingOhdCache ohdCache,
 			TracingIncidentCache incidentCache, Logger logger) {
 		this.companyCode = companyCode;
 		this.daysBack = daysBack;
@@ -73,11 +73,11 @@ public class SettingsDTO {
 		this.ruleSet = ruleSet;
 	}
 
-	public PassiveTraceErrorHandler getErrorHandler() {
+	public ErrorHandler getErrorHandler() {
 		return errorHandler;
 	}
 
-	public void setErrorHandler(PassiveTraceErrorHandler errorHandler) {
+	public void setErrorHandler(ErrorHandler errorHandler) {
 		this.errorHandler = errorHandler;
 	}
 

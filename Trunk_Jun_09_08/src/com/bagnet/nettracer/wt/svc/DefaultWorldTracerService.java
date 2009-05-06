@@ -809,6 +809,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			result.put(WorldTracerField.BR, result.get(WorldTracerField.FD));
 		} else if (result.get(WorldTracerField.FD) == null) {
 			result.put(WorldTracerField.FD, result.get(WorldTracerField.BR));
+			result.put(WorldTracerField.RT, result.get(WorldTracerField.BRT));
 		}
 
 		if (ntIncident.getClaimcheck_list() != null) {
@@ -1005,6 +1006,11 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 		if (itin.getItinerarytype() == TracingConstants.BAGGAGE_ROUTING) {
 			addIncidentFieldEntry(WorldTracerField.BR, fd, result);
+			List<String> routing = result.get(WorldTracerField.BRT);
+			if (routing == null || !routing.get(routing.size() - 1).equalsIgnoreCase(itin.getLegfrom().trim())) {
+				addIncidentFieldEntry(WorldTracerField.BRT, itin.getLegfrom().trim(), result);
+			}
+			addIncidentFieldEntry(WorldTracerField.BRT, itin.getLegto().trim(), result);
 		} else if (itin.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
 			addIncidentFieldEntry(WorldTracerField.FD, fd, result);
 			List<String> routing = result.get(WorldTracerField.RT);

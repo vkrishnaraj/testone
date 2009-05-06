@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -37,6 +38,8 @@ public class WorldTracerQueueSweeper {
 	private RuleMapper wtRuleMap;
 
 	private WorldTracerService wtService;
+
+	private ErrorHandler errorHandler;
 	
 	public void setWtService(WorldTracerService wtService) {
 		this.wtService = wtService;
@@ -63,7 +66,7 @@ public class WorldTracerQueueSweeper {
 		logger.debug("i think i need to start " + workerThreads + " worker threads");
 		
 		//proess the queued tasks
-		List<WorldTracerQueue> qTasks = null;
+		List<Long> qTasks = null;
 		try {
 			qTasks = wtqBmo.findAllPendingTasks(companyCode);
 			logger.debug("I got " + qTasks.size() + " tasks to work");
@@ -77,13 +80,13 @@ public class WorldTracerQueueSweeper {
 			return;
 		}
 		
-		ConcurrentLinkedQueue<WorldTracerQueue> qq = new ConcurrentLinkedQueue<WorldTracerQueue>(qTasks);
+		ConcurrentLinkedQueue<Long> qq = new ConcurrentLinkedQueue<Long>(qTasks);
 		
 		Thread[] workers = new Thread[workerThreads];
 		
 		for(int i = 0; i < workerThreads; i++) {
 			logger.debug("creating worker thread " + i);
-			WorldTracerQueueWorker ww = new WorldTracerQueueWorker(wtService, companyCode, wtqBmo, ogadmin, wafBmo, qq, wtRuleMap);
+			WorldTracerQueueWorker ww = new WorldTracerQueueWorker(wtService, companyCode, wtqBmo, ogadmin, wafBmo, qq, wtRuleMap, errorHandler);
 			Thread t = new Thread(ww);
 			workers[i] = t;
 			logger.debug("starting worker thread " + i);
@@ -118,5 +121,8 @@ public class WorldTracerQueueSweeper {
 		this.wafBmo = wafBmo;
 	}
 
-	
+	public void setErrorHandler(ErrorHandler errorHandler) {
+		this.errorHandler = errorHandler;
+	}
+
 }
