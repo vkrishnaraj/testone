@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/tx
@@ -12,72 +10,77 @@
 		http://www.springframework.org/schema/util/spring-util-2.5.xsd
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
-		
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="resource:/tracer.properties" />
 		<property name="properties">
 			<props>
 				<prop key="wt.host">wtrweb.worldtracer.aero</prop>
 				<prop key="training.mode">TRAINING</prop>
-				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
+				<prop key="wt.rules">
+					com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
 			</props>
 		</property>
 	</bean>
 
 	<bean id="scannerDataSource"
 		class="com.bagnet.clients.${scanner.class.path}.ScannerDataSourceImpl" />
-		
-	<bean id="customReportBmo"
-		class="com.bagnet.clients.${report.class.path}.CustomReportBMO" />
+
+	<bean id="customReportBmo" class="com.bagnet.clients.${report.class.path}.CustomReportBMO" />
 
 
 	<bean id="reservationIntegration"
 		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />
-		
+
 	<bean id="eventHandler"
 		class="com.bagnet.clients.${event.class.path}.ClientEventHandlerImpl" />
 
 	<!-- Hibernate config -->
-	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper" factory-method="getSession" />
+	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"
+		factory-method="getSession" />
 
-	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
+	<tx:annotation-driven transaction-manager="txManager"
+		proxy-target-class="true" />
 
 	<!-- Data Access Objects -->
-	
+
 	<bean id="wtTx-bmo" class="com.bagnet.nettracer.wt.bmo.WtTransactionBmo">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
+
 	<bean id="actionFileStationBmo" class="com.bagnet.nettracer.wt.bmo.ActionFileStationBMO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
+
 	<bean id="worldTracerAccountBmo" class="com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
+
 	<bean id="lockBMO" class="com.bagnet.nettracer.tracing.bmo.LockBMO">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
+
 	<bean id="wafBmo" class="com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	<!-- services used by the workers-->
-	
-	
-	<bean id="wtConnectionFactory" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionFactory">
+
+
+	<bean id="wtConnectionFactory"
+		class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionFactory">
 		<constructor-arg value="${wt.company.code}" />
 		<constructor-arg value="${wt.host}" />
 		<constructor-arg ref="worldTracerAccountBmo" />
 		<property name="mode" value="${training.mode}" />
 	</bean>
-	
+
 	<bean id="wtConnectionPool" class="com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool">
 		<constructor-arg value="${wt.company.code}" />
 		<constructor-arg ref="worldTracerAccountBmo" />
@@ -85,35 +88,51 @@
 		<property name="lifo" value="true" />
 		<property name="maxWait" value="15000" />
 		<property name="whenExhaustedAction">
-			<util:constant static-field="org.apache.commons.pool.impl.GenericObjectPool.WHEN_EXHAUSTED_BLOCK"/>
+			<util:constant
+				static-field="org.apache.commons.pool.impl.GenericObjectPool.WHEN_EXHAUSTED_BLOCK" />
 		</property>
 	</bean>
-	
-	<bean id="wtRuleMap" class="${wt.rules}"/>
-	
-	<bean id="wtConnector" class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector" scope="prototype">
+
+	<bean id="wtRuleMap" class="${wt.rules}" />
+
+	<bean id="wtConnector"
+		class="com.bagnet.nettracer.wt.connector.NewWorldTracerConnector"
+		scope="prototype">
 		<constructor-arg ref="wtConnectionPool" />
 		<constructor-arg value="${wt.company.code}" />
 		<property name="wtRuleMap" ref="wtRuleMap" />
 	</bean>
-	
-	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService" scope="prototype">
+
+	<bean id="wtService" class="com.bagnet.nettracer.wt.svc.DefaultWorldTracerService"
+		scope="prototype">
 		<property name="wtConnector" ref="wtConnector" />
 		<property name="wtCompanyCode" value="${wt.company.code}" />
 	</bean>
 
 	<!-- Aspects and advice -->
 	<aop:aspectj-autoproxy />
-	
+
 	<!--  world tracer transaction logging -->
 	<bean id="wtLogging" class="com.bagnet.nettracer.aop.WorldTracerLogger">
 		<constructor-arg ref="wtTx-bmo" />
 	</bean>
-	
-	<bean id="actionFileManager" class="com.bagnet.nettracer.wt.svc.ActionFileManagerImpl" factory-method="getInstance">
+
+	<bean id="actionFileManager" class="com.bagnet.nettracer.wt.svc.ActionFileManagerImpl"
+		factory-method="getInstance">
 		<property name="afsBmo" ref="actionFileStationBmo" />
 		<property name="lockBmo" ref="lockBMO" />
 		<property name="wafBmo" ref="wafBmo" />
 	</bean>
+
+	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter"
+		lazy-init="false">
+		<property name="beans">
+			<map>
+				<entry key="NetTracer:name=ntManagementBean" value-ref="ntManagementBean" />
+			</map>
+		</property>
+	</bean>
 	
+	<bean id="ntManagementBean" class="com.bagnet.nettracer.jmx.NetTracerManagementBean" >
+	</bean>
 </beans>

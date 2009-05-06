@@ -2,7 +2,10 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.log4j.Logger;
 
@@ -11,6 +14,8 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 public class TracerProperties {
 
 	private static Properties properties = new Properties();
+	
+	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	public static final String APP_TYPE = "app_type";
 	public static final String IMAGE_STORE = "image_store";
@@ -40,10 +45,14 @@ public class TracerProperties {
 	public static final String FRENCH_STATIONS = "french.stations";
 	public static final String SAVE_ON_CLOSE_PAGE = "display.closepage.save.while.open";
 	public static final String RESERVATION_UPDATE_EXPENSES_ON = "updatecomment.expenses.is_on";
+	public static final String ALLOW_CACHING = "allow.caching";
+	public static final String DEFAULT_CHECKED_LOCATION = "default.checked.location";
+
+	private static final Logger logger = Logger.getLogger(TracerProperties.class);
 
 	static {
 		try {
-			properties.load(HibernateWrapper.class
+			properties.load(TracerProperties.class
 					.getResourceAsStream("/tracer.properties"));
 
 		} catch (IOException e) {
@@ -52,12 +61,24 @@ public class TracerProperties {
 	}
 
 	public static String get(String property) {
-		return properties.getProperty(property);
+		
+		try {
+			lock.readLock().lock();
+			return properties.getProperty(property);
+		} finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	public static boolean isTrue(String property) {
-		String value = properties.getProperty(property);
-		if (value != null) {
+		String value = null;
+		try {
+			lock.readLock().lock();
+			value = properties.getProperty(property);
+		}finally {
+			lock.readLock().unlock();
+		}
+		if ( value != null) {
 			return value.equals("1");
 		} else {
 			// If the value is not found a null value will be returned
@@ -79,4 +100,16 @@ public class TracerProperties {
 		return "";
 	}
 	
+	public static void reloadProperties() {
+		try {
+		lock.writeLock().lock();
+		properties.clear();
+		properties.load(TracerProperties.class
+				.getResourceAsStream("/tracer.properties"));
+		} catch (IOException e) {
+			logger.error("unable to reload properties", e);
+		} finally {
+			lock.writeLock().unlock();
+		}
+	}
 }

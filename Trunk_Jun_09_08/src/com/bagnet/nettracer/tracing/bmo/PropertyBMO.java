@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.bmo;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -12,6 +13,8 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 public class PropertyBMO {
 	
 	private static Logger logger = Logger.getLogger(PropertyBMO.class);
+	
+	private static ConcurrentHashMap<String, List<String>> propCache = new ConcurrentHashMap<String, List<String>>();
 	
 	// PROPERTIES USED TO LIMIT STATIONS TO CODE TO
 	public static final String PROPERTY_LIMIT_LD_STATIONS = "losscode.ld.limitstations";
@@ -33,11 +36,9 @@ public class PropertyBMO {
 	public static final String PROPERTY_WT_QUEUE_ATTEMPTS = "wt.queue.attempts";
 	public static final String PROPERTY_WT_AF_EXPIRE = "wt.af.expire";
 	public static final String DISABLE_INC_REPORT = "disable.inc.report";
-
 	public static final String PROPERTY_LIMIT_OHD_STATIONS = "losscode.ohd.limitstations";
-
 	public static final String PROPERTY_LIMIT_OHD_ADDSTATIONS = "losscode.ohd.addstations";
-
+	public static final String PROPERTY_DEFAULT_OHD_SEARCH_STATUS = "default.ohd.search.status";
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 
@@ -46,11 +47,15 @@ public class PropertyBMO {
 	 * @throws HibernateException
 	 */
 	private static List<String> getValues(String keyVal) throws HibernateException {
+		if(propCache.containsKey(keyVal)) {
+			return propCache.get(keyVal);
+		}
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Query q = sess.createQuery("select property.valueStr from com.bagnet.nettracer.tracing.db.Property property where keyStr= :key");
 			q.setString("key", keyVal);
 			List<String> list = q.list();
+			propCache.put(keyVal, list);
 			if (list == null || list.size() == 0) {
 				return null;
 			}
@@ -87,5 +92,9 @@ public class PropertyBMO {
 			logger.warn("error checking boolean property " + property + ", returning false", e);
 			return false;
 		}
+	}
+	
+	public static void resetCache() {
+		propCache.clear();
 	}
 }
