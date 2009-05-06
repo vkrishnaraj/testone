@@ -56,6 +56,8 @@ public class SearchOnHandAction extends Action {
 
 		// check session and user validity
 		TracerUtils.checkSession(session);
+		
+		boolean notClosed = false;
 
 		if (session.getAttribute("user") == null || form == null) {
 			response.sendRedirect("logoff.do");
@@ -75,7 +77,13 @@ public class SearchOnHandAction extends Action {
 			//daform.setAirline(user.getStation().getCompany().getCompanyCode_ID());
 			daform.setCompanycreated_ID(user.getStation().getCompany().getCompanyCode_ID());
 			daform.setCompanycode_ID(user.getStation().getCompany().getCompanyCode_ID());
-			daform.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+			String tmp = PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_OHD_SEARCH_STATUS);
+			if(tmp == null) {
+				daform.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+			}
+			else {
+				daform.setStatus_ID(Integer.parseInt(tmp));
+			}
 			return (mapping.findForward(TracingConstants.SEARCH_ONHAND));
 		}
 
@@ -89,12 +97,16 @@ public class SearchOnHandAction extends Action {
 				int outputType = new Integer(request.getParameter("outputtype")).intValue();
 				String reportFile = null;
 				
-				List countArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, false, true);
+				if(daform.getStatus_ID() == TracingConstants.OHD_STATUS_ACTIVE) {
+					notClosed = true;
+				}
+				
+				List countArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true);
 				int rc = ((Long) countArray.get(0)).intValue();
 				int maxRc = TracerProperties.getMaxReportRows(); 
 									
 				if (rc < maxRc) {
-					List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, false, true);
+					List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, notClosed, true);
 					ReportBMO rbmo = new ReportBMO(request);
 
 					reportFile = ReportBMO.createSearchOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
@@ -125,8 +137,11 @@ public class SearchOnHandAction extends Action {
 
 		List resultlist = null;
 
+		if(daform.getStatus_ID() == TracingConstants.OHD_STATUS_ACTIVE) {
+			notClosed = true;
+		}
 		// get number of records found
-		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, false, true)) == null
+		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true)) == null
 				|| resultlist.size() <= 0) {
 			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
 					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
@@ -166,7 +181,7 @@ public class SearchOnHandAction extends Action {
 
 			//find the paginated on hand bags
 			List searchList = bs.findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage,
-					false, false, true);
+					false, notClosed, true);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {

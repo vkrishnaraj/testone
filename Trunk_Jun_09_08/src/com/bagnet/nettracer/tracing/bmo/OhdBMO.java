@@ -960,7 +960,12 @@ public class OhdBMO {
 
 			if (siDTO.getAirline().length() > 0) s.append(" and itinerary.airline like :airline");
 			
-			if (siDTO.getStatus_ID() > 0) s.append(" and ohd.status.status_ID = :status_ID");
+			if (siDTO.getStatus_ID() > 0) {
+				s.append(" and ohd.status.status_ID = :status_ID");
+			}
+			else if(siDTO.getStatus_ID() == TracingConstants.OHD_STATUS_ACTIVE) {
+				s.append(" and ohd.status.status_ID != :status_ID");
+			}
 
 			if (!iscount) s.append(" order by ohd.OHD_ID");
 			
@@ -988,6 +993,9 @@ public class OhdBMO {
 
 			if (siDTO.getStatus_ID() > 0) {
 				q.setInteger("status_ID", siDTO.getStatus_ID());
+			}
+			else if(siDTO.getStatus_ID() == TracingConstants.OHD_STATUS_ACTIVE) {
+				q.setInteger("status_ID", TracingConstants.OHD_STATUS_CLOSED);
 			}
 			
 			if (siDTO.getRecordlocator().length() > 0) {

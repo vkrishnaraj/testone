@@ -72,6 +72,7 @@ public class CustomQueryAction extends Action {
 		
 		List oStatusList = OHDUtils.getOhdStatusList(user.getCurrentlocale());
 		request.setAttribute("oStatusList", oStatusList);
+		request.setAttribute("statusList", TracerUtils.getStatusList(user.getCurrentlocale(), TracingConstants.AJAX_STATUS_INC));
 
 		IncidentForm theform = new IncidentForm();
 		OnHandForm ohdform = new OnHandForm();
@@ -96,7 +97,13 @@ public class CustomQueryAction extends Action {
 				}
 				
 				if (searchType != null && searchType.equals("5")) {
-					newform.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+					String tmp = PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_OHD_SEARCH_STATUS);
+					if(tmp == null) {
+						newform.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+					}
+					else {
+						newform.setStatus_ID(Integer.parseInt(tmp));
+					}
 				}
 
 				
@@ -139,8 +146,14 @@ public class CustomQueryAction extends Action {
 					}
 				}
 				
-				if (searchType != null && searchType.equals("5")) {
-					daform.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+				if (request.getParameter("changeStatuses").equals("" + TracingConstants.AJAX_STATUS_OHD)) {
+					String tmp = PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_OHD_SEARCH_STATUS);
+					if(tmp == null) {
+						request.setAttribute("ohdStatus", TracingConstants.OHD_STATUS_OPEN);
+					}
+					else {
+						request.setAttribute("ohdStatus", Integer.parseInt(tmp));
+					}
 				}
 
 				

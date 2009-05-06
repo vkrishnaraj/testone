@@ -260,6 +260,8 @@ public class TracingConstants {
 	public final static int OHD_REQUEST_STATUS_DENIED = 8;
 	public final static int OHD_REQUEST_STATUS_FORWARDED = 9;
 	public final static int OHD_STATUS_PROCESSFORDELIVERY = 51;
+	public final static int OHD_STATUS_ALL=0;
+	public final static int OHD_STATUS_ACTIVE=-1;
 	
 	public final static int LOG_NOT_RECEIVED = 0;
 	public final static int LOG_RECEIVED = 1;
