@@ -27,7 +27,7 @@
     <!--
 	var cal1xx = new CalendarPopup();	
 	
-	// show manufacturer
+
 	function showmanu(o) {
 		if (o.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
 			document.getElementById("manu_other").style.visibility = "visible";
@@ -199,40 +199,39 @@ function updatePagination() {
 		ar = (ArrayList)request.getAttribute("oStatusList");
 		%>
 		<bean:message key="colname.ohd_status" />
-		<br />
 		<%
 	} else {
 		ar = (ArrayList)session.getAttribute("statuslist");
 		%>
 		<bean:message key="colname.status" />
-		<br />
 		<%
 	}
 	if (ar != null && ar.size() > 0) {
       int selectedStatusId = ((SearchIncidentForm)request.getAttribute("searchIncidentForm")).getStatus_ID();
 	%>
-      <select name="status_ID" class="dropdown">
-      	<option value="" <% 
-              if (0 == selectedStatusId) { %>
-         selected
-        <% } %>><bean:message key="select.all" /></option>
+	<br />
+	<html:select property="status_ID" >
+		<html:option value="<%= Integer.toString(TracingConstants.OHD_STATUS_ALL) %>"><bean:message key="select.all" /></html:option>
 		<%
-		Status status = null;
-		for (int i=0; i < ar.size(); i++) {
-			status = (Status)ar.get(i);
-      		%>
-    		<option value="<%=status.getStatus_ID()%>" 
-    		<% 
-              if (status.getStatus_ID() == selectedStatusId) { %>
-    		 selected
-    		<% } %>
-    		
-    		><%=status.getDescription()%></option>
-    		<%
-		}
+		if (request.getAttribute("ohd") != null) {
+			%>
+			<html:option value="<%= Integer.toString(TracingConstants.OHD_STATUS_ACTIVE) %>"><bean:message key="select.all_active" /></html:option>
+		<% 
+		} 
 		%>
-		 
-		</select>
+		
+		<%
+		if (request.getAttribute("ohd") != null) {
+			%>
+		<html:options collection="oStatusList" labelProperty="description" property="status_ID"></html:options>
+		<% 
+		}
+		else {
+			%>
+		<html:options collection="statusList" labelProperty="description" property="status_ID"></html:options>
+		<% } %>
+		
+	</html:select>
 	<% } %>
                   </span>
 
@@ -505,7 +504,7 @@ function updatePagination() {
             <SCRIPT LANGUAGE="JavaScript">
               <!--
 
-	// happens after load
+
 
 	if (document.searchIncidentForm.manufacturer_ID.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
 		document.getElementById("manu_other").style.visibility = "visible";

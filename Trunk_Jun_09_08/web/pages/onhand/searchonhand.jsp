@@ -21,7 +21,7 @@
   <SCRIPT LANGUAGE="JavaScript">
     <!--
 	var cal1xx = new CalendarPopup();	
-	//cal1xx.showNavigationDropdowns();
+
 // -->
   </SCRIPT>
   <!-- calendar stuff ends here -->
@@ -87,7 +87,7 @@ function updatePagination() {
           <strong>
             <bean:message key="wildcard" />
           </strong>
-          <font color=red>
+          <font color="red">
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
             <table class="form2" cellspacing="0" cellpadding="0">
@@ -101,8 +101,11 @@ function updatePagination() {
                   <bean:message key="colname.ohd_status" />
                   <br>
                   <html:select property="status_ID" styleClass="dropdown">
-                    <html:option value="">
+                    <html:option value="<%= Integer.toString(TracingConstants.OHD_STATUS_ALL) %>">
                       <bean:message key="select.all" />
+                    </html:option>
+                    <html:option value="<%= Integer.toString(TracingConstants.OHD_STATUS_ACTIVE) %>">
+                      <bean:message key="select.all_active" />
                     </html:option>
                     <html:options collection="oStatusList" property="status_ID" labelProperty="description" />
                   </html:select>
@@ -113,7 +116,7 @@ function updatePagination() {
                   <html:text property="ticketnumber" size="14" maxlength="13" styleClass="textfield" />
                 </td>
                 
-                <td nowrap>
+                <td nowrap="nowrap">
                   <bean:message key="colname.flightnum" />
                   <br>
                   <html:select property="airline" styleClass="dropdown">
@@ -133,7 +136,7 @@ function updatePagination() {
                   <br>
                   <html:text property="lastname" size="25" maxlength="25" styleClass="textfield" />
                 </td>
-                <td colspan=2>
+                <td colspan="2">
                   <bean:message key="colname.first_name" />
                   <br>
                   <html:text property="firstname" size="25" maxlength="25" styleClass="textfield" />
@@ -187,14 +190,14 @@ function updatePagination() {
                 </td>
               </tr>
               <tr>
-                <td colspan=2>
+                <td colspan="2">
                   <bean:message key="colname.date_range" />
                   (
                   <%= a.getDateformat().getFormat() %>)
                   <br>
                   <html:text property="s_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
                   <html:text property="e_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-                <td colspan=2>
+                <td colspan="2">
                   <bean:message key="colname.ohd_create_agent" />
                   <br>
                   <html:text property="agent" size="20" maxlength="20" styleClass="textfield" />
@@ -227,13 +230,13 @@ function updatePagination() {
             <div id="pageheaderright">
               <select name="outputtype">
                 <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
-                  <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
+                  <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
                 <% } %>
                 <option value="1"><bean:message key="radio.html" /></option>
               </select>
               <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
               <logic:present name="reportfile" scope="request">
-                <script language=javascript>
+                <script language="javascript">
                   <!--
                     openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
                   //-->
@@ -431,7 +434,7 @@ function updatePagination() {
               </tr>
               <!-- end pagination -->
             </table>
-            <script language=javascript>
+            <script language="javascript">
               <!--
   document.location.href="#result";
   //-->
