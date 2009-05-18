@@ -10,7 +10,8 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <script language="javascript">
+  <%@page import="com.bagnet.nettracer.tracing.db.OHDRequest"%>
+<script language="javascript">
     
 function goprev() {
   o = document.viewCreatedRequestForm;
@@ -122,6 +123,9 @@ function updatePagination() {
               <td>
                 <b><bean:message key="header.request" /></b>
               </td>
+              <td>
+                <b><bean:message key="header.action" /></b>
+              </td>
             </tr>
             <logic:present name="requestList" scope="request">
               <logic:iterate id="req" name="requestList">
@@ -158,6 +162,12 @@ function updatePagination() {
                   <td>
                     <A HREF="request_on_hand.do?showRequest=1&request_ID=<bean:write name="req" property="ohd_request_id"/>"><bean:message key="details" /></a>
                   </td>
+                  <td>
+                    <% if (((OHDRequest)req).getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) { %>
+                        <a href="viewCreatedROH.do?cancelReq=1&request_ID=<bean:write name="req" property="ohd_request_id"/>" ><bean:message key="link.cancelRequest" /></a>
+                      <% }%>&nbsp;
+                  </td>
+
                 </tr>
               </logic:iterate>
               

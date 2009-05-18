@@ -103,7 +103,7 @@
         }
       }
       else if (currentElementName.indexOf("[0].state_ID") != -1) {  
-        // check country
+        
         var pos = currentElementName.indexOf(".");
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
   

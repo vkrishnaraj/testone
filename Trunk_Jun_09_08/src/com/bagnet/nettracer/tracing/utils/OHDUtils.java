@@ -18,7 +18,6 @@ import java.util.TimeZone;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
@@ -35,12 +34,14 @@ import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.ViewCreatedRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
+import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 
 /**
  * @author Administrator
@@ -606,6 +607,7 @@ public class OHDUtils {
 				if (log.getOhd_request_id() != 0) {
 					OHDRequest req = (OHDRequest) sess.load(OHDRequest.class, log.getOhd_request_id());
 					req.setStatus(openStatus);
+					sess.update(req);
 				}
 			
 			}
@@ -1431,6 +1433,78 @@ public class OHDUtils {
 			return list.get(0);
 		else
 			return null;
+	}
+
+	public static void cancelRequest(String request_ID, Agent user) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		
+		Status cancelledStatus = new Status();
+		cancelledStatus.setStatus_ID(TracingConstants.OHD_REQUEST_CANCELLED);
+		
+		Transaction t = null;
+		try {
+			t = sess.beginTransaction();	
+			OHDRequest request = (OHDRequest) sess.load(OHDRequest.class, Integer.parseInt(request_ID));
+			request.setStatus(cancelledStatus);
+			sess.save(request);
+			
+			OHD ohd = request.getOhd();
+			
+			Remark r = new Remark();
+			MessageResources messages = MessageResources
+			.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+			
+			r.setAgent(user);
+			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime
+					.getGMTDate()));
+			r.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()),
+					"bagRequestCancelMessage")
+					+ " "
+					+ user.getStation().getCompany().getCompanyCode_ID()
+					+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS")
+					+ " "
+					+ user.getStation().getStationcode() + " station.");
+			r.setRemarktype(TracingConstants.REMARK_REGULAR);
+			r.setOhd(ohd);
+			
+			if (ohd.getRemarks() == null) 
+				ohd.setRemarks(new HashSet());
+			ohd.getRemarks().add(r);
+
+			sess.update(ohd);
+			t.commit();
+			if (user.getStation().getCompany().getVariable().getAudit_ohd() == 1) {
+				Audit_OHD audit_dto = AuditOHDUtils.getAuditOHD(ohd, user);
+				if (audit_dto != null) {
+					t = sess.beginTransaction();
+					sess.save(audit_dto);
+					t.commit();
+				}
+			}
+
+			sess.close();
+			sess = null;
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	

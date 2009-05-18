@@ -56,34 +56,13 @@ public class ViewCreatedRequests extends Action {
 		} else {
 			agent_station = user.getStation();
 		}
-
-		List ohd_request_status_list = new ArrayList();
-
-		Status s = new Status();
-		s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-		s.setLocale(user.getCurrentlocale());
-		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_STATUS_OPEN));
-		ohd_request_status_list.add(s);
-
-		s = new Status();
-		s.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
-		s.setLocale(user.getCurrentlocale());
-		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_STATUS_CLOSED));
-		ohd_request_status_list.add(s);
-
-		s = new Status();
-		s.setStatus_ID(TracingConstants.OHD_REQUEST_STATUS_FORWARDED);
-		s.setLocale(user.getCurrentlocale());
-		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_REQUEST_STATUS_FORWARDED));
-		ohd_request_status_list.add(s);
-
-		s = new Status();
-		s.setStatus_ID(TracingConstants.OHD_REQUEST_STATUS_DENIED);
-		s.setLocale(user.getCurrentlocale());
-		//s.setDescription(OHDUtils.getStatusDesc(TracingConstants.OHD_REQUEST_STATUS_DENIED));
-		ohd_request_status_list.add(s);
-
+		
+		List ohd_request_status_list = getRequestStatusList(user);
 		request.setAttribute("ohd_request_status_list", ohd_request_status_list);
+		
+		if (request.getParameter("cancelReq") != null && request.getParameter("request_ID") != null) {
+			OHDUtils.cancelRequest(request.getParameter("request_ID"), user);
+		}
 		
 		ViewCreatedRequestForm theform =(ViewCreatedRequestForm) form;
 		if (theform != null) {
@@ -148,5 +127,36 @@ public class ViewCreatedRequests extends Action {
 		}
 
 		return mapping.findForward(TracingConstants.VIEW_CREATED_REQUEST_LIST);
+	}
+
+	private List getRequestStatusList(Agent user) {
+		List ohd_request_status_list = new ArrayList();
+
+		Status s = new Status();
+		s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+		s.setLocale(user.getCurrentlocale());
+		ohd_request_status_list.add(s);
+
+		s = new Status();
+		s.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+		s.setLocale(user.getCurrentlocale());
+		ohd_request_status_list.add(s);
+
+		s = new Status();
+		s.setStatus_ID(TracingConstants.OHD_REQUEST_STATUS_FORWARDED);
+		s.setLocale(user.getCurrentlocale());
+		ohd_request_status_list.add(s);
+
+		s = new Status();
+		s.setStatus_ID(TracingConstants.OHD_REQUEST_STATUS_DENIED);
+		s.setLocale(user.getCurrentlocale());
+		ohd_request_status_list.add(s);
+		
+		s = new Status();
+		s.setStatus_ID(TracingConstants.OHD_REQUEST_CANCELLED);
+		s.setLocale(user.getCurrentlocale());
+		ohd_request_status_list.add(s);
+		
+		return ohd_request_status_list;
 	}
 }
