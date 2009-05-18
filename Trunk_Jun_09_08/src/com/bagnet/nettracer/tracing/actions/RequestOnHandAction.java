@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -90,14 +91,34 @@ public class RequestOnHandAction extends Action {
 					Remark r = new Remark();
 					r.setAgent(user);
 					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-					r.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyMessage") + " "
-							+ user.getStation().getCompany().getCompanyCode_ID() + messages.getMessage(new Locale(user.getCurrentlocale()), "aposS") + " "
-							+ user.getStation().getStationcode() + " station.");
+					String remarkText = messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyMessage") + " "
+					+ user.getStation().getCompany().getCompanyCode_ID() + messages.getMessage(new Locale(user.getCurrentlocale()), "aposS") + " "
+					+ user.getStation().getStationcode() + " station.";
+					
+					if (reason != null && reason.trim().length() > 0) {
+						remarkText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " ";
+					}
+						
+					r.setRemarktext(remarkText);
+					
+
 					r.setOhd(ohd);
 					Set remarks = ohd.getRemarks();
 					remarks.add(r);
 					obmo.insertOHD(ohd, user);
 					
+					String msgText = messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenySendMessage1") + " "
+					+ oReq.getOhd().getOHD_ID() + " "
+					+ messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenySendMessage2") + " "
+					+ user.getStation().getCompany().getCompanyCode_ID() + messages.getMessage(new Locale(user.getCurrentlocale()), "aposS") + " "
+					+ user.getStation().getStationcode() + " " + TracerUtils.getText("remarkTextStation", user);
+					 
+					if (msgText != null && reason.trim().length() > 0) {
+						remarkText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " ";
+					}
+					String subject = TracerUtils.getText("bagrequestDenyMsgSubject" + ": " + oReq.getOhd().getOHD_ID(), user);
+					
+					MessageUtils.sendmessage(oReq.getRequestForStation(), subject, user, msgText, oReq.getIncident_ID(), oReq.getOhd().getOHD_ID());
 				}
 				response.sendRedirect("viewROH.do");
 				return null;
