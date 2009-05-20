@@ -36,7 +36,7 @@
                   :
                 </td>
                 <td>
-                  <A HREF="request_on_hand.do?request_ID=<bean:write name="forwardOnHandForm" property="bag_request_id"/>"><bean:message key="view" /></a>
+                  <A HREF="request_on_hand.do?showRequest=1&request_ID=<bean:write name="forwardOnHandForm" property="bag_request_id"/>"><bean:message key="view" /></a>
                 </td>
               </tr>
             </logic:notEmpty>

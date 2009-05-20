@@ -14,7 +14,8 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 "org.apache.struts.action.LOCALE");
 %>
   
-  <script language="javascript">
+  <%@page import="com.bagnet.nettracer.tracing.bmo.RequestOhdBMO"%>
+<script language="javascript">
     
 function goprev() {
   o = document.viewIncomingRequestForm;
@@ -181,6 +182,9 @@ function sortIncomingBags(sortOrder) {
                 <b><a href="#" onclick="sortIncomingBags('ohd');"><bean:message key="header.ohd" /></a></b>
               </td>
               <td>
+                <b><bean:message key="colname.ld_report_num" /></b>
+              </td>
+              <td>
                 <b><a href="#" onclick="sortIncomingBags('expedite');"><bean:message key="header.expedite" /></a></b>
               </td>
               <td>
@@ -227,6 +231,16 @@ function sortIncomingBags(sortOrder) {
                   </logic:notPresent>
                   <td>
                     <a href="addOnHandBag.do?ohd_ID=<bean:write name="forwardLog" property="ohd.OHD_ID"/>"><bean:write name="forwardLog" property="ohd.OHD_ID" /></a>
+                  </td>
+                  <td>
+                    <%
+                    String incidentId = RequestOhdBMO.getOhdRequestIncidentId(forwardLog.ohd_request_id);
+                    if (incidentId != null) {
+                    %>
+                      <a href="searchIncident.do?incident=<%=incidentId %>"><%=incidentId %></a>
+                    <%
+                    }
+                    %>&nbsp;
                   </td>
                   <td>
                     <logic:empty name="forwardLog" property="expeditenum">

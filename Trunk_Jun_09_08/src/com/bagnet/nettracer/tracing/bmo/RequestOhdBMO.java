@@ -41,5 +41,33 @@ public class RequestOhdBMO {
 			}
 		}
 	}
+	
+	public static String getOhdRequestIncidentId(int requestId) {
+		if (requestId == 0) {
+			return null;
+		}
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery("select incident_ID from OHDRequest where ohd_request_id = :requestId");
+			q.setParameter("requestId", requestId);
+			List<String> result = q.list();
+			if(result == null || result.size() < 1) {
+				return null;
+			}
+			return result.get(0);
+		} catch (Exception e) {
+			logger.error("Unable to determine if OHDRequest exists", e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.warn("Unable to close session after (attempting?) retrieving OHDRequest", e);
+				}
+			}
+		}
+	}
 
 }
