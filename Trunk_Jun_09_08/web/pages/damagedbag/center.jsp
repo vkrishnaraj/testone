@@ -286,7 +286,7 @@ function disableButton(aButton) {
               <td align="center" valign="top"><br>
 		<html:hidden property="save" value="" disabled="true" />
               <html:button property="saveButton" styleId="button"
-		      onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+		      onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.save" />
                 </logic:notEqual>
