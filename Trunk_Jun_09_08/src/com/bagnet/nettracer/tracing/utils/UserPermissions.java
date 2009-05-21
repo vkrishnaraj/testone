@@ -19,6 +19,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
@@ -56,7 +57,7 @@ public class UserPermissions {
 			sql.append(" order by policy.component.sort_group, policy.component.sort_order ");
 
 			Query q = sess.createQuery(sql.toString());
-			q.setInteger("groupId", agent.getGroup().getUserGroup_ID());
+			q.setInteger("groupId", agent.getUsergroup_id());
 
 			List list = q.list();
 			Object[] o = null;
@@ -73,8 +74,7 @@ public class UserPermissions {
 	
 					
 					permissionMap.put(plicy.getComponent().getComponent_Name(), childMap);
-					List childList = getChildLinks(plicy.getComponent().getComponent_ID(), agent.getGroup()
-							.getUserGroup_ID());
+					List childList = getChildLinks(plicy.getComponent().getComponent_ID(), agent.getUsergroup_id());
 					for (Iterator j = childList.iterator(); j.hasNext();) {
 						/*
 						GroupComponentPolicy plicy2 = (GroupComponentPolicy) j.next();
@@ -95,8 +95,7 @@ public class UserPermissions {
 	
 					
 					permissionMap.put(plicy.getComponent().getComponent_Name(), childMap);
-					List childList = getChildLinks(plicy.getComponent().getComponent_ID(), agent.getGroup()
-							.getUserGroup_ID());
+					List childList = getChildLinks(plicy.getComponent().getComponent_ID(), agent.getUsergroup_id());
 					for (Iterator j = childList.iterator(); j.hasNext();) {
 						/*
 						GroupComponentPolicy plicy2 = (GroupComponentPolicy) j.next();
@@ -149,7 +148,7 @@ public class UserPermissions {
 			sql.append(" order by policy.component.sort_group, policy.component.sort_order ");
 
 			Query q = sess.createQuery(sql.toString());
-			q.setInteger("groupId", agent.getGroup().getUserGroup_ID());
+			q.setInteger("groupId", agent.getUsergroup_id());
 
 			list = q.list();
 

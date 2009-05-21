@@ -58,7 +58,7 @@ public final class ManagePermissions extends Action {
 
 		String groupID = "";
 		if (request.getParameter("groupId") != null) groupID = request.getParameter("groupId");
-		else groupID = "" + user.getGroup().getUserGroup_ID();
+		else groupID = "" + user.getUsergroup_id();
 
 		UserGroup group = AdminUtils.getGroup(groupID);
 

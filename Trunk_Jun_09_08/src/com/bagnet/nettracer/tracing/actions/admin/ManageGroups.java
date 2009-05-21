@@ -133,7 +133,7 @@ public final class ManageGroups extends Action {
 
 				for (Iterator i = agents.iterator(); i.hasNext();) {
 					Agent a = (Agent) i.next();
-					if (a.getGroup().getUserGroup_ID() == group
+					if (a.getUsergroup_id() == group
 							.getUserGroup_ID()) {
 						// check if it has been selected. if so.leave as is
 						if (selectedAgents.get("" + a.getAgent_ID()) == null) {

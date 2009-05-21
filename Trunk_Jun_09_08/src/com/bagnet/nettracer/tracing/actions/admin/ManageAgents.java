@@ -97,7 +97,7 @@ public final class ManageAgents extends Action {
 			dForm.set("station_id", "" + a.getStation().getStation_ID());
 			companyCode = a.getStation().getCompany().getCompanyCode_ID();
 			dForm.set("companyCode", "" + a.getStation().getCompany().getCompanyCode_ID());
-			dForm.set("group_id", "" + a.getGroup().getUserGroup_ID());
+			dForm.set("group_id", "" + a.getUsergroup_id());
 			dForm.set("fname", "" + a.getFirstname());
 			dForm.set("mname", "" + a.getMname());
 			dForm.set("lname", "" + a.getLastname());

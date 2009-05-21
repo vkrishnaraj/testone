@@ -210,7 +210,12 @@ public class LogonAction extends Action {
 	private void taskManagerSetup(HttpSession session, HttpServletRequest request) {
 
 		Agent agent = (Agent) session.getAttribute("user");
-		ArrayList<GroupComponentPolicy> taskList = UserPermissions.getTaskManagerComponents(agent);
+		
+		ArrayList<GroupComponentPolicy> taskList = (ArrayList<GroupComponentPolicy>) session.getAttribute("userTaskList");
+		if (taskList == null) {
+			taskList = UserPermissions.getTaskManagerComponents(agent);
+			session.setAttribute("userTaskList", taskList);
+		}
 		
 
 		//	check if the cbro agent

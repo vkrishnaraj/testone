@@ -374,7 +374,7 @@ public class IncidentUtils {
 			}
 
 			StringBuffer sql = new StringBuffer();
-			sql.append("from " + "com.bagnet.nettracer.tracing.db.Incident incident where 1=1 ");
+			sql.append("select count(incident.incident_ID) from " + "com.bagnet.nettracer.tracing.db.Incident incident where 1=1 ");
 			sql.append(" and incident.stationassigned.company.companyCode_ID = :company");
 			sql.append(" and incident.stationassigned.stationcode = :stationcode");
 			sql.append(" and incident.status.status_ID <> :status_ID");
@@ -434,12 +434,11 @@ public class IncidentUtils {
 			}
 
 			List list = q.list();
-			/*
-			 * if (list.size() > 0) { return ((Long) list.get(0)).intValue(); }
-			 * else { return 0; }
-			 */
-			if (list != null) return list.size();
-			else return -1;
+			if (list.size() > 0) {
+				return ((Long) list.get(0)).intValue();
+			} else {
+				return 0;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;

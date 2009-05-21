@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.dto.ComponentDTO;
 import com.bagnet.nettracer.tracing.forms.MaintainCompanyForm;
 import com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm;
 import com.bagnet.nettracer.tracing.forms.UserActivityForm;
+import com.bagnet.nettracer.tracing.performance.Cache;
 
 /**
  * @author Ankur Gupta
@@ -320,11 +321,17 @@ public class AdminUtils {
 	 * @return TimeZone or null if exception or nothing found.
 	 */
 	public static TimeZone getTimeZoneById(String id) {
+		if (Cache.TIMEZONES.contains(id)) {
+			return (TimeZone) Cache.TIMEZONES.retrieve(id);
+		}
+		
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(TimeZone.class).add(Expression.eq("id", new Integer(id)));
-			return (TimeZone) cri.list().get(0);
+			TimeZone retVal = (TimeZone) cri.list().get(0);
+			Cache.TIMEZONES.insert(id, retVal);
+			return retVal;
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1459,7 +1466,7 @@ public class AdminUtils {
 				SystemComponent component = (SystemComponent) i.next();
 				//If the component exists in the parent group id..
 				if (user.getStation().getCompany().getCompanyCode_ID().equals(TracingConstants.OWENS_GROUP)
-						|| AdminUtils.checkIfPermissionExists(user.getGroup().getUserGroup_ID(), component.getComponent_ID())) {
+						|| AdminUtils.checkIfPermissionExists(user.getUsergroup_id(), component.getComponent_ID())) {
 
 					//do for parent component.
 					boolean isChecked = true;
@@ -1479,7 +1486,7 @@ public class AdminUtils {
 					for (Iterator j = childList.iterator(); j.hasNext();) {
 						SystemComponent component2 = (SystemComponent) j.next();
 						if (user.getStation().getCompany().getCompanyCode_ID().equals(TracingConstants.OWENS_GROUP)
-								|| AdminUtils.checkIfPermissionExists(user.getGroup().getUserGroup_ID(), component2.getComponent_ID())) {
+								|| AdminUtils.checkIfPermissionExists(user.getUsergroup_id(), component2.getComponent_ID())) {
 
 							//do for parent component.
 							boolean isChecked2 = true;

@@ -50,6 +50,7 @@ public class Agent implements Serializable {
 	private boolean web_enabled;
 	private boolean ws_enabled;
 	private int max_ws_sessions;
+	private UserGroup cachedGroup = null;
 	
 	
 	
@@ -366,6 +367,8 @@ public class Agent implements Serializable {
 	public int getUsergroup_id() {
 		return usergroup_id;
 	}
+	
+	
 
 	/**
 	 * @param group
@@ -373,6 +376,7 @@ public class Agent implements Serializable {
 	 */
 	public void setUsergroup_id(int usergroup_id) {
 		this.usergroup_id = usergroup_id;
+		cachedGroup = null;
 	}
 	
 	
@@ -380,7 +384,10 @@ public class Agent implements Serializable {
 	 * @return Returns the group.
 	 */
 	public UserGroup getGroup() {
-		return UsergroupBMO.getUsergroup(this.usergroup_id);
+		if (cachedGroup != null && cachedGroup.getUserGroup_ID() == this.usergroup_id) {
+			return cachedGroup;
+		}
+		return cachedGroup = UsergroupBMO.getUsergroup(this.usergroup_id);
 	}
 
 	/**
@@ -570,7 +577,6 @@ public class Agent implements Serializable {
 				+ this.getDefaultlocale() + " clocale=" + this.getCurrentlocale() + " dcure="
 				+ this.getDefaultcurrency());
 		sb.append("\n\t " + this.getStation());
-		sb.append("\n\t " + this.getGroup());
 		return sb.toString();
 	}
 

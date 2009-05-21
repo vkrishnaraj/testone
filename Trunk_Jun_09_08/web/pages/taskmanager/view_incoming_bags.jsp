@@ -235,6 +235,10 @@ function sortIncomingBags(sortOrder) {
                   <td>
                     <%
                     String incidentId = RequestOhdBMO.getOhdRequestIncidentId(forwardLog.ohd_request_id);
+                    if (incidentId == null && forwardLog.getOhd().getMatched_incident() != null && forwardLog.getOhd().getMatched_incident().trim().length() > 0) {
+                      incidentId = forwardLog.getOhd().getMatched_incident();
+                    }
+                    
                     if (incidentId != null) {
                     %>
                       <a href="searchIncident.do?incident=<%=incidentId %>"><%=incidentId %></a>
