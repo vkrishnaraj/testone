@@ -9,6 +9,7 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -53,6 +54,7 @@ public class BDO implements Serializable {
 	private String delivery_integration_id;
 	private int integrationDelivercompany_ID;
 	private String delivery_comments;
+	private Set expensePayouts;
 	
 	
 	/**
@@ -445,5 +447,32 @@ public class BDO implements Serializable {
 	 */
 	public void setDelivery_comments(String delivery_comments) {
 		this.delivery_comments = delivery_comments;
+	}
+
+	/**
+	 * @return Returns the items.
+	 * 
+	 * @hibernate.set cascade="all" inverse="true"
+	 * @hibernate.key column="bdo_id"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.ExpensePayout"
+	 */
+	public Set getExpensePayouts() {
+		return expensePayouts;
+	}
+
+	public void setExpensePayouts(Set expensePayouts) {
+		this.expensePayouts = expensePayouts;
+	}
+
+	public ExpensePayout getExpensePayout() {
+		if (expensePayouts == null || expensePayouts.size() == 0) {
+			return null;
+		}
+		return (ExpensePayout) expensePayouts.toArray()[0];
+	}
+
+	public void setExpensePayout(ExpensePayout createNewBdoPayout) {
+		expensePayouts = new HashSet();
+		expensePayouts.add(createNewBdoPayout);
 	}
 }

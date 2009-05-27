@@ -150,13 +150,13 @@ function toggledc(o) {
               <br>
               <html:text property="companycode_ID" size="2" styleClass="textfield" readonly="true" />
             </td>
-          </tr>
-          <tr>
-          	<td nowrap>
+            <td nowrap>
               <bean:message key="colname.agent" />
               <br>
               <html:text property="agentinit" size="10" styleClass="textfield" readonly="true" />
             </td>
+          </tr>
+          <tr>
             <td nowrap>
               <bean:message key="colname.delivercompany_nobr" />
               <input type="hidden" name="changeservice" value="">
@@ -184,10 +184,20 @@ function toggledc(o) {
               <bean:message key="colname.deliverydate.req" />
               (<%= a.getDateformat().getFormat() %>)
               <br />
-              <html:text property="dispdeliverydate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.dispdeliverydate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+              <html:text property="dispdeliverydate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.dispdeliverydate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+            </td>
+            <td nowrap colspan="2">
+              <bean:message key="colname.bdo.cost" />
+              <br>
+                <html:select property="currency" styleClass="dropdown">
+                  <html:option value=""><bean:message key="select.please_select" /></html:option>
+                  <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
+                </html:select>&nbsp;
+                <html:text property="cost" size="6" maxlength="10" styleClass="textfield" />
+            </td>
           </tr>
           <tr>
-            <td colspan="4">
+            <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
               <br />
               <html:textarea rows="10" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
@@ -462,7 +472,7 @@ function toggledc(o) {
             <td valign=top>
               <bean:message key="colname.bag_status" />
               <br>
-              <input type="text" name = "theitem[<%=i %>].status.description" value="<bean:message name="ohd" property="status.key" />" size="25" maxlength="25" styleClass="textfield" readonly="true"/>
+              <input type="text" name = "theitem[<%=i %>].status.description" value="<bean:message name="theitem" property="status.key" />" size="25" maxlength="25" class="textfield" readonly="true"/>
             </td>
             <td valign=top>
               <bean:message key="colname.claimnum" />

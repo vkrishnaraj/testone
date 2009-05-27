@@ -60,7 +60,6 @@
     returnValue = validateBDO(form);
     if (returnValue == false) { return returnValue; }
 
-
     return true;
   }
   

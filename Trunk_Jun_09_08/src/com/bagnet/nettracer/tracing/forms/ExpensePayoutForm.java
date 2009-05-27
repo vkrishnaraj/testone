@@ -33,6 +33,7 @@ public class ExpensePayoutForm extends ActionForm {
 	private double incidentalAmountClaimed;
 	private Date voucherExpirationDate;
 	private double creditCardRefund;
+	private String bdo_id;
 	
 	//hidden
 	private int expensepayout_ID;
@@ -368,5 +369,11 @@ public class ExpensePayoutForm extends ActionForm {
 	}
 	public void setUpdateRemarkOnly(String updateRemarkOnly) {
 		this.updateRemarkOnly = updateRemarkOnly;
+	}
+	public String getBdo_id() {
+		return bdo_id;
+	}
+	public void setBdo_id(String bdo_id) {
+		this.bdo_id = bdo_id;
 	}
 }

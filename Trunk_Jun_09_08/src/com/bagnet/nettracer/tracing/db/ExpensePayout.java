@@ -7,11 +7,8 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -31,7 +28,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -44,9 +40,17 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 public class ExpensePayout implements Serializable {
 
 	@ManyToOne
-	@JoinColumn(name = "incident_ID", nullable = false)
+	@JoinColumn(name = "incident_ID", nullable = true)
 	private Incident incident;
+	
+	@ManyToOne
+	@JoinColumn(name = "bdo_id", nullable = true)
+	private BDO bdo;
 
+	@ManyToOne
+	@JoinColumn(name = "ohd_id", nullable = true)
+	private OHD ohd;
+	
 	@Id
 	@GeneratedValue
 	private int expensepayout_ID;
@@ -428,6 +432,22 @@ public class ExpensePayout implements Serializable {
 
 	public void setIncidentalAmountClaimed(double incidentalAmountClaimed) {
 		this.incidentalAmountClaimed = incidentalAmountClaimed;
+	}
+
+	public BDO getBdo() {
+		return bdo;
+	}
+
+	public void setBdo(BDO bdo) {
+		this.bdo = bdo;
+	}
+
+	public OHD getOhd() {
+		return ohd;
+	}
+
+	public void setOhd(OHD ohd) {
+		this.ohd = ohd;
 	}
 
 }

@@ -17,6 +17,7 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.SearchExpenseForm"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -250,9 +251,9 @@ function updatePagination() {
                       if (canApprove) {
 %>
                     <td>
-                      <logic:equal name="expenselist" property="status.status_ID" value="<%=TracingConstants.EXPENSEPAYOUT_STATUS_PENDING%>">
+                      <c:if test="${expenselist.status.status_ID == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING}">
                         <input type="checkbox" name="code" value="<bean:write name="expenselist" property="expensepayout_ID"/>">
-                      </logic:equal>
+                      </c:if>
                       &nbsp;
                     </td>
                     <%

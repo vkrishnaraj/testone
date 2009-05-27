@@ -51,6 +51,8 @@ public final class BDOForm extends ValidatorForm {
 	private TimeZone _TIMEZONE;
 	private String delivery_comments;
 	private String delivery_integration_id;
+	private String currency;
+	private String cost;
 	
 	
     private String wt_id;
@@ -409,5 +411,22 @@ public final class BDOForm extends ValidatorForm {
 	public void setDelivery_comments(String delivery_comments) {
 		this.delivery_comments = delivery_comments;
 	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
+	}
+
 
 }

@@ -171,13 +171,17 @@
 										<bean:message key="claim.other" />
 									</html:option>
 								</html:select>
+                                <br />
+                                <c:if test="${!empty expensePayoutForm.bdo_id}">
+                                  <a href="bdo.do?bdo_id=<c:out value="${expensePayoutForm.bdo_id}"/>"><c:out value="${expensePayoutForm.bdo_id}"/></a>
+                                </c:if>
 							</td>
 						</tr>
 						<jsp:include page="/pages/includes/payment_types_incl.jsp" />
 
 
 						<tr>
-							<td colspan=3>
+							<td colspan="3">
 								<bean:message key="agent.comments" />
 								<br />
 								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;<fmt:formatDate value="${comment.createDate}" />&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
@@ -187,7 +191,7 @@
 					if (canEdit || canApprove || canPay) {
 						%>
 						<tr>
-							<td colspan=3>
+							<td colspan="3">
 								<bean:message key="colname.new.comments" />
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"

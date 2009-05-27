@@ -7,6 +7,9 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,12 +23,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.Comment;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.ExpenseType;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
+import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -72,20 +82,6 @@ public class BDOAction extends Action {
 		} else {
 
 			request.setAttribute("show_word_for", "1"); // show "BDO for" in
-			// header
-			// String wt_id = "";
-			// -------------------------------------------------------------------------
-			/**
-			 * if (theform.getOhd().getWt_id() != null){ wt_id =
-			 * theform.getOhd().getWt_id();
-			 * 
-			 * request.setAttribute("wt_id", "a"); } if
-			 * (theform.getIncident().getWt_id() != null){ wt_id =
-			 * theform.getIncident().getWt_id();
-			 * 
-			 * request.setAttribute("wt_id", "b"); }
-			 */
-			// List list=new ArrayList();
 			
 			String bdo_id2 = request.getParameter("bdo_id");
 
@@ -120,7 +116,6 @@ public class BDOAction extends Action {
 					}
 
 				}
-				// BDOForm theform2 = (BDOForm) form;
 			} 
 		}
 
@@ -200,6 +195,7 @@ public class BDOAction extends Action {
 			BDO bdo = null;
 			try {
 				bdo = BDOUtils.createBdo(theform, bagchosen);
+				bdo.setExpensePayout(createNewBdoPayout(theform, user, bdo));
 				boolean success = BDOUtils.insertBDO(bdo, user);
 				
 				if (!success) {
@@ -310,9 +306,49 @@ public class BDOAction extends Action {
 			}
 		}
 		
-		//IncidentUtils.promptToCloseFile(incident, request);
 		IncidentUtils.promptToCloseFile(incident, request);
 
 		return (mapping.findForward(TracingConstants.BDO_MAIN));
+	}
+	
+	protected ExpensePayout createNewBdoPayout(BDOForm theform, Agent user, BDO bdo) throws Exception {
+		ExpensePayout ep = null;
+		try {
+			if (theform.getCost() != null && theform.getCost().length() > 0) {
+				ep = new ExpensePayout();
+				
+				ep.setAgent(user);	
+				ep.setCurrency(Currency.getInstance(theform.getCurrency()));
+				ep.setCreatedate(new Date());
+				
+				Status s = new Status();
+				s.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
+				ep.setStatus(s);
+				
+				ep.setApproval_date(new Date());
+				
+				ep.setCheckamt(Double.parseDouble(theform.getCost()));
+				
+				ep.setExpenselocation(user.getStation());
+		
+				ExpenseType et = new ExpenseType();
+				et.setExpensetype_ID(TracingConstants.EXPENSEPAYOUT_DELIVERY);
+				ep.setExpensetype(et);
+				ep.setPaycode(TracingConstants.EXPENSEPAYOUT_DELIVERY_CODE);
+						
+				ep.setBdo(bdo);
+				if (bdo.getIncident() != null) {
+					ep.setIncident(bdo.getIncident());
+				} else if (bdo.getOhd() != null) {
+					ep.setOhd(bdo.getOhd());
+				}
+				
+				ep.setStation(user.getStation());
+			}
+		} catch (NumberFormatException e) {
+			return null;
+		}
+
+		return ep;
 	}
 }

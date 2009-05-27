@@ -123,7 +123,9 @@ public abstract class BaseExpenseAction extends CheckedAction {
 
 	protected void populateForm(ExpensePayoutForm epform, ExpensePayout ep, Agent user, HttpServletRequest request) {
 		BeanUtils.copyProperties(ep, epform);
-
+		if (ep.getBdo() != null) {
+			epform.setBdo_id(ep.getBdo().getBDO_ID_ref());
+		}
 		epform.setCreateStation(ep.getStation().getStationcode());
 		epform.setCreateUser(ep.getAgent().getUsername());
 		epform.setDateFormat(user.getDateformat().getFormat());

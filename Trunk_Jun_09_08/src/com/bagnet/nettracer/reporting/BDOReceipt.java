@@ -120,7 +120,8 @@ public class BDOReceipt {
 				if (dc != null)
 					brd.setVendor(dc.getName());
 
-				brd.setCharges("");
+				
+				brd.setCharges(theform.getCurrency() + " " + theform.getCost());
 				al.add(brd);
 			}
 

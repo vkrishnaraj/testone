@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -41,6 +40,7 @@ import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -49,7 +49,6 @@ import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.SystemPermission;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.SearchBDOForm;
@@ -241,6 +240,11 @@ public class BDOUtils {
 
 			theform.setPassengerlist(new ArrayList(bdo.getPassengers()));
 			theform.setItemlist(new ArrayList(bdo.getItems()));
+			if (bdo.getExpensePayout() != null) {
+				 
+				theform.setCost(Double.toString(bdo.getExpensePayout().getCheckamt()));
+				theform.setCurrency(bdo.getExpensePayout().getCurrency_ID());
+			}
 
 			// loop through and check to see if bag is in station or not
 			Item item = null;
@@ -727,6 +731,18 @@ public class BDOUtils {
 				bdo.setDelivery_integration_type(oldBdo.getDelivery_integration_type());
 				bdo.setIntegrationDelivercompany_ID(oldBdo
 						.getIntegrationDelivercompany_ID());
+				
+				ExpensePayout newEp = bdo.getExpensePayout();
+				ExpensePayout oldEp = oldBdo.getExpensePayout();
+				
+				if (oldEp == null) {
+					bdo.setExpensePayout(newEp);
+				} else {
+					oldEp.setCurrency(newEp.getCurrency());
+					oldEp.setCheckamt(newEp.getCheckamt());
+					bdo.setExpensePayout(oldEp);
+				}
+				
 			}
 			
 
@@ -761,7 +777,9 @@ public class BDOUtils {
 					sess.save(rem);
 				}
 			}
+			
 			sess.saveOrUpdate(bdo);
+			
 			t.commit();
 
 			String formateddatetime = DateUtils.formatDate(TracerDateTime

@@ -228,8 +228,12 @@ public class TracingConstants {
 	public final static int LEG_T_STATION = 2; // transfer station
 	public final static int LEG_E_STATION = 3; // terminating station
 
-	// interim expensepayout
+	// expensepayout
+	public final static int EXPENSEPAYOUT_DELIVERY = 2;
 	public final static int EXPENSEPAYOUT_INTERIM = 3;
+	
+	public final static String EXPENSEPAYOUT_DELIVERY_CODE = "DEL";
+	
 
 	/** ** manufacturer id in database *** */
 	public final static int MANUFACTURER_OTHER_ID = 71;

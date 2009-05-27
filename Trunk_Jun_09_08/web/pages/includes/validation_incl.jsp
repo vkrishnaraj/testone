@@ -1046,6 +1046,15 @@
           return false;
         }
       }
+      else if (currentElementName.indexOf("cost") != -1)
+      {
+        if (currentElement.value.length > 0 && checkFloat(currentElement.value) != true)
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bdo.cost") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.float") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
       
       else if (currentElementName.indexOf("address1") != -1)
       {
