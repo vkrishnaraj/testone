@@ -18,7 +18,6 @@
       countfield.value = maxlimit - field.value.length;
     }
   }
-  // End -->
 </SCRIPT>
 <%
   Agent a = (Agent)session.getAttribute("user");

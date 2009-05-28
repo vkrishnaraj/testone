@@ -257,8 +257,8 @@
 	                  <html:text property="<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description" %>" size="80" maxlength="255" styleClass="textfield" />
 	                </td>
 	                <td align="center">&nbsp;<br>
-	                	<input type="submit" name="deleteinventory_<%= i %>_<%= j %>" id="button" value="<bean:message key="button.delete_content"/>">
-	      
+	                	<input type="submit" name="deleteinventory_<%= i %>_<%= j %>" id="button" value="<bean:message key="button.delete_content"/>"
+	                		onclick="return checkDeleteCount(<%= i %>);">
 	                </td>
 	              </tr>
 	            </table>

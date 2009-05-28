@@ -16,20 +16,16 @@
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
-    
+<script language="javascript" SRC="deployment/main/js/date.js"></script>
+  <script language="javascript" SRC="deployment/main/js/AnchorPosition.js"></script>
+  <script language="javascript" SRC="deployment/main/js/PopupWindow.js"></script>
+  <script language="javascript" SRC="deployment/main/js/popcalendar.js"></script>
+  <script language="javascript" SRC="deployment/main/js/ajax_forall.js"></script>
+  <script language="javascript">
 	var cal1xx = new CalendarPopup();	
-
 	var doCheck = 0;
-	<jsp:include page="/pages/includes/ldclose.jsp" />
-	<% %>
-
-  </SCRIPT>
+  </script>
+  <jsp:include page="/pages/includes/ldclose.jsp" />
   
   <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
     <tr>

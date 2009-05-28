@@ -34,12 +34,12 @@
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
 %>
 <html:form action="UpdateExpense.do" method="post">
-	<html:hidden name="expensePayoutForm" property="dateFormat" />
-	<html:hidden name="expensePayoutForm" property="tz" />
+	<html:javascript formName="expensePayoutForm" />
+	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
+	<html:hidden name="expensePayoutForm" property="tz" value="<%= a.getCurrenttimezone() %>" />
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
 	<html:hidden name="expensePayoutForm" property="status_id" />
-	<html:javascript formName="expensePayoutForm" />
-	<fmt:timeZone value="${time_zone}">
+	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">
 				<div id="pageheaderleft">
@@ -112,7 +112,7 @@
 								<br />
 								<input type="text" name="createdate" size="15" class="textfield"
 									disabled="disabled"
-									value="<fmt:formatDate value='${expensePayoutForm.createdate}' pattern='${date_format}' />" />
+									value="<fmt:formatDate value='${expensePayoutForm.createdate}' pattern='${expensePayoutForm.dateFormat}' />" />
 							</td>
 							<td>
 								<bean:message key="colname.agentusername" />
@@ -205,7 +205,7 @@
 						}
 					%>
 						<tr>
-							<td align="center" valign="top" colspan=3>
+							<td align="center" valign="top" colspan="3">
 								<%
 									if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
 												if (canApprove) {

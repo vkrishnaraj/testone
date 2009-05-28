@@ -263,7 +263,7 @@
       } 
     }
   
-  var bag0 = document.getElementById("theItem[0].lnameonbag");
+  var bag0 = document.getElementById("theitem[0].lnameonbag");
   
   if(bag0 == null) {
     alert("<%=(String) myMessages.getMessage(myLocale,
@@ -287,7 +287,7 @@
         alert("<%=(String) myMessages.getMessage(myLocale,
           "colname.key_contents")%>" + " <%=(String) myMessages.getMessage(myLocale,
           "error.validation.isRequired")%>");
-        document.getElementById("theItem[" + j + "].lnameonbag").focus();
+        document.getElementById("theitem[" + j + "].lnameonbag").focus();
         return false;
       }
     }

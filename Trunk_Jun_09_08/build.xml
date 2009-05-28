@@ -107,7 +107,7 @@
 
 	<!-- Copy any resource or configuration files -->
 
-	<target name="resources2" depends="compile-web">
+	<target name="resources2" >
 		<copy todir="${build.dir}/${ant_project_name}_web/classes" includeEmptyDirs="no">
 			<fileset dir="src">
 				<patternset>
@@ -532,6 +532,7 @@
 		<property name="ant_war_name" value="b6dev" />
 		<property name="jetblue.init.complete" value="true" />
 		<property name="environment.name" value="dev"/>
+		<antcall target="hibernate_generate"/>
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 

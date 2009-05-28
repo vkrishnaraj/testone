@@ -55,7 +55,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
         } else if (buttonSelected == 'savelzlist' && document.getElementsByName("lz_mode")[0].value == 2) {
       		var totalPercent = 0;
       		buttonSelected = null;
-      		<% // BELOW JAVASCRIPT VALIDATES LZ LIST  %>
+
       		for (i=0; i<numberOfLzs; ++i) {
       			var ignore = 0;
       			var element = document.getElementsByName("lz[" + i + "].percent")[0];
@@ -65,7 +65,7 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
       					ignore = 1;
       				}
       			} catch (err) {
-      				<% // Must not ignore default which cannot be deleted. %>
+
       			}
       			
       			if (ignore == 0) {

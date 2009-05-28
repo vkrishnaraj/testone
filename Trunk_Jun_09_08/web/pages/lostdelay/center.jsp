@@ -249,6 +249,7 @@
   <html:form action="lostDelay.do" method="post"
     onsubmit="return validateRest(this);">
     <html:hidden property="otherSystemInformation" />
+    <html:hidden property="notifiedOfRequirements"/>
     <input type="hidden" name="historical_report" value="">
     <tr>
       <td colspan="3" id="pageheadercell">

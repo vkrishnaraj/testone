@@ -32,7 +32,7 @@
 %>
 <html:form action="SaveExpense.do" method="post">
 	<html:javascript formName="expensePayoutForm" />
-	<fmt:timeZone value="${time_zone}">
+	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">
 				<div id="pageheaderleft">
@@ -106,7 +106,7 @@
 								<br />
 								<input type="text" name="createdate" size="15" class="textfield"
 									disabled="disabled"
-									value="<fmt:formatDate value='${expensePayoutForm.createdate}' pattern='${date_format}' />" />
+									value="<fmt:formatDate value='${expensePayoutForm.createdate}' pattern='${expensePayoutForm.dateFormat}' />" />
 							</td>
 							<td>
 								<bean:message key="colname.agentusername" />
@@ -130,19 +130,7 @@
 										labelProperty="stationcode" />
 								</html:select>
 							</td>
-							<td>
-								<bean:message key="colname.expense_type" />
-								<br />
-
-								<html:select property="expensetype_id" styleClass="dropdown">
-									<html:options collection="expensetypelist"
-										property="expensetype_ID" labelProperty="description" />
-								</html:select>
-
-							</td>
-							<td>
-
-
+							<td colspan="2">
 								<bean:message key="colname.paycode" />
 								<br />
 								<html:select property="paycode" styleClass="dropdown">
@@ -164,9 +152,9 @@
 								</html:select>
 							</td>
 						</tr>
-						<jsp:include page="/pages/includes/payment_types_incl.jsp" />
+						<jsp:include page="/pages/includes/create_payment_incl.jsp" />
 						<tr>
-							<td colspan=3>
+							<td colspan="3">
 								<bean:message key="colname.comments" />
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"
@@ -181,7 +169,7 @@
 						if(canEdit) {
 						 %>
 						<tr>
-							<td align="center" valign="top" colspan=3>
+							<td align="center" valign="top" colspan="3">
 								<html:submit property="createExpense" styleId="button">
 									<bean:message key="button.request_for_approval" />
 								</html:submit>
