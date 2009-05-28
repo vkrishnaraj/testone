@@ -10,12 +10,6 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.TracerDateTime" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.AdminUtils" %>
 
-<%
-response.addHeader("Pragma", "No-cache");
-response.addHeader("Cache-Control", "no-cache");
-response.addDateHeader("Expires", -1);
-%>
-
 <% LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
    Agent agent = (Agent)session.getAttribute("user");
    int total_menu = 0;
@@ -30,6 +24,7 @@ response.addDateHeader("Expires", -1);
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+
 <%
 if(!TracerProperties.isTrue(TracerProperties.ALLOW_CACHING)) {
 response.addHeader("Pragma", "No-cache");
@@ -37,6 +32,7 @@ response.addHeader("Cache-Control", "no-cache");
 response.addDateHeader("Expires", -1);
 }
 %>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
