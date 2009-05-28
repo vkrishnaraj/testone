@@ -44,90 +44,8 @@ response.addDateHeader("Expires", -1);
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/date.js"></script>
 <logic:present name="user" scope="session">
-<style language="text/css">
-#menuList, #menuList ul {
-	float: left;
-	width: 36em;
-	list-style: none;
-	line-height: 1;
-	background: white;
-	font-weight: bold;
-	padding: 0;
-	border: solid #eda;
-	border-width: 1px 0;
-	margin: 0 0 1em 0;
-}
- 
-#menuList a {
-	display: block;
-	width: 10em;
-	w\idth: 6em;
-	color: #7C6240;
-	text-decoration: none;
-	padding: 0.25em 2em;
-}
- 
-#menuList a.daddy {
-	background: url(rightarrow2.gif) center right no-repeat;
-}
- 
-#menuList li {
-	float: left;
-	padding: 0;
-	width: 10em;
-}
- 
-#menuList li ul {
-	position: absolute;
-	left: -999em;
-	height: auto;
-	width: 14.4em;
-	w\idth: 13.9em;
-	font-weight: normal;
-	border-width: 0.25em;
-	margin: 0;
-}
- 
-#menuList li li {
-	padding-right: 1em;
-	width: 13em
-}
- 
-#menuList li ul a {
-	width: 13em;
-	w\idth: 9em;
-}
- 
-#menuList li ul ul {
-	margin: -1.75em 0 0 14em;
-}
- 
-#menuList li:hover ul ul, #menuList li:hover ul ul ul, #menuList li.sfhover ul ul, #menuList li.sfhover ul ul ul {
-	left: -999em;
-}
- 
-#menuList li:hover ul, #menuList li li:hover ul, #menuList li li li:hover ul, #menuList li.sfhover ul, #menuList li li.sfhover ul, #menuList li li li.sfhover ul {
-	left: auto;
-}
- 
-#menuList li:hover, #menuList li.sfhover {
-	background: #eda;
-}
-</style>
-<script type="text/javascript">
-sfHover = function() {
-	var sfEls = document.getElementById("menuList").getElementsByTagName("LI");
-	for (var i=0; i<sfEls.length; i++) {
-		sfEls[i].onmouseover=function() {
-			this.className+=" sfhover";
-		}
-		sfEls[i].onmouseout=function() {
-			this.className=this.className.replace(new RegExp(" sfhover\\b"), "");
-		}
-	}
-}
-if (window.attachEvent) window.attachEvent("onload", sfHover);
- </script> 
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu.js"></script>
+<!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
 </logic:present>
 <link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
 <link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
@@ -167,7 +85,6 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
         
       		</td>
         </tr>
-     </table>
 
  	</td>
   <td id="middlecolumn"> 
@@ -274,34 +191,69 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 <div id="mainMenu">
 	<ul id="menuList">
-<li><a href="#">Gobioidei</a> 
-		<ul> 
-			<li><a href="#">Burrowing gobies</a></li> 
-			<li><a href="#">Dartfishes</a></li> 
-			<li><a href="#">Eellike gobies</a></li> 
-			<li><a href="#">Gobies</a></li> 
-			<li><a href="#">Loach gobies</a></li> 
-			<li><a href="#">Odontobutidae</a></li> 
-			<li><a href="#">Sandfishes</a></li> 
-			<li><a href="#">Schindleriidae</a></li> 
-			<li><a href="#">Sleepers</a></li> 
-			<li><a href="#">Xenisthmidae</a></li> 
-		</ul> 
-	</li> 
-	<li><a href="#">Foobar</a> 
-		<ul> 
-			<li><a href="#">Burrowing gobies</a></li> 
-			<li><a href="#">Dartfishes</a></li> 
-			<li><a href="#">Eellike gobies</a></li> 
-			<li><a href="#">Gobies</a></li> 
-			<li><a href="#">Loach gobies</a></li> 
-			<li><a href="#">Odontobutidae</a></li> 
-			<li><a href="#">Sandfishes</a></li> 
-			<li><a href="#">Schindleriidae</a></li> 
-			<li><a href="#">Sleepers</a></li> 
-			<li><a href="#">Xenisthmidae</a></li> 
-		</ul> 
-	</li> 
+<%
+	
+  int index = -1;
+	int index2 = -1;
+	String key = null;
+	String key2 = null;
+  if (menu_links != null && menu_links.size() > 0) {
+  	total_menu = menu_links.size();
+    for (Iterator i=menu_links.keySet().iterator();i.hasNext();) {
+      key = (String)i.next();
+			key2 = key.replaceAll(" ", "_");
+			index++;
+      
+      LinkedHashMap nextMenu = (LinkedHashMap)menu_links.get(key);					
+
+%>
+<li class="menubar">
+<%
+	if (key.indexOf("Task Manager") != -1) {
+%>
+	<a id="menucol_<%=index%>.0" href="logon.do?taskmanager=1" class="starter"><bean:message key="<%=key2%>" arg0="<u>" arg1="</u>"/></a>
+<%
+	} else {
+%>
+	<a id="menucol_<%=index%>.0" href="#" class="starter"><bean:message key="<%=key2%>" arg0="<u>" arg1="</u>"/></a>
+  
+<%
+  }    
+			if (nextMenu != null && nextMenu.size() > 0) {
+				index2 = 0;
+%>
+				<ul id="menubuilder<%=index%>" class="navimenu" >
+<%
+				for (Iterator j=nextMenu.keySet().iterator();j.hasNext();) {
+					key2 = (String)j.next();
+          String val2 = (String)nextMenu.get(key2);
+          
+        	key2 = key2.replaceAll(" ", "_");
+        	index2++;
+
+%>
+					<li><a id="menucol_<%=index%>.<%=index2%>" href="<%=val2%>"><bean:message key="<%=key2%>"/></a></li>
+<%
+
+				}
+%>
+				</ul> 
+					
+<%
+			}
+%>
+</li> 
+
+<%
+			if (i.hasNext()) {
+%> 
+&nbsp;|&nbsp; 
+<%
+			}
+		}
+	}
+%>
+
 
   </ul>
 </div>
