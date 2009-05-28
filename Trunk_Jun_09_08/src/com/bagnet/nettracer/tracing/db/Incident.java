@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -857,7 +858,7 @@ public class Incident implements Serializable {
 	}
 
 	public void setExpenselist(List<ExpensePayout> expenselist) {
-		this.expenselist = expenselist;
+		this.expenses = new LinkedHashSet<ExpensePayout>(expenselist);
 	}
 
 	@Transient

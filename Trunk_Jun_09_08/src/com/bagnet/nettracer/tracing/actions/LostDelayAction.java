@@ -33,6 +33,7 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -300,6 +301,7 @@ public class LostDelayAction extends CheckedAction {
 				|| request.getParameter("doclose") != null || request.getParameter("doclosewt") != null
 				|| request.getParameter("savetemp") != null || request.getParameter("savetracing") != null
 				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null ) {
+
 			Incident iDTO = new Incident();
 
 			// if save for tracing, change status to open,

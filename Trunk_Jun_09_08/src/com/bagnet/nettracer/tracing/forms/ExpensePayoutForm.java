@@ -6,7 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -35,6 +41,8 @@ public class ExpensePayoutForm extends ActionForm {
 	private double creditCardRefund;
 	private String bdo_id;
 	
+	private String paymentType;
+	
 	//hidden
 	private int expensepayout_ID;
 	private int status_id;
@@ -62,6 +70,10 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dateFormat;
 	private String tz;
 	private String updateRemarkOnly;
+	private String dispDraftpaiddate;
+	private String dispApproval_date;
+	private String dispDraftreqdate;
+	private String dispVoucherExpirationDate;
 	
 	public String getIncident_ID() {
 		return incident_ID;
@@ -103,23 +115,7 @@ public class ExpensePayoutForm extends ActionForm {
 	}
 	
 	public void setDispDraftpaiddate(String dpDate) {
-		if(dpDate == null || dpDate.trim().length() < 1) {
-			this.draftpaiddate = null;
-		}
-		try {
-			SimpleDateFormat sdf;
-			if(dateFormat != null) {
-				sdf = new SimpleDateFormat(dateFormat);
-			}
-			else {
-				sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
-			}
-			
-			if(tz != null) sdf.setTimeZone(TimeZone.getTimeZone(tz));
-			this.draftpaiddate = sdf.parse(dpDate);
-		} catch (ParseException e) {
-			//pass
-		}
+		this.dispDraftpaiddate = dpDate;
 	}
 	
 	public String getDispApproval_date() {
@@ -127,23 +123,7 @@ public class ExpensePayoutForm extends ActionForm {
 	}
 	
 	public void setDispApproval_date(String dpDate) {
-		if(dpDate == null || dpDate.trim().length() < 1) {
-			this.approval_date = null;
-		}
-		try {
-			SimpleDateFormat sdf;
-			if(dateFormat != null) {
-				sdf = new SimpleDateFormat(dateFormat);
-			}
-			else {
-				sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
-			}
-			
-			if(tz != null) sdf.setTimeZone(TimeZone.getTimeZone(tz));
-			this.approval_date = sdf.parse(dpDate);
-		} catch (ParseException e) {
-			//pass
-		}
+		this.dispApproval_date = dpDate;
 	}
 	
 	public String getDispDraftreqdate() {
@@ -151,23 +131,8 @@ public class ExpensePayoutForm extends ActionForm {
 	}
 	
 	public void setDispDraftreqdate(String dpDate) {
-		if(dpDate == null || dpDate.trim().length() < 1) {
-			this.draftreqdate = null;
-		}
-		try {
-			SimpleDateFormat sdf;
-			if(dateFormat != null) {
-				sdf = new SimpleDateFormat(dateFormat);
-			}
-			else {
-				sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
-			}
-			
-			if(tz != null) sdf.setTimeZone(TimeZone.getTimeZone(tz));
-			this.draftreqdate = sdf.parse(dpDate);
-		} catch (ParseException e) {
-			//pass
-		}
+		this.dispDraftreqdate = dpDate;
+		
 	}
 	
 	public String getDispVoucherExpirationDate() {
@@ -175,23 +140,7 @@ public class ExpensePayoutForm extends ActionForm {
 	}
 	
 	public void setDispVoucherExpirationDate(String dpDate) {
-		if(dpDate == null || dpDate.trim().length() < 1) {
-			this.voucherExpirationDate = null;
-		}
-		try {
-			SimpleDateFormat sdf;
-			if(dateFormat != null) {
-				sdf = new SimpleDateFormat(dateFormat);
-			}
-			else {
-				sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
-			}
-			
-			if(tz != null) sdf.setTimeZone(TimeZone.getTimeZone(tz));
-			this.voucherExpirationDate = sdf.parse(dpDate);
-		} catch (ParseException e) {
-			//pass
-		}
+		this.dispVoucherExpirationDate = dpDate;
 	}
 	
 	
@@ -346,7 +295,7 @@ public class ExpensePayoutForm extends ActionForm {
 			return "";
 		}
 		else {
-			SimpleDateFormat tmp = dateFormat == null ? new SimpleDateFormat(TracingConstants.DB_DATEFORMAT) : new SimpleDateFormat(dateFormat);
+			SimpleDateFormat tmp = (dateFormat == null ? new SimpleDateFormat(TracingConstants.DB_DATEFORMAT) : new SimpleDateFormat(dateFormat));
 			if(tz == null) {
 				tmp.setTimeZone(TimeZone.getDefault());
 			}
@@ -370,10 +319,64 @@ public class ExpensePayoutForm extends ActionForm {
 	public void setUpdateRemarkOnly(String updateRemarkOnly) {
 		this.updateRemarkOnly = updateRemarkOnly;
 	}
+	
+	public String getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+	
 	public String getBdo_id() {
 		return bdo_id;
 	}
 	public void setBdo_id(String bdo_id) {
 		this.bdo_id = bdo_id;
 	}
+	
+	@Override
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		ActionErrors errs = new ActionErrors();
+
+		try {
+			this.approval_date = parseUserDate(dispApproval_date);
+		} catch (ParseException e) {
+			errs.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("invalid.date"));
+		}
+		
+		try {
+			this.draftpaiddate = parseUserDate(dispDraftpaiddate);
+		} catch (ParseException e) {
+			errs.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("invalid.date"));
+		}
+		
+		try {
+			this.draftreqdate = parseUserDate(dispDraftreqdate);
+		} catch (ParseException e) {
+			errs.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("invalid.date"));
+		}
+		
+		try {
+			this.voucherExpirationDate = parseUserDate(dispVoucherExpirationDate);
+		} catch (ParseException e) {
+			errs.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("invalid.date"));
+		}
+		
+		if(errs.isEmpty()) {
+			return null;
+		}
+		
+		return errs;
+	}
+	
+	private Date parseUserDate(String dateStr) throws ParseException {
+		if(dateStr == null || dateStr.trim().length() < 1) {
+			return null;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		sdf.setTimeZone(TimeZone.getTimeZone(tz));
+		return sdf.parse(dateStr);
+	}
+	
 }

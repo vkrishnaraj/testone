@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -91,6 +92,38 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 			logger.error("unable to find transactions", t);
 		}
 		return txList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
+	public List<Object[]> countTransactionResults(long hours) {
+		Long tmp = (new Date()).getTime();
+		
+		tmp = tmp - (hours * 60 * 60 * 1000);
+		
+		Date cutoffDate = new Date();
+		cutoffDate.setTime(tmp);
+		
+		// TODO Auto-generated method stub
+		String queryString = 
+			"select wtx.txType, " +
+			" (select count(*) from WorldTracerTransaction a " +
+			"   where a.txType = wtx.txType and a.result = 'SUCCESS' " +
+			"   and a.createDate > :cutoffDate) as successCount," +
+			" (select count(*) from WorldTracerTransaction a" +
+			"   where a.txType = wtx.txType" +
+			"   and a.result = 'FAILURE'" +
+			"   and a.createDate > :cutoffDate) as failureCount " +
+			" from WorldTracerTransaction wtx " +
+			" where wtx.createDate > :cutoffDate " +
+			" group by wtx.txType " +
+			" having successCount = 0 and failureCount > 0 ";
+		
+		Session sess = getSession(false);
+		
+		Query q = sess.createQuery(queryString);
+		q.setTimestamp("cutoffDate", cutoffDate);
+		return q.list();
 	}
 
 }

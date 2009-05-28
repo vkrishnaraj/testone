@@ -696,6 +696,10 @@ public class TracingConstants {
 	public static final Object WT_PENDING_FOH = "WT_PENDING_FOH";
 	public static final String INVALID_TOKEN = "invalidtoken";
 	public static final String MANUAL_QUEUE = "manualQueue";
+	public static final String ROWSPERPAGE_MAP = "rowsperpage_map";
+	public static final String ROWS_ADMIN_PAGES = "rowsAdminPages";
+	public static final String ROWS_AUDIT_PAGES = "rowsAuditPages";
+	public static final String ROWS_SEARCH_PAGES = "rowsSearchPages";
 	
 	
 	public static String getDBDateFormat(Properties properties) {

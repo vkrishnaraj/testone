@@ -84,6 +84,8 @@ public final class IncidentForm extends ValidatorForm {
 	private String membershipstatus;
 	private String otherSystemInformation;
 	
+	private boolean notifiedOfRequirements;
+	
 	private WorldTracerFile wtFile;
 	{
 		String defChecked = TracerProperties.get(TracerProperties.DEFAULT_CHECKED_LOCATION);
@@ -1161,4 +1163,11 @@ public final class IncidentForm extends ValidatorForm {
 		this.bagTagNumber = bagTagNumber;
 	}
 
+	public boolean isNotifiedOfRequirements() {
+		return notifiedOfRequirements;
+	}
+
+	public void setNotifiedOfRequirements(boolean notifiedOfRequirements) {
+		this.notifiedOfRequirements = notifiedOfRequirements;
+	}
 }

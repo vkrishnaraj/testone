@@ -15,6 +15,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class ApprovedExpenseAction extends BaseExpenseAction {
 	@Override
@@ -32,11 +33,7 @@ public class ApprovedExpenseAction extends BaseExpenseAction {
 		sef.setTimeZone(user.getCurrenttimezone());
 		int rowcount = ExpensePayoutBMO.countExpenses(sef, user);
 		if(rowcount > 0) {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) {
-				rowsperpage = TracingConstants.ROWS_PER_PAGE;
-			}
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, request.getSession());
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 

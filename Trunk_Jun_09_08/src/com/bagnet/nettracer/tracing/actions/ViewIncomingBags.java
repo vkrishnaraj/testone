@@ -294,9 +294,7 @@ public class ViewIncomingBags extends Action {
 		if (requestListCount > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 
@@ -333,9 +331,7 @@ public class ViewIncomingBags extends Action {
 			/** ************ end of pagination ************* */
 			request.setAttribute("requestList", requestList);
 		} else {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request

@@ -17,6 +17,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.actions.BillingAction;
@@ -33,11 +34,15 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 
 public class CronUtils {
 	
 	private static Logger logger = Logger.getLogger(CronUtils.class);
-	private static String companyCode = null;
+	private String companyCode = null;
+	
+	private ErrorHandler errHandler;
+	private WtTransactionBmo wtxBmo;
 	
 	public CronUtils(String companyCode) {
 		this.companyCode = companyCode;
@@ -275,5 +280,18 @@ public class CronUtils {
 		} finally {
 			writeSession.close();
 		}
+	}
+	
+	public void checkWorldTracer() {
+		List foo = wtxBmo.countTransactionResults(12);
+	}
+
+	//setters used by Spring to inject props
+	public void setErrHandler(ErrorHandler errHandler) {
+		this.errHandler = errHandler;
+	}
+
+	public void setWtxBmo(WtTransactionBmo wtxBmo) {
+		this.wtxBmo = wtxBmo;
 	}
 }

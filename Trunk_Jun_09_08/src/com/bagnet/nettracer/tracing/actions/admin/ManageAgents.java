@@ -414,10 +414,10 @@ public final class ManageAgents extends Action {
 		if (agentList != null && agentList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+			
 			int totalpages = 0;
 			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
 					.getParameter("currpage")) : 0;
@@ -454,9 +454,7 @@ public final class ManageAgents extends Action {
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
 
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request

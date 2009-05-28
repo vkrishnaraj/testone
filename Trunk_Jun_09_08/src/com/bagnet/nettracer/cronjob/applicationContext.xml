@@ -107,6 +107,10 @@
 	<bean id="wtqErrorHandler" parent="parentErrorHandler" >	
 		<property name="processName" value="WT Queue" />
 	</bean>
+	
+	<bean id="cronUtilsErrhandler" parent="parentErrorHandler">
+		<property name="processName" value="Cron Utils" />
+	</bean>
 
 	<bean id="wtProcessQueue" class="com.bagnet.nettracer.cronjob.wt.WorldTracerQueueSweeper">
 		<constructor-arg value="${default.wt.agent}" />
@@ -123,6 +127,8 @@
 	
 	<bean id="CronUtils" class="com.bagnet.nettracer.cronjob.utilities.CronUtils" >
 		<constructor-arg value="${company.code}" />
+		<property name="errHandler" ref="cronUtilsErrhandler"/>
+		<property name="wtxBmo" ref="wtTx-bmo" />
 	</bean>
 	
 	<bean id="moveToWt" class="com.bagnet.nettracer.cronjob.wt.MoveToWorldTracer" >

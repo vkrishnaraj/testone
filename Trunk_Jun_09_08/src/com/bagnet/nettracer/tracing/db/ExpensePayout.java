@@ -39,100 +39,39 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 @Proxy(lazy = false)
 public class ExpensePayout implements Serializable {
 
-	@ManyToOne
-	@JoinColumn(name = "incident_ID", nullable = true)
 	private Incident incident;
-	
-	@ManyToOne
-	@JoinColumn(name = "bdo_id", nullable = true)
+	private int expensepayout_ID;
+	private Date createdate;
+	private String paycode;
+	private String draft;
+	private Date draftreqdate;
+	private Date draftpaiddate;
+	private double checkamt;
+	private double voucheramt;
+	private int mileageamt;
+	private Set<Comment> comments = new HashSet<Comment>();
+	private ExpenseType expensetype;
+	private Station expenselocation;
+	private java.util.Currency currency;
+	private Status status;
+	private double incidentalAmountAuth;
+	private double incidentalAmountClaimed;
+	private Date voucherExpirationDate;
+	private double creditCardRefund;
+	private Date approval_date;
+	private Agent agent;
+	private Station station;
 	private BDO bdo;
-
-	@ManyToOne
-	@JoinColumn(name = "ohd_id", nullable = true)
 	private OHD ohd;
 	
-	@Id
-	@GeneratedValue
-	private int expensepayout_ID;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
-	private Date createdate;
 	
-	@Column(length = 5)
-	private String paycode;
-	
-	@Column(length = 30)
-	private String draft;
-	
-	@Temporal(TemporalType.DATE)
-	private Date draftreqdate;
-	
-	@Temporal(TemporalType.DATE)
-	private Date draftpaiddate;
-	
-	@Basic
-	private double checkamt;
-	
-	@Basic
-	private double voucheramt;
-	
-	@Basic
-	private int mileageamt;
-
-	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
-	@JoinTable(name = "expense_comment", joinColumns = @JoinColumn(name = "expensepayout_ID"))
-	@org.hibernate.annotations.OrderBy(clause = "createDate asc")
-	@Fetch(FetchMode.SELECT)
-	private Set<Comment> comments = new HashSet<Comment>();
-
-	@ManyToOne
-	@JoinColumn(name = "expenseType_ID", nullable = false)
-	private ExpenseType expensetype;
-
-	@ManyToOne
-	@JoinColumn(name = "expenselocation_ID")
-	private Station expenselocation;
-
-	@Column(name = "currency_ID")
-	private java.util.Currency currency;
-
-	@ManyToOne
-	@JoinColumn(name = "status_ID")
-	private Status status;
-	
-	@Column(name = "incidental_amount_auth")
-	private double incidentalAmountAuth;
-	
-	@Column(name = "incidental_amount_claim")
-	private double incidentalAmountClaimed;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "voucher_exp")
-	private Date voucherExpirationDate;
-	
-	@Column(name = "creditcard_refund")
-	private double creditCardRefund;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date approval_date;
-
-	@ManyToOne
-	@JoinColumn(name = "agent_ID", nullable = false)
-	private Agent agent;
-
-	@ManyToOne
-	@JoinColumn(name = "station_ID", nullable = false)
-	private Station station;
-
-	@Transient
+	//not part of the model
 	private String _DATEFORMAT;
-	@Transient
 	private String _TIMEFORMAT;
-
-	@Transient
 	private TimeZone _TIMEZONE;
 
+	@ManyToOne
+	@JoinColumn(name = "incident_ID", nullable = false)
 	public Incident getIncident() {
 		return incident;
 	}
@@ -141,6 +80,7 @@ public class ExpensePayout implements Serializable {
 		this.incident = incident;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getApproval_date() {
 		return approval_date;
 	}
@@ -149,10 +89,13 @@ public class ExpensePayout implements Serializable {
 		this.approval_date = approval_date;
 	}
 
+	@Transient
 	public String getDispapproval_date() {
 		return DateUtils.formatDate(approval_date, get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "expenseType_ID", nullable = false)
 	public ExpenseType getExpensetype() {
 		return expensetype;
 	}
@@ -161,6 +104,8 @@ public class ExpensePayout implements Serializable {
 		this.expensetype = expensetype;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "expenselocation_ID")
 	public Station getExpenselocation() {
 		return expenselocation;
 	}
@@ -169,6 +114,9 @@ public class ExpensePayout implements Serializable {
 		this.expenselocation = expenselocation;
 	}
 
+
+	@ManyToOne
+	@JoinColumn(name = "agent_ID", nullable = false)
 	public Agent getAgent() {
 		return agent;
 	}
@@ -177,6 +125,8 @@ public class ExpensePayout implements Serializable {
 		this.agent = agent;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "station_ID", nullable = false)
 	public Station getStation() {
 		return station;
 	}
@@ -185,11 +135,12 @@ public class ExpensePayout implements Serializable {
 		this.station = station;
 	}
 
-	
-	public String getCurrency_ID() {
-		return currency.getCurrencyCode();
-	}
 
+
+	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
+	@JoinTable(name = "expense_comment", joinColumns = @JoinColumn(name = "expensepayout_ID"))
+	@org.hibernate.annotations.OrderBy(clause = "createDate asc")
+	@Fetch(FetchMode.SELECT)
 	public Set<Comment> getComments() {
 		return comments;
 	}
@@ -198,10 +149,13 @@ public class ExpensePayout implements Serializable {
 		this.comments = comments;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	public Date getCreatedate() {
 		return createdate;
 	}
 
+	@Transient
 	public String getDiscreatedate() {
 		return DateUtils.formatDate(getCreatedate(), get_DATEFORMAT(), null, get_TIMEZONE());
 	}
@@ -210,6 +164,7 @@ public class ExpensePayout implements Serializable {
 		this.createdate = createdate;
 	}
 
+	@Column(length = 30)
 	public String getDraft() {
 		return draft;
 	}
@@ -222,6 +177,7 @@ public class ExpensePayout implements Serializable {
 		this.draft = draft;
 	}
 
+	@Temporal(TemporalType.DATE)
 	public Date getDraftpaiddate() {
 		return draftpaiddate;
 	}
@@ -230,14 +186,17 @@ public class ExpensePayout implements Serializable {
 		this.draftpaiddate = draftpaiddate;
 	}
 
+	
 	public void setDisdraftpaiddate(String s) {
 		setDraftpaiddate(DateUtils.convertToDate(s, get_DATEFORMAT(), null));
 	}
 
+	@Transient
 	public String getDisdraftpaiddate() {
 		return DateUtils.formatDate(getDraftpaiddate(), get_DATEFORMAT(), null, null);
 	}
 
+	@Temporal(TemporalType.DATE)
 	public Date getDraftreqdate() {
 		return draftreqdate;
 	}
@@ -250,40 +209,30 @@ public class ExpensePayout implements Serializable {
 		setDraftreqdate(DateUtils.convertToDate(s, get_DATEFORMAT(), null));
 	}
 
+	@Transient
 	public String getDisdraftreqdate() {
 		return DateUtils.formatDate(getDraftreqdate(), get_DATEFORMAT(), null, null);
 	}
 
-	/**
-	 * @return Returns the _DATEFORMAT.
-	 */
+	@Transient
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
 	}
 
-	/**
-	 * @param _dateformat
-	 *            The _DATEFORMAT to set.
-	 */
 	public void set_DATEFORMAT(String _dateformat) {
 		_DATEFORMAT = _dateformat;
 	}
 
-	/**
-	 * @return Returns the _DATEFORMAT.
-	 */
+	@Transient
 	public String get_TIMEFORMAT() {
 		return _TIMEFORMAT;
 	}
 
-	/**
-	 * @param _dateformat
-	 *            The _DATEFORMAT to set.
-	 */
 	public void set_TIMEFORMAT(String _timeformat) {
 		_TIMEFORMAT = _timeformat;
 	}
 
+	@Transient
 	public TimeZone get_TIMEZONE() {
 		return _TIMEZONE;
 	}
@@ -293,13 +242,16 @@ public class ExpensePayout implements Serializable {
 		_TIMEZONE = _timezone;
 	}
 
+	@Id
+	@GeneratedValue
 	public int getExpensepayout_ID() {
 		return expensepayout_ID;
 	}
 	public void setExpensepayout_ID(int expensepayout_ID) {
-		expensepayout_ID = expensepayout_ID;
+		this.expensepayout_ID = expensepayout_ID;
 	}
 
+	@Column(name = "currency_ID")
 	public java.util.Currency getCurrency() {
 		return currency;
 	}
@@ -307,30 +259,32 @@ public class ExpensePayout implements Serializable {
 	public void setCurrency(java.util.Currency currency) {
 		this.currency = currency;
 	}
+	
+	@Transient
+	public String getCurrency_ID() {
+		return currency.getCurrencyCode();
+	}
 
-
+	@Column(length = 5)
 	public String getPaycode() {
 		return paycode;
 	}
 
-	/**
-	 * @param paycode
-	 *            The paycode to set.
-	 */
 	public void setPaycode(String paycode) {
 		this.paycode = paycode;
 	}
 
 
+	@Basic
 	public double getCheckamt() {
 		return checkamt;
 	}
-
 
 	public void setCheckamt(double checkamt) {
 		this.checkamt = checkamt;
 	}
 
+	@Transient
 	public String getDischeckamt() {
 		return TracingConstants.DECIMALFORMAT.format(getCheckamt());
 	}
@@ -339,30 +293,25 @@ public class ExpensePayout implements Serializable {
 		setCheckamt(TracerUtils.convertToDouble(s));
 	}
 
+	@Basic
 	public int getMileageamt() {
 		return mileageamt;
 	}
-
-	/**
-	 * @param mileageamt
-	 *            The mileageamt to set.
-	 */
+	
 	public void setMileageamt(int mileageamt) {
 		this.mileageamt = mileageamt;
 	}
 
+	@Basic
 	public double getVoucheramt() {
 		return voucheramt;
 	}
 
-	/**
-	 * @param voucheramt
-	 *            The voucheramt to set.
-	 */
 	public void setVoucheramt(double voucheramt) {
 		this.voucheramt = voucheramt;
 	}
 
+	@Transient
 	public String getDisvoucheramt() {
 		return TracingConstants.DECIMALFORMAT.format(getVoucheramt());
 	}
@@ -371,36 +320,27 @@ public class ExpensePayout implements Serializable {
 		setVoucheramt(TracerUtils.convertToDouble(s));
 	}
 
-	/** ** following code is for reporting ** */
-
+	@Transient
 	public String getLocdesc() {
 		return expenselocation.getStationcode();
 	}
 
+	@Transient
 	public String getTypedesc() {
 		return expensetype.getDescription();
 	}
 
-	/**
-	 * @return Returns the status.
-	 * 
-	 */
+	@ManyToOne
+	@JoinColumn(name = "status_ID")
 	public Status getStatus() {
 		return status;
 	}
 
-	/**
-	 * @param status
-	 *            The status to set.
-	 */
 	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	/**
-	 * @return Returns the status.
-	 * 
-	 */
+	@Column(name = "incidental_amount_auth")
 	public double getIncidentalAmountAuth() {
 		return incidentalAmountAuth;
 	}
@@ -409,6 +349,8 @@ public class ExpensePayout implements Serializable {
 		this.incidentalAmountAuth = incidentalAmount;
 	}
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "voucher_exp")
 	public Date getVoucherExpirationDate() {
 		return voucherExpirationDate;
 	}
@@ -417,7 +359,7 @@ public class ExpensePayout implements Serializable {
 		this.voucherExpirationDate = voucherExpirationDate;
 	}
 
-
+	@Column(name = "creditcard_refund")
 	public double getCreditCardRefund() {
 		return creditCardRefund;
 	}
@@ -426,6 +368,7 @@ public class ExpensePayout implements Serializable {
 		this.creditCardRefund = creditCardRefund;
 	}
 
+	@Column(name = "incidental_amount_claim")
 	public double getIncidentalAmountClaimed() {
 		return incidentalAmountClaimed;
 	}
@@ -434,6 +377,8 @@ public class ExpensePayout implements Serializable {
 		this.incidentalAmountClaimed = incidentalAmountClaimed;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "bdo_id", nullable = true)
 	public BDO getBdo() {
 		return bdo;
 	}
@@ -442,6 +387,8 @@ public class ExpensePayout implements Serializable {
 		this.bdo = bdo;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "ohd_id", nullable = true)
 	public OHD getOhd() {
 		return ohd;
 	}
@@ -449,5 +396,6 @@ public class ExpensePayout implements Serializable {
 	public void setOhd(OHD ohd) {
 		this.ohd = ohd;
 	}
+
 
 }

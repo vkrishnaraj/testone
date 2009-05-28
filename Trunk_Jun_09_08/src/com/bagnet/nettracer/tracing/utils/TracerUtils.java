@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -388,6 +389,11 @@ public class TracerUtils {
 				.getAttribute("currencylist") : retrieveBasicRecords(
 				"com.bagnet.nettracer.tracing.db.Currency", "currency",
 				"description"));
+		
+		
+		session.setAttribute("paymentTypeList", session.getAttribute("paymentTypeList") != null ?
+				session.getAttribute("paymentTypeList") :
+				getPaymentList(user.getCurrentlocale()));
 
 		session.setAttribute("categorylist", session
 				.getAttribute("categorylist") != null ? session
@@ -447,6 +453,16 @@ public class TracerUtils {
 				.getAttribute("prioritylist") :  retrieveLocaleBasedRecords(
 						"com.bagnet.nettracer.tracing.db.Priority", "priority",
 						"priority_ID", locale));
+	}
+
+	private static List<LabelValueBean> getPaymentList(String locale) {
+		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>();
+		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.draft"), "DRAFT"));
+		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.voucher"), "VOUCH"));
+		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.mileage"), "MILE"));
+		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.incidental"), "INC"));
+		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.ccrefund"), "CCREF"));
+		return result;
 	}
 
 	public static void populateCompanyLists(HttpSession session) {
@@ -1528,5 +1544,47 @@ public class TracerUtils {
 		}
 		return messages.getMessage(new Locale(locale), key);
 	}
+
+	public static int getRowsPerPage(String key, HttpSession session) {
+		ConcurrentHashMap<String, Integer> rowMap = (ConcurrentHashMap<String, Integer>) session.getAttribute(TracingConstants.ROWSPERPAGE_MAP);
+		
+		if(rowMap == null) {
+			rowMap = new ConcurrentHashMap<String, Integer>();
+			session.setAttribute(TracingConstants.ROWSPERPAGE_MAP, rowMap);
+		}
+		
+		if(!rowMap.containsKey(key)) {
+			rowMap.put(key, TracingConstants.ROWS_PER_PAGE);
+			return TracingConstants.ROWS_PER_PAGE;
+		}
+		return rowMap.get(key);
+	}
+
+	public static void updateRowsPerPage(String key, int rowsperpage, HttpSession session) {
+		ConcurrentHashMap<String, Integer> rowMap = (ConcurrentHashMap<String, Integer>) session.getAttribute(TracingConstants.ROWSPERPAGE_MAP);
+		if(rowMap == null) {
+			rowMap = new ConcurrentHashMap<String, Integer>();
+			session.setAttribute(TracingConstants.ROWSPERPAGE_MAP, rowMap);
+		}
+		rowMap.put(key, rowsperpage);
+	}
+
+	public static int manageRowsPerPage(String rowsString, String rowKey, HttpSession session) {
+		int rowsperpage = 0;
+		if(rowsString != null) {
+			rowsperpage = Integer.parseInt(rowsString);
+			if(rowsperpage > 0) {
+				TracerUtils.updateRowsPerPage(rowKey, rowsperpage, session);
+			}
+			else {
+				rowsperpage = TracerUtils.getRowsPerPage(rowKey, session);
+			}
+		}
+		else {
+			rowsperpage = TracerUtils.getRowsPerPage(rowKey, session);
+		}
+		return rowsperpage;
+	}
+
 
 }

@@ -450,9 +450,7 @@ public final class ManageCompany extends Action {
 		if (companyList != null && companyList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 
@@ -489,9 +487,7 @@ public final class ManageCompany extends Action {
 
 			request.setAttribute("companyList", companyList);
 		} else {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
@@ -533,9 +529,7 @@ public final class ManageCompany extends Action {
 		
 		/** ************ pagination ************* */
 		int rowcount = -1;
-		int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-				.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-		if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, request.getSession());
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		int totalpages = 0;
 

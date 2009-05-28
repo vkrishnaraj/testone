@@ -75,9 +75,7 @@ public class AuditCompanyAction extends Action {
 		if ((resultlist = AuditCompanyUtils.getAudits(user.getStation().getCompany()
 				.getCompanyCode_ID(), 0, 0, true)) == null
 				|| resultlist.size() <= 0) {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_AUDIT_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
@@ -90,9 +88,7 @@ public class AuditCompanyAction extends Action {
 			saveMessages(request, errors);
 		} else {
 			int rowcount = -1;
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_AUDIT_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 

@@ -48,8 +48,90 @@ response.addDateHeader("Expires", -1);
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/date.js"></script>
 <logic:present name="user" scope="session">
-<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu.js"></script>
-<!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
+<style language="text/css">
+#menuList, #menuList ul {
+	float: left;
+	width: 36em;
+	list-style: none;
+	line-height: 1;
+	background: white;
+	font-weight: bold;
+	padding: 0;
+	border: solid #eda;
+	border-width: 1px 0;
+	margin: 0 0 1em 0;
+}
+ 
+#menuList a {
+	display: block;
+	width: 10em;
+	w\idth: 6em;
+	color: #7C6240;
+	text-decoration: none;
+	padding: 0.25em 2em;
+}
+ 
+#menuList a.daddy {
+	background: url(rightarrow2.gif) center right no-repeat;
+}
+ 
+#menuList li {
+	float: left;
+	padding: 0;
+	width: 10em;
+}
+ 
+#menuList li ul {
+	position: absolute;
+	left: -999em;
+	height: auto;
+	width: 14.4em;
+	w\idth: 13.9em;
+	font-weight: normal;
+	border-width: 0.25em;
+	margin: 0;
+}
+ 
+#menuList li li {
+	padding-right: 1em;
+	width: 13em
+}
+ 
+#menuList li ul a {
+	width: 13em;
+	w\idth: 9em;
+}
+ 
+#menuList li ul ul {
+	margin: -1.75em 0 0 14em;
+}
+ 
+#menuList li:hover ul ul, #menuList li:hover ul ul ul, #menuList li.sfhover ul ul, #menuList li.sfhover ul ul ul {
+	left: -999em;
+}
+ 
+#menuList li:hover ul, #menuList li li:hover ul, #menuList li li li:hover ul, #menuList li.sfhover ul, #menuList li li.sfhover ul, #menuList li li li.sfhover ul {
+	left: auto;
+}
+ 
+#menuList li:hover, #menuList li.sfhover {
+	background: #eda;
+}
+</style>
+<script type="text/javascript">
+sfHover = function() {
+	var sfEls = document.getElementById("menuList").getElementsByTagName("LI");
+	for (var i=0; i<sfEls.length; i++) {
+		sfEls[i].onmouseover=function() {
+			this.className+=" sfhover";
+		}
+		sfEls[i].onmouseout=function() {
+			this.className=this.className.replace(new RegExp(" sfhover\\b"), "");
+		}
+	}
+}
+if (window.attachEvent) window.attachEvent("onload", sfHover);
+ </script> 
 </logic:present>
 <link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
 <link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
@@ -77,7 +159,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <table cellspacing="0" id="bodytable"> 
   <tr> 
     <td id="topcell">
-  <table cellspacing="0" id="toplayouttable"> 
+  	<table cellspacing="0" id="toplayouttable"> 
         <tr> 
           <td id="header" class="cssstandardthreecolumn">
         	<div id="headercontent">      </div>
@@ -88,9 +170,10 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
           <td colspan="3" id="headermenucell">
         
       		</td>
-        </tr> 
+        </tr>
+     </table>
 
- 
+ 	</td>
   <td id="middlecolumn"> 
 	<div id="maincontent">
 
@@ -128,7 +211,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 
 
-  <div id=mainlogin>
+  <div id="mainlogin">
 
     <tiles:insert attribute="center"/>
                 
@@ -164,6 +247,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
             <td><bean:message key="Logged_as"/>:</td>
             <td><bean:write name="user" property="username" scope="session"/></td>
           </tr>
+          <tr>
             <td colspan="2"><bean:message key="Company"/>:<bean:write name="user" property="companycode_ID" scope="session"/>
             &nbsp;<bean:message key="station"/>:<bean:write name="user" property="station.stationcode" scope="session"/></td>
           </tr>
@@ -190,73 +274,38 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
         <table border="0" cellspacing="0" cellpadding="0" id="headermenu"> 
     
           <tr> 
-            <td align=left>
+            <td align="left">
 
 <div id="mainMenu">
 	<ul id="menuList">
-<%
-	
-  int index = -1;
-	int index2 = -1;
-	String key = null;
-	String key2 = null;
-  if (menu_links != null && menu_links.size() > 0) {
-  	total_menu = menu_links.size();
-    for (Iterator i=menu_links.keySet().iterator();i.hasNext();) {
-      key = (String)i.next();
-			key2 = key.replaceAll(" ", "_");
-			index++;
-      
-      LinkedHashMap nextMenu = (LinkedHashMap)menu_links.get(key);					
-
-%>
-<li class="menubar">
-<%
-	if (key.indexOf("Task Manager") != -1) {
-%>
-	<a id="menucol_<%=index%>.0" href="logon.do?taskmanager=1" class="starter"><bean:message key="<%=key2%>" arg0="<u>" arg1="</u>"/></a>
-<%
-	} else {
-%>
-	<a id="menucol_<%=index%>.0" href="#" class="starter"><bean:message key="<%=key2%>" arg0="<u>" arg1="</u>"/></a>
-  
-<%
-  }    
-			if (nextMenu != null && nextMenu.size() > 0) {
-				index2 = 0;
-%>
-				<ul id="menubuilder<%=index%>" class="navimenu" >
-<%
-				for (Iterator j=nextMenu.keySet().iterator();j.hasNext();) {
-					key2 = (String)j.next();
-          String val2 = (String)nextMenu.get(key2);
-          
-        	key2 = key2.replaceAll(" ", "_");
-        	index2++;
-
-%>
-					<li><a id="menucol_<%=index%>.<%=index2%>" href="<%=val2%>"><bean:message key="<%=key2%>"/></a></li>
-<%
-
-				}
-%>
-				</ul> 
-					
-<%
-			}
-%>
-</li> 
-
-<%
-			if (i.hasNext()) {
-%> 
-&nbsp;|&nbsp; 
-<%
-			}
-		}
-	}
-%>
-
+<li><a href="#">Gobioidei</a> 
+		<ul> 
+			<li><a href="#">Burrowing gobies</a></li> 
+			<li><a href="#">Dartfishes</a></li> 
+			<li><a href="#">Eellike gobies</a></li> 
+			<li><a href="#">Gobies</a></li> 
+			<li><a href="#">Loach gobies</a></li> 
+			<li><a href="#">Odontobutidae</a></li> 
+			<li><a href="#">Sandfishes</a></li> 
+			<li><a href="#">Schindleriidae</a></li> 
+			<li><a href="#">Sleepers</a></li> 
+			<li><a href="#">Xenisthmidae</a></li> 
+		</ul> 
+	</li> 
+	<li><a href="#">Foobar</a> 
+		<ul> 
+			<li><a href="#">Burrowing gobies</a></li> 
+			<li><a href="#">Dartfishes</a></li> 
+			<li><a href="#">Eellike gobies</a></li> 
+			<li><a href="#">Gobies</a></li> 
+			<li><a href="#">Loach gobies</a></li> 
+			<li><a href="#">Odontobutidae</a></li> 
+			<li><a href="#">Sandfishes</a></li> 
+			<li><a href="#">Schindleriidae</a></li> 
+			<li><a href="#">Sleepers</a></li> 
+			<li><a href="#">Xenisthmidae</a></li> 
+		</ul> 
+	</li> 
 
   </ul>
 </div>
@@ -299,11 +348,11 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
   </tr> 
   <tr> 
     <td id="bottomcell">
-      <table width=100% border=0>
+      <table width="100%" border="0">
       <tr><td><div id="copyright">
       <bean:message key="copyright.line1"/><br/>
     <bean:message key="copyright.line2"/></div></td> 
-      <td align=right width=1>
+      <td align="right" width="1">
             <bean:message key="footer.current_version"/>-<%= TracerProperties.getInstanceLabel() %>
       </td>
       </tr>

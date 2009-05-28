@@ -53,6 +53,7 @@ import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -611,6 +612,11 @@ public class BagService {
 						}
 					}
 				}
+			}
+			
+			for(ExpensePayout ep : iDTO.getExpenses()) {
+				ep.setIncident(iDTO);
+				ep.setExpensepayout_ID(0);
 			}
 
 			// everytime when user update mbr, reset the ohd lasttraced date so

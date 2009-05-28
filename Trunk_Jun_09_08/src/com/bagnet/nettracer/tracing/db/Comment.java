@@ -22,16 +22,11 @@ public class Comment implements Serializable {
 		this.agent = agent;
 	}
 	
-	@Column(length = 255)
 	String content;
-	
-	@ManyToOne
-	@JoinColumn(name="agent_id")
 	Agent agent;
-	
-	@Temporal(TemporalType.TIMESTAMP)
 	Date createDate;
 
+	@Column(length = 255)
 	public String getContent() {
 		return content;
 	}
@@ -40,14 +35,25 @@ public class Comment implements Serializable {
 		this.content = content;
 	}
 
+	@ManyToOne
+	@JoinColumn(name="agent_id")
 	public Agent getAgent() {
 		return agent;
 	}
 
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreateDate() {
 		return createDate;
 	}
 	
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public boolean equals(Object otherObject) {
 		// TODO Auto-generated method stub

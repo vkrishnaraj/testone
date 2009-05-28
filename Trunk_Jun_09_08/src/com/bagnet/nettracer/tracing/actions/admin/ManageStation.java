@@ -176,9 +176,7 @@ public final class ManageStation extends Action {
 			if (agents != null && agents.size() > 0) {
 				/** ************ pagination ************* */
 				int rowcount = -1;
-				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-				if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+				int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 				request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 				int totalpages = 0;
 
@@ -217,9 +215,7 @@ public final class ManageStation extends Action {
 
 				request.setAttribute("agentList", agents);
 			} else {
-				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-				if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+				int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 				request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
@@ -293,9 +289,7 @@ public final class ManageStation extends Action {
 					if (agents != null && agents.size() > 0) {
 						/** ************ pagination ************* */
 						int rowcount = -1;
-						int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
-								.parseInt(request.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-						if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+						int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 						request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 						int totalpages = 0;
 
@@ -337,9 +331,7 @@ public final class ManageStation extends Action {
 
 						request.setAttribute("agentList", agents);
 					} else {
-						int rowsperpage = request.getParameter("rowsperpage") != null ? Integer
-								.parseInt(request.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-						if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+						int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 						request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 						int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
@@ -492,9 +484,7 @@ public final class ManageStation extends Action {
 		if (stationList != null && stationList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 
@@ -531,9 +521,7 @@ public final class ManageStation extends Action {
 
 			request.setAttribute("stationList", stationList);
 		} else {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) rowsperpage = TracingConstants.ROWS_PER_PAGE;
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 			int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request

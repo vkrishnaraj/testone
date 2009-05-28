@@ -10,6 +10,8 @@
 	java.util.Locale myLocale = (java.util.Locale) session
 			.getAttribute("org.apache.struts.action.LOCALE");
 %>
+
+<%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <script language="javascript">
   
   
@@ -88,4 +90,21 @@
   	return true;
   }
 
+  var isAware = <%= ((IncidentForm) session.getAttribute("incidentForm")).isNotifiedOfRequirements()%>;
+  function checkDeleteCount(bagNum) {
+	  inputs = document.getElementsByTagName("input");
+	  var invCount = 0;
+	  for(i = 0; i < inputs.length; i++) {
+	    if(inputs[i].id.indexOf("deleteinventory_" + bagNum) == 0) {
+	      invCount ++;
+	      if(invCount >= 3) break;
+	    }
+	  }
+	  if(invCount < 3 && !isAware) {
+	    isAware = confirm("An explanatory remark must be entered when reporting baggage with less than 3 content fields. Would you like to continue?");
+	    document.forms[0].notifiedOfRequirements.value = true;
+	    return isAware;
+	  }
+	  return true;
+	}
 </script>

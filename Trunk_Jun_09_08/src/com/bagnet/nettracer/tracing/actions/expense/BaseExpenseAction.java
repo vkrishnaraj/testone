@@ -44,8 +44,6 @@ public abstract class BaseExpenseAction extends CheckedAction {
 	protected final static String UPDATE_SUCCESS = "update_success";
 	protected final static String SAVE_SUCCESS = "save_success";
 	protected final static String ERROR_NO_INCIDENT = "error_no_incident";
-	private static final String DATE_FORMAT = "date_format";
-	private static final String TIME_ZONE = "time_zone";
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -63,6 +61,8 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		}
 
 		Agent user = (Agent) session.getAttribute("user");
+		ExpensePayoutForm epf = (ExpensePayoutForm) form;
+		
 
 		if ("Create".equals(mapping.getParameter())) {
 			if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, user)) {
@@ -73,7 +73,6 @@ public abstract class BaseExpenseAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.NO_PERMISSION));
 			}
 		} else if ("Update".equals(mapping.getParameter())) {
-			ExpensePayoutForm epf = (ExpensePayoutForm) form;
 			if (epf.getApproveExpense() != null
 					&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, user)) {
 				return (mapping.findForward(TracingConstants.NO_PERMISSION));
@@ -116,8 +115,9 @@ public abstract class BaseExpenseAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
 		}
 		
-		request.setAttribute(DATE_FORMAT, user.getDateformat().getFormat());
-		request.setAttribute(TIME_ZONE, user.getCurrenttimezone());
+		epf.setTz(user.getCurrenttimezone());
+		epf.setDateFormat(user.getDateformat().getFormat());
+
 		return mapping.findForward(SUCCESS);
 	}
 
@@ -199,11 +199,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		sef.setTimeZone(user.getCurrenttimezone());
 		int rowcount = ExpensePayoutBMO.countExpenses(sef, user);
 		if(rowcount > 0) {
-			int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-					.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-			if (rowsperpage < 1) {
-				rowsperpage = TracingConstants.ROWS_PER_PAGE;
-			}
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, request.getSession());
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 			int totalpages = 0;
 
