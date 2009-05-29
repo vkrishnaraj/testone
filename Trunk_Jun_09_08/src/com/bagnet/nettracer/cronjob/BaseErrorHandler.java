@@ -10,7 +10,7 @@ import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 
-public abstract class BaseErrorHandler implements ErrorHandler {
+public class BaseErrorHandler implements ErrorHandler {
 
 	private static final Logger logger = Logger.getLogger(BaseErrorHandler.class);
 	private String emailHost = "localhost";
