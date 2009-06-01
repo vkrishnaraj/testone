@@ -23,14 +23,14 @@
 					</td>
 					<td valign="top" align="right">
 					<c:choose>
-						<c:when test="${siteLanguage == 'es'}">
-						<a href="search.htm?locale=en"><spring:message code="english"/></a>
+						<c:when test="${siteLanguage == 'en'}">
+						<a href="search.htm?locale=br"><spring:message code="port"/></a>
 						</c:when>
-						<c:when test="${(empty siteLanguage) and cookie.userLanguage.value == 'es'}">
-						<a href="search.htm?locale=en"><spring:message code="english"/></a>
+						<c:when test="${(empty siteLanguage) and cookie.userLanguage.value == 'en'}">
+						<a href="search.htm?locale=br"><spring:message code="port"/></a>
 						</c:when>
 						<c:otherwise>
-						<a href="search.htm?locale=es"><spring:message code="spanish"/></a>
+						<a href="search.htm?locale=en"><spring:message code="english"/></a>
 						</c:otherwise>
 					</c:choose>
 					</td>
@@ -84,8 +84,8 @@
 														code="pv5" />
 												</font>
 												<br />
-												<font style="font-size: 11px; line-height: 25px;">JFKB600000015
-													&nbsp;<spring:message code="becomes"/>&nbsp; JFKB615</font>
+												<font style="font-size: 11px; line-height: 25px;">SAOAD00000015
+													&nbsp;<spring:message code="becomes"/>&nbsp; SAOAD15</font>
 											</p>
 
 										</td>

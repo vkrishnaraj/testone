@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="resource:/paxview.properties" />
+		<property name="properties">
+			<props>
+				<prop key="default.locale">en</prop>
+			</props>
+		</property>
+
 	</bean>
-	
+
 	<!--  Web Service Definitions -->
 	<bean name="serviceLocator"
 		class="com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceLocator">
-		<property name="NTPassengerViewServiceSOAP12port_httpEndpointAddress"
+		<property
+			name="NTPassengerViewServiceSOAP12port_httpEndpointAddress"
 			value="${webservice.url}" />
 	</bean>
-	<bean name="paxViewService" class="com.bagnet.nettracer.paxview.PaxViewServiceImpl">
+	<bean name="paxViewService"
+		class="com.bagnet.nettracer.paxview.PaxViewServiceImpl">
 		<property name="serviceLocator" ref="serviceLocator" />
 	</bean>
 
 	<!-- Controller Beans -->
-	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+	<bean id="handlerMapping"
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
 		<property name="interceptors">
 			<list>
 				<ref bean="localeChangeInterceptor" />
 			</list>
 		</property>
 	</bean>
-	<bean name="/search.htm" class="com.bagnet.nettracer.paxview.PaxViewController">
+	<bean name="/search.htm"
+		class="com.bagnet.nettracer.paxview.PaxViewController">
 		<property name="formView" value="search" />
 		<property name="successView" value="details" />
-		<property name="commandClass" value="com.bagnet.nettracer.paxview.Search" />
+		<property name="commandClass"
+			value="com.bagnet.nettracer.paxview.Search" />
 		<property name="pvService" ref="paxViewService" />
 		<property name="validator" ref="beanValidator" />
 	</bean>
-	
+
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
@@ -53,15 +67,17 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
-	
-	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
 
-	
-	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+
+
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="cookieName" value="userLanguage" />
-		<property name="defaultLocale" value="en" />
+		<property name="defaultLocale" value="${default.locale}" />
 	</bean>
-	
+
 	<!-- Form Validation -->
 	<bean id="validatorFactory"
 		class="org.springmodules.validation.commons.DefaultValidatorFactory">
@@ -72,7 +88,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="beanValidator"
 		class="org.springmodules.validation.commons.DefaultBeanValidator">
 		<property name="validatorFactory" ref="validatorFactory" />
