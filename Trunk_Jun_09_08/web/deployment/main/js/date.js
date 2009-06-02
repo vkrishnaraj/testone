@@ -78,18 +78,24 @@ function isDate(val,format) {
 //   Compare two date strings to see which is greater.
 //   Returns:
 //   1 if date1 is greater than date2
-//   0 if date2 is greater than date1 of if they are the same
-//  -1 if either of the dates is in an invalid format
+//   0 if they are the same
+//   -1 if date2 is greater than date1
+//  -2 if either of the dates is in an invalid format
 // -------------------------------------------------------------------
 function compareDates(date1,dateformat1,date2,dateformat2) {
 	var d1=getDateFromFormat(date1,dateformat1);
 	var d2=getDateFromFormat(date2,dateformat2);
+
 	if (d1==0 || d2==0) {
-		return -1;
+		return -2;
 		}
 	else if (d1 > d2) {
 		return 1;
 		}
+	else if (d1 < d2) {
+		return -1;
+		}
+	
 	return 0;
 	}
 

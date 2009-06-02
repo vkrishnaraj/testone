@@ -1,6 +1,7 @@
 <%@ page language="java"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="org.apache.struts.action.Action"%>
+<%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 
 <%
 	Agent a = (Agent) session.getAttribute("user");
@@ -11,9 +12,8 @@
 			.getAttribute("org.apache.struts.action.LOCALE");
 %>
 
-<%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
+
 <script language="javascript">
-  
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
  
@@ -167,7 +167,7 @@
       else if (currentElementName.indexOf("].color") != -1) {
     	  bagIndices = bagIndices.push(currentElementName.substring(left+1, right));
       }
-      else if (currentElementName.indexOf("deleteinventory" != -1) {
+      else if (currentElementName.indexOf("deleteinventory") != -1) {
           bagsWithContents = bagsWithContents.push(currentElementName.split('_')[1]);
       }
         
@@ -334,7 +334,13 @@
   	return true;
   }
 
-  var isAware = <%= ((IncidentForm) session.getAttribute("incidentForm")).isNotifiedOfRequirements()%>;
+  <% if (session.getAttribute("incidentForm") != null) { %>
+    var isAware = <%= ((IncidentForm) session.getAttribute("incidentForm")).isNotifiedOfRequirements()%>;
+  <% } else { %>
+    var isAware = false;
+  <% }%>
+  
+  
   function checkDeleteCount(bagNum) {
 	  inputs = document.getElementsByTagName("input");
 	  var invCount = 0;

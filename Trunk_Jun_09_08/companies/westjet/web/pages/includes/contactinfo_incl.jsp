@@ -65,7 +65,7 @@
           <tr>
             <td colspan=5>
               <a name='addpassenger<%= i %>'></a>
-              <b><bean:message key="colname.passenger" /> <%= i + 1 %></b>
+              <b><bean:message key="colname.passenger" /> <%= ((Integer)i).intValue() + 1 %></b>
             </td>
 
           </tr>

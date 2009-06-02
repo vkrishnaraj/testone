@@ -127,6 +127,34 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 	      }
 	    } 
 	 	}
+    
+     i = 0;
+     
+     while (true) {
+       var format = '<%= a.getDateformat().getFormat() %>' + ' ' + '<%= a.getTimeformat().getFormat() %>';
+       var arrDate = document.getElementsByName("itinerarylist[" + i +"].disarrivedate");
+       var arrTime = document.getElementsByName("itinerarylist[" + i +"].disscharrivetime");
+       ++i;
+       var depDate = document.getElementsByName("itinerarylist[" + i +"].disdepartdate");
+       var depTime = document.getElementsByName("itinerarylist[" + i +"].disschdeparttime");
+
+
+       if (arrDate.length < 1 ||arrTime.length < 1 || depDate.length < 1 || depTime.length < 1 ||
+        arrDate[0].value.length < 1 ||arrTime[0].value.length < 1 || depDate[0].value.length < 1 || depTime[0].value.length < 1
+  ) {
+          break;
+       }
+       
+       var arrival = arrDate[0].value + ' ' + arrTime[0].value;
+       var departure = depDate[0].value + ' ' + depTime[0].value;
+
+       if (compareDates(arrival,format,departure,format) > -1) {
+          alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.departbeforearrive") %>"); 
+        currentElement.focus();
+        return false;
+       }
+     }
+    
     if (!validateReqForward(form)) return false;
 	 	 return true;
   }

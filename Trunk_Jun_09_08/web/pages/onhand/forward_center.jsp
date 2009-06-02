@@ -23,16 +23,16 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <script langugage="javascript">
   
-	function getstations() {
-		o = document.incidentForm;
-		o.getstation.value="1";
-		document.getElementById("faultstationdiv").innerHTML = "<td nowrap><bean:message key="ajax.please_wait" /></td>";
-			postForm("incidentForm", true, function (req) { 
-				o.getstation.value = "0";
-				document.getElementById("faultstationdiv").innerHTML = req.responseText; 
-		});
-	}
-	
+  function getstations() {
+    o = document.incidentForm;
+    o.getstation.value="1";
+    document.getElementById("faultstationdiv").innerHTML = "<td nowrap><bean:message key="ajax.please_wait" /></td>";
+      postForm("incidentForm", true, function (req) { 
+        o.getstation.value = "0";
+        document.getElementById("faultstationdiv").innerHTML = req.responseText; 
+    });
+  }
+  
     function textCounter(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
         field.value = field.value.substring(0, maxlimit);
@@ -41,12 +41,12 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
       }
     }
 
-	var cal1xx = new CalendarPopup();	
+  var cal1xx = new CalendarPopup(); 
 
- 	function setExpediteNum(form) { return true; }
+  function setExpediteNum(form) { return true; }
   
-	function validateMessageForm (form)
-	{
+  function validateMessageForm (form)
+  {
       expediteElement = null;
       bagTagElement = null;
 
@@ -54,112 +54,138 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
       for (var j=0;j<form.length;j++) {
         currentElement = form.elements[j];
         currentElementName=currentElement.name;
-		
+    
         if (currentElementName.indexOf("expedite") != -1)
-	    {
+      {
           expediteElement = currentElement;
-	      if (currentElement.value.length > 0 && !checkExpedite(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("bag_tag") != -1)
-	    {
+        if (currentElement.value.length > 0 && !checkExpedite(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.expedite_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("bag_tag") != -1)
+      {
           bagTagElement = currentElement;
-	      if (currentElement.value.length > 0 && !checkClaimCheck(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_tag_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("destStation") != -1)
-	    {
-	      if (currentElement.value.length < 1)
-	      {
-	         alert("<%= (String)myMessages.getMessage(myLocale, "colname.stationForwardTo") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
-	         currentElement.focus();
-	         return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("legfrom") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>");
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("legto") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>"); 
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("flightnum") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkFlightNum(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.flightNum") %>");
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("dispBagArriveDate") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_arrived_date") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("disdepartdate") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("disarrivedate") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.arrdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>"); 
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("disschdeparttime") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkTime(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.schdeptime") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.time") %>"); 
-	        currentElement.focus();
-	        return false;
-	      }
-	    }
-	    else if (currentElementName.indexOf("disscharrivetime") != -1)
-	    {
-	      if (currentElement.value.length > 0 && !checkTime(currentElement.value))
-	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.scharrtime") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.time") %>"); 
-	        currentElement.focus();
-	        return false;
-	      }
-	    } 
-	 	}
-	 	
-	 if (form.name == "forwardMessageForm"){
-    	if (!validatereqBEORN(form)) return false;
+        if (currentElement.value.length > 0 && !checkClaimCheck(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_tag_number") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.expedite") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("destStation") != -1)
+      {
+        if (currentElement.value.length < 1)
+        {
+           alert("<%= (String)myMessages.getMessage(myLocale, "colname.stationForwardTo") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+           currentElement.focus();
+           return false;
+        }
+      }
+      else if (currentElementName.indexOf("legfrom") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("legto") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.station") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("flightnum") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkFlightNum(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.flightNum") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("dispBagArriveDate") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkDate(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_arrived_date") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("disdepartdate") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkDate(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("disarrivedate") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkDate(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.arrdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.date") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("disschdeparttime") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkTime(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.schdeptime") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.time") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("disscharrivetime") != -1)
+      {
+        if (currentElement.value.length > 0 && !checkTime(currentElement.value))
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.scharrtime") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.time") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+   }
+    
+     i = 0;
+     
+     while (true) {
+       var format = '<%= a.getDateformat().getFormat() %>' + ' ' + '<%= a.getTimeformat().getFormat() %>';
+       var arrDate = document.getElementsByName("itinerarylist[" + i +"].disarrivedate");
+       var arrTime = document.getElementsByName("itinerarylist[" + i +"].disscharrivetime");
+       ++i;
+       var depDate = document.getElementsByName("itinerarylist[" + i +"].disdepartdate");
+       var depTime = document.getElementsByName("itinerarylist[" + i +"].disschdeparttime");
+
+       if (arrDate.length < 1 ||arrTime.length < 1 || depDate.length < 1 || depTime.length < 1 ||
+        arrDate[0].value.length < 1 ||arrTime[0].value.length < 1 || depDate[0].value.length < 1 || depTime[0].value.length < 1
+  ) {
+          break;
+       }
+       
+       var arrival = arrDate[0].value + ' ' + arrTime[0].value;
+       var departure = depDate[0].value + ' ' + depTime[0].value;
+
+       if (compareDates(arrival,format,departure,format) > -1) {
+          alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.departbeforearrive") %>"); 
+        currentElement.focus();
+        return false;
+       }
+     }
+    
+   if (form.name == "forwardMessageForm"){
+      if (!validatereqBEORN(form)) return false;
      }
     
    
@@ -169,14 +195,14 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
       return false;
     }
     
-	 return true;
+   return true;
   }
 
 
 </script>
 
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
 
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="forward_message.do" method="post">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
@@ -229,36 +255,36 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                 </td>
               </tr>
                           
-			<tr>
-			  <td>
-			    <bean:message key="colname.losscode" />
-			  </td>
-			  <td>
-			    <html:select property="lossCode" styleClass="dropdown">
-			      <html:option value="0">
-			        <bean:message key="select.please_select" />
-			      </html:option>
-				  <html:options collection="losscodes" property="code_id" labelProperty="combination"/>
-			    </html:select>
-			  </td>
-			</tr>
+      <tr>
+        <td>
+          <bean:message key="colname.losscode" />
+        </td>
+        <td>
+          <html:select property="lossCode" styleClass="dropdown">
+            <html:option value="0">
+              <bean:message key="select.please_select" />
+            </html:option>
+          <html:options collection="losscodes" property="code_id" labelProperty="combination"/>
+          </html:select>
+        </td>
+      </tr>
 
               <tr>
-              	<td><bean:message key="colname.faultstation" /></td>
-              	<td>
-					<html:select property="faultStation" styleClass="dropdown">
-					  <html:option value="">
-					    <bean:message key="select.please_select" />
-					  </html:option>
-					  <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
-					</html:select>
-              	</td>
+                <td><bean:message key="colname.faultstation" /></td>
+                <td>
+          <html:select property="faultStation" styleClass="dropdown">
+            <html:option value="">
+              <bean:message key="select.please_select" />
+            </html:option>
+            <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+          </html:select>
+                </td>
               </tr>
               <tr>
-              	<td><bean:message key="colname.fwd.specialinstructions" /></td>
-              	<td>
+                <td><bean:message key="colname.fwd.specialinstructions" /></td>
+                <td>
                   <html:text name="forwardMessageForm" property="specialInstructions" size="20" maxlength="20" />
-              	</td>
+                </td>
               </tr>
               
               <tr>
@@ -302,7 +328,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                     <logic:iterate indexId="k" id="bagItinerary" name="forwardMessageForm" property="bagitinerarylist">
                       <tr>
                         <td nowrap>
-                        	<html:hidden name="bagItinerary" property="itinerarytype" value="1" indexed="true" />
+                          <html:hidden name="bagItinerary" property="itinerarytype" value="1" indexed="true" />
      
                           <html:text name="bagItinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
                           <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=bagItinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
@@ -320,12 +346,12 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                             </logic:empty>
                             
                         
-                        	<html:select name="bagItinerary" property="airline" styleClass="dropdown" indexed="true">
-		                    	<html:option value="">
-		                      		<bean:message key="select.please_select" />
-		                    	</html:option>
-		                    	<html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-		                  	</html:select>
+                          <html:select name="bagItinerary" property="airline" styleClass="dropdown" indexed="true">
+                          <html:option value="">
+                              <bean:message key="select.please_select" />
+                          </html:option>
+                          <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
+                        </html:select>
                           &nbsp;<br>
                           <html:text styleClass="textfield" name="bagItinerary" property="flightnum" size="4" maxlength="4" indexed="true" />
                         </td>
@@ -396,8 +422,8 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                       <tr>
                         <td nowrap>
 
-     					<html:hidden name="itinerary" property="itinerarytype" value="1" indexed="true" />
-     											
+              <html:hidden name="itinerary" property="itinerarytype" value="1" indexed="true" />
+                          
                           <html:text name="itinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
                           <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
                           /<br>
@@ -410,12 +436,12 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                               <jsp:setProperty name="itinerary" property="airline" value="<%= a.getCompanycode_ID() %>"/>
                             </logic:empty>
                         
-                        	<html:select name="itinerary" property="airline" styleClass="dropdown" indexed="true">
-		                    	<html:option value="">
-		                      		<bean:message key="select.please_select" />
-		                    	</html:option>
-		                    	<html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-		                  	</html:select>
+                          <html:select name="itinerary" property="airline" styleClass="dropdown" indexed="true">
+                          <html:option value="">
+                              <bean:message key="select.please_select" />
+                          </html:option>
+                          <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
+                        </html:select>
                           &nbsp;<br>
                           <html:text styleClass="textfield" name="itinerary" property="flightnum" size="4" maxlength="4" indexed="true" />
                         </td>
@@ -470,3 +496,4 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
               </tr>
             </table>
           </html:form>
+
