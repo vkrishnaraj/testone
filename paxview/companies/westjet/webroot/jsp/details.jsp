@@ -17,7 +17,16 @@ window.addEvent('domready', function() {
 	var myAccordion = new Accordion($('accordion'), 'p.statClaimToggle', 'div.statClaimContent', {
 		opacity: false,
 		onActive: function(toggler, element){
-			toggler.setStyle('text-decoration', 'none');
+
+			var browser=navigator.appName;
+			var version = parseFloat(navigator.appVersion.split('MSIE')[1]);
+        
+        	if (browser=="Microsoft Internet Explorer" && (version<7))
+	        {
+        		toggler.setStyle('text-decoration', 'underline');
+		    } else {   
+				toggler.setStyle('text-decoration', 'none');
+			}
 		},
 		onBackground: function(toggler, element){
 			toggler.setStyle('text-decoration', 'underline');
