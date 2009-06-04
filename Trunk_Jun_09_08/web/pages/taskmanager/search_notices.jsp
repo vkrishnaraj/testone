@@ -129,31 +129,33 @@
       <br>
       <table class="form2" cellspacing="0" cellpadding="0">
         <tr>
-          <td><strong>Select</strong></td>
-          <td><strong>On-Hand</strong></td>
-          <td><strong>Forward Date</strong></td>
-          <td><strong>Itinerary</strong></td>
-          <td><strong>Status</strong></td>
+          <td><strong><bean:message key="colname.select" /></strong></td>
+          <td><strong><bean:message key="colname.ohd_ID" /></strong></td>
+          <td><strong><bean:message key="details" /></strong></td>
+          <td><strong><bean:message key="colname.forwarddate" /></strong></td>
+          <td><strong><bean:message key="colname.itinerary" /></strong></td>
+          <td><strong><bean:message key="header.tsk_status" /></strong></td>
         </tr>
         <logic:iterate id="result" name="resultlist" type="com.bagnet.nettracer.tracing.db.ForwardNotice">
           <tr>
 	    <td><input type="checkbox" name="id" value="<%=Long.toString(result.getId()) %>" ></td>
-            <td><bean:write name="result" property="forward.ohd.OHD_ID" /></td>
+            <td><a href='addOnHandBag.do?ohd_ID=<bean:write name="result" property="forward.ohd.OHD_ID" />'><bean:write name="result" property="forward.ohd.OHD_ID" /></a></td>
+            <td><a href="forward_on_hand.do?showForward=1&forward_id=<bean:write name="result" property="forward.OHDLog_ID"/>"><bean:message key="details" /></a></td>
             <td><bean:write name="result" property="forward.dispForwardTime" /></td>
-            <td><bean:write name="result" property="forward.dispItinerary" filter="false"/></td>
+            <td><bean:write name="result" property="dispItinerary" filter="false"/>&nbsp;</td>
             <td><bean:message name="result" property="key" /></td>
           </tr>
         </logic:iterate>
         <tr>
-          <td colspan="5">
+          <td colspan="6">
             <jsp:include page="/pages/includes/pagination_incl.jsp" />
           </td>
         </tr>
         <tr>
-          <td colspan="5">&nbsp;</td>
+          <td colspan="6">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="5">
+          <td colspan="6">
 <%
                   if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
 %>

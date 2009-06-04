@@ -276,18 +276,5 @@ public class OHD_Log implements Serializable {
 
 	public void setLog_status(int log_status) {
 		this.log_status = log_status;
-	}
-	
-	public String getDispItinerary() {
-		ArrayList<String> list = new ArrayList<String>();
-		for (OHD_Log_Itinerary itin: (Set<OHD_Log_Itinerary>)getItinerary()) {
-			String b = StringUtils.join(" ", itin.getAirline() + itin.getFlightnum(), itin.getLegfrom() + " to " + itin.getLegto() + "<br />",
-					"Departs:", itin.getDisdepartdate(), itin.getDisschdeparttime(),
-					"Arrives:", itin.getDisarrivedate(), itin.getDisscharrivetime());		
-			list.add(b.toString());
-		}
-		return StringUtils.join(list, "<br /><br />");
-	}
-	
-	
+	}	
 }
