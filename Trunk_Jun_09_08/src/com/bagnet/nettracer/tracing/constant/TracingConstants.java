@@ -84,6 +84,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_TO_BE_DELIVERED = "Bags To Be Delivered";
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_IN_STATION = "On-hand Bags";
 	public final static String SYSTEM_COMPONENT_NAME_SCANNER_DATA = "Scanner Data";
+	public final static String SYSTEM_COMPONENT_NAME_FORWARD_NOTICES = "Forward Copies";
 
 	public final static String FORWARD_SCANNER_DATA = "scannerData";
 	
@@ -357,6 +358,7 @@ public class TracingConstants {
 	public final static String SEARCH_ONHAND = "searchOnHand";
 	// custom query
 	public final static String CUSTOM_QUERY = "customquery";
+	public final static String SEARCH_FORWARD_NOTICE = "search_notices";
 
 	// activetracing
 	public final static String ACTIVE_TRACING = "activetracing";

@@ -33,8 +33,9 @@
 		<form-bean name="expensePayoutForm" type="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm" />
 		<form-bean name="searchExpenseForm" type="com.bagnet.nettracer.tracing.forms.SearchExpenseForm" />
 		
-		<form-bean name="claimSettlementForm" type="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm" />
+		<form-bean name="searchForwardNoticeForm" type="com.bagnet.nettracer.tracing.forms.SearchForwardNoticeForm" />
 		
+		<form-bean name="claimSettlementForm" type="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm" />
 		<form-bean name="claimToBeProcessedForm" type="com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm" />
 		<form-bean name="claimProrateForm" type="com.bagnet.nettracer.tracing.forms.ClaimProrateForm" />
 		<form-bean name="statReportForm" type="com.bagnet.nettracer.tracing.forms.StatReportForm" />
@@ -344,6 +345,7 @@
 		<forward name="expensepayoutdeniedsuccess" path="expense_payoutdeniedsuccess" />
 		<forward name="bdo" path="bdo_page" />
 		<forward name="searchbdo" path="search_bdo" />
+		<forward name="search_notices" path="search_notices" />
 		<forward name="nopermission" path="no_permission" />
 		<forward name="viewloggedagents" path="view_loggedagents" />
 
@@ -457,6 +459,8 @@
 		
 		<action path="/claim_settlement" type="com.bagnet.nettracer.tracing.actions.ClaimSettlementAction" name="claimSettlementForm" scope="session" validate="false"></action>
 		
+		<action path="/forwardNotices" type="com.bagnet.nettracer.tracing.actions.taskmanager.SearchForwardNoticeAction" name="searchForwardNoticeForm" scope="request" validate="false" ></action>
+		
 		<!-- Expense Actions -->
 		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="true" >
 			<forward name="create_success" path="create_expense"></forward>
@@ -468,6 +472,9 @@
 		<action path="/BatchApproveExpenses" parameter="BatchApprove" type="com.bagnet.nettracer.tracing.actions.expense.BatchApproveExpenseAction" name="interimExpenseRequestForm" scope="request" validate="false" >
 		</action>
 		
+
+
+
 		<action path="/SearchExpenses" parameter="Search" type="com.bagnet.nettracer.tracing.actions.expense.SearchExpenseAction" name="searchExpenseForm" scope="request" validate="false" >
 			<forward name="success" path="search_expense"></forward>
 		</action>

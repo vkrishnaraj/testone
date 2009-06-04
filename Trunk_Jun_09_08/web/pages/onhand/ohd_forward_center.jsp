@@ -346,7 +346,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                 <td colspan="2">
                   <table>
                     <tr>
-                      <td colspan="6">
+                      <td colspan="7">
                         <strong>
                           <bean:message key="header.forward_itinerary" />
                         </strong>
@@ -356,6 +356,11 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                       <td valign="top">
                         <strong>
                           <bean:message key="colname.foh.fromto" />
+                        </strong>
+                      </td>
+                      <td valign="top">
+                        <strong>
+                          <bean:message key="colname.notifydestination" />
                         </strong>
                       </td>
                       <td valign="top">
@@ -405,6 +410,9 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 
                         </td>
                         <td>
+                            <html:checkbox name="itinerarylist" indexed="true" property="notify"></html:checkbox>
+                        </td>
+                        <td>
                         
                             <logic:empty name="itinerarylist" property="airline">
                               <jsp:setProperty name="itinerarylist" property="airline" value="<%= a.getCompanycode_ID() %>"/>
@@ -432,7 +440,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                         </td>
                       </tr>
                       <tr>
-                        <td colspan=6>
+                        <td colspan="7">
                           <html:submit styleId="button" property="deleteBag" indexed="true">
                             <bean:message key="button.delete_forward_itinerary" />
                           </html:submit>

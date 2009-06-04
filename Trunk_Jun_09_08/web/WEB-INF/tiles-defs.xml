@@ -482,6 +482,11 @@
     <definition name="search_bdo" extends="user_menu">
         <put name="center"   value="/pages/bdo/search_bdo_page.jsp"/>
     </definition>
+    
+    <definition name="search_notices" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/search_notices.jsp"/>
+    </definition>
+
         
     <definition name="no_permission" extends="user_menu">
         <put name="center"   value="/pages/customerrpages/error_noperm.jsp"/>

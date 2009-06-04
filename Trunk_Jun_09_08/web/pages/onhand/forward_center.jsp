@@ -21,7 +21,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
-<script langugage="javascript">
+<script language="javascript">
   
   function getstations() {
     o = document.incidentForm;
@@ -202,7 +202,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 </script>
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
-
+<jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="forward_message.do" method="post">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
@@ -216,7 +216,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
           </h1>
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-            <br>
+            <br />
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
@@ -367,7 +367,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                         </td>
                       </tr>
                       <tr>
-                        <td colspan=6>
+                        <td colspan="7">
                           <html:submit styleId="button" property="deleteBag" indexed="true">
                             <bean:message key="button.delete_bag_itinerary" />
                           </html:submit>
@@ -384,7 +384,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                 <td colspan="2">
                   <table>
                     <tr>
-                      <td colspan="6">
+                      <td colspan="7">
                         <strong>
                           <bean:message key="header.forward_itinerary" />
                         </strong>
@@ -393,6 +393,9 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                     <tr>
                       <td valign="top">
                         <bean:message key="colname.fromto.req" />
+                      </td>
+                      <td valign="top" width="5%">
+                          <bean:message key="colname.notifydestination" />
                       </td>
                       <td valign="top">
                         <bean:message key="colname.flightnum.req" />
@@ -431,6 +434,9 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                           <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerary[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
       
                         </td>
+                        <td> 
+                          <html:checkbox name="itinerary" property="notify" indexed="true"></html:checkbox>
+                        </td>
                         <td >
                             <logic:empty name="itinerary" property="airline">
                               <jsp:setProperty name="itinerary" property="airline" value="<%= a.getCompanycode_ID() %>"/>
@@ -457,7 +463,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                         </td>
                       </tr>
                       <tr>
-                        <td colspan=6>
+                        <td colspan="7">
                           <html:submit styleId="button" property="deleteForward" indexed="true">
                             <bean:message key="button.delete_forward_itinerary" />
                           </html:submit>
@@ -477,7 +483,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                 </td>
                 <td>
                   <html:textarea styleClass="textarea" property="message" cols="60" rows="16" onkeydown="textCounter(this.form.message,this.form.remLen,1500);" onkeyup="textCounter(this.form.message,this.form.remLen,1500);" />
-                  <input disabled="true" type="text" name="remLen" size="4" maxlength="4" value="1500">
+                  <input disabled type="text" name="remLen" size="4" maxlength="4" value="1500">
                 </td>
               </tr>
               <tr>

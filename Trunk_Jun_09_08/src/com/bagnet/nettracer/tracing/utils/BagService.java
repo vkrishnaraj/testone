@@ -36,6 +36,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
+import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -158,10 +159,17 @@ public class BagService {
 			log.setItinerary(new HashSet(form.getItinerarylist()));
 			log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 			OHD_Log_Itinerary oli = null;
+			
+			ArrayList<String> notifyList = new ArrayList<String>();
+			
 			if(log.getItinerary() != null) {
 				for(Iterator i = log.getItinerary().iterator(); i.hasNext();) {
 					oli = (OHD_Log_Itinerary) i.next();
 					oli.setLog(log);
+					
+					if (oli.isNotify() && oli.getLegto() != null) {
+						notifyList.add(oli.getLegto());
+					}
 				}
 			}
 
@@ -258,6 +266,9 @@ public class BagService {
 				}
 			}
 			HibernateUtils.save(log);
+			ForwardNoticeBMO.createForwardNotice(log, notifyList, user);
+			
+			
 
 			// update l/d bag status to in transit as well if forwarding station
 			// is the same as l/d assigned station
@@ -338,11 +349,19 @@ public class BagService {
 		log.setItinerary(new HashSet(form.getForwarditinerarylist()));
 		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 		OHD_Log_Itinerary oli = null;
+		
+		ArrayList<String> notifyList = new ArrayList<String>();
+		
 		if(log.getItinerary() != null) {
 			List itinList = log.getItinerarylist();
 			for (int i = 0; itinList != null && i<itinList.size(); ++i) {
 				oli = (OHD_Log_Itinerary) itinList.get(i);
 				oli.setLog(log);
+				
+				if (oli.isNotify() && oli.getLegto() != null) {
+					notifyList.add(oli.getLegto());
+				}
+				
   			if (i == itinList.size() -1) {
   				finalFlightAirline = oli.getAirline();
   				finalFlightNumber = oli.getFlightnum();
@@ -350,10 +369,11 @@ public class BagService {
   				
   			}
 			}
-
 		}
 
 		HibernateUtils.save(log);
+		
+		ForwardNoticeBMO.createForwardNotice(log, notifyList, user);
 		
 		bdto.setSpecialInstructions(form.getSpecialInstructions());
 		bdto.setExpediteNumber(form.getExpediteNumber());

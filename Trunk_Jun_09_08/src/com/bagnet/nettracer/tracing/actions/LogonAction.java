@@ -22,9 +22,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
+import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
@@ -255,7 +257,11 @@ public class LogonAction extends Action {
 					int x = TaskUtils.getActiveTaskCount(s.getStation_ID(), true);
 					if (x != -1)
 						entries = x;
-				} else {
+				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES)) {
+					int x = ForwardNoticeBMO.getForwardsForStationCount(s, ForwardNotice.OPEN_STATUS);
+					if (x != -1)
+						entries = x;
+				}	else {
 					if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_BAGS_TO_LZ)) {
 						if (!s.isThisOhdLz()) {
 							int x = OHDUtils.getBagsToLZedCount(s.getStation_ID(), true);

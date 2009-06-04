@@ -30,6 +30,7 @@ public class OHD_Log_Itinerary implements Serializable {
 	private Date schdeparttime;
 	private Date scharrivetime;
 	private OHD_Log log;
+	private boolean notify;
 
 	private String _DATEFORMAT; //for date time format purpose only, not
 	// literally part of this object
@@ -326,5 +327,13 @@ public class OHD_Log_Itinerary implements Serializable {
 	 */
 	public void set_TIMEFORMAT(String _timeformat) {
 		_TIMEFORMAT = _timeformat;
+	}
+
+	public boolean isNotify() {
+		return notify;
+	}
+
+	public void setNotify(boolean notify) {
+		this.notify = notify;
 	}
 }

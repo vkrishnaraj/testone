@@ -97,8 +97,13 @@ public class HibernateUtils {
 	 * 
 	 * @param obj
 	 */
-	public static boolean delete(Object obj) {
-		Session sess = null;
+	public static boolean delete(Object obj, Session sess) {
+		boolean sessionNull = (sess == null);
+
+		if (sessionNull) {
+			sess = HibernateWrapper.getSession().openSession();
+		}
+		
 		Transaction t = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -116,7 +121,7 @@ public class HibernateUtils {
 			}
 			return false;
 		} finally {
-			if (sess != null) {
+			if (sess != null && sessionNull) {
 				try {
 					sess.close();
 				} catch (Exception e) {
@@ -125,6 +130,14 @@ public class HibernateUtils {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * 
+	 * @param obj
+	 */
+	public static boolean delete(Object obj) {
+		return delete(obj, null);
 	}
 
 	/**
