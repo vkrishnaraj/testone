@@ -90,7 +90,12 @@
   	return true;
   }
 
-  var isAware = <%= ((IncidentForm) session.getAttribute("incidentForm")).isNotifiedOfRequirements()%>;
+  <% if (session.getAttribute("incidentForm") != null) { %>
+    var isAware = <%= ((IncidentForm) session.getAttribute("incidentForm")).isNotifiedOfRequirements()%>;
+  <% } else { %>
+    var isAware = false;
+  <% }%>
+
   function checkDeleteCount(bagNum) {
 	  inputs = document.getElementsByTagName("input");
 	  var invCount = 0;
