@@ -9,7 +9,7 @@
                  com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
-
+<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
     <table class=login2 width="50%" align=center>
       	<tr>
         	<td align="center" colspan=2>
@@ -62,7 +62,7 @@
           </tr>
           <tr>
             <td colspan=2 align=center>
-            <H1><font color="red">Warning: This is a test environment only.  Do not enter real claims or bags.</font></H2>
+            <h2><font color="red">Warning: This is a test environment only.  Do not enter real claims or bags.</font></h2>
               <p>
                 <font color=red>
                   <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
@@ -78,3 +78,4 @@
                     </td>
                   </tr>
                 </table>
+</html:form>
