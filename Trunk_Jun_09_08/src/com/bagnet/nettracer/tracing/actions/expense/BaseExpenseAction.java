@@ -61,7 +61,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		}
 
 		Agent user = (Agent) session.getAttribute("user");
-		ExpensePayoutForm epf = (ExpensePayoutForm) form;
+		
 		
 
 		if ("Create".equals(mapping.getParameter())) {
@@ -73,6 +73,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.NO_PERMISSION));
 			}
 		} else if ("Update".equals(mapping.getParameter())) {
+			ExpensePayoutForm epf = (ExpensePayoutForm) form;
 			if (epf.getApproveExpense() != null
 					&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, user)) {
 				return (mapping.findForward(TracingConstants.NO_PERMISSION));
@@ -115,9 +116,13 @@ public abstract class BaseExpenseAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
 		}
 		
-		epf.setTz(user.getCurrenttimezone());
-		epf.setDateFormat(user.getDateformat().getFormat());
-
+		if (form instanceof ExpensePayoutForm) {
+			ExpensePayoutForm epf = (ExpensePayoutForm) form;
+			epf.setTz(user.getCurrenttimezone());
+			epf.setDateFormat(user.getDateformat().getFormat());	
+		}
+		
+		
 		return mapping.findForward(SUCCESS);
 	}
 
