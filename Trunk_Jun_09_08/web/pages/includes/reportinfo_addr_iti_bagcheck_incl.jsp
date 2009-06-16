@@ -190,7 +190,7 @@
               <html:hidden property="ld_inc_ID"/>
               <html:hidden property="damage_inc_ID" />
               <html:hidden property="ma_inc_ID" />
-              <input type="hidden" name="delete_these_elements" value="" />
+              
               <input type="hidden" name="wtq_pending_cancel" value="" />
               <input type="hidden" name="wtq_suspend" value="" />
               <input type="hidden" name="wtq_reinstate" value="" />

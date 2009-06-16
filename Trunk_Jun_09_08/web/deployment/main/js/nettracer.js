@@ -182,7 +182,7 @@ function hideThisDiv(object, objectType) {
 	del.value += object + ",";
 }
  
-   function hideThisElement(objectName, objectType, num) {
+function hideThisElement(objectName, objectType, num) {
 	var obj = document.getElementById(objectName);
 	removeElement(obj);
 	if (num > 0) {

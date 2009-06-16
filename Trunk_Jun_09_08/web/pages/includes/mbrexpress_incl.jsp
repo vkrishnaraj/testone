@@ -154,7 +154,7 @@
                           <%= a.getDateformat().getFormat() %>)
                         </td>
                       </tr>
-                      <tr>
+                      <tr id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k %>">
                         <td>
                           <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
                           <html:text name="theitinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
@@ -178,17 +178,21 @@
                         <td>
                           <html:text name="theitinerary" property="disarrivedate" size="10" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar2<%= k %>" name="itcalendar2<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitinerary[" + k + "].disarrivedate" %>','itcalendar2<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                       </tr>
-                      <tr>
+                      <tr id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k %>_1">
                         <td colspan="4">
-                          <html:submit styleId="button" property="deletePassit" indexed="true">
-                            <bean:message key="button.delete_pass_itinerary" />
-                          </html:submit>
+                          <input type="button" value="<bean:message key="button.delete_pass_itinerary" />" onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />', 1)" id="button">
                         </td>
                       </tr>
                     </logic:equal>
                   </logic:iterate>
                 </table>
-                <center><html:submit property="addpassit" styleId="button">
+                <center><select name="addpassitNum">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+          </select> <html:submit property="addpassit" styleId="button">
                   <bean:message key="button.add_cust_itinerary" />
                 </html:submit></center>
                 <br>
@@ -209,7 +213,7 @@
                   </h1>
                   <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
                     <logic:iterate id="claimcheck" indexId="i" name="incidentForm" property="claimchecklist">
-                      <tr>
+                      <tr id="claimcheck_<%=i %>">
                         <td width="30%" nowrap="nowrap">
                           <bean:message key="colname.claimnum" />
                           :
@@ -218,16 +222,25 @@
                           <html:text name="claimcheck" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
                         </td>
                       </tr>
-                      <tr>
+                      <tr id="claimcheck_<%=i %>_1">
                         <td colspan="2">
-                          <html:submit styleId="button" property="deleteClaimcheck" indexed="true">
-                            <bean:message key="button.delete_claim" />
-                          </html:submit>
+<input type="button" value="<bean:message key="button.delete_claim" />" onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_CLAIMCHECK %>_<%=i%>', '<bean:message
+                key="colname.claimnum.req" />', 1)" id="button">
+              
                         </td>
                       </tr>
                     </logic:iterate>
                   </table>
-                  <center><html:submit property="addclaimcheck" styleId="button">
+                  <center>
+                  <select name="addclaimcheckNum">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        
+                  <html:submit property="addclaimcheck" styleId="button">
                     <bean:message key="button.add_claimcheck" />
                   </html:submit></center>
                   <br>
@@ -262,6 +275,7 @@
                     <span class="reqfield">*</span>
                     <bean:message key="message.required" />
                     <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
+                    <div id="<%=TracingConstants.JSP_DELETE_ITEM %>_<%=i%>">
                       <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
                         <tr>
                           <td>
@@ -357,7 +371,7 @@
 							              <bean:define id="inventories" name="theitem" property="inventorylist" />
 							              <logic:iterate id="inventorylist" indexId="j" name="inventories" type="com.bagnet.nettracer.tracing.db.Item_Inventory">
 								            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%">
-								              <tr>
+								              <tr id="<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>">
 								                <td>
 								                  <bean:message key="colname.category" /><br>
 								                  <html:select property='<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].categorytype_ID" %>' styleClass="dropdown">
@@ -388,14 +402,23 @@
 								                  <html:text property="<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description" %>" size="70" maxlength="255" styleClass="textfield" />
 								                </td>
 								                <td align="center">&nbsp;<br>
-								                	<input type="submit" name="deleteinventory_<%= i %>_<%= j %>" id="button" value="<bean:message key="button.delete_content"/>">
+								                        <input type="button" value="<bean:message key="button.delete_content"/>" 
+                      onclick="if (checkDeleteCount(<%= i %>)) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>', '<bean:message key="colname.lc.content" />', 0);}" id="button">
+
 								      
 								                </td>
 								              </tr>
 								            </table>
 								          	</logic:iterate>
 								  
-									          <center><html:submit styleId="button" property="addinventory" indexed="true" >
+									          <center>
+                  <select name="addNumInventory">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select> <html:submit styleId="button" property="addinventory" indexed="true" >
 									            <bean:message key="button.add_content" />
 									          </html:submit></center>
                           </td>
@@ -450,14 +473,21 @@
 %>
                         <tr>
                           <td colspan="3">
-                            <html:submit styleId="button" property="deleteItem" indexed="true">
-                              <bean:message key="button.delete_item" />
-                            </html:submit>
+                            <input type="button" value="<bean:message key="button.delete_item" />" 
+            onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ITEM %>_<%=i%>', 
+            '<bean:message key="header.bag" />')" id="button">
                           </td>
                         </tr>
                       </table>
+                      </div>
                     </logic:iterate>
-                    <center><html:submit property="additem" styleId="button">
+                    <center><select name="additemNum">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select> <html:submit property="additem" styleId="button">
                       <bean:message key="button.add_bag" />
                     </html:submit></center>
                     <SCRIPT LANGUAGE="JavaScript">

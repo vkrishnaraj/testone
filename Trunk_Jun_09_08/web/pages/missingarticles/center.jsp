@@ -125,6 +125,7 @@ function disableButton(aButton) {
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="missing.do" method="post"
     onsubmit="return validateRest(this);">
+    <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />
     <input type="hidden" name="historical_report" value="">
     <tr>

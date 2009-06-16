@@ -242,6 +242,7 @@
   <jsp:include page="/pages/includes/validation_incl.jsp" />
   <html:form action="lostDelay.do" method="post"
     onsubmit="return validateRest(this);">
+    <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />
     <html:hidden property="notifiedOfRequirements"/>
     <input type="hidden" name="historical_report" value="">
