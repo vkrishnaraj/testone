@@ -7,7 +7,9 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
@@ -48,22 +51,37 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
  * create date - Oct 28, 2004
  */
 public class MBRActionUtils {
-		
+	
+	private static Logger logger = Logger.getLogger(MBRActionUtils.class);
+	
 	public static boolean actionAdd(IncidentForm theform, HttpServletRequest request, Agent user) {
 		// when adding or deleting from the page,
 		// email_customer checkbox needs to be set to 0 if user unchecked it
+		
+		if (request.getParameter("email_customer") == null)
+			theform.setEmail_customer(0);
+			
+		int numberToAdd = 1;
 		int fileindex = -1;
 		StringTokenizer stt = null;
 		Enumeration e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String parameter = (String) e.nextElement();
 			if (parameter.indexOf("addinventory") > -1) {
+				numberToAdd = getNumberToAdd(request, "addNumInventory");
 				fileindex = Integer.parseInt(parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]")));
+				
+				for (int i=0; i<numberToAdd; ++i) {
+					Item_Inventory ii = new Item_Inventory();
+					ii.setItem(theform.getItem(fileindex, -1));
+					theform.getItem(fileindex, -1).getInventorylist().add(ii);
+
+				}
+				return true;
 			}
 		}
 
-		if (request.getParameter("email_customer") == null)
-			theform.setEmail_customer(0);
+
 
 		// add new remark box
 		if (request.getParameter("addremark") != null) {
@@ -79,52 +97,64 @@ public class MBRActionUtils {
 		}
 		// add passenger
 		if (request.getParameter("addPassenger") != null) {
-			theform.getPassenger(theform.getPassengerlist().size());
+			numberToAdd = getNumberToAdd(request, "addPassengerNum");
+			for (int i=0; i<numberToAdd; ++i) {
+				theform.getPassenger(theform.getPassengerlist().size());
+			}
 			request.setAttribute("passenger", Integer.toString(theform.getPassengerlist().size() - 1));
 			return true;
 		}
 
 		// add claimcheck
 		if (request.getParameter("addclaimcheck") != null) {
-			theform.getClaimcheck(theform.getClaimchecklist().size());
+			numberToAdd = getNumberToAdd(request, "addclaimcheckNum");
+			for (int i=0; i<numberToAdd; ++i) {
+				theform.getClaimcheck(theform.getClaimchecklist().size());
+			}
 			request.setAttribute("claimcheck", "1");
 			return true;
 		}
 		// add new item box
 		if (request.getParameter("additem") != null) {
-			Item item = theform.getItem(theform.getItemlist().size(), TracingConstants.LOST_DELAY);
-			item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
-			item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
-			item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
-			item.set_DATEFORMAT(user.getDateformat().getFormat());
-			item.setCurrency_ID(user.getDefaultcurrency());
-			// set item status if it is not being set to open
-			item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
+			numberToAdd = getNumberToAdd(request, "additemNum");
+			for (int i=0; i<numberToAdd; ++i) {
+	
+				Item item = theform.getItem(theform.getItemlist().size(), TracingConstants.LOST_DELAY);
+				item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+				item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+				item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
+				item.set_DATEFORMAT(user.getDateformat().getFormat());
+				item.setCurrency_ID(user.getDefaultcurrency());
+				// set item status if it is not being set to open
+				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
+			}
 			request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
-			return true;
-		}
-		if (fileindex >= 0) {
-			Item_Inventory ii = new Item_Inventory();
-			ii.setItem(theform.getItem(fileindex, -1));
-			theform.getItem(fileindex, -1).getInventorylist().add(ii);
-			request.setAttribute("inventory", Integer.toString(fileindex));
 			return true;
 		}
 
 		if (request.getParameter("addarticles") != null) {
-			Articles a = theform.getArticle(theform.getArticlelist().size());
-			a.setCurrency_ID(user.getDefaultcurrency());
+			numberToAdd = getNumberToAdd(request, "addarticlesNum");
+			for (int i=0; i<numberToAdd; ++i) {	
+				Articles a = theform.getArticle(theform.getArticlelist().size());
+				a.setCurrency_ID(user.getDefaultcurrency());
+			}
 			request.setAttribute("articles", Integer.toString(theform.getArticlelist().size() - 1));
 			return true;
 		}
 		// add new itinerary box
-		if (request.getParameter("addpassit") != null) {
-			theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.PASSENGER_ROUTING);
+		if (request.getParameter("addpassit") != null) {		
+			numberToAdd = getNumberToAdd(request, "addpassitNum");
+			for (int i=0; i<numberToAdd; ++i) {
+				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.PASSENGER_ROUTING);
+			}
 			request.setAttribute("passit", "1");
 			return true;
 		}
 		if (request.getParameter("addbagit") != null) {
-			theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.BAGGAGE_ROUTING);
+			numberToAdd = getNumberToAdd(request, "addbagitNum");
+			for (int i=0; i<numberToAdd; ++i) {
+				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.BAGGAGE_ROUTING);
+			}
 			request.setAttribute("bagit", "1");
 			return true;
 		}
@@ -132,17 +162,93 @@ public class MBRActionUtils {
 		return false;
 	}
 
+	private static int getNumberToAdd(HttpServletRequest request, String namedParameter) {
+		try {
+			if (request.getParameter(namedParameter) != null) {
+				return Integer.parseInt(request.getParameter(namedParameter));
+			}
+		} catch (Exception e) {
+			logger.error("Error adding certain number of items to form for variable " + namedParameter, e);
+		}
+		return 1;
+	}
+
 	public static boolean actionDelete(IncidentForm theform, HttpServletRequest request) {
-		/** ************* delete *************** */
-		boolean deleteArticle = false;
-		boolean deleteClaimcheck = false;
-		boolean deletePass = false;
-		boolean deleteItem = false;
-		boolean deleteInventory = false;
-		boolean deletePhoto = false;
+		
+		if (request.getParameter("delete_these_elements") != null && request.getParameter("delete_these_elements").length() > 0) {
+			String deleteTheseElements =  request.getParameter("delete_these_elements");
+			String[] elements = deleteTheseElements.split(",");
+			
+			HashMap<String, ArrayList<Integer>> elementBreakdown = new HashMap();
+			HashMap<Integer, ArrayList<Integer>> inventoryBreakdown = new HashMap();
+			
+			// Iterate through elements and sort into types
+			for (String element: elements) {
+				String[] str = element.split("_");
+
+				// Treat inventory different because
+				// 1.  They are nested objects
+				// 2.  They must be dealt with prior to items.
+				if (str[0].equals(TracingConstants.JSP_DELETE_INVENTORY)) {
+					addToIntegerMap(inventoryBreakdown, Integer.parseInt(str[1]), Integer.parseInt(str[2]));
+				}else {
+					addToStringMap(elementBreakdown, str[0], str[1]);
+				}
+			}
+			
+			// Deal with Inventory
+			for (Integer itemIndex: inventoryBreakdown.keySet()) {
+				ArrayList<Integer> list = inventoryBreakdown.get(itemIndex);				
+				Collections.sort(list, Collections.reverseOrder());
+				
+				for (int inventoryIndex: list) {
+					Item_Inventory ii = (Item_Inventory) theform.getItem(itemIndex, -1).getInventorylist().get(inventoryIndex);
+					theform.getItem(itemIndex, -1).getInventorylist().remove(inventoryIndex);
+				}
+			}
+			
+			// Sort elements in the list in descending integer order,
+			// then iterate through them to perform action.
+			for (String key: elementBreakdown.keySet()) {
+				ArrayList<Integer> list = elementBreakdown.get(key);				
+				Collections.sort(list, Collections.reverseOrder());
+				
+				for (int index: list) {
+					
+					if(key.equals(TracingConstants.JSP_DELETE_ITINERARY)) {
+						List itinerarylist = theform.getItinerarylist();
+						if (itinerarylist != null)
+							itinerarylist.remove(index);
+					} 
+
+					if(key.equals(TracingConstants.JSP_DELETE_CLAIMCHECK)) {
+						List claimchecklist = theform.getClaimchecklist();
+						if (claimchecklist != null)
+							claimchecklist.remove(index);
+					} 
+
+					if(key.equals(TracingConstants.JSP_DELETE_ITEM)) {
+						List itemList = theform.getItemlist();
+						if (itemList != null)
+							itemList.remove(index);
+					}
+					
+					if(key.equals(TracingConstants.JSP_DELETE_PAX)) {
+						List passList = theform.getPassengerlist();
+						if (passList != null)
+							passList.remove(index);
+					}
+					
+					if(key.equals(TracingConstants.JSP_DELETE_ARTICLE)) {
+						List articleList = theform.getArticlelist();
+						if (articleList != null)
+							articleList.remove(index);
+					} 		
+				}
+			}
+		}
+		
 		boolean deleteRemark = false;
-		boolean deletePassit = false;
-		boolean deleteBagit = false;
 
 		// when adding or deleting from the page,
 		// email_customer checkbox needs to be set to 0 if user unchecked it
@@ -155,112 +261,13 @@ public class MBRActionUtils {
 			String parameter = (String) e.nextElement();
 			if (parameter.indexOf("[") != -1) {
 				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
-				if (parameter.indexOf("deleteClaimcheck") != -1) {
-					deleteClaimcheck = true;
-					break;
-				} else if (parameter.indexOf("deleteArticle") != -1) {
-					deleteArticle = true;
-					break;
-				} else if (parameter.indexOf("deleteItem") != -1) {
-					deleteItem = true;
-					break;
-				} else if (parameter.indexOf("deletePassenger") != -1) {
-					deletePass = true;
-					break;
-				} else if (parameter.indexOf("deletePhoto") != -1) {
-					deletePhoto = true;
-					break;
-				} else if (parameter.indexOf("deletePassit") != -1) {
-					deletePassit = true;
-					break;
-				} else if (parameter.indexOf("deleteBagit") != -1) {
-					deleteBagit = true;
-					break;
-				} else if (parameter.indexOf("deleteRemark") != -1) {
+					if (parameter.indexOf("deleteRemark") != -1) {
 					deleteRemark = true;
 					break;
 				}
-			} else if (parameter.indexOf("deleteinventory") > -1) {
-				deleteInventory = true;
-				break;
-
 			}
 		}
-		if (deleteClaimcheck) {
-			request.setAttribute("claimcheck", "1");
-			List claimchecklist = theform.getClaimchecklist();
-			if (claimchecklist != null)
-				claimchecklist.remove(Integer.parseInt(index));
-			return true;
-		} else if (deleteItem) {
-			List itemList = theform.getItemlist();
-			if (itemList != null)
-				itemList.remove(Integer.parseInt(index));
-			request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
-			return true;
-		} else if (deleteInventory) {
-			int itemindex = -1;
-			int inventoryindex = -1;
-			int fileindex = -1;
-			StringTokenizer stt = null;
-			Enumeration en = request.getParameterNames();
-			while (en.hasMoreElements()) {
-				String parameter = (String) en.nextElement();
-				try {
-					if (parameter.indexOf("deleteinventory") > -1) {
-						stt = new StringTokenizer(parameter, "_");
-						if (stt.hasMoreElements())
-							stt.nextToken();
-						if (stt.hasMoreElements())
-							itemindex = Integer.parseInt(stt.nextToken());
-						if (stt.hasMoreElements())
-							inventoryindex = Integer.parseInt(stt.nextToken());
-					}
-				} catch (Exception removephotoe) {
-					// tempering with data, should never happen
-				}
-			}
-
-			if (itemindex >= 0 && inventoryindex >= 0) {
-				Item_Inventory ii = (Item_Inventory) theform.getItem(itemindex, -1).getInventorylist().get(inventoryindex);
-				theform.getItem(itemindex, -1).getInventorylist().remove(inventoryindex);
-			}
-
-			request.setAttribute("item", Integer.toString(itemindex));
-			return true;
-
-		} else if (deletePass) {
-
-			List passList = theform.getPassengerlist();
-			if (passList != null)
-				passList.remove(Integer.parseInt(index));
-			request.setAttribute("passenger", Integer.toString(theform.getPassengerlist().size() - 1));
-			return true;
-		} else if (deleteArticle) {
-			request.setAttribute("articles", "1");
-			List articleList = theform.getArticlelist();
-			if (articleList != null)
-				articleList.remove(Integer.parseInt(index));
-			request.setAttribute("articles", Integer.toString(theform.getArticlelist().size() - 1));
-			return true;
-		} else if (deletePassit) {
-			request.setAttribute("passit", "1");
-			List itinerarylist = theform.getItinerarylist();
-			if (itinerarylist != null)
-				itinerarylist.remove(Integer.parseInt(index));
-			return true;
-		} else if (deleteBagit) {
-			request.setAttribute("bagit", "1");
-			List itinerarylist = theform.getItinerarylist();
-			if (itinerarylist != null)
-				itinerarylist.remove(Integer.parseInt(index));
-			return true;
-			//} else if (deletePhoto) {
-			//	request.setAttribute("upload", "1");
-			//	List itemlist = theform.getItemlist();
-			//	if (photoList != null) photoList.remove(Integer.parseInt(index));
-			//	return (mapping.findForward(TracingConstants.LD_MAIN));
-		} else if (deleteRemark) {
+		if (deleteRemark) {
 			List remarkList = theform.getRemarklist();
 			if (remarkList != null)
 				remarkList.remove(Integer.parseInt(index));
@@ -270,18 +277,47 @@ public class MBRActionUtils {
 		return false;
 	}
 	
+	public static void addToIntegerMap(HashMap<Integer, ArrayList<Integer>> typeBreakdown, Integer key, Integer value) {
+		ArrayList<Integer> internalList = null;
+		
+		if (typeBreakdown.containsKey(key)) {
+			internalList = typeBreakdown.get(key);
+			internalList.add(value);
+		} else {
+			internalList = new ArrayList();
+			internalList.add(value);
+			typeBreakdown.put(key, internalList);
+		}
+	}
+	
+	public static void addToStringMap(HashMap<String, ArrayList<Integer>> typeBreakdown, String key, String integer) {
+		ArrayList<Integer> internalList = null;
+		
+		Integer value = Integer.parseInt(integer);
+		
+		if (typeBreakdown.containsKey(key)) {
+			internalList = typeBreakdown.get(key);
+			internalList.add(value);
+		} else {
+			internalList = new ArrayList();
+			internalList.add(value);
+			typeBreakdown.put(key, internalList);
+		}
+	}
+
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
 		String incident = request.getParameter("incident_ID");
+		Incident inc = null;
 		if(incident != null && incident.length() > 0 && request.getParameter("close") != null) {
 			BagService bs = new BagService();
-			bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY);
+			inc = bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY);
 		}
 
 		List faultstationlist = null;
 		List faultCompanyList = null;
 		if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
 			// If the user has limited permission, 
-			if (UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+			if (UserPermissions.hasLimitedSavePermission(user, inc)) {
 				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 				faultCompanyList = new ArrayList();
 				faultCompanyList.add(user.getStation().getCompany());

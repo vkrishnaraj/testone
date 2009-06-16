@@ -228,7 +228,7 @@ function updatePagination() {
 		}
 		else {
 			%>
-		<html:options collection="statusList" labelProperty="description" property="status_ID"></html:options>
+		<html:options collection="statuslist" labelProperty="description" property="status_ID"></html:options>
 		<% } %>
 		
 	</html:select>

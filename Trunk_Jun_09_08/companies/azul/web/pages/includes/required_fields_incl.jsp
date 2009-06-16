@@ -440,5 +440,7 @@
 
     return true;
   }
+  
+  function checkDeleteCount(bagNum) { return true; }
 
 </script>

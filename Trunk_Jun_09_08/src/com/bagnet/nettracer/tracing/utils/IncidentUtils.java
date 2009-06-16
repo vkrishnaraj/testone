@@ -700,10 +700,12 @@ public class IncidentUtils {
 		}
 			
 	}
-
-	public static boolean promptToCloseFile(String incident_id,
+	
+	public static boolean promptToCloseFile(String incident_id, Incident incidentObj,
 			HttpServletRequest request) {
-		if (incident_id != null) {
+		if (incidentObj != null) {
+			return promptToCloseFile(incidentObj, request);
+		} else if (incident_id != null) {
 			Incident inc = IncidentBMO.getIncidentByID(incident_id, null);
 			return promptToCloseFile(inc, request);
 		}

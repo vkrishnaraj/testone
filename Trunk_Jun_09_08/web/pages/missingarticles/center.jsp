@@ -298,8 +298,11 @@ function disableButton(aButton) {
           src="deployment/main/images/nettracer/button_help.gif"
           width="20" height="21" border="0"></a></h1>
         <span class="reqfield">*</span> <bean:message
-          key="message.required" /> <logic:iterate id="article"
+          key="message.required" />
+          
+          <logic:iterate id="article"
           indexId="i" name="incidentForm" property="articlelist" type="com.bagnet.nettracer.tracing.db.Articles">
+          <div id="<%=TracingConstants.JSP_DELETE_ARTICLE %>_<%=i%>">
           <table class="<%=cssFormClass %>" cellspacing="0"
             cellpadding="0">
             <tr>
@@ -342,14 +345,21 @@ function disableButton(aButton) {
                 </td>
             </tr>
             <tr>
-              <td colspan=4><html:submit styleId="button"
-                property="deleteArticle" indexed="true">
-                <bean:message key="button.delete_article" />
-              </html:submit></td>
+              <td colspan=4>
+              <input type="button" value="<bean:message key="button.delete_article" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ARTICLE %>_<%=i%>', '<bean:message key="ma_article.lc" />')" id="button">              
+              </td>
             </tr>
           </table>
+          </div>
         </logic:iterate>
-        <center><html:submit property="addarticles"
+        <center>
+<select name="addarticlesNum">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+          </select>&nbsp;<html:submit property="addarticles"
           styleId="button">
           <bean:message key="button.add_articles" />
         </html:submit></center>

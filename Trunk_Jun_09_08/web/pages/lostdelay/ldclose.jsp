@@ -24,8 +24,10 @@
   <script language="javascript">
 	var cal1xx = new CalendarPopup();	
 	var doCheck = 0;
+    
+    <jsp:include page="/pages/includes/ldclose.jsp" />
   </script>
-  <jsp:include page="/pages/includes/ldclose.jsp" />
+  
   
   <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
     <tr>

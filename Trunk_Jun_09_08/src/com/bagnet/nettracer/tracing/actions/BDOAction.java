@@ -306,7 +306,7 @@ public class BDOAction extends Action {
 			}
 		}
 		
-		IncidentUtils.promptToCloseFile(incident, request);
+		IncidentUtils.promptToCloseFile(incident, null, request);
 
 		return (mapping.findForward(TracingConstants.BDO_MAIN));
 	}

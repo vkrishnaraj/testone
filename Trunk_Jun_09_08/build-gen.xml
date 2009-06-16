@@ -213,17 +213,32 @@
 			<format property="VERSION" pattern="yyyyMMdd-HHmm " locale="en" />
 		</tstamp>
 
-		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve" >
-			<fileset dir="${basedir}/companies/${ant_project_name}/web">				
+		<delete dir="${build.dir}/${ant_project_name}/webWorking" failonerror="false" includeemptydirs="true" />
+		
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/companies/${ant_project_name}/web">
 			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
 			<fileset dir="${basedir}/web">
 				<exclude name="**/web.xml" />
-				<exclude name="WEB-INF/classes/**/*.*"/>
+				<exclude name="WEB-INF/classes/**/*.*" />
 			</fileset>
+		</copy>
+		
+		
+		<replaceregexp match="\s+" replace=" " flags="g" byline="false">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
+		</replaceregexp>
+		
+
+		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
-			<lib dir="${lib.jar.dir}" >
-				<exclude name="log4j*.*"/>
-				<exclude name="servlet.jar"/>
+			<lib dir="${lib.jar.dir}">
+				<exclude name="log4j*.*" />
+				<exclude name="servlet.jar" />
 			</lib>
 		</war>
 	</target>

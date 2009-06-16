@@ -179,11 +179,10 @@ public class MissingAction extends CheckedAction {
 			}
 		}
 		
-		if (MBRActionUtils.actionAdd(theform, request, user)) {
-			return (mapping.findForward(TracingConstants.MISSING_MAIN));
-		}
-
 		if (MBRActionUtils.actionDelete(theform, request)) {
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
+		if (MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
 

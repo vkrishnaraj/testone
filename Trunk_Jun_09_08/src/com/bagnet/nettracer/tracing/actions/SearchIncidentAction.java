@@ -252,6 +252,7 @@ public class SearchIncidentAction extends Action {
 			Incident inc = foundinc;
 			if (foundinc == null) {
 				inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
+				session.setAttribute("incidentObj", inc);
 			} else {
 				IncidentBMO iBMO = new IncidentBMO();
 				TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
@@ -293,7 +294,7 @@ public class SearchIncidentAction extends Action {
 
 				switch (itemType) {
 				case TracingConstants.LOST_DELAY:
-					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
 						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());
@@ -329,7 +330,7 @@ public class SearchIncidentAction extends Action {
 					saveToken(request);
 					return (mapping.findForward(TracingConstants.LD_MAIN));
 				case TracingConstants.DAMAGED_BAG:
-					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
 						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());
@@ -347,7 +348,7 @@ public class SearchIncidentAction extends Action {
 					saveToken(request);
 					return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 				case TracingConstants.MISSING_ARTICLES:
-					if(UserPermissions.hasLimitedSavePermission(user, theform.getIncident_ID())) {
+					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
 						faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 						faultCompanyList = new ArrayList();
 						faultCompanyList.add(user.getStation().getCompany());

@@ -95,6 +95,7 @@
       <span class="reqfield">*</span>
       <bean:message key="message.required" />
       <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
+        <div id="<%=TracingConstants.JSP_DELETE_ITEM %>_<%=i%>">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
             <td valign="top">
@@ -235,7 +236,7 @@
               <bean:define id="inventories" name="theitem" property="inventorylist" />
               <logic:iterate id="inventorylist" indexId="j" name="inventories" type="com.bagnet.nettracer.tracing.db.Item_Inventory">
 	            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%">
-	              <tr>
+	              <tr id="<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>">
 	                <td>
 	                  <bean:message key="colname.category" /><br>
 	                  <html:select property='<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].categorytype_ID" %>' styleClass="dropdown">
@@ -257,14 +258,24 @@
 	                  <html:text property="<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description" %>" size="80" maxlength="255" styleClass="textfield" />
 	                </td>
 	                <td align="center">&nbsp;<br>
-	                	<input type="submit" name="deleteinventory_<%= i %>_<%= j %>" id="button" value="<bean:message key="button.delete_content"/>"
-	                		onclick="return checkDeleteCount(<%= i %>);">
+                      <input type="button" value="<bean:message key="button.delete_content"/>" 
+                      onclick="if (checkDeleteCount(<%= i %>)) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>', '<bean:message key="colname.lc.content" />', 0);}" id="button">
 	                </td>
 	              </tr>
 	            </table>
+                
 	          	</logic:iterate>
 	  
-		          <center><html:submit styleId="button" property="addinventory" indexed="true" >
+		          <center>
+
+                  <select name="addNumInventory">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                  <html:submit styleId="button" property="addinventory" indexed="true" >
 		            <bean:message key="button.add_content" />
 		          </html:submit></center>
 
@@ -382,7 +393,7 @@
 %>
                       </logic:iterate>
                     </logic:present>
-                  </tr>
+                  
                 </table>
                 <br>
                 <center><input type="FILE" name='<%= "imagefile" + i %>' />
@@ -398,17 +409,27 @@
 %>
         <tr>
           <td colspan="3">
-            <html:submit styleId="button" property="deleteItem" indexed="true">
-              <bean:message key="button.delete_item" />
-            </html:submit>
+            <input type="button" value="<bean:message key="button.delete_item" />" 
+            onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ITEM %>_<%=i%>', 
+            '<bean:message key="header.bag" />')" id="button">
           </td>
         </tr>
       </table>
+      </div>
     </logic:iterate>
-    <center><html:submit property="additem" styleId="button">
+    <center>
+            <select name="additemNum">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+    
+    <html:submit property="additem" styleId="button">
       <bean:message key="button.add_bag" />
     </html:submit></center>
-    <SCRIPT LANGUAGE="JavaScript">
+    <script language="JavaScript">
       
 
 
@@ -433,7 +454,7 @@
 
 	
 
-    </SCRIPT>
+    </script>
     <br>
     <br>
     &nbsp;&nbsp;&uarr;

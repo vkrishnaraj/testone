@@ -22,15 +22,12 @@
 	Station stationAss = StationBMO.getStation(myform.getStationassigned_ID());
 %>
 
-
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
-
-  <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
-
+<%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%><script language="javascript">
+<%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
+<script language="javascript">
     
-        
     function gotoHistoricalReport(form) {
         o = document.incidentForm;
     	o.historical_report.value = "1";
@@ -77,11 +74,8 @@
      }
     }
     
-
   </script>
   
-
-
 <logic:present name="prepopulate" scope="request">
 
   <script language="javascript">
@@ -496,9 +490,9 @@
           src="deployment/main/images/nettracer/button_help.gif"
           width="20" height="21" border="0"></a>
         </h1>
-        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="test">
           <logic:iterate id="claimcheck" indexId="i" name="incidentForm" property="claimchecklist">
-            <tr>
+            <tr id="claimcheck_<%=i %>">
               <td width="30%" nowrap="nowrap"><bean:message
                 key="colname.claimnum.req" /> :</td>
               <td><html:text name="claimcheck"
@@ -543,15 +537,23 @@
                 </logic:notPresent>
               </logic:notEqual>&nbsp;</td>
             </tr>
-            <tr>
-              <td colspan="3"><html:submit styleId="button"
-                property="deleteClaimcheck" indexed="true">
-                <bean:message key="button.delete_claim" />
-              </html:submit></td>
+            <tr id="claimcheck_<%=i %>_1">
+              <td colspan="3">
+              <input type="button" value="<bean:message key="button.delete_claim" />" onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_CLAIMCHECK %>_<%=i%>', '<bean:message
+                key="colname.claimnum.req" />', 1)" id="button">
+              </td>
             </tr>
           </logic:iterate>
         </table>
-        <center><html:submit property="addclaimcheck"
+        <center>
+        <select name="addclaimcheckNum">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <html:submit property="addclaimcheck"
           styleId="button">
           <bean:message key="button.add_claimcheck" />
         </html:submit></center>

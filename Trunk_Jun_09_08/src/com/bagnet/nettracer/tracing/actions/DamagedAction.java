@@ -188,12 +188,11 @@ public class DamagedAction extends CheckedAction {
 				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
 			}
 		}
-
-		if (MBRActionUtils.actionAdd(theform, request, user)) {
-			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
-		}
-
+		
 		if (MBRActionUtils.actionDelete(theform, request)) {
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
+		if (MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 

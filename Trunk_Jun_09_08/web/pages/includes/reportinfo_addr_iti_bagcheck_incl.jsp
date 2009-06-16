@@ -26,6 +26,7 @@
   
   <%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -53,7 +54,6 @@
 	theform.submit();
 	}
 
-
   </SCRIPT>
   
 <%
@@ -70,10 +70,11 @@
   <div id="maincontent">
   
     
-    <c:if test="${!empty incidentForm.incident_ID}">
+    <c:if test="${!empty incidentForm.incident_ID and !empty incidentObj and incidentForm.incident_ID == incidentObj.incident_ID}">
      <% 
      IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
-     if (IncidentUtils.promptToCloseFile(myform.getIncident_ID(), null)) { %>
+     Incident incidentObj = (Incident) session.getAttribute("incidentObj");
+     if ((incidentObj != null && myform.getIncident_ID().equals(incidentObj.getIncident_ID())) || IncidentUtils.promptToCloseFile(myform.getIncident_ID(), null, null)) { %>
        <table border="1" align="center">
           <tr>
             <td align="center">
@@ -189,6 +190,7 @@
               <html:hidden property="ld_inc_ID"/>
               <html:hidden property="damage_inc_ID" />
               <html:hidden property="ma_inc_ID" />
+              <input type="hidden" name="delete_these_elements" value="" />
               <input type="hidden" name="wtq_pending_cancel" value="" />
               <input type="hidden" name="wtq_suspend" value="" />
               <input type="hidden" name="wtq_reinstate" value="" />
@@ -426,9 +428,10 @@
               <span class="reqfield">*</span>
               <bean:message key="message.required" />
               <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
-                <logic:equal name="theitinerary" property="itinerarytype" value="0">
-                  <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
-                  <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+	      <logic:equal name="theitinerary" property="itinerarytype" value="0">
+	      	<div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
+              <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
+			  <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="hidexItinerary<%=k %>">
                     <tr>
                       <td>
                         <bean:message key="colname.pax.fromto.req" />
@@ -502,15 +505,22 @@
                     </tr>
                     <tr>
                       <td colspan="4">
-                        <html:submit styleId="button" property="deletePassit" indexed="true">
-                          <bean:message key="button.delete_pass_itinerary" />
-                        </html:submit>
+			  <input type="button" value="<bean:message key="button.delete_pass_itinerary" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
                       </td>
                     </tr>
-                  </table>
+	               </table>
+                  </div>
                 </logic:equal>
               </logic:iterate>
-              <center><html:submit property="addpassit" styleId="button">
+	         <center>
+              <select name="addpassitNum">
+			      <option value="1">1</option>
+			      <option value="2">2</option>
+			      <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+		      </select>
+		      <html:submit property="addpassit" styleId="button">
                 <bean:message key="button.add_cust_itinerary" />
               </html:submit></center>
               <p class="blue">
@@ -537,6 +547,7 @@
                   <a name="bagit"></a>
                   <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
                     <logic:equal name="theitinerary" property="itinerarytype" value="1">
+                      <div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
                       <html:hidden name="theitinerary" property="itinerarytype" value="1" indexed="true" />
                       <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
                         <tr>
@@ -611,15 +622,22 @@
                         </tr>
                         <tr>
                           <td colspan="4">
-                            <html:submit styleId="button" property="deleteBagit" indexed="true">
-                              <bean:message key="button.delete_bag_itinerary" />
-                            </html:submit>
+                          <input type="button" value="<bean:message key="button.delete_bag_itinerary" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
                           </td>
                         </tr>
                       </table>
+                      </div>
                     </logic:equal>
                   </logic:iterate>
-                  <center><html:submit property="addbagit" styleId="button">
+                  <center>
+                                <select name="addbagitNum">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+          </select>
+                  <html:submit property="addbagit" styleId="button">
                     <bean:message key="button.add_bag_itinerary" />
                   </html:submit></center>
                   <br>

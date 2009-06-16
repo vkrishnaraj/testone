@@ -281,14 +281,13 @@ public class LostDelayAction extends CheckedAction {
 				}
 		}
 
-
+		if (MBRActionUtils.actionDelete(theform, request)) {
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
 		if(MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
-		if(MBRActionUtils.actionDelete(theform, request)) {
-			return (mapping.findForward(TracingConstants.LD_MAIN));
-		}
 
 		String loc = null;
 		if((loc = MBRActionUtils.actionAddAssoc(theform, request, user)) != null) {
@@ -412,6 +411,9 @@ public class LostDelayAction extends CheckedAction {
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
+			
+			session.setAttribute("incidentObj", inc);
+			
 			//wt  suspend or reinstate
 			if(request.getParameter("wtq_reinstate") != null && request.getParameter("wtq_reinstate").trim().length() > 0) {
 				WtqReinstateAhl wtq = new WtqReinstateAhl();
@@ -459,7 +461,6 @@ public class LostDelayAction extends CheckedAction {
 				}
 				request.setAttribute("wtq_pending_id", pendingAction.getWt_queue_id());
 			}
-
 			
 			request.setAttribute("incident", incident);
 

@@ -261,6 +261,16 @@ public class UserPermissions {
 		return ret;
 	}
 	
+	public static boolean hasLimitedSavePermission(Agent a, Incident inc) {
+		if (inc != null) {
+			int type = inc.getItemtype().getItemType_ID();
+			return hasLimitedSavePermissionByType(a, type);
+		} else {
+			return false;
+		}
+	}
+	
+	@Deprecated
 	public static boolean hasLimitedSavePermission(Agent a, String incident_ID) {
 		if (incident_ID == null) {
 			return true;

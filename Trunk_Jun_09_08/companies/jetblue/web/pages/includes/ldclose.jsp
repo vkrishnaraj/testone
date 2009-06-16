@@ -9,7 +9,7 @@
     Locale  myLocale   = (Locale)session.getAttribute("org.apache.struts.action.LOCALE");
 %>
 
-<script language="javascript">
+
 function validateLdClose(form, doCheck)
 {
 	if (doCheck == 1) {
@@ -39,4 +39,3 @@ function validateLdClose(form, doCheck)
     }
 	return true;
 }
-</script>

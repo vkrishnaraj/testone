@@ -702,6 +702,12 @@ public class TracingConstants {
 	public static final String ROWS_ADMIN_PAGES = "rowsAdminPages";
 	public static final String ROWS_AUDIT_PAGES = "rowsAuditPages";
 	public static final String ROWS_SEARCH_PAGES = "rowsSearchPages";
+	public static final String JSP_DELETE_ITINERARY = "itin";
+	public static final String JSP_DELETE_CLAIMCHECK = "claimcheck";
+	public static final String JSP_DELETE_ITEM = "item";
+	public static final String JSP_DELETE_INVENTORY = "inventory";
+	public static final String JSP_DELETE_PAX = "pax";
+	public static final String JSP_DELETE_ARTICLE = "article";
 	
 	
 	public static String getDBDateFormat(Properties properties) {

@@ -175,3 +175,27 @@ function getDate(type) {
   if (type == 1) return currdate;
   else return currtime;
 }
+
+function hideThisDiv(object, objectType) {
+	document.getElementById(object).innerHTML = "";
+	del = document.forms[0].delete_these_elements;
+	del.value += object + ",";
+}
+ 
+   function hideThisElement(objectName, objectType, num) {
+	var obj = document.getElementById(objectName);
+	removeElement(obj);
+	if (num > 0) {
+		for (i=1; i <= num; ++i) {
+			var additionalObj = document.getElementById(objectName + "_" + i);
+			removeElement(additionalObj);
+		}
+	}
+	del = document.forms[0].delete_these_elements;
+	del.value += objectName + ",";
+}
+
+function removeElement(obj) {
+	var parent = obj.parentElement;
+	parent.removeChild(obj);
+}
