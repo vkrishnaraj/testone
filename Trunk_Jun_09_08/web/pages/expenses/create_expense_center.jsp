@@ -31,7 +31,7 @@
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 %>
 <html:form action="SaveExpense.do" method="post">
-	<html:javascript formName="expensePayoutForm" />
+	
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">
