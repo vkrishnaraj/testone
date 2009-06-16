@@ -882,7 +882,7 @@ public class OhdBMO {
 
 			// record locator
 			if (siDTO.getRecordlocator().length() > 0) {
-				s.append(" and ohd.recordlocator like :recordlocator");
+				s.append(" and ohd.record_locator like :recordlocator");
 			}
 			
 			// passenger
