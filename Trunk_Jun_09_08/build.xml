@@ -652,9 +652,9 @@
 
 		<copy todir="${basedir}/src" file="companies/westjet/custom_ui.properties" />
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
-			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
-			<param name="overrideResource" value="${basedir}/companies/westjet/ApplicationResources.properties" />
-			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/westjet/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/westjet/ApplicationResources_fr.properties" />
 		<antcall target="fast_all" />
@@ -1115,8 +1115,18 @@
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="test/" />
 		<property name="cron.job.config.file" value="companies/westjet/environment/test/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="wstest-" />
 		<antcall target="build-cron-service" />
 	</target>
+	
+	<target name="wjqa-build-cron">
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="qa/" />
+		<property name="jarprefix" value="wsqa-" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/qa/jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
 
 	<target name="wjprod-build-cron">
 		<property name="ant_project_name" value="westjet" />
@@ -1140,6 +1150,7 @@
 		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
+	
 	<target name="jetblue-build-cron-prod">
 		<property name="ant_project_name" value="jetblue" />
 		<property name="sub_path" value="prod/" />

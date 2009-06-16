@@ -18,8 +18,7 @@
 			<props>
 				<prop key="wt.host">wtrweb.worldtracer.aero</prop>
 				<prop key="training.mode">TRAINING</prop>
-				<prop key="wt.rules">
-					com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
+				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
 			</props>
 		</property>
 	</bean>
