@@ -72,9 +72,8 @@
     
     <c:if test="${!empty incidentForm.incident_ID and !empty incidentObj and incidentForm.incident_ID == incidentObj.incident_ID}">
      <% 
-     IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
      Incident incidentObj = (Incident) session.getAttribute("incidentObj");
-     if ((incidentObj != null && myform.getIncident_ID().equals(incidentObj.getIncident_ID())) || IncidentUtils.promptToCloseFile(myform.getIncident_ID(), null, null)) { %>
+     if (IncidentUtils.promptToCloseFile(null, incidentObj, null)) { %>
        <table border="1" align="center">
           <tr>
             <td align="center">
