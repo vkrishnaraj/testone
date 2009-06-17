@@ -366,7 +366,7 @@ public class BDOUtils {
 					BDO_Passenger bp = (BDO_Passenger) theform.getPassenger(i);
 					bp.setBdo(bdo);
 				}
-				bdo.setPassengers(new HashSet(theform.getPassengerlist()));
+				bdo.setPassengers(new LinkedHashSet(theform.getPassengerlist()));
 			}
 
 			if (theform.getDelivercompany_ID() > 0) {
