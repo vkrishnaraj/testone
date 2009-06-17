@@ -268,7 +268,7 @@ function sortAgents(sortOrder) {
                     <bean:message name="taskDTO" property="status.key" />
                   </td>
                   <td>
-                    <a href="otherTasks.do?edit_task_id=<bean:write name="taskDTO" property="task_id"/>"><bean:message property="edit" /></a>
+                    <a href="otherTasks.do?edit_task_id=<bean:write name="taskDTO" property="task_id"/>"><bean:message key="edit" /></a>
                   </td>
                 </tr>
               </logic:iterate>
