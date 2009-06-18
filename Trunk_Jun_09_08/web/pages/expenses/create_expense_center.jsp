@@ -130,7 +130,20 @@
 										labelProperty="stationcode" />
 								</html:select>
 							</td>
-							<td colspan="2">
+							<td>
+								<bean:message key="colname.expense_type" />
+								<br />
+
+								<html:select property="expensetype_id" styleClass="dropdown"
+									disabled="disabled">
+									<html:options collection="expensetypelist"
+										property="expensetype_ID" labelProperty="description" />
+								</html:select>
+
+							</td>
+							<td>
+
+
 								<bean:message key="colname.paycode" />
 								<br />
 								<html:select property="paycode" styleClass="dropdown">
