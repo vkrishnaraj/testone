@@ -223,7 +223,7 @@ function updatePagination() {
 		<%
 		if (request.getAttribute("ohd") != null) {
 			%>
-		<html:options collection="oStatusList" labelProperty="description" property="status_ID"></html:options>
+		<html:options collection="ohdStatusList" labelProperty="description" property="status_ID"></html:options>
 		<% 
 		}
 		else {

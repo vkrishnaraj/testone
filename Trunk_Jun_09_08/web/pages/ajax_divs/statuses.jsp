@@ -29,14 +29,14 @@
 		%>
       	<select name="status_ID" class="dropdown">
       	<option value="0" 
-      	<% if(isOhd && ohdStatus == TracingConstants.OHD_STATUS_ALL) {
+      	<% if(isOhd && ohdStatus.intValue() == TracingConstants.OHD_STATUS_ALL) {
     	%>
     	selected="selected" 	
     	<% } %>
       	><bean:message key="select.all" /></option>
       	<% if(isOhd) { %>
       	<option value="-1" 
-      	<% if(ohdStatus == TracingConstants.OHD_STATUS_ACTIVE) {
+      	<% if(ohdStatus.intValue() == TracingConstants.OHD_STATUS_ACTIVE) {
     	%>
     	selected="selected" 	
     	<% } %>
@@ -49,7 +49,7 @@
       		%>
     		<option value="<%=status.getStatus_ID()%>" 
     		<% if ((!isOhd && status.getStatus_ID() == TracingConstants.MBR_STATUS_OPEN )
-    				|| (isOhd && status.getStatus_ID() == ohdStatus)) { %>
+    				|| (isOhd && status.getStatus_ID() == ohdStatus.intValue())) { %>
     		 selected="selected"
     		<% } %>
     		>
