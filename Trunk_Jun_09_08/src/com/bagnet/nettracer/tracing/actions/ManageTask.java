@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -53,9 +54,12 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * @author Ankur Gupta
  */
 public class ManageTask extends Action {
+	
+			
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
+		
 		HttpSession session = request.getSession();
 		// check session and user validity
 		TracerUtils.checkSession(session);
@@ -95,6 +99,7 @@ public class ManageTask extends Action {
 
 		String file_ref_number = request.getParameter("file_ref_number");
 		String assigned_to = dForm.getAssigned_to_id();
+				
 		String file_type = request.getParameter("file_type");
 
 		if (request.getParameter("file") != null) {
@@ -127,23 +132,23 @@ public class ManageTask extends Action {
 			}
 
 			String assignedtoagent_id = request.getParameter("assigned_to_id");
-
+			
 			if (assignedtoagent_id == null || assignedtoagent_id.equals("")) {
 				task.setAssignedTo(null);
 			} else {
 				Agent agent = AdminUtils.getAgent(assignedtoagent_id);
-				task.setAssignedTo(agent);
+				task.setAssignedTo(agent);  
 			}
 
-			task.set_DATEFORMAT(user.getDateformat().getFormat());
-			task.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			task.set_DATEFORMAT(user.getDateformat().getFormat()); 
+			task.set_TIMEFORMAT(user.getTimeformat().getFormat());  
 			task.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
-					.getTimezone()));
+					.getTimezone()));  
 
 			Date duedate = null, reminderdate = null;
 
-			String dispduedate = request.getParameter("dispduedate");
-			String dispduetime = request.getParameter("dispduetime");
+			String dispduedate = request.getParameter("dispduedate"); 
+			String dispduetime = request.getParameter("dispduetime"); 
 
 			String dispreminderdate = request.getParameter("dispreminderdate");
 			String dispremindertime = request.getParameter("dispremindertime");
@@ -316,6 +321,13 @@ public class ManageTask extends Action {
 			task.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
 					.getTimezone()));
 
+			if(task.getAssignedTo()!=null)
+			{
+				dForm.setAssigned_to_id(Integer.toString(task.getAssignedTo().getAgent_ID()));
+			}
+			
+			
+			
 			ArrayList al = new ArrayList();
 			al.add(new LabelValueBean(TracerUtils.getText("ohd.short", user), "0"));
 			al.add(new LabelValueBean(TracerUtils.getText("incident_cap", user), "1"));
@@ -333,6 +345,7 @@ public class ManageTask extends Action {
 			dForm.setTask_status(Integer.toString(task_status_id));
 		}
 
+		
 		int taskListCount = ((Long) TaskUtils.getTasks(
 				agent_station.getStation_ID(), assigned_to, file_ref_number, task_status_id,
 				request.getParameter("s_time"), request.getParameter("e_time"), user, 0, 0, sort,

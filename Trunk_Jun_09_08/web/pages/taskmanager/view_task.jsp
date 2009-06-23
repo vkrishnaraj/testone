@@ -74,22 +74,14 @@
                   :
                 </td>
                 <td colspan="3">
-                  <logic:notEmpty name="task" property="assignedTo">
-                    <html:select name="task" property="assignedTo.agent_ID" styleClass="dropdown">
-                      <html:option value="">
-                        <bean:message key="select.please_select" />
-                      </html:option>
-                      <html:options collection="stationAgents" property="agent_ID" labelProperty="username" />
-                    </html:select>
-                  </logic:notEmpty>
-                  <logic:empty name="task" property="assignedTo">
+                 
                     <html:select name="taskForm" property="assigned_to_id" styleClass="dropdown">
                       <html:option value="">
                         <bean:message key="select.please_select" />
                       </html:option>
                       <html:options collection="stationAgents" property="agent_ID" labelProperty="username" />
                     </html:select>
-                  </logic:empty>
+                 
                 </td>
               </tr>
               <tr>
