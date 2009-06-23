@@ -242,17 +242,6 @@ function updatePagination() {
             </tr>
             <tr>
               <td>
-                <bean:message key="header.locale" />
-              </td>
-              <logic:iterate id="audit_lfi" name="compareList" scope="request">
-                <td>
-                  <bean:write name="audit_lfi" property="locale" />
-                  &nbsp;
-                </td>
-              </logic:iterate>
-            </tr>
-            <tr>
-              <td>
                 <bean:message key="colname.street_addr" />
               </td>
               <logic:iterate id="audit_lfi" name="compareList" scope="request">

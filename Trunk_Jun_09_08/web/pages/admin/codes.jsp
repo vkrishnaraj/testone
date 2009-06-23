@@ -194,9 +194,6 @@
               <b><bean:message key="header.code_description" /></b>
             </td>
             <td>
-              <b><bean:message key="header.locale" /></b>
-            </td>
-            <td>
               <b><bean:message key="header.companyCode" /></b>
             </td>
           </tr>
@@ -218,9 +215,6 @@
                 </td>
                 <td>
                   <bean:write name="code" property="description" />
-                </td>
-                <td>
-                  <bean:write name="code" property="locale" />
                 </td>
                 <td>
                   <bean:write name="code" property="company.companyCode_ID" />

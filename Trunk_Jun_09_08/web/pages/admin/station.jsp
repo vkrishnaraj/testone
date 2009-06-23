@@ -144,9 +144,6 @@
               <b><bean:message key="header.stationDesc" /></b>
             </td>
             <td>
-              <b><bean:message key="header.locale" /></b>
-            </td>
-            <td>
               <b><bean:message key="header.active" /></b>
             </td>
             <td>
@@ -163,9 +160,6 @@
                   <bean:write name="station" property="stationdesc" />
                 </td>
                 <td>
-                  <bean:write name="station" property="locale" />
-                </td>
-                <td>
                   <logic:equal name="station" property="active" value="true">
                     <bean:message key="select.yes" />
                   </logic:equal>
@@ -180,19 +174,19 @@
             </logic:iterate>
             
             <tr>
-              <td colspan="5">
+              <td colspan="4">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
               </td>
             </tr>
             
           </logic:present>
           <tr>
-            <td colspan="8">
+            <td colspan="7">
               &nbsp;
             </td>
           </tr>
           <tr>
-            <td colspan="5" align="center">
+            <td colspan="4" align="center">
               <html:hidden property="companyCode" />
               <INPUT Id="button" type="button" value="Back" onClick="history.back()">
               &nbsp;

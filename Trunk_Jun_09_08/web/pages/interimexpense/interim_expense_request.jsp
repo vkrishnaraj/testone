@@ -193,7 +193,7 @@ function sortInterimExpense(sortOrder) {
                   </logic:present>
                   <logic:notPresent name="cbroStationID" scope="session">
                     <td>
-                      <logic:equal name="expenselist" property="status.description" value="Pending">
+                      <logic:equal name="expenselist" property="status.status_ID" value="<%=TracingConstants.EXPENSEPAYOUT_STATUS_PENDING%>">
                         <input type="checkbox" name="code" value="<bean:write name="expenselist" property="expensepayout_ID"/>">
                       </logic:equal>
                       &nbsp;

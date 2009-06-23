@@ -108,17 +108,6 @@
               </tr>
               <tr>
                 <td>
-                  <bean:message key="header.locale" />
-                  :
-                </td>
-                <td>
-                  <html:select styleClass="dropdown" name="stationForm" property="locale">
-                    <html:options collection="localelist" property="value" labelProperty="label" />
-                  </html:select>
-                </td>
-              </tr>
-              <tr>
-                <td>
                   <bean:message key="header.companyCode" />
                   :
                 </td>

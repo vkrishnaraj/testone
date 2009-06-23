@@ -266,9 +266,6 @@ function updatePagination() {
                     <b><bean:message key="header.stationDesc" /></b>
                   </td>
                   <td>
-                    <b><bean:message key="header.locale" /></b>
-                  </td>
-                  <td>
                     <b><bean:message key="header.companyCode" /></b>
                   </td>
                   <td>
@@ -282,9 +279,6 @@ function updatePagination() {
                     </td>
                     <td>
                       <bean:write name="station" property="stationdesc" />
-                    </td>
-                    <td>
-                      <bean:write name="station" property="locale" />
                     </td>
                     <td>
                       <bean:write name="station" property="companycode_ID" />

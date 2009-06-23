@@ -320,6 +320,7 @@ public class ClaimSettlementAction extends Action {
 				cs.setDepreciationComplete(convertDate(form.getDepreciationComplete(), a));
 				cs.setDepreciationDue(convertDate(form.getDepreciationDue(), a));
 				cs.setFirstContact(convertDate(form.getFirstContact(), a));
+				cs.setClaimType(form.getClaimType());
 
 				if (form.getNewComment() != null && form.getNewComment().length() > 0)
 				{
@@ -355,6 +356,12 @@ public class ClaimSettlementAction extends Action {
 				cs.setVerifyTrace1(form.isVerifyTrace1());
 				cs.setVerifyTrace2(form.isVerifyTrace2());
 				cs.setVerifyTrace3(form.isVerifyTrace3());
+				cs.setDateStatusChange(convertDate(form.getDateStatusChange(), a));
+				cs.setOfferSent(convertDate(form.getOfferSent(), a));
+				cs.setOfferSentVia(form.getOfferSentVia());
+				cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
+				cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
+				cs.setRevisitedBy(form.getRevisitedBy());
 
 				break;
 			case 2:
