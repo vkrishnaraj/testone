@@ -165,10 +165,10 @@
           ccCount += 1;
         }
       else if (currentElementName.indexOf("].color") != -1) {
-    	  bagIndices = bagIndices.push(currentElementName.substring(left+1, right));
+    	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
       }
       else if (currentElementName.indexOf("deleteinventory") != -1) {
-          bagsWithContents = bagsWithContents.push(currentElementName.split('_')[1]);
+          bagsWithContents = bagsWithContents.concat(currentElementName.split('_')[1]);
       }
         
     } 

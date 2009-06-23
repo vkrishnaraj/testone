@@ -77,6 +77,7 @@ public class MBRActionUtils {
 					theform.getItem(fileindex, -1).getInventorylist().add(ii);
 
 				}
+				request.setAttribute("inventory", Integer.toString(fileindex));
 				return true;
 			}
 		}

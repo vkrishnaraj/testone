@@ -375,6 +375,7 @@ public class ClaimSettlementAction extends Action {
 				cs.setProvince(form.getProvince());
 				cs.setSalutation(form.getSalutation());
 				cs.setState_ID(form.getState_ID());
+				cs.setZip(form.getZip());
 				
 				break;
 			case 3:

@@ -143,7 +143,7 @@
               <bean:write name="prepopInc" property="incident_ID" />
               </a></td>
               <td><bean:write name="prepopInc" property="displaydate" /></td>
-              <td><bean:write name="prepopInc" property="statusdesc" /></td>
+              <td><bean:message name="prepopInc" property="status.key" /></td>
               <td>
 <%
                 boolean hasp = false;
