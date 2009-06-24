@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -298,5 +299,9 @@ public class Task implements Serializable {
 
 	public String getDispduetime() {
 		return DateUtils.formatDate(this.getDue_date_time(), _TIMEFORMAT, null, _TIMEZONE);
+	}
+
+	public String getStatusString() {
+		return status.getTextDescription(null);
 	}
 }

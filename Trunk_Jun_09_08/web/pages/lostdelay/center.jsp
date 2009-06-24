@@ -33,7 +33,6 @@
     	o.historical_report.value = "1";
     	o.submit();
     }
-    
     function disableButton(aButton) {
     	aButton.disabled = true;
     	aButton.value= "<bean:message key='ajax.please_wait' />";
@@ -45,32 +44,27 @@
     }
     
      function disableButtons() {
-     	if(document.incidentForm.savetracingButton) {
-	   disableButton(document.incidentForm.savetracingButton);
-     	}
      	if(document.incidentForm.saveButton) {
-	   disableButton(document.incidentForm.saveButton);
+ 	   disableButton(document.incidentForm.saveButton); 
      	}
-     	if(document.incidentForm.savetowtButton) {
-	   disableButton(document.incidentForm.savetowtButton);
-     	}
-     	if(document.incidentForm.amendWTButton) {
-	   disableButton(document.incidentForm.amendWTButton);
+     	if(document.incidentForm.saveremarkButton) {
+ 	   disableButton(document.incidentForm.saveremarkButton); 
      	}
     }
     
     function enableButtons() {
-     if(document.incidentForm.savetracingButton) {
-        enableButton(document.incidentForm.savetracingButton, "<bean:message key='button.savetracing' />");
-     }
      if(document.incidentForm.saveButton) {
+
+      <logic:notEqual name="incidentForm" property="incident_ID" value="">
         enableButton(document.incidentForm.saveButton, "<bean:message key='button.save' />");
+                </logic:notEqual>
+                <logic:equal name="incidentForm" property="incident_ID" value="">
+        enableButton(document.incidentForm.saveButton, "<bean:message key='button.saveincident' />");
+                </logic:equal>
+     	
      }
-     if(document.incidentForm.savetowtButton) {
-        enableButton(document.incidentForm.savetowtButton, "<bean:message key='button.savetoWT' />");
-     }
-     if(document.incidentForm.amendWTButton) {
-        enableButton(document.incidentForm.amendWTButton, "<bean:message key='button.amendWT' />");
+     if(document.incidentForm.saveremarkButton) {
+        enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
      }
     }
     
@@ -651,9 +645,9 @@
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
 		<html:hidden property="save" value="" disabled="true" />
-                <html:button property="saveButton" styleId="button"
+                <html:button property="saveremarkButton" styleId="button"
 			onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false  && validateRest(this.form) != false) {this.form.save.disabled = false; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
-                  <bean:message key="button.save" />
+                  <bean:message key="button.saveremark" />
                 </html:button>
                 </logic:notEqual></td>
               </tr>

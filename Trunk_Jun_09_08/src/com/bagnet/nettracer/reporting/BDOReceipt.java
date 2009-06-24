@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -129,7 +130,11 @@ public class BDOReceipt {
 					charges.append(" " + theform.getCost());
 				}
 				
-				brd.setCharges(charges.toString());
+				try {
+					brd.setCharges(TracingConstants.DECIMALFORMAT.format(charges.toString()));
+				} catch (Exception e) {
+					brd.setCharges("");
+				}
 				al.add(brd);
 			}
 

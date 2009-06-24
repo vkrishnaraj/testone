@@ -61,6 +61,7 @@
       <span class="reqfield">*</span>
       <bean:message key="Required" />
       <logic:iterate id="passenger" name="incidentForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.Passenger">
+      <div id="<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
             <td colspan=5>
@@ -321,7 +322,7 @@
                       	<html:options collection="receiptLocaleList" property="value" labelProperty="label"/>
                     </html:select>
 <%
-                    	}
+                    }
 %>
                   </logic:equal>
                 </td>
@@ -330,14 +331,21 @@
           </logic:present>
           <tr>
             <td colspan=5>
-              <html:submit styleId="button" property="deletePassenger" indexed="true">
-                <bean:message key="button.delete_passenger" />
-              </html:submit>
+              <input type="button" value="<bean:message key="button.delete_passenger" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>', '<bean:message key="colname.passenger" />')" id="button">
             </td>
           </tr>
         </table>
+        </div>
       </logic:iterate>
-      <center><html:submit styleId="button" property="addPassenger">
+      <center>
+      <select name="addPassengerNum">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <html:submit styleId="button" property="addPassenger">
         <bean:message key="button.add_additional_passenger" />
       </html:submit></center>
       <br>

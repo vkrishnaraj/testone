@@ -242,7 +242,7 @@ public class BDOUtils {
 			theform.setItemlist(new ArrayList(bdo.getItems()));
 			if (bdo.getExpensePayout() != null) {
 				 
-				theform.setCost(Double.toString(bdo.getExpensePayout().getCheckamt()));
+				theform.setCost(TracingConstants.DECIMALFORMAT.format(bdo.getExpensePayout().getCheckamt()));
 				theform.setCurrency(bdo.getExpensePayout().getCurrency_ID());
 			}
 

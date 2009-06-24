@@ -319,4 +319,8 @@ public class OHDRequest implements Serializable {
 	public void setForward_id(int forward_id) {
 		this.forward_id = forward_id;
 	}
+	
+	public String getRequestStatus() {
+		return status.getTextDescription(null);
+	}
 }

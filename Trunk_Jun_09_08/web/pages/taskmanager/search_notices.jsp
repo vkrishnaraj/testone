@@ -165,10 +165,6 @@
 %>
           </td>
         </tr>        
-        
-            <html:submit property="close" styleId="button">
-              
-            </html:submit>
       </table>
     </logic:notEmpty>
   </html:form>
