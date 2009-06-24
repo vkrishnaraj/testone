@@ -9,6 +9,7 @@ package com.bagnet.nettracer.tracing.utils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -220,6 +221,39 @@ public class MessageUtils {
 
 		msg.setRecipients(new HashSet(newRecpList));
 		HibernateUtils.save(msg);
+		
+
+		//save each repient's copy
+		if (msg.getMessage_id() > 0) {
+			for (Iterator i = newRecpList.iterator(); i.hasNext();) {
+				Recipient recpt = (Recipient) i.next();
+				MessageCopy copy = new MessageCopy();
+				copy.setParent_message(msg);
+				copy.setBody(msg.getMessage());
+				copy.setSubject(msg.getSubject());
+				copy.setAgent(user);
+				copy.setReceiving_station(recpt.getStation());
+				Status s = new Status();
+				s.setStatus_ID(TracingConstants.MESSAGE_STATUS_NEW);
+				copy.setStatus(s);
+
+				HibernateUtils.save(copy);
+			}
+		}
+		
+		//set the sent box copy..
+		if (msg != null && msg.getMessage_id() > 0) {
+			MessageCopy copy = new MessageCopy();
+			copy.setParent_message(msg);
+			copy.setBody(msg.getMessage());
+			copy.setSubject(msg.getSubject());
+			copy.setAgent(user);
+			copy.setReceiving_station(msg.getSend_station());
+			Status s1 = new Status();
+			s1.setStatus_ID(TracingConstants.MESSAGE_STATUS_SENT);
+			copy.setStatus(s1);
+			HibernateUtils.save(copy);
+		}
 	}
 	
 	public static int getMessagesCount(String stationId, int status_id, String s_date, String e_date,

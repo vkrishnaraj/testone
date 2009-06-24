@@ -96,7 +96,7 @@ public class RequestOnHandAction extends Action {
 					+ user.getStation().getStationcode() + " station.";
 					
 					if (reason != null && reason.trim().length() > 0) {
-						remarkText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " ";
+						remarkText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " " + reason;
 					}
 						
 					r.setRemarktext(remarkText);
