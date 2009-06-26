@@ -251,9 +251,11 @@ function updatePagination() {
                       if (canApprove) {
 %>
                     <td>
-                      <c:if test="${expenselist.status.status_ID == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING}">
+                      <%
+                        if (expenselist.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
+                      %>
                         <input type="checkbox" name="code" value="<bean:write name="expenselist" property="expensepayout_ID"/>">
-                      </c:if>
+                      <% } %>
                       &nbsp;
                     </td>
                     <%

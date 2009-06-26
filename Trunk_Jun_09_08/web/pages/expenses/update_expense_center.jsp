@@ -17,14 +17,7 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
-    
-	var cal1xx = new CalendarPopup();	
-
-
-  </SCRIPT>
-
-
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
 <%
 	Agent a = (Agent) request.getSession().getAttribute("user");
 	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
@@ -32,9 +25,36 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
+
+	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
+			.getAttribute("org.apache.struts.action.MESSAGE");
+	java.util.Locale myLocale = (java.util.Locale) session
+			.getAttribute("org.apache.struts.action.LOCALE");
 %>
-<html:form action="UpdateExpense.do" method="post">
-	
+
+    <script language="javascript">
+    
+	 var cal1xx = new CalendarPopup();	
+
+     var buttonSelected = ''; 
+    
+      function validateExpense() {
+        if (buttonSelected == '') {
+          return true;
+        } else if (buttonSelected = 'payExpense') {
+          
+          if (document.expensePayoutForm.checkamt.value != '' && checkFloatGreaterThan0(document.expensePayoutForm.checkamt.value)) {
+            if (document.expensePayoutForm.draft.value == '') {
+              alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.claims.draftNumberRequired")%>');
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+      
+    </script>
+<html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
 	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
 	<html:hidden name="expensePayoutForm" property="tz" value="<%= a.getCurrenttimezone() %>" />
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
@@ -173,7 +193,7 @@
 								</html:select>
                                 <br />
                                 <c:if test="${!empty expensePayoutForm.bdo_id}">
-                                  <a href="bdo.do?bdo_id=<c:out value="${expensePayoutForm.bdo_id}"/>"><c:out value="${expensePayoutForm.bdo_id}"/></a>
+                                  <a href="bdo.do?bdo_id=<c:out value="${expensePayoutForm.bdo_id}"/>"><c:out value="${expensePayoutForm.bdo_ref}"/></a>
                                 </c:if>
 							</td>
 						</tr>
@@ -241,7 +261,7 @@
 									}
 									if (canPay) {
 								%>
-								<html:submit property="payExpense" styleId="button">
+								<html:submit property="payExpense" styleId="button" onclick="buttonSelected='payExpense';">
 									<bean:message key="button.payExpense" />
 								</html:submit>
 								<%

@@ -122,7 +122,7 @@ function submitForwardForm()
                 </td>
                 <td>
                   <strong>
-                    <bean:message key="colname.incident_create_date" />
+                    <bean:message key="colname.ohd_create_date" />
                   </strong>
                 </td>
                 <td>

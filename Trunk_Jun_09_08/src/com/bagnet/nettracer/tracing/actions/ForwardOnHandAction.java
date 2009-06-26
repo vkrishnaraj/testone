@@ -107,6 +107,7 @@ public class ForwardOnHandAction extends Action {
 			OHD_Log_Itinerary itinerary = theform.getItinerary(theform.getItinerarylist().size());
 			itinerary.set_DATEFORMAT(user.getDateformat().getFormat());
 			itinerary.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			return mapping.findForward(TracingConstants.ENTER_FORWARD_ON_HAND);
 		} else if (request.getParameter("save") != null) {
 			//Invalid or no destination is selected.
 			if (theform.getDestStation() == null || theform.getDestStation().equals("")) {

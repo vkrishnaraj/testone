@@ -28,6 +28,27 @@ function checkPnr(strng)
   return objRegExp.test(strng);
 }
 
+
+function checkFloatGreaterThan0(value)
+{ 
+    // remove '.' before checking digits
+    var tempArray = value.split('.');
+    var joinedString= tempArray.join('');
+
+    if (!checkInteger(joinedString)) {
+      return false;
+    } 
+    else 
+    {
+      var iValue = parseFloat(value);
+      if (iValue > 0) {
+      	return true;
+      }
+      
+    }   
+    return false;
+}
+
 function checkFloat(value)
 { 
     // remove '.' before checking digits

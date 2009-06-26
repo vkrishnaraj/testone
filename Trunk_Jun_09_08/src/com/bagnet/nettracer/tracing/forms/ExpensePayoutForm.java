@@ -40,6 +40,8 @@ public class ExpensePayoutForm extends ActionForm {
 	private Date voucherExpirationDate;
 	private double creditCardRefund;
 	private String bdo_id;
+	private String bdo_ref;
+	
 	
 	private String paymentType;
 	
@@ -378,5 +380,14 @@ public class ExpensePayoutForm extends ActionForm {
 		sdf.setTimeZone(TimeZone.getTimeZone(tz));
 		return sdf.parse(dateStr);
 	}
+	
+	public String getBdo_ref() {
+		return bdo_ref;
+	}
+	
+	public void setBdo_ref(String bdo_ref) {
+		this.bdo_ref = bdo_ref;
+	}
+
 	
 }

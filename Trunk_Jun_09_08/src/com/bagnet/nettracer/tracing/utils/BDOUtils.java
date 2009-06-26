@@ -86,6 +86,7 @@ public class BDOUtils {
 		theform.setCreatetime(TracerDateTime.getGMTDate());
 		theform.set_DATEFORMAT(user.getDateformat().getFormat());
 		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		theform.setCurrency(user.getDefaultcurrency());
 		if (user.getDefaulttimezone() != null)
 			theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
 					user.getDefaulttimezone()).getTimezone()));

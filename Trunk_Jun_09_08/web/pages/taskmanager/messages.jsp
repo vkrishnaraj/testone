@@ -204,7 +204,7 @@ function sortAgents(sortOrder) {
                 </td>
               </logic:notPresent>
               <TD>
-                <b><a href="#" onclick="sortAgents('order_file_number');"><bean:message key="header.file" /></a></b>
+                <b><a href="#" onclick="sortAgents('order_file_number');"><bean:message key="header.files" /></a></b>
               </td>
               <TD>
                 <b><bean:message key="header.subject" /></b>

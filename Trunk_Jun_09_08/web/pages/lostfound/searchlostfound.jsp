@@ -116,7 +116,7 @@ function updatePagination() {
                   </html:select>
                 </td>
                 <td>
-                  <bean:message key="colname.report_type" />
+                  <bean:message key="colname.lf.report_type" />
                   <br>
                   <select name="report_type" class="dropdown">
                     <option value="">

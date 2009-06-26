@@ -7,13 +7,17 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
 org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
 request.getAttribute("org.apache.struts.action.MESSAGE");
 java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
 "org.apache.struts.action.LOCALE");
+  boolean noticePermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES, a);
 %>
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
     function textCounter(field, countfield, maxlimit) {
@@ -358,11 +362,17 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                           <bean:message key="colname.foh.fromto" />
                         </strong>
                       </td>
+                      <%
+                        if (noticePermission) {
+                      %>
                       <td valign="top">
                         <strong>
                           <bean:message key="colname.notifydestination" />
                         </strong>
                       </td>
+                      <%
+                        }
+                      %>
                       <td valign="top">
                         <strong>
                           <bean:message key="colname.foh.flightnum" />
@@ -409,9 +419,15 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 	                        <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerarylist[<%= k %>].legto','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
 
                         </td>
+                        <%
+                          if (noticePermission) {
+                        %>
                         <td>
                             <html:checkbox name="itinerarylist" indexed="true" property="notify"></html:checkbox>
                         </td>
+                        <%
+                          }
+                        %>
                         <td>
                         
                             <logic:empty name="itinerarylist" property="airline">
@@ -440,7 +456,17 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                         </td>
                       </tr>
                       <tr>
+                        <%
+                          if (noticePermission) {
+                        %>
                         <td colspan="7">
+                        <%
+                          } else  {
+                        %>
+                        <td colspan="6">
+                        <%
+                          }
+                        %>
                           <html:submit styleId="button" property="deleteBag" indexed="true">
                             <bean:message key="button.delete_forward_itinerary" />
                           </html:submit>
