@@ -71,7 +71,7 @@ public class ExpensePayout implements Serializable {
 	private TimeZone _TIMEZONE;
 
 	@ManyToOne
-	@JoinColumn(name = "incident_ID", nullable = false)
+	@JoinColumn(name = "incident_ID", nullable = true)
 	public Incident getIncident() {
 		return incident;
 	}
