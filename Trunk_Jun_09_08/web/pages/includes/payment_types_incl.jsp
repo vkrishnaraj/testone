@@ -32,8 +32,7 @@
                             <bean:message key="colname.draftreqdate" />
                             (<c:out value="${date_format}"/>)
                             <br />
-                            
-                            <input type="text" name="dispDraftreqdate" size="15" maxlength="10" class="textfield" value="<fmt:formatDate value='${expensePayoutForm.draftreqdate}' pattern='${date_format}' />"/>
+                            <html:text property="dispDraftreqdate"  size="15" maxlength="10" styleClass="textfield" />
                             <img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftreqdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                           <td>
                             <bean:message key="colname.draftpaiddate" />

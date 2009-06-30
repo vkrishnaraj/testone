@@ -31,19 +31,19 @@
                             (
                             <%= a.getDateformat().getFormat() %>)
                             <br />
-                            <html:text property="disdraftreqdate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.disdraftreqdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                            <html:text property="dispDraftreqdate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftreqdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                           <td>
                             <bean:message key="colname.draftpaiddate" />
                             (
                             <%= a.getDateformat().getFormat() %>)
                             <br />
-                            <html:text property="disdraftpaiddate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.disdraftpaiddate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                            <html:text property="dispDraftpaiddate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftpaiddate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                         </tr>
                         <tr>
                           <td>
                             <bean:message key="colname.checkamt" />
                             <br />
-                            <html:text property="discheckamt" size="11" maxlength="10" styleClass="textfield" />
+                            <html:text property="checkamt" size="11" maxlength="10" styleClass="textfield" />
                             <br />
                             <bean:message key="colname.currency" />
                             <br />
@@ -54,11 +54,11 @@
                           <td>
                             <bean:message key="colname.voucheramt" />
                             <br />
-			    <html:text property="disvoucheramt" size="15" maxlength="10" styleClass="textfield" />
+			    <html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" />
                             <br />
                             <bean:message key="colname.voucherexp" />
                             <br />
-                            <html:text property="voucherExpirationDate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.voucherExpirationDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+                            <html:text property="dispVoucherExpirationDate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispVoucherExpirationDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
                           </td>
                           <td>
                             <bean:message key="colname.cc_refund" />

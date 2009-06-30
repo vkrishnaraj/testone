@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
+import java.util.Date;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 			addComment(ep, user, "expense.comment.updated", expenseForm.getNewComment());
 		} else if (expenseForm.getApproveExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
+			ep.setApproval_date(TracerDateTime.getGMTDate());
 			addComment(ep, user, "expense.comment.approved", expenseForm.getNewComment());
 		} else if (expenseForm.getDenyExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_DENIED);

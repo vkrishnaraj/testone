@@ -223,6 +223,12 @@ public class TracingConstants {
 	public final static int CHECK_PAYOUT = 1;
 	public final static int VOUCHER_PAYOUT = 2;
 	public final static int MILEAGE_PAYOUT = 3;
+	
+	public final static String ENUM_VOUCHER = "VOUCH";
+	public final static String ENUM_DRAFT = "DRAFT";
+	public final static String ENUM_MILE = "MILE";
+	public final static String ENUM_INC = "INC";
+	public final static String ENUM_CCREF = "CCREF";
 
 	// leg types
 	public final static int LEG_B_STATION = 1; // orinating station

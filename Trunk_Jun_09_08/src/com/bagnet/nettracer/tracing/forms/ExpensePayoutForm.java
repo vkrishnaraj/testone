@@ -388,6 +388,9 @@ public class ExpensePayoutForm extends ActionForm {
 	public void setBdo_ref(String bdo_ref) {
 		this.bdo_ref = bdo_ref;
 	}
+	public void setDraftpaiddate(Date draftpaiddate) {
+		this.draftpaiddate = draftpaiddate;
+	}
 
 	
 }

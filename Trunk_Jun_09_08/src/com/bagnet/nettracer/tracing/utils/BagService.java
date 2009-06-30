@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
+import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 
@@ -121,29 +122,13 @@ public class BagService {
 
 	public boolean forwardOnHand(ForwardOnHandForm form, Agent user, MessageResources messages) {
 		boolean escape = false;
-		String ohd_id = form.getOhd_ID();
-		String expedite_num = form.getExpediteNumber();
-		while (true) {
-			String onhandnum = "";
-			String expeditenum = "";
-			if(ohd_id.indexOf(",") != -1) {
-				int index = ohd_id.indexOf(",");
-				onhandnum = ohd_id.substring(0, index);
-				ohd_id = ohd_id.substring(index + 1);
-
-				index = expedite_num.indexOf(",");
-				expeditenum = expedite_num.substring(0, index);
-				expedite_num = expedite_num.substring(index + 1);
-			}
-			else {
-				onhandnum = ohd_id;
-				expeditenum = expedite_num;
-				escape = true;
-			}
-
-			if(onhandnum.equals(""))
-				break;
-
+		List<LabelValueBean> ohds = form.getOhdList();
+		//String expedite_num = form.getExpediteNumber();
+		
+		for (LabelValueBean ohdBean: ohds) {
+			String onhandnum = ohdBean.getLabel();
+			String expeditenum = ohdBean.getValue();
+	
 			OhdBMO obmo = new OhdBMO();
 			OHD ohd = obmo.findOHDByID(onhandnum);
 			if(ohd == null)

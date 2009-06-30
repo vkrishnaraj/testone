@@ -159,6 +159,24 @@ public abstract class BaseExpenseAction extends CheckedAction {
 
 		ExpenseType et = new ExpenseType();
 		et.setExpensetype_ID(expenseForm.getExpensetype_id());
+		
+		if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
+			ep.setVoucheramt(expenseForm.getCheckamt());
+			ep.setCheckamt(0);
+		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_CCREF)) {
+			ep.setCreditCardRefund(expenseForm.getCheckamt());
+			ep.setCheckamt(0);
+		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_DRAFT)) {
+			// Do nothing -- this occurs by default
+		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_INC)) {
+			ep.setIncidentalAmountClaimed(expenseForm.getCheckamt());
+			ep.setCheckamt(0);
+		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_MILE)) {
+			Double x = new Double(expenseForm.getCheckamt());
+			ep.setMileageamt(x.intValue());
+			ep.setCheckamt(0);
+		}
+		
 		ep.setExpensetype(et);
 		ep.setStation(user.getStation());
 

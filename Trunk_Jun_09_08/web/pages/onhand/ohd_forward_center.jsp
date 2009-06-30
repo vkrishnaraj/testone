@@ -3,12 +3,13 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+
 <%@ page import="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
-<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+
 <%
   Agent a = (Agent)session.getAttribute("user");
 org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
@@ -18,6 +19,12 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
   boolean noticePermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES, a);
 %>
 
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  
+<%@page import="com.mysql.jdbc.IterateBlock"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
     function textCounter(field, countfield, maxlimit) {
@@ -174,19 +181,11 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
     return isDate(strng,'<%= a.getTimeformat().getFormat() %>');
   }
     
-
+  var cal1xx = new CalendarPopup();
+  
   </SCRIPT>
   
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
-    
-	var cal1xx = new CalendarPopup();	
 
-
-  </SCRIPT>
   
   <jsp:include page="/pages/includes/required_fields_incl.jsp" />
   
@@ -211,47 +210,16 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                   :
                 </td>
                 <td>
-<%
-                  boolean batch  = false;
-                  boolean escape = false;
-                  String  ohd_id = ((ForwardOnHandForm)session.getAttribute("forwardOnHandForm")).getOhd_ID();
-
-                  while (true) {
-                    String onhandnum = "";
-
-                    if (ohd_id.indexOf(",") != -1) {
-                      batch = true;
-
-                      int index = ohd_id.indexOf(",");
-
-                      onhandnum = ohd_id.substring(0, index);
-                      ohd_id    = ohd_id.substring(index + 1);
-                    } else {
-                      onhandnum = ohd_id;
-                      escape    = true;
-                    }
-%>
-                    <A HREF='addOnHandBag.do?ohd_ID=<%= onhandnum %>'><%= onhandnum %></a>
+                  <logic:iterate name="forwardOnHandForm"  property="ohdList" id="ohd" indexId="i" type="org.apache.struts.util.LabelValueBean">
+                    <a href="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="label" />"><bean:write name="ohd" property="label" /></a>
                     &nbsp;
-<%
-                    if (onhandnum.equals("")) {
-                      break;
-                    }
-
-                    if (batch) {
-%>
-                      &nbsp;
                       <bean:message key="colname.expedite_number" />
                       :
-                      <input type="text" size="20" maxlength="20" name='expedite_<%= onhandnum %>'>
-                      <br>
-<%
-                    }
-                    if (escape) {
-                      break;
-                    }
-                  }
-%>
+                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>"/>
+                      <br />
+                  </logic:iterate>
+
+
                 </td>
               </tr>
               <logic:notEmpty name="forwardOnHandForm" property="bag_request_id">
@@ -293,59 +261,6 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 
                 </td>
               </tr>
-<%
-              if (!batch) {
-%>
-                <script language="javascript">
-                  
-        function setExpediteNum(form)
-        { 
-        return true;
-        }
-
-
-                </script>
-                <tr>
-                  <td>
-                    <bean:message key="colname.expedite_number" />
-                    <font color=red>
-                      *
-                    </font>
-                    :
-                  </td>
-                  <td>
-                    <html:text name="forwardOnHandForm" property="expediteNumber" size="20" maxlength="10" />
-                  </td>
-                </tr>
-<%
-              } else {
-%>
-                <script language="javascript">
-                  
-        function setExpediteNum(form)
-        {
-            var expediteNum = "";
-            for (var j=0;j<form.length;j++) {
-              currentElement = form.elements[j];
-              currentElementName=currentElement.name;
-              if (currentElementName.indexOf("expedite") != -1 && (currentElementName != "expediteNumber"))
-              {
-                if (expediteNum != "")
-                  expediteNum += ",";
-                
-                expediteNum += currentElement.value;
-              }
-            }
-            document.forwardOnHandForm.expediteNumber.value = expediteNum;
-            return true;
-        }
-
-
-                </script>
-                <input type="hidden" name="expediteNumber" value="a">
-<%
-              }
-%>
               <tr>
                 <td colspan="2">
                   <table>

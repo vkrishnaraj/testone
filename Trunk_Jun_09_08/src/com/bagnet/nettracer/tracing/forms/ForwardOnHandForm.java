@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.LabelValueBean;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
@@ -20,6 +21,7 @@ public final class ForwardOnHandForm extends ActionForm {
 	private int lz = 0; //is this Forwarding for LZ.
 	private String bag_request_id; //baggage request
 	private String ohd_ID; //on-hand id
+	private List<LabelValueBean> ohdList;
 	private String expediteNumber; //expedite number
 	private String destStation; //destination station
 	private String message; //message
@@ -172,4 +174,13 @@ public final class ForwardOnHandForm extends ActionForm {
 		}
 		return (OHD_Log_Itinerary) this.itinerarylist.get(index);
 	}
+
+	public List<LabelValueBean> getOhdList() {
+		return ohdList;
+	}
+
+	public void setOhdList(List<LabelValueBean> ohdList) {
+		this.ohdList = ohdList;
+	}
+
 }

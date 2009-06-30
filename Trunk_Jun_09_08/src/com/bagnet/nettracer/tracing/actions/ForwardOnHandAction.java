@@ -15,11 +15,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
@@ -153,6 +155,14 @@ public class ForwardOnHandAction extends Action {
 		if (request.getParameter("batch") != null) {
 			ohd_ID = request.getParameter("batch_id");
 		}
+		
+		ArrayList<LabelValueBean> oList = new ArrayList<LabelValueBean>();
+		
+		String[] ohdArray = ohd_ID.split(",");
+		
+		for (String o: ohdArray) {
+			oList.add(new LabelValueBean(o, ""));
+		}		
 
 		if (ohd_ID != null) {
 			//reset the forward form
@@ -163,6 +173,7 @@ public class ForwardOnHandAction extends Action {
 			itinerary.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			list.add(itinerary);
 			theform.setOhd_ID(ohd_ID);
+			theform.setOhdList(oList);
 			theform.setCompanyCode(user.getCompanycode_ID());
 			session.setAttribute("forwardOnHandForm", theform);
 		}
@@ -189,12 +200,12 @@ public class ForwardOnHandAction extends Action {
 			}
 		}
 
-		if (theform.getExpediteNumber() == null || theform.getExpediteNumber().length() < 1) {
+		if (theform.getItinerarylist().size() == 0) {
 			OHD_Log_Itinerary itinerary = theform.getItinerary(0);
 			itinerary.set_DATEFORMAT(user.getDateformat().getFormat());
 			itinerary.set_TIMEFORMAT(user.getTimeformat().getFormat());
 		}
-
+		
 		//Allow modifications to the forward.
 		return mapping.findForward(TracingConstants.ENTER_FORWARD_ON_HAND);
 	}
