@@ -158,7 +158,10 @@ function sortInterimExpense(sortOrder) {
               <logic:iterate id="expenselist" name="expenseList" type="com.bagnet.nettracer.tracing.db.ExpensePayout">
                 <tr>
                   <td>
-                    <a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
+                    <logic:notEmpty name="expenselist" property="incident">
+                      <a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
+                    </logic:notEmpty>
+                    &nbsp;
                   </td>
                   <td>
                     <a href='EditExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
