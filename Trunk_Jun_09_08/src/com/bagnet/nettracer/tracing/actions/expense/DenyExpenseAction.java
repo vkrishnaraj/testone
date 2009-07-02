@@ -42,6 +42,7 @@ public class DenyExpenseAction extends BaseExpenseAction {
 		Status st = new Status();
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_DENIED);
 		addComment(ep, user, "expense.comment.denied", expenseForm.getNewComment());
+		ep.setApproval_date(TracerDateTime.getGMTDate());
 		ep.setStatus(st);
 		
 		if(ExpensePayoutBMO.updateExpense(ep, user)) {
