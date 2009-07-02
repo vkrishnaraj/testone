@@ -11,7 +11,7 @@
       .getAttribute("org.apache.struts.action.LOCALE");
 %>
 
-  function validatereqWtIncFields(form, formType, requireContents)
+  function validatereqWtIncFields(form, formType, requireContents, firstPaxIndex, firstItemIndex, firstClaimcheckIndex)
   {
     <%
       if (a.getStation().getCompany().getVariable().getWt_enabled() != 1) {
@@ -33,7 +33,7 @@
         reqContentFields = false;
       }
       
-      if (currentElementName.indexOf("[0].lastname") != -1) {  
+      if (currentElementName.indexOf("["+firstPaxIndex+"].lastname") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale,
@@ -43,7 +43,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("[0].firstname") != -1) {
+      else if (currentElementName.indexOf("["+firstPaxIndex+"].firstname") != -1) {
         if (currentElement.value.length == 0)
         {
           alert("<%= (String)myMessages.getMessage(myLocale, 
@@ -53,7 +53,7 @@
           return false;
         }
       }
-    else if (currentElementName.indexOf("[0].address1") != -1) {
+    else if (currentElementName.indexOf("["+firstPaxIndex+"].address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -66,7 +66,7 @@
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("[0]address1") != -1) {
+      } else if (currentElementName.indexOf("["+firstPaxIndex+"]address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -81,7 +81,7 @@
         }
       }
       
-      else if (currentElementName.indexOf("[0].city") != -1) {  
+      else if (currentElementName.indexOf("["+firstPaxIndex+"].city") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale, "colname.city")%>" + " <%=(String) myMessages.getMessage(myLocale,
@@ -90,7 +90,7 @@
           return false;
         } 
       } 
-      else if (currentElementName.indexOf("[0].countrycode_ID") != -1) {
+      else if (currentElementName.indexOf("["+firstPaxIndex+"].countrycode_ID") != -1) {
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
           
         if (currentElement.value.length == 0)
@@ -102,7 +102,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("[0].state_ID") != -1) {  
+      else if (currentElementName.indexOf("["+firstPaxIndex+"].state_ID") != -1) {  
         
         var pos = currentElementName.indexOf(".");
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
@@ -263,7 +263,7 @@
       } 
     }
   
-  var bag0 = document.getElementById("theitem[0].lnameonbag");
+  var bag0 = document.getElementById("theitem["+firstItemIndex+"].lnameonbag");
   
   if(bag0 == null) {
     alert("<%=(String) myMessages.getMessage(myLocale,
@@ -274,7 +274,7 @@
 
   if(ccCount > bagIndices.length) {
         alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.too.many.claimchecks")%>');
-        document.getElementById("claimcheck[0].claimchecknum").focus();
+        document.getElementById("claimcheck["+firstClaimcheckIndex+"].claimchecknum").focus();
         return false;
   }
     

@@ -25,7 +25,29 @@
   {
     returnValue = true;
     
-    returnValue = validatereqWtIncFields(form, formType, false);
+    var firstPaxIndex = -1;
+    var firstItemIndex = -1;
+    var firstClaimcheckIndex = -1;
+    
+    for (var j=0;j < form.length; j++) {
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+      if (firstPaxIndex == -1 && currentElementName.indexOf("].lastname") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstPaxIndex = currentElementName.substring(left+1, right);
+      } else if (firstItemIndex == -1 && currentElementName.indexOf("].lnameonbag") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstItemIndex = currentElementName.substring(left+1, right);
+      } else if (firstClaimcheckIndex == -1 && currentElementName.indexOf("claimcheck[") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstClaimcheckIndex = currentElementName.substring(left+1, right);
+      }
+    }
+    
+    returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstItemIndex, firstClaimcheckIndex);
     if (returnValue == false) { return returnValue; }
     
     for (var j=0;j < form.length; j++) {
@@ -36,7 +58,7 @@
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
 
-      } else if (currentElementName.indexOf("[0].zip") != -1) {  
+      } else if (currentElementName.indexOf("[" + firstPaxIndex + "].zip") != -1) {  
         
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
@@ -123,9 +145,9 @@
     }
     
 
-    var mobile = document.getElementById("addresses[0].mobile");
-    var home = document.getElementById("addresses[0].homephone");
-    var work = document.getElementById("addresses[0].workphone");
+    var mobile = document.getElementById("addresses[" + firstPaxIndex + "].mobile");
+    var home = document.getElementById("addresses[" + firstPaxIndex + "].homephone");
+    var work = document.getElementById("addresses[" + firstPaxIndex + "].workphone");
         
     if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
       alert("<%= (String)myMessages.getMessage(myLocale, "colname.phone") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
