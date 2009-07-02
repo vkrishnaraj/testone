@@ -30,7 +30,34 @@
   {
     returnValue = true;
     
-    returnValue = validatereqWtIncFields(form, formType, false);
+    var firstPaxIndex = -1;
+    var firstAddressIndex = -1;
+    var firstItemIndex = -1;
+    var firstClaimcheckIndex = -1;
+    
+    for (var j=0;j < form.length; j++) {
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+      if (firstPaxIndex == -1 && currentElementName.indexOf("].lastname") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstPaxIndex = currentElementName.substring(left+1, right);
+      } else if (firstItemIndex == -1 && currentElementName.indexOf("].lnameonbag") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstItemIndex = currentElementName.substring(left+1, right);
+      } else if (firstClaimcheckIndex == -1 && currentElementName.indexOf("claimcheck[") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstClaimcheckIndex = currentElementName.substring(left+1, right);
+      } else if (firstAddressIndex == -1 && currentElementName.indexOf("addresses[") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstAddressIndex = currentElementName.substring(left+1, right);
+      }
+    }
+    
+    returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
     if (returnValue == false) { return returnValue; }
     
     return true;

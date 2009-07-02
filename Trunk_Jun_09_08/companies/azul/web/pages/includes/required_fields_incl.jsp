@@ -30,7 +30,34 @@
     var reqContentFields = true;
     returnValue = true;
     
-    returnValue = validatereqWtIncFields(form, formType, false);
+    var firstPaxIndex = -1;
+    var firstAddressIndex = -1;
+    var firstItemIndex = -1;
+    var firstClaimcheckIndex = -1;
+    
+    for (var j=0;j < form.length; j++) {
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+      if (firstPaxIndex == -1 && currentElementName.indexOf("].lastname") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstPaxIndex = currentElementName.substring(left+1, right);
+      } else if (firstItemIndex == -1 && currentElementName.indexOf("].lnameonbag") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstItemIndex = currentElementName.substring(left+1, right);
+      } else if (firstClaimcheckIndex == -1 && currentElementName.indexOf("claimcheck[") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstClaimcheckIndex = currentElementName.substring(left+1, right);
+      } else if (firstAddressIndex == -1 && currentElementName.indexOf("addresses[") != -1) {
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+        firstAddressIndex = currentElementName.substring(left+1, right);
+      }
+    }
+    
+    returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
     if (returnValue == false) { return returnValue; }
     
     for (var j=0;j < form.length; j++) {
@@ -47,7 +74,7 @@
 	      }
 	    }
 
-      if (currentElementName.indexOf("[0].lastname") != -1) {  
+      if (currentElementName.indexOf("[" + firstPaxIndex + "].lastname") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale,
@@ -57,7 +84,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("[0].firstname") != -1) {
+      else if (currentElementName.indexOf("[" + firstPaxIndex + "].firstname") != -1) {
         if (currentElement.value.length == 0)
         {
           alert("<%= (String)myMessages.getMessage(myLocale, 
@@ -68,7 +95,7 @@
         }
       }
       
-    else if (currentElementName.indexOf("[0].address1") != -1) {
+    else if (currentElementName.indexOf("[" + firstAddressIndex + "].address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -81,7 +108,7 @@
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("[0]address1") != -1) {
+      } else if (currentElementName.indexOf("[" + firstAddressIndex + "]address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -96,7 +123,7 @@
         }
       }
       
-      else if (currentElementName.indexOf("[0].city") != -1) {  
+      else if (currentElementName.indexOf("[" + firstAddressIndex + "].city") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale, "colname.city")%>" + " <%=(String) myMessages.getMessage(myLocale,
@@ -105,7 +132,7 @@
           return false;
         } 
       } 
-      else if (currentElementName.indexOf("[0].countrycode_ID") != -1) {
+      else if (currentElementName.indexOf("[" + firstAddressIndex + "].countrycode_ID") != -1) {
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
           
         if (currentElement.value.length == 0)
@@ -117,7 +144,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("[0].state_ID") != -1) {  
+      else if (currentElementName.indexOf("[" + firstAddressIndex + "].state_ID") != -1) {  
 
         var pos = currentElementName.indexOf(".");
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
@@ -227,7 +254,7 @@
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
 
-      } else if (currentElementName.indexOf("[0].zip") != -1) {  
+      } else if (currentElementName.indexOf("[" + firstAddressIndex + "].zip") != -1) {  
         
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
@@ -288,9 +315,9 @@
     }
     
 
-    var mobile = document.getElementById("addresses[0].mobile");
-    var home = document.getElementById("addresses[0].homephone");
-    var work = document.getElementById("addresses[0].workphone");
+    var mobile = document.getElementById("addresses[" + firstAddressIndex + "].mobile");
+    var home = document.getElementById("addresses[" + firstAddressIndex + "].homephone");
+    var work = document.getElementById("addresses[" + firstAddressIndex + "].workphone");
         
     if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
       alert("<%= (String)myMessages.getMessage(myLocale, "colname.phone") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
