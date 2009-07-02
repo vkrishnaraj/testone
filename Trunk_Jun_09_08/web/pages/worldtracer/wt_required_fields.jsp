@@ -11,7 +11,7 @@
       .getAttribute("org.apache.struts.action.LOCALE");
 %>
 
-  function validatereqWtIncFields(form, formType, requireContents, firstPaxIndex, firstItemIndex, firstClaimcheckIndex)
+  function validatereqWtIncFields(form, formType, requireContents, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex)
   {
     <%
       if (a.getStation().getCompany().getVariable().getWt_enabled() != 1) {
@@ -53,7 +53,7 @@
           return false;
         }
       }
-    else if (currentElementName.indexOf("["+firstPaxIndex+"].address1") != -1) {
+    else if (currentElementName.indexOf("["+firstAddressIndex+"].address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -66,7 +66,7 @@
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("["+firstPaxIndex+"]address1") != -1) {
+      } else if (currentElementName.indexOf("["+firstAddressIndex+"]address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
@@ -81,7 +81,7 @@
         }
       }
       
-      else if (currentElementName.indexOf("["+firstPaxIndex+"].city") != -1) {  
+      else if (currentElementName.indexOf("["+firstAddressIndex+"].city") != -1) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) myMessages.getMessage(myLocale, "colname.city")%>" + " <%=(String) myMessages.getMessage(myLocale,
@@ -90,7 +90,7 @@
           return false;
         } 
       } 
-      else if (currentElementName.indexOf("["+firstPaxIndex+"].countrycode_ID") != -1) {
+      else if (currentElementName.indexOf("["+firstAddressIndex+"].countrycode_ID") != -1) {
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
           
         if (currentElement.value.length == 0)
@@ -102,7 +102,7 @@
           return false;
         }
       }
-      else if (currentElementName.indexOf("["+firstPaxIndex+"].state_ID") != -1) {  
+      else if (currentElementName.indexOf("["+firstAddressIndex+"].state_ID") != -1) {  
         
         var pos = currentElementName.indexOf(".");
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
