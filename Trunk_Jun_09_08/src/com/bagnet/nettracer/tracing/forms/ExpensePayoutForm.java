@@ -377,7 +377,6 @@ public class ExpensePayoutForm extends ActionForm {
 			return null;
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-		sdf.setTimeZone(TimeZone.getTimeZone(tz));
 		return sdf.parse(dateStr);
 	}
 	
