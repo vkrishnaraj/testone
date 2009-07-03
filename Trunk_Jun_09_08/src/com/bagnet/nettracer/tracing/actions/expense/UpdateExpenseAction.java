@@ -53,6 +53,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		} else if (expenseForm.getDenyExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_DENIED);
 			addComment(ep, user, "expense.comment.denied", expenseForm.getNewComment());
+			ep.setApproval_date(TracerDateTime.getGMTDate());
 		} else if (expenseForm.getPayExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
 			addComment(ep, user, "expense.comment.paid", expenseForm.getNewComment());
