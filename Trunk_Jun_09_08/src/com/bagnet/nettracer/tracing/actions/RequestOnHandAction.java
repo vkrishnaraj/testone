@@ -117,8 +117,11 @@ public class RequestOnHandAction extends Action {
 						remarkText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " ";
 					}
 					String subject = TracerUtils.getText("bagrequestDenyMsgSubject", user)  + ": " + oReq.getOhd().getOHD_ID();
-					
-					MessageUtils.sendmessage(oReq.getRequestForStation(), subject, user, msgText, oReq.getIncident_ID(), oReq.getOhd().getOHD_ID());
+					String incidentId = "";
+					if (oReq.getIncident_ID() != null && oReq.getIncident_ID().trim().length() > 0) {
+						incidentId = oReq.getIncident_ID();
+					}
+					MessageUtils.sendmessage(oReq.getRequestForStation(), subject, user, msgText, incidentId, oReq.getOhd().getOHD_ID());
 				}
 				response.sendRedirect("viewROH.do");
 				return null;
