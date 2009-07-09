@@ -127,11 +127,11 @@ public class BDOReceipt {
 				}
 				
 				if (theform.getCost() != null) {
-					charges.append(" " + theform.getCost());
+					charges.append(theform.getCost());
 				}
 				
 				try {
-					brd.setCharges(TracingConstants.DECIMALFORMAT.format(charges.toString()));
+					brd.setCharges(charges.toString());
 				} catch (Exception e) {
 					brd.setCharges("");
 				}

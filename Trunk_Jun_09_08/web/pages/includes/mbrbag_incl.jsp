@@ -258,8 +258,14 @@
 	                  <html:text property="<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description" %>" size="80" maxlength="255" styleClass="textfield" />
 	                </td>
 	                <td align="center">&nbsp;<br>
-                      <input type="button" value="<bean:message key="button.delete_content"/>" 
-                      onclick="if (checkDeleteCount(<%= i %>)) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>', '<bean:message key="colname.lc.content" />', 0);}" id="button">
+                      <% 
+                      String check = "true";
+                      if (report_type !=2) {
+                        check = "checkDeleteCount("+i+")";
+                      }
+                      	%>
+                      <input type="button" name="deleteinventory_<%=i %>" value="<bean:message key="button.delete_content"/>" 
+                      onclick="if (<%=check %>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>', '<bean:message key="colname.lc.content" />', 0);}" id="button">
 	                </td>
 	              </tr>
 	            </table>

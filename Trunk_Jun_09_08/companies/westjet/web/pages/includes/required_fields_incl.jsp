@@ -195,9 +195,7 @@
       else if (currentElementName.indexOf("].color") != -1) {
     	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
       }
-      else if (currentElementName.indexOf("deleteinventory") != -1) {
-          bagsWithContents = bagsWithContents.concat(currentElementName.split('_')[1]);
-      }
+
         
     } 
     
@@ -373,12 +371,12 @@
 	  inputs = document.getElementsByTagName("input");
 	  var invCount = 0;
 	  for(i = 0; i < inputs.length; i++) {
-	    if(inputs[i].id.indexOf("deleteinventory_" + bagNum) == 0) {
+	    if(inputs[i].name.indexOf("deleteinventory_" + bagNum) == 0) {
 	      invCount ++;
-	      if(invCount >= 3) break;
+	      if(invCount >= 4) break;
 	    }
 	  }
-	  if(invCount < 3 && !isAware) {
+	  if(invCount <= 3 && !isAware) {
 	    isAware = confirm("An explanatory remark must be entered when reporting baggage with less than 3 content fields. Would you like to continue?");
 	    document.forms[0].notifiedOfRequirements.value = true;
 	    return isAware;

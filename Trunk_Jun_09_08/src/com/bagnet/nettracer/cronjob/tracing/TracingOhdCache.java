@@ -63,7 +63,19 @@ public class TracingOhdCache{
 		if (containsKey && ohd.getLastupdated().equals(lastUpdated)) {
 			return ohd;
 		} else {
-			ohd = (TraceOHD) sess.get(TraceOHD.class, ohdId);
+			int limit = 0;
+			do {
+				if (limit > 0) {
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// Do nothing.
+					}
+				}
+				ohd = (TraceOHD) sess.get(TraceOHD.class, ohdId);
+				++ limit;
+			} while (ohd == null && limit < 3);
+			
 			sess.evict(ohd);
 			if (!stopCaching || containsKey) {
 				ohdMap.put(ohdId, ohd);
