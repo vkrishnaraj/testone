@@ -1,0 +1,10 @@
+<project name="tracer" default="jar-monitor" basedir=".">
+	<target name="jar-monitor">
+		<jar destfile="ntMonitoring.jar">
+			<manifest>
+				<attribute name="Main-Class" value ="aero.nettracer.monitor.Monitor"/>
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+	</target>
+</project>
