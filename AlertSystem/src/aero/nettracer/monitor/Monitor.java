@@ -32,7 +32,7 @@ public class Monitor {
 		
 		String datePattern = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}";
 		Pattern succePatt = Pattern.compile(datePattern, Pattern.CASE_INSENSITIVE);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		long FIFTEEN_MINUTES = 15*60*1000;
 
 		
@@ -68,6 +68,7 @@ public class Monitor {
 		    in.close();
 	    } catch (Exception e) {
 		    e.printStackTrace();
+		    
 	    }
 	    Date then = null;
 	    Date now = new Date();
