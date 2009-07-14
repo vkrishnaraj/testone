@@ -114,7 +114,7 @@ public class RequestOnHandAction extends Action {
 					+ user.getStation().getStationcode() + " " + TracerUtils.getText("remarkTextStation", user);
 					 
 					if (msgText != null && reason.trim().length() > 0) {
-						remarkText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " ";
+						msgText += "\n\n" + messages.getMessage(new Locale(user.getCurrentlocale()), "bagrequestDenyReason") + " ";
 					}
 					String subject = TracerUtils.getText("bagrequestDenyMsgSubject", user)  + ": " + oReq.getOhd().getOHD_ID();
 					String incidentId = "";
