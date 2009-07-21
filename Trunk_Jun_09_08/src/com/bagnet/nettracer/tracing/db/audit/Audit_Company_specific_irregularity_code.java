@@ -25,7 +25,6 @@ public class Audit_Company_specific_irregularity_code implements Serializable {
 	private int audit_id;
 	private int code_id;
 	private int loss_code;
-	private String locale;
 	private String companycode_ID;
 	private String description;
 	private int report_type;
@@ -169,22 +168,6 @@ public class Audit_Company_specific_irregularity_code implements Serializable {
 	 */
 	public void setCode_id(int code_id) {
 		this.code_id = code_id;
-	}
-
-	/**
-	 * @hibernate.property type="string"
-	 * @return Returns the locale.
-	 */
-	public String getLocale() {
-		return locale;
-	}
-
-	/**
-	 * @param locale
-	 *          The locale to set.
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
 	}
 
 	/**
