@@ -294,4 +294,67 @@ public class CronUtils {
 	public void setWtxBmo(WtTransactionBmo wtxBmo) {
 		this.wtxBmo = wtxBmo;
 	}
+	
+	public void closeAirTranOldMassOhdsInSQLServer() {
+		
+		// FIRST HALF	
+		Session writeSession = HibernateWrapper.getSession().openSession();
+		Session readSess = HibernateWrapper.getDirtySession().openSession();
+		
+		airtranTwentyFourHourBusinessRules(writeSession, readSess);
+		
+		// SECOND HALF
+		readSess.close();
+		writeSession.close();
+	}
+
+	private void airtranTwentyFourHourBusinessRules(Session writeSession,
+			Session readSess) {
+		String sql = "SELECT OHD_ID FROM OHD WHERE STATUS_ID = :openStatus " +
+				"AND found_station_ID = holding_station_ID " +
+				"AND ohd_type = :ohdType " +
+				"AND (founddate < :24HourFoundDate OR( founddate = :24HourFoundDate AND foundtime<= :24HourFoundTime )) " +
+				"AND ohd_id NOT IN (select distinct ohd_id from match_history where status_ID = :matchConfirmed)" +
+				"AND ohd_id NOT IN (select distinct ohd_id from ohd_request where " +
+					"status_ID != :requestClosed and status_ID != :requestDenied)";
+		
+		
+		
+		SQLQuery query = readSess.createSQLQuery(sql);
+		
+		query.setInteger("openStatus", TracingConstants.OHD_STATUS_OPEN);
+		query.setInteger("ohdType", TracingConstants.MASS_OHD_TYPE);
+		query.setInteger("requestClosed", TracingConstants.OHD_STATUS_CLOSED);
+		query.setInteger("requestDenied", TracingConstants.OHD_REQUEST_STATUS_DENIED);
+		query.setInteger("matchConfirmed", TracingConstants.MATCH_STATUS_MATCHED);
+				
+		Calendar hours24 = new GregorianCalendar();
+		hours24.add(Calendar.DAY_OF_MONTH, -1);
+
+		Date hours24Date = new Date(hours24.getTime().getTime() + (hours24.getTime().getTimezoneOffset() * 1000 * 60));
+		
+		query.setDate("24HourFoundDate", hours24Date);
+		query.setTime("24HourFoundTime", hours24Date);
+
+		query.addScalar("OHD_ID", Hibernate.STRING);
+		
+		List<String> list = (List<String>) query.list();
+		logger.info("OHDs to close: " + list.size());
+		
+		Agent ogadmin = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		Status closedStatus = new Status();
+		closedStatus.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+		
+		for (String ohdId: list) {
+			try {
+				OHD ohd = OhdBMO.getOHDByID(ohdId, writeSession);
+				ohd.setStatus(closedStatus);
+				OhdBMO.updateOHD(ohd, ogadmin, writeSession);
+				writeSession.evict(ohd);
+				logger.info("Closed: " + ohd.getOHD_ID());
+			} catch (Exception e) {
+				logger.error("closeUSAirOldMassOhdsInSQLServer: Exception encountered", e);
+			}
+		}
+	}
 }
