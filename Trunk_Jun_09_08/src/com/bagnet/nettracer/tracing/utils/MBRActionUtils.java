@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -308,12 +309,15 @@ public class MBRActionUtils {
 
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
 		String incident = request.getParameter("incident_ID");
+
 		Incident inc = null;
 		if(incident != null && incident.length() > 0 && request.getParameter("close") != null) {
 			BagService bs = new BagService();
 			inc = bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY);
+		} else {
+			inc = IncidentBMO.getIncidentByID(theform.getIncident_ID(), null); 
 		}
-
+		
 		List faultstationlist = null;
 		List faultCompanyList = null;
 		if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
