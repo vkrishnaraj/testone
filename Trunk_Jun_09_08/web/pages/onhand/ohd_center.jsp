@@ -1009,8 +1009,8 @@ function gotoHistoricalReport() {
       height="21" border="0"></a>
     </h1>
     <% 
-    if (a.getCompanycode_ID().equals(onHandForm.getHolding_company()) && (UserPermissions.hasPermission(
-            TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_OHD_LOSS_CODES, a) || onHandForm.getOhd_id() == null || onHandForm.getOhd_id().trim().length() < 1
+    if ((a.getCompanycode_ID().equals(onHandForm.getHolding_company()) && (UserPermissions.hasPermission(
+            TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_OHD_LOSS_CODES, a)) || onHandForm.getOhd_id() == null || onHandForm.getOhd_id().trim().length() < 1
             || (onHandForm.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_CLOSED && onHandForm.getReadonly() != 1))) { %>
     	<jsp:include page="/pages/includes/ohd_fault_incl.jsp">
     		<jsp:param value="form2_ohd" name="tableClass"/>
