@@ -190,7 +190,7 @@ public class DamagedAction extends CheckedAction {
 		}
 		
 		if (MBRActionUtils.actionDelete(theform, request)) {
-			return (mapping.findForward(TracingConstants.LD_MAIN));
+			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 		if (MBRActionUtils.actionAdd(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
