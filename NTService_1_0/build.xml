@@ -1,0 +1,74 @@
+<project name="tracer" default="services_java2wsdl" basedir=".">
+
+	<property file="user.properties" />
+	<property file="common.properties" />
+	<property environment="env" />
+	<property name="lib" value="lib/jars" />
+	<property name="buildlib" value="lib/build-client" />
+	
+	<path id="base.libraries">
+		<pathelement location="${build.classes}" />
+		<fileset dir="${axis2.home}\lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="axis2.classpath" value="base.libraries" />
+	<property name="build.dir" value="${root.dir}\\bin" />
+
+	<target name="services_java2wsdl">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+		<Java2WSDLTask classPath="${build.dir}" className="aero.nettracer.serviceprovider.ws_1_0.ReservationService_1_0" outputLocation="src/aero/nettracer/serviceprovider/ws_1_0" outputFileName="ReservationService_1_0.wsdl">
+		</Java2WSDLTask>
+	</target>
+
+	<target name="services_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/aero/nettracer/serviceprovider/ws_1_0/ReservationService_1_0.wsdl" />
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/NTService" />
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		<copy todir="${basedir}/web/WEB-INF/services/NTService/META-INF" file="${build.dir}/webservices/NTService/resources/services.xml" />
+
+		<!-- copy java files to src -->
+
+		<copy todir="${basedir}/src">
+			<fileset dir="${build.dir}/webservices/NTService/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+
+
+
+		<!-- make jar file for schema -->
+
+		<mkdir dir="${build.dir}/webservices/NTService/temp" />
+		<move todir="${build.dir}/webservices/NTService/temp">
+			<fileset dir="${build.dir}/webservices/NTService/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		<jar destfile="${build.dir}/webservices/NTService/ReservationService_1_0.jar" basedir="${build.dir}/webservices/NTService/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/NTService/ReservationService_1_0.jar" />
+
+		<!-- clean up -->
+
+		<delete dir="${build.dir}/webservices/NTService/temp" />
+		<delete dir="${build.dir}/webservices/NTService/resources" />
+		<delete dir="${build.dir}/webservices/NTService/src" />
+	</target>
+
+</project>
