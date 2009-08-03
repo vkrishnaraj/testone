@@ -6,6 +6,7 @@ a {
 }	
 a:hover, 
 a:active {
+	color:#006699;
 	text-decoration: none;
 }
 body,td,input {
@@ -69,7 +70,7 @@ form {
 	background-color:#FFFFFF;
 	border-left:1px solid #000000;
 	border-right:1px solid #000000;
-
+	
 	height: 100%;
 	text-align:left;
 	margin-right: auto;
@@ -83,14 +84,14 @@ form {
 	background-color:#E0EDFB;
 }
 #bodytable #bottomcell {
-	background-color:#B90010;
+	background-color:#006699;
 	vertical-align:bottom;
 	border-top:1px solid #000000;
 }
 /***** TOP LAYOUT *****/
 #toplayouttable {
 	border: 0px none;
-
+	
 }
 
 /***** HEADER AND MENU *****/
@@ -103,14 +104,24 @@ div.headerright {
 	text-align:right;
 }
 
-/***** HU *****/
+
+td.white{
+	background-color:#fff;
+	height:10px;
+}
+
+td.header{
+	background-color:#006699;
+	color:#fff;
+}
+
 td#header {
 	height: 78px;
 }
 td#header.cssstandardthreecolumn { 
 	background-image:url(../images/nettracer/header_bg.gif);
 	background-repeat:no-repeat;
-	background-color:#1F43AE;
+	background-color:#006699;
 }
 div#headercontent {
 	float:right;
@@ -121,24 +132,24 @@ table#headercontent td{
 	text-align:right;
 }
 table#headercontent a{
-	color:#fff;
+	color:#ffffff;
 	text-decoration:none;
 }
 table#headercontent a:hover{
-	color:#fff;
+	color:#ffffff;
 	text-decoration:underline;
 }
 
 /* horizontal text links menu */
 td#headermenucell {
-	background-color:#B90010;
+	background-color:#006699;
 	vertical-align:middle;
 	height: 24px;
 	text-align:left;
 }
 table#headermenu td{
+	color:#ffffff;
 	white-space:nowrap;
-	color: #ffffff;
 }
 
 table#headermenu a {
@@ -156,8 +167,8 @@ a#nav
 	text-align:center;
 	padding:2px 2px;
 	text-decoration:none;
-	background-color:#BBBB67;
-	color:#2758af;
+	background-color:#006699;
+	color:#fff;
 }
 table#headermenu a:hover, 
 table#headermenu a:active {
@@ -333,21 +344,9 @@ div#maincontent table.form{
 div#maincontent table.form2{
 	background-color:#D1E4F1;
 }
-
-td.white{
-	background-color:#fff;
-	height:10px;
-}
-
-td.header{
-	background-color:#B90010;
-	color:#fff;
-}
-
 div#maincontent table.form2_inc{
 	background-color:#D1E4F1;
 }
-
 div#maincontent table.form2_ld{
 	background-color:#D1E4F1;
 }
@@ -459,10 +458,4 @@ div#maincontent li.loginlinks {
 }
 .bold {
 	font-weight: bold;
-}
-
-div#notablelines table td {
-	border:0px solid #fff;
-	padding:0px;
-	vertical-align:top;
 }

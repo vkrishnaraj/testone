@@ -11,8 +11,21 @@
 				<ref bean="cronMoveToLzTrigger" />
 				<ref bean="cronNewPassiveTracerTrigger" />
 				<ref bean="cronOldPassiveTracerTrigger" />
+				<ref bean="RemoveMassOhdTrigger" />
+				<ref bean="BillingTrigger" />
 			</list>
 		</property>
+	</bean>
+	
+	<bean id="RemoveMassOhdJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="closeAirTranOldMassOhdsInSQLServer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="RemoveMassOhdTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="RemoveMassOhdJob" />
+		<property name="cronExpression" value="${removemassohd.cron}" />
 	</bean>
 
 </beans>

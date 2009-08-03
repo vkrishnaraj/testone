@@ -38,38 +38,38 @@ public class TraceTest {
 	public void tearDown() throws Exception {
 	}
 	
-	/*
+	
 	@Test
 	public void testTrace1() {
 		// 217905
 		// 100% overall match
 		// 100% claim check
 		// 100% record locator
-		String incident_ID = "DALUS00000210";
-		String ohd_ID = "XFKUS00000204";
+		String incident_ID = "YQBWS00000178";
+		String ohd_ID = "YQBWS00000187";
 		double actual = trace(incident_ID, ohd_ID);
 		//assertEquals(100, actual, .01);
 	}
-	*/
+	
 	
 	
 	public void testTraceing() {
 		PassiveTrace.startPassiveTracing("US", "Test Instance", PassiveTrace.PTMode.OLD);
 	}
 	
-	@Test
-	public void test() {
-		Date x = new Date();
-		GregorianCalendar a = new GregorianCalendar();
-		a.setTime(x);
-		a.set(Calendar.SECOND, 0);
-		a.set(Calendar.MILLISECOND, 0);
-		a.set(Calendar.MINUTE, 0);
-		a.set(Calendar.HOUR_OF_DAY, 0);
-		Date y = a.getTime();
-		
-		int z = 1;
-		
-	}
+//	@Test
+//	public void test() {
+//		Date x = new Date();
+//		GregorianCalendar a = new GregorianCalendar();
+//		a.setTime(x);
+//		a.set(Calendar.SECOND, 0);
+//		a.set(Calendar.MILLISECOND, 0);
+//		a.set(Calendar.MINUTE, 0);
+//		a.set(Calendar.HOUR_OF_DAY, 0);
+//		Date y = a.getTime();
+//		
+//		int z = 1;
+//		
+//	}
 	
 }
