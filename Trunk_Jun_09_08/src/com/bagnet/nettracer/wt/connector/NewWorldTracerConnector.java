@@ -30,7 +30,6 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerInitializationException;
-import com.bagnet.nettracer.wt.WorldTracerLoggedOutException;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
@@ -48,12 +47,11 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	public static final String WTRWEB_FLOW_URL = "/WorldTracerWeb/wtwflow.do";
 
 	private static final Pattern FLOW_PATTERN = Pattern.compile("_flowExecutionKey=(.*)$");
+	private static final Pattern BDO_ERROR_PATTERN = Pattern.compile("\\berror\\s*=\\s*'([^']+?)'", Pattern.CASE_INSENSITIVE);
 
 	private static final String OK = "OK";
 
 	private static final String ALREADY_REINSTATED = "ALREADY REINSTATED";
-
-	private String wtCompanycode;
 	
 	private String flowKey = null;
 	
@@ -139,8 +137,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	
 	private WorldTracerRule<String> BASIC_RULE = DefaultWorldTracerService.BASIC_RULE;
 
-	public NewWorldTracerConnector(WorldTracerConnectionPool pool, String companyCode) {
-		this.wtCompanycode = companyCode;
+	public NewWorldTracerConnector(WorldTracerConnectionPool pool) {
 		this.pool = pool;
 	}
 	
@@ -156,14 +153,12 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		String responseBody = null;
 		String newLocation = null;
-		int fdCount = 0;
-		int brCount = 0;
 		try {
 			NameValuePair[] p1 = { new NameValuePair("_flowId", "createdelayedbagrecord-flow") };
 			newLocation = startFlow(p1, "INSERT INCIDENT", 1);
 
 			PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
-			List<String> bagsList = fieldMap.get(WorldTracerService.WorldTracerField.CT);  //for bagTag.airlineCode and bagTag.tagNum
+			List<String> bagsList = fieldMap.get(WorldTracerService.WorldTracerField.CC);  //for bagTag.airlineCode and bagTag.tagNum
 			for(Map.Entry<WorldTracerService.WorldTracerField, List<String>> fieldEntry : fieldMap.entrySet()){
 				List<String> fieldList = fieldEntry.getValue();
 				//add bag type
@@ -183,21 +178,16 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				//add passenger itinerary
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.FD){
 					if(fieldList != null){
-						WorldTracerRule<String> rule = RULES.get(WorldTracerService.WorldTracerField.FD);
-						for(int i = 0; i < fieldList.size() && i < rule.getMaxAllowed(); i++){
+						for(int i = 0; i < fieldList.size(); i++){
 							String paxIntinery = fieldList.get(i);
-							String[] itin = paxIntinery.split("/");
-							String airlineCode = itin[0].substring(0, 2);
-							String flightNumber = itin[0].substring(2);
-							String flightDate = itin[1];
+							String[] inti = paxIntinery.split("/");
+							String airlineCode = inti[0].substring(0, 2);
+							String flightNumber = inti[0].substring(2);
+							String flightDate = inti[1];
 							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].airlineCode", airlineCode);
 							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightNumber", flightNumber);
-							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);
-							fdCount++;
+							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);							
 						}
-					}
-					if(fdCount == 0) {
-						throw new WorldTracerException("No Passenger Itinerary");
 					}
 				}
 				//add passenger initials
@@ -230,19 +220,28 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				}
 				//add passenger names
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.NM){
-					WorldTracerRule<String> rule = RULES.get(WorldTracerField.NM);
-					int nameCount = 0;
 					if(fieldList != null){
-						for(int i = 0; i < fieldList.size() && nameCount < rule.getMaxAllowed(); i++){
-							String[] tmpName = fieldList.get(i).split("/");				
-							for (int j = 0; j < tmpName.length && nameCount < rule.getMaxAllowed(); j++) {
-								String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(tmpName[j]);					
-								search.setParameter("delayedBagRecord.passenger.names[" + nameCount +"]", name);
-								nameCount ++;
-							}
+						for(int i = 0; i < fieldList.size(); i++){
+							String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(i));					
+							search.setParameter("delayedBagRecord.passenger.names[" + i +"]", name);
 						}
 					}
 				}
+				
+				else if (fieldEntry.getKey() == WorldTracerService.WorldTracerField.FL) {
+					logger.info("FL: " + fieldEntry.getValue().get(0));
+					search.setParameter("quickEntryRecord.passenger.frequentFlyerId", fieldEntry.getValue().get(0));
+					search.setParameter("delayedBagRecord.passenger.frequentFlyerId", fieldEntry.getValue().get(0));
+				}
+				
+				else if (fieldEntry.getKey() == WorldTracerService.WorldTracerField.PS) {
+					logger.info("PS: " + fieldEntry.getValue().get(0));
+
+					search.setParameter("delayedBagRecord.passenger.classStatus", fieldEntry.getValue().get(0));
+					search.setParameter("quickEntryRecord.passenger.classStatus", fieldEntry.getValue().get(0));
+				}
+
+				
 				//add first passenger title
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.PT){
 					if(fieldList != null){						
@@ -368,8 +367,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				//add bag itinerary
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.BR){
 					if(fieldList != null){
-						WorldTracerRule<String> rule = RULES.get(WorldTracerService.WorldTracerField.BR);
-						for(int i = 0; i < fieldList.size() && i < rule.getMaxAllowed(); i++){
+						for(int i = 0; i < fieldList.size(); i++){
 							String bagIntinery = fieldList.get(i);
 							String[] inti = bagIntinery.split("/");
 							String airlineCode = inti[0].substring(0, 2);
@@ -378,7 +376,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].airlineCode", airlineCode);
 							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightNumber", flightNumber);
 							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightDate", flightDate);
-							brCount++;
 						}
 					}
 				}
@@ -434,6 +431,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			search.setParameter("_avoidBindingdelayedBagRecord.delayedBagGroup.keysCollected", "on");
 			search.setParameter("bagType", "Delayed");
 			search.setParameter("_eventId", "submit");
+			
 			try {
 				debugOut(search, "insertIncident");
 				client.executeMethodWithPause(search, "INSERT INCIDENT: INSERT (2)");
@@ -461,8 +459,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			try {
 				client.executeMethod(redirect, "INSERT INCIDENT: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
-				//System.out.println("response body:" + responseBody);
-				//return true;
 			}
 			catch (HttpException e) {
 				logger.error("error", e);
@@ -481,7 +477,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		String wt_id = null;
 		String errorString = "Submit failed.";
-		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING([^<>]+)]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
 		Matcher succeMat = succePatt.matcher(responseBody);
 		if(succeMat.find()){
 			wt_id = succeMat.group(1).replaceAll("&nbsp;", "").replaceAll("(\\(.*\\))", "");
@@ -495,7 +491,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if (wt_id != null && wt_id.length() >= 10) {
 			return wt_id;
 		} else {
-			throw new WorldTracerException(errorString);
+			
+			throw new WorldTracerException(errorString + " Response body below: " + responseBody);
 		}
 		
 	}
@@ -575,6 +572,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if(responseBody.toUpperCase().contains("NO MATCHING RECORDS FOUND")){
 			throw new WorldTracerException("wt_ahl_id not exists!");
 		}
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
 		//add params to amend
 		PostMethod amendMethod = new PostMethod(WTRWEB_FLOW_URL);
 		//add normal params
@@ -606,7 +607,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			else if(fields[k] == WorldTracerService.WorldTracerField.FD){
 				int i = 0;
 				if(fieldList != null){
-					for(i = 0; i < fieldList.size() && i < 4; i++){
+					for(i = 0; i < fieldList.size(); i++){
 						String paxIntinery = fieldList.get(i);
 						String[] inti = paxIntinery.split("/");
 						String airlineCode = inti[0].substring(0, 2);
@@ -663,18 +664,30 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			//add passenger names
 			else if(fields[k] == WorldTracerService.WorldTracerField.NM){
 				if(fieldList != null){
-					WorldTracerRule<String> rule = RULES.get(WorldTracerField.NM);
-					int nameCount = 0;
-					for(int i = 0; i < fieldList.size() && nameCount < rule.getMaxAllowed(); i++){
-						String[] tmpName = fieldList.get(i).split("/");				
-						for (int j = 0; j < tmpName.length && nameCount < rule.getMaxAllowed(); j++) {
-							String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-							amendMethod.setParameter("delayedBagRecord.passenger.names[" + nameCount +"]", name);
-							nameCount++;
-						}
+					for(int i = 0; i < fieldList.size(); i++){
+						String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(i));
+						amendMethod.setParameter("delayedBagRecord.passenger.names[" + i +"]", name);
 					}
 				}
 			}
+			
+			else if (fields[k] == WorldTracerService.WorldTracerField.FL) {
+				if (fieldMap.get(WorldTracerService.WorldTracerField.FL) != null && fieldMap.get(WorldTracerService.WorldTracerField.FL).get(0) != null) {
+					logger.info("FL: " + fieldMap.get(WorldTracerService.WorldTracerField.FL).get(0));
+					amendMethod.setParameter("quickEntryRecord.passenger.frequentFlyerId", fieldMap.get(WorldTracerService.WorldTracerField.FL).get(0));
+					amendMethod.setParameter("delayedBagRecord.passenger.frequentFlyerId", fieldMap.get(WorldTracerService.WorldTracerField.FL).get(0));
+				}
+			}
+			
+			else if (fields[k] == WorldTracerService.WorldTracerField.PS) {
+				if (fieldMap.get(WorldTracerService.WorldTracerField.PS) != null && fieldMap.get(WorldTracerService.WorldTracerField.PS).get(0) != null) {
+					logger.info("PS: " + fieldMap.get(WorldTracerService.WorldTracerField.PS).get(0));
+					
+					amendMethod.setParameter("delayedBagRecord.passenger.classStatus", fieldMap.get(WorldTracerService.WorldTracerField.PS).get(0));
+					amendMethod.setParameter("quickEntryRecord.passenger.classStatus", fieldMap.get(WorldTracerService.WorldTracerField.PS).get(0));					
+				}
+			}
+			
 			//add first passenger title
 			else if(fields[k] == WorldTracerService.WorldTracerField.PT){
 				if(fieldList != null){
@@ -906,8 +919,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		amendMethod.setParameter("bagType", "Delayed");
 		amendMethod.setParameter("_avoidBindingdelayedBagRecord.passenger.booking.group", "on");
 		amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagGroup.keysCollected", "on");
-		amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.insured", "on");
-		amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.liabilityTag", "on");
+		//amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.insured", "on");
+		//amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.liabilityTag", "on");
 		amendMethod.setParameter("_flowExecutionKey", flowKey);
 		amendMethod.setParameter("flowExecutionKey_Flights", flowKey);
 		amendMethod.setParameter("flowExecutionKey_Bags", flowKey);
@@ -948,21 +961,21 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		finally {
 			redirect.releaseConnection();
 		}
-		if (responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY")) {
+		if (responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")) {
 			return "AHL AMENDED";
 		} else {
 			String errorString;
 			Pattern error_patt = Pattern.compile(
 					"error = '([^<>']*)'", Pattern.CASE_INSENSITIVE
 							| Pattern.DOTALL);
-			Matcher m = error_patt.matcher(responseBody);
+			m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
 			} else {
 				errorString = "Unable to amend AHL. See logs for details";
-				logger.error("amend Ahl error result: "+responseBody);
+				logger.error("amend Ahl result:"+responseBody);
 			}
-			if (errorString.trim().toUpperCase().endsWith("/CLOSED")) {
+			if (errorString.toUpperCase().contains("FILE CLOSED")) {
 				throw new WorldTracerAlreadyClosedException(errorString);
 			}
 			throw new WorldTracerException(errorString);
@@ -1030,6 +1043,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if(responseBody.toUpperCase().contains("NO MATCHING RECORDS FOUND")){
 			throw new WorldTracerException("wt_ohd_id not exists!");
 		}
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
 		//add params to amend
 		PostMethod amendMethod = new PostMethod(WTRWEB_FLOW_URL);
 		WorldTracerService.WorldTracerField[] fields = WorldTracerService.WorldTracerField.values();
@@ -1051,7 +1068,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			else if(fields[k] == WorldTracerService.WorldTracerField.FD){
 				int i = 0;
 				if(fieldList != null){
-					for(i = 0; i < fieldList.size() && i < 4; i++){
+					for(i = 0; i < fieldList.size(); i++){
 						String paxIntinery = fieldList.get(i);
 						String[] inti = paxIntinery.split("/");
 						String airlineCode = inti[0].substring(0, 2);
@@ -1247,7 +1264,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		finally {
 			redirect.releaseConnection();
 		}
-		if (responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY")) {
+		if (responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")) {
 			logger.debug("OHD Amend Output: " + responseBody);
 			return "OHD AMENDED";
 		} else {
@@ -1255,7 +1272,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			Pattern error_patt = Pattern.compile(
 					"error = '([^<>']*)'", Pattern.CASE_INSENSITIVE
 							| Pattern.DOTALL);
-			Matcher m = error_patt.matcher(responseBody);
+			m = error_patt.matcher(responseBody);
 			if (m.find()) {
 				errorString = m.group(1);
 			} else {
@@ -1542,6 +1559,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				newLocation = requestMethod.getResponseHeader("location").getValue();
 			}
 			else{
+				logger.error("Request OHD error response: " + requestMethod.getResponseBodyAsString());
 				throw new WorldTracerException("request method not redirect!");
 			}
 		}
@@ -1585,8 +1603,9 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				errorString = m.group(1);
 			} else {
 				errorString = "Unable to ROH. See logs for details";
-				logger.error("responseBody:" + responseBody);
+				logger.error(errorString);
 			}
+			logger.error("responseBody:" + responseBody);
 			throw new WorldTracerException(errorString);
 		}
 	}
@@ -1603,7 +1622,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				result = amendBeforeClose(fieldMap, wt_id, stationCode);
 				if(result == null){
 					logger.error("amend incident error with WorldTracer");
-					throw new WorldTracerConnectionException();
+					//throw new WorldTracerConnectionException();
 				}
 				result = closeInc(fieldMap, wt_id, stationCode);
 				if(result == null){
@@ -1642,8 +1661,9 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		search.setParameter("wtrCloseRequest.recordReferences[0].recordId", wt_id.substring(5));
 		search.setParameter("amendOption[0]", "noamend");
 		
-		search.setParameter("_showAllDetailsInReadOnlyArea", "on");
+		//search.setParameter("_showAllDetailsInReadOnlyArea", "on");
 		search.setParameter("_eventId", "continue");
+		search.setParameter("wtrDisplayRequest.recordAdditionalInfo.fullRecord", "TRUE");
 		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.fullRecord", "on");
 		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.recordHistory", "on");
 		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.matchingHistory", "on");
@@ -1695,9 +1715,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 	    }
 		if(responseBody.toUpperCase().contains("FILE CLOSED") 
-				|| responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)")){
+				|| responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)") || responseBody.toUpperCase().contains("CLOSE FILE (FINISH)")){
 			return wt_id;
 		}else{
+			logger.info("FAILED TO CLOSE AHL REPSONSE. ");
 			return null;
 		}
 	}
@@ -1709,7 +1730,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		String responseBody = null;
 		NameValuePair[] p1 = { new NameValuePair("_flowId",
 				"createrushdbagrecord-flow") };
-		String newLocation = startFlow(p1, "CLOSE INCIDENT", 1);
+		String newLocation = startFlow(p1, "SEND FORWARD", 1);
 		
 		PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
@@ -1901,7 +1922,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			throw new WorldTracerException("unable to submit fwd redirect");
 		}
 		
-		if (responseBody.toUpperCase().contains("RECORD CREATED SUCCESSFULLY")) {
+		if (responseBody.toUpperCase().contains("RECORD CREATED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE CREATED SUCCESSFULLY")) {
 			return "fwdSuccess";
 		}
 		else {
@@ -1953,8 +1974,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				//add bag(passenger) itinerary
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.FD){
 					if(fieldList != null){
-						WorldTracerRule<String> rule = RULES.get(WorldTracerField.FD);
-						for(int i = 0; i < fieldList.size() && i < rule.getMaxAllowed(); i++){
+						for(int i = 0; i < fieldList.size(); i++){
 							String paxIntinery = fieldList.get(i);
 							String[] inti = paxIntinery.split("/");
 							String airlineCode = inti[0].substring(0, 2);
@@ -1994,10 +2014,8 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				}
 				//add passenger name
 				else if(fieldEntry.getKey() == WorldTracerService.WorldTracerField.NM){
-				
 					if(fieldList != null && fieldList.size() >= 1){
-						String name = fieldList.get(0).split("/")[0];
-						name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(name);
+						String name = RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(0));
 						search.setParameter("onHandBagRecord.passenger.names[0]", name);
 					}
 				}
@@ -2162,7 +2180,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		try {
 
 			NameValuePair[] p1 = { new NameValuePair("_flowId", "closeonhandbagrecord-flow")};
-			String newLocation = startFlow(p1, "CLOSE INCIDENT", 1);
+			String newLocation = startFlow(p1, "CLOSE OHD", 1);
 			PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
 			NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
 			search.setQueryString(p2);
@@ -2172,8 +2190,9 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			search.setParameter("wtrCloseRequest.recordReferences[0].recordId", wt_id.substring(5));
 			search.setParameter("amendOption[0]", "noamend");
 			
-			search.setParameter("_showAllDetailsInReadOnlyArea", "on");
+			//search.setParameter("_showAllDetailsInReadOnlyArea", "on");
 			search.setParameter("_eventId", "continue");
+			search.setParameter("wtrDisplayRequest.recordAdditionalInfo.fullRecord", "TRUE");
 			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.fullRecord", "on");
 			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.recordHistory", "on");
 			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.matchingHistory", "on");
@@ -2224,10 +2243,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				}
 		    }
 			if (responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)") 
-					|| responseBody.toUpperCase().contains("FILE CLOSED")){
+					|| responseBody.toUpperCase().contains("FILE CLOSED") || responseBody.toUpperCase().contains("CLOSE FILE (FINISH)")){
 				return wt_id;
 			} else {
-				logger.error("Close onHand bag error");
+				logger.error("Close onHand bag error: \n" + responseBody);
 				throw new WorldTracerException();
 			}
 			
@@ -2871,17 +2890,33 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				redirect.releaseConnection();
 			}
 		}
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		NameValuePair[] p3 = { new NameValuePair("_flowExecutionKey", flowKey) };
 
 		search = new PostMethod(WTRWEB_FLOW_URL);
-		search.setQueryString(p2);
-		search.setParameter(
-				"deliveryOrderVO.deliveryorder.deliveryservicecompany", "01");
+		search.setQueryString(p3);
+		
+		String dcName = delivercompany.getName();
+		
+		if(dcName == null || dcName.trim().length() < 1) {
+			dcName = "DEFAULT DELIVERY";
+		}
+		dcName = dcName.replaceAll("[\\.#\"><%]", " ").replaceAll("\\s+", " ").trim();
+		
+		if(dcName.length() > 44) {
+			dcName = dcName.substring(0, 44);
+		}
+		
+		search.setParameter("deliveryOrderVO.deliveryOrder.deliveryServiceCompany", String.format("01 - %s", dcName));
 		search.setParameter("deliveryOrderVO.deliveryOrder.deliveryDate",
 				fieldMap.get(WorldTracerField.DD).get(0));
 		search.setParameter("deliveryOrderVO.deliveryAddr1", "true");
 		String da = fieldMap.get(WorldTracerField.DA).get(0);
 		Pattern daPatt = Pattern.compile("(.{1,55})( (.{1,55}))?");
-		Matcher m = daPatt.matcher(da);
+		m = daPatt.matcher(da);
 		if (!m.find()) {
 			throw new WorldTracerException("Unable to parse delivery address");
 		}
@@ -2899,8 +2934,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 				m = ctPatt.matcher(ct);
 				if (m.find()) {
-					search.setParameter("deliveryOrderVO.colorType"
-							+ addedCount, "true");
+					search.setParameter(String.format("deliveryOrderVO.colorType%d", addedCount + 1), "true");
 					search.setParameter(
 							"avoidBindingdeliveryOrderVO.deliveryOrder.colorTypes["
 									+ addedCount + "].colorCode", m.group(1));
@@ -2932,7 +2966,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 		search.setParameter("deliveryOrderVO.deliveryOrder.originStation",
 				station.getWt_stationcode());
-		search.setParameter("_eventId", "submit");
+		search.setParameter("_eventId", "Submit");
 		try {
 			debugOut(search, "");
 			client.executeMethodWithPause(search, "CREATE BDO: BDO (4)");
@@ -2941,7 +2975,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				newLocation = search.getResponseHeader("location").getValue();
 			} else {
 				newLocation = "";
-				logger.error("bdo post1 not redirect!");
+				logger.error("bdo post2 not redirect!");
 				throw new WorldTracerException("unable to send BDO");
 			}
 		} catch (HttpException e) {
@@ -2971,6 +3005,12 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 				redirect.releaseConnection();
 			}
 		}
+
+		m = BDO_ERROR_PATTERN.matcher(responseBody);
+		if(m.find()) {
+			throw new WorldTracerException(m.group(1));
+		}
+		
 		if(! responseBody.toUpperCase().contains("SUCCESSFULLY DELIVERED THE GIVEN ORDER")) {
 			throw new WorldTracerException("unable to send BDO");
 		}
@@ -3124,10 +3164,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		finally {
 			redirect.releaseConnection();
 		}
-		if(responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY")){
+		if(responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")){
 			return wt_id;
 		}else{
-			logger.error("amend incident failed");
+			logger.error("amend before close incident failed ");
 			return null;
 		}
 	}
@@ -3442,10 +3482,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		this.logout(true);
 	}
 
-	public void setWtCompanycode(String wtCompanycode) {
-		this.wtCompanycode = wtCompanycode;
-	}
-
 	public void setPool(WorldTracerConnectionPool pool) {
 		this.pool = pool;
 	}
@@ -3673,7 +3709,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			attempts ++;
 		} while (attempts < 3);
-		throw new WorldTracerLoggedOutException("unable to start: " + flowName + " after 3 attempts");
+		throw new WorldTracerException("unable to start: " + flowName + " after 3 attempts");
 	}
 
 	private void startFlowWithRedirect(NameValuePair[] getParams, String flowName, int stepNum) throws WorldTracerException {

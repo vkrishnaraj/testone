@@ -37,6 +37,15 @@ public class BDO_Receipt_DTO {
 	private String zip;
 	private String instructions;
 	private String refNum;
+	private String serviceLevel;
+
+	public String getServiceLevel() {
+		return serviceLevel;
+	}
+
+	public void setServiceLevel(String serviceLevel) {
+		this.serviceLevel = serviceLevel;
+	}
 
 	/**
 	 * @return Returns the address.

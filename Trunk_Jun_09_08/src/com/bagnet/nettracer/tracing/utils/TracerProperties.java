@@ -50,6 +50,8 @@ public class TracerProperties {
 
 	private static final Logger logger = Logger.getLogger(TracerProperties.class);
 
+	public static final String IGNORE_CHECK_DIGIT = "ignoreCheckDigit";
+
 	static {
 		try {
 			properties.load(TracerProperties.class
@@ -89,7 +91,6 @@ public class TracerProperties {
 	
 	public static int getMaxReportRows() {
 		return Integer.parseInt(TracerProperties.get(PROPERTY_REPORT_MAX_ROWS));
-		//return Integer.parseInt(PropertyBMO.getValue(PropertyBMO.PROPERTY_REPORT_MAX_ROWS));
 	}
 	
 	public static String getInstanceLabel() {

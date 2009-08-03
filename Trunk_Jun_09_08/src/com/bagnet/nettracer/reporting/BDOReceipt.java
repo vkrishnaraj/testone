@@ -20,10 +20,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
+import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.dto.BDO_Receipt_DTO;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
@@ -136,6 +138,11 @@ public class BDOReceipt {
 					brd.setCharges("");
 				}
 				al.add(brd);
+				
+				Deliver_ServiceLevel sl = DelivercompanyBMO.getServiceLevel(theform.getServicelevel_ID());
+				if (sl != null && sl.getDescription() != null) 
+					brd.setServiceLevel(sl.getDescription());	
+				
 			}
 
 			ReportBMO rbmo = new ReportBMO(request);

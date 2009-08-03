@@ -44,6 +44,7 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
@@ -509,7 +510,7 @@ public enum MatchElement {
 
 		String ohdBagTag = ohd.getClaimnum();
 		String ohdTenDigitTag = null;
-		Boolean ignoreCheckDigit = false;
+		Boolean ignoreCheckDigit = (false || TracerProperties.isTrue(TracerProperties.IGNORE_CHECK_DIGIT));
 		try {
 			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag,
 					PassiveTrace.AirlineConversionMap);

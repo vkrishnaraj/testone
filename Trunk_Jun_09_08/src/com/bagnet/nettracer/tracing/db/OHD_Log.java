@@ -36,6 +36,7 @@ public class OHD_Log implements Serializable {
 	public Date forward_time;
 	private Set itinerary;
 	public int log_status;
+	private ProactiveNotification pcn;
 	
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -276,5 +277,17 @@ public class OHD_Log implements Serializable {
 
 	public void setLog_status(int log_status) {
 		this.log_status = log_status;
+	}
+
+	/**
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.ProactiveNotification"
+	 *                        column="pcn"
+	 */
+	public ProactiveNotification getPcn() {
+		return pcn;
+	}
+
+	public void setPcn(ProactiveNotification pcn) {
+		this.pcn = pcn;
 	}	
 }

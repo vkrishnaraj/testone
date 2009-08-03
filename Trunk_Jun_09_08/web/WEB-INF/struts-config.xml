@@ -34,6 +34,7 @@
 		<form-bean name="searchExpenseForm" type="com.bagnet.nettracer.tracing.forms.SearchExpenseForm" />
 		
 		<form-bean name="searchForwardNoticeForm" type="com.bagnet.nettracer.tracing.forms.SearchForwardNoticeForm" />
+		<form-bean name="pcnSearchForm" type="com.bagnet.nettracer.tracing.forms.PcnSearchForm" />
 		
 		<form-bean name="claimSettlementForm" type="com.bagnet.nettracer.tracing.forms.ClaimSettlementForm" />
 		<form-bean name="claimToBeProcessedForm" type="com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm" />
@@ -346,6 +347,7 @@
 		<forward name="bdo" path="bdo_page" />
 		<forward name="searchbdo" path="search_bdo" />
 		<forward name="search_notices" path="search_notices" />
+		<forward name="pcn" path="pcn" />
 		<forward name="nopermission" path="no_permission" />
 		<forward name="viewloggedagents" path="view_loggedagents" />
 
@@ -460,6 +462,8 @@
 		<action path="/claim_settlement" type="com.bagnet.nettracer.tracing.actions.ClaimSettlementAction" name="claimSettlementForm" scope="session" validate="false"></action>
 		
 		<action path="/forwardNotices" type="com.bagnet.nettracer.tracing.actions.taskmanager.SearchForwardNoticeAction" name="searchForwardNoticeForm" scope="request" validate="false" ></action>
+		
+		<action path="/pcn" type="com.bagnet.nettracer.tracing.actions.taskmanager.PcnAction" name="pcnSearchForm" scope="request" validate="false" ></action>
 		
 		<!-- Expense Actions -->
 		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="true" >

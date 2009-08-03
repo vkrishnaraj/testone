@@ -486,6 +486,11 @@
     <definition name="search_notices" extends="user_menu">
         <put name="center"   value="/pages/taskmanager/search_notices.jsp"/>
     </definition>
+    
+    <definition name="pcn" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/pcn.jsp"/>
+    </definition>
+    
 
         
     <definition name="no_permission" extends="user_menu">

@@ -25,12 +25,14 @@ import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
+import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -603,6 +605,12 @@ public class OHDUtils {
 				log.setLog_status(TracingConstants.LOG_CANCELLED);
 				sess.update(log);
 				
+				// CLOSE PCN  -- MUST OCCUR AFTER UPDATING LOG
+				if (log.getPcn() != null) {
+					ProactiveNotification pcn = log.getPcn();
+					ProactiveNotificationBMO.checkClosePcn(pcn, sess, null);
+				}
+				
 				// UPDATE REQUEST IF NECESSARY
 				if (log.getOhd_request_id() != 0) {
 					OHDRequest req = (OHDRequest) sess.load(OHDRequest.class, log.getOhd_request_id());
@@ -671,22 +679,40 @@ public class OHDUtils {
 	 * update ohd_log table to set all status to received for this ohd id
 	 * @param ohd_id
 	 */
-	public static void setLogReceived(String ohd_id) {
+	public static void setLogReceived(OHD ohd) {
+		String ohd_id = ohd.getOHD_ID();
+		Session sess = null;
+		Transaction t = null;
 		try {
-		Session sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getSession().openSession();
 
-		Connection conn = sess.connection();
-		Statement stmt = conn.createStatement();
-		
-		String sql = "update ohd_log set log_status = " +
-			TracingConstants.LOG_RECEIVED + " where ohd_id = '" + ohd_id + "' and log_status = " + TracingConstants.LOG_NOT_RECEIVED;
-		stmt.execute(sql);
-		stmt.close();
-		sess.close();
+			OHD_Log log = getLastLog(ohd_id);
+			if (log.getPcn() != null) {
+				t = sess.beginTransaction();
+				ProactiveNotificationBMO.checkClosePcn(log.getPcn(), sess, log);
+				t.commit();
+			}
+
+			Connection conn = sess.connection();
+			Statement stmt = conn.createStatement();
+
+			String sql = "update ohd_log set log_status = " + TracingConstants.LOG_RECEIVED + " where ohd_id = '" + ohd_id
+					+ "' and log_status = " + TracingConstants.LOG_NOT_RECEIVED;
+			stmt.execute(sql);
+			stmt.close();
+			
+			
 		} catch (Exception e) {
+			if (t!= null) {
+				t.rollback();
+			}
 			e.printStackTrace();
+		} finally {
+			sess.close();
 		}
 	}
+	
+	
 	/**
 	 * Incoming bags
 	 * 

@@ -23,13 +23,16 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
+import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
+import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
+import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
 import com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm;
 import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
@@ -255,6 +258,13 @@ public class LogonAction extends Action {
 				int entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
 					int x = TaskUtils.getActiveTaskCount(s.getStation_ID(), true);
+					if (x != -1)
+						entries = x;
+				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PCN)) {
+					PcnSearchDTO pcnDto = new PcnSearchDTO();
+					pcnDto.setDestinationStation(agent.getStation().getStation_ID());
+					pcnDto.setStatus_ID(ProactiveNotification.STATUS_OPEN);
+					int x = ProactiveNotificationBMO.getCount(pcnDto, agent);
 					if (x != -1)
 						entries = x;
 				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES)) {

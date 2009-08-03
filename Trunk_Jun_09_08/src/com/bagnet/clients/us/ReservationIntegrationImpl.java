@@ -273,6 +273,11 @@ public class ReservationIntegrationImpl extends
 		// Record Locator
 		form.setRecordlocator(booking.getRecordLocator());
 		form.setAgent(user);
+		
+		if (request.getParameter("pcn_id") != null) {
+			form.setPcn_id(request.getParameter("pcn_id"));
+		}
+		
 		if (pnrContents != null) {
 			form.setOtherSystemInformation(pnrContents);
 		}

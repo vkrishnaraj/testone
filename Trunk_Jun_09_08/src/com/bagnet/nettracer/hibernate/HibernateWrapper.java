@@ -47,7 +47,7 @@ public class HibernateWrapper {
 			} else {
 //				addClasses(cfg_prod);
 				sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
-				sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
+				//sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
 //				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
 			}
 		} catch (Exception e) {
@@ -123,7 +123,7 @@ public class HibernateWrapper {
 			} else {
 				if (sf_prod_dirty == null) {
 //					addClasses(cfg_prod);
-					sf_prod_dirty = cfg_prod_dirty.configure(new File(hibernate_dirty_path)).buildSessionFactory();
+					//sf_prod_dirty = cfg_prod_dirty.configure(new File(hibernate_dirty_path)).buildSessionFactory();
 				}
 				return sf_prod_dirty;
 			}

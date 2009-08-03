@@ -114,7 +114,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -124,7 +124,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerConnectionException ex) {
 						// TODO
-						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -134,7 +134,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (Throwable ex) {
 						// TODO
-						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -162,7 +162,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -172,7 +172,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerConnectionException ex) {
 						// TODO
-						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -181,7 +181,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (Throwable ex) {
-						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -208,7 +208,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -217,7 +217,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -226,7 +226,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (Throwable ex) {
-						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -254,7 +254,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to close wt ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to close wt ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -263,7 +263,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						logger.warn("unable to close ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to close ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -272,7 +272,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (Throwable ex) {
-						logger.warn("unable to close ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to close ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -300,7 +300,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to supsend incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to supsend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -310,7 +310,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerConnectionException ex) {
 						// TODO
-						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -320,7 +320,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (Throwable ex) {
 						// TODO
-						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -348,7 +348,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -358,7 +358,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerConnectionException ex) {
 						// TODO
-						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -368,7 +368,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (Throwable ex) {
 						// TODO
-						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage());
+						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -396,7 +396,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to supsend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to supsend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -407,7 +407,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerConnectionException ex) {
 						// TODO
-						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -417,7 +417,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (Throwable ex) {
 						// TODO
-						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -445,7 +445,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerException ex) {
 						// TODO
-						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -455,7 +455,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (WorldTracerConnectionException ex) {
 						// TODO
-						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -465,7 +465,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					catch (Throwable ex) {
 						// TODO
-						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage());
+						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
 							queue.setStatus(WtqStatus.FAIL);

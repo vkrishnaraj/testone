@@ -11,8 +11,20 @@
 				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronMoveToWtTrigger" />
 				<ref bean="LockCleanupTrigger" />
+				<ref bean="wtStatusTrigger" />
 			</list>
 		</property>
+	</bean>
+	
+	<bean id="WtStatusJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="emailWtTransactions" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="wtStatusTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="WtStatusJob" />
+		<property name="cronExpression" value="${wtstatus.cron}" />
 	</bean>
 
 </beans>

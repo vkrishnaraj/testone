@@ -226,7 +226,12 @@ public class DSI implements BDOIntegration {
 					ht.setServiceType("Delivery");
 					ht.setOrderStatus("New");
 					
-					String bigIntString = "" + bdo.getItems().size(); 
+					String bigIntString = null;
+					if (bdo.getItems() == null || bdo.getItems().size() <= 1) {
+						bigIntString = "1";
+					} else {
+						bigIntString = "" + bdo.getItems().size();
+					}
 					BigInteger bigInt = new BigInteger(bigIntString);
 					ht.setNumberOfItems(bigInt);
 					

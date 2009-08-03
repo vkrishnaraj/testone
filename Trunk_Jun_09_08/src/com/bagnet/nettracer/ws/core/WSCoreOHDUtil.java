@@ -788,7 +788,7 @@ public class WSCoreOHDUtil {
 		  		int lossCode = si.getLossCode();
 		  		Company_specific_irregularity_code code = LossCodeBMO.getLossCode(lossCode, TracingConstants.OHD, CompanyBMO.getCompany(agent.getCompanycode_ID()));
 		  		if(code != null) {
-		  			onhand.setLoss_code(lossCode);
+		  			onhand.setLoss_code(code.getCode_id());
 		  		}
 		  		
 	  		}
@@ -897,14 +897,18 @@ public class WSCoreOHDUtil {
 	  			logger.error("Error performing client-specific BEORN Action...");
 	  			e.printStackTrace();
 	  		}
-
+	  		
+	  		try {
+	  			SpringUtils.getClientEventHandler().doPcn(log);
+	  		} catch (Exception e) {
+	  			logger.error("Error performing PCN lookup...");
+	  			e.printStackTrace();
+	  		}
 				
   		} catch (Exception e) {
   			e.printStackTrace();
   			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
   		}
-  		
-  		
   	}
   	
   	// Return Response

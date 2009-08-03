@@ -238,6 +238,7 @@
     onsubmit="return validateRest(this);">
     <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />
+    <html:hidden property="pcn_id" />
     <html:hidden property="notifiedOfRequirements"/>
     <input type="hidden" name="historical_report" value="">
     <tr>

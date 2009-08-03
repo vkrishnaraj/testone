@@ -7,7 +7,6 @@ import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount;
-import com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO;
 
 public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 
@@ -15,8 +14,6 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	private String host;
 	private volatile int itemsUsed = 0;
 	private String mode;
-	private WorldTracerAccountBMO wtaBmo = null;
-	private String companyCode;
 	
 	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1080000;
 	
@@ -30,11 +27,9 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 		return accounts.get(itemsUsed - 1);
 	}	
 	
-	public WorldTracerConnectionFactory(String companyCode, String host, WorldTracerAccountBMO wtaBmo) {
-		this.companyCode = companyCode;
-		this.host = host;
-		this.wtaBmo = wtaBmo;
-		this.accounts = wtaBmo.getAccountNames(this.companyCode);
+	public WorldTracerConnectionFactory(List<WorldTracerAccount> accounts, String mode, String host) {
+		this.accounts = accounts;
+		this.mode = mode;
 		this.host = host;
 	}
 
@@ -42,7 +37,7 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	@Override
 	public synchronized Object makeObject() throws Exception {
 		WorldTracerAccount wta = getNextItem();
-		WorldTracerConnection connection = new WorldTracerConnection(wta, host, mode, wtaBmo);
+		WorldTracerConnection connection = new WorldTracerConnection(wta, host, mode);
 		connection.login();
 		return connection;
 	}
@@ -65,13 +60,4 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	public void passivateObject(Object obj) throws Exception {		
 		logger.debug("Passivating Object...");
 	}
-
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-
-	public void setWtaBmo(WorldTracerAccountBMO wtaBmo) {
-		this.wtaBmo = wtaBmo;
-	}
-	
 }

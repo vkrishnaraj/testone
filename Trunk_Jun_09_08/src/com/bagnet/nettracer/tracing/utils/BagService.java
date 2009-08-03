@@ -39,6 +39,7 @@ import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -367,7 +368,7 @@ public class BagService {
 		bdto.setFinalDestination(StationBMO.getStation(form.getDestStation()).getStationcode());
 		bdto.setFinalFlightDepartureDate(finalFlightDate);
 		bdto.setFinalFlightAirline(finalFlightAirline);
-		bdto.setReasonForLoss(form.getLossCode());
+		bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
 		bdto.setTagNumber(form.getBag_tag());
 		
 		try {
@@ -376,8 +377,13 @@ public class BagService {
 			logger.error("Error performing client-specific BEORN Action...");
 			e.printStackTrace();
 		}
-		
-		
+
+		try {
+			SpringUtils.getClientEventHandler().doPcn(log);
+		} catch (Exception e) {
+			logger.error("Error performing PCN lookup...");
+			e.printStackTrace();
+		}
 		return oDTO.getOHD_ID();
 	}
 

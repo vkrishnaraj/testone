@@ -26,6 +26,7 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -135,8 +136,8 @@ public class ViewIncomingBags extends Action {
 						ohd.setHoldingStation(user.getStation());
 						
 						// set ohd_log to received status
-						OHDUtils.setLogReceived(ohd.getOHD_ID());
-
+						OHDUtils.setLogReceived(ohd);
+						
 						Remark r = new Remark();
 						r.setAgent(user);
 						r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime
@@ -222,7 +223,7 @@ public class ViewIncomingBags extends Action {
 					}
 					
 					// set ohd_log to received status
-					OHDUtils.setLogReceived(ohd.getOHD_ID());
+					OHDUtils.setLogReceived(ohd);
 
 					//Update the controlling information on the file.
 					ControlLog newLog = new ControlLog();

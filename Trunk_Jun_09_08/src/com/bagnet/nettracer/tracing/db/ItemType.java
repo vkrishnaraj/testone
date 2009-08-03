@@ -18,6 +18,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
 public class ItemType extends LocaleBasedObject implements Serializable {
 	private int ItemType_ID;
 	private static String MSG_KEY = "ITEMTYPE_";
+	private String description;
 
 	/**
 	 * @return Returns the itemType_ID.
@@ -36,6 +37,23 @@ public class ItemType extends LocaleBasedObject implements Serializable {
 	 */
 	public void setItemType_ID(int itemType_ID) {
 		ItemType_ID = itemType_ID;
+	}
+
+	/**
+	 * @return Returns the description.
+	 * 
+	 * @hibernate.property type="string" length="10"
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description
+	 *          The description to set.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public String getKey() {

@@ -33,6 +33,7 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -42,6 +43,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
+import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
@@ -330,6 +332,10 @@ public class LostDelayAction extends CheckedAction {
 						osi.setIncident(iDTO);
 						osi.setInfo(theform.getOtherSystemInformation());
 						HibernateUtils.save(osi);
+					} 
+					if (theform.getPcn_id() != null && theform.getPcn_id().length() > 0) {
+						long pcn_id = Long.parseLong(theform.getPcn_id());
+						ProactiveNotificationBMO.setIncidentId(pcn_id, iDTO);
 					}
 					WtqIncidentAction wtq = null;
 					if(request.getParameter("savetowt") != null && (iDTO.getWt_id() == null || iDTO.getWt_id().trim().length() == 0) ) {

@@ -39,6 +39,12 @@ public class PropertyBMO {
 	public static final String PROPERTY_LIMIT_OHD_STATIONS = "losscode.ohd.limitstations";
 	public static final String PROPERTY_LIMIT_OHD_ADDSTATIONS = "losscode.ohd.addstations";
 	public static final String PROPERTY_DEFAULT_OHD_SEARCH_STATUS = "default.ohd.search.status";
+	public static final String PROPERTY_PCN_ENABLED = "pcn.enabled";
+	public static final String PROPERTY_TELEX_PRINTER = "telex.printer";
+	
+	
+	
+	
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 

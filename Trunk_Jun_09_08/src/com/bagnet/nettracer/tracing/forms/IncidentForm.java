@@ -40,6 +40,7 @@ public final class IncidentForm extends ValidatorForm {
 	private String Incident_ID;
 
 	private int version;
+	private String pcn_id = "";
 
 	//associating reports
 	private String ld_inc_ID = "";
@@ -1169,5 +1170,13 @@ public final class IncidentForm extends ValidatorForm {
 
 	public void setNotifiedOfRequirements(boolean notifiedOfRequirements) {
 		this.notifiedOfRequirements = notifiedOfRequirements;
+	}
+
+	public String getPcn_id() {
+		return pcn_id;
+	}
+
+	public void setPcn_id(String pcn_id) {
+		this.pcn_id = pcn_id;
 	}
 }

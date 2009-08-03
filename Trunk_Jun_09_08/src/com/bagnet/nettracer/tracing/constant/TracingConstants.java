@@ -73,6 +73,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION = "Claim Resolution";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_PRORATE = "Claim Prorate";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT = "Claim Settlement";
+	public final static String SYSTEM_COMPONENT_NAME_PCN = "PCN";
 	public final static String SYSTEM_COMPONENT_NAME_CREATE_EXPENSE = "Create Expense";
 	public final static String SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE = "Approve Expense";
 	public final static String SYSTEM_COMPONENT_NAME_APPROVED_EXPENSES = "Approved Payments";
@@ -85,6 +86,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_IN_STATION = "On-hand Bags";
 	public final static String SYSTEM_COMPONENT_NAME_SCANNER_DATA = "Scanner Data";
 	public final static String SYSTEM_COMPONENT_NAME_FORWARD_NOTICES = "Forward Copies";
+	
+	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
 	public final static String FORWARD_SCANNER_DATA = "scannerData";
 	

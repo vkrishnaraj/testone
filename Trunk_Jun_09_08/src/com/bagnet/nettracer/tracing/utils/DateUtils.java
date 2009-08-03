@@ -226,5 +226,9 @@ public class DateUtils {
 		return addDays(x, 1);
 	}
 	
+	public static boolean isSameDate(Calendar a, Calendar b) {
+		return a.get(Calendar.YEAR) == b.get(Calendar.YEAR) 
+			&& a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) == b.get(Calendar.DATE);
+	}
 
 }

@@ -40,6 +40,7 @@ import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
+import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -127,6 +128,7 @@ public class OhdBMO {
 			// check to see if we closed the ohd, if we did, then close all matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
 				MatchUtils.closeMatches(null, iDTO.getOHD_ID());
+				ProactiveNotificationBMO.closedOhd(iDTO);
 			}
 
 			//check if audit is enabled for this company....
@@ -204,6 +206,7 @@ public class OhdBMO {
 			// check to see if we closed the ohd, if we did, then close all matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
 				MatchUtils.closeMatches(null, iDTO.getOHD_ID());
+				ProactiveNotificationBMO.closedOhd(ohd);
 			}
 
 			//check if audit is enabled for this company....
@@ -1630,6 +1633,7 @@ public class OhdBMO {
 				// check to see if we closed the ohd, if we did, then close all matches
 				if (ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
 					MatchUtils.closeMatches(null, ohd.getOHD_ID());
+					ProactiveNotificationBMO.closedOhd(ohd);
 				}
 
 				//check if audit is enabled for this company....

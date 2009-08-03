@@ -261,5 +261,11 @@ public class StringUtils {
   		return srcStr.length() - 1;
   	}
   }
+  
+  public static void appendIfNotNull(StringBuilder sb, String x) {
+  	if (x!= null && x.trim().length() > 0) {
+  		sb.append(x + " ");
+  	}
+  }
     
 }

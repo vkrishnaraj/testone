@@ -145,9 +145,12 @@ public class Passenger implements Serializable {
 
 
 	public String getAirlinememcompany() {
-		String ret = membership.getCompanycode_ID();
-
-		if (ret == null) ret = "";
+		String ret = "";
+		
+		if (membership != null && membership.getCompanycode_ID() != null) {
+			ret = membership.getCompanycode_ID();
+		}
+		
 		return ret;
 	}
 
