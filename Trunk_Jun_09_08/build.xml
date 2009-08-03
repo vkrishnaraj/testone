@@ -1091,8 +1091,8 @@
 			<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/tracer.properties" />
 		</ant>
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
@@ -1224,7 +1224,7 @@
 	<target name="build-cron-service" depends="build-cron-jar">
 
 		<copy todir="${build.dir}/dist/cron/">
-			<fileset dir="${basedir}/companies/${ant_project_name}/${sub_path}cron" />
+			<fileset dir="${basedir}/companies/${ant_project_name}/environment/${sub_path}cron" />
 		</copy>
 		<copy todir="${build.dir}/dist/cron/lib">
 			<fileset refid="cronjar2" />

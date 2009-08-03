@@ -1,23 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"  >
 
 <hibernate-configuration>
 
     <session-factory>	
-        	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
-		<property name="connection.url">jdbc:mysql://192.168.2.127/jetblue_training</property>
-		<property name="connection.username">nettracer</property>
-		<property name="connection.password">nettracer</property>
-		<property name="show_sql">false</property>
+    
+		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod;sendStringParametersAsUnicode=false</property>
+		<property name="connection.username">nettracerjobs</property>
+		<property name="connection.password">evya28Ovm2FU</property>
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="company.code">B6</property>
+		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+		<property name="company.code">US</property>
+		<property name="hibernate.connection.isolation">1</property>
 
-
+			
 		<!-- c3p0 -->
 		<property name="hibernate.c3p0.acquire_increment">1</property> 
 		<property name="hibernate.c3p0.idle_test_period">100</property> <!-- seconds --> 
@@ -26,7 +27,7 @@
 		<property name="hibernate.c3p0.min_size">10</property> 
 		<property name="hibernate.c3p0.timeout">5000</property> <!-- seconds --> 
 		
-	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
+			<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_Specific_Variable.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_specific_irregularity_code.hbm.xml"/>
@@ -84,7 +85,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Agent_Logger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Passenger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Address.hbm.xml"/>
-		<mapping resource="com/bagnet/nettracer/tracing/db/Incident.hbm.xml"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Incident"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Station.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Resolution.hbm.xml"/>
@@ -111,8 +112,8 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Assoc.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
-		<mapping resource="com/bagnet/nettracer/tracing/db/Claim.hbm.xml"/>
-		<mapping resource="com/bagnet/nettracer/tracing/db/ExpensePayout.hbm.xml"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Claim"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.ExpensePayout"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
 
 		<mapping resource="com/bagnet/nettracer/tracing/db/LogEvent.hbm.xml"/>
@@ -153,6 +154,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Lz.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Rule.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Property.hbm.xml"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Comment"/>
 		
 		<!-- WorldTracer Stuff -->
 		<mapping resource="com/bagnet/nettracer/tracing/db/Worldtracer_Actionfiles.hbm.xml"/>
@@ -161,6 +163,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/WT_TTY.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/WT_FWD_Log.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/WT_FWD_Log_Itinerary.hbm.xml"/>
+				
 		<!-- Java5 Annotated Classes -->
 		<mapping class="com.bagnet.nettracer.tracing.db.WorldTracerFile" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue"/>
@@ -191,6 +194,20 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.datafeed.DataFeedLog" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
 		<mapping class="com.bagnet.nettracer.tracing.db.Report" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.ClaimSettlementBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.ClaimSettlement" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.SettlementBagInventory" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlementBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditClaimSettlement" />
+		<mapping class="com.bagnet.nettracer.tracing.db.claims.AuditSettlementBagInventory" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wt.ActionFileStation" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wt.ActionFileCount" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount" />
+		<mapping class="com.bagnet.nettracer.tracing.db.Lock" />
+		<mapping class="com.bagnet.nettracer.tracing.db.ForwardNotice" />
+		<mapping class="com.bagnet.nettracer.tracing.db.ProactiveNotification" />
+		
+		
     </session-factory>
 
 </hibernate-configuration>
