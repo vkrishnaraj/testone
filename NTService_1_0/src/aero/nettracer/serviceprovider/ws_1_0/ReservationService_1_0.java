@@ -20,7 +20,7 @@ public class ReservationService_1_0 {
 		return null;
 	}
 
-	public RemarkResponse writeRemark(RequestHeader header, String pnr) {
+	public RemarkResponse writeRemark(RequestHeader header, String pnr, String remark) {
 		return null;
 	}
 

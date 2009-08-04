@@ -93,6 +93,8 @@ public class WriteRemarkDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
                 "header");
         private static final javax.xml.namespace.QName PNR$2 = new javax.xml.namespace.QName("http://ws_1_0.serviceprovider.nettracer.aero",
                 "pnr");
+        private static final javax.xml.namespace.QName REMARK$4 = new javax.xml.namespace.QName("http://ws_1_0.serviceprovider.nettracer.aero",
+                "remark");
 
         public WriteRemarkImpl(org.apache.xmlbeans.SchemaType sType) {
             super(sType);
@@ -359,6 +361,146 @@ public class WriteRemarkDocumentImpl extends org.apache.xmlbeans.impl.values.Xml
             synchronized (monitor()) {
                 check_orphaned();
                 get_store().remove_element(PNR$2, 0);
+            }
+        }
+
+        /**
+         * Gets the "remark" element
+         */
+        public java.lang.String getRemark() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(REMARK$4,
+                        0);
+
+                if (target == null) {
+                    return null;
+                }
+
+                return target.getStringValue();
+            }
+        }
+
+        /**
+         * Gets (as xml) the "remark" element
+         */
+        public org.apache.xmlbeans.XmlString xgetRemark() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(REMARK$4,
+                        0);
+
+                return target;
+            }
+        }
+
+        /**
+         * Tests for nil "remark" element
+         */
+        public boolean isNilRemark() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(REMARK$4,
+                        0);
+
+                if (target == null) {
+                    return false;
+                }
+
+                return target.isNil();
+            }
+        }
+
+        /**
+         * True if has "remark" element
+         */
+        public boolean isSetRemark() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                return get_store().count_elements(REMARK$4) != 0;
+            }
+        }
+
+        /**
+         * Sets the "remark" element
+         */
+        public void setRemark(java.lang.String remark) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .find_element_user(REMARK$4,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                                   .add_element_user(REMARK$4);
+                }
+
+                target.setStringValue(remark);
+            }
+        }
+
+        /**
+         * Sets (as xml) the "remark" element
+         */
+        public void xsetRemark(org.apache.xmlbeans.XmlString remark) {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(REMARK$4,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(REMARK$4);
+                }
+
+                target.set(remark);
+            }
+        }
+
+        /**
+         * Nils the "remark" element
+         */
+        public void setNilRemark() {
+            synchronized (monitor()) {
+                check_orphaned();
+
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .find_element_user(REMARK$4,
+                        0);
+
+                if (target == null) {
+                    target = (org.apache.xmlbeans.XmlString) get_store()
+                                                                 .add_element_user(REMARK$4);
+                }
+
+                target.setNil();
+            }
+        }
+
+        /**
+         * Unsets the "remark" element
+         */
+        public void unsetRemark() {
+            synchronized (monitor()) {
+                check_orphaned();
+                get_store().remove_element(REMARK$4, 0);
             }
         }
     }

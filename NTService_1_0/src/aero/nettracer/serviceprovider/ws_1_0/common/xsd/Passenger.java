@@ -15,7 +15,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
  */
 public interface Passenger extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Passenger.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sBE8218F01D2D304949F3BBA6C8907854")
+            "schemaorg_apache_xmlbeans.system.s415A2E0AAF8C512FA4F2CB86373D7DD9")
                                                                                                                            .resolveHandle("passenger2b76type");
 
     /**

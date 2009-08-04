@@ -15,7 +15,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
  */
 public interface WebServiceError extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WebServiceError.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sBE8218F01D2D304949F3BBA6C8907854")
+            "schemaorg_apache_xmlbeans.system.s415A2E0AAF8C512FA4F2CB86373D7DD9")
                                                                                                                            .resolveHandle("webserviceerrora463type");
 
     /**
@@ -57,6 +57,128 @@ public interface WebServiceError extends org.apache.xmlbeans.XmlObject {
      * Unsets the "description" element
      */
     void unsetDescription();
+
+    /**
+     * Gets the "CONFIGURATION_ERROR" element
+     */
+    java.lang.String getCONFIGURATIONERROR();
+
+    /**
+     * Gets (as xml) the "CONFIGURATION_ERROR" element
+     */
+    org.apache.xmlbeans.XmlString xgetCONFIGURATIONERROR();
+
+    /**
+     * Tests for nil "CONFIGURATION_ERROR" element
+     */
+    boolean isNilCONFIGURATIONERROR();
+
+    /**
+     * True if has "CONFIGURATION_ERROR" element
+     */
+    boolean isSetCONFIGURATIONERROR();
+
+    /**
+     * Sets the "CONFIGURATION_ERROR" element
+     */
+    void setCONFIGURATIONERROR(java.lang.String configurationerror);
+
+    /**
+     * Sets (as xml) the "CONFIGURATION_ERROR" element
+     */
+    void xsetCONFIGURATIONERROR(
+        org.apache.xmlbeans.XmlString configurationerror);
+
+    /**
+     * Nils the "CONFIGURATION_ERROR" element
+     */
+    void setNilCONFIGURATIONERROR();
+
+    /**
+     * Unsets the "CONFIGURATION_ERROR" element
+     */
+    void unsetCONFIGURATIONERROR();
+
+    /**
+     * Gets the "UNEXPECTED_EXCEPTION" element
+     */
+    java.lang.String getUNEXPECTEDEXCEPTION();
+
+    /**
+     * Gets (as xml) the "UNEXPECTED_EXCEPTION" element
+     */
+    org.apache.xmlbeans.XmlString xgetUNEXPECTEDEXCEPTION();
+
+    /**
+     * Tests for nil "UNEXPECTED_EXCEPTION" element
+     */
+    boolean isNilUNEXPECTEDEXCEPTION();
+
+    /**
+     * True if has "UNEXPECTED_EXCEPTION" element
+     */
+    boolean isSetUNEXPECTEDEXCEPTION();
+
+    /**
+     * Sets the "UNEXPECTED_EXCEPTION" element
+     */
+    void setUNEXPECTEDEXCEPTION(java.lang.String unexpectedexception);
+
+    /**
+     * Sets (as xml) the "UNEXPECTED_EXCEPTION" element
+     */
+    void xsetUNEXPECTEDEXCEPTION(
+        org.apache.xmlbeans.XmlString unexpectedexception);
+
+    /**
+     * Nils the "UNEXPECTED_EXCEPTION" element
+     */
+    void setNilUNEXPECTEDEXCEPTION();
+
+    /**
+     * Unsets the "UNEXPECTED_EXCEPTION" element
+     */
+    void unsetUNEXPECTEDEXCEPTION();
+
+    /**
+     * Gets the "USER_NOT_AUTHORIZED" element
+     */
+    java.lang.String getUSERNOTAUTHORIZED();
+
+    /**
+     * Gets (as xml) the "USER_NOT_AUTHORIZED" element
+     */
+    org.apache.xmlbeans.XmlString xgetUSERNOTAUTHORIZED();
+
+    /**
+     * Tests for nil "USER_NOT_AUTHORIZED" element
+     */
+    boolean isNilUSERNOTAUTHORIZED();
+
+    /**
+     * True if has "USER_NOT_AUTHORIZED" element
+     */
+    boolean isSetUSERNOTAUTHORIZED();
+
+    /**
+     * Sets the "USER_NOT_AUTHORIZED" element
+     */
+    void setUSERNOTAUTHORIZED(java.lang.String usernotauthorized);
+
+    /**
+     * Sets (as xml) the "USER_NOT_AUTHORIZED" element
+     */
+    void xsetUSERNOTAUTHORIZED(org.apache.xmlbeans.XmlString usernotauthorized);
+
+    /**
+     * Nils the "USER_NOT_AUTHORIZED" element
+     */
+    void setNilUSERNOTAUTHORIZED();
+
+    /**
+     * Unsets the "USER_NOT_AUTHORIZED" element
+     */
+    void unsetUSERNOTAUTHORIZED();
 
     /**
      * A factory class with static methods for creating instances

@@ -1,4 +1,4 @@
-package aero.nettracer.serviceprovider.common.auth;
+package aero.nettracer.serviceprovider.common.exceptions;
 
 public class UserNotAuthorizedException extends Exception {
 

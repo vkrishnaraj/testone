@@ -15,12 +15,12 @@ public class SabrePool extends GenericObjectPool {
 //	}
 //	
 //
-//	public Object borrowObject() throws Exception {
-//		return super.borrowObject();
-//	}
-//
-//	public void returnObject(Object obj) throws Exception {
-//		super.returnObject(obj);
-//	}
+	public Object borrowObject() throws Exception {
+		return super.borrowObject();
+	}
+
+	public void returnObject(Object obj) throws Exception {
+		super.returnObject(obj);
+	}
 	
 }

@@ -1,19 +1,14 @@
 package aero.nettracer.serviceprovider.common.db;
 
-import java.util.Set;
+import java.util.Map;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -29,16 +24,12 @@ public class Profile {
 	@JoinColumn(nullable = false)
 	private User user;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
-	private Set<Parameter> parameters;
+	//TODO: DEFINE HIBERNATE MAPPING
+	private Map<ParameterType, String> parameters;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
-	private Set<Permission> permissions;
+	//TODO: DEFINE HIBERNATE MAPPING
+	private Map<PermissionType, Boolean> permissions;
 	
-	private enum ReservationType {};
-
 	public long getId() {
 		return id;
 	}
@@ -55,19 +46,19 @@ public class Profile {
 		this.user = user;
 	}
 
-	public Set<Parameter> getParameters() {
+	public Map<ParameterType, String> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(Set<Parameter> parameters) {
+	public void setParameters(Map<ParameterType, String> parameters) {
 		this.parameters = parameters;
 	}
 
-	public Set<Permission> getPermissions() {
+	public Map<PermissionType, Boolean> getPermissions() {
 		return permissions;
 	}
 
-	public void setPermissions(Set<Permission> permissions) {
+	public void setPermissions(Map<PermissionType, Boolean> permissions) {
 		this.permissions = permissions;
 	}
 }

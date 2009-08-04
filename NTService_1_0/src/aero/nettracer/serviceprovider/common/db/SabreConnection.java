@@ -1,13 +1,9 @@
 package aero.nettracer.serviceprovider.common.db;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -15,38 +11,34 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
-import aero.nettracer.serviceprovider.common.pojo.UserProvidedParameters;
-
 @Entity
-@Table(name = "User")
+@Table(name = "sabre_connection")
 @Proxy(lazy = true)
 @NamedQueries({
 	@NamedQuery(
-	name = "loadByUsername",
-	query = "from User where username = :username"
+	name = "loadByProfile",
+	query = "from SabreConnection c where c.profile.id  = :profile"
 	)
 	})
-public class User {
-	 
-	@Transient
-	public static final String LOAD_BY_PERMISSION = "loadByUsername";
+public class SabreConnection {
 
+	@Transient
+	public static final String LOAD_BY_PERMISSION = "loadByProfile";
+	
 	@Id
 	@GeneratedValue
 	private long id;
-
+	
+	private Profile profile;
+	
+	@Column(length = 2)
+	private String company;
+	
 	@Column(length = 20)
 	private String username;
-
+	
 	@Column(length = 20)
 	private String password;
-
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private Profile profile;
-
-	@Transient
-	private Set<UserProvidedParameters> userProvidedParameters;
 
 	public String getUsername() {
 		return username;
@@ -64,31 +56,27 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<UserProvidedParameters> getUserProvidedParameters() {
-		return userProvidedParameters;
-	}
+	public String getCompany() {
+  	return company;
+  }
 
-	public void setUserProvidedParameters(Set<UserProvidedParameters> userProvidedParameters) {
-		this.userProvidedParameters = userProvidedParameters;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	public void setCompany(String company) {
+  	this.company = company;
+  }
 
 	public long getId() {
-		return id;
-	}
+  	return id;
+  }
 
 	public void setId(long id) {
-		this.id = id;
-	}
+  	this.id = id;
+  }
 
 	public Profile getProfile() {
-		return profile;
-	}
+  	return profile;
+  }
 
 	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
+  	this.profile = profile;
+  }
 }

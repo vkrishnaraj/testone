@@ -4,8 +4,12 @@
 	<property file="common.properties" />
 	<property environment="env" />
 	<property name="lib" value="lib/jars" />
-	<property name="buildlib" value="lib/build-client" />
 	
+	<patternset id="jar.files">
+		<include name="**/*.jar" />
+		<include name="**/*.zip" />
+	</patternset>
+
 	<path id="base.libraries">
 		<pathelement location="${build.classes}" />
 		<fileset dir="${axis2.home}\lib">
@@ -13,6 +17,15 @@
 		</fileset>
 	</path>
 
+	<path id="project.classpath">
+		<fileset dir="${basedir}/lib">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/jars">
+			<patternset refid="jar.files" />
+		</fileset>		
+	</path>
+	
 	<property name="axis2.classpath" value="base.libraries" />
 	<property name="build.dir" value="${root.dir}\\bin" />
 
@@ -75,6 +88,19 @@
 		<delete dir="${build.dir}/webservices/NTService/temp" />
 		<delete dir="${build.dir}/webservices/NTService/resources" />
 		<delete dir="${build.dir}/webservices/NTService/src" />
+	</target>
+	
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.classpath" />
+	
+	<target name="schemaexport" description="Exports a generated schema to file">
+		<hibernatetool destdir="${build.dir}">
+			<classpath>
+				<path refid="project.classpath" />
+				<path location="${build.dir}" />
+			</classpath>
+			<annotationconfiguration configurationfile="${build.dir}/hibernate_main.cfg.xml" />
+			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
+		</hibernatetool>
 	</target>
 
 </project>
