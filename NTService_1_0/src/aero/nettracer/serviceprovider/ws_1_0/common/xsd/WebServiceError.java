@@ -15,8 +15,48 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
  */
 public interface WebServiceError extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WebServiceError.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s3ABAB084C02932FDB9E0FCEE6AB72CA7")
+            "schemaorg_apache_xmlbeans.system.sBE8218F01D2D304949F3BBA6C8907854")
                                                                                                                            .resolveHandle("webserviceerrora463type");
+
+    /**
+     * Gets the "description" element
+     */
+    java.lang.String getDescription();
+
+    /**
+     * Gets (as xml) the "description" element
+     */
+    org.apache.xmlbeans.XmlString xgetDescription();
+
+    /**
+     * Tests for nil "description" element
+     */
+    boolean isNilDescription();
+
+    /**
+     * True if has "description" element
+     */
+    boolean isSetDescription();
+
+    /**
+     * Sets the "description" element
+     */
+    void setDescription(java.lang.String description);
+
+    /**
+     * Sets (as xml) the "description" element
+     */
+    void xsetDescription(org.apache.xmlbeans.XmlString description);
+
+    /**
+     * Nils the "description" element
+     */
+    void setNilDescription();
+
+    /**
+     * Unsets the "description" element
+     */
+    void unsetDescription();
 
     /**
      * A factory class with static methods for creating instances

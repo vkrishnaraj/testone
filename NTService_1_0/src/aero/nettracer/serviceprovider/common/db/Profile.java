@@ -36,6 +36,8 @@ public class Profile {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SELECT)
 	private Set<Permission> permissions;
+	
+	private enum ReservationType {};
 
 	public long getId() {
 		return id;

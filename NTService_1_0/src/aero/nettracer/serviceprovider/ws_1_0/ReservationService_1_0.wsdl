@@ -121,7 +121,9 @@
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="WebServiceError">
-                <xs:sequence/>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
+                </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Reservation">
                 <xs:sequence>

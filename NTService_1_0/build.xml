@@ -1,4 +1,4 @@
-<project name="tracer" default="services_java2wsdl" basedir=".">
+<project name="tracer" default="services_recompile" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -16,6 +16,12 @@
 	<property name="axis2.classpath" value="base.libraries" />
 	<property name="build.dir" value="${root.dir}\\bin" />
 
+	<target name="services_recompile">
+		<antcall target="services_java2wsdl" />
+		<antcall target="services_wsdl2java" />
+	</target>
+
+	
 	<target name="services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 		<Java2WSDLTask classPath="${build.dir}" className="aero.nettracer.serviceprovider.ws_1_0.ReservationService_1_0" outputLocation="src/aero/nettracer/serviceprovider/ws_1_0" outputFileName="ReservationService_1_0.wsdl">
