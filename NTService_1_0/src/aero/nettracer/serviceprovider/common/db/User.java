@@ -18,7 +18,7 @@ import org.hibernate.annotations.Proxy;
 import aero.nettracer.serviceprovider.common.pojo.UserProvidedParameters;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @Proxy(lazy = true)
 @NamedQueries({
 	@NamedQuery(
@@ -33,7 +33,7 @@ public class User {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private int id;
 
 	@Column(length = 20)
 	private String username;
@@ -78,10 +78,6 @@ public class User {
 
 	public long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public Profile getProfile() {

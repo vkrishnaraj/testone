@@ -4,6 +4,7 @@
 	<property file="common.properties" />
 	<property environment="env" />
 	<property name="lib" value="lib/jars" />
+	<property name="lib.build-client.dir" value="${root.dir}\\lib" />
 	
 	<patternset id="jar.files">
 		<include name="**/*.jar" />

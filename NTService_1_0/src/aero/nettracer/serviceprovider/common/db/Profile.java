@@ -2,14 +2,22 @@ package aero.nettracer.serviceprovider.common.db;
 
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.MapKey;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Proxy;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.EnumType;
+
 
 @Entity
 @Table(name = "profile")
@@ -24,10 +32,18 @@ public class Profile {
 	@JoinColumn(nullable = false)
 	private User user;
 
-	//TODO: DEFINE HIBERNATE MAPPING
+	@org.hibernate.annotations.CollectionOfElements(targetElement = String.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "profile_parameters", joinColumns = @JoinColumn(name = "profile_id"))
+	@MapKey(columns = @Column(name = "parameter_type", length = 3), type = @Type(type = "org.hibernate.type.EnumType", parameters = {
+			@Parameter(name = EnumType.ENUM, value = "aero.nettracer.serviceprovider.common.db.ParameterType"),
+			@Parameter(name = EnumType.TYPE, value = "12") }))
 	private Map<ParameterType, String> parameters;
 
-	//TODO: DEFINE HIBERNATE MAPPING
+	@org.hibernate.annotations.CollectionOfElements(targetElement = Boolean.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "profile_permission", joinColumns = @JoinColumn(name = "permission_id"))
+	@MapKey(columns = @Column(name = "permission_type", length = 3), type = @Type(type = "org.hibernate.type.EnumType", parameters = {
+			@Parameter(name = EnumType.ENUM, value = "aero.nettracer.serviceprovider.common.db.PermissionType"),
+			@Parameter(name = EnumType.TYPE, value = "12") }))
 	private Map<PermissionType, Boolean> permissions;
 	
 	public long getId() {

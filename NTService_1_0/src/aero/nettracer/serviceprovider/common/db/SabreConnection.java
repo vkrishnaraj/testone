@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,8 +28,9 @@ public class SabreConnection {
 	
 	@Id
 	@GeneratedValue
-	private long id;
+	private int id;
 	
+	@ManyToOne
 	private Profile profile;
 	
 	@Column(length = 2)
@@ -64,11 +66,11 @@ public class SabreConnection {
   	this.company = company;
   }
 
-	public long getId() {
+	public int getId() {
   	return id;
   }
 
-	public void setId(long id) {
+	public void setId(int id) {
   	this.id = id;
   }
 
