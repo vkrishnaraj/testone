@@ -26,9 +26,10 @@ public class HibernateWrapper {
 
 	public static SessionFactory getSession() {
 		try {
-			sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
+			//sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
 			return sf_prod;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 
