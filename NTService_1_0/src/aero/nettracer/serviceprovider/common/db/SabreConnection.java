@@ -1,5 +1,6 @@
 package aero.nettracer.serviceprovider.common.db;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,28 @@ public class SabreConnection {
 	@Transient
 	public static final String LOAD_BY_PERMISSION = "loadByProfile";
 
+	@Transient
+	private int state;
+
+	@Transient
+	private String binarySecurityToken;
+
+	public String getBinarySecurityToken() {
+		return binarySecurityToken;
+	}
+
+	public void setBinarySecurityToken(String securityToken) {
+		this.binarySecurityToken = securityToken;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 	@Id
 	@GeneratedValue
 	private int id;
@@ -39,6 +62,17 @@ public class SabreConnection {
 
 	@Column(length = 20)
 	private String organization;
+
+	@Basic
+	private String endpoint;
+
+	public String getEndpoint() {
+		return endpoint;
+	}
+
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
 
 	public String getOrganization() {
 		return organization;
@@ -119,5 +153,10 @@ public class SabreConnection {
 
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+
+	public String getLoggingString() {
+		return "Username: " + username + " Profile: " + profile.getId()
+				+ " Endpoint: " + endpoint;
 	}
 }
