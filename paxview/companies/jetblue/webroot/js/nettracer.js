@@ -30,3 +30,8 @@ function fillzero(o,maxlen) {
     }    
     return true;
 }
+
+function formatForm(form) {
+	fillzero(form.claimnumber, 13);
+	return true;
+}

@@ -15,7 +15,7 @@
 		</title>
 	</head>
 	<body>
-		<form:form method="POST" action="search.htm" name="searchForm">
+		<form:form method="POST" action="search.htm" name="searchForm" onsubmit="formatForm(this)">
 			<table cellspacing="0" width="600" border="0">
 				<tr>
 					<td>
