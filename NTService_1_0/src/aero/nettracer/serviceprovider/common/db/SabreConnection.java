@@ -23,7 +23,11 @@ public class SabreConnection {
 	public static final String LOAD_BY_PERMISSION = "loadByProfile";
 
 	@Transient
-	private int state;
+	private int state = LOGGED_OUT_STATE;
+	
+	public static final int LOGGED_OUT_STATE = 0;
+	public static final int LOGGED_IN_STATE = 1;
+	
 
 	@Transient
 	private String binarySecurityToken;

@@ -6,6 +6,7 @@
  */
 package aero.nettracer.serviceprovider.ws_1_0;
 
+import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.PermissionType;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.ConfigurationException;
@@ -30,9 +31,9 @@ public class ReservationService_1_0Impl {
 	 * @param getEnplanements
 	 */
 	public aero.nettracer.serviceprovider.ws_1_0.GetEnplanementsResponseDocument getEnplanements(
-	    aero.nettracer.serviceprovider.ws_1_0.GetEnplanementsDocument getEnplanements) {
+			aero.nettracer.serviceprovider.ws_1_0.GetEnplanementsDocument getEnplanements) {
 		throw new java.lang.UnsupportedOperationException("Please implement "
-		    + this.getClass().getName() + "#getEnplanements");
+				+ this.getClass().getName() + "#getEnplanements");
 	}
 
 	/**
@@ -41,10 +42,10 @@ public class ReservationService_1_0Impl {
 	 * @param writeRemark
 	 */
 	public aero.nettracer.serviceprovider.ws_1_0.WriteRemarkResponseDocument writeRemark(
-	    aero.nettracer.serviceprovider.ws_1_0.WriteRemarkDocument writeRemark) {
+			aero.nettracer.serviceprovider.ws_1_0.WriteRemarkDocument writeRemark) {
 
 		WriteRemarkResponseDocument doc = WriteRemarkResponseDocument.Factory
-		    .newInstance();
+				.newInstance();
 		WriteRemarkResponse res = doc.addNewWriteRemarkResponse();
 		RemarkResponse res1 = res.addNewReturn();
 		RequestHeader header = writeRemark.getWriteRemark().getHeader();
@@ -52,27 +53,24 @@ public class ReservationService_1_0Impl {
 		String password = header.getPassword();
 
 		try {
-			User user = ServiceUtilities.getAndAuthorizeUser(username, password,
-			    PermissionType.WRITE_REMARK);
+			User user = ServiceUtilities.getAndAuthorizeUser(username,
+					password, PermissionType.WRITE_REMARK);
 			ReservationInterface reservation = ServiceUtilities
-			    .getReservationSystem(user);
+					.getReservationSystem(user);
 			String pnr = writeRemark.getWriteRemark().getPnr();
 			String remark = writeRemark.getWriteRemark().getRemark();
-			reservation.writeRemark(header, pnr, remark);
+			reservation.writeRemark(user, pnr, remark);
 		} catch (UserNotAuthorizedException e) {
 			WebServiceError error = res1.addNewError();
-			error
-			    .setDescription(aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError.USER_NOT_AUTHORIZED);
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
 			return doc;
 		} catch (ConfigurationException e) {
 			WebServiceError error = res1.addNewError();
-			error
-			    .setDescription(aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError.CONFIGURATION_ERROR);
+			error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
 			return doc;
 		} catch (UnexpectedException e) {
 			WebServiceError error = res1.addNewError();
-			error
-			    .setDescription(aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError.UNEXPECTED_EXCEPTION);
+			error.setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
 			return doc;
 
 		}
@@ -87,43 +85,41 @@ public class ReservationService_1_0Impl {
 	 * @param getReservationData
 	 */
 	public aero.nettracer.serviceprovider.ws_1_0.GetReservationDataResponseDocument getReservationData(
-	    aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument getReservationData) {
+			aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument getReservationData) {
 
 		GetReservationDataResponseDocument doc = GetReservationDataResponseDocument.Factory
-		    .newInstance();
+				.newInstance();
 		GetReservationDataResponse res = doc.addNewGetReservationDataResponse();
 		ReservationResponse res1 = res.addNewReturn();
 
 		RequestHeader header = getReservationData.getGetReservationData()
-		    .getHeader();
+				.getHeader();
 		String username = header.getUsername();
 		String password = header.getPassword();
 
 		try {
-			User user = ServiceUtilities.getAndAuthorizeUser(username, password,
-			    PermissionType.GET_PREPOP_DATA);
+			User user = ServiceUtilities.getAndAuthorizeUser(username,
+					password, PermissionType.GET_PREPOP_DATA);
 			ReservationInterface reservation = ServiceUtilities
-			    .getReservationSystem(user);
+					.getReservationSystem(user);
 			String pnr = getReservationData.getGetReservationData().getPnr();
-			String bagTag = getReservationData.getGetReservationData().getBagTag();
-			reservation.getReservationData(header, pnr, bagTag);
+			String bagTag = getReservationData.getGetReservationData()
+					.getBagTag();
+			reservation.getReservationData(user, pnr, bagTag);
 		} catch (UserNotAuthorizedException e) {
 			WebServiceError error = res1.addNewError();
-			error
-			    .setDescription(aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError.USER_NOT_AUTHORIZED);
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
 			return doc;
 		} catch (ConfigurationException e) {
 			WebServiceError error = res1.addNewError();
-			error
-			    .setDescription(aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError.CONFIGURATION_ERROR);
+			error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
 			return doc;
 		} catch (UnexpectedException e) {
 			WebServiceError error = res1.addNewError();
-			error
-			    .setDescription(aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError.UNEXPECTED_EXCEPTION);
+			error.setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
 			return doc;
 
-    }
+		}
 
 		return doc;
 
@@ -135,9 +131,9 @@ public class ReservationService_1_0Impl {
 	 * @param getOsiContents
 	 */
 	public aero.nettracer.serviceprovider.ws_1_0.GetOsiContentsResponseDocument getOsiContents(
-	    aero.nettracer.serviceprovider.ws_1_0.GetOsiContentsDocument getOsiContents) {		
-		
+			aero.nettracer.serviceprovider.ws_1_0.GetOsiContentsDocument getOsiContents) {
+
 		throw new java.lang.UnsupportedOperationException("Please implement "
-		    + this.getClass().getName() + "#getOsiContents");
+				+ this.getClass().getName() + "#getOsiContents");
 	}
 }
