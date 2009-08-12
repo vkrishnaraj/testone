@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/sifr.js"></script>
 <script type="text/javascript" src="js/sifr-addons.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>WestJet Baggage Tracking Service</title>
+<title>NetTracer Baggage Tracking Service</title>
 </head>
 <body>
   <div id="wrapper">
@@ -23,9 +23,9 @@
       <h1>Check baggage status</h1>
       <div id="francais">&gt;&gt; <a href="#">Fran&ccedil;ais</a></div>
       <!-- /francais -->
-      <p><strong>Delayed Baggage</strong>: If you have notified a WestJet Customer Service Agent of your delayed baggage, please enter your claim number below to check the current status of your baggage.</p>
+      <p><strong>Delayed Baggage</strong>: If you have notified a NetTracer Customer Service Agent of your delayed baggage, please enter your claim number below to check the current status of your baggage.</p>
 
-      <form:form method="POST" action="search.htm" >
+      <form:form method="POST" action="search.htm" onsubmit="formatForm(this)">
       <table cellspacing="0" cellpadding="0" id="inputDelayedBags">
          <c:if test="${!empty noneFound }">
       		<tr>
@@ -46,7 +46,7 @@
         <tr>
           <td>&nbsp;</td>
           <td class="smallFormText" colspan="2"><strong>Claim number</strong> - You may omit leading zeros when entering your claim number. For example:
-            WSLFL486 becomes WSLFL00000486. </td>
+            ATLDA1 becomes ATLDA00000001. </td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -58,11 +58,11 @@
       </form:form>
       <div class="hr"></div>
       <p><img src="images/icon_Advisory.png" alt="Important Note" width="20" height="20" style="float: left; margin: 0 10px 100px 0;" />If you have not already notified us of your delayed baggage, please contact our System Baggage Service office Monday through Friday from 7:30am to 7:30pm.</p>
-      <p><strong>System Baggage Service</strong>: 1-800-965-2107 x8900.</p>
+      <p><strong>System Baggage Service</strong>: 1-555-555-5555.</p>
     </div>
     <!-- /content -->
     <div id="footer">
-      <div id="copyright">&copy; WestJet. All rights reserved.</div>
+      <div id="copyright">&copy; NetTracer. All rights reserved.</div>
     </div>
     <!-- /footer -->
   </div>

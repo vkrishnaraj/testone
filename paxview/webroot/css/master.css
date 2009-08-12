@@ -22,7 +22,7 @@ body {
 	text-align: left;
 	margin: 20px auto;
 	width: 918px;
-	background: url(../images/wrapperBG.png) repeat-x #fff;
+	/*background: url(../images/wrapperBG.png) repeat-x #fff;*/
 }
 
 #header {
@@ -30,7 +30,7 @@ body {
 	margin: 0;
 	width: 918px;
 	height: 96px;
-	background: url(../images/header.png) no-repeat;
+	background: url(../images/header_bg_noconf.jpg) no-repeat;
 }
 
 #content {

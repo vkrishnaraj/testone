@@ -38,7 +38,7 @@ window.addEvent('domready', function() {
 		}
 	</style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>WestJet Baggage Tracking Service</title>
+<title>NetTracer Baggage Tracking Service</title>
 </head>
 <body onload="initStaticClaim()">
 <div id="container">
@@ -206,7 +206,7 @@ window.addEvent('domready', function() {
     </div>
     <!-- /content -->
     <div id="footer">
-      <div id="copyright">&copy; WestJet. All rights reserved.</div>
+      <div id="copyright">&copy; NetTracer, Inc. All rights reserved.</div>
     </div>
     <!-- /footer -->
   </div>
