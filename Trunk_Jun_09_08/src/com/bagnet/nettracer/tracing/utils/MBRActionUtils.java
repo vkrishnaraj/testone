@@ -948,7 +948,7 @@ public class MBRActionUtils {
 	}
 
 	public static boolean prePopulate(HttpServletRequest request,IncidentForm form, ArrayList<String> alerrors, int incidentType) {
-		if (request.getParameter("doprepopulate") != null) {
+		if (request.getParameter("doprepopulate") != null && (request.getParameter("doprepopulate").length() > 0)) {
 			if (request.getParameter("wt_af_id") == null) {
 				alerrors.addAll(SpringUtils.getReservationIntegration().populateIncidentForm(request, form, incidentType));
 				return true;

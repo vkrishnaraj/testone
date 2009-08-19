@@ -891,6 +891,8 @@ public class WSCoreOHDUtil {
 	  		dto.setFinalFlightAirline(finalFlightAirline);
 	  		dto.setReasonForLoss("" + si.getLossCode());
 	  		dto.setTagNumber(si.getClaimCheckNumber());
+	  		dto.setOnhand(onhand.getOHD_ID());
+	  		
 	  		try {
 	  			SpringUtils.getClientEventHandler().doEventOnBeornWS(dto);
 	  		} catch (Exception e) {

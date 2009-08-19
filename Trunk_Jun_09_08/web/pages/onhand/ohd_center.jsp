@@ -27,14 +27,28 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <logic:present name="prepopulate" scope="request">
    <script language="javascript">
-   
+
+	  function disableButton(aButton) {
+	   	aButton.disabled = true;
+	   	aButton.value= "<bean:message key='ajax.please_wait' />";
+	  }
+      
       var buttonSelected = null;
 
       function validateThis(form) {
          if (buttonSelected == null) {
             return true;
          } else {
-            return validateRest(form);
+            if (validateRest(form) == true) {
+                 //assign value to hidden field doprepopulate
+                 form.doprepopulate.value = 11;
+                 disableButton(form.doprepopulate1);
+           
+                 return true;
+            } else {
+             	return false;
+            }              
+            //return validateRest(form);
          } 
          return true;
       }
@@ -43,7 +57,7 @@
   
   <html:form action="addOnHandBag.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/validation_incl.jsp" />
-    
+    <html:hidden property="doprepopulate" value="" />
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">

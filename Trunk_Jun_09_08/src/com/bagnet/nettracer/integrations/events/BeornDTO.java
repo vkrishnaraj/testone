@@ -13,6 +13,15 @@ public class BeornDTO {
 	private String reasonForLoss;
 	private String faultStation;
 	private String specialInstructions;
+	private String onhand;
+
+	public String getOnhand() {
+		return onhand;
+	}
+
+	public void setOnhand(String onhand) {
+		this.onhand = onhand;
+	}
 
 	/**
 	 * @return the tagNumber

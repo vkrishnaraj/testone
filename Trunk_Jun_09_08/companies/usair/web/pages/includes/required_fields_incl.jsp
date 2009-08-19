@@ -20,6 +20,30 @@
   {
     return true;
   }
+
+  function validateUSAirArrivalAndDepartureDatesRule()
+  {
+	  var format = '<%= a.getDateformat().getFormat() %>';
+	  i = 0;
+	     
+      while (true) {       
+       var arrDate = document.getElementsByName("theitinerary[" + i +"].disarrivedate");
+       var depDate = document.getElementsByName("theitinerary[" + i +"].disdepartdate");
+	   if(arrDate == null) {
+			break;
+	   }
+       
+       var arrival = arrDate[i].value;
+       var departure = depDate[i].value;
+       ++i;
+
+       if (isArrivalAndDepartureDateTheSameDayOrOneDayAfter(arrival,format,departure,format) == -1) {
+          alert("<%= (String)myMessages.getMessage(myLocale, "error.usair.arrivalanddeparturedates.rule") %>"); 
+        return false;
+       }
+     }
+     return true;
+  }
   
   function validatereqFields(form, formType)
   {
@@ -94,6 +118,9 @@
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
+        }
+        else {
+          return validateUSAirArrivalAndDepartureDatesRule();
         }
       } 
       else if (currentElementName.indexOf("numpassengers") != -1)

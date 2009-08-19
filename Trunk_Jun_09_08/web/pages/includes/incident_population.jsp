@@ -32,7 +32,7 @@
         </tr>
         <tr>
           <td align="center" valign="top" colspan="12"><html:submit
-            property="doprepopulate" styleId="button" onclick="buttonSelected = 'prepopulate'">
+            property="doprepopulate1" styleId="button" onclick="buttonSelected = 'prepopulate'">
             <bean:message key="button.populate" />
           </html:submit> <html:submit property="skip_prepopulate" styleId="button"  onclick="buttonSelected = null">
             <bean:message key="button.skip_populate"/>

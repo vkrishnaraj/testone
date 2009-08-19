@@ -52,37 +52,47 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			StringBuffer str = new StringBuffer(256);
 			
 			str.append("Baggage Forward Message+");
+			
+			str.append("OHD                  " + dto.getOnhand() + "+");
 			if (stringExists(dto.getTagNumber())) {
 				str.append("Tag Number           " + dto.getTagNumber() + "+");
 			} else if (stringExists(dto.getExpediteNumber())) {
 				str.append("Expedite Number      " + dto.getExpediteNumber() +"+");
 			}
 
-			GregorianCalendar cal = new GregorianCalendar();
-			cal.setTime(dto.getFinalFlightDepartureDate());
-			
-			int day = cal.get(Calendar.DAY_OF_MONTH);
-			int month = cal.get(Calendar.MONTH);
+			int day = 0;
 			String monthStr = "";
-			switch (month) {
-				case Calendar.JANUARY: monthStr = "JAN"; break;
-				case Calendar.FEBRUARY: monthStr = "FEB"; break;
-				case Calendar.MARCH: monthStr = "MAR"; break;
-				case Calendar.APRIL: monthStr = "APR"; break;
-				case Calendar.MAY: monthStr = "MAY"; break;
-				case Calendar.JUNE: monthStr = "JUN"; break;
-				case Calendar.JULY: monthStr = "JUL"; break;
-				case Calendar.AUGUST: monthStr = "AUG"; break;
-				case Calendar.SEPTEMBER: monthStr = "SEP"; break;
-				case Calendar.OCTOBER: monthStr = "OCT"; break;
-				case Calendar.NOVEMBER: monthStr = "NOV"; break;
-				case Calendar.DECEMBER: monthStr = "DEC"; break;
+			String finalFlightDate = "";
+			if(dto.getFinalFlightDepartureDate() != null) {
+				GregorianCalendar cal = new GregorianCalendar();
+				cal.setTime(dto.getFinalFlightDepartureDate());
+				
+				day = cal.get(Calendar.DAY_OF_MONTH);
+				int month = cal.get(Calendar.MONTH);
+				
+				switch (month) {
+					case Calendar.JANUARY: monthStr = "JAN"; break;
+					case Calendar.FEBRUARY: monthStr = "FEB"; break;
+					case Calendar.MARCH: monthStr = "MAR"; break;
+					case Calendar.APRIL: monthStr = "APR"; break;
+					case Calendar.MAY: monthStr = "MAY"; break;
+					case Calendar.JUNE: monthStr = "JUN"; break;
+					case Calendar.JULY: monthStr = "JUL"; break;
+					case Calendar.AUGUST: monthStr = "AUG"; break;
+					case Calendar.SEPTEMBER: monthStr = "SEP"; break;
+					case Calendar.OCTOBER: monthStr = "OCT"; break;
+					case Calendar.NOVEMBER: monthStr = "NOV"; break;
+					case Calendar.DECEMBER: monthStr = "DEC"; break;
+				}	
+				finalFlightDate = "/" + day + monthStr;
 			}
+
+						
+			
+			str.append("Final Flight         " + dto.getFinalFlightAirline() + dto.getFinalFlightNumber() + finalFlightDate + "+");
 			
 			
-			String finalFlightDate = day + monthStr;
 			
-			str.append("Final Flight         " + dto.getFinalFlightAirline() + dto.getFinalFlightNumber() +"/" + finalFlightDate + "+");
 			str.append("Final Destination    " + dto.getFinalDestination() +"+");
 			str.append("Reason for Loss      " + dto.getReasonForLoss() +"+");
 			str.append("Mishandling Station  " + dto.getFaultStation() +"+");
@@ -90,6 +100,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			
 			// Call USAir Web Service to send message
 			SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
+			logger.info(str.toString());
 			try {
 				iw.sendTelex(str.toString(), dto.getSpecialInstructions());
 			} catch (Exception e) {

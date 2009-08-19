@@ -573,7 +573,7 @@ public class OnHandAction extends CheckedAction {
 					// Begin Prepopulate
 					
 					ArrayList alerrors = new ArrayList();
-					if (request.getParameter("doprepopulate") != null) {
+					if (request.getParameter("doprepopulate") != null && request.getParameter("doprepopulate").length() > 0) {
 						alerrors.addAll(SpringUtils.getReservationIntegration().populateOhdForm(request, theform));
 
 						if (alerrors.size() > 0) {

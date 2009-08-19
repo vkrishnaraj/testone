@@ -370,6 +370,7 @@ public class BagService {
 		bdto.setFinalFlightAirline(finalFlightAirline);
 		bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
 		bdto.setTagNumber(form.getBag_tag());
+		bdto.setOnhand(oDTO.getOHD_ID());
 		
 		try {
 			SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);

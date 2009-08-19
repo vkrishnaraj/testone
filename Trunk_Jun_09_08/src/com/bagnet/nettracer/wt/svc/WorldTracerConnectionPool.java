@@ -24,7 +24,8 @@ public class WorldTracerConnectionPool extends GenericObjectPool {
 		
 		Company_Specific_Variable comsv = AdminUtils.getCompVariable(companyCode);
 		if (comsv.getWt_enabled() == 0) {
-			throw new WorldTracerConnectionException("worldtracer not enabled");
+			return;
+			//throw new WorldTracerConnectionException("worldtracer not enabled");
 		}
 
 		this.host = comsv.getWt_url();

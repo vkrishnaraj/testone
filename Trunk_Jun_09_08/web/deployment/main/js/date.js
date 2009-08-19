@@ -99,6 +99,44 @@ function compareDates(date1,dateformat1,date2,dateformat2) {
 	return 0;
 	}
 
+//------------------------------------------------------------------
+//isArrivalAndDepartureDateTheSameDayOrOneDayAfter(dateDepart,dfDepart,
+//		dateArrive,dfArrive)
+//First to make sure both dates are valid and arrival is after departure;
+//then to make sure that departure is the same day as arrival or one day
+//after.
+//Returns:
+//1 if Arrival Date is within one day after Departure Date
+//0 if Arrival Date is the same as Departure Date
+//-1 if otherwise
+//------------------------------------------------------------------
+function isArrivalAndDepartureDateTheSameDayOrOneDayAfter(dateDepart,dfDepart,dateArrive,dfArrive){
+
+	var resultFromCompareDates = compareDates(dateDepart,dfDepart,dateArrive,dfArrive);
+	if(resultFromCompareDates == 0) {
+		return 0;
+		} 
+	else if(resultFromCompareDates == -1) {
+		var dDepart=getDateFromFormat(dateDepart,dfDepart);
+		var dArrive=getDateFromFormat(dateArrive,dfArrive);
+		alert("dDepart=" + dDepart + " and dArrive=" + dArrive);
+		var one_day=1000*60*60*24;
+		var two_day=one_day*2;
+		
+		if(two_day > (dArrive - dDepart)) {
+			alert("(dArrive - dDepart)=" + (dArrive - dDepart));
+			return 1;
+			} 
+		else {
+			return -1;
+			}
+		} 
+	else {
+		return -1;
+		}
+	}
+
+
 // ------------------------------------------------------------------
 // formatDate (date_object, format)
 // Returns a date in the output format specified.
