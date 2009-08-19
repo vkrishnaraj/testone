@@ -79,7 +79,17 @@ function disableButton(aButton) {
       if (buttonSelected == null) {
         return true;
       } else {
-        return validateRest(form);
+        if (validateRest(form) == true) {
+            //assign value to hidden field doprepopulate
+            form.doprepopulate.value = 11;
+            disableButton(form.doprepopulate1);
+      
+            return true;
+        } else {
+        	return false;
+        } 
+        
+        //return validateRest(form);
       } 
       return true;
     }
@@ -88,7 +98,7 @@ function disableButton(aButton) {
   
   <html:form action="missing.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/validation_incl.jsp" />
-    
+    <html:hidden property="doprepopulate" value="" />
     <tr>
       <td colspan="3" id="pageheadercell">
       <div id="pageheaderleft">
