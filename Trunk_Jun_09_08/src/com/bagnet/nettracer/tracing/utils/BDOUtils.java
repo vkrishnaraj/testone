@@ -183,7 +183,7 @@ public class BDOUtils {
 			OHD ohd_obj = null;
 			for (int i = 0; i < iDTO.getItemlist().size(); i++) {
 				item = (Item) iDTO.getItemlist().get(i);
-				if (item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY) {
+				if (item != null && item.getStatus().getStatus_ID() != TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY) {
 					theform.getItemlist().add(item);
 					// find out if this l/d bag is matched to ohd
 					ohd_obj = oBMO.findOHDByID(item.getOHD_ID());

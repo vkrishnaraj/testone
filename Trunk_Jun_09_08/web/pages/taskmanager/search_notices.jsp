@@ -156,13 +156,7 @@
         </tr>
         <tr>
           <td colspan="6">
-<%
-                  if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
-%>
                     <input type="button" value="<bean:message key="button.closenotices" />" onClick="closeNotices()" id="button">
-<%
-                  }
-%>
           </td>
         </tr>        
       </table>

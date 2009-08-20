@@ -42,8 +42,35 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 
 		if (expenseForm.getUpdateExpense() != null) {
 			st.setStatus_ID(expenseForm.getStatus_id());
-			if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
-				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
+			if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED 
+					|| expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
+				
+				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
+				Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
+				if (Math.abs(ep.getCheckamt()) > 0.001) {
+					if (csv.getMin_interim_approval_check() >= -0.001
+							&& (csv.getMin_interim_approval_check() - Math.abs(ep.getCheckamt())) < -0.001) {
+						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
+					}
+				}
+				if (Math.abs(ep.getMileageamt()) > 0) {
+					if (csv.getMin_interim_approval_miles() >= -0.001
+							&& (csv.getMin_interim_approval_miles() - Math.abs(ep.getMileageamt())) < -0.001) {
+						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
+					}
+				}
+				if (Math.abs(ep.getVoucheramt()) > 0.001) {
+					if (csv.getMin_interim_approval_voucher() >= -0.001
+							&& (csv.getMin_interim_approval_voucher() - Math.abs(ep.getVoucheramt())) < -0.001) {
+						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
+					}
+				}
+				if (Math.abs(ep.getCreditCardRefund()) > 0.001) {
+					if (csv.getMin_interim_approval_cc_refund() >= -0.001
+							&& (csv.getMin_interim_approval_cc_refund() - Math.abs(ep.getCreditCardRefund())) < -0.001) {
+						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
+					}
+				}
 			}
 			addComment(ep, user, "expense.comment.updated", expenseForm.getNewComment());
 		} else if (expenseForm.getApproveExpense() != null) {

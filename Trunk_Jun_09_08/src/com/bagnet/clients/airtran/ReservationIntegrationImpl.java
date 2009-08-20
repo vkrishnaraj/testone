@@ -324,16 +324,6 @@ public class ReservationIntegrationImpl extends
 		else
 			theform.setNumbagchecked(1);
 
-		// set new remark with current time and current agent
-		Remark r = theform.getRemark(theform.getRemarklist().size());
-		r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT)
-				.format(TracerDateTime.getGMTDate()));
-		r.setAgent(user);
-		r.set_DATEFORMAT(user.getDateformat().getFormat());
-		r.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
-				user.getDefaulttimezone()).getTimezone()));
-
 		// create new article
 		if (itemtype == TracingConstants.MISSING_ARTICLES) {
 			Articles a = theform.getArticle(0);

@@ -340,6 +340,12 @@ public class ExpensePayoutForm extends ActionForm {
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		ActionErrors errs = new ActionErrors();
+		
+		if (dateFormat == null) {
+			Agent user = (Agent) request.getSession().getAttribute("user");
+			this.dateFormat = user.getDateformat().getFormat();
+			this.tz = user.getCurrenttimezone();
+		}
 
 		try {
 			this.approval_date = parseUserDate(dispApproval_date);

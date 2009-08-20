@@ -93,15 +93,20 @@ public class LostDelayReceipt {
 		parameters.put("creditfile_amt", "0.00");
 		parameters.put("creditfile_exp", "");
 		parameters.put("incidental_amt", "0.00");
+		
+		double totalVoucher = 0;
+		double incidentalAmt = 0;
 		for(ExpensePayout payout : (Iterable<ExpensePayout>)theform.getExpenselist()) {
 			if(payout.getVoucheramt() > 0.05) {
-				parameters.put("creditfile_amt", String.format("%01.2f", payout.getVoucheramt()));
+				totalVoucher += payout.getVoucheramt();
+				parameters.put("creditfile_amt", String.format("%01.2f", totalVoucher));
 			}
 			if(payout.getVoucherExpirationDate() != null) {
 				parameters.put("creditfile_exp", DateUtils.formatDate(payout.getVoucherExpirationDate(), user.getDateformat().getFormat(), user.getCurrentlocale(), TimeZone.getTimeZone(user.getCurrenttimezone())));
 			}
 			if(payout.getIncidentalAmountAuth() > 0.05) {
-				parameters.put("incidental_amt", String.format("%01.2f", payout.getIncidentalAmountAuth()));
+				incidentalAmt += payout.getIncidentalAmountAuth();
+				parameters.put("incidental_amt", String.format("%01.2f", incidentalAmt));
 			}
 			if(payout.getCurrency_ID() != null && payout.getCurrency_ID().trim().length() > 0) {
 				parameters.put("currency_id", payout.getCurrency_ID());
