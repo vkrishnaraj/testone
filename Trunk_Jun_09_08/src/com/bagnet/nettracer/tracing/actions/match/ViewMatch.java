@@ -419,13 +419,16 @@ public final class ViewMatch extends Action {
 			if (ohd.getHoldingStation().getStation_ID() == incident.getStationassigned().getStation_ID()) {
 				if (has_matched) {
 					ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED));
+					ohd.setMatched_incident(incident.getIncident_ID());
 					oBMO.insertOHD(ohd, user);
 				} else if (has_unmatched) {
 					ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
+					ohd.setMatched_incident(null);
 					oBMO.insertOHD(ohd, user);
 				}
 			} else if (has_matched && ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
 				ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT));
+				ohd.setMatched_incident(incident.getIncident_ID());
 				oBMO.insertOHD(ohd, user);
 			}
 		}

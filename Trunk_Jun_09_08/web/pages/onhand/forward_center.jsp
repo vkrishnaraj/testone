@@ -26,7 +26,23 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <script language="javascript">
-  
+
+  var buttonSelected = null;
+  function validateThis(form) {
+    if (buttonSelected == null) {
+      return true;
+    } else {
+      if (validateMessageForm(form) && setExpediteNum(form))  {
+          form.save.value="1";
+          disableButton(buttonSelected);
+          return true;
+    	}
+      buttonSelected = null;
+      return false;
+    } 
+    return true;
+  }
+
   function getstations() {
     o = document.incidentForm;
     o.getstation.value="1";
@@ -44,6 +60,13 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
         countfield.value = maxlimit - field.value.length;
       }
     }
+
+    function disableButton(aButton) {
+    	aButton.disabled = true;
+    	aButton.value= "<bean:message key='ajax.please_wait' />";
+    }
+
+    
 
   var cal1xx = new CalendarPopup(); 
 
@@ -203,11 +226,14 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
   }
 
 
+  
+
+
 </script>
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
 <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="forward_message.do" method="post">
+  <html:form action="forward_message.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       
@@ -522,7 +548,8 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
                 <td colspan="2" align="center">
                   <INPUT type="button" Id="button" value="Back" onClick="history.back()">
                   &nbsp;
-                  <html:submit styleId="button" property="save" onclick="return (validateMessageForm(this.form) && setExpediteNum(this.form)); ">
+                  <input type="hidden" name="save" value="" />
+                  <html:submit styleId="button" property="save1" onclick="buttonSelected = this;">
                     <bean:message key="button.forward" />
                   </html:submit>
                 </td>

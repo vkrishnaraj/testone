@@ -181,6 +181,9 @@
             </td>
             <td>
               <html:select name="agentForm" property="group_id" styleClass="dropdown">
+				<html:option value="">
+                  <bean:message key="select.please_select" />
+                </html:option>
                 <html:options collection="grouplist" property="value" labelProperty="label" />
               </html:select>
             </td>
@@ -447,12 +450,21 @@
 	function validateStation() {
 		var element = (document.getElementsByName('station_id'))[0];
 		if (element.value != '') {
-			return true;
 		} else {
-			alert("No station has been selected.  This may result from the agent's present station being disabled.");
-
+			alert("<bean:message key="agent.save.nostation" />");
+			element.focus();
+			return false;
 		}
-		return false;
+		element = null;
+		element = (document.getElementsByName('group_id'))[0];
+		if (element.value != '') {
+		} else {
+			alert("<bean:message key="agent.save.nogroup" />");
+			element.focus();
+			return false;
+		}
+		
+		return true;
 	}
     
 	</script>

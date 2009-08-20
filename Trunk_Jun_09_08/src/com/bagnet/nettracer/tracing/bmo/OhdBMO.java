@@ -917,7 +917,7 @@ public class OhdBMO {
 			if (siDTO.getProvince() != null && siDTO.getProvince().length() > 0)
 				s.append(" and (address.province like :province)");
 			if (siDTO.getCountrycode_ID().length() > 0) {
-				s.append(" and (address.countrycode_ID like :countrycode_ID");
+				s.append(" and (address.countrycode_ID like :countrycode_ID)");
 			}
 			if (siDTO.getZip().length() > 0) s.append(" and address.zip like :zip");
 			if (siDTO.getPhone().length() > 0) s
@@ -971,7 +971,7 @@ public class OhdBMO {
 			}
 
 			if (!iscount) s.append(" order by ohd.OHD_ID");
-			
+			logger.info(s.toString());
 			q = sess.createQuery(s.toString());
 			
 			if (rowsperpage > 0) {

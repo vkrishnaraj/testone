@@ -633,25 +633,9 @@ public class MatchUtils {
 
 	public static void matchToOhd(int matchId, OHD ohd, Agent agent) {
 		String incidentId = MatchUtils.matchedOHD(matchId, ohd);
-
-		if (incidentId != null) {
-			Session sess = HibernateWrapper.getSession().openSession();
-			OHD myOhd = OhdBMO.getOHDByID(ohd.getOHD_ID(), sess);
-			myOhd.setMatched_incident(incidentId);
-			OhdBMO.updateOHD(myOhd, agent, sess);
-			sess.close();
-			
-		}
 	}
 
 	public static void unmatchTheOHD(String ohd_id, Agent agent) {
 		unmatchOHD(ohd_id);
-
-		Session sess = HibernateWrapper.getSession().openSession();
-		OHD myOhd = OhdBMO.getOHDByID(ohd_id, sess);
-		myOhd.setMatched_incident(null);
-		OhdBMO.updateOHD(myOhd, agent, sess);
-		sess.close();
-			
 	}
 }

@@ -15,6 +15,7 @@ import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
@@ -366,11 +367,23 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			message.append("BAG TAG #:          ");
 			message.append(StringUtils.join(tags, ", ") + newline);
 			
+			finalSegment.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
+			finalSegment.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_C);
+			
 			if (newFlightValuesValidAndPresent) {
-				if (finalSegment.getAirline() != null && finalSegment.getFlightnum() != null) {
-					message.append("NEW FLIGHT #:       " + finalSegment.getAirline() + " " + finalSegment.getFlightnum());
+				
+				String newFlight = "";
+				if (finalSegment.getAirline() != null) {
+					newFlight += finalSegment.getAirline() + " ";
+				}
+				if (finalSegment.getFlightnum() != null) {
+					newFlight += finalSegment.getFlightnum();
+				}
+				
+				if (finalSegment.getFlightnum() != null) {
+					message.append("NEW FLIGHT #:       " + newFlight + newline);
 				  if (finalSegment.getScharrivetime() != null && finalSegment.getArrivedate() != null) {
-				  	message.append(" ESTIMATED ARRIVAL: " + finalSegment.getDisscharrivetime() 
+				  	message.append("ESTIMATED ARRIVAL: " + finalSegment.getDisscharrivetime() 
 				  			+ " " + finalSegment.getDisarrivedate() + newline);
 				  } else {
 				  	message.append(newline);

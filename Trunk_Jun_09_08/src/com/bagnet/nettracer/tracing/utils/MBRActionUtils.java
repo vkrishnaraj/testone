@@ -69,8 +69,7 @@ public class MBRActionUtils {
 		while (e.hasMoreElements()) {
 			String parameter = (String) e.nextElement();
 			if (parameter.indexOf("addinventory") > -1) {
-				String index = parameter.substring(parameter.indexOf("[")+1, java.lang.Math.min(parameter.indexOf("]"), parameter.length()));
-				
+				String index = parameter.substring(parameter.indexOf("[")+1, java.lang.Math.min(parameter.indexOf("]"), parameter.length()));				
 				numberToAdd = getNumberToAdd(request, "addNumInventory[" + index + "]" );
 				fileindex = Integer.parseInt(parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]")));
 				

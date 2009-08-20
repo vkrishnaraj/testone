@@ -77,11 +77,11 @@ public class OsiAction extends Action {
 			
 			HibernateUtils.save(osi, sess);
 			
-			Audit_OtherSystemInformation auditOsi = new Audit_OtherSystemInformation();
-			BeanUtils.copyProperties(auditOsi, osi);
-			auditOsi.setModifying_agent(user);
-			auditOsi.setTime_modified(TracerDateTime.getGMTDate());
-			HibernateUtils.save(auditOsi, sess);
+//			Audit_OtherSystemInformation auditOsi = new Audit_OtherSystemInformation();
+//			BeanUtils.copyProperties(auditOsi, osi);
+//			auditOsi.setModifying_agent(user);
+//			auditOsi.setTime_modified(TracerDateTime.getGMTDate());
+//			HibernateUtils.save(auditOsi, sess);
 			
 		} else {
 			// GET OSI OR CREATE NEW OSI

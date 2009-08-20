@@ -184,6 +184,7 @@ public class TracingConstants {
 	public final static String DISPLAY_DATEFORMAT = "MM/dd/yyyy";
 	public final static String DISPLAY_TIMEFORMAT = "hh:mm:ss a";
 	public final static String DISPLAY_TIMEFORMAT_B = "hh:mm a";
+	public final static String DISPLAY_TIMEFORMAT_C = "HH:mm";
 	
 	public final static String DB_DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public final static String DB_DATEFORMAT = "yyyy-MM-dd";

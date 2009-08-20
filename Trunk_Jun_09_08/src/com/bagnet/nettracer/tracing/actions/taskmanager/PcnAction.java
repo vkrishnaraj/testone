@@ -82,16 +82,16 @@ public class PcnAction extends Action {
 			dto.setDestinationStation(user.getStation().getStation_ID());
 		}
 			
-		if (theForm.getMissedFlightAirline() == null) {
-			theForm.setMissedFlightAirline(user.getCompanycode_ID());
-			dto.setMissedFlightAirline(user.getCompanycode_ID());
-		}
-		
-		if (theForm.getMissedFlightDate() == null) {
-			SimpleDateFormat tmp = new SimpleDateFormat(user.getDateformat().getFormat());
-			tmp.setTimeZone(TimeZone.getDefault());
-			theForm.setMissedFlightDate(tmp.format(TracerDateTime.getGMTDate()));
-		}
+//		if (theForm.getMissedFlightAirline() == null) {
+//			theForm.setMissedFlightAirline(user.getCompanycode_ID());
+//			dto.setMissedFlightAirline(user.getCompanycode_ID());
+//		}
+//		
+//		if (theForm.getMissedFlightDate() == null) {
+//			SimpleDateFormat tmp = new SimpleDateFormat(user.getDateformat().getFormat());
+//			tmp.setTimeZone(TimeZone.getDefault());
+//			theForm.setMissedFlightDate(tmp.format(TracerDateTime.getGMTDate()));
+//		}
 	
 		
 		int rowcount = ProactiveNotificationBMO.getCount(dto, user);

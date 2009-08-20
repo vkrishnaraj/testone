@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -452,8 +453,20 @@ public class BDOUtils {
 			OhdBMO oBMO = new OhdBMO();
 			OHD ohd = bdo.getOhd();
 
-			// Find out if this l/d bag is matched to OHD
-			if (ohd != null) {
+			// If the BDO is matched
+			if (bdo.getItems().size() > 0) {
+				Set<Item> items =(Set<Item>) bdo.getItems();
+				for (Item item:  items) {
+					if (item != null) {
+						if (item.getOHD_ID() != null) {
+							ohd = OhdBMO.getOHDByID(item.getOHD_ID(), null);
+							ohd.setStatus(StatusBMO.getStatus(
+									TracingConstants.OHD_STATUS_PROCESSFORDELIVERY));
+							oBMO.insertOHD(ohd, agent);
+						}
+					}
+				}
+			} else if (ohd != null) {
 				ohd.setStatus(StatusBMO.getStatus(
 						TracingConstants.OHD_STATUS_PROCESSFORDELIVERY));
 				oBMO.insertOHD(ohd, agent);

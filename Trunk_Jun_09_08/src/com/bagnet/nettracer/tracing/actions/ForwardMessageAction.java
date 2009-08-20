@@ -91,7 +91,7 @@ public class ForwardMessageAction extends Action {
 			OHD_Itinerary itinerary = theform.getBagItinerary(theform.getBagitinerarylist().size());
 			itinerary.set_DATEFORMAT(user.getDateformat().getFormat());
 			itinerary.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		} else if (request.getParameter("save") != null) {
+		} else if (request.getParameter("save") != null && request.getParameter("save").length() > 0) {
 			//Invalid or no destination is selected.
 			if (theform.getDestStation() == null || theform.getDestStation().equals("")) {
 				ActionMessage error = new ActionMessage("error.noStationcode");

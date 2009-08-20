@@ -242,13 +242,13 @@
                   if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
 %>
                     <input type="button" value="<bean:message key="button.closenotices" />" onClick="closeNotices()" id="button">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_TELEX_PRINTER)) { %>
-                      <html:text property="printerAddress" />
-                      <input type="button" value="<bean:message key="button.printNotices" />" onClick="printNotices()" id="button">
-                    <% } %>
 <%
                   }
 %>
+                 <% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_TELEX_PRINTER)) { %>
+                   <html:text property="printerAddress" />
+                   <input type="button" value="<bean:message key="button.printNotices" />" onClick="printNotices()" id="button">
+                 <% } %>
           </td>
         </tr>        
         

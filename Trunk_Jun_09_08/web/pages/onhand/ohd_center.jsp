@@ -272,7 +272,9 @@ function gotoHistoricalReport() {
         <b><bean:message key="message.matched_to" /> <a href='searchIncident.do?incident=<c:out value="${OnHandForm.matched_incident}" />'><c:out value="${OnHandForm.matched_incident}" /></a></b><br />
       </c:if>
       <%
-         if (onHandForm.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) {
+         if (onHandForm.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_CLOSED &&
+        		 onHandForm.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT &&
+        		 onHandForm.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_IN_TRANSIT) {
                   if (a.getCompanycode_ID().equals(onHandForm.getHolding_company())
                         && a.getStation().getStationcode().equals(
                               onHandForm.getHolding_station())) {
