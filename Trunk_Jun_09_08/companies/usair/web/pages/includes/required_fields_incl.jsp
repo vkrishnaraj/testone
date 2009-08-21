@@ -21,28 +21,35 @@
     return true;
   }
 
-  function validateUSAirArrivalAndDepartureDatesRule()
+  function validateUSAirArrivalAndDepartureDatesRule(i,arrayName)
   {
-	  var format = '<%= a.getDateformat().getFormat() %>';
-	  i = 0;
-	     
-      while (true) {       
-       var arrDate = document.getElementsByName("theitinerary[" + i +"].disarrivedate");
-       var depDate = document.getElementsByName("theitinerary[" + i +"].disdepartdate");
-	   if(arrDate == null) {
-			break;
-	   }
-       
-       var arrival = arrDate[i].value;
-       var departure = depDate[i].value;
-       ++i;
-
-       if (isArrivalAndDepartureDateTheSameDayOrOneDayAfter(arrival,format,departure,format) == -1) {
-          alert("<%= (String)myMessages.getMessage(myLocale, "error.usair.arrivalanddeparturedates.rule") %>"); 
-        return false;
-       }
-     }
-     return true;
+	returnValue = true;
+	
+	var format = '<%= a.getDateformat().getFormat() %>';
+	var arrivalField = document.getElementById(arrayName + i +"].disarrivedate");
+    var departureField = document.getElementById(arrayName + i +"].disdepartdate");
+       	
+    if(arrivalField!=null && departureField!=null) {
+      	var arrival=arrivalField.value;
+        var departure=departureField.value;
+          	
+   		var myDateDepart=getDateFromFormat(departure,format);
+   		var myDateArrive=getDateFromFormat(arrival,format);
+    	   
+		var one_day_plus_one=1000*60*60*24 + 1;
+		var diffDateDepartDateArrive = myDateArrive - myDateDepart;
+		if((one_day_plus_one > diffDateDepartDateArrive) && (0 <= diffDateDepartDateArrive)) {
+			//alert("dateArrive is the same day as or one day after dateDepart !");
+			returnValue = true;
+		} else {
+			returnValue = false;
+			departureField.focus();
+			alert("<%= (String)myMessages.getMessage(myLocale, "error.usair.arrivalanddeparturedates.rule") %>");
+		}
+    }
+       	
+	
+    return returnValue;
   }
   
   function validatereqFields(form, formType)
@@ -53,6 +60,7 @@
     var firstAddressIndex = -1;
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
+    var myItineraryDateIndex = -1;
     
     for (var j=0;j < form.length; j++) {
       currentElement = form.elements[j];
@@ -73,7 +81,7 @@
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         firstAddressIndex = currentElementName.substring(left+1, right);
-      }
+      } 
     }
     
     returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
@@ -118,10 +126,7 @@
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
-        }
-        else {
-          return validateUSAirArrivalAndDepartureDatesRule();
-        }
+        } 
       } 
       else if (currentElementName.indexOf("numpassengers") != -1)
       {  
@@ -174,6 +179,17 @@
           return false;
         }
       }
+      else if (currentElementName.indexOf("theitinerary[") != -1 && currentElementName.indexOf("disdepartdate") != -1) {  
+          
+          var left = currentElementName.indexOf("[");
+          var right = currentElementName.indexOf("]");
+          myItineraryDateIndex=currentElementName.substring(left+1, right);
+	      if (currentElement.value.length != 0)
+	      {
+		    retVal = validateUSAirArrivalAndDepartureDatesRule(myItineraryDateIndex,'theitinerary[');
+		    if (retVal == false) { return false; }
+	      }
+      } 
     }
     
 
@@ -234,6 +250,17 @@
           return false;
         }
       }
+      else if (currentElementName.indexOf("itinerarylist[") != -1 && currentElementName.indexOf("disdepartdate") != -1) {  
+          
+          var left = currentElementName.indexOf("[");
+          var right = currentElementName.indexOf("]");
+          myItineraryDateIndex=currentElementName.substring(left+1, right);
+	      if (currentElement.value.length != 0)
+	      {
+		    retVal = validateUSAirArrivalAndDepartureDatesRule(myItineraryDateIndex,'itinerarylist[');
+		    if (retVal == false) { return false; }
+	      }
+      } 
     }
     return true;
   }
