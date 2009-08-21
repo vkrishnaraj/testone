@@ -150,7 +150,7 @@
         <td>
         <html:select property="missedFlightAirline" styleClass="dropdown">
           <html:option value="">
-            <bean:message key="select.none" />
+            <bean:message key="select.all" />
           </html:option>
           <html:options collection="companylistByName"
             property="companyCode_ID" labelProperty="companydesc" />
