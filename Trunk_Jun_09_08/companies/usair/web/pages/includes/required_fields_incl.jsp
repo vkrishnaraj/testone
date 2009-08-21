@@ -38,8 +38,7 @@
     	   
 		var one_day_plus_one=1000*60*60*24 + 1;
 		var diffDateDepartDateArrive = myDateArrive - myDateDepart;
-		if((one_day_plus_one > diffDateDepartDateArrive) && (0 <= diffDateDepartDateArrive)) {
-			//alert("dateArrive is the same day as or one day after dateDepart !");
+		if((diffDateDepartDateArrive < one_day_plus_one) && (diffDateDepartDateArrive >= 0)) {
 			returnValue = true;
 		} else {
 			returnValue = false;
