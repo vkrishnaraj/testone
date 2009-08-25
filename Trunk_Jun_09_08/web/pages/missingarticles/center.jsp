@@ -80,7 +80,7 @@ function disableButton(aButton) {
         return true;
       } else {
         if (validateRest(form) == true) {
-            //assign value to hidden field doprepopulate
+            
             form.doprepopulate.value = 11;
             disableButton(form.doprepopulate1);
       
@@ -89,7 +89,7 @@ function disableButton(aButton) {
         	return false;
         } 
         
-        //return validateRest(form);
+        
       } 
       return true;
     }
