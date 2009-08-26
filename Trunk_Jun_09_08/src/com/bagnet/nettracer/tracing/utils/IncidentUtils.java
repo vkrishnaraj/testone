@@ -173,7 +173,7 @@ public class IncidentUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(ItemType.class);
 			cri.add(Expression.eq("itemType_ID", new Integer(type_id)));
-			cri.add(Expression.eq("locale", locale));
+//			cri.add(Expression.eq("locale", locale));
 			return (ItemType) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
