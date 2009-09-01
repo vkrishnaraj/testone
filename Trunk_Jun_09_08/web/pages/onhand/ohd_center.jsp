@@ -40,7 +40,7 @@
             return true;
          } else {
             if (validateRest(form) == true) {
-                 //assign value to hidden field doprepopulate
+                 
                  form.doprepopulate.value = 11;
                  disableButton(form.doprepopulate1);
            
@@ -48,7 +48,7 @@
             } else {
              	return false;
             }              
-            //return validateRest(form);
+            
          } 
          return true;
       }
