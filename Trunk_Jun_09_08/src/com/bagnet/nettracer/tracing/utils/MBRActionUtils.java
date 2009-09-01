@@ -816,13 +816,19 @@ public class MBRActionUtils {
 
 						// if bag is at the report station, change both status to open
 						// again
-
-						if (ohd_obj != null & ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
-							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
-							if (bdo == null) {
-								// if no bdo, then change ohd status, otherwise leave it as is
+						
+						if (ohd_obj != null ) {
+							if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
+								item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));	
+								if (bdo == null) {
+									// if no bdo, then change ohd status, otherwise leave it as is
+									ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
+								}
+							} else {
 								ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
 							}
+							
+							ohd_obj.setMatched_incident(null);
 							oBMO.insertOHD(ohd_obj, theform.getAgent());
 						} else {
 							// change item to open only

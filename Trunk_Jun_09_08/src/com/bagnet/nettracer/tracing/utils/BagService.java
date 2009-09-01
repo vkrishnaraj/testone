@@ -142,7 +142,23 @@ public class BagService {
 			log.setForward_time(TracerDateTime.getGMTDate());
 			log.setMessage(form.getMessage());
 			log.setDestStationCode(Integer.parseInt(form.getDestStation()));
-			log.setItinerary(new HashSet(form.getItinerarylist()));
+			
+			HashSet<OHD_Log_Itinerary> newItinSet = new HashSet<OHD_Log_Itinerary>();
+			
+			for (OHD_Log_Itinerary i: (List<OHD_Log_Itinerary>) form.getItinerarylist()) {
+				OHD_Log_Itinerary ii = new OHD_Log_Itinerary();
+				try {
+					BeanUtils.copyProperties(ii, i);
+					ii.setLog(log);
+					newItinSet.add(ii);
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			log.setItinerary(newItinSet);
 			log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 			OHD_Log_Itinerary oli = null;
 			
