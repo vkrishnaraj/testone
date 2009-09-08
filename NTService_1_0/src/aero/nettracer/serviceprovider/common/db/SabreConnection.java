@@ -103,12 +103,12 @@ public class SabreConnection {
 	}
 
 	public String getConversation() {
-		return conversation;
+		return "NTSESSION" + id;
 	}
 
-	public void setConversation(String conversation) {
-		this.conversation = conversation;
-	}
+//	public void setConversation(String conversation) {
+//		this.conversation = conversation;
+//	}
 
 	@Column(length = 20)
 	private String domain;

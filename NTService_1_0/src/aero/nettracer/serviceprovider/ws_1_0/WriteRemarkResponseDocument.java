@@ -16,7 +16,7 @@ package aero.nettracer.serviceprovider.ws_1_0;
  */
 public interface WriteRemarkResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WriteRemarkResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s415A2E0AAF8C512FA4F2CB86373D7DD9")
+            "schemaorg_apache_xmlbeans.system.s72AC0240CDCB7D5C0FD050B1FA2B4C94")
                                                                                                                            .resolveHandle("writeremarkresponseecc3doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface WriteRemarkResponseDocument extends org.apache.xmlbeans.XmlObje
      */
     public interface WriteRemarkResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WriteRemarkResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s415A2E0AAF8C512FA4F2CB86373D7DD9")
+                "schemaorg_apache_xmlbeans.system.s72AC0240CDCB7D5C0FD050B1FA2B4C94")
                                                                                                                                .resolveHandle("writeremarkresponse9337elemtype");
 
         /**

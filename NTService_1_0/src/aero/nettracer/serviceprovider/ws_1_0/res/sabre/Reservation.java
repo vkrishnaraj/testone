@@ -2,18 +2,22 @@ package aero.nettracer.serviceprovider.ws_1_0.res.sabre;
 
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument;
+import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument.MessageHeader;
+import org.ebxml.www.namespaces.messageheader.PartyIdDocument.PartyId;
 import org.opentravel.www.ota._2002._11.SessionCloseRQDocument;
 import org.opentravel.www.ota._2002._11.SessionCloseRSDocument;
 import org.opentravel.www.ota._2002._11.SessionCreateRQDocument;
 import org.opentravel.www.ota._2002._11.SessionCreateRSDocument;
 import org.opentravel.www.ota._2002._11.SessionValidateRQDocument;
 import org.opentravel.www.ota._2002._11.SessionValidateRSDocument;
-import org.opentravel.www.ota._2002._11.SessionCreateRQDocument.SessionCreateRQ.POS.Source;
 import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
 import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument.Security;
 import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument.Security.UsernameToken;
@@ -22,6 +26,7 @@ import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.SabreConnection;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.UnexpectedException;
+import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
@@ -75,8 +80,21 @@ public class Reservation implements ReservationInterface {
 	private static final String ADD_REMARK = "ADD REMARK: ";
 	private static final String VALIDATE_SESSION = "VALIDATE SESSION: ";
 	private static final String NATIVE_COMMAND = "SABRE_NATIVE_COMMAND: ";
-
+	private static final String ACTION_SESSION_CREATE_RQ = "SessionCreateRQ";
+	private static final String ACTION_SESSION_CLOSE_RQ = "SessionCloseRQ";
+	private static final String ACTION_GENERIC_RQ = "SabreCommandLLSRQ";
+	private static final String ACTION_ADD_REMARK_RQ = "AddRemarkLLSRQ";
+	private static final String ACTION_END_RQ = "EndTransactionLLSRQ";
+	private static final String ACTION_IGNORE_RQ = "IgnoreTransactionLLSRQ";
+	private static final String ACTION_TRAVEL_ITINERARY_RQ = "OTA_TravelItineraryReadLLSRQ";
+	private static final String ACTION_SESSION_VALIDATE_RQ = "SessionValidateRQ";
+	
+	private static PartyId basicPartyId = PartyId.Factory.newInstance();
 	private static Logger logger = Logger.getLogger(Reservation.class);
+	
+	static {
+		basicPartyId.setStringValue("1");
+	}
 
 	@Override
 	public EnplanementResponse getEnplanements(User user) {
@@ -102,9 +120,8 @@ public class Reservation implements ReservationInterface {
 		try {
 			connParams = (SabreConnection) pool.borrowObject();
 			
-			
 			if (pnr == null && bagTag != null) {
-				// TODO: GO RETRIEVE RECORD LOCATOR
+				throw new RuntimeException("This feature not capable of implementation.");
 			}
 
 			OTATravelItineraryRSDocument doc = loadPnr(connParams, pnr, true);
@@ -117,7 +134,7 @@ public class Reservation implements ReservationInterface {
 			PersonName[] pns = cust.getPersonNameArray();
 			CustLoyalty[] custLoyalty = cust.getCustLoyaltyArray();			
 			Email[] email = cust.getEmailArray();
-			
+			Telephone[] telephones = cust.getTelephoneArray();
 			ItemType[] items = ti.getItineraryInfo().getReservationItems().getItemArray();
 			
 			for (ItemType item: items) {
@@ -144,28 +161,59 @@ public class Reservation implements ReservationInterface {
 					
 				}
 			}
-			
 
-			// TODO: What to do with these?
-			Telephone[] tel = cust.getTelephoneArray();
-			
 			res.setPaxAffected(pns.length);
+			Passenger firstPax = null;
 			
 			for (int i=0; i<pns.length; ++i) {
 				PersonName pn = pns[i];
 				Passenger pax = res.addNewPassengers();
 				String paxKey = pn.getTPAExtensions().getNameNumber().getNumber();
 				paxMap.put(paxKey, pax);
+				if (firstPax == null) {
+					firstPax = pax;
+				}
 
 				pax.setFirstname(pn.getGivenName());
 				pax.setLastname(pn.getSurname());
-				pax.addNewAddresses();
+				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address add = pax.addNewAddresses();
 				
 				if (i == 0) {
-					// TODO: Add address data
 					Address padd = cust.getAddress();
+					String[] lines = padd.getAddressLineArray();
+					
+					String x = StringUtils.join(lines, " ");
+					if (x.length() > 0) {
+						x = x.trim();
+						
+						if (x.length() > 49) {
+							ArrayList<String> al = ServiceUtilities.splitOnWordBreak(x, 49);
+							add.setAddress1(al.get(0));
+							if (al.size() > 1) {
+								add.setAddress2(al.get(1));
+							}
+						} else {
+							add.setAddress1(x);
+						}
+					}
+
 				}
 			}
+			
+			for (int i=0; i< telephones.length; ++i) {
+				Telephone tel = telephones[i];
+				switch (i) {
+					case 0: firstPax.getAddresses().setHomePhone(tel.getPhoneNumber());
+							break;
+					case 1: firstPax.getAddresses().setMobilePhone(tel.getPhoneNumber());
+							break;
+					case 2: firstPax.getAddresses().setAltPhone(tel.getPhoneNumber());
+							break;
+					case 3: firstPax.getAddresses().setWorkPhone(tel.getPhoneNumber());
+							break;
+				}
+			}
+
 			
 			for (CustLoyalty custL: custLoyalty) {
 				Passenger pax = paxMap.get(custL.getNameNumber());
@@ -181,19 +229,18 @@ public class Reservation implements ReservationInterface {
 			}
 			
 			
-			// TODO: SET
-			int numberChecked = 0;
-			
-			res.setNumberChecked(numberChecked);
 			res.setPnr(doc.getOTATravelItineraryRS().getTravelItinerary().getItineraryRef().getID());
-			res.setCheckedLocation(0);
+			
 			res.setNilOsi();
 			
+			// TODO: Need to get claim checks & associated book dates.
 			//String command = "";
 			//genericCommand(connParams, command);
 
-			//Currently being done in the return
-			//ignoreTransaction(connParams);
+			int numberChecked = 0;
+			int checkedLocation = 0;
+			res.setNumberChecked(numberChecked);
+			res.setCheckedLocation(checkedLocation);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -247,7 +294,7 @@ public class Reservation implements ReservationInterface {
 					connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_GENERIC_RQ);
 			SabreCommandLLSRQDocument rqDoc = SabreCommandLLSRQDocument.Factory
 					.newInstance();
 			rqDoc.addNewSabreCommandLLSRQ().addNewRequest().setHostCommand(command);
@@ -255,7 +302,7 @@ public class Reservation implements ReservationInterface {
 			logger.info(NATIVE_COMMAND + connParams.getLoggingString() + " Command: " + command);
 
 			SabreCommandLLSRSDocument responseDocument =stub.sabreCommandLLSRQ(rqDoc,
-					null, securityDocument);
+					mhDoc, securityDocument);
 
 			logger.info(NATIVE_COMMAND + responseDocument.toString());
 
@@ -273,7 +320,7 @@ public class Reservation implements ReservationInterface {
 					connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_ADD_REMARK_RQ);
 			AddRemarkRQDocument rqDoc = AddRemarkRQDocument.Factory
 					.newInstance();
 			BasicRemark br = rqDoc.addNewAddRemarkRQ().addNewBasicRemark();
@@ -282,7 +329,7 @@ public class Reservation implements ReservationInterface {
 			logger.info(ADD_REMARK + connParams.getLoggingString() + " Remark: " + remark);
 
 			AddRemarkRSDocument responseDocument = stub.addRemarkRQ(rqDoc,
-					null, securityDocument);
+					mhDoc, securityDocument);
 
 			logger.info(ADD_REMARK + responseDocument.toString());
 
@@ -300,7 +347,7 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_END_RQ);
 			EndTransactionRQDocument rqDoc = EndTransactionRQDocument.Factory
 					.newInstance();
 			EndTransactionRQ rqDoc1 = rqDoc.addNewEndTransactionRQ();
@@ -308,7 +355,7 @@ public class Reservation implements ReservationInterface {
 			logger.info(END_TRANSACTION + connParams.getLoggingString());
 
 			EndTransactionRSDocument responseDocument = stub.endTransactionRQ(
-					rqDoc, null, securityDocument);
+					rqDoc, mhDoc, securityDocument);
 
 			logger.info(END_TRANSACTION + responseDocument.toString());
 
@@ -327,21 +374,18 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_IGNORE_RQ);
 			IgnoreTransactionRQDocument rqDoc = IgnoreTransactionRQDocument.Factory
 					.newInstance();
 			IgnoreTransactionRQ rqDoc1 = rqDoc.addNewIgnoreTransactionRQ();
 
-			// com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument.IgnoreTransactionRQ.POS.Source
-			// source =
-			// rqDoc1.addNewPOS().addNewSource();
-			// source.setPseudoCityCode(connParams.getPseudoCityCode());
+
 			rqDoc1.addNewIgnoreTransaction().setInd(true);
 
 			logger.info(IGNORE_TRANSACTION + connParams.getLoggingString());
 
 			IgnoreTransactionRSDocument responseDocument = stub
-					.ignoreTransactionRQ(rqDoc, null, securityDocument);
+					.ignoreTransactionRQ(rqDoc, mhDoc, securityDocument);
 
 			logger.info(IGNORE_TRANSACTION + responseDocument.toString());
 
@@ -360,7 +404,7 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_TRAVEL_ITINERARY_RQ);
 			OTATravelItineraryReadRQDocument rqDoc = OTATravelItineraryReadRQDocument.Factory
 					.newInstance();
 			OTATravelItineraryReadRQ readRq = rqDoc
@@ -368,15 +412,11 @@ public class Reservation implements ReservationInterface {
 			UniqueID id = readRq.addNewUniqueID();
 			id.setID(pnr);
 
-			// com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument.OTATravelItineraryReadRQ.POS.Source
-			// source = readRq
-			// .addNewPOS().addNewSource();
-			// source.setPseudoCityCode(connParams.getPseudoCityCode());
 
 			logger.info(LOAD_PNR_NO_DATA + connParams.getLoggingString());
 
 			OTATravelItineraryRSDocument responseDocument = stub
-					.oTA_TravelItineraryReadRQ(rqDoc, null, securityDocument);
+					.oTA_TravelItineraryReadRQ(rqDoc, mhDoc, securityDocument);
 
 			logger.info(LOAD_PNR_NO_DATA + responseDocument.toString());
 			
@@ -396,18 +436,13 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_SESSION_CLOSE_RQ);
 			SessionCloseRQDocument rqDoc = SessionCloseRQDocument.Factory
 					.newInstance();
-			// org.opentravel.www.ota._2002._11.SessionCloseRQDocument.SessionCloseRQ.POS.Source
-			// source = rqDoc
-			// .addNewSessionCloseRQ().addNewPOS().addNewSource();
-			//
-			// source.setPseudoCityCode(connParams.getPseudoCityCode());
 
 			logger.info(CLOSE_PREFIX + connParams.getLoggingString());
 			SessionCloseRSDocument responseDocument = stub.sessionCloseRQ(
-					rqDoc, null, securityDocument);
+					rqDoc, mhDoc, securityDocument);
 
 			logger.info(CLOSE_PREFIX + responseDocument.toString());
 
@@ -425,19 +460,63 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_SESSION_VALIDATE_RQ);
 			SessionValidateRQDocument rqDoc = SessionValidateRQDocument.Factory
 					.newInstance();
 
 			logger.info(VALIDATE_SESSION + connParams.getLoggingString());
 			SessionValidateRSDocument responseDocument = stub
-					.sessionValidateRQ(rqDoc, null, securityDocument);
+					.sessionValidateRQ(rqDoc, mhDoc, securityDocument);
 			
 
 			logger.info(VALIDATE_SESSION + responseDocument.toString());
 
 		} catch (RemoteException e) {
 			logger.error(VALIDATE_SESSION + "Error closing session: ", e);
+			throw e;
+		}
+	}
+
+	public static void createSession(SabreConnection connParams)
+			throws RemoteException {
+		try {
+			SessionCreateRQServiceStub2 stub = new SessionCreateRQServiceStub2(
+					null, connParams.getEndpoint());
+
+			SecurityDocument securityDocument = SecurityDocument.Factory
+					.newInstance();
+			UsernameToken token = securityDocument.addNewSecurity()
+					.addNewUsernameToken();
+			token.setUsername(connParams.getUsername());
+			token.setOrganization(connParams.getOrganization());
+			token.setPassword(connParams.getPassword());
+			token.setDomain(connParams.getDomain());
+			
+
+			SessionCreateRQDocument rqDoc = SessionCreateRQDocument.Factory
+					.newInstance();
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_SESSION_CREATE_RQ);
+			rqDoc.addNewSessionCreateRQ();
+
+			logger.info(CREATE_PREFIX + connParams.getLoggingString());
+
+			SessionCreateRSDocument responseDocument = stub.sessionCreateRQ(
+					rqDoc, mhDoc, securityDocument);
+			logger.debug(CREATE_PREFIX + responseDocument.toString());
+			
+			
+			String status = responseDocument.getSessionCreateRS().getStatus();
+			String binarySecurityToken = stub.getBinarySecurityToken();
+			connParams.setBinarySecurityToken(binarySecurityToken);
+
+			logger.debug(CREATE_PREFIX + responseDocument.toString());
+			logger.info(CREATE_PREFIX + "Status Received: "
+					+ status);
+			logger.info(CREATE_PREFIX + "Binary Security Token Received: "
+					+ binarySecurityToken);
+
+		} catch (RemoteException e) {
+			logger.error(CREATE_PREFIX + "Error creating session: ", e);
 			throw e;
 		}
 	}
@@ -455,42 +534,15 @@ public class Reservation implements ReservationInterface {
 		token.setDomain(connParams.getDomain());
 		return securityDocument;
 	}
-
-	public static void createSession(SabreConnection connParams)
-			throws RemoteException {
-		try {
-			SessionCreateRQServiceStub2 stub = new SessionCreateRQServiceStub2(
-					null, connParams.getEndpoint());
-
-			SecurityDocument securityDocument = SecurityDocument.Factory
-					.newInstance();
-			UsernameToken token = securityDocument.addNewSecurity()
-					.addNewUsernameToken();
-			token.setUsername(connParams.getUsername());
-			token.setOrganization(connParams.getOrganization());
-			token.setPassword(connParams.getPassword());
-			token.setDomain(connParams.getDomain());
-
-			SessionCreateRQDocument rqDoc = SessionCreateRQDocument.Factory
-					.newInstance();
-			Source source = rqDoc.addNewSessionCreateRQ().addNewPOS()
-					.addNewSource();
-			source.setPseudoCityCode(connParams.getPseudoCityCode());
-
-			logger.info(CREATE_PREFIX + connParams.getLoggingString());
-
-			SessionCreateRSDocument responseDocument = stub.sessionCreateRQ(
-					rqDoc, null, securityDocument);
-			String binarySecurityToken = stub.getBinarySecurityToken();
-			connParams.setBinarySecurityToken(binarySecurityToken);
-
-			logger.info(CREATE_PREFIX + responseDocument.toString());
-			logger.info(CREATE_PREFIX + "Binary Security Token Received: "
-					+ binarySecurityToken);
-
-		} catch (RemoteException e) {
-			logger.error(CREATE_PREFIX + "Error creating session: ", e);
-			throw e;
-		}
+	
+	private static MessageHeaderDocument getMessageHeader(
+			SabreConnection connParams, String action) {
+		MessageHeaderDocument mhDoc = MessageHeaderDocument.Factory.newInstance();
+		MessageHeader mh = mhDoc.addNewMessageHeader();
+		mh.addNewFrom().setPartyIdArray(0, basicPartyId);
+		mh.addNewTo().setPartyIdArray(0, basicPartyId);			
+		mh.setConversationId(connParams.getConversation());
+		mh.setAction(action);
+		return mhDoc;
 	}
 }

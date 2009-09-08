@@ -3,7 +3,7 @@
 	<property file="user.properties" />
 	<property file="common.properties" />
 	<property environment="env" />
-	<property name="lib" value="lib/jars" />
+	<property name="lib" value="lib" />
 	<property name="lib.build-client.dir" value="${root.dir}\\lib" />
 	
 	<patternset id="jar.files">
@@ -22,7 +22,7 @@
 		<fileset dir="${basedir}/lib">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="${basedir}/lib/jars">
+		<fileset dir="${basedir}/lib/wslib">
 			<patternset refid="jar.files" />
 		</fileset>		
 	</path>

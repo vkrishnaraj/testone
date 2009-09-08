@@ -124,9 +124,6 @@
             <xs:complexType name="WebServiceError">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="CONFIGURATION_ERROR" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="UNEXPECTED_EXCEPTION" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="USER_NOT_AUTHORIZED" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Reservation">
