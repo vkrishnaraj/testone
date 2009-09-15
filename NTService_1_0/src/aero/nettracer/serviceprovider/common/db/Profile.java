@@ -9,7 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.MapKey;
 import org.hibernate.annotations.Parameter;
@@ -22,6 +25,8 @@ import org.hibernate.type.EnumType;
 @Proxy(lazy = true)
 public class Profile {
 
+	
+	
 	@Id
 	@GeneratedValue
 	private long id;

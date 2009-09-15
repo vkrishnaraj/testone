@@ -20,7 +20,7 @@ import org.hibernate.annotations.Proxy;
 public class SabreConnection {
 
 	@Transient
-	public static final String LOAD_BY_PERMISSION = "loadByProfile";
+	public static final String LOAD_BY_PROFILE = "loadByProfile";
 
 	@Transient
 	private int state = LOGGED_OUT_STATE;

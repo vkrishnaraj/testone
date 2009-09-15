@@ -1,5 +1,6 @@
 package aero.nettracer.serviceprovider.ws_1_0.common;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Itinerary {
@@ -7,6 +8,7 @@ public class Itinerary {
 	private String arrivalCity;
 	private String airline;
 	private String flightnum;
+	
 
 	// These will be used to populate fields (local time).
 	// The will be used to determine if a field can be
@@ -22,6 +24,15 @@ public class Itinerary {
 	private Date scharrivetimeGmt;
 	private Date actdeparttimeGmt;
 	private Date actarrivetimeGmt;
+	private Calendar timeChecked;
+
+	public Calendar getTimeChecked() {
+		return timeChecked;
+	}
+
+	public void setTimeChecked(Calendar timeChecked) {
+		this.timeChecked = timeChecked;
+	}
 
 	// Also known as an ARNK (pronounced arunk)
 	private boolean arrivalUnknown;

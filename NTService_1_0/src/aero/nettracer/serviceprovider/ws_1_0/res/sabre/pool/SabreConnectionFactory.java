@@ -15,7 +15,7 @@ public class SabreConnectionFactory extends BasePoolableObjectFactory {
 	private volatile int itemsUsed = 0;
 	private static Logger logger = Logger.getLogger(SabreConnectionFactory.class);
 
-	public SabreConnectionFactory(int profile, List<SabreConnection> connections) {
+	public SabreConnectionFactory(long profile, List<SabreConnection> connections) {
 		this.connections = connections;
 	}
 

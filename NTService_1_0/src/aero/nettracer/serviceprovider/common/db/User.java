@@ -29,7 +29,7 @@ import aero.nettracer.serviceprovider.common.pojo.UserProvidedParameters;
 public class User {
 	 
 	@Transient
-	public static final String LOAD_BY_PERMISSION = "loadByUsername";
+	public static final String LOAD_BY_USERNAME = "loadByUsername";
 
 	@Id
 	@GeneratedValue

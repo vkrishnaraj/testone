@@ -83,5 +83,14 @@
 	<classpathentry kind="lib" path="lib/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/asm-attrs.jar"/>
 	<classpathentry kind="lib" path="lib/asm.jar"/>
+	<classpathentry kind="lib" path="lib/opensaml-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/rampart-core-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/rampart-policy-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/rampart-trust-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/wss4j-1.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/xmlsec-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/rahas-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/rampart-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jars/ReservationService_1_0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

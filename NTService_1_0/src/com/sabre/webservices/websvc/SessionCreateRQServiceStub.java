@@ -1,22 +1,11 @@
-// PLEASE READ COMMENTS IMMEDIATELY BELOW
+
 /**
- * SessionCreateRQServiceStub2.java
+ * SessionCreateRQServiceStub.java
  *
- * This file was modified from the automatically generated Axis2 file
- * to allow for access to the binary security token in the generated
- * response.
- * 
+ * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT)
  */
         package com.sabre.webservices.websvc;
-
-import java.util.Iterator;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axiom.om.OMElement;
-import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument;
-import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
 
         
 
@@ -25,7 +14,7 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
         */
 
         
-        public class SessionCreateRQServiceStub2 extends org.apache.axis2.client.Stub
+        public class SessionCreateRQServiceStub extends org.apache.axis2.client.Stub
         {
         protected org.apache.axis2.description.AxisOperation[] _operations;
 
@@ -35,22 +24,8 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
         private java.util.HashMap faultMessageMap = new java.util.HashMap();
 
         private static int counter = 0;
-        
-        private String binarySecurityToken = null;
 
-
-
-		public String getBinarySecurityToken() {
-			return binarySecurityToken;
-		}
-
-
-		public void setBinarySecurityToken(String binarySecurityToken) {
-			this.binarySecurityToken = binarySecurityToken;
-		}
-
-
-		private static synchronized java.lang.String getUniqueSuffix(){
+        private static synchronized java.lang.String getUniqueSuffix(){
             // reset the counter if it is greater than 99999
             if (counter > 99999){
                 counter = 0;
@@ -96,7 +71,7 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
       *Constructor that takes in a configContext
       */
 
-    public SessionCreateRQServiceStub2(org.apache.axis2.context.ConfigurationContext configurationContext,
+    public SessionCreateRQServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext,
        java.lang.String targetEndpoint)
        throws org.apache.axis2.AxisFault {
          this(configurationContext,targetEndpoint,false);
@@ -106,7 +81,7 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
    /**
      * Constructor that takes in a configContext  and useseperate listner
      */
-   public SessionCreateRQServiceStub2(org.apache.axis2.context.ConfigurationContext configurationContext,
+   public SessionCreateRQServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext,
         java.lang.String targetEndpoint, boolean useSeparateListener)
         throws org.apache.axis2.AxisFault {
          //To populate AxisService
@@ -126,7 +101,7 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
     /**
      * Default Constructor
      */
-    public SessionCreateRQServiceStub2(org.apache.axis2.context.ConfigurationContext configurationContext) throws org.apache.axis2.AxisFault {
+    public SessionCreateRQServiceStub(org.apache.axis2.context.ConfigurationContext configurationContext) throws org.apache.axis2.AxisFault {
         
                     this(configurationContext,"https://webservices.sabre.com/websvc" );
                 
@@ -135,7 +110,7 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
     /**
      * Default Constructor
      */
-    public SessionCreateRQServiceStub2() throws org.apache.axis2.AxisFault {
+    public SessionCreateRQServiceStub() throws org.apache.axis2.AxisFault {
         
                     this("https://webservices.sabre.com/websvc" );
                 
@@ -144,7 +119,7 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
     /**
      * Constructor taking the target endpoint
      */
-    public SessionCreateRQServiceStub2(java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
+    public SessionCreateRQServiceStub(java.lang.String targetEndpoint) throws org.apache.axis2.AxisFault {
         this(null,targetEndpoint);
     }
 
@@ -231,12 +206,6 @@ import org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument;
                org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(
                                            org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
                 org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
-
-                  org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument object2 = (org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument) fromOM(
-                		  _returnEnv.getHeader().getFirstChildWithName(new QName("http://schemas.xmlsoap.org/ws/2002/12/secext", "Security", "wsse")) ,
-                  org.xmlsoap.schemas.ws._2002._12.secext.SecurityDocument.class,
-                   getEnvelopeNamespaces(_returnEnv));
-          binarySecurityToken = object2.getSecurity().getBinarySecurityToken();
                 
                 
                                 java.lang.Object object = fromOM(

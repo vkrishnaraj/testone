@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument;
@@ -27,9 +31,13 @@ import aero.nettracer.serviceprovider.common.db.SabreConnection;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.UnexpectedException;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
+import aero.nettracer.serviceprovider.ws_1_0.common.xsd.ClaimCheck;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
+import aero.nettracer.serviceprovider.ws_1_0.res.sabre.dto.SabreParseDTO;
+import aero.nettracer.serviceprovider.ws_1_0.res.sabre.dto.SabreParsedBagItin;
+import aero.nettracer.serviceprovider.ws_1_0.res.sabre.dto.SabreParsedBags;
 import aero.nettracer.serviceprovider.ws_1_0.res.sabre.pool.SabrePool;
 import aero.nettracer.serviceprovider.ws_1_0.res.sabre.pool.SabrePoolManager;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.EnplanementResponse;
@@ -88,13 +96,8 @@ public class Reservation implements ReservationInterface {
 	private static final String ACTION_IGNORE_RQ = "IgnoreTransactionLLSRQ";
 	private static final String ACTION_TRAVEL_ITINERARY_RQ = "OTA_TravelItineraryReadLLSRQ";
 	private static final String ACTION_SESSION_VALIDATE_RQ = "SessionValidateRQ";
-	
-	private static PartyId basicPartyId = PartyId.Factory.newInstance();
+
 	private static Logger logger = Logger.getLogger(Reservation.class);
-	
-	static {
-		basicPartyId.setStringValue("1");
-	}
 
 	@Override
 	public EnplanementResponse getEnplanements(User user) {
@@ -102,16 +105,16 @@ public class Reservation implements ReservationInterface {
 	}
 
 	@Override
-	public OsiResponse getOsiContents(User user, String pnr,
-			String bagTag) {
+	public OsiResponse getOsiContents(User user, String pnr, String bagTag) {
 		return null;
 	}
 
 	@Override
-	public ReservationResponse getReservationData(User user,
-			String pnr, String bagTag) throws UnexpectedException {
+	public ReservationResponse getReservationData(User user, String pnr,
+			String bagTag) throws UnexpectedException {
 
-		ReservationResponse response = ReservationResponse.Factory.newInstance();
+		ReservationResponse response = ReservationResponse.Factory
+				.newInstance();
 		HashMap<String, Passenger> paxMap = new HashMap<String, Passenger>();
 
 		SabrePool pool = SabrePoolManager.getInstance().getPool(user);
@@ -119,56 +122,68 @@ public class Reservation implements ReservationInterface {
 
 		try {
 			connParams = (SabreConnection) pool.borrowObject();
-			
+
 			if (pnr == null && bagTag != null) {
-				throw new RuntimeException("This feature not capable of implementation.");
+				throw new RuntimeException(
+						"This feature not capable of implementation.");
 			}
 
-			OTATravelItineraryRSDocument doc = loadPnr(connParams, pnr, true);
-			TravelItinerary ti = doc.getOTATravelItineraryRS().getTravelItinerary(); 
-			Customer cust = ti.getCustomerInfos().getCustomerInfo().getCustomer();
-			
-			aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation res = response.addNewReservation();
-			
-			
+			OTATravelItineraryRSDocument doc = loadPnr(connParams, pnr, false);
+			TravelItinerary ti = doc.getOTATravelItineraryRS()
+					.getTravelItinerary();
+			Customer cust = ti.getCustomerInfos().getCustomerInfo()
+					.getCustomer();
+
+			aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation res = response
+					.addNewReservation();
+
 			PersonName[] pns = cust.getPersonNameArray();
-			CustLoyalty[] custLoyalty = cust.getCustLoyaltyArray();			
+			CustLoyalty[] custLoyalty = cust.getCustLoyaltyArray();
 			Email[] email = cust.getEmailArray();
 			Telephone[] telephones = cust.getTelephoneArray();
-			ItemType[] items = ti.getItineraryInfo().getReservationItems().getItemArray();
-			
-			for (ItemType item: items) {
+			ItemType[] items = ti.getItineraryInfo().getReservationItems()
+					.getItemArray();
+
+			for (ItemType item : items) {
 				Air[] airs = item.getAirArray();
-				for (Air air: airs) {
+				for (Air air : airs) {
 					Itinerary itin = res.addNewPassengerItinerary();
-					itin.setDepartureCity(air.getDepartureAirport().getLocationCode());
-					itin.setArrivalCity(air.getArrivalAirport().getLocationCode());
+					itin.setDepartureCity(air.getDepartureAirport()
+							.getLocationCode());
+					itin.setArrivalCity(air.getArrivalAirport()
+							.getLocationCode());
 					itin.setFlightnum(air.getFlightNumber());
 					String depTime = air.getDepartureDateTime();
 					String arrTime = air.getArrivalDateTime();
-					
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy-MM-dd'T'HH:mm:ss");
 					Calendar schdeparttime = new GregorianCalendar();
 					Calendar scharrivetime = new GregorianCalendar();
-					
+
 					schdeparttime.setTime(sdf.parse(depTime));
 					scharrivetime.setTime(sdf.parse(arrTime));
-					
+
 					itin.setSchdeparttime(schdeparttime);
 					itin.setScharrivetime(scharrivetime);
-					itin.setAirline(air.getMarketingAirline().getCode());
+					if (air.getMarketingAirline() != null) {
+						itin.setAirline(air.getMarketingAirline().getCode());
+					} else if (air.getOperatingAirline() != null) {
+						itin.setAirline(air.getOperatingAirline().getCode());
+					}
 					air.getArrivalDateTime();
-					
+
 				}
 			}
 
 			res.setPaxAffected(pns.length);
 			Passenger firstPax = null;
-			
-			for (int i=0; i<pns.length; ++i) {
+
+			for (int i = 0; i < pns.length; ++i) {
 				PersonName pn = pns[i];
 				Passenger pax = res.addNewPassengers();
-				String paxKey = pn.getTPAExtensions().getNameNumber().getNumber();
+				String paxKey = pn.getTPAExtensions().getNameNumber()
+						.getNumber();
 				paxMap.put(paxKey, pax);
 				if (firstPax == null) {
 					firstPax = pax;
@@ -176,89 +191,148 @@ public class Reservation implements ReservationInterface {
 
 				pax.setFirstname(pn.getGivenName());
 				pax.setLastname(pn.getSurname());
-				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address add = pax.addNewAddresses();
-				
+				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address add = pax
+						.addNewAddresses();
+
 				if (i == 0) {
-					Address padd = cust.getAddress();
-					String[] lines = padd.getAddressLineArray();
-					
-					String x = StringUtils.join(lines, " ");
-					if (x.length() > 0) {
-						x = x.trim();
-						
-						if (x.length() > 49) {
-							ArrayList<String> al = ServiceUtilities.splitOnWordBreak(x, 49);
-							add.setAddress1(al.get(0));
-							if (al.size() > 1) {
-								add.setAddress2(al.get(1));
+					if (cust.getAddress() != null) {
+						Address padd = cust.getAddress();
+						String[] lines = padd.getAddressLineArray();
+
+						String x = StringUtils.join(lines, " ");
+						if (x.length() > 0) {
+							x = x.trim();
+
+							if (x.length() > 49) {
+								ArrayList<String> al = ServiceUtilities
+										.splitOnWordBreak(x, 49);
+								add.setAddress1(al.get(0));
+								if (al.size() > 1) {
+									
+									add.setAddress2(al.get(1));
+								}
+							} else {
+								add.setAddress1(x);
 							}
-						} else {
-							add.setAddress1(x);
 						}
 					}
-
 				}
 			}
 			
-			for (int i=0; i< telephones.length; ++i) {
+			ArrayList<String> numbersLeftToAdd = new ArrayList<String>();
+			Pattern p = Pattern.compile("([0-9\\-]*)(-[HCBFA])");
+			
+			
+			for (int i = 0; i < telephones.length; ++i) {
 				Telephone tel = telephones[i];
-				switch (i) {
-					case 0: firstPax.getAddresses().setHomePhone(tel.getPhoneNumber());
-							break;
-					case 1: firstPax.getAddresses().setMobilePhone(tel.getPhoneNumber());
-							break;
-					case 2: firstPax.getAddresses().setAltPhone(tel.getPhoneNumber());
-							break;
-					case 3: firstPax.getAddresses().setWorkPhone(tel.getPhoneNumber());
-							break;
+				
+				String phone = tel.getPhoneNumber();
+				String phoneText = phone;
+				Matcher m = p.matcher(phone);
+				
+				if (m.find()) {
+					phoneText = m.group(1);
+				} 
+				
+				if (phone.contains("-H")) {
+					firstPax.getAddresses().setHomePhone(phoneText);
+				} else if (phone.contains("-C")) {
+					firstPax.getAddresses().setMobilePhone(phoneText);
+				}else if (phone.contains("-B")) {
+					firstPax.getAddresses().setWorkPhone(phoneText);
+				}else if (phone.contains("-F")) {
+					firstPax.getAddresses().setAltPhone(phoneText);
+				}else if (phone.contains("-A")) {
+					firstPax.getAddresses().setAltPhone(phoneText);
+				} else {
+					numbersLeftToAdd.add(phone);
+				}
+			}
+			
+			for (String phone : numbersLeftToAdd) {
+				if (firstPax.getAddresses().getHomePhone() != null) {
+					firstPax.getAddresses().setHomePhone(phone);
+				} else if (firstPax.getAddresses().getMobilePhone() != null) {
+					firstPax.getAddresses().setMobilePhone(phone);
+				} else if (firstPax.getAddresses().getWorkPhone() != null) {
+					firstPax.getAddresses().setWorkPhone(phone);
+				} else if (firstPax.getAddresses().getAltPhone() != null) {
+					firstPax.getAddresses().setAltPhone(phone);
 				}
 			}
 
-			
-			for (CustLoyalty custL: custLoyalty) {
+			for (CustLoyalty custL : custLoyalty) {
 				Passenger pax = paxMap.get(custL.getNameNumber());
 				pax.setFfAirline(custL.getProgramID());
 				pax.setFfNumber(custL.getMembershipID());
 				pax.setFfStatus(custL.getShortText());
 			}
-			
-			for (Email e: email) {
+
+			for (Email e : email) {
 				Passenger pax = paxMap.get(e.getNameNumber());
-				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address a = pax.getAddresses();
+				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address a = pax
+						.getAddresses();
 				a.setEmailAddress(e.getStringValue());
 			}
-			
-			
-			res.setPnr(doc.getOTATravelItineraryRS().getTravelItinerary().getItineraryRef().getID());
-			
-			res.setNilOsi();
-			
-			// TODO: Need to get claim checks & associated book dates.
-			//String command = "";
-			//genericCommand(connParams, command);
 
-			int numberChecked = 0;
+			res.setPnr(doc.getOTATravelItineraryRS().getTravelItinerary()
+					.getItineraryRef().getID());
+
+			res.setNilOsi();
+
+			
+			String command = "*" + pnr;
+			String commandString = genericCommand(connParams, command);
+			SabreParseDTO dto = parseForBaggageInfo(commandString);
+			
+			int numberChecked = dto.getBags().size();
+			
+			
+			for (SabreParsedBags bag: dto.getBags()) {
+				ClaimCheck check = res.addNewClaimChecks();
+				check.setAirline(bag.getCarrier());
+				check.setTagNumber(bag.getTag());
+				check.setTimeChecked(bag.getCheckedTime());
+			}
+			
+			for (SabreParsedBagItin itin: dto.getItin()) {
+				Itinerary i = res.addNewBagItinerary();
+				i.setAirline(itin.getAirline());
+				i.setArrivalCity(itin.getArrivalCity());
+//				i.setCheckedTime(itin.getCheckedTime());
+				i.setDepartureCity(itin.getDepartureCity());
+				i.setFlightnum(itin.getFlight());
+			}
+
+			
 			int checkedLocation = 0;
-			res.setNumberChecked(numberChecked);
-			res.setCheckedLocation(checkedLocation);
+			if (numberChecked > 0) {
+				res.setNumberChecked(numberChecked);
+			}
+			
+			if (checkedLocation > 0) {
+				res.setCheckedLocation(checkedLocation);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Error: ", e);
 			throw new UnexpectedException();
 		} finally {
 			try {
 				pool.returnObject(connParams);
 			} catch (Exception e) {
 				logger.error("Error: ", e);
-				response.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+				response.addNewError().setDescription(
+						ServiceConstants.UNEXPECTED_EXCEPTION);
 			}
 		}
 		return response;
 	}
 
 	@Override
-	public RemarkResponse writeRemark(User user, String pnr,
-			String remark) throws UnexpectedException {
+	public RemarkResponse writeRemark(User user, String pnr, String remark)
+			throws UnexpectedException {
 		RemarkResponse response = RemarkResponse.Factory.newInstance();
 
 		SabrePool pool = SabrePoolManager.getInstance().getPool(user);
@@ -271,7 +345,6 @@ public class Reservation implements ReservationInterface {
 			addRemark(connParams, remark);
 			endTransaction(connParams);
 
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new UnexpectedException();
@@ -280,53 +353,140 @@ public class Reservation implements ReservationInterface {
 				pool.returnObject(connParams);
 			} catch (Exception e) {
 				logger.error("Error: ", e);
-				response.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+				response.addNewError().setDescription(
+						ServiceConstants.UNEXPECTED_EXCEPTION);
 			}
 		}
 		return response;
 	}
 
-	private void genericCommand(
-			SabreConnection connParams, String command) throws RemoteException {
-		try {
+	public static SabreParseDTO parseForBaggageInfo(String string) {
+			SabreParseDTO retVal = new SabreParseDTO();
+			LinkedHashMap<String,SabreParsedBags> bagMap = new LinkedHashMap<String,SabreParsedBags>();
+			LinkedHashMap<String,SabreParsedBagItin> itinMap = new LinkedHashMap<String,SabreParsedBagItin>();
 			
-			SabreCommandLLSServiceStub stub = new SabreCommandLLSServiceStub(null,
-					connParams.getEndpoint());
+			Pattern p1 = Pattern.compile("BAGGAGE INFORMATION((.*\\n)*)^([A-Z]{3}\\.)", Pattern.MULTILINE);
+			Matcher m = p1.matcher(string);
+			m.find();
+			
+			try {
+				String[] sArray = m.group(1).split("\\n");
+				String airline = null;
+				String flight = null;
+				
+				for (String st: sArray) {
+					SabreParsedBagItin itin = new SabreParsedBagItin();
+					SabreParsedBags bag = new SabreParsedBags();
+					
+					Pattern rtPat = Pattern.compile("ROUTING-([A-Z0-9]{2})\\s*([0-9]{3,})\\s([A-Z]{3})");
+					Pattern bagPat = Pattern.compile("\\s+([A-Z]{3})\\s+([A-Z0-9]{2})\\s+([0-9]{6})\\s-\\sBY\\s+([A-Z]{3})[A-Z0-9]{3,4}\\s([0-9]{4})/([0-9]{2})([A-Z]{3})([0-9]{2})");
+					
+					Matcher m1 = rtPat.matcher(st);
+					Matcher m3 = bagPat.matcher(st);
+					
+					if (m1.find()) {
+						System.out.println("Routing Line: " + m1.group());
+						airline = m1.group(1);
+						flight = m1.group(2);
+		//				arrCity1 = m1.group(3);
+						
+		
+					} else if (m3.find()) {
+						System.out.println("Bag Line: " + m3.group());
+		//				System.out.println(m3.group());
+						String arrCity = m3.group(1);
+						String bagAirline = m3.group(2);
+						String bagTag = m3.group(2) + m3.group(3);
+						String depCity = m3.group(4);
+						String time = m3.group(5) + " " + m3.group(6) + " " + m3.group(7) + " " + m3.group(8);			
+						GregorianCalendar checkedTime = new GregorianCalendar();
+						
+						try {
+							SimpleDateFormat sdf = new SimpleDateFormat("HHmm dd MMM yy");
+							checkedTime.setTime(sdf.parse(time));
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						bag.setTag(bagTag);
+						bag.setCheckedTime(checkedTime);
+						bag.setCarrier(bagAirline);
+						
+						itin.setAirline(airline);
+						itin.setArrivalCity(arrCity);
+						itin.setCheckedTime(checkedTime);
+						itin.setDepartureCity(depCity);
+						itin.setFlight(flight);
+						
+						itinMap.put(itin.key(), itin);
+						bagMap.put(bag.key(), bag);
+					}
+					
+				}
+			} catch (IllegalStateException e) {
+				// Ignore
+			}
+			
+			ArrayList<SabreParsedBags> bags = new ArrayList<SabreParsedBags>();
+			ArrayList<SabreParsedBagItin> itins = new ArrayList<SabreParsedBagItin>();
+			for (String key: bagMap.keySet()) {
+				bags.add(bagMap.get(key));
+			}
+			
+			for (String key: itinMap.keySet()) {
+				itins.add(itinMap.get(key));
+			}
+			retVal.setBags(bags);
+			retVal.setItin(itins);
+			return retVal;
+		}
+
+	public static String genericCommand(SabreConnection connParams, String command)
+			throws RemoteException {
+		try {
+
+			SabreCommandLLSServiceStub stub = new SabreCommandLLSServiceStub(
+					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_GENERIC_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_GENERIC_RQ);
 			SabreCommandLLSRQDocument rqDoc = SabreCommandLLSRQDocument.Factory
 					.newInstance();
-			rqDoc.addNewSabreCommandLLSRQ().addNewRequest().setHostCommand(command);
+			rqDoc.addNewSabreCommandLLSRQ().addNewRequest().setHostCommand(
+					command);
 
-			logger.info(NATIVE_COMMAND + connParams.getLoggingString() + " Command: " + command);
+			logger.info(NATIVE_COMMAND + connParams.getLoggingString()
+					+ " Command: " + command);
 
-			SabreCommandLLSRSDocument responseDocument =stub.sabreCommandLLSRQ(rqDoc,
-					mhDoc, securityDocument);
+			SabreCommandLLSRSDocument responseDocument = stub
+					.sabreCommandLLSRQ(rqDoc, mhDoc, securityDocument);
 
 			logger.info(NATIVE_COMMAND + responseDocument.toString());
+			return responseDocument.getSabreCommandLLSRS().getResponse();
 
 		} catch (RemoteException e) {
 			logger.error(NATIVE_COMMAND + "Error creating session: ", e);
 			throw e;
 		}
-
 	}
 
-	private void addRemark(SabreConnection connParams,
-			String remark) throws RemoteException {
+	public static void addRemark(SabreConnection connParams, String remark)
+			throws RemoteException {
 		try {
 			AddRemarkServiceStub stub = new AddRemarkServiceStub(null,
 					connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_ADD_REMARK_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_ADD_REMARK_RQ);
 			AddRemarkRQDocument rqDoc = AddRemarkRQDocument.Factory
 					.newInstance();
 			BasicRemark br = rqDoc.addNewAddRemarkRQ().addNewBasicRemark();
 			br.setText(remark);
 
-			logger.info(ADD_REMARK + connParams.getLoggingString() + " Remark: " + remark);
+			logger.info(ADD_REMARK + connParams.getLoggingString()
+					+ " Remark: " + remark);
 
 			AddRemarkRSDocument responseDocument = stub.addRemarkRQ(rqDoc,
 					mhDoc, securityDocument);
@@ -339,7 +499,7 @@ public class Reservation implements ReservationInterface {
 		}
 	}
 
-	private void endTransaction(SabreConnection connParams)
+	public static void endTransaction(SabreConnection connParams)
 			throws RemoteException {
 		try {
 
@@ -347,7 +507,8 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_END_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_END_RQ);
 			EndTransactionRQDocument rqDoc = EndTransactionRQDocument.Factory
 					.newInstance();
 			EndTransactionRQ rqDoc1 = rqDoc.addNewEndTransactionRQ();
@@ -365,8 +526,8 @@ public class Reservation implements ReservationInterface {
 		}
 	}
 
-	public static void ignoreTransaction(
-			SabreConnection connParams) throws RemoteException {
+	public static void ignoreTransaction(SabreConnection connParams)
+			throws RemoteException {
 
 		try {
 
@@ -374,11 +535,12 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_IGNORE_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_IGNORE_RQ);
 			IgnoreTransactionRQDocument rqDoc = IgnoreTransactionRQDocument.Factory
 					.newInstance();
 			IgnoreTransactionRQ rqDoc1 = rqDoc.addNewIgnoreTransactionRQ();
-
+			rqDoc1.setVersion("2003A.TsabreXML1.0.1");
 
 			rqDoc1.addNewIgnoreTransaction().setInd(true);
 
@@ -396,15 +558,17 @@ public class Reservation implements ReservationInterface {
 
 	}
 
-	private OTATravelItineraryRSDocument loadPnr(
-			SabreConnection connParams, String pnr, boolean getData) throws RemoteException {
+	public static OTATravelItineraryRSDocument loadPnr(
+			SabreConnection connParams, String pnr, boolean getData)
+			throws RemoteException {
 		try {
 
 			OTA_TravelItineraryServiceStub stub = new OTA_TravelItineraryServiceStub(
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_TRAVEL_ITINERARY_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_TRAVEL_ITINERARY_RQ);
 			OTATravelItineraryReadRQDocument rqDoc = OTATravelItineraryReadRQDocument.Factory
 					.newInstance();
 			OTATravelItineraryReadRQ readRq = rqDoc
@@ -412,14 +576,19 @@ public class Reservation implements ReservationInterface {
 			UniqueID id = readRq.addNewUniqueID();
 			id.setID(pnr);
 
+			OTATravelItineraryRSDocument responseDocument = null;
 
-			logger.info(LOAD_PNR_NO_DATA + connParams.getLoggingString());
+			if (!getData) {
+				logger.info(LOAD_PNR_NO_DATA + connParams.getLoggingString());
 
-			OTATravelItineraryRSDocument responseDocument = stub
-					.oTA_TravelItineraryReadRQ(rqDoc, mhDoc, securityDocument);
+				responseDocument = stub.oTA_TravelItineraryReadRQ(rqDoc, mhDoc,
+						securityDocument);
 
-			logger.info(LOAD_PNR_NO_DATA + responseDocument.toString());
-			
+				logger.info(LOAD_PNR_NO_DATA + responseDocument.toString());
+			} else {
+
+			}
+
 			return responseDocument;
 
 		} catch (RemoteException e) {
@@ -436,9 +605,11 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_SESSION_CLOSE_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_SESSION_CLOSE_RQ);
 			SessionCloseRQDocument rqDoc = SessionCloseRQDocument.Factory
 					.newInstance();
+			rqDoc.addNewSessionCloseRQ();
 
 			logger.info(CLOSE_PREFIX + connParams.getLoggingString());
 			SessionCloseRSDocument responseDocument = stub.sessionCloseRQ(
@@ -452,36 +623,65 @@ public class Reservation implements ReservationInterface {
 		}
 	}
 
-	public static void validateSession(
-			SabreConnection connParams) throws RemoteException {
+	public static void validateSession(SabreConnection connParams)
+			throws RemoteException {
 		try {
 
 			SessionValidateRQServiceStub stub = new SessionValidateRQServiceStub(
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_SESSION_VALIDATE_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_SESSION_VALIDATE_RQ);
 			SessionValidateRQDocument rqDoc = SessionValidateRQDocument.Factory
 					.newInstance();
+			rqDoc.addNewSessionValidateRQ();
 
 			logger.info(VALIDATE_SESSION + connParams.getLoggingString());
 			SessionValidateRSDocument responseDocument = stub
 					.sessionValidateRQ(rqDoc, mhDoc, securityDocument);
-			
 
 			logger.info(VALIDATE_SESSION + responseDocument.toString());
 
 		} catch (RemoteException e) {
-			logger.error(VALIDATE_SESSION + "Error closing session: ", e);
-			throw e;
+			if (!e.getMessage().contains(
+					"The document is not a SessionValidateRS")) {
+				logger.error("Unexpected Error Occurred", e);
+				throw e;
+			}
+
 		}
 	}
 
 	public static void createSession(SabreConnection connParams)
 			throws RemoteException {
 		try {
+
 			SessionCreateRQServiceStub2 stub = new SessionCreateRQServiceStub2(
 					null, connParams.getEndpoint());
+			AxisConfiguration ac = stub._getServiceClient()
+					.getAxisConfiguration();
+			ArrayList al = new ArrayList();
+			al.add(new MustUnderstandHandler());
+			ac.setInPhasesUptoAndIncludingPostDispatch(al);
+
+			// stub._getServiceClient().engageModule("rampart");
+			//
+			// StAXOMBuilder builder;
+			// try {
+			// builder = new StAXOMBuilder("policy.xml");
+			// Policy clientPolicy = PolicyEngine.getPolicy(builder
+			// .getDocumentElement());
+			// Options o = stub._getServiceClient().getOptions();
+			// o.setProperty(RampartMessageData.KEY_RAMPART_POLICY,
+			// clientPolicy);
+			//
+			// } catch (FileNotFoundException e) {
+			//
+			// e.printStackTrace();
+			// } catch (XMLStreamException e) {
+			// e.printStackTrace();
+			// }
 
 			SecurityDocument securityDocument = SecurityDocument.Factory
 					.newInstance();
@@ -491,11 +691,11 @@ public class Reservation implements ReservationInterface {
 			token.setOrganization(connParams.getOrganization());
 			token.setPassword(connParams.getPassword());
 			token.setDomain(connParams.getDomain());
-			
 
 			SessionCreateRQDocument rqDoc = SessionCreateRQDocument.Factory
 					.newInstance();
-			MessageHeaderDocument mhDoc = getMessageHeader(connParams, ACTION_SESSION_CREATE_RQ);
+			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
+					ACTION_SESSION_CREATE_RQ);
 			rqDoc.addNewSessionCreateRQ();
 
 			logger.info(CREATE_PREFIX + connParams.getLoggingString());
@@ -503,15 +703,13 @@ public class Reservation implements ReservationInterface {
 			SessionCreateRSDocument responseDocument = stub.sessionCreateRQ(
 					rqDoc, mhDoc, securityDocument);
 			logger.debug(CREATE_PREFIX + responseDocument.toString());
-			
-			
+
 			String status = responseDocument.getSessionCreateRS().getStatus();
 			String binarySecurityToken = stub.getBinarySecurityToken();
 			connParams.setBinarySecurityToken(binarySecurityToken);
 
 			logger.debug(CREATE_PREFIX + responseDocument.toString());
-			logger.info(CREATE_PREFIX + "Status Received: "
-					+ status);
+			logger.info(CREATE_PREFIX + "Status Received: " + status);
 			logger.info(CREATE_PREFIX + "Binary Security Token Received: "
 					+ binarySecurityToken);
 
@@ -521,7 +719,8 @@ public class Reservation implements ReservationInterface {
 		}
 	}
 
-	private static SecurityDocument getSecurityDocument(SabreConnection connParams) {
+	private static SecurityDocument getSecurityDocument(
+			SabreConnection connParams) {
 		SecurityDocument securityDocument = SecurityDocument.Factory
 				.newInstance();
 
@@ -534,13 +733,16 @@ public class Reservation implements ReservationInterface {
 		token.setDomain(connParams.getDomain());
 		return securityDocument;
 	}
-	
+
 	private static MessageHeaderDocument getMessageHeader(
 			SabreConnection connParams, String action) {
-		MessageHeaderDocument mhDoc = MessageHeaderDocument.Factory.newInstance();
+		MessageHeaderDocument mhDoc = MessageHeaderDocument.Factory
+				.newInstance();
 		MessageHeader mh = mhDoc.addNewMessageHeader();
-		mh.addNewFrom().setPartyIdArray(0, basicPartyId);
-		mh.addNewTo().setPartyIdArray(0, basicPartyId);			
+		PartyId a = mh.addNewFrom().addNewPartyId();
+		PartyId b = mh.addNewTo().addNewPartyId();
+		a.setStringValue("1");
+		b.setStringValue("1");
 		mh.setConversationId(connParams.getConversation());
 		mh.setAction(action);
 		return mhDoc;

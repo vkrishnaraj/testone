@@ -10,12 +10,12 @@ import org.junit.Test;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 
-public class UserTest {
+public class InitialUserTest {
 	public static final String USERNAME = "jetblue";
 	public static final String PASSWORD = "password";
 	public static final String PROFILE_NAME = "JetBlue Prod";
 	
-	@Test
+	//@Test
 	public void test1() {
 		// Generate basic user object
 		User u = new User();
@@ -51,7 +51,7 @@ public class UserTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void test2() {
 		Session sess = HibernateWrapper.getSession().openSession();
 		User u = (User) sess.load(User.class, 1);
@@ -74,7 +74,7 @@ public class UserTest {
 		sess.close();
 	}
 	
-	@Test
+	//@Test
 	public void test3() {
 		Session sess = HibernateWrapper.getSession().openSession();
 		User u = (User) sess.load(User.class, 1);
@@ -99,7 +99,7 @@ public class UserTest {
 		assert(p.getParameters().size() == 2);
 	}
 	
-	@Test
+	//@Test
 	public void test4() {
 		Session sess = HibernateWrapper.getSession().openSession();
 		User u = (User) sess.load(User.class, 1);

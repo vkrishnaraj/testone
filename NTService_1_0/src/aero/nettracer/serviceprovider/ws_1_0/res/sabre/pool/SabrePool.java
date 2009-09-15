@@ -15,11 +15,11 @@ public class SabrePool extends GenericObjectPool {
 	
 	private List<SabreConnection> connections = null;
 	
-	public SabrePool(int profile) {
+	public SabrePool(long profile) {
 		super();
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		Query q = sess.getNamedQuery(User.LOAD_BY_PERMISSION);
+		Query q = sess.getNamedQuery(SabreConnection.LOAD_BY_PROFILE);
 		q.setParameter("profile", profile);
 		connections = q.list();
 		sess.close();
