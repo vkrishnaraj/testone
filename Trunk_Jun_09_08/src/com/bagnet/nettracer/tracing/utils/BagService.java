@@ -143,7 +143,7 @@ public class BagService {
 			log.setMessage(form.getMessage());
 			log.setDestStationCode(Integer.parseInt(form.getDestStation()));
 			
-			HashSet<OHD_Log_Itinerary> newItinSet = new HashSet<OHD_Log_Itinerary>();
+			LinkedHashSet<OHD_Log_Itinerary> newItinSet = new LinkedHashSet<OHD_Log_Itinerary>();
 			
 			for (OHD_Log_Itinerary i: (List<OHD_Log_Itinerary>) form.getItinerarylist()) {
 				OHD_Log_Itinerary ii = new OHD_Log_Itinerary();

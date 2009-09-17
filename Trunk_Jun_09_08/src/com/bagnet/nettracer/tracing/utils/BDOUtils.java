@@ -454,7 +454,7 @@ public class BDOUtils {
 			OHD ohd = bdo.getOhd();
 
 			// If the BDO is matched
-			if (bdo.getItems().size() > 0) {
+			if (bdo.getItems() != null && bdo.getItems().size() > 0) {
 				Set<Item> items =(Set<Item>) bdo.getItems();
 				for (Item item:  items) {
 					if (item != null) {

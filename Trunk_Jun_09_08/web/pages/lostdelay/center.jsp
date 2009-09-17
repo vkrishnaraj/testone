@@ -50,6 +50,10 @@
      	if(document.incidentForm.saveremarkButton) {
  	   disableButton(document.incidentForm.saveremarkButton); 
      	}
+     	if(document.incidentForm.savetracingButton) {
+      	   disableButton(document.incidentForm.savetracingButton); 
+        }
+     	
     }
     
     function enableButtons() {
@@ -66,6 +70,9 @@
      if(document.incidentForm.saveremarkButton) {
         enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
      }
+     if(document.incidentForm.savetracingButton) {
+         enableButton(document.incidentForm.savetracingButton, "<bean:message key='button.savetracing' />");
+      }
     }
     
   </script>

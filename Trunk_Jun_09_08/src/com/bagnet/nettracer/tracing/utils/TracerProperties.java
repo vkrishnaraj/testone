@@ -51,6 +51,7 @@ public class TracerProperties {
 	private static final Logger logger = Logger.getLogger(TracerProperties.class);
 
 	public static final String IGNORE_CHECK_DIGIT = "ignoreCheckDigit";
+	public static final String SET_DEFAULT_AIRLINE = "set.default.fault.airline";
 
 	static {
 		try {

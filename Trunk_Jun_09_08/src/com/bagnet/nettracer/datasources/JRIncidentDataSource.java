@@ -108,7 +108,11 @@ public class JRIncidentDataSource implements JRDataSource {
 		}  else if (fieldName.equals(COLOR_TYPE)) {
 			if (currentElement < currentObject.getItemlist().size()) {
 				Item tmp = (Item) currentObject.getItemlist().get(currentElement);
-				return  tmp.getColor() + " " + tmp.getBagtype();
+				if (tmp != null) {
+					return  tmp.getColor() + " " + tmp.getBagtype();
+				} else {
+					return "";
+				}
 			}
 			return null;
 		} else {

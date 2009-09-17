@@ -339,7 +339,7 @@ public class CronUtils {
 				he.setSmtpPort(company.getVariable().getEmail_port());
 				he.setFrom("support@nettracer.aero");
 				ArrayList toList = new ArrayList();
-				toList.add(new InternetAddress("bsmith@nettracer.aero"));
+				toList.add(new InternetAddress("support@nettracer.aero"));
 				he.setTo(toList);
 				he.setSubject("Daily WT Status Report: " + companyCode);
 				he.setHtmlMsg(output.toString());

@@ -149,7 +149,7 @@ public class ReportBMO {
 			return null;
 		}
 		catch (Exception e) {
-			logger.error("hibernate exception: " + e);
+			logger.error("hibernate exception: " + e, e);
 			return null;
 		}
 	}
@@ -2830,7 +2830,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			return rbmo.getReportFile(jasperReport, ds, parameters, ReportingConstants.SEARCH_INCIDENT_RPT_NAME, reportPath, outputtype);
 
 		} catch (Exception e) {
-			logger.error("unable to search incident report: " + e);
+			logger.error("unable to search incident report: " + e, e);
 			e.printStackTrace();
 			return null;
 		}
