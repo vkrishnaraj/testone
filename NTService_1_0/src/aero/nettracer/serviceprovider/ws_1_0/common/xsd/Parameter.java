@@ -15,7 +15,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
  */
 public interface Parameter extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Parameter.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s72AC0240CDCB7D5C0FD050B1FA2B4C94")
+            "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
                                                                                                                            .resolveHandle("parameter1185type");
 
     /**

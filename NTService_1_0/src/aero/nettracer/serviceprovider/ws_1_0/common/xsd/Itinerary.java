@@ -15,7 +15,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
  */
 public interface Itinerary extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Itinerary.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s72AC0240CDCB7D5C0FD050B1FA2B4C94")
+            "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
                                                                                                                            .resolveHandle("itinerarya0e7type");
 
     /**
@@ -527,6 +527,46 @@ public interface Itinerary extends org.apache.xmlbeans.XmlObject {
      * Unsets the "schdeparttimeGmt" element
      */
     void unsetSchdeparttimeGmt();
+
+    /**
+     * Gets the "timeChecked" element
+     */
+    java.util.Calendar getTimeChecked();
+
+    /**
+     * Gets (as xml) the "timeChecked" element
+     */
+    org.apache.xmlbeans.XmlDateTime xgetTimeChecked();
+
+    /**
+     * Tests for nil "timeChecked" element
+     */
+    boolean isNilTimeChecked();
+
+    /**
+     * True if has "timeChecked" element
+     */
+    boolean isSetTimeChecked();
+
+    /**
+     * Sets the "timeChecked" element
+     */
+    void setTimeChecked(java.util.Calendar timeChecked);
+
+    /**
+     * Sets (as xml) the "timeChecked" element
+     */
+    void xsetTimeChecked(org.apache.xmlbeans.XmlDateTime timeChecked);
+
+    /**
+     * Nils the "timeChecked" element
+     */
+    void setNilTimeChecked();
+
+    /**
+     * Unsets the "timeChecked" element
+     */
+    void unsetTimeChecked();
 
     /**
      * A factory class with static methods for creating instances

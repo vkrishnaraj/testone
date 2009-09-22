@@ -40,6 +40,8 @@ public class ItineraryImpl extends org.apache.xmlbeans.impl.values.XmlComplexCon
             "schdeparttime");
     private static final javax.xml.namespace.QName SCHDEPARTTIMEGMT$24 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "schdeparttimeGmt");
+    private static final javax.xml.namespace.QName TIMECHECKED$26 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+            "timeChecked");
 
     public ItineraryImpl(org.apache.xmlbeans.SchemaType sType) {
         super(sType);
@@ -1826,6 +1828,146 @@ public class ItineraryImpl extends org.apache.xmlbeans.impl.values.XmlComplexCon
         synchronized (monitor()) {
             check_orphaned();
             get_store().remove_element(SCHDEPARTTIMEGMT$24, 0);
+        }
+    }
+
+    /**
+     * Gets the "timeChecked" element
+     */
+    public java.util.Calendar getTimeChecked() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(TIMECHECKED$26,
+                    0);
+
+            if (target == null) {
+                return null;
+            }
+
+            return target.getCalendarValue();
+        }
+    }
+
+    /**
+     * Gets (as xml) the "timeChecked" element
+     */
+    public org.apache.xmlbeans.XmlDateTime xgetTimeChecked() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(TIMECHECKED$26,
+                    0);
+
+            return target;
+        }
+    }
+
+    /**
+     * Tests for nil "timeChecked" element
+     */
+    public boolean isNilTimeChecked() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(TIMECHECKED$26,
+                    0);
+
+            if (target == null) {
+                return false;
+            }
+
+            return target.isNil();
+        }
+    }
+
+    /**
+     * True if has "timeChecked" element
+     */
+    public boolean isSetTimeChecked() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            return get_store().count_elements(TIMECHECKED$26) != 0;
+        }
+    }
+
+    /**
+     * Sets the "timeChecked" element
+     */
+    public void setTimeChecked(java.util.Calendar timeChecked) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(TIMECHECKED$26,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .add_element_user(TIMECHECKED$26);
+            }
+
+            target.setCalendarValue(timeChecked);
+        }
+    }
+
+    /**
+     * Sets (as xml) the "timeChecked" element
+     */
+    public void xsetTimeChecked(org.apache.xmlbeans.XmlDateTime timeChecked) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(TIMECHECKED$26,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                               .add_element_user(TIMECHECKED$26);
+            }
+
+            target.set(timeChecked);
+        }
+    }
+
+    /**
+     * Nils the "timeChecked" element
+     */
+    public void setNilTimeChecked() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                           .find_element_user(TIMECHECKED$26,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlDateTime) get_store()
+                                                               .add_element_user(TIMECHECKED$26);
+            }
+
+            target.setNil();
+        }
+    }
+
+    /**
+     * Unsets the "timeChecked" element
+     */
+    public void unsetTimeChecked() {
+        synchronized (monitor()) {
+            check_orphaned();
+            get_store().remove_element(TIMECHECKED$26, 0);
         }
     }
 }

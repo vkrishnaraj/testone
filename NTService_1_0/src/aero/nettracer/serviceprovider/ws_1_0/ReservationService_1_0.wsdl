@@ -154,6 +154,7 @@
                     <xs:element minOccurs="0" name="scharrivetimeGmt" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="schdeparttime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="schdeparttimeGmt" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="timeChecked" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ClaimCheck">

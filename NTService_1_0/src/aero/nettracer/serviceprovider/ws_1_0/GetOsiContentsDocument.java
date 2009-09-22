@@ -16,7 +16,7 @@ package aero.nettracer.serviceprovider.ws_1_0;
  */
 public interface GetOsiContentsDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetOsiContentsDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s72AC0240CDCB7D5C0FD050B1FA2B4C94")
+            "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
                                                                                                                            .resolveHandle("getosicontentse868doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface GetOsiContentsDocument extends org.apache.xmlbeans.XmlObject {
      */
     public interface GetOsiContents extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetOsiContents.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.s72AC0240CDCB7D5C0FD050B1FA2B4C94")
+                "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
                                                                                                                                .resolveHandle("getosicontentsa44delemtype");
 
         /**

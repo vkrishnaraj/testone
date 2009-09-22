@@ -263,6 +263,9 @@ public class Reservation implements ReservationInterface {
 
 			for (CustLoyalty custL : custLoyalty) {
 				Passenger pax = paxMap.get(custL.getNameNumber());
+				if (pax == null) {
+					pax = firstPax;
+				}
 				pax.setFfAirline(custL.getProgramID());
 				pax.setFfNumber(custL.getMembershipID());
 				pax.setFfStatus(custL.getShortText());
@@ -299,7 +302,7 @@ public class Reservation implements ReservationInterface {
 				Itinerary i = res.addNewBagItinerary();
 				i.setAirline(itin.getAirline());
 				i.setArrivalCity(itin.getArrivalCity());
-//				i.setCheckedTime(itin.getCheckedTime());
+				i.setTimeChecked(itin.getCheckedTime());
 				i.setDepartureCity(itin.getDepartureCity());
 				i.setFlightnum(itin.getFlight());
 			}
@@ -373,26 +376,54 @@ public class Reservation implements ReservationInterface {
 				String[] sArray = m.group(1).split("\\n");
 				String airline = null;
 				String flight = null;
+				String arrCity1 = null;
+				ArrayList<SabreParsedBagItin> currentItinList = new ArrayList<SabreParsedBagItin>();
 				
 				for (String st: sArray) {
-					SabreParsedBagItin itin = new SabreParsedBagItin();
+					
+					
 					SabreParsedBags bag = new SabreParsedBags();
 					
-					Pattern rtPat = Pattern.compile("ROUTING-([A-Z0-9]{2})\\s*([0-9]{3,})\\s([A-Z]{3})");
+					//Pattern rtPat = Pattern.compile("ROUTING-([A-Z0-9]{2})\\s*([0-9]{3,})\\s([A-Z]{3})");
+					Pattern rtPat = Pattern.compile("ROUTING-[([A-Z0-9]{2})\\s*([0-9]{1,})\\s([A-Z]{3})/*]+");
+					Pattern subRtPat = Pattern.compile("([A-Z0-9]{2})\\s*([0-9]{1,})\\s([A-Z]{3})/*\\s*+");
 					Pattern bagPat = Pattern.compile("\\s+([A-Z]{3})\\s+([A-Z0-9]{2})\\s+([0-9]{6})\\s-\\sBY\\s+([A-Z]{3})[A-Z0-9]{3,4}\\s([0-9]{4})/([0-9]{2})([A-Z]{3})([0-9]{2})");
+					
+//					System.out.println("Line: " + st);
 					
 					Matcher m1 = rtPat.matcher(st);
 					Matcher m3 = bagPat.matcher(st);
 					
 					if (m1.find()) {
-						System.out.println("Routing Line: " + m1.group());
-						airline = m1.group(1);
-						flight = m1.group(2);
-		//				arrCity1 = m1.group(3);
+						
+						Matcher sub = subRtPat.matcher(m1.group());
+						
+//						System.out.println("Routing Line: " + m1.group());
+						int itinNum = 0;
+						while (sub.find()) {
+							
+							SabreParsedBagItin itin = new SabreParsedBagItin();
+//							System.out.println("Sub Routing: " + sub.group());
+							airline = sub.group(1);
+							flight = sub.group(2);
+							arrCity1 = sub.group(3);
+							
+							itin.setAirline(airline);
+							itin.setArrivalCity(arrCity1);
+							itin.setFlight(flight);
+							
+							if (itinNum > 0) {
+								itin.setDepartureCity(currentItinList.get(itinNum-1).getArrivalCity());
+							}
+							currentItinList.add(itin);
+							++itinNum;
+							
+						}
+						
 						
 		
 					} else if (m3.find()) {
-						System.out.println("Bag Line: " + m3.group());
+//						System.out.println("Bag Line: " + m3.group());
 		//				System.out.println(m3.group());
 						String arrCity = m3.group(1);
 						String bagAirline = m3.group(2);
@@ -412,13 +443,19 @@ public class Reservation implements ReservationInterface {
 						bag.setCheckedTime(checkedTime);
 						bag.setCarrier(bagAirline);
 						
-						itin.setAirline(airline);
-						itin.setArrivalCity(arrCity);
-						itin.setCheckedTime(checkedTime);
-						itin.setDepartureCity(depCity);
-						itin.setFlight(flight);
+						for (int i = 0; i < currentItinList.size(); ++i) {
+							SabreParsedBagItin itin = currentItinList.get(i);
+							
+							if (itin.getDepartureCity() == null) {
+								itin.setDepartureCity(depCity);
+							}
+							
+							if (itin.getCheckedTime() == null || itin.getCheckedTime().compareTo(checkedTime) < 0) {
+								itin.setCheckedTime(checkedTime);
+							}
+							itinMap.put(itin.key(), itin);
+						}
 						
-						itinMap.put(itin.key(), itin);
 						bagMap.put(bag.key(), bag);
 					}
 					
@@ -552,8 +589,8 @@ public class Reservation implements ReservationInterface {
 			logger.info(IGNORE_TRANSACTION + responseDocument.toString());
 
 		} catch (RemoteException e) {
-			logger.error(IGNORE_TRANSACTION + "Error creating session: ", e);
-			throw e;
+			logger.error(IGNORE_TRANSACTION + "Error ignoring transaction: ", e);
+//			throw e;
 		}
 
 	}
