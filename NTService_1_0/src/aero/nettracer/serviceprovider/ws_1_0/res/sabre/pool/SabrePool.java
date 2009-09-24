@@ -41,7 +41,11 @@ public class SabrePool extends GenericObjectPool {
 	public Object borrowObject() throws Exception {		
 		SabreConnection obj = (SabreConnection) super.borrowObject();
 		if (obj.getState() == SabreConnection.LOGGED_OUT_STATE) {
-			Reservation.createSession(obj);
+			try {
+				Reservation.createSession(obj);
+			} catch (Exception e) {
+				// Ignore
+			}
 			obj.setState(SabreConnection.LOGGED_IN_STATE);
 		}
 		return obj;
@@ -49,8 +53,12 @@ public class SabrePool extends GenericObjectPool {
 
 	public void returnObject(Object obj) throws Exception {
 		SabreConnection object = (SabreConnection) obj;
-		Reservation.ignoreTransaction(object);
-		Reservation.closeSession(object);
+		try {
+			Reservation.ignoreTransaction(object);
+			Reservation.closeSession(object);
+		} catch (Exception e) {
+			// Ignore
+		}
 		object.setState(SabreConnection.LOGGED_OUT_STATE);
 		super.returnObject(obj);
 	}

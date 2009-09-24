@@ -1,10 +1,19 @@
-<project name="tracer" default="services_recompile" basedir=".">
+<project name="NTServices_1_0" default="build-war" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
 	<property environment="env" />
-	<property name="lib" value="lib" />
-	<property name="lib.build-client.dir" value="${root.dir}\\lib" />
+	
+	<property name="war.name" value="NTServices_1_0" />
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="dist.dir" location="${basedir}/dist" />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="webroot.dir" location="${basedir}/web" />
+	<property name="compile.classpath" location="${basedir}/web/WEB-INF/lib" />
+	
+	<property name="build.classes.dir" location="bin" />
+	<property name="lib" value="web/WEB-INF/lib" />
+	<property name="lib.build-client.dir" value="${root.dir}\\web/WEB-INF/lib" />
 	
 	<patternset id="jar.files">
 		<include name="**/*.jar" />
@@ -19,12 +28,9 @@
 	</path>
 
 	<path id="project.classpath">
-		<fileset dir="${basedir}/lib">
+		<fileset dir="${root.dir}\\web/WEB-INF/lib">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="${basedir}/lib/wslib">
-			<patternset refid="jar.files" />
-		</fileset>		
 	</path>
 	
 	<property name="axis2.classpath" value="base.libraries" />
@@ -38,7 +44,10 @@
 	
 	<target name="services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
-		<Java2WSDLTask classPath="${build.dir}" className="aero.nettracer.serviceprovider.ws_1_0.ReservationService_1_0" outputLocation="src/aero/nettracer/serviceprovider/ws_1_0" outputFileName="ReservationService_1_0.wsdl">
+		<Java2WSDLTask classPath="${build.classes.dir}" 
+			className="aero.nettracer.serviceprovider.ws_1_0.ReservationService_1_0" 
+			outputLocation="src/aero/nettracer/serviceprovider/ws_1_0" 
+			outputFileName="ReservationService_1_0.wsdl">
 		</Java2WSDLTask>
 	</target>
 
@@ -68,8 +77,6 @@
 		</copy>
 
 
-
-		<!-- make jar file for schema -->
 
 		<mkdir dir="${build.dir}/webservices/NTService/temp" />
 		<move todir="${build.dir}/webservices/NTService/temp">
@@ -103,5 +110,50 @@
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
+	
+	<target name="build-war" id="build" description="Build WAR file">
+		
+		<delete file="${app.deploy.dir}/${war.name}.war" failonerror="false" />
+		<delete dir="${build.dir}/services-war" />
+		<mkdir dir="${build.dir}/services-war"/>
+		<copy todir="${build.dir}/services-war" overwrite="true">
+			<fileset dir="${webroot.dir}" >
+				<include name="WEB-INF/**/*"/>
+				<include name="META-INF/**/*"/>
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
+			<fileset dir="${build.classes.dir}" />
+		</copy>
+		<war destfile="${dist.dir}/${war.name}.war" duplicate="preserve" compress="true" webxml="web/WEB-INF/web.xml">
+			<fileset dir="${build.dir}/services-war"/>
+		</war>
+		
+		<copy todir="${app.deploy.dir}" verbose="true">
+			<fileset dir="${dist.dir}">
+				
+			</fileset>
+		</copy>
+		<echo>WAR copied! ${app.deploy.dir}</echo>
+		
+	</target>
+	
+	<!--
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<copy todir="${build.classes.dir}">
+		  <fileset dir="${src.dir}" includes="${source.files.tocopy}"/>
+		</copy>
+		<echo>Compilation complete!</echo>
+	</target>
+	-->
+	
+	<target name="init">
+		<mkdir dir="${build.classes.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
 
 </project>

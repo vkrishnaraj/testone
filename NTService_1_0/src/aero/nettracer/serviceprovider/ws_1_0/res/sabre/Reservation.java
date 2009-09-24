@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,6 +57,7 @@ import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRQDocument;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRSDocument;
+import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ;
 import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ.BasicRemark;
 import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer;
 import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer.Address;
@@ -120,7 +122,7 @@ public class Reservation implements ReservationInterface {
 		SabrePool pool = SabrePoolManager.getInstance().getPool(user);
 		SabreConnection connParams = null;
 
-		try {
+		 try {
 			connParams = (SabreConnection) pool.borrowObject();
 
 			if (pnr == null && bagTag != null) {
@@ -199,64 +201,85 @@ public class Reservation implements ReservationInterface {
 						Address padd = cust.getAddress();
 						String[] lines = padd.getAddressLineArray();
 
-						String x = StringUtils.join(lines, " ");
-						if (x.length() > 0) {
-							x = x.trim();
-
-							if (x.length() > 49) {
-								ArrayList<String> al = ServiceUtilities
-										.splitOnWordBreak(x, 49);
-								add.setAddress1(al.get(0));
-								if (al.size() > 1) {
-									
-									add.setAddress2(al.get(1));
-								}
-							} else {
-								add.setAddress1(x);
+						// Example:
+						// <AddressLine>N/FRED PARKER</AddressLine>
+						// <AddressLine>A/3045 JOHN F KENNDY</AddressLine>
+						// <AddressLine>C/NEW YORK, NY</AddressLine>
+						// <AddressLine>Z/10018</AddressLine>
+						
+						for (String line: lines) {
+							if (line.startsWith("A/")) {
+								add.setAddress1(line.substring(2));
+							} else if (line.startsWith("C/")) {
+								String[] arr = line.split(",");
+								String city = arr[0].substring(2);
+								String state = arr[1];
+								add.setCity(city.trim());
+								add.setState(state.trim());
+							} else if (line.startsWith("Z/")) {
+								add.setZip(line.substring(2));
 							}
 						}
+						
+//						String x = StringUtils.join(lines, " ");
+//						if (x.length() > 0) {
+//							x = x.trim();
+//
+//							if (x.length() > 49) {
+//								ArrayList<String> al = ServiceUtilities
+//										.splitOnWordBreak(x, 49);
+//								add.setAddress1(al.get(0));
+//								if (al.size() > 1) {
+//
+//									add.setAddress2(al.get(1));
+//								}
+//							} else {
+//								add.setAddress1(x);
+//							}
+//						}
 					}
 				}
 			}
-			
+
 			ArrayList<String> numbersLeftToAdd = new ArrayList<String>();
 			Pattern p = Pattern.compile("([0-9\\-]*)(-[HCBFA])");
-			
-			
+
 			for (int i = 0; i < telephones.length; ++i) {
 				Telephone tel = telephones[i];
-				
+
 				String phone = tel.getPhoneNumber();
 				String phoneText = phone;
 				Matcher m = p.matcher(phone);
-				
+
 				if (m.find()) {
 					phoneText = m.group(1);
-				} 
-				
+				}
+
 				if (phone.contains("-H")) {
 					firstPax.getAddresses().setHomePhone(phoneText);
 				} else if (phone.contains("-C")) {
 					firstPax.getAddresses().setMobilePhone(phoneText);
-				}else if (phone.contains("-B")) {
+				} else if (phone.contains("-B")) {
 					firstPax.getAddresses().setWorkPhone(phoneText);
-				}else if (phone.contains("-F")) {
+				} else if (phone.contains("-F")) {
 					firstPax.getAddresses().setAltPhone(phoneText);
-				}else if (phone.contains("-A")) {
+				} else if (phone.contains("-A")) {
 					firstPax.getAddresses().setAltPhone(phoneText);
 				} else {
-					numbersLeftToAdd.add(phone);
+					numbersLeftToAdd.add(phoneText);
 				}
 			}
-			
+
 			for (String phone : numbersLeftToAdd) {
-				if (firstPax.getAddresses().getHomePhone() != null) {
+
+				
+				if (firstPax.getAddresses().getHomePhone() == null) {
 					firstPax.getAddresses().setHomePhone(phone);
-				} else if (firstPax.getAddresses().getMobilePhone() != null) {
+				} else if (firstPax.getAddresses().getMobilePhone() == null) {
 					firstPax.getAddresses().setMobilePhone(phone);
-				} else if (firstPax.getAddresses().getWorkPhone() != null) {
+				} else if (firstPax.getAddresses().getWorkPhone() == null) {
 					firstPax.getAddresses().setWorkPhone(phone);
-				} else if (firstPax.getAddresses().getAltPhone() != null) {
+				} else if (firstPax.getAddresses().getAltPhone() == null) {
 					firstPax.getAddresses().setAltPhone(phone);
 				}
 			}
@@ -283,22 +306,20 @@ public class Reservation implements ReservationInterface {
 
 			res.setNilOsi();
 
-			
 			String command = "*" + pnr;
 			String commandString = genericCommand(connParams, command);
 			SabreParseDTO dto = parseForBaggageInfo(commandString);
-			
+
 			int numberChecked = dto.getBags().size();
-			
-			
-			for (SabreParsedBags bag: dto.getBags()) {
+
+			for (SabreParsedBags bag : dto.getBags()) {
 				ClaimCheck check = res.addNewClaimChecks();
 				check.setAirline(bag.getCarrier());
 				check.setTagNumber(bag.getTag());
 				check.setTimeChecked(bag.getCheckedTime());
 			}
-			
-			for (SabreParsedBagItin itin: dto.getItin()) {
+
+			for (SabreParsedBagItin itin : dto.getItin()) {
 				Itinerary i = res.addNewBagItinerary();
 				i.setAirline(itin.getAirline());
 				i.setArrivalCity(itin.getArrivalCity());
@@ -307,12 +328,11 @@ public class Reservation implements ReservationInterface {
 				i.setFlightnum(itin.getFlight());
 			}
 
-			
 			int checkedLocation = 0;
 			if (numberChecked > 0) {
 				res.setNumberChecked(numberChecked);
 			}
-			
+
 			if (checkedLocation > 0) {
 				res.setCheckedLocation(checkedLocation);
 			}
@@ -364,122 +384,129 @@ public class Reservation implements ReservationInterface {
 	}
 
 	public static SabreParseDTO parseForBaggageInfo(String string) {
-			SabreParseDTO retVal = new SabreParseDTO();
-			LinkedHashMap<String,SabreParsedBags> bagMap = new LinkedHashMap<String,SabreParsedBags>();
-			LinkedHashMap<String,SabreParsedBagItin> itinMap = new LinkedHashMap<String,SabreParsedBagItin>();
-			
-			Pattern p1 = Pattern.compile("BAGGAGE INFORMATION((.*\\n)*)^([A-Z]{3}\\.)", Pattern.MULTILINE);
-			Matcher m = p1.matcher(string);
-			m.find();
-			
-			try {
-				String[] sArray = m.group(1).split("\\n");
-				String airline = null;
-				String flight = null;
-				String arrCity1 = null;
-				ArrayList<SabreParsedBagItin> currentItinList = new ArrayList<SabreParsedBagItin>();
-				
-				for (String st: sArray) {
-					
-					
-					SabreParsedBags bag = new SabreParsedBags();
-					
-					//Pattern rtPat = Pattern.compile("ROUTING-([A-Z0-9]{2})\\s*([0-9]{3,})\\s([A-Z]{3})");
-					Pattern rtPat = Pattern.compile("ROUTING-[([A-Z0-9]{2})\\s*([0-9]{1,})\\s([A-Z]{3})/*]+");
-					Pattern subRtPat = Pattern.compile("([A-Z0-9]{2})\\s*([0-9]{1,})\\s([A-Z]{3})/*\\s*+");
-					Pattern bagPat = Pattern.compile("\\s+([A-Z]{3})\\s+([A-Z0-9]{2})\\s+([0-9]{6})\\s-\\sBY\\s+([A-Z]{3})[A-Z0-9]{3,4}\\s([0-9]{4})/([0-9]{2})([A-Z]{3})([0-9]{2})");
-					
-//					System.out.println("Line: " + st);
-					
-					Matcher m1 = rtPat.matcher(st);
-					Matcher m3 = bagPat.matcher(st);
-					
-					if (m1.find()) {
-						
-						Matcher sub = subRtPat.matcher(m1.group());
-						
-//						System.out.println("Routing Line: " + m1.group());
-						int itinNum = 0;
-						while (sub.find()) {
-							
-							SabreParsedBagItin itin = new SabreParsedBagItin();
-//							System.out.println("Sub Routing: " + sub.group());
-							airline = sub.group(1);
-							flight = sub.group(2);
-							arrCity1 = sub.group(3);
-							
-							itin.setAirline(airline);
-							itin.setArrivalCity(arrCity1);
-							itin.setFlight(flight);
-							
-							if (itinNum > 0) {
-								itin.setDepartureCity(currentItinList.get(itinNum-1).getArrivalCity());
-							}
-							currentItinList.add(itin);
-							++itinNum;
-							
+		SabreParseDTO retVal = new SabreParseDTO();
+		LinkedHashMap<String, SabreParsedBags> bagMap = new LinkedHashMap<String, SabreParsedBags>();
+		LinkedHashMap<String, SabreParsedBagItin> itinMap = new LinkedHashMap<String, SabreParsedBagItin>();
+
+		Pattern p1 = Pattern.compile(
+				"BAGGAGE INFORMATION((.*\\n)*)^([A-Z]{3}\\.)",
+				Pattern.MULTILINE);
+		Matcher m = p1.matcher(string);
+		m.find();
+
+		try {
+			String[] sArray = m.group(1).split("\\n");
+			String airline = null;
+			String flight = null;
+			String arrCity1 = null;
+			ArrayList<SabreParsedBagItin> currentItinList = new ArrayList<SabreParsedBagItin>();
+
+			for (String st : sArray) {
+
+				SabreParsedBags bag = new SabreParsedBags();
+
+				// Pattern rtPat =
+				// Pattern.compile("ROUTING-([A-Z0-9]{2})\\s*([0-9]{3,})\\s([A-Z]{3})");
+				Pattern rtPat = Pattern
+						.compile("ROUTING-[([A-Z0-9]{2})\\s*([0-9]{1,})\\s([A-Z]{3})/*]+");
+				Pattern subRtPat = Pattern
+						.compile("([A-Z0-9]{2})\\s*([0-9]{1,})\\s([A-Z]{3})/*\\s*+");
+				Pattern bagPat = Pattern
+						.compile("\\s+([A-Z]{3})\\s+([A-Z0-9]{2})\\s+([0-9]{6})\\s-\\sBY\\s+([A-Z]{3})[A-Z0-9]{3,4}\\s([0-9]{4})/([0-9]{2})([A-Z]{3})([0-9]{2})");
+
+				// System.out.println("Line: " + st);
+
+				Matcher m1 = rtPat.matcher(st);
+				Matcher m3 = bagPat.matcher(st);
+
+				if (m1.find()) {
+
+					Matcher sub = subRtPat.matcher(m1.group());
+
+					// System.out.println("Routing Line: " + m1.group());
+					int itinNum = 0;
+					while (sub.find()) {
+
+						SabreParsedBagItin itin = new SabreParsedBagItin();
+						// System.out.println("Sub Routing: " + sub.group());
+						airline = sub.group(1);
+						flight = sub.group(2);
+						arrCity1 = sub.group(3);
+
+						itin.setAirline(airline);
+						itin.setArrivalCity(arrCity1);
+						itin.setFlight(flight);
+
+						if (itinNum > 0) {
+							itin.setDepartureCity(currentItinList.get(
+									itinNum - 1).getArrivalCity());
 						}
-						
-						
-		
-					} else if (m3.find()) {
-//						System.out.println("Bag Line: " + m3.group());
-		//				System.out.println(m3.group());
-						String arrCity = m3.group(1);
-						String bagAirline = m3.group(2);
-						String bagTag = m3.group(2) + m3.group(3);
-						String depCity = m3.group(4);
-						String time = m3.group(5) + " " + m3.group(6) + " " + m3.group(7) + " " + m3.group(8);			
-						GregorianCalendar checkedTime = new GregorianCalendar();
-						
-						try {
-							SimpleDateFormat sdf = new SimpleDateFormat("HHmm dd MMM yy");
-							checkedTime.setTime(sdf.parse(time));
-							
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						bag.setTag(bagTag);
-						bag.setCheckedTime(checkedTime);
-						bag.setCarrier(bagAirline);
-						
-						for (int i = 0; i < currentItinList.size(); ++i) {
-							SabreParsedBagItin itin = currentItinList.get(i);
-							
-							if (itin.getDepartureCity() == null) {
-								itin.setDepartureCity(depCity);
-							}
-							
-							if (itin.getCheckedTime() == null || itin.getCheckedTime().compareTo(checkedTime) < 0) {
-								itin.setCheckedTime(checkedTime);
-							}
-							itinMap.put(itin.key(), itin);
-						}
-						
-						bagMap.put(bag.key(), bag);
+						currentItinList.add(itin);
+						++itinNum;
+
 					}
-					
+
+				} else if (m3.find()) {
+					// System.out.println("Bag Line: " + m3.group());
+					// System.out.println(m3.group());
+					String arrCity = m3.group(1);
+					String bagAirline = m3.group(2);
+					String bagTag = m3.group(2) + m3.group(3);
+					String depCity = m3.group(4);
+					String time = m3.group(5) + " " + m3.group(6) + " "
+							+ m3.group(7) + " " + m3.group(8);
+					GregorianCalendar checkedTime = new GregorianCalendar();
+
+					try {
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"HHmm dd MMM yy");
+						checkedTime.setTime(sdf.parse(time));
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					bag.setTag(bagTag);
+					bag.setCheckedTime(checkedTime);
+					bag.setCarrier(bagAirline);
+
+					for (int i = 0; i < currentItinList.size(); ++i) {
+						SabreParsedBagItin itin = currentItinList.get(i);
+
+						if (itin.getDepartureCity() == null) {
+							itin.setDepartureCity(depCity);
+						}
+
+						if (itin.getCheckedTime() == null
+								|| itin.getCheckedTime().compareTo(checkedTime) < 0) {
+							itin.setCheckedTime(checkedTime);
+						}
+						itinMap.put(itin.key(), itin);
+					}
+
+					bagMap.put(bag.key(), bag);
 				}
-			} catch (IllegalStateException e) {
-				// Ignore
+
 			}
-			
-			ArrayList<SabreParsedBags> bags = new ArrayList<SabreParsedBags>();
-			ArrayList<SabreParsedBagItin> itins = new ArrayList<SabreParsedBagItin>();
-			for (String key: bagMap.keySet()) {
-				bags.add(bagMap.get(key));
-			}
-			
-			for (String key: itinMap.keySet()) {
-				itins.add(itinMap.get(key));
-			}
-			retVal.setBags(bags);
-			retVal.setItin(itins);
-			return retVal;
+		} catch (IllegalStateException e) {
+			// Ignore
 		}
 
-	public static String genericCommand(SabreConnection connParams, String command)
-			throws RemoteException {
+		ArrayList<SabreParsedBags> bags = new ArrayList<SabreParsedBags>();
+		ArrayList<SabreParsedBagItin> itins = new ArrayList<SabreParsedBagItin>();
+		for (String key : bagMap.keySet()) {
+			bags.add(bagMap.get(key));
+		}
+
+		for (String key : itinMap.keySet()) {
+			itins.add(itinMap.get(key));
+		}
+		retVal.setBags(bags);
+		retVal.setItin(itins);
+		return retVal;
+	}
+
+	public static String genericCommand(SabreConnection connParams,
+			String command) throws RemoteException {
 		try {
 
 			SabreCommandLLSServiceStub stub = new SabreCommandLLSServiceStub(
@@ -519,8 +546,13 @@ public class Reservation implements ReservationInterface {
 					ACTION_ADD_REMARK_RQ);
 			AddRemarkRQDocument rqDoc = AddRemarkRQDocument.Factory
 					.newInstance();
-			BasicRemark br = rqDoc.addNewAddRemarkRQ().addNewBasicRemark();
-			br.setText(remark);
+			AddRemarkRQ rq = rqDoc.addNewAddRemarkRQ();
+			rq.setVersion("2003A.TsabreXML1.3.1");
+			BasicRemark br = rq.addNewBasicRemark();
+			String remarkText = remark;
+			remarkText = remarkText.replaceAll("[(),]", "");
+			remarkText = remarkText.replaceAll("[:]", "-");
+			br.setText(remarkText);
 
 			logger.info(ADD_REMARK + connParams.getLoggingString()
 					+ " Remark: " + remark);
@@ -549,6 +581,9 @@ public class Reservation implements ReservationInterface {
 			EndTransactionRQDocument rqDoc = EndTransactionRQDocument.Factory
 					.newInstance();
 			EndTransactionRQ rqDoc1 = rqDoc.addNewEndTransactionRQ();
+			rqDoc1.setVersion("2003A.TsabreXML1.4.1");
+			rqDoc1.addNewUpdatedBy().addNewTPAExtensions().addNewAccess().addNewAccessPerson().setGivenName("NETTRACER");
+			rqDoc1.addNewEndTransaction().setInd(true);
 
 			logger.info(END_TRANSACTION + connParams.getLoggingString());
 
@@ -589,8 +624,10 @@ public class Reservation implements ReservationInterface {
 			logger.info(IGNORE_TRANSACTION + responseDocument.toString());
 
 		} catch (RemoteException e) {
-			logger.error(IGNORE_TRANSACTION + "Error ignoring transaction: ", e);
-//			throw e;
+			logger
+					.error(IGNORE_TRANSACTION + "Error ignoring transaction: ",
+							e);
+			// throw e;
 		}
 
 	}
@@ -612,6 +649,7 @@ public class Reservation implements ReservationInterface {
 					.addNewOTATravelItineraryReadRQ();
 			UniqueID id = readRq.addNewUniqueID();
 			id.setID(pnr);
+			readRq.setVersion("1.14.1");
 
 			OTATravelItineraryRSDocument responseDocument = null;
 
@@ -698,27 +736,9 @@ public class Reservation implements ReservationInterface {
 					null, connParams.getEndpoint());
 			AxisConfiguration ac = stub._getServiceClient()
 					.getAxisConfiguration();
-			ArrayList al = new ArrayList();
-			al.add(new MustUnderstandHandler());
+			List al = ac.getInFlowPhases();
+			al.add(0, new MustUnderstandHandler());
 			ac.setInPhasesUptoAndIncludingPostDispatch(al);
-
-			// stub._getServiceClient().engageModule("rampart");
-			//
-			// StAXOMBuilder builder;
-			// try {
-			// builder = new StAXOMBuilder("policy.xml");
-			// Policy clientPolicy = PolicyEngine.getPolicy(builder
-			// .getDocumentElement());
-			// Options o = stub._getServiceClient().getOptions();
-			// o.setProperty(RampartMessageData.KEY_RAMPART_POLICY,
-			// clientPolicy);
-			//
-			// } catch (FileNotFoundException e) {
-			//
-			// e.printStackTrace();
-			// } catch (XMLStreamException e) {
-			// e.printStackTrace();
-			// }
 
 			SecurityDocument securityDocument = SecurityDocument.Factory
 					.newInstance();

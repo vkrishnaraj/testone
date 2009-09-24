@@ -82,13 +82,18 @@ public class MustUnderstandHandler extends AbstractDispatcher {
 
 		MustUnderstandUtils.markUnderstoodHeaderParameters(msgContext);
 
-		Iterator headerBlocks = envelope.getHeader().getHeadersToProcess(null);
-		while (headerBlocks.hasNext()) {
-			SOAPHeaderBlock headerBlock = (SOAPHeaderBlock) headerBlocks.next();
-			if (headerBlock.isProcessed() || !headerBlock.getMustUnderstand()) {
-				continue;
+		if (envelope.getHeader() != null) {
+			Iterator headerBlocks = envelope.getHeader().getHeadersToProcess(
+					null);
+			while (headerBlocks.hasNext()) {
+				SOAPHeaderBlock headerBlock = (SOAPHeaderBlock) headerBlocks
+						.next();
+				if (headerBlock.isProcessed()
+						|| !headerBlock.getMustUnderstand()) {
+					continue;
+				}
+				headerBlock.setProcessed();
 			}
-			headerBlock.setProcessed();
 		}
 		return checksPass;
 	}

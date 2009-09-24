@@ -24,7 +24,7 @@ import aero.nettracer.serviceprovider.ws_1_0.response.xsd.ReservationResponse;
 /**
  * ReservationService_1_0Skeleton java skeleton for the axisService
  */
-public class ReservationService_1_0Impl {
+public class ReservationService_1_0Impl extends ReservationService_1_0Skeleton{
 	/**
 	 * Auto generated method signature
 	 * 
@@ -84,6 +84,7 @@ public class ReservationService_1_0Impl {
 	 * 
 	 * @param getReservationData
 	 */
+	
 	public aero.nettracer.serviceprovider.ws_1_0.GetReservationDataResponseDocument getReservationData(
 			aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument getReservationData) {
 
@@ -105,7 +106,9 @@ public class ReservationService_1_0Impl {
 			String pnr = getReservationData.getGetReservationData().getPnr();
 			String bagTag = getReservationData.getGetReservationData()
 					.getBagTag();
-			reservation.getReservationData(user, pnr, bagTag);
+			
+			res1 = reservation.getReservationData(user, pnr, bagTag);
+			res.setReturn(res1);
 		} catch (UserNotAuthorizedException e) {
 			WebServiceError error = res1.addNewError();
 			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
@@ -118,7 +121,6 @@ public class ReservationService_1_0Impl {
 			WebServiceError error = res1.addNewError();
 			error.setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
 			return doc;
-
 		}
 
 		return doc;

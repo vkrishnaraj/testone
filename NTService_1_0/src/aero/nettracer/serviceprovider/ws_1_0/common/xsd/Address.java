@@ -15,7 +15,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
  */
 public interface Address extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Address.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
+            "schemaorg_apache_xmlbeans.system.sA7FCDC8BA50307927F3589E751AC55EF")
                                                                                                                            .resolveHandle("address5690type");
 
     /**
@@ -177,6 +177,46 @@ public interface Address extends org.apache.xmlbeans.XmlObject {
      * Unsets the "city" element
      */
     void unsetCity();
+
+    /**
+     * Gets the "country" element
+     */
+    java.lang.String getCountry();
+
+    /**
+     * Gets (as xml) the "country" element
+     */
+    org.apache.xmlbeans.XmlString xgetCountry();
+
+    /**
+     * Tests for nil "country" element
+     */
+    boolean isNilCountry();
+
+    /**
+     * True if has "country" element
+     */
+    boolean isSetCountry();
+
+    /**
+     * Sets the "country" element
+     */
+    void setCountry(java.lang.String country);
+
+    /**
+     * Sets (as xml) the "country" element
+     */
+    void xsetCountry(org.apache.xmlbeans.XmlString country);
+
+    /**
+     * Nils the "country" element
+     */
+    void setNilCountry();
+
+    /**
+     * Unsets the "country" element
+     */
+    void unsetCountry();
 
     /**
      * Gets the "emailAddress" element

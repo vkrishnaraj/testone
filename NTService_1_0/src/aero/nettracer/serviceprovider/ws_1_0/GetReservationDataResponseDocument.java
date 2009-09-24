@@ -16,7 +16,7 @@ package aero.nettracer.serviceprovider.ws_1_0;
  */
 public interface GetReservationDataResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetReservationDataResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
+            "schemaorg_apache_xmlbeans.system.sA7FCDC8BA50307927F3589E751AC55EF")
                                                                                                                            .resolveHandle("getreservationdataresponse0530doctype");
 
     /**
@@ -42,7 +42,7 @@ public interface GetReservationDataResponseDocument extends org.apache.xmlbeans.
      */
     public interface GetReservationDataResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GetReservationDataResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.sEFE6345392E523A6707B3AC577A384C3")
+                "schemaorg_apache_xmlbeans.system.sA7FCDC8BA50307927F3589E751AC55EF")
                                                                                                                                .resolveHandle("getreservationdataresponsed34delemtype");
 
         /**

@@ -22,21 +22,23 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
             "altPhone");
     private static final javax.xml.namespace.QName CITY$6 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "city");
-    private static final javax.xml.namespace.QName EMAILADDRESS$8 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName COUNTRY$8 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+            "country");
+    private static final javax.xml.namespace.QName EMAILADDRESS$10 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "emailAddress");
-    private static final javax.xml.namespace.QName HOMEPHONE$10 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName HOMEPHONE$12 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "homePhone");
-    private static final javax.xml.namespace.QName MOBILEPHONE$12 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName MOBILEPHONE$14 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "mobilePhone");
-    private static final javax.xml.namespace.QName PAGERNUMBER$14 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName PAGERNUMBER$16 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "pagerNumber");
-    private static final javax.xml.namespace.QName PROVINCE$16 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName PROVINCE$18 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "province");
-    private static final javax.xml.namespace.QName STATE$18 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName STATE$20 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "state");
-    private static final javax.xml.namespace.QName WORKPHONE$20 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName WORKPHONE$22 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "workPhone");
-    private static final javax.xml.namespace.QName ZIP$22 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
+    private static final javax.xml.namespace.QName ZIP$24 = new javax.xml.namespace.QName("http://common.ws_1_0.serviceprovider.nettracer.aero/xsd",
             "zip");
 
     public AddressImpl(org.apache.xmlbeans.SchemaType sType) {
@@ -604,6 +606,146 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     }
 
     /**
+     * Gets the "country" element
+     */
+    public java.lang.String getCountry() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(COUNTRY$8,
+                    0);
+
+            if (target == null) {
+                return null;
+            }
+
+            return target.getStringValue();
+        }
+    }
+
+    /**
+     * Gets (as xml) the "country" element
+     */
+    public org.apache.xmlbeans.XmlString xgetCountry() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COUNTRY$8,
+                    0);
+
+            return target;
+        }
+    }
+
+    /**
+     * Tests for nil "country" element
+     */
+    public boolean isNilCountry() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COUNTRY$8,
+                    0);
+
+            if (target == null) {
+                return false;
+            }
+
+            return target.isNil();
+        }
+    }
+
+    /**
+     * True if has "country" element
+     */
+    public boolean isSetCountry() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            return get_store().count_elements(COUNTRY$8) != 0;
+        }
+    }
+
+    /**
+     * Sets the "country" element
+     */
+    public void setCountry(java.lang.String country) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(COUNTRY$8,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .add_element_user(COUNTRY$8);
+            }
+
+            target.setStringValue(country);
+        }
+    }
+
+    /**
+     * Sets (as xml) the "country" element
+     */
+    public void xsetCountry(org.apache.xmlbeans.XmlString country) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COUNTRY$8,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(COUNTRY$8);
+            }
+
+            target.set(country);
+        }
+    }
+
+    /**
+     * Nils the "country" element
+     */
+    public void setNilCountry() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(COUNTRY$8,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(COUNTRY$8);
+            }
+
+            target.setNil();
+        }
+    }
+
+    /**
+     * Unsets the "country" element
+     */
+    public void unsetCountry() {
+        synchronized (monitor()) {
+            check_orphaned();
+            get_store().remove_element(COUNTRY$8, 0);
+        }
+    }
+
+    /**
      * Gets the "emailAddress" element
      */
     public java.lang.String getEmailAddress() {
@@ -612,7 +754,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(EMAILADDRESS$8,
+                                                           .find_element_user(EMAILADDRESS$10,
                     0);
 
             if (target == null) {
@@ -632,7 +774,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(EMAILADDRESS$8,
+                                                         .find_element_user(EMAILADDRESS$10,
                     0);
 
             return target;
@@ -648,7 +790,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(EMAILADDRESS$8,
+                                                         .find_element_user(EMAILADDRESS$10,
                     0);
 
             if (target == null) {
@@ -666,7 +808,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(EMAILADDRESS$8) != 0;
+            return get_store().count_elements(EMAILADDRESS$10) != 0;
         }
     }
 
@@ -679,12 +821,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(EMAILADDRESS$8,
+                                                           .find_element_user(EMAILADDRESS$10,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(EMAILADDRESS$8);
+                                                               .add_element_user(EMAILADDRESS$10);
             }
 
             target.setStringValue(emailAddress);
@@ -700,12 +842,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(EMAILADDRESS$8,
+                                                         .find_element_user(EMAILADDRESS$10,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(EMAILADDRESS$8);
+                                                             .add_element_user(EMAILADDRESS$10);
             }
 
             target.set(emailAddress);
@@ -721,12 +863,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(EMAILADDRESS$8,
+                                                         .find_element_user(EMAILADDRESS$10,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(EMAILADDRESS$8);
+                                                             .add_element_user(EMAILADDRESS$10);
             }
 
             target.setNil();
@@ -739,7 +881,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetEmailAddress() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(EMAILADDRESS$8, 0);
+            get_store().remove_element(EMAILADDRESS$10, 0);
         }
     }
 
@@ -752,7 +894,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(HOMEPHONE$10,
+                                                           .find_element_user(HOMEPHONE$12,
                     0);
 
             if (target == null) {
@@ -772,7 +914,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(HOMEPHONE$10,
+                                                         .find_element_user(HOMEPHONE$12,
                     0);
 
             return target;
@@ -788,7 +930,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(HOMEPHONE$10,
+                                                         .find_element_user(HOMEPHONE$12,
                     0);
 
             if (target == null) {
@@ -806,7 +948,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(HOMEPHONE$10) != 0;
+            return get_store().count_elements(HOMEPHONE$12) != 0;
         }
     }
 
@@ -819,12 +961,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(HOMEPHONE$10,
+                                                           .find_element_user(HOMEPHONE$12,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(HOMEPHONE$10);
+                                                               .add_element_user(HOMEPHONE$12);
             }
 
             target.setStringValue(homePhone);
@@ -840,12 +982,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(HOMEPHONE$10,
+                                                         .find_element_user(HOMEPHONE$12,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(HOMEPHONE$10);
+                                                             .add_element_user(HOMEPHONE$12);
             }
 
             target.set(homePhone);
@@ -861,12 +1003,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(HOMEPHONE$10,
+                                                         .find_element_user(HOMEPHONE$12,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(HOMEPHONE$10);
+                                                             .add_element_user(HOMEPHONE$12);
             }
 
             target.setNil();
@@ -879,7 +1021,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetHomePhone() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(HOMEPHONE$10, 0);
+            get_store().remove_element(HOMEPHONE$12, 0);
         }
     }
 
@@ -892,7 +1034,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(MOBILEPHONE$12,
+                                                           .find_element_user(MOBILEPHONE$14,
                     0);
 
             if (target == null) {
@@ -912,7 +1054,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(MOBILEPHONE$12,
+                                                         .find_element_user(MOBILEPHONE$14,
                     0);
 
             return target;
@@ -928,7 +1070,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(MOBILEPHONE$12,
+                                                         .find_element_user(MOBILEPHONE$14,
                     0);
 
             if (target == null) {
@@ -946,7 +1088,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(MOBILEPHONE$12) != 0;
+            return get_store().count_elements(MOBILEPHONE$14) != 0;
         }
     }
 
@@ -959,12 +1101,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(MOBILEPHONE$12,
+                                                           .find_element_user(MOBILEPHONE$14,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(MOBILEPHONE$12);
+                                                               .add_element_user(MOBILEPHONE$14);
             }
 
             target.setStringValue(mobilePhone);
@@ -980,12 +1122,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(MOBILEPHONE$12,
+                                                         .find_element_user(MOBILEPHONE$14,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(MOBILEPHONE$12);
+                                                             .add_element_user(MOBILEPHONE$14);
             }
 
             target.set(mobilePhone);
@@ -1001,12 +1143,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(MOBILEPHONE$12,
+                                                         .find_element_user(MOBILEPHONE$14,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(MOBILEPHONE$12);
+                                                             .add_element_user(MOBILEPHONE$14);
             }
 
             target.setNil();
@@ -1019,7 +1161,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetMobilePhone() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(MOBILEPHONE$12, 0);
+            get_store().remove_element(MOBILEPHONE$14, 0);
         }
     }
 
@@ -1032,7 +1174,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(PAGERNUMBER$14,
+                                                           .find_element_user(PAGERNUMBER$16,
                     0);
 
             if (target == null) {
@@ -1052,7 +1194,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PAGERNUMBER$14,
+                                                         .find_element_user(PAGERNUMBER$16,
                     0);
 
             return target;
@@ -1068,7 +1210,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PAGERNUMBER$14,
+                                                         .find_element_user(PAGERNUMBER$16,
                     0);
 
             if (target == null) {
@@ -1086,7 +1228,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(PAGERNUMBER$14) != 0;
+            return get_store().count_elements(PAGERNUMBER$16) != 0;
         }
     }
 
@@ -1099,12 +1241,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(PAGERNUMBER$14,
+                                                           .find_element_user(PAGERNUMBER$16,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(PAGERNUMBER$14);
+                                                               .add_element_user(PAGERNUMBER$16);
             }
 
             target.setStringValue(pagerNumber);
@@ -1120,12 +1262,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PAGERNUMBER$14,
+                                                         .find_element_user(PAGERNUMBER$16,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(PAGERNUMBER$14);
+                                                             .add_element_user(PAGERNUMBER$16);
             }
 
             target.set(pagerNumber);
@@ -1141,12 +1283,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PAGERNUMBER$14,
+                                                         .find_element_user(PAGERNUMBER$16,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(PAGERNUMBER$14);
+                                                             .add_element_user(PAGERNUMBER$16);
             }
 
             target.setNil();
@@ -1159,7 +1301,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetPagerNumber() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(PAGERNUMBER$14, 0);
+            get_store().remove_element(PAGERNUMBER$16, 0);
         }
     }
 
@@ -1172,7 +1314,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(PROVINCE$16,
+                                                           .find_element_user(PROVINCE$18,
                     0);
 
             if (target == null) {
@@ -1192,7 +1334,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PROVINCE$16,
+                                                         .find_element_user(PROVINCE$18,
                     0);
 
             return target;
@@ -1208,7 +1350,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PROVINCE$16,
+                                                         .find_element_user(PROVINCE$18,
                     0);
 
             if (target == null) {
@@ -1226,7 +1368,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(PROVINCE$16) != 0;
+            return get_store().count_elements(PROVINCE$18) != 0;
         }
     }
 
@@ -1239,12 +1381,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(PROVINCE$16,
+                                                           .find_element_user(PROVINCE$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(PROVINCE$16);
+                                                               .add_element_user(PROVINCE$18);
             }
 
             target.setStringValue(province);
@@ -1260,12 +1402,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PROVINCE$16,
+                                                         .find_element_user(PROVINCE$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(PROVINCE$16);
+                                                             .add_element_user(PROVINCE$18);
             }
 
             target.set(province);
@@ -1281,12 +1423,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(PROVINCE$16,
+                                                         .find_element_user(PROVINCE$18,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(PROVINCE$16);
+                                                             .add_element_user(PROVINCE$18);
             }
 
             target.setNil();
@@ -1299,7 +1441,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetProvince() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(PROVINCE$16, 0);
+            get_store().remove_element(PROVINCE$18, 0);
         }
     }
 
@@ -1312,7 +1454,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(STATE$18,
+                                                           .find_element_user(STATE$20,
                     0);
 
             if (target == null) {
@@ -1332,7 +1474,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(STATE$18,
+                                                         .find_element_user(STATE$20,
                     0);
 
             return target;
@@ -1348,7 +1490,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(STATE$18,
+                                                         .find_element_user(STATE$20,
                     0);
 
             if (target == null) {
@@ -1366,7 +1508,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(STATE$18) != 0;
+            return get_store().count_elements(STATE$20) != 0;
         }
     }
 
@@ -1379,12 +1521,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(STATE$18,
+                                                           .find_element_user(STATE$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(STATE$18);
+                                                               .add_element_user(STATE$20);
             }
 
             target.setStringValue(state);
@@ -1400,12 +1542,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(STATE$18,
+                                                         .find_element_user(STATE$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(STATE$18);
+                                                             .add_element_user(STATE$20);
             }
 
             target.set(state);
@@ -1421,12 +1563,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(STATE$18,
+                                                         .find_element_user(STATE$20,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(STATE$18);
+                                                             .add_element_user(STATE$20);
             }
 
             target.setNil();
@@ -1439,7 +1581,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetState() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(STATE$18, 0);
+            get_store().remove_element(STATE$20, 0);
         }
     }
 
@@ -1452,7 +1594,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(WORKPHONE$20,
+                                                           .find_element_user(WORKPHONE$22,
                     0);
 
             if (target == null) {
@@ -1472,7 +1614,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WORKPHONE$20,
+                                                         .find_element_user(WORKPHONE$22,
                     0);
 
             return target;
@@ -1488,7 +1630,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WORKPHONE$20,
+                                                         .find_element_user(WORKPHONE$22,
                     0);
 
             if (target == null) {
@@ -1506,7 +1648,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(WORKPHONE$20) != 0;
+            return get_store().count_elements(WORKPHONE$22) != 0;
         }
     }
 
@@ -1519,12 +1661,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(WORKPHONE$20,
+                                                           .find_element_user(WORKPHONE$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(WORKPHONE$20);
+                                                               .add_element_user(WORKPHONE$22);
             }
 
             target.setStringValue(workPhone);
@@ -1540,12 +1682,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WORKPHONE$20,
+                                                         .find_element_user(WORKPHONE$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(WORKPHONE$20);
+                                                             .add_element_user(WORKPHONE$22);
             }
 
             target.set(workPhone);
@@ -1561,12 +1703,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(WORKPHONE$20,
+                                                         .find_element_user(WORKPHONE$22,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(WORKPHONE$20);
+                                                             .add_element_user(WORKPHONE$22);
             }
 
             target.setNil();
@@ -1579,7 +1721,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetWorkPhone() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(WORKPHONE$20, 0);
+            get_store().remove_element(WORKPHONE$22, 0);
         }
     }
 
@@ -1592,7 +1734,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ZIP$22,
+                                                           .find_element_user(ZIP$24,
                     0);
 
             if (target == null) {
@@ -1612,7 +1754,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ZIP$22,
+                                                         .find_element_user(ZIP$24,
                     0);
 
             return target;
@@ -1628,7 +1770,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ZIP$22,
+                                                         .find_element_user(ZIP$24,
                     0);
 
             if (target == null) {
@@ -1646,7 +1788,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(ZIP$22) != 0;
+            return get_store().count_elements(ZIP$24) != 0;
         }
     }
 
@@ -1659,12 +1801,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ZIP$22,
+                                                           .find_element_user(ZIP$24,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(ZIP$22);
+                                                               .add_element_user(ZIP$24);
             }
 
             target.setStringValue(zip);
@@ -1680,12 +1822,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ZIP$22,
+                                                         .find_element_user(ZIP$24,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ZIP$22);
+                                                             .add_element_user(ZIP$24);
             }
 
             target.set(zip);
@@ -1701,12 +1843,12 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ZIP$22,
+                                                         .find_element_user(ZIP$24,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ZIP$22);
+                                                             .add_element_user(ZIP$24);
             }
 
             target.setNil();
@@ -1719,7 +1861,7 @@ public class AddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     public void unsetZip() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(ZIP$22, 0);
+            get_store().remove_element(ZIP$24, 0);
         }
     }
 }

@@ -181,6 +181,7 @@
                     <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="altPhone" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="homePhone" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="mobilePhone" nillable="true" type="xs:string"/>

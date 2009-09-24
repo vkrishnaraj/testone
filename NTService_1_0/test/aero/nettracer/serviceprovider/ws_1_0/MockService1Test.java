@@ -160,5 +160,17 @@ public class MockService1Test {
 
 	}
 	
+	@Test
+	public void testSequentialReservationResponseData() throws Exception {
+
+		Session sess = HibernateWrapper.getSession().openSession();
+		User user = (User) sess.load(User.class, 3);
+		Reservation res = new Reservation();
+		ReservationResponse response1 = res.getReservationData(user, "DUNLAF", null);
+		ReservationResponse response2 = res.getReservationData(user, "DUNLAF", null);
+		ReservationResponse response3 = res.getReservationData(user, "DUNLAF", null);
+		int i = 0;
+	}
+	
 	
 }
