@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,8 +26,10 @@ import org.htmlparser.util.ParserException;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.WT_PXF;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
@@ -3769,5 +3773,151 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 	}
 
+
+	@Override
+	public String sendPxf(WtqRequestPxf wtqRequestPxf) throws WorldTracerException {
+		String result = null;
+		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
+		NameValuePair[] p1 = { 
+				new NameValuePair("_flowId", "sendmessage-flow"),
+				new NameValuePair("isHDQ", "N"),
+				};
+		startFlow.setQueryString(p1);
+		// check this
+		startFlow.setFollowRedirects(false);
+		try {
+			client.executeMethodWithPause(startFlow, "SEND_PXF (1)");
+		}
+		catch (HttpException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			startFlow.releaseConnection();
+		}
+		if(startFlow.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && startFlow.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.error("start forward message flow not redirect!");
+			throw new WorldTracerException("start forward message flow not redirect!");
+		}
+		//get flow key
+		String newLocation = startFlow.getResponseHeader("location").getValue();
+		String flowKey = newLocation.split("=")[1];
+		String responseBody = null;
+		//add params to forward
+		PostMethod forwardMethod = new PostMethod("/WorldTracerWeb/wtwflow.do");
+		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
+		forwardMethod.setQueryString(p2);
+		
+		//get to the WT interface and send the PXF request
+		//first compose information package 
+		forwardMethod.setParameter("_eventId", "Send");
+		forwardMethod.setParameter("isHDQ", "yes");
+		WT_PXF myPxf = wtqRequestPxf.getPxf();
+		int myDestinationType = myPxf.getDestination();
+		String sendToDestination = null;  // default 
+		if(myDestinationType == 1) {
+			sendToDestination = "ALL_STATIONS";
+			String allStationsActionArea = "" + myPxf.getArea_1();
+			forwardMethod.setParameter("sendMessageActionVO.allStationsActionArea", allStationsActionArea);
+		} else if(myDestinationType == 2) {
+			sendToDestination = "ONE_REGION";
+			String regionNumber = "" + myPxf.getStation_1();
+			String regionActionArea = "" + myPxf.getArea_1();
+			forwardMethod.setParameter("sendMessageActionVO.regionNumber", regionNumber);
+			forwardMethod.setParameter("sendMessageActionVO.regionActionArea", regionActionArea);
+		} else {
+			sendToDestination = "ACTION_AREA_ADDRESSES";
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].stationCode", myPxf.getStation_1());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].airlineCode", myPxf.getAirline_1());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].actionAreaType", myPxf.getArea_1());
+
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].stationCode", myPxf.getStation_2());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].airlineCode", myPxf.getAirline_2());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].actionAreaType", myPxf.getArea_2());
+			
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].stationCode", myPxf.getStation_3());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].airlineCode", myPxf.getAirline_3());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].actionAreaType", myPxf.getArea_3());
+			
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].stationCode", myPxf.getStation_4());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].airlineCode", myPxf.getAirline_4());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].actionAreaType", myPxf.getArea_4());
+			
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[4].stationCode", myPxf.getStation_5());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[4].airlineCode", myPxf.getAirline_5());
+			
+		}
+		forwardMethod.setParameter("sendMessageActionVO.sendToDestination", sendToDestination);
+		forwardMethod.setParameter("_sendMessageActionVO.schedule", "on");
+		
+		Set<String> myTeletypes = wtqRequestPxf.getTeletypes();
+		Iterator<String> itr = myTeletypes.iterator();
+		int myIndex = 0;
+		while(itr.hasNext()) {
+			String myTeletype = itr.next();
+			forwardMethod.setParameter("sendMessageActionVO.ttyAddresses[" + myIndex + "]", myTeletype);
+			myIndex++;
+		}
+		forwardMethod.setParameter("wtrActionAreaWriteRequest.message", wtqRequestPxf.getFurtherInfo());
+		
+		//execute the send PXF request
+		try {
+			client.executeMethodWithPause(forwardMethod, "SEND_PXF (2)");
+			if(forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = forwardMethod.getResponseHeader("location").getValue();
+			}
+			else{
+				//TODO: Update
+				throw new WorldTracerException("send pxf method not redirect!");
+			}
+		}
+		catch (HttpException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			forwardMethod.releaseConnection();
+		}
+		
+		//////////////////////
+		
+		//check redirect
+		if (!"".equals(newLocation)) {
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				
+				//TODO:Update description
+				client.executeMethod(redirect, "SEND PXF: REDIRECT (3)");
+				responseBody = getStringFromInputStream(redirect
+						.getResponseBodyAsStream());
+			} catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerConnectionException("could not read pxf response");
+			} catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerConnectionException("could not read pxf response");
+			} finally {
+				redirect.releaseConnection();
+			}
+		} else {
+			throw new WorldTracerException("unable to send pxf redirect");
+		}
+		if (responseBody == null) {
+			throw new WorldTracerException("unable to send pxf redirect");
+		}
+		
+		if (responseBody.contains("alert(\"Message sent successfully\")") && responseBody.contains("var message = \'1\';")) {
+			result = "pxfSuccess";
+		} else {
+			result = responseBody;
+			logger.error("PXF did not work ! Error detail : " + responseBody);
+		}
+		
+		return result;
+	}
 	
 }

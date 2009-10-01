@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
@@ -870,6 +871,53 @@ public class WorldTracerQueueWorker implements Runnable {
 							logger.error("unable to update queue task", e);
 						}
 					}
+				}
+				else if(queue instanceof WtqRequestPxf) {
+					String result = "";
+					try {
+						WtqRequestPxf wtq = (WtqRequestPxf) queue;
+						// we need to map them up...
+						result = wtService.sendPxf(wtq);
+					}
+					catch(WorldTracerLoggedOutException ex) {
+						errorHandler.sendEmail("Unable to Login", ex, false, false);
+						logger.warn("weren't able to login so sleeping for 5 minutes");
+						Thread.sleep(5 * 60 * 1000);
+						continue;
+					}
+					catch (WorldTracerException ex) {
+						// TODO
+						logger.warn("unable to send pxf", ex);
+						queue.setAttempts(queue.getAttempts() + 1);
+						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+							queue.setStatus(WtqStatus.FAIL);
+						}
+						wtqBmo.updateQueue(queue);
+						continue;
+					}
+					catch (WorldTracerConnectionException ex) {
+						// TODO
+						logger.warn("unable to send pxf", ex);
+						queue.setAttempts(queue.getAttempts() + 1);
+						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+							queue.setStatus(WtqStatus.FAIL);
+						}
+						wtqBmo.updateQueue(queue);
+						continue;
+					}
+					catch (Throwable ex) {
+						// TODO
+						logger.warn("unable to send pxf", ex);
+						queue.setAttempts(queue.getAttempts() + 1);
+						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+							queue.setStatus(WtqStatus.FAIL);
+						}
+						wtqBmo.updateQueue(queue);
+						continue;
+					}
+					logger.info("pxf sent !" + result);
+					queue.setStatus(WtqStatus.SUCCESS);
+					wtqBmo.updateQueue(queue);
 				}
 			}
 		} catch (Exception e) {

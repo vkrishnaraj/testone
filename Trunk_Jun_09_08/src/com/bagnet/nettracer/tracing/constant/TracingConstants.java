@@ -124,6 +124,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_LOG = "WorldTracer Log";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_AUTO_AMEND = "WorldTracer Auto Amend";
 	public static final String SYSTEM_COMPONENT_NAME_WORLD_TRACER_REQ_QOH = "WorldTracer Request QOH";
+	// G for new PXF 
+	public static final String SYSTEM_COMPONENT_NAME_WORLD_TRACER_PXF = "WorldTracer PXF";
 	
 
 	public final static String SYSTEM_COMPONENT_NAME_BDO = "Baggage Delivery Order";
@@ -477,6 +479,7 @@ public class TracingConstants {
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
 	public final static String VIEW_WORLDTRACER_TTY = "viewworldtracertty";
 	public static final String VIEW_WORLDTRACER_REQ_QOH = "viewworldtracerreqqoh";
+	public static final String VIEW_WORLDTRACER_PXF = "viewworldtracerpxf";
 
 	public final static String VIEW_WORLDTRACER_SUSRIT = "viewworldtracersusrit";
 
@@ -497,6 +500,10 @@ public class TracingConstants {
 	
 	//success wt roh
 	public final static String SEND_WT_ROH_SUCCESS = "sendwtrohsuccess";
+	
+	//success wt pxf
+	public final static String SEND_WT_PXF_SUCCESS = "sendwtpxfsuccess";
+	
 	//enter forward
 	public final static String ENTER_FORWARD_ON_HAND = "enterforwardonhand";
 

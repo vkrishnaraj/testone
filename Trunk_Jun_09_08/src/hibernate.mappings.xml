@@ -177,4 +177,5 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.Lock" />
 		<mapping class="com.bagnet.nettracer.tracing.db.ForwardNotice" />
 		<mapping class="com.bagnet.nettracer.tracing.db.ProactiveNotification" />
+		<mapping class="com.bagnet.nettracer.tracing.db.WT_PXF" />
 		

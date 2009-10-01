@@ -51,6 +51,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqFwd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -1394,6 +1395,12 @@ public class BetaWorldTracerService implements WorldTracerService {
 	public List<Worldtracer_Actionfiles> getActionFileSummary(
 			String companyCode, String wtStation, ActionFileType afType,
 			int day, Agent user) throws WorldTracerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String sendPxf(WtqRequestPxf pxf) throws WorldTracerException {
 		// TODO Auto-generated method stub
 		return null;
 	}

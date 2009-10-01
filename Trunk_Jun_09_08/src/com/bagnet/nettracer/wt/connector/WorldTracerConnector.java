@@ -8,6 +8,7 @@ import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
@@ -146,5 +147,7 @@ public interface WorldTracerConnector {
 	void logout();
 
 	public void initialize() throws Exception;
+	
+	public String sendPxf(WtqRequestPxf pxf) throws WorldTracerException;
 
 }

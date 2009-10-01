@@ -36,6 +36,7 @@ import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
@@ -1270,6 +1271,12 @@ public class BetaWtConnector implements WorldTracerConnector {
 	public void logout() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public String sendPxf(WtqRequestPxf pxf) throws WorldTracerException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

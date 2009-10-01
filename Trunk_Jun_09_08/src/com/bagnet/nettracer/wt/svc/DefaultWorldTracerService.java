@@ -52,6 +52,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqFwd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -1216,6 +1217,17 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			Agent user) throws WorldTracerException {
 		String result = wtConnector.getActionFileDetails(companyCode, wtStation, afType, day, itemNum);
 		return result;
+	}
+	
+	@WorldTracerTx(type = TxType.SEND_PXF)
+	public String sendPxf(WtqRequestPxf wtq) throws WorldTracerException {
+		
+		//check here to make sure we get the exact objs
+
+//		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(wtq);
+//		addConvertedTag(wtq.getBagTagNumber(), WorldTracerField.TN, fieldMap, wtq.getAgent().getCompanycode_ID());
+
+		return wtConnector.sendPxf(wtq);
 	}
 
 
