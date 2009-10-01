@@ -309,6 +309,10 @@
     	<put name="center" value="/pages/worldtracer/worldtracer_req_qoh_main.jsp"/>
     </definition>
     
+    <definition name="view_worldtracerpxf" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_pxf_main.jsp"/>
+    </definition>
+    
     <definition name="view_worldtracertty" extends="user_menu">
         <put name="center" value="/pages/worldtracer/worldtracer_tty_main.jsp"/>
     </definition>
@@ -326,6 +330,9 @@
     </definition>
     <definition name="send_wt_roh_success" extends="user_menu">
         <put name="center" value="/pages/worldtracer/send_wt_roh_success.jsp"/>
+    </definition>
+    <definition name="send_wt_pxf_success" extends="user_menu">
+        <put name="center" value="/pages/worldtracer/send_wt_pxf_success.jsp"/>
     </definition>
     <definition name="claims_list" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/claims.jsp"/>

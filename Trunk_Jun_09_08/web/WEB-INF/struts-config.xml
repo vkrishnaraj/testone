@@ -188,6 +188,7 @@
 		<form-bean name="worldTracerFWDForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm" />
 		<form-bean name="worldTracerFOHForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerFOHForm" />
 		<form-bean name="worldTracerReqQOHForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerReqQOHForm" />
+		<form-bean name="worldTracerPXFForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerPXFForm" />
 		<form-bean name="worldTracerROHForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="wt_ahl_id" type="java.lang.String" />
 			<form-property name="wt_ohd_id" type="java.lang.String" />
@@ -264,6 +265,7 @@
 		<forward name="forwardwtbagsuccess" path="forward_wt_bag_success" />
 		<forward name="sendwtttysuccess" path="send_wt_tty_success" />
 		<forward name="sendwtrohsuccess" path="send_wt_roh_success" />
+		<forward name="sendwtpxfsuccess" path="send_wt_pxf_success" />
 		<forward name="sendwtsusritsuccess" path="send_wt_sus_rit_success" />
 
 
@@ -291,6 +293,7 @@
 		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
 		<forward name="viewworldtracertty" path="view_worldtracertty" />
 		<forward name="viewworldtracerreqqoh" path="view_worldtracerreqqoh" />
+		<forward name="viewworldtracerpxf" path="view_worldtracerpxf" />
 
 
 
@@ -541,6 +544,8 @@
 		<action path="/worldtracerfwd" type="com.bagnet.nettracer.tracing.actions.WorldTracerFWDAction" name="worldTracerFWDForm" scope="session" validate="false"></action>
 		
 		<action path="/worldtracerqoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerReqQOHAction" name="worldTracerReqQOHForm" scope="session" validate="false"></action>
+		
+		<action path="/worldtracerpxf" type="com.bagnet.nettracer.tracing.actions.WorldTracerPXFAction" name="worldTracerPXFForm" scope="session" validate="false"></action>
 		
 		<action path="/worldtracerfoh" type="com.bagnet.nettracer.tracing.actions.WorldTracerFOHAction" name="worldTracerFOHForm" scope="session" validate="false">
 			<forward name="use_general" path="/worldtracerfwd.do"></forward>

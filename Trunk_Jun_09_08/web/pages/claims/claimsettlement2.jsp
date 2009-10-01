@@ -191,7 +191,7 @@
             </logic:notEqual>
           </logic:notEqual></td>
           <td><bean:message key="claimsettlement.zip" /><br>
-          <html:text name="claimSettlementForm" property="zip" size="15" maxlength="9"  styleClass="textfield" /></td>
+          <html:text name="claimSettlementForm" property="zip" size="15" maxlength="11"  styleClass="textfield" /></td>
           
           <td><bean:message key="claimsettlement.country" /><br>
   

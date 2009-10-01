@@ -26,6 +26,10 @@
     function  validatereqOHDFields(form) {
 		     return true;
  }
+
+  function  validatereqPXFFields(form) {
+	     return true;
+  }
   function validatereqFields(form, formType)
   {
     returnValue = true;
