@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.axis2.engine.AxisConfiguration;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument.MessageHeader;
@@ -31,7 +30,6 @@ import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.SabreConnection;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.UnexpectedException;
-import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.ClaimCheck;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger;
@@ -639,7 +637,7 @@ public class Reservation implements ReservationInterface {
 
 			OTA_TravelItineraryServiceStub stub = new OTA_TravelItineraryServiceStub(
 					null, connParams.getEndpoint());
-
+			addMustUnderstandHandler(stub);
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
 			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
 					ACTION_TRAVEL_ITINERARY_RQ);
@@ -734,11 +732,7 @@ public class Reservation implements ReservationInterface {
 
 			SessionCreateRQServiceStub2 stub = new SessionCreateRQServiceStub2(
 					null, connParams.getEndpoint());
-			AxisConfiguration ac = stub._getServiceClient()
-					.getAxisConfiguration();
-			List al = ac.getInFlowPhases();
-			al.add(0, new MustUnderstandHandler());
-			ac.setInPhasesUptoAndIncludingPostDispatch(al);
+			addMustUnderstandHandler(stub);
 
 			SecurityDocument securityDocument = SecurityDocument.Factory
 					.newInstance();
@@ -774,6 +768,15 @@ public class Reservation implements ReservationInterface {
 			logger.error(CREATE_PREFIX + "Error creating session: ", e);
 			throw e;
 		}
+	}
+
+	private static void addMustUnderstandHandler(
+			org.apache.axis2.client.Stub stub) {
+		AxisConfiguration ac = stub._getServiceClient()
+				.getAxisConfiguration();
+		List al = ac.getInFlowPhases();
+		al.add(0, new MustUnderstandHandler());
+		ac.setInPhasesUptoAndIncludingPostDispatch(al);
 	}
 
 	private static SecurityDocument getSecurityDocument(
