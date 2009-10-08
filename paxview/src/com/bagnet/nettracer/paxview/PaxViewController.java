@@ -28,7 +28,7 @@ public class PaxViewController extends SimpleFormController {
 	}
 	
 	@Override
-	protected ModelAndView onSubmit(Object command, BindException errors) throws Exception {
+	protected ModelAndView onSubmit(HttpServletRequest req, HttpServletResponse res, Object command, BindException errors) throws Exception {
 		Search search = (Search) command;
 
 		WS_PVAdvancedIncident advancedIncident = pvService.getAdvancedIncidentPV(search.getClaimnumber(), search.getLastname(), false);
@@ -40,6 +40,7 @@ public class PaxViewController extends SimpleFormController {
 			return new ModelAndView(getFormView(), model);
 		}
 		
+		req.getSession().setAttribute("FORM_DATA", advancedIncident);
 		return new ModelAndView(getSuccessView(), "incident", advancedIncident);
 	}
 

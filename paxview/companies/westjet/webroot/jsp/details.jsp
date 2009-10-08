@@ -63,7 +63,7 @@ window.addEvent('domready', function() {
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><spring:message code="page.title" /></title>
+<title><spring:message code="page.title" /> - Details</title>
 </head>
 <body>
 <div id="container">
@@ -233,6 +233,21 @@ window.addEvent('domready', function() {
         </form>
         </div>
         </p>
+        <div class="hr"></div>
+        <p><strong>If you want to send a message to the airline, <a href="paxCommunication.htm">click here</a></strong></p>
+        <p><strong>To view prior communication with the airline, <a href="paxCommunication.htm">click here</a></strong></p>
+        <p><strong>You have a new message from the airline, please <a href="paxCommunication.htm">click here</a> to view it.</strong></p>
+        <!-- new button to start pax communication begins -->
+        <!-- 
+        <p>
+        <div align="right" id="newPaxCommunicationButtonContainer">
+        <form action="paxCommunication.htm" method="get">
+          <input type="submit" value="<spring:message code='pax.communication'/>" class="button" />
+        </form>
+        </div>
+        </p>
+        -->
+        <!-- new button to start pax communication ends -->
       </div>
       <!-- /content_resultsLeftCol -->
       <div id="content_resultsRightCol">

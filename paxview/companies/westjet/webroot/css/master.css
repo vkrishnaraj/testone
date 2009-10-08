@@ -51,7 +51,7 @@ body {
 #content_resultsLeftCol {
 	position: relative;
 	float: left;
-	width: 350px;
+	width: 490px;
 	margin: 15px 0px;
 	background-color: fff;
 /*	border: 1px solid #9495a2;  */
@@ -61,7 +61,7 @@ body {
 	position: relative;
 	float: right;
 	margin: -20px 0 15px 15px;
-	width: 490px;
+	width: 350px;
 	background-color: #e8f2fc; 
 }
 
