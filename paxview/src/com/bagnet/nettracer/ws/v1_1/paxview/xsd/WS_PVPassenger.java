@@ -5,9 +5,11 @@
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package com.bagnet.nettracer.ws.core.pojo.xsd;
+package com.bagnet.nettracer.ws.v1_1.paxview.xsd;
 
 public class WS_PVPassenger  implements java.io.Serializable {
+    private java.lang.String addressOnFile;
+
     private java.lang.String email;
 
     private java.lang.String firstname;
@@ -28,6 +30,7 @@ public class WS_PVPassenger  implements java.io.Serializable {
     }
 
     public WS_PVPassenger(
+           java.lang.String addressOnFile,
            java.lang.String email,
            java.lang.String firstname,
            java.lang.String homephone,
@@ -36,6 +39,7 @@ public class WS_PVPassenger  implements java.io.Serializable {
            java.lang.String middlename,
            java.lang.String mobile,
            java.lang.String workphone) {
+           this.addressOnFile = addressOnFile;
            this.email = email;
            this.firstname = firstname;
            this.homephone = homephone;
@@ -44,6 +48,26 @@ public class WS_PVPassenger  implements java.io.Serializable {
            this.middlename = middlename;
            this.mobile = mobile;
            this.workphone = workphone;
+    }
+
+
+    /**
+     * Gets the addressOnFile value for this WS_PVPassenger.
+     * 
+     * @return addressOnFile
+     */
+    public java.lang.String getAddressOnFile() {
+        return addressOnFile;
+    }
+
+
+    /**
+     * Sets the addressOnFile value for this WS_PVPassenger.
+     * 
+     * @param addressOnFile
+     */
+    public void setAddressOnFile(java.lang.String addressOnFile) {
+        this.addressOnFile = addressOnFile;
     }
 
 
@@ -218,6 +242,9 @@ public class WS_PVPassenger  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
+            ((this.addressOnFile==null && other.getAddressOnFile()==null) || 
+             (this.addressOnFile!=null &&
+              this.addressOnFile.equals(other.getAddressOnFile()))) &&
             ((this.email==null && other.getEmail()==null) || 
              (this.email!=null &&
               this.email.equals(other.getEmail()))) &&
@@ -253,6 +280,9 @@ public class WS_PVPassenger  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
+        if (getAddressOnFile() != null) {
+            _hashCode += getAddressOnFile().hashCode();
+        }
         if (getEmail() != null) {
             _hashCode += getEmail().hashCode();
         }
@@ -286,59 +316,66 @@ public class WS_PVPassenger  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(WS_PVPassenger.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "WS_PVPassenger"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVPassenger"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("addressOnFile");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "addressOnFile"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("email");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "email"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "email"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("firstname");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "firstname"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "firstname"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("homephone");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "homephone"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "homephone"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("hotel");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "hotel"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "hotel"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("lastname");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "lastname"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "lastname"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("middlename");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "middlename"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "middlename"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("mobile");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "mobile"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "mobile"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("workphone");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "workphone"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "workphone"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

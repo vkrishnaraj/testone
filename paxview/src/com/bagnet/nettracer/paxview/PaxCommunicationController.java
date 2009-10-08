@@ -10,7 +10,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import com.bagnet.nettracer.ws.core.pojo.xsd.WS_PVAdvancedIncident;
+import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
 
 public class PaxCommunicationController extends SimpleFormController {
 	private boolean anyNewComment;
@@ -53,7 +53,7 @@ public class PaxCommunicationController extends SimpleFormController {
 			//return new ModelAndView(getFormView(), model);
 		} 
 		
-		WS_PVAdvancedIncident advancedIncident = (WS_PVAdvancedIncident) req.getSession().getAttribute("FORM_DATA");
+		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
 		model.put("incident", advancedIncident);
 		return new ModelAndView(getSuccessView(), model);
 	}

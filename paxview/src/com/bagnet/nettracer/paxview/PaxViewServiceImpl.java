@@ -6,53 +6,30 @@ import javax.xml.rpc.ServiceException;
 
 import org.apache.log4j.Logger;
 
-import com.bagnet.nettracer.ws.core.pojo.xsd.WS_PVAdvancedIncident;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WS_PVIncident;
-import com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceLocator;
-import com.bagnet.nettracer.ws.passengerview.NTPassengerViewServicePortType;
+import com.bagnet.nettracer.ws.v1_1.PaxViewLocator;
+import com.bagnet.nettracer.ws.v1_1.PaxViewPortType;
+import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
 
 public class PaxViewServiceImpl implements PaxViewService {
 
 	private static final Logger logger = Logger.getLogger(PaxViewServiceImpl.class);
 
-	private NTPassengerViewServiceLocator serviceLocator;
+	private PaxViewLocator serviceLocator;
 
 	public PaxViewServiceImpl() {
 	}
 
-	/* (non-Javadoc)
-	 * @see com.bagnet.nettracer.paxview.PaxViewService#getAdvancedIncidentPV(java.lang.String, java.lang.String, boolean)
-	 */
-	public WS_PVAdvancedIncident getAdvancedIncidentPV(String incident_id, String lastname, boolean doNotAuthorize)
-			throws RemoteException, ServiceException {
-
-		NTPassengerViewServicePortType stub;
-		try {
-			stub = serviceLocator.getNTPassengerViewServiceSOAP12port_http();
-		}
-		catch (ServiceException e) {
-			logger.error("unable to get WebService Stub", e);
-			throw e;
-		}
-
-		try {
-			return stub.getAdvancedIncidentPV(incident_id, lastname, doNotAuthorize);
-		}
-		catch (RemoteException e) {
-			logger.error("error executing AdvancedIncidentPV", e);
-			throw e;
-		}
-
-	}
 
 	/* (non-Javadoc)
 	 * @see com.bagnet.nettracer.paxview.PaxViewService#getIncidentPV(java.lang.String, java.lang.String)
 	 */
 	public WS_PVIncident getIncidentPV(java.lang.String incident_id, java.lang.String lastname)
 			throws java.rmi.RemoteException, ServiceException {
-		NTPassengerViewServicePortType stub;
+		
+		PaxViewPortType stub;
 		try {
-			stub = serviceLocator.getNTPassengerViewServiceSOAP12port_http();
+			
+			stub = serviceLocator.getPaxViewSOAP12port_http();
 		}
 		catch (ServiceException e) {
 			logger.error("unable to get WebService Stub", e);
@@ -60,7 +37,7 @@ public class PaxViewServiceImpl implements PaxViewService {
 		}
 
 		try {
-			return stub.getIncidentPV(incident_id, lastname);
+			return stub.getPaxView(incident_id, lastname, "PaxViewUser", "Password");
 		}
 		catch (RemoteException e) {
 			logger.error("error executing getIncidentPV", e);
@@ -68,7 +45,7 @@ public class PaxViewServiceImpl implements PaxViewService {
 		}
 	}
 
-	public void setServiceLocator(NTPassengerViewServiceLocator sl) {
+	public void setServiceLocator(PaxViewLocator sl) {
 		this.serviceLocator = sl;
 	}
 

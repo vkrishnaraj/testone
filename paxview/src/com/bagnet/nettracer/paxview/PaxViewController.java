@@ -10,7 +10,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import com.bagnet.nettracer.ws.core.pojo.xsd.WS_PVAdvancedIncident;
+import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
 
 public class PaxViewController extends SimpleFormController {
 
@@ -31,7 +31,7 @@ public class PaxViewController extends SimpleFormController {
 	protected ModelAndView onSubmit(HttpServletRequest req, HttpServletResponse res, Object command, BindException errors) throws Exception {
 		Search search = (Search) command;
 
-		WS_PVAdvancedIncident advancedIncident = pvService.getAdvancedIncidentPV(search.getClaimnumber(), search.getLastname(), false);
+		WS_PVIncident advancedIncident = pvService.getIncidentPV(search.getClaimnumber(), search.getLastname());
 		
 		if(advancedIncident == null) {
 			Map<String, Object> model = new HashMap<String, Object>();
