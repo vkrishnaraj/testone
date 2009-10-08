@@ -16,9 +16,11 @@
 
 	<!--  Web Service Definitions -->
 	<bean name="serviceLocator"
-		class="com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceLocator">
-		<property
-			name="NTPassengerViewServiceSOAP12port_httpEndpointAddress"
+		class="com.bagnet.nettracer.ws.v1_1.PaxViewLocator">
+		<!-- <property name="PaxViewSOAP12port_httpEndpointAddress"
+			value="${webservice.url}" />
+			 -->
+			 <property name="myUrl"
 			value="${webservice.url}" />
 	</bean>
 	<bean name="paxViewService"
