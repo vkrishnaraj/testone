@@ -21,9 +21,5 @@
 	<classpathentry kind="lib" path="provided-libs/log4j.jar"/>
 	<classpathentry kind="lib" path="provided-libs/saaj.jar"/>
 	<classpathentry kind="lib" path="provided-libs/servlet-api.jar"/>
-	<classpathentry kind="lib" path="C:/tools/eclipse/plugins/javax.xml.rpc_1.1.0.v200806030420/lib/jaxrpc.jar"/>
-	<classpathentry kind="lib" path="C:/tools/eclipse/plugins/javax.xml.soap_1.2.0.v200806030421/lib/saaj.jar"/>
-	<classpathentry kind="lib" path="C:/tools/eclipse/plugins/javax.wsdl_1.5.1.v200806030408.jar"/>
-	<classpathentry kind="lib" path="C:/tools/eclipse/plugins/org.apache.commons.logging_1.0.4.v20080605-1930.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
