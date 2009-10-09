@@ -201,14 +201,12 @@ window.addEvent('domready', function() {
 						</c:choose>
 						</td>
     </tr>
-    <c:if test="${!empty incident.items[status.index].address1}">
+    <c:if test="${!empty incident.items[status.index].deliveryAddress}">
           <tr>
             <td class="rightAlign"><spring:message code="deliver.to" />:</td>
 	    <td>
-		    <c:out value="${incident.items[status.index].address1}" />
-    		<c:if test="${!empty incident.items[status.index].address2}">
-		<br/><c:out value="${incident.items[status.index].address2}" />
-		</c:if>
+		    <c:out value="${incident.items[status.index].deliveryAddress}" />
+
 	    </td>
     </tr>
     </c:if>
