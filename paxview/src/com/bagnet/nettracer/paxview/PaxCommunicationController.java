@@ -14,6 +14,7 @@ import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
 
 public class PaxCommunicationController extends SimpleFormController {
 	private boolean anyNewComment;
+	private PaxViewService pvService;
 	
 	public PaxCommunicationController()	{
 		setCommandClass(PaxCommunication.class);
@@ -28,6 +29,9 @@ public class PaxCommunicationController extends SimpleFormController {
 			req.setAttribute("siteLanguage", req.getParameter("locale"));
 		}
 
+		String myNextAction = "" + req.getParameter("prepareto");
+		req.setAttribute("prepareto", myNextAction);
+		
 		return super.handleRequestInternal(req, res);
 	}
 	
@@ -38,9 +42,15 @@ public class PaxCommunicationController extends SimpleFormController {
 			BindException errors) throws Exception {
 		PaxCommunication paxCommunication = (PaxCommunication) command;
 		
+		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
+		//advancedIncident.getPaxCommunication();
 		String myNewComment = "" + req.getParameter("newPaxComment");
 		anyNewComment = false;
 		if(myNewComment.trim().length() > 0) {
+			if(advancedIncident != null) {
+				String claimnumber = advancedIncident.getIncident_ID();
+				advancedIncident = pvService.writeComment(claimnumber, myNewComment.trim());
+			}
 			anyNewComment = true;
 			paxCommunication.setComment(myNewComment);
 		}
@@ -53,9 +63,16 @@ public class PaxCommunicationController extends SimpleFormController {
 			//return new ModelAndView(getFormView(), model);
 		} 
 		
-		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
+		String myNextAction = "" + req.getParameter("prepareto");
+		model.put("prepareto", myNextAction);
+		
+		
+		req.getSession().setAttribute("FORM_DATA", advancedIncident);
 		model.put("incident", advancedIncident);
 		return new ModelAndView(getSuccessView(), model);
 	}
 
+	public void setPvService(PaxViewService pvService) {
+		this.pvService = pvService;
+	}
 }

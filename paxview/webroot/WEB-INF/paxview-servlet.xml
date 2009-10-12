@@ -49,6 +49,7 @@
 	<bean name="/paxCommunication.htm" class="com.bagnet.nettracer.paxview.PaxCommunicationController">
 		<property name="formView" value="pax_communication_details" />
 		<property name="successView" value="pax_communication_details" />
+		<property name="pvService" ref="paxViewService" />
 	</bean>
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">

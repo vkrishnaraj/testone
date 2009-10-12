@@ -49,5 +49,27 @@ public class PaxViewServiceImpl implements PaxViewService {
 		this.serviceLocator = sl;
 	}
 
+
+	@Override
+	public WS_PVIncident writeComment(String claimnumber, String comment) throws ServiceException, RemoteException {
+		PaxViewPortType stub;
+		try {
+			
+			stub = serviceLocator.getPaxViewSOAP12port_http();
+		}
+		catch (ServiceException e) {
+			logger.error("unable to get WebService Stub", e);
+			throw e;
+		}
+
+		try {
+			return stub.writePassengerComment(claimnumber, comment, "PaxViewUser", "Password");
+		}
+		catch (RemoteException e) {
+			logger.error("error executing getIncidentPV", e);
+			throw e;
+		}
+	}
+
 	
 }

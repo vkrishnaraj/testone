@@ -65,6 +65,14 @@ body {
 	background-color: #e8f2fc; 
 }
 
+#content_resultsCenterCol {
+	position: relative;
+	float: center;
+	margin: 85px 35px;
+	width: 650px;
+	background-color: #e8f2fc; 
+}
+
 #footer {
 	position: relative;
 	clear: both;

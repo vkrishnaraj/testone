@@ -3,6 +3,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page import="com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication" %>
+<%@ page import="com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -231,10 +234,52 @@ window.addEvent('domready', function() {
         </form>
         </div>
         </p>
-        <div class="hr"></div>
-        <p><strong>If you want to send a message to the airline, <a href="paxCommunication.htm">click here</a></strong></p>
-        <p><strong>To view prior communication with the airline, <a href="paxCommunication.htm">click here</a></strong></p>
-        <p><strong>You have a new message from the airline, please <a href="paxCommunication.htm">click here</a> to view it.</strong></p>
+        <div class="hr"></div>       
+<%
+
+WS_PVIncident advancedIncident = (WS_PVIncident) request.getSession().getAttribute("FORM_DATA");
+if (advancedIncident.getPaxCommunication() != null) {
+	WS_PVPaxCommunication[] arr = advancedIncident.getPaxCommunication();
+	
+	if (arr == null || arr.length == 0) {
+		//option 1 (pax sends a message)
+%>
+		<p><strong><spring:message code="pax.want.to.send.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp; here</a></strong></p>
+<%
+		
+	} else if (arr.length > 0){
+		//loop through to find out is there is any new comment from airline
+		boolean isThereAnyNewCommentByAirline = false;
+		for(int i=0; i<arr.length; i++) {
+			WS_PVPaxCommunication myWS_PVPaxCommunication = arr[i];
+			if(myWS_PVPaxCommunication != null) {
+				String myStatus = "" + myWS_PVPaxCommunication.getStatus();
+				if(myStatus.equalsIgnoreCase("NEW") 
+						&& myWS_PVPaxCommunication.getAgent() != null) {
+					isThereAnyNewCommentByAirline = true;
+				}				
+			}
+
+		}
+		if(isThereAnyNewCommentByAirline) {
+			//view new message by airline option
+%>
+		<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew">click here</a></strong></p>
+<%
+		} else {
+			//view prior communication option
+%>
+		<p><strong><spring:message code="pax.want.to.view.prior.commnent" /><a href="paxCommunication.htm?prepareto=viewprior">click here</a></strong></p>
+<%
+		}
+	}
+} else {
+%>
+<p><strong><spring:message code="pax.want.to.send.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp; here</a></strong></p>
+<%
+}
+
+%>
         <!-- new button to start pax communication begins -->
         <!-- 
         <p>

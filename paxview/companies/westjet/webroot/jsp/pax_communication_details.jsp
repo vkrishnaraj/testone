@@ -3,6 +3,51 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page import="com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication" %>
+<%@ page import="com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident" %>
+<% 
+String myNextAction = "" + (String) request.getAttribute("prepareto");
+
+StringBuffer sbPriorCommunication = new StringBuffer("");
+WS_PVIncident advancedIncident = (WS_PVIncident) request.getSession().getAttribute("FORM_DATA");
+if (advancedIncident != null) {
+	WS_PVPaxCommunication[] arr = advancedIncident.getPaxCommunication();
+	if (arr != null) {
+		if (arr.length > 0){
+			for(int i=0; i<arr.length; i++) {
+				WS_PVPaxCommunication myWS_PVPaxCommunication = arr[i];
+				if(myWS_PVPaxCommunication != null) {
+					String enteredBy = "";
+					String myAgent = "" + myWS_PVPaxCommunication.getAgent();
+					if(myAgent==null || myAgent.equals("") || myAgent.equals("null")) {  //comment by pax 
+						enteredBy = " - Your Comment";
+					} else {
+						enteredBy = " - US Airways";
+					} 
+					
+					sbPriorCommunication.append("<H2>" + myWS_PVPaxCommunication.getCreate_timestamp() + enteredBy + "</H2><BR />");
+					
+					String strAcknowledgedBy = "";
+					String myAcknowledgedAgent = "" + myWS_PVPaxCommunication.getAcknowledged_agent();
+					String myAcknowledgedTimestamp = "" + myWS_PVPaxCommunication.getAcknowledged_timestamp();
+					if(myAcknowledgedAgent != null && myAcknowledgedTimestamp != null) {
+						if(!myAcknowledgedAgent.equals("") && (!myAcknowledgedTimestamp.equals(""))) {
+
+							strAcknowledgedBy = "<I>Comment acknowledged by US Airways on " + myAcknowledgedTimestamp + "</I>";
+						}
+					}
+					sbPriorCommunication.append(strAcknowledgedBy + "<BR />");
+					
+					sbPriorCommunication.append("<H4>" + myWS_PVPaxCommunication.getComment() + "</H4><BR />");
+					sbPriorCommunication.append("<HR />");
+				}
+			}
+		}
+	}	
+	
+}
+
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -112,23 +157,25 @@ window.addEvent('domready', function() {
 						</c:otherwise>
 					</c:choose>	
     <!-- /header -->
-    <div style="overflow:auto;height:auto;"><center>
-      	<table border="0" cellspacing="5" cellpadding="5">
+    <div id="content_resultsCenterCol">
+    <!--<div style="overflow:auto;height:auto;">--><center>
+      	<table border="0" cellspacing="5" cellpadding="5" id="Definitions">
+      	    <tr>
+      	    	<td><strong><spring:message code="pax.communication.priorcomments" /></strong>:<br /></td>
+      	    </tr>
       		<tr>
 				<td>
-					<p><strong><spring:message code="pax.communication.priorcomments" /></strong>:<br />
-			  		<TEXTAREA name="priorPaxCommunication" id="priorPaxCommunication" ROWS="17" COLS="75" style="background-color: #EDEDED" readonly="readonly">
 			  			<c:out value="${incident.comments }"/>
-						Please enter your special instructions or commentsPlease enter your special instructions or commentsPlease enter your special instructions or commentsPlease enter your special instructions or commentsPlease enter your special instructions or commentsPlease enter your special instructions or commentsPlease enter your special instructions or comments
-						<c:if test="${!empty command.comment}">
-							<c:out value="${command.comment}" />
-						</c:if>
-					</TEXTAREA></td>
+						<%=sbPriorCommunication.toString() %>
+				</td>
 			</tr>
 		</table></center>
 	</div> 
     <div id="newPaxComment"><center>
 	    <form method="POST" action="paxCommunication.htm" name="frmNewPaxComment" id="frmNewPaxComment">
+<%
+//if(myNextAction.equalsIgnoreCase("sendnew")) {
+%>
 			<table cellspacing="1" cellpadding="1">
 				<tr>
 					<td colspan="2">
@@ -151,6 +198,9 @@ window.addEvent('domready', function() {
 					</td>
 				</tr>
 			</table>
+<%
+//}
+%>
 		</form></center>
     </div>
     <!-- /content -->
