@@ -30,6 +30,7 @@ import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.SabreConnection;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.UnexpectedException;
+import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.ClaimCheck;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger;
@@ -72,7 +73,7 @@ import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument
 import com.sabre.webservices.websvc.AddRemarkServiceStub;
 import com.sabre.webservices.websvc.EndTransactionServiceStub;
 import com.sabre.webservices.websvc.IgnoreTransactionServiceStub;
-import com.sabre.webservices.websvc.OTA_TravelItineraryServiceStub;
+import com.sabre.webservices.websvc.OTA_TravelItineraryServiceStub2;
 import com.sabre.webservices.websvc.SabreCommandLLSServiceStub;
 import com.sabre.webservices.websvc.SessionCloseRQServiceStub;
 import com.sabre.webservices.websvc.SessionCreateRQServiceStub2;
@@ -211,30 +212,27 @@ public class Reservation implements ReservationInterface {
 							} else if (line.startsWith("C/")) {
 								String[] arr = line.split(",");
 								String city = arr[0].substring(2);
-								String state = arr[1];
 								add.setCity(city.trim());
+								
+								String state = "";
+								try {
+									state = arr[1];
+								} catch (Exception e) {
+									// Ignore exception.
+									// State was unable to be parsed because there was no comma between city and state
+									// Sample is below
+									// <AddressLine>N/MIKE JOHNSON</AddressLine>
+									// <AddressLine>A/123 MAIN
+									// STREET</AddressLine>
+									// <AddressLine>C/JERSEY CITY,
+									// NJ</AddressLine>
+									// <AddressLine>Z/07306</AddressLine>
+								}
 								add.setState(state.trim());
 							} else if (line.startsWith("Z/")) {
 								add.setZip(line.substring(2));
 							}
 						}
-						
-//						String x = StringUtils.join(lines, " ");
-//						if (x.length() > 0) {
-//							x = x.trim();
-//
-//							if (x.length() > 49) {
-//								ArrayList<String> al = ServiceUtilities
-//										.splitOnWordBreak(x, 49);
-//								add.setAddress1(al.get(0));
-//								if (al.size() > 1) {
-//
-//									add.setAddress2(al.get(1));
-//								}
-//							} else {
-//								add.setAddress1(x);
-//							}
-//						}
 					}
 				}
 			}
@@ -550,16 +548,20 @@ public class Reservation implements ReservationInterface {
 			String remarkText = remark;
 			remarkText = remarkText.replaceAll("[(),]", "");
 			remarkText = remarkText.replaceAll("[:]", "-");
-			br.setText(remarkText);
+			
+			ArrayList<String> list = ServiceUtilities.splitOnWordBreak(remarkText, 58);
+			for (String str: list) {
+				br.setText(str);
+				
+				logger.info(ADD_REMARK + connParams.getLoggingString()
+						+ " Remark: " + remark);
 
-			logger.info(ADD_REMARK + connParams.getLoggingString()
-					+ " Remark: " + remark);
+				AddRemarkRSDocument responseDocument = stub.addRemarkRQ(rqDoc,
+						mhDoc, securityDocument);
 
-			AddRemarkRSDocument responseDocument = stub.addRemarkRQ(rqDoc,
-					mhDoc, securityDocument);
-
-			logger.info(ADD_REMARK + responseDocument.toString());
-
+				logger.info(ADD_REMARK + responseDocument.toString());
+			}
+			
 		} catch (RemoteException e) {
 			logger.error(ADD_REMARK + "Error creating session: ", e);
 			throw e;
@@ -625,7 +627,6 @@ public class Reservation implements ReservationInterface {
 			logger
 					.error(IGNORE_TRANSACTION + "Error ignoring transaction: ",
 							e);
-			// throw e;
 		}
 
 	}
@@ -635,19 +636,20 @@ public class Reservation implements ReservationInterface {
 			throws RemoteException {
 		try {
 
-			OTA_TravelItineraryServiceStub stub = new OTA_TravelItineraryServiceStub(
+			OTA_TravelItineraryServiceStub2 stub = new OTA_TravelItineraryServiceStub2(
 					null, connParams.getEndpoint());
-			addMustUnderstandHandler(stub);
+
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
 			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
-					ACTION_TRAVEL_ITINERARY_RQ);
+					ACTION_TRAVEL_ITINERARY_RQ, "Travel");
+			
+			
 			OTATravelItineraryReadRQDocument rqDoc = OTATravelItineraryReadRQDocument.Factory
 					.newInstance();
-			OTATravelItineraryReadRQ readRq = rqDoc
-					.addNewOTATravelItineraryReadRQ();
+			OTATravelItineraryReadRQ readRq = rqDoc.addNewOTATravelItineraryReadRQ();
 			UniqueID id = readRq.addNewUniqueID();
 			id.setID(pnr);
-			readRq.setVersion("1.14.1");
+			readRq.setVersion("2003A.TsabreXML1.14.1");
 
 			OTATravelItineraryRSDocument responseDocument = null;
 
@@ -732,7 +734,19 @@ public class Reservation implements ReservationInterface {
 
 			SessionCreateRQServiceStub2 stub = new SessionCreateRQServiceStub2(
 					null, connParams.getEndpoint());
-			addMustUnderstandHandler(stub);
+			AxisConfiguration ac = stub._getServiceClient()
+					.getAxisConfiguration();
+			
+			List al = ac.getInFlowPhases();
+			List al2 = ac.getInFaultFlowPhases();
+			if (al.size() > 0 && !(al.get(0) instanceof MustUnderstandHandler)) {
+				logger.info("Created MustUnderstandHandler");
+				MustUnderstandHandler mu = new MustUnderstandHandler();
+				al.add(0, mu);
+				al2.add(0, mu);
+				ac.setInPhasesUptoAndIncludingPostDispatch(al);
+				ac.setInFaultPhases(al2);
+			}
 
 			SecurityDocument securityDocument = SecurityDocument.Factory
 					.newInstance();
@@ -759,7 +773,7 @@ public class Reservation implements ReservationInterface {
 			String binarySecurityToken = stub.getBinarySecurityToken();
 			connParams.setBinarySecurityToken(binarySecurityToken);
 
-			logger.debug(CREATE_PREFIX + responseDocument.toString());
+			
 			logger.info(CREATE_PREFIX + "Status Received: " + status);
 			logger.info(CREATE_PREFIX + "Binary Security Token Received: "
 					+ binarySecurityToken);
@@ -768,15 +782,6 @@ public class Reservation implements ReservationInterface {
 			logger.error(CREATE_PREFIX + "Error creating session: ", e);
 			throw e;
 		}
-	}
-
-	private static void addMustUnderstandHandler(
-			org.apache.axis2.client.Stub stub) {
-		AxisConfiguration ac = stub._getServiceClient()
-				.getAxisConfiguration();
-		List al = ac.getInFlowPhases();
-		al.add(0, new MustUnderstandHandler());
-		ac.setInPhasesUptoAndIncludingPostDispatch(al);
 	}
 
 	private static SecurityDocument getSecurityDocument(
@@ -796,6 +801,11 @@ public class Reservation implements ReservationInterface {
 
 	private static MessageHeaderDocument getMessageHeader(
 			SabreConnection connParams, String action) {
+		return getMessageHeader(connParams, action, null);
+	}
+	
+	private static MessageHeaderDocument getMessageHeader(
+			SabreConnection connParams, String action, String service) {
 		MessageHeaderDocument mhDoc = MessageHeaderDocument.Factory
 				.newInstance();
 		MessageHeader mh = mhDoc.addNewMessageHeader();
@@ -804,6 +814,11 @@ public class Reservation implements ReservationInterface {
 		a.setStringValue("1");
 		b.setStringValue("1");
 		mh.setConversationId(connParams.getConversation());
+		if (service != null) { 
+			mh.addNewService().setStringValue(service);
+		} else {
+			mh.addNewService().setStringValue("");
+		}
 		mh.setAction(action);
 		return mhDoc;
 	}

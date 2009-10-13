@@ -116,6 +116,7 @@
 		<delete file="${app.deploy.dir}/${war.name}.war" failonerror="false" />
 		<delete dir="${build.dir}/services-war" />
 		<mkdir dir="${build.dir}/services-war"/>
+		
 		<copy todir="${build.dir}/services-war" overwrite="true">
 			<fileset dir="${webroot.dir}" >
 				<include name="WEB-INF/**/*"/>
@@ -125,6 +126,8 @@
 		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
 			<fileset dir="${build.classes.dir}" />
 		</copy>
+		<delete dir="${dist.dir}" failonerror="false" />
+		<mkdir dir="${dist.dir}"/>
 		<war destfile="${dist.dir}/${war.name}.war" duplicate="preserve" compress="true" webxml="web/WEB-INF/web.xml">
 			<fileset dir="${build.dir}/services-war"/>
 		</war>
