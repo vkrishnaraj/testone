@@ -67,7 +67,7 @@ public class PaxCommunicationController extends SimpleFormController {
 		model.put("prepareto", myNextAction);
 		
 		
-		req.getSession().setAttribute("FORM_DATA", advancedIncident);
+		req.getSession().setAttribute("FORM_DATA", advancedIncident); 
 		model.put("incident", advancedIncident);
 		return new ModelAndView(getSuccessView(), model);
 	}

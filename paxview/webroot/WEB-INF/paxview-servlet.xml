@@ -41,8 +41,17 @@
 		class="com.bagnet.nettracer.paxview.PaxViewController">
 		<property name="formView" value="search" />
 		<property name="successView" value="details" />
-		<property name="commandClass"
-			value="com.bagnet.nettracer.paxview.Search" />
+		<property name="jumpSuccessView" value="pax_communication_details" />
+		<property name="commandClass" value="com.bagnet.nettracer.paxview.Search" />
+		<property name="pvService" ref="paxViewService" />
+		<property name="validator" ref="beanValidator" />
+	</bean>
+		<bean name="/search.htm?message=1"
+		class="com.bagnet.nettracer.paxview.PaxViewController">
+		<property name="formView" value="search" />
+		<property name="successView" value="details" />
+		<property name="jumpSuccessView" value="pax_communication_details" />
+		<property name="commandClass" value="com.bagnet.nettracer.paxview.Search" />
 		<property name="pvService" ref="paxViewService" />
 		<property name="validator" ref="beanValidator" />
 	</bean>
@@ -51,6 +60,11 @@
 		<property name="successView" value="pax_communication_details" />
 		<property name="pvService" ref="paxViewService" />
 	</bean>
+	<bean name="/claimDetail.htm" class="com.bagnet.nettracer.paxview.ClaimDetailController">
+		<property name="formView" value="pax_communication_details" />
+		<property name="successView" value="details" />
+	</bean>
+	
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
