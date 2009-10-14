@@ -227,6 +227,7 @@ window.addEvent('domready', function() {
           <textarea name="specialInstructions" id="specialInstructions" cols="45" rows="5" readonly="readonly"><c:out value="${incident.comments }"/></textarea>
         </p>
         </c:if>
+        <!-- 
         <p>
         <div align="right" id="newSearchButtonContainer">
         <form action="search.htm" method="get">
@@ -234,11 +235,13 @@ window.addEvent('domready', function() {
         </form>
         </div>
         </p>
+        -->
         <div class="hr"></div>       
 <%
 
 WS_PVIncident advancedIncident = (WS_PVIncident) request.getSession().getAttribute("FORM_DATA");
-if (advancedIncident.getPaxCommunication() != null) {
+if (advancedIncident != null) {
+  if (advancedIncident.getPaxCommunication() != null) {
 	WS_PVPaxCommunication[] arr = advancedIncident.getPaxCommunication();
 	
 	if (arr == null || arr.length == 0) {
@@ -264,32 +267,31 @@ if (advancedIncident.getPaxCommunication() != null) {
 		if(isThereAnyNewCommentByAirline) {
 			//view new message by airline option
 %>
-		<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew">click here</a></strong></p>
+		<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew">&nbsp;click here</a></strong></p>
 <%
 		} else {
 			//view prior communication option
 %>
-		<p><strong><spring:message code="pax.want.to.view.prior.commnent" /><a href="paxCommunication.htm?prepareto=viewprior">click here</a></strong></p>
+		<p><strong><spring:message code="pax.want.to.view.prior.commnent" /><a href="paxCommunication.htm?prepareto=viewprior">&nbsp;click here</a></strong></p>
 <%
 		}
 	}
-} else {
+  } else {
 %>
-<p><strong><spring:message code="pax.want.to.send.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp; here</a></strong></p>
+<p><strong><spring:message code="pax.want.to.send.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp;click here</a></strong></p>
 <%
+  }
 }
-
 %>
         <!-- new button to start pax communication begins -->
-        <!-- 
+        <div class="hr"></div>
         <p>
-        <div align="right" id="newPaxCommunicationButtonContainer">
-        <form action="paxCommunication.htm" method="get">
-          <input type="submit" value="<spring:message code='pax.communication'/>" class="button" />
+        <div align="right" id="newSearchButtonContainer">
+        <form action="search.htm" method="get">
+          <input type="submit" value="<spring:message code='new.search'/>" class="button" />
         </form>
         </div>
         </p>
-        -->
         <!-- new button to start pax communication ends -->
       </div>
       <!-- /content_resultsLeftCol -->
