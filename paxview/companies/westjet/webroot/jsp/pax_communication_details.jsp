@@ -24,21 +24,23 @@ if (advancedIncident != null) {
 					} else {
 						enteredBy = " - US Airways";
 					} 
-					
-					sbPriorCommunication.append("<H2>" + myWS_PVPaxCommunication.getCreate_timestamp() + enteredBy + "</H2><BR />");
+					sbPriorCommunication.append("<p class='small'>");
+					sbPriorCommunication.append("<H2>" + myWS_PVPaxCommunication.getCreate_timestamp() + enteredBy + "</H2>");
 					
 					String strAcknowledgedBy = "";
 					String myAcknowledgedAgent = "" + myWS_PVPaxCommunication.getAcknowledged_agent();
 					String myAcknowledgedTimestamp = "" + myWS_PVPaxCommunication.getAcknowledged_timestamp();
 					if(myAcknowledgedAgent != null && myAcknowledgedTimestamp != null) {
 						if(!myAcknowledgedAgent.equals("") && (!myAcknowledgedTimestamp.equals(""))) {
-
-							strAcknowledgedBy = "<I>Comment acknowledged by US Airways on " + myAcknowledgedTimestamp + "</I>";
+							if(!myAcknowledgedTimestamp.equals("null")) {
+								strAcknowledgedBy = "<I>Comment acknowledged by US Airways on " + myAcknowledgedTimestamp + "</I>";	
+							}
 						}
 					}
-					sbPriorCommunication.append(strAcknowledgedBy + "<BR />");
-					
-					sbPriorCommunication.append("<H4>" + myWS_PVPaxCommunication.getComment() + "</H4><BR />");
+					sbPriorCommunication.append(strAcknowledgedBy + "</p><BR />");
+					String myComment = "" + myWS_PVPaxCommunication.getComment();
+					myComment = myComment.replaceAll("\n", "<BR />");
+					sbPriorCommunication.append("<H4>" + myComment + "</H4>");
 					sbPriorCommunication.append("<HR />");
 				}
 			}
@@ -133,10 +135,25 @@ window.addEvent('domready', function() {
 
 </script>
 
+<script type="text/javascript">
+function redirect2ClaimDetail() {
+	document.location.href='search.htm';
+}
+</script>
+
+
 <style type="text/css">
-  p.statClaimToggle {
+p.statClaimToggle {
     cursor: pointer;
-  }
+}
+p.small
+{
+	line-height: 3px
+}
+p.big
+{
+	line-height: 30px
+} 
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -157,51 +174,75 @@ window.addEvent('domready', function() {
 						</c:otherwise>
 					</c:choose>	
     <!-- /header -->
-    <div id="content_resultsCenterCol">
-    <!--<div style="overflow:auto;height:auto;">--><center>
+    <div id="content_commentsCenterCol">
+    <!--<div style="overflow:auto;height:auto;">--><!--<center>-->
       	<table border="0" cellspacing="5" cellpadding="5" id="Definitions">
+      	    <tr>
+   				<td align="left">
+					<div id="searchButtonContainer">
+							<form action="claimDetail.htm" method="POST">
+          						<input type="submit" value="<spring:message code='view.claim.detail'/>" class="button" />
+        					</form>
+					</div>
+				</td>   	    	
+      	    </tr>
+      	    <!-- 
       	    <tr>
       	    	<td><strong><spring:message code="pax.communication.priorcomments" /></strong>:<br /></td>
       	    </tr>
+      	    -->
       		<tr>
 				<td>
-			  			<c:out value="${incident.comments }"/>
+			  			<!--<c:out value="${incident.comments }"/>-->
 						<%=sbPriorCommunication.toString() %>
 				</td>
 			</tr>
-		</table></center>
+		</table><!--</center>-->
 	</div> 
-    <div id="newPaxComment"><center>
+    <div id="newPaxComment"><!--<center>-->
 	    <form method="POST" action="paxCommunication.htm" name="frmNewPaxComment" id="frmNewPaxComment">
 <%
 //if(myNextAction.equalsIgnoreCase("sendnew")) {
 %>
-			<table cellspacing="1" cellpadding="1">
+			<table cellspacing="0" cellpadding="5" border="0">
 				<tr>
-					<td colspan="2">
+					<td>
 						<c:if test="${!empty noNewComment }">
 									<spring:message code="no.new.comment" />
 						</c:if></td>
 				</tr>
+				<!-- 
 				<tr>		
-					<td>&nbsp;</td>
 					<td>
-			  		<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="73" onKeyUp="highlight(event)" onClick="highlight(event)"></TEXTAREA>
+			  			<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="78" onKeyUp="highlight(event)" onClick="highlight(event)"></TEXTAREA>
 					</td>
 				</tr>
 				<tr>
-					<td>&nbsp;</td>
 					<td align="right">
 						<div id="searchButtonContainer">
 							<input type="submit" class="button" tabindex="3" value='Add Comment' />
 						</div>
 					</td>
 				</tr>
+				-->
+				<tr>		
+					<td>
+						<table cellspacing="0" cellpadding="0" border="0">
+							<tr><td>
+								<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="82" onKeyUp="highlight(event)" onClick="highlight(event)"></TEXTAREA>
+							</td></tr>
+							<tr><td align="right">
+								<div id="searchButtonContainer">
+									<input type="submit" class="button" tabindex="3" value='Add Comment' />
+								</div>
+							</td></tr></table>
+					</td>
+				</tr>
 			</table>
 <%
 //}
 %>
-		</form></center>
+		</form><!--</center>-->
     </div>
     <!-- /content -->
     <div id="footer">
