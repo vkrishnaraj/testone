@@ -68,9 +68,23 @@ body {
 #content_resultsCenterCol {
 	position: relative;
 	float: center;
-	margin: 85px 35px;
+	margin: 45px 35px;
 	width: 650px;
 	background-color: #e8f2fc; 
+}
+
+#content_commentsCenterCol {
+	position: relative;
+	float: center;
+	margin: 45px 35px;
+	width: 650px;
+	background-color: #e8f2fc; 
+}
+
+#newPaxComment {
+	position: relative;
+	float: left;
+	margin: 5px 14px;
 }
 
 #footer {
