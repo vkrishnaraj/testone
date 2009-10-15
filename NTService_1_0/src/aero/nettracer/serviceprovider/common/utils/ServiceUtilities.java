@@ -34,7 +34,7 @@ public class ServiceUtilities {
 		return user;
 	}
 
-	private static boolean authorize(User user, PermissionType permissionType) {
+	public static boolean authorize(User user, PermissionType permissionType) {
 		if (user != null) {
 			if (user.getProfile().getPermissions().containsKey(permissionType)) {
 				return true;

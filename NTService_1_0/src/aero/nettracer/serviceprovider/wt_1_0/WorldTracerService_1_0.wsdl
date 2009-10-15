@@ -1,0 +1,1243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://response.ws_1_0.serviceprovider.nettracer.aero/xsd" xmlns:ns1="http://wt_1_0.serviceprovider.nettracer.aero" xmlns:ns3="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://common.wt_1_0.serviceprovider.nettracer.aero/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://wt_1_0.serviceprovider.nettracer.aero">
+    <wsdl:types>
+        <xs:schema xmlns:ax22="http://common.wt_1_0.serviceprovider.nettracer.aero/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://common.wt_1_0.serviceprovider.nettracer.aero/xsd">
+            <xs:complexType name="Ahl">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax22:Itinerary"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="claimCheck" nillable="true" type="ax22:ClaimCheck"/>
+                    <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax22:Item"/>
+                    <xs:element minOccurs="0" name="numberPaxAffected" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax22:Passenger"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax22:Itinerary"/>
+                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Itinerary">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivalCity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="departureCity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="flightDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ClaimCheck">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Item">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="brand" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="content" nillable="true" type="ax22:Content"/>
+                    <xs:element minOccurs="0" name="desc1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="desc2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="desc3" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstNameOnBag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastNameOnBag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Content">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="category" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Passenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="addresses" nillable="true" type="ax22:Address"/>
+                    <xs:element minOccurs="0" name="ffAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ffNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ffStatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="initials" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Address">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="altPhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homePhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobilePhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="pagerNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="province" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="state" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="temporaryAddress" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="workPhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WorldTracerResponse">
+                <xs:complexContent>
+                    <xs:extension base="ns2:GenericResponse">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="actionFiles" nillable="true" type="xs:anyType"/>
+                            <xs:element minOccurs="0" name="ahl" nillable="true" type="ax22:Ahl"/>
+                            <xs:element minOccurs="0" name="counts" nillable="true" type="xs:anyType"/>
+                            <xs:element minOccurs="0" name="ohd" nillable="true" type="ax22:Ohd"/>
+                            <xs:element minOccurs="0" name="responseData" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="responseId" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="success" type="xs:boolean"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="Ohd">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="Bdo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="deliveryCompany" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="deliveryDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="deliveryStationCode" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax22:Item"/>
+                    <xs:element minOccurs="0" name="originationStationCode" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passenger" nillable="true" type="ax22:Passenger"/>
+                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ActionFileRequestData">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="day" type="xs:int"/>
+                    <xs:element minOccurs="0" name="number" type="xs:int"/>
+                    <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ForwardOhd">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ohd" nillable="true" type="ax22:Ohd"/>
+                    <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Pxf">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="content" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="destination" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pxfDetails" nillable="true" type="ax22:PxfAas"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PxfAas">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="area" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ForwardMessage">
+                <xs:sequence/>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ns="http://wt_1_0.serviceprovider.nettracer.aero" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <xs:element name="amendAhl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ahl" nillable="true" type="ns0:Ahl"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="amendAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="amendOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ns0:Ohd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="amendOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="closeAhl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ahl" nillable="true" type="ns0:Ahl"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="closeAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="closeOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ns0:Ohd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="closeOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createAhl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ahl" nillable="true" type="ns0:Ahl"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createBdo">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="bdo" nillable="true" type="ns0:Bdo"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createBdoResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ns0:Ohd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="eraseActionFile">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ActionFileRequestData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="eraseActionFileResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="forwardOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ForwardOhd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="forwardOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getActionFileCounts">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ActionFileRequestData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getActionFileCountsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getActionFileDetails">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ActionFileRequestData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getActionFileDetailsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getActionFileSummary">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ActionFileRequestData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getActionFileSummaryResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAhl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ahl" nillable="true" type="ns0:Ahl"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ns0:Ohd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="placeActionFile">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="pxf" nillable="true" type="ns0:Pxf"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="placeActionFileResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reinstanteAhl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ahl" nillable="true" type="ns0:Ahl"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reinstanteAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="requestOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ForwardOhd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="requestOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="requestQuickOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ns0:ForwardOhd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="requestQuickOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sendForwardMessage">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="forwardMessage" nillable="true" type="ns0:ForwardMessage"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sendForwardMessageResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="suspendAhl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ns3:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ahl" nillable="true" type="ns0:Ahl"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="suspendAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax23="http://response.ws_1_0.serviceprovider.nettracer.aero/xsd" xmlns:ax24="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://response.ws_1_0.serviceprovider.nettracer.aero/xsd">
+            <xs:import namespace="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd"/>
+            <xs:complexType name="GenericResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="error" nillable="true" type="ax24:WebServiceError"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax21="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd">
+            <xs:complexType name="RequestHeader">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="parameters" nillable="true" type="ax21:Parameter"/>
+                    <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Parameter">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="value" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WebServiceError">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="closeOhdRequest">
+        <wsdl:part name="parameters" element="ns1:closeOhd"/>
+    </wsdl:message>
+    <wsdl:message name="closeOhdResponse">
+        <wsdl:part name="parameters" element="ns1:closeOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="forwardOhdRequest">
+        <wsdl:part name="parameters" element="ns1:forwardOhd"/>
+    </wsdl:message>
+    <wsdl:message name="forwardOhdResponse">
+        <wsdl:part name="parameters" element="ns1:forwardOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getAhlRequest">
+        <wsdl:part name="parameters" element="ns1:getAhl"/>
+    </wsdl:message>
+    <wsdl:message name="getAhlResponse">
+        <wsdl:part name="parameters" element="ns1:getAhlResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createAhlRequest">
+        <wsdl:part name="parameters" element="ns1:createAhl"/>
+    </wsdl:message>
+    <wsdl:message name="createAhlResponse">
+        <wsdl:part name="parameters" element="ns1:createAhlResponse"/>
+    </wsdl:message>
+    <wsdl:message name="eraseActionFileRequest">
+        <wsdl:part name="parameters" element="ns1:eraseActionFile"/>
+    </wsdl:message>
+    <wsdl:message name="eraseActionFileResponse">
+        <wsdl:part name="parameters" element="ns1:eraseActionFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="amendOhdRequest">
+        <wsdl:part name="parameters" element="ns1:amendOhd"/>
+    </wsdl:message>
+    <wsdl:message name="amendOhdResponse">
+        <wsdl:part name="parameters" element="ns1:amendOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getActionFileSummaryRequest">
+        <wsdl:part name="parameters" element="ns1:getActionFileSummary"/>
+    </wsdl:message>
+    <wsdl:message name="getActionFileSummaryResponse">
+        <wsdl:part name="parameters" element="ns1:getActionFileSummaryResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getOhdRequest">
+        <wsdl:part name="parameters" element="ns1:getOhd"/>
+    </wsdl:message>
+    <wsdl:message name="getOhdResponse">
+        <wsdl:part name="parameters" element="ns1:getOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getActionFileCountsRequest">
+        <wsdl:part name="parameters" element="ns1:getActionFileCounts"/>
+    </wsdl:message>
+    <wsdl:message name="getActionFileCountsResponse">
+        <wsdl:part name="parameters" element="ns1:getActionFileCountsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="requestOhdRequest">
+        <wsdl:part name="parameters" element="ns1:requestOhd"/>
+    </wsdl:message>
+    <wsdl:message name="requestOhdResponse">
+        <wsdl:part name="parameters" element="ns1:requestOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="amendAhlRequest">
+        <wsdl:part name="parameters" element="ns1:amendAhl"/>
+    </wsdl:message>
+    <wsdl:message name="amendAhlResponse">
+        <wsdl:part name="parameters" element="ns1:amendAhlResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createBdoRequest">
+        <wsdl:part name="parameters" element="ns1:createBdo"/>
+    </wsdl:message>
+    <wsdl:message name="createBdoResponse">
+        <wsdl:part name="parameters" element="ns1:createBdoResponse"/>
+    </wsdl:message>
+    <wsdl:message name="requestQuickOhdRequest">
+        <wsdl:part name="parameters" element="ns1:requestQuickOhd"/>
+    </wsdl:message>
+    <wsdl:message name="requestQuickOhdResponse">
+        <wsdl:part name="parameters" element="ns1:requestQuickOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getActionFileDetailsRequest">
+        <wsdl:part name="parameters" element="ns1:getActionFileDetails"/>
+    </wsdl:message>
+    <wsdl:message name="getActionFileDetailsResponse">
+        <wsdl:part name="parameters" element="ns1:getActionFileDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="sendForwardMessageRequest">
+        <wsdl:part name="parameters" element="ns1:sendForwardMessage"/>
+    </wsdl:message>
+    <wsdl:message name="sendForwardMessageResponse">
+        <wsdl:part name="parameters" element="ns1:sendForwardMessageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="placeActionFileRequest">
+        <wsdl:part name="parameters" element="ns1:placeActionFile"/>
+    </wsdl:message>
+    <wsdl:message name="placeActionFileResponse">
+        <wsdl:part name="parameters" element="ns1:placeActionFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createOhdRequest">
+        <wsdl:part name="parameters" element="ns1:createOhd"/>
+    </wsdl:message>
+    <wsdl:message name="createOhdResponse">
+        <wsdl:part name="parameters" element="ns1:createOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="reinstanteAhlRequest">
+        <wsdl:part name="parameters" element="ns1:reinstanteAhl"/>
+    </wsdl:message>
+    <wsdl:message name="reinstanteAhlResponse">
+        <wsdl:part name="parameters" element="ns1:reinstanteAhlResponse"/>
+    </wsdl:message>
+    <wsdl:message name="closeAhlRequest">
+        <wsdl:part name="parameters" element="ns1:closeAhl"/>
+    </wsdl:message>
+    <wsdl:message name="closeAhlResponse">
+        <wsdl:part name="parameters" element="ns1:closeAhlResponse"/>
+    </wsdl:message>
+    <wsdl:message name="suspendAhlRequest">
+        <wsdl:part name="parameters" element="ns1:suspendAhl"/>
+    </wsdl:message>
+    <wsdl:message name="suspendAhlResponse">
+        <wsdl:part name="parameters" element="ns1:suspendAhlResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="WorldTracerServicePortType">
+        <wsdl:operation name="closeOhd">
+            <wsdl:input message="ns1:closeOhdRequest" wsaw:Action="urn:closeOhd"/>
+            <wsdl:output message="ns1:closeOhdResponse" wsaw:Action="urn:closeOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="forwardOhd">
+            <wsdl:input message="ns1:forwardOhdRequest" wsaw:Action="urn:forwardOhd"/>
+            <wsdl:output message="ns1:forwardOhdResponse" wsaw:Action="urn:forwardOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAhl">
+            <wsdl:input message="ns1:getAhlRequest" wsaw:Action="urn:getAhl"/>
+            <wsdl:output message="ns1:getAhlResponse" wsaw:Action="urn:getAhlResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createAhl">
+            <wsdl:input message="ns1:createAhlRequest" wsaw:Action="urn:createAhl"/>
+            <wsdl:output message="ns1:createAhlResponse" wsaw:Action="urn:createAhlResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="eraseActionFile">
+            <wsdl:input message="ns1:eraseActionFileRequest" wsaw:Action="urn:eraseActionFile"/>
+            <wsdl:output message="ns1:eraseActionFileResponse" wsaw:Action="urn:eraseActionFileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="amendOhd">
+            <wsdl:input message="ns1:amendOhdRequest" wsaw:Action="urn:amendOhd"/>
+            <wsdl:output message="ns1:amendOhdResponse" wsaw:Action="urn:amendOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileSummary">
+            <wsdl:input message="ns1:getActionFileSummaryRequest" wsaw:Action="urn:getActionFileSummary"/>
+            <wsdl:output message="ns1:getActionFileSummaryResponse" wsaw:Action="urn:getActionFileSummaryResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getOhd">
+            <wsdl:input message="ns1:getOhdRequest" wsaw:Action="urn:getOhd"/>
+            <wsdl:output message="ns1:getOhdResponse" wsaw:Action="urn:getOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileCounts">
+            <wsdl:input message="ns1:getActionFileCountsRequest" wsaw:Action="urn:getActionFileCounts"/>
+            <wsdl:output message="ns1:getActionFileCountsResponse" wsaw:Action="urn:getActionFileCountsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="requestOhd">
+            <wsdl:input message="ns1:requestOhdRequest" wsaw:Action="urn:requestOhd"/>
+            <wsdl:output message="ns1:requestOhdResponse" wsaw:Action="urn:requestOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="amendAhl">
+            <wsdl:input message="ns1:amendAhlRequest" wsaw:Action="urn:amendAhl"/>
+            <wsdl:output message="ns1:amendAhlResponse" wsaw:Action="urn:amendAhlResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createBdo">
+            <wsdl:input message="ns1:createBdoRequest" wsaw:Action="urn:createBdo"/>
+            <wsdl:output message="ns1:createBdoResponse" wsaw:Action="urn:createBdoResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="requestQuickOhd">
+            <wsdl:input message="ns1:requestQuickOhdRequest" wsaw:Action="urn:requestQuickOhd"/>
+            <wsdl:output message="ns1:requestQuickOhdResponse" wsaw:Action="urn:requestQuickOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileDetails">
+            <wsdl:input message="ns1:getActionFileDetailsRequest" wsaw:Action="urn:getActionFileDetails"/>
+            <wsdl:output message="ns1:getActionFileDetailsResponse" wsaw:Action="urn:getActionFileDetailsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="sendForwardMessage">
+            <wsdl:input message="ns1:sendForwardMessageRequest" wsaw:Action="urn:sendForwardMessage"/>
+            <wsdl:output message="ns1:sendForwardMessageResponse" wsaw:Action="urn:sendForwardMessageResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="placeActionFile">
+            <wsdl:input message="ns1:placeActionFileRequest" wsaw:Action="urn:placeActionFile"/>
+            <wsdl:output message="ns1:placeActionFileResponse" wsaw:Action="urn:placeActionFileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createOhd">
+            <wsdl:input message="ns1:createOhdRequest" wsaw:Action="urn:createOhd"/>
+            <wsdl:output message="ns1:createOhdResponse" wsaw:Action="urn:createOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="reinstanteAhl">
+            <wsdl:input message="ns1:reinstanteAhlRequest" wsaw:Action="urn:reinstanteAhl"/>
+            <wsdl:output message="ns1:reinstanteAhlResponse" wsaw:Action="urn:reinstanteAhlResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="closeAhl">
+            <wsdl:input message="ns1:closeAhlRequest" wsaw:Action="urn:closeAhl"/>
+            <wsdl:output message="ns1:closeAhlResponse" wsaw:Action="urn:closeAhlResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="suspendAhl">
+            <wsdl:input message="ns1:suspendAhlRequest" wsaw:Action="urn:suspendAhl"/>
+            <wsdl:output message="ns1:suspendAhlResponse" wsaw:Action="urn:suspendAhlResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="WorldTracerServiceSOAP11Binding" type="ns1:WorldTracerServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="closeOhd">
+            <soap:operation soapAction="urn:closeOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="forwardOhd">
+            <soap:operation soapAction="urn:forwardOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAhl">
+            <soap:operation soapAction="urn:getAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createAhl">
+            <soap:operation soapAction="urn:createAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="eraseActionFile">
+            <soap:operation soapAction="urn:eraseActionFile" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="amendOhd">
+            <soap:operation soapAction="urn:amendOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileSummary">
+            <soap:operation soapAction="urn:getActionFileSummary" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOhd">
+            <soap:operation soapAction="urn:getOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileCounts">
+            <soap:operation soapAction="urn:getActionFileCounts" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="requestOhd">
+            <soap:operation soapAction="urn:requestOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="amendAhl">
+            <soap:operation soapAction="urn:amendAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createBdo">
+            <soap:operation soapAction="urn:createBdo" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="requestQuickOhd">
+            <soap:operation soapAction="urn:requestQuickOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileDetails">
+            <soap:operation soapAction="urn:getActionFileDetails" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendForwardMessage">
+            <soap:operation soapAction="urn:sendForwardMessage" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="placeActionFile">
+            <soap:operation soapAction="urn:placeActionFile" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createOhd">
+            <soap:operation soapAction="urn:createOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="reinstanteAhl">
+            <soap:operation soapAction="urn:reinstanteAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="closeAhl">
+            <soap:operation soapAction="urn:closeAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="suspendAhl">
+            <soap:operation soapAction="urn:suspendAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="WorldTracerServiceSOAP12Binding" type="ns1:WorldTracerServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="closeOhd">
+            <soap12:operation soapAction="urn:closeOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="forwardOhd">
+            <soap12:operation soapAction="urn:forwardOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAhl">
+            <soap12:operation soapAction="urn:getAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createAhl">
+            <soap12:operation soapAction="urn:createAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="eraseActionFile">
+            <soap12:operation soapAction="urn:eraseActionFile" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="amendOhd">
+            <soap12:operation soapAction="urn:amendOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileSummary">
+            <soap12:operation soapAction="urn:getActionFileSummary" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOhd">
+            <soap12:operation soapAction="urn:getOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileCounts">
+            <soap12:operation soapAction="urn:getActionFileCounts" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="requestOhd">
+            <soap12:operation soapAction="urn:requestOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="amendAhl">
+            <soap12:operation soapAction="urn:amendAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createBdo">
+            <soap12:operation soapAction="urn:createBdo" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="requestQuickOhd">
+            <soap12:operation soapAction="urn:requestQuickOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileDetails">
+            <soap12:operation soapAction="urn:getActionFileDetails" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendForwardMessage">
+            <soap12:operation soapAction="urn:sendForwardMessage" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="placeActionFile">
+            <soap12:operation soapAction="urn:placeActionFile" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createOhd">
+            <soap12:operation soapAction="urn:createOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="reinstanteAhl">
+            <soap12:operation soapAction="urn:reinstanteAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="closeAhl">
+            <soap12:operation soapAction="urn:closeAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="suspendAhl">
+            <soap12:operation soapAction="urn:suspendAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="WorldTracerServiceHttpBinding" type="ns1:WorldTracerServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="closeOhd">
+            <http:operation location="WorldTracerService/closeOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="closeOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="closeOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="forwardOhd">
+            <http:operation location="WorldTracerService/forwardOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="forwardOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="forwardOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAhl">
+            <http:operation location="WorldTracerService/getAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createAhl">
+            <http:operation location="WorldTracerService/createAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="createAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="createAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="eraseActionFile">
+            <http:operation location="WorldTracerService/eraseActionFile"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="eraseActionFile"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="eraseActionFile"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="amendOhd">
+            <http:operation location="WorldTracerService/amendOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="amendOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="amendOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileSummary">
+            <http:operation location="WorldTracerService/getActionFileSummary"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getActionFileSummary"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getActionFileSummary"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOhd">
+            <http:operation location="WorldTracerService/getOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileCounts">
+            <http:operation location="WorldTracerService/getActionFileCounts"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getActionFileCounts"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getActionFileCounts"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="requestOhd">
+            <http:operation location="WorldTracerService/requestOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="requestOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="requestOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="amendAhl">
+            <http:operation location="WorldTracerService/amendAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="amendAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="amendAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createBdo">
+            <http:operation location="WorldTracerService/createBdo"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="createBdo"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="createBdo"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="requestQuickOhd">
+            <http:operation location="WorldTracerService/requestQuickOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="requestQuickOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="requestQuickOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getActionFileDetails">
+            <http:operation location="WorldTracerService/getActionFileDetails"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getActionFileDetails"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getActionFileDetails"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendForwardMessage">
+            <http:operation location="WorldTracerService/sendForwardMessage"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="sendForwardMessage"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="sendForwardMessage"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="placeActionFile">
+            <http:operation location="WorldTracerService/placeActionFile"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="placeActionFile"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="placeActionFile"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createOhd">
+            <http:operation location="WorldTracerService/createOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="createOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="createOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="reinstanteAhl">
+            <http:operation location="WorldTracerService/reinstanteAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="reinstanteAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="reinstanteAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="closeAhl">
+            <http:operation location="WorldTracerService/closeAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="closeAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="closeAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="suspendAhl">
+            <http:operation location="WorldTracerService/suspendAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="suspendAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="suspendAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="WorldTracerService">
+        <wsdl:port name="WorldTracerServiceSOAP11port_http" binding="ns1:WorldTracerServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/WorldTracerService"/>
+        </wsdl:port>
+        <wsdl:port name="WorldTracerServiceSOAP12port_http" binding="ns1:WorldTracerServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/WorldTracerService"/>
+        </wsdl:port>
+        <wsdl:port name="WorldTracerServiceHttpport" binding="ns1:WorldTracerServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/WorldTracerService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
