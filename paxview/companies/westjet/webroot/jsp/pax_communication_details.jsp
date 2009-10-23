@@ -8,6 +8,8 @@
 <% 
 String myNextAction = "" + (String) request.getAttribute("prepareto");
 
+boolean isThereAnyMessage = false;
+
 StringBuffer sbPriorCommunication = new StringBuffer("");
 WS_PVIncident advancedIncident = (WS_PVIncident) request.getSession().getAttribute("FORM_DATA");
 if (advancedIncident != null) {
@@ -22,10 +24,10 @@ if (advancedIncident != null) {
 					if(myAgent==null || myAgent.equals("") || myAgent.equals("null")) {  //comment by pax 
 						enteredBy = " - Your Comment";
 					} else {
-						enteredBy = " - US Airways";
+						enteredBy = " - WestJet";
 					} 
 					sbPriorCommunication.append("<p class='small'>");
-					sbPriorCommunication.append("<H2>" + myWS_PVPaxCommunication.getCreate_timestamp() + enteredBy + "</H2>");
+					sbPriorCommunication.append("<H2>" + myWS_PVPaxCommunication.getCreate_timestamp() + " GMT" + enteredBy + "</H2>");
 					
 					String strAcknowledgedBy = "";
 					String myAcknowledgedAgent = "" + myWS_PVPaxCommunication.getAcknowledged_agent();
@@ -33,7 +35,7 @@ if (advancedIncident != null) {
 					if(myAcknowledgedAgent != null && myAcknowledgedTimestamp != null) {
 						if(!myAcknowledgedAgent.equals("") && (!myAcknowledgedTimestamp.equals(""))) {
 							if(!myAcknowledgedTimestamp.equals("null")) {
-								strAcknowledgedBy = "<I>Comment acknowledged by US Airways on " + myAcknowledgedTimestamp + "</I>";	
+								strAcknowledgedBy = "<I>Comment acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";	
 							}
 						}
 					}
@@ -44,6 +46,7 @@ if (advancedIncident != null) {
 					sbPriorCommunication.append("<HR />");
 				}
 			}
+			isThereAnyMessage = true;
 		}
 	}	
 	
@@ -186,11 +189,11 @@ p.big
 					</div>
 				</td>   	    	
       	    </tr>
-      	    <!-- 
+<% if(isThereAnyMessage) { %>
       	    <tr>
-      	    	<td><strong><spring:message code="pax.communication.priorcomments" /></strong>:<br /></td>
+      	    	<td><center><strong><spring:message code="pax.communication.priorcomments" /></strong>:</center></td>
       	    </tr>
-      	    -->
+<% } %>
       		<tr>
 				<td>
 			  			<!--<c:out value="${incident.comments }"/>-->
@@ -225,6 +228,11 @@ p.big
 					</td>
 				</tr>
 				-->
+				<tr>
+					<td><center>
+						<spring:message code="please.type.new.message.below" /></center>
+					</td>
+				</tr>
 				<tr>		
 					<td>
 						<table cellspacing="0" cellpadding="0" border="0">
