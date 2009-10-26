@@ -63,6 +63,7 @@
 	<bean name="/claimDetail.htm" class="com.bagnet.nettracer.paxview.ClaimDetailController">
 		<property name="formView" value="pax_communication_details" />
 		<property name="successView" value="details" />
+		<property name="pvService" ref="paxViewService" />
 	</bean>
 	
 	<bean id="messageSource"

@@ -43,6 +43,7 @@ public class PaxCommunicationController extends SimpleFormController {
 		PaxCommunication paxCommunication = (PaxCommunication) command;
 		
 		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
+		
 		//advancedIncident.getPaxCommunication();
 		String myNewComment = "" + req.getParameter("newPaxComment");
 		anyNewComment = false;
@@ -54,6 +55,11 @@ public class PaxCommunicationController extends SimpleFormController {
 			anyNewComment = true;
 			paxCommunication.setComment(myNewComment);
 		}
+		
+		//refresh data
+		String searchClaimNumber = advancedIncident.getIncident_ID();
+		String searchLastname = advancedIncident.getPassengers(0).getLastname();
+		advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname);
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("command", paxCommunication);

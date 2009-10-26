@@ -42,6 +42,13 @@ public class ClaimDetailController extends SimpleFormController {
 
 		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
 		
+		//refresh data
+		if(advancedIncident != null) {
+			String searchClaimNumber = advancedIncident.getIncident_ID();
+			String searchLastname = advancedIncident.getPassengers(0).getLastname();
+			advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname);
+		}
+		
 		req.getSession().setAttribute("FORM_DATA", advancedIncident);
 		return new ModelAndView(getSuccessView(), "incident", advancedIncident);
 	}
