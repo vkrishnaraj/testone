@@ -130,6 +130,7 @@ public class Reservation implements ReservationInterface {
 			}
 
 			OTATravelItineraryRSDocument doc = loadPnr(connParams, pnr, false);
+			
 			TravelItinerary ti = doc.getOTATravelItineraryRS()
 					.getTravelItinerary();
 			Customer cust = ti.getCustomerInfos().getCustomerInfo()
@@ -142,38 +143,40 @@ public class Reservation implements ReservationInterface {
 			CustLoyalty[] custLoyalty = cust.getCustLoyaltyArray();
 			Email[] email = cust.getEmailArray();
 			Telephone[] telephones = cust.getTelephoneArray();
-			ItemType[] items = ti.getItineraryInfo().getReservationItems()
-					.getItemArray();
+			
+			if (ti.getItineraryInfo() != null && ti.getItineraryInfo().getReservationItems() != null) {
+				ItemType[] items = ti.getItineraryInfo().getReservationItems().getItemArray();
 
-			for (ItemType item : items) {
-				Air[] airs = item.getAirArray();
-				for (Air air : airs) {
-					Itinerary itin = res.addNewPassengerItinerary();
-					itin.setDepartureCity(air.getDepartureAirport()
-							.getLocationCode());
-					itin.setArrivalCity(air.getArrivalAirport()
-							.getLocationCode());
-					itin.setFlightnum(air.getFlightNumber());
-					String depTime = air.getDepartureDateTime();
-					String arrTime = air.getArrivalDateTime();
-
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyy-MM-dd'T'HH:mm:ss");
-					Calendar schdeparttime = new GregorianCalendar();
-					Calendar scharrivetime = new GregorianCalendar();
-
-					schdeparttime.setTime(sdf.parse(depTime));
-					scharrivetime.setTime(sdf.parse(arrTime));
-
-					itin.setSchdeparttime(schdeparttime);
-					itin.setScharrivetime(scharrivetime);
-					if (air.getMarketingAirline() != null) {
-						itin.setAirline(air.getMarketingAirline().getCode());
-					} else if (air.getOperatingAirline() != null) {
-						itin.setAirline(air.getOperatingAirline().getCode());
+				for (ItemType item : items) {
+					Air[] airs = item.getAirArray();
+					for (Air air : airs) {
+						Itinerary itin = res.addNewPassengerItinerary();
+						itin.setDepartureCity(air.getDepartureAirport()
+								.getLocationCode());
+						itin.setArrivalCity(air.getArrivalAirport()
+								.getLocationCode());
+						itin.setFlightnum(air.getFlightNumber());
+						String depTime = air.getDepartureDateTime();
+						String arrTime = air.getArrivalDateTime();
+	
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyy-MM-dd'T'HH:mm:ss");
+						Calendar schdeparttime = new GregorianCalendar();
+						Calendar scharrivetime = new GregorianCalendar();
+	
+						schdeparttime.setTime(sdf.parse(depTime));
+						scharrivetime.setTime(sdf.parse(arrTime));
+	
+						itin.setSchdeparttime(schdeparttime);
+						itin.setScharrivetime(scharrivetime);
+						if (air.getMarketingAirline() != null) {
+							itin.setAirline(air.getMarketingAirline().getCode());
+						} else if (air.getOperatingAirline() != null) {
+							itin.setAirline(air.getOperatingAirline().getCode());
+						}
+						air.getArrivalDateTime();
+	
 					}
-					air.getArrivalDateTime();
-
 				}
 			}
 
@@ -238,7 +241,7 @@ public class Reservation implements ReservationInterface {
 			}
 
 			ArrayList<String> numbersLeftToAdd = new ArrayList<String>();
-			Pattern p = Pattern.compile("([0-9\\-]*)(-[HCBFA])");
+			Pattern p = Pattern.compile("([0-9\\-]*)(-[A-Z])");
 
 			for (int i = 0; i < telephones.length; ++i) {
 				Telephone tel = telephones[i];
