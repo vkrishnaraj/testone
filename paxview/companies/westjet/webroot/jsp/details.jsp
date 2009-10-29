@@ -36,15 +36,15 @@ window.addEvent('domready', function() {
 		},
 		display: <c:choose>
 			<c:when test="${incident.incident_status == 'Temporary'}">
-			0
+				0
 			</c:when>
 			<c:when test="${incident.incident_status == 'Open'}">
 				1
 			</c:when>
-				<c:when test="${incident.incident_status == 'Pending'}">
+			<c:when test="${incident.incident_status == 'Pending'}">
 				2
 			</c:when>
-			<c:when test="${incident.incident_status == 'Open'}">
+			<c:when test="${incident.incident_status == 'Closed'}">
 				3
 			</c:when>
 			<c:otherwise>
