@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
 
@@ -24,7 +25,21 @@ public class PaxCommunicationController extends SimpleFormController {
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest req,
 			HttpServletResponse res) throws Exception {
-
+		
+		//System.out.println("inside handleRequestInternal ...");
+		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
+		
+		if(advancedIncident == null) {
+			//System.out.println("handleRequestInternal says advancedIncident is null in this case...");
+			//redirect to the search page
+			//res.sendRedirect("/paxview/search.htm");
+			//return new ModelAndView(new RedirectView("/search.htm", true)); 
+			return new ModelAndView("redirect:search.htm");
+		    
+		} else {
+			//System.out.println("handleRequestInternal says advancedIncident is NOT null in that case...");
+		}
+		
 		if(req.getParameter("locale") != null && req.getParameter("locale").trim().length() > 0) {
 			req.setAttribute("siteLanguage", req.getParameter("locale"));
 		}
@@ -40,6 +55,7 @@ public class PaxCommunicationController extends SimpleFormController {
 			HttpServletResponse res, 
 			Object command, 
 			BindException errors) throws Exception {
+		//System.out.println("inside onSubmit ...");
 		PaxCommunication paxCommunication = (PaxCommunication) command;
 		
 		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
@@ -51,6 +67,9 @@ public class PaxCommunicationController extends SimpleFormController {
 			if(advancedIncident != null) {
 				String claimnumber = advancedIncident.getIncident_ID();
 				advancedIncident = pvService.writeComment(claimnumber, myNewComment.trim());
+				//limit the input to 1500 or fewer characters
+				//String stNewComment2Save = myNewComment.trim().substring(0, 1500);
+				//advancedIncident = pvService.writeComment(claimnumber, stNewComment2Save);
 			}
 			anyNewComment = true;
 			paxCommunication.setComment(myNewComment);
