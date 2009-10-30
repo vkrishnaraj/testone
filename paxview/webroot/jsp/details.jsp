@@ -41,7 +41,7 @@ window.addEvent('domready', function() {
 				<c:when test="${incident.incident_status == 'Pending'}">
 				2
 			</c:when>
-			<c:when test="${incident.incident_status == 'Open'}">
+			<c:when test="${incident.incident_status == 'Closed'}">
 				3
 			</c:when>
 			<c:otherwise>

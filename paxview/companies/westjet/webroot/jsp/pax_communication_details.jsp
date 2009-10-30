@@ -35,7 +35,12 @@ if (advancedIncident != null) {
 					if(myAcknowledgedAgent != null && myAcknowledgedTimestamp != null) {
 						if(!myAcknowledgedAgent.equals("") && (!myAcknowledgedTimestamp.equals(""))) {
 							if(!myAcknowledgedTimestamp.equals("null")) {
-								strAcknowledgedBy = "<I>Comment acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";	
+								String myStatus = myWS_PVPaxCommunication.getStatus();
+								if(myStatus.equalsIgnoreCase("RESPONDED")) {
+									strAcknowledgedBy = "<I>Comment responded by WestJet on " + myAcknowledgedTimestamp + "</I>";
+								} else {
+									strAcknowledgedBy = "<I>Comment acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";
+								}	
 							}
 						}
 					}
@@ -144,6 +149,16 @@ function redirect2ClaimDetail() {
 }
 </script>
 
+<script language="javascript" type="text/javascript">
+function limitText(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
+</script>
+
 
 <style type="text/css">
 p.statClaimToggle {
@@ -237,7 +252,11 @@ p.big
 					<td>
 						<table cellspacing="0" cellpadding="0" border="0">
 							<tr><td>
-								<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="82" onKeyUp="highlight(event)" onClick="highlight(event)"></TEXTAREA>
+								<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="82" onKeyDown="limitText(this.form.newPaxComment,this.form.countdown,1500);" onKeyUp="highlight(event);limitText(this.form.newPaxComment,this.form.countdown,1500);" onClick="highlight(event)"></TEXTAREA>
+							</td></tr>
+							<tr><td align="center">
+								<font size="1">(Maximum characters: 1500)<br />
+								You have <input readonly type="text" name="countdown" size="3" value="1500"> characters left.</font>
 							</td></tr>
 							<tr><td align="right">
 								<div id="searchButtonContainer">
