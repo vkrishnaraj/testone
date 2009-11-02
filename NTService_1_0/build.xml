@@ -8,6 +8,7 @@
 	<property name="src.dir" location="${basedir}/src" />
 	<property name="dist.dir" location="${basedir}/dist" />
 	<property name="build.dir" location="${basedir}/build" />
+	<property name="classes.dir" location="${basedir}/bin" />
 	<property name="webroot.dir" location="${basedir}/web" />
 	<property name="compile.classpath" location="${basedir}/web/WEB-INF/lib" />
 	
@@ -104,9 +105,9 @@
 		<hibernatetool destdir="${build.dir}">
 			<classpath>
 				<path refid="project.classpath" />
-				<path location="${build.dir}" />
+				<path location="${classes.dir}" />
 			</classpath>
-			<annotationconfiguration configurationfile="${build.dir}/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="${classes.dir}/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
@@ -256,7 +257,7 @@
 		</copy>
 
 
-
+		
 		<mkdir dir="${build.dir}/webservices/WTService/temp" />
 		<move todir="${build.dir}/webservices/WTService/temp">
 			<fileset dir="${build.dir}/webservices/WTService/resources">
@@ -265,16 +266,19 @@
 			</fileset>
 		</move>
 
-		<jar destfile="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" basedir="${build.dir}/webservices/NTService/temp">
+		
+		<jar destfile="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" basedir="${build.dir}/webservices/WTService/temp">
 		</jar>
+		
 
-		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/WTService/ReservationService_1_0.jar" />
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" />
 
 		<!-- clean up -->
-
+		<!--
 		<delete dir="${build.dir}/webservices/WTService/temp" />
 		<delete dir="${build.dir}/webservices/WTService/resources" />
 		<delete dir="${build.dir}/webservices/WTService/src" />
+		-->
 	</target>
 
 	
