@@ -229,20 +229,6 @@ p.big
 									<spring:message code="no.new.comment" />
 						</c:if></td>
 				</tr>
-				<!-- 
-				<tr>		
-					<td>
-			  			<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="78" onKeyUp="highlight(event)" onClick="highlight(event)"></TEXTAREA>
-					</td>
-				</tr>
-				<tr>
-					<td align="right">
-						<div id="searchButtonContainer">
-							<input type="submit" class="button" tabindex="3" value='Add Comment' />
-						</div>
-					</td>
-				</tr>
-				-->
 				<tr>
 					<td><center>
 						<spring:message code="please.type.new.message.below" /></center>
@@ -252,7 +238,7 @@ p.big
 					<td>
 						<table cellspacing="0" cellpadding="0" border="0">
 							<tr><td>
-								<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="82" onKeyDown="limitText(this.form.newPaxComment,this.form.countdown,1500);" onKeyUp="highlight(event);limitText(this.form.newPaxComment,this.form.countdown,1500);" onClick="highlight(event)"></TEXTAREA>
+								<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="82" onKeyDown="limitText(this.form.newPaxComment,this.form.countdown,1500);" onKeyUp="highlight(event);limitText(this.form.newPaxComment,this.form.countdown,1500);"></TEXTAREA>
 							</td></tr>
 							<tr><td align="center">
 								<font size="1">(Maximum characters: 1500)<br />
@@ -260,7 +246,7 @@ p.big
 							</td></tr>
 							<tr><td align="right">
 								<div id="searchButtonContainer">
-									<input type="submit" class="button" tabindex="3" value='Add Comment' />
+									<input type="submit" class="button" tabindex="3" value='<spring:message code="button.submit.message" />' />
 								</div>
 							</td></tr></table>
 					</td>

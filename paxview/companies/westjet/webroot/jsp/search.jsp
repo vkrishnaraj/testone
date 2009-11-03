@@ -55,7 +55,10 @@
 				<p>
 					<strong><spring:message code="delayed.baggage" />
 					</strong>:
-					<spring:message code="notice1" />
+					<c:choose>
+						<c:when test="${param.message == 1}"><spring:message code="notice11" /></c:when>
+						<c:otherwise><spring:message code="notice1" /></c:otherwise>
+					</c:choose>
 				</p>
 
 				<form:form method="POST" action="search.htm">
