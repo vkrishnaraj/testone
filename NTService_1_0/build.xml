@@ -242,8 +242,9 @@
 
 		<!-- copy services.xml to web-inf -->
 		
-		
+		<!--
 		<copy todir="${basedir}/web/WEB-INF/services/WTService/META-INF" file="${build.dir}/webservices/WTService/resources/services.xml" />
+		-->
 		
 		
 
@@ -259,19 +260,19 @@
 
 		
 		<mkdir dir="${build.dir}/webservices/WTService/temp" />
-		<move todir="${build.dir}/webservices/WTService/temp">
+		<copy todir="${build.dir}/webservices/WTService/temp">
 			<fileset dir="${build.dir}/webservices/WTService/resources">
 				<include name="*schema*/**/*.class" />
 				<include name="*schema*/**/*.xsb" />
 			</fileset>
-		</move>
+		</copy>
 
 		
 		<jar destfile="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" basedir="${build.dir}/webservices/WTService/temp">
 		</jar>
 		
 
-		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" />
+		<move todir="${basedir}/web/WEB-INF/lib" file="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" />
 
 		<!-- clean up -->
 		<!--
