@@ -3,6 +3,9 @@ package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb;
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -181,9 +184,10 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 	}
 
 	@Override
-	public WorldTracerResponse closeAhl(WorldTracerActionDTO dto,
+	public WorldTracerResponse closeAhl(WorldTracerActionDTO dto, Ahl ahl,
 			WorldTracerResponse response) {
-
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.closeAhl(dto, ahl, response);
 		return response;
 	}
 
@@ -202,9 +206,10 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 	}
 
 	@Override
-	public WorldTracerResponse createBdo(WorldTracerActionDTO dto,
-			WorldTracerResponse response) {
-
+	public WorldTracerResponse createBdo(WorldTracerActionDTO dto, Bdo bdo, 
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.insertBdo(dto, bdo, response);
 		return response;
 	}
 
@@ -287,30 +292,33 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
-			WorldTracerResponse response) {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.placeActionFile(dto, pxf, response);
 		return response;
 	}
 
 	@Override
-	public WorldTracerResponse reinstateAhl(WorldTracerActionDTO dto,
-			WorldTracerResponse response) {
-
+	public WorldTracerResponse reinstateAhl(WorldTracerActionDTO dto, Ahl ahl,
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.reinstateAhl(dto, ahl, response);
 		return response;
 	}
 
 	@Override
-	public WorldTracerResponse sendFwdMessage(WorldTracerActionDTO dto,
-			WorldTracerResponse response) {
-
+	public WorldTracerResponse sendFwdMessage(WorldTracerActionDTO dto, ForwardMessage msg,
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.sendForwardMessage(dto, msg, response);
 		return response;
 	}
 
 	@Override
-	public WorldTracerResponse suspendAhl(WorldTracerActionDTO dto,
-			WorldTracerResponse response) {
-
+	public WorldTracerResponse suspendAhl(WorldTracerActionDTO dto, Ahl ahl,
+	    WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.suspendAhl(dto, ahl, response);
 		return response;
 	}
 

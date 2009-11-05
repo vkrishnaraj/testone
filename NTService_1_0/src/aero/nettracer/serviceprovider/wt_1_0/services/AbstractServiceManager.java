@@ -3,6 +3,9 @@ package aero.nettracer.serviceprovider.wt_1_0.services;
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -37,16 +40,16 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						response = amendAhl(dto, response);
 						break;
 					case CLOSE_AHL:
-						//TODO: Complete
-						response = closeAhl(dto, response);
+						Ahl ahl3 = (Ahl) dto.getPayload();
+						response = closeAhl(dto, ahl3, response);
 						break;
 					case SUSPEND_AHL:
-						//TODO: Complete
-						response = suspendAhl(dto, response);
+						Ahl ahl2 = (Ahl) dto.getPayload();
+						response = suspendAhl(dto, ahl2, response);
 						break;
 					case REINSTATE_AHL:
-						//TODO: Complete
-						response = reinstateAhl(dto, response);
+						Ahl ahl = (Ahl) dto.getPayload();
+						response = reinstateAhl(dto, ahl, response);
 						break;
 					case GET_OHD:
 						//TODO: Complete
@@ -77,8 +80,9 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						response = requestQuickOhd(dto, response);
 						break;
 					case CREATE_BDO:
-						//TODO: Complete
-						response = createBdo(dto, response);
+						Bdo bdo = (Bdo) dto
+						.getPayload();
+						response = createBdo(dto, bdo, response);
 						break;
 					case ERASE_ACTION_FILE:
 						ActionFileRequestData data3 = (ActionFileRequestData) dto
@@ -101,8 +105,8 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						response = getActionFileDetails(dto, data2, response);
 						break;
 					case SEND_FORWARD_MESSAGE:
-						//TODO: Complete
-						response = sendFwdMessage(dto, response);
+						ForwardMessage msg = (ForwardMessage) dto.getPayload();
+						response = sendFwdMessage(dto, msg, response);
 						break;
 					case PLACE_ACTION_FILE:
 						Pxf pxf = (Pxf) dto
@@ -115,6 +119,7 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				e.printStackTrace();
 				response.setError(new WebServiceError(
 						ServiceConstants.UNEXPECTED_EXCEPTION));
+				response.setSuccess(false);
 			} catch (NotLoggedIntoWorldTracerException e) {
 				e.printStackTrace();
 				WorldTracerHttpClient client = (WorldTracerHttpClient) dto.getConnection();

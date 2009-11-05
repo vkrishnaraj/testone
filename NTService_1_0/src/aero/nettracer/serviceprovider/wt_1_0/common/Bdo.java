@@ -3,6 +3,7 @@ package aero.nettracer.serviceprovider.wt_1_0.common;
 import java.util.Calendar;
 
 public class Bdo {
+	private String bdoId;
 	private String stationCode;
 	private String airlineCode;
 	private String ahlId;
@@ -12,8 +13,10 @@ public class Bdo {
 	private Calendar deliveryDate;
 	private String address1;
 	private String address2;
-	private Passenger[] passenger;
-	private Item[] item;
+	private Passenger[] passengers;
+	private Item[] items;
+	private String deliveryComments;
+	private Agent agent;
 
 	public String getStationCode() {
 		return stationCode;
@@ -87,20 +90,44 @@ public class Bdo {
 		this.address2 = address2;
 	}
 
-	public Passenger[] getPassenger() {
-		return passenger;
-	}
+	public String getBdoId() {
+  	return bdoId;
+  }
 
-	public void setPassenger(Passenger[] passenger) {
-		this.passenger = passenger;
-	}
+	public void setBdoId(String bdoId) {
+  	this.bdoId = bdoId;
+  }
 
-	public Item[] getItem() {
-		return item;
-	}
+	public Item[] getItems() {
+  	return items;
+  }
 
-	public void setItem(Item[] item) {
-		this.item = item;
-	}
+	public void setItems(Item[] items) {
+  	this.items = items;
+  }
+
+	public String getDeliveryComments() {
+  	return deliveryComments;
+  }
+
+	public void setDeliveryComments(String deliveryComments) {
+  	this.deliveryComments = deliveryComments;
+  }
+
+	public Agent getAgent() {
+  	return agent;
+  }
+
+	public void setAgent(Agent agent) {
+  	this.agent = agent;
+  }
+
+	public Passenger[] getPassengers() {
+  	return passengers;
+  }
+
+	public void setPassengers(Passenger[] passengers) {
+  	this.passengers = passengers;
+  }
 
 }

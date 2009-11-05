@@ -8,7 +8,7 @@ public class Item {
 	private String desc1;
 	private String desc2;
 	private String desc3;
-	private String brand;
+	private String manufacturer;
 	private Content[] content;
 
 	public String getColor() {
@@ -59,14 +59,6 @@ public class Item {
 		this.content = content;
 	}
 
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-
 	public String getFirstNameOnBag() {
 		return firstNameOnBag;
 	}
@@ -82,4 +74,12 @@ public class Item {
 	public void setLastNameOnBag(String lastNameOnBag) {
 		this.lastNameOnBag = lastNameOnBag;
 	}
+
+	public String getManufacturer() {
+  	return manufacturer;
+  }
+
+	public void setManufacturer(String manufacturer) {
+  	this.manufacturer = manufacturer;
+  }
 }

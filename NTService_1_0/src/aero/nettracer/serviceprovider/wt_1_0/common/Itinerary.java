@@ -8,6 +8,7 @@ public class Itinerary {
 	private String airline;
 	private String flightnum;
 	private Calendar flightDate;
+	
 
 	public String getDepartureCity() {
 		return departureCity;

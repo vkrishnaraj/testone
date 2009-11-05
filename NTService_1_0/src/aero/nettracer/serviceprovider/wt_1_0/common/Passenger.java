@@ -8,7 +8,7 @@ public class Passenger {
 	private String ffAirline;
 	private String ffNumber;
 	private String ffStatus;
-	private Address addresses;
+	private Address address;
 	private String initials;
 
 	public String getFirstname() {
@@ -59,14 +59,6 @@ public class Passenger {
 		this.ffStatus = ffStatus;
 	}
 
-	public Address getAddresses() {
-		return addresses;
-	}
-
-	public void setAddresses(Address addresses) {
-		this.addresses = addresses;
-	}
-
 	public String getInitials() {
 		return initials;
 	}
@@ -74,5 +66,13 @@ public class Passenger {
 	public void setInitials(String initials) {
 		this.initials = initials;
 	}
+
+	public Address getAddress() {
+  	return address;
+  }
+
+	public void setAddress(Address address) {
+  	this.address = address;
+  }
 
 }

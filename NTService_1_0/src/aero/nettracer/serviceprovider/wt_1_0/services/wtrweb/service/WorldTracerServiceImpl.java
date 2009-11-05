@@ -1,11 +1,20 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,12 +28,24 @@ import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
+import aero.nettracer.serviceprovider.common.exceptions.BagtagException;
+import aero.nettracer.serviceprovider.common.utils.BagTagConversion;
+import aero.nettracer.serviceprovider.common.utils.StringUtils;
+import aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFile;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
+import aero.nettracer.serviceprovider.wt_1_0.common.Address;
+import aero.nettracer.serviceprovider.wt_1_0.common.Agent;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
+import aero.nettracer.serviceprovider.wt_1_0.common.Item;
+import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.PxfDetails;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
+import aero.nettracer.serviceprovider.wt_1_0.common.WtqSegment;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.ParsingUtils.ActionFileType;
@@ -42,8 +63,24 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			"\\berror\\s*=\\s*'([^']+?)'", Pattern.CASE_INSENSITIVE);
 	private static final String OK = "OK";
 	private static final String ALREADY_REINSTATED = "ALREADY REINSTATED";
+	private static final String ALREADY_SUSPENDED = "ALREADY SUSPENDED";
 	private String flowKey = null;
+	private static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
+	private static final Pattern FLIGHTNUM_FORMAT = Pattern.compile("[1-9]\\d{0,3}[a-zA-Z]?");
+	private static final String DEFAULT_BAG_TYPE = "99";
+	private static final String UNKNOWN_AIRLINE = "YY";
+	
+	private static final List<String> VALID_BAG_TYPES = Arrays.asList(new String[] { "01", "02", "03", "05", "06",
+			"07", "08", "09", "10", "12", "20", "22", "23", "25", "26", "27", "28", "29", "50", "51", "52", "53", "54",
+			"55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "71", "72", "73",
+			"74", "75", "81", "82", "83", "85", "89", "90", "92", "93", "94", "95", "96", "97", "98", "99" });
 
+	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
+	
+	private static final List<String> wt_mats = Arrays.asList("D", "L", "M", "R", "T");
+	private static final List<String> wt_descs = Arrays.asList("D", "L", "M", "R", "T", "B", "K", "C", "H", "S", "W",
+			"X");
+	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 		this.client = (WorldTracerHttpClient) dto.getConnection();
 
@@ -536,11 +573,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		finally {
 			search.releaseConnection();
 		}
-		return;		
+		response.setSuccess(true);		
 	}
 
 	public void placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
-			WorldTracerResponse response) {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
 		String result = null;
 		PxfDetails[] details = pxf.getPxfDetails();
 
@@ -572,11 +609,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			detail = new PxfDetails();
 		}
 		
+		HashMap<String, String> lookupHash = new HashMap<String, String>();
+		lookupHash.put("AP", "ADDITIONAL_PROMPT_AREA");
+		lookupHash.put("FW", "FORWARD_AREA");
+		lookupHash.put("AA", "ACTION_AREA");
 
 		if(myDestinationType == 1) {
 			sendToDestination = "ALL_STATIONS";
-			// TODO: DOES THIS NEED TO USE LOOKUP???
-			String allStationsActionArea = "" + detail.getArea();
+
+			String allStationsActionArea = lookupHash.get(detail.getArea());
 			forwardMethod.setParameter("sendMessageActionVO.allStationsActionArea", allStationsActionArea);
 		} else if(myDestinationType == 2) {
 			sendToDestination = "ONE_REGION";
@@ -585,10 +626,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			forwardMethod.setParameter("sendMessageActionVO.regionNumber", regionNumber);
 			forwardMethod.setParameter("sendMessageActionVO.regionActionArea", regionActionArea);
 		} else {
-			HashMap<String, String> lookupHash = new HashMap<String, String>();
-			lookupHash.put("AP", "ADDITIONAL_PROMPT_AREA");
-			lookupHash.put("FW", "FORWARD_AREA");
-			lookupHash.put("AA", "ACTION_AREA");
+			
 			
 			
 			sendToDestination = "ACTION_AREA_ADDRESSES";
@@ -683,9 +721,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		finally {
 			forwardMethod.releaseConnection();
 		}
-		
-		//////////////////////
-		
+
 		//check redirect
 		if (!"".equals(newLocation)) {
 			GetMethod redirect = new GetMethod(newLocation);
@@ -717,8 +753,834 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			logger.error("PXF did not work ! Error detail : " + responseBody);
 			throw new WorldTracerException("PXF Failed");
 		}
-		
-		return result;
-		
 	}
+	
+	public String getStringFromInputStream(InputStream is) throws IOException{
+		if(is == null){
+			return null;
+		}
+		StringBuilder replySB = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		String tempString = "";
+		while((tempString = reader.readLine())!=null){
+			replySB.append(tempString);
+		}
+		reader.close();
+		
+		return new String(replySB);
+	}
+
+
+	public void reinstateAhl(WorldTracerActionDTO dto, Ahl ahl,
+      WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+	  reinstateAHL(ahl.getAhlId(), response);
+  }
+	
+	public void suspendAhl(WorldTracerActionDTO dto, Ahl ahl,
+      WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+	  suspendAHL(ahl.getAhlId(), response);
+  }
+	
+	private void reinstateAHL(String wt_id, WorldTracerResponse response)
+	    throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		String responseBody = susritItem(wt_id, "RIT", "AHL");
+		String errorString;
+		Pattern error_patt = Pattern.compile(
+		    "<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
+		    Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if (OK.equals(errorString) || ALREADY_REINSTATED.equals(errorString)) {
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+
+
+	private void suspendAHL(String wt_id, WorldTracerResponse response)
+			throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		String responseBody = susritItem(wt_id, "SUS", "AHL");
+		String errorString;
+		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if (OK.equals(errorString) || ALREADY_SUSPENDED.equals(errorString)) {
+			response.setSuccess(true);
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+	
+	private String susritItem(String wt_id, String action, String type) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		String responseBody = null;
+		String flowId = null;
+		String amendOption = null;
+		if(action.equals("SUS") && type.equals("AHL")){
+			flowId = "suspenddelayedbagrecord-flow";
+			amendOption = "fullsuspendnoamend";
+		}
+		else if(action.equals("RIT") && type.equals("AHL")){
+			flowId = "reinstatedelayedbagrecord-flow";
+			amendOption = "fullreinstatenoamend";
+		}
+		else if(action.equals("SUS") && type.equals("OHD")){
+			flowId = "suspendonhandbagrecord-flow";
+			amendOption = "fullsuspendnoamend";
+		}
+		else if(action.equals("RIT") && type.equals("OHD")){
+			flowId = "reinstateonhandbagrecord-flow";
+			amendOption = "fullreinstatenoamend";
+		}
+
+		NameValuePair[] p1 = { new NameValuePair("_flowId", flowId)};
+		String newLocation = startFlow(p1, "SUSRIT", 1);
+		
+		//submit to suspend/reinstate
+		PostMethod amend = new PostMethod(WTRWEB_FLOW_URL);
+		NameValuePair[] p = {new NameValuePair("_flowExecutionKey", flowKey)};
+		amend.setQueryString(p);
+
+		amend.setParameter("wtrStateChangeRequest.recordStates[0].stationCode", wt_id.substring(0,3));
+		amend.setParameter("wtrStateChangeRequest.recordStates[0].airlineCode", wt_id.substring(3,5));
+		amend.setParameter("wtrStateChangeRequest.recordStates[0].recordId", wt_id.substring(5));
+		amend.setParameter("_showAllDetailsInReadOnlyArea", "on");
+		amend.setParameter("_wtrDisplayRequest.recordAdditionalInfo.recordHistory", "on");
+		amend.setParameter("_wtrDisplayRequest.recordAdditionalInfo.matchingHistory", "on");
+		amend.setParameter("_wtrDisplayRequest.recordAdditionalInfo.fullRecord", "on");
+		amend.setParameter("_wtrDisplayRequest.recordAdditionalInfo.SMSMessages", "on");
+		amend.setParameter("_wtrDisplayRequest.recordAdditionalInfo.internetMessages", "on");
+		amend.setParameter("resultsForm.sortOption", "recordReference");
+		amend.setParameter("amendOption[0]", amendOption);
+		amend.setParameter("_eventId", "continue");
+		
+		try {
+			debugOut(amend, "");
+			client.executeMethodWithPause(amend, "SUSRIT: PERFORM ACTION (2)");
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to sus/rit item", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to sus/rit item", e);
+		}
+		finally {
+			amend.releaseConnection();
+		}
+		if(amend.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && amend.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.error("suspend/reinstate flow not redirect!");
+			throw new WorldTracerException("unable to sus/rit item");
+		}
+		newLocation = amend.getResponseHeader("location").getValue();
+		GetMethod redirect = new GetMethod(newLocation);
+		try {
+			client.executeMethod(redirect, "SUSRIT: REDIRECT (3");
+			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to sus/rit item", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to sus/rit item", e);
+		}
+		finally {
+			redirect.releaseConnection();
+		}
+
+		return responseBody;
+	}
+
+	public void sendForwardMessage(WorldTracerActionDTO dto, ForwardMessage msg,
+      WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		
+		
+		Map<WorldTracerField, List<String>> fieldMap = createFwdFieldMap(msg);
+		
+		Pattern itinPatt = Pattern.compile("(\\w{2})(\\w+)/(\\w+)", Pattern.CASE_INSENSITIVE);
+		String responseBody = null;
+		NameValuePair[] p1 = { new NameValuePair("_flowId",
+				"createrushdbagrecord-flow") };
+		String newLocation = startFlow(p1, "SEND FORWARD", 1);
+		
+		PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
+		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
+		search.setQueryString(p2);
+
+		search.setParameter("rushBagRecord.recordReference.stationCode", msg.getFromStation());
+		search.setParameter("rushBagRecord.recordReference.airlineCode",
+				msg.getFromAirline());
+
+		EnumMap<WorldTracerField, WorldTracerRule<String>> fwdRules = wtRuleMap.getRule(TxType.FWD_GENERAL);
+		for (Entry<WorldTracerField, WorldTracerRule<String>> entry : fwdRules.entrySet()) {
+			
+			if (fieldMap.containsKey(entry.getKey())) {
+				switch (entry.getKey()) {
+				case TN:
+					List<String> tagList = null;
+					tagList = fieldMap.get(entry.getKey());
+					if(tagList != null) {
+						int addedCount = 0;
+						for (String rawTag: tagList) {
+							if(addedCount > entry.getValue().getMaxAllowed()) break;
+							
+							String finalTag = null;
+							try {
+								finalTag = BagTagConversion.getTwoCharacterBagTag(rawTag);
+							} catch (BagtagException e) {
+								logger.debug("Unable to convert bagtag while creating fwd: " + rawTag);
+								continue;
+							}
+							
+							search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].originalBagTag.airlineCode", finalTag.substring(0,2));
+							search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].originalBagTag.tagNumber", finalTag.substring(2,8));
+							addedCount++;
+						}
+					}
+					break;
+				case XT:
+					List<String> xtList = null;
+					xtList = fieldMap.get(entry.getKey());
+					if(xtList != null) {
+						int addedCount = 0;
+						for (String rawTag : xtList) {
+							if(addedCount > entry.getValue().getMaxAllowed()) break;
+							
+							String finalTag = null;
+							try {
+								finalTag = BagTagConversion.getTwoCharacterBagTag(rawTag);
+							} catch (BagtagException e) {
+								logger.debug("Unable to convert bagtag while creating fwd: " + rawTag);
+								continue;
+							}
+							
+							search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].rushBagTag.airlineCode", finalTag.substring(0,2));
+							search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].rushBagTag.tagNumber", finalTag.substring(2,8));
+							addedCount++;
+							
+						}
+					}
+					break;
+				case FO:
+					List<String> itinList = fieldMap.get(entry.getKey());
+					if(itinList != null) {
+						int addedCount = 0;
+						for (String itin : itinList) {
+							
+							if(addedCount > entry.getValue().getMaxAllowed()) break;
+							
+							Matcher m = itinPatt.matcher(itin);
+							if(m.find()) {
+								String airline = m.group(1);
+								String flightNum = m.group(2);
+								String date = m.group(3);
+								search.setParameter("rushBagRecord.rushBagGroup.rushFlights[" + addedCount + "].airlineCode", airline);
+								search.setParameter("rushBagRecord.rushBagGroup.rushFlights[" + addedCount + "].flightNumber", flightNum);
+								search.setParameter("rushBagRecord.rushBagGroup.rushFlights[" + addedCount + "].flightDate", date);
+								addedCount++;
+							}
+							else {
+								logger.error("Unable to parse FO field itin while creating a FWD");
+								continue;
+							}
+							
+							
+						}
+					}
+					break;
+				case FW:
+					List<String> fwList = fieldMap.get(entry.getKey());
+					if(fwList != null) {
+						int addedCount = 0;
+						for (String fw : fwList) {
+							if(addedCount > entry.getValue().getMaxAllowed()) break;
+							search.setParameter("rushBagRecord.rushBagGroup.rushStationAirlines[" + addedCount + "].stationCode", fw.substring(0,3));
+							search.setParameter("rushBagRecord.rushBagGroup.rushStationAirlines[" + addedCount + "].airlineCode", fw.substring(3,5));
+							addedCount++;
+						}
+					}
+					break;
+				case NM:
+					List<String> nameList = fieldMap.get(entry.getKey());
+					if(nameList != null) {
+						int addedCount = 0;
+						for (String name : nameList) {
+							if(addedCount > entry.getValue().getMaxAllowed()) break;
+							search.setParameter("rushBagRecord.passenger.names[" + addedCount + "]", entry.getValue().formatEntry(name));
+							addedCount++;
+						}
+					}
+					break;
+				case RL:
+					List<String> losscodeList = fieldMap.get(entry.getKey());
+					if(losscodeList != null && losscodeList.size() > 0)  {
+						search.setParameter("rushBagRecord.reasonForLossCode", losscodeList.get(0));
+					}
+					break;
+				case RC:
+					List<String> losscommentList = fieldMap.get(entry.getKey());
+					if(losscommentList != null && losscommentList.size() > 0)  {
+						search.setParameter("rushBagRecord.commentsOnLoss", entry.getValue().formatEntry(losscommentList.get(0)));
+					}
+					break;
+				case SI:
+					List<String> suppList = fieldMap.get(entry.getKey());
+					if(suppList != null && suppList.size() > 0)  {
+						search.setParameter("rushBagRecord.supplementaryInfo[0]", entry.getValue().formatEntry(suppList.get(0)));
+					}
+					break;
+				case TX:
+					List<String> ttypeList = fieldMap.get(entry.getKey());
+					if(ttypeList != null) {
+						int addedCount = 0;
+						for (String name : ttypeList) {
+							if(addedCount > entry.getValue().getMaxAllowed()) break;
+							search.setParameter("rushBagRecord.teletypeAdresses[" + addedCount + "]", name);
+							addedCount++;
+						}
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		search.addParameter("_eventId", "submit");
+		search.addParameter("bagType", "Rush");
+		try {
+			debugOut(search, "");
+			client.executeMethodWithPause(search, "SEND FORWARD: SEND (2)");
+			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
+					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+				newLocation = search.getResponseHeader("location").getValue();
+			} else {
+				newLocation = "";
+				logger.debug("fwd rush bag post not redirect!");
+				throw new WorldTracerException("fwd submit did not go through");
+			}
+		} catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerConnectionException("fwd submit did not go through");
+		} catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerConnectionException("fwd submit did not go through");
+		} finally {
+			search.releaseConnection();
+		}
+		
+		if (!"".equals(newLocation)) {
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				client.executeMethod(redirect, "SEND FORWARD: REDIRECT (3)");
+				responseBody = getStringFromInputStream(redirect
+						.getResponseBodyAsStream());
+				// System.out.println("close incident result:" + responseBody);
+			} catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerConnectionException("could not read final fwd response");
+			} catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerConnectionException("could not read final fwd response");
+			} finally {
+				redirect.releaseConnection();
+			}
+		}
+		else {
+			throw new WorldTracerException("unable to submit fwd redirect");
+		}
+		
+		if (responseBody == null) {
+			throw new WorldTracerException("unable to submit fwd redirect");
+		}
+		
+		if (responseBody.toUpperCase().contains("RECORD CREATED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE CREATED SUCCESSFULLY")) {
+			response.setSuccess(true);
+			return;
+		}
+		else {
+			String errorString;
+			Pattern error_patt = Pattern.compile(
+					"error = '([^<>']*)'", Pattern.CASE_INSENSITIVE
+							| Pattern.DOTALL);
+			Matcher m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to send Fwd. See logs for details";
+				logger.error("send fwd result:"+responseBody);
+			}
+			if (errorString.toUpperCase().contains("FILE CLOSED")) {
+				//throw new WorldTracerAlreadyClosedException(errorString);
+				response.setSuccess(false);
+				response.setError(new WebServiceError("Cannot forward: file already closed."));
+				return;
+			}
+			throw new WorldTracerException(errorString);
+		}
+  }
+	
+	private Map<WorldTracerField, List<String>> createFwdFieldMap(ForwardMessage fwd) throws WorldTracerException {
+		if (fwd == null) {
+			return null;
+		}
+
+		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
+		addIncidentFieldEntry(WorldTracerField.AG, getAgentEntry(fwd.getAgent()), result);
+
+		addConvertedTag(fwd.getExpediteTag(), WorldTracerField.XT, result, fwd.getFromAirline());
+
+		if (fwd.getName() != null) {
+			for (String name : fwd.getName()) {
+				addIncidentFieldEntry(WorldTracerField.NM, name.trim(), result);
+			}
+		}
+
+		if (fwd.getTeletype() != null) {
+			for (String tt : fwd.getTeletype()) {
+				addIncidentFieldEntry(WorldTracerField.TX, tt.trim(), result);
+			}
+		}
+
+		addIncidentFieldEntry(WorldTracerField.SI, fwd.getSuplementaryInfo(), result);
+		addIncidentFieldEntry(WorldTracerField.TI, fwd.getTextInfo(), result);
+
+		String fw = null;
+		if (fwd.getItinerary() != null) {
+			for (WtqSegment itin : fwd.getItinerary()) {
+				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getFlightnum() == null
+						|| itin.getFlightnum().trim().length() <= 0 || itin.getLegfrom() == null
+						|| itin.getLegfrom().trim().length() <= 0 || itin.getLegto() == null
+						|| itin.getLegto().trim().length() <= 0 || itin.getDepartdate() == null) {
+					continue;
+				}
+				String fnum = wtFlightNumber(itin.getFlightnum());
+				String fd = null;
+				if (fnum.length() == 0) {
+					fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getDepartdate());
+				} else {
+					fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getDepartdate());
+				}
+				addIncidentFieldEntry(WorldTracerField.FO, fd, result);
+				addIncidentFieldEntry(WorldTracerField.NF, fd, result);
+				List<String> routing = result.get(WorldTracerField.NR);
+				if (routing == null || !routing.get(routing.size() - 1).equalsIgnoreCase(itin.getLegfrom().trim())) {
+					addIncidentFieldEntry(WorldTracerField.NR, itin.getLegfrom().trim(), result);
+				}
+				addIncidentFieldEntry(WorldTracerField.NR, itin.getLegto().trim(), result);
+				fw = itin.getLegto() + itin.getAirline();
+				addIncidentFieldEntry(WorldTracerField.FW, fw, result);
+			}
+		}
+		List<String> foo = result.get(WorldTracerField.FW);
+		if (foo != null && foo.size() > 0) {
+			foo.set(foo.size() - 1, fwd.getDestinationStation() + fwd.getDestinationAirline());
+		} else {
+			throw new WorldTracerException("invalid forward itinerary");
+		}
+
+		return result;
+	}
+	
+
+	protected void addIncidentFieldEntry(WorldTracerField key, String value, Map<WorldTracerField, List<String>> result) {
+		if (value == null || value.trim().length() <= 0) {
+			return;
+		}
+
+		List<String> entryList = result.get(key);
+		if (entryList == null) {
+			entryList = new ArrayList<String>();
+			entryList.add(value);
+			result.put(key, entryList);
+		} else {
+			entryList.add(value);
+		}
+	}
+	
+	private void addConvertedTag(String tag, WorldTracerField field, Map<WorldTracerField, List<String>> result, String companyCode) {
+		String bagTagString = null;
+		try {
+			bagTagString = BagTagConversion.getTwoCharacterBagTag(tag.trim());
+		} catch (BagtagException e) {
+			// couldn't figure out the tag.
+			Pattern wt_patt = Pattern.compile("([a-zA-Z0-9]{2})(\\d{1,6})");
+			Matcher m = wt_patt.matcher(tag.trim());
+			if (m.find() && BagTagConversion.getThreeDigitTicketingCode(m.group(1)) != null) {
+				bagTagString = String.format("%s%06d", m.group(1), Integer.parseInt(m.group(2)));
+			} else {
+				Pattern base_patt = Pattern.compile("(\\d{1,6})(\\D|$)");
+				m = base_patt.matcher(tag.trim());
+				if (m.find()) {
+					bagTagString = companyCode + m.group(1);
+				}
+			}
+		}
+		if (bagTagString != null && bagTagString.matches(".*[1-9].*")) {
+			if (result.get(field) == null || !(result.get(field).contains(bagTagString))) {
+				addIncidentFieldEntry(field, bagTagString, result);
+			}
+		}
+	}
+	
+	private static String getAgentEntry(Agent ag) {
+		if (ag != null)
+			return (ag.getUsername().length() > 7 ? ag.getUsername().substring(0, 7)
+			    : ag.getUsername())
+			    + "/" + ag.getAirline();
+		return "NTRACER";
+	}
+	
+	private String wtFlightNumber(String flightnum) {
+		if (flightnum == null)
+			return "";
+
+		Matcher m = FLIGHTNUM_FORMAT.matcher(flightnum);
+		if (m.find()) {
+			return m.group();
+		}
+		return "";
+	}
+
+	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo,
+      WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+	  // TODO Auto-generated method stub
+		
+		Map<WorldTracerField, List<String>> fieldMap = createBdoFieldMap(bdo);
+
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate Bdo mapping, ID: " + bdo.getBdoId());
+		}
+		
+		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_BDO);
+		
+		String responseBody = null;
+		NameValuePair[] p1 = { new NameValuePair("_flowId",
+				"deliverDelayedBag-flow") };
+		String newLocation = startFlow(p1, "CREATE BDO", 1);
+		// submit close form by post method
+		PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
+		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey) };
+		search.setQueryString(p2);
+
+		search.setParameter("wtrDisplayRequest.recordReference.stationCode",
+				bdo.getAhlId().substring(0, 3));
+		search.setParameter("wtrDisplayRequest.recordReference.airlineCode",
+				bdo.getAhlId().substring(3, 5));
+		search.setParameter("wtrDisplayRequest.recordReference.recordId",
+				bdo.getAhlId().substring(5));
+
+		search.setParameter("wtrDeliveryRequest.deliverySationCode", bdo.getAhlId()
+				.substring(0, 3));
+
+		search.setParameter("_eventId", "submit");
+
+		try {
+			debugOut(search, "");
+			client.executeMethodWithPause(search, "CREATE BDO: PREPARE AHL DELIVERY (2)");
+			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
+					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+				newLocation = search.getResponseHeader("location").getValue();
+			} else {
+				newLocation = "";
+				logger.error("bdo post1 not redirect!");
+				throw new WorldTracerException("unable to send BDO");
+			}
+		} catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to send BDO");
+		} catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to send BDO");
+		} finally {
+			search.releaseConnection();
+		}
+
+		if (!"".equals(newLocation)) {
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				client.executeMethod(redirect, "CREATE BDO: REDIRECT (3)");
+				responseBody = getStringFromInputStream(redirect
+						.getResponseBodyAsStream());
+				// System.out.println("close incident result:" + responseBody);
+			} catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to send BDO", e);
+			} catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to send BDO", e);
+			} finally {
+				redirect.releaseConnection();
+			}
+		}
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		NameValuePair[] p3 = { new NameValuePair("_flowExecutionKey", flowKey) };
+
+		search = new PostMethod(WTRWEB_FLOW_URL);
+		search.setQueryString(p3);
+		
+		String dcName = bdo.getDeliveryCompany();
+		
+		if(dcName == null || dcName.trim().length() < 1) {
+			dcName = "DEFAULT DELIVERY";
+		}
+		dcName = dcName.replaceAll("[\\.#\"><%]", " ").replaceAll("\\s+", " ").trim();
+		
+		if(dcName.length() > 44) {
+			dcName = dcName.substring(0, 44);
+		}
+		
+		search.setParameter("deliveryOrderVO.deliveryOrder.deliveryServiceCompany", String.format("01 - %s", dcName));
+		search.setParameter("deliveryOrderVO.deliveryOrder.deliveryDate",
+				fieldMap.get(WorldTracerField.DD).get(0));
+		search.setParameter("deliveryOrderVO.deliveryAddr1", "true");
+		String da = fieldMap.get(WorldTracerField.DA).get(0);
+		Pattern daPatt = Pattern.compile("(.{1,55})( (.{1,55}))?");
+		m = daPatt.matcher(da);
+		if (!m.find()) {
+			throw new WorldTracerException("Unable to parse delivery address");
+		}
+		search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.deliveryAddress.line1", RULES.get(WorldTracerService.WorldTracerField.PA).formatEntry(m.group(1)));
+		search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.deliveryAddress.line2", m.group(3) == null ? "" : RULES.get(WorldTracerService.WorldTracerField.PA).formatEntry(m.group(3)));
+
+		Pattern ctPatt = Pattern.compile("(\\w{2})(\\d{2})(\\w{1,3})?");
+		List<String> bagList = null;
+		bagList = fieldMap.get(WorldTracerField.CT);
+		if (bagList != null) {
+			int addedCount = 0;
+			for (String ct : bagList) {
+				if (addedCount > 9)
+					break;
+
+				m = ctPatt.matcher(ct);
+				if (m.find()) {
+					search.setParameter(String.format("deliveryOrderVO.colorType%d", addedCount + 1), "true");
+					search.setParameter(
+							"avoidBindingdeliveryOrderVO.deliveryOrder.colorTypes["
+									+ addedCount + "].colorCode", m.group(1));
+					search.setParameter(
+							"avoidBindingdeliveryOrderVO.deliveryOrder.colorTypes["
+									+ addedCount + "].typeCode", m.group(2));
+					if (m.group(3) != null) {
+						search.setParameter(
+								"avoidBindingdeliveryOrderVO.deliveryOrder.colorTypes["
+										+ addedCount + "].descriptionCodes", m
+										.group(3));
+						addedCount++;
+					}
+				}
+			}
+		}
+		List<String> nameList = null;
+		nameList = fieldMap.get(WorldTracerField.NM);
+		if (nameList != null) {
+			int addedCount = 0;
+			for (String name : nameList) {
+				if (addedCount > 2)
+					break;
+				search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.names[" + addedCount + "]", RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(name));
+				addedCount++;
+
+			}
+		}
+
+		search.setParameter("deliveryOrderVO.deliveryOrder.originStation",
+				bdo.getOriginationStationCode());
+		search.setParameter("_eventId", "Submit");
+		try {
+			debugOut(search, "");
+			client.executeMethodWithPause(search, "CREATE BDO: BDO (4)");
+			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
+					|| search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY) {
+				newLocation = search.getResponseHeader("location").getValue();
+			} else {
+				newLocation = "";
+				logger.error("bdo post2 not redirect!");
+				throw new WorldTracerException("unable to send BDO");
+			}
+		} catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to send BDO");
+		} catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to send BDO");
+		} finally {
+			search.releaseConnection();
+		}
+
+		if (!"".equals(newLocation)) {
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				client.executeMethod(redirect, "CREATE BDO: REDIRECT (5)");
+				responseBody = getStringFromInputStream(redirect
+						.getResponseBodyAsStream());
+				logger.debug("Create BDO result result:" + responseBody);
+			} catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to send BDO");
+			} catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to send BDO");
+			} finally {
+				redirect.releaseConnection();
+			}
+		}
+
+		m = BDO_ERROR_PATTERN.matcher(responseBody);
+		if(m.find()) {
+			throw new WorldTracerException(m.group(1));
+		}
+		
+		if(! responseBody.toUpperCase().contains("SUCCESSFULLY DELIVERED THE GIVEN ORDER")) {
+			throw new WorldTracerException("unable to send BDO");
+		}
+		
+		response.setSuccess(true);
+	  
+  }
+	
+	private Map<WorldTracerField, List<String>> createBdoFieldMap(Bdo bdo) throws WorldTracerException {
+		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
+
+		if (bdo.getItems() == null || bdo.getItems().length < 1) {
+			throw new WorldTracerException("Can't send a bdo with no Items for bdo: " + bdo.getBdoId());
+		}
+		for (Item item : bdo.getItems()) {
+			getItemInfo(item, result, false);
+		}
+
+		if (bdo.getDeliveryDate() != null) {
+			addIncidentFieldEntry(WorldTracerField.DD, ITIN_DATE_FORMAT.format(bdo.getDeliveryDate()), result);
+		}
+
+		if (result.get(WorldTracerField.DD) == null) {
+			throw new WorldTracerException("Could not export BDO due to invalid delivery date. Id: " + bdo.getBdoId());
+		}
+
+		addIncidentFieldEntry(WorldTracerField.LD, bdo.getDeliveryComments(), result);
+
+		addIncidentFieldEntry(WorldTracerField.AG, getAgentEntry(bdo.getAgent()), result);
+
+		if (bdo.getPassengers() != null && bdo.getPassengers().length > 0) {
+			for (Passenger p : bdo.getPassengers()) {
+				getBdoPaxInfo(p, result);
+			}
+		}
+
+		return result;
+	}
+	
+	private void getBdoPaxInfo(Passenger pax, Map<WorldTracerField, List<String>> result) {
+		addIncidentFieldEntry(WorldTracerField.NM, pax.getLastname(), result);
+		Address a = pax.getAddress();
+		String addy = StringUtils.join(" ", elimNulls(a.getAddress1()), elimNulls(a.getAddress2()),
+				elimNulls(a.getCity()),
+				elimNulls(a.getState()).equals("") ? elimNulls(a.getProvince()) : elimNulls(a.getState()),
+				elimNulls(a.getZip())).trim().replaceAll("\\s+", " ");
+		addIncidentFieldEntry(WorldTracerField.DA, addy, result);
+
+		addIncidentFieldEntry(WorldTracerField.PN, wtPhone(a.getHomePhone()), result);
+		addIncidentFieldEntry(WorldTracerField.TP, wtPhone(a.getWorkPhone()), result);
+		addIncidentFieldEntry(WorldTracerField.CP, wtPhone(a.getMobilePhone()), result);
+	}
+	
+	protected void getItemInfo(Item item, Map<WorldTracerField, List<String>> result, boolean includeXdesc) {
+
+		if (item.getColor() == null || item.getColor().trim().length() <= 0 || item.getType() == null
+				|| item.getType().trim().length() != 2) {
+			return;
+		}
+
+		String colorType = "";
+		if ("TD".equals(item.getColor().trim())) {
+			colorType = "BN";
+		} else {
+			colorType = item.getColor().trim();
+		}
+
+		String type = item.getType().trim();
+		if (!VALID_BAG_TYPES.contains(type)) {
+			type = DEFAULT_BAG_TYPE;
+		}
+		colorType += type;
+
+		String desc1 = mapXDesc(item.getDesc1());
+		String desc2 = mapXDesc(item.getDesc2());
+		String desc3 = mapXDesc(item.getDesc3());
+
+		colorType += getDescString(desc1, desc2, desc3);
+
+		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
+
+		addIncidentFieldEntry(WorldTracerField.BI, item.getManufacturer(), result);
+	}
+	
+	private String mapXDesc(String code) {
+		if (code == null || !wt_descs.contains(code)) {
+			return "X";
+		}
+		return code;
+	}
+	
+	private String elimNulls(String str) {
+		if (str != null)
+			return str.trim();
+		return "";
+	}
+	
+	private String wtPhone(String rawText) {
+		return rawText != null ? rawText.replaceAll("\\D", "") : null;
+	}
+
+
+	private String getDescString(String... descs) {
+		// need to remove duplicates
+		Set<String> foo = new HashSet<String>(Arrays.asList(descs));
+		String result = "";
+		boolean hasMat = false;
+		for (String desc : foo) {
+			if (wt_mats.contains(desc)) {
+				if (!hasMat) {
+					result += desc;
+					hasMat = true;
+				}
+			} else {
+				result += desc;
+			}
+		}
+		if (result.length() > 3) {
+			return result.substring(0, 3);
+		} else if (result.length() == 3) {
+			return result;
+		} else if (result.length() == 2) {
+			return result + "X";
+		} else if (result.length() == 1) {
+			return result + "XX";
+		} else {
+			return "XXX";
+		}
+	}
+	
+	public void closeAhl(WorldTracerActionDTO dto, Ahl ahl,
+      WorldTracerResponse response) {
+	  // TODO Auto-generated method stub
+	  
+  }
+	
+
 }
