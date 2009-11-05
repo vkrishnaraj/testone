@@ -1,10 +1,18 @@
 package aero.nettracer.serviceprovider.common.utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.hibernate.classic.Session;
 
+import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.dao.UserDao;
 import aero.nettracer.serviceprovider.common.db.ParameterType;
 import aero.nettracer.serviceprovider.common.db.PermissionType;
@@ -18,6 +26,8 @@ import aero.nettracer.serviceprovider.ws_1_0.res.sabre.Reservation;
 
 public class ServiceUtilities {
 
+	private static Logger logger = Logger.getLogger(ServiceUtilities.class);
+	
 	public static User getAndAuthorizeUser(String username, String password,
 			PermissionType permissionType) throws UserNotAuthorizedException {
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -87,6 +97,52 @@ public class ServiceUtilities {
 		} else {
 			return srcStr.length() - 1;
 		}
+	}
+
+
+	public static Date getGMTDate() {
+		try {
+			Date now = new Date(); // current system date
+			DateFormat df = new SimpleDateFormat(ServiceConstants.DB_DATETIMEFORMAT);
+			df.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+			Date newdate = convertToDate(df.format(now), ServiceConstants.DB_DATETIMEFORMAT,
+					null);
+
+			return newdate;
+		} catch (Exception e) {
+			return new Date();
+		}
+
+	}
+
+	public static Date convertToDate(String str, String instyle, String inloc) {
+		return convertToDate(str, instyle, inloc, null);
+	}
+	
+	public static Date convertToDate(String str, String instyle, String inloc, TimeZone startTZ) {
+		try {
+			Locale locale = null;
+			if (inloc == null) locale = Locale.US;
+			else locale = new Locale(inloc);
+			if (instyle == null || instyle.equals("")) instyle = ServiceConstants.DB_DATEFORMAT;
+
+			if (str == null || str.length() <= 0) return null;
+
+			SimpleDateFormat df = new SimpleDateFormat(instyle, locale);
+			if(startTZ != null) {
+				df.setTimeZone(startTZ);
+			}
+			Date mydate = df.parse(str);
+			Calendar c = Calendar.getInstance();
+			c.setTime(mydate);
+			if (c.get(Calendar.YEAR) < 1900) return null;
+
+			return mydate;
+		} catch (Exception e) {
+			logger.warn("user entered bad date format: " + instyle);
+		}
+		return null;
 	}
 
 }

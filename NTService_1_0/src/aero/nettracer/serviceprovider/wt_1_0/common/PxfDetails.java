@@ -1,9 +1,9 @@
 package aero.nettracer.serviceprovider.wt_1_0.common;
 
-public class PxfAas {
-	private String airline;
-	private String area;
-	private String station;
+public class PxfDetails {
+	private String airline = "";
+	private String area = "";
+	private String station = "";
 
 	public String getAirline() {
 		return airline;

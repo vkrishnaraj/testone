@@ -7,214 +7,191 @@
  * Automatically generated - do not modify.
  */
 package aero.nettracer.serviceprovider.wt_1_0.impl;
-
 /**
  * A document containing one createAhlResponse(@http://wt_1_0.serviceprovider.nettracer.aero) element.
  *
  * This is a complex type.
  */
-public class CreateAhlResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
-    implements aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument {
-    private static final javax.xml.namespace.QName CREATEAHLRESPONSE$0 = new javax.xml.namespace.QName("http://wt_1_0.serviceprovider.nettracer.aero",
-            "createAhlResponse");
-
-    public CreateAhlResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType) {
+public class CreateAhlResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument
+{
+    
+    public CreateAhlResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
+    {
         super(sType);
     }
-
+    
+    private static final javax.xml.namespace.QName CREATEAHLRESPONSE$0 = 
+        new javax.xml.namespace.QName("http://wt_1_0.serviceprovider.nettracer.aero", "createAhlResponse");
+    
+    
     /**
      * Gets the "createAhlResponse" element
      */
-    public aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse getCreateAhlResponse() {
-        synchronized (monitor()) {
+    public aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse getCreateAhlResponse()
+    {
+        synchronized (monitor())
+        {
             check_orphaned();
-
-            aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse target =
-                null;
-            target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse) get_store()
-                                                                                                             .find_element_user(CREATEAHLRESPONSE$0,
-                    0);
-
-            if (target == null) {
+            aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse target = null;
+            target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse)get_store().find_element_user(CREATEAHLRESPONSE$0, 0);
+            if (target == null)
+            {
                 return null;
             }
-
             return target;
         }
     }
-
+    
     /**
      * Sets the "createAhlResponse" element
      */
-    public void setCreateAhlResponse(
-        aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse createAhlResponse) {
-        synchronized (monitor()) {
+    public void setCreateAhlResponse(aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse createAhlResponse)
+    {
+        synchronized (monitor())
+        {
             check_orphaned();
-
-            aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse target =
-                null;
-            target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse) get_store()
-                                                                                                             .find_element_user(CREATEAHLRESPONSE$0,
-                    0);
-
-            if (target == null) {
-                target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse) get_store()
-                                                                                                                 .add_element_user(CREATEAHLRESPONSE$0);
+            aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse target = null;
+            target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse)get_store().find_element_user(CREATEAHLRESPONSE$0, 0);
+            if (target == null)
+            {
+                target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse)get_store().add_element_user(CREATEAHLRESPONSE$0);
             }
-
             target.set(createAhlResponse);
         }
     }
-
+    
     /**
      * Appends and returns a new empty "createAhlResponse" element
      */
-    public aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse addNewCreateAhlResponse() {
-        synchronized (monitor()) {
+    public aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse addNewCreateAhlResponse()
+    {
+        synchronized (monitor())
+        {
             check_orphaned();
-
-            aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse target =
-                null;
-            target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse) get_store()
-                                                                                                             .add_element_user(CREATEAHLRESPONSE$0);
-
+            aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse target = null;
+            target = (aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse)get_store().add_element_user(CREATEAHLRESPONSE$0);
             return target;
         }
     }
-
     /**
      * An XML createAhlResponse(@http://wt_1_0.serviceprovider.nettracer.aero).
      *
      * This is a complex type.
      */
-    public static class CreateAhlResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
-        implements aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse {
-        private static final javax.xml.namespace.QName RETURN$0 = new javax.xml.namespace.QName("http://wt_1_0.serviceprovider.nettracer.aero",
-                "return");
-
-        public CreateAhlResponseImpl(org.apache.xmlbeans.SchemaType sType) {
+    public static class CreateAhlResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument.CreateAhlResponse
+    {
+        
+        public CreateAhlResponseImpl(org.apache.xmlbeans.SchemaType sType)
+        {
             super(sType);
         }
-
+        
+        private static final javax.xml.namespace.QName RETURN$0 = 
+            new javax.xml.namespace.QName("http://wt_1_0.serviceprovider.nettracer.aero", "return");
+        
+        
         /**
          * Gets the "return" element
          */
-        public aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse getReturn() {
-            synchronized (monitor()) {
+        public aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse getReturn()
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
-
-                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target =
-                    null;
-                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                    .find_element_user(RETURN$0,
-                        0);
-
-                if (target == null) {
+                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target = null;
+                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().find_element_user(RETURN$0, 0);
+                if (target == null)
+                {
                     return null;
                 }
-
                 return target;
             }
         }
-
+        
         /**
          * Tests for nil "return" element
          */
-        public boolean isNilReturn() {
-            synchronized (monitor()) {
+        public boolean isNilReturn()
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
-
-                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target =
-                    null;
-                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                    .find_element_user(RETURN$0,
-                        0);
-
-                if (target == null) {
-                    return false;
-                }
-
+                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target = null;
+                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().find_element_user(RETURN$0, 0);
+                if (target == null) return false;
                 return target.isNil();
             }
         }
-
+        
         /**
          * True if has "return" element
          */
-        public boolean isSetReturn() {
-            synchronized (monitor()) {
+        public boolean isSetReturn()
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
-
                 return get_store().count_elements(RETURN$0) != 0;
             }
         }
-
+        
         /**
          * Sets the "return" element
          */
-        public void setReturn(
-            aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse xreturn) {
-            synchronized (monitor()) {
+        public void setReturn(aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse xreturn)
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
-
-                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target =
-                    null;
-                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                    .find_element_user(RETURN$0,
-                        0);
-
-                if (target == null) {
-                    target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                        .add_element_user(RETURN$0);
+                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target = null;
+                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().find_element_user(RETURN$0, 0);
+                if (target == null)
+                {
+                    target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().add_element_user(RETURN$0);
                 }
-
                 target.set(xreturn);
             }
         }
-
+        
         /**
          * Appends and returns a new empty "return" element
          */
-        public aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse addNewReturn() {
-            synchronized (monitor()) {
+        public aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse addNewReturn()
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
-
-                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target =
-                    null;
-                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                    .add_element_user(RETURN$0);
-
+                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target = null;
+                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().add_element_user(RETURN$0);
                 return target;
             }
         }
-
+        
         /**
          * Nils the "return" element
          */
-        public void setNilReturn() {
-            synchronized (monitor()) {
+        public void setNilReturn()
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
-
-                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target =
-                    null;
-                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                    .find_element_user(RETURN$0,
-                        0);
-
-                if (target == null) {
-                    target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse) get_store()
-                                                                                                        .add_element_user(RETURN$0);
+                aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse target = null;
+                target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().find_element_user(RETURN$0, 0);
+                if (target == null)
+                {
+                    target = (aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse)get_store().add_element_user(RETURN$0);
                 }
-
                 target.setNil();
             }
         }
-
+        
         /**
          * Unsets the "return" element
          */
-        public void unsetReturn() {
-            synchronized (monitor()) {
+        public void unsetReturn()
+        {
+            synchronized (monitor())
+            {
                 check_orphaned();
                 get_store().remove_element(RETURN$0, 0);
             }

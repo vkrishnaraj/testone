@@ -6,7 +6,7 @@
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="aero.nettracer.serviceprovider.wt_1_0.WorldTracerServiceMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter name="ServiceClass">aero.nettracer.serviceprovider.wt_1_0.WorldTracerServiceSkeleton</parameter>
+        <parameter name="ServiceClass">aero.nettracer.serviceprovider.wt_1_0.WorldTracerServiceImpl</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
         <operation name="closeOhd" mep="http://www.w3.org/ns/wsdl/in-out">

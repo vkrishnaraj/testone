@@ -1,31 +1,46 @@
 package aero.nettracer.serviceprovider.wt_1_0;
 
+
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
+
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.PermissionType;
+import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.ConfigurationException;
 import aero.nettracer.serviceprovider.common.exceptions.UserNotAuthorizedException;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.WebServiceError;
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
+import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
+import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
 import aero.nettracer.serviceprovider.wt_1_0.services.ServicesManager;
 
 public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
-    /**
-     * Auto generated method signature
-     * @param closeOhd
-     */
+	
+	
     public aero.nettracer.serviceprovider.wt_1_0.CloseOhdResponseDocument closeOhd(
         aero.nettracer.serviceprovider.wt_1_0.CloseOhdDocument closeOhd) {
     	
+    	WorldTracerActionType type = WorldTracerActionType.CLOSE_OHD;
+    	
     	RequestHeader header = closeOhd.getCloseOhd().getHeader();
+    	User user = null;
     	String username = header.getUsername();
     	String password = header.getUsername();
     	boolean userAuthorized = true;
     	
     	try {
-			ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
 		} catch (UserNotAuthorizedException e) {
 			userAuthorized = false;
 		}
@@ -33,17 +48,20 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
 
 		if (userAuthorized) {
-    		WorldTracerActionDTO dto = new WorldTracerActionDTO();
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = closeOhd.getCloseOhd().getOhd();
+    		
+			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
     		try {
 				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
-				convertToWebServiceResponse(sResponse, xreturn);
+				xreturn = convertToWebServiceResponse(sResponse);
 			} catch (UserNotAuthorizedException e) {
 				userAuthorized = false;
 			} catch (ConfigurationException e) {
 				WebServiceError error = xreturn.addNewError();
 				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
 			}
-    		
     	} 
 
     	if (!userAuthorized){
@@ -58,92 +76,382 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
     }
 
 
-	/**
-     * Auto generated method signature
-     * @param forwardOhd
-     */
     public aero.nettracer.serviceprovider.wt_1_0.ForwardOhdResponseDocument forwardOhd(
         aero.nettracer.serviceprovider.wt_1_0.ForwardOhdDocument forwardOhd) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#forwardOhd");
+
+    	WorldTracerActionType type = WorldTracerActionType.FORWARD_OHD;
+    	
+    	RequestHeader header = forwardOhd.getForwardOhd().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardOhd input = forwardOhd.getForwardOhd().getData();
+    		
+			ForwardOhd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ForwardOhd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	ForwardOhdResponseDocument response = ForwardOhdResponseDocument.Factory.newInstance();
+		response.addNewForwardOhdResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param getAhl
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.GetAhlResponseDocument getAhl(
         aero.nettracer.serviceprovider.wt_1_0.GetAhlDocument getAhl) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getAhl");
+
+    	WorldTracerActionType type = WorldTracerActionType.GET_AHL;
+    	
+    	RequestHeader header = getAhl.getGetAhl().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = getAhl.getGetAhl().getAhl();
+    		
+			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	GetAhlResponseDocument response = GetAhlResponseDocument.Factory.newInstance();
+		response.addNewGetAhlResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param createAhl
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.CreateAhlResponseDocument createAhl(
         aero.nettracer.serviceprovider.wt_1_0.CreateAhlDocument createAhl) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#createAhl");
+    	WorldTracerActionType type = WorldTracerActionType.CREATE_AHL;
+    	
+    	RequestHeader header = createAhl.getCreateAhl().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = createAhl.getCreateAhl().getAhl();
+    		
+			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	CreateAhlResponseDocument response = CreateAhlResponseDocument.Factory.newInstance();
+		response.addNewCreateAhlResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param eraseActionFile
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.EraseActionFileResponseDocument eraseActionFile(
         aero.nettracer.serviceprovider.wt_1_0.EraseActionFileDocument eraseActionFile) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#eraseActionFile");
+    	WorldTracerActionType type = WorldTracerActionType.ERASE_ACTION_FILE;
+    	
+    	RequestHeader header = eraseActionFile.getEraseActionFile().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input = eraseActionFile.getEraseActionFile().getData();
+    		
+			ActionFileRequestData payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ActionFileRequestData.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	EraseActionFileResponseDocument response = EraseActionFileResponseDocument.Factory.newInstance();
+		response.addNewEraseActionFileResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param amendOhd
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.AmendOhdResponseDocument amendOhd(
         aero.nettracer.serviceprovider.wt_1_0.AmendOhdDocument amendOhd) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#amendOhd");
+    	WorldTracerActionType type = WorldTracerActionType.AMEND_OHD;
+    	
+    	RequestHeader header = amendOhd.getAmendOhd().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = amendOhd.getAmendOhd().getOhd();
+    		
+			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	AmendOhdResponseDocument response = AmendOhdResponseDocument.Factory.newInstance();
+		response.addNewAmendOhdResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param getActionFileSummary
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.GetActionFileSummaryResponseDocument getActionFileSummary(
         aero.nettracer.serviceprovider.wt_1_0.GetActionFileSummaryDocument getActionFileSummary) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getActionFileSummary");
+    	WorldTracerActionType type = WorldTracerActionType.ACTION_FILE_SUMMARY;
+    	
+    	RequestHeader header = getActionFileSummary.getGetActionFileSummary().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input = getActionFileSummary.getGetActionFileSummary().getData();
+    		
+			ActionFileRequestData payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ActionFileRequestData.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	GetActionFileSummaryResponseDocument response = GetActionFileSummaryResponseDocument.Factory.newInstance();
+		response.addNewGetActionFileSummaryResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param getOhd
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.GetOhdResponseDocument getOhd(
         aero.nettracer.serviceprovider.wt_1_0.GetOhdDocument getOhd) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getOhd");
+    	WorldTracerActionType type = WorldTracerActionType.GET_OHD;
+    	
+    	RequestHeader header = getOhd.getGetOhd().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = getOhd.getGetOhd().getOhd();
+    		
+			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	GetOhdResponseDocument response = GetOhdResponseDocument.Factory.newInstance();
+		response.addNewGetOhdResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param getActionFileCounts
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.GetActionFileCountsResponseDocument getActionFileCounts(
         aero.nettracer.serviceprovider.wt_1_0.GetActionFileCountsDocument getActionFileCounts) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getActionFileCounts");
+    	WorldTracerActionType type = WorldTracerActionType.ACTION_FILE_COUNTS;
+    	
+    	RequestHeader header = getActionFileCounts.getGetActionFileCounts().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+		
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input = getActionFileCounts.getGetActionFileCounts().getData();
+			Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+			
+			ActionFileRequestData payload = mapper.map(input, ActionFileRequestData.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	GetActionFileCountsResponseDocument response = GetActionFileCountsResponseDocument.Factory.newInstance();
+		response.addNewGetActionFileCountsResponse().setReturn(xreturn);
+		
+		return response;
     }
 
     /**
@@ -152,132 +460,523 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
      */
     public aero.nettracer.serviceprovider.wt_1_0.RequestOhdResponseDocument requestOhd(
         aero.nettracer.serviceprovider.wt_1_0.RequestOhdDocument requestOhd) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#requestOhd");
+    	WorldTracerActionType type = WorldTracerActionType.REQUEST_OHD;
+    	
+    	RequestHeader header = requestOhd.getRequestOhd().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.RequestOhd input = requestOhd.getRequestOhd().getData();
+    		
+			RequestOhd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, RequestOhd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	RequestOhdResponseDocument response = RequestOhdResponseDocument.Factory.newInstance();
+		response.addNewRequestOhdResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param amendAhl
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.AmendAhlResponseDocument amendAhl(
         aero.nettracer.serviceprovider.wt_1_0.AmendAhlDocument amendAhl) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#amendAhl");
+    	WorldTracerActionType type = WorldTracerActionType.AMEND_AHL;
+    	
+    	RequestHeader header = amendAhl.getAmendAhl().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = amendAhl.getAmendAhl().getAhl();
+    		
+			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	AmendAhlResponseDocument response = AmendAhlResponseDocument.Factory.newInstance();
+		response.addNewAmendAhlResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param createBdo
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.CreateBdoResponseDocument createBdo(
         aero.nettracer.serviceprovider.wt_1_0.CreateBdoDocument createBdo) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#createBdo");
+    	WorldTracerActionType type = WorldTracerActionType.CREATE_BDO;
+    	
+    	RequestHeader header = createBdo.getCreateBdo().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Bdo input = createBdo.getCreateBdo().getBdo();
+    		
+			Bdo payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Bdo.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	CreateBdoResponseDocument response = CreateBdoResponseDocument.Factory.newInstance();
+		response.addNewCreateBdoResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param requestQuickOhd
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.RequestQuickOhdResponseDocument requestQuickOhd(
         aero.nettracer.serviceprovider.wt_1_0.RequestQuickOhdDocument requestQuickOhd) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#requestQuickOhd");
+    	WorldTracerActionType type = WorldTracerActionType.REQUEST_QOHD;
+    	
+    	RequestHeader header = requestQuickOhd.getRequestQuickOhd().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.RequestOhd input = requestQuickOhd.getRequestQuickOhd().getData();
+    		
+			RequestOhd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, RequestOhd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	RequestQuickOhdResponseDocument response = RequestQuickOhdResponseDocument.Factory.newInstance();
+		response.addNewRequestQuickOhdResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param getActionFileDetails
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.GetActionFileDetailsResponseDocument getActionFileDetails(
         aero.nettracer.serviceprovider.wt_1_0.GetActionFileDetailsDocument getActionFileDetails) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#getActionFileDetails");
+    	WorldTracerActionType type = WorldTracerActionType.ACTION_FILE_DETAILS;
+    	
+    	RequestHeader header = getActionFileDetails.getGetActionFileDetails().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input =  getActionFileDetails.getGetActionFileDetails().getData();
+    		
+			ActionFileRequestData payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ActionFileRequestData.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	GetActionFileDetailsResponseDocument response = GetActionFileDetailsResponseDocument.Factory.newInstance();
+		response.addNewGetActionFileDetailsResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param sendForwardMessage
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.SendForwardMessageResponseDocument sendForwardMessage(
         aero.nettracer.serviceprovider.wt_1_0.SendForwardMessageDocument sendForwardMessage) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#sendForwardMessage");
+    	WorldTracerActionType type = WorldTracerActionType.SEND_FORWARD_MESSAGE;
+    	
+    	RequestHeader header = sendForwardMessage.getSendForwardMessage().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardMessage input = sendForwardMessage.getSendForwardMessage().getForwardMessage();
+    		
+			ForwardMessage payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ForwardMessage.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	SendForwardMessageResponseDocument response = SendForwardMessageResponseDocument.Factory.newInstance();
+		response.addNewSendForwardMessageResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param placeActionFile
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.PlaceActionFileResponseDocument placeActionFile(
         aero.nettracer.serviceprovider.wt_1_0.PlaceActionFileDocument placeActionFile) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#placeActionFile");
+    	WorldTracerActionType type = WorldTracerActionType.PLACE_ACTION_FILE;
+    	
+    	RequestHeader header = placeActionFile.getPlaceActionFile().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Pxf input = placeActionFile.getPlaceActionFile().getPxf();
+    		
+			Pxf payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Pxf.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	PlaceActionFileResponseDocument response = PlaceActionFileResponseDocument.Factory.newInstance();
+		response.addNewPlaceActionFileResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param createOhd
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.CreateOhdResponseDocument createOhd(
         aero.nettracer.serviceprovider.wt_1_0.CreateOhdDocument createOhd) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#createOhd");
+    	WorldTracerActionType type = WorldTracerActionType.CREATE_OHD;
+    	
+    	RequestHeader header = createOhd.getCreateOhd().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = createOhd.getCreateOhd().getOhd();
+    		
+			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	CreateOhdResponseDocument response = CreateOhdResponseDocument.Factory.newInstance();
+		response.addNewCreateOhdResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param reinstanteAhl
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.ReinstanteAhlResponseDocument reinstanteAhl(
         aero.nettracer.serviceprovider.wt_1_0.ReinstanteAhlDocument reinstanteAhl) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#reinstanteAhl");
+    	WorldTracerActionType type = WorldTracerActionType.REINSTATE_AHL;
+    	
+    	RequestHeader header = reinstanteAhl.getReinstanteAhl().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = reinstanteAhl.getReinstanteAhl().getAhl();
+    		
+			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	ReinstanteAhlResponseDocument response = ReinstanteAhlResponseDocument.Factory.newInstance();
+		response.addNewReinstanteAhlResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param closeAhl
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.CloseAhlResponseDocument closeAhl(
         aero.nettracer.serviceprovider.wt_1_0.CloseAhlDocument closeAhl) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#closeAhl");
+    	WorldTracerActionType type = WorldTracerActionType.CLOSE_AHL;
+    	
+    	RequestHeader header = closeAhl.getCloseAhl().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = closeAhl.getCloseAhl().getAhl();
+    		
+			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	CloseAhlResponseDocument response = CloseAhlResponseDocument.Factory.newInstance();
+		response.addNewCloseAhlResponse().setReturn(xreturn);
+		
+		return response;
     }
 
-    /**
-     * Auto generated method signature
-     * @param suspendAhl
-     */
+
     public aero.nettracer.serviceprovider.wt_1_0.SuspendAhlResponseDocument suspendAhl(
         aero.nettracer.serviceprovider.wt_1_0.SuspendAhlDocument suspendAhl) {
-        //TODO : fill this with the necessary business logic
-        throw new java.lang.UnsupportedOperationException("Please implement " +
-            this.getClass().getName() + "#suspendAhl");
+    	WorldTracerActionType type = WorldTracerActionType.SUSPEND_AHL;
+    	
+    	RequestHeader header = suspendAhl.getSuspendAhl().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = suspendAhl.getSuspendAhl().getAhl();
+    		
+			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	SuspendAhlResponseDocument response = SuspendAhlResponseDocument.Factory.newInstance();
+		response.addNewSuspendAhlResponse().setReturn(xreturn);
+		
+		return response;
     }
     
-	private void convertToWebServiceResponse(
-			aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse response,
-			WorldTracerResponse xreturn) {
+	private WorldTracerResponse convertToWebServiceResponse(
+			aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse input) {
 		
-		
-		response.getActionFiles();
-		response.getCounts();
-		response.getResponseData();
-		response.getError();
-		response.getAhl();
-		response.getOhd();
-		
+		return DozerBeanMapperSingletonWrapper.getInstance().map(input, WorldTracerResponse.class);
 	}
 }

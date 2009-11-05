@@ -3,7 +3,7 @@ package aero.nettracer.serviceprovider.wt_1_0.common;
 public class ActionFileCount {
 	private int count;
 
-	private String day;
+	private int day;
 
 	private String station;
 
@@ -11,10 +11,6 @@ public class ActionFileCount {
 
 	public int getCount() {
 		return count;
-	}
-
-	public String getDay() {
-		return day;
 	}
 
 	public String getStation() {
@@ -29,13 +25,19 @@ public class ActionFileCount {
 		this.count = count;
 	}
 
-	public void setDay(String day) {
-		this.day = day;
-	}
 	public void setStation(String station) {
 		this.station = station;
 	}
+
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public void setDay(int day) {
+		this.day = day;
 	}
 }

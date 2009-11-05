@@ -13,13 +13,12 @@ public class ServicesManager {
 	
 	private static ServicesManager instance = null;
 	
-	public static ServicesManager getInstance() {
-		synchronized (instance) {
-			if (instance == null) {
-				instance = new ServicesManager();
-			}
-			return instance;
+	public static synchronized ServicesManager getInstance() {
+		if (instance == null) {
+			instance = new ServicesManager();
 		}
+		return instance;
+
 	}
 	
 	public WorldTracerResponse performAction(WorldTracerActionDTO dto) throws UserNotAuthorizedException, ConfigurationException {
@@ -27,16 +26,16 @@ public class ServicesManager {
 		AbstractServiceManager svcMgr = null;
 		
 		// Authorize
-		if (dto.getUser() == null || !ServiceUtilities.authorize(dto.getUser(), PermissionType.WORLDTRACER)) {
+		if (dto.getUser() == null || (!dto.isAuthCheckPerformed() && !ServiceUtilities.authorize(dto.getUser(), PermissionType.WORLDTRACER))) {
 			throw new UserNotAuthorizedException();
 		}
 		
 		// Determine Destination Service Manager
-		ParameterType serviceManagerType = dto.getType().getParameterType();
-		if (!dto.getUser().getProfile().getParameters().containsKey(serviceManagerType)) {
+		ParameterType actionType = dto.getType().getParameterType();
+		if (!dto.getUser().getProfile().getParameters().containsKey(actionType)) {
 			throw new ConfigurationException();
 		} else {
-			String serviceReference = dto.getUser().getProfile().getParameters().get(serviceManagerType);
+			String serviceReference = dto.getUser().getProfile().getParameters().get(actionType);
 			svcMgr = WorldTracerServiceManagers.valueOf(serviceReference).getServiceManager();
 		}
 		

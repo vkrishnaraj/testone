@@ -1,7 +1,5 @@
 package aero.nettracer.serviceprovider.wt_1_0.common;
 
-import java.util.List;
-
 import aero.nettracer.serviceprovider.ws_1_0.response.GenericResponse;
 
 public class WorldTracerResponse extends GenericResponse {
@@ -9,17 +7,32 @@ public class WorldTracerResponse extends GenericResponse {
 	private boolean success;
 	private String responseId;
 	private Ahl ahl;
-	List<ActionFile> actionFiles = null;
-	List<ActionFileCount> counts = null;
+	ActionFile[] actionFiles = null;
+	ActionFileCount[] counts = null;
 	private Ohd ohd;
 	private String responseData;
+	private byte[] captcha;
+	private String captchaTimestamp;
+	private String connectionRef;
+
+	public String getConnectionRef() {
+		return connectionRef;
+	}
+
+	public void setConnectionRef(String connectionRef) {
+		this.connectionRef = connectionRef;
+	}
+
+	public byte[] getCaptcha() {
+		return captcha;
+	}
+
+	public void setCaptcha(byte[] captcha) {
+		this.captcha = captcha;
+	}
 
 	public Ahl getAhl() {
 		return ahl;
-	}
-
-	public List<ActionFileCount> getCounts() {
-		return counts;
 	}
 
 	public Ohd getOhd() {
@@ -36,10 +49,6 @@ public class WorldTracerResponse extends GenericResponse {
 
 	public void setAhl(Ahl ahl) {
 		this.ahl = ahl;
-	}
-
-	public void setCounts(List<ActionFileCount> counts) {
-		this.counts = counts;
 	}
 
 	public void setOhd(Ohd ohd) {
@@ -62,11 +71,29 @@ public class WorldTracerResponse extends GenericResponse {
 		this.success = success;
 	}
 
-	public List<ActionFile> getActionFiles() {
+	public void setCaptchaTimestamp(String captchaTimestamp) {
+		this.captchaTimestamp = captchaTimestamp;
+	}
+
+	public ActionFile[] getActionFiles() {
 		return actionFiles;
 	}
 
-	public void setActionFiles(List<ActionFile> actionFiles) {
+
+	public void setActionFiles(ActionFile[] actionFiles) {
 		this.actionFiles = actionFiles;
 	}
+
+	public ActionFileCount[] getCounts() {
+		return counts;
+	}
+
+	public void setCounts(ActionFileCount[] counts) {
+		this.counts = counts;
+	}
+
+	public String getCaptchaTimestamp() {
+		return captchaTimestamp;
+	}
+
 }

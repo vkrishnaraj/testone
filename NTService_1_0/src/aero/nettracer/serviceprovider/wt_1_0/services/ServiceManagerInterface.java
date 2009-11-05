@@ -1,29 +1,36 @@
 package aero.nettracer.serviceprovider.wt_1_0.services;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
+import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.NotLoggedIntoWorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerException;
 
 public interface ServiceManagerInterface {
-	public abstract WorldTracerResponse getAhl(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse createAhl(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse amendAhl(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse closeAhl(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse suspendAhl(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse reinstateAhl(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse getOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse createOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse amendOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse closeOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse forwardOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse requestOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse requestQuickOhd(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse createBdo(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse eraseActionFile(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse getActionFileCounts(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse getActionFileSummary(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse getActionFileDetails(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse sendFwdMessage(WorldTracerActionDTO dto, WorldTracerResponse response);
-	public abstract WorldTracerResponse pleaseActionFile(WorldTracerActionDTO dto, WorldTracerResponse response);
+	public abstract boolean preProcess(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract boolean postProcess(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse getAhl(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse createAhl(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse amendAhl(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse closeAhl(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse suspendAhl(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse reinstateAhl(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse getOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse createOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse amendOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse closeOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse forwardOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse requestOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse requestQuickOhd(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse createBdo(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse eraseActionFile(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse getActionFileCounts(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse getActionFileSummary(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse getActionFileDetails(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse sendFwdMessage(WorldTracerActionDTO dto, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
+	public abstract WorldTracerResponse placeActionFile(WorldTracerActionDTO dto, Pxf data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException;
 
 }
+
 

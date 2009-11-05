@@ -2,7 +2,7 @@ package aero.nettracer.serviceprovider.wt_1_0.common;
 
 public class Pxf {
 	private int destination;
-	private PxfAas[] pxfDetails;
+	private PxfDetails[] pxfDetails;
 	private String[] teletype;
 	private String content;
 
@@ -14,11 +14,11 @@ public class Pxf {
 		this.destination = destination;
 	}
 
-	public PxfAas[] getPxfDetails() {
+	public PxfDetails[] getPxfDetails() {
 		return pxfDetails;
 	}
 
-	public void setPxfDetails(PxfAas[] pxfDetails) {
+	public void setPxfDetails(PxfDetails[] pxfDetails) {
 		this.pxfDetails = pxfDetails;
 	}
 
