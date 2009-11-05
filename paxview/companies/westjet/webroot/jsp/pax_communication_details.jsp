@@ -5,10 +5,17 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page import="com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication" %>
 <%@ page import="com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident" %>
+<%@ page import="java.text.DateFormat" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.text.ParseException" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.Date" %>
 <% 
 String myNextAction = "" + (String) request.getAttribute("prepareto");
 
 boolean isThereAnyMessage = false;
+
+String strLocale = "" + request.getAttribute("siteLanguage");
 
 StringBuffer sbPriorCommunication = new StringBuffer("");
 WS_PVIncident advancedIncident = (WS_PVIncident) request.getSession().getAttribute("FORM_DATA");
@@ -22,12 +29,37 @@ if (advancedIncident != null) {
 					String enteredBy = "";
 					String myAgent = "" + myWS_PVPaxCommunication.getAgent();
 					if(myAgent==null || myAgent.equals("") || myAgent.equals("null")) {  //comment by pax 
-						enteredBy = " - Your Comment";
+						if (strLocale.equalsIgnoreCase("fr")) {
+							enteredBy = " - Votre message";
+						} else {
+							enteredBy = " - Your Comment";
+						}
 					} else {
 						enteredBy = " - WestJet";
 					} 
+					String createdDateTime = myWS_PVPaxCommunication.getCreate_timestamp();
+					//String historicalCreatedDateTime = createdDateTime;
+					//String strLocale = "" + request.getAttribute("siteLanguage");
+					//strLocale="fr";
+					if (strLocale.equalsIgnoreCase("fr")) {
+						SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd, yyyy HH:mm:ss");
+						Locale localeFR = Locale.FRANCE;
+				        DateFormat fullDateFormatFR =
+				            DateFormat.getDateTimeInstance(
+				            DateFormat.FULL,
+				            DateFormat.MEDIUM,
+				            localeFR);
+				        try {
+				        	Date myFrenchDate = sdf.parse(createdDateTime); 
+				        	createdDateTime = fullDateFormatFR.format(myFrenchDate);
+				        } catch(ParseException e) {
+				        	createdDateTime += e.toString();
+				        }
+				        
+					}
+					
 					sbPriorCommunication.append("<p class='small'>");
-					sbPriorCommunication.append("<H2>" + myWS_PVPaxCommunication.getCreate_timestamp() + " GMT" + enteredBy + "</H2>");
+					sbPriorCommunication.append("<H2>" + createdDateTime + " GMT" + enteredBy + "</H2>");
 					
 					String strAcknowledgedBy = "";
 					String myAcknowledgedAgent = "" + myWS_PVPaxCommunication.getAcknowledged_agent();

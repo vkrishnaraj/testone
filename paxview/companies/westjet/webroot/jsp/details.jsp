@@ -267,18 +267,57 @@ if (advancedIncident != null) {
 		if(isThereAnyNewCommentByAirline) {
 			//view new message by airline option
 %>
+ 		<c:choose>
+			<c:when test="${siteLanguage == 'fr'}">
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew&locale=fr">&nbsp;click here</a></strong></p>
+			</c:when>
+			<c:when		test="${(empty siteLanguage) and cookie.userLanguage.value == 'fr'}">
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew&locale=fr">&nbsp;click here</a></strong></p>
+			</c:when>
+			<c:otherwise>
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew">&nbsp;click here</a></strong></p>
+			</c:otherwise>
+		</c:choose>	
+		<!-- 
 		<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewnew">&nbsp;click here</a></strong></p>
+		 -->
 <%
 		} else {
 			//view prior communication option
 %>
+ 		<c:choose>
+			<c:when test="${siteLanguage == 'fr'}">
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewprior&locale=fr">&nbsp;click here</a></strong></p>
+			</c:when>
+			<c:when		test="${(empty siteLanguage) and cookie.userLanguage.value == 'fr'}">
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewprior&locale=fr">&nbsp;click here</a></strong></p>
+			</c:when>
+			<c:otherwise>
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=viewprior">&nbsp;click here</a></strong></p>
+			</c:otherwise>
+		</c:choose>	
+		<!-- 
 		<p><strong><spring:message code="pax.want.to.view.prior.commnent" /><a href="paxCommunication.htm?prepareto=viewprior">&nbsp;click here</a></strong></p>
+		 -->
 <%
 		}
 	}
   } else {
 %>
-<p><strong><spring:message code="pax.want.to.send.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp;click here</a></strong></p>
+ 		<c:choose>
+			<c:when test="${siteLanguage == 'fr'}">
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew&locale=fr">&nbsp;click here</a></strong></p>
+			</c:when>
+			<c:when		test="${(empty siteLanguage) and cookie.userLanguage.value == 'fr'}">
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew&locale=fr">&nbsp;click here</a></strong></p>
+			</c:when>
+			<c:otherwise>
+				<p><strong><spring:message code="pax.want.to.view.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp;click here</a></strong></p>
+			</c:otherwise>
+		</c:choose>	
+		<!-- 
+		<p><strong><spring:message code="pax.want.to.send.new.commnent" /><a href="paxCommunication.htm?prepareto=sendnew">&nbsp;click here</a></strong></p>
+		-->
 <%
   }
 }
