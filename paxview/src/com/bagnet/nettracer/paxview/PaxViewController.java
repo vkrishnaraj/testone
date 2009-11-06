@@ -59,7 +59,7 @@ public class PaxViewController extends SimpleFormController {
         
 		WS_PVIncident advancedIncident = pvService.getIncidentPV(search.getClaimnumber(), search.getLastname());
 		
-		if(advancedIncident == null) {  
+		if(advancedIncident == null || advancedIncident.getIncident_ID() == null || advancedIncident.getIncident_ID().length() == 0) {
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("command", search);
 			model.put("noneFound", true);
