@@ -66,6 +66,9 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         param.setOmittable(true);
         param.setNillable(true);
         oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://v1_1.ws.nettracer.bagnet.com", "msgsReadByUser"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"), java.lang.Boolean.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVIncident"));
         oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://v1_1.ws.nettracer.bagnet.com", "return"));
@@ -260,7 +263,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
 }
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident getPaxView(java.lang.String incident_id, java.lang.String lastname, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException {
+    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident getPaxView(java.lang.String incident_id, java.lang.String lastname, java.lang.String username, java.lang.String password, java.lang.Boolean msgsReadByUser) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -276,7 +279,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {incident_id, lastname, username, password});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {incident_id, lastname, username, password, msgsReadByUser});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

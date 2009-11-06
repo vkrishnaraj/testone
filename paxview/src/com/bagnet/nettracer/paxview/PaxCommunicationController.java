@@ -78,7 +78,7 @@ public class PaxCommunicationController extends SimpleFormController {
 		//refresh data
 		String searchClaimNumber = advancedIncident.getIncident_ID();
 		String searchLastname = advancedIncident.getPassengers(0).getLastname();
-		advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname);
+		advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname, true);
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("command", paxCommunication);

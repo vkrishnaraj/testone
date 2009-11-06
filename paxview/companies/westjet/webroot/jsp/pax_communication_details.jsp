@@ -38,9 +38,8 @@ if (advancedIncident != null) {
 						enteredBy = " - WestJet";
 					} 
 					String createdDateTime = myWS_PVPaxCommunication.getCreate_timestamp();
-					//String historicalCreatedDateTime = createdDateTime;
-					//String strLocale = "" + request.getAttribute("siteLanguage");
-					//strLocale="fr";
+
+
 					if (strLocale.equalsIgnoreCase("fr")) {
 						SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd, yyyy HH:mm:ss");
 						Locale localeFR = Locale.FRANCE;
@@ -223,9 +222,9 @@ p.big
 							<div id="header"></div>
 						</c:otherwise>
 					</c:choose>	
-    <!-- /header -->
+
     <div id="content_commentsCenterCol">
-    <!--<div style="overflow:auto;height:auto;">--><!--<center>-->
+    
       	<table border="0" cellspacing="5" cellpadding="5" id="Definitions">
       	    <tr>
    				<td align="left">
@@ -249,11 +248,8 @@ p.big
 			</tr>
 		</table><!--</center>-->
 	</div> 
-    <div id="newPaxComment"><!--<center>-->
-	    <form method="POST" action="paxCommunication.htm" name="frmNewPaxComment" id="frmNewPaxComment">
-<%
-//if(myNextAction.equalsIgnoreCase("sendnew")) {
-%>
+    <div id="newPaxComment">
+	    <form method="post" action="paxCommunication.htm" name="frmNewPaxComment" id="frmNewPaxComment">
 			<table cellspacing="0" cellpadding="5" border="0">
 				<tr>
 					<td>
@@ -284,20 +280,18 @@ p.big
 					</td>
 				</tr>
 			</table>
-<%
-//}
-%>
-		</form><!--</center>-->
+
+		</form>
     </div>
-    <!-- /content -->
+    
     <div id="footer">
       <div id="copyright"><spring:message code="rights.reserved" /></div>
     </div>
-    <!-- /footer -->
+    
   </div>
-  <!-- /wrapper -->
+  
 </div>
-<!-- /container -->
+
 <script type="text/javascript">
 
 window.onload=function(){

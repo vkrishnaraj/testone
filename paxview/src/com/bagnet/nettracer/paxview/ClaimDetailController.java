@@ -46,7 +46,7 @@ public class ClaimDetailController extends SimpleFormController {
 		if(advancedIncident != null) {
 			String searchClaimNumber = advancedIncident.getIncident_ID();
 			String searchLastname = advancedIncident.getPassengers(0).getLastname();
-			advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname);
+			advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname, false);
 		}
 		
 		req.getSession().setAttribute("FORM_DATA", advancedIncident);

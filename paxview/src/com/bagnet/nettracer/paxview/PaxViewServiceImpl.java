@@ -23,7 +23,7 @@ public class PaxViewServiceImpl implements PaxViewService {
 	/* (non-Javadoc)
 	 * @see com.bagnet.nettracer.paxview.PaxViewService#getIncidentPV(java.lang.String, java.lang.String)
 	 */
-	public WS_PVIncident getIncidentPV(java.lang.String incident_id, java.lang.String lastname)
+	public WS_PVIncident getIncidentPV(java.lang.String incident_id, java.lang.String lastname, boolean msgSeenByUser)
 			throws java.rmi.RemoteException, ServiceException {
 		
 		PaxViewPortType stub;
@@ -37,7 +37,7 @@ public class PaxViewServiceImpl implements PaxViewService {
 		}
 
 		try {
-			return stub.getPaxView(incident_id, lastname, "PaxViewUser", "Password");
+			return stub.getPaxView(incident_id, lastname, "PaxViewUser", "Password", msgSeenByUser);
 		}
 		catch (RemoteException e) {
 			logger.error("error executing getIncidentPV", e);
@@ -70,6 +70,8 @@ public class PaxViewServiceImpl implements PaxViewService {
 			throw e;
 		}
 	}
+
+
 
 	
 }
