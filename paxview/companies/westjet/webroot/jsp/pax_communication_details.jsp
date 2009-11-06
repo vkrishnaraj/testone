@@ -273,8 +273,8 @@ p.big
 								<TEXTAREA name="newPaxComment" id="newPaxComment" ROWS="5" COLS="82" onKeyDown="limitText(this.form.newPaxComment,this.form.countdown,1500);" onKeyUp="highlight(event);limitText(this.form.newPaxComment,this.form.countdown,1500);"></TEXTAREA>
 							</td></tr>
 							<tr><td align="center">
-								<font size="1">(Maximum characters: 1500)<br />
-								You have <input readonly type="text" name="countdown" size="3" value="1500"> characters left.</font>
+								<font size="1">(<spring:message code="maximum.characters" />: 1500)<br />
+								<spring:message code="you.have" /> <input readonly type="text" name="countdown" size="3" value="1500"> <spring:message code="characters.left" /></font>
 							</td></tr>
 							<tr><td align="right">
 								<div id="searchButtonContainer">
