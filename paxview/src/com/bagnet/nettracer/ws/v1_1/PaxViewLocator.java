@@ -12,7 +12,17 @@ public class PaxViewLocator extends org.apache.axis.client.Service implements co
     public PaxViewLocator() {
     }
 
+    private String myUrl = null;
+    
+    
+    public String getMyUrl() {
+		return myUrl;
+	}
 
+	public void setMyUrl(String myUrl) {
+		this.myUrl = myUrl;
+		this.PaxViewSOAP12port_http_address = myUrl;
+	}
     public PaxViewLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
     }
