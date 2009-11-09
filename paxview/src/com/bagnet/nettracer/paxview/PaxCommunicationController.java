@@ -47,6 +47,12 @@ public class PaxCommunicationController extends SimpleFormController {
 		String myNextAction = "" + req.getParameter("prepareto");
 		req.setAttribute("prepareto", myNextAction);
 		
+		
+		//need to refresh data here from WS
+		String searchClaimNumber = advancedIncident.getIncident_ID();
+		String searchLastname = advancedIncident.getPassengers(0).getLastname();
+		advancedIncident = pvService.getIncidentPV(searchClaimNumber, searchLastname, true);
+		
 		return super.handleRequestInternal(req, res);
 	}
 	
@@ -100,4 +106,5 @@ public class PaxCommunicationController extends SimpleFormController {
 	public void setPvService(PaxViewService pvService) {
 		this.pvService = pvService;
 	}
+	
 }

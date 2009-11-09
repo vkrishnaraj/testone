@@ -57,7 +57,7 @@ public class PaxViewController extends SimpleFormController {
         	//System.out.println("request.getParameter() worked and the message is " + myMessage);
         }
         
-		WS_PVIncident advancedIncident = pvService.getIncidentPV(search.getClaimnumber(), search.getLastname(), true);
+		WS_PVIncident advancedIncident = pvService.getIncidentPV(search.getClaimnumber(), search.getLastname(), false);
 		
 		if(advancedIncident == null || advancedIncident.getIncident_ID() == null || advancedIncident.getIncident_ID().length() == 0) {
 			Map<String, Object> model = new HashMap<String, Object>();
