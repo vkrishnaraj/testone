@@ -16,7 +16,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
 public interface WebServiceError extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WebServiceError.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s062C397454C935FCA9C3F988DC4FD439").resolveHandle("webserviceerrora463type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WebServiceError.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s6980842208659A35DEE731EA9F8944BC").resolveHandle("webserviceerrora463type");
     
     /**
      * Gets the "description" element

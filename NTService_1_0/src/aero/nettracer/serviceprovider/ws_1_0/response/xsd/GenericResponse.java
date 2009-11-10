@@ -16,7 +16,7 @@ package aero.nettracer.serviceprovider.ws_1_0.response.xsd;
 public interface GenericResponse extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GenericResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s062C397454C935FCA9C3F988DC4FD439").resolveHandle("genericresponse1d6atype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(GenericResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s6980842208659A35DEE731EA9F8944BC").resolveHandle("genericresponse1d6atype");
     
     /**
      * Gets the "error" element

@@ -16,7 +16,7 @@ package aero.nettracer.serviceprovider.ws_1_0.common.xsd;
 public interface RequestHeader extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(RequestHeader.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s062C397454C935FCA9C3F988DC4FD439").resolveHandle("requestheader7f58type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(RequestHeader.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s6980842208659A35DEE731EA9F8944BC").resolveHandle("requestheader7f58type");
     
     /**
      * Gets array of all "parameters" elements
