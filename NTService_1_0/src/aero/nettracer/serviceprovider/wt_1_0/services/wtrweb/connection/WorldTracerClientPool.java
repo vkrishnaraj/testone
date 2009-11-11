@@ -24,6 +24,11 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 
 		this.setMaxWait(1000 * 20);
 		this.setWhenExhaustedAction(WHEN_EXHAUSTED_BLOCK);
+  	this.setTestOnReturn(false);
+  	this.setTestOnBorrow(false);
+  	this.setTestWhileIdle(true);
+  	this.setTimeBetweenEvictionRunsMillis(2*60*1000); // TWO MINUTES
+		
 		List<WorldTracerWebAccount> accounts = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();

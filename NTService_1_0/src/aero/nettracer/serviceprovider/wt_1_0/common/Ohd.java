@@ -1,15 +1,35 @@
 package aero.nettracer.serviceprovider.wt_1_0.common;
 
+import java.util.Calendar;
+
 public class Ohd {
 	private String ohdId;
 	private String stationCode;
 	private String faultStation;
 	private int faultReason;
-	private Passenger pax;
+	private Passenger[] pax;
 	private Itinerary[] paxItinerary;
 	private Itinerary[] bagItinerary;
 	private Item item;
 	private ClaimCheck claimCheck;
+	private Calendar createDate;
+	private String storageLocation;
+
+	public String getStorageLocation() {
+  	return storageLocation;
+  }
+
+	public void setStorageLocation(String storageLocation) {
+  	this.storageLocation = storageLocation;
+  }
+
+	public Calendar getCreateDate() {
+  	return createDate;
+  }
+
+	public void setCreateDate(Calendar createDate) {
+  	this.createDate = createDate;
+  }
 
 	public String getOhdId() {
 		return ohdId;
@@ -43,13 +63,6 @@ public class Ohd {
 		this.faultReason = faultReason;
 	}
 
-	public Passenger getPax() {
-		return pax;
-	}
-
-	public void setPax(Passenger pax) {
-		this.pax = pax;
-	}
 
 	public Itinerary[] getPaxItinerary() {
 		return paxItinerary;
@@ -82,4 +95,12 @@ public class Ohd {
 	public void setClaimCheck(ClaimCheck claimCheck) {
 		this.claimCheck = claimCheck;
 	}
+
+	public void setPax(Passenger[] pax) {
+  	this.pax = pax;
+  }
+
+	public Passenger[] getPax() {
+  	return pax;
+  }
 }

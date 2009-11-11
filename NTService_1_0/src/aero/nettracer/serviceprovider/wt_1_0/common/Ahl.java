@@ -1,8 +1,12 @@
 package aero.nettracer.serviceprovider.wt_1_0.common;
 
+import java.util.Calendar;
+
 public class Ahl {
 	private String ahlId;
+	private Calendar createDate;
 	private int numberPaxAffected;
+	private int numberBagsChecked;
 	private String stationCode;
 	private String faultStation;
 	private int faultReason;
@@ -11,7 +15,7 @@ public class Ahl {
 	private Itinerary[] bagItinerary;
 	private Item[] item;
 	private ClaimCheck[] claimCheck;
-
+	
 	public String getAhlId() {
 		return ahlId;
 	}
@@ -91,5 +95,22 @@ public class Ahl {
 	public void setClaimCheck(ClaimCheck[] claimCheck) {
 		this.claimCheck = claimCheck;
 	}
+
+	public Calendar getCreateDate() {
+  	return createDate;
+  }
+
+	public void setCreateDate(Calendar createDate) {
+  	this.createDate = createDate;
+  }
+
+	public int getNumberBagsChecked() {
+  	return numberBagsChecked;
+  }
+
+	public void setNumberBagsChecked(int numberBagsChecked) {
+  	this.numberBagsChecked = numberBagsChecked;
+  }
+
 
 }

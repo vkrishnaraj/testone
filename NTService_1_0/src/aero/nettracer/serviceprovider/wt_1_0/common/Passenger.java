@@ -2,6 +2,7 @@ package aero.nettracer.serviceprovider.wt_1_0.common;
 
 public class Passenger {
 
+	private int salutation;
 	private String firstname;
 	private String middlename;
 	private String lastname;
@@ -74,5 +75,15 @@ public class Passenger {
 	public void setAddress(Address address) {
   	this.address = address;
   }
+
+	public int getSalutation() {
+  	return salutation;
+  }
+
+	public void setSalutation(int salutation) {
+  	this.salutation = salutation;
+  }
+
+
 
 }

@@ -14,16 +14,10 @@ public class Address {
 	private String altPhone;
 	private String pagerNumber;
 	private String emailAddress;
-	private String country;
+	private String countryCode;
 	private boolean isTemporaryAddress;
 
-	public String getCountry() {
-		return country;
-	}
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
 
 	public String getAddress1() {
 		return address1;
@@ -128,5 +122,13 @@ public class Address {
 	public void setTemporaryAddress(boolean isTemporaryAddress) {
 		this.isTemporaryAddress = isTemporaryAddress;
 	}
+
+	public String getCountryCode() {
+  	return countryCode;
+  }
+
+	public void setCountryCode(String countryCode) {
+  	this.countryCode = countryCode;
+  }
 
 }

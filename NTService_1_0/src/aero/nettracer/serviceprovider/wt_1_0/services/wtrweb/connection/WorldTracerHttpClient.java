@@ -366,4 +366,9 @@ public class WorldTracerHttpClient extends HttpClient implements
 		}
 		return response;
 	}
+
+	public void keepAlive() {
+	  // TODO Auto-generated method stub --- IMPLEMENT
+	  
+  }
 }

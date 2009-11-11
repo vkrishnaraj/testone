@@ -6,7 +6,10 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
@@ -28,20 +31,20 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				if (process) {
 					switch (type) {
 					case GET_AHL:
-						//TODO: Complete
-						response = getAhl(dto, response);
+						Ahl ahl5 = (Ahl) dto.getPayload();
+						response = getAhl(dto, ahl5, response);
 						break;
 					case CREATE_AHL:
-						//TODO: Complete
-						response = createAhl(dto, response);
+						Ahl ahl4 = (Ahl) dto.getPayload();
+						response = createAhl(dto, ahl4, response);
 						break;
 					case AMEND_AHL:
-						//TODO: Complete
-						response = amendAhl(dto, response);
+						Ahl ahl3 = (Ahl) dto.getPayload();
+						response = amendAhl(dto, ahl3, response);
 						break;
 					case CLOSE_AHL:
-						Ahl ahl3 = (Ahl) dto.getPayload();
-						response = closeAhl(dto, ahl3, response);
+						Ahl ahl6 = (Ahl) dto.getPayload();
+						response = closeAhl(dto, ahl6, response);
 						break;
 					case SUSPEND_AHL:
 						Ahl ahl2 = (Ahl) dto.getPayload();
@@ -53,35 +56,35 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						break;
 					case GET_OHD:
 						//TODO: Complete
-						response = getOhd(dto, response);
+						Ohd ohd1 = (Ohd) dto.getPayload();
+						response = getOhd(dto, ohd1, response);
 						break;
 					case CREATE_OHD:
-						//TODO: Complete
-						response = createOhd(dto, response);
+						Ohd ohd2 = (Ohd) dto.getPayload();
+						response = createOhd(dto, ohd2, response);
 						break;
 					case AMEND_OHD:
-						//TODO: Complete
-						response = amendOhd(dto, response);
+						Ohd ohd3 = (Ohd) dto.getPayload();
+						response = amendOhd(dto, ohd3, response);
 						break;
 					case CLOSE_OHD:
-						//TODO: Complete
-						response = closeOhd(dto, response);
+						Ohd ohd4 = (Ohd) dto.getPayload();
+						response = closeOhd(dto, ohd4, response);
 						break;
 					case FORWARD_OHD:
-						//TODO: Complete
-						response = forwardOhd(dto, response);
+						ForwardOhd fw1 = (ForwardOhd) dto.getPayload();
+						response = forwardOhd(dto, fw1, response);
 						break;
 					case REQUEST_OHD:
-						//TODO: Complete
-						response = requestOhd(dto, response);
+						RequestOhd rq2 = (RequestOhd) dto.getPayload();
+						response = requestOhd(dto, rq2, response);
 						break;
 					case REQUEST_QOHD:
-						//TODO: Complete
-						response = requestQuickOhd(dto, response);
+						RequestOhd rq1 = (RequestOhd) dto.getPayload();
+						response = requestQuickOhd(dto, rq1, response);
 						break;
 					case CREATE_BDO:
-						Bdo bdo = (Bdo) dto
-						.getPayload();
+						Bdo bdo = (Bdo) dto.getPayload();
 						response = createBdo(dto, bdo, response);
 						break;
 					case ERASE_ACTION_FILE:

@@ -1,6 +1,5 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +13,7 @@ import aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount;
 
 public class WorldTracerClientFactory extends BaseKeyedPoolableObjectFactory{
 	private static final Logger logger = Logger.getLogger(WorldTracerClientFactory.class);
-	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1200000;
+	public static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1200000; // 20 Minutes = 1200000
 	private List<WorldTracerWebAccount> accounts = null;
 	private int itemsUsed = 0;
 	HashMap<Integer, WorldTracerHttpClient> clientList = new HashMap<Integer, WorldTracerHttpClient>();
@@ -59,6 +58,34 @@ public class WorldTracerClientFactory extends BaseKeyedPoolableObjectFactory{
 
 	public void setClientList(HashMap<Integer, WorldTracerHttpClient> clientList) {
 		this.clientList = clientList;
+	}
+	
+	@Override
+	public boolean validateObject(Object key, Object obj) {
+		WorldTracerHttpClient connection = (WorldTracerHttpClient) obj;
+		
+		if (connection.isValidConnection()) {
+  		GregorianCalendar cal = new GregorianCalendar();
+  		
+  		long diff = cal.getTimeInMillis() - connection.getLastUsed().getTimeInMillis();
+
+  		boolean lastAliveConnection = true;
+  		for (WorldTracerHttpClient client: clientList.values()) {
+  			if (!client.getKey().equals(connection.getKey()) && client.isValidConnection() == true) {
+  				lastAliveConnection = false;
+  				break;
+  			}
+  		}
+  		
+  		if (lastAliveConnection && diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
+  			connection.keepAlive();
+  		}
+  		
+  		if (diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
+  			connection.setValidConnection(false);
+  		}
+		}
+		return true;
 	}
 	
 }

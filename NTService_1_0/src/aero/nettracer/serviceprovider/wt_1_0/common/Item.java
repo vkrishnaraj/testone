@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0.common;
 
 public class Item {
+	private int bagNumber;
 	private String firstNameOnBag;
 	private String lastNameOnBag;
 	private String color;
@@ -81,5 +82,13 @@ public class Item {
 
 	public void setManufacturer(String manufacturer) {
   	this.manufacturer = manufacturer;
+  }
+
+	public int getBagNumber() {
+  	return bagNumber;
+  }
+
+	public void setBagNumber(int bagNumber) {
+  	this.bagNumber = bagNumber;
   }
 }

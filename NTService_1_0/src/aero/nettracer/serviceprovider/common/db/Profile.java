@@ -33,6 +33,9 @@ public class Profile {
 
 	@Column(length = 20)
 	private String name;
+	
+	@Column(length = 2)
+	private String airline;
 
 	public String getName() {
 		return name;
@@ -41,6 +44,7 @@ public class Profile {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 
 	@org.hibernate.annotations.CollectionOfElements(targetElement = String.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "profile_parameters", joinColumns = @JoinColumn(name = "profile_id"))
@@ -79,4 +83,12 @@ public class Profile {
 	public void setPermissions(Map<PermissionType, Boolean> permissions) {
 		this.permissions = permissions;
 	}
+
+	public String getAirline() {
+  	return airline;
+  }
+
+	public void setAirline(String airline) {
+  	this.airline = airline;
+  }
 }
