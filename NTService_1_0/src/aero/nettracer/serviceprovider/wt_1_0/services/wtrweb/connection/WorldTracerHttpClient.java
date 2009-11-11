@@ -21,6 +21,7 @@ import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
@@ -39,6 +40,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerConnection;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerServiceImpl;
 
 public class WorldTracerHttpClient extends HttpClient implements
 		WorldTracerConnection {
@@ -368,7 +370,7 @@ public class WorldTracerHttpClient extends HttpClient implements
 	}
 
 	public void keepAlive() {
-	  // TODO Auto-generated method stub --- IMPLEMENT
-	  
+		WorldTracerServiceImpl.keepAlive(this);
+		
   }
 }

@@ -13,10 +13,12 @@ import aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount;
 
 public class WorldTracerClientFactory extends BaseKeyedPoolableObjectFactory{
 	private static final Logger logger = Logger.getLogger(WorldTracerClientFactory.class);
-	public static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1200000; // 20 Minutes = 1200000
+	public static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 20*60*1000; // 20 Minutes = 1200000
+	public static final int KEEP_ALIVE_TIME = ALLOWED_MILLIS_WITH_NOACTIVITIY - 3*60*1000; 
 	private List<WorldTracerWebAccount> accounts = null;
 	private int itemsUsed = 0;
-	HashMap<Integer, WorldTracerHttpClient> clientList = new HashMap<Integer, WorldTracerHttpClient>();
+	private HashMap<Integer, WorldTracerHttpClient> clientList = new HashMap<Integer, WorldTracerHttpClient>();
+	private WorldTracerHttpClient keepAliveConnection = null;
 	
 	public WorldTracerClientFactory(List<WorldTracerWebAccount> accounts) {
 		this.accounts = accounts;
@@ -69,16 +71,27 @@ public class WorldTracerClientFactory extends BaseKeyedPoolableObjectFactory{
   		
   		long diff = cal.getTimeInMillis() - connection.getLastUsed().getTimeInMillis();
 
-  		boolean lastAliveConnection = true;
-  		for (WorldTracerHttpClient client: clientList.values()) {
-  			if (!client.getKey().equals(connection.getKey()) && client.isValidConnection() == true) {
-  				lastAliveConnection = false;
-  				break;
-  			}
+  		// UPDATE NEWEST CONNECTION (ONE TO KEEP ALIVE)
+  		synchronized (keepAliveConnection) {
+  			
+	  		for (WorldTracerHttpClient client: clientList.values()) {
+	  			if (client.isValidConnection() == true) {
+	  				if (keepAliveConnection == null) {
+	  					keepAliveConnection = client;
+	  				}
+	  				
+	  				if (keepAliveConnection.getLastUsed().getTime().getTime() < client.getLastUsed().getTime().getTime()) {
+	  					keepAliveConnection = client;
+	  				}
+	  			}
+	  		}
   		}
   		
-  		if (lastAliveConnection && diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
-  			connection.keepAlive();
+  		// IF OLDEST CONNECTION IS BETWEEN KEEP_ALIVE_LIMIT AND SESSION TIMEOUT, KEEP IT ALIVE
+  		synchronized (keepAliveConnection) {
+	  		if (keepAliveConnection.getKey().equals((Integer)key) && diff > KEEP_ALIVE_TIME) {
+	  			connection.keepAlive();
+	  		}
   		}
   		
   		if (diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {

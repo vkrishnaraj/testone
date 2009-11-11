@@ -3169,4 +3169,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					e);
 		}
   }
+	
+	public static void keepAlive(WorldTracerHttpClient client) {
+		NameValuePair[] p1 = { new NameValuePair("_flowId", "displayonhandbagrecord-flow")};
+		GetMethod method = new GetMethod(WTRWEB_FLOW_URL);
+		method.setQueryString(p1);
+		method.setFollowRedirects(false);
+		try {
+			client.executeMethod(method, "KEEP-ALIVE");
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
