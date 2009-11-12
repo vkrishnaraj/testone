@@ -39,15 +39,15 @@ if (advancedIncident != null) {
 					} 
 					String createdDateTime = myWS_PVPaxCommunication.getCreate_timestamp();
 
+					SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd, yyyy HH:mm:ss");
+					Locale localeFR = Locale.FRANCE;
+			        DateFormat fullDateFormatFR =
+			            DateFormat.getDateTimeInstance(
+			            DateFormat.FULL,
+			            DateFormat.MEDIUM,
+			            localeFR);
 
 					if (strLocale.equalsIgnoreCase("fr")) {
-						SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd, yyyy HH:mm:ss");
-						Locale localeFR = Locale.FRANCE;
-				        DateFormat fullDateFormatFR =
-				            DateFormat.getDateTimeInstance(
-				            DateFormat.FULL,
-				            DateFormat.MEDIUM,
-				            localeFR);
 				        try {
 				        	Date myFrenchDate = sdf.parse(createdDateTime); 
 				        	createdDateTime = fullDateFormatFR.format(myFrenchDate);
@@ -69,8 +69,26 @@ if (advancedIncident != null) {
 								String myStatus = myWS_PVPaxCommunication.getStatus();
 								if(myStatus.equalsIgnoreCase("RESPONDED")) {
 									strAcknowledgedBy = "<I>Comment responded by WestJet on " + myAcknowledgedTimestamp + "</I>";
+									if (strLocale.equalsIgnoreCase("fr")) {
+								        try {
+								        	Date myFrenchAcknowledgedDate = sdf.parse(myAcknowledgedTimestamp); 
+								        	myAcknowledgedTimestamp = fullDateFormatFR.format(myFrenchAcknowledgedDate);
+								        } catch(ParseException e) {
+								        	myAcknowledgedTimestamp += e.toString();
+								        }
+										strAcknowledgedBy = "<I>Message répondu par WestJet le " + myAcknowledgedTimestamp + "</I>";
+									}
 								} else {
 									strAcknowledgedBy = "<I>Comment acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";
+									if (strLocale.equalsIgnoreCase("fr")) {
+								        try {
+								        	Date myFrenchAcknowledgedDate = sdf.parse(myAcknowledgedTimestamp); 
+								        	myAcknowledgedTimestamp = fullDateFormatFR.format(myFrenchAcknowledgedDate);
+								        } catch(ParseException e) {
+								        	myAcknowledgedTimestamp += e.toString();
+								        }
+										strAcknowledgedBy = "<I>Message reconnu par WestJet le " + myAcknowledgedTimestamp + "</I>";
+									}
 								}	
 							}
 						}
