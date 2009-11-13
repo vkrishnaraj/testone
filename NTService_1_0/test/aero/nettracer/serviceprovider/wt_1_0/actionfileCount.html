@@ -1,0 +1,188 @@
+<HTML
+><HEAD>
+<title>Web Terminal for NIAL MCLOUGHLIN using LNIATA D6BD01 (SHARES B production system . )</title><META http-equiv=msthemecompatible content=no></HEAD>
+ <SCRIPT>
+<!--
+function sf(){document.gs.q.focus();
+document.execCommand("Overwrite");}
+function poponload()
+{
+testwindow= window.open ("/cgi-bin/bpass.cgi?Token=EQUIPAJEUS4AFC582B000EA048&","mywindow","location=1,status=1,scrollbars=1,width=1000,menubar=1,left=0,top=400");
+}
+function CheckKey(msg,el) {
+	if ((document.all.q) && (220==event.keyCode) && (event.shiftKey)){}
+  else {
+	if ((document.all.q) && (13==event.keyCode) ) {
+		el.selection=document.selection.createRange();
+		setTimeout("ProcessEnter('" + el.id + "')",0)}
+	if ((document.all.q) && (17==event.keyCode) ) {
+		el.selection=document.selection.createRange();
+		setTimeout("ProcessCTL('" + el.id + "')",0)}
+	if ((document.all.q) && (220==event.keyCode) ) {
+		el.selection=document.selection.createRange();
+		setTimeout("ProcessBackSlash('" + el.id + "')",0)}
+	if ((document.all.q) && (45==event.keyCode) ) {
+	   document.execCommand("Overwrite");
+      document.execCommand("Overwrite");}
+if (event.keyCode==123)
+  {
+var x,y,i,z,j,m;
+m=0;
+y=0;
+  while(1)
+  {
+   if (msg.value.indexOf("\r",y)!=-1)
+   {
+    m++;
+    y=msg.value.indexOf("\r",y)+1;
+   }
+   else
+     break;
+  }
+x=caretPos(msg)-m+1;
+j=0;
+m=0;
+y=0;
+  while(j<x)
+  {
+   if (msg.value.indexOf("\r",y)!=-1)
+   {
+    m++;
+    y=msg.value.indexOf("\r",y)+1;
+     if ( y>x)
+        m--;
+   }
+   else
+     break;
+  }
+i=0;
+ if (msg.value.indexOf(":",x+1+m)!=-1)
+ {
+  z=msg.value.indexOf(":",x+1+m)+1;
+  y=0;
+  while(y<z)
+  {
+   if (msg.value.indexOf("\r",y)!=-1)
+   {
+    i++;
+    y=msg.value.indexOf("\r",y)+1;
+     if ( y>z)
+        i--;
+   }
+   else
+     break;
+  }
+  k=z-i;
+  }
+  else
+     k=0;
+x=k;
+if(el.setSelectionRange) {
+el.focus(); 
+el.setSelectionRange(x,1); 
+} 
+else { 
+if(el.createTextRange) { 
+range=el.createTextRange(); 
+range.collapse(true); 
+range.moveEnd('character',1); 
+range.moveStart('character',x); 
+range.select(); 
+return false; 
+} 
+return false;
+} 
+return false; 
+} 
+function caretPos(msg){
+var i=msg.value.length+1;
+if (msg.createTextRange){
+theCaret = document.selection.createRange().duplicate();
+while ( theCaret.parentElement() == msg
+&& theCaret.move("character",1)==1 ) --i;
+}
+return i==msg.value.length+1?-1:i;
+}
+}
+} 
+function ProcessEnter(id)     
+{document.all.q.selection.text=String.fromCharCode(0)
+document.gs.submit()}
+function ProcessCTL(id)     
+{}
+function ProcessBackSlash(id)
+{sf()
+document.all.q.selection.text=String.fromCharCode(13)}
+</SCRIPT>
+<body onload="sf()">
+<TABLE width="100%" cellSpacing=0 cellPadding=0 border=0>
+<thead><tr>	<th>
+<TABLE align="left" cellSpacing=0 cellPadding=0 border=0>
+<TBODY>	<TR><TD valign="top">
+<img border=0 src=/company.gif></TD>
+<TD>&nbsp;&nbsp;</TD><TD valign="bottom">
+<FORM name=gs action=/cgi-bin/term.cgi method=post>
+<input type=hidden name=Token value=EQUIPAJEUS4AFC582B000EA048>
+<input type=hidden name=Type value=24>
+<textarea onkeydown=CheckKey(this,document.getElementById('q')) rows=24 name=q cols=64></textarea><input type=submit value=Send name=btnG style=arial>
+<input type=reset value=Reset name=B1 style=arial></FORM></TD>
+</TR>	</TBODY></TABLE></th>	</tr><tr>	<th>
+<hr color="#3366CC"></th></tr></thead>
+<tbody><tr>	<td>
+<font face= " courier " ><PRE>MANAGEMENT ACTION FILE - STATION ATLUS - DATE 12NOV 
+AREA  D1    D2    D3    D4    D5    D6    D7 
+FW     0     0     0     0     0     1     0 
+AA     3     2     0     0     2     0     0 
+WM     0     0     0     0     1     1     0 
+SP     0     1     0     3     2     0     1 
+AP     1     0     2     0     0     0     1 
+END OF REPORT 
+</PRE></td></tr></tbody><tfoot><tr><td><hr color="#3366CC">
+</td>	</tr></tfoot></TABLE>
+ <td>
+  <table  style="border-collapse:collapse;border-width:0" width=100%>
+    <tr>
+     <td width=40% style="border-style: none; border-width: medium">
+      <form name=ls method=POST action=/cgi-bin/logoff.cgi>
+       <input type=hidden name=Token value=EQUIPAJEUS4AFC582B000EA048>
+       <p align=right>
+       <input type=submit value=Logoff name=B1 style=font-family:Arial>
+       </p>
+      </form>
+     </td>
+     <td width=10% style="border-style: none; border-width: medium">
+      <form name=ls method=POST action=/cgi-bin/login.cgi>
+       <input type=hidden name=Token value=EQUIPAJEUS4AFC582B000EA048>
+       <p align=left>
+       <input type=submit value=Menu name=B1 style=font-family:Arial>
+       </p>
+      </form>
+     </td>
+      <td width=15% style="border-style: none; border-width: medium">
+       <form name=ls method=POST action=/cgi-bin/term.cgi>
+       <input type=hidden name=Token value=EQUIPAJEUS4AFC582B000EA048>
+       <p align=left>
+       <INPUT type=submit value="Form size" name=b style=arial>
+       <select size=1 name=Type>
+       <option>1</option>
+       <option>2</option>
+       <option>4</option>
+       <option>12</option>
+       <option>24</option>
+       <option>255</option>
+       </select>
+       </p>
+       </form>
+      </td>
+      <td width=35% style="border-style: none; border-width: medium">
+       <form name=ls method=POST action=/cgi-bin/term.cgi>
+       <input type=hidden name=Token value=EQUIPAJEUS4AFC582B000EA048>
+       <p align=left>
+       <input type=submit value=Privacy name=Privacy style=Arial>
+       </p>
+       </form>
+      </td>
+      </tr>
+    </table>
+    </font></td>
+</body></html>

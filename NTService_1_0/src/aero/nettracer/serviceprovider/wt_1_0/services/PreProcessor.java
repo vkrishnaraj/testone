@@ -19,8 +19,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerException;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService.WorldTracerField;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 
 public class PreProcessor {
 	

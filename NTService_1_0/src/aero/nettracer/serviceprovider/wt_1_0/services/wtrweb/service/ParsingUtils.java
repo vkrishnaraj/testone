@@ -26,6 +26,7 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFile;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 
 public class ParsingUtils {
 	

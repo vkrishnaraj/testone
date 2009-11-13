@@ -1,5 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service;
 
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+
 
 public class EmailRule extends BasicRule {
 

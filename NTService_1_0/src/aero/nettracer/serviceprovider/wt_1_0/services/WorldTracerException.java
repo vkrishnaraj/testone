@@ -1,4 +1,4 @@
-package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service;
+package aero.nettracer.serviceprovider.wt_1_0.services;
 
 public class WorldTracerException extends Exception {
 

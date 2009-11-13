@@ -13,12 +13,12 @@ import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.AbstractServiceManager;
+import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.ConnectionPoolManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerClientPool;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.NotLoggedIntoWorldTracerException;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerServiceImpl;
 
 public class WtrWebServiceManager extends AbstractServiceManager implements

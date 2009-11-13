@@ -2,9 +2,9 @@ package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service;
 
 import java.util.EnumMap;
 
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService.TxType;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService.WorldTracerField;
 
 
 public class UsWorldTracerRuleMap implements RuleMapper {

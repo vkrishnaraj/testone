@@ -39,7 +39,7 @@ import aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerConnection;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerServiceImpl;
 
 public class WorldTracerHttpClient extends HttpClient implements

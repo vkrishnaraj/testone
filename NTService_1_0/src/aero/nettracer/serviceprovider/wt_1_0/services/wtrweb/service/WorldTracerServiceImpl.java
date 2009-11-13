@@ -54,7 +54,12 @@ import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.common.WtqSegment;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService;
+import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.PreProcessor;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.ParsingUtils.ActionFileType;
 
@@ -1311,8 +1316,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (!m.find()) {
 			throw new WorldTracerException("Unable to parse delivery address");
 		}
-		search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.deliveryAddress.line1", RULES.get(WorldTracerService.WorldTracerField.PA).formatEntry(m.group(1)));
-		search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.deliveryAddress.line2", m.group(3) == null ? "" : RULES.get(WorldTracerService.WorldTracerField.PA).formatEntry(m.group(3)));
+		search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.deliveryAddress.line1", RULES.get(DefaultWorldTracerService.WorldTracerField.PA).formatEntry(m.group(1)));
+		search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.deliveryAddress.line2", m.group(3) == null ? "" : RULES.get(DefaultWorldTracerService.WorldTracerField.PA).formatEntry(m.group(3)));
 
 		Pattern ctPatt = Pattern.compile("(\\w{2})(\\d{2})(\\w{1,3})?");
 		List<String> bagList = null;
@@ -1349,7 +1354,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			for (String name : nameList) {
 				if (addedCount > 2)
 					break;
-				search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.names[" + addedCount + "]", RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(name));
+				search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.names[" + addedCount + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(name));
 				addedCount++;
 
 			}
@@ -1634,14 +1639,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (fieldMap.containsKey(WorldTracerField.NM)) {
 			List<String> nameList = fieldMap.get(WorldTracerField.NM);
 			for(int i=0; i < nameList.size() && i < 3; i++){
-				requestMethod.setParameter("wtrForwardRequest.passenger.names[" + i + "]", RULES.get(WorldTracerService.WorldTracerField.NM).formatEntry(nameList.get(i)));
+				requestMethod.setParameter("wtrForwardRequest.passenger.names[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(nameList.get(i)));
 			}
 		}
 		if (fieldMap.containsKey(WorldTracerField.FI)) {
-			requestMethod.setParameter("wtrForwardRequest.supplementaryInfo[0]", RULES.get(WorldTracerService.WorldTracerField.FI).formatEntry(fieldMap.get(WorldTracerField.FI).get(0)).replace(".", "&#46;"));
+			requestMethod.setParameter("wtrForwardRequest.supplementaryInfo[0]", RULES.get(DefaultWorldTracerService.WorldTracerField.FI).formatEntry(fieldMap.get(WorldTracerField.FI).get(0)).replace(".", "&#46;"));
 		}
 		if (fieldMap.containsKey(WorldTracerField.SL)) {
-			requestMethod.setParameter("wtrForwardRequest.storageLocation", RULES.get(WorldTracerService.WorldTracerField.SL).formatEntry(fieldMap.get(WorldTracerField.SL).get(0)).replace(".", "&#46;"));
+			requestMethod.setParameter("wtrForwardRequest.storageLocation", RULES.get(DefaultWorldTracerService.WorldTracerField.SL).formatEntry(fieldMap.get(WorldTracerField.SL).get(0)).replace(".", "&#46;"));
 		}
 		try {
 			debugOut(requestMethod, "");
@@ -1802,10 +1807,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 		}
 		if (fieldMap.containsKey(WorldTracerField.FI)) {
-			requestMethod.setParameter("wtrForwardRequest.supplementaryInfo[0]", RULES.get(WorldTracerService.WorldTracerField.FI).formatEntry(fieldMap.get(WorldTracerField.FI).get(0)).replace(".", "&#46;"));
+			requestMethod.setParameter("wtrForwardRequest.supplementaryInfo[0]", RULES.get(DefaultWorldTracerService.WorldTracerField.FI).formatEntry(fieldMap.get(WorldTracerField.FI).get(0)).replace(".", "&#46;"));
 		}
 		if (fieldMap.containsKey(WorldTracerField.SL)) {
-			requestMethod.setParameter("wtrForwardRequest.storageLocation", RULES.get(WorldTracerService.WorldTracerField.SL).formatEntry(fieldMap.get(WorldTracerField.SL).get(0)).replace(".", "&#46;"));
+			requestMethod.setParameter("wtrForwardRequest.storageLocation", RULES.get(DefaultWorldTracerService.WorldTracerField.SL).formatEntry(fieldMap.get(WorldTracerField.SL).get(0)).replace(".", "&#46;"));
 		}
 
 		try {

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import aero.nettracer.serviceprovider.common.utils.StringUtils;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 
 
 public class ContentRule extends BasicRule {

@@ -13,9 +13,8 @@ import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.NotLoggedIntoWorldTracerException;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerException;
 
 public abstract class AbstractServiceManager implements ServiceManagerInterface {
 
@@ -130,6 +129,9 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				retry = true;
 				retryCount += 1;
 				//TODO: IF BACKEND PROCESS NEED TO ONLY RETRY LIMIT # TIMES
+			} catch (CommandNotProperlyFormedException e) {
+				 response.setSuccess(false);
+				 WebServiceError error = new WebServiceError(ServiceConstants.COMMAND_NOT_PROPERLY_FORMATTED);
 			}
 		}
 		postProcess(dto, response);

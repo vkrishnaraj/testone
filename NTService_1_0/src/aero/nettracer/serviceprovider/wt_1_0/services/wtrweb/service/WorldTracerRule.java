@@ -2,7 +2,8 @@ package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service;
 
 import java.util.List;
 
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService.WorldTracerField;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 
 
 
