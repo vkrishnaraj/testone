@@ -1,4 +1,4 @@
-package aero.nettracer.serviceprovider.wt_1_0;
+package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 
 import junit.framework.Assert;
 
