@@ -16,19 +16,26 @@ public class ISharesTestCases {
 	@Test
 	public void TestParsingActionFile()	throws CommandNotProperlyFormedException {
 		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
 		ActionFileRequestData payload = new ActionFileRequestData();
 		payload.setAirline("US");
 		payload.setStation("XAX");
 		
+		// Initialize other data (do not change)
 		WorldTracerResponse response = new WorldTracerResponse();
-		WorldTracerActionDTO dto = new WorldTracerActionDTO(WorldTracerActionType.ACTION_FILE_COUNTS, null, payload, true, null);
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, null, payload, true, null);
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true);
+		
+		// Perform Action
 		impl.getActionFileCounts(dto, payload, response);
 		
-		// Perform any necessary assertions here
-		// Also use debug statement here to manually validate response data 
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(response.isSuccess(), true); 
 		Assert.assertEquals(response.getCounts().length, 13);
 	}
+	
+	
 	
 	
 }
