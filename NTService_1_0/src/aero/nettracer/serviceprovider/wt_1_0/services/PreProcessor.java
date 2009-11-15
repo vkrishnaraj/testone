@@ -4,15 +4,27 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Address;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Item_Inventory;
+import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.svc.ContentRule;
+import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
+
 import aero.nettracer.serviceprovider.common.exceptions.BagtagException;
 import aero.nettracer.serviceprovider.common.utils.BagTagConversion;
 import aero.nettracer.serviceprovider.wt_1_0.common.Agent;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Itinerary;
 import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
@@ -203,6 +215,119 @@ public class PreProcessor {
 			return m.group();
 		}
 		return "";
+	}
+
+
+	public static Map<WorldTracerField, List<String>> createAhlFieldMap(Ahl data) {
+
+		if (ntIncident == null) {
+			return null;
+		}
+		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
+
+		// this is a little messy, but we are keeping track of the addresses
+		// here.
+		// ones explicitly marked permanent get highest priority for the PA
+		// field
+		List<Address> permAdds = new ArrayList<Address>();
+		List<Address> namedAdds = new ArrayList<Address>();
+		List<Address> tempAdds = new ArrayList<Address>();
+		if(ntIncident.getPassenger_list() != null) {
+			int passengerCount = 0;
+			for(Passenger p : (List<Passenger>) ntIncident.getPassenger_list()) {
+					if (passengerCount < 3) {
+					++passengerCount;
+					
+					getPassengerInfo(p, result);
+					Address a = p.getAddress(0);
+					if(a != null) {
+						if(a.isPermanent()) {
+							permAdds.add(a);
+						}
+						else if(p.getLastname() == null || p.getLastname().trim().length() <= 0) {
+							tempAdds.add(a);
+						}
+						else {
+							namedAdds.add(a);
+						}
+					}
+				}
+			}
+			for (Address addr : permAdds) {
+				addWtIncAddress(result, addr, WorldTracerField.PA);
+			}
+			for (Address addr : namedAdds) {
+				addWtIncAddress(result, addr, WorldTracerField.PA);
+			}
+			for (Address addr : tempAdds) {
+				addWtIncAddress(result, addr, WorldTracerField.TA);
+			}
+		}
+
+		// num passengers
+		addIncidentFieldEntry(WorldTracerField.NP, Integer.toString(ntIncident.getNumpassengers()), result);
+
+		addIncidentFieldEntry(WorldTracerField.PR, ntIncident.getRecordlocator(), result);
+
+		if (ntIncident.getItinerary_list() != null) {
+			for (Itinerary i : ntIncident.getItinerary_list()) {
+				getItineraryInfo(i, result);
+			}
+		}
+
+		if (result.get(WorldTracerField.BR) == null && result.get(WorldTracerField.FD) == null) {
+			throw new WorldTracerException("No valid itinerary");
+		}
+		if (result.get(WorldTracerField.BR) == null) {
+			result.put(WorldTracerField.BR, result.get(WorldTracerField.FD));
+		} else if (result.get(WorldTracerField.FD) == null) {
+			result.put(WorldTracerField.FD, result.get(WorldTracerField.BR));
+		}
+
+		if (ntIncident.getClaimcheck_list() != null) {
+			for (Incident_Claimcheck ic : ntIncident.getClaimcheck_list()) {
+				if (ic.getClaimchecknum() != null && ic.getClaimchecknum().trim().length() > 0) {
+					addClaimCheckNum(ic.getClaimchecknum(), result, ntIncident.getStationassigned().getCompany()
+							.getCompanyCode_ID());
+				}
+			}
+		}
+
+		// contents category can only have one entry in WT, but you can use up
+		// to two lines for each
+		// you can have 12 total categories (see ContentRule class)
+		if (ntIncident.getItemlist() != null) {
+			int bagCount = 1;
+			for (Item i : ntIncident.getItemlist()) {
+				getItemInfo(i, result);
+				if (i.getInventorylist() != null) {
+
+					Map<String, List<String>> temp = new HashMap<String, List<String>>();
+					for (Item_Inventory inv : (List<Item_Inventory>) i.getInventorylist()) {
+						String category = CategoryBMO.getCategory(inv.getCategorytype_ID(), TracingConstants.DEFAULT_LOCALE).getWtCategory();
+						String contents = inv.getDescription().trim().toUpperCase();
+						if (category == null || contents == null || category.trim().length() == 0
+								|| contents.trim().length() == 0)
+							continue;
+						if (temp.get(category) == null) {
+							temp.put(category, new ArrayList<String>());
+						}
+						temp.get(category).add(contents);
+					}
+					if (temp.size() > 0) {
+						String entry = ContentRule.buildEntry(temp, bagCount);
+						if (entry != null) {
+							addIncidentFieldEntry(WorldTracerField.CC, entry, result);
+							bagCount += 1;
+						}
+					}
+				}
+			}
+		}
+		addIncidentFieldEntry(WorldTracerField.PB, "0000", result);
+		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ntIncident.getAgent()),
+				result);
+		return result;
 	}
 
 

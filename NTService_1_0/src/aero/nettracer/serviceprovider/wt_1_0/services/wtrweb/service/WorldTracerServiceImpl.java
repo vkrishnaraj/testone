@@ -2051,7 +2051,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void getAhl(WorldTracerActionDTO dto, Ahl data,
       WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
-	  // TODO Auto-generated method stub
 		String ahlId = data.getAhlId();
 		String responseBody = getAhl(ahlId);
 		Ahl ahl = parseWTIncident(ahlId, responseBody);
@@ -2061,7 +2060,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void getOhd(WorldTracerActionDTO dto, Ohd data,
       WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
-	  // TODO Auto-generated method stub
 		String ohdId = data.getOhdId();
 		String responseBody = getOhd(ohdId);
 		Ohd ohd = parseWTOhd(ohdId, responseBody);
@@ -2073,6 +2071,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void createAhl(WorldTracerActionDTO dto, Ahl data,
       WorldTracerResponse response) {
+		
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createAhlFieldMap(data);  //Create error, corrected field IT
 	  // TODO Auto-generated method stub
 	  
   }
