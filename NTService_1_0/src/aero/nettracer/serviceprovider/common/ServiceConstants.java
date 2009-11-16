@@ -18,5 +18,6 @@ public class ServiceConstants {
 	public static final String CAPTCHA_TIMESTAMP = "CAPTCHA_TIMESTAMP";
 	public static final String USE_AVAILABLE_CONNECTIONS_IF_POSSIBLE = "USE_AVAILABLE_CONNECTIONS_IF_POSSIBLE";
 	public static final String CRON_USER = "CRON_USER";
+	public static final String REFERENCED_OBJECT_CLOSED = "REFERENCED OBJECT ALREADY CLOSED";
 	
 }

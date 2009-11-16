@@ -132,7 +132,11 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 			} catch (CommandNotProperlyFormedException e) {
 				 response.setSuccess(false);
 				 WebServiceError error = new WebServiceError(ServiceConstants.COMMAND_NOT_PROPERLY_FORMATTED);
-			}
+			} catch (WorldTracerAlreadyClosedException e) {
+	      response.setSuccess(false);
+	      WebServiceError error = new WebServiceError(ServiceConstants.REFERENCED_OBJECT_CLOSED);
+	      e.printStackTrace();
+      }
 		}
 		postProcess(dto, response);
 

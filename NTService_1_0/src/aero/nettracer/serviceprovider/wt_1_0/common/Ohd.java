@@ -5,6 +5,7 @@ import java.util.Calendar;
 public class Ohd {
 	private String ohdId;
 	private String stationCode;
+	private String airlineCode;
 	private String faultStation;
 	private int faultReason;
 	private Passenger[] pax;
@@ -14,7 +15,9 @@ public class Ohd {
 	private ClaimCheck claimCheck;
 	private Calendar createDate;
 	private String storageLocation;
-
+	private Agent agent;
+	private String pnrLocator;
+	
 	public String getStorageLocation() {
   	return storageLocation;
   }
@@ -102,5 +105,29 @@ public class Ohd {
 
 	public Passenger[] getPax() {
   	return pax;
+  }
+
+	public Agent getAgent() {
+  	return agent;
+  }
+
+	public void setAgent(Agent agent) {
+  	this.agent = agent;
+  }
+
+	public String getPnrLocator() {
+  	return pnrLocator;
+  }
+
+	public void setPnrLocator(String pnrLocator) {
+  	this.pnrLocator = pnrLocator;
+  }
+
+	public String getAirlineCode() {
+  	return airlineCode;
+  }
+
+	public void setAirlineCode(String airlineCode) {
+  	this.airlineCode = airlineCode;
   }
 }

@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 public class Ahl {
 	private String ahlId;
+	private String pnrLocator;
 	private Calendar createDate;
 	private int numberPaxAffected;
 	private int numberBagsChecked;
@@ -15,7 +16,19 @@ public class Ahl {
 	private Itinerary[] bagItinerary;
 	private Item[] item;
 	private ClaimCheck[] claimCheck;
-	
+	private Agent agent;
+	private String airlineCode;
+	private Expenses[] expenses;
+	private String faultReasonDescription;
+
+	public String getFaultReasonDescription() {
+		return faultReasonDescription;
+	}
+
+	public void setFaultReasonDescription(String faultReasonDescription) {
+		this.faultReasonDescription = faultReasonDescription;
+	}
+
 	public String getAhlId() {
 		return ahlId;
 	}
@@ -97,20 +110,51 @@ public class Ahl {
 	}
 
 	public Calendar getCreateDate() {
-  	return createDate;
-  }
+		return createDate;
+	}
 
 	public void setCreateDate(Calendar createDate) {
-  	this.createDate = createDate;
-  }
+		this.createDate = createDate;
+	}
 
 	public int getNumberBagsChecked() {
-  	return numberBagsChecked;
-  }
+		return numberBagsChecked;
+	}
 
 	public void setNumberBagsChecked(int numberBagsChecked) {
-  	this.numberBagsChecked = numberBagsChecked;
-  }
+		this.numberBagsChecked = numberBagsChecked;
+	}
 
+	public Agent getAgent() {
+		return agent;
+	}
+
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+
+	public String getPnrLocator() {
+		return pnrLocator;
+	}
+
+	public void setPnrLocator(String pnrLocator) {
+		this.pnrLocator = pnrLocator;
+	}
+
+	public String getAirlineCode() {
+		return airlineCode;
+	}
+
+	public void setAirlineCode(String airlineCode) {
+		this.airlineCode = airlineCode;
+	}
+
+	public Expenses[] getExpenses() {
+		return expenses;
+	}
+
+	public void setExpenses(Expenses[] expenses) {
+		this.expenses = expenses;
+	}
 
 }

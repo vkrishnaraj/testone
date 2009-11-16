@@ -57,6 +57,7 @@ import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService;
 import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.PreProcessor;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerAlreadyClosedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
@@ -81,22 +82,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final int MAX_NAME_LENGTH = 20;
 	private static final int MAX_ADDRESS_LINE = 50;
 	private static final int MAX_PHONE_LENGTH = 50;
+	public static final WorldTracerRule<String> BASIC_RULE = new BasicRule(1, 57, 1, aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format.FREE_FLOW);
 
 
 
-	private static final String DEFAULT_BAG_TYPE = "99";
-	
-	
-	private static final List<String> VALID_BAG_TYPES = Arrays.asList(new String[] { "01", "02", "03", "05", "06",
-			"07", "08", "09", "10", "12", "20", "22", "23", "25", "26", "27", "28", "29", "50", "51", "52", "53", "54",
-			"55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "71", "72", "73",
-			"74", "75", "81", "82", "83", "85", "89", "90", "92", "93", "94", "95", "96", "97", "98", "99" });
 
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
 	
-	private static final List<String> wt_mats = Arrays.asList("D", "L", "M", "R", "T");
-	private static final List<String> wt_descs = Arrays.asList("D", "L", "M", "R", "T", "B", "K", "C", "H", "S", "W",
-			"X");
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 		this.client = (WorldTracerHttpClient) dto.getConnection();
@@ -1475,14 +1467,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		}
 
 		String type = item.getType().trim();
-		if (!VALID_BAG_TYPES.contains(type)) {
-			type = DEFAULT_BAG_TYPE;
+		if (!PreProcessor.VALID_BAG_TYPES.contains(type)) {
+			type = PreProcessor.DEFAULT_BAG_TYPE;
 		}
 		colorType += type;
 
-		String desc1 = mapXDesc(item.getDesc1());
-		String desc2 = mapXDesc(item.getDesc2());
-		String desc3 = mapXDesc(item.getDesc3());
+		String desc1 = PreProcessor.mapXDesc(item.getDesc1());
+		String desc2 = PreProcessor.mapXDesc(item.getDesc2());
+		String desc3 = PreProcessor.mapXDesc(item.getDesc3());
 
 		colorType += getDescString(desc1, desc2, desc3);
 
@@ -1491,12 +1483,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		PreProcessor.addIncidentFieldEntry(WorldTracerField.BI, item.getManufacturer(), result);
 	}
 	
-	private String mapXDesc(String code) {
-		if (code == null || !wt_descs.contains(code)) {
-			return "X";
-		}
-		return code;
-	}
 	
 	private String elimNulls(String str) {
 		if (str != null)
@@ -1515,7 +1501,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		String result = "";
 		boolean hasMat = false;
 		for (String desc : foo) {
-			if (wt_mats.contains(desc)) {
+			if (PreProcessor.wt_mats.contains(desc)) {
 				if (!hasMat) {
 					result += desc;
 					hasMat = true;
@@ -2070,48 +2056,366 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 	public void createAhl(WorldTracerActionDTO dto, Ahl data,
-      WorldTracerResponse response) {
+      WorldTracerResponse response) throws WorldTracerException {
 		
 		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createAhlFieldMap(data);  //Create error, corrected field IT
-	  // TODO Auto-generated method stub
+
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate incident mapping");
+		}
+		
+		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_AHL);
+		
+		String responseBody = null;
+		String newLocation = null;
+		try {
+			NameValuePair[] p1 = { new NameValuePair("_flowId", "createdelayedbagrecord-flow") };
+			newLocation = startFlow(p1, "INSERT INCIDENT", 1);
+
+			PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
+			List<String> bagsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);  //for bagTag.airlineCode and bagTag.tagNum
+			for(Map.Entry<DefaultWorldTracerService.WorldTracerField, List<String>> fieldEntry : fieldMap.entrySet()){
+				List<String> fieldList = fieldEntry.getValue();
+				//add bag type
+				if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.CT){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							String bagFace = fieldList.get(i);
+							String colorType = bagFace.substring(0, 2);
+							String bagType = bagFace.substring(2, 4);
+							String colorDesc = bagFace.substring(4, 7);
+							search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].colorType.colorCode", colorType);
+							search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].colorType.typeCode", bagType);
+							search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].colorType.descriptionCodes", colorDesc);
+						}
+					}
+				}
+				//add passenger itinerary
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.FD){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							String paxIntinery = fieldList.get(i);
+							String[] inti = paxIntinery.split("/");
+							String airlineCode = inti[0].substring(0, 2);
+							String flightNumber = inti[0].substring(2);
+							String flightDate = inti[1];
+							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].airlineCode", airlineCode);
+							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightNumber", flightNumber);
+							search.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);							
+						}
+					}
+				}
+				//add passenger initials
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.IT){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							String initial = fieldList.get(i);
+							search.setParameter("delayedBagRecord.passenger.initials[" + i +"]", initial);
+						}
+					}
+				}
+				//add passenger routing
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.RT){
+					if(fieldList != null){
+						int originCount = 2;
+						for(int i = 0; i < fieldList.size(); i++){
+							String station = fieldList.get(i);
+							search.setParameter("delayedBagRecord.delayedBagGroup.route.tracingStations["+ i +"]", station);
+							if(i <= 1){
+								//add first routing
+								search.setParameter("delayedBagRecord.delayedBagGroup.route.passengerRoute["+ i +"]", station);
+							}else{
+								//add other routing								
+								search.setParameter("station__origin__field0" + originCount, fieldList.get(i-1));
+								search.setParameter("delayedBagRecord.delayedBagGroup.route.passengerRoute["+ originCount +"]", station);
+								originCount++;
+							}							
+						}
+					}
+				}
+				//add passenger names
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.NM){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(i));					
+							search.setParameter("delayedBagRecord.passenger.names[" + i +"]", name);
+						}
+					}
+				}
+				
+				else if (fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.FL) {
+					logger.info("FL: " + fieldEntry.getValue().get(0));
+					search.setParameter("quickEntryRecord.passenger.frequentFlyerId", fieldEntry.getValue().get(0));
+					search.setParameter("delayedBagRecord.passenger.frequentFlyerId", fieldEntry.getValue().get(0));
+				}
+				
+				else if (fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.PS) {
+					logger.info("PS: " + fieldEntry.getValue().get(0));
+
+					search.setParameter("delayedBagRecord.passenger.classStatus", fieldEntry.getValue().get(0));
+					search.setParameter("quickEntryRecord.passenger.classStatus", fieldEntry.getValue().get(0));
+				}
+
+				
+				//add first passenger title
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.PT){
+					if(fieldList != null){						
+						String[] titles = fieldList.get(0).split(". ");
+						if(titles.length>0) {
+							String title = RULES.get(DefaultWorldTracerService.WorldTracerField.PT).formatEntry(titles[titles.length-1]);
+							search.setParameter("delayedBagRecord.passenger.title", title);
+						}
+					}
+				}
+				//add passenger permanent address and country code
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.PA){
+					//firstly get country code
+					List<String> countryList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CO);
+					//add first passenger country
+					if(countryList != null){
+						search.setParameter("delayedBagRecord.passenger.countryCode", countryList.get(0));
+					}
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size() && i < 2; i++){
+							String address = BASIC_RULE.formatEntry(fieldEntry.getValue().get(i).trim());
+							search.setParameter("delayedBagRecord.passenger.permanentAddress.line" + (i+1), address.replace(".", "&#46;"));
+							search.setParameter("delayedBagRecord.passenger.delivery.deliveryAddress.line"+(i+1), address.replace(".", "&#46;"));
+						}
+						search.setParameter("delayedBagRecord.deliveryAddressType", "PERMANENT");
+					}
+				} else if (fieldEntry.getKey() ==DefaultWorldTracerService.WorldTracerField.ZIP) {
+					search.setParameter("delayedBagRecord.passenger.zipCode", fieldEntry.getValue().get(0));
+				} else if (fieldEntry.getKey() ==DefaultWorldTracerService.WorldTracerField.STATE) {
+					search.setParameter("delayedBagRecord.passenger.state", fieldEntry.getValue().get(0));
+				}
+				//add passenger temp address and country code
+				else if(fieldEntry.getKey() ==DefaultWorldTracerService.WorldTracerField.TA){
+					//firstly get country code
+					if(null == search.getParameter("delayedBagRecord.passenger.countryCode") || "".equals(search.getParameter("delayedBagRecord.passenger.countryCode").getValue().trim())){
+						List<String> countryList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CO);
+						//add first passenger country
+						if(countryList != null){
+							search.setParameter("delayedBagRecord.passenger.countryCode", countryList.get(0));
+						}
+					}
+					if(fieldList != null){
+						boolean isTemp = false;
+						if(null == search.getParameter("delayedBagRecord.deliveryAddressType") || "TEMPORARY".equalsIgnoreCase(search.getParameter("delayedBagRecord.deliveryAddressType").getValue().trim())){
+							search.setParameter("delayedBagRecord.deliveryAddressType", "TEMPORARY");
+							isTemp = true;
+						}
+						for(int i = 0; i < fieldList.size() && i < 2; i++){
+							String address = BASIC_RULE.formatEntry(fieldEntry.getValue().get(i).trim());
+							search.setParameter("delayedBagRecord.passenger.tempAddress.line" + (i+1), address.replace(".", "&#46;"));
+							if(isTemp){
+								search.setParameter("delayedBagRecord.passenger.delivery.deliveryAddress.line"+(i+1), address.replace(".", "&#46;"));
+							}
+						}
+					}
+				}
+				//add first passenger email  ABC/D/FFS/U/FSAG/+/GASGGSDG/T/G/A/GSDG/D/DGS/D/GEGGGE
+				else if(fieldEntry.getKey() ==DefaultWorldTracerService.WorldTracerField.EA){
+					if(fieldList != null && fieldList.size() >= 1){
+						String email = RULES.get(DefaultWorldTracerService.WorldTracerField.EA).formatEntry(fieldList.get(0)).length()>1?fieldList.get(0).replace("/A/", "@")
+								.replace("/D/", ".").replace("/U/", "_").replace("/T/", "~").replace("/P/", "+"):"";
+						search.setParameter("delayedBagRecord.passenger.email", email);
+					}
+				}
+				//add passenger home/business phone, here maybe execute two times
+				else if(fieldEntry.getKey() ==DefaultWorldTracerService.WorldTracerField.PN || fieldEntry.getKey() ==DefaultWorldTracerService.WorldTracerField.TP){
+					fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
+					List<String> bizPhones = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TP);
+					if(bizPhones == null && fieldList != null){
+						for(int i = 0; i < (fieldList.size()<=2 ? fieldList.size() : 2); i++){
+							search.setParameter("delayedBagRecord.passenger.permanentPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(fieldList.get(i)));
+						}
+					}
+					else if(fieldList == null && bizPhones != null){
+						for(int i = 0; i < (bizPhones.size()<=2 ? bizPhones.size() : 2); i++){
+							search.setParameter("delayedBagRecord.passenger.permanentPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.TP).formatEntry(bizPhones.get(i)));
+						}
+					}
+					else if(fieldList != null && bizPhones != null){
+						String permPhone = "";
+						int max = fieldList.size() > bizPhones.size() ? fieldList.size() : bizPhones.size();
+						if(max > 2)
+							max = 2;
+						if(fieldList != null){
+							for(int i = 0; i < max; i++){
+								if(fieldList.get(i)!=null)
+									permPhone += fieldList.get(i) + ",";
+								if(bizPhones.get(i)!=null)
+									permPhone += bizPhones.get(i) + ",";
+								if(permPhone.startsWith(","))
+									permPhone = permPhone.substring(1);
+								if(permPhone.endsWith(","))
+									permPhone = permPhone.substring(0, permPhone.length()-1);
+								search.setParameter("delayedBagRecord.passenger.permanentPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(permPhone));
+							}
+						}
+					}
+				}
+				//add passenger cellphone
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.CP){
+					if(fieldList != null){
+						for(int i = 0; i < (fieldList.size()>2?2:fieldList.size()); i++){
+							search.setParameter("delayedBagRecord.passenger.cellPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.CP).formatEntry(fieldList.get(i)));
+						}
+					}
+				}
+				//add passenger fax
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.FX){
+					if(fieldList != null){
+						for(int i = 0; i < (fieldList.size()>2?2:fieldList.size()); i++){
+							search.setParameter("delayedBagRecord.passenger.fax" + (i+1), RULES.get(DefaultWorldTracerService.WorldTracerField.FX).formatEntry(fieldList.get(i)));
+						}
+					}
+				}
+				//add number of passenger and booking infomation
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.NP){
+					if(fieldList != null){
+						search.setParameter("delayedBagRecord.passenger.booking.numberOfPaxInfo", RULES.get(DefaultWorldTracerService.WorldTracerField.NP).formatEntry(fieldList.get(0)));
+					}
+					search.setParameter("delayedBagRecord.passenger.booking.pooledTicketNumber", "0000");
+					search.setParameter("_avoidBindingdelayedBagRecord.passenger.booking.group", "on");
+				}
+				//add bag itinerary
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.BR){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							String bagIntinery = fieldList.get(i);
+							String[] inti = bagIntinery.split("/");
+							String airlineCode = inti[0].substring(0, 2);
+							String flightNumber = inti[0].substring(2);
+							String flightDate = inti[1];
+							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].airlineCode", airlineCode);
+							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightNumber", flightNumber);
+							search.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightDate", flightDate);
+						}
+					}
+				}
+				//add tag number of bags  [US123456, A1234567]
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.TN){
+					if(fieldList != null){
+						int count = fieldList.size() < bagsList.size() ? fieldList.size() : bagsList.size();
+						for(int i = 0; i < count; i++){
+							String airtag = fieldList.get(i);
+							search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagTag.airlineCode", airtag.substring(0,2));
+							search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagTag.tagNumber", airtag.substring(2));
+						}
+					}
+				}
+				//add brand of bags
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.BI){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].brandInfo.brandInformation", RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(i)));
+						}
+					}
+				}
+				//add bags contents:  [01 BOOK/TECHNICAL BOOK.- PHOTO/VIEW PHOTOES, 02 FOOD/GOOD FOODS]
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.CC){
+					if(fieldList != null){
+						//bags number must be 1, if more would be error in WorldTracer?
+						for(int i = 0; i < 1; i++){
+							String bagInfo = fieldList.get(i);
+							String[] bagContents = bagInfo.split(".- ");
+							int countPerBag = bagContents.length;
+							for(int j = 0; j < countPerBag; j++){
+								String contents = bagContents[j];
+								if(j == 0)
+									contents = contents.substring(3);
+								int index = contents.indexOf("/");
+								search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagContents.bagItemsList["+ j +"].category", contents.substring(0, index));
+								search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagContents.bagItemsList["+ j +"].descriptionLine1", contents.substring(index+1).replace(".", "&#46;"));
+								search.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagContents.bagItemsList["+ j +"].descriptionLine2", "/");
+								
+							}
+						}
+					}
+				}
+			}
+			search.setParameter("_flowExecutionKey", flowKey);
+			search.setParameter("delayedBagRecord.recordReference.stationCode", data.getStationCode());
+			search.setParameter("delayedBagRecord.recordReference.airlineCode", data.getAirlineCode());
+			search.setParameter("delayedBagRecord.tracingOption", "FULLTRACING");
+			search.setParameter("avoidBindingdelayedBagRecord.handledAirlineCopyOption", "");
+			search.setParameter("userLang", "1");
+			search.setParameter("flowExecutionKey_Flights", flowKey);
+			search.setParameter("flowExecutionKey_Bags", flowKey);
+			search.setParameter("_avoidBindingdelayedBagRecord.delayedBagGroup.keysCollected", "on");
+			search.setParameter("bagType", "Delayed");
+			search.setParameter("_eventId", "submit");
+			
+			try {
+				debugOut(search, "insertIncident");
+				client.executeMethodWithPause(search, "INSERT INCIDENT: INSERT (2)");
+				if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+					newLocation = search.getResponseHeader("location").getValue();
+				}
+				else{
+					logger.error("Insert incident method not redirect!");
+					throw new WorldTracerException("unable to export incident");
+				}
+			}
+			catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to export incident: " + e.getMessage(), e);
+			}
+			catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to export incident: " + e.getMessage(), e);
+			}
+			finally {
+				search.releaseConnection();
+			}
+			//redirect to submit result page and get wt_id
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				client.executeMethod(redirect, "INSERT INCIDENT: REDIRECT (3)");
+				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+			}
+			catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to export incident: " + e.getMessage(), e);
+			}
+			catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to export incident: " + e.getMessage(), e);
+			}
+			finally {
+				redirect.releaseConnection();
+			}
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException(
+					"Communication error with WorldTracer", e);
+		}
+		String wt_id = null;
+		String errorString = "Submit failed.";
+		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING([^<>]+)]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Matcher succeMat = succePatt.matcher(responseBody);
+		if(succeMat.find()){
+			wt_id = succeMat.group(1).replaceAll("&nbsp;", "").replaceAll("(\\(.*\\))", "");
+		}else{
+			succePatt = Pattern.compile("error = \'([^\']*)\'",Pattern.CASE_INSENSITIVE);
+			succeMat = succePatt.matcher(responseBody);
+			if(succeMat.find())
+				errorString = succeMat.group(1);
+		}
+		logger.info("incident wt_id:" + wt_id);
+		if (wt_id != null && wt_id.length() >= 10) {
+			Ahl responseAhl = new Ahl();
+			responseAhl.setAhlId(wt_id.trim());
+			response.setAhl(responseAhl);
+			response.setSuccess(true);
+			return;
+		} else {
+			logger.error("Exception inserting AHL; responseBody below: \n" + responseBody);
+			throw new WorldTracerException(errorString + " Response body below: " + responseBody);
+		}
 	  
   }
 
-	public void amendAhl(WorldTracerActionDTO dto, Ahl data,
-      WorldTracerResponse response) {
-	  // TODO Auto-generated method stub
-	  
-  }
-	
-
-	public void closeAhl(WorldTracerActionDTO dto, Ahl ahl,
-      WorldTracerResponse response) {
-	  // TODO Auto-generated method stub
-	  
-  }
-
-
-
-
-
-	public void createOhd(WorldTracerActionDTO dto, Ohd data,
-      WorldTracerResponse response) {
-	  // TODO Auto-generated method stub
-	  
-  }
-
-
-	public void closeOhd(WorldTracerActionDTO dto, Ohd data,
-      WorldTracerResponse response) {
-	  // TODO Auto-generated method stub
-	  
-  }
-
-	public void amendOhd(WorldTracerActionDTO dto, Ohd data,
-      WorldTracerResponse response) {
-	  // TODO Auto-generated method stub
-	  
-  }
 	
 	private String getAhl(String wt_id) throws WorldTracerException, NotLoggedIntoWorldTracerException {
 		String responseBody = null;
@@ -3188,4 +3492,1396 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			e.printStackTrace();
 		}
 	}
+	
+
+	public void amendAhl(WorldTracerActionDTO dto, Ahl data,
+      WorldTracerResponse response) throws WorldTracerException, WorldTracerAlreadyClosedException, NotLoggedIntoWorldTracerException {
+		
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createAhlFieldMap(data);
+		String wt_ahl_id = data.getAhlId();
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate incident mapping");
+		}
+
+		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.AMEND_AHL);
+		//start
+		NameValuePair[] p1 = { new NameValuePair("_flowId", "editdelayedbagrecord-flow")};
+		String newLocation = startFlow(p1, "AMEND AHL", 1);
+		
+		//flowKey = newLocation.split("=")[1];
+		String responseBody = null;
+		//if exists this wt_id
+		PostMethod getAhl = new PostMethod(newLocation);
+		getAhl.setParameter("_flowExecutionKey", flowKey);
+		getAhl.setParameter("wtrDisplayRequest.recordReference.stationCode", wt_ahl_id.substring(0, 3));
+		getAhl.setParameter("wtrDisplayRequest.recordReference.airlineCode", wt_ahl_id.substring(3, 5));
+		getAhl.setParameter("wtrDisplayRequest.recordReference.recordId", wt_ahl_id.substring(5));
+		getAhl.setParameter("resultsForm.sortOption", "recordReference");
+		getAhl.setParameter("_eventId", "update");
+		try {
+			debugOut(getAhl, "amendAhl");
+			client.executeMethodWithPause(getAhl, "AMEND AHL: GET AHL (2)");
+			if(getAhl.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getAhl.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = getAhl.getResponseHeader("location").getValue();
+			}else{
+				logger.error("Get amend ahl details error!");
+				throw new WorldTracerException("unable to amend incident");
+			}
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident");
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident");
+		}
+		finally {
+			getAhl.releaseConnection();
+		}
+		GetMethod getWtDetails = new GetMethod(newLocation);
+		try {
+			logger.debug(getWtDetails.getQueryString());
+			client.executeMethodWithPause(getWtDetails, "AMEND AHL: GET WT DETAILS (3)");
+			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				logger.error("getWtDetails method redirect again!");
+				throw new WorldTracerException("unable to amend incident");
+			}else{
+				responseBody = getStringFromInputStream(getWtDetails.getResponseBodyAsStream());
+			}
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident", e);
+		}
+		finally {
+			getWtDetails.releaseConnection();
+		}
+		if(responseBody.toUpperCase().contains("NO MATCHING RECORDS FOUND")){
+			throw new WorldTracerException("wt_ahl_id not exists!");
+		}
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		//add params to amend
+		PostMethod amendMethod = new PostMethod(WTRWEB_FLOW_URL);
+		//add normal params
+		List<String> bagsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CT);  //for bagTag.airlineCode and bagTag.tagNum
+		DefaultWorldTracerService.WorldTracerField[] fields = DefaultWorldTracerService.WorldTracerField.values();
+		for(int k=0; k<fields.length; k++){
+			List<String> fieldList = fieldMap.get(fields[k]);
+			//add bag type
+			if(fields[k] == DefaultWorldTracerService.WorldTracerField.CT){
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < fieldList.size(); i++){
+						String bagFace = fieldList.get(i);
+						String colorType = bagFace.substring(0, 2);
+						String bagType = bagFace.substring(2, 4);
+						String colorDesc = bagFace.substring(4, 7);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].colorType.colorCode", colorType);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].colorType.typeCode", bagType);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].colorType.descriptionCodes", colorDesc);
+					}
+				}
+				for(int j=i; j<10; j++){
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ j +"].colorType.colorCode", "");
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ j +"].colorType.typeCode", "");
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ j +"].colorType.descriptionCodes", "");
+				}
+			}
+			//add passenger itinerary
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.FD){
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < fieldList.size(); i++){
+						String paxIntinery = fieldList.get(i);
+						String[] inti = paxIntinery.split("/");
+						String airlineCode = inti[0].substring(0, 2);
+						String flightNumber = inti[0].substring(2);
+						String flightDate = inti[1];
+						amendMethod.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].airlineCode", airlineCode);
+						amendMethod.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightNumber", flightNumber);
+						amendMethod.setParameter("delayedBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);
+					}
+				}
+				for(int j=i; j<4; j++){
+					amendMethod.setParameter("delayedBagRecord.passenger.paxFlights["+ j +"].airlineCode", "");
+					amendMethod.setParameter("delayedBagRecord.passenger.paxFlights["+ j +"].flightNumber", "");
+					amendMethod.setParameter("delayedBagRecord.passenger.paxFlights["+ j +"].flightDate", "");
+				}
+			}
+			//add passenger initials
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.IT){
+				if(fieldList != null){
+					for(int i = 0; i < fieldList.size(); i++){
+						amendMethod.setParameter("delayedBagRecord.passenger.initials[" + i +"]", fieldList.get(i));
+					}
+				}
+			}
+			//add passenger routing
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.RT){
+				int originCount = 2;
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < fieldList.size(); i++){
+						String station = fieldList.get(i);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.route.tracingStations["+ i +"]", station);
+						if(i <= 1){
+							//add first routing
+							amendMethod.setParameter("delayedBagRecord.delayedBagGroup.route.passengerRoute["+ i +"]", station);
+
+						}else{
+							//add other routing								
+							amendMethod.setParameter("station__origin__field0" + originCount, fieldList.get(i-1));
+							amendMethod.setParameter("delayedBagRecord.delayedBagGroup.route.passengerRoute["+ originCount +"]", station);
+							originCount++;
+						}							
+					}
+				}
+				//delete other no value fields
+				for(int j=originCount; j<5; j++){
+					amendMethod.setParameter("station__origin__field0" + j, "");
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.route.passengerRoute["+ j +"]", "");
+				}
+				for(int t=i; t<15; t++){
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.route.tracingStations["+ t +"]", "");
+				}
+			}
+			//add passenger names
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.NM){
+				if(fieldList != null){
+					for(int i = 0; i < fieldList.size(); i++){
+						String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(i));
+						amendMethod.setParameter("delayedBagRecord.passenger.names[" + i +"]", name);
+					}
+				}
+			}
+			
+			else if (fields[k] == DefaultWorldTracerService.WorldTracerField.FL) {
+				if (fieldMap.get(DefaultWorldTracerService.WorldTracerField.FL) != null && fieldMap.get(DefaultWorldTracerService.WorldTracerField.FL).get(0) != null) {
+					logger.info("FL: " + fieldMap.get(DefaultWorldTracerService.WorldTracerField.FL).get(0));
+					amendMethod.setParameter("quickEntryRecord.passenger.frequentFlyerId", fieldMap.get(DefaultWorldTracerService.WorldTracerField.FL).get(0));
+					amendMethod.setParameter("delayedBagRecord.passenger.frequentFlyerId", fieldMap.get(DefaultWorldTracerService.WorldTracerField.FL).get(0));
+				}
+			}
+			
+			else if (fields[k] == DefaultWorldTracerService.WorldTracerField.PS) {
+				if (fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS) != null && fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS).get(0) != null) {
+					logger.info("PS: " + fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS).get(0));
+					
+					amendMethod.setParameter("delayedBagRecord.passenger.classStatus", fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS).get(0));
+					amendMethod.setParameter("quickEntryRecord.passenger.classStatus", fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS).get(0));					
+				}
+			}
+			
+			//add first passenger title
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.PT){
+				if(fieldList != null){
+					String[] titles = fieldList.get(0).split(". ");
+					if(titles.length>0) {
+						String title = RULES.get(DefaultWorldTracerService.WorldTracerField.PT).formatEntry(titles[titles.length-1]);
+						amendMethod.setParameter("delayedBagRecord.passenger.title", title);
+					}
+				}
+			}
+			//add passenger permanent address and country code
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.PA){
+				//firstly get country code
+				List<String> countryList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CO);
+				//add first passenger country
+				if(countryList != null){
+					amendMethod.setParameter("delayedBagRecord.passenger.countryCode", countryList.get(0));
+				}
+				if(fieldList != null){
+					for(int i = 0; i < fieldList.size() && i < 2; i++){
+						String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
+						amendMethod.setParameter("delayedBagRecord.passenger.permanentAddress.line" + (i+1), address.replace(".", "&#46;"));
+						amendMethod.setParameter("delayedBagRecord.passenger.delivery.deliveryAddress.line"+(i+1), address.replace(".", "&#46;"));
+					}
+					amendMethod.setParameter("delayedBagRecord.deliveryAddressType", "PERMANENT");
+				}
+			} else if (fields[k] == DefaultWorldTracerService.WorldTracerField.ZIP) {
+				if (fieldList != null) {
+					amendMethod.setParameter("delayedBagRecord.passenger.zipCode", fieldList.get(0));
+				}
+			} else if (fields[k] == DefaultWorldTracerService.WorldTracerField.STATE) {
+				if (fieldList != null) {
+					amendMethod.setParameter("delayedBagRecord.passenger.state", fieldList.get(0));
+				}
+			}
+			//add passenger temp address and country code
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.TA){
+				//firstly get country code
+				if(null == amendMethod.getParameter("delayedBagRecord.passenger.countryCode") || "".equals(amendMethod.getParameter("delayedBagRecord.passenger.countryCode").getValue().trim())){
+					List<String> countryList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CO);
+					//add first passenger country
+					if(countryList != null){
+						amendMethod.setParameter("delayedBagRecord.passenger.countryCode", countryList.get(0));
+					}
+				}
+				if(fieldList != null){
+					boolean isTemp = false;
+					if(null == amendMethod.getParameter("delayedBagRecord.deliveryAddressType") || "TEMPORARY".equalsIgnoreCase(amendMethod.getParameter("delayedBagRecord.deliveryAddressType").getValue().trim())){
+						isTemp = true;
+						amendMethod.setParameter("delayedBagRecord.deliveryAddressType", "TEMPORARY");
+					}
+					for(int i = 0; i < fieldList.size() && i < 2; i++){
+						String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
+						amendMethod.setParameter("delayedBagRecord.passenger.tempAddress.line" + (i+1), address.replace(".", "&#46;"));
+						if(isTemp){
+							amendMethod.setParameter("delayedBagRecord.passenger.delivery.deliveryAddress.line"+(i+1), address.replace(".", "&#46;"));
+						}
+					}
+				}
+			}
+			//add first passenger email, cannot be deleted in WorldTracer.  [ABC/D/FFS/U/FSAG/+/GASGGSDG/T/G/A/GSDG/D/DGS/D/GEGGGE]
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.EA){
+				if(fieldList != null && fieldList.size() >= 1){
+					String email = RULES.get(DefaultWorldTracerService.WorldTracerField.EA).formatEntry(fieldList.get(0)).length()>1?fieldList.get(0).replace("/A/", "@")
+							.replace("/D/", ".").replace("/U/", "_").replace("/T/", "~").replace("/P/", "+"):"";
+          amendMethod.setParameter("delayedBagRecord.passenger.email", email);
+				}else{
+					amendMethod.setParameter("delayedBagRecord.passenger.email", "");  //not useful, WorldTracer would restore
+				}
+			}
+			//add passenger home/business phone, phone can not be deleted in WorldTracer
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.PN){
+				List<String> bizPhones = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TP);
+				String permPhone = "";
+				if(bizPhones == null && fieldList != null){
+					for(int i = 0; i < (fieldList.size()<2?fieldList.size():2); i++){
+						amendMethod.setParameter("delayedBagRecord.passenger.permanentPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(fieldList.get(i)));
+					}
+				}
+				else if(fieldList == null && bizPhones != null){
+					for(int i = 0; i < (bizPhones.size()<2?bizPhones.size():2); i++){
+						amendMethod.setParameter("delayedBagRecord.passenger.permanentPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.TP).formatEntry(bizPhones.get(i)));
+					}
+				}
+				else if(fieldList != null && bizPhones != null){
+					int max = fieldList.size() > bizPhones.size() ? fieldList.size() : bizPhones.size();
+					if(max > 2)
+						max = 2;
+					if(fieldList != null){
+						for(int i = 0; i < max; i++){
+							if(fieldList.get(i)!=null)
+								permPhone += fieldList.get(i) + ",";
+							if(bizPhones.get(i)!=null)
+								permPhone += bizPhones.get(i) + ",";
+							if(permPhone.startsWith(","))
+								permPhone = permPhone.substring(1);
+							if(permPhone.endsWith(","))
+								permPhone = permPhone.substring(0, (permPhone.length()-1));
+							amendMethod.setParameter("delayedBagRecord.passenger.permanentPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(permPhone));
+						}
+					}
+				}
+			}
+			//add passenger cellphone
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.CP){
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < (fieldList.size()>2?2:fieldList.size()); i++){
+						amendMethod.setParameter("delayedBagRecord.passenger.cellPhones[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.CP).formatEntry(fieldList.get(i)));
+					}
+				}
+				for(int j=i; j<2; j++){
+					amendMethod.setParameter("delayedBagRecord.passenger.cellPhones[" + j + "]", "");
+				}
+			}
+			//add passenger fax, fax can not be deleted in WorldTracer
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.FX){
+				if(fieldList != null){
+					for(int i = 0; i < (fieldList.size()>2?2:fieldList.size()); i++){
+						if(!fieldList.get(i).equals("")){
+							amendMethod.setParameter("delayedBagRecord.passenger.fax" + (i+1), RULES.get(DefaultWorldTracerService.WorldTracerField.FX).formatEntry(fieldList.get(i)));
+						}
+					}
+				}
+			}
+			//add number of passenger and booking infomation
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.NP){
+				if(fieldList != null && fieldList.get(0).length() > 0){
+					amendMethod.setParameter("delayedBagRecord.passenger.booking.numberOfPaxInfo", fieldList.get(0));
+				}
+				amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.booking.pooledTicketNumber", "0000");
+				amendMethod.setParameter("_avoidBindingdelayedBagRecord.passenger.booking.group", "on");
+			}
+			//add bag itinerary
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.BR){
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < fieldList.size(); i++){
+						String bagIntinery = fieldList.get(i);
+						String[] inti = bagIntinery.split("/");
+						String airlineCode = inti[0].substring(0, 2);
+						String flightNumber = inti[0].substring(2);
+						String flightDate = inti[1];
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].airlineCode", airlineCode);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightNumber", flightNumber);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ i +"].flightDate", flightDate);
+					}
+				}
+				for(int j=i; j<4; j++){
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ j +"].airlineCode", "");
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ j +"].flightNumber", "");
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.bagFlights["+ j +"].flightDate", "");
+				}
+			}
+			//add tag number of bags  [US123456, A1234567]
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.TN){
+				int i = 0;
+				if(fieldList != null){
+					int count = fieldList.size() < bagsList.size() ? fieldList.size() : bagsList.size();
+					for(i = 0; i < count; i++){
+						String airtag = fieldList.get(i);
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagTag.airlineCode", airtag.substring(0,2));
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagTag.tagNumber", airtag.substring(2));
+
+					}
+				}
+				for(int j=i; j<10; j++){
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ j +"].bagTag.airlineCode", "");
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ j +"].bagTag.tagNumber", "");
+				}
+			}
+			//add brand of bags
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.BI){
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < fieldList.size(); i++){
+						amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].brandInfo.brandInformation", RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(i)));
+					}
+				}
+				for(int j=i; j<10; j++){
+					amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags[" + j + "].brandInfo.brandInformation", "");
+				}
+			}
+			//add bags contents:  [01 BOOK/TECHNICAL BOOK.- PHOTO/VIEW PHOTOES, 02 FOOD/GOOD FOODS]
+			//contents can not be deleted in WorldTracer
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.CC){
+				int i = 0;
+				if(fieldList != null){
+					//bags number must be 1, if more would be error in WorldTracer?
+					for(i = 0; i < 1; i++){
+						String bagInfo = fieldList.get(i);
+						String[] bagContents = bagInfo.split(".- ");
+						int countPerBag = bagContents.length;
+						for(int j = 0; j < countPerBag; j++){
+							String contents = bagContents[j];
+							if(j == 0)
+								contents = contents.substring(3);
+							int index = contents.indexOf("/");
+							amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagContents.bagItemsList["+ j +"].category", contents.substring(0, index));
+							amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagContents.bagItemsList["+ j +"].descriptionLine1", contents.substring(index+1).replace(".", "&#46;"));
+							amendMethod.setParameter("delayedBagRecord.delayedBagGroup.delayedBags["+ i +"].bagContents.bagItemsList["+ j +"].descriptionLine2", "/");
+							
+						}
+					}
+				}
+			}
+			//add claim params, RL can not be deleted
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.FS){
+				if(fieldList != null && fieldList.size() > 0){
+					amendMethod.setParameter("delayedBagRecord.delayedBagClaim.faultStation", fieldList.get(0));
+				}
+			}
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.RL){
+				if(fieldList != null && fieldList.size() > 0){
+					amendMethod.setParameter("delayedBagRecord.delayedBagClaim.reasonForLoss", fieldList.get(0));
+				}
+			}
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.RC){
+				if(fieldList != null && fieldList.size() > 0){
+					amendMethod.setParameter("delayedBagRecord.delayedBagClaim.commentsOnLoss", fieldList.get(0).replace(".", "&#46;"));
+				}
+			}
+		}
+		amendMethod.setParameter("delayedBagRecord.recordReference.stationCode", wt_ahl_id.substring(0,3));
+		amendMethod.setParameter("delayedBagRecord.recordReference.airlineCode", wt_ahl_id.substring(3,5));
+		amendMethod.setParameter("delayedBagRecord.recordReference.recordId", wt_ahl_id.substring(5));
+		
+		amendMethod.setParameter("_eventId", "amend");
+		amendMethod.setParameter("bagType", "Delayed");
+		amendMethod.setParameter("_avoidBindingdelayedBagRecord.passenger.booking.group", "on");
+		amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagGroup.keysCollected", "on");
+		//amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.insured", "on");
+		//amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.liabilityTag", "on");
+		amendMethod.setParameter("_flowExecutionKey", flowKey);
+		amendMethod.setParameter("flowExecutionKey_Flights", flowKey);
+		amendMethod.setParameter("flowExecutionKey_Bags", flowKey);
+		
+		try{
+			debugOut(amendMethod, "");
+			client.executeMethodWithPause(amendMethod, "AMEND AHL: AMEND (4)");
+			if(amendMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || amendMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = amendMethod.getResponseHeader("location").getValue();
+			}else{
+				logger.error("Amend ahl method not redirect!");
+				throw new WorldTracerException("Amend ahl method not redirect!");
+			}
+		}catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident", e);
+		}
+		finally {
+			amendMethod.releaseConnection();
+		}
+		GetMethod redirect = new GetMethod(newLocation);
+		try {
+			client.executeMethod(redirect, "AMEND AHL: REDIRECT (5)");
+			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend incident", e);
+		}
+		finally {
+			redirect.releaseConnection();
+		}
+		if (responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")) {
+			response.setSuccess(true);
+			return;
+		} else {
+			String errorString;
+			Pattern error_patt = Pattern.compile(
+					"error = '([^<>']*)'", Pattern.CASE_INSENSITIVE
+							| Pattern.DOTALL);
+			m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to amend AHL. See logs for details";
+				logger.error("amend Ahl result:"+responseBody);
+			}
+			if (errorString.toUpperCase().contains("FILE CLOSED")) {
+				throw new WorldTracerAlreadyClosedException(errorString);
+			}
+			throw new WorldTracerException(errorString);
+		}
+		
+  }
+	
+
+	public void closeAhl(WorldTracerActionDTO dto, Ahl ahl,
+      WorldTracerResponse response) throws WorldTracerException {
+		
+		if (ahl.getAhlId() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
+		
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createCloseFieldMap(ahl);
+		if(ahl.getAhlId() == null || ahl.getAhlId().trim().length() < 1){
+			throw new WorldTracerException("No associated WorldTracer file");
+		}
+		try {
+			String result = closeInc(fieldMap, ahl.getAhlId(), ahl.getStationCode());
+			if(result == null){
+				result = amendBeforeClose(fieldMap, ahl.getAhlId(), ahl.getStationCode());
+				if(result == null){
+					logger.error("amend incident error with WorldTracer");
+					//throw new WorldTracerConnectionException();
+				}
+				result = closeInc(fieldMap, ahl.getAhlId(), ahl.getStationCode());
+				if(result == null){
+					logger.error("close incident error with WorldTracer");
+					throw new WorldTracerConnectionException();
+				}
+			}
+			response.setSuccess(true);
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}  
+  }
+	
+	public String amendBeforeClose(
+			Map<DefaultWorldTracerService.WorldTracerField, List<String>> fieldMap,
+			String wt_id, String stationCode) throws WorldTracerException{
+		GetMethod startFlow = new GetMethod(WTRWEB_FLOW_URL);
+		NameValuePair[] p1 = { new NameValuePair("_flowId", "editdelayedbagrecord-flow")};
+		startFlow.setQueryString(p1);
+		startFlow.setFollowRedirects(false);
+		try {
+			client.executeMethodWithPause(startFlow, "AMEND BEFORE CLOSE: START FLOW (1)");
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend", e);
+		}
+		finally {
+			startFlow.releaseConnection();
+		}
+		if(startFlow.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && startFlow.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
+			logger.error("start amend_before_close_incident flow not redirect!");
+			throw new WorldTracerException("unable to amend before close");
+		}
+		//redirect to update incident page and get flow key
+		String newLocation = startFlow.getResponseHeader("location").getValue();
+		flowKey = newLocation.split("=")[1];
+		String responseBody = null;
+		//The field starts with avoidBinding... means no change in WorldTracer. So it is not necessory to retrieve details.
+		PostMethod amendMethod = new PostMethod(WTRWEB_FLOW_URL);
+		//add fields no changed
+		for(int j=0; j<10; j++){
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].bagTag.airlineCode", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].bagTag.tagNumber", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].colorType.typeCode", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].colorType.colorCode", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].colorType.descriptionCodes", "");
+			for(int k=0; k<12; k++){
+				amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].brandInfo.brandInformation", "");
+				amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].bagContents.bagItemsList[" + k + "].category", "");
+				amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].bagContents.bagItemsList[" + k + "].descriptionLine1", "");
+				amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.delayedBags[" + j + "].bagContents.bagItemsList[" + k + "].descriptionLine2", "");
+			}
+		}
+		for(int j=0; j<4; j++){
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.bagFlights[" + j + "].airlineCode", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.bagFlights[" + j + "].flightNumber", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.bagFlights[" + j + "].flightDate", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.paxFlights[" + j + "].airlineCode", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.paxFlights[" + j + "].flightNumber", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.paxFlights[" + j + "].flightDate", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.route.passengerRoute[" + j + "]", "");
+		}
+		for(int j=0; j<15; j++){
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.delayedBagGroup.route.tracingStations[" + j + "]", "");
+		}
+		for(int j=0; j<2; j++){
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.cellPhones[" + j + "]", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.permanentPhones[" + j + "]", "");
+		}
+		for(int j=0; j<3; j++){
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.names[" + j + "]", "");
+			amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.initials[" + j + "]", "");
+		}
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.email", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.title", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.state", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.countryCode", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.booking.pooledTicketNumber", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.booking.numberOfPaxInfo", "");
+		amendMethod.setParameter("userLang", "1");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.deliveryAddressType", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.delivery.deliveryAddress.line1", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.delivery.deliveryAddress.line2", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.permanentAddress.line1", "");
+		amendMethod.setParameter("avoidBindingdelayedBagRecord.passenger.permanentAddress.line2", "");
+		//add claim params, and submit to amend
+		List<String> faultStationList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.FS);
+		if(faultStationList != null && faultStationList.size() > 0){
+			amendMethod.setParameter("delayedBagRecord.delayedBagClaim.faultStation", faultStationList.get(0));
+		}
+		List<String> reasonCodeList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.RL);
+		if(reasonCodeList != null && reasonCodeList.size() > 0){
+			amendMethod.setParameter("delayedBagRecord.delayedBagClaim.reasonForLoss", reasonCodeList.get(0));
+		}
+		List<String> commentList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.RC);
+		if(commentList != null && commentList.size() > 0){
+			amendMethod.setParameter("delayedBagRecord.delayedBagClaim.commentsOnLoss", commentList.get(0).replace(".", "&#46;"));
+		}
+		amendMethod.setParameter("delayedBagRecord.delayedBagClaim.paymentToPassengerList[0].costType", "X");
+		amendMethod.setParameter("delayedBagRecord.delayedBagClaim.paymentToPassengerList[0].currency", "USD");
+		amendMethod.setParameter("delayedBagRecord.delayedBagClaim.paymentToPassengerList[0].value", "0");
+		
+		amendMethod.setParameter("delayedBagRecord.recordReference.stationCode", wt_id.substring(0,3));
+		amendMethod.setParameter("delayedBagRecord.recordReference.airlineCode", wt_id.substring(3,5));
+		amendMethod.setParameter("delayedBagRecord.recordReference.recordId", wt_id.substring(5));
+		
+		amendMethod.setParameter("_eventId", "amend");
+		amendMethod.setParameter("bagType", "Delayed");
+		amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.insured", "on");
+		amendMethod.setParameter("_avoidBindingdelayedBagRecord.delayedBagClaim.liabilityTag", "on");
+		amendMethod.setParameter("_flowExecutionKey", flowKey);
+		amendMethod.setParameter("flowExecutionKey_Claim", flowKey);
+		try{
+			debugOut(amendMethod, "");
+			client.executeMethodWithPause(amendMethod, "AMEND BEFORE CLOSE: AMEND (2)");
+			if(amendMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || amendMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = amendMethod.getResponseHeader("location").getValue();
+			}else{
+				logger.error("Amend method before close ahl not redirect!");
+				throw new WorldTracerException("Amend method before close ahl not redirect!");
+			}
+		}catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend before close", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend before close", e);
+		}
+		finally {
+			amendMethod.releaseConnection();
+		}
+		GetMethod redirect = new GetMethod(newLocation);
+		try {
+			client.executeMethod(redirect, "AMEND BEFORE CLOSE: REDIRECT (3)");
+			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend before close", e);
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend before close", e);
+		}
+		finally {
+			redirect.releaseConnection();
+		}
+		if(responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")){
+			return wt_id;
+		}else{
+			logger.error("amend before close incident failed ");
+			return null;
+		}
+	}
+	
+	public String closeInc(
+			Map<DefaultWorldTracerService.WorldTracerField, List<String>> fieldMap,
+			String wt_id, String stationCode) throws WorldTracerException, NotLoggedIntoWorldTracerException{
+		String responseBody = null;
+		
+		NameValuePair[] p1 = { new NameValuePair("_flowId", "closedelayedbagrecord-flow")};
+		String newLocation = startFlow(p1, "CLOSE INCIDENT", 1);
+		
+		PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
+		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
+		search.setQueryString(p2);
+		
+		search.setParameter("wtrCloseRequest.recordReferences[0].stationCode", wt_id.substring(0,3));
+		search.setParameter("wtrCloseRequest.recordReferences[0].airlineCode", wt_id.substring(3,5));
+		search.setParameter("wtrCloseRequest.recordReferences[0].recordId", wt_id.substring(5));
+		search.setParameter("amendOption[0]", "noamend");
+		
+		//search.setParameter("_showAllDetailsInReadOnlyArea", "on");
+		search.setParameter("_eventId", "continue");
+		search.setParameter("wtrDisplayRequest.recordAdditionalInfo.fullRecord", "TRUE");
+		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.fullRecord", "on");
+		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.recordHistory", "on");
+		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.matchingHistory", "on");
+		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.SMSMessages", "on");
+		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.internetMessages", "on");
+		
+		try {
+			debugOut(search, "");
+			client.executeMethodWithPause(search, "CLOSE INCIDENT: SEARCH (2)");
+			if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || 
+					search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = search.getResponseHeader("location").getValue();
+			}
+			else{
+				newLocation = "";
+				logger.error("close postMethod not redirect!");
+				throw new WorldTracerException("unable to close ahl");
+			}
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to close ahl");
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to close ahl");
+		}
+		finally {
+			search.releaseConnection();
+		}
+		//redirect to submit result page and get close signal
+		if(!"".equals(newLocation)){
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				client.executeMethodWithPause(redirect, "CLOSE INCIDENT: REDIRECT (3)");
+				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+				//System.out.println("close incident result:" + responseBody);
+			}
+			catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to close ahl");
+			}
+			catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to close ahl");
+			}
+			finally {
+				redirect.releaseConnection();
+			}
+	    }
+		if(responseBody.toUpperCase().contains("FILE CLOSED") 
+				|| responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)") || responseBody.toUpperCase().contains("CLOSE FILE (FINISH)")){
+			return wt_id;
+		}else{
+			logger.info("FAILED TO CLOSE AHL REPSONSE. ");
+			return null;
+		}
+	}
+
+
+	public void createOhd(WorldTracerActionDTO dto, Ohd data,
+      WorldTracerResponse response) throws WorldTracerException {
+
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createOhdFieldMap(data);
+
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate ohd mapping");
+		}
+
+		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_OHD);
+		String responseBody = null;
+		try {
+
+			NameValuePair[] p1 = { new NameValuePair("_flowId", "createonhandbagrecord-flow")};
+			String newLocation = startFlow(p1, "INSERT OHD", 1);
+			
+			PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
+			for(Map.Entry<DefaultWorldTracerService.WorldTracerField, List<String>> fieldEntry : fieldMap.entrySet()){
+				List<String> fieldList = fieldEntry.getValue();
+				//add color type
+				if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.CT){
+					if(fieldList != null && fieldList.size() >= 1){
+						String bagFace = fieldList.get(0);
+						String colorType = bagFace.substring(0, 2);
+						String bagType = bagFace.substring(2, 4);
+						String colorDesc = bagFace.substring(4, 7);
+						search.setParameter("onHandBagRecord.onHandBag.colorType.colorCode", colorType);
+						search.setParameter("onHandBagRecord.onHandBag.colorType.typeCode", bagType);
+						search.setParameter("onHandBagRecord.onHandBag.colorType.descriptionCodes", colorDesc);
+					}
+				}
+				//add bag(passenger) itinerary
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.FD){
+					if(fieldList != null){
+						for(int i = 0; i < fieldList.size(); i++){
+							String paxIntinery = fieldList.get(i);
+							String[] inti = paxIntinery.split("/");
+							String airlineCode = inti[0].substring(0, 2);
+							String flightNumber = inti[0].substring(2);
+							String flightDate = inti[1];
+							search.setParameter("onHandBagRecord.passenger.paxFlights["+ i +"].airlineCode", airlineCode);
+							search.setParameter("onHandBagRecord.passenger.paxFlights["+ i +"].flightNumber", flightNumber);
+							search.setParameter("onHandBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);
+						}
+					}
+				}
+				//add passenger routing
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.RT){
+					if(fieldList != null){
+						int originCount = 2;
+						int destinCount = 2;
+						for(int i = 0; i < fieldList.size(); i++){
+							String station = fieldList.get(i);
+							if(i <= 1){
+								//add first routing
+								search.setParameter("onHandBagRecord.onHandBag.route.passengerRoute["+ i +"]", station);
+							}else{
+								//add other routing								
+								search.setParameter("station__origin__field0" + originCount, fieldList.get(i-1));
+								search.setParameter("onHandBagRecord.onHandBag.route.passengerRoute["+ destinCount +"]", station);
+								originCount++;
+								destinCount++;
+							}							
+						}
+					}
+				}
+				//add passenger initial
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.IT){
+					if(fieldList != null && fieldList.size() >= 1){
+						search.setParameter("onHandBagRecord.passenger.initials[0]", fieldList.get(0));
+					}
+				}
+				//add passenger name
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.NM){
+					if(fieldList != null && fieldList.size() >= 1){
+						String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(0));
+						search.setParameter("onHandBagRecord.passenger.names[0]", name);
+					}
+				}
+				//add passenger first name/title
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.PT){
+					if(fieldList != null && fieldList.size() >= 1){
+						String title = RULES.get(DefaultWorldTracerService.WorldTracerField.PT).formatEntry(fieldList.get(0));
+						search.setParameter("onHandBagRecord.passenger.title", title);
+					}
+				}
+				//add passenger address on bag
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.AB){
+					if(fieldList != null && fieldList.size() >= 1){
+						String ab = RULES.get(DefaultWorldTracerService.WorldTracerField.AB).formatEntry(fieldList.get(0));
+						search.setParameter("onHandBagRecord.onHandBag.bagAddress.line1", ab.replace(".", "&#46;"));
+					}
+				}
+				//add passenger phones on bag
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.PN || fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.TP){
+					fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
+					List<String> workPhoneList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TP);
+					String phone = "";
+					if(fieldList != null && fieldList.size() >= 1){
+						if(fieldList.get(0).length()>0)
+							phone = RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(fieldList.get(0)) + ",";
+					}
+					if(workPhoneList != null && workPhoneList.size() >= 1){
+						if(workPhoneList.get(0).length()>0){
+							phone += RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(workPhoneList.get(0));
+						}
+					}
+					if(phone.endsWith(",")){
+						phone = phone.substring(0, phone.length()-1);
+					}
+					search.setParameter("onHandBagRecord.onHandBag.bagPhones[0]", phone);
+				}
+				//add passenger mobile phone
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.CP){
+					if(fieldList != null && fieldList.size() >= 1){
+						search.setParameter("onHandBagRecord.onHandBag.bagPhones[1]", RULES.get(DefaultWorldTracerService.WorldTracerField.CP).formatEntry(fieldList.get(0)));
+					}
+				}
+				//add airline code and tagNumber: airlineCode(2 alphabet)+tagNumber(6 digits) or 10 digits(US),auto handle
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.TN){
+					if(fieldList != null && fieldList.size() >= 1){
+						String airtag = fieldList.get(0);
+						search.setParameter("onHandBagRecord.onHandBag.bagTag.airlineCode", airtag.substring(0, 2));
+						search.setParameter("onHandBagRecord.onHandBag.bagTag.tagNumber", airtag.substring(2));
+					}
+				}
+				//add brand information 
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.BI){
+					if(fieldList != null && fieldList.size() >= 1){
+						search.setParameter("onHandBagRecord.onHandBag.brandInfo.brandInformation", RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(0)));
+					}
+				}
+				//add contents
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.CC){
+					if(fieldList != null && fieldList.size() >= 1){
+						String[] contents = fieldList.get(0).split(".- ");
+						for(int i = 0; i < contents.length; i++){
+							int index = contents[i].indexOf("/");
+							search.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + i + "].category", contents[i].substring(0,index));
+							search.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + i + "].descriptionLine1", contents[i].substring(index+1).replace(".", "&#46;"));
+							search.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + i + "].descriptionLine2", "");
+						}
+					}
+				}
+				//add storage location
+				else if(fieldEntry.getKey() == DefaultWorldTracerService.WorldTracerField.SL){
+					if(fieldList != null && fieldList.size() >= 1){
+						search.setParameter("onHandBagRecord.onHandBag.storageLocation", RULES.get(DefaultWorldTracerService.WorldTracerField.SL).formatEntry(fieldList.get(0)).replace(".", "&#46;"));
+					}
+				}
+			}
+			search.setParameter("_flowExecutionKey", flowKey);
+			search.setParameter("flowExecutionKey_Passenger", flowKey);
+			search.setParameter("flowExecutionKey_OnhandBags", flowKey);
+			search.setParameter("onHandBagRecord.recordReference.airlineCode", data.getAirlineCode());
+			search.setParameter("onHandBagRecord.recordReference.stationCode", data.getStationCode());
+			
+			search.setParameter("userLang", "1");
+			search.setParameter("onHandBagRecord.tracingOption", "FULLTRACING");
+			search.setParameter("_eventId", "submit");
+			search.setParameter("bagType", "OnHand");
+			
+			try {
+				debugOut(search, "");
+				client.executeMethodWithPause(search, "INSERT OHD: INSERT (2)");
+				if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+					newLocation = search.getResponseHeader("location").getValue();
+				}
+				else{
+					logger.error("Close on-hand post method not redirect!");
+					throw new WorldTracerException("on-hand post method not redirect!");
+				}
+			}
+			catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to create ohd");
+			}
+			catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to create ohd");
+			}
+			finally {
+				search.releaseConnection();
+			}
+			//redirect to submit result page and get wt_id
+			
+			GetMethod redirect = new GetMethod(newLocation);
+			try {
+				client.executeMethod(redirect, "INSERT OHD: REDIRECT (3)");
+				responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+				//System.out.println("response body:" + responseBody);
+				//return true;
+			}
+			catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to create ohd");
+			}
+			catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to create ohd");
+			}
+			finally {
+				redirect.releaseConnection();
+			}
+			
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException(
+					"Communication error with WorldTracer", e);
+		}
+		String wt_id = null;
+		String errorString = "Submit failed.";
+		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Matcher succeMat = succePatt.matcher(responseBody);
+		
+		if(succeMat.find()){
+			wt_id = succeMat.group(1).replaceAll("&nbsp;", "").replaceAll("(\\(.*\\))", "");
+		}else{
+			succePatt = Pattern.compile("error = \'([^\']*)\'",Pattern.CASE_INSENSITIVE);
+			succeMat = succePatt.matcher(responseBody);
+			if(succeMat.find())
+				errorString = succeMat.group(1);
+		}
+		logger.info("onhandbag wt_id:" + wt_id);
+		if (wt_id != null && wt_id.length() >= 10) {
+			Ohd ohdResponse = new Ohd();
+			ohdResponse.setOhdId(wt_id);
+			response.setOhd(ohdResponse);
+			response.setSuccess(true);
+			return;
+		} else {
+			throw new WorldTracerException(errorString);
+		}
+	  
+  }
+
+
+	public void closeOhd(WorldTracerActionDTO dto, Ohd data,
+      WorldTracerResponse response) throws WorldTracerException {
+
+		if (data.getOhdId() == null) {
+			throw new WorldTracerException("Can't close ohd, no associated wt file");
+		}
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createOhdCloseFieldMap(data);
+
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate close ohd mapping");
+		}
+
+		if(data.getOhdId() == null || data.getOhdId().trim().length() < 1){
+			response.setSuccess(false);
+			throw new WorldTracerException("Incomplete data");
+		}
+		String responseBody = null;
+		try {
+
+			NameValuePair[] p1 = { new NameValuePair("_flowId", "closeonhandbagrecord-flow")};
+			String newLocation = startFlow(p1, "CLOSE OHD", 1);
+			PostMethod search = new PostMethod(WTRWEB_FLOW_URL);
+			NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
+			search.setQueryString(p2);
+			
+			search.setParameter("wtrCloseRequest.recordReferences[0].stationCode", data.getOhdId().substring(0,3));
+			search.setParameter("wtrCloseRequest.recordReferences[0].airlineCode", data.getOhdId().substring(3,5));
+			search.setParameter("wtrCloseRequest.recordReferences[0].recordId", data.getOhdId().substring(5));
+			search.setParameter("amendOption[0]", "noamend");
+			
+			//search.setParameter("_showAllDetailsInReadOnlyArea", "on");
+			search.setParameter("_eventId", "continue");
+			search.setParameter("wtrDisplayRequest.recordAdditionalInfo.fullRecord", "TRUE");
+			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.fullRecord", "on");
+			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.recordHistory", "on");
+			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.matchingHistory", "on");
+			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.SMSMessages", "on");
+			search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.internetMessages", "on");
+			
+			try {
+				debugOut(search, "");
+				client.executeMethodWithPause(search, "CLOSE OHD: CLOSE (2)");
+				if(search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || search.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+					newLocation = search.getResponseHeader("location").getValue();
+				}
+				else{
+					newLocation = "";
+					logger.error("close onHandBag postMethod not redirect!");
+					throw new WorldTracerException("unable to close ohd");
+				}
+			}
+			catch (HttpException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to close ohd", e);
+			}
+			catch (IOException e) {
+				logger.error("error", e);
+				throw new WorldTracerException("unable to close ohd", e);
+			}
+			finally {
+				search.releaseConnection();
+			}
+			//redirect to submit result page and get close signal
+			if(!"".equals(newLocation)){
+				GetMethod redirect = new GetMethod(newLocation);
+				try {
+					client.executeMethod(redirect, "CLOSE OHD: REDIRECT (3)");
+					responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+					//System.out.println("close onHandBag result:" + responseBody);
+				}
+				catch (HttpException e) {
+					logger.error("error", e);
+					throw new WorldTracerException("unable to close ohd", e);
+				}
+				catch (IOException e) {
+					logger.error("error", e);
+					throw new WorldTracerException("unable to close ohd", e);
+				}
+				finally {
+					redirect.releaseConnection();
+				}
+		    }
+			if (responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)") 
+					|| responseBody.toUpperCase().contains("FILE CLOSED") || responseBody.toUpperCase().contains("CLOSE FILE (FINISH)")){
+				response.setSuccess(true);
+				return;
+			} else {
+				logger.error("Close onHand bag error: \n" + responseBody);
+				throw new WorldTracerException();
+			}
+			
+		} catch (Exception e) {
+			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
+		}
+
+		
+	  
+  }
+
+	public void amendOhd(WorldTracerActionDTO dto, Ohd data,
+      WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		if (data.getOhdId() == null) {
+			throw new WorldTracerException("no associated worldtracer file");
+		}
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createOhdFieldMap(data);
+
+		if (fieldMap == null) {
+			throw new WorldTracerException("Unable to generate ohd mapping");
+		}
+		
+		String wt_ohd_id = data.getOhdId();
+
+		EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.AMEND_OHD);
+		NameValuePair[] p1 = { new NameValuePair("_flowId", "editonhandbagrecord-flow")};
+		String newLocation = startFlow(p1, "AMEND OHD", 1);
+		
+		String responseBody = null;
+		//if exists this wt_id
+		PostMethod getOnhand = new PostMethod(newLocation);
+		getOnhand.setParameter("_flowExecutionKey", flowKey);
+		getOnhand.setParameter("wtrDisplayRequest.recordReference.stationCode", wt_ohd_id.substring(0, 3));
+		getOnhand.setParameter("wtrDisplayRequest.recordReference.airlineCode", wt_ohd_id.substring(3, 5));
+		getOnhand.setParameter("wtrDisplayRequest.recordReference.recordId", wt_ohd_id.substring(5));
+		getOnhand.setParameter("resultsForm.sortOption", "recordReference");
+		getOnhand.setParameter("radio", "1");
+		getOnhand.setParameter("_eventId", "update");
+		try {
+			debugOut(getOnhand, "");
+			client.executeMethodWithPause(getOnhand, "AMEND OHD: LOAD OHD (2)");
+			if(getOnhand.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getOnhand.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = getOnhand.getResponseHeader("location").getValue();
+			}else{
+				logger.error("Get amend onhand details not redirect!");
+				throw new WorldTracerException("Get amend onhand details not redirect!");
+			}
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		finally {
+			getOnhand.releaseConnection();
+		}
+		GetMethod getWtDetails = new GetMethod(newLocation);
+		try {
+			client.executeMethodWithPause(getWtDetails, "AMEND OHD: GET OHD (3)");
+			if(getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || getWtDetails.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				logger.error("GetWtDetails method redirect again!");
+				throw new WorldTracerException("unable to amend ohd");
+			}else{
+				responseBody = getStringFromInputStream(getWtDetails.getResponseBodyAsStream());
+			}
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		finally {
+			getWtDetails.releaseConnection();
+		}
+		if(responseBody.toUpperCase().contains("NO MATCHING RECORDS FOUND")){
+			throw new WorldTracerException("wt_ohd_id not exists!");
+		}
+		Matcher m = FLOW_PATTERN.matcher(newLocation);
+		if(m.find()) {
+			flowKey = m.group(1).trim();
+		}
+		//add params to amend
+		PostMethod amendMethod = new PostMethod(WTRWEB_FLOW_URL);
+		DefaultWorldTracerService.WorldTracerField[] fields = DefaultWorldTracerService.WorldTracerField.values();
+		for(int k=0; k<fields.length; k++){
+			List<String> fieldList = fieldMap.get(fields[k]);
+			//add color type
+			if(fields[k] == DefaultWorldTracerService.WorldTracerField.CT){
+				if(fieldList != null && fieldList.size() >= 1){
+					String bagFace = fieldList.get(0);
+					String colorType = bagFace.substring(0, 2);
+					String bagType = bagFace.substring(2, 4);
+					String colorDesc = bagFace.substring(4, 7);
+					amendMethod.setParameter("onHandBagRecord.onHandBag.colorType.colorCode", colorType);
+					amendMethod.setParameter("onHandBagRecord.onHandBag.colorType.typeCode", bagType);
+					amendMethod.setParameter("onHandBagRecord.onHandBag.colorType.descriptionCodes", colorDesc);
+				}
+			}
+			//add bag(passenger) itinerary
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.FD){
+				int i = 0;
+				if(fieldList != null){
+					for(i = 0; i < fieldList.size(); i++){
+						String paxIntinery = fieldList.get(i);
+						String[] inti = paxIntinery.split("/");
+						String airlineCode = inti[0].substring(0, 2);
+						String flightNumber = inti[0].substring(2);
+						String flightDate = inti[1];
+						amendMethod.setParameter("onHandBagRecord.passenger.paxFlights["+ i +"].airlineCode", airlineCode);
+						amendMethod.setParameter("onHandBagRecord.passenger.paxFlights["+ i +"].flightNumber", flightNumber);
+						amendMethod.setParameter("onHandBagRecord.passenger.paxFlights["+ i +"].flightDate", flightDate);
+					}
+				}
+				for(int j=i; j<4; j++){
+					amendMethod.setParameter("onHandBagRecord.passenger.paxFlights["+ j +"].airlineCode", "");
+					amendMethod.setParameter("onHandBagRecord.passenger.paxFlights["+ j +"].flightNumber", "");
+					amendMethod.setParameter("onHandBagRecord.passenger.paxFlights["+ j +"].flightDate", "");
+				}
+			}
+			//add passenger routing
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.RT){
+				int originCount = 2;
+				if(fieldList != null){
+					for(int i = 0; i < fieldList.size(); i++){
+						String station = fieldList.get(i);
+						if(i <= 1){
+							//add first routing
+							amendMethod.setParameter("onHandBagRecord.onHandBag.route.passengerRoute["+ i +"]", station);
+						}else{
+							//add other routing								
+							amendMethod.setParameter("station__origin__field0" + originCount, fieldList.get(i-1));
+							amendMethod.setParameter("onHandBagRecord.onHandBag.route.passengerRoute["+ originCount +"]", station);
+							originCount++;
+						}							
+					}
+				}
+				for(int j=originCount; j<5; j++){
+					amendMethod.setParameter("station__origin__field0" + j, "");
+					amendMethod.setParameter("onHandBagRecord.onHandBag.route.passengerRoute["+ j +"]", "");
+				}
+			}
+			//add passenger initial
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.IT){
+				if(fieldList != null && fieldList.size() >= 1){
+					amendMethod.setParameter("onHandBagRecord.passenger.initials[0]", fieldList.get(0));
+				}else{
+					amendMethod.setParameter("onHandBagRecord.passenger.initials[0]", "");
+				}
+			}
+			//add passenger name. name cannot be deleted in world tracer
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.NM){
+				if(fieldList != null && fieldList.size() >= 1){
+					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(0));
+					amendMethod.setParameter("onHandBagRecord.passenger.names[0]", name);
+				}
+			}
+			//add passenger first name/title
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.PT){
+				if(fieldList != null && fieldList.size() >= 1){
+					String title = RULES.get(DefaultWorldTracerService.WorldTracerField.PT).formatEntry(fieldList.get(0));
+					amendMethod.setParameter("onHandBagRecord.passenger.title", title);
+				}else{
+					amendMethod.setParameter("onHandBagRecord.passenger.title", "");
+				}
+			}
+			//add passenger address on bag
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.AB){
+				if(fieldList != null && fieldList.size() >= 1){
+					String ab = RULES.get(DefaultWorldTracerService.WorldTracerField.AB).formatEntry(fieldList.get(0));
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagAddress.line1", ab.replace(".", "&#46;"));
+				}else{
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagAddress.line1", "");
+				}
+			}
+			//add passenger phones on bag
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.PN){
+				List<String> workPhoneList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TP);
+//				List<String> mobilePhoneList = fieldMap.get(WorldTracerService.WorldTracerField.CP);
+				String phone = "";
+				if(fieldList != null && fieldList.size() >= 1){
+					if(fieldList.get(0).length()>0)
+						phone = RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(fieldList.get(0)) + ",";
+				}
+				if(workPhoneList != null && workPhoneList.size() >= 1){
+					if(workPhoneList.get(0).length()>0){
+						phone += RULES.get(DefaultWorldTracerService.WorldTracerField.PN).formatEntry(workPhoneList.get(0));
+					}	
+				}
+				if(phone.endsWith(",")){
+					phone = phone.substring(0, phone.length()-1);
+				}
+				amendMethod.setParameter("onHandBagRecord.onHandBag.bagPhones[0]", phone);
+				
+//				if(mobilePhoneList != null && mobilePhoneList.size() >= 1){
+//					if(phone.equals("")){
+//						amendMethod.setParameter("onHandBagRecord.onHandBag.bagPhones[0]", mobilePhoneList.get(0));
+//					}else{
+//						amendMethod.setParameter("onHandBagRecord.onHandBag.bagPhones[1]", mobilePhoneList.get(0));
+//					}
+//				}
+
+			}				
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.CP){
+				if(fieldList != null && fieldList.size() >= 1){
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagPhones[1]", RULES.get(DefaultWorldTracerService.WorldTracerField.CP).formatEntry(fieldList.get(0)));
+				}
+			}
+			//add airline code and tagNumber: cannot be deleted
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.TN){
+				if(fieldList != null && fieldList.size() >= 1){
+					String airtag = fieldList.get(0);
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagTag.airlineCode", airtag.substring(0, 2));
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagTag.tagNumber", airtag.substring(2));
+				}else{
+					logger.info("Bag Tag Number in World Tracer can not be deleted if exists!");
+				}
+			}
+			//add brand information 
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.BI){
+				if(fieldList != null && fieldList.size() >= 1){
+					amendMethod.setParameter("onHandBagRecord.onHandBag.brandInfo.brandInformation", RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(0)));
+				}else{
+					amendMethod.setParameter("onHandBagRecord.onHandBag.brandInfo.brandInformation", "");
+				}
+			}
+			//add contents, contents cannot be deleted [COMPUTER/FSOKK/FSF PC.- BOOK/NEW BOOKS.- PHOTO/ERER PHOTO]
+			//Category cannot be changed. (If changed it would be added as new content in World Tracer.)
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.CC){
+				int i = 0;
+				if(fieldList != null && fieldList.size() >= 1){
+					String[] contents = fieldList.get(0).split(".- ");
+					for(i = 0; i < contents.length; i++){
+						int index = contents[i].indexOf("/");
+						amendMethod.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + i + "].category", contents[i].substring(0, index));
+						amendMethod.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + i + "].descriptionLine1", contents[i].substring(index+1).replace(".", "&#46;"));
+						amendMethod.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + i + "].descriptionLine2", "");
+						
+					}
+				}
+				for(int j=i; j<12; j++){
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + j + "].category", "");
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + j + "].descriptionLine1", "");
+					amendMethod.setParameter("onHandBagRecord.onHandBag.bagContents.bagItemsList[" + j + "].descriptionLine2", "");
+				}
+			}
+			//add storage location
+			else if(fields[k] == DefaultWorldTracerService.WorldTracerField.SL){
+				if(fieldList != null && fieldList.size() >= 1){
+					amendMethod.setParameter("onHandBagRecord.onHandBag.storageLocation", fieldList.get(0).replace(".", "&#46;"));
+				}else{
+					amendMethod.setParameter("onHandBagRecord.onHandBag.storageLocation", "");
+				}
+			}
+		}
+		amendMethod.setParameter("onHandBagRecord.recordReference.stationCode", wt_ohd_id.substring(0,3));
+		amendMethod.setParameter("onHandBagRecord.recordReference.airlineCode", wt_ohd_id.substring(3,5));
+		amendMethod.setParameter("onHandBagRecord.recordReference.recordId", wt_ohd_id.substring(5));
+		
+		amendMethod.setParameter("_eventId", "amend");
+		amendMethod.setParameter("bagType", "OnHand");
+		amendMethod.setParameter("_flowExecutionKey", flowKey);
+		try{
+			debugOut(amendMethod, "");
+			client.executeMethodWithPause(amendMethod, "AMEND OHD: AMEND (4)");
+			if(amendMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY 
+					|| amendMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
+				newLocation = amendMethod.getResponseHeader("location").getValue();
+			}else{
+				logger.error("Amend onhand method not redirect!");
+				throw new WorldTracerException("Amend onhand method not redirect!");
+			}
+		}catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		finally {
+			amendMethod.releaseConnection();
+		}
+		GetMethod redirect = new GetMethod(newLocation);
+		try {
+			client.executeMethod(redirect, "AMEND OHD: REDIRECT (5)");
+			responseBody = getStringFromInputStream(redirect.getResponseBodyAsStream());
+		}
+		catch (HttpException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		catch (IOException e) {
+			logger.error("error", e);
+			throw new WorldTracerException("unable to amend ohd");
+		}
+		finally {
+			redirect.releaseConnection();
+		}
+		if (responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")) {
+			logger.debug("OHD Amend Successfully: " + responseBody);
+			response.setSuccess(true);
+			return;
+		} else {
+			String errorString;
+			Pattern error_patt = Pattern.compile(
+					"error = '([^<>']*)'", Pattern.CASE_INSENSITIVE
+							| Pattern.DOTALL);
+			m = error_patt.matcher(responseBody);
+			if (m.find()) {
+				errorString = m.group(1);
+			} else {
+				errorString = "Unable to amend OHD. See logs for details";
+				logger.error("amend ohd response:" + responseBody);
+			}
+			throw new WorldTracerException(errorString);
+		}
+	  
+  }
 }

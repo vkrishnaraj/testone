@@ -15,6 +15,7 @@ import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.AbstractServiceManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerAlreadyClosedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.ConnectionPoolManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerClientPool;
@@ -174,7 +175,7 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 	
 	@Override
 	public WorldTracerResponse amendAhl(WorldTracerActionDTO dto, Ahl data,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, WorldTracerAlreadyClosedException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.amendAhl(dto, data, response);
 		return response;
@@ -190,7 +191,7 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse closeAhl(WorldTracerActionDTO dto, Ahl ahl,
-			WorldTracerResponse response) {
+			WorldTracerResponse response) throws WorldTracerException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.closeAhl(dto, ahl, response);
 		return response;

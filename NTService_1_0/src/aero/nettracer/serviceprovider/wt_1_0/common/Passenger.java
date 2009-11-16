@@ -83,6 +83,14 @@ public class Passenger {
 	public void setSalutation(int salutation) {
   	this.salutation = salutation;
   }
+	
+	public String getSalutationDescription() {
+		switch (salutation) {
+		case 10: return null;
+			
+		}
+		return null;
+	}
 
 
 
