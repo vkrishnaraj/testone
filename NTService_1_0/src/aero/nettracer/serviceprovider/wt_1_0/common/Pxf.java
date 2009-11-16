@@ -5,6 +5,15 @@ public class Pxf {
 	private PxfDetails[] pxfDetails;
 	private String[] teletype;
 	private String content;
+	private String sendingStation;
+
+	public String getSendingStation() {
+		return sendingStation;
+	}
+
+	public void setSendingStation(String sendingStation) {
+		this.sendingStation = sendingStation;
+	}
 
 	public int getDestination() {
 		return destination;
