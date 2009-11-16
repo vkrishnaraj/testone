@@ -18,12 +18,15 @@ import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerAlreadyClosedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.ConnectionPoolManager;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.NoActiveConnectionException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerClientPool;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerServiceImpl;
 
 public class WtrWebServiceManager extends AbstractServiceManager implements
 		ServiceManagerInterface {
+	private static final String WS_ERROR_STRING1 = "Could Not Decode String";
+	private static final String WS_ERROR_STRING2 = "Exception";
 	private static WtrWebServiceManager instance = null;
 
 	public static AbstractServiceManager getInstance() {
@@ -45,7 +48,13 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 			// Provide a Round-Robin approach to obtaining cron connections.
 			String strLoggedInConnection = dto.getParameterValue(ServiceConstants.USE_AVAILABLE_CONNECTIONS_IF_POSSIBLE);
 			if (strLoggedInConnection != null && strLoggedInConnection.length() > 0) {
-				Integer tmpKey = pool.getNextLoggedInKeyForCron();
+				Integer tmpKey = null;
+				try {
+					tmpKey = pool.getNextLoggedInKeyForCron();
+				} catch (NoActiveConnectionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (tmpKey != null) {
 					key = tmpKey;
 				}
@@ -111,15 +120,31 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 		if (client.getAccount().isCaptchaRequired()
 				&& cronUser) {
 			// Automatically determine the captcha value
+			
+			boolean retry = true;
+			int retries = 2;
 			loginWithCaptcha = true;
-			try {
-				client.getLogonPageAndCaptcha();
-			} catch (WorldTracerException e) {
-				e.printStackTrace();
-			}
+			
+			for (int i = 0; i < retries && retry == true; ++i) {
+				retry = false;
+				try {
+					client.getLogonPageAndCaptcha();
+				} catch (WorldTracerException e) {
+					e.printStackTrace();
+				}
 
-			captchaText = client.getAutoProcessCaptcha(client.getByteCaptcha());
-			if (captchaText == null) {
+				captchaText = client.getAutoProcessCaptcha(client
+						.getByteCaptcha());
+				// TODO: What is the error string
+				if (captchaText == null || captchaText.trim().length() == 0
+						|| captchaText.contains(WS_ERROR_STRING1)
+						|| captchaText.contains(WS_ERROR_STRING2)) {
+					// Retry
+					retry = true;
+				}
+			}
+			
+			if (captchaText == null || captchaText.trim().length() == 0 || captchaText.contains(WS_ERROR_STRING1) || captchaText.contains(WS_ERROR_STRING2)) {
 				return false;
 			}
 

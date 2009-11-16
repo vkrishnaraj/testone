@@ -1,5 +1,9 @@
 package aero.nettracer.serviceprovider.wt_1_0.services;
 
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpException;
+
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
@@ -133,10 +137,21 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				 response.setSuccess(false);
 				 WebServiceError error = new WebServiceError(ServiceConstants.COMMAND_NOT_PROPERLY_FORMATTED);
 			} catch (WorldTracerAlreadyClosedException e) {
-	      response.setSuccess(false);
-	      WebServiceError error = new WebServiceError(ServiceConstants.REFERENCED_OBJECT_CLOSED);
-	      e.printStackTrace();
-      }
+				response.setSuccess(false);
+				WebServiceError error = new WebServiceError(
+						ServiceConstants.REFERENCED_OBJECT_CLOSED);
+				e.printStackTrace();
+			} catch (HttpException e) {
+				response.setSuccess(false);
+				WebServiceError error = new WebServiceError(
+						ServiceConstants.UNEXPECTED_EXCEPTION);
+				e.printStackTrace();
+			} catch (IOException e) {
+				response.setSuccess(false);
+				WebServiceError error = new WebServiceError(
+						ServiceConstants.UNEXPECTED_EXCEPTION);
+				e.printStackTrace();
+			}
 		}
 		postProcess(dto, response);
 

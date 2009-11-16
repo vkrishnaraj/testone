@@ -1,5 +1,9 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares;
 
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpException;
+
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
@@ -14,6 +18,9 @@ import aero.nettracer.serviceprovider.wt_1_0.services.AbstractServiceManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ConnectionPoolManager;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ISharesClientPool;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ISharesHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.WorldTracerServiceImpl;
 
@@ -31,6 +38,22 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public boolean preProcess(WorldTracerActionDTO dto,
 			WorldTracerResponse response) {
+		ISharesClientPool pool = ConnectionPoolManager.getInstance().getPool(dto.getUser());
+		try {
+			ISharesHttpClient conn = (ISharesHttpClient) pool.borrowObject();
+			dto.setConnection(conn);
+			if (conn.isValidConnection() == false) {
+				conn.performLogon();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (dto.getConnection() == null) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -38,7 +61,15 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public boolean postProcess(WorldTracerActionDTO dto,
 			WorldTracerResponse response) {
-
+		ISharesClientPool pool = ConnectionPoolManager.getInstance().getPool(dto.getUser());
+		if (dto.getConnection() != null) {
+			try {
+				pool.returnObject(dto.getConnection());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return true;
 	}
 	
@@ -133,7 +164,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public WorldTracerResponse getActionFileCounts(WorldTracerActionDTO dto,
 			ActionFileRequestData data, WorldTracerResponse response)
-			throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.getActionFileCounts(dto, data, response);

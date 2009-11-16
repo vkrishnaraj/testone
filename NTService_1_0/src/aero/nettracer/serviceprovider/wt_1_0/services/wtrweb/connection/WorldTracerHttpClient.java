@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,6 @@ import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
@@ -92,9 +92,12 @@ public class WorldTracerHttpClient extends HttpClient implements
 		org.apache.commons.httpclient.protocol.ProtocolSocketFactory ssl = new SSLProtocolSocketFactory();
 		Protocol https = new Protocol("https", ssl, 443);
 		this.getHostConfiguration().setHost(account.getHost(), 443, https);
+
+		
 		HttpConnectionParams params = this.getHttpConnectionManager()
 				.getParams();
 		params.setConnectionTimeout(TWO_MINUTES);
+
 	}
 
 

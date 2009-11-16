@@ -17,7 +17,8 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 	
 	private static final Logger logger = Logger
 			.getLogger(WorldTracerClientPool.class);
-	private RoundRobinGenerator r = null;
+//	private RoundRobinGenerator r = null;
+	private AgeManagement ageMgmt = null;
 	private WorldTracerClientFactory f = null;
 
 	public WorldTracerClientPool(Profile profile) {
@@ -32,23 +33,29 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 		List<WorldTracerWebAccount> accounts = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		accounts = WorldTracerAccountDao.getByProfile(sess, profile.getId());
+		accounts = WorldTracerAccountDao.getWtWebByProfile(sess, profile.getId());
 		sess.close();
 		
 		this.setMaxActive(accounts.size());
-		this.r = new RoundRobinGenerator(accounts.size());
+		
+//		this.r = new RoundRobinGenerator(accounts.size());
 		WorldTracerClientFactory factory = new WorldTracerClientFactory(accounts);
 		this.setFactory(factory);
+		this.ageMgmt = new AgeManagement(new ArrayList(factory.getClientList().values()));
 		f = factory;
 	}
 	
-	public Integer getNextLoggedInKeyForCron() {
-		return r.getNextLoggedInKeyForCron(f.getClientList());
+	public Integer getNextLoggedInKeyForCron() throws NoActiveConnectionException {
+		return ageMgmt.getOldestConnection(true);
 	}
 
 	public Object borrowObject(Object obj) throws Exception {
-		if (obj == null || !r.validateKey(obj)) {
-			obj = r.getLeastConnnections();
+//		if (obj == null || !r.validateKey(obj)) {
+//			obj = r.getLeastConnnections();
+//		} 
+		
+		if (obj == null) {
+			obj = ageMgmt.getOldestConnection(false);
 		} 
 		
 		if (logger.isDebugEnabled()) {

@@ -1,8 +1,11 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.httpclient.HttpException;
 
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
@@ -15,39 +18,32 @@ import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ISharesHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
 
 
 public class WorldTracerServiceImpl implements WorldTracerService {
 
 	private WorldTracerActionDTO dto = null;
-	private ISharesConnection connection = null;
+	private ISharesHttpClient connection = null;
 	private String connectionType = "WM";
 	private boolean unitTest = false;
 	static Pattern commandResponsePattern = Pattern.compile("<PRE>((.*\\n)*.*)</PRE>", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
 
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
-		// TODO: Byron to define connection type
 		this.dto = dto;
+		connection = (ISharesHttpClient) dto.getConnection();
 	}
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto, boolean unitTest) {
-		// TODO: Byron to define connection type
 		this.dto = dto;
 		this.unitTest = unitTest;
 	}
 	
-	
-	
-	static String sendCommand(String command) throws CommandNotProperlyFormedException {
-		
-		
-		// TODO Byron to fill in with communication means
+	private String sendCommand(String methodName, String command) throws CommandNotProperlyFormedException, HttpException, IOException {
 		// Test for presence of any remaining {} characters and throw exception
-		testCommand(command);
-		// TODO: SEND
-		String response = "";
-		
+		command = testCommand(command);
+		String response = connection.sendCommand(methodName, command);
 		
 		Matcher m = commandResponsePattern.matcher(response);
 		if (m.find()) {
@@ -62,18 +58,22 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		String output = command;
 		for (String key: map.keySet()) {
 			String replaceValue = map.get(key);
-			if (replaceValue != null) output = output.replace("{" + key + "}", replaceValue);
+			try {
+				if (replaceValue != null) output = output.replaceAll("\\{" + key + "\\}", replaceValue);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return output;
 	}
 	
 
-	private static void testCommand(String command) throws CommandNotProperlyFormedException {
+	private static String testCommand(String command) throws CommandNotProperlyFormedException {
 		if (command.contains("{") || command.contains("}")) throw new CommandNotProperlyFormedException();
+		command = command.replaceAll("\\[.*\\]", "");
+		return command;
 	}
 	
-
-
 	public void reinstateAhl(WorldTracerActionDTO dto, Ahl ahl,
 			WorldTracerResponse response) throws CommandNotProperlyFormedException {
 		// DO NOT IMPLMENT
@@ -143,22 +143,28 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	 * @param data
 	 * @param response
 	 * @throws CommandNotProperlyFormedException 
+	 * @throws IOException 
+	 * @throws HttpException 
 	 */
 	public void getActionFileCounts(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException {
+			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
 		
 		// Prepare variables
+		String specificCommandType = "CXF";
 		boolean success = false;
 		
 		// If applicable, perform any pre-processing required to obtain a
 		// hashmap of field names
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("COMMAND_TYPE", connectionType);
+		map.put("COMMAND", specificCommandType);
+		map.put("CONNECTION_TYPE", connectionType);
 		map.put("STATION_CODE", data.getStation());
 		map.put("AIRLINE_CODE", data.getAirline());
+		map.put("AIRLINE_CODE", data.getAirline());
+		
 		
 		// Generate Command from Hash (Example means provided)
-		String command = "{COMMAND_TYPE} CXF {STATION_CODE}{AIRLINE_CODE}";
+		String command = "{CONNECTION_TYPE} {COMMAND} {STATION_CODE}{AIRLINE_CODE}";
 		command = inputValuesIntoCommand(map, command);
 		
 		// Send Command
@@ -166,7 +172,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (unitTest) {
 			responseTxt = MockISharesResponse.mockGetActionFileCountsCommand(command);
 		} else {
-			responseTxt = sendCommand(command);
+			responseTxt = sendCommand(specificCommandType, command);
 		}
 		
 		// Process Response and insert any necessary data into the response
@@ -215,8 +221,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public void getActionFileDetails(WorldTracerActionDTO dto,
 			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException {
 		// TODO SPECIAL CASE: MAY NOT NEED TO BE IMPLEMENTED
-		
-		
+
 	}
 
 

@@ -1,5 +1,9 @@
 package aero.nettracer.serviceprovider.wt_1_0.services;
 
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpException;
+
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
@@ -30,7 +34,7 @@ public interface ServiceManagerInterface {
 	public abstract WorldTracerResponse requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
 	public abstract WorldTracerResponse createBdo(WorldTracerActionDTO dto, Bdo bdo, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
 	public abstract WorldTracerResponse eraseActionFile(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
-	public abstract WorldTracerResponse getActionFileCounts(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
+	public abstract WorldTracerResponse getActionFileCounts(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException;
 	public abstract WorldTracerResponse getActionFileSummary(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
 	public abstract WorldTracerResponse getActionFileDetails(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
 	public abstract WorldTracerResponse sendFwdMessage(WorldTracerActionDTO dto, ForwardMessage msg, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException;
