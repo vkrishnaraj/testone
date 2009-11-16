@@ -239,16 +239,15 @@
 			<arg value="-d" />
 			<arg value="xmlbeans" />
 		</java>
-
-		<!-- copy services.xml to web-inf -->
-		
 		<!--
+		
+		
+		
 		<copy todir="${basedir}/web/WEB-INF/services/WTService/META-INF" file="${build.dir}/webservices/WTService/resources/services.xml" />
-		-->
+		
 		
 		
 
-		<!-- copy java files to src -->
 
 		<copy todir="${basedir}/src">
 			<fileset dir="${build.dir}/webservices/WTService/src">
@@ -270,12 +269,12 @@
 		
 		<jar destfile="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" basedir="${build.dir}/webservices/WTService/temp">
 		</jar>
-		
+		 
 
 		<move todir="${basedir}/web/WEB-INF/lib" file="${build.dir}/webservices/WTService/WorldTracerService_1_0.jar" />
 
-		<!-- clean up -->
-		<!--
+		
+		
 		<delete dir="${build.dir}/webservices/WTService/temp" />
 		<delete dir="${build.dir}/webservices/WTService/resources" />
 		<delete dir="${build.dir}/webservices/WTService/src" />
