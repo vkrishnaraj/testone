@@ -131,7 +131,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse eraseActionFile(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.eraseActionFile(dto, data, response);
 		return response;
@@ -147,7 +147,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse requestOhd(WorldTracerActionDTO dto, RequestOhd data,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.requestOhd(dto, data, response);
 		return response;
@@ -155,7 +155,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.requestQuickOhd(dto, data, response);
 		return response;
@@ -206,7 +206,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.placeActionFile(dto, pxf, response);
 		return response;
