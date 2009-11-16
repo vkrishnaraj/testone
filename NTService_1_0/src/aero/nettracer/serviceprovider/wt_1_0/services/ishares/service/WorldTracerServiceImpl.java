@@ -449,26 +449,21 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Send Command
 		String responseTxt = null;
 		if (unitTest) {
-			responseTxt = MockISharesResponse.mockGetActionFileCountsCommand(command);
+			responseTxt = MockISharesResponse.mockPxfCommand(command);
 		} else {
+			int i = 1/0;
 			responseTxt = sendCommand("PXF", command);
 		}
 		
 		// Process Response and insert any necessary data into the response
 		// object & set success variable if successful
 		// update here for erasing Action File
-		ActionFileCount[] counts = ISharesResponseParser.processActionfileResponse(responseTxt);
-		response.setCounts(counts);
-		success = true;
-		
+
 		// On success, set success to true (defaults to false)
-		if (success) {
+		if (responseTxt.contains("-OK-")) {
 			response.setSuccess(true);
 		}
-		
 	}
-
-
 }
 
 
