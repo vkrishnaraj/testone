@@ -36,11 +36,20 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private ISharesHttpClient connection = null;
 	private String connectionType = "WM";
 	private boolean unitTest = false;
+	private int unitTestNumber = 0;
+	public static final int UNIT_TEST_SUCCESS = 0;
+	public static final int UNIT_TEST_FAILURE = 1;
 	static Pattern commandResponsePattern = Pattern.compile("<PRE>((.*\\n)*.*)</PRE>", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
 
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 		this.dto = dto;
 		connection = (ISharesHttpClient) dto.getConnection();
+	}
+	
+	public WorldTracerServiceImpl(WorldTracerActionDTO dto, boolean unitTest, int unitTestNumber) {
+		this.dto = dto;
+		this.unitTest = unitTest;
+		this.unitTestNumber = unitTestNumber;
 	}
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto, boolean unitTest) {
@@ -225,7 +234,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Send Command
 		String responseTxt = null;
 		if (unitTest) {
-			responseTxt = MockISharesResponse.mockGetActionFileCountsCommand(command);
+			switch (unitTestNumber) {
+				case UNIT_TEST_SUCCESS: 
+					responseTxt = MockISharesResponse.mockExfSuccessCommand(command);
+					break;
+				case UNIT_TEST_FAILURE:
+					responseTxt = MockISharesResponse.mockExfFailureCommand(command);
+					break;
+			}
+			responseTxt = MockISharesResponse.mockExfSuccessCommand(command);
 		} else {
 			responseTxt = sendCommand("EXF", command);
 		}
@@ -233,14 +250,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Process Response and insert any necessary data into the response
 		// object & set success variable if successful
 		// update here for erasing Action File
-		ActionFileCount[] counts = ISharesResponseParser.processActionfileResponse(responseTxt);
-		response.setCounts(counts);
-		success = true;
 		
 		// On success, set success to true (defaults to false)
-		if (success) {
+		if (responseTxt.contains("-OK-")) {
 			response.setSuccess(true);
 		}
+
 		
 	}
 

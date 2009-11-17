@@ -107,6 +107,54 @@ public class ISharesTestCases {
 		int i = 0;
 	}
 	
+	@Test
+	public void testEraseSuccessActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
+		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
+
+		ActionFileRequestData payload = new ActionFileRequestData();
+		payload.setStation("XAX");
+		payload.setDay(1);
+		payload.setNumber(1);
+		payload.setType("AA");
+		
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, null, payload, true, null);
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
+		
+		// Perform Action
+		impl.eraseActionFile(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(true, response.isSuccess());
+	}	
 	
-	
+
+	@Test
+	public void testEraseFailureActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
+		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
+
+		ActionFileRequestData payload = new ActionFileRequestData();
+		payload.setStation("XAX");
+		payload.setDay(1);
+		payload.setNumber(1);
+		payload.setType("AA");
+		
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, null, payload, true, null);
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_FAILURE);
+		
+		// Perform Action
+		impl.eraseActionFile(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(false, response.isSuccess());
+	}	
+
+
 }
