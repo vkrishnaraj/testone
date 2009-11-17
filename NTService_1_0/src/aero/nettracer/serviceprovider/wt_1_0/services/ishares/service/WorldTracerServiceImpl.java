@@ -242,7 +242,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					responseTxt = MockISharesResponse.mockExfFailureCommand(command);
 					break;
 			}
-			responseTxt = MockISharesResponse.mockExfSuccessCommand(command);
 		} else {
 			responseTxt = sendCommand("EXF", command);
 		}

@@ -74,7 +74,7 @@ public class ISharesTestCases {
 	public void testPlaceActionFileFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
 		
 		// Create Payload & Type
-		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
+		WorldTracerActionType type =  WorldTracerActionType.PLACE_ACTION_FILE;
 		Pxf payload = new Pxf();
 		payload.setContent("TEXT CONTENT");
 		payload.setDestination(1);
@@ -108,13 +108,14 @@ public class ISharesTestCases {
 	}
 	
 	@Test
-	public void testEraseSuccessActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
+	public void testEraseSuccessActionFile() throws CommandNotProperlyFormedException, HttpException, IOException {
 		
 		// Create Payload & Type
-		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
+		WorldTracerActionType type =  WorldTracerActionType.ERASE_ACTION_FILE;
 
 		ActionFileRequestData payload = new ActionFileRequestData();
 		payload.setStation("XAX");
+		payload.setAirline("US");
 		payload.setDay(1);
 		payload.setNumber(1);
 		payload.setType("AA");
@@ -136,10 +137,11 @@ public class ISharesTestCases {
 	public void testEraseFailureActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
 		
 		// Create Payload & Type
-		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
+		WorldTracerActionType type =  WorldTracerActionType.ERASE_ACTION_FILE;
 
 		ActionFileRequestData payload = new ActionFileRequestData();
 		payload.setStation("XAX");
+		payload.setAirline("US");
 		payload.setDay(1);
 		payload.setNumber(1);
 		payload.setType("AA");
