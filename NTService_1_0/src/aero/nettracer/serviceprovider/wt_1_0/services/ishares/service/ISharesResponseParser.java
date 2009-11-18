@@ -7,11 +7,12 @@ import java.util.regex.Pattern;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 
 public class ISharesResponseParser {
+	
+	private static Pattern p = Pattern.compile("^([A-Z]{2})\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)");
+	
 	static ActionFileCount[] processActionfileResponse(String responseTxt) {
 		String[] list = responseTxt.split("\n");
 		ArrayList<ActionFileCount> counts = new ArrayList<ActionFileCount>();
-
-		Pattern p = Pattern.compile("^([A-Z]{2})\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)");
 
 		for (String string : list) {
 			Matcher m = p.matcher(string);
