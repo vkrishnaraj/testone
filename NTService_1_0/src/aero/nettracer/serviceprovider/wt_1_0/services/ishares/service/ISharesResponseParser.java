@@ -9,7 +9,10 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 public class ISharesResponseParser {
 	
 	private static Pattern p = Pattern.compile("^([A-Z]{2})\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)");
-	
+	private static final Pattern AHL_PATT = Pattern.compile("(?:\\bAHL\\s+|A/|FILE\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern OHD_PATT = Pattern.compile("(?:\\bOHD\\s+|O/|ON-HAND\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern PERCENT_PATT = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
+
 	static ActionFileCount[] processActionfileResponse(String responseTxt) {
 		String[] list = responseTxt.split("\n");
 		ArrayList<ActionFileCount> counts = new ArrayList<ActionFileCount>();
@@ -40,5 +43,32 @@ public class ISharesResponseParser {
 			}
 		}
 		return counts.toArray(new ActionFileCount[counts.size()]);
+	}
+	
+	private static double parsePercentMatch(String content) {
+		if(content == null) return 0.0D;
+		Matcher m = PERCENT_PATT.matcher(content);
+		if(m.find()) {
+			return Double.parseDouble(m.group(1));
+		}
+		return 0.0D;
+	}
+	
+	private static String parseAhlId(String content) {
+		if(content == null) return null;
+		Matcher m = AHL_PATT.matcher(content);
+		if(m.find()) {
+			return m.group(1);
+		}
+		return "";
+	}
+
+	private static String parseOhdId(String content) {
+		if(content == null) return null;
+		Matcher m = OHD_PATT.matcher(content);
+		if(m.find()) {
+			return m.group(1);
+		}
+		return "";
 	}
 }
