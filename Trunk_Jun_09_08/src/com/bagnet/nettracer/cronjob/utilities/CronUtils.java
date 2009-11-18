@@ -11,7 +11,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -23,17 +22,17 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.actions.BillingAction;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.dto.BillingDTO;
 import com.bagnet.nettracer.tracing.forms.BillingForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 
 public class CronUtils {
@@ -295,12 +294,92 @@ public class CronUtils {
 		this.wtxBmo = wtxBmo;
 	}
 	
+	public void hourlySqlServerStatusCheck() {
+		ArrayList<String> alerts = new ArrayList<String>();
+		
+		int pendingSize = checkPendingSize();
+		if (pendingSize > 15) {
+			alerts.add("Pending Size: " + pendingSize);
+		}
+		
+		int lastSequentialFailures = checkSQLServerSequentialFailures();
+		if (lastSequentialFailures > 20) {
+			alerts.add("Failures (max 50): " + lastSequentialFailures);
+		}
+		
+		if (alerts.size() > 0) {
+			StringBuffer output = new StringBuffer();
+			for (String alert: alerts) {
+				output.append(alert + "\n");
+			}
+			
+			try {
+				Company company = CompanyBMO.getCompany(companyCode);
+				HtmlEmail he = new HtmlEmail();			
+				he.setHostName(company.getVariable().getEmail_host());
+				he.setSmtpPort(company.getVariable().getEmail_port());
+				he.setFrom("support@nettracer.aero");
+				ArrayList toList = new ArrayList();
+				String toString = PropertyBMO.getValue("ALERT_SMS_EMAILS");
+				toList.add(new InternetAddress("support@nettracer.aero"));
+				for (String sms: toString.split(",")) {
+					toList.add(new InternetAddress(sms));
+				}
+				
+				he.setTo(toList);
+				he.setSubject("Alert: " + companyCode);
+				he.setHtmlMsg(output.toString());
+				System.out.println(output.toString());
+				he.setCharset("UTF-8");
+				he.send();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	// TODO Auto-generated method stub	
+	private int checkSQLServerSequentialFailures() {
+		
+		String sql = "SELECT top 50 wtq_status FROM wt_queue " +
+		"ORDER BY CREATEDATE DESC";
+		Session sess = HibernateWrapper.getSession().openSession();
+		
+		SQLQuery query = sess.createSQLQuery(sql);
+		query.addScalar("wtq_status", Hibernate.STRING);
+		
+		List<String> list = (List<String>) query.list();
+		
+		int sequentialFails = 0;
+		for (String str: list) {
+			if (str.equals(WorldTracerQueue.WtqStatus.SUCCESS.name())) {
+				sequentialFails = 0;
+				break;
+			}  else if (str.equals(WorldTracerQueue.WtqStatus.FAIL.name())) {
+				sequentialFails++;
+			}
+		}
+		
+		sess.close();
+		return sequentialFails;
+	}
+
+	private int checkPendingSize() {
+		String sql = "SELECT count(*) as icount FROM wt_queue " +
+		"WHERE wtq_status = 'PENDING'";
+		Session sess = HibernateWrapper.getSession().openSession();
+		SQLQuery query = sess.createSQLQuery(sql);
+		List<Integer> list = (List<Integer>) query.list();
+		sess.close();
+		return ((Integer)list.get(0)).intValue();
+	}
 	
 	public void emailWtTransactions() {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		Calendar day = new GregorianCalendar();
 		StringBuilder output = new StringBuilder();
-		
+			
 		try{
 			for (int i =0; i < 3; ++i) {
 				String sql = "select wtq_action, wtq_status, count(*) as count from wt_queue " +
@@ -322,7 +401,11 @@ public class CronUtils {
 				output.append("<b>WorldTracer Transactions: " + d1.toString() + " to " + d2.toString() + "</b><br />");
 				output.append("<table>");
 				for (Object[] x: list) {
-					output.append("<tr>");
+					if (((String)(x[1])).contains("PENDING")) {
+						output.append("<tr bgcolor=\"lightred\">");
+					} else {
+						output.append("<tr>");
+					}
 					output.append("<td>" + x[0] + "</td>");
 					output.append("<td>" + x[1] + "</td>");
 					output.append("<td>" + x[2] + "</td>");

@@ -278,7 +278,7 @@ private boolean isNameMatch(String lastname, String name) {
 		return false;
 	}
 	lastname = lastname.trim().replaceAll("\\s+", " ");
-	name = name.trim().replaceAll("\\s+", "");
+	name = name.trim().replaceAll("\\s+", " ");
 	return lastname.equalsIgnoreCase(name); 
 }
  	

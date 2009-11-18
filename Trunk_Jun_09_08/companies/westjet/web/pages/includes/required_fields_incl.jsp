@@ -136,11 +136,33 @@
 	    currentElement.focus();
 	    return false;
 	  }
-	} else if (currentElementName.indexOf("address1") != -1) {
+	} else if (currentElementName.indexOf("lastname") != -1) {  
+	      if (currentElement.value.length == 0)
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.last_name") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	  } else if (currentElementName.indexOf("address1") != -1) {
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
-      } 
+      }
+
+	  else if (currentElementName.indexOf("addresses[0].email") != -1) {  
+	      if (currentElement.value.length == 0)
+	      {
+	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.email") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+
+	      if (currentElement.value.indexOf("@noemail.com") != -1) {
+	    	  var emailCustomer = document.getElementById("email_customer");
+	    	  emailCustomer.checked = false;
+	      }
+	  }
+     
       else if (currentElementName.indexOf("nonrevenue") != -1) {  
         if (currentElement.value != 0)
         {
@@ -195,8 +217,16 @@
       else if (currentElementName.indexOf("].color") != -1) {
     	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
       }
-
-        
+      else if (formType != 'pilfered' && formType != 'damaged' && currentElementName.indexOf("].description") != -1)
+      {  
+        if (currentElement.value.length == 0)
+        {
+          alert("<%= (String)myMessages.getMessage(myLocale, "colname.description") %>" + 
+          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
     } 
     
     for (var j=0;j<addressIndices.length;j++) {
@@ -378,6 +408,41 @@
 	  }
 	  if(invCount <= 3 && !isAware) {
 	    isAware = confirm("An explanatory remark must be entered when reporting baggage with less than 3 content fields. Would you like to continue?");
+	    document.forms[0].notifiedOfRequirements.value = true;
+	    return isAware;
+	  }
+	  return true;
+	}
+
+  function checkDeleteCount(bagNum) {
+	  inputs = document.getElementsByTagName("input");
+	  var invCount = 0;
+	  for(i = 0; i < inputs.length; i++) {
+	    if(inputs[i].name.indexOf("deleteinventory_" + bagNum) == 0) {
+	      invCount ++;
+	      if(invCount >= 4) break;
+	    }
+	  }
+	  if(invCount <= 3 && !isAware) {
+	    isAware = confirm("An explanatory remark must be entered when reporting baggage with no content fields. Would you like to continue?");
+	    document.forms[0].notifiedOfRequirements.value = true;
+	    return isAware;
+	  }
+	  return true;
+	}
+
+
+  function checkOhdDeleteCount() {
+	  inputs = document.getElementsByTagName("input");
+	  var invCount = 0;
+	  for(i = 0; i < inputs.length; i++) {
+	    if(inputs[i].name.indexOf("deleteItem[") == 0) {
+	      invCount ++;
+	      if(invCount > 1) break;
+	    }
+	  }
+	  if(invCount <= 1 && !isAware) {
+	    isAware = confirm("An explanatory remark must be entered when reporting baggage with no content fields. Would you like to continue?");
 	    document.forms[0].notifiedOfRequirements.value = true;
 	    return isAware;
 	  }

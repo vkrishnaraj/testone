@@ -11,11 +11,11 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
 public class PropertyBMO {
-	
+
 	private static Logger logger = Logger.getLogger(PropertyBMO.class);
-	
+
 	private static ConcurrentHashMap<String, List<String>> propCache = new ConcurrentHashMap<String, List<String>>();
-	
+
 	// PROPERTIES USED TO LIMIT STATIONS TO CODE TO
 	public static final String PROPERTY_LIMIT_LD_STATIONS = "losscode.ld.limitstations";
 	public static final String PROPERTY_LIMIT_MISSING_STATIONS = "losscode.missing.limitstations";
@@ -41,10 +41,18 @@ public class PropertyBMO {
 	public static final String PROPERTY_DEFAULT_OHD_SEARCH_STATUS = "default.ohd.search.status";
 	public static final String PROPERTY_PCN_ENABLED = "pcn.enabled";
 	public static final String PROPERTY_TELEX_PRINTER = "telex.printer";
-	
-	
-	
-	
+
+	public static final String PROPERTY_WT_CAPTCHA = "wt.captcha";
+	public static final String RESERVATION_HOURS_FORWARD = "reservation.hours.forward";
+	public static final String RESERVATION_HOURS_BACK = "reservation.hours.backward";
+	public static final String PROPERTY_NT_RES_PASSWORD = "nt.res.password";
+	public static final String PROPERTY_NT_RES_USERNAME = "nt.res.username";
+	public static final String PROPERTY_NT_RES_OSI_ON = "nt.res.osi.on";
+
+	public static final String PROPERTY_NT_BOOKING_ENDPOINT = "booking.nt.endpoint";
+
+	public static final String HIGH_PRIORITY_PAX_COMMUNICATION_HOURS = "high.priority.pax.com.hours";
+
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 
@@ -102,5 +110,13 @@ public class PropertyBMO {
 	
 	public static void resetCache() {
 		propCache.clear();
+	}
+
+	public static int getValueAsInt(String keyVal) {
+		try {
+			return Integer.parseInt(getValue(keyVal));
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 }

@@ -23,6 +23,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class ActionFileDetailAction extends Action {
 	
@@ -78,6 +79,15 @@ public class ActionFileDetailAction extends Action {
 		} else {
 			agentStation = user.getStation();
 		}
+		
+		WorldTracerService service = SpringUtils.getWorldTracerService();
+		if (service.getWtConnector().doesUserNeedToEnterCaptcha(false)) {
+			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
+			response.sendRedirect("wtCaptcha.do");
+			return null;
+		}
+
+		
 		ActionMessages errors = new ActionMessages();
 		
 		String companyCode = user.getCompanycode_ID();

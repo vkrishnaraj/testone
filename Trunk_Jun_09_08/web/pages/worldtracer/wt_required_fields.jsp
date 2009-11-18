@@ -283,7 +283,7 @@
       var index = bagIndices[j] * 20;
       var contents = document.getElementById("inventoryList[" + index + "].description");
             
-      if (!contents) {
+      if (!contents && reqContentFields) {
         alert("<%=(String) myMessages.getMessage(myLocale,
           "colname.key_contents")%>" + " <%=(String) myMessages.getMessage(myLocale,
           "error.validation.isRequired")%>");

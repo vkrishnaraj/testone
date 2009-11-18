@@ -24,7 +24,7 @@
   }
 %>
   
-  <%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -404,6 +404,20 @@
           <a href="#"><bean:message key="link.to_top" /></a>
           <br>
           <br>
+          
+
+<c:if test="${!empty incidentForm.incident_ID and !empty incidentObj and incidentForm.incident_ID == incidentObj.incident_ID}">
+<%
+
+      boolean bIncidentChecklist = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST, a);
+      boolean bIncidentChecklistReadOnly = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY, a);
+      if (bIncidentChecklist || bIncidentChecklistReadOnly) {
+%>
+          <jsp:include page="/pages/includes/auto_checklist_incl.jsp" />
+<% 
+      }
+%>
+</c:if>
           
           <jsp:include page="/pages/includes/contactinfo_incl.jsp" />
           

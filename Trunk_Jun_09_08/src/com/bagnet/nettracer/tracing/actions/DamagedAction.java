@@ -342,6 +342,9 @@ public class DamagedAction extends CheckedAction {
 		} else {
 			// prepopulate
 			TracerUtils.populateIncident(theform, request, TracingConstants.DAMAGED_BAG);
+			IncidentForm thenewform = (IncidentForm)session.getAttribute("incidentForm");
+			thenewform.setFaultcompany_id(user.getCompanycode_ID());
+
 			request.setAttribute("newform", "1");
 			
 			ActionMessage error = null;

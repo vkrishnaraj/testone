@@ -3,18 +3,14 @@ package com.bagnet.nettracer.cronjob.bmo;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-
-import static org.hibernate.criterion.Restrictions.*;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
-import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 
 public class WTQueueBmo extends HibernateDaoSupport {
@@ -39,6 +35,7 @@ public class WTQueueBmo extends HibernateDaoSupport {
 		cri.createCriteria("agent").add(Restrictions.eq("companycode_ID", company));
 		cri.add(Restrictions.eq("status", WtqStatus.PENDING));
 		cri.setProjection(Projections.property("wt_queue_id"));
+		cri.addOrder(Order.asc("wt_queue_id"));
 		return cri.list();
 	}
 

@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.actions.wt;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,8 +25,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
-import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
+import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class ActionFileCountAction extends Action {
 
@@ -83,6 +85,16 @@ public class ActionFileCountAction extends Action {
 		} else {
 			agentStation = user.getStation();
 		}
+		
+		
+		// CHANGES BEGINNING HERE
+		WorldTracerService service = SpringUtils.getWorldTracerService();
+		if (service.getWtConnector().doesUserNeedToEnterCaptcha(false)) {
+			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
+			response.sendRedirect("wtCaptcha.do");
+			return null;
+		}
+		// CHANGES ENDING HERE
 
 		String companyCode = user.getCompanycode_ID();
 		ActionFileManager afm = SpringUtils.getActionFileManager();

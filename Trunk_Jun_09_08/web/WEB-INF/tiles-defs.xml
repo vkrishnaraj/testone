@@ -23,6 +23,10 @@
   	<definition name="manualQueue" path="/pages/worldtracerqueue/queue.jsp">
     </definition>
   
+ 	<definition name="incidentchecklist" path="/pages/includes/incident_checklist.jsp">
+        <put name="center"   value="/pages/includes/incident_checklist.jsp"/>
+    </definition>
+    
 	<definition name="homepage" path="/deployment/main/layouts/main_layout.jsp">
         <put name="center"   value="/pages/login/center.jsp"/>
     </definition>
@@ -45,6 +49,18 @@
     
     <definition name="customer_comments" extends="user_menu">
         <put name="center"  value="/pages/others/customer_comments.jsp"/>
+    </definition>
+    
+    <definition name="auto_checklist_step_one" extends="user_menu">
+        <put name="center"  value="/pages/others/auto-checklist-demo-step1.jsp"/>
+    </definition>
+    
+    <definition name="pax_communication" extends="user_menu">
+        <put name="center"  value="/pages/others/pax_communication.jsp"/>
+    </definition>
+    
+    <definition name="list_new_pax_communication" extends="user_menu">
+        <put name="center"  value="/pages/taskmanager/list_new_pax_communication.jsp"/>
     </definition>
     
     <definition name="insert_success" extends="user_menu">
@@ -279,6 +295,10 @@
     
     <definition name="view_actionfile_count" extends="user_menu">
     	<put name="center" value="/pages/worldtracer/actionfile_count.jsp"/>
+    </definition>
+    
+    <definition name="enter_captcha" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/enter_captcha.jsp"/>
     </definition>
     
      <definition name="view_actionfile_summary" extends="user_menu">

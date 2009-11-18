@@ -468,6 +468,8 @@ public class BagService {
 			String configpath = realpath + "/WEB-INF/classes/";
 			String imagepath = realpath + "/deployment/main/images/nettracer/";
 
+			
+			
 			// fault station
 			if(theform.getFaultstation_id() == 0) {
 				// default to assigned station

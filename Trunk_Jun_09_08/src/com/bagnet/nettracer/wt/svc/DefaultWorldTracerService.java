@@ -112,6 +112,8 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			wt_id = wtConnector.insertIncident(fieldMap,incident.getStationassigned().getCompany().getCompanyCode_ID(), incident.getStationassigned().getWt_stationcode());
 
 		} catch (Exception e) {
+			logger.error("Full exception: ", e);
+			e.printStackTrace();
 			if (e instanceof WorldTracerException) {
 				throw (WorldTracerException) e;
 			} else {
@@ -1135,6 +1137,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	public void setWtConnector(WorldTracerConnector wtConnector) {
 		this.wtConnector = wtConnector;
+		logger.info("Setting wtConnector...");
 	}
 
 	private String wtPhone(String rawText) {

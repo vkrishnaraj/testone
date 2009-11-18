@@ -118,5 +118,9 @@
 	<classpathentry kind="lib" path="lib/client-b6/JetBlueReservation.jar"/>
 	<classpathentry kind="lib" path="lib/jars/htmlparser-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-pool-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jars/ProcessImage3-test-client.jar"/>
+	<classpathentry kind="lib" path="lib/client-b6/ReservationService_1_0-test-client.jar"/>
+	<classpathentry kind="lib" path="lib/jars/ReservationService_1_0-test-client.jar"/>
+	<classpathentry kind="lib" path="lib/jars/PaxView_1_1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

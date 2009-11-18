@@ -44,6 +44,7 @@ import com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 /**
  * @author Administrator
@@ -1533,6 +1534,56 @@ public class OHDUtils {
 		}
 	}
 	
-	
+	public static OHD getBagTagNumberIncomingToStation(String bagTagNumber, Station foundAtStation) {
+
+		OHD result = null;
+		
+		List<OHD_Log> list = null;
+		Session sess = null;
+		try {
+			
+			sess = HibernateWrapper.getSession().openSession();
+			StringBuffer sql = new StringBuffer(512);
+			
+		
+			
+			sql.append("select log from com.bagnet.nettracer.tracing.db.OHD_Log log");
+			sql.append(" where 1=1");
+			sql.append(" and log.destStationCode = :station_ID");
+			sql.append(" and (log.ohd.claimnum = :claimnum1");
+			sql.append(" or log.ohd.claimnum = :claimnum2)");
+			sql.append(" and log.log_status = :status");
+			
+			Query q = sess.createQuery(sql.toString());
+
+			q.setInteger("station_ID", foundAtStation.getStation_ID());
+			q.setString("claimnum1", bagTagNumber);
+			
+			String twoCharBagTag = LookupAirlineCodes.getTwoCharacterBagTag(bagTagNumber);
+			
+			q.setString("claimnum2", twoCharBagTag);
+			q.setInteger("status", TracingConstants.LOG_NOT_RECEIVED);
+			
+			list = q.list();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		if (list != null) {
+			if (list.size() == 1) {
+				result = list.get(0).getOhd();
+			}
+		}
+		return result;
+	}
 	
 }

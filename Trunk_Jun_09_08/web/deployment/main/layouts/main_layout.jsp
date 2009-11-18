@@ -43,13 +43,20 @@ response.addDateHeader("Expires", -1);
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/designScripts.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/date.js"></script>
+
+
 <logic:present name="user" scope="session">
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-1.3.2.min.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-ui-1.7.2.custom.min.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.form.js"></script>
+<link href="<%=request.getContextPath()%>/deployment/main/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
+
 <!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
 </logic:present>
-<link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
-<link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
-<link href="<%=request.getContextPath()%>/deployment/main/css/styles.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/deployment/main/css/styles.css" rel="stylesheet" type="text/css" />
 
 
 <logic:present name="user" scope="session">
@@ -299,7 +306,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
       <table width="100%" border="0">
       <tr><td><div id="copyright">
       <bean:message key="copyright.line1"/><br/>
-    <bean:message key="copyright.line2"/></div></td> 
+    <bean:message key="copyright.line2"/></div><div id="dialog"><div id="dialog-inner-content"></div></div></td> 
       <td align="right" width="1">
             <bean:message key="footer.current_version"/>-<%= TracerProperties.getInstanceLabel() %>
       </td>

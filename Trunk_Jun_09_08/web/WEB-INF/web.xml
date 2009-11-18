@@ -97,6 +97,10 @@
  </servlet>
  <!-- web service client for testing -->
  <servlet>
+  <servlet-name>showCaptcha</servlet-name>
+  <servlet-class>com.bagnet.nettracer.servlets.showCaptcha</servlet-class>
+ </servlet>
+ <servlet>
   <servlet-name>showImage</servlet-name>
   <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
  </servlet>
@@ -141,6 +145,10 @@
  <servlet-mapping>
   <servlet-name>showImage</servlet-name>
   <url-pattern>/showImage</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>showCaptcha</servlet-name>
+  <url-pattern>/showCaptcha</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>ViewLog</servlet-name>

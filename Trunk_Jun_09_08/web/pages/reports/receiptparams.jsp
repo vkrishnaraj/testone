@@ -18,7 +18,8 @@
 boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.getParameter("toprint"));
  %>
  
-<SCRIPT LANGUAGE="JavaScript">
+
+<%@page import="org.apache.struts.util.LabelValueBean"%><SCRIPT LANGUAGE="JavaScript">
   
 	
 	function generateReceipt(frm) {
@@ -164,9 +165,13 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
                     :
                   </td>
                   <td>
+                  	<%
+                  		Agent agent = (Agent) request.getSession().getAttribute("user");
+                  		String userLocale = agent.getDefaultlocale();
+                  	%>
                     <select name="language" class="dropdown">
                       <logic:iterate id="locale" name="receiptLocaleList" scope="session">
-                        <option value='<bean:write name="locale" property="value"/>'>
+                        <option value='<bean:write name="locale" property="value"/>' <%=(((LabelValueBean)locale).getValue().equals(userLocale)? "selected" : "") %>>
                         <bean:write name="locale" property="label" />
                       </logic:iterate>
                     </select>

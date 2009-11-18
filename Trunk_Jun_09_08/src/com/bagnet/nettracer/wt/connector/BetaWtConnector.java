@@ -1272,7 +1272,19 @@ public class BetaWtConnector implements WorldTracerConnector {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+	@Override
+	public boolean doesUserNeedToEnterCaptcha(boolean a) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void returnUserCaptcha(String text) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public String sendPxf(WtqRequestPxf pxf) throws WorldTracerException {
 		// TODO Auto-generated method stub

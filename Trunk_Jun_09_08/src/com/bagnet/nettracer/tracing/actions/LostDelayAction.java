@@ -65,6 +65,7 @@ import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
@@ -200,6 +201,7 @@ public class LostDelayAction extends CheckedAction {
 			} 
 
 				if (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals("")) {
+					theform.setFaultcompany_id(user.getCompanycode_ID());
 					theform.setFaultstation_id(0);
 				}
 
@@ -227,8 +229,14 @@ public class LostDelayAction extends CheckedAction {
 				request.setAttribute("faultCompanyList", faultCompanyList);
 			}
 			else {
+
+				if (TracerProperties.isTrue(TracerProperties.SET_DEFAULT_AIRLINE) && (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals(""))) {
+					theform.setFaultcompany_id(user.getCompanycode_ID());
+				}
+				
 				request.setAttribute("faultstationlist", TracerUtils.getStationList(theform.getFaultcompany_id()));
 				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));
+				
 			}
 		}
 		// / confirm matching and unmatching

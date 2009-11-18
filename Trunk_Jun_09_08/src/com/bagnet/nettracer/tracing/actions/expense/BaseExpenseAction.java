@@ -160,21 +160,37 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		ExpenseType et = new ExpenseType();
 		et.setExpensetype_ID(expenseForm.getExpensetype_id());
 		
-		if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
-			ep.setVoucheramt(expenseForm.getCheckamt());
-			ep.setCheckamt(0);
-		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_CCREF)) {
-			ep.setCreditCardRefund(expenseForm.getCheckamt());
-			ep.setCheckamt(0);
-		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_DRAFT)) {
-			// Do nothing -- this occurs by default
-		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_INC)) {
-			ep.setIncidentalAmountClaimed(expenseForm.getCheckamt());
-			ep.setCheckamt(0);
-		} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_MILE)) {
-			Double x = new Double(expenseForm.getCheckamt());
-			ep.setMileageamt(x.intValue());
-			ep.setCheckamt(0);
+		// If limited version of page (DEFAULT)
+		if (expenseForm.getPaymentType() != null) {
+			
+			if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
+				ep.setVoucheramt(expenseForm.getCheckamt());
+				ep.setCheckamt(0);
+			} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_CCREF)) {
+				ep.setCreditCardRefund(expenseForm.getCheckamt());
+				ep.setCheckamt(0);
+			} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_DRAFT)) {
+				// Do nothing -- this occurs by default
+			} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_INC)) {
+				ep.setIncidentalAmountClaimed(expenseForm.getCheckamt());
+				ep.setCheckamt(0);
+			} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_MILE)) {
+				Double x = new Double(expenseForm.getCheckamt());
+				ep.setMileageamt(x.intValue());
+				ep.setCheckamt(0);
+			}
+		} else {
+			// If complete version of page (WESTJET)
+			ep.setCheckamt(expenseForm.getCheckamt());
+			ep.setCreditCardRefund(expenseForm.getCreditCardRefund());
+			ep.setDraft(expenseForm.getDraft());
+			ep.setDraftpaiddate(expenseForm.getDraftpaiddate());
+			ep.setDraftreqdate(expenseForm.getDraftreqdate());
+			ep.setIncidentalAmountAuth(expenseForm.getIncidentalAmountAuth());
+			ep.setIncidentalAmountClaimed(expenseForm.getIncidentalAmountClaimed());
+			ep.setMileageamt(expenseForm.getMileageamt());
+			ep.setVoucheramt(expenseForm.getVoucheramt());
+			ep.setVoucherExpirationDate(expenseForm.getVoucherExpirationDate());
 		}
 		
 		ep.setExpensetype(et);

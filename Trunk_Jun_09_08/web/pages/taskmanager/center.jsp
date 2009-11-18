@@ -118,8 +118,10 @@
               <td class="header">
                 <b><bean:message key="tasks.other" /></b>
               </td>
-              <td class="header">
-                <b><bean:message key="entries" /></b>
+              <td class="header" width="120">
+                <b>
+                	<bean:message key="entries" />
+                </b>
               </td>
             </tr>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
@@ -129,7 +131,10 @@
                     <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
-                    <bean:write name="activityDTO" property="entries" />
+                    <span style="float:left" ><bean:write name="activityDTO" property="entries" /></span>
+                    <logic:equal name="activityDTO" property="highPriority" value="true">
+		    			<span style="float:right" ><font color="red"><i><b><bean:message key="status.urgent" /> (<bean:write name="activityDTO" property="highPriorityNumber" />)</b></i></font>&nbsp;&nbsp;&nbsp;</span>
+		    		</logic:equal>
                   </td>
                 </tr>
               </logic:equal>

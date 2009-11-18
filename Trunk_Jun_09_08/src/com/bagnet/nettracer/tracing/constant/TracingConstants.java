@@ -40,6 +40,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_OCCURRENCES = "Occurrences";
 	public final static String SYSTEM_COMPONENT_NAME_OHD_BAGGAGE_REPORT = "OHD Baggage Report";
 	public final static String SYSTEM_COMPONENT_NAME_MY_INBOX = "My Inbox";
+	public final static String SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION = "Passenger Communication";
+	public final static String SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION_READ_ONLY = "Passenger Communication Read Only";
 	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES = "Missing Articles";
 	public final static String SYSTEM_COMPONENT_NAME_MISHANDLED_BAG = "Mishandled Bag";
 	public final static String SYSTEM_COMPONENT_NAME_MASS_ON_HANDS = "Mass On-hands";
@@ -144,6 +146,9 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_UPDATE_ASSIGNED_MS = "Assigned Station Update Missing";
 	
 	public final static String SYSTEM_COMPONENT_NAME_QUERY_REPORTS = "Query Reports";
+	
+	public final static String SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST = "Incident Checklist";
+	public final static String SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY = "Incident Checklist Read Only";
 
 	
 	//Table numbers for status
@@ -537,6 +542,8 @@ public class TracingConstants {
 	public final static String SEARCH_LOST_FOUND = "searchlostfound";
 	public final static String LOST_FOUND = "lostfound";
 	public final static String LOST_FOUND_SUCCESS = "lostfound_success";
+	public final static String AUTO_CHECKLIST_STEP_ONE = "auto_checklist_step_one";
+	public final static String INCIDENT_CHECKLIST = "incident_checklist";
 
 	// customer view only
 	public final static String PASS_VIEW_ONLY = "passview";
@@ -544,6 +551,8 @@ public class TracingConstants {
 	// OSI
 	public final static String FORWARD_OSI = "osi";
 	public final static String FORWARD_CUSTOMER_COMMENTS = "customer_comments";
+	public final static String PAX_COMMUNICATION = "pax_communication";
+	public final static String LIST_NEW_PAX_COMMUNICATION ="listnewpaxcommunication";
 
 	// bdo
 	public final static String BDO_MAIN = "bdo";

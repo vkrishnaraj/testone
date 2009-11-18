@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
+import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -254,6 +255,7 @@ public class LogonAction extends Action {
 				dto.setActivityloc(policy.getComponent().getComponent_action_link());
 				dto.setActivityinfomenu(key);
 				dto.setGroup(policy.getComponent().getSort_group());
+				dto.setHighPriority(false);
 
 				int entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
@@ -378,7 +380,18 @@ public class LogonAction extends Action {
 																					if(x != -1) {
 																						entries = x;
 																					}
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION)) {
+																					int x = PaxCommunicationBMO.getPaxMessagesCount("" + s.getStation_ID(), "NEW", null, null, null, null, null, null, true);
+																					int highPriority = PaxCommunicationBMO.getHighPriorityPaxMessagesCount("" + s.getStation_ID(), "NEW");
+																					if (highPriority > 0) {
+																						dto.setHighPriority(true);
+																						dto.setHighPriorityNumber(highPriority);
+																					}
+																					if (x != -1) {
+																							entries = x;
+																					} // end if
 																				}
+																				
 																			}
 																		}
 																		

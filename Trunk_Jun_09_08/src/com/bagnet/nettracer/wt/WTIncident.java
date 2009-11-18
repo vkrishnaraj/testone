@@ -74,6 +74,9 @@ public class WTIncident {
 				throw new WorldTracerException("unable to retrieve worldtraer id, wt content is bad");
 			}
 			wt_id = incidentMap.get("Record_Number");
+			if (wt_id == null) {
+				wt_id = incidentMap.get("File_Reference_Number");
+			}
 			if(wt_id == null){
 				throw new WorldTracerException("unable to retrieve worldtraer id, wt content is bad");
 			}

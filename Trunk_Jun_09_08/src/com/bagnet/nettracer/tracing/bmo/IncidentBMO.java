@@ -100,11 +100,15 @@ public class IncidentBMO {
 			if (incident_id == null || incident_id.length() <= 0) {
 				isnew = true;
 				iDTO.setIncident_ID(getIncidentID(iDTO.getStationcreated()));
+				
+				long versionId = IncidentChecklistBMO.getActiveChecklistVersion(null).getVersion_id();
+				iDTO.setChecklist_version(versionId);
 			} else {
 				oldinc = findIncidentByID(incident_id);
 				if (oldinc == null)
 					isnew = true;
 			}
+			
 
 			t = sess.beginTransaction();
 
@@ -114,6 +118,9 @@ public class IncidentBMO {
 				if (isnew)
 					sess.save(iDTO);
 				else {
+					if (iDTO.getChecklist_version() == 0) {
+						iDTO.setChecklist_version(oldinc.getChecklist_version());
+					}
 					if (checkClosedStatus) {
 						Status oldStatus = oldinc.getStatus();
 						iDTO.setStatus(oldStatus);

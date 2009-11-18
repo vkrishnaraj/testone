@@ -132,7 +132,7 @@ public class CustomReportBMO implements
 
 			String sql = "SELECT station.stationcode, station.station_region,station.station_region_mgr, station.goal, station.station_ID "
 					+ " FROM  com.bagnet.nettracer.tracing.db.Station station "
-					+ " where 1=1 "
+					+ " where station.active = :active "
 					+ stationq
 					+ companylimit
 					+ " group by station.station_region,station.stationcode,station.station_region_mgr,station.goal, station.station_ID "
@@ -144,6 +144,7 @@ public class CustomReportBMO implements
 					&& !srDTO.getStation_ID()[0].equals("0"))
 				q.setParameterList("station_ID", srDTO.getStation_ID());
 
+			q.setBoolean("active", true);
 			q.setString("companyCode_ID", user.getStation().getCompany()
 					.getCompanyCode_ID());
 			List templist = q.list();

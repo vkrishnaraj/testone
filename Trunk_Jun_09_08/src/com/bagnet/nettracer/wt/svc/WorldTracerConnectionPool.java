@@ -9,6 +9,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
 
@@ -43,15 +44,19 @@ public class WorldTracerConnectionPool extends GenericObjectPool {
 		this.setMaxWait(1000 * 15);
 		this.setWhenExhaustedAction(WHEN_EXHAUSTED_BLOCK);
 		this.setFactory(factory);
+//		this.setTestOnReturn(false);
+//		this.setTestOnBorrow(false);
+//		this.setTestWhileIdle(true);
+//		this.setTimeBetweenEvictionRunsMillis(5*60*1000);
 	}
 
 	public Object borrowObject() throws Exception {
-		logger.debug("Borrowing object..");
+		logger.info("Borrowing object..");
 		return super.borrowObject();
 	}
 
 	public void returnObject(Object obj) throws Exception {
-		logger.debug("Returning object.." + obj);
+		logger.info("Returning object.." + obj);
 		super.returnObject(obj);
 	}
 

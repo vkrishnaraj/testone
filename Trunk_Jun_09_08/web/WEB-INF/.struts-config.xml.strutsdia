@@ -1137,4 +1137,27 @@
   TYPE="forward" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page168" PATH="manualQueue" SHAPE="240,13250,0,0"
   SUBTYPE="tile" TITLE="manualQueue" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="search_notices" NAME="forward162"
+  PATH="search_notices" SHAPE="32,13233,0,0" TARGET="page170"
+  TITLE="search_notices" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="pcn" NAME="forward163" PATH="pcn"
+  SHAPE="32,13233,0,0" TARGET="page171" TITLE="pcn" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#forwardNotices" NAME="action87"
+  PATH="/forwardNotices" SHAPE="32,13441,0,0"
+  TITLE="searchForwardNoticeForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#pcn" NAME="action88" PATH="/pcn"
+  SHAPE="32,13441,0,0" TITLE="pcnSearchForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page170" PATH="search_notices"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="search_notices"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page171" PATH="pcn" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="pcn" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#wtCaptcha" NAME="action89" PATH="/wtCaptcha"
+  SHAPE="32,13441,0,0" TITLE="captchaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="enterCaptcha" NAME="forward0"
+   PATH="enter_captcha" TARGET="page172" TITLE="enterCaptcha"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="page172" PATH="enter_captcha" SHAPE="448,13553,0,0"
+  SUBTYPE="tile" TITLE="enter_captcha" TYPE="page" model-entity="StrutsProcessItem"/>
 </PROCESS>

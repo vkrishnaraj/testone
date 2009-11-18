@@ -1,23 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"  >
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"        >
 
 <hibernate-configuration>
 
-    <session-factory>	
+    <session-factory>
     
 		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-		<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod;sendStringParametersAsUnicode=false</property>
-		<property name="connection.username">nettracerjobs</property>
-		<property name="connection.password">evya28Ovm2FU</property>
-		<property name="jdbc.fetch_size">50</property> 
+		<property name="hibernate.connection.url">jdbc:sqlserver://192.168.2.128:1433;databaseName=usair</property>
+		<property name="connection.username">nettracer2</property>
+		<property name="connection.password">nettracer2</property>
+		<property name="show_sql">false</property>
+		<property name="jdbc.fetch_size">500</property> 
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
 		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
 		<property name="company.code">US</property>
+		<property name="hibernate.show_sql">false</property>
 		<property name="hibernate.connection.isolation">1</property>
-
 			
 		<!-- c3p0 -->
 		<property name="hibernate.c3p0.acquire_increment">1</property> 
@@ -27,7 +28,7 @@
 		<property name="hibernate.c3p0.min_size">10</property> 
 		<property name="hibernate.c3p0.timeout">5000</property> <!-- seconds --> 
 		
-			<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
+	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_Specific_Variable.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_specific_irregularity_code.hbm.xml"/>
@@ -206,8 +207,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.Lock" />
 		<mapping class="com.bagnet.nettracer.tracing.db.ForwardNotice" />
 		<mapping class="com.bagnet.nettracer.tracing.db.ProactiveNotification" />
-		
-		
+		<mapping class="com.bagnet.nettracer.tracing.db.WT_PXF" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf" />		
     </session-factory>
 
 </hibernate-configuration>

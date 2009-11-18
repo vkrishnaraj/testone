@@ -243,6 +243,8 @@ public class MissingAction extends CheckedAction {
 			
 			// prepopulate
 			TracerUtils.populateIncident(theform, request, TracingConstants.MISSING_ARTICLES);
+			IncidentForm thenewform = (IncidentForm)session.getAttribute("incidentForm");
+			thenewform.setFaultcompany_id(user.getCompanycode_ID());
 			request.setAttribute("newform", "1");
 
 			ActionMessage error = null;

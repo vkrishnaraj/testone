@@ -458,7 +458,7 @@ public class BDOUtils {
 				Set<Item> items =(Set<Item>) bdo.getItems();
 				for (Item item:  items) {
 					if (item != null) {
-						if (item.getOHD_ID() != null) {
+						if (item.getOHD_ID() != null && !item.getOHD_ID().equals("")) {
 							ohd = OhdBMO.getOHDByID(item.getOHD_ID(), null);
 							ohd.setStatus(StatusBMO.getStatus(
 									TracingConstants.OHD_STATUS_PROCESSFORDELIVERY));

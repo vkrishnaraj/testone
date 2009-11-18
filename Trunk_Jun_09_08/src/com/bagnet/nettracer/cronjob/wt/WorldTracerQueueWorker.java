@@ -1,17 +1,16 @@
 package com.bagnet.nettracer.cronjob.wt;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 
+import com.bagnet.clients.us.wt.UsWorldTracerRuleMap;
 import com.bagnet.nettracer.cronjob.ErrorHandler;
+import com.bagnet.nettracer.cronjob.NettracerCron;
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -42,7 +41,6 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
-import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLoggedOutException;
@@ -52,6 +50,7 @@ import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
+import com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class WorldTracerQueueWorker implements Runnable {
@@ -76,7 +75,20 @@ public class WorldTracerQueueWorker implements Runnable {
 
 	public WorldTracerQueueWorker(WorldTracerService wtService, String companyCode, WTQueueBmo qBmo, Agent defAgent, WT_ActionFileBmo afBmo,
 			ConcurrentLinkedQueue<Long> qq, RuleMapper wtRuleMap, ErrorHandler errorHandler) {
-		this.wtService = wtService;
+		// DO NOT USE PROVIDED WT SERVICE
+		//this.wtService = wtService;
+		DefaultWorldTracerService dwts = new DefaultWorldTracerService();
+		dwts.setWtCompanyCode(defAgent.getCompanycode_ID());
+		
+		NewWorldTracerConnector connector = new NewWorldTracerConnector((WorldTracerConnectionPool)NettracerCron.ctx.getBean("wtConnectionPool"));
+		if (wtRuleMap == null) {
+			wtRuleMap = new UsWorldTracerRuleMap();
+		}
+		connector.setWtRuleMap(wtRuleMap);
+		dwts.setWtConnector(connector);
+		
+		
+		this.wtService = dwts;
 		this.wtqBmo = qBmo;
 		this.defaultWtAgent = defAgent;
 		this.wafBmo = afBmo;
@@ -89,6 +101,7 @@ public class WorldTracerQueueWorker implements Runnable {
 	public void run() {
 
 		try {
+			
 			wtService.getWtConnector().initialize();
 			IncidentBMO iBmo = new IncidentBMO();
 			OhdBMO ohdBmo = new OhdBMO();
@@ -921,6 +934,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				}
 			}
 		} catch (Exception e) {
+			logger.error("Queue Worker Failure: ", e);
 			throw new RuntimeException(e);
 		} finally {
 			WorldTracerConnector conn = wtService.getWtConnector();

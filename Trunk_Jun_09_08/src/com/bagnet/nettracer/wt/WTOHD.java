@@ -64,6 +64,9 @@ public class WTOHD {
 			String wt_id;
 			wt_id = ohdMap.get("Record_Number");
 			if (wt_id == null) {
+				wt_id = ohdMap.get("File_Reference_Number");
+			}
+			if (wt_id == null) {
 				throw new WorldTracerException(
 						"unable to import OHD.  no wt_id was parsed");
 			}

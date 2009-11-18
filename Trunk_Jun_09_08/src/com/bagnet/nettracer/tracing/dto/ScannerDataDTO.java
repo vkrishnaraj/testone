@@ -3,6 +3,8 @@
  */
 package com.bagnet.nettracer.tracing.dto;
 
+import java.util.Calendar;
+
 /**
  * @author Byron
  *
@@ -14,7 +16,16 @@ public class ScannerDataDTO {
 	private String string3;
 	private String string4;
 	private String ohdId;
+	private Calendar timestamp;
 	
+	public Calendar getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Calendar timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	public ScannerDataDTO() {};
 	
 	public ScannerDataDTO (String timeStamp, String station, String scanType, String otherInfo, String ohdId) {
@@ -23,6 +34,15 @@ public class ScannerDataDTO {
 		this.setString3(scanType);
 		this.setString4(otherInfo);
 		this.setOhdId(ohdId);
+	}
+	
+	public ScannerDataDTO (String timeStamp, String station, String scanType, String otherInfo, String ohdId, Calendar time) {
+		this.setString1(timeStamp);
+		this.setString2(station);
+		this.setString3(scanType);
+		this.setString4(otherInfo);
+		this.setOhdId(ohdId);
+		this.setTimestamp(time);
 	}
 
 	/**

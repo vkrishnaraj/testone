@@ -158,6 +158,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqCreateBdo" />
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction" />
 		<mapping class="com.bagnet.nettracer.tracing.db.OtherSystemInformation" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CustomerViewableComment" />
@@ -178,4 +179,10 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.ForwardNotice" />
 		<mapping class="com.bagnet.nettracer.tracing.db.ProactiveNotification" />
 		<mapping class="com.bagnet.nettracer.tracing.db.WT_PXF" />
+		<mapping class="com.bagnet.nettracer.tracing.db.PaxCommunication" />
+		<mapping class="com.bagnet.nettracer.tracing.db.ChecklistVersion" />
+		<mapping class="com.bagnet.nettracer.tracing.db.ChecklistTask" />
+		<mapping class="com.bagnet.nettracer.tracing.db.ChecklistTaskOption" />
+		<mapping class="com.bagnet.nettracer.tracing.db.IncidentChecklist" />
+		<mapping class="com.bagnet.nettracer.tracing.db.AuditIncidentChecklist" />
 		

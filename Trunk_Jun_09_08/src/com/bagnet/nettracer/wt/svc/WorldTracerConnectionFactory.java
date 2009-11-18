@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.log4j.Logger;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 
@@ -14,8 +16,11 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	private String host;
 	private volatile int itemsUsed = 0;
 	private String mode;
+	private boolean IS_FRONTEND = false;
 	
-	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1080000;
+	// 1080000 = 18 minutes
+	private static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 1200000;
+	private static final int ALLOWED_MILLIS_BEFORE_CHECK = 11*60*1000;
 	
 	private static final Logger logger = Logger.getLogger(WorldTracerConnectionFactory.class);
 	
@@ -38,7 +43,11 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	public synchronized Object makeObject() throws Exception {
 		WorldTracerAccount wta = getNextItem();
 		WorldTracerConnection connection = new WorldTracerConnection(wta, host, mode);
-		connection.login();
+		if (!TracerProperties.isFrontend() || !PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_CAPTCHA)) {
+			if (!connection.login()) {
+				connection.incrementSequentialFailedAttempts();
+			}
+		}
 		return connection;
 	}
 
@@ -52,7 +61,11 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 		
 		if (connection.isValidConnection() == false || diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
 			logger.debug("Logging in...");
-			connection.login();
+			if (!TracerProperties.isFrontend() || !PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_CAPTCHA)) {
+				if (!connection.login()) {
+					connection.incrementSequentialFailedAttempts();
+				}
+			}
 		}
 	}
 	
@@ -60,4 +73,6 @@ public class WorldTracerConnectionFactory extends BasePoolableObjectFactory {
 	public void passivateObject(Object obj) throws Exception {		
 		logger.debug("Passivating Object...");
 	}
+	
+
 }

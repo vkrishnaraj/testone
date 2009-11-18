@@ -19,6 +19,7 @@
 				<prop key="wt.host">wtrweb.worldtracer.aero</prop>
 				<prop key="training.mode">TRAINING</prop>
 				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
+				<prop key="reservation.version.name"></prop>
 			</props>
 		</property>
 	</bean>
@@ -30,7 +31,7 @@
 
 
 	<bean id="reservationIntegration"
-		class="com.bagnet.clients.${reservation.class.path}.ReservationIntegrationImpl" />
+		class="com.bagnet.clients.${reservation.class.path}.${reservation.version.name}ReservationIntegrationImpl" />
 
 	<bean id="eventHandler"
 		class="com.bagnet.clients.${event.class.path}.ClientEventHandlerImpl" />

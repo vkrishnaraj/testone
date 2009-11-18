@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.WT_PXF;
@@ -62,6 +64,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	WorldTracerConnectionPool pool = null;
 	
 	RuleMapper wtRuleMap;
+
 	
 	public static enum UserType {
 		WM, WT
@@ -143,9 +146,11 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 
 	public NewWorldTracerConnector(WorldTracerConnectionPool pool) {
 		this.pool = pool;
+		logger.info("Creating a NewWorldTracerConnector");
 	}
 	
 	public void initialize() throws Exception {
+		logger.info("Initializing a NewWorldTracerConnector");
 		if(pool != null) {
 			this.client = (WorldTracerConnection) pool.borrowObject();
 		}
@@ -3483,7 +3488,11 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	}
 
 	public void logout() {
-		this.logout(true);
+		try {
+			pool.returnObject(client);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setPool(WorldTracerConnectionPool pool) {
@@ -3716,9 +3725,9 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		throw new WorldTracerException("unable to start: " + flowName + " after 3 attempts");
 	}
 
-	private void startFlowWithRedirect(NameValuePair[] getParams, String flowName, int stepNum) throws WorldTracerException {
-		startFlowWithRedirect(getParams, flowName, stepNum, true, 0L);
-	}
+//	private void startFlowWithRedirect(NameValuePair[] getParams, String flowName, int stepNum) throws WorldTracerException {
+//		startFlowWithRedirect(getParams, flowName, stepNum, true, 0L);
+//	}
 	
 	private void startFlowWithRedirect(NameValuePair[] getParams, String flowName,
 			int stepNum, boolean usePause) throws WorldTracerException {
@@ -3738,6 +3747,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if (pool != null) {
 			try {
 				pool.returnObject(client);
+				logger.info("Returned client: " + client);
 			} catch (Exception e) {
 				logger.error("Unable to return client to pool", e);
 			}
@@ -3777,43 +3787,26 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 	@Override
 	public String sendPxf(WtqRequestPxf wtqRequestPxf) throws WorldTracerException {
 		String result = null;
-		GetMethod startFlow = new GetMethod("/WorldTracerWeb/wtwflow.do");
-		NameValuePair[] p1 = { 
+
+		NameValuePair[] p1 = {
 				new NameValuePair("_flowId", "sendmessage-flow"),
-				new NameValuePair("isHDQ", "N"),
-				};
-		startFlow.setQueryString(p1);
-		// check this
-		startFlow.setFollowRedirects(false);
-		try {
-			client.executeMethodWithPause(startFlow, "SEND_PXF (1)");
-		}
-		catch (HttpException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			startFlow.releaseConnection();
-		}
-		if(startFlow.getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY && startFlow.getStatusCode() != HttpStatus.SC_MOVED_PERMANENTLY) {
-			logger.error("start forward message flow not redirect!");
-			throw new WorldTracerException("start forward message flow not redirect!");
-		}
-		//get flow key
-		String newLocation = startFlow.getResponseHeader("location").getValue();
-		String flowKey = newLocation.split("=")[1];
+				new NameValuePair("isHDQ", "N") };
+		
+		String newLocation = startFlow(p1, "SEND_PXF", 1);
+		startFlowWithRedirect(p1, "SEND_PXF", 1, false);
+		
+		
+				
 		String responseBody = null;
 		//add params to forward
-		PostMethod forwardMethod = new PostMethod("/WorldTracerWeb/wtwflow.do");
+		PostMethod forwardMethod = new PostMethod(WTRWEB_FLOW_URL);
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
 		forwardMethod.setQueryString(p2);
 		
 		//get to the WT interface and send the PXF request
 		//first compose information package 
-		forwardMethod.setParameter("_eventId", "Send");
 		forwardMethod.setParameter("isHDQ", "yes");
+		
 		WT_PXF myPxf = wtqRequestPxf.getPxf();
 		int myDestinationType = myPxf.getDestination();
 		String sendToDestination = null;  // default 
@@ -3828,48 +3821,70 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			forwardMethod.setParameter("sendMessageActionVO.regionNumber", regionNumber);
 			forwardMethod.setParameter("sendMessageActionVO.regionActionArea", regionActionArea);
 		} else {
+			HashMap<String, String> lookupHash = new HashMap<String, String>();
+			lookupHash.put("AP", "ADDITIONAL_PROMPT_AREA");
+			lookupHash.put("FW", "FORWARD_AREA");
+			lookupHash.put("AA", "ACTION_AREA");
+			
+			
 			sendToDestination = "ACTION_AREA_ADDRESSES";
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].stationCode", myPxf.getStation_1());
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].airlineCode", myPxf.getAirline_1());
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].actionAreaType", myPxf.getArea_1());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[0].actionAreaType", lookupHash.get(myPxf.getArea_1()));
 
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].stationCode", myPxf.getStation_2());
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].airlineCode", myPxf.getAirline_2());
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].actionAreaType", myPxf.getArea_2());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[1].actionAreaType", lookupHash.get(myPxf.getArea_2()));
 			
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].stationCode", myPxf.getStation_3());
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].airlineCode", myPxf.getAirline_3());
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].actionAreaType", myPxf.getArea_3());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[2].actionAreaType", lookupHash.get(myPxf.getArea_3()));
 			
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].stationCode", myPxf.getStation_4());
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].airlineCode", myPxf.getAirline_4());
-			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].actionAreaType", myPxf.getArea_4());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[3].actionAreaType", lookupHash.get(myPxf.getArea_4()));
 			
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[4].stationCode", myPxf.getStation_5());
 			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[4].airlineCode", myPxf.getAirline_5());
+			forwardMethod.setParameter("sendMessageActionVO.actionMessageAddresses[4].actionAreaType", lookupHash.get(myPxf.getArea_5()));
+			
+			forwardMethod.setParameter("_sendMessageActionVO.schedule", "on");
+			
+			
+			for (int i=0; i<4; ++i) {
+				forwardMethod.setParameter("sendMessageActionVO.relatedRecords[" + i + "].recordType", "");
+				forwardMethod.setParameter("sendMessageActionVO.relatedRecords[" + i + "].recordReference.stationCode", "");
+				forwardMethod.setParameter("sendMessageActionVO.relatedRecords[" + i + "].recordReference.airlineCode", "");
+				forwardMethod.setParameter("sendMessageActionVO.relatedRecords[" + i + "].recordReference.recordId", "");
+			}
 			
 		}
 		forwardMethod.setParameter("sendMessageActionVO.sendToDestination", sendToDestination);
-		forwardMethod.setParameter("_sendMessageActionVO.schedule", "on");
-		
-		Set<String> myTeletypes = wtqRequestPxf.getTeletypes();
-		Iterator<String> itr = myTeletypes.iterator();
-		int myIndex = 0;
-		while(itr.hasNext()) {
-			String myTeletype = itr.next();
-			forwardMethod.setParameter("sendMessageActionVO.ttyAddresses[" + myIndex + "]", myTeletype);
-			myIndex++;
+
+		for (int i=0; i<5; ++i) {
+			Object[] myTeletypes = wtqRequestPxf.getTeletypes().toArray();
+			if (i< myTeletypes.length) {
+				forwardMethod.setParameter("sendMessageActionVO.ttyAddresses[" + i + "]", (String) myTeletypes[i]);
+			} else {
+				forwardMethod.setParameter("sendMessageActionVO.ttyAddresses[" + i + "]", "");
+			}
 		}
+		
+		
 		forwardMethod.setParameter("wtrActionAreaWriteRequest.message", wtqRequestPxf.getFurtherInfo());
+		forwardMethod.setParameter("_eventId", "Send");
 		
 		//execute the send PXF request
 		try {
+			for (NameValuePair pair: forwardMethod.getParameters()) {
+				logger.info(pair.getName() + ": " + pair.getValue());
+			}
+			
 			client.executeMethodWithPause(forwardMethod, "SEND_PXF (2)");
 			if(forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY || forwardMethod.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY){
 				newLocation = forwardMethod.getResponseHeader("location").getValue();
 			}
 			else{
-				//TODO: Update
 				throw new WorldTracerException("send pxf method not redirect!");
 			}
 		}
@@ -3890,7 +3905,6 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			GetMethod redirect = new GetMethod(newLocation);
 			try {
 				
-				//TODO:Update description
 				client.executeMethod(redirect, "SEND PXF: REDIRECT (3)");
 				responseBody = getStringFromInputStream(redirect
 						.getResponseBodyAsStream());
@@ -3915,9 +3929,86 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		} else {
 			result = responseBody;
 			logger.error("PXF did not work ! Error detail : " + responseBody);
+			throw new WorldTracerException("PXF Failed");
 		}
 		
 		return result;
 	}
 	
+	/**
+	 * Assumes there is only one connection in pool.
+	 * Used to determine if we need to show captcha to end user.
+	 */
+	@Override
+	public synchronized boolean doesUserNeedToEnterCaptcha(boolean loginNow) {
+		boolean useCaptcha = PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_CAPTCHA);
+		boolean retValue = false;
+		if (!useCaptcha) {
+			return false;
+		}
+		
+		try {
+			
+			client = (WorldTracerConnection) pool.borrowObject();				
+			
+			if (!client.isValidConnection()) {
+				retValue = true;
+				if (loginNow && client.getCaptcha() == null) {
+					client.frontendLogin1GetCaptcha();
+				}
+			}
+			
+			pool.returnObject(client);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		return retValue;
+	}
+	
+	/**
+	 * Assumes there is only one connection in pool.
+	 * Used to determine if we need to show captcha to end user.
+	 */
+	@Override
+	public synchronized void returnUserCaptcha(String text) {
+		try {
+			client = (WorldTracerConnection) pool.borrowObject();
+
+			if (client != null) {
+				if (client.isValidConnection()) {
+					return;
+				} else {
+					if (client.getCaptcha() != null) { 
+						client.frontendLogin2SetCaptcha(text);
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Error returning captcha: ", e);
+		} finally {
+			try {
+				pool.returnObject(client);
+			} catch(Exception e) {
+				logger.error("Error returning captcha: ", e);
+			}
+		}
+		
+	}
+
+	public byte[] getCaptcha() {
+		byte[] retValue = null;
+		try {
+			client = (WorldTracerConnection) pool.borrowObject();
+			retValue = client.getCaptcha();
+			pool.returnObject(client);
+		} catch (Exception e) {
+			// ignore
+		}
+		return retValue;
+	}
+	
+
 }
+

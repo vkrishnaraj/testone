@@ -252,15 +252,15 @@ public class MoveToLZThread {
 		// Get LZ Stations
 		List<Lz> lzList = (List<Lz>) LzUtils.getIncidentLzStations(companyCode);
 
-		if (ld_days + dg_days + ma_days > 0) {
+		if (ld_days + dg_days + ma_days > -3) {
 			
 			Session sess = null;
 			try {
 				
 				sess = HibernateWrapper.getSession().openSession();
 				
-				ArrayList<Incident> incidentList = null;
-				incidentList = (ArrayList) getIncidentsToMove(company, ld_days, TracingConstants.LOST_DELAY, sess, lzList);
+				ArrayList<Incident> incidentList = new ArrayList<Incident>();
+				incidentList.addAll(getIncidentsToMove(company, ld_days, TracingConstants.LOST_DELAY, sess, lzList));
 				incidentList.addAll(getIncidentsToMove(company, dg_days, TracingConstants.MISSING_ARTICLES, sess, lzList));
 				incidentList.addAll(getIncidentsToMove(company, ma_days, TracingConstants.DAMAGED_BAG, sess, lzList));
 	
@@ -289,7 +289,9 @@ public class MoveToLZThread {
 	}
 	
 	public List<Incident> getIncidentsToMove(String company, long datediff, int itemtype, Session sess, List<Lz> lzList) {
-		
+		if (datediff == -1) {
+			return new ArrayList<Incident>();
+		}
 		Date now = new Date();
 		long nowl = now.getTime();
 		datediff *= 86400000;

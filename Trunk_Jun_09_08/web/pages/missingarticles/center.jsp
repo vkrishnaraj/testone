@@ -137,6 +137,7 @@ function disableButton(aButton) {
     onsubmit="return validateRest(this);">
     <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />
+    <html:hidden property="notifiedOfRequirements"/>
     <input type="hidden" name="historical_report" value="">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -239,6 +240,19 @@ function disableButton(aButton) {
           <br />
           &nbsp;</span> <span class="bb"><bean:message
             key="menu.osi" /></span> <span class="cc">&nbsp; <br />
+          &nbsp;</span></a></dd>
+          <%
+            }
+          %>
+          <%
+            boolean bPaxCommunication = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION, a);
+            boolean bPaxCommunicationReadOnly = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION_READ_ONLY, a);
+            if (bPaxCommunication || bPaxCommunicationReadOnly) {
+          %>
+          <dd><a href='paxCommunication.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />'><span class="aa">&nbsp;
+          <br />
+          &nbsp;</span> <span class="bb"><bean:message
+            key="menu.pax_communication" /></span> <span class="cc">&nbsp; <br />
           &nbsp;</span></a></dd>
           <%
             }

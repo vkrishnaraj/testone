@@ -50,6 +50,8 @@
 		<form-bean name="BDOForm" type="com.bagnet.nettracer.tracing.forms.BDOForm" />
 		<form-bean name="MaintainDeliveryCompanyForm" type="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm" />
 		<form-bean name="companyForm" type="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm" />
+		<form-bean name="listNewPaxCommunicationForm" type="com.bagnet.nettracer.tracing.forms.ListNewPaxCommunicationForm" />
+		<form-bean name="captchaForm" type="com.bagnet.nettracer.tracing.forms.CaptchaForm" />
 		
 		<form-bean name="OsiForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="id" type="java.lang.String" />
@@ -64,6 +66,20 @@
 			<form-property name="text" type="java.lang.String" />
 			<form-property name="readOnly" type="java.lang.String" />
 		</form-bean>
+		
+		<form-bean name="PaxCommunicationForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="id" type="java.lang.String" />
+			<form-property name="incident_id" type="java.lang.String" />
+			<form-property name="text" type="java.lang.String" />
+			<form-property name="readOnly" type="java.lang.String" />
+			<form-property name="agentNewComment" type="java.lang.String" />
+			<form-property name="addNewAgentCommentSuccess" type="java.lang.String" />
+			<form-property name="acknowledgeNewPaxCommentSuccess" type="java.lang.String" />
+			<form-property name="agentActionType" type="java.lang.String" />
+			<form-property name="isThereNewPaxComment" type="java.lang.String" />
+			<form-property name="ifPaxEmailNotOnFile" type="java.lang.String" />
+		</form-bean>
+		
 		
 		<form-bean name="agentForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="agentSearchName" type="java.lang.String" />
@@ -207,7 +223,7 @@
 		<form-bean name="worldTracerSusRitForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerSusRitForm" />
 		
 		<form-bean name="searchWtLogsForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerLogsForm" />
-
+		<form-bean name="incidentChecklistForm" type="com.bagnet.nettracer.tracing.forms.IncidentChecklistForm" />
 
 	</form-beans>
 	<!-- global exception -->
@@ -291,7 +307,8 @@
 		<forward name="viewworldtracerfwd" path="view_worldtracerfwd" />
 		<forward name="viewworldtracerfoh" path="view_worldtracerfoh" />
 		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
-		<forward name="viewworldtracertty" path="view_worldtracertty" />
+		<forward name="viewworldtracerpxf" path="view_worldtracerpxf" />
+ 		<forward name="viewworldtracertty" path="view_worldtracertty" />
 		<forward name="viewworldtracerreqqoh" path="view_worldtracerreqqoh" />
 		<forward name="viewworldtracerpxf" path="view_worldtracerpxf" />
 
@@ -344,6 +361,8 @@
 		<forward name="passview" path="pass_view_only" />
 		<forward name="osi" path="osi" />
 		<forward name="customer_comments" path="customer_comments" />
+		<forward name="pax_communication" path="pax_communication" />
+		<forward name="listnewpaxcommunication" path="list_new_pax_communication" />
 		<forward name="closeonhandsuccess" path="close_onhandsuccess" />
 		<forward name="expensepayoutapprovedsuccess" path="expense_payoutapprovedsuccess" />
 		<forward name="expensepayoutdeniedsuccess" path="expense_payoutdeniedsuccess" />
@@ -353,6 +372,9 @@
 		<forward name="pcn" path="pcn" />
 		<forward name="nopermission" path="no_permission" />
 		<forward name="viewloggedagents" path="view_loggedagents" />
+
+		
+		<forward name="incident_checklist" path="incidentchecklist" />
 
 		<forward name="interimexpenserequest" path="interim_expenserequest" />
 		<forward name="createdinterimexpenserequest" path="created_interimexpenserequest" />
@@ -528,6 +550,9 @@
 		<action path="/actionFileCount" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileCountAction" name="worldtracerafForm" scope="request" validate="false">
 			<forward name="success" path="view_actionfile_count"></forward>
 		</action>
+		<action path="/wtCaptcha" type="com.bagnet.nettracer.tracing.actions.wt.WtCaptchaAction" name="captchaForm" scope="request" validate="false">
+			<forward name="enterCaptcha" path="enter_captcha"></forward>
+		</action>
 
 		<action path="/actionFileSummary" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileSummaryAction" name="worldtracerafForm" scope="request" validate="false">
 			<forward name="success" path="view_actionfile_summary"></forward>
@@ -536,6 +561,8 @@
 		<action path="/actionFileDetail" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileDetailAction" name="worldtracerafForm" scope="request" validate="false">
 			<forward name="success" path="actionFileSummary.do" redirect="true" ></forward>
 		</action>
+		
+		<action path="/worldtracerpxf" type="com.bagnet.nettracer.tracing.actions.WorldTracerPXFAction" name="worldTracerPXFForm" scope="session" validate="false"></action>
 
 		<action path="/actionFileDelete" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileDeleteAction" name="worldtracerafForm" scope="request" validate="false">
 			<forward name="success" path="actionFileSummary.do" redirect="true" ></forward>
@@ -555,6 +582,8 @@
 
 		<action path="/worldtracertty" type="com.bagnet.nettracer.tracing.actions.WorldTracerTTYAction" name="worldTracerTTYForm" scope="request" validate="false"></action>
 		<action path="/worldtracersusrit" type="com.bagnet.nettracer.tracing.actions.WorldTracerSUSRITAction" name="worldTracerSusRitForm" scope="request" validate="false"></action>
+
+		<action path="/incidentChecklist" type="com.bagnet.nettracer.tracing.actions.IncidentChecklistAction" name="incidentChecklistForm" scope="session" validate="false"></action>
 
 		<!-- Administer Groups -->
 		<action path="/createGroup" type="com.bagnet.nettracer.tracing.actions.admin.ManageGroups" name="groupForm" scope="request" validate="false"></action>
@@ -584,7 +613,11 @@
 		<action path="/osi" type="com.bagnet.nettracer.tracing.actions.OsiAction" name="OsiForm" scope="request" validate="false"></action>
 
 		<action path="/customerComments" type="com.bagnet.nettracer.tracing.actions.CustomerCommentsAction" name="CustomerCommentsForm" scope="request" validate="false"></action>
-
+		
+		<action path="/paxCommunication" type="com.bagnet.nettracer.tracing.actions.PaxCommunicationAction" name="PaxCommunicationForm" scope="request" validate="false"></action>
+		
+		<action path="/listNewPaxCommunication" type="com.bagnet.nettracer.tracing.actions.ListNewPaxCommunication" name="listNewPaxCommunicationForm" scope="request" validate="false"></action>
+		
 		<!-- Administer Tasks -->
 		<action path="/otherTasks" type="com.bagnet.nettracer.tracing.actions.ManageTask" name="taskForm" scope="request" validate="false"></action>
 		<action parameter="active" path="/activeOtherTasks" type="com.bagnet.nettracer.tracing.actions.ManageTask" name="taskForm" scope="request" validate="false"></action>

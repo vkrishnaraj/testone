@@ -106,6 +106,17 @@ public class Incident implements Serializable {
 	
 	private Set<ExpensePayout> expenses;
 	private List<ExpensePayout>expenselist;
+	
+	private String language;
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	private long checklist_version;    // for auto checklist
 
 	@Transient
 	public String getReportMethodString(int val) {
@@ -1053,6 +1064,14 @@ public class Incident implements Serializable {
 			ret = StationBMO.getStation("" + this.getStationassigned().getStation_ID());
 
 		return ret;
+	}
+	
+	public long getChecklist_version() {
+		return checklist_version;
+	}
+
+	public void setChecklist_version(long checklist_version) {
+		this.checklist_version = checklist_version;
 	}
 
 	private String format(String val) {

@@ -9,6 +9,8 @@ import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
+import com.bagnet.nettracer.wt.svc.RuleMapper;
+import com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class SpringUtils {
@@ -22,6 +24,8 @@ public class SpringUtils {
 	public final static String EVENT_HANDLER = "eventHandler";
 
 	private static final String WORLDTRACER_CONNECTOR = "wtConnector";
+	private static final String WORLDTRACER_CONNECTION_POOL = "wtConnectionPool";
+	private static final String WORLDTRACER_RULE_MAP = "wtRuleMap";
 
 	private static final String WORLDTRACER_TX_BMO = "wtTx-bmo";
 
@@ -67,7 +71,16 @@ public class SpringUtils {
 	}
 
 	public static ActionFileManager getActionFileManager() {
-		// TODO Auto-generated method stub
 		return (ActionFileManager) getBean(ACTIONFILE_MANAGER);
 	}
+	
+	public static WorldTracerConnectionPool getWtConnectionPool() {
+		return (WorldTracerConnectionPool) getBean(WORLDTRACER_CONNECTION_POOL);
+	}
+	
+	public static RuleMapper getWtRuleMap() {
+		return (RuleMapper) getBean(WORLDTRACER_RULE_MAP);
+	}
+	
+	
 }

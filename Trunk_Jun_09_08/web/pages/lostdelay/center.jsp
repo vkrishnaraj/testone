@@ -403,6 +403,20 @@
             }
           %>
           <%
+            boolean bPaxCommunication = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION, a);
+            boolean bPaxCommunicationReadOnly = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION_READ_ONLY, a);
+            if (bPaxCommunication || bPaxCommunicationReadOnly) {
+          %>
+          <dd><a href='paxCommunication.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />'><span class="aa">&nbsp;
+          <br />
+          &nbsp;</span> <span class="bb"><bean:message
+            key="menu.pax_communication" /></span> <span class="cc">&nbsp; <br />
+          &nbsp;</span></a></dd>
+          <%
+            }
+          %>
+          
+          <%
             val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS, a);
             if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
           %>

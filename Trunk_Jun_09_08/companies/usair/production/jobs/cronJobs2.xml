@@ -12,8 +12,20 @@
 				<ref bean="cronMoveToWtTrigger" />
 				<ref bean="LockCleanupTrigger" />
 				<ref bean="wtStatusTrigger" />
+				<ref bean="wtAlertTrigger" />
 			</list>
 		</property>
+	</bean>
+	
+	<bean id="WtAlertJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="hourlySqlServerStatusCheck" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="wtAlertTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="WtAlertJob" />
+		<property name="cronExpression" value="${wtalert.cron}" />
 	</bean>
 	
 	<bean id="WtStatusJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">

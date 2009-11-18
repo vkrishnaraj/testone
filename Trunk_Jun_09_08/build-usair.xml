@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="usair" default="build-usair">
+<project name="USAir-NT 1.74-5" default="build-usair">
 	
 	<target name="build-usair-all">
 		<antcall target="build-usair-dev" />
@@ -76,8 +76,27 @@
 		<copy todir="${basedir}/src" file="companies/usair/report_email_ld.html" />
 		<copy todir="${basedir}/src" file="companies/usair/report_email_dam.html" />
 		<copy todir="${basedir}/src" file="companies/usair/report_email_pil.html" />
+		<copy todir="${basedir}/src" file="companies/usair/pax_comm_email.html" />
+		
+		
+		<copy tofile="${basedir}/src/report_email_ld_fr.html" file="companies/usair/report_email_ld.html" />
+		<copy tofile="${basedir}/src/report_email_dam_fr.html" file="companies/usair/report_email_dam.html" />
+		<copy tofile="${basedir}/src/report_email_pil_fr.html" file="companies/usair/report_email_pil.html" />
+		
+		<copy tofile="${basedir}/src/report_email_ld_de.html" file="companies/usair/report_email_ld.html" />
+		<copy tofile="${basedir}/src/report_email_dam_de.html" file="companies/usair/report_email_dam.html" />
+		<copy tofile="${basedir}/src/report_email_pil_de.html" file="companies/usair/report_email_pil.html" />
+		
+		<copy tofile="${basedir}/src/report_email_ld_es.html" file="companies/usair/report_email_ld.html" />
+		<copy tofile="${basedir}/src/report_email_dam_es.html" file="companies/usair/report_email_dam.html" />
+		<copy tofile="${basedir}/src/report_email_pil_es.html" file="companies/usair/report_email_pil.html" /> 
+		
+		
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_de.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_fr.properties" />
+		
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
@@ -160,6 +179,14 @@
 		<property name="jarprefix" value="prod2-"/>
 		<property name="sub_path" value="production/"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs2.xml" />
+		<ant antfile="build-gen.xml" target="build-cron-service" />
+	</target>
+	
+	<target name="usair-build-cron-prod2-1">
+		<property name="ant_project_name" value="usair"/>
+		<property name="jarprefix" value="prod2-1-"/>
+		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs2-1.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
 	</target>
 	

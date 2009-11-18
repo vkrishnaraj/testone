@@ -150,4 +150,8 @@ public interface WorldTracerConnector {
 	
 	public String sendPxf(WtqRequestPxf pxf) throws WorldTracerException;
 
+	boolean doesUserNeedToEnterCaptcha(boolean loginNow);
+
+	void returnUserCaptcha(String text);
+
 }

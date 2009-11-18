@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report2" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<queryString>
+		<![CDATA[select innerquery.c agentcount, agent.username, checklist_task.description task, 
+checklist_task_option.description taskOption, 
+count(checklist_task_option.description) optionCounts 
+from incident_checklist  join agent on incident_checklist.agent_agent_id = agent.agent_id  
+join checklist_task on incident_checklist.task_id = checklist_task.task_id 
+join checklist_task_option on incident_checklist.option_id = checklist_task_option.option_id 
+join (select agent_agent_id, COUNT(*) c 
+from incident_checklist 
+where incident_checklist.timestamp >= '10/23/2008' and incident_checklist.timestamp <= '10/23/2009' 
+group by agent_agent_id) innerquery on agent.agent_id = innerquery.agent_agent_id 
+where incident_checklist.timestamp >= '10/23/2008' and incident_checklist.timestamp <= '10/23/2009'  
+group by agent.username, checklist_task.description, checklist_task_option.description, innerquery.c 
+order by agent.username;]]>
+	</queryString>
+	<field name="agentcount" class="java.lang.Integer">
+	</field>
+	<field name="username" class="java.lang.String">
+	</field>
+	<field name="task" class="java.lang.String">
+	</field>
+	<field name="taskOption" class="java.lang.String">
+	</field>
+	<field name="optionCounts" class="java.lang.Integer">
+	</field>
+	<group name="username">
+		<groupExpression><![CDATA[$F{username}]]></groupExpression>
+	</group>
+	<group name="task">
+		<groupExpression><![CDATA[$F{task}]]></groupExpression>
+	</group>
+	<group name="taskOption">
+		<groupExpression><![CDATA[$F{taskOption}]]></groupExpression>
+	</group>
+	<group name="agentGroup">
+		<groupExpression><![CDATA[$F{username}]]></groupExpression>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="45">
+			<staticText>
+				<reportElement x="0" y="0" width="551" height="45"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Checklist Performance Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="27">
+			<staticText>
+				<reportElement x="0" y="7" width="104" height="20"/>
+				<textElement/>
+				<text><![CDATA[User]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="7" width="166" height="20"/>
+				<textElement/>
+				<text><![CDATA[Task]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="7" width="213" height="20"/>
+				<textElement/>
+				<text><![CDATA[Action Taken]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="307" y="7" width="35" height="20"/>
+				<textElement/>
+				<text><![CDATA[Count]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="104" y="7" width="37" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="24">
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="0" y="1" width="104" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{username}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="141" y="1" width="166" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{task}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="342" y="1" width="213" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{taskOption}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="307" y="1" width="35" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{optionCounts}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="104" y="1" width="37" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{agentcount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54">
+			<textField hyperlinkType="None">
+				<reportElement x="435" y="11" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" hyperlinkType="None">
+				<reportElement x="515" y="11" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

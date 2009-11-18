@@ -83,6 +83,34 @@ public class Audit_Incident implements Serializable {
 	private Date modify_time;
 	private String modify_reason;
 	
+	private String language;
+	/**
+	 * @return Returns the language.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	private long checklist_version;    // for auto checklist
+	
+	/**
+	 * @return Returns the checklist_versopm.
+	 * 
+	 * @hibernate.property type="long"
+	 */
+	public long getChecklist_version() {
+		return checklist_version;
+	}
+
+	public void setChecklist_version(long checklist_version) {
+		this.checklist_version = checklist_version;
+	}
+	
 	/**
 	 * @return Returns the modify_agent.
 	 * 

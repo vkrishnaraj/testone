@@ -20,6 +20,24 @@ public class ActivityDTO implements Serializable {
 	private String activityinfomenu;
 	private String entries;
 	private int group;
+	private boolean highPriority;
+	private int highPriorityNumber;
+
+	public int getHighPriorityNumber() {
+		return highPriorityNumber;
+	}
+
+	public void setHighPriorityNumber(int highPriorityNumber) {
+		this.highPriorityNumber = highPriorityNumber;
+	}
+
+	public boolean isHighPriority() {
+		return highPriority;
+	}
+
+	public void setHighPriority(boolean highPriority) {
+		this.highPriority = highPriority;
+	}
 
 	/**
 	 * @return Returns the component_id.
@@ -110,4 +128,6 @@ public class ActivityDTO implements Serializable {
 	public void setGroup(int group) {
 		this.group = group;
 	}
+
+
 }

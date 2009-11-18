@@ -170,7 +170,6 @@ public class LostDelayReceipt {
 			Map parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title");
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
-			
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			
 

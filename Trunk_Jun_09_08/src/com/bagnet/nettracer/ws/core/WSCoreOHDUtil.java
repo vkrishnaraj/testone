@@ -15,6 +15,7 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -26,7 +27,11 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
+import com.bagnet.nettracer.tracing.db.ControlLog;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Inventory;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
@@ -37,6 +42,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
@@ -622,10 +628,17 @@ public class WSCoreOHDUtil {
   	
   	OHD onhand = OHDUtils.getExistingOnhandWithin24HoursAtStation(bagTagNumber, foundStation);
   	
+  	//auto receive related : to check if there is an incoming OHD that has the same bagTagNumber
+
+  	OHD forwardedOnHand = OHDUtils.getBagTagNumberIncomingToStation(bagTagNumber, foundStation);
+  	
   	// If OHD within last 24 hours with this ID:
   	if (onhand != null) {
   		si.setOhdId(onhand.getOHD_ID());
   		si.setErrorResponse(errorMsg + "Duplicate of OHD inserted in last 24 hours at station.");
+  	} else if(forwardedOnHand != null) {  
+  		si.setOhdId(forwardedOnHand.getOHD_ID());
+  		properlyHandleForwardedOnHand(forwardedOnHand, agent, foundStation);
   	} else {
 
   		OHD ohd = createOnhand(agent, bagTagNumber, foundStation, foundDate, comment);
@@ -644,6 +657,98 @@ public class WSCoreOHDUtil {
     return resDoc;
   }
   
+  /**
+   * when a bag is scanned and auto-received
+   * a series of steps take place
+   * to handle it correctly
+   */
+  private void properlyHandleForwardedOnHand(OHD ohd, Agent user, Station foundAtStation) {
+	Date gmtDate = TracerDateTime.getGMTDate();
+	String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(gmtDate);
+	MessageResources messages = MessageResources
+	.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+	
+	Incident tmpIncident = null;
+	
+	if (ohd.getMatched_incident() != null) {
+		tmpIncident = IncidentBMO.getIncidentByID(ohd.getMatched_incident(), null);
+	}
+	
+	if (tmpIncident != null && tmpIncident.getStationassigned().getStation_ID() == foundAtStation.getStation_ID()) {
+		ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
+	} else {
+		ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+	}
+	
+	//Update the close date on the file as well.
+	ohd.setClose_date(gmtDate);
+
+	//Update the holding status for this ohd and also add a remark.
+	ControlLog log = ohd.getLastLog();
+	if (log != null) {
+		log.setEnd_date(date);
+	}
+
+	//Update the controlling information on the file.
+	ControlLog newLog = new ControlLog();
+	newLog.setControlling_station(foundAtStation);
+	newLog.setStart_date(date);
+	newLog.setOhd(ohd);
+
+	ohd.getControlLog().add(newLog);
+	ohd.setHoldingStation(foundAtStation);
+	
+	// set ohd_log to received status
+	OHDUtils.setLogReceived(ohd);
+	
+	Remark r = new Remark();
+	r.setAgent(user);
+	r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime
+			.getGMTDate()));
+	r.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()),
+			"bagreceiveMessage")
+			+ " "
+			+ foundAtStation.getCompany().getCompanyCode_ID()
+			+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS")
+			+ " "
+			+ foundAtStation.getStationcode() + " station.");
+	r.setRemarktype(TracingConstants.REMARK_REGULAR);
+	r.setOhd(ohd);
+	
+	if (ohd.getRemarks() == null) ohd.setRemarks(new HashSet());
+	ohd.getRemarks().add(r);
+	
+	//HibernateUtils.save(ohd);
+	OhdBMO ohdBmo = new OhdBMO();
+	ohdBmo.insertOHD(ohd, user);
+	
+	// update l/d bag status to to be delivered as well if forwarding station is the same as l/d assigned station
+	Item item = BDOUtils.findOHDfromMatchedLD(ohd.getOHD_ID());
+	if (item != null) {
+		if (ohd.getHoldingStation().getStation_ID() == item.getIncident().getStationassigned().getStation_ID()) {
+			// only do this if forwarded station = station assigned for incident
+			Status s2 = new Status();
+			s2.setStatus_ID(TracingConstants.ITEM_STATUS_TOBEDELIVERED);
+			item.setStatus(s2);
+			HibernateUtils.save(item);
+		}
+	}
+	
+	// update request if there was one
+	OHDRequest forRequest = null;
+	Status s = null;
+	ArrayList listofrequest = (ArrayList)OHDUtils.getCreatedRequestsForOHD(foundAtStation.getStation_ID(),ohd.getOHD_ID());
+	if (listofrequest != null && listofrequest.size() > 0) {
+		for (int i = 0; i<listofrequest.size();i++) {
+			// close all these requests
+			s = new Status();
+			s.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+			forRequest = (OHDRequest) listofrequest.get(i);
+			forRequest.setStatus(s);
+			HibernateUtils.save(forRequest);
+		}
+	}
+  }
 
   /**
    * insert ohd into nt from outside
