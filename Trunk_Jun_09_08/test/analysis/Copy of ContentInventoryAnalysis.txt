@@ -1,0 +1,187 @@
+package analysis;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+import analysis.objects.Word;
+import analysis.objects.WordAnalysisCollection;
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Item_Inventory;
+import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OHD_Inventory;
+
+/**
+ * 
+ * @author Byron
+ *
+ * Objective:
+ * The objective of this class is to analyze a given database's
+ * content verbiage, both incidents and onhands, with the ultimate
+ * goal to be to determine the uniqueness of a word within a
+ * given population.
+ * 
+ * Data to Gather:
+ * 1.  Total Incidents
+ * 2.  Total On-Hands
+ * 3.  Breakdown of Tokenized Words
+ * 4.  Number of Occurances of each word in incidents and on-hands
+ * 
+ * Analysis to Perform:
+ * 1.  What are important descriptor words?
+ * 2.  How can we identify brand names that might be useful?  Nike, Addias, etc.
+ * 3.  What words should we generally ignore?
+ * 4.  What should the cutoff be?
+ */
+
+public class ContentInventoryAnalysis {
+
+	public static void main(String[] args) {
+		try {
+	    doWork();
+    } catch (HibernateException e) {
+	    e.printStackTrace();
+    }
+	}
+	
+	public static void doWork() throws HibernateException {
+		WordAnalysisCollection wac = new WordAnalysisCollection();
+		
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		//processAllIncidents(wac, sess);
+		processAllOhds(wac, sess);
+		sess.close();
+		
+		System.out.println("Sorting By Incident Occurances... " + new Date());
+		List<Word> wordList = wac.getList();
+		Comparator<Word> comparator = new IncidentWordFrequencyComparator();
+		Collections.sort(wordList, comparator);
+		
+		System.out.println("Generating Output... " + new Date());
+		FileOutputStream out;
+    try {
+	    out = new FileOutputStream("output.txt");
+	    PrintStream p = new PrintStream(out);
+	    
+	    for (Word w: wordList) {
+	    	p.println(w.getWord()+","+w.getIncidentOccurances()+"," + w.getOhdOccurances());
+	    }
+	    p.close();
+    } catch (FileNotFoundException e) {
+	    e.printStackTrace();
+    }
+		
+    System.out.println("Finished Incidents... " + new Date());
+
+	}
+
+	private static void processAllOhds(WordAnalysisCollection wac, Session sess) {
+	  List<String> ohds = null;
+
+		System.out.println("Starting OHDs... "+ new Date());
+		
+		String sql = "select distinct ohd.OHD_ID from com.bagnet.nettracer.tracing.db.OHD ohd";
+		Query q = sess.createQuery(sql);
+		ohds = (List<String>) q.list();
+
+		System.out.println("Processing OHDs... " + new Date());
+		
+		int tenPercent = ohds.size() / 50;
+
+		for (int i=0; i<ohds.size(); ++i) {
+			if (i%tenPercent == 0) {
+				double dd = i;
+				double percent = dd/ohds.size() * 100;
+				System.out.println(percent + "% ohds complete...");	
+			}
+			try {
+				processOhd(ohds.get(i), sess, wac);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+  }
+
+	private static void processAllIncidents(WordAnalysisCollection wac,
+      Session sess) {
+	  List<String> incidents;
+	  System.out.println("Starting... "+ new Date());
+		
+		String sql = "select distinct incident.incident_ID from com.bagnet.nettracer.tracing.db.Incident incident";
+		Query q = sess.createQuery(sql);
+		incidents = (List<String>) q.list();
+
+		System.out.println("Processing Incidents... " + new Date());
+		
+		int tenPercent = incidents.size() / 50;
+
+		for (int i=0; i<incidents.size(); ++i) {
+			if (i%tenPercent == 0) {
+				double dd = i;
+				double percent = dd/incidents.size() * 100;
+				System.out.println(percent + "% incidents complete...");	
+			}
+			try {
+				processIncident(incidents.get(i), sess, wac);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+  }
+	
+	private static void processIncident(String incidentId, Session sess, WordAnalysisCollection wac) throws HibernateException {
+		Incident incident = (Incident) sess.load(Incident.class, incidentId);
+		HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+		
+		for (Item item: (List<Item>) incident.getItemlist()) {
+			if (item != null) {
+  			for (Item_Inventory inv: (Set<Item_Inventory>)item.getInventory()) {
+  				StringTokenizer t = new StringTokenizer(inv.getDescription().toUpperCase(), " ,/\\()\"!.-;");
+  				while (t.hasMoreTokens()) {
+  					String token = t.nextToken();
+  					Word word = wac.getKey(token);
+  					word.setIncidentOccurances(word.getIncidentOccurances() + 1);
+  				}
+  			}
+			}
+		}
+		sess.evict(incident);
+		sess.clear();
+		
+	}
+	
+	private static void processOhd(String ohdId, Session sess, WordAnalysisCollection wac) {
+		OHD ohd = (OHD) sess.load(OHD.class, ohdId);
+		HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+		
+		for (OHD_Inventory item: (Set<OHD_Inventory>) ohd.getItems()) {
+			StringTokenizer t = new StringTokenizer(item.getDescription().toUpperCase(), " ,/\\()\"!.-;");
+			while (t.hasMoreTokens()) {
+				String token = t.nextToken();
+				Word word = wac.getKey(token);
+				word.setIncidentOccurances(word.getIncidentOccurances() + 1);
+			}
+		}
+		sess.evict(ohd);
+		sess.clear();
+	}
+}
+
+
