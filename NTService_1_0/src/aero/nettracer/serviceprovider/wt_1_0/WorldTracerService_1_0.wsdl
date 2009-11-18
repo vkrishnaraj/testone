@@ -5,16 +5,29 @@
             <xs:import namespace="http://response.ws_1_0.serviceprovider.nettracer.aero/xsd"/>
             <xs:complexType name="Ahl">
                 <xs:sequence>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
                     <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="claimCheck" nillable="true" type="ax23:ClaimCheck"/>
+                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="expenses" nillable="true" type="ax23:Expenses"/>
                     <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
+                    <xs:element minOccurs="0" name="faultReasonDescription" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element minOccurs="0" name="numberBagsChecked" type="xs:int"/>
                     <xs:element minOccurs="0" name="numberPaxAffected" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
+                    <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Agent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Itinerary">
@@ -23,7 +36,9 @@
                     <xs:element minOccurs="0" name="arrivalCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="departureCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="flightDate" nillable="true" type="xs:dateTime"/>
-                    <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="flightNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="legfrom_type" type="xs:int"/>
+                    <xs:element minOccurs="0" name="legto_type" type="xs:int"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ClaimCheck">
@@ -32,9 +47,17 @@
                     <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="Expenses">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="approvalDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="checkamt" type="xs:float"/>
+                    <xs:element minOccurs="0" name="currrency" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="paycode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="Item">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="brand" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagNumber" type="xs:int"/>
                     <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="content" nillable="true" type="ax23:Content"/>
                     <xs:element minOccurs="0" name="desc1" nillable="true" type="xs:string"/>
@@ -42,6 +65,7 @@
                     <xs:element minOccurs="0" name="desc3" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="firstNameOnBag" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lastNameOnBag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
@@ -53,7 +77,7 @@
             </xs:complexType>
             <xs:complexType name="Passenger">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="addresses" nillable="true" type="ax23:Address"/>
+                    <xs:element minOccurs="0" name="address" nillable="true" type="ax23:Address"/>
                     <xs:element minOccurs="0" name="ffAirline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="ffNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="ffStatus" nillable="true" type="xs:string"/>
@@ -61,6 +85,8 @@
                     <xs:element minOccurs="0" name="initials" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="salutation" type="xs:int"/>
+                    <xs:element minOccurs="0" name="salutationDescription" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Address">
@@ -69,7 +95,7 @@
                     <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="altPhone" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="countryCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="homePhone" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="mobilePhone" nillable="true" type="xs:string"/>
@@ -118,26 +144,72 @@
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Ohd">
-                <xs:sequence/>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax23:Itinerary"/>
+                    <xs:element minOccurs="0" name="claimCheck" nillable="true" type="ax23:ClaimCheck"/>
+                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
+                    <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="storageLocation" nillable="true" type="xs:string"/>
+                </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ForwardMessage">
-                <xs:sequence/>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
+                    <xs:element minOccurs="0" name="destinationAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="expediteTag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fromAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fromStation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax23:WtqSegment"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="suplementaryInfo" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="textInfo" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WtqSegment">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivalTime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="arrivedate" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="departdate" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="departureTime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="legfrom" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="legto" nillable="true" type="xs:string"/>
+                </xs:sequence>
             </xs:complexType>
             <xs:complexType name="RequestOhd">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="ohd" nillable="true" type="ax23:Ohd"/>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
+                    <xs:element minOccurs="0" name="ahl" nillable="true" type="ax23:Ahl"/>
+                    <xs:element minOccurs="0" name="bagTagNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fromAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fromStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="furtherInfo" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Pxf">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="content" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="destination" type="xs:int"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pxfDetails" nillable="true" type="ax23:PxfAas"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pxfDetails" nillable="true" type="ax23:PxfDetails"/>
+                    <xs:element minOccurs="0" name="sendingStation" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="PxfAas">
+            <xs:complexType name="PxfDetails">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="area" nillable="true" type="xs:string"/>
@@ -155,22 +227,33 @@
             </xs:complexType>
             <xs:complexType name="ForwardOhd">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="ohd" nillable="true" type="ax23:Ohd"/>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
+                    <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="destinationAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="expediteNumber" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="fwdName" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="supplementaryInfo" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Bdo">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
                     <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bdoId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="deliveryComments" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="deliveryCompany" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="deliveryDate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="deliveryStationCode" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax23:Item"/>
                     <xs:element minOccurs="0" name="originationStationCode" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passenger" nillable="true" type="ax23:Passenger"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax23:Passenger"/>
                     <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
@@ -504,6 +587,7 @@
             <xs:complexType name="WebServiceError">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="systemResponse" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>

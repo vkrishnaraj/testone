@@ -42,6 +42,13 @@
 		<antcall target="services_wsdl2java" />
 	</target>
 
+	<target name="All_Services_wsdl2java">
+		<antcall target="services_java2wsdl" />
+		<ant target="WT_services_java2wsdl" />
+		<antcall target="services_wsdl2java" />
+		<ant target="WT_services_wsdl2java" />
+	</target>	
+
 	
 	<target name="services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
@@ -57,7 +64,7 @@
 			<arg value="-uri" />
 			<arg file="src/aero/nettracer/serviceprovider/ws_1_0/ReservationService_1_0.wsdl" />
 			<arg value="-o" />
-			<arg file="${build.dir}/webservices/NTService" />
+			<arg file="${build.dir}/webservices" />
 			<arg value="-ss" />
 			<arg value="-sd" />
 			<arg value="-g" />
@@ -65,11 +72,12 @@
 			<arg value="xmlbeans" />
 		</java>
 
-		<!-- copy services.xml to web-inf -->
+		<!-- copy services.xml to web-inf 
+		
 		<copy todir="${basedir}/web/WEB-INF/services/NTService/META-INF" file="${build.dir}/webservices/NTService/resources/services.xml" />
-
+		-->
 		<!-- copy java files to src -->
-
+		<!--
 		<copy todir="${basedir}/src">
 			<fileset dir="${build.dir}/webservices/NTService/src">
 				<include name="**/**/*.java" />
@@ -91,12 +99,13 @@
 		</jar>
 
 		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/NTService/ReservationService_1_0.jar" />
-
+		-->
 		<!-- clean up -->
-
+		<!--
 		<delete dir="${build.dir}/webservices/NTService/temp" />
 		<delete dir="${build.dir}/webservices/NTService/resources" />
 		<delete dir="${build.dir}/webservices/NTService/src" />
+		-->
 	</target>
 	
 	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.classpath" />
@@ -227,12 +236,14 @@
 		</Java2WSDLTask>
 	</target>
 
+	
+	
 	<target name="WT_services_wsdl2java">
 		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
 			<arg value="-uri" />
 			<arg file="src/aero/nettracer/serviceprovider/wt_1_0/WorldTracerService_1_0.wsdl" />
 			<arg value="-o" />
-			<arg file="${build.dir}/webservices/WTService" />
+			<arg file="${build.dir}/webservices" />
 			<arg value="-ss" />
 			<arg value="-sd" />
 			<arg value="-g" />
