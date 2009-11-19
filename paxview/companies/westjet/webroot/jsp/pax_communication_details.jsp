@@ -243,7 +243,7 @@ p.big
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><spring:message code="page.title" /> - Pax Communication Details - strLocale is set to <%=strLocale %></title>
+<title><spring:message code="page.title" /> - Pax Communication Details</title>
 </head>
 <body>
 <div id="container">
