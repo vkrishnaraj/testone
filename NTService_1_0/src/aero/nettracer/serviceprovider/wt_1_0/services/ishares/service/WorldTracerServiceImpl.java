@@ -1,9 +1,12 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -204,8 +207,49 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo,
-			WorldTracerResponse response) throws CommandNotProperlyFormedException {
+			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
 		// TODO Auto-generated method stub
+		boolean success = false;
+		String specificCommandType = "BDO";
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("COMMAND_TYPE", connectionType);
+		map.put("FILE_TYPE", "AHL");
+		map.put("WT_AHL_ID", bdo.getAhlId());  
+		map.put("DELIVERY_SERVICE","DS");
+		map.put("STATION_CODE", bdo.getStationCode());
+		map.put("AIRLINE_CODE", bdo.getStationCode());
+		map.put("DELIVERY_SERVICE_ID", "01");  //Assume	that we will always use the first delivery company in the predefined WT list
+		map.put("COLOR_TYPE", "01");
+		
+		String command = "{COMMAND_TYPE} BDO {FILE_TYPE} {WT_AHL_ID} \n {DELIVERY SERVICE} {STATION_CODE}{AIRLINE_CODE}{DELIVERY_SERVICE_ID}/{COLOR_TYPE}";
+		
+		command = inputValuesIntoCommand(map, command);
+		
+		// Send Command - The first BDO call will return a mask that will need to be resubmitted with the DD(delivery date) and .AG (Agent Code)
+		String responseTxt = null;
+		if (unitTest) {
+			responseTxt = MockISharesResponse.mockRequestBDOCommand_1(command);
+		} else {
+			responseTxt = sendCommand(specificCommandType, command);
+		}
+		//The mask should now be in responseTxt - need to add DD and .AG
+		if (responseTxt.contains("DD")& responseTxt.contains(".AG")){
+			responseTxt = responseTxt.replaceAll("DD", "DD"+PreProcessor.ITIN_DATE_FORMAT.format(bdo.getDeliveryDate()));
+			responseTxt = responseTxt.replaceAll(".AG", ".AG"+PreProcessor.getAgentEntry(bdo.getAgent()));
+			if (unitTest) {
+				responseTxt = MockISharesResponse.mockRequestBDOCommand_2(command);
+			} else {
+				responseTxt = sendCommand(specificCommandType, command);
+			}
+			//sample success message "WM BDO AHL XAXUS10485                   /-OK-/19NOV09 1516GMT"
+			if (responseTxt.contains("-OK-")) {
+				response.setSuccess(true);
+			} 
+		} else {
+			response.setSuccess(success);
+		}
+		
 		
 	}
 
