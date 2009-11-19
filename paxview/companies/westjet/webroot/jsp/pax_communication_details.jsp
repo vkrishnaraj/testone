@@ -15,7 +15,26 @@ String myNextAction = "" + (String) request.getAttribute("prepareto");
 
 boolean isThereAnyMessage = false;
 
-String strLocale = "" + request.getAttribute("siteLanguage");
+String strLocale = null;
+if(request.getAttribute("siteLanguage") != null) {
+	strLocale = (String) request.getAttribute("siteLanguage");
+}
+	
+if(strLocale == null || strLocale.trim().length() == 0) {
+	Cookie myCookie = null;
+	
+	Cookie cookies [] = request.getCookies ();
+	if (cookies != null)
+	for (int i = 0; i < cookies.length; i++)
+	{
+		if (cookies[i].getName().equals("userLanguage")) // the name of the cookie you have added
+		{
+			myCookie = cookies[i];
+			strLocale = myCookie.getValue();
+			break;
+		}
+	}
+}
 
 StringBuffer sbPriorCommunication = new StringBuffer("");
 WS_PVIncident advancedIncident = (WS_PVIncident) request.getSession().getAttribute("FORM_DATA");
@@ -32,7 +51,7 @@ if (advancedIncident != null) {
 						if (strLocale.equalsIgnoreCase("fr")) {
 							enteredBy = " - Votre message";
 						} else {
-							enteredBy = " - Your Comment";
+							enteredBy = " - Your Message";
 						}
 					} else {
 						enteredBy = " - WestJet";
@@ -224,7 +243,7 @@ p.big
 </style>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><spring:message code="page.title" /> - Pax Communication Details</title>
+<title><spring:message code="page.title" /> - Pax Communication Details - strLocale is set to <%=strLocale %></title>
 </head>
 <body>
 <div id="container">
@@ -267,7 +286,17 @@ p.big
 		</table><!--</center>-->
 	</div> 
     <div id="newPaxComment">
-	    <form method="post" action="paxCommunication.htm" name="frmNewPaxComment" id="frmNewPaxComment">
+    <c:choose>
+	<c:when test="${siteLanguage == 'fr'}">
+		<form method="post" action="paxCommunication.htm?locale=fr" name="frmNewPaxComment" id="frmNewPaxComment">
+	</c:when>
+	<c:when	test="${(empty siteLanguage) and cookie.userLanguage.value == 'fr'}">
+		<form method="post" action="paxCommunication.htm?locale=fr" name="frmNewPaxComment" id="frmNewPaxComment">
+	</c:when>
+	<c:otherwise>
+		<form method="post" action="paxCommunication.htm" name="frmNewPaxComment" id="frmNewPaxComment">
+	</c:otherwise>
+	</c:choose>	
 			<table cellspacing="0" cellpadding="5" border="0">
 				<tr>
 					<td>
@@ -309,7 +338,6 @@ p.big
   </div>
   
 </div>
-
 <script type="text/javascript">
 
 window.onload=function(){
