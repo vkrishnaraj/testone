@@ -8,15 +8,21 @@ import org.apache.commons.httpclient.HttpException;
 import org.junit.Test;
 
 import aero.nettracer.serviceprovider.common.db.PermissionType;
+import aero.nettracer.serviceprovider.common.db.Profile;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.UserNotAuthorizedException;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
+import aero.nettracer.serviceprovider.wt_1_0.common.Agent;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.PxfDetails;
+import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.ISharesServiceManager;
 
 public class ISharesTestCases {
@@ -158,5 +164,124 @@ public class ISharesTestCases {
 		Assert.assertEquals(false, response.isSuccess());
 	}	
 
+	@Test
+	public void testRequestOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.REQUEST_OHD;
 
+		RequestOhd payload = new RequestOhd();
+		Ahl myAhl = new Ahl();
+		myAhl.setAhlId("JFKZZ14361");
+		Passenger[] myPaxes = new Passenger[1];
+		Passenger myPax = new Passenger();
+		myPax.setLastname("PHILPOTT");
+		myPaxes[0] = myPax;
+		myAhl.setPax(myPaxes);
+		payload.setAhl(myAhl);
+		payload.setOhdId("LGWZZ33451");
+		
+		payload.setFurtherInfo("FURTHER INFO FREE TEXT.");
+		Agent myAgent = new Agent();
+		myAgent.setAirline("US");
+		myAgent.setUsername("CHUCK");
+		payload.setAgent(myAgent);
+		
+		
+		// create a User, Profile objs ()
+		User user = new User();
+		Profile profile = new Profile();
+		profile.setAirline("US");
+		user.setProfile(profile);
+		
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, null);
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
+		
+		// Perform Action
+		impl.requestOhd(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(true, response.isSuccess());
+	}
+	
+	@Test
+	public void testRequestQuickOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.REQUEST_QOHD;
+
+		RequestOhd payload = new RequestOhd();
+		Ahl myAhl = new Ahl();
+		myAhl.setAhlId("JFKZZ14361");
+		Passenger[] myPaxes = new Passenger[1];
+		Passenger myPax = new Passenger();
+		myPax.setLastname("PHILPOTT");
+		myPaxes[0] = myPax;
+		myAhl.setPax(myPaxes);
+		payload.setAhl(myAhl);
+		payload.setBagTagNumber("US123456");
+		payload.setFurtherInfo("FURTHER INFO FREE TEXT.");
+		Agent myAgent = new Agent();
+		myAgent.setAirline("US");
+		myAgent.setUsername("CHUCK");
+		payload.setAgent(myAgent);
+		
+		payload.setFromAirline("US");
+		payload.setFromStation("XAX");
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		
+		// create a User, Profile objs ()
+		User user = new User();
+		Profile profile = new Profile();
+		profile.setAirline("US");
+		user.setProfile(profile);
+	
+		
+		
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, null);
+		
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
+		
+		// Perform Action
+		impl.requestQuickOhd(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(true, response.isSuccess());
+	}
+	
+	@Test
+	public void testGetActionFileSummary() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_SUMMARY;
+
+		ActionFileRequestData payload = new ActionFileRequestData();
+		payload.setStation("ATL");
+		payload.setAirline("US");
+		payload.setType("AP");
+		payload.setDay(3);
+		
+
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		
+		// create a User, Profile objs ()
+		User user = new User();
+		Profile profile = new Profile();
+		profile.setAirline("US");
+		user.setProfile(profile);
+	
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, null);
+		
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
+		
+		// Perform Action
+		impl.getActionFileSummary(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(true, response.isSuccess());
+	}
 }
