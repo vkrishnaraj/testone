@@ -87,7 +87,7 @@ if (advancedIncident != null) {
 							if(!myAcknowledgedTimestamp.equals("null")) {
 								String myStatus = myWS_PVPaxCommunication.getStatus();
 								if(myStatus.equalsIgnoreCase("RESPONDED")) {
-									strAcknowledgedBy = "<I>Comment responded by WestJet on " + myAcknowledgedTimestamp + "</I>";
+									strAcknowledgedBy = "<I>Message responded by WestJet on " + myAcknowledgedTimestamp + "</I>";
 									if (strLocale.equalsIgnoreCase("fr")) {
 								        try {
 								        	Date myFrenchAcknowledgedDate = sdf.parse(myAcknowledgedTimestamp); 
@@ -98,7 +98,7 @@ if (advancedIncident != null) {
 										strAcknowledgedBy = "<I>Message répondu par WestJet le " + myAcknowledgedTimestamp + "</I>";
 									}
 								} else {
-									strAcknowledgedBy = "<I>Comment acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";
+									strAcknowledgedBy = "<I>Message acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";
 									if (strLocale.equalsIgnoreCase("fr")) {
 								        try {
 								        	Date myFrenchAcknowledgedDate = sdf.parse(myAcknowledgedTimestamp); 

@@ -9,7 +9,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+
+<%@page import="org.apache.struts.util.LabelValueBean"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -314,11 +315,15 @@
                       <b><bean:message key="colname.report_email_cus" /></b>
                       </td>
                       <td width="17%">
+                      <% String userLocale = a.getDefaultlocale();	%>
                       <bean:message key="colname.email.language" />
                       <br />
-                      <html:select name="incidentForm" property="language" styleClass="dropdown">
-                      	<html:options collection="receiptLocaleList" property="value" labelProperty="label"/>
-                    </html:select>
+                    <select name="language" class="dropdown">
+                      <logic:iterate id="locale" name="receiptLocaleList" scope="session">
+                        <option value='<bean:write name="locale" property="value"/>' <%=(((LabelValueBean)locale).getValue().equals(userLocale)? "selected" : "") %>>
+                        <bean:write name="locale" property="label" />
+                      </logic:iterate>
+                    </select>
 <%
                     }
 %>
