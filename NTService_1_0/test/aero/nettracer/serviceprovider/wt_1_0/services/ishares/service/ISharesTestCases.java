@@ -163,12 +163,38 @@ public class ISharesTestCases {
 		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
 		Assert.assertEquals(false, response.isSuccess());
 	}	
+	@Test
+	public void testBDO()	throws CommandNotProperlyFormedException, HttpException, IOException {
+		
+		// Create Payload & Type
+		WorldTracerActionType type =  WorldTracerActionType.CREATE_BDO;
 
+ 
+		BDORequestData payload = new BDORequestData();
+		payload.setStation("XAX");
+		payload.setAirline("US");
+		payload.setDay(1);
+		payload.setNumber(1);
+		payload.setType("AA");
+		
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, null, payload, true, null);
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
+		
+		// Perform Action
+		impl.insertBdo(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(false, response.isSuccess());
+	}	
+=======
 	@Test
 	public void testRequestOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.REQUEST_OHD;
+>>>>>>> 1.7
 
 		RequestOhd payload = new RequestOhd();
 		Ahl myAhl = new Ahl();
