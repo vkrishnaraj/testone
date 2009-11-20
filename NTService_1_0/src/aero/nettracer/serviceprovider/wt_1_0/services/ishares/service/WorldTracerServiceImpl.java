@@ -3,6 +3,7 @@ package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpException;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFile;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
@@ -316,7 +318,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
 		// TODO Auto-generated method stub
 		// Prepare variables
-		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.requestQuickOhd(dto, data, response);
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.requestOhd(dto, data, response);
 		//TODO: CHECK THIS EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.REQUEST_QOH);
 		
 		boolean success = false;
@@ -327,8 +329,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		map.put("COMMAND_TYPE", connectionType);
 		map.put("AHL_FILE_REFERENCE", data.getAhl().getAhlId());
 		map.put("OHD_FILE_REFERENCE_NUMBER", data.getOhdId());
-		map.put("FI_FREE_FORM_TEXT", data.getFurtherInfo());
-		map.put("AGENT_ID", PreProcessor.getAgentEntry(data.getAgent()));
+		map.put("FI_FREE_FORM_TEXT", ((List<String>)fieldMap.get(WorldTracerField.FI)).get(0));
+		map.put("AGENT_ID", ((List<String>)fieldMap.get(WorldTracerField.AG)).get(0));
 		
 		// teletypes - optional field
 		String[] myTeletypes = data.getTeletype();
@@ -364,7 +366,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Send Command
 		String responseTxt = null;
 		if (unitTest) {
-			responseTxt = MockISharesResponse.mockGetActionFileCountsCommand(command);
+			responseTxt = MockISharesResponse.mockRohCommand(command);
 		} else {
 			responseTxt = sendCommand("ROH", command);
 		}
@@ -375,9 +377,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		Ohd myOhd = null;
 		
 		success = true;
-		
+
 		// On success, set success to true (defaults to false)
-		if (success) {
+		if (responseTxt.contains("WM SUS AHL")) {
 			response.setSuccess(true);
 		}
 		
@@ -398,9 +400,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("COMMAND_TYPE", connectionType);
 		map.put("AHL_FILE_REFERENCE", data.getAhl().getAhlId());
-		map.put("QOH_FILE_REFERENCE_NUMBER", data.getOhdId());
-		map.put("FI_FREE_FORM_TEXT", data.getFurtherInfo());
-		map.put("AGENT_ID", PreProcessor.getAgentEntry(data.getAgent()));
+		map.put("FROM_STATION", data.getFromStation());
+		map.put("FROM_AIRLINE", data.getFromAirline());
+		map.put("TAG_NUMBER", ((List<String>)fieldMap.get(WorldTracerField.TN)).get(0));
+		map.put("FI_FREE_FORM_TEXT", ((List<String>)fieldMap.get(WorldTracerField.FI)).get(0));
+		map.put("AGENT_ID", ((List<String>)fieldMap.get(WorldTracerField.AG)).get(0));
 		
 		// teletypes - optional field
 		String[] myTeletypes = data.getTeletype();
@@ -425,7 +429,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		
 		// Generate Command from Hash (Example means provided)
 		String command = "{COMMAND_TYPE} ROH {AHL_FILE_REFERENCE}\n" +
-					     "QOH {QOH_FILE_REFERENCE_NUMBER}\n" +
+					     "QOH {FROM_STATION}{FROM_AIRLINE} {TAG_NUMBER}\n" +
 					   	 "FI {FI_FREE_FORM_TEXT}\n" +
 					   	 "AG {AGENT_ID}\n" +
 					   	 "SI {FI_FREE_FORM_TEXT}\n" +
@@ -436,7 +440,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Send Command
 		String responseTxt = null;
 		if (unitTest) {
-			responseTxt = MockISharesResponse.mockGetActionFileCountsCommand(command);
+			responseTxt = MockISharesResponse.mockRequestQohCommand(command);
 		} else {
 			responseTxt = sendCommand("Quick ROH", command);
 		}
@@ -444,33 +448,83 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Process Response and insert any necessary data into the response
 		// object & set success variable if successful
 		// parse the result from iShare 
-		Ohd myOhd = null;
-		
-		success = true;
-		
+
+
 		// On success, set success to true (defaults to false)
-		if (success) {
+		if (responseTxt.contains("WM SUS AHL")) {
 			response.setSuccess(true);
 		}
-		
 	}
 
 
 	public void getActionFileDetails(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException {
-		// TODO SPECIAL CASE: MAY NOT NEED TO BE IMPLEMENTED
+			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException {
+		throw new WorldTracerException("METHOD NOT IMPLEMENTED INTENTIONALLY");
 
 	}
 
 
 
 	public void getActionFileSummary(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException {
-		// TODO Auto-generated method stub
+			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
+		//TODO here
+		// Prepare variables
 		
+		// If applicable, perform any pre-processing required to obtain a
+		// hashmap of field names
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("COMMAND_TYPE", connectionType);
+		map.put("STATION", data.getStation());
+		map.put("AIRLINE", data.getAirline());
+		map.put("AREA", data.getType());
+		map.put("DAY", data.getDay()+"");
+//		map.put("NUMBER", data.getNumber()+"");
+		
+		// Generate Command from Hash (Example means provided)
+		String command = "{COMMAND_TYPE} DXF {STATION}{AIRLINE} {AREA} D{DAY}";
+
+		command = inputValuesIntoCommand(map, command);
+		
+		// Send Command
+		String responseTxt = null;
+		if (unitTest) {
+			responseTxt = MockISharesResponse.mockActionFileSummaryNextCommand(command);
+		} else {
+			responseTxt = sendCommand("DXF", command);
+		}
+		
+		List<ActionFile> myActionFileList = new ArrayList<ActionFile>();
+		
+		 while (responseTxt.contains("WMPN") || responseTxt.contains("ACTION FILE DISPLAY COMPLETE")){
+			// multiple pages with next page flag or last page with last page flag
+			// populate XF[]
+			ActionFile myActionFile = ISharesResponseParser.processActionFileDetail(responseTxt);
+			myActionFileList.add(myActionFile);
+			
+			if(responseTxt.contains("WMPN")){
+				try{
+					if (unitTest) {
+						responseTxt = MockISharesResponse.mockActionFileSummaryNextCommand(command);
+					} else {
+						responseTxt = sendCommand("WMPN", "WMPN");
+					}
+					
+					//get the result
+				} catch(HttpException httpEx) {
+					httpEx.printStackTrace();
+				} catch(IOException ioEx) {
+					ioEx.printStackTrace();
+				}
+			}
+			
+			// On success, set success to true (defaults to false)
+			if (responseTxt.contains("ACTION FILE DISPLAY COMPLETE")) {  //only single page or on last page
+				response.setSuccess(true);
+				response.setActionFiles(myActionFileList.toArray(new ActionFile[myActionFileList.size()]));
+				return;
+			}
+		}
 	}
-
-
 
 	public void placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
 			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {

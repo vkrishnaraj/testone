@@ -72,7 +72,18 @@ public class PreProcessor {
 	  return fieldMap;
   }
 	
-	
+	public static Map<WorldTracerField, List<String>> requestOhd(WorldTracerActionDTO dto, RequestOhd data,
+		      WorldTracerResponse response) throws WorldTracerException {
+				Map<WorldTracerField, List<String>> fieldMap = createFieldMap(data, dto);
+				
+				if (data.getAhl() == null || data.getAhl().getAhlId() == null) {
+					throw new WorldTracerException("No WorldTracer AHL ID provided.");
+				}
+				
+			  return fieldMap;
+		  }
+			
+
 	private static Map<WorldTracerField, List<String>> createFieldMap(RequestOhd data, WorldTracerActionDTO dto) {
 		if (data == null) {
 			return null;
@@ -97,7 +108,9 @@ public class PreProcessor {
 		}
 
 		addIncidentFieldEntry(WorldTracerField.AG, getAgentEntry(data.getAgent()), result);
-		addConvertedTag(data.getBagTagNumber(), WorldTracerField.TN, result, dto.getUser().getProfile().getAirline());
+		if (data.getBagTagNumber() != null) {
+			addConvertedTag(data.getBagTagNumber(), WorldTracerField.TN, result, dto.getUser().getProfile().getAirline());
+		}
 		return result;
 
 	}

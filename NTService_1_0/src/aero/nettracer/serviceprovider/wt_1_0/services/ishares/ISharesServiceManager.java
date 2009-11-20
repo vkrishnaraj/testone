@@ -173,7 +173,8 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse getActionFileDetails(WorldTracerActionDTO dto, ActionFileRequestData data, 
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			WorldTracerResponse response) 
+			throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.getActionFileDetails(dto, data, response);
 		return response;
@@ -182,7 +183,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public WorldTracerResponse getActionFileSummary(WorldTracerActionDTO dto,
 			ActionFileRequestData data, 
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.getActionFileSummary(dto, data, response);
 		return response;

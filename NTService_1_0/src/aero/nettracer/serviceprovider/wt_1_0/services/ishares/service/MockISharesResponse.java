@@ -2258,8 +2258,8 @@ public class MockISharesResponse {
 
 				break;
 			case 3:
-				sb.append(">WM ACTION FILE   PHXUS  -WM- D1/2 \n");
-				sb.append(" ");
+				sb.append("<font face= \" courier \" ><PRE>&GTWM ACTION FILE   PHXUS  -WM- D1/2 \n");
+				sb.append(" \n");
 				sb.append("1/  A/PHXUS46289 O/ORDUA39034 SCORE - 62 CT/FD/RT \n");
 				sb.append("A/MOSINSKI   JM   LO208609  BK22HXX GDN/MUC/ORD LO395/16NOV \n");
 				sb.append("O/                          BK22XXX ORD         YY/16NOV \n");
@@ -2280,8 +2280,8 @@ public class MockISharesResponse {
 				sb.append("DISPLAY FILES           DMF   DISPLAY MATCH CONTENTS  DMC   \n");
 				sb.append("ERASE AND DISPLAY NEXT  EXF   TRANSFER TO FILE        TXF   \n");
 				sb.append("SEND TO TX/XF           DXF  .. ......../ ......../ ......../  \n");
-				sb.append(">WMPN \n");
-				sb.append("\n");
+				sb.append("&GTWMPN \n");
+				sb.append("</PRE></td></tr></tbody><tfoot><tr><td><hr color=\"#3366CC\">\n");
 
 				break;
 			
