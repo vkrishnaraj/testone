@@ -48,7 +48,7 @@ if (advancedIncident != null) {
 					String enteredBy = "";
 					String myAgent = "" + myWS_PVPaxCommunication.getAgent();
 					if(myAgent==null || myAgent.equals("") || myAgent.equals("null")) {  //comment by pax 
-						if (strLocale.equalsIgnoreCase("fr")) {
+						if (strLocale != null && strLocale.equalsIgnoreCase("fr")) {
 							enteredBy = " - Votre message";
 						} else {
 							enteredBy = " - Your Message";
@@ -66,7 +66,7 @@ if (advancedIncident != null) {
 			            DateFormat.MEDIUM,
 			            localeFR);
 
-					if (strLocale.equalsIgnoreCase("fr")) {
+					if (strLocale != null && strLocale.equalsIgnoreCase("fr")) {
 				        try {
 				        	Date myFrenchDate = sdf.parse(createdDateTime); 
 				        	createdDateTime = fullDateFormatFR.format(myFrenchDate);
@@ -87,8 +87,8 @@ if (advancedIncident != null) {
 							if(!myAcknowledgedTimestamp.equals("null")) {
 								String myStatus = myWS_PVPaxCommunication.getStatus();
 								if(myStatus.equalsIgnoreCase("RESPONDED")) {
-									strAcknowledgedBy = "<I>Message responded by WestJet on " + myAcknowledgedTimestamp + "</I>";
-									if (strLocale.equalsIgnoreCase("fr")) {
+									strAcknowledgedBy = "<I>Comment responded by WestJet on " + myAcknowledgedTimestamp + "</I>";
+									if (strLocale != null && strLocale.equalsIgnoreCase("fr")) {
 								        try {
 								        	Date myFrenchAcknowledgedDate = sdf.parse(myAcknowledgedTimestamp); 
 								        	myAcknowledgedTimestamp = fullDateFormatFR.format(myFrenchAcknowledgedDate);
@@ -98,8 +98,8 @@ if (advancedIncident != null) {
 										strAcknowledgedBy = "<I>Message répondu par WestJet le " + myAcknowledgedTimestamp + "</I>";
 									}
 								} else {
-									strAcknowledgedBy = "<I>Message acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";
-									if (strLocale.equalsIgnoreCase("fr")) {
+									strAcknowledgedBy = "<I>Comment acknowledged by WestJet on " + myAcknowledgedTimestamp + "</I>";
+									if (strLocale != null && strLocale.equalsIgnoreCase("fr")) {
 								        try {
 								        	Date myFrenchAcknowledgedDate = sdf.parse(myAcknowledgedTimestamp); 
 								        	myAcknowledgedTimestamp = fullDateFormatFR.format(myFrenchAcknowledgedDate);
