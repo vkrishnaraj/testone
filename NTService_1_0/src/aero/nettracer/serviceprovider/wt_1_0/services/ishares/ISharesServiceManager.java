@@ -115,7 +115,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse createBdo(WorldTracerActionDTO dto, Bdo bdo, 
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.insertBdo(dto, bdo, response);
 		return response;
