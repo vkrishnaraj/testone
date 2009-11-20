@@ -2277,11 +2277,11 @@ public class MockISharesResponse {
 				sb.append("\n");
 				sb.append("\n");
 				sb.append("\n");
-				sb.append("DISPLAY FILES           DMF   DISPLAY MATCH CONTENTS  DMC   ");
-				sb.append("ERASE AND DISPLAY NEXT  EXF   TRANSFER TO FILE        TXF   ");
-				sb.append("SEND TO TX/XF           DXF  .. ......../ ......../ ......../  ");
-				sb.append(">WMPN ");
-				sb.append("");
+				sb.append("DISPLAY FILES           DMF   DISPLAY MATCH CONTENTS  DMC   \n");
+				sb.append("ERASE AND DISPLAY NEXT  EXF   TRANSFER TO FILE        TXF   \n");
+				sb.append("SEND TO TX/XF           DXF  .. ......../ ......../ ......../  \n");
+				sb.append(">WMPN \n");
+				sb.append("\n");
 
 				break;
 			
