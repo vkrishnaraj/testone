@@ -1,5 +1,6 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ public class WorldTracerClientFactory extends BaseKeyedPoolableObjectFactory{
 	private List<WorldTracerWebAccount> accounts = null;
 	private int itemsUsed = 0;
 	private HashMap<Integer, WorldTracerHttpClient> clientList = new HashMap<Integer, WorldTracerHttpClient>();
+	private ArrayList<WorldTracerHttpClient> clientListArray = null;	
 	private WorldTracerHttpClient keepAliveConnection = null;
 	
 	public WorldTracerClientFactory(List<WorldTracerWebAccount> accounts) {
@@ -52,6 +54,15 @@ public class WorldTracerClientFactory extends BaseKeyedPoolableObjectFactory{
 		if (diff > ALLOWED_MILLIS_WITH_NOACTIVITIY) {
 			connection.setValidConnection(false);
 		}
+	}
+	
+
+	public ArrayList<WorldTracerHttpClient> getClientListArray() {
+		if (clientListArray == null || clientList.size() != clientListArray.size()) {
+			clientListArray = new ArrayList<WorldTracerHttpClient>(getClientList().values()); 
+		} 
+		return clientListArray;
+		
 	}
 
 	public HashMap<Integer, WorldTracerHttpClient> getClientList() {

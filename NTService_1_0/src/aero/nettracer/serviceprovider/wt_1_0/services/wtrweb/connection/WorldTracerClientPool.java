@@ -1,6 +1,5 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
@@ -17,7 +16,7 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 	
 	private static final Logger logger = Logger
 			.getLogger(WorldTracerClientPool.class);
-//	private RoundRobinGenerator r = null;
+
 	private AgeManagement ageMgmt = null;
 	private WorldTracerClientFactory f = null;
 
@@ -25,10 +24,11 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 
 		this.setMaxWait(1000 * 20);
 		this.setWhenExhaustedAction(WHEN_EXHAUSTED_BLOCK);
-  	this.setTestOnReturn(false);
-  	this.setTestOnBorrow(false);
-  	this.setTestWhileIdle(true);
-  	this.setTimeBetweenEvictionRunsMillis(2*60*1000); // TWO MINUTES
+	
+	  	this.setTestOnReturn(false);
+	  	this.setTestOnBorrow(false);
+	  	this.setTestWhileIdle(true);
+	  	this.setTimeBetweenEvictionRunsMillis(2*60*1000); // TWO MINUTES
 		
 		List<WorldTracerWebAccount> accounts = null;
 		
@@ -37,12 +37,20 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 		sess.close();
 		
 		this.setMaxActive(accounts.size());
-		
-//		this.r = new RoundRobinGenerator(accounts.size());
+
 		WorldTracerClientFactory factory = new WorldTracerClientFactory(accounts);
 		this.setFactory(factory);
-		this.ageMgmt = new AgeManagement(new ArrayList(factory.getClientList().values()));
+		this.ageMgmt = new AgeManagement(factory);
 		f = factory;
+		
+		for (int i = 1; i <= accounts.size(); ++i) {
+			try {
+				this.borrowObject(new Integer(i));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public Integer getNextLoggedInKeyForCron() throws NoActiveConnectionException {

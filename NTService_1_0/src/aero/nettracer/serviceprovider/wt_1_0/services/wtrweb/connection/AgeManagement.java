@@ -6,16 +6,19 @@ public class AgeManagement {
 	
 	private int backendIndex = -1;
 	private int frontendIndex = -1;
+	private WorldTracerClientFactory factory = null;
 
-	
-	private ArrayList<WorldTracerHttpClient> clientList = new ArrayList<WorldTracerHttpClient>();	
-
-	public AgeManagement(ArrayList<WorldTracerHttpClient> clientList) {
-		this.clientList = clientList;
+	public AgeManagement(WorldTracerClientFactory factory) {
+		this.factory = factory;
 	}
 	
-	
 	public synchronized Integer getOldestConnection(boolean requireActiveConnection) throws NoActiveConnectionException{
+		if (requireActiveConnection && factory.getClientList().size() == 0) {
+			throw new NoActiveConnectionException();
+		} else if (factory.getClientList().size() == 0) {
+			return new Integer(1);
+		}
+		
 		int currentIndex = 0;
 		if (!requireActiveConnection) {
 			currentIndex = frontendIndex;
@@ -30,12 +33,12 @@ public class AgeManagement {
 		long oldestTime = 0;
 		
 		boolean complete = false;
-		for (int i = 0; i < clientList.size() && !complete; ++i) {
+		for (int i = 0; i < factory.getClientListArray().size() && !complete; ++i) {
 			currentIndex += 1;
-			if (currentIndex > clientList.size())
+			if (currentIndex >= factory.getClientListArray().size())
 				currentIndex = 0;
 
-			WorldTracerHttpClient client = clientList.get(currentIndex);
+			WorldTracerHttpClient client = factory.getClientListArray().get(currentIndex);
 
 			if (oldestClient == null) {
 				oldestTime = client.getLastUsed().getTimeInMillis();
