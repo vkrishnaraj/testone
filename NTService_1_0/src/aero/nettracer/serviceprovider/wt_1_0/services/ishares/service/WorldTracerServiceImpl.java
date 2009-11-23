@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -208,11 +209,20 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	}
 
 
+	   //Note the BDO command does not close the file
 	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo,
 			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
-		// TODO Auto-generated method stub
-		boolean success = false;
+		 
 		String specificCommandType = "BDO";
+		Date DelivDate = new Date();
+		//Make sure we have a valid delivery date - need to consider if we do not have a DD
+		//should we just use todays date
+		if (bdo.getDeliveryDate() != null) {
+			DelivDate = bdo.getDeliveryDate().getTime();
+		}  else {
+			//throw new CommandNotProperlyFormedException("Could not export BDO due to invalid delivery date. Id: " + bdo.getBdoId());
+			throw new CommandNotProperlyFormedException();
+		}			
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("COMMAND_TYPE", connectionType);
@@ -220,11 +230,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		map.put("WT_AHL_ID", bdo.getAhlId());  
 		map.put("DELIVERY_SERVICE","DS");
 		map.put("STATION_CODE", bdo.getStationCode());
-		map.put("AIRLINE_CODE", bdo.getStationCode());
+		map.put("AIRLINE_CODE", bdo.getAirlineCode());
 		map.put("DELIVERY_SERVICE_ID", "01");  //Assume	that we will always use the first delivery company in the predefined WT list
-		map.put("COLOR_TYPE", "01");
+		map.put("COLOR_TYPE", "01");  //Assume we will always deliver the first bag since we do not keep track of WT bags
+
+		//TODO see if there is a way to determine which bag we should deliver instead of defaulting to CT01
 		
-		String command = "{COMMAND_TYPE} BDO {FILE_TYPE} {WT_AHL_ID} \n {DELIVERY SERVICE} {STATION_CODE}{AIRLINE_CODE}{DELIVERY_SERVICE_ID}/{COLOR_TYPE}";
+		String command = "{COMMAND_TYPE} BDO {FILE_TYPE} {WT_AHL_ID}\n{DELIVERY_SERVICE} {STATION_CODE}{AIRLINE_CODE}{DELIVERY_SERVICE_ID}/CT{COLOR_TYPE}";
 		
 		command = inputValuesIntoCommand(map, command);
 		
@@ -235,32 +247,34 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		} else {
 			responseTxt = sendCommand(specificCommandType, command);
 		}
+		System.out.println("\n\n\n"+ responseTxt+"\n\n\n\n");
 		//The mask should now be in responseTxt - need to add DD and .AG
-		if (responseTxt.contains("DD")& responseTxt.contains(".AG")){
-			responseTxt = responseTxt.replaceAll("DD", "DD"+PreProcessor.ITIN_DATE_FORMAT.format(bdo.getDeliveryDate()));
-			responseTxt = responseTxt.replaceAll(".AG", ".AG"+PreProcessor.getAgentEntry(bdo.getAgent()));
-			if (unitTest) {
-				responseTxt = MockISharesResponse.mockRequestBDOCommand_2(command);
-			} else {
-				responseTxt = sendCommand(specificCommandType, command);
-			}
-			//sample success message "WM BDO AHL XAXUS10485                   /-OK-/19NOV09 1516GMT"
-			if (responseTxt.contains("-OK-")) {
-				response.setSuccess(true);
-			} 
-		} else {
-			response.setSuccess(success);
+		if (responseTxt.contains("DD")&& responseTxt.contains(".AG"))
+		{			
+				responseTxt = responseTxt.replaceAll("    "+(char)46+"AG", ".AG"+ PreProcessor.getAgentEntry(bdo.getAgent()));
+				responseTxt = responseTxt.replaceAll("DD", "DD"+ PreProcessor.ITIN_DATE_FORMAT.format(DelivDate));
+				if (unitTest) {
+					responseTxt = MockISharesResponse.mockRequestBDOCommand_2(responseTxt);
+				} else {
+					responseTxt = sendCommand(specificCommandType, command);
+				}
+				
+				//sample success message "WM BDO AHL XAXUS10485                   /-OK-/19NOV09 1516GMT"
+				if (responseTxt.contains("-OK-")) {
+					response.setSuccess(true); 
+		} 
+		     response.setSuccess(false);  //set to false if DD and .AG does not come back after 1st command
 		}
-		
+			
 		
 	}
 
 
 	public void eraseActionFile(WorldTracerActionDTO dto,
 			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
-		// TODO Auto-generated method stub
+
 		// Prepare variables
-		boolean success = false;
+
 		
 		// If applicable, perform any pre-processing required to obtain a
 		// hashmap of field names
@@ -316,12 +330,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	 */
 	public void requestOhd(WorldTracerActionDTO dto, RequestOhd data,
 			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
-		// TODO Auto-generated method stub
 		// Prepare variables
 		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.requestOhd(dto, data, response);
-		//TODO: CHECK THIS EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.REQUEST_QOH);
-		
-		boolean success = false;
+
 		
 		// If applicable, perform any pre-processing required to obtain a
 		// hashmap of field names
@@ -374,9 +385,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		// Process Response and insert any necessary data into the response
 		// object & set success variable if successful
 		// parse the result from iShare 
-		Ohd myOhd = null;
-		
-		success = true;
+
 
 		// On success, set success to true (defaults to false)
 		if (responseTxt.contains("WM SUS AHL")) {
@@ -389,11 +398,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data,
 			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
-		// TODO Auto-generated method stub
+
 		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.requestQuickOhd(dto, data, response);
-		//TODO: CHECK THIS EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.REQUEST_QOH);
-		
-		boolean success = false;
+
 		
 		// If applicable, perform any pre-processing required to obtain a
 		// hashmap of field names
@@ -467,7 +474,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void getActionFileSummary(WorldTracerActionDTO dto,
 			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
-		//TODO here
+
 		// Prepare variables
 		
 		// If applicable, perform any pre-processing required to obtain a
@@ -528,8 +535,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
 			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
-		// TODO Auto-generated method stub
-		boolean success = false;
 		
 		// If applicable, perform any pre-processing required to obtain a
 		// hashmap of field names
@@ -563,7 +568,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (unitTest) {
 			responseTxt = MockISharesResponse.mockPxfCommand(command);
 		} else {
-			int i = 1/0;
 			responseTxt = sendCommand("PXF", command);
 		}
 		

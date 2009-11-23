@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import junit.framework.Assert;
 
@@ -15,6 +16,7 @@ import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Agent;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
 import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
 import aero.nettracer.serviceprovider.wt_1_0.common.PxfDetails;
@@ -163,38 +165,12 @@ public class ISharesTestCases {
 		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
 		Assert.assertEquals(false, response.isSuccess());
 	}	
-	@Test
-	public void testBDO()	throws CommandNotProperlyFormedException, HttpException, IOException {
-		
-		// Create Payload & Type
-		WorldTracerActionType type =  WorldTracerActionType.CREATE_BDO;
 
- 
-		BDORequestData payload = new BDORequestData();
-		payload.setStation("XAX");
-		payload.setAirline("US");
-		payload.setDay(1);
-		payload.setNumber(1);
-		payload.setType("AA");
-		
-		// Initialize other data (do not change)
-		WorldTracerResponse response = new WorldTracerResponse();
-		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, null, payload, true, null);
-		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
-		
-		// Perform Action
-		impl.insertBdo(dto, payload, response);
-		
-		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
-		Assert.assertEquals(false, response.isSuccess());
-	}	
-=======
 	@Test
 	public void testRequestOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.REQUEST_OHD;
->>>>>>> 1.7
 
 		RequestOhd payload = new RequestOhd();
 		Ahl myAhl = new Ahl();
@@ -310,4 +286,36 @@ public class ISharesTestCases {
 		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
 		Assert.assertEquals(true, response.isSuccess());
 	}
+	
+	@Test
+	public void testBDO()	throws CommandNotProperlyFormedException, HttpException, IOException {
+		
+		// Create Pay load & Type
+		WorldTracerActionType type =  WorldTracerActionType.CREATE_BDO;
+		Calendar deliveryDate =  Calendar.getInstance();
+		Agent BDOAgent = new Agent();
+		BDOAgent.setUsername("Bruce");
+		BDOAgent.setAirline("US");
+ 
+		Bdo payload = new Bdo();
+
+		payload.setStationCode("XAX");
+		payload.setAirlineCode("US");
+		payload.setAhlId("XAXUS10485");
+		payload.setAgent(BDOAgent);
+		payload.setDeliveryDate(deliveryDate);
+
+
+		
+		// Initialize other data (do not change)
+		WorldTracerResponse response = new WorldTracerResponse();
+		WorldTracerActionDTO dto = new WorldTracerActionDTO(type, null, payload, true, null);
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto, true, WorldTracerServiceImpl.UNIT_TEST_SUCCESS);
+		
+		// Perform Action
+		impl.insertBdo(dto, payload, response);
+		
+		// Case-Specific Test of Data (Also use debugger to review contents of the "response" object.
+		Assert.assertEquals(true, response.isSuccess());
+	}	
 }

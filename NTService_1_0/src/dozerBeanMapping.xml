@@ -22,6 +22,19 @@
 		</field>
 	</mapping>
 
+	<mapping map-null="false">
+		<class-a>
+			aero.nettracer.serviceprovider.ws_1_0.common.RequestHeader
+		</class-a>
+		<class-b>
+			aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader
+		</class-b>
+		<field >
+			<a>parameters</a>
+			<b>parametersArray</b>
+		</field>
+	</mapping>
+
 	<!-- 
 	<mapping map-null="false">
 		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Ahl

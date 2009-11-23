@@ -45,9 +45,10 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 		
 		for (int i = 1; i <= accounts.size(); ++i) {
 			try {
-				this.borrowObject(new Integer(i));
+				Object bor = this.borrowObject(new Integer(i));
+				this.returnObject(new Integer(i), bor);
+				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
