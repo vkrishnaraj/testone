@@ -148,6 +148,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			try {
 				client.executeMethod(redirect,
 						"GET AF COUNTS (FRONTEND): REDIRECT (3)");
+				logger.info(redirect.getResponseBodyAsString());
 				inStream = redirect.getResponseBodyAsStream();
 				EnumMap<ActionFileType, int[]> result = ParsingUtils
 						.parseActionFileCounts(inStream, "ISO-8859-1");
