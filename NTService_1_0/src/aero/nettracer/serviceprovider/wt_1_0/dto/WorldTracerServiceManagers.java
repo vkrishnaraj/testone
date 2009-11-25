@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0.dto;
 
 import aero.nettracer.serviceprovider.wt_1_0.services.AbstractServiceManager;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.ISharesServiceManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.WtrWebServiceManager;
 
 public enum WorldTracerServiceManagers {
@@ -12,15 +13,13 @@ public enum WorldTracerServiceManagers {
 	
 	WEBSERVICES {
 		public AbstractServiceManager getServiceManager() {
-//			return WTWebServiceManager.getInstance();
 			return null;
 		}
 	}, 
 	
-	I_SABRE {
+	ISHARES {
 		public AbstractServiceManager getServiceManager() {
-//			return ISharesServiceManager.getInstance();
-			return null;
+			return ISharesServiceManager.getInstance();
 		}
 	}, 
 	

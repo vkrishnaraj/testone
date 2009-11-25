@@ -11,7 +11,10 @@ public class ForwardMessage {
 	private String[] teletype;
 	private String suplementaryInfo;
 	private String textInfo;
-	private WtqSegment[] itinerary;
+	private Itinerary[] itinerary;
+	private String faultReasonDescription;
+	private String faultStation;
+	private int faultReason;
 
 	public String getFromStation() {
 		return fromStation;
@@ -77,14 +80,6 @@ public class ForwardMessage {
 		this.textInfo = textInfo;
 	}
 
-	public WtqSegment[] getItinerary() {
-		return itinerary;
-	}
-
-	public void setItinerary(WtqSegment[] itinerary) {
-		this.itinerary = itinerary;
-	}
-
 	public String getDestinationStation() {
   	return destinationStation;
   }
@@ -100,5 +95,37 @@ public class ForwardMessage {
 	public void setDestinationAirline(String destinationAirline) {
   	this.destinationAirline = destinationAirline;
   }
+
+	public String getFaultReasonDescription() {
+		return faultReasonDescription;
+	}
+
+	public void setFaultReasonDescription(String faultReasonDescription) {
+		this.faultReasonDescription = faultReasonDescription;
+	}
+
+	public String getFaultStation() {
+		return faultStation;
+	}
+
+	public void setFaultStation(String faultStation) {
+		this.faultStation = faultStation;
+	}
+
+	public int getFaultReason() {
+		return faultReason;
+	}
+
+	public void setFaultReason(int faultReason) {
+		this.faultReason = faultReason;
+	}
+
+	public Itinerary[] getItinerary() {
+		return itinerary;
+	}
+
+	public void setItinerary(Itinerary[] itinerary) {
+		this.itinerary = itinerary;
+	}
 
 }

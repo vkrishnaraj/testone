@@ -167,25 +167,16 @@
                     <xs:element minOccurs="0" name="destinationAirline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="expediteTag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
+                    <xs:element minOccurs="0" name="faultReasonDescription" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="fromAirline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="fromStation" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax23:WtqSegment"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="name" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="suplementaryInfo" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="textInfo" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WtqSegment">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="arrivalTime" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="arrivedate" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="departdate" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="departureTime" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="legfrom" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="legto" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="RequestOhd">
@@ -441,6 +432,20 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="establishWtrConnection">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="establishWtrConnectionResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="eraseActionFile">
                 <xs:complexType>
                     <xs:sequence>
@@ -634,6 +639,12 @@
     <wsdl:message name="amendOhdResponse">
         <wsdl:part name="parameters" element="ns:amendOhdResponse"/>
     </wsdl:message>
+    <wsdl:message name="establishWtrConnectionRequest">
+        <wsdl:part name="parameters" element="ns:establishWtrConnection"/>
+    </wsdl:message>
+    <wsdl:message name="establishWtrConnectionResponse">
+        <wsdl:part name="parameters" element="ns:establishWtrConnectionResponse"/>
+    </wsdl:message>
     <wsdl:message name="closeAhlRequest">
         <wsdl:part name="parameters" element="ns:closeAhl"/>
     </wsdl:message>
@@ -741,6 +752,10 @@
             <wsdl:input message="ns:amendOhdRequest" wsaw:Action="urn:amendOhd"/>
             <wsdl:output message="ns:amendOhdResponse" wsaw:Action="urn:amendOhdResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="establishWtrConnection">
+            <wsdl:input message="ns:establishWtrConnectionRequest" wsaw:Action="urn:establishWtrConnection"/>
+            <wsdl:output message="ns:establishWtrConnectionResponse" wsaw:Action="urn:establishWtrConnectionResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="closeAhl">
             <wsdl:input message="ns:closeAhlRequest" wsaw:Action="urn:closeAhl"/>
             <wsdl:output message="ns:closeAhlResponse" wsaw:Action="urn:closeAhlResponse"/>
@@ -843,6 +858,15 @@
         </wsdl:operation>
         <wsdl:operation name="requestQuickOhd">
             <soap:operation soapAction="urn:requestQuickOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="establishWtrConnection">
+            <soap:operation soapAction="urn:establishWtrConnection" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -1033,6 +1057,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="establishWtrConnection">
+            <soap12:operation soapAction="urn:establishWtrConnection" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="amendOhd">
             <soap12:operation soapAction="urn:amendOhd" style="document"/>
             <wsdl:input>
@@ -1214,6 +1247,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="requestQuickOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="establishWtrConnection">
+            <http:operation location="WorldTracerService/establishWtrConnection"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="establishWtrConnection"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="establishWtrConnection"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="amendOhd">

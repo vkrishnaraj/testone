@@ -35,10 +35,8 @@ public class ISharesHttpClient extends HttpClient implements
 	Pattern tokenPattern = Pattern.compile("<input type=hidden name=Token value=(.*)>");
 
 	public ISharesHttpClient(WorldTracerISharesAccount wta) {
-		// TODO Auto-generated constructor stub
 		this.account = wta;
 		this.getHostConfiguration().setHost(account.getHost());
-		this.getHostConfiguration().setProxy("127.0.0.1", 8888);
 	}
 
 	@Deprecated
@@ -135,7 +133,7 @@ public class ISharesHttpClient extends HttpClient implements
 				Matcher m = p.matcher(responseString);
 				if (m.find()) {
 					terminalAddress = m.group(1);
-					logger.info(terminalAddress);
+//					logger.info(terminalAddress);
 				} else {
 					validConnection = false;
 					this.setToken(null);
@@ -187,8 +185,8 @@ public class ISharesHttpClient extends HttpClient implements
 		
 		String responseBody = null;
 		PostMethod method = new PostMethod("/cgi-bin/term.cgi");
-		logger.info("Using token: " + this.getToken());
-		logger.info("Command: " + command);
+//		logger.info("Using token: " + this.getToken());
+//		logger.info("Command: " + command);
 		method.addParameter("Token", this.getToken());
 		method.addParameter("Type", "1");
 		method.addParameter("q", command);

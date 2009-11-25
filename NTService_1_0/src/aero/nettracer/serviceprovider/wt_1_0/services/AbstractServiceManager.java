@@ -170,4 +170,10 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 			WorldTracerResponse response) {
 		return true;
 	}
+	
+	@Override
+	public WorldTracerResponse establish(WorldTracerActionDTO dto, Object obj, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			CommandNotProperlyFormedException {
+		return response;
+	}
 }

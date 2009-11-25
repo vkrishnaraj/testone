@@ -13,7 +13,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 
 
 public class WorldTracerService {
-	
+	public WorldTracerResponse establishWtrConnection(RequestHeader header) { return null; }
 	public WorldTracerResponse amendAhl(RequestHeader header, Ahl ahl) {return null;}
 	public WorldTracerResponse amendOhd(RequestHeader header, Ohd ohd) {return null;}
 	public WorldTracerResponse closeAhl(RequestHeader header, Ahl ahl) {return null;}

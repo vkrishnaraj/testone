@@ -28,6 +28,52 @@ import aero.nettracer.serviceprovider.wt_1_0.services.ServicesManager;
 public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 	
 	
+    public aero.nettracer.serviceprovider.wt_1_0.EstablishWtrConnectionResponseDocument establishWtrConnection(
+			aero.nettracer.serviceprovider.wt_1_0.EstablishWtrConnectionDocument establishWtrConnection) {
+
+    	WorldTracerActionType type = WorldTracerActionType.ESTABLISH;
+    	
+    	RequestHeader header = establishWtrConnection.getEstablishWtrConnection().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, null, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	EstablishWtrConnectionResponseDocument response = EstablishWtrConnectionResponseDocument.Factory.newInstance();
+		response.addNewEstablishWtrConnectionResponse().setReturn(xreturn);
+		
+		return response;
+	}
+
+	
     public aero.nettracer.serviceprovider.wt_1_0.CloseOhdResponseDocument closeOhd(
         aero.nettracer.serviceprovider.wt_1_0.CloseOhdDocument closeOhd) {
     	

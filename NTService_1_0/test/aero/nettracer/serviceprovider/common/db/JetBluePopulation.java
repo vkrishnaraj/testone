@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.common.db;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -26,6 +27,43 @@ public class JetBluePopulation {
 	public static Profile testProfile = null;
 	public static Profile mockProfile = null;
 	
+	//@Test
+	public void addWtConnections() {
+		Session sess = HibernateWrapper.getSession().openSession();
+		
+		User user = (User) sess.load(User.class, 1);
+		user.getProfile().getPermissions().put(PermissionType.WORLDTRACER, new Boolean(true));
+		Map<ParameterType, String> parameters = user.getProfile().getParameters();
+		parameters.put(ParameterType.WTSM_ACTION_FILE_COUNTS, "WTRWEB");
+		parameters.put(ParameterType.WTSM_GET_AHL, "WTRWEB");
+		parameters.put(ParameterType.WTSM_CREATE_AHL, "WTRWEB");
+		parameters.put(ParameterType.WTSM_AMEND_AHL, "WTRWEB");
+		parameters.put(ParameterType.WTSM_CLOSE_AHL, "WTRWEB");
+		parameters.put(ParameterType.WTSM_SUSPEND_AHL, "WTRWEB");
+		parameters.put(ParameterType.WTSM_REINSTATE_AHL, "WTRWEB");
+		parameters.put(ParameterType.WTSM_GET_OHD, "WTRWEB");
+		parameters.put(ParameterType.WTSM_CREATE_OHD, "WTRWEB");
+		parameters.put(ParameterType.WTSM_AMEND_OHD, "WTRWEB");
+		parameters.put(ParameterType.WTSM_CLOSE_OHD, "WTRWEB");
+		parameters.put(ParameterType.WTSM_FORWARD_OHD, "WTRWEB");
+		parameters.put(ParameterType.WTSM_CREATE_BDO, "WTRWEB");
+		parameters.put(ParameterType.WTSM_ERASE_ACTION_FILE, "WTRWEB");
+		parameters.put(ParameterType.WTSM_ACTION_FILE_SUMMARY, "WTRWEB");
+		parameters.put(ParameterType.WTSM_ACTION_FILE_DETAILS, "WTRWEB");
+		parameters.put(ParameterType.WTSM_SEND_FORWARD_MESSAGE, "WTRWEB");
+		parameters.put(ParameterType.WTSM_PLACE_ACTION_FILE, "WTRWEB");
+		
+		Transaction t = null;
+		try {
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(user);
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		sess.close();
+	}
 	
 	//@Test
 	public void createTestUser() {

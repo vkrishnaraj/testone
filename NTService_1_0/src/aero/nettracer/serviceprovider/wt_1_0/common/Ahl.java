@@ -9,8 +9,6 @@ public class Ahl {
 	private int numberPaxAffected;
 	private int numberBagsChecked;
 	private String stationCode;
-	private String faultStation;
-	private int faultReason;
 	private Passenger[] pax;
 	private Itinerary[] paxItinerary;
 	private Itinerary[] bagItinerary;
@@ -20,6 +18,8 @@ public class Ahl {
 	private String airlineCode;
 	private Expenses[] expenses;
 	private String faultReasonDescription;
+	private String faultStation;
+	private int faultReason;
 
 	public String getFaultReasonDescription() {
 		return faultReasonDescription;
