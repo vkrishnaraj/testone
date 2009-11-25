@@ -35,7 +35,7 @@
 		</field>
 	</mapping>
 
-	<!-- 
+	
 	<mapping map-null="false">
 		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Ahl
 		</class-a>
@@ -61,6 +61,22 @@
 			<a>claimCheck</a>
 			<b>claimCheckArray</b>
 		</field>
+		<field>
+			<a>expenses</a>
+			<b>expensesArray</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Item
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Item
+		</class-b>
+		<field>
+			<a>content</a>
+			<b>contentArray</b>
+		</field>
 	</mapping>
 
 
@@ -82,15 +98,70 @@
 			<b>bagItineraryArray</b>
 		</field>
 	</mapping>
- 	-->
 
 	<mapping map-null="false">
-		<class-a>
-			aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd
 		</class-a>
-		<class-b>
-			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.RequestOhd
 		</class-b>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardOhd
+		</class-b>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+		<field >
+			<a>fwdName</a>
+			<b>fwdNameArray</b>
+		</field>
+		<field >
+			<a>itinerary</a>
+			<b>itineraryArray</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardMessage
+		</class-b>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+		<field >
+			<a>name</a>
+			<b>nameArray</b>
+		</field>
+		<field >
+			<a>itinerary</a>
+			<b>itineraryArray</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Bdo
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Bdo
+		</class-b>
+		<field >
+			<a>passengers</a>
+			<b>passengersArray</b>
+		</field>
+		<field >
+			<a>items</a>
+			<b>itemsArray</b>
+		</field>
 	</mapping>
 
 </mappings>
