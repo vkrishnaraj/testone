@@ -156,9 +156,9 @@ public class PreProcessor {
 				String fnum = wtFlightNumber(itin.getFlightNumber());
 				String fd = null;
 				if (fnum.length() == 0) {
-					fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate());
+					fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 				} else {
-					fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate());
+					fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 				}
 				addIncidentFieldEntry(WorldTracerField.FO, fd, result);
 				addIncidentFieldEntry(WorldTracerField.NF, fd, result);
@@ -303,7 +303,7 @@ public class PreProcessor {
 		
 		if (data.getPaxItinerary() != null) {
 			for (Itinerary i : data.getPaxItinerary()) {
-				getItineraryInfo(i, result, false);
+				getItineraryInfo(i, result, true);
 			}
 		}
 
@@ -554,9 +554,9 @@ public class PreProcessor {
 		String fnum = wtFlightNumber(itin.getFlightNumber());
 		String fd = null;
 		if (fnum.length() == 0 && isPassengerRouting) {
-			fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate());
+			fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 		} else {
-			fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate());
+			fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime().getTime());
 		}
 
 		if (!isPassengerRouting) {
@@ -744,9 +744,9 @@ public class PreProcessor {
 		String fnum = wtFlightNumber(itin.getFlightNumber());
 		String fd = null;
 		if (fnum.length() == 0) {
-			fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate());
+			fd = UNKNOWN_AIRLINE + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 		} else {
-			fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate());
+			fd = itin.getAirline() + fnum + "/" + ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 		}
 
 		addIncidentFieldEntry(WorldTracerField.FD, fd, result);

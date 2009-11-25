@@ -1,5 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.wtrweb;
 
+import org.apache.log4j.Logger;
+
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
@@ -17,7 +19,6 @@ import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerEx
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerAlreadyClosedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
-import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.ConnectionPoolManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.NoActiveConnectionException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerClientPool;
@@ -29,6 +30,7 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 	private static final String WS_ERROR_STRING1 = "Could Not Decode String";
 	private static final String WS_ERROR_STRING2 = "Exception";
 	private static WtrWebServiceManager instance = null;
+	private static final Logger logger = Logger.getLogger(WtrWebServiceManager.class);
 
 	public static AbstractServiceManager getInstance() {
 		if (instance == null) {
@@ -43,18 +45,19 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 		WorldTracerClientPool pool = ConnectionPoolManager.getInstance().getPool(dto.getUser());
 		WorldTracerHttpClient conn = null;
 		
+		String strLoggedInConnection = dto.getParameterValue(ServiceConstants.USE_AVAILABLE_CONNECTIONS_IF_POSSIBLE);
 		if (dto.getConnection() == null) {
 			Integer key = null;
 			
 			// Provide a Round-Robin approach to obtaining cron connections.
-			String strLoggedInConnection = dto.getParameterValue(ServiceConstants.USE_AVAILABLE_CONNECTIONS_IF_POSSIBLE);
 			if (strLoggedInConnection != null && strLoggedInConnection.length() > 0) {
 				Integer tmpKey = null;
 				try {
 					tmpKey = pool.getNextLoggedInKeyForCron();
 				} catch (NoActiveConnectionException e) {
+					logger.warn("There are presently no active connections...");
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+
 				}
 				if (tmpKey != null) {
 					key = tmpKey;
@@ -72,9 +75,20 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 				dto.setConnection(conn);
 			} catch (Exception e) {
 				e.printStackTrace();
-
+				// NO ACTIVE CONNECTION
 			}
 		}
+		
+		
+		if (conn != null && strLoggedInConnection != null && strLoggedInConnection.length() > 0 && !conn.isValidConnection()) {
+			response.setError(new WebServiceError(
+					ServiceConstants.CAPTCHA_EXCEPTION));
+			response.setSuccess(false);
+			return false;
+		}
+			
+			
+		
 
 		if (conn == null) {
 			response.setError(new WebServiceError(

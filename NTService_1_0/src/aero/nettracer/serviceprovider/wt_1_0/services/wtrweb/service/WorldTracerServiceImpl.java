@@ -804,6 +804,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			errorString = responseBody;
 		}
 		if (OK.equals(errorString) || ALREADY_REINSTATED.equals(errorString)) {
+			response.setSuccess(true);
 			return;
 		}
 		throw new WorldTracerException(errorString);
@@ -2400,7 +2401,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		}
 		String wt_id = null;
 		String errorString = "Submit failed.";
-		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING([^<>]+)]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Pattern succePatt = Pattern.compile("<SPAN.*>([^<>]+)\\[ACTIVE\\/TRACING([^<>]+)]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
 		Matcher succeMat = succePatt.matcher(responseBody);
 		if(succeMat.find()){
 			wt_id = succeMat.group(1).replaceAll("&nbsp;", "").replaceAll("(\\(.*\\))", "");
@@ -4159,6 +4160,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if(responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")){
 			return wt_id;
 		}else{
+			logger.error("Amend before close incident result:" + responseBody);
 			logger.error("amend before close incident failed ");
 			return null;
 		}
@@ -4239,6 +4241,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			return wt_id;
 		}else{
 			logger.info("FAILED TO CLOSE AHL REPSONSE. ");
+			logger.info("close incident result:" + responseBody);
 			return null;
 		}
 	}
@@ -4455,7 +4458,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		}
 		String wt_id = null;
 		String errorString = "Submit failed.";
-		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Pattern succePatt = Pattern.compile("<SPAN.*>([^<>]+)\\[ACTIVE\\/TRACING]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
 		Matcher succeMat = succePatt.matcher(responseBody);
 		
 		if(succeMat.find()){

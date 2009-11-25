@@ -119,6 +119,9 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						.getPayload();
 						response = placeActionFile(dto, pxf, response);
 						break;
+					case ESTABLISH:
+						response = establish(dto, null, response);
+						break;
 					}
 				}
 			} catch (WorldTracerException e) {
@@ -174,6 +177,7 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 	@Override
 	public WorldTracerResponse establish(WorldTracerActionDTO dto, Object obj, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
 			CommandNotProperlyFormedException {
+		response.setSuccess(true);
 		return response;
 	}
 }

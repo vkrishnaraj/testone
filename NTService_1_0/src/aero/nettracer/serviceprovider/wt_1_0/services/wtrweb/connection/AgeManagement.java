@@ -46,11 +46,13 @@ public class AgeManagement {
 				oldestIndex = currentIndex;
 			}
 
-			if (client.getLastUsed() == null || client.getLastUsed().getTimeInMillis() < oldestTime) {
-				if (requireActiveConnection && client.isValidConnection()) {
-  				oldestTime = client.getLastUsed().getTimeInMillis();
-  				oldestClient = client;
-  				oldestIndex = currentIndex;
+			if (client.getLastUsed() == null || client.getLastUsed().getTimeInMillis() < oldestTime || (requireActiveConnection && client.isValidConnection())) {
+				if (requireActiveConnection) {
+					if (client.isValidConnection()) {
+		  				oldestTime = client.getLastUsed().getTimeInMillis();
+		  				oldestClient = client;
+		  				oldestIndex = currentIndex;
+					}
 				} else {
 					oldestTime = client.getLastUsed().getTimeInMillis();
 					oldestClient = client;

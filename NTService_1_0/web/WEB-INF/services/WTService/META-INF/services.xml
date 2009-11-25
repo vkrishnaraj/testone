@@ -9,6 +9,10 @@
         <parameter name="ServiceClass">aero.nettracer.serviceprovider.wt_1_0.WorldTracerServiceImpl</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="establishWtrConnection" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:establishWtrConnection</actionMapping>
+            <outputActionMapping>urn:establishWtrConnectionResponse</outputActionMapping>
+        </operation>
         <operation name="closeOhd" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:closeOhd</actionMapping>
             <outputActionMapping>urn:closeOhdResponse</outputActionMapping>

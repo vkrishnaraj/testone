@@ -27,5 +27,7 @@
     );
     
     alter table profile add airline varchar(2);
+    insert into profile_parameters values (4, 'WTRWEB', 'WTSM_ESTABLISH');
     
     ################################### ABOVE FUNCTION COMPLETED
+    
