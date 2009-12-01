@@ -53,7 +53,7 @@ public class SearchForwardNoticeAction extends Action {
 		}
 		
 		// Close
-		if (theForm.getSelect() != null && theForm.getSelect().trim().length() != 0 && request.getParameter("close") != null && ((String)request.getAttribute("close")).length() > 0) {
+		if (theForm.getSelect() != null && theForm.getSelect().trim().length() != 0 && request.getParameter("close") != null && ((String)request.getParameter("close")).length() > 0) {
 			String[] selectedObject = request.getParameter("select").split(",");
 			ForwardNoticeBMO.closeForwardNotice(selectedObject);
 		}
