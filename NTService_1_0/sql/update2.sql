@@ -29,5 +29,8 @@
     alter table profile add airline varchar(2);
     insert into profile_parameters values (4, 'WTRWEB', 'WTSM_ESTABLISH');
     
+    ## SUSPEND_OHD, REINSTATE_OHD
+    insert into profile_parameters values (4, 'WTRWEB', 'WTSM_REINSTATE_OHD');
+    insert into profile_parameters values (4, 'WTRWEB', 'WTSM_SUSPEND_OHD');
     ################################### ABOVE FUNCTION COMPLETED
     

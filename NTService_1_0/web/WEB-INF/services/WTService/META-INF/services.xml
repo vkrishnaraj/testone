@@ -81,9 +81,9 @@
             <actionMapping>urn:createOhd</actionMapping>
             <outputActionMapping>urn:createOhdResponse</outputActionMapping>
         </operation>
-        <operation name="reinstanteAhl" mep="http://www.w3.org/ns/wsdl/in-out">
+        <operation name="reinstateAhl" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:reinstanteAhl</actionMapping>
-            <outputActionMapping>urn:reinstanteAhlResponse</outputActionMapping>
+            <outputActionMapping>urn:reinstateAhlResponse</outputActionMapping>
         </operation>
         <operation name="closeAhl" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:closeAhl</actionMapping>
@@ -93,5 +93,14 @@
             <actionMapping>urn:suspendAhl</actionMapping>
             <outputActionMapping>urn:suspendAhlResponse</outputActionMapping>
         </operation>
+        <operation name="reinstateOhd" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:reinstanteOhd</actionMapping>
+            <outputActionMapping>urn:reinstateOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="suspendOhd" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:suspendOhd</actionMapping>
+            <outputActionMapping>urn:suspendOhdResponse</outputActionMapping>
+        </operation>
+
     </service>
 </serviceGroup>

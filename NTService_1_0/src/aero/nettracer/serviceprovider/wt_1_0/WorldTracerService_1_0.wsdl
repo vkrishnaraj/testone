@@ -3,25 +3,22 @@
     <wsdl:types>
         <xs:schema xmlns:ax27="http://response.ws_1_0.serviceprovider.nettracer.aero/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://common.wt_1_0.serviceprovider.nettracer.aero/xsd">
             <xs:import namespace="http://response.ws_1_0.serviceprovider.nettracer.aero/xsd"/>
-            <xs:complexType name="Ahl">
+            <xs:complexType name="Ohd">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
-                    <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax23:Itinerary"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="claimCheck" nillable="true" type="ax23:ClaimCheck"/>
+                    <xs:element minOccurs="0" name="claimCheck" nillable="true" type="ax23:ClaimCheck"/>
                     <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="expenses" nillable="true" type="ax23:Expenses"/>
                     <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
-                    <xs:element minOccurs="0" name="faultReasonDescription" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
-                    <xs:element minOccurs="0" name="numberBagsChecked" type="xs:int"/>
-                    <xs:element minOccurs="0" name="numberPaxAffected" type="xs:int"/>
+                    <xs:element minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="storageLocation" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Agent">
@@ -45,14 +42,6 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="Expenses">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="approvalDate" nillable="true" type="xs:dateTime"/>
-                    <xs:element minOccurs="0" name="checkamt" type="xs:float"/>
-                    <xs:element minOccurs="0" name="currrency" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="paycode" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Item">
@@ -135,30 +124,41 @@
                     <xs:element minOccurs="0" name="summary" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="Ahl">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
+                    <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax23:Itinerary"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="claimCheck" nillable="true" type="ax23:ClaimCheck"/>
+                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="expenses" nillable="true" type="ax23:Expenses"/>
+                    <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
+                    <xs:element minOccurs="0" name="faultReasonDescription" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element minOccurs="0" name="numberBagsChecked" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numberPaxAffected" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
+                    <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Expenses">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="approvalDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="checkamt" type="xs:float"/>
+                    <xs:element minOccurs="0" name="currrency" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="paycode" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="ActionFileCount">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="count" type="xs:int"/>
                     <xs:element minOccurs="0" name="day" type="xs:int"/>
                     <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="Ohd">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
-                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax23:Itinerary"/>
-                    <xs:element minOccurs="0" name="claimCheck" nillable="true" type="ax23:ClaimCheck"/>
-                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
-                    <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
-                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
-                    <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
-                    <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="storageLocation" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ForwardMessage">
@@ -252,6 +252,21 @@
         <xs:schema xmlns:ax24="http://common.wt_1_0.serviceprovider.nettracer.aero/xsd" xmlns:ax22="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://wt_1_0.serviceprovider.nettracer.aero">
             <xs:import namespace="http://common.ws_1_0.serviceprovider.nettracer.aero/xsd"/>
             <xs:import namespace="http://common.wt_1_0.serviceprovider.nettracer.aero/xsd"/>
+            <xs:element name="suspendOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ax24:Ohd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="suspendOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="suspendAhl">
                 <xs:complexType>
                     <xs:sequence>
@@ -312,7 +327,22 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="reinstanteAhl">
+            <xs:element name="reinstateOhd">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ax24:Ohd"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reinstateOhdResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="reinstateAhl">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
@@ -320,7 +350,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="reinstanteAhlResponse">
+            <xs:element name="reinstateAhlResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WorldTracerResponse"/>
@@ -615,12 +645,6 @@
     <wsdl:message name="createAhlResponse">
         <wsdl:part name="parameters" element="ns:createAhlResponse"/>
     </wsdl:message>
-    <wsdl:message name="reinstanteAhlRequest">
-        <wsdl:part name="parameters" element="ns:reinstanteAhl"/>
-    </wsdl:message>
-    <wsdl:message name="reinstanteAhlResponse">
-        <wsdl:part name="parameters" element="ns:reinstanteAhlResponse"/>
-    </wsdl:message>
     <wsdl:message name="createBdoRequest">
         <wsdl:part name="parameters" element="ns:createBdo"/>
     </wsdl:message>
@@ -656,6 +680,12 @@
     </wsdl:message>
     <wsdl:message name="forwardOhdResponse">
         <wsdl:part name="parameters" element="ns:forwardOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="reinstateAhlRequest">
+        <wsdl:part name="parameters" element="ns:reinstateAhl"/>
+    </wsdl:message>
+    <wsdl:message name="reinstateAhlResponse">
+        <wsdl:part name="parameters" element="ns:reinstateAhlResponse"/>
     </wsdl:message>
     <wsdl:message name="getOhdRequest">
         <wsdl:part name="parameters" element="ns:getOhd"/>
@@ -693,6 +723,12 @@
     <wsdl:message name="getActionFileDetailsResponse">
         <wsdl:part name="parameters" element="ns:getActionFileDetailsResponse"/>
     </wsdl:message>
+    <wsdl:message name="suspendOhdRequest">
+        <wsdl:part name="parameters" element="ns:suspendOhd"/>
+    </wsdl:message>
+    <wsdl:message name="suspendOhdResponse">
+        <wsdl:part name="parameters" element="ns:suspendOhdResponse"/>
+    </wsdl:message>
     <wsdl:message name="createOhdRequest">
         <wsdl:part name="parameters" element="ns:createOhd"/>
     </wsdl:message>
@@ -705,17 +741,23 @@
     <wsdl:message name="getActionFileCountsResponse">
         <wsdl:part name="parameters" element="ns:getActionFileCountsResponse"/>
     </wsdl:message>
-    <wsdl:message name="closeOhdRequest">
-        <wsdl:part name="parameters" element="ns:closeOhd"/>
-    </wsdl:message>
-    <wsdl:message name="closeOhdResponse">
-        <wsdl:part name="parameters" element="ns:closeOhdResponse"/>
-    </wsdl:message>
     <wsdl:message name="eraseActionFileRequest">
         <wsdl:part name="parameters" element="ns:eraseActionFile"/>
     </wsdl:message>
     <wsdl:message name="eraseActionFileResponse">
         <wsdl:part name="parameters" element="ns:eraseActionFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="reinstateOhdRequest">
+        <wsdl:part name="parameters" element="ns:reinstateOhd"/>
+    </wsdl:message>
+    <wsdl:message name="reinstateOhdResponse">
+        <wsdl:part name="parameters" element="ns:reinstateOhdResponse"/>
+    </wsdl:message>
+    <wsdl:message name="closeOhdRequest">
+        <wsdl:part name="parameters" element="ns:closeOhd"/>
+    </wsdl:message>
+    <wsdl:message name="closeOhdResponse">
+        <wsdl:part name="parameters" element="ns:closeOhdResponse"/>
     </wsdl:message>
     <wsdl:message name="amendAhlRequest">
         <wsdl:part name="parameters" element="ns:amendAhl"/>
@@ -735,10 +777,6 @@
         <wsdl:operation name="createAhl">
             <wsdl:input message="ns:createAhlRequest" wsaw:Action="urn:createAhl"/>
             <wsdl:output message="ns:createAhlResponse" wsaw:Action="urn:createAhlResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="reinstanteAhl">
-            <wsdl:input message="ns:reinstanteAhlRequest" wsaw:Action="urn:reinstanteAhl"/>
-            <wsdl:output message="ns:reinstanteAhlResponse" wsaw:Action="urn:reinstanteAhlResponse"/>
         </wsdl:operation>
         <wsdl:operation name="createBdo">
             <wsdl:input message="ns:createBdoRequest" wsaw:Action="urn:createBdo"/>
@@ -764,6 +802,10 @@
             <wsdl:input message="ns:forwardOhdRequest" wsaw:Action="urn:forwardOhd"/>
             <wsdl:output message="ns:forwardOhdResponse" wsaw:Action="urn:forwardOhdResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="reinstateAhl">
+            <wsdl:input message="ns:reinstateAhlRequest" wsaw:Action="urn:reinstateAhl"/>
+            <wsdl:output message="ns:reinstateAhlResponse" wsaw:Action="urn:reinstateAhlResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="getOhd">
             <wsdl:input message="ns:getOhdRequest" wsaw:Action="urn:getOhd"/>
             <wsdl:output message="ns:getOhdResponse" wsaw:Action="urn:getOhdResponse"/>
@@ -788,6 +830,10 @@
             <wsdl:input message="ns:getActionFileDetailsRequest" wsaw:Action="urn:getActionFileDetails"/>
             <wsdl:output message="ns:getActionFileDetailsResponse" wsaw:Action="urn:getActionFileDetailsResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="suspendOhd">
+            <wsdl:input message="ns:suspendOhdRequest" wsaw:Action="urn:suspendOhd"/>
+            <wsdl:output message="ns:suspendOhdResponse" wsaw:Action="urn:suspendOhdResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="createOhd">
             <wsdl:input message="ns:createOhdRequest" wsaw:Action="urn:createOhd"/>
             <wsdl:output message="ns:createOhdResponse" wsaw:Action="urn:createOhdResponse"/>
@@ -796,13 +842,17 @@
             <wsdl:input message="ns:getActionFileCountsRequest" wsaw:Action="urn:getActionFileCounts"/>
             <wsdl:output message="ns:getActionFileCountsResponse" wsaw:Action="urn:getActionFileCountsResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="closeOhd">
-            <wsdl:input message="ns:closeOhdRequest" wsaw:Action="urn:closeOhd"/>
-            <wsdl:output message="ns:closeOhdResponse" wsaw:Action="urn:closeOhdResponse"/>
-        </wsdl:operation>
         <wsdl:operation name="eraseActionFile">
             <wsdl:input message="ns:eraseActionFileRequest" wsaw:Action="urn:eraseActionFile"/>
             <wsdl:output message="ns:eraseActionFileResponse" wsaw:Action="urn:eraseActionFileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="reinstateOhd">
+            <wsdl:input message="ns:reinstateOhdRequest" wsaw:Action="urn:reinstateOhd"/>
+            <wsdl:output message="ns:reinstateOhdResponse" wsaw:Action="urn:reinstateOhdResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="closeOhd">
+            <wsdl:input message="ns:closeOhdRequest" wsaw:Action="urn:closeOhd"/>
+            <wsdl:output message="ns:closeOhdResponse" wsaw:Action="urn:closeOhdResponse"/>
         </wsdl:operation>
         <wsdl:operation name="amendAhl">
             <wsdl:input message="ns:amendAhlRequest" wsaw:Action="urn:amendAhl"/>
@@ -831,15 +881,6 @@
         </wsdl:operation>
         <wsdl:operation name="createAhl">
             <soap:operation soapAction="urn:createAhl" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="reinstanteAhl">
-            <soap:operation soapAction="urn:reinstanteAhl" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -901,6 +942,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="reinstateAhl">
+            <soap:operation soapAction="urn:reinstateAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getOhd">
             <soap:operation soapAction="urn:getOhd" style="document"/>
             <wsdl:input>
@@ -946,6 +996,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="suspendOhd">
+            <soap:operation soapAction="urn:suspendOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getActionFileDetails">
             <soap:operation soapAction="urn:getActionFileDetails" style="document"/>
             <wsdl:input>
@@ -973,6 +1032,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="closeOhd">
+            <soap:operation soapAction="urn:closeOhd" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="eraseActionFile">
             <soap:operation soapAction="urn:eraseActionFile" style="document"/>
             <wsdl:input>
@@ -982,8 +1050,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="closeOhd">
-            <soap:operation soapAction="urn:closeOhd" style="document"/>
+        <wsdl:operation name="reinstateOhd">
+            <soap:operation soapAction="urn:reinstateOhd" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -1023,15 +1091,6 @@
         </wsdl:operation>
         <wsdl:operation name="createAhl">
             <soap12:operation soapAction="urn:createAhl" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="reinstanteAhl">
-            <soap12:operation soapAction="urn:reinstanteAhl" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -1093,6 +1152,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="reinstateAhl">
+            <soap12:operation soapAction="urn:reinstateAhl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getOhd">
             <soap12:operation soapAction="urn:getOhd" style="document"/>
             <wsdl:input>
@@ -1138,6 +1206,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="suspendOhd">
+            <soap12:operation soapAction="urn:suspendOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getActionFileDetails">
             <soap12:operation soapAction="urn:getActionFileDetails" style="document"/>
             <wsdl:input>
@@ -1165,6 +1242,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="closeOhd">
+            <soap12:operation soapAction="urn:closeOhd" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="eraseActionFile">
             <soap12:operation soapAction="urn:eraseActionFile" style="document"/>
             <wsdl:input>
@@ -1174,8 +1260,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="closeOhd">
-            <soap12:operation soapAction="urn:closeOhd" style="document"/>
+        <wsdl:operation name="reinstateOhd">
+            <soap12:operation soapAction="urn:reinstateOhd" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -1220,15 +1306,6 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="createAhl"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="reinstanteAhl">
-            <http:operation location="WorldTracerService/reinstanteAhl"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="reinstanteAhl"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="reinstanteAhl"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="createBdo">
@@ -1285,6 +1362,15 @@
                 <mime:content type="text/xml" part="forwardOhd"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="reinstateAhl">
+            <http:operation location="WorldTracerService/reinstateAhl"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="reinstateAhl"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="reinstateAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getOhd">
             <http:operation location="WorldTracerService/getOhd"/>
             <wsdl:input>
@@ -1330,6 +1416,15 @@
                 <mime:content type="text/xml" part="placeActionFile"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="suspendOhd">
+            <http:operation location="WorldTracerService/suspendOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="suspendOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="suspendOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getActionFileDetails">
             <http:operation location="WorldTracerService/getActionFileDetails"/>
             <wsdl:input>
@@ -1357,6 +1452,15 @@
                 <mime:content type="text/xml" part="createOhd"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="closeOhd">
+            <http:operation location="WorldTracerService/closeOhd"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="closeOhd"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="closeOhd"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="eraseActionFile">
             <http:operation location="WorldTracerService/eraseActionFile"/>
             <wsdl:input>
@@ -1366,13 +1470,13 @@
                 <mime:content type="text/xml" part="eraseActionFile"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="closeOhd">
-            <http:operation location="WorldTracerService/closeOhd"/>
+        <wsdl:operation name="reinstateOhd">
+            <http:operation location="WorldTracerService/reinstateOhd"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="closeOhd"/>
+                <mime:content type="text/xml" part="reinstateOhd"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="closeOhd"/>
+                <mime:content type="text/xml" part="reinstateOhd"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="amendAhl">

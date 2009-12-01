@@ -237,4 +237,18 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 		return response;
 	}
 
+	@Override
+	public WorldTracerResponse reinstateOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			CommandNotProperlyFormedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WorldTracerResponse suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			CommandNotProperlyFormedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

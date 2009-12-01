@@ -19,6 +19,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerEx
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerAlreadyClosedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.ConnectionPoolManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.NoActiveConnectionException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerClientPool;
@@ -373,6 +374,24 @@ public class WtrWebServiceManager extends AbstractServiceManager implements
 	    WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.suspendAhl(dto, ahl, response);
+		return response;
+	}
+
+	@Override
+	public WorldTracerResponse reinstateOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			CommandNotProperlyFormedException {
+		// TODO Auto-generated method stub
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.reinstateOhd(dto, ohd, response);
+		return response;
+	}
+
+	@Override
+	public WorldTracerResponse suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			CommandNotProperlyFormedException {
+		// TODO Auto-generated method stub
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.suspendOhd(dto, ohd, response);
 		return response;
 	}
 

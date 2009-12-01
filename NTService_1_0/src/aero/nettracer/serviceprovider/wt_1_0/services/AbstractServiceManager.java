@@ -122,6 +122,14 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 					case ESTABLISH:
 						response = establish(dto, null, response);
 						break;
+					case REINSTATE_OHD:
+						Ohd ohd6 = (Ohd) dto.getPayload();
+						response = reinstateOhd(dto, ohd6, response);
+						break;
+					case SUSPEND_OHD:
+						Ohd ohd5 = (Ohd) dto.getPayload();
+						response = suspendOhd(dto, ohd5, response);
+						break;
 					}
 				}
 			} catch (WorldTracerException e) {

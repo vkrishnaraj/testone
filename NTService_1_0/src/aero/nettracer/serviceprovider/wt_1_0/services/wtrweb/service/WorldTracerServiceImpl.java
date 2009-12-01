@@ -1071,6 +1071,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		search.addParameter("_eventId", "submit");
 		search.addParameter("bagType", "Rush");
 		try {
+			// BEGIN
+			StringBuilder sb = new StringBuilder("params:");
+			for (NameValuePair foo : search.getParameters()) {
+				sb.append(String
+						.format("%s=%s,", foo.getName(), foo.getValue()));
+			}
+			logger.info(sb.toString());
+			/// END 
 			debugOut(search, "");
 			client.executeMethodWithPause(search, "SEND FORWARD: SEND (2)");
 			if (search.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
@@ -1116,11 +1124,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			throw new WorldTracerException("unable to submit fwd redirect");
 		}
 		
-		if (responseBody.toUpperCase().contains("RECORD CREATED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE CREATED SUCCESSFULLY")) {
+		Pattern succePatt = Pattern.compile("var recordId = '[0-9]{5}';", Pattern.CASE_INSENSITIVE);
+		Matcher succeMat = succePatt.matcher(responseBody);
+		
+//		if (responseBody.toUpperCase().contains("RECORD CREATED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE CREATED SUCCESSFULLY")) {
+//			response.setSuccess(true);
+//			return;
+//		}
+		if (succeMat.find()) {
 			response.setSuccess(true);
 			return;
-		}
-		else {
+		} else {
 			String errorString;
 			Pattern error_patt = Pattern.compile(
 					"error = '([^<>']*)'", Pattern.CASE_INSENSITIVE
@@ -1187,9 +1201,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				String fnum = PreProcessor.wtFlightNumber(itin.getFlightNumber());
 				String fd = null;
 				if (fnum.length() == 0) {
-					fd = PreProcessor.UNKNOWN_AIRLINE + "/" + PreProcessor.ITIN_DATE_FORMAT.format(itin.getFlightDate());
+					fd = PreProcessor.UNKNOWN_AIRLINE + "/" + PreProcessor.ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 				} else {
-					fd = itin.getAirline() + fnum + "/" + PreProcessor.ITIN_DATE_FORMAT.format(itin.getFlightDate());
+					fd = itin.getAirline() + fnum + "/" + PreProcessor.ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
 				}
 				PreProcessor.addIncidentFieldEntry(WorldTracerField.FO, fd, result);
 				PreProcessor.addIncidentFieldEntry(WorldTracerField.NF, fd, result);
@@ -3045,7 +3059,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if(htmlBody == null){
 			return null;
 		}
-		Pattern input_patt = Pattern.compile("<SPAN>([^<>]+)[^<>\\[\\]]*<\\/SPAN>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Pattern input_patt = Pattern.compile("<SPAN.*>([^<>]+)[^<>\\[\\]]*<\\/SPAN>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher m = input_patt.matcher(htmlBody);
 		Map<String, String> paramMap = new HashMap<String, String>();
 		if (m.find()) {
@@ -4893,6 +4907,42 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			throw new WorldTracerException(errorString);
 		}
-	  
   }
+
+	public void reinstateOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		String responseBody = susritItem(ohd.getOhdId(), "RIT", "OHD");
+		String errorString;
+		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if (OK.equals(errorString) || ALREADY_REINSTATED.equals(errorString)) {
+			response.setSuccess(true);
+			return;
+		}
+		throw new WorldTracerException(errorString);
+	}
+
+	public void suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
+		String responseBody = susritItem(ohd.getOhdId(), "SUS", "OHD");
+		String errorString;
+		Pattern error_patt = Pattern.compile("<input[^<>]*id=\"result__cr0\"[^<>]*value=\"([^<>\"]*)\"+?[^<>]*/>+?",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher m = error_patt.matcher(responseBody);
+		if (m.find()) {
+			errorString = m.group(1);
+		} else {
+			errorString = responseBody;
+		}
+		if (OK.equals(errorString) || ALREADY_SUSPENDED.equals(errorString)) {
+			response.setSuccess(true);
+			return;
+		}
+		throw new WorldTracerException(errorString);
+		
+	}
 }

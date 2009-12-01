@@ -618,7 +618,7 @@ public class PreProcessor {
 			addIncidentFieldEntry(WorldTracerField.CS, "01 X/USD0.00", result);
 		}
 
-		if (incident.getFaultReason() != 0) {
+		if (incident.getFaultReason() != 0 || incident.getFaultReason() > 79) {
 			addIncidentFieldEntry(WorldTracerField.RL, Integer.toString(incident.getFaultReason()), result);
 			addIncidentFieldEntry(WorldTracerField.RC, incident.getFaultReasonDescription(), result);
 		} else {

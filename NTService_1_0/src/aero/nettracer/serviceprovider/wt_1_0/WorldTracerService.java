@@ -20,7 +20,6 @@ public class WorldTracerService {
 	public WorldTracerResponse closeOhd(RequestHeader header, Ohd ohd) {return null;}
 	public WorldTracerResponse createAhl(RequestHeader header, Ahl ahl) {return null;}
 	public WorldTracerResponse createBdo(RequestHeader header, Bdo bdo) {return null;}
-	
 	public WorldTracerResponse createOhd(RequestHeader header, Ohd ohd) {return null;}
 	public WorldTracerResponse eraseActionFile(RequestHeader header, ActionFileRequestData data) {return null;}
 	public WorldTracerResponse forwardOhd(RequestHeader header, ForwardOhd data) {return null;}
@@ -28,15 +27,14 @@ public class WorldTracerService {
 	public WorldTracerResponse getActionFileDetails(RequestHeader header, ActionFileRequestData data) {return null;}
 	public WorldTracerResponse getActionFileSummary(RequestHeader header, ActionFileRequestData data) {return null;}
 	public WorldTracerResponse getAhl(RequestHeader header, Ahl ahl) {return null;}
-	
 	public WorldTracerResponse getOhd(RequestHeader header, Ohd ohd) {return null;}
-	
 	public WorldTracerResponse placeActionFile(RequestHeader header, Pxf pxf) {return null;}
-	public WorldTracerResponse reinstanteAhl(RequestHeader header, Ahl ahl) {return null;}
+	public WorldTracerResponse reinstateAhl(RequestHeader header, Ahl ahl) {return null;}
 	public WorldTracerResponse requestOhd(RequestHeader header, RequestOhd data) {return null;}
 	public WorldTracerResponse requestQuickOhd(RequestHeader header, RequestOhd data) {return null;}
-	
 	public WorldTracerResponse sendForwardMessage(RequestHeader header, ForwardMessage forwardMessage) {return null;}
 	public WorldTracerResponse suspendAhl(RequestHeader header, Ahl ahl) {return null;}
+	public WorldTracerResponse suspendOhd(RequestHeader header, Ohd ohd) {return null;}
+	public WorldTracerResponse reinstateOhd(RequestHeader header, Ohd ohd) {return null;}
 	
 }

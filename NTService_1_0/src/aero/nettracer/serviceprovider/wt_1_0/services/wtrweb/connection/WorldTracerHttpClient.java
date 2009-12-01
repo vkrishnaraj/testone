@@ -93,6 +93,7 @@ public class WorldTracerHttpClient extends HttpClient implements
 		Protocol https = new Protocol("https", ssl, 443);
 		this.getHostConfiguration().setHost(account.getHost(), 443, https);
 
+
 		
 		HttpConnectionParams params = this.getHttpConnectionManager()
 				.getParams();

@@ -36,7 +36,7 @@ public class WorldTracerClientPool extends GenericKeyedObjectPool {
 		accounts = WorldTracerAccountDao.getWtWebByProfile(sess, profile.getId());
 		sess.close();
 		
-		this.setMaxActive(accounts.size());
+		this.setMaxActive(1);
 
 		WorldTracerClientFactory factory = new WorldTracerClientFactory(accounts);
 		this.setFactory(factory);
