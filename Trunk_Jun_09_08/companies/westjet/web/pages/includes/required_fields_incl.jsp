@@ -159,7 +159,10 @@
 
 	      if (currentElement.value.indexOf("@noemail.com") != -1) {
 	    	  var emailCustomer = document.getElementById("email_customer");
-	    	  emailCustomer.checked = false;
+	    	  if (emailCustomer != null) {
+	    		  emailCustomer.checked = false;
+		      }
+	    	  
 	      }
 	  }
      
