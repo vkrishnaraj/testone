@@ -486,7 +486,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		String wt_id = null;
 		String errorString = "Submit failed.";
-		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING([^<>]+)]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Pattern succePatt = Pattern.compile("<SPAN.*>([^<>]+)\\[ACTIVE\\/TRACING([^<>]+)]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
 		Matcher succeMat = succePatt.matcher(responseBody);
 		if(succeMat.find()){
 			wt_id = succeMat.group(1).replaceAll("&nbsp;", "").replaceAll("(\\(.*\\))", "");
@@ -2160,7 +2160,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		}
 		String wt_id = null;
 		String errorString = "Submit failed.";
-		Pattern succePatt = Pattern.compile("<SPAN>([^<>]+)\\[ACTIVE\\/TRACING]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
+		Pattern succePatt = Pattern.compile("<SPAN.*>([^<>]+)\\[ACTIVE\\/TRACING]<\\/SPAN>",Pattern.CASE_INSENSITIVE);
 		Matcher succeMat = succePatt.matcher(responseBody);
 		
 		if(succeMat.find()){

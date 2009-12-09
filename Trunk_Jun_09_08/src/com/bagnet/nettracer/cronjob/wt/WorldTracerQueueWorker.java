@@ -41,6 +41,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLoggedOutException;
@@ -77,7 +78,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			ConcurrentLinkedQueue<Long> qq, RuleMapper wtRuleMap, ErrorHandler errorHandler) {
 		// DO NOT USE PROVIDED WT SERVICE
 		//this.wtService = wtService;
-		DefaultWorldTracerService dwts = new DefaultWorldTracerService();
+		DefaultWorldTracerService dwts = (DefaultWorldTracerService) wtService;
 		dwts.setWtCompanyCode(defAgent.getCompanycode_ID());
 		
 		NewWorldTracerConnector connector = new NewWorldTracerConnector((WorldTracerConnectionPool)NettracerCron.ctx.getBean("wtConnectionPool"));

@@ -31,19 +31,19 @@ public class JetBlueIntegrationWrapper {
 	private String pnrContents;
 	
 	private Logger logger = Logger.getLogger(JetBlueIntegrationWrapper.class);
-	private String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_BOOKING_ENDPOINT);
+	private String endpoint = "https://blueservices.jetblue.com/BaggageService_vs3_0_BP_NT";
 	private String commentEndpoint = PropertyBMO.getValue("comments.endpoint");
 	
-	private String consumerId = PropertyBMO.getValue("jetblue.reservation.consumerId");
-	private String signature = PropertyBMO.getValue("jetblue.reservation.signature");
-	private String token = PropertyBMO.getValue("jetblue.reservation.token");
+	private String consumerId = "NETTRACER";
+	private String signature = "xgDLy7KwOuR5iQG4oL30CBf01dc=";
+	private String token = "RkxUU1RBVFVTICa8RkUUtvyzk8d0fb52XD5+RlEsDU27VsBZYc7mgUIJCA==";
 	private ReservationDetail reservationDetail = null;
 	
 	public JetBlueIntegrationWrapper () {
 		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\ntcerts");
-    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
-    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\ntkeys.ks");
-    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
+	    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
+	    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\ntkeys.ks");
+	    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
 	}
 
 
@@ -89,7 +89,9 @@ public class JetBlueIntegrationWrapper {
 	 * @return
 	 */
 	public boolean getBookingByKey(String recordLocator, String bagTag) {
-
+		System.out.println("Signature: " + signature);
+		System.out.println("Token: " + token);
+		System.out.println("Consumer ID:" + consumerId);
 		try {
 			
 			if (recordLocator != null) {

@@ -1,4 +1,4 @@
-<project name="tracer" default="build-jetblue-dev" basedir=".">
+<project name="1.75" default="build-jetblue-dev" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
