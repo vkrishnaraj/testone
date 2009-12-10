@@ -434,7 +434,7 @@ public class PreProcessor {
 		}
 	}
 	
-	private static String wtPhone(String rawText) {
+	public static String wtPhone(String rawText) {
 		return rawText != null ? rawText.replaceAll("\\D", "") : null;
 	}
 	

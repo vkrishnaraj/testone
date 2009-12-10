@@ -17,5 +17,5 @@ INSERT INTO special_flag (keyStr, valueStr, flagResetTimestamp) VALUES ('captcha
 insert into systemcomponents values(324,'Captcha','to enable captcha feature',15,'wtCaptcha.do?taskManagerEntry=1',1,1,-1);
 
 DECLARE @admin_grp int;
-SET @admin_grp = (SELECT TOP 1 UserGroup_ID from usergroup where description = 'Admin' and companycode_ID='US');
+SET @admin_grp = (SELECT TOP 1 UserGroup_ID from usergroup where description = 'Admin' and companycode_ID='B6');
 insert into group_component_policy (component_id,group_id) values (324, @admin_grp);
