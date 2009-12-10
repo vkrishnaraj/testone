@@ -85,14 +85,21 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 
 		GetScanPointsResponseDocument responseDoc = null;
 		try {
+			System.out.println("Scanner request: " + scanDoc);
+			logger.info("Scanner request: " + scanDoc);
+			
 			responseDoc = stub.getScanPoints(scanDoc);
+			
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 		
 		Out out = responseDoc.getGetScanPointsResponse().getOut();
+		System.out.println("Scanner Response: " + responseDoc);
+		logger.info("Scanner response: " + responseDoc);
 		
 		for (int i = 0; i < 16; ++i) {
+			logger.info("Iteration: " + i);
 			Object[] arr = null;
 			switch (i) {
 				case 0: if (out.getBulkUnloadArray() != null) arr = out.getBulkUnloadArray(); break;
@@ -110,12 +117,17 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				case 13: if (out.getUldTransferArray() != null ) arr = out.getUldTransferArray(); break;
 				case 14: if (out.getUnloadArray() != null ) arr = out.getUnloadArray(); break;
 				case 15: if (out.getUnloadULDArray() != null ) arr = out.getUnloadULDArray(); break;
-
 			}
 			
-			if (arr != null) {
+			
+			if (arr != null && arr.length > 0) {
+				
+				logger.info(arr);
 				for (int j = 0; j < arr.length; ++j) {
-					for (Object obj : arr) {
+					Object obj = arr[j];
+//					for (Object obj : arr) {
+						logger.info(obj);
+						
 						String type = "Scan";
 						StringBuffer comment = new StringBuffer();
 						String ohdId = null;
@@ -252,7 +264,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						ScannerDataDTO dtoItem = new ScannerDataDTO(dateString, city, type, comment.toString(), ohdId, time);
 						list.add(dtoItem);
 
-					}
+//					}
 				}
 
 			}
