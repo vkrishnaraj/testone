@@ -82,6 +82,7 @@ import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType.Itinerary.FlightSe
 import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType.Amount;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
 import aero.sita.www.bag.wtr.delayedbagservice.DelayedBagServiceStub;
+import aero.sita.www.bag.wtr.onhandbagservice.OnhandBagServiceStub;
 
 public class WorldTracerServiceImpl implements WorldTracerService {
 
@@ -107,7 +108,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
 	
 	// String endpoint = "http://chocolate.nettracer.aero:8080";
-	String endpoint = "https://webservice-qa.worldtracer.aero/DelayedBagService/0.1";
+	String delayedEndpoint = "https://webservice-qa.worldtracer.aero/DelayedBagService/0.1";
+	String onhandEndpoint = "https://webservice-qa.worldtracer.aero/OnhandBagService/0.1";
 	
 	
 
@@ -184,7 +186,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			System.exit(0);
 		}
 
 		List<Phase> phases = client.getAxisConfiguration().getInFlowPhases();
@@ -244,17 +245,85 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	}
 
-	public void reinstateOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) {
-
+	public void reinstateOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException {
 		// TODO Auto-generated method stub
 		try {
 			
-			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			OnhandBagServiceStub stub = new OnhandBagServiceStub(onhandEndpoint);
+			configureClient(stub);
+
+			WTRReinstateRecordsRQDocument d = WTRReinstateRecordsRQDocument.Factory
+			    .newInstance();
+			WTRTracingStateChangeRQType d1 = d.addNewWTRReinstateRecordsRQ();
+
+			// Set version & POS
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+			    dto.getUser().getProfile().getAirline());
+
+			
+			d1.setRecordType(RecordType.ON_HAND);
+			RecordReferenceType r = d1.addNewRecords().addNewRecord()
+			    .addNewRecordReference();
+			String ohdId = ohd.getOhdId();
+
+			r.setAirlineCode(ohdId.substring(0, 3));
+			r.setReferenceNumber(Integer.parseInt(ohdId.substring(5)));
+			r.setStationCode(ohdId.substring(3, 5));
+
+			d1.setAgentID(PreProcessor.getAgentEntry(ohd.getAgent()));
+
+			// Send Message
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				logger.info(d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				wsresponse = stub.reinstate(d);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+			    && wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+				    && wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors()
+					    .getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error("Web Service Error Message: " + error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = "Unknown Failure";
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			WorldTracerException e = new WorldTracerException(
+			    "Web Service Connection Issue", axisFault);
+			throw e;
+		}
+
+	}
+
+	public void suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException {
+
+		try {
+			
+			OnhandBagServiceStub stub = new OnhandBagServiceStub(onhandEndpoint);
 			configureClient(stub);
 
 			WTRSuspendRecordsRQDocument d = WTRSuspendRecordsRQDocument.Factory
@@ -267,23 +336,23 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			    dto.getUser().getProfile().getAirline());
 
 			
-			d1.setRecordType(RecordType.DELAYED);
+			d1.setRecordType(RecordType.ON_HAND);
 			RecordReferenceType r = d1.addNewRecords().addNewRecord()
 			    .addNewRecordReference();
-			String ahlId = ahl.getAhlId();
+			String ohdId = ohd.getOhdId();
 
-			r.setAirlineCode(ahlId.substring(0, 3));
-			r.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
-			r.setStationCode(ahlId.substring(3, 5));
+			r.setAirlineCode(ohdId.substring(0, 3));
+			r.setReferenceNumber(Integer.parseInt(ohdId.substring(5)));
+			r.setStationCode(ohdId.substring(3, 5));
 
-			d1.setAgentID(PreProcessor.getAgentEntry(ahl.getAgent()));
+			d1.setAgentID(PreProcessor.getAgentEntry(ohd.getAgent()));
 
 			// Send Message
 			WTRStatusRSDocument wsresponse = null;
 			try {
 				logger.info(d);
 				if (FORCE_FAILURE) {
-					System.exit(0);
+					return;
 				}
 				wsresponse = stub.suspend(d);
 			} catch (Exception e) {
@@ -335,7 +404,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			
 			EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_AHL);
 			
-			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(delayedEndpoint);
 			configureClient(stub);
 
 			WTRDelayedBagsCreateRQDocument d = WTRDelayedBagsCreateRQDocument.Factory.newInstance();
@@ -618,7 +687,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			try {
 				logger.info(d);
 				if (FORCE_FAILURE) {
-					System.exit(0);
+					return;
 				}
 				wsresponse = stub.create(d);
 			} catch (Exception e) {
@@ -670,7 +739,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void suspendAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
 		try {
-			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(delayedEndpoint);
 			configureClient(stub);
 
 			WTRSuspendRecordsRQDocument d = WTRSuspendRecordsRQDocument.Factory
@@ -699,7 +768,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			try {
 				logger.info(d);
 				if (FORCE_FAILURE) {
-					System.exit(0);
+					return;
 				}
 				wsresponse = stub.suspend(d);
 			} catch (Exception e) {
@@ -741,7 +810,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	public void reinstateAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
 		try {
-			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(delayedEndpoint);
 			configureClient(stub);
 
 			WTRReinstateRecordsRQDocument d = WTRReinstateRecordsRQDocument.Factory
@@ -770,7 +839,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			try {
 				logger.info(d);
 				if (FORCE_FAILURE) {
-					System.exit(0);
+					return;
 				}
 				wsresponse = stub.reinstate(d);
 			} catch (Exception e) {
