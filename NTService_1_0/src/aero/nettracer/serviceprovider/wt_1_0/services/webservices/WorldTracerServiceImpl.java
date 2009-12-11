@@ -53,6 +53,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracer
 import aero.sita.www.bag.wtr._2009._01.BagDescType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType;
 import aero.sita.www.bag.wtr._2009._01.BagMatrlType;
+import aero.sita.www.bag.wtr._2009._01.BagTagType;
 import aero.sita.www.bag.wtr._2009._01.ColorCodeType;
 import aero.sita.www.bag.wtr._2009._01.ColorTypeDescType;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType;
@@ -66,9 +67,14 @@ import aero.sita.www.bag.wtr._2009._01.OriginDestinationType;
 import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType;
 import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType;
 import aero.sita.www.bag.wtr._2009._01.RecordReferenceType;
+import aero.sita.www.bag.wtr._2009._01.RecordType;
 import aero.sita.www.bag.wtr._2009._01.StationAirlineType;
 import aero.sita.www.bag.wtr._2009._01.WTRBagsCreateRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRReinstateRecordsRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRStatusRSDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRSuspendRecordsRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRTracingStateChangeRQType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType.Enum;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType.PermanentAddress;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType.TempAddress.Address;
@@ -79,6 +85,9 @@ import aero.sita.www.bag.wtr.delayedbagservice.DelayedBagServiceStub;
 
 public class WorldTracerServiceImpl implements WorldTracerService {
 
+	// TODO: MARKER 1: Potentially Delivery Address - Appears unecessary until BDO
+	// TODO: MARKER 2: NO STATE IN WEB SERVICES - Is not in WS model
+	
 	WorldTracerHttpClient client = null;
 
 	private static final Logger logger = Logger.getLogger(WorldTracerServiceImpl.class);
@@ -241,12 +250,80 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	}
 
 	public void suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) {
-		// TODO Auto-generated method stub
 
+		// TODO Auto-generated method stub
+		try {
+			
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			configureClient(stub);
+
+			WTRSuspendRecordsRQDocument d = WTRSuspendRecordsRQDocument.Factory
+			    .newInstance();
+			WTRTracingStateChangeRQType d1 = d.addNewWTRSuspendRecordsRQ();
+
+			// Set version & POS
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+			    dto.getUser().getProfile().getAirline());
+
+			
+			d1.setRecordType(RecordType.DELAYED);
+			RecordReferenceType r = d1.addNewRecords().addNewRecord()
+			    .addNewRecordReference();
+			String ahlId = ahl.getAhlId();
+
+			r.setAirlineCode(ahlId.substring(0, 3));
+			r.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
+			r.setStationCode(ahlId.substring(3, 5));
+
+			d1.setAgentID(PreProcessor.getAgentEntry(ahl.getAgent()));
+
+			// Send Message
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				logger.info(d);
+				if (FORCE_FAILURE) {
+					System.exit(0);
+				}
+				wsresponse = stub.suspend(d);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+			    && wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+				    && wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors()
+					    .getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error("Web Service Error Message: " + error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = "Unknown Failure";
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			WorldTracerException e = new WorldTracerException(
+			    "Web Service Connection Issue", axisFault);
+			throw e;
+		}
 	}
 
 	public void createAhl(WorldTracerActionDTO dto, Ahl data, WorldTracerResponse response) throws WorldTracerException {
-		// TODO Auto-generated method stub
 		Ahl incident = data;
 
 		try {
@@ -325,12 +402,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			// Set Baggage Information
 			DelayedBagGroupType t2 = d1.addNewDelayedBagGroup();
 			
+			
+			
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CT);
 			List<String> fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.BI);
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
+			List<String> tagList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 
 			if (fieldList != null) {
-				for (int i = 0; i < fieldList.size(); i++) {
+				for (int i = 0; i < fieldList.size() && i < 10; i++) {
 
 					String bagFace = fieldList.get(i);
 					String colorType = bagFace.substring(0, 2);
@@ -338,6 +418,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String bagDesc = bagFace.substring(4, 7);
 
 					DelayedBagType t3 = t2.addNewDelayedBags().addNewDelayedBag();
+					
+					if (tagList != null && i < tagList.size()) {
+						BagTagType tag = t3.addNewBagTag();
+						String airtag = fieldList.get(i);
+						tag.setAirlineCode(airtag.substring(0,2));
+						tag.setTagSequence(airtag.substring(2));
+					}
 					
 					if (fieldList2 != null && i < fieldList2.size()) {
 						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
@@ -473,11 +560,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				ct.setZipCode(fieldList.get(0));
 			}
 
-			// TODO: NO STATE IN WEB SERVICES
+
+
+			// MARKER 1
+			// MARKER 2
+
 //			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.STATE);
 //			if (fieldList != null && fieldList.size() > 0) {
-//				ct.setZipCode(arg0);
+//				ct.setState(fieldList.get(0));
 //			}
+			
+			
 			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -516,7 +609,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			
 			
-			// TODO: BAG TAGS & Potentially Delivery Address
+
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AG);
 			d1.setAgentID(fieldList.get(0));
 
@@ -575,14 +668,146 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	}
 
-	public void suspendAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) {
-		// TODO Auto-generated method stub
+	public void suspendAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
+		try {
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			configureClient(stub);
 
+			WTRSuspendRecordsRQDocument d = WTRSuspendRecordsRQDocument.Factory
+			    .newInstance();
+			WTRTracingStateChangeRQType d1 = d.addNewWTRSuspendRecordsRQ();
+
+			// Set version & POS
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+			    dto.getUser().getProfile().getAirline());
+
+			
+			d1.setRecordType(RecordType.DELAYED);
+			RecordReferenceType r = d1.addNewRecords().addNewRecord()
+			    .addNewRecordReference();
+			String ahlId = ahl.getAhlId();
+
+			r.setAirlineCode(ahlId.substring(0, 3));
+			r.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
+			r.setStationCode(ahlId.substring(3, 5));
+
+			d1.setAgentID(PreProcessor.getAgentEntry(ahl.getAgent()));
+
+			// Send Message
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				logger.info(d);
+				if (FORCE_FAILURE) {
+					System.exit(0);
+				}
+				wsresponse = stub.suspend(d);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+			    && wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+				    && wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors()
+					    .getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error("Web Service Error Message: " + error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = "Unknown Failure";
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			WorldTracerException e = new WorldTracerException(
+			    "Web Service Connection Issue", axisFault);
+			throw e;
+		}
 	}
 
-	public void reinstateAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) {
-		// TODO Auto-generated method stub
+	public void reinstateAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
+		try {
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
+			configureClient(stub);
 
+			WTRReinstateRecordsRQDocument d = WTRReinstateRecordsRQDocument.Factory
+			    .newInstance();
+			WTRTracingStateChangeRQType d1 = d.addNewWTRReinstateRecordsRQ();
+
+			// Set version & POS
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+			    dto.getUser().getProfile().getAirline());
+
+			
+			d1.setRecordType(RecordType.DELAYED);
+			RecordReferenceType r = d1.addNewRecords().addNewRecord()
+			    .addNewRecordReference();
+			String ahlId = ahl.getAhlId();
+
+			r.setAirlineCode(ahlId.substring(0, 3));
+			r.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
+			r.setStationCode(ahlId.substring(3, 5));
+
+			d1.setAgentID(PreProcessor.getAgentEntry(ahl.getAgent()));
+
+			// Send Message
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				logger.info(d);
+				if (FORCE_FAILURE) {
+					System.exit(0);
+				}
+				wsresponse = stub.reinstate(d);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+			    && wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+				    && wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors()
+					    .getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error("Web Service Error Message: " + error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = "Unknown Failure";
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			WorldTracerException e = new WorldTracerException(
+			    "Web Service Connection Issue", axisFault);
+			throw e;
+		}
 	}
 
 	public void closeAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) {
