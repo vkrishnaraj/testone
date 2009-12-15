@@ -918,7 +918,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
       WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException {
 		
 		
-		Map<WorldTracerField, List<String>> fieldMap = createFwdFieldMap(msg, dto);
+		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createFwdFieldMap(msg, dto);
 		
 		Pattern itinPatt = Pattern.compile("(\\w{2})(\\w+)/(\\w+)", Pattern.CASE_INSENSITIVE);
 		String responseBody = null;
@@ -1156,75 +1156,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		}
   }
 	
-	private Map<WorldTracerField, List<String>> createFwdFieldMap(ForwardMessage fwd, WorldTracerActionDTO dto) throws WorldTracerException {
-		if (fwd == null) {
-			return null;
-		}
 
-		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
-		
-		
-		if (fwd.getFaultReason() != 0) {
-			PreProcessor.addIncidentFieldEntry(WorldTracerField.RL, Integer.toString(fwd.getFaultReason()), result);
-		}
-
-		PreProcessor.addIncidentFieldEntry(WorldTracerField.RC, fwd.getFaultReasonDescription(), result);
-		
-		PreProcessor.addIncidentFieldEntry(WorldTracerField.AG, PreProcessor.getAgentEntry(fwd.getAgent()), result);
-
-		PreProcessor.addConvertedTag(fwd.getExpediteTag(), WorldTracerField.XT, result, fwd.getFromAirline());
-
-		if (fwd.getName() != null) {
-			for (String name : fwd.getName()) {
-				PreProcessor.addIncidentFieldEntry(WorldTracerField.NM, name.trim(), result);
-			}
-		}
-
-		if (fwd.getTeletype() != null) {
-			for (String tt : fwd.getTeletype()) {
-				PreProcessor.addIncidentFieldEntry(WorldTracerField.TX, tt.trim(), result);
-			}
-		}
-
-		PreProcessor.addIncidentFieldEntry(WorldTracerField.SI, fwd.getSuplementaryInfo(), result);
-		PreProcessor.addIncidentFieldEntry(WorldTracerField.TI, fwd.getTextInfo(), result);
-
-		String fw = null;
-		if (fwd.getItinerary() != null) {
-			for (Itinerary itin : fwd.getItinerary()) {
-				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getFlightNumber() == null
-						|| itin.getFlightNumber().trim().length() <= 0 || itin.getDepartureCity() == null
-						|| itin.getDepartureCity().trim().length() <= 0 || itin.getArrivalCity() == null
-						|| itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null) {
-					continue;
-				}
-				String fnum = PreProcessor.wtFlightNumber(itin.getFlightNumber());
-				String fd = null;
-				if (fnum.length() == 0) {
-					fd = PreProcessor.UNKNOWN_AIRLINE + "/" + PreProcessor.ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
-				} else {
-					fd = itin.getAirline() + fnum + "/" + PreProcessor.ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
-				}
-				PreProcessor.addIncidentFieldEntry(WorldTracerField.FO, fd, result);
-				PreProcessor.addIncidentFieldEntry(WorldTracerField.NF, fd, result);
-				List<String> routing = result.get(WorldTracerField.NR);
-				if (routing == null || !routing.get(routing.size() - 1).equalsIgnoreCase(itin.getDepartureCity().trim())) {
-					PreProcessor.addIncidentFieldEntry(WorldTracerField.NR, itin.getDepartureCity().trim(), result);
-				}
-				PreProcessor.addIncidentFieldEntry(WorldTracerField.NR, itin.getArrivalCity().trim(), result);
-				fw = itin.getArrivalCity() + itin.getAirline();
-				PreProcessor.addIncidentFieldEntry(WorldTracerField.FW, fw, result);
-			}
-		}
-		List<String> foo = result.get(WorldTracerField.FW);
-		if (foo != null && foo.size() > 0) {
-			foo.set(foo.size() - 1, fwd.getDestinationStation() + fwd.getDestinationAirline());
-		} else {
-			throw new WorldTracerException("invalid forward itinerary");
-		}
-
-		return result;
-	}
 	
 
 

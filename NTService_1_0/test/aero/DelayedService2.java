@@ -191,6 +191,83 @@ public class DelayedService2 {
 	@Test
 	public void testRead() throws RemoteException, XMLStreamException {
 
+		/*
+		
+		 
+		 <wtr:WTR_DelayedBagRecReadRS Version="0.1" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" xmlns:xsd="http://www.w3.org/1999/XMLSchema" xmlns:SOAP-EN="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance">
+  <wtr:DiaryInfo>
+    <wtr:CreateDate>2009-12-07T15:34:00-05:00</wtr:CreateDate>
+    <wtr:TracingDate>2009-12-07T00:00:00-05:00</wtr:TracingDate>
+    <wtr:CloseDate>2009-12-07T16:48:00-05:00</wtr:CloseDate>
+  </wtr:DiaryInfo>
+  <wtr:DelayedBagGroup>
+    <wtr:DelayedBags>
+      <wtr:DelayedBag>
+        <wtr:ColorTypeDesc Suspended="false">
+          <wtr:ColorCode>BU</wtr:ColorCode>
+          <wtr:TypeCode>22</wtr:TypeCode>
+          <wtr:Descriptor>
+            <wtr:MtrlElement>M</wtr:MtrlElement>
+            <wtr:OtherElement>B</wtr:OtherElement>
+            <wtr:OtherElement>C</wtr:OtherElement>
+          </wtr:Descriptor>
+        </wtr:ColorTypeDesc>
+        <wtr:BrandInfo Suspended="false">AMERIBAG</wtr:BrandInfo>
+      </wtr:DelayedBag>
+    </wtr:DelayedBags>
+  </wtr:DelayedBagGroup>
+  <wtr:Passengers>
+    <wtr:Names>
+      <wtr:Name>SMITH</wtr:Name>
+    </wtr:Names>
+    <wtr:Initials>
+      <wtr:Intial>S</wtr:Intial>
+    </wtr:Initials>
+    <wtr:Itinerary>
+      <wtr:FlightSegments>
+        <wtr:FlightSegmentOrARNK>
+          <wtr:FlightSegment>
+            <wtr:FlightAndDate>
+              <wtr:AirlineCode>US</wtr:AirlineCode>
+              <wtr:FlightNumber>9999</wtr:FlightNumber>
+              <wtr:Date>2009-12-07</wtr:Date>
+            </wtr:FlightAndDate>
+            <wtr:OriginDestination>
+              <wtr:Origin>PHX</wtr:Origin>
+              <wtr:Destination>ATL</wtr:Destination>
+            </wtr:OriginDestination>
+          </wtr:FlightSegment>
+        </wtr:FlightSegmentOrARNK>
+      </wtr:FlightSegments>
+      <wtr:AdditionalRoutes/>
+    </wtr:Itinerary>
+  </wtr:Passengers>
+  <wtr:Claim>
+    <wtr:ClaimAmout>
+      <wtr:Amount CurrencyCode="USD" Amount="0"/>
+    </wtr:ClaimAmout>
+    <wtr:PassengerPayments>
+      <wtr:PassengerPayment>
+        <wtr:Type>X</wtr:Type>
+        <wtr:Amount CurrencyCode="USD" Amount="0"/>
+      </wtr:PassengerPayment>
+    </wtr:PassengerPayments>
+    <wtr:FaultStationCode>DEN</wtr:FaultStationCode>
+    <wtr:LossComments>79 - UNKNOWN</wtr:LossComments>
+    <wtr:LossReasonCode>79</wtr:LossReasonCode>
+  </wtr:Claim>
+  <wtr:RecordHistory>
+    <wtr:History>AHL  07DEC/2034GMT AG AGENT FROM WTW WM BY US
+AAH  07DEC/2134GMT /US AG AGENT WTW ELEMENTS
+     RL01/FS01/CA01/
+AAH  07DEC/2144GMT /US AG AGENT WTW ELEMENTS RC01/
+AAH  07DEC/2148GMT /US AG AGENT WTW ELEMENTS CS01/
+CFI  07DEC/2148GMT /US AG AGENT WTW
+-   MCH  07DEC/2036 NO MATCH</wtr:History>
+  </wtr:RecordHistory>
+</wtr:WTR_DelayedBagRecReadRS>
+	
+		 */
 		DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
 		configureClient(stub);
 		
