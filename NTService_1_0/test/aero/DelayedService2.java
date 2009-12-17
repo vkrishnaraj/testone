@@ -133,11 +133,11 @@ public class DelayedService2 {
 		
 		d1.setAgentID("AGENT");
 
-		System.setProperty("javax.net.ssl.trustStore", "c:\\jdk\\jre\\lib\\security\\cacerts");
-		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-
-		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
-		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
+//		System.setProperty("javax.net.ssl.trustStore", "c:\\jdk\\jre\\lib\\security\\cacerts");
+//		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+//
+//		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
+//		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
 		WTRBagsCreateRSDocument response = null;
 		try {
