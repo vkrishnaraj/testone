@@ -1,19 +1,17 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.log4j.Logger;
 
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFile;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
@@ -46,6 +44,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public static final int UNIT_TEST_SUCCESS = 0;
 	public static final int UNIT_TEST_FAILURE = 1;
 	static Pattern commandResponsePattern = Pattern.compile("<PRE>((.*\\n)*.*)</PRE>", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+	private static Logger logger = Logger.getLogger(WorldTracerServiceImpl.class);
 
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 		this.dto = dto;
@@ -70,9 +69,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		
 		Matcher m = commandResponsePattern.matcher(response);
 		if (m.find()) {
-			return m.group(1);
+			String responseTxt = m.group(1);
+			if (responseTxt != null) {
+				logger.info("Response Text: " + responseTxt);
+			}
+			
+			return responseTxt;
 		}
-		
+		logger.info("Response Text: null");
 		return null;
 	}
 	
@@ -524,10 +528,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 			
+			if (responseTxt != null) {
+				logger.info("Response Text: " + responseTxt);
+			}
+			
 			// On success, set success to true (defaults to false)
 			if (responseTxt.contains("ACTION FILE DISPLAY COMPLETE")) {  //only single page or on last page
+				logger.info("Success: true");
 				response.setSuccess(true);
 				response.setActionFiles(myActionFileList.toArray(new ActionFile[myActionFileList.size()]));
+				
 				return;
 			}
 		}

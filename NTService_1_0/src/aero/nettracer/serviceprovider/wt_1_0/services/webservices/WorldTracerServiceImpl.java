@@ -148,9 +148,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
 	
 	// TODO: MOVE THESE TO PROFILE DATA
-	String delayedEndpoint = "https://webservice-qa.worldtracer.aero/DelayedBagService/0.1";
-	String onhandEndpoint = "https://webservice-qa.worldtracer.aero/OnhandBagService/0.1";
-	String rushEndpoint = "https://webservice-qa.worldtracer.aero/RushBagService/0.1";
+	String delayedEndpoint = "https://webservice.worldtracer.aero/DelayedBagService/0.1";
+	String onhandEndpoint = "https://webservice.worldtracer.aero/OnhandBagService/0.1";
+	String rushEndpoint = "https://webservice.worldtracer.aero/RushBagService/0.1";
 	
 
 	public static final WorldTracerRule<String> BASIC_RULE = new BasicRule(1, 57, 1, aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format.FREE_FLOW);
