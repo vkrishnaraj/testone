@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name = "sabre_connection")
+@Table(name = "svc_sabre_connection")
 @Proxy(lazy = true)
 @NamedQueries( { @NamedQuery(name = "loadByProfile", query = "from SabreConnection c where c.profile.id  = :profile") })
 public class SabreConnection {

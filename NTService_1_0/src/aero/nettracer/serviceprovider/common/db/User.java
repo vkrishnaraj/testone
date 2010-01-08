@@ -18,7 +18,7 @@ import org.hibernate.annotations.Proxy;
 import aero.nettracer.serviceprovider.common.pojo.UserProvidedParameters;
 
 @Entity
-@Table(name = "user")
+@Table(name = "svc_user")
 @Proxy(lazy = true)
 @NamedQueries({
 	@NamedQuery(

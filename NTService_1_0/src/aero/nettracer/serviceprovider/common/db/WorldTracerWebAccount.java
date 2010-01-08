@@ -19,7 +19,7 @@ import org.hibernate.annotations.Proxy;
 
 @Entity
 @Proxy(lazy = true)
-@Table(name = "world_tracer_web_account")
+@Table(name = "svc_world_tracer_web_account")
 @NamedQueries({
 	@NamedQuery(
 	name = "loadWTAccountByProfile",

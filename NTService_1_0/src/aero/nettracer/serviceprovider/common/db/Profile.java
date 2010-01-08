@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.type.EnumType;
 
 @Entity
-@Table(name = "profile")
+@Table(name = "svc_profile")
 @Proxy(lazy = true)
 public class Profile {
 
@@ -47,14 +47,14 @@ public class Profile {
 	
 
 	@org.hibernate.annotations.CollectionOfElements(targetElement = String.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "profile_parameters", joinColumns = @JoinColumn(name = "profile_id"))
+	@JoinTable(name = "svc_profile_parameters", joinColumns = @JoinColumn(name = "profile_id"))
 	@MapKey(columns = @Column(name = "parameter_type", length = 30), type = @Type(type = "org.hibernate.type.EnumType", parameters = {
 			@Parameter(name = EnumType.ENUM, value = "aero.nettracer.serviceprovider.common.db.ParameterType"),
 			@Parameter(name = EnumType.TYPE, value = "12") }))
 	private Map<ParameterType, String> parameters;
 
 	@org.hibernate.annotations.CollectionOfElements(targetElement = Boolean.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "profile_permission", joinColumns = @JoinColumn(name = "permission_id"))
+	@JoinTable(name = "svc_profile_permission", joinColumns = @JoinColumn(name = "permission_id"))
 	@MapKey(columns = @Column(name = "permission_type", length = 30), type = @Type(type = "org.hibernate.type.EnumType", parameters = {
 			@Parameter(name = EnumType.ENUM, value = "aero.nettracer.serviceprovider.common.db.PermissionType"),
 			@Parameter(name = EnumType.TYPE, value = "12") }))

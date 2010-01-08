@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,9 +14,12 @@ public class ISharesResponseParser {
 	private static final Pattern AHL_PATT = Pattern.compile("(?:\\bAHL\\s+|A/|FILE\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private static final Pattern OHD_PATT = Pattern.compile("(?:\\bOHD\\s+|O/|ON-HAND\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private static final Pattern PERCENT_PATT = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
+	private static final Pattern PATT_BEGIN = Pattern.compile("^\\d+/", Pattern.MULTILINE);
+	private static final Pattern PATT_END = Pattern.compile("^\\d+/|^\\s*$", Pattern.MULTILINE);
+	
 	
 	//private static final Pattern PATT_DXF = Pattern.compile("^(\\d+)/(.*\\n)*(^\\s*$){2,}", Pattern.MULTILINE);
-	private static final Pattern PATT_DXF = Pattern.compile("^(\\d+)/(.*\\n)*(^\\s*$){1,}", Pattern.MULTILINE);
+	private static final Pattern PATT_DXF = Pattern.compile("^(\\d+)/(.*\\n)*", Pattern.MULTILINE);
 
 	static ActionFileCount[] processActionfileResponse(String responseTxt) {
 		String[] list = responseTxt.split("\n");
@@ -49,19 +53,41 @@ public class ISharesResponseParser {
 		return counts.toArray(new ActionFileCount[counts.size()]);
 	}
 	
-	static ActionFile processActionFileDetail(String responseTxt) {
-		ActionFile result = new ActionFile();
-		Matcher matcher = PATT_DXF.matcher(responseTxt);
-	    if(matcher.find()) {
-	    	int myItemNumber = Integer.parseInt(matcher.group(1));
-	    	result.setItemNumber(myItemNumber);
-	    	result.setSummary(matcher.group().trim());
-	    	result.setAhlId(parseAhlId(responseTxt) + "");
-	    	result.setOhdId(parseOhdId(responseTxt) + "");
-	    	result.setPercentMatch(parsePercentMatch(responseTxt));
-	    }		
+	static List<ActionFile> processActionFileDetail(String responseTxt) {
+		ArrayList<ActionFile> list = new ArrayList<ActionFile>();
 		
-		return result;
+		// TODO: HERE
+		Matcher start = PATT_BEGIN.matcher(responseTxt);
+		Matcher end = PATT_END.matcher(responseTxt);
+		
+		int startIndex = 0;
+		while (start.find(startIndex)) {
+			
+			String subString = null;
+			startIndex = start.start();
+			if (startIndex++ < responseTxt.length() && end.find(startIndex)) {
+				subString = responseTxt.substring(start.start(), end.start());
+			} else {
+				subString = responseTxt.substring(start.start()); 
+			}
+			
+			ActionFile result = new ActionFile();
+			Matcher matcher = PATT_DXF.matcher(subString);
+		    if(matcher.find()) {
+		    	int myItemNumber = Integer.parseInt(matcher.group(1));
+		    	result.setItemNumber(myItemNumber);
+		    	result.setSummary(matcher.group().trim());
+		    	result.setDetails(matcher.group().trim());
+		    	result.setAhlId(parseAhlId(subString) + "");
+		    	result.setOhdId(parseOhdId(subString) + "");
+		    	result.setPercentMatch(parsePercentMatch(subString));
+		    	
+		    }
+		    list.add(result);
+		}
+	    
+		
+		return list;
 	}
 	
 	private static double parsePercentMatch(String content) {

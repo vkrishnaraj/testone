@@ -489,7 +489,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		map.put("AIRLINE", data.getAirline());
 		map.put("AREA", data.getType());
 		map.put("DAY", data.getDay()+"");
-//		map.put("NUMBER", data.getNumber()+"");
 		
 		// Generate Command from Hash (Example means provided)
 		String command = "{COMMAND_TYPE} DXF {STATION}{AIRLINE} {AREA} D{DAY}";
@@ -506,11 +505,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		
 		List<ActionFile> myActionFileList = new ArrayList<ActionFile>();
 		
-		 while (responseTxt.contains("WMPN") || responseTxt.contains("ACTION FILE DISPLAY COMPLETE")){
+		while (responseTxt.contains("WMPN") || (responseTxt.contains("ACTION FILE ") && responseTxt.contains(" COMPLETE")) || responseTxt.contains("END OF REPORT")){
 			// multiple pages with next page flag or last page with last page flag
 			// populate XF[]
-			ActionFile myActionFile = ISharesResponseParser.processActionFileDetail(responseTxt);
-			myActionFileList.add(myActionFile);
+			List<ActionFile> myActionFiles = ISharesResponseParser.processActionFileDetail(responseTxt);
+			myActionFileList.addAll(myActionFiles);
+			
 			
 			if(responseTxt.contains("WMPN")){
 				try{
@@ -533,7 +533,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			
 			// On success, set success to true (defaults to false)
-			if (responseTxt.contains("ACTION FILE DISPLAY COMPLETE")) {  //only single page or on last page
+			if ((responseTxt.contains("ACTION FILE ") && responseTxt.contains(" COMPLETE")) || responseTxt.contains("END OF REPORT") ) {  //only single page or on last page
 				logger.info("Success: true");
 				response.setSuccess(true);
 				response.setActionFiles(myActionFileList.toArray(new ActionFile[myActionFileList.size()]));

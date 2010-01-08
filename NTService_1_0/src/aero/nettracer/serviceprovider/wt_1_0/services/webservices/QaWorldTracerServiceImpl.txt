@@ -23,7 +23,6 @@ import org.apache.neethi.Policy;
 import org.apache.neethi.PolicyEngine;
 import org.iata.www.iata._2007._00.ErrorType;
 
-import aero.DelayedService2;
 import aero.nettracer.serviceprovider.common.exceptions.BagtagException;
 import aero.nettracer.serviceprovider.common.utils.BagTagConversion;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
@@ -54,11 +53,14 @@ import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.UsWorldTrac
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerConnectionException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
+import aero.sita.www.bag.wtr._2009._01.AmountType;
 import aero.sita.www.bag.wtr._2009._01.BagDescType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType;
 import aero.sita.www.bag.wtr._2009._01.BagMatrlType;
+import aero.sita.www.bag.wtr._2009._01.BagTagAmendType;
 import aero.sita.www.bag.wtr._2009._01.BagTagType;
 import aero.sita.www.bag.wtr._2009._01.ColorCodeType;
+import aero.sita.www.bag.wtr._2009._01.ColorTypeDescAmendType;
 import aero.sita.www.bag.wtr._2009._01.ColorTypeDescType;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoAmendType;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType;
@@ -79,11 +81,10 @@ import aero.sita.www.bag.wtr._2009._01.FlightSegmentType;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagAmendType;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType;
 import aero.sita.www.bag.wtr._2009._01.OriginDestinationType;
-import aero.sita.www.bag.wtr._2009._01.PassengerAmendType;
+import aero.sita.www.bag.wtr._2009._01.PassengerItineraryAmendType;
+import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType;
+import aero.sita.www.bag.wtr._2009._01.PassengerPaymentAmendType;
 import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType;
-import aero.sita.www.bag.wtr._2009._01.PassengerType;
-import aero.sita.www.bag.wtr._2009._01.PassengersAmendType;
-import aero.sita.www.bag.wtr._2009._01.PassengersType;
 import aero.sita.www.bag.wtr._2009._01.RecordIdentifierType;
 import aero.sita.www.bag.wtr._2009._01.RecordReferenceType;
 import aero.sita.www.bag.wtr._2009._01.RecordType;
@@ -106,14 +107,14 @@ import aero.sita.www.bag.wtr._2009._01.WTRStatusRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRSuspendRecordsRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRTracingStateChangeRQType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType.Enum;
+import aero.sita.www.bag.wtr._2009._01.ClaimType.ClaimAmout.Amount;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType.PermanentAddress;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType.TempAddress.Address;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.DelayedBags.DelayedBag;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.BagAddress;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary.Routes;
-import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType.Amount;
+import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType.Itinerary.FlightSegments;
 import aero.sita.www.bag.wtr._2009._01.PassengerType.Names;
-import aero.sita.www.bag.wtr._2009._01.PassengersType.Itinerary.FlightSegments;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushDestinations;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushFlights;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
@@ -124,6 +125,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForward
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.RushBagTags;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.TeletypeAddresses;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ.Passengers;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBagRecReadRS;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument.WTROnhandBagRecUpdateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
@@ -149,9 +151,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
 	
 	// TODO: MOVE THESE TO PROFILE DATA
-	String delayedEndpoint = "https://webservice.worldtracer.aero/DelayedBagService/0.1";
-	String onhandEndpoint = "https://webservice.worldtracer.aero/OnhandBagService/0.1";
-	String rushEndpoint = "https://webservice.worldtracer.aero/RushBagService/0.1";
+	String baseUrl = "https://webservice-qa.worldtracer.aero";
+	String delayedEndpoint = baseUrl + "/DelayedBagService/0.1";
+	String onhandEndpoint = baseUrl + "/OnhandBagService/0.1";
+	String rushEndpoint = baseUrl + "/RushBagService/0.1";
+	
 	
 
 	public static final WorldTracerRule<String> BASIC_RULE = new BasicRule(1, 57, 1, aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format.FREE_FLOW);
@@ -198,7 +202,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	}
 
 	private static Policy loadPolicy(String xmlPath) throws Exception {
-		StAXOMBuilder builder = new StAXOMBuilder(DelayedService2.class.getResourceAsStream(xmlPath));
+		StAXOMBuilder builder = new StAXOMBuilder(WorldTracerServiceImpl.class.getResourceAsStream(xmlPath));
 		return PolicyEngine.getPolicy(builder.getDocumentElement());
 	}
 //
@@ -437,8 +441,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 			
-			
-			PassengerType p1 = d1.addNewPassenger();
+			Passengers p1 = d1.addNewPassengers();
 			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
 			List<String> fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
@@ -487,8 +490,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			WorldTracerField field = DefaultWorldTracerService.WorldTracerField.EA;
 			fieldList = fieldMap.get(field);
 			if (fieldList != null && fieldList.size() > 0) {
-				//TODO: UNCOMMENT
-				// ct.addNewEmails().addEmail(fieldList.get(0));
+				ct.addNewEmails().addEmail(fieldList.get(0));
 			}
 			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
@@ -788,6 +790,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			
 			PassengerPaymentType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
+			
 //			String cs_fmt = "%02d %s/%s%1.2f";
 			int claimCount = 0;
 			if (incident.getExpenses() != null) {
@@ -797,7 +800,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					for (Expenses expense : incident.getExpenses()) {
 						if (expense.getApprovalDate() != null && expense.getCurrrency() != null) {
 							claimCount++;
-							Amount amt = d3.addNewAmount();
+							
+							AmountType amt = d3.addNewAmount();
 							BigDecimal claimAmount = new BigDecimal(0);
 							amt.setAmount(claimAmount);
 							amt.setCurrencyCode(expense.getCurrrency());
@@ -808,7 +812,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			// see if we added a CS
 			if (claimCount == 0) {
-				Amount amt = d3.addNewAmount();
+				AmountType amt = d3.addNewAmount();
 				BigDecimal claimAmount = new BigDecimal(0);
 				amt.setAmount(claimAmount);
 				amt.setCurrencyCode("USD");
@@ -890,7 +894,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			
 			
 			// Set Passengers & Contact Information
-			PassengersType p1 = d1.addNewPassengers();
+			PassengerItineraryType p1 = d1.addNewPassengers();
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
 			fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			for(int j = 0; j < fieldList.size(); j++){
@@ -935,8 +939,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			WorldTracerField field = DefaultWorldTracerService.WorldTracerField.EA;
 			fieldList = fieldMap.get(field);
 			if (fieldList != null && fieldList.size() > 0) {
-				// TODO: REMOVE COMMENTED
-				// ct.addNewEmails().addEmail(fieldList.get(0));
+				ct.addNewEmails().addEmail(fieldList.get(0));
 			}
 			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
@@ -1716,16 +1719,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			rahl.setAirlineCode(ahlId.substring(3, 5));
 			rahl.setStationCode(ahlId.substring(0, 3));			
 			
-			// TODO: DAIRY vs. DIARY
-			if (wr1.getDairyInfo() != null && wr1.getDairyInfo().getCreateDate() != null) {
-				rahl.setCreateDate(wr1.getDairyInfo().getCreateDate());
+			if (wr1.getDiaryInfo() != null && wr1.getDiaryInfo().getCreateDate() != null) {
+				rahl.setCreateDate(wr1.getDiaryInfo().getCreateDate());
 			}
 			
 
 			
 			if (wr1.getPassengers() != null) {
-				// TODO: TYPE
-				PassengersType wsp = wr1.getPassengers();
+				PassengerItineraryType wsp = wr1.getPassengers();
 				
 				if (wsp.getPNR() != null) rahl.setPnrLocator(wsp.getPNR());
 				
@@ -1898,10 +1899,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				
 				
 				try {
-					if (db1.getBaggageItinerary() != null && db1.getBaggageItinerary().getFlightSegmentOrARNKArray() != null && db1.getBaggageItinerary().getFlightSegmentOrARNKArray().length > 0) {
+					if (db1.getBaggageItinerary() != null && db1.getBaggageItinerary().getFlightDateOrARNKArray() != null && db1.getBaggageItinerary().getFlightDateOrARNKArray().length > 0) {
 						ArrayList<Itinerary> itin = new ArrayList<Itinerary>();
 				
-						for (FlightDateOrARNKType type: db1.getBaggageItinerary().getFlightSegmentOrARNKArray()) {
+						for (FlightDateOrARNKType type: db1.getBaggageItinerary().getFlightDateOrARNKArray()) {
 							Itinerary seg = new Itinerary();
 							seg.setAirline(type.getFlightDate().getAirlineCode());
 							seg.setFlightDate(type.getFlightDate().getDate());
@@ -2118,7 +2119,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				String bagType = bagFace.substring(2, 4);
 				String bagDesc = bagFace.substring(4, 7);
 
-				ColorTypeDescType t1 = d2.addNewColorTypeDesc();
+				ColorTypeDescAmendType t1 = d2.addNewColorTypeDesc();
 				t1.setColorCode(ColorCodeType.Enum.forString(colorType));
 				t1.setTypeCode(Integer.valueOf(bagType));
 
@@ -2150,7 +2151,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
 				}
 
-				BagTagType t3 = d2.addNewBagTag();
+				BagTagAmendType t3 = d2.addNewBagTag();
 				t3.setAirlineCode(airtag.substring(0, 2));
 				t3.setTagSequence(airtag.substring(2));
 			}
@@ -2179,8 +2180,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					rts.addNewRoute().setStringValue(itin.getArrivalCity().trim());
 				}
 			}
-			// TODO: TYPE & NAMING
-			PassengerAmendType p1 = d1.addNewPassenger();
+
+			aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument.WTROnhandBagRecUpdateRQ.Passengers p1 = d1.addNewPassengers();
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
 			List<String> fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
@@ -2226,10 +2227,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			WorldTracerField field = DefaultWorldTracerService.WorldTracerField.EA;
 			fieldList = fieldMap.get(field);
-			// TODO: UNCOMMENT
-//			if (fieldList != null && fieldList.size() > 0) {
-//				ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
-//			}
+			if (fieldList != null && fieldList.size() > 0) {
+				ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
+			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -2252,7 +2252,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
-			ContentsType c2 = null;
+			ContentsAmendType c2 = null;
 			for (int i = 0; i < contentsList.size() && i < 12; i++) {
 
 				if (i == 0) {
@@ -2364,17 +2364,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				d2.addNewFaultStationCode().setStringValue(incident.getStationCode());
 			}
 			
-			PassengerPaymentType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
-//			String cs_fmt = "%02d %s/%s%1.2f";
+			PassengerPaymentAmendType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
+
 			int claimCount = 0;
 			if (incident.getExpenses() != null) {
-//				String cost;
 
 				if (incident.getExpenses() != null) {
 					for (Expenses expense : incident.getExpenses()) {
 						if (expense.getApprovalDate() != null && expense.getCurrrency() != null) {
 							claimCount++;
-							Amount amt = d3.addNewAmount();
+							AmountType amt = d3.addNewAmount();
 							BigDecimal claimAmount = new BigDecimal(0);
 							amt.setAmount(claimAmount);
 							amt.setCurrencyCode(expense.getCurrrency());
@@ -2385,7 +2384,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			// see if we added a CS
 			if (claimCount == 0) {
-				Amount amt = d3.addNewAmount();
+				AmountType amt = d3.addNewAmount();
 				BigDecimal claimAmount = new BigDecimal(0);
 				amt.setAmount(claimAmount);
 				amt.setCurrencyCode("USD");
@@ -2414,7 +2413,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ContentsAmendType cx = t3.addNewBagContents();
 					
 					if (tagList != null && i < tagList.size()) {
-						BagTagType tag = t3.addNewBagTag();
+						BagTagAmendType tag = t3.addNewBagTag();
 						String airtag = fieldList.get(i);
 						tag.setAirlineCode(airtag.substring(0,2));
 						tag.setTagSequence(airtag.substring(2));
@@ -2423,7 +2422,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					if (fieldList2 != null && i < fieldList2.size()) {
 						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
 					}
-					ColorTypeDescType t4 = t3.addNewColorTypeDesc();
+					ColorTypeDescAmendType t4 = t3.addNewColorTypeDesc();
 					t4.setColorCode(ColorCodeType.Enum.forString(colorType));
 					t4.setTypeCode(Integer.valueOf(bagType));
 					
@@ -2461,9 +2460,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 			
-			// TODO: Type
+			
 			// Set Passengers & Contact Information
-			PassengersAmendType p1 = d1.addNewPassengers();
+			PassengerItineraryAmendType p1 = d1.addNewPassengers();
 			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
 			fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
@@ -2510,11 +2509,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			
 			WorldTracerField field = DefaultWorldTracerService.WorldTracerField.EA;
 			fieldList = fieldMap.get(field);
-			// TODO: REMOVE COMMENT
-//			if (fieldList != null && fieldList.size() > 0) {
-//				ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
-//				
-//			}
+			if (fieldList != null && fieldList.size() > 0) {
+				ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
+				
+			}
 			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -2585,8 +2583,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			// Set Flight Information
 			
 			int itinCount = 0;
-			// TODO: TYPE
-			aero.sita.www.bag.wtr._2009._01.PassengersAmendType.Itinerary.FlightSegments p2 = p1.addNewItinerary().addNewFlightSegments();
+			aero.sita.www.bag.wtr._2009._01.PassengerItineraryAmendType.Itinerary.FlightSegments p2 = p1.addNewItinerary().addNewFlightSegments();
 			for (Itinerary itin: incident.getPaxItinerary()) {
 				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getDepartureCity() == null
 						|| itin.getDepartureCity().trim().length() <= 0 || itin.getArrivalCity() == null
