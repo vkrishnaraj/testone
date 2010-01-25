@@ -147,7 +147,12 @@
 				
 			</fileset>
 		</copy>
-		<echo>WAR copied! ${app.deploy.dir}</echo>
+		<copy todir="c:\deploy" verbose="true">
+			<fileset dir="${dist.dir}">
+				
+			</fileset>
+		</copy>
+		<echo>WAR copied! ${app.deploy.dir}, c:\deploy</echo>
 		
 	</target>
 	

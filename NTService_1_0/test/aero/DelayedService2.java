@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -21,6 +22,7 @@ import org.apache.neethi.Policy;
 import org.apache.neethi.PolicyEngine;
 import org.junit.Test;
 
+import aero.sita.www.bag.wtr._2009._01.AmountType;
 import aero.sita.www.bag.wtr._2009._01.BagDescType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType;
 import aero.sita.www.bag.wtr._2009._01.BagMatrlType;
@@ -30,12 +32,12 @@ import aero.sita.www.bag.wtr._2009._01.CostType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagType;
 import aero.sita.www.bag.wtr._2009._01.DelayedClaimAmendType;
-import aero.sita.www.bag.wtr._2009._01.DelayedClaimType;
 import aero.sita.www.bag.wtr._2009._01.FlightDateType;
 import aero.sita.www.bag.wtr._2009._01.FlightSegmentType;
 import aero.sita.www.bag.wtr._2009._01.OriginDestinationType;
+import aero.sita.www.bag.wtr._2009._01.PassengerItineraryAmendType;
 import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType;
-import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType;
+import aero.sita.www.bag.wtr._2009._01.PassengerPaymentAmendType;
 import aero.sita.www.bag.wtr._2009._01.RecordIdentifierType;
 import aero.sita.www.bag.wtr._2009._01.RecordReferenceType;
 import aero.sita.www.bag.wtr._2009._01.RecordType;
@@ -47,9 +49,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRStatusRSDocument;
-import aero.sita.www.bag.wtr._2009._01.ClaimAmendType.PassengerPayments.PassengerPayment;
-import aero.sita.www.bag.wtr._2009._01.ClaimType.PassengerPayments;
-import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType.Amount;
+import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.BaggageItinerary;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
@@ -58,23 +58,42 @@ import aero.sita.www.bag.wtr.delayedbagservice.DelayedBagServiceStub;
 
 public class DelayedService2 {
 
-	private static final int REFERENCE_ID = 10025;
-	private static final String DESTINATION_STATION = "ATL";
-	private static final String ORIGIN_STATION = "PHX";
-	private static final String CREATE_STATION_CODE = "DEN";
+	private static final String CREATE_STATION_CODE = "XCI";
+	private static final int REFERENCE_ID = 10061;
+	
+	private static final String DESTINATION_STATION = "XCI";
+	private static final String ORIGIN_STATION = "XLF";
+
 	private static final String AIRLINE_CODE = "US";
 	private static final String CLAIM_CURRENCY_CODE = "USD";
 	private static final BigDecimal CLAIM_AMOUNT = new BigDecimal(0);
-	 //String endpoint = "http://chocolate.nettracer.aero:8080";
-	 String endpoint = "https://webservice-qa.worldtracer.aero/DelayedBagService/0.1";
+
+	 String endpoint = "https://webservice.worldtracer.aero/DelayedBagService/0.1";
 
 	private static Policy loadPolicy(String xmlPath) throws Exception {
 		StAXOMBuilder builder = new StAXOMBuilder(DelayedService2.class.getResourceAsStream(xmlPath));
 		return PolicyEngine.getPolicy(builder.getDocumentElement());
 	}
 
-
 //	@Test
+	public void testDate() {
+		
+		FlightDateType p3 = FlightDateType.Factory.newInstance();
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
+		
+		
+		for (String a: TimeZone.getAvailableIDs()) {
+			cal.setTimeZone(TimeZone.getTimeZone(a));
+			p3.setDate(cal);
+			System.out.println(a);
+			System.out.println(p3);
+			System.out.println("--------------");
+		}
+	}
+	
+	@Test
 	public void testCreate() throws RemoteException, XMLStreamException {
 
 		DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
@@ -89,25 +108,35 @@ public class DelayedService2 {
 		d1.setVersion(b);
 		d1.addNewPOS().addNewSource().setAirlineVendorID(AIRLINE_CODE);
 		
-		DelayedClaimType d2 = d1.addNewClaim();
-		d2.setFaultStationCode(CREATE_STATION_CODE);
-		d2.setLossReasonCode(79);
-		d2.setLossComments("79 - Unknown");
-		
-		PassengerPaymentType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
-		Amount amt = d3.addNewAmount();
-		amt.setCurrencyCode(CLAIM_CURRENCY_CODE);
-		amt.setAmount(CLAIM_AMOUNT);
+//		DelayedClaimType d2 = d1.addNewClaim();
+//		d2.setFaultStationCode(CREATE_STATION_CODE);
+//		d2.setLossReasonCode(79);
+//		d2.setLossComments("79 - Unknown");
+//		
+//		PassengerPaymentType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
+//		d3.setType(CostType.X);
+//		AmountType amt = d3.addNewAmount();
+//		amt.setCurrencyCode(CLAIM_CURRENCY_CODE);
+//		amt.setAmount(CLAIM_AMOUNT);
 		
 		StationAirlineType sat = d1.addNewRefStationAirline();
 		sat.setAirlineCode(AIRLINE_CODE);
 		sat.setStationCode(CREATE_STATION_CODE);
 
 		DelayedBagGroupType t2 = d1.addNewDelayedBagGroup();
+		BaggageItinerary iti = t2.addNewBaggageItinerary();
+		FlightDateType iti1 = iti.addNewFlightDateOrARNK().addNewFlightDate();
+		iti.addNewFlightDateOrARNK().addNewFlightDate();
+		
+		iti1.setAirlineCode("US");
+		iti1.setDate(new GregorianCalendar());
+		iti1.setFlightNumber("123");
+		
+		
 		DelayedBagType t3 = t2.addNewDelayedBags().addNewDelayedBag();
 		t3.addNewBrandInfo().setStringValue("AMERIBAG");
 		ColorTypeDescType t4 = t3.addNewColorTypeDesc();
-		t4.setColorCode(ColorCodeType.BU);
+		t4.setColorCode(ColorCodeType.BK);
 		t4.setTypeCode(22);
 		BagDescType t5 = t4.addNewDescriptor();
 		t5.setMtrlElement(BagMatrlType.M);
@@ -115,17 +144,22 @@ public class DelayedService2 {
 		t5.addNewOtherElement().set(BagElmsType.C);
 		
 		
-		
+		// TODO: TYPE
 		PassengerItineraryType p1 = d1.addNewPassengers();
+		p1.setPooledTktNumber("0000");
+//		p1.setPNR("ABCDEF");
 		p1.addNewNames().addName("SMITH");
-		
+		p1.setTitle("MR");
 		p1.addNewInitials().addNewIntial().setStringValue("S");
 		
 		FlightSegmentType p2 = p1.addNewItinerary().addNewFlightSegments().addNewFlightSegmentOrARNK().addNewFlightSegment();
 		FlightDateType p3 = p2.addNewFlightAndDate();
 		p3.setAirlineCode("US");
-		p3.setDate(new GregorianCalendar());
-		p3.setFlightNumber("9999");
+		GregorianCalendar cal = new GregorianCalendar();
+		// HERE
+//		cal.setTimeZone();
+		p3.setDate(cal);
+		p3.setFlightNumber("0123");
 		
 		OriginDestinationType p4 = p2.addNewOriginDestination();
 		p4.setOrigin(ORIGIN_STATION);
@@ -133,15 +167,15 @@ public class DelayedService2 {
 		
 		d1.setAgentID("AGENT");
 
-//		System.setProperty("javax.net.ssl.trustStore", "c:\\jdk\\jre\\lib\\security\\cacerts");
-//		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-//
-//		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
-//		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
+		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
+		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
+		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
 		WTRBagsCreateRSDocument response = null;
 		try {
 			System.out.println(d);
+			
 			Thread.sleep(1000*5);
 			response = stub.create(d);
 		} catch (Exception e) {
@@ -164,7 +198,46 @@ public class DelayedService2 {
 			System.exit(0);
 		}
 		
+		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
+		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+
+		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
+		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
+
+
+		removeFaultPhases(client);
+		removePhases(client);
+	}
+
+
+	private void removePhases(ServiceClient client) {
 		List<Phase> phases = client.getAxisConfiguration().getInFlowPhases();
+		AxisConfiguration config = client.getAxisConfiguration();
+		
+
+		
+		for (Phase p: phases) {
+			HandlerDescription removeThis = null;
+			System.out.println("Phase: " + p.getPhaseName());
+			if (p.getPhaseName().equals("Security") || p.getPhaseName().equals("Dispatch")) {
+				List<Handler> l = p.getHandlers();
+				for (Handler h: l) {
+					System.out.println("  Handler: " + h.getName());
+					if(h.getName().equals("Apache Rampart inflow handler") || h.getName().equals("Post dispatch security verification handler")) {
+						removeThis = h.getHandlerDesc();
+					}
+				}
+			}
+			
+			if (removeThis != null) {
+				p.removeHandler(removeThis);
+			}
+		}
+	}
+	
+
+	private void removeFaultPhases(ServiceClient client) {
+		List<Phase> phases = client.getAxisConfiguration().getInFaultFlowPhases();
 		AxisConfiguration config = client.getAxisConfiguration();
 		
 
@@ -277,6 +350,7 @@ CFI  07DEC/2148GMT /US AG AGENT WTW
 		BigDecimal a = new BigDecimal(0.1);
 		BigDecimal b = a.setScale(1, RoundingMode.HALF_UP);
 		d1.setVersion(b);
+		
 		d1.addNewPOS().addNewSource().setAirlineVendorID(AIRLINE_CODE);
 		RecordIdentifierType d2 = d1.addNewRecordID();
 		RecordReferenceType d3 = d2.addNewRecordReference();
@@ -285,22 +359,30 @@ CFI  07DEC/2148GMT /US AG AGENT WTW
 		d3.setStationCode(CREATE_STATION_CODE);
 		d2.setRecordType(RecordType.DELAYED);
 		d1.setAgentID("AGENT");
+		
+		
+//		d1.addNewPOS().addNewSource().setAirlineVendorID(AIRLINE_CODE);
+//		RecordIdentifierType d2 = d1.addNewRecordID();
+//		RecordReferenceType d3 = d2.addNewRecordReference();
+//		d3.setReferenceNumber(14239);
+//		d3.setAirlineCode("US");
+//		d3.setStationCode("ABE");
+//		d2.setRecordType(RecordType.DELAYED);
+//		d1.setAgentID("AGENT");
 
-		System.setProperty("javax.net.ssl.trustStore", "c:\\jdk\\jre\\lib\\security\\cacerts");
-		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
-		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
-		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
 		WTRDelayedBagRecReadRSDocument response = null;
 		try {
 			System.out.println(d);
+			Thread.sleep(5*1000);
 			response = stub.read(d);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		Assert.assertNotNull(response);
 		processResponse(response);
+		int i = 0;
 	}
 
 	private void processResponse(WTRDelayedBagRecReadRSDocument response) {
@@ -370,7 +452,7 @@ CFI  07DEC/2148GMT /US AG AGENT WTW
 		processResponse3(response);
 	}
 	
-//	@Test
+	@Test
 	public void testAmend() throws RemoteException, XMLStreamException {
 
 		DelayedBagServiceStub stub = new DelayedBagServiceStub(endpoint);
@@ -389,6 +471,9 @@ CFI  07DEC/2148GMT /US AG AGENT WTW
 		d1.setVersion(b);
 		d1.addNewPOS().addNewSource().setAirlineVendorID(AIRLINE_CODE);
 		
+		PassengerItineraryAmendType c = d1.addNewPassengers();
+//		Initials cc = c.addNewInitials();
+//		Intial ccc = cc.addNewIntial();
 		
 		
 		DelayedClaimAmendType d2 = d1.addNewClaim();
@@ -397,9 +482,9 @@ CFI  07DEC/2148GMT /US AG AGENT WTW
 //		d3.setAmount(CLAIM_AMOUNT);
 //		d3.setCurrencyCode(CLAIM_CURRENCY_CODE);
 		
-		PassengerPayment d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
+		PassengerPaymentAmendType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
 		d3.setType(CostType.X);
-		Amount amt = d3.addNewAmount();
+		AmountType amt = d3.addNewAmount();
 		amt.setCurrencyCode(CLAIM_CURRENCY_CODE);
 		amt.setAmount(CLAIM_AMOUNT);
 		
@@ -413,15 +498,11 @@ CFI  07DEC/2148GMT /US AG AGENT WTW
 
 		d1.setAgentID("AGENT");
 
-		System.setProperty("javax.net.ssl.trustStore", "c:\\jdk\\jre\\lib\\security\\cacerts");
-		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-
-		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
-		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
 		WTRStatusRSDocument response = null;
 		try {
 			System.out.println(d);
+//			System.exit(0);
 			response = stub.update(d);
 		} catch (Exception e) {
 			e.printStackTrace();

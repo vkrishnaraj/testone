@@ -43,7 +43,6 @@ import aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary.Routes;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ.Passengers;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
 import aero.sita.www.bag.wtr.onhandbagservice.OnhandBagServiceStub;
 
@@ -58,7 +57,7 @@ public class OnhandService2 {
 	private static final BigDecimal CLAIM_AMOUNT = new BigDecimal(0);
 	 //String endpoint = "http://chocolate.nettracer.aero:8080";
 //	 String endpoint = "https://webservice-qa.worldtracer.aero/DelayedBagService/0.1";
-		String onhandEndpoint = "https://webservice-qa.worldtracer.aero/OnhandBagService/0.1";
+		String onhandEndpoint = "https://webservice.worldtracer.aero/OnhandBagService/0.1";
 		
 	private static Policy loadPolicy(String xmlPath) throws Exception {
 		StAXOMBuilder builder = new StAXOMBuilder(OnhandService2.class.getResourceAsStream(xmlPath));
@@ -69,7 +68,7 @@ public class OnhandService2 {
 		System.out.println(response);	
 	}
 	
-	@Test
+//	@Test
 	public void testRead() throws RemoteException, XMLStreamException {
 
 		OnhandBagServiceStub stub = new OnhandBagServiceStub(onhandEndpoint);
@@ -128,9 +127,9 @@ private void processResponse(WTROnhandBagRecReadRSDocument response) {
 		d1.addNewPOS().addNewSource().setAirlineVendorID(AIRLINE_CODE);
 		
 		RecordReferenceType t1 = d1.addNewRecords().addNewRecordReference();
-		t1.setReferenceNumber(10031);
+		t1.setReferenceNumber(10322);
 		t1.setAirlineCode("US");
-		t1.setStationCode("DEN");
+		t1.setStationCode("XAX");
 		d1.setRecordType(RecordType.ON_HAND);
 //		d1.set
 		d1.setAgentID("AGENT");
@@ -144,8 +143,10 @@ private void processResponse(WTROnhandBagRecReadRSDocument response) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Assert.assertNotNull(response);
+//		System.out.println(response);
 		processResponse1(response);
+		Assert.assertNotNull(response);
+		
 	}
 	
 private void processResponse1(WTRStatusRSDocument response) {
@@ -208,7 +209,7 @@ private void processResponse1(WTRStatusRSDocument response) {
 		
 //		d2.addNewBagContents();
 //		d2.addNewBagAddress();
-		Passengers p1 = d1.addNewPassengers();
+//		Passengers p1 = d1.addNewPassengers();
 		
 		StationAirlineType s1 = d1.addNewRefStationAirline();
 		s1.setAirlineCode("US");
@@ -232,12 +233,11 @@ private void processResponse1(WTRStatusRSDocument response) {
 	private void configureClient(org.apache.axis2.client.Stub stub) throws AxisFault {
 
 
-		System.setProperty("javax.net.ssl.trustStore", "c:\\jdk\\jre\\lib\\security\\cacerts");
-		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 
+		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
+		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 		System.out.println(System.getProperty("javax.net.ssl.trustStore"));
 		System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
-
 		
 		ServiceClient client = stub._getServiceClient();
 		

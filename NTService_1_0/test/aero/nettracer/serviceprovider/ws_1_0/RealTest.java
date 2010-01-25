@@ -15,7 +15,7 @@ public class RealTest {
 		Session sess = HibernateWrapper.getSession().openSession();
 		User user = (User) sess.load(User.class, 1);
 		Reservation res = new Reservation();
-		ReservationResponse response = res.getReservationData(user, "FOHFGZ", null);
+		ReservationResponse response = res.getReservationData(user, "PDOMZX", null);
 		int i = 0;
 	}
 }

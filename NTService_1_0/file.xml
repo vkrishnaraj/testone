@@ -1,0 +1,64 @@
+<soapenv:Body xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	wsu:Id="Id-12388840">
+	<WTR_DelayedBagsCreateRQ xmlns="http://www.sita.aero/bag/wtr/2009/01"
+		Version="0.1">
+		<POS>
+			<Source xmlns="http://www.iata.org/IATA/2007/00"
+				AirlineVendorID="US" />
+		</POS>
+		<RefStationAirline AirlineCode="US" StationCode="XAX" />
+		<DelayedBagGroup>
+			<DelayedBags>
+				<DelayedBag>
+					<ColorTypeDesc>
+						<ColorCode>BU</ColorCode>
+						<TypeCode>22</TypeCode>
+						<Descriptor>
+							<MtrlElement>M</MtrlElement>
+							<OtherElement>B</OtherElement>
+							<OtherElement>C</OtherElement>
+						</Descriptor>
+					</ColorTypeDesc>
+					<BrandInfo>AMERIBAG</BrandInfo>
+				</DelayedBag>
+			</DelayedBags>
+		</DelayedBagGroup>
+		<Passengers>
+			<Names>
+				<Name>SMITH</Name>
+			</Names>
+			<Initials>
+				<Intial>S</Intial>
+			</Initials>
+			<Itinerary>
+				<FlightSegments>
+					<FlightSegmentOrARNK>
+						<FlightSegment>
+							<FlightAndDate>
+								<AirlineCode>US</AirlineCode>
+								<FlightNumber>9999</FlightNumber>
+								<Date>2010-01-06-05:00</Date>
+							</FlightAndDate>
+							<OriginDestination>
+								<Origin>XLF</Origin>
+								<Destination>XAX</Destination>
+							</OriginDestination>
+						</FlightSegment>
+					</FlightSegmentOrARNK>
+				</FlightSegments>
+			</Itinerary>
+		</Passengers>
+		<Claim>
+			<PassengerPayments>
+				<PassengerPayment>
+					<Amount Amount="0" CurrencyCode="USD" />
+				</PassengerPayment>
+			</PassengerPayments>
+			<FaultStationCode>XAX</FaultStationCode>
+			<LossComments>79 - Unknown</LossComments>
+			<LossReasonCode>79</LossReasonCode>
+		</Claim>
+		<AgentID>AGENT</AgentID>
+	</WTR_DelayedBagsCreateRQ>
+</soapenv:Body>

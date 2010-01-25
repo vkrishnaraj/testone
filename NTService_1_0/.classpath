@@ -95,6 +95,8 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/ProcessImage3-test-client.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/htmlparser-1.6.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/dozer-5.1.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/sqljdbc.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/WorldTracerServiceClient.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

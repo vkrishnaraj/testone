@@ -25,12 +25,13 @@ import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerTimeoutException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.ISharesServiceManager;
 
 public class ISharesTestCases {
 
 	@Test
-	public void TestParsingActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
+	public void TestParsingActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
@@ -79,7 +80,7 @@ public class ISharesTestCases {
 	}
 	
 	@Test
-	public void testPlaceActionFileFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
+	public void testPlaceActionFileFile()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.PLACE_ACTION_FILE;
@@ -116,7 +117,7 @@ public class ISharesTestCases {
 	}
 	
 	@Test
-	public void testEraseSuccessActionFile() throws CommandNotProperlyFormedException, HttpException, IOException {
+	public void testEraseSuccessActionFile() throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.ERASE_ACTION_FILE;
@@ -142,7 +143,7 @@ public class ISharesTestCases {
 	
 
 	@Test
-	public void testEraseFailureActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException {
+	public void testEraseFailureActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.ERASE_ACTION_FILE;
@@ -167,7 +168,7 @@ public class ISharesTestCases {
 	}	
 
 	@Test
-	public void testRequestOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+	public void testRequestOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.REQUEST_OHD;
@@ -189,6 +190,8 @@ public class ISharesTestCases {
 		myAgent.setUsername("CHUCK");
 		payload.setAgent(myAgent);
 		
+		String[] teletype = {"HDQZZUS"};
+		payload.setTeletype(teletype);
 		
 		// create a User, Profile objs ()
 		User user = new User();
@@ -209,7 +212,7 @@ public class ISharesTestCases {
 	}
 	
 	@Test
-	public void testRequestQuickOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+	public void testRequestQuickOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.REQUEST_QOHD;
@@ -255,7 +258,7 @@ public class ISharesTestCases {
 	}
 	
 	@Test
-	public void testGetActionFileSummary() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+	public void testGetActionFileSummary() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
 		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_SUMMARY;
@@ -288,7 +291,7 @@ public class ISharesTestCases {
 	}
 	
 	@Test
-	public void testBDO()	throws CommandNotProperlyFormedException, HttpException, IOException {
+	public void testBDO()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Pay load & Type
 		WorldTracerActionType type =  WorldTracerActionType.CREATE_BDO;
