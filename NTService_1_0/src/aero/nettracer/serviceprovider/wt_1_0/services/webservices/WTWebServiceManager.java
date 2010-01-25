@@ -1,7 +1,5 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.webservices;
 
-import org.apache.log4j.Logger;
-
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
@@ -25,7 +23,7 @@ public class WTWebServiceManager extends AbstractServiceManager implements
 
 	
 	private static WTWebServiceManager instance = null;
-	private static final Logger logger = Logger.getLogger(WTWebServiceManager.class);
+	
 
 	public static AbstractServiceManager getInstance() {
 		if (instance == null) {

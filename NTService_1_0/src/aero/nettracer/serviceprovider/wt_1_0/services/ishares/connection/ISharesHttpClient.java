@@ -6,7 +6,6 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -22,14 +21,14 @@ import aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerConnection;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WtHttpClient;
 
-public class ISharesHttpClient extends HttpClient implements
+public class ISharesHttpClient extends WtHttpClient implements
 		WorldTracerConnection {
-	private static final Logger logger = Logger
-			.getLogger(ISharesHttpClient.class);
+	private static Logger logger = Logger.getLogger(ISharesHttpClient.class);
 
 	private Calendar lastUsed = new GregorianCalendar();
-	private boolean validConnection = false;
+	
 	private WorldTracerISharesAccount account;
 	private String token = null;
 	Pattern tokenPattern = Pattern.compile("<input type=hidden name=Token value=(.*)>");
@@ -185,8 +184,8 @@ public class ISharesHttpClient extends HttpClient implements
 		
 		String responseBody = null;
 		PostMethod method = new PostMethod("/cgi-bin/term.cgi");
-//		logger.info("Using token: " + this.getToken());
-//		logger.info("Command: " + command);
+		logger.info("Using token: " + this.getToken());
+		logger.info("Command: " + command);
 		method.addParameter("Token", this.getToken());
 		method.addParameter("Type", "1");
 		method.addParameter("q", command);

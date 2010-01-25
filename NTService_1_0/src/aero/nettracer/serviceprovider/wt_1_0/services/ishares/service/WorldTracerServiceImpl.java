@@ -29,6 +29,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.PreProcessor;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerTimeoutException;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ISharesHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
@@ -44,6 +45,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public static final int UNIT_TEST_SUCCESS = 0;
 	public static final int UNIT_TEST_FAILURE = 1;
 	static Pattern commandResponsePattern = Pattern.compile("<PRE>((.*\\n)*.*)</PRE>", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+//	private static Logger logger = Logger.getLogger(WorldTracerServiceImpl.class);
 	private static Logger logger = Logger.getLogger(WorldTracerServiceImpl.class);
 
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
@@ -62,16 +64,22 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		this.unitTest = unitTest;
 	}
 	
-	private String sendCommand(String methodName, String command) throws CommandNotProperlyFormedException, HttpException, IOException {
+	private String sendCommand(String methodName, String command) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		// Test for presence of any remaining {} characters and throw exception
 		command = testCommand(command);
-		String response = connection.sendCommand(methodName, command);
+		String response = connection.sendCommand(methodName, command.replaceAll("\n", "\r"));
+		
+		
 		
 		Matcher m = commandResponsePattern.matcher(response);
 		if (m.find()) {
 			String responseTxt = m.group(1);
 			if (responseTxt != null) {
 				logger.info("Response Text: " + responseTxt);
+			}
+			
+			if (response.contains("Time out. Please retry.")) {
+				throw new WorldTracerTimeoutException();
 			}
 			
 			return responseTxt;
@@ -86,11 +94,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		for (String key: map.keySet()) {
 			String replaceValue = map.get(key);
 			try {
-				if (replaceValue != null) output = output.replaceAll("\\{" + key + "\\}", replaceValue);
+				
+				if (replaceValue != null) {
+					output = output.replaceAll("\\{" + key + "\\}", replaceValue);
+					output = output.replaceAll("\\[" + key + "\\]", replaceValue);
+				} 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+
 		return output;
 	}
 	
@@ -172,9 +185,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	 * @throws CommandNotProperlyFormedException 
 	 * @throws IOException 
 	 * @throws HttpException 
+	 * @throws WorldTracerTimeoutException 
 	 */
 	public void getActionFileCounts(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
+			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Prepare variables
 		String specificCommandType = "CXF";
@@ -214,68 +228,83 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 	   //Note the BDO command does not close the file
-	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo,
-			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
-		 
+	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
+
 		String specificCommandType = "BDO";
 		Date DelivDate = new Date();
-		//Make sure we have a valid delivery date - need to consider if we do not have a DD
-		//should we just use todays date
+		// Make sure we have a valid delivery date - need to consider if we do
+		// not have a DD
+		// should we just use todays date
 		if (bdo.getDeliveryDate() != null) {
 			DelivDate = bdo.getDeliveryDate().getTime();
-		}  else {
-			//throw new CommandNotProperlyFormedException("Could not export BDO due to invalid delivery date. Id: " + bdo.getBdoId());
+		} else {
 			throw new CommandNotProperlyFormedException();
-		}			
-		
+		}
+
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("COMMAND_TYPE", connectionType);
 		map.put("FILE_TYPE", "AHL");
-		map.put("WT_AHL_ID", bdo.getAhlId());  
-		map.put("DELIVERY_SERVICE","DS");
+		map.put("WT_AHL_ID", bdo.getAhlId());
+		map.put("DELIVERY_SERVICE", "DS");
 		map.put("STATION_CODE", bdo.getStationCode());
 		map.put("AIRLINE_CODE", bdo.getAirlineCode());
-		map.put("DELIVERY_SERVICE_ID", "01");  //Assume	that we will always use the first delivery company in the predefined WT list
-		map.put("COLOR_TYPE", "01");  //Assume we will always deliver the first bag since we do not keep track of WT bags
+		map.put("DELIVERY_SERVICE_ID", "01"); // Assume that we will always use
+												// the first delivery company in
+												// the predefined WT list
+		map.put("COLOR_TYPE", "01"); // Assume we will always deliver the first
+										// bag since we do not keep track of WT
+										// bags
 
-		//TODO see if there is a way to determine which bag we should deliver instead of defaulting to CT01
-		
-		String command = "{COMMAND_TYPE} BDO {FILE_TYPE} {WT_AHL_ID}\n{DELIVERY_SERVICE} {STATION_CODE}{AIRLINE_CODE}{DELIVERY_SERVICE_ID}/CT{COLOR_TYPE}";
-		
+		// TODO see if there is a way to determine which bag we should deliver
+		// instead of defaulting to CT01
+
+		String command = "{COMMAND_TYPE} BDO {FILE_TYPE} {WT_AHL_ID}\r{DELIVERY_SERVICE} {STATION_CODE}{AIRLINE_CODE}{DELIVERY_SERVICE_ID}/CT{COLOR_TYPE}";
+
 		command = inputValuesIntoCommand(map, command);
-		
-		// Send Command - The first BDO call will return a mask that will need to be resubmitted with the DD(delivery date) and .AG (Agent Code)
+
+		// Send Command - The first BDO call will return a mask that will need
+		// to be resubmitted with the DD(delivery date) and .AG (Agent Code)
 		String responseTxt = null;
 		if (unitTest) {
 			responseTxt = MockISharesResponse.mockRequestBDOCommand_1(command);
 		} else {
 			responseTxt = sendCommand(specificCommandType, command);
 		}
-		System.out.println("\n\n\n"+ responseTxt+"\n\n\n\n");
-		//The mask should now be in responseTxt - need to add DD and .AG
-		if (responseTxt.contains("DD")&& responseTxt.contains(".AG"))
-		{			
-				responseTxt = responseTxt.replaceAll("    "+(char)46+"AG", ".AG"+ PreProcessor.getAgentEntry(bdo.getAgent()));
-				responseTxt = responseTxt.replaceAll("DD", "DD"+ PreProcessor.ITIN_DATE_FORMAT.format(DelivDate));
-				if (unitTest) {
-					responseTxt = MockISharesResponse.mockRequestBDOCommand_2(responseTxt);
-				} else {
-					responseTxt = sendCommand(specificCommandType, command);
-				}
-				
-				//sample success message "WM BDO AHL XAXUS10485                   /-OK-/19NOV09 1516GMT"
-				if (responseTxt.contains("-OK-")) {
-					response.setSuccess(true); 
-		} 
-		     response.setSuccess(false);  //set to false if DD and .AG does not come back after 1st command
-		}
+		System.out.println("\n\n\n" + responseTxt + "\n\n\n\n");
+		// The mask should now be in responseTxt - need to add DD and .AG
+		if (responseTxt.contains("DD") && responseTxt.contains(".AG")) {
+			responseTxt = responseTxt.replaceAll("&GT", "");
+			responseTxt = responseTxt.replaceAll("    " + (char) 46 + "AG", ".AG" + PreProcessor.getAgentEntry(bdo.getAgent()));
+			responseTxt = responseTxt.replaceAll("DD", "DD" + PreProcessor.ITIN_DATE_FORMAT.format(DelivDate));
+			responseTxt = responseTxt.replaceAll("\n", "\r");
+			if (unitTest) {
+				responseTxt = MockISharesResponse.mockRequestBDOCommand_2(responseTxt);
+			} else {
+				responseTxt = sendCommand(specificCommandType, responseTxt);
+			}
+
+			// sample success message
+			// "WM BDO AHL XAXUS10485                   /-OK-/19NOV09 1516GMT"
+			System.out.println(responseTxt);
+			try {
+				Thread.sleep(10*1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-		
+			if (responseTxt.contains("-OK-")) {
+				response.setSuccess(true);
+			} else {
+				response.setSuccess(false); // set to false if DD and .AG does not
+										// come back after 1st command
+			}
+		}
 	}
 
 
 	public void eraseActionFile(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
+			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 
 		// Prepare variables
 
@@ -331,9 +360,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	 * @throws WorldTracerException 
 	 * @throws IOException 
 	 * @throws HttpException 
+	 * @throws WorldTracerTimeoutException 
 	 */
 	public void requestOhd(WorldTracerActionDTO dto, RequestOhd data,
-			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		// Prepare variables
 		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.requestOhd(dto, data, response);
 
@@ -357,24 +387,26 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			// replace the last / with \n 
 			myTX_LINE = myTX_LINE.substring(0, myTX_LINE.length()-1);
-			myTX_LINE += "\n";
-			map.put("[TX_LINE]", myTX_LINE);
+			myTX_LINE += "\r";
+			map.put("TX_LINE", myTX_LINE);
 		}
 		
 		// name - optional field
-		Passenger myPax = data.getAhl().getPax()[0];
-		if(myPax != null) {
-			String myNAME_LINE = "NM " + myPax.getLastname();
-			map.put("[NAME_LINE]", myNAME_LINE);
+		if (data.getAhl().getPax() != null && data.getAhl().getPax().length > 0) {
+			Passenger myPax = data.getAhl().getPax()[0];
+			if(myPax != null) {
+				String myNAME_LINE = "NM " + myPax.getLastname();
+				map.put("[NAME_LINE]", myNAME_LINE);
+			}
 		}
 		
 		// Generate Command from Hash (Example means provided)
-		String command = "{COMMAND_TYPE} ROH {AHL_FILE_REFERENCE}\n" +
-					     "OHD {OHD_FILE_REFERENCE_NUMBER}\n" +
-					   	 "FI {FI_FREE_FORM_TEXT}\n" +
-					   	 "AG {AGENT_ID}\n" +
-					   	 "SI {FI_FREE_FORM_TEXT}\n" +
-					   	 "[TX_LINE]\n" +
+		String command = "{COMMAND_TYPE} ROH {AHL_FILE_REFERENCE}\r" +
+					     "OHD {OHD_FILE_REFERENCE_NUMBER}\r" +
+					   	 "FI {FI_FREE_FORM_TEXT}\r" +
+					   	 "AG {AGENT_ID}\r" +
+					   	 "SI {FI_FREE_FORM_TEXT}\r" +
+					   	 "[TX_LINE]\r" +
 					   	 "[NAME_LINE]";
 		command = inputValuesIntoCommand(map, command);
 		
@@ -392,7 +424,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 		// On success, set success to true (defaults to false)
-		if (responseTxt.contains("WM SUS AHL")) {
+		if (responseTxt.contains("-OK-") || responseTxt.contains("WM SUS AHL")) {
 			response.setSuccess(true);
 		}
 		
@@ -401,7 +433,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 	public void requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data,
-			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException {
+			WorldTracerResponse response) throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 
 		Map<WorldTracerField, List<String>> fieldMap = PreProcessor.requestQuickOhd(dto, data, response);
 
@@ -419,7 +451,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		
 		// teletypes - optional field
 		String[] myTeletypes = data.getTeletype();
-		if(myTeletypes != null) {
+		if(myTeletypes != null && myTeletypes.length > 0) {
 			String myTX_LINE = "TX ";
 			List<String> txs = Arrays.asList(myTeletypes);
 			for(String tx: txs) {
@@ -427,24 +459,26 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			// replace the last / with \n 
 			myTX_LINE = myTX_LINE.substring(0, myTX_LINE.length()-1);
-			myTX_LINE += "\n";
-			map.put("[TX_LINE]", myTX_LINE);
+			myTX_LINE += "\r";
+			map.put("TX_LINE", myTX_LINE);
 		}
 		
 		// name - optional field
-		Passenger myPax = data.getAhl().getPax()[0];
-		if(myPax != null) {
-			String myNAME_LINE = "NM " + myPax.getLastname();
-			map.put("[NAME_LINE]", myNAME_LINE);
+		if (data.getAhl().getPax() != null && data.getAhl().getPax().length > 0) {
+			Passenger myPax = data.getAhl().getPax()[0];
+			if(myPax != null) {
+				String myNAME_LINE = "NM " + myPax.getLastname();
+				map.put("[NAME_LINE]", myNAME_LINE);
+			}
 		}
 		
 		// Generate Command from Hash (Example means provided)
-		String command = "{COMMAND_TYPE} ROH {AHL_FILE_REFERENCE}\n" +
-					     "QOH {FROM_STATION}{FROM_AIRLINE} {TAG_NUMBER}\n" +
-					   	 "FI {FI_FREE_FORM_TEXT}\n" +
-					   	 "AG {AGENT_ID}\n" +
-					   	 "SI {FI_FREE_FORM_TEXT}\n" +
-					   	 "[TX_LINE]\n" +
+		String command = "{COMMAND_TYPE} ROH {AHL_FILE_REFERENCE}\r" +
+					     "QOH {FROM_STATION}{FROM_AIRLINE} {TAG_NUMBER}\r" +
+					   	 "FI {FI_FREE_FORM_TEXT}\r" +
+					   	 "AG {AGENT_ID}\r" +
+					   	 "SI {FI_FREE_FORM_TEXT}\r" +
+					   	 "[TX_LINE]\r" +
 					   	 "[NAME_LINE]";
 		command = inputValuesIntoCommand(map, command);
 		
@@ -462,7 +496,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 		// On success, set success to true (defaults to false)
-		if (responseTxt.contains("WM SUS AHL")) {
+		if (responseTxt.contains("-OK-") || responseTxt.contains("WM SUS AHL")) {
 			response.setSuccess(true);
 		}
 	}
@@ -477,7 +511,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 
 	public void getActionFileSummary(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
+			ActionFileRequestData data, WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 
 		// Prepare variables
 		
@@ -544,7 +578,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	}
 
 	public void placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
-			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException {
+			WorldTracerResponse response) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// If applicable, perform any pre-processing required to obtain a
 		// hashmap of field names
@@ -560,6 +594,22 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				myPXF_TARGET_LINE += target.getStation() + target.getAirline() + target.getArea() + "/";
 			}
 		}
+		
+		
+		// teletypes - optional field
+		String[] myTeletypes = pxf.getTeletype();
+		if(myTeletypes != null) {
+			String myTX_LINE = "TX ";
+			List<String> txs = Arrays.asList(myTeletypes);
+			for(String tx: txs) {
+				myTX_LINE += tx + "/";
+			}
+			// replace the last / with \n 
+			myTX_LINE = myTX_LINE.substring(0, myTX_LINE.length()-1);
+			myTX_LINE += "\r";
+			map.put("TX_LINE", myTX_LINE);
+		}
+		
 		// remove trailing /
 		myPXF_TARGET_LINE = myPXF_TARGET_LINE.substring(0, myPXF_TARGET_LINE.length()-1);
 		map.put("PXF_TARGET_LINE", myPXF_TARGET_LINE);
@@ -567,9 +617,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		map.put("MESSAGE_CONTENT", pxf.getContent());
 		
 		// Generate Command from Hash (Example means provided)
-		String command = "{COMMAND_TYPE} PXF {PXF_TARGET_LINE}\n" +
-						 ".{SENDING_STATION}\n" +
+		String command = "{COMMAND_TYPE} PXF {PXF_TARGET_LINE}\r" +
+						 "[TX_LINE]\r" +
+						 ".{SENDING_STATION}\r" +
 						 "{MESSAGE_CONTENT}";
+		
+		
 
 		command = inputValuesIntoCommand(map, command);
 		

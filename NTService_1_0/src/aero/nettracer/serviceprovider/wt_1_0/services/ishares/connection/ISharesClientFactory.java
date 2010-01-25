@@ -4,14 +4,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.pool.BasePoolableObjectFactory;
-import org.apache.log4j.Logger;
 
 import aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount;
 
 
 
 public class ISharesClientFactory extends BasePoolableObjectFactory{
-	private static final Logger logger = Logger.getLogger(ISharesClientFactory.class);
+	
 	public static final int ALLOWED_MILLIS_WITH_NOACTIVITIY = 15*60*1000; // 20 Minutes = 1200000
 	private List<WorldTracerISharesAccount> accounts = null;
 	private int itemsUsed = 0;

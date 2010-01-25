@@ -3,6 +3,7 @@ package aero.nettracer.serviceprovider.wt_1_0.services;
 import java.io.IOException;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.log4j.Logger;
 
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.ws_1_0.common.WebServiceError;
@@ -19,15 +20,21 @@ import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WtHttpClient;
 
 public abstract class AbstractServiceManager implements ServiceManagerInterface {
 
+	private static final Logger logger = Logger.getLogger(AbstractServiceManager.class);
+	
 	public WorldTracerResponse process(WorldTracerActionDTO dto) {
 		WorldTracerResponse response = new WorldTracerResponse();
 		WorldTracerActionType type = dto.getType();
 		boolean retry = true;
 		int retryCount = 0;
 		while (retry && retryCount < 2) {
+			if (retryCount > 0) {
+				response = new WorldTracerResponse();
+			}
 			retry = false;
 			try {
 				boolean process = preProcess(dto, response);
@@ -133,35 +140,47 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 					}
 				}
 			} catch (WorldTracerException e) {
-				e.printStackTrace();
-				response.setError(new WebServiceError(
-						ServiceConstants.UNEXPECTED_EXCEPTION));
+				logger.error(e);
+				response.setError(new WebServiceError(ServiceConstants.UNEXPECTED_EXCEPTION));
 				response.setSuccess(false);
 			} catch (NotLoggedIntoWorldTracerException e) {
-				e.printStackTrace();
-				WorldTracerHttpClient client = (WorldTracerHttpClient) dto.getConnection();
+				logger.error(e);
+				WtHttpClient client = (WtHttpClient) dto.getConnection();
 				client.setValidConnection(false);
 				retry = true;
 				retryCount += 1;
-				//TODO: IF BACKEND PROCESS NEED TO ONLY RETRY LIMIT # TIMES
+			} catch (WorldTracerTimeoutException e) {
+				WtHttpClient client = (WtHttpClient) dto.getConnection();
+				client.setValidConnection(false);
+				response.setSuccess(false);
+				WebServiceError error = new WebServiceError(ServiceConstants.COMMAND_TIMED_OUT);
+				response.setError(error);
+				logger.error(e);
+				retry = true;
+				retryCount += 1;
 			} catch (CommandNotProperlyFormedException e) {
 				 response.setSuccess(false);
 				 WebServiceError error = new WebServiceError(ServiceConstants.COMMAND_NOT_PROPERLY_FORMATTED);
+				 response.setError(error);
+				 logger.error(e);
 			} catch (WorldTracerAlreadyClosedException e) {
 				response.setSuccess(false);
 				WebServiceError error = new WebServiceError(
 						ServiceConstants.REFERENCED_OBJECT_CLOSED);
-				e.printStackTrace();
+				response.setError(error);
+				logger.error(e);
 			} catch (HttpException e) {
 				response.setSuccess(false);
 				WebServiceError error = new WebServiceError(
 						ServiceConstants.UNEXPECTED_EXCEPTION);
-				e.printStackTrace();
+				response.setError(error);
+				logger.error(e);
 			} catch (IOException e) {
 				response.setSuccess(false);
 				WebServiceError error = new WebServiceError(
 						ServiceConstants.UNEXPECTED_EXCEPTION);
-				e.printStackTrace();
+				response.setError(error);
+				logger.error(e);
 			}
 		}
 		postProcess(dto, response);

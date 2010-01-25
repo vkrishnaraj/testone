@@ -160,7 +160,7 @@ public class SabreConnection {
 	}
 
 	public String getLoggingString() {
-		return "Username: " + username + " Profile: " + profile.getId()
+		return "Username: " + username + " Profile: " + profile.getId() + "Password: " + password
 				+ " Endpoint: " + endpoint;
 	}
 }

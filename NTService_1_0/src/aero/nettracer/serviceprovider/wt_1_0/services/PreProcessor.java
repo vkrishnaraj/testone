@@ -33,7 +33,9 @@ import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.BasicRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.ContentRule;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
 
 public class PreProcessor {
 	
@@ -205,8 +207,7 @@ public class PreProcessor {
 	public static String getAgentEntry(Agent ag) {
 		if (ag != null)
 			return (ag.getUsername().length() > 7 ? ag.getUsername().substring(0, 7)
-			    : ag.getUsername())
-			    + "/" + ag.getAirline();
+			    : ag.getUsername());
 		return "NTRACER";
 	}
 	
@@ -404,7 +405,8 @@ public class PreProcessor {
 			    && p.getFfAirline().length() > 0) {
 				membership = p.getFfAirline() + membership;
 			}
-			addIncidentFieldEntry(WorldTracerField.FL, membership, result);
+			BasicRule rule = new BasicRule(7, 7, 10, Format.ALPHA_NUMERIC);
+			addIncidentFieldEntry(WorldTracerField.FL, rule.formatEntry(membership), result);
 		}
 		if (address != null) {
 
@@ -688,7 +690,8 @@ public class PreProcessor {
 			if (ohd.getPax()[0].getFfAirline() != null) {
 				membership = ohd.getPax()[0].getFfAirline() + membership;
 			}
-			addIncidentFieldEntry(WorldTracerField.FL, membership, result);
+			BasicRule rule = new BasicRule(7, 7, 10, Format.ALPHA_NUMERIC);
+			addIncidentFieldEntry(WorldTracerField.FL, rule.formatEntry(membership), result);
 		}
 
 		if (ohd.getBagItinerary() == null || ohd.getBagItinerary().length == 0) {

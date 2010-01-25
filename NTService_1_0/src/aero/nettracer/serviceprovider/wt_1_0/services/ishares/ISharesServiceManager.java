@@ -18,6 +18,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.AbstractServiceManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerTimeoutException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ConnectionPoolManager;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ISharesClientPool;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection.ISharesHttpClient;
@@ -115,7 +116,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse createBdo(WorldTracerActionDTO dto, Bdo bdo, 
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.insertBdo(dto, bdo, response);
 		return response;
@@ -131,7 +132,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse eraseActionFile(WorldTracerActionDTO dto,
-			ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.eraseActionFile(dto, data, response);
 		return response;
@@ -147,7 +148,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse requestOhd(WorldTracerActionDTO dto, RequestOhd data,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.requestOhd(dto, data, response);
 		return response;
@@ -155,7 +156,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.requestQuickOhd(dto, data, response);
 		return response;
@@ -164,7 +165,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public WorldTracerResponse getActionFileCounts(WorldTracerActionDTO dto,
 			ActionFileRequestData data, WorldTracerResponse response)
-			throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.getActionFileCounts(dto, data, response);
@@ -183,7 +184,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public WorldTracerResponse getActionFileSummary(WorldTracerActionDTO dto,
 			ActionFileRequestData data, 
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.getActionFileSummary(dto, data, response);
 		return response;
@@ -207,7 +208,7 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 
 	@Override
 	public WorldTracerResponse placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
-			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException {
+			WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.placeActionFile(dto, pxf, response);
 		return response;

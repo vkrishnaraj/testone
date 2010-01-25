@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.wt_1_0;
 
 
+import org.apache.log4j.Logger;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
@@ -27,6 +28,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.ServicesManager;
 
 public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 	
+	private static final Logger logger = Logger.getLogger(WorldTracerServiceImpl.class);
 	
     public aero.nettracer.serviceprovider.wt_1_0.EstablishWtrConnectionResponseDocument establishWtrConnection(
 			aero.nettracer.serviceprovider.wt_1_0.EstablishWtrConnectionDocument establishWtrConnection) {
@@ -95,7 +97,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = closeOhd.getCloseOhd().getOhd();
-    		
+			logger.info(input);
 			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -143,7 +145,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardOhd input = forwardOhd.getForwardOhd().getData();
-    		
+			logger.info(input);
 			ForwardOhd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ForwardOhd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -191,7 +193,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = getAhl.getGetAhl().getAhl();
-    		
+    		logger.info(input);
 			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -238,8 +240,9 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = createAhl.getCreateAhl().getAhl();
-    		
+			logger.info(input);
 			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
+			
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
     		try {
@@ -285,7 +288,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input = eraseActionFile.getEraseActionFile().getData();
-    		
+			logger.info(input);
 			ActionFileRequestData payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ActionFileRequestData.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -332,7 +335,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = amendOhd.getAmendOhd().getOhd();
-    		
+			logger.info(input);
 			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -379,7 +382,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input = getActionFileSummary.getGetActionFileSummary().getData();
-    		
+			logger.info(input);
 			ActionFileRequestData payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ActionFileRequestData.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -426,7 +429,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = getOhd.getGetOhd().getOhd();
-    		
+			logger.info(input);
 			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -474,7 +477,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input = getActionFileCounts.getGetActionFileCounts().getData();
 			Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-			
+			logger.info(input);
 			ActionFileRequestData payload = mapper.map(input, ActionFileRequestData.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -524,7 +527,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.RequestOhd input = requestOhd.getRequestOhd().getData();
-    		
+			logger.info(input);
 			RequestOhd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, RequestOhd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -553,6 +556,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
     public aero.nettracer.serviceprovider.wt_1_0.AmendAhlResponseDocument amendAhl(
         aero.nettracer.serviceprovider.wt_1_0.AmendAhlDocument amendAhl) {
+    	
     	WorldTracerActionType type = WorldTracerActionType.AMEND_AHL;
     	
     	RequestHeader header = amendAhl.getAmendAhl().getHeader();
@@ -571,7 +575,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = amendAhl.getAmendAhl().getAhl();
-    		
+			logger.info(input);
 			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -618,7 +622,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Bdo input = createBdo.getCreateBdo().getBdo();
-    		
+			logger.info(input);
 			Bdo payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Bdo.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -665,7 +669,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.RequestOhd input = requestQuickOhd.getRequestQuickOhd().getData();
-    		
+			logger.info(input);
 			RequestOhd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, RequestOhd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -712,7 +716,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileRequestData input =  getActionFileDetails.getGetActionFileDetails().getData();
-    		
+			logger.info(input);
 			ActionFileRequestData payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ActionFileRequestData.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -759,7 +763,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardMessage input = sendForwardMessage.getSendForwardMessage().getForwardMessage();
-    		
+			logger.info(input);
 			ForwardMessage payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, ForwardMessage.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -806,7 +810,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Pxf input = placeActionFile.getPlaceActionFile().getPxf();
-    		
+			logger.info(input);
 			Pxf payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Pxf.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -853,7 +857,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = createOhd.getCreateOhd().getOhd();
-    		
+			logger.info(input);
 			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -900,7 +904,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = reinstateAhl.getReinstateAhl().getAhl();
-    		
+			logger.info(input);
 			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -947,7 +951,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = closeAhl.getCloseAhl().getAhl();
-    		
+			logger.info(input);
 			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -994,7 +998,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl input = suspendAhl.getSuspendAhl().getAhl();
-    		
+			logger.info(input);
 			Ahl payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ahl.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -1046,7 +1050,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = suspendOhd.getSuspendOhd().getOhd();
-    		
+			logger.info(input);
 			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		
@@ -1091,7 +1095,7 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 
 		if (userAuthorized) {
 			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd input = reinstateOhd.getReinstateOhd().getOhd();
-    		
+			logger.info(input);
 			Ohd payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Ohd.class);
 			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
     		

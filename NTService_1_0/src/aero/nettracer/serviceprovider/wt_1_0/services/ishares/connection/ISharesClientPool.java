@@ -13,8 +13,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class ISharesClientPool extends GenericObjectPool {
 
-	private static final Logger logger = Logger
-			.getLogger(ISharesClientPool.class);
+	private static Logger logger = Logger.getLogger(ISharesClientPool.class);
 	private ISharesClientFactory f = null;
 
 	public ISharesClientPool(Profile profile) {

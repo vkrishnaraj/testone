@@ -42,7 +42,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerConnection;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerServiceImpl;
 
-public class WorldTracerHttpClient extends HttpClient implements
+public class WorldTracerHttpClient extends WtHttpClient implements
 		WorldTracerConnection {
 
 	private static final int DEFAULT_MILLISECOND_WAIT = 2000;
@@ -55,7 +55,6 @@ public class WorldTracerHttpClient extends HttpClient implements
 	private Integer key = null;
 
 	private Calendar lastUsed = new GregorianCalendar();
-	private boolean validConnection = false;
 	private boolean isWaitingOnCaptcha = false;
 	private WorldTracerWebAccount account;
 	
@@ -176,13 +175,7 @@ public class WorldTracerHttpClient extends HttpClient implements
 		return StringUtils.substring(str, 0, maxLen);
 	}
 
-	public boolean isValidConnection() {
-		return validConnection;
-	}
 
-	public void setValidConnection(boolean validConnection) {
-		this.validConnection = validConnection;
-	}
 
 	public WorldTracerWebAccount getAccount() {
 		return account;

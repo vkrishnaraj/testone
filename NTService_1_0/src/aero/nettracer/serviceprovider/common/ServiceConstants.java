@@ -8,6 +8,7 @@ public class ServiceConstants {
 	public static final String CONFIGURATION_ERROR = "CONFIGURATION ERROR";
 	public static final String UNEXPECTED_EXCEPTION = "UNEXPECTED EXCEPTION ENCOUNTERED";
 	public static final String COMMAND_NOT_PROPERLY_FORMATTED = "COMMAND NOT PROPERLY FORMATTED";
+	public static final String COMMAND_TIMED_OUT = "COMMAND TIMED OUT - WT DID NOT RESPOND";
 	public static final String CAPTCHA_EXCEPTION = "MUST ENTER CAPTCHA";
 	
 	public final static String DB_DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";

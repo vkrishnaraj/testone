@@ -80,6 +80,7 @@ public class UsWorldTracerRuleMap implements RuleMapper {
 		OHD_FIELD_RULES.put(WorldTracerField.PT, new BasicRule(1, 25, 1, Format.ALPHA));
 		OHD_FIELD_RULES.put(WorldTracerField.CC, new ContentRule(1, 57, 10, Format.CONTENT_FIELD));
 		OHD_FIELD_RULES.put(WorldTracerField.PR, new BasicRule(1, 12, 1, Format.FREE_FLOW));
+		OHD_FIELD_RULES.put(WorldTracerField.SI, new BasicRule(1, 55, 3, Format.FREE_FLOW));
 		
 		CAH_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
 		CAH_FIELD_RULES.put(WorldTracerField.CS, new BasicRule(6, 16, 5, Format.ALPHA_NUMERIC));
@@ -150,6 +151,7 @@ public class UsWorldTracerRuleMap implements RuleMapper {
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PB, new BasicRule(1, 15, 1, Format.ALPHA_NUMERIC));
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.CC, new ContentAmendRule(1, 57, 10, Format.CONTENT_FIELD, true));
 		AMEND_AHL_FIELD_RULES.put(WorldTracerField.AG, new BasicRule(1, 12, 1, Format.FREE_FLOW));
+		AMEND_AHL_FIELD_RULES.put(WorldTracerField.PR, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 		
 		AMEND_OHD_FIELD_RULES = new EnumMap<WorldTracerField, WorldTracerRule<String>>(WorldTracerField.class);
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.CT, new SameLineRule(7, 7, 1, Format.ALPHA_NUMERIC));
@@ -168,6 +170,7 @@ public class UsWorldTracerRuleMap implements RuleMapper {
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.PT, new BasicRule(1, 25, 1, Format.ALPHA));
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.AB, new BasicRule(1, 57, 2, Format.FREE_FLOW));
 		AMEND_OHD_FIELD_RULES.put(WorldTracerField.PN, new NumberedLinesRule(1, 20, 2, Format.NUMERIC, false));
+		AMEND_OHD_FIELD_RULES.put(WorldTracerField.PR, new BasicRule(1, 12, 1, Format.FREE_FLOW));
 	}
 	
 	public EnumMap<WorldTracerField,WorldTracerRule<String>> getRule(TxType tx){
