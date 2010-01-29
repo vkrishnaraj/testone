@@ -184,8 +184,7 @@ public class ISharesHttpClient extends WtHttpClient implements
 		
 		String responseBody = null;
 		PostMethod method = new PostMethod("/cgi-bin/term.cgi");
-		logger.info("Using token: " + this.getToken());
-		logger.info("Command: " + command);
+		logger.debug("Using token: " + this.getToken());
 		method.addParameter("Token", this.getToken());
 		method.addParameter("Type", "1");
 		method.addParameter("q", command);
@@ -198,10 +197,10 @@ public class ISharesHttpClient extends WtHttpClient implements
 		Matcher m = tokenPattern.matcher(responseBody);
 		if (m.find()) {
 			String t = m.group(1);
-			logger.info("Token found: " + t);
+			logger.debug("Token found: " + t);
 			this.setToken(t);
 		} else {
-			logger.error("No token found...");
+			logger.debug("No token found...");
 			validConnection = false;
 		}
 
@@ -214,7 +213,7 @@ public class ISharesHttpClient extends WtHttpClient implements
 	}
 
 	public void setToken(String token) {
-		logger.info("Token set to: " + token);
+		logger.debug("Token set to: " + token);
 		this.token = token;
 	}
 }

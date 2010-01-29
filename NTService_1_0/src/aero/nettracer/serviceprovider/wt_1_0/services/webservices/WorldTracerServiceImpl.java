@@ -26,6 +26,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.iata.www.iata._2007._00.ErrorType;
+import org.iata.www.iata._2007._00.WarningType;
 
 import aero.nettracer.serviceprovider.common.db.ParameterType;
 import aero.nettracer.serviceprovider.common.exceptions.BagtagException;
@@ -161,7 +162,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final String UNABLE_TO_GENERATE_INCIDENT_MAPPING = "Unable to generate incident mapping";
 	private static final String WEB_SERVICE_CONNECTION_ISSUE = "Web Service Connection Issue";
 	private static final String UNKNOWN_FAILURE = "Unknown Failure";
-	private static final String WEB_SERVICE_ERROR_MESSAGE = "Web Service Error Message: ";
+	private static final String WEB_SERVICE_ERROR_MESSAGE = "WS Error: ";
 	private static final String EXCEPTION_FOUND_RESPONSE = "Exception found... Response: ";
 	private static final String ACTION_BEING_PERFORMED = "Action Being Performed: ";
 	private static final String JAVAX_NET_SSL_TRUST_STORE_PASSWORD = "javax.net.ssl.trustStorePassword";
@@ -476,7 +477,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getDepartureCity() == null || itin.getDepartureCity().trim().length() <= 0
 						|| itin.getArrivalCity() == null || itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null || itinCount > 4) {
 				} else {
-					itinCount++;
+					
 
 					FlightOptionalDateOrARNKType p3 = f1.addNewFlightSegment();
 					FlightOptionalDateType p5 = p3.addNewFlightDate();
@@ -489,6 +490,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						rts.addNewRoute().setStringValue(itin.getDepartureCity().trim());
 					}
 					rts.addNewRoute().setStringValue(itin.getArrivalCity().trim());
+					itinCount++;
 				}
 			}
 
@@ -568,18 +570,25 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			ContentsType c2 = null;
 			if (contentsList != null) {
+				
 				for (int i = 0; i < contentsList.size() && i < 12; i++) {
 	
 					if (i == 0) {
 						c2 = d2.addNewBagContents();
 					}
-	
-					String contents = contentsList.get(i);
-					int index = contents.indexOf("/");
-	
-					ContentType c = c2.addNewContent();
-					c.setCategory(contents.substring(0, index));
-					c.setDescription(contents.substring(index + 1));
+					
+					String contentsX = contentsList.get(i);
+					String[] bagContents = contentsX.split(".- ");
+					
+					int countPerBag = bagContents.length;
+						for (int j = 0; j < countPerBag && j < 12; j++) {
+						String contents = bagContents[j];
+						int index = contents.indexOf("/");
+		
+						ContentType c = c2.addNewContent();
+						c.setCategory(contents.substring(0, index));
+						c.setDescription(contents.substring(index + 1));
+					}
 				}
 			}
 
@@ -604,6 +613,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 				writeToLog(label);
 				wsresponse = stub.create(d);
+				logger.info(wsresponse);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
@@ -1352,16 +1362,30 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			// Process Response and/or Error Messages
-			if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getSuccess() != null) {
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getSuccess() != null && wsresponse.getWTRStatusRS().getErrors() == null  && wsresponse.getWTRStatusRS().getWarnings() == null) {
 				response.setSuccess(true);
 			} else {
 				StringBuffer errorMsg = new StringBuffer();
 
-				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
-					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
-					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
-						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null) {
+					if (wsresponse.getWTRStatusRS().getErrors() != null) {
+						ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
+						for (ErrorType error : errors) {
+							errorMsg.append(error.getShortText());
+							logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
+						}
+					}
+					
+					if (wsresponse.getWTRStatusRS().getWarnings() != null) {
+						WarningType[] errors = wsresponse.getWTRStatusRS().getWarnings().getWarningArray();
+						for (WarningType error : errors) {
+							if (error.getStringValue().contains("RECORD ALREADY CLOSED")) {
+								response.setSuccess(true);
+							} else {
+								errorMsg.append(error.getShortText());
+								logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
+							}
+						}
 					}
 				}
 
@@ -1370,8 +1394,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					returnError = UNKNOWN_FAILURE;
 				}
 
-				WorldTracerException e = new WorldTracerException(returnError);
-				throw e;
 
 			}
 		} catch (AxisFault axisFault) {
@@ -2211,7 +2233,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getDepartureCity() == null || itin.getDepartureCity().trim().length() <= 0
 						|| itin.getArrivalCity() == null || itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null || itinCount > 4) {
 				} else {
-					itinCount++;
+					
 
 					FlightOptionalDateOrARNKType p3 = f1.addNewFlightSegment();
 					FlightOptionalDateType p5 = p3.addNewFlightDate();
@@ -2224,6 +2246,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						rts.addNewRoute().setStringValue(itin.getDepartureCity().trim());
 					}
 					rts.addNewRoute().setStringValue(itin.getArrivalCity().trim());
+					itinCount++;
 				}
 			}
 
@@ -2316,18 +2339,25 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			ContentsAmendType c2 = null;
+			
+			
 			for (int i = 0; i < contentsList.size() && i < 12; i++) {
 
 				if (i == 0) {
 					c2 = d2.addNewBagContents();
 				}
 
-				String contents = contentsList.get(i);
-				int index = contents.indexOf("/");
-
-				ContentType c = c2.addNewContent();
-				c.setCategory(contents.substring(0, index));
-				c.setDescription(contents.substring(index + 1));
+				String bagInfo = contentsList.get(i);
+				String[] bagContents = bagInfo.split(".- ");
+				int countPerBag = bagContents.length;
+				for (int j = 0; j < countPerBag && j < 12; j++) {
+					String contents = bagContents[j];
+					int index = contents.indexOf("/");
+	
+					ContentType c = c2.addNewContent();
+					c.setCategory(contents.substring(0, index));
+					c.setDescription(contents.substring(index + 1));
+				}
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.SL);
@@ -2691,9 +2721,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					p5.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
 					p5.setDate(itin.getFlightDate());
 
-					OriginDestinationType p4 = p3.addNewOriginDestination();
-					p4.setOrigin(itin.getDepartureCity().trim());
-					p4.setDestination(itin.getArrivalCity().trim());
+//					OriginDestinationType p4 = p3.addNewOriginDestination();
+//					p4.setOrigin(itin.getDepartureCity().trim());
+//					p4.setDestination(itin.getArrivalCity().trim());
 				}
 			}
 

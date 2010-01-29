@@ -66,9 +66,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	
 	private String sendCommand(String methodName, String command) throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		// Test for presence of any remaining {} characters and throw exception
-		command = testCommand(command);
-		String response = connection.sendCommand(methodName, command.replaceAll("\n", "\r"));
 		
+		command = testCommand(command);
+		command = command.replaceAll("\n", "\r");
+		String response = connection.sendCommand(methodName, command);
 		
 		
 		Matcher m = commandResponsePattern.matcher(response);
@@ -374,7 +375,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		map.put("COMMAND_TYPE", connectionType);
 		map.put("AHL_FILE_REFERENCE", data.getAhl().getAhlId());
 		map.put("OHD_FILE_REFERENCE_NUMBER", data.getOhdId());
-		map.put("FI_FREE_FORM_TEXT", ((List<String>)fieldMap.get(WorldTracerField.FI)).get(0));
+		
+		String freeFormText = "NONE";
+		if ((List<String>)fieldMap.get(WorldTracerField.FI) != null && ((List<String>)fieldMap.get(WorldTracerField.FI)).size() > 0) {
+			freeFormText = ((List<String>)fieldMap.get(WorldTracerField.FI)).get(0);
+		}
+		
+		map.put("FI_FREE_FORM_TEXT", freeFormText);
 		map.put("AGENT_ID", ((List<String>)fieldMap.get(WorldTracerField.AG)).get(0));
 		
 		// teletypes - optional field
@@ -545,13 +552,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			List<ActionFile> myActionFiles = ISharesResponseParser.processActionFileDetail(responseTxt);
 			myActionFileList.addAll(myActionFiles);
 			
-			
+			boolean finalProcess = false;
 			if(responseTxt.contains("WMPN")){
 				try{
 					if (unitTest) {
 						responseTxt = MockISharesResponse.mockActionFileSummaryNextCommand(command);
 					} else {
 						responseTxt = sendCommand("WMPN", "WMPN");
+						finalProcess = true;
 					}
 					
 					//get the result
@@ -562,13 +570,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 			
-			if (responseTxt != null) {
-				logger.info("Response Text: " + responseTxt);
-			}
-			
 			// On success, set success to true (defaults to false)
 			if ((responseTxt.contains("ACTION FILE ") && responseTxt.contains(" COMPLETE")) || responseTxt.contains("END OF REPORT") ) {  //only single page or on last page
-				logger.info("Success: true");
+				if (finalProcess) {
+					List<ActionFile> myActionFiles2 = ISharesResponseParser.processActionFileDetail(responseTxt);
+					myActionFileList.addAll(myActionFiles2);
+				}
+				logger.info("Success: true/DX");
 				response.setSuccess(true);
 				response.setActionFiles(myActionFileList.toArray(new ActionFile[myActionFileList.size()]));
 				

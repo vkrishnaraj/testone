@@ -47,8 +47,8 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 				conn.performLogon();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+//			e.printStackTrace();
 		}
 
 		if (dto.getConnection() == null) {

@@ -151,7 +151,7 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				retryCount += 1;
 			} catch (WorldTracerTimeoutException e) {
 				WtHttpClient client = (WtHttpClient) dto.getConnection();
-				client.setValidConnection(false);
+//				client.setValidConnection(false);
 				response.setSuccess(false);
 				WebServiceError error = new WebServiceError(ServiceConstants.COMMAND_TIMED_OUT);
 				response.setError(error);
@@ -182,8 +182,8 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				response.setError(error);
 				logger.error(e);
 			}
+			postProcess(dto, response);
 		}
-		postProcess(dto, response);
 
 		return response;
 

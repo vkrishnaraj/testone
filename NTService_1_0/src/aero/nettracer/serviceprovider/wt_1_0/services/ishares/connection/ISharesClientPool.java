@@ -18,7 +18,7 @@ public class ISharesClientPool extends GenericObjectPool {
 
 	public ISharesClientPool(Profile profile) {
 
-		this.setMaxWait(1000 * 20);
+		this.setMaxWait(1000 * 25);
 		this.setWhenExhaustedAction(WHEN_EXHAUSTED_BLOCK);
 
 		List<WorldTracerISharesAccount> accounts = null;

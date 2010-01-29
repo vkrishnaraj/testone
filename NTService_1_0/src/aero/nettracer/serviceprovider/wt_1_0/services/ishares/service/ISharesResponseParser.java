@@ -15,13 +15,15 @@ public class ISharesResponseParser {
 	private static final Pattern OHD_PATT = Pattern.compile("(?:\\bOHD\\s+|O/|ON-HAND\\s+)(\\w{5}\\d{5})\\b", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private static final Pattern PERCENT_PATT = Pattern.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
 	private static final Pattern PATT_BEGIN = Pattern.compile("^\\d+/", Pattern.MULTILINE);
-	private static final Pattern PATT_END = Pattern.compile("^\\d+/|^\\s*$", Pattern.MULTILINE);
+	//private static final Pattern PATT_END = Pattern.compile("^\\d+/|^\\s*$", Pattern.MULTILINE);
+	private static final Pattern PATT_END = Pattern.compile("^\\d+/|^END OF REPORT|^\\&GT|\\n\\s*\\n\\s*\\n|^ERASE AND DISPLAY NEXT|^DISPLAY OHD", Pattern.MULTILINE);
+	//
 	
 	
 	//private static final Pattern PATT_DXF = Pattern.compile("^(\\d+)/(.*\\n)*(^\\s*$){2,}", Pattern.MULTILINE);
 	private static final Pattern PATT_DXF = Pattern.compile("^(\\d+)/(.*\\n)*", Pattern.MULTILINE);
 
-	static ActionFileCount[] processActionfileResponse(String responseTxt) {
+	public static ActionFileCount[] processActionfileResponse(String responseTxt) {
 		String[] list = responseTxt.split("\n");
 		ArrayList<ActionFileCount> counts = new ArrayList<ActionFileCount>();
 
@@ -53,7 +55,7 @@ public class ISharesResponseParser {
 		return counts.toArray(new ActionFileCount[counts.size()]);
 	}
 	
-	static List<ActionFile> processActionFileDetail(String responseTxt) {
+	public static List<ActionFile> processActionFileDetail(String responseTxt) {
 		ArrayList<ActionFile> list = new ArrayList<ActionFile>();
 		
 		// TODO: HERE
