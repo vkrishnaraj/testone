@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.001" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_ET_CommonTypes.xsd"/>
+	<!-- This is a request to create Damaged bags in the WorldTracer system. Upto 10 realted damaged bags can be registered using this request.-->
+	<xs:annotation>
+		<xs:documentation xml:lang="en">General comment</xs:documentation>
+	</xs:annotation>
+	<xs:element name="WTR_DamagedBagsRecUpdateRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Request for updaitng Damaged bag record in WTR</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<!-- Define other elements required for the specific request -->
+				<xs:element name="POS" type="iata:POS_Type"/>
+				<xs:element name="RecordReference" type="RecordReferenceType"/>
+				<xs:element name="DamagedBagGroup" type="DamagedBagGroupAmendType" minOccurs="0"/>
+				<xs:element name="Passengers" type="PassengerItineraryAmendType" minOccurs="0"/>
+				<xs:element name="HandledAirlineCopyInd" type="HandledAirlineCopyIndType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>HC - Indicator to specify if a copy of the request required to be sent to the hendled airline</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DesignatedLocator" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>DL - Used to record members front end system record locator</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="StringLength0to12">
+								<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AdditionalInfo" type="AdditionalInfoAmendType" minOccurs="0"/>
+				<xs:element name="Claim" type="DamageClaimAmendType" minOccurs="0"/>
+				<xs:element name="LZControlDate" type="xs:date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>LZ - LZ control date</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CrossReferenceRecord" type="RecordIdentifierAmendType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>XR - Contians reference to a related record</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="InBoxAddresses" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>XF - Action file(Inbox) address</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="InboxAddress" type="InboxAddressType" maxOccurs="5"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AgentID" type="AlphaNumericStringLength1to12">
+					<xs:annotation>
+						<xs:documentation>AG - Agent Identification</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

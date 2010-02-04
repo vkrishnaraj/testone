@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.1" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_CommonTypes.xsd"/>
+	<xs:element name="WTR_RushBagRecReadRS">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This is taken as a template from OTA Schema</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="Success" type="iata:SuccessType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en"> Standard way to indicate successful processing of an IATA message. Returning an empty element of this type indicates success. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Warnings" type="iata:WarningsType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Standard way to indicate successful processing of an IATA message, but one in which warnings are generated. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="BagType" type="RecordType">
+						<xs:annotation>
+							<xs:documentation>To indicate the type of rush record.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DiaryInfo" type="DiaryInfoType"/>
+					<xs:element name="RushBagGroup" type="RushBagGroupType"/>
+					<xs:element name="BagReferences" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contians up to 5 Onhand bag identifiers to be forwarded to LZ station</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Bag" type="RecordIdentifierType" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="QuickOnHandBags" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>For forward onhand bagsdisplay when Quick onhand bags are present</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="StationAirline" type="StationAirlineType"/>
+								<xs:element name="BagTag" type="BagTagType" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Origin" type="StationAirlineType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>OS - Origin station</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ReasonForLossCode" minOccurs="0">
+						<xs:simpleType>
+							<xs:restriction base="xs:int">
+								<xs:minInclusive value="10"/>
+								<xs:maxInclusive value="99"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="LossComments" type="StringLength1to58" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>RC - Contains comments regarding the reason for the loss of baggage</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ContactInfo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Contains contact information of the passengers owning the bags</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:choice>
+								<xs:annotation>
+									<xs:documentation>Different contact info based on rush bag type, names are common across all rush bag types</xs:documentation>
+								</xs:annotation>
+								<xs:sequence>
+									<xs:element name="PermanentAddress" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>PA - Permanent address of the passenger</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="PermPhones" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>PN - Permanent Phone numbers of the passenger</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Phone" type="StringLength1to20" maxOccurs="2"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Faxes" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>FX - Fax numbers of the passenger</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Fax" type="StringLength1to20" maxOccurs="2"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:choice>
+										<xs:annotation>
+											<xs:documentation>AB for forward to LZ response and the rest for forward held bag response</xs:documentation>
+										</xs:annotation>
+										<xs:element name="AddressOnBag" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>AB - Address found on the bag</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:sequence>
+											<xs:element name="TempAddress" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>TA - Temporary address of the passenger</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="Address">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="ValidityDate" type="xs:date" minOccurs="0"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="CellPhones" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>CP - Cellular phone numbers of the passenger</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="Phone" type="StringLength1to20" maxOccurs="2"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="TempPhones" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>TP - Temporary phone numbers of the passenger</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="Phone" type="StringLength1to20" maxOccurs="2"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:choice>
+								</xs:sequence>
+								<xs:sequence>
+									<xs:annotation>
+										<xs:documentation>For forward onhand bag response</xs:documentation>
+									</xs:annotation>
+									<xs:element name="DeliveryAddress" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>DA - Delivery Address</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="SupplimentalInfo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>SI - Supplimental info</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="TextLine" type="StringLength1to58" maxOccurs="2"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="FaultStationCode" type="iata:StationType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>FS - Station responsible for the mishandling of the bag</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FaultTerminal" type="AlphaNumericStringLength2" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>FT - Terminal  responsible for the mishandling of the bag</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DeliveryInstructions" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="TextLine" type="StringLength1to58" maxOccurs="2"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:element name="Errors" type="iata:ErrorsType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">A collection of errors that occurred during the processing of a message.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

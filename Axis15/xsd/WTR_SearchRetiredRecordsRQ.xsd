@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.1" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_ET_CommonTypes.xsd"/>
+	<xs:element name="WTR_SearchRetiredRecordsRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Request for searching pastdate records by name in WTR</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<!-- Define other elements required for the specific request -->
+				<xs:element name="POS" type="iata:POS_Type"/>
+				<xs:element name="RecordType" type="RecordType">
+					<xs:annotation>
+						<xs:documentation>Type of record. Valid values are DELAYED, ON-HAND and DAMAGED</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RefStationAirline" type="StationAirlineType"/>
+				<xs:element name="Date" type="xs:date"/>
+				<xs:element name="Name" type="AlphaLength2to16"/>
+				<xs:element name="AgentID" type="AlphaNumericStringLength1to12">
+					<xs:annotation>
+						<xs:documentation>AG - Agent Identification</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

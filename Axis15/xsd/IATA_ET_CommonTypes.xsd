@@ -1,0 +1,2063 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v5 rel. 3 U (http://www.xmlspy.com) by Jeff Althouse (Worldspan) -->
+<xs:schema targetNamespace="http://www.iata.org/IATA/2007/00" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.iata.org/IATA/2007/00" elementFormDefault="qualified" version="1.001" id="IATA2008.1">
+	<xs:include schemaLocation="IATA_CommonTypes.xsd"/>
+	<xs:include schemaLocation="IATA_SimpleTypes.xsd"/>
+	<xs:attributeGroup name="AirportLocationGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Airport location includes 3 letter code, terminal and gate.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="LocationCode" type="StringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en"> Location code used to identify a specific airport.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CodeContext" type="StringLength1to32" use="optional" default="IATA">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifies the context of the identifying code, such as IATA, ARC, or internal code, etc.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Terminal" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en"> Arrival or departure terminal (e.g., Concourse A)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Gate" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en"> Arrival or departure gate (e.g., B12)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="BagTagGroup">
+		<xs:annotation>
+			<xs:documentation>Used to provide bag tag numbers and pooling information.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="IssuerCode" type="AlphaNumericStringLength1to3" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The issuer of the bag tag numbers.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="SerialNumber" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The bagtag number.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[0-9]{6}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="SequenceCount" type="Numeric0to99" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The number of sequential bagtag numbers.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="BaggagePoolIndicator" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">When true, the baggage is pooled.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="BookingChannelGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Specifies the booking channel types and whether it is the primary means of connectivity of the source.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Type" type="IATA_CodeType" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The type of booking channel (e.g. Global Distribution System (GDS), Alternative Distribution System (ADS), Sales and Catering System (SCS), Property Management System (PMS), Central Reservation System (CRS), Tour Operator System (TOS), Internet and ALL). Not applicable, no code list exists.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Primary" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates whether the enumerated booking channel is the primary means of connectivity used by the source.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="CommissionGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Data for the collection of non-airport/government fees.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Type" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A code to identify the type of commission.  Refer to IATA PADIS code list data element 5025.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="CurrencyAmountGroup"/>
+		<xs:attribute name="Percent" type="Percentage" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The decimal percentage claimed by the agent as eligible commission.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="CurrencyAmountGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides a monetary amount and the currency code to reflect the currency in which this amount is expressed.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Amount" type="Money" use="optional"/>
+		<xs:attributeGroup ref="CurrencyCodeGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Provides a currency code to reflect the currency in which an amount may be expressed as well as the number of decimal places of that currency.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="CurrencyCodeGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides a currency code to reflect the currency in which an amount may be expressed.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="CurrencyCode" type="AlphaLength3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The code specifying a monetary unit. Use ISO 4217, three alpha code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DecimalPlaces" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates the number of decimal places for a particular currency. This is equivalent to the ISO 4217 standard "minor unit". Typically used when the amount provided includes the minor unit of currency without a decimal point (e.g., USD 8500 needs DecimalPlaces="2" to represent $85).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="CustomerLoyaltyGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Program rewarding frequent use by accumulating credits for services provided by vendors.</xs:documentation>
+		</xs:annotation>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="ProgramID" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifier to indicate the company owner of the loyalty program.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="MembershipID" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Unique identifier of the member in the program (membership number, account number, etc.).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="TravelSector" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifies the travel sector.  Refer to IATA PADIS Code List for data element 4025.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="LoyalLevelGroup"/>
+		<xs:attributeGroup ref="SingleVendorIndGroup"/>
+		<xs:attributeGroup ref="SignupDateGroup"/>
+		<xs:attributeGroup ref="EffectiveExpireOptionalDateGroup"/>
+		<xs:attribute name="RPH" type="RPH_Type" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A reference placeholder for this loyalty membership.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="VendorCode" type="ListOfStringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicate the partner(s)/vendor(s) for which the customer loyalty number is valid.  </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="DefaultIndGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Indicates that the receiving system should assume the default value if the user specifies no overriding value or action.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="DefaultInd" type="xs:boolean" use="optional" default="false"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="EffectiveExpireOptionalDateGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used to send the effective date and/or expiration date.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="EffectiveDate" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates the starting date.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ExpireDate" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates the ending date.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="FareComponentGroup">
+		<xs:attribute name="Number" type="Numeric0to4" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A sequential number representing the order of the fare comonents within the fare component calculation</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="TariffNumber" type="NumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The tariff number where the fare data is filed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="RuleNumber" type="AlphaNumericStringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The rule number within the tariff where the fare data is filed</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="RuleCode" type="AlphaNumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">System generated data indicating the ticketed fare is from a specific rule filed fare sent by the issuing system.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="FeeTaxGroup_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines the fees and/or taxes associated with a charge (e.g. taxes associated with a hotel rate).</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Qualifier" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to specify if current, paid, additional taxes   Refer to IATA PADIS Code list data element 5305. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ISOCountry" type="ISO3166" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to specify the ISO country code or special purpose code.		</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="CurrencyAmountGroup"/>
+		<xs:attribute name="TaxType" type="AlphaNumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The tax designator code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FiledAmount" type="Money" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The tax filed amount.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FiledCurrencyCode" type="AlphaLength3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The currency code in which the tax/fee/charge amount was filed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FiledTaxType" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="EN">The filed two letter ticket tax code assigned by IATA.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ConversionRate" type="Money" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The BSR and/or BBR used to convert the tax/fee/charge filed amount from filed currency into the tax/fee/charge amount in currency of country of payment.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Usage" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A code to indicate if the tax is non-refundable/non-interlineable or used/compensated or new paid.  Refer to IATA PADIS Code List for data element 5007.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="FiledFeeGroup">
+		<xs:annotation>
+			<xs:documentation>Used to specify filed fee information.</xs:documentation>
+		</xs:annotation>
+		<xs:attributeGroup ref="CurrencyAmountGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The amount and currency code for the service covered by the coupon/segment.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+		<xs:attribute name="BSR_Rate" type="xs:decimal" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The bankers selling rate used to convert the filed fee into the currency of payment of the EMD.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="FormattedInd">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Identifies if the associated data is formatted into its individual pieces, or exists as a single entity.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="FormattedInd" type="xs:boolean" use="optional" default="false">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Specifies if the associated data is formatted or not.  When true, then it is formatted; when false, then not formatted.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ID_Group">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used to provide a required unique identifier.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="ID" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A unique identifying value assigned by the creating system.  The ID attribute may be used to reference a primary-key value within a database or in a particular implementation.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="IssuerNameGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Name of bank or organization issuing the card (e.g., alumni association, bank, fraternal organization, etc.).</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="BankID" type="StringLength1to64">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Code of bank issuing the card.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="LocationGroup">
+		<xs:annotation>
+			<xs:documentation>Code and optional string to describe a location point.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="LocationCode" type="StringLength1to16" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Code used to identify a location.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CodeContext" type="StringLength1to32" default="IATA">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifies the context of the identifying code (e.g., IATA, ARC, or internal code).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="LoyalLevelGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides the level within a loyalty program.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="LoyalLevel" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates special privileges in program assigned to individual.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="LoyaltyCertificateNumberGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The loyalty certificate number and member loyalty number.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="CertificateNumber" type="StringLength1to32" use="optional"/>
+		<xs:attribute name="MemberNumber" type="StringLength1to32" use="optional"/>
+		<xs:attribute name="ProgramName" type="StringLength1to64" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">This identifies the loyalty program.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="OriginDestinationGroup">
+		<xs:annotation>
+			<xs:documentation>Used to specify the origin and destination airport/city codes.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="OriginCityCode" type="StringLength1to8" use="optional"/>
+		<xs:attribute name="DestinationCityCode" type="StringLength1to8" use="optional"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="PaymentCardDateGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Indicates the start and end date for a payment card.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="EffectiveDate" type="MMYYDate" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates the starting date.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ExpireDate" type="MMYYDate" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates the ending date.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="PositionGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used to specify the geographic coordinates of a location.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Latitude" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The measure of the angular distance on a meridian north or south of the equator.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Longitude" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The measure of the angular distance on a meridian east or west of the prime meridian.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Altitude" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The height of an item, typically above sea level.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AltitudeUnitOfMeasureCode" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Provides the unit of measure for the altitude (e.g., feet, meters, miles, kilometers).  Not applicable - no code list exists.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="PrivacyGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The two Privacy attributes allow for control of the sharing of data between parties.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="ShareSynchInd" use="optional">
+			<xs:simpleType>
+				<xs:annotation>
+					<xs:documentation xml:lang="en"> value="Inherit" Permission for sharing data for synchronization of information held by other travel service providers.							</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="Yes"/>
+					<xs:enumeration value="No"/>
+					<xs:enumeration value="Inherit"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ShareMarketInd" use="optional">
+			<xs:simpleType>
+				<xs:annotation>
+					<xs:documentation xml:lang="en"> value="Inherit" Permission for sharing data for marketing purposes.</xs:documentation>
+				</xs:annotation>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="Yes"/>
+					<xs:enumeration value="No"/>
+					<xs:enumeration value="Inherit"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="PricingInformationGroup">
+		<xs:annotation>
+			<xs:documentation>Used to specify the pricing date, ISO country code, location city/airport code and time.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Date" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The date booked itinerary was priced.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Time" type="DateOrTimeOrDateTimeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The time the booked itinerary was priced.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ISOCountryCode" type="ISO3166" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The code used to identify the country in which the booked itinerary was priced.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="LocationCode" type="AlphaNumericStringLength1to5" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">City or airport code identifying the pricing location.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="PromotionCodeGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used to provide a promotion code.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="PromotionCode" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Promotion code is the identifier used by the host to link directly with a specific named advertising campaign. By including the required code, the client is able to gain access to special offers which may have been created for a specifically targeted group via a CRM system or for a wider advertising campaign using Television or press adverts.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="PromotionVendorCode" type="ListOfStringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">List of the vendor codes associated with a promotion.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="QuantityGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used to define a quantity.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Quantity" type="Numeric1to9999" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to define a quantity of an associated element or attribute.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ReasonForIssuanceGroup">
+		<xs:annotation>
+			<xs:documentation>Used to specify the reason code and subcode and the description.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Code" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The reason for the issuance of the EMD.  Refer to IATA PADIS Code List for data elemet 4183.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="SubCode" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A subcode for the reason of the issuance of the EMD.  Refer to IATA PADIS Code List for data elemet 4183.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Description" type="StringLength1to86" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The corresponding description to the reason for issuance code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="SignupDateGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides the date of registration for a loyalty program.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="SignupDate" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates when the member signed up for the loyalty program.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="SingleVendorIndGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Indicates the alliance status of a program.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="SingleVendorInd">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates if program is affiliated with a group of related offers accumulating credits.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="SingleVndr">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Indicates the program is not part of an alliance.</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="Alliance">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Indicates the program is part of an alliance.</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="TravelerCountGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Defines information on the number of travelers of a specific type (e.g.  a driver type can be either one of a defined set, Adult, YoungDriver, YoungerDriver, or it may be a code that is acceptable to both Trading Partners).</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Age" type="Numeric0to999" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">This is used to specify age in years.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Code" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to specify the PTC code. Refer to IATA PADIS Code List data element 6353.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:union memberTypes="StringLength1to8 IATA_CodeType"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="CodeContext" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifies the source authority for the code. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="URI" type="xs:anyURI" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifies the location of the code table</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="QuantityGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Specifies the number of travelers.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="UniqueID_Group">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides unique identification information.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="URL" type="xs:anyURI" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">URL that identifies the location associated with the record identified by the UniqueID.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Type" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A reference to the type of object defined by the UniqueID element. Refer to IATA PADIS Code List for data elemet 9972.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Instance" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The identification of a record as it exists at a point in time. An instance is used in update messages where the sender must assure the server that the update sent refers to the most recent modification level of the object being updated.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="ID_Group"/>
+		<xs:attribute name="ID_Context" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to identify the source of the identifier (e.g., IATA, ABTA).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="UnstructuredFareCalcGroup">
+		<xs:annotation>
+			<xs:documentation>Information for an unstructured fare calculation area.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Type" type="PurposeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to specify net or sell amount.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="PricingCode" type="AlphaNumericStringLength1" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The primary identifier reflecting the method of pricing for this transaction.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ReportingCode" type="AlphaNumericStringLength1" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A secondary identifier reflecting the method of pricing for this transaction used in the reporting process.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Info" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The fare calculation area.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="UnitsOfMeasureGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides measurement information.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="UnitOfMeasureQuantity" type="xs:decimal" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">This is the numeric value associated with the measurement.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="UnitOfMeasure" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">This is the standard unit of measure name (e.g., it could be generic such as metric or imperial or specific such as inches, feet, yards, miles, millimeters, centimeters, meters, kilometers- according to usage). </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="UnitOfMeasureCode" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The unit of measure in a code format (e.g., kilograms, pieces, inches). Refer to IATA PADIS Code List for data element 5463..</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="VoucherGroup">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">A form of payment using a voucher or coupon.</xs:documentation>
+		</xs:annotation>
+		<xs:attributeGroup ref="EffectiveExpireOptionalDateGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The date when a voucher becomes valid for use, if applicable, and the the date when a voucher or series of coupons expires and is no longer valid.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+	</xs:attributeGroup>
+	<xs:complexType name="AddressInfoType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Information about an address that identifies a location for a specific purposes.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="AddressType">
+				<xs:attributeGroup ref="DefaultIndGroup"/>
+				<xs:attribute name="UseType" type="IATA_CodeType" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Describes the use of the address (e.g. mailing, delivery, billing, etc.).  Not applicable - no code list exists.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="RPH" type="RPH_Type" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Used elsewhere in the message to reference this specific address.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AddressType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides address information.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StreetNmbr" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">May contain the street number and optionally the street name.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="StreetNmbrType">
+							<xs:attribute name="StreetNmbrSuffix" type="StringLength1to8" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Usually a letter right after the street number (A in 66-A, B in 123-B etc).</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="StreetDirection" type="StringLength1to8" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Street direction of an address (e.g., N, E, S, NW, SW). 
+
+</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="RuralRouteNmbr" type="NumericStringLength1to5" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Numerical equivalent of a rural township as defined within a given area (e.g., 12, 99).</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="BldgRoom" type="StringLength0to64" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Building name, room, apartment, or suite number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AddressLine" type="StringLength1to255" minOccurs="0" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">When the address is unformatted (FormattedInd="false") these lines will contain free form address details. When the address is formatted and street number and street name must be sent independently, the street number will be sent using StreetNmbr, and the street name will be sent in the first AddressLine occurrence.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CityName" type="StringLength1to64" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">City (e.g., Dublin), town, or postal station (i.e., a postal service territory, often used in a military address).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostalCode" type="StringLength1to16" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Post Office Code number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="County" type="StringLength1to32" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">County or Region Name (e.g., Fairfax).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StateProv" type="StateProvType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">State or Province name (e.g., Texas).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountryName" type="CountryNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Country name (e.g., Ireland).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="FormattedInd">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Specifies if the associated data is formatted or not.  When true, then it is formatted; when false, then not formatted.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="Type" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Defines the type of address (e.g. home, business, other). Refer to IATA PADIS Code List data element 3299.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="BankAcctType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Customer bank accounts for payments, either for paper checks or electronic funds transfer.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BankAcctName" type="StringLength1to64" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The name the account is held under.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="BankID" type="StringLength1to64" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Code assigned by authorities to financial institutions; sometimes called bank routing number.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AcctType" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Describes the bank account used for financing travel (e.g., checking, savings, investment).
+					</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="BankAcctNumber" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifier for the account assigned by the bank.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ChecksAcceptedInd" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">If true, checks are accepted. If false, checks are not accepted.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CarrierFeeInfoType">
+		<xs:annotation>
+			<xs:documentation>Carrier fee information.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PaymentDetail" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Form of payment information for carrier fees.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="PaymentFormType_IATA">
+							<xs:attribute name="PaymentType" type="IATA_CodeType" use="required">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The form of payment type, e.g., check, credit card.  Refer to IATA PADIS code list data element 9888.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CarrierFee" minOccurs="0" maxOccurs="9">
+				<xs:annotation>
+					<xs:documentation>Used to specify if the carrier fee is related to the booking, ticketing, or service and associated information.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FeeAmount" maxOccurs="9">
+							<xs:annotation>
+								<xs:documentation>The type of fee being imposed by a carrier, the amount and other related information.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:attribute name="Type" type="AlphaNumericStringLength1to3" use="required">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">Carrier fee code</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="Amount" type="Money" use="required">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The carrier fee amount.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="ApplicationCode" type="ListOfIATA_CodeType" use="required">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">To specify if not interlineable, not refundable, commissionable or not commissionable.  Refer to IATA PADIS Code List for data element 9988..</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attributeGroup ref="OriginDestinationGroup">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The from and to airport/city code for this carrier fee.</xs:documentation>
+									</xs:annotation>
+								</xs:attributeGroup>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Type" type="IATA_CodeType" use="required">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The type of carrier fee, i.e., related to booking or ticketing or service.  Refer to IATA PADIS Code List for data element 9750.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attributeGroup ref="FareComponentGroup">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Used to specify the carrier fee fare component number, rule, code, rule number, and tariff number.</xs:documentation>
+						</xs:annotation>
+					</xs:attributeGroup>
+					<xs:attributeGroup ref="CompanyID_AttributesGroup">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">In the Code attribute is the two/three character designator representing the carrier whose fee is represented by the carrier fee code.  In the CompanyShortName is the Carrier fee commercial name.</xs:documentation>
+						</xs:annotation>
+					</xs:attributeGroup>
+					<xs:attribute name="FareClassCode" type="StringLength1to8" use="optional">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The fare class code that must be used when matching alternate cateory data as specifed by the carrier fee fare rule code, carrier fee rule number, and carrier fee tariff number fields.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="ReportingCode" type="AlphaNumericStringLength1" use="optional">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The identifier reflecting the method of pricing for the carrier fee.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Taxes" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A collection of  taxes applicable to the carrier fee.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Tax" minOccurs="0" maxOccurs="99">
+							<xs:annotation>
+								<xs:documentation>A tax applicable to a carrier fee or to the carrier fee tax.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:attributeGroup ref="FeeTaxGroup_IATA">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">Used to specify tax information.  </xs:documentation>
+									</xs:annotation>
+								</xs:attributeGroup>
+								<xs:attribute name="ApplicationCode" type="IATA_CodeType" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The tax application code to specify if tax applies to fee or to tax on carrier fee.  Refer to IATA PADIS Code List for data element 5305.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CompanyNameType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Identifies a company by name.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StringLength0to128">
+				<xs:attributeGroup ref="CompanyID_AttributesGroup"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="CountryNameType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The name or code of a country (e.g. as used in an address or to specify citizenship of a traveller).</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StringLength0to64">
+				<xs:attribute name="Code" type="ISO3166" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">ISO 3166 code for a country.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="CouponInfoType">
+		<xs:annotation>
+			<xs:documentation>Information for a coupon.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SoldAirlineInfo" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date and time, flight number, stopover indicator, and status code.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="FlightSegmentType_IATA">
+							<xs:attribute name="Status" type="AlphaNumericStringLength1to3" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">Reservation status code.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="StopoverInd" type="xs:boolean" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">When true, a stopover is permitted.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="DepartureTerminal" type="AlphaNumericStringLength1to5" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The departing terminal location for the operating carrier's flight.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="ArrivalTerminal" type="AlphaNumericStringLength1to5" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The arrival terminal location for the operating carrier's flight.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="SeatNumber" type="AlphaNumericStringLength1to4" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The seat assignment reserved for a confirmed flight at the time of ticket issuance.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Number" type="Numeric1to4" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The applicable coupon number.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="InConnectionNbr" type="Numeric1to4" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The coupon number associated with the 'in connection with' document number.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CouponReference" type="StringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The sequential number (segment identifier) of an individual flight segment, e.g., 1 of 3.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FareBasisCode" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The applicable fare basis code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="DateTimeSpanGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Not valid before and after dates.  Not used for an EMD.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+	</xs:complexType>
+	<xs:complexType name="DirectBillType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Company name and location for sending invoice for remittances for travel services.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Company name to whom remittance should be directed.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="CompanyNameType">
+							<xs:attribute name="ContactName" type="StringLength1to64" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">This may be used to pass the name of the contact at the company for which the direct bill applies.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Address" type="AddressInfoType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Address where remittance should be directed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="DirectBill_ID" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifier for the organization to be billed directly for travel services.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="EquipmentType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Specifies the aircraft equipment type.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StringLength0to64">
+				<xs:attribute name="AirEquipType" type="StringLength3" use="required">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">This is the 3 character IATA code.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ChangeofGauge" type="xs:boolean" use="optional" default="false">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Indicates there is an equipment change.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ET_FareInfo">
+		<xs:annotation>
+			<xs:documentation>Account code, net reporting code, nonendorsable and nonrefundable indicators, penalty restriction indicator, pricing system, statistical code and tour code.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Waiver" minOccurs="0" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation>A code assigned by the validating carrier that allows fare rule modification or override.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="Code" type="AlphaNumericStringLength1to19" use="optional">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">A code assigned by the validating carrier that allows fare rule modification or override.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Type" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="ExchangedReissued"/>
+								<xs:enumeration value="FareComponent"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RuleIndicator" minOccurs="0" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation>System generated data indicating the ticket fare is an ATPCO Category number fare.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="RuleCode" type="NumericStringLength1to3" use="required">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The ATPCO category number for the fare.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="NetReportingCode" type="AlphaNumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A code indicating the transaction is subject to a net reporting arrangement.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="StatisticalCode" type="AlphaNumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used for domestic or international sales differentiation.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="TourCode" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The applicable tour code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CountryCodeOfIssue" type="ISO3166" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The country code where the ticket is issued.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="FareComponentType">
+		<xs:annotation>
+			<xs:documentation>Information representing sold data supporting the fare construction applicable to each fare component in a transaction.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PriceableUnit" maxOccurs="99">
+				<xs:annotation>
+					<xs:documentation>Priceable unit number.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="FareComponentDetail" maxOccurs="99">
+							<xs:annotation>
+								<xs:documentation>Component number, tariff number, rule number, fare owner, waiver code, PTC, rule code, fare basis code, ticket designator. ticket designator qualifier, and agreement code</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CouponSequence" maxOccurs="99">
+										<xs:annotation>
+											<xs:documentation>Sequence number, coupon/itinerary sequence nbr, from and to city codes, stopover indicator, and airline designator.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:attribute name="SequenceNbr" type="StringLength1to8" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">Represents the sequential order of the coupon(s) that apply within a specific fare component of a ticket being issued, e.g. 1 of 5.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="CouponItinerarySeqNbr" type="Numeric0to99" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The number representing the order in which this coupon was is to be used.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attributeGroup ref="OriginDestinationGroup">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The from and to airport/city code.</xs:documentation>
+												</xs:annotation>
+											</xs:attributeGroup>
+											<xs:attribute name="StopoverInd" type="xs:boolean" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">When true, a stopover is permitted.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attributeGroup ref="CompanyID_AttributesGroup">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The two/three character designator identifying the marketing carrier whose fare is used from a board point to a stopover or connection point.</xs:documentation>
+												</xs:annotation>
+											</xs:attributeGroup>
+											<xs:attribute name="ResBookDesigCode" type="UpperCaseAlphaLength1to2" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The RBD at the time of pricing.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="ConstructionPrinciple" minOccurs="0" maxOccurs="99">
+										<xs:annotation>
+											<xs:documentation>Principle indicator, from and to airport/city code, amount and percent.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:attribute name="Code" type="AlphaNumericStringLength1to3" use="required">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">A code identifying a rule used to formulate the fare.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attributeGroup ref="OriginDestinationGroup">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The from and to airport/city code.</xs:documentation>
+												</xs:annotation>
+											</xs:attributeGroup>
+											<xs:attribute name="Amount" type="Money" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">An amount applicable to the fare rule based on the fare component construction principle indicator.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="Percent" type="Percentage" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">A percentage applicable to the fare rule based on the fare component construction principle indicator.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="BaseAmount" maxOccurs="3">
+										<xs:annotation>
+											<xs:documentation>The base, base net, and base sell amounts.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:attribute name="Purpose" type="PurposeType" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">Used to specify base, base net or base sell amount.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attributeGroup ref="CurrencyAmountGroup">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The base, base sell, or base net fare amount and currency code.</xs:documentation>
+												</xs:annotation>
+											</xs:attributeGroup>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="TicketDesignator" minOccurs="0" maxOccurs="9">
+										<xs:complexType>
+											<xs:attribute name="TicketDesignatorCode" type="StringLength1to16" use="required">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The applicable code as provided for in ATA SIPP Reso 110.16 or IATA Reso 728.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="TicketDesignatorQualifier" type="AlphaNumericStringLength1to3" use="optional">
+												<xs:annotation>
+													<xs:documentation>Used to qualify the ticket designator.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="Number" type="Numeric0to4" use="required">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">A sequential number representing the order of the fare comonents within the fare component calculation.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="TariffNumber" type="NumericStringLength1to3" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The tariff number where the fare data is filed.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="RuleNumber" type="AlphaNumericStringLength1to8" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The rule number within the tariff where the fare data is filed.
+</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attributeGroup ref="CompanyID_AttributesGroup">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The two/three character designator representing the carrier whose fare within the tariff was used.</xs:documentation>
+									</xs:annotation>
+								</xs:attributeGroup>
+								<xs:attribute name="WaiverCode" type="AlphaNumericStringLength1to19" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">A validating carrier assigned code that allows a fare rule modification or override.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="PassengerTypeCode" type="AlphaLength3" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">PTC code.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="RuleCode" type="AlphaNumericStringLength1to3" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">System generated data indicating the ticketed fare is from a specific rule filed fare sent by the issuing system.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="FareBasisCode" type="StringLength1to16" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The applicable code as provided for in ATA SIPP Reso 110.16 or IATA Reso 728.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+								<xs:attribute name="AgreementCode" type="StringLength1to16" use="optional">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The applicable Tour/Value Coding/Contract/Commercial Agreement Reference Code used to price the fare component.  </xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Number" type="AlphaNumericStringLength1to8" use="required">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">A sequential number representing the priceable unit in which the fare component resides.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TotalConstructionAmount" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation>The total base, total net, or total sell construction amount. </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="Purpose" type="PurposeType" use="required">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Used to specify base, base net, or base sell.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attributeGroup ref="CurrencyAmountGroup">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The total construction amount and the applicable currency code.</xs:documentation>
+						</xs:annotation>
+					</xs:attributeGroup>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="PriceQuoteDate" type="DateOrDateTimeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The date on which the fare was calculated and quoted.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AccountCode" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A qualifier for pricing to select fares.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="PricingDesignator" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A qualifier for pricing to select fares.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="QuantityGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The total number of fare components within the fare component calculation.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+		<xs:attribute name="ExchangeRate" type="xs:decimal" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A published value used to convert a NUC amount to the currency of commencement of travel.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="FareTransactionType">
+		<xs:annotation>
+			<xs:documentation>Used to specify fare transaction values.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Fare" maxOccurs="2">
+				<xs:complexType>
+					<xs:attribute name="Type" use="required">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Used to indicate if this is base or equivalent fare transaction information.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="Base"/>
+								<xs:enumeration value="Equivalent"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attributeGroup ref="CurrencyAmountGroup">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The fare transaction amount and the currency code.</xs:documentation>
+						</xs:annotation>
+					</xs:attributeGroup>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="ReissueSeqNbr" type="NumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The sequence number assigned to each transaction amount.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ConversionRate" type="Money" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The BSR and/or BBR used to convert the base fare transaction amount into the equivalent fare transaction amount.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="FlightSegmentBaseType_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Construct for holding a flight segment availability object.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DepartureAirport">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Departure point of flight segment.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attributeGroup ref="AirportLocationGroup"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ArrivalAirport">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Arrival point of flight segment.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attributeGroup ref="AirportLocationGroup"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OperatingAirline" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en"> The operating airline of the flight if it is a codeshare  flight.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="OperatingAirlineType_IATA">
+							<xs:attribute name="OperationalSuffix" type="OperationalSuffixType" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Equipment" type="EquipmentType" minOccurs="0" maxOccurs="2">
+				<xs:annotation>
+					<xs:documentation xml:lang="en"> The type of equipment  used for the  flight..</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="DepartureDateTime" type="xs:dateTime" use="optional"/>
+		<xs:attribute name="ArrivalDateTime" type="xs:dateTime" use="optional"/>
+		<xs:attribute name="StopQuantity" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en"> The number of stops the flight makes</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="RPH" type="RPH_Type" use="optional"/>
+		<xs:attribute name="InfoSource" type="InfoSourceType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to specify the source of the data being exchanged as determined by trading partners. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="FlightSegmentType_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">FlightSegmentType extends FlightSegmentBaseType to provide additional functionality. 
+	</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="FlightSegmentBaseType_IATA">
+				<xs:sequence>
+					<xs:element name="MarketingAirline" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The marketing airline. This is required for use with scheduled airline messages but may be omitted for requests by tour operators. </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="CompanyNameType">
+									<xs:attributeGroup ref="SingleVendorIndGroup">
+										<xs:annotation>
+											<xs:documentation xml:lang="en">To specifiy if an airline is a member of an alliance.</xs:documentation>
+										</xs:annotation>
+									</xs:attributeGroup>
+									<xs:attribute name="ResBookDesigCode" type="UpperCaseAlphaLength1to2" use="optional"/>
+								</xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="FlightNumber" type="FlightNumberType" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The marketing flight number.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="TourOperatorFlightID" type="StringLength1to8" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">ID of a flight in the Tour Operator's inventory. This flight is not necessarily in the inventory of an airline. Rather, it is a code created by tour operators.  </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="OperationalSuffix" type="OperationalSuffixType" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The operational flight prefix/suffix for the coupon.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OperatingAirlineType_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This is an extension of CompanyNameType to include a FlightNumber.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="CompanyNameType">
+				<xs:attribute name="FlightNumber" type="FlightNumberType" use="optional"/>
+				<xs:attribute name="ResBookDesigCode" type="UpperCaseAlphaLength1to2" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PaymentFormType_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Ways of providing funds for travel by the individual.</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0">
+			<xs:element name="PaymentCard" type="PaymentCardType_IATA">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Details of a debit or credit card.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BankAcct" type="BankAcctType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Details of a bank account. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DirectBill" type="DirectBillType">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Details of a direct billing arrangement.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Voucher">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Details of a document indicating prepayment.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attributeGroup ref="VoucherGroup"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="LoyaltyRedemption">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Details of a loyalty redemption arrangement. This is normally miles or points. </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attributeGroup ref="LoyaltyCertificateNumberGroup"/>
+					<xs:attributeGroup ref="PromotionCodeGroup"/>
+					<xs:attribute name="RedemptionQuantity" type="xs:positiveInteger" use="optional">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The quantity of loyalty units being redeemed.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="MiscChargeOrder">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Details of a miscellaneous charge order (MCO).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="TicketNumber" type="StringLength1to32">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The ticket number of the miscellaneous charge order (MCO).</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Cash">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Used to indicate payment in cash.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="CashIndicator" type="xs:boolean" use="optional" default="true">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">If true, this indicates cash is being used.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Other">
+				<xs:complexType>
+					<xs:attribute name="Text" type="StringLength1to32" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="CostCenterID" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A reference to identify the billing department for allocating cost of travel to company account.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="RPH" type="RPH_Type" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Provides a reference to a specific form of payment.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="PaymentTransactionTypeCode" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">This is used to indicate either a charge or reserve (deposit).</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="charge">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">This indicates that an actual payment has been made.</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+					<xs:enumeration value="reserve">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">This indicates that a hold for the indicated amount has been placed on a credit card or that a cash amount has been taken from the customer to guarantee final payment.</xs:documentation>
+						</xs:annotation>
+					</xs:enumeration>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="PaymentDetailType_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Details of payment.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="PaymentFormType_IATA">
+				<xs:sequence>
+					<xs:element name="PaymentAmount" minOccurs="0">
+						<xs:complexType>
+							<xs:attributeGroup ref="CurrencyAmountGroup"/>
+							<xs:attribute name="ApprovalCode" type="StringLength1to16" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">The approval code returned as part of an authorization process.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PaymentCardType_IATA">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Identification about a specific credit card</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CardHolderName" type="StringLength1to64" minOccurs="0"/>
+			<xs:element name="CardIssuerName" minOccurs="0">
+				<xs:complexType>
+					<xs:attributeGroup ref="IssuerNameGroup"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Address" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="AddressType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CustomerFileRef" minOccurs="0">
+				<xs:complexType>
+					<xs:attributeGroup ref="UniqueID_Group"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="CardType" type="AlphaNumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Indicates the type of magnetic striped card.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CardCode" type="PaymentCardCodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The 2 character code of the credit card issuer.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CardNumber" type="NumericStringLength1to19" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Credit card number embossed on the card.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="SeriesCode" type="NumericStringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Verification digits printed on the card following the embossed number. This may also accommodate the customer identification/batch number (CID), card verification value (CVV2 ), card validation code number (CVC2) on credit card.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="PaymentCardDateGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Date the card becomes valid for use (optional) and the date the card expires (required) in ISO 8601 prescribed format.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+		<xs:attribute name="MaskedCardNumber" type="AlphaNumericStringLength1to19" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">May be used to send a concealed credit card number (e.g., xxxxxxxxxxxx9922).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CardHolderRPH" type="RPH_Type" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Provides a reference pointer that links the payment card to the payment card holder.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AddressValidation" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The address verification response code (AVS) when the ticketing agency performs address verification.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ApprovalCode" type="AlphaNumericStringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A series of characters assigned by the applicable credit card company's authorization system to confirm the approval of a credit sale transaction.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CorporateContractCode" type="AlphaNumericStringLength1" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to indicate whether the purchase is on behalf of a corporate client that has a contract ith the ticketing agency for the purchase of transportation and related services.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Text" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">May contain unique transaction information supplied to the airline/system provider by the credit card company.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ExtendedPaymentCode" type="AlphaNumericStringLength1to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A code to indicate the number of months over which the customer wishes to pay where the credit card issuer permits.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ApprovalType" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Used to specify how the approval code for a credit card sale was obtained.  Refer to IATA PADIS Code List for data element 9890.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attributeGroup ref="CurrencyAmountGroup">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Authorized credit card amount.</xs:documentation>
+			</xs:annotation>
+		</xs:attributeGroup>
+	</xs:complexType>
+	<xs:complexType name="PersonNameType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This provides name information for a person.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NamePrefix" type="StringLength1to16" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Salutation of honorific. (e.g., Mr. Mrs., Ms., Miss, Dr.) </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GivenName" type="StringLength1to64" minOccurs="0" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Given name, first name or names</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MiddleName" type="StringLength1to64" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">The middle name of the person name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SurnamePrefix" type="StringLength1to16" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">e.g "van der", "von", "de" </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Surname" type="StringLength1to64">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Family name, last name.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NameSuffix" type="StringLength1to16" minOccurs="0" maxOccurs="3">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Hold various name suffixes and letters (e.g. Jr., Sr., III, Ret., Esq.).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NameTitle" type="StringLength1to16" minOccurs="0" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Degree or honors (e.g., Ph.D., M.D.)   </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="PrivacyGroup"/>
+		<xs:attribute name="NameType" type="IATA_CodeType" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Type of name of the individual, such as former, nickname, alternate or alias name.  Not applicable, no code list exists.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="POS_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Point of Sale (POS) is the details identifying the party or connection channel making the request.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Source" type="SourceType" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">This holds details regarding the requestor. It may be repeated to also accommodate the delivery systems.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReissuedFlownType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The reissued flown flight coupon information.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FlightCouponData">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="FlightSegmentType_IATA">
+							<xs:sequence>
+								<xs:element name="IntermediateStop" minOccurs="0" maxOccurs="9">
+									<xs:annotation>
+										<xs:documentation>An intermediate airport/city code stop.</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:attributeGroup ref="AirportLocationGroup"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute name="StopoverInd" type="xs:boolean" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">When true, a stopover is permitted.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Number" type="Numeric1to4" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Coupon number.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="CouponItinerarySeqNbr" type="Numeric0to99" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The number representing the order in which this coupon was used or is to be used.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FareBasisCode" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The applicable fare basis code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="TicketDocumentNbr" type="StringLength1to16" use="required">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Document number comprised of the airline code, form code, and serial number.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="DateOfIssue" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The date the ticket was issued.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="WaiverCode" type="AlphaNumericStringLength1to19" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">A validating carrier assigned code allowing a fare rule modification or override applied to a flown coupon from the ticket being reissued.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="TicketDesignatorCode" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The applicable code as provided for in ATA SIPP Reso 110.16 or IATA Reso 728, for each flown coupon from the ticket being reissued.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="SourceType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Provides information on the source of a request.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequestorID" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">An identifier of the entity making the request  (e.g. ATA/IATA/ID number, Electronic Reservation Service Provider (ERSP), Association of British Travel Agents (ABTA)).  Refer to IATA PADIS Code List for data element 9972 for the code value for Type.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="UniqueID_Type">
+							<xs:attribute name="MessagePassword" type="StringLength1to16" use="optional">
+								<xs:annotation>
+									<xs:documentation xml:lang="en">This password provides an additional level of security that the recipient can use to validate the sending party's authority to use the message.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Position" minOccurs="0">
+				<xs:complexType>
+					<xs:attributeGroup ref="PositionGroup"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="BookingChannel" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Specifies the booking channel type and whether it is the primary means of connectivity of the source.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CompanyName" type="CompanyNameType" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation xml:lang="en">Identifies the company that is associated with the booking channel.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:attributeGroup ref="BookingChannelGroup"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="AgentSine" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Identifies the party within the requesting entity.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="PseudoCityCode" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">An identification code assigned to an office/agency by a reservation system.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ISOCountry" type="ISO3166" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The country code of the requesting party.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ISOCurrency" type="AlphaLength3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The currency code in which the reservation will be ticketed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AgentDutyCode" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">An authority code assigned to a requestor.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AirlineVendorID" type="UpperCaseAlphaNumericLength2to3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The IATA assigned airline code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="AirportCode" type="UpperCaseAlphaNumericLength3to5" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The IATA assigned airport code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="FirstDepartPoint" type="StringLength3" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The point of first departure in a trip.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="ERSP_UserID" type="StringLength1to16" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">Electronic Reservation Service Provider (ERSP) assigned identifier used to identify the individual using the ERSP system.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="TerminalID" type="StringLength1to32" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">This is the electronic address of the device from which information is entered.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StaffDetailType">
+		<xs:annotation>
+			<xs:documentation>Staff detail information for a ticket.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="UniqueID_Type">
+				<xs:attribute name="JoinDate" type="xs:date" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The date the staff member joined the airline with which the staff member is currently employed.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="ResEntitledInd" type="xs:boolean" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Indicates the booking status entitlement.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="Status" type="IATA_CodeType" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Indicates the actual status of employment of the staff member at time of ticketing.  Refer to IATA PADIS code list  data element 9011.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="TravelPurpose" type="IATA_CodeType" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Indicates the nature of the industry discount ticket issued.  Refer to IATA PADIS code list  data element 9011.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="TicketCondition" type="IATA_CodeType" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Ticket type indicator.  Refer to IATA PADIS code list data element 9011.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StateProvType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">State, province, or region name or code needed to identify location.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StringLength0to64">
+				<xs:attribute name="StateCode" type="StateProvCodeType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">The standard code or abbreviation for the state, province, or region.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StreetNmbrType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Street name; number on street.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StringLength0to64">
+				<xs:attribute name="PO_Box" type="StringLength1to16">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Defines a Post Office Box number.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="TaxCouponType">
+		<xs:annotation>
+			<xs:documentation>Used to specify tax information for a coupon.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TicketDocument" maxOccurs="4">
+				<xs:annotation>
+					<xs:documentation>The ticket/document number to which the tax coupon data applies.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CouponNumber" maxOccurs="4">
+							<xs:annotation>
+								<xs:documentation>The applicable coupon number.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TaxCouponInfo" minOccurs="0">
+										<xs:complexType>
+											<xs:attribute name="Cabin" type="CabinType" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The sold cabin of passenger travel for the coupon.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="AirEquipType" type="StringLength3" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The standard code of the equipment used for the coupon flight.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Tax" minOccurs="0" maxOccurs="99">
+										<xs:annotation>
+											<xs:documentation>The tax/fee charge for this coupon.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:attributeGroup ref="FeeTaxGroup_IATA"/>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="UnticketedPointInfo" minOccurs="0" maxOccurs="5">
+										<xs:complexType>
+											<xs:attribute name="CityAirportCode" type="StringLength1to8" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The airport or city code identifying an unticketed point which occurs between the coupon origin and destination.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="ArrivalDate" type="DateOrDateTimeType" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The date and time of arrival in GMT at the unticketed point.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="DepartureDate" type="DateOrDateTimeType" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The date and time of depature in GMT from the unticketed point.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="AirEquipType" type="StringLength3" use="optional">
+												<xs:annotation>
+													<xs:documentation xml:lang="en">The standard code of the quipment used for the coupon flight departing from the unticketed point.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="Number" type="Numeric1to4" use="required">
+									<xs:annotation>
+										<xs:documentation xml:lang="en">The coupon number.</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="TicketDocumentNbr" type="StringLength1to16" use="required">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The ticket/document number for this transaction.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="BirthDate" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The date of birth of the passenger.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="JourneyTurnaroundCityCode" type="StringLength1to8" use="optional">
+			<xs:annotation>
+				<xs:documentation xml:lang="en">The airport/city code which has been assumed to be the journey turnaround point in the construction of the itinerary by the pricing system.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="UniqueID_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">An identifier used to uniquely reference an object in a system (e.g. an airline reservation reference, customer profile reference, booking confirmation number, or a reference to a previous availability quote). </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyName" type="CompanyNameType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Identifies the company that is associated with the UniqueID.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="UniqueID_Group"/>
+	</xs:complexType>
+	<xs:complexType name="VoluntaryChangesType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Specifies charges and/or penalties associated with making ticket changes after purchase.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="Penalty" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation xml:lang="en">Specifies penalty charges as either a currency amount or a percentage of the fare</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="PenaltyType" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation xml:lang="en"> Indicates the type of penalty involved in the search or response.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="DepartureStatus" type="xs:string" use="optional">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Identifier used to indicate whether the change occurs before or after departure from the origin city.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attributeGroup ref="CurrencyAmountGroup">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The penalty charge defined a fee in terms of its amount, currency and decimal laces.</xs:documentation>
+						</xs:annotation>
+					</xs:attributeGroup>
+					<xs:attribute name="Percent" type="Percentage">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">The penalty charge conveyed as a percent of the total fare. </xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

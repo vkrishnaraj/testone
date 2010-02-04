@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.1" id="WTR2009A">
+	<xs:include schemaLocation="WTR_CommonTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_CommonTypes.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en"/>
+	</xs:annotation>
+	<xs:element name="WTR_FoundPropertyAmendRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This is used for amending registering found property items in WTR</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="iata:POS_Type"/>
+				<xs:element name="RefStationAirline" type="StationAirlineType"/>
+				<xs:element name="FoundItems">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="FoundItem" type="FoundItemType" maxOccurs="100"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AgentID" type="AlphaNumericStringLength1to12">
+					<xs:annotation>
+						<xs:documentation>AG - Agent Identification</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

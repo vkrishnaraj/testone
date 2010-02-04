@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.1" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_ET_CommonTypes.xsd"/>
+	<xs:annotation>
+		<xs:documentation xml:lang="en">General comment</xs:documentation>
+	</xs:annotation>
+	<xs:element name="WTR_ForwardHeldBagsRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Request for forwarding held Delayed bags to a differnt station and airline</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="iata:POS_Type"/>
+				<xs:element name="RecordReference" type="RecordReferenceType">
+					<xs:annotation>
+						<xs:documentation>Contains the reference of the delayed bag recod that is being forwarded</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="RushFlights">
+					<xs:annotation>
+						<xs:documentation>FO - Containns rush flight and date information</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Flight" type="FlightDateOrARNKType" maxOccurs="5"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RushBags">
+					<xs:annotation>
+						<xs:documentation>Contians the details of the rush bag being forwarded</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="RushBag" type="RushBagType" maxOccurs="10"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RushDestinations">
+					<xs:annotation>
+						<xs:documentation>FW - Stations and airlines that the bags are being forwarded to</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Destination" type="StationAirlineType" maxOccurs="5"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Origin" type="StationAirlineType">
+					<xs:annotation>
+						<xs:documentation>OS - Origin station</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NumberOfBags" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>FB - Number of bags being forwarded</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:positiveInteger">
+							<xs:maxInclusive value="10"/>
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DeliveryAddress" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>DA - Delivery Address</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DeliveryInstructions" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TextLine" type="StringLength1to58" maxOccurs="2"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="SupplimentalInfo" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>SI - Supplimental info</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TextLine" type="StringLength1to58" maxOccurs="2"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ContactInfo" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contains contact information of the passengers owning the bags</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Names" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>NM - Passnger surnames and other names</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Name" type="AlphaLength2to16" maxOccurs="3"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PermanentAddress" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>PA - Permanent address of the passenger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="TempAddress" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>TA - Temporary address of the passenger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Address">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ValidityDate" type="xs:date" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PermPhones" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>PN - Permanent Phone numbers of the passenger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Phone" type="StringLength1to20" maxOccurs="2"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="CellPhones" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>CP - Cellular phone numbers of the passenger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Phone" type="StringLength1to20" maxOccurs="2"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="TempPhones" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>TP - Temporary phone numbers of the passenger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Phone" type="StringLength1to20" maxOccurs="2"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Faxes" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>FX - Fax numbers of the passenger</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Fax" type="StringLength1to20" maxOccurs="2"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TeletypeAddresses" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>TX - Teletype address</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TeletypeAddress" type="iata:TTY_Address" maxOccurs="10"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AgentID" type="AlphaNumericStringLength1to12">
+					<xs:annotation>
+						<xs:documentation>AG - Agent Identification</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

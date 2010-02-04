@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="0.001" id="WTR2009A">
+	<xs:simpleType name="StringLength0to58">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 0 to 58</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="58"/>
+			<xs:pattern value="[^\?]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to58">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 1 to 58</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="58"/>
+			<xs:pattern value="[^\?]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength2to58">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 2 to 58</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="2"/>
+			<xs:maxLength value="58"/>
+			<xs:pattern value="[^\?]*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength2">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha-Numeric Strings, length 2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RecordType">
+		<xs:annotation>
+			<xs:documentation>This enumerates the bag rcord types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DELAYED"/>
+			<xs:enumeration value="ON-HAND"/>
+			<xs:enumeration value="RUSH"/>
+			<xs:enumeration value="DAMAGED"/>
+			<xs:enumeration value="RUSH-DELAYED"/>
+			<xs:enumeration value="RUSH-ONHAND"/>
+			<xs:enumeration value="RUSH-LZ"/>
+			<xs:enumeration value="QUICK-ONHAND"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to25">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 1 to 25</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="25"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength0to25">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 0 to 25</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="25"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength0to32">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 0 to 32</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength2to16">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 2 to 16</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{2,16}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength0to16">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 0 to 16</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{0,16}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength1to4">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 1 to 4</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{1,4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength0to4">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 0 to 4</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{0,4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength0to20">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 1 to 20</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to20">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 1 to 20</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmailType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="6"/>
+			<xs:maxLength value="44"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength0to64">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength4to12">
+		<xs:annotation>
+			<xs:documentation>Used for Character Strings, length 4 to 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="4"/>
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to16">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="16"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to8">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumericStringLength1to5">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used for Numeric Strings, length 1 to 5</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{1,5}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to255">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength3">
+		<xs:annotation>
+			<xs:documentation>Contains Alpha string of length 3</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to64">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used for Character Strings, length 1 to 64</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="64"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to30">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used for Character Strings, length 1 to 30</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength0to12">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used for Character Strings, length 0 to 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to12">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Used for Character Strings, length 1 to 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength2to3">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 2 and 3</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{2,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IssuerCodeType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TagSequenceType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{3}[0-9Xx]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumericLength1">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="9"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ColorCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="WT"/>
+			<xs:enumeration value="BK"/>
+			<xs:enumeration value="GY"/>
+			<xs:enumeration value="BU"/>
+			<xs:enumeration value="RD"/>
+			<xs:enumeration value="YW"/>
+			<xs:enumeration value="BE"/>
+			<xs:enumeration value="BN"/>
+			<xs:enumeration value="GN"/>
+			<xs:enumeration value="MC"/>
+			<xs:enumeration value="PU"/>
+			<xs:enumeration value="PR"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BagTypeCodeType">
+		<xs:restriction base="xs:int">
+			<xs:pattern value="[0-9]{1,2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BagMatrlType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="D"/>
+			<xs:enumeration value="L"/>
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="R"/>
+			<xs:enumeration value="T"/>
+			<xs:enumeration value="X"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BagElmsType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="B"/>
+			<xs:enumeration value="K"/>
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="H"/>
+			<xs:enumeration value="S"/>
+			<xs:enumeration value="W"/>
+			<xs:enumeration value="X"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FlightNumberType">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Identifies a flight number (1 to 4 numbers followed by optional uppercase A - Z, which specifies an operational suffix)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{1,4}[A-Z]?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ARNK_Type">
+		<xs:annotation>
+			<xs:documentation>This is type to indicate flight type as ARNK</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ARNK"/>
+			<xs:enumeration value=""/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to6">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 6</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0to6">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 0 and 6</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{0,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to15">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 15</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,15}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0to15">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 0 and 15</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{0,15}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to7">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 7</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,7}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0to7">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 0 and 7</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{0,7}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to12">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0to12">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 0 and 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{0,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to58">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 58</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,58}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0to58">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 0 and 58</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{0,58}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GenderType">
+		<xs:annotation>
+			<xs:documentation>Indicate M for male or F for female</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="F"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to9">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 9</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0to9">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 0 and 9</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{0,9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HandledAirlineCopyIndType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="YES"/>
+			<xs:enumeration value="NO"/>
+			<xs:enumeration value="REPEAT"/>
+			<xs:enumeration value="FULL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TeletypeAddressType">
+		<xs:annotation>
+			<xs:documentation>TX - Teletype address</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{3}[a-zA-Z0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumericLength10">
+		<xs:annotation>
+			<xs:documentation>Contians numeric string of length 10</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{1,10}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CostType">
+		<xs:annotation>
+			<xs:documentation>Contians type of costs paid to passenger
+			A - Advance
+			D - Delivery
+			F - Final
+			I - Insurance
+			X - Other</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A"/>
+			<xs:enumeration value="D"/>
+			<xs:enumeration value="F"/>
+			<xs:enumeration value="I"/>
+			<xs:enumeration value="X"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumericLength2">
+		<xs:annotation>
+			<xs:documentation>Contiains a number with up to 2 digits</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:short">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StandardCategoryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ALCOHOL"/>
+			<xs:enumeration value="ART"/>
+			<xs:enumeration value="AUDIO"/>
+			<xs:enumeration value="BOOK"/>
+			<xs:enumeration value="COAT"/>
+			<xs:enumeration value="COMPUTER"/>
+			<xs:enumeration value="COSMETICS"/>
+			<xs:enumeration value="CURRENCY"/>
+			<xs:enumeration value="DRESS"/>
+			<xs:enumeration value="ELECTRIC"/>
+			<xs:enumeration value="FOOD"/>
+			<xs:enumeration value="FOOTWEAR"/>
+			<xs:enumeration value="GIFT"/>
+			<xs:enumeration value="HAIR"/>
+			<xs:enumeration value="HANDBAG"/>
+			<xs:enumeration value="HEADWEAR"/>
+			<xs:enumeration value="HOUSEHOLD"/>
+			<xs:enumeration value="INFANT"/>
+			<xs:enumeration value="JEWELLERY"/>
+			<xs:enumeration value="LINEN"/>
+			<xs:enumeration value="MECHANIC"/>
+			<xs:enumeration value="MEDICAL"/>
+			<xs:enumeration value="MUSIC"/>
+			<xs:enumeration value="NATURE"/>
+			<xs:enumeration value="OPTICS"/>
+			<xs:enumeration value="PAPERS"/>
+			<xs:enumeration value="PHOTO"/>
+			<xs:enumeration value="RELIGIOUS"/>
+			<xs:enumeration value="SHIRT"/>
+			<xs:enumeration value="SKIRT"/>
+			<xs:enumeration value="SLEEPWEAR"/>
+			<xs:enumeration value="SPORT"/>
+			<xs:enumeration value="SPORTSWEAR"/>
+			<xs:enumeration value="SUIT"/>
+			<xs:enumeration value="SWEATER"/>
+			<xs:enumeration value="TIMEPIECE"/>
+			<xs:enumeration value="TOBACCO"/>
+			<xs:enumeration value="TOOLS"/>
+			<xs:enumeration value="TOYS"/>
+			<xs:enumeration value="TROUSERS"/>
+			<xs:enumeration value="UNIFORM"/>
+			<xs:enumeration value="VEDIO"/>
+			<xs:enumeration value="WEAPON"/>
+			<xs:enumeration value="WEATHER"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength1to12">
+		<xs:annotation>
+			<xs:documentation>Alpha characters length 1 to 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{1,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to45">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="45"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength0to2000">
+		<xs:annotation>
+			<xs:documentation>Strings of length 0 to 2000</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="2000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to2000">
+		<xs:annotation>
+			<xs:documentation>Strings of length 1 to 2000</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InboxAreaType">
+		<xs:annotation>
+			<xs:documentation>Contians Inbox (Action File) area.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="AA"/>
+			<xs:enumeration value="AP"/>
+			<xs:enumeration value="CM"/>
+			<xs:enumeration value="EM"/>
+			<xs:enumeration value="FW"/>
+			<xs:enumeration value="HQ"/>
+			<xs:enumeration value="IN"/>
+			<xs:enumeration value="LM"/>
+			<xs:enumeration value="PR"/>
+			<xs:enumeration value="SP"/>
+			<xs:enumeration value="WM"/>
+			<xs:enumeration value="XX"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SearchTypeType">
+		<xs:annotation>
+			<xs:documentation>To indicate if the search is simple or advanced</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="SIMPLE"/>
+			<xs:enumeration value="ADVANCED"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RecordStatus">
+		<xs:annotation>
+			<xs:documentation>Contains enumeration of WTR record statuses</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="ACTIVE"/>
+			<xs:enumeration value="CLOSED"/>
+			<xs:enumeration value="SUSPENDED"/>
+			<xs:enumeration value="NON-TRACING"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaLength1to25">
+		<xs:annotation>
+			<xs:documentation>Contians Alpha string of length 1 to 25</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z]{1,25}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LossReasonCodeType">
+		<xs:restriction base="xs:int">
+			<xs:minInclusive value="10"/>
+			<xs:maxInclusive value="99"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength1to25">
+		<xs:annotation>
+			<xs:documentation>Used for Alpha Numeric Strings, length 1 and 25</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9]{1,25}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DamageLocationType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="SIDE"/>
+			<xs:enumeration value="TOP"/>
+			<xs:enumeration value="END"/>
+			<xs:enumeration value="BOTTOM"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DamageAmountType">
+		<xs:annotation>
+			<xs:documentation>MI - MINOR, MA - MAJOR, TL - TOTAL</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="MA"/>
+			<xs:enumeration value="MI"/>
+			<xs:enumeration value="TL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FileStatusType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="CLOSED"/>
+			<xs:enumeration value="EXTENDED"/>
+			<xs:enumeration value="SUSPENDED"/>
+			<xs:enumeration value="OPEN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TracingOptionType">
+		<xs:annotation>
+			<xs:documentation>Tracing Option</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="NON_TRACING"/>
+			<xs:enumeration value="ONLINE_TRACING"/>
+			<xs:enumeration value="SUSPENDED"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CreateActionType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="CREATE"/>
+			<xs:enumeration value="RECREATE"/>
+			<xs:enumeration value="REASSIGN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AmendActionType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="AMEND"/>
+			<xs:enumeration value="SUSPEND"/>
+			<xs:enumeration value="CLOSE"/>
+			<xs:enumeration value="REINSTATE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AutomatedMessageOptionType">
+		<xs:annotation>
+			<xs:documentation>AM</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="SMS"/>
+			<xs:enumeration value="EMAIL"/>
+			<xs:enumeration value="SMS_AND_EMAIL"/>
+			<xs:enumeration value="NO_MESSAGE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaNumericStringLength0or2">
+		<xs:annotation>
+			<xs:documentation>Alpha Numeric string of length 0 or 2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-zA-Z]{0,2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaStringLength2">
+		<xs:annotation>
+			<xs:documentation>Alpha string length 2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="2"/>
+			<xs:maxLength value="2"/>
+			<xs:pattern value="[a-zA-Z]{2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AlphaStringLength0to2">
+		<xs:annotation>
+			<xs:documentation>Alpha string length 0 to 2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="2"/>
+			<xs:pattern value="[a-zA-Z]{0,2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

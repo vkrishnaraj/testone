@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.1" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_ET_CommonTypes.xsd"/>
+	<xs:element name="WTR_RushBagsCreateRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Request for cretaing rush bag record in WTR</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="iata:POS_Type"/>
+				<xs:element name="RefStationAirline" type="StationAirlineType"/>
+				<xs:element name="RushBagGroup" type="RushBagGroupType"/>
+				<xs:element name="CrossReferenceRecord" type="RecordIdentifierType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Contians reference to delayed bag or damaged bag record being forwarded</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="LossReasonCode" type="LossReasonCodeType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>RL - Contains comments regarding the reason for loss of the baggage</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="LossComments" type="StringLength1to58" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>RC - Contains comments regarding the reason for the loss of baggage</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SupplimentalInfo" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>SI - Supplimental info</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TextLine" type="StringLength1to58" maxOccurs="2"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FaultStationCode" type="iata:StationType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>FS - Station responsible for the mishandling of the bag</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FaultTerminal" type="AlphaNumericStringLength2" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>FT - Terminal  responsible for the mishandling of the bag</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="HandledAirlineCopyInd" type="HandledAirlineCopyIndType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>HC - Indicator to specify if a copy of the request required to be sent to the hendled airline</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TeletypeAddresses" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>TX - Teletype address</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TeletypeAddress" type="iata:TTY_Address" maxOccurs="10"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AgentID" type="AlphaNumericStringLength1to12">
+					<xs:annotation>
+						<xs:documentation>AG - Agent Identification</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.1" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_ET_CommonTypes.xsd"/>
+	<xs:element name="WTR_OnhandBagCreateRQ">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Request for creating an On Hand bag (Found bag)</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="POS" type="iata:POS_Type"/>
+				<xs:element name="RefStationAirline" type="StationAirlineType"/>
+				<xs:element name="TracingOption" type="TracingOptionType" minOccurs="0"/>
+				<xs:element name="OnHandBag" type="OnHandBagType"/>
+				<xs:element name="Passengers">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="PassengerType">
+								<xs:sequence>
+									<xs:element name="PassengerPayments" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>CS - All the costs paid to the passenger</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="PassengerPayment" type="PassengerPaymentType" maxOccurs="5"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PartnerCode" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>PC - Contins the carrier code of the code share partner</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="CarrierCode">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="[a-zA-Z0-9]{2,3}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="None"/>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CrossReferenceRecord" type="RecordIdentifierType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>XR - Contians reference to a related record</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DesignatedLocator" type="StringLength4to12" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>DL - Used to record members front end system record locator</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AdditionalInfo" type="AdditionalInfoType" minOccurs="0"/>
+				<xs:element name="HandledAirlineCopyInd" type="HandledAirlineCopyIndType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>HC - Indicator to specify if a copy of the request required to be sent to the hendled airline</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TeletypeAddresses" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>TX - Teletype address</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TeletypeAddress" type="iata:TTY_Address" maxOccurs="10"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AgentID" type="AlphaNumericStringLength1to12">
+					<xs:annotation>
+						<xs:documentation>AG - Agent Identification</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

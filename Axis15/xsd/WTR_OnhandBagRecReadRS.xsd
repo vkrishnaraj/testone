@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2009 sp1 (http://www.altova.com) by Siva (SITA) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sita.aero/bag/wtr/2009/01" xmlns:iata="http://www.iata.org/IATA/2007/00" targetNamespace="http://www.sita.aero/bag/wtr/2009/01" elementFormDefault="qualified" version="0.001" id="WTR2009A">
+	<xs:include schemaLocation="WTR_BagTypes.xsd"/>
+	<xs:import namespace="http://www.iata.org/IATA/2007/00" schemaLocation="IATA_CommonTypes.xsd"/>
+	<xs:element name="WTR_OnhandBagRecReadRS">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This contains all the details of a onhand bag record</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="Success" type="iata:SuccessType">
+						<xs:annotation>
+							<xs:documentation xml:lang="en"> Standard way to indicate successful processing of an IATA message.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Warnings" type="iata:WarningsType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="en">Standard way to indicate successful processing of an IATA message, but one in which warnings are generated. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DiaryInfo" type="DiaryInfoType"/>
+					<xs:element name="OnHandBag" type="OnHandBagType"/>
+					<xs:element name="Passengers">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:extension base="PassengerType">
+									<xs:sequence>
+										<xs:element name="PassengerPayments" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>CS - All the costs paid to the passenger</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PassengerPayment" type="PassengerPaymentType" maxOccurs="5"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:extension>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="PartnerCode" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>PC - Contins the carrier code of the code share partner</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:choice>
+								<xs:element name="CarrierCode">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:pattern value="[a-zA-Z0-9]{2,3}"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+								<xs:element name="None"/>
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="HandledAirlineCopyInd" type="HandledAirlineCopyIndType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>HC - Indicator to specify if a copy of the request required to be sent to the hendled airline</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="DesignatedLocator" type="StringLength4to12" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>DL - Used to record members front end system record locator</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="TextInfo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>TI - Text Information</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="TextLine" type="StringLength0to58" maxOccurs="2"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="AdditionalInfo" type="AdditionalInfoType" minOccurs="0"/>
+					<xs:element name="MatchInfo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>MR - Matching information</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Text" type="StringLength0to2000" maxOccurs="50"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="RecordHistory" type="RecordHistoryType"/>
+				</xs:sequence>
+				<xs:element name="Errors" type="iata:ErrorsType">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">A collection of errors that occurred during the processing of a message.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:attributeGroup ref="iata:IATA_PayloadStdAttributes"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
