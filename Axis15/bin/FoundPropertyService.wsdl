@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.sita.aero/bag/wtr/FoundPropertyService" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" targetNamespace="http://www.sita.aero/bag/wtr/FoundPropertyService" name="FoundPropertyService">
+	<types>
+		<xs:schema targetNamespace="http://www.sita.aero/bag/wtr/FoundPropertyService">
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_FoundPropertyRegisterRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_FoundPropertyRegisterRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_FoundPropertySearchRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_FoundPropertySearchRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_FoundPropertyAmendRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_FoundPropertyEraseRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_StatusRS.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="FoundPropertyRegisterRQ">
+		<part name="request" element="wtr:WTR_FoundPropertyRegisterRQ"/>
+	</message>
+	<message name="FoundPropertyRegisterRS">
+		<part name="response" element="wtr:WTR_FoundPropertyRegisterRS"/>
+	</message>
+	<message name="FoundPropertySearchRQ">
+		<part name="request" element="wtr:WTR_FoundPropertySearchRQ"/>
+	</message>
+	<message name="FoundPropertySearchRS">
+		<part name="response" element="wtr:WTR_FoundPropertySearchRS"/>
+	</message>
+	<message name="FoundPropertyAmendRQ">
+		<part name="request" element="wtr:WTR_FoundPropertyAmendRQ"/>
+	</message>
+	<message name="FoundPropertyEraseRQ">
+		<part name="response" element="wtr:WTR_FoundPropertyEraseRQ"/>
+	</message>
+
+	<message name="StatusRS">
+		<part name="response" element="wtr:WTR_StatusRS"/>
+	</message>
+
+	<portType name="FoundPropertyService">
+		<operation name="Register">
+			<input message="tns:FoundPropertyRegisterRQ"/>
+			<output message="tns:FoundPropertyRegisterRS"/>
+		</operation>
+		<operation name="Search">
+			<input message="tns:FoundPropertySearchRQ"/>
+			<output message="tns:FoundPropertySearchRS"/>
+		</operation>
+		<operation name="Update">
+			<input message="tns:FoundPropertyAmendRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Erase">
+			<input message="tns:FoundPropertyEraseRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+	</portType>
+
+	<binding name="FoundPropertyServiceSOAPBinding" type="tns:FoundPropertyService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="Register">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Search">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Update">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Erase">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+
+	<service name="FoundPropertyService">
+		<port name="FoundPropertyServiceSOAP" binding="tns:FoundPropertyServiceSOAPBinding">
+			<soap:address location="https://webservice-qa.worldtracer.aero/FoundPropertyService/0.1"/>
+		</port>
+	</service>
+</definitions>

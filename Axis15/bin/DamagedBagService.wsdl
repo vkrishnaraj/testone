@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.sita.aero/bag/wtr/DamagedBagService" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" targetNamespace="http://www.sita.aero/bag/wtr/DamagedBagService" name="DamagedBagService">
+	<types>
+		<xs:schema targetNamespace="http://www.sita.aero/bag/wtr/DamagedBagService">
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DamagedBagsCreateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DamagedBagRecReadRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRecordRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsCreateRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_StatusRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsSearchRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsSearchRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DamagedBagsRecUpdateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_CloseRecordsRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRetiredRecordRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_SearchRetiredRecordsRQ.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="DamagedBagsCreateRQ">
+		<part name="request" element="wtr:WTR_DamagedBagsCreateRQ"/>
+	</message>
+	<message name="BagsCreateRS">
+		<part name="response" element="wtr:WTR_BagsCreateRS"/>
+	</message>
+	<message name="ReadRecordRQ">
+		<part name="request" element="wtr:WTR_ReadRecordRQ"/>
+	</message>
+	<message name="CloseRecordsRQ">
+		<part name="request" element="wtr:WTR_CloseRecordsRQ"/>
+	</message>
+	<message name="DamagedBagRecReadRS">
+		<part name="response" element="wtr:WTR_DamagedBagRecReadRS"/>
+	</message>
+	<message name="BagsSearchRQ">
+		<part name="request" element="wtr:WTR_BagsSearchRQ"/>
+	</message>
+	<message name="DamagedBagsRecUpdateRQ">
+		<part name="request" element="wtr:WTR_DamagedBagsRecUpdateRQ"/>
+	</message>
+	<message name="BagsSearchRS">
+		<part name="response" element="wtr:WTR_BagsSearchRS"/>
+	</message>
+	<message name="ReadRetiredRecordRQ">
+		<part name="request" element="wtr:WTR_ReadRetiredRecordRQ"/>
+	</message>
+	<message name="SearchRetiredRecordsRQ">
+		<part name="request" element="wtr:WTR_SearchRetiredRecordsRQ"/>
+	</message>
+	<message name="StatusRS">
+		<part name="response" element="wtr:WTR_StatusRS"/>
+	</message>
+
+	<portType name="DamagedBagService">
+		<operation name="Create">
+			<input message="tns:DamagedBagsCreateRQ"/>
+			<output message="tns:BagsCreateRS"/>
+		</operation>
+		<operation name="Read">
+			<input message="tns:ReadRecordRQ"/>
+			<output message="tns:DamagedBagRecReadRS"/>
+		</operation>
+		<operation name="Search">
+			<input message="tns:BagsSearchRQ"/>
+			<output message="tns:BagsSearchRS"/>
+		</operation>
+		<operation name="Update">
+			<input message="tns:DamagedBagsRecUpdateRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Close">
+			<input message="tns:CloseRecordsRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="ReadRetired">
+			<input message="tns:ReadRetiredRecordRQ"/>
+			<output message="tns:DamagedBagRecReadRS"/>
+		</operation>
+		<operation name="SearchRetired">
+			<input message="tns:SearchRetiredRecordsRQ"/>
+			<output message="tns:BagsSearchRS"/>
+		</operation>
+	</portType>
+
+	<binding name="DamagedBagServiceSOAPBinding" type="tns:DamagedBagService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="Create">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Read">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Search">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Update">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Close">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ReadRetired">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SearchRetired">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+
+	<service name="DamagedBagService">
+		<port name="DamagedBagServiceSOAP" binding="tns:DamagedBagServiceSOAPBinding">
+			<soap:address location="https://webservice-qa.worldtracer.aero/DamagedBagService/0.1"/>
+		</port>
+	</service>
+</definitions>

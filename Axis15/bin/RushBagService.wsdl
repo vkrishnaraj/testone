@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.sita.aero/bag/wtr/RushBagService" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" targetNamespace="http://www.sita.aero/bag/wtr/RushBagService" name="RushBagService">
+	<types>
+		<xs:schema targetNamespace="http://www.sita.aero/bag/wtr/RushBagService">
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RushBagsCreateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RushBagRecReadRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRecordRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsCreateRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ForwardHeldBagsRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_StatusRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RushBagsSearchRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsSearchRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ForwardOnhandBagsRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ForwardBagsToLZ_OfficeRQ.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="RushBagsCreateRQ">
+		<part name="request" element="wtr:WTR_RushBagsCreateRQ"/>
+	</message>
+	<message name="BagsCreateRS">
+		<part name="response" element="wtr:WTR_BagsCreateRS"/>
+	</message>
+	<message name="ReadRecordRQ">
+		<part name="request" element="wtr:WTR_ReadRecordRQ"/>
+	</message>
+	<message name="RushBagRecReadRS">
+		<part name="response" element="wtr:WTR_RushBagRecReadRS"/>
+	</message>
+	<message name="RushBagsSearchRQ">
+		<part name="request" element="wtr:WTR_RushBagsSearchRQ"/>
+	</message>
+	<message name="BagsSearchRS">
+		<part name="response" element="wtr:WTR_BagsSearchRS"/>
+	</message>
+
+	<message name="ForwardHeldBagsRQ">
+		<part name="request" element="wtr:WTR_ForwardHeldBagsRQ"/>
+	</message>
+	<message name="StatusRS">
+		<part name="response" element="wtr:WTR_StatusRS"/>
+	</message>
+
+	
+	<message name="ForwardOnhandBagsRQ">
+		<part name="request" element="wtr:WTR_ForwardOnhandBagsRQ"/>
+	</message>
+
+	<message name="ForwardBagsToLZ_OfficeRQ">
+		<part name="request" element="wtr:WTR_ForwardBagsToLZ_OfficeRQ"/>
+	</message>
+
+	<portType name="RushBagService">
+		<operation name="Create">
+			<input message="tns:RushBagsCreateRQ"/>
+			<output message="tns:BagsCreateRS"/>
+		</operation>
+		<operation name="Read">
+			<input message="tns:ReadRecordRQ"/>
+			<output message="tns:RushBagRecReadRS"/>
+		</operation>
+		<operation name="Search">
+			<input message="tns:RushBagsSearchRQ"/>
+			<output message="tns:BagsSearchRS"/>
+		</operation>
+		<operation name="ForwardHeldBags">
+			<input message="tns:ForwardHeldBagsRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="ForwardOnhandBags">
+			<input message="tns:ForwardOnhandBagsRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="ForwardBagsToLZOffice">
+			<input message="tns:ForwardBagsToLZ_OfficeRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+	</portType>
+	<binding name="RushBagServiceSOAPBinding" type="tns:RushBagService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="Create">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Read">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Search">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ForwardHeldBags">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ForwardOnhandBags">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ForwardBagsToLZOffice">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="RushBagService">
+		<port name="RushBagServiceSOAP" binding="tns:RushBagServiceSOAPBinding">
+			<soap:address location="https://webservice-qa.worldtracer.aero/RushBagService/0.1"/>
+		</port>
+	</service>
+</definitions>

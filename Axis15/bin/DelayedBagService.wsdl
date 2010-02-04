@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.sita.aero/bag/wtr/DelayedBagService" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" targetNamespace="http://www.sita.aero/bag/wtr/DelayedBagService" name="DelayedBagService">
+	<types>
+		<xs:schema targetNamespace="http://www.sita.aero/bag/wtr/DelayedBagService">
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DelayedBagsCreateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DelayedBagRecReadRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRecordRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsCreateRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_StatusRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsSearchRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_BagsSearchRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_TraceBagRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DelayedBagsRecUpdateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_CloseRecordsRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_TracingStateChangeRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRetiredRecordRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_SearchRetiredRecordsRQ.xsd"/>
+		</xs:schema>
+	</types>
+	<message name="DelayedBagsCreateRQ">
+		<part name="request" element="wtr:WTR_DelayedBagsCreateRQ"/>
+	</message>
+	<message name="BagsCreateRS">
+		<part name="response" element="wtr:WTR_BagsCreateRS"/>
+	</message>
+	<message name="ReadRecordRQ">
+		<part name="request" element="wtr:WTR_ReadRecordRQ"/>
+	</message>
+	<message name="DelayedBagRecReadRS">
+		<part name="response" element="wtr:WTR_DelayedBagRecReadRS"/>
+	</message>
+	<message name="BagsSearchRQ">
+		<part name="request" element="wtr:WTR_BagsSearchRQ"/>
+	</message>
+	<message name="TraceBagRQ">
+		<part name="request" element="wtr:WTR_TraceBagRQ"/>
+	</message>
+	<message name="CloseRecordsRQ">
+		<part name="request" element="wtr:WTR_CloseRecordsRQ"/>
+	</message>
+	<message name="BagsSearchRS">
+		<part name="response" element="wtr:WTR_BagsSearchRS"/>
+	</message>
+	<message name="DelayedBagsRecUpdateRQ">
+		<part name="request" element="wtr:WTR_DelayedBagsRecUpdateRQ"/>
+	</message>
+	<message name="SuspendRecordsRQ">
+		<part name="request" element="wtr:WTR_SuspendRecordsRQ"/>
+	</message>
+	<message name="ReinstateRecordsRQ">
+		<part name="request" element="wtr:WTR_ReinstateRecordsRQ"/>
+	</message>
+	<message name="ReadRetiredRecordRQ">
+		<part name="request" element="wtr:WTR_ReadRetiredRecordRQ"/>
+	</message>
+	<message name="SearchRetiredRecordsRQ">
+		<part name="request" element="wtr:WTR_SearchRetiredRecordsRQ"/>
+	</message>
+
+	<message name="StatusRS">
+		<part name="response" element="wtr:WTR_StatusRS"/>
+	</message>
+
+	<portType name="DelayedBagService">
+		<operation name="Create">
+			<input message="tns:DelayedBagsCreateRQ"/>
+			<output message="tns:BagsCreateRS"/>
+		</operation>
+		<operation name="Read">
+			<input message="tns:ReadRecordRQ"/>
+			<output message="tns:DelayedBagRecReadRS"/>
+		</operation>
+		<operation name="Search">
+			<input message="tns:BagsSearchRQ"/>
+			<output message="tns:BagsSearchRS"/>
+		</operation>
+		<operation name="Trace">
+			<input message="tns:TraceBagRQ"/>
+			<output message="tns:BagsSearchRS"/>
+		</operation>
+		<operation name="Update">
+			<input message="tns:DelayedBagsRecUpdateRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Close">
+			<input message="tns:CloseRecordsRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Suspend">
+			<input message="tns:SuspendRecordsRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Reinstate">
+			<input message="tns:ReinstateRecordsRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="ReadRetired">
+			<input message="tns:ReadRetiredRecordRQ"/>
+			<output message="tns:DelayedBagRecReadRS"/>
+		</operation>
+		<operation name="SearchRetired">
+			<input message="tns:SearchRetiredRecordsRQ"/>
+			<output message="tns:BagsSearchRS"/>
+		</operation>
+	</portType>
+
+	<binding name="DelayedBagServiceSOAPBinding" type="tns:DelayedBagService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="Create">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Read">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Search">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Trace">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Update">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Close">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Suspend" >
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Reinstate">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ReadRetired">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SearchRetired">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+
+	<service name="DelayedBagService">
+		<port name="DelayedBagServiceSOAP" binding="tns:DelayedBagServiceSOAPBinding">
+			<soap:address location="https://webservice-qa.worldtracer.aero/DelayedBagService/0.1"/>
+		</port>
+	</service>
+</definitions>
