@@ -113,7 +113,7 @@ public class Reservation implements ReservationInterface {
 	@Override
 	public ReservationResponse getReservationData(User user, String pnr,
 			String bagTag) throws UnexpectedException {
-
+		String exceptionText = null;
 		ReservationResponse response = ReservationResponse.Factory
 				.newInstance();
 		HashMap<String, Passenger> paxMap = new HashMap<String, Passenger>();
@@ -130,6 +130,11 @@ public class Reservation implements ReservationInterface {
 			}
 
 			OTATravelItineraryRSDocument doc = loadPnr(connParams, pnr, false);
+			
+			if (doc.getOTATravelItineraryRS().getErrors() != null && doc.getOTATravelItineraryRS().getErrors().getError() != null && doc.getOTATravelItineraryRS().getErrors().getError().getErrorMessage() != null) {
+				exceptionText = doc.getOTATravelItineraryRS().getErrors().getError().getErrorMessage();
+				throw new Exception();
+			}
 			
 			TravelItinerary ti = doc.getOTATravelItineraryRS()
 					.getTravelItinerary();
@@ -337,9 +342,19 @@ public class Reservation implements ReservationInterface {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Error: ", e);
-			throw new UnexpectedException();
+			if (exceptionText != null) {
+				if (exceptionText.contains("PNR LOCATOR NOT VALID")) {
+					response.addNewError().setDescription(
+							ServiceConstants.PNR_NOT_VALID);	
+				} else {
+					response.addNewError().setDescription(
+							ServiceConstants.UNEXPECTED_EXCEPTION);
+				}
+				
+			} else { 
+				throw new UnexpectedException();
+			}
 		} finally {
 			try {
 				pool.returnObject(connParams);
@@ -368,7 +383,6 @@ public class Reservation implements ReservationInterface {
 			endTransaction(connParams);
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new UnexpectedException();
 		} finally {
 			try {
@@ -462,7 +476,7 @@ public class Reservation implements ReservationInterface {
 						checkedTime.setTime(sdf.parse(time));
 
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("Error: ", e);
 					}
 					bag.setTag(bagTag);
 					bag.setCheckedTime(checkedTime);
