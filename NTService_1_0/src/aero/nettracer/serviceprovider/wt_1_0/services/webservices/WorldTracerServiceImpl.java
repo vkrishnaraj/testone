@@ -482,8 +482,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					FlightOptionalDateOrARNKType p3 = f1.addNewFlightSegment();
 					FlightOptionalDateType p5 = p3.addNewFlightDate();
 
-					p5.setAirlineCode(itin.getAirline());
-					p5.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
+					String flightNum = PreProcessor.wtFlightNumber(itin.getFlightNumber());
+					String airlineCode = itin.getAirline();
+					if (flightNum == null || flightNum.equals("")) {
+						airlineCode = "YY";
+					}
+					p5.setFlightNumber(flightNum);
+					p5.setAirlineCode(airlineCode);
 					p5.setDate(itin.getFlightDate());
 
 					if (itinCount == 0) {
@@ -2238,8 +2243,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					FlightOptionalDateOrARNKType p3 = f1.addNewFlightSegment();
 					FlightOptionalDateType p5 = p3.addNewFlightDate();
 
-					p5.setAirlineCode(itin.getAirline());
-					p5.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
+					String flightNum = PreProcessor.wtFlightNumber(itin.getFlightNumber());
+					String airlineCode = itin.getAirline();
+					if (flightNum == null || flightNum.equals("")) {
+						airlineCode = "YY";
+					}
+					p5.setFlightNumber(flightNum);
+					p5.setAirlineCode(airlineCode);
 					p5.setDate(itin.getFlightDate());
 
 					if (itinCount == 0) {

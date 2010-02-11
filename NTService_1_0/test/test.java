@@ -21,6 +21,17 @@ import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.ContentRule
 public class test {
 	public static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
 	
+	@Test
+	public void test1() throws Exception{
+		try {
+			int a = 0/0;
+		} catch (Exception e) {
+			throw new Exception ("Test");
+		} finally {
+			System.out.println("Complete...");
+		}
+	}
+	
 //	@Test
 //	public void  myTest() throws ParseException {
 //		String v = "12NOV";
