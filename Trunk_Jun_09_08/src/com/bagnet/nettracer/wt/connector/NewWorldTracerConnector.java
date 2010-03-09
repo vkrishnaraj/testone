@@ -1641,6 +1641,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 			return result;
 		} catch (Exception e) {
+			logger.error(e);
 			throw new WorldTracerConnectionException(
 					"Communication error with WorldTracer", e);
 		}
@@ -1665,6 +1666,13 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		NameValuePair[] p2 = { new NameValuePair("_flowExecutionKey", flowKey)};
 		search.setQueryString(p2);
 		
+		// ADDED:
+		search.setParameter("resultsForm.sortOption", "recordReference");
+		search.setParameter("resultsForm.sortByOrder", "DESCENDING");
+		search.setParameter("resultsForm.recordNumber", wt_id.substring(5));
+		search.setParameter("_resultsForm.recordNumber", "on");
+		// END ADDED
+		
 		search.setParameter("wtrCloseRequest.recordReferences[0].stationCode", wt_id.substring(0,3));
 		search.setParameter("wtrCloseRequest.recordReferences[0].airlineCode", wt_id.substring(3,5));
 		search.setParameter("wtrCloseRequest.recordReferences[0].recordId", wt_id.substring(5));
@@ -1672,7 +1680,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		
 		//search.setParameter("_showAllDetailsInReadOnlyArea", "on");
 		search.setParameter("_eventId", "continue");
-		search.setParameter("wtrDisplayRequest.recordAdditionalInfo.fullRecord", "TRUE");
+		search.setParameter("wtrDisplayRequest.recordAdditionalInfo.fullRecord", "true"); // changed TRUE to true
 		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.fullRecord", "on");
 		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.recordHistory", "on");
 		search.setParameter("_wtrDisplayRequest.recordAdditionalInfo.matchingHistory", "on");
@@ -1724,10 +1732,10 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 			}
 	    }
 		if(responseBody.toUpperCase().contains("FILE CLOSED") 
-				|| responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)") || responseBody.toUpperCase().contains("CLOSE FILE (FINISH)")){
+				|| responseBody.toUpperCase().contains("CLOSE RECORD (FINISH)") || responseBody.toUpperCase().contains("CLOSE FILE (FINISH)") || responseBody.toUpperCase().contains("DATA NOT FOUND")){
 			return wt_id;
 		}else{
-			logger.info("FAILED TO CLOSE AHL REPSONSE. ");
+			logger.info("FAILED TO CLOSE AHL REPSONSE: \n" + responseBody);
 			return null;
 		}
 	}
@@ -3176,7 +3184,7 @@ public class NewWorldTracerConnector implements WorldTracerConnector {
 		if(responseBody.toUpperCase().contains("RECORD AMENDED SUCCESSFULLY") || responseBody.toUpperCase().contains("FILE AMENDED SUCCESSFULLY")){
 			return wt_id;
 		}else{
-			logger.error("amend before close incident failed ");
+			logger.error("amend before close incident failed; response: \n" + responseBody);
 			return null;
 		}
 	}

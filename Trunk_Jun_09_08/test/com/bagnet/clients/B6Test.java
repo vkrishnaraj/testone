@@ -6,25 +6,20 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import com.bagnet.clients.b6.JetBlueIntegrationWrapper;
-import com.bagnet.clients.b6.ReservationIntegrationImpl;
-import com.bagnet.clients.b6.WriteThreadPool;
 import com.jetblue.schemas._2008._03.framework.baggage.ReservationDetail;
 
 public class B6Test {
 	
 	@Test
-	public void getBooking() {
+	public void getOldBooking() {
 		
 		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\ntcerts");
-    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
-
-    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\ntkeys.ks");
-    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
+	    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
+	    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\ntkeys.ks");
+	    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
 
 		
-		String recordLocator = "M43VAV";
-    //String tagNumber = "0279955858";
-    //String tagNumber = "0279660953";
+		String recordLocator = "NF1HN0";
     
 		ArrayList<String> errors = new ArrayList<String>();
 		ReservationDetail booking = null;
@@ -42,9 +37,11 @@ public class B6Test {
 				booking = wrapper.getReservationDetail();
 			}
 			
-			System.out.println(booking);
-			System.out.println(booking);
-
+			if (booking == null) {
+				throw new Exception();
+			} else {
+				System.out.println(booking);
+			}
 			return;
 
 		} catch (Exception e) {
@@ -54,29 +51,66 @@ public class B6Test {
 		}
 	}
 	
-	//@Test
-	public void writeComment() {
+	@Test
+	public void getNewBooking() throws Exception {
 		
-		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\ntcerts");
-    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
-
-    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\ntkeys.ks");
-    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
+		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\newfiles\\ntcerts");
+	    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
+	
+	    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\newfiles\\ntkeys.ks");
+	    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
 
 		
-		String recordLocator = "S364AA";
+		String recordLocator = "NF1HN0";
+    
 		ArrayList<String> errors = new ArrayList<String>();
 		ReservationDetail booking = null;
 		try {
-			/*
 			JetBlueIntegrationWrapper wrapper = new JetBlueIntegrationWrapper();
 			
-			wrapper.writeCommentToPNR(recordLocator, "This is the final test ATLB6000002");
-			*/
-			ReservationIntegrationImpl resInt = new ReservationIntegrationImpl();
-			resInt.writeCommentToPNR("This is my test comment.", recordLocator);
-			System.out.println("End of calling method");
+			boolean result = true;
+			result = wrapper.getBookingByKey(recordLocator, null);
+			//result = wrapper.getBookingByKey(null, tagNumber);
 			
+			if (!result) {
+				System.out.println("error");
+			} else {
+				// Get the booking
+				booking = wrapper.getReservationDetail();
+			}
+			
+			if (booking == null) {
+				throw new Exception();
+			} else {
+				System.out.println(booking);
+			}
+
+			return;
+
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+//	
+	@Test
+	public void writeOldComment() {
+		
+		System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\newfiles\\ntcerts");
+	    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer1");
+	
+	    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\newfiles\\ntkeys.ks");
+	    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer1");
+		
+		String recordLocator = "NF1HN0";
+		ArrayList<String> errors = new ArrayList<String>();
+		ReservationDetail booking = null;
+		try {
+			
+			JetBlueIntegrationWrapper wrapper = new JetBlueIntegrationWrapper();
+			wrapper.writeCommentToPNR(recordLocator, "This is a test comment...");
+
 			for (int i=0; i<60; ++i) {
 				Thread.sleep(1000);
 				System.out.println("Waiting...");
