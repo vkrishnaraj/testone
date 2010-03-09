@@ -256,6 +256,8 @@ public class SearchIncidentAction extends Action {
 			} else {
 				IncidentBMO iBMO = new IncidentBMO();
 				TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
+				theform = (IncidentForm)session.getAttribute("incidentForm");
+				theform.setFaultcompany_id(user.getCompanycode_ID());
 				bs.populateIncidentFormFromIncidentObj(null, theform, user, TracingConstants.LOST_DELAY, iBMO, foundinc, true);
 				theform.setCreatedate(TracerDateTime.getGMTDate());
 				theform.setCreatetime(TracerDateTime.getGMTDate());

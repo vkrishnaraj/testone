@@ -335,9 +335,15 @@
                   <table class="form2" cellspacing="0" cellpadding="0">
                   
                   <logic:notEqual name="reportnum" scope="request" value="10">
-                  <logic:notEqual name="reportnum" scope="request" value="20">
-                  	<jsp:include page="report_options_incl_3_8.jsp" />
-                  </logic:notEqual>
+                  	<logic:equal name="reportnum" scope="request" value="3">
+                  		<jsp:include page="report_options_incl_3_only.jsp" />
+                  	</logic:equal>
+                  	<logic:notEqual name="reportnum" scope="request" value="3">
+                  		<logic:notEqual name="reportnum" scope="request" value="20">
+                  			<jsp:include page="report_options_incl_3_8.jsp" />
+                  		</logic:notEqual>
+                  	</logic:notEqual>
+                  		
                   </logic:notEqual>
                   
                   <logic:equal name="reportnum" scope="request" value="10">

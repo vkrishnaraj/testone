@@ -21,6 +21,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  * create date - Sep 1, 2004
  */
 public class StatReport_Custom_1_DTO {
+	private String companycode;
 	private String stationcode;
 	private String station_region;
 	private String station_region_mgr;
@@ -476,4 +477,12 @@ public class StatReport_Custom_1_DTO {
 	public void setBoarded(double boarded) {
 		this.boarded = boarded;
 	}
+	public String getCompanycode() {
+		return companycode;
+	}
+	public void setCompanycode(String companycode) {
+		this.companycode = companycode;
+	}
+	
+	
 }

@@ -20,6 +20,8 @@ public class SearchIncident_DTO {
 	private int stationassigned_ID;
 	private String agentassigned;
 	private String companycreated_ID;
+	private String companyfaulted_ID;
+	private int faultstation_ID;
 	private String ticketnumber;
 	private String airline;
 	private String flightnum;
@@ -354,6 +356,23 @@ public class SearchIncident_DTO {
 
 	public void setRecordlocator(String recordlocator) {
 		this.recordlocator = recordlocator;
-	}	
+	}
+
+	public String getCompanyfaulted_ID() {
+		return companyfaulted_ID;
+	}
+
+	public void setCompanyfaulted_ID(String companyfaulted_ID) {
+		this.companyfaulted_ID = companyfaulted_ID;
+	}
+
+	public int getFaultstation_ID() {
+		return faultstation_ID;
+	}
+
+	public void setFaultstation_ID(int faultstation_ID) {
+		this.faultstation_ID = faultstation_ID;
+	}
+
 	
 }

@@ -43,12 +43,24 @@ public class StatReportDTO {
 	
 	private String[] holdingstation_ID;
 
+	private int groupby;
 	private int sumordet;
 
 	private int outputtype = -1;
 
 	private String agent;
 	private String lz_id;
+	
+	private String[] company_ID;
+	
+
+	public String[] getCompany_ID() {
+		return company_ID;
+	}
+
+	public void setCompany_ID(String[] company_ID) {
+		this.company_ID = company_ID;
+	}
 
 	/**
 	 * @return Returns the itemType_ID.
@@ -416,5 +428,13 @@ public class StatReportDTO {
 	 */
 	public void setLz_id(String lz_id) {
 		this.lz_id = lz_id;
+	}
+
+	public int getGroupby() {
+		return groupby;
+	}
+
+	public void setGroupby(int groupby) {
+		this.groupby = groupby;
 	}
 }

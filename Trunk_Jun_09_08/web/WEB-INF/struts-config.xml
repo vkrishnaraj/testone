@@ -430,6 +430,7 @@
 
 		<forward name="ajax_agentassigned" path="ajax_agentassigned" />
 		<forward name="ajax_faultstation" path="ajax_faultstation" />
+		<forward name="ajax_faultstationall" path="ajax_faultstationall" />
 		<forward name="ajax_servicelevel" path="ajax_servicelevel" />
 		<forward name="ajax_statuses" path="ajax_statuses" />
 		<forward name="viewworldtracercount" path="view_worldtracer_count" />

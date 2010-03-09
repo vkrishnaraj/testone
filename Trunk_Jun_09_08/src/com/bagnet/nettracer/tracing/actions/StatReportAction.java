@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -64,6 +65,14 @@ public class StatReportAction extends Action {
 		String reportpath = sc.getRealPath("/");
 
 		StatReportForm daform = (StatReportForm) form;
+		
+		//G - set the airline code for form
+		if (daform.getCompany_ID() == null) {
+			String myStrCompanyCode = user.getCompanycode_ID();
+			String[] myCompanycode = {myStrCompanyCode};
+			daform.setCompany_ID(myCompanycode);
+		}
+		
 
 		String reportnum = request.getParameter("reportnum");
 

@@ -190,4 +190,5 @@
 	}
 
   function checkDeleteCount(bagNum) { return true; }
+  function checkOhdDeleteCount(bagNum) { return true; }
 </script>

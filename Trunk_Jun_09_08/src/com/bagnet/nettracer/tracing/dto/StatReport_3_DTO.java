@@ -22,6 +22,7 @@ public class StatReport_3_DTO {
 	private int station_ID;
 	private String stationcode;
 	private String faultstationcode;
+	private String faultcompany;
 	private String incident_ID;
 	private int itemtype_ID;
 	private int loss_code;
@@ -271,6 +272,12 @@ public class StatReport_3_DTO {
 	 */
 	public void set_TIMEZONE(TimeZone _timezone) {
 		_TIMEZONE = _timezone;
+	}
+	public String getFaultcompany() {
+		return faultcompany;
+	}
+	public void setFaultcompany(String faultcompany) {
+		this.faultcompany = faultcompany;
 	}
 	
 }

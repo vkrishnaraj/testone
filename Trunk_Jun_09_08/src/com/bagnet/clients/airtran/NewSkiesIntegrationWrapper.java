@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import com.airtran.AddBookingCommentsESDocument;
 import com.airtran.AddBookingCommentsESResponseDocument;
 import com.airtran.EnplanementBookingServiceStub;
@@ -17,6 +19,7 @@ import com.airtran.GetBookingInformationESDocument;
 import com.airtran.GetBookingInformationESResponseDocument;
 import com.airtran.GetEnplanementsESDocument;
 import com.airtran.GetEnplanementsESResponseDocument;
+import com.bagnet.clients.defaul.ReservationIntegrationImpl;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.navitaire.schemas.messages.booking.Booking;
 
@@ -27,6 +30,8 @@ import com.navitaire.schemas.messages.booking.Booking;
  * Preferences - Java - Code Style - Code Templates
  */
 public class NewSkiesIntegrationWrapper {
+	
+	protected static Logger logger = Logger.getLogger(NewSkiesIntegrationWrapper.class);
 	
 	private String endpoint;
 	private String calltype;
@@ -84,6 +89,7 @@ public class NewSkiesIntegrationWrapper {
 			if (thebook != null) {
 				return true;
 			} else {
+				logger.info("Location 5");
 				setErrormsg("error.norecord");
 				return false;
 			}

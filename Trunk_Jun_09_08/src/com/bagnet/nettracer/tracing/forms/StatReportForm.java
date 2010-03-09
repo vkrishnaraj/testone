@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.forms;
 
+import java.util.List;
+
 import org.apache.struts.validator.ValidatorForm;
 
 /**
@@ -34,12 +36,39 @@ public final class StatReportForm extends ValidatorForm {
 	
 	private String[] holdingstation_ID;
 	
+	private int groupby;
 	private int sumordet;
 
 	private int outputtype = 0;
 
 	private String agent;
 	private String lz_id;
+	
+	private String[] company_ID;
+	
+	
+
+	public String[] getCompany_ID() {
+		return company_ID;
+	}
+
+	public void setCompany_ID(String[] company_ID) {
+		this.company_ID = company_ID;
+		
+	}
+	
+//	private List<String> company_ID;
+//	
+//
+//	
+//	
+//	public List<String> getCompany_ID() {
+//		return company_ID;
+//	}
+//
+//	public void setCompany_ID(List<String> company_ID) {
+//		this.company_ID = company_ID;
+//	}
 
 	/**
 	 * @return the lz_id
@@ -429,5 +458,13 @@ public final class StatReportForm extends ValidatorForm {
 
 	public void setAgent(String agent) {
 		this.agent = agent;
+	}
+
+	public int getGroupby() {
+		return groupby;
+	}
+
+	public void setGroupby(int groupby) {
+		this.groupby = groupby;
 	}
 }

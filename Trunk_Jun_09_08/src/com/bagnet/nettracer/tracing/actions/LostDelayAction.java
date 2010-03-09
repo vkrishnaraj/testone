@@ -483,6 +483,10 @@ public class LostDelayAction extends CheckedAction {
 			ArrayList alerrors = new ArrayList();
 			// prepopulate new incident fields
 			TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
+			//next two lines solve the problem with Occurred BSO Airline dropdown not default to right value
+			IncidentForm thenewform = (IncidentForm)session.getAttribute("incidentForm");
+			thenewform.setFaultcompany_id(user.getCompanycode_ID());
+			
 			request.setAttribute("newform", "1");
 
 			// Attempt to prepopulate the fields from the reservation integration.

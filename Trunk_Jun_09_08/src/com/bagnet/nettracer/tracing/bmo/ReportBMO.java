@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -37,11 +38,14 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
@@ -55,6 +59,7 @@ import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.datasources.JRIncidentDataSource;
 import com.bagnet.nettracer.datasources.JROnhandDataSource;
+import com.bagnet.nettracer.exceptions.AmountOfDataOutOfRangeException;
 import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.other.JRGovernedFileVirtualizer;
@@ -90,6 +95,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 
 public class ReportBMO {
+	private static final int GROUP_BY_FAULT_STATION = 1;
 	private static Logger logger = Logger.getLogger(ReportBMO.class);
 	private static String rootpath;
 	private Agent user;
@@ -148,6 +154,10 @@ public class ReportBMO {
 			setErrormsg("error.missingRequired");
 			return null;
 		}
+		catch(AmountOfDataOutOfRangeException e) {
+			setErrormsg("error.amount.of.data.exceeds.limit");
+			return null;
+		}
 		catch (Exception e) {
 			logger.error("hibernate exception: " + e, e);
 			return null;
@@ -168,12 +178,49 @@ public class ReportBMO {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 
+			/*** START ***/
+			
+			StringBuffer sbCompanyQuery = new StringBuffer("");
+			String[] myCompanyList = srDTO.getCompany_ID();
+			
+			boolean reset2AllStations = true;
+			if (myCompanyList != null) {
+				sbCompanyQuery.append(" AND s2.companycode_ID IN ");
+				
+				List<String> myCompanyIdList = Arrays.asList(myCompanyList);
+				
+				//TODO: when companyList contains only this airline, stationq stays unchanged
+				//boolean reset2AllStations = true;
+				int numOfCompanyInList = myCompanyIdList.size();
+				if (numOfCompanyInList == 1) {
+					String myCompanyId = myCompanyIdList.get(0);
+					if (myCompanyId.equalsIgnoreCase(user.getCompanycode_ID())) {
+						reset2AllStations = false;
+					}
+				} 
+				
+				String myCompanySql = "(";
+				
+				for (String item : myCompanyIdList) {
+					myCompanySql += "'" + item + "',";
+
+				}
+				//replace last character with )
+				int myLastIndex = myCompanySql.length() - 2;
+				if (myLastIndex > 0) {
+					myCompanySql = myCompanySql.substring(0, myLastIndex);
+					myCompanySql += "')";
+				}
+				sbCompanyQuery.append(myCompanySql);
+			}
+			/*** STOP ***/
+				
 
 			/*************** use direct jdbc sql statement **************/
 			Connection conn = sess.connection();
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
-			String sql = "select incident.stationassigned_ID,s1.stationcode as ascode,faultstation_ID,s2.stationcode as fscode, "
+			String sql = "select incident.stationassigned_ID,s1.stationcode as ascode,faultstation_ID,s2.stationcode as fscode, s2.station_id as fsid, s2.companycode_ID as fccode, "
 					 + "incident.incident_ID,incident.itemType_ID,incident.loss_code,incident.createdate,incident.createtime,status.status_ID as stdesc,itemtype.description as itdesc, "
 					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum "
 					 + "from station s1,station s2,status,itemtype,agent,incident " 
@@ -211,13 +258,15 @@ public class ReportBMO {
 			}
 			
 			intc = "";
-			if (srDTO.getFaultstation_ID() != null) {
+			if (!reset2AllStations && srDTO.getFaultstation_ID() != null) {
 				for (int i = 0; i < srDTO.getFaultstation_ID().length; i++) {
 					intc += srDTO.getFaultstation_ID()[i] + ",";
 				}
 			}
 
-			if (intc.length() > 0 && srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
+			if (reset2AllStations) {
+				sql += sbCompanyQuery.toString();
+			} else if (intc.length() > 0 && srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
 				intc = intc.substring(0,intc.length() - 1);
 				sql += " and incident.faultstation_ID in (" + intc + ") ";
 			}
@@ -287,8 +336,12 @@ public class ReportBMO {
 			}
 
 			
-			
-			sql += " order by incident.stationassigned_ID,incident.itemtype_ID,incident.incident_ID,it.itinerary_ID";
+			if (srDTO.getGroupby() == GROUP_BY_FAULT_STATION) {
+				sql += " order by fsid, incident.itemtype_ID,incident.incident_ID,it.itinerary_ID";
+			} else {
+				// DEFAULT (0) is grouped by station assigned
+				sql += " order by incident.stationassigned_ID,incident.itemtype_ID,incident.incident_ID,it.itinerary_ID";
+			}
 			
 			rs = stmt.executeQuery(sql);
 
@@ -316,8 +369,16 @@ public class ReportBMO {
 					}
 					sr = new StatReport_3_DTO();
 
-					sr.setStation_ID(rs.getInt("stationassigned_ID"));
-					sr.setStationcode(rs.getString("ascode"));
+					if (srDTO.getGroupby() == GROUP_BY_FAULT_STATION) {
+						sr.setStation_ID(rs.getInt("fsid"));
+						sr.setStationcode(rs.getString("fscode"));
+					} else {
+						// DEFAULT (0) is grouped by station assigned
+						sr.setStation_ID(rs.getInt("stationassigned_ID"));
+						sr.setStationcode(rs.getString("ascode"));
+					}
+					
+					sr.setFaultcompany(rs.getString("fccode"));
 					sr.setFaultstationcode(rs.getString("fscode"));
 					sr.setIncident_ID(rs.getString("incident_ID"));
 					lastincid = sr.getIncident_ID();
@@ -2607,6 +2668,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
 		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, request, null);
 	}
+	
+	// overload starts
+	public static String getReportFile(List list, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, int MAX_NUMBER_OF_PAGES) throws Exception {
+		JasperReport jasperReport = getCompiledReport(reportname, rootpath);
+		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, request, null, MAX_NUMBER_OF_PAGES);
+	} //overload ends
 
 	private String getReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype) throws Exception {
 		return getReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, req, this);
@@ -2618,7 +2686,142 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 		// added virtualizer to reduce memory
 		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
-		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", 501);
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", 1000);
+		
+		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
+
+		if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+		}
+		
+		try {
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
+	
+			virtualizer.setReadOnly(true);
+	
+			if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
+				outfile += ".html";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					outfile += ".pdf";
+				} else {
+					outfile += ".html";
+					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+				}
+				
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS)
+				outfile += ".xls";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV)
+				outfile += ".csv";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XML)
+				outfile += ".xml";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
+				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					outfile += ".pdf";
+					outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+				} else {
+					outfile += ".html";
+					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+				}
+			}
+				
+	
+			String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
+			JRExporter exporter = null;
+	
+			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+				JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
+				exporter = new JRHtmlExporter();
+	
+				Map imagesMap = new HashMap();
+				
+				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
+				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+				// Boolean.TRUE);
+				exporter.exportReport();
+			}
+	
+			//TODO: switch to JExcelApiExporter
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+/*				exporter = new JRXlsExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, false); 
+				exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+				exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, true);
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, true);
+				//exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, true);  // 01-13-2010 attempt to fix excel problem
+				//exporter.setParameter(JRXlsExporterParameter.MAXIMUM_ROWS_PER_SHEET, 65536);
+				exporter.exportReport();*/
+				JExcelApiExporter alternativeExporter = new JExcelApiExporter();
+				Map excelParameters = new HashMap();
+				excelParameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jasperPrint);
+				excelParameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				excelParameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+				excelParameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+				excelParameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+				//excelParameters.put(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, Boolean.TRUE); 
+				excelParameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
+				
+				alternativeExporter.setParameters(excelParameters);
+				alternativeExporter.exportReport();
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
+				exporter = new JRCsvExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.exportReport();
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) {
+				exporter = new JRXmlExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.exportReport();
+			}
+		} catch (JRMaxFilesException e) {
+			logger.error("JRMaxFilesException encountered...");
+			logger.error("Report Name: " + reportname);
+			Agent user = (Agent) request.getSession().getAttribute("user");
+			logger.error("User ID: " + user.getAgent_ID() + " User Name: " + user.getUsername());
+			
+			for (Object obj: parameters.keySet()) {
+				logger.error("Parameter: " + obj.toString() + "  Value: " + parameters.get(obj).toString());
+			}
+			outfile = null;
+			if (rbmo != null) {
+				rbmo.setErrormsg("error.maxpages");
+			}
+		}
+		
+		virtualizer.cleanup();
+		
+		return outfile;
+	}
+	
+	//method overload
+	public static String getReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, ReportBMO rbmo, int MAX_NUMBER_OF_PAGES) throws Exception {
+		/** look for compiled reports, if can't find it, compile xml report * */
+		
+
+		// added virtualizer to reduce memory
+		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", MAX_NUMBER_OF_PAGES);
 		
 		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
@@ -2685,13 +2888,24 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			}
 	
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
-				exporter = new JRXlsExporter();
-	
-				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
-				exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
-				exporter.exportReport();
+
+				//done: want to use JExcelApiExporter instead, for large data set
+				JExcelApiExporter alternativeExporter = new JExcelApiExporter();
+				Map excelParameters = new HashMap();
+				excelParameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jasperPrint);
+				excelParameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				excelParameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+				excelParameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+				excelParameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+				//excelParameters.put(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, Boolean.TRUE);  //???
+				excelParameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
+				
+				alternativeExporter.setParameters(excelParameters);
+				alternativeExporter.exportReport();
+				
 			} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
 				exporter = new JRCsvExporter();
 	
@@ -2723,7 +2937,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		virtualizer.cleanup();
 		
 		return outfile;
-	}
+	}// method overload end
 
 	/**
 	 * @return Returns the errormsg.
@@ -2949,4 +3163,133 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		
 	}
 	
+	//TODO: custom dynamic report for AirTran MBR Report
+	public static String getDynamicReportFile(List list, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request) throws Exception {
+		//JasperReport jasperReport = getCompiledReport(reportname, rootpath);
+		
+		//TODO: compose JasperReport and prepare list
+		JasperReport jasperReport = null;
+		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+		return getDynamicReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, request, null);
+	}
+	
+	//TODO: custom dynamic report for AirTran MBR Report
+	public static String getDynamicReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, ReportBMO rbmo) throws Exception {
+		/** look for compiled reports, if can't find it, compile xml report * */
+		
+
+		// added virtualizer to reduce memory
+		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", 501);
+		
+		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
+
+		if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+		}
+		
+		try {
+			
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
+	
+			virtualizer.setReadOnly(true);
+	
+			if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
+				outfile += ".html";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					outfile += ".pdf";
+				} else {
+					outfile += ".html";
+					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+				}
+				
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS)
+				outfile += ".xls";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV)
+				outfile += ".csv";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XML)
+				outfile += ".xml";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
+				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					outfile += ".pdf";
+					outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+				} else {
+					outfile += ".html";
+					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+				}
+			}
+				
+	
+			String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
+			JRExporter exporter = null;
+	
+			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+				JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
+				exporter = new JRHtmlExporter();
+	
+				Map imagesMap = new HashMap();
+				
+				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
+				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+				// Boolean.TRUE);
+				exporter.exportReport();
+			}
+	
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+				exporter = new JRXlsExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, false); 
+				exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+				exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, true);
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, true);
+				//exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, true);  // 01-13-2010 attempt to fix excel problem
+				//exporter.setParameter(JRXlsExporterParameter.MAXIMUM_ROWS_PER_SHEET, 65536);
+				exporter.exportReport();
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
+				exporter = new JRCsvExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.exportReport();
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) {
+				exporter = new JRXmlExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.exportReport();
+			}
+		} catch (JRMaxFilesException e) {
+			logger.error("JRMaxFilesException encountered...");
+			logger.error("Report Name: " + reportname);
+			Agent user = (Agent) request.getSession().getAttribute("user");
+			logger.error("User ID: " + user.getAgent_ID() + " User Name: " + user.getUsername());
+			
+			for (Object obj: parameters.keySet()) {
+				logger.error("Parameter: " + obj.toString() + "  Value: " + parameters.get(obj).toString());
+			}
+			outfile = null;
+			if (rbmo != null) {
+				rbmo.setErrormsg("error.maxpages");
+			}
+		}
+		
+		virtualizer.cleanup();
+		
+		return outfile;
+	}
 }

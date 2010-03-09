@@ -416,7 +416,7 @@
                   <html:text name="itemlist" property="description" size="70" maxlength="255" styleClass="textfield" indexed="true" />
                 </td>
                 <td align="center">&nbsp;<br>
-                  <html:submit styleId="button" property="deleteItem" indexed="true">
+                  <html:submit styleId="button" property="deleteItem" indexed="true" onclick="return checkOhdDeleteCount();">
                     <bean:message key="button.delete_content" />
                   </html:submit>
                 </td>

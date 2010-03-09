@@ -697,6 +697,8 @@
     </definition>
     <definition name="ajax_faultstation" path="/pages/ajax_divs/faultstation.jsp">
     </definition>
+    <definition name="ajax_faultstationall" path="/pages/ajax_divs/faultstationall.jsp">
+    </definition>
     <definition name="ajax_servicelevel" path="/pages/ajax_divs/servicelevel.jsp">
 	</definition>
 	<definition name="ajax_statuses" path="/pages/ajax_divs/statuses.jsp">

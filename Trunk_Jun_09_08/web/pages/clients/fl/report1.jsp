@@ -39,10 +39,23 @@
                         <html:text property="starttime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.starttime,'calendar','<%= agent.getDateformat().getFormat() %>'); return false;">-
                         <html:text property="endtime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.endtime,'calendar2','<%= agent.getDateformat().getFormat() %>'); return false;"></td>
                     </tr>
+                    
                     <tr>
                       <td>
-                        <bean:message key="colname.faultstation" />
+                        <bean:message key="reports.faultCompany" />
                         :
+                      </td>
+                      <td>
+                        <html:select property="company_ID" styleClass="dropdown" multiple="true">
+                          <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
+                        </html:select>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td>
+                        <bean:message key="colname.faultstation" /> 
+                        : <BR>(Only valid for <%=agent.getCompanycode_ID() %> exclusive searches)
                       </td>
                       <td>
                         <html:select property="station_ID" styleClass="dropdown" multiple="true">

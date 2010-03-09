@@ -690,6 +690,7 @@ public class TracingConstants {
 	// AJAX DIVS
 	public final static String AJAX_AGENTASSIGNED = "ajax_agentassigned";
 	public final static String AJAX_FAULTSTATION = "ajax_faultstation";
+	public final static String AJAX_FAULTSTATION_ALL = "ajax_faultstationall";
 	public final static String AJAX_SERVICELEVEL = "ajax_servicelevel";
 	public final static String AJAX_STATUSES = "ajax_statuses";
 	

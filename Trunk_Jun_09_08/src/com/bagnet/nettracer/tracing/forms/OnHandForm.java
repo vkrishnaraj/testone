@@ -85,7 +85,16 @@ public final class OnHandForm extends ValidatorForm {
 	
 	private int faultStation = 0;
 	private int lossCode = 0;
+	private boolean notifiedOfRequirements;
 	
+	public boolean isNotifiedOfRequirements() {
+		return notifiedOfRequirements;
+	}
+
+	public void setNotifiedOfRequirements(boolean notifiedOfRequirements) {
+		this.notifiedOfRequirements = notifiedOfRequirements;
+	}
+
 	/**
 	 * @return Returns the ohd_type.
 	 */
