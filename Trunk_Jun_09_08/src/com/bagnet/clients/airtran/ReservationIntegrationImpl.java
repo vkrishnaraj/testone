@@ -55,17 +55,19 @@ public class ReservationIntegrationImpl extends
 
 					NewSkiesIntegrationWrapper aiw = new NewSkiesIntegrationWrapper();
 					boolean callresult = aiw.getBooking(form.getRecordlocator());
-					
+					logger.info("Call result: " + callresult);
 					if (!callresult) {
 						if (aiw.getErrormsg().equals("error.norecord")) {
-							
+							logger.info("Location: 1");
 							addError(errors, "error.no.recordlocator");
 						}
 						else addError(errors, aiw.getErrormsg());
 						return errors;
 					} else {
 						Booking book = aiw.getThebook();
+						logger.info("Location 2");
 						populateIncident(form, request, incidentType, book);
+						logger.info("Location 3");
 						HttpSession session = request.getSession();
 						session.setAttribute("incidentForm", form);
 					}
