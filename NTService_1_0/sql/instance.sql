@@ -1,4 +1,4 @@
-insert into properties (keyStr, valueStr) values ('nt.central.endpoint', 'http://10.52.113.18/NTServices_1_0/services/WorldTracerService');
+insert into properties (keyStr, valueStr) values ('nt.central.endpoint', 'http://localhost/NTServices_1_0/services/WorldTracerService');
 insert into properties (keyStr, valueStr)values ('nt.central.username', 'usairways');
 insert into properties (keyStr, valueStr)values ('nt.central.password', 'password');
 

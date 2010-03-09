@@ -63,6 +63,9 @@ public class ServiceUtilities {
 			if (value.equals(ReservationSystemType.SABRE.name())) {
 				// TODO: Change to singleton? Use spring?
 				return new Reservation();
+			} else if (value.equals(ReservationSystemType.SPIRIT.name())) {
+				// TODO: Change to singleton? Use spring?
+				return new aero.nettracer.serviceprovider.ws_1_0.res.spirit.Reservation();
 			}
 		}
 

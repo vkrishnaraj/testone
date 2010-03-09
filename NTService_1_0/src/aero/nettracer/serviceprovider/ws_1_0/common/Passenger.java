@@ -8,6 +8,7 @@ public class Passenger {
 	private String ffNumber;
 	private String ffStatus;
 	private Address addresses;
+	private int salutation;
 
 	public String getFirstname() {
 		return firstname;
@@ -63,5 +64,13 @@ public class Passenger {
 
 	public void setAddresses(Address addresses) {
 		this.addresses = addresses;
+	}
+
+	public int getSalutation() {
+		return salutation;
+	}
+
+	public void setSalutation(int salutation) {
+		this.salutation = salutation;
 	}
 }

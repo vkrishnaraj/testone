@@ -144,18 +144,18 @@
             </xs:complexType>
             <xs:complexType name="Itinerary">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="actarrivetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="actarrivetime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="actarrivetimeGmt" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="actdeparttime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="actdeparttime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="actdeparttimeGmt" nillable="true" type="xs:date"/>
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="arrivalCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="arrivalUnknown" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="departureCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="scharrivetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="scharrivetime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="scharrivetimeGmt" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="schdeparttime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="schdeparttime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="schdeparttimeGmt" nillable="true" type="xs:date"/>
                     <xs:element minOccurs="0" name="timeChecked" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>
@@ -176,6 +176,7 @@
                     <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="salutation" type="xs:int"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Address">

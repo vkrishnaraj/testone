@@ -42,7 +42,7 @@
 		<antcall target="services_wsdl2java" />
 	</target>
 
-	<target name="All_Services_wsdl2java">
+	<target name="All_Web_Services_Rebuild">
 		<antcall target="services_java2wsdl" />
 		<ant target="WT_services_java2wsdl" />
 		<antcall target="services_wsdl2java" />

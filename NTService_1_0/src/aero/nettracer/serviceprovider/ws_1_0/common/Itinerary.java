@@ -13,10 +13,10 @@ public class Itinerary {
 	// These will be used to populate fields (local time).
 	// The will be used to determine if a field can be
 	// auto-populated if gmtCounterparts are not available.
-	private Date schdeparttime;
-	private Date scharrivetime;
-	private Date actdeparttime;
-	private Date actarrivetime;
+	private Calendar schdeparttime;
+	private Calendar scharrivetime;
+	private Calendar actdeparttime;
+	private Calendar actarrivetime;
 
 	// These will be used if available to determine
 	// whether a value is subject to time constraints.
@@ -69,38 +69,6 @@ public class Itinerary {
 		this.flightnum = flightnum;
 	}
 
-	public Date getSchdeparttime() {
-		return schdeparttime;
-	}
-
-	public void setSchdeparttime(Date schdeparttime) {
-		this.schdeparttime = schdeparttime;
-	}
-
-	public Date getScharrivetime() {
-		return scharrivetime;
-	}
-
-	public void setScharrivetime(Date scharrivetime) {
-		this.scharrivetime = scharrivetime;
-	}
-
-	public Date getActdeparttime() {
-		return actdeparttime;
-	}
-
-	public void setActdeparttime(Date actdeparttime) {
-		this.actdeparttime = actdeparttime;
-	}
-
-	public Date getActarrivetime() {
-		return actarrivetime;
-	}
-
-	public void setActarrivetime(Date actarrivetime) {
-		this.actarrivetime = actarrivetime;
-	}
-
 	public boolean isArrivalUnknown() {
 		return arrivalUnknown;
 	}
@@ -139,6 +107,38 @@ public class Itinerary {
 
 	public void setActarrivetimeGmt(Date actarrivetimeGmt) {
 		this.actarrivetimeGmt = actarrivetimeGmt;
+	}
+
+	public Calendar getSchdeparttime() {
+		return schdeparttime;
+	}
+
+	public void setSchdeparttime(Calendar schdeparttime) {
+		this.schdeparttime = schdeparttime;
+	}
+
+	public Calendar getScharrivetime() {
+		return scharrivetime;
+	}
+
+	public void setScharrivetime(Calendar scharrivetime) {
+		this.scharrivetime = scharrivetime;
+	}
+
+	public Calendar getActdeparttime() {
+		return actdeparttime;
+	}
+
+	public void setActdeparttime(Calendar actdeparttime) {
+		this.actdeparttime = actdeparttime;
+	}
+
+	public Calendar getActarrivetime() {
+		return actarrivetime;
+	}
+
+	public void setActarrivetime(Calendar actarrivetime) {
+		this.actarrivetime = actarrivetime;
 	}
 
 }
