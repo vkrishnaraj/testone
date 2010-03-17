@@ -1496,7 +1496,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (fieldList != null && fieldList.size() > 0) {
 				TeletypeAddresses add = d1.addNewTeletypeAddresses();
 
-				for (int i = 0; i < fieldList.size() && i < 2; i++) {
+				for (int i = 0; i < fieldList.size() && i < 10; i++) {
 					add.addTeletypeAddress(fieldList.get(i));
 				}
 			}
@@ -1635,7 +1635,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (fieldList != null && fieldList.size() > 0) {
 				aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ.TeletypeAddresses add = d1.addNewTeletypeAddresses();
 
-				for (int i = 0; i < fieldList.size() && i < 2; i++) {
+				for (int i = 0; i < fieldList.size() && i < 10; i++) {
 					add.addTeletypeAddress(fieldList.get(i));
 				}
 			}
@@ -2731,11 +2731,30 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					p5.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
 					p5.setDate(itin.getFlightDate());
 
-//					OriginDestinationType p4 = p3.addNewOriginDestination();
-//					p4.setOrigin(itin.getDepartureCity().trim());
-//					p4.setDestination(itin.getArrivalCity().trim());
+					OriginDestinationType p4 = p3.addNewOriginDestination();
+					p4.setOrigin(itin.getDepartureCity().trim());
+					p4.setDestination(itin.getArrivalCity().trim());
 				}
 			}
+			
+			
+			aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.BaggageItinerary iti = t2.addNewBaggageItinerary();
+						
+			int itinCountA = 0;
+
+			for (Itinerary itin : incident.getBagItinerary()) {
+				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getDepartureCity() == null || itin.getDepartureCity().trim().length() <= 0
+						|| itin.getArrivalCity() == null || itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null || itinCountA > 4) {
+				} else {
+					itinCountA++;
+					FlightDateType p3 = iti.addNewFlightDateOrARNK().addNewFlightDate();
+					p3.setAirlineCode(itin.getAirline());
+					p3.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
+					p3.setDate(itin.getFlightDate());
+				}
+			}
+
+			
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AG);
 			d1.setAgentID(fieldList.get(0));
