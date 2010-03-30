@@ -136,7 +136,7 @@ public class Reservation implements ReservationInterface {
 									add.setZip(a.getPostalCode());
 								
 								if (a.getPhone() != null)
-									add.setMobilePhone(a.getPhone());
+									add.setHomePhone(a.getPhone());
 								
 								if (a.getCountryCode() != null)
 									add.setCountry(a.getCountryCode());
@@ -145,16 +145,12 @@ public class Reservation implements ReservationInterface {
 									add.setProvince(a.getProvinceState());
 								} else {
 									add.setState(a.getProvinceState());
-								}
-								
-								// TODO: What to do with address 3?
-								// a.getAddress3();
-								
+								}						
 							}
 						}
 						
 						if (pax.getBaggage() != null && pax.getBaggage().getBagArray().length > 0) {
-//							Calendar lastCheckedDate = null;
+
 							for (Bag bag: pax.getBaggage().getBagArray()) {
 								
 								ClaimCheck cc = res.addNewClaimChecks();

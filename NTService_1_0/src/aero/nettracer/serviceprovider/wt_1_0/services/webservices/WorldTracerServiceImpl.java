@@ -586,12 +586,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String[] bagContents = contentsX.split(".- ");
 					
 					int countPerBag = bagContents.length;
-						for (int j = 0; j < countPerBag && j < 12; j++) {
+					String lastCategory = null;
+					for (int j = 0; j < countPerBag && j < 12; j++) {
 						String contents = bagContents[j];
 						int index = contents.indexOf("/");
-		
+						
 						ContentType c = c2.addNewContent();
-						c.setCategory(contents.substring(0, index));
+						if (lastCategory == null) {
+							lastCategory = contents.substring(0, index);
+						}
+						c.setCategory(lastCategory);
+						
 						c.setDescription(contents.substring(index + 1));
 					}
 				}
@@ -1569,8 +1574,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			s1.setAirlineCode(msg.getFromAirline());
 			s1.setStationCode(msg.getFromStation());
 
+			// TODO: HERE
+			if (false) {
+//				RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
+//				RecordReferenceType d4 = d3.addNewRecordReference();
+//				d4.setAirlineCode(arg0);
+//				d4.setReferenceNumber(arg0);
+//				d4.setStationCode(arg0);
+			}
+			
 			RushBagGroupType rb = d1.addNewRushBagGroup();
 			RushBagType rbt = rb.addNewRushBags().addNewRushBag();
+			
 
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 			if (fieldList != null && fieldList.size() > 0) {

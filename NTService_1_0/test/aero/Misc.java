@@ -19,7 +19,14 @@ public class Misc {
 	private static final Pattern PATT_END = Pattern.compile("^\\d+/|^END OF REPORT|^\\&GT|^\\s*$^\\s*$", Pattern.MULTILINE);
 
 	
-	
+	@Test
+	public void quickTest() {
+		String var = "UNDERWEAR/lots of bras underwear in plastic bag 1oran.-ge 1bk 1lavender / 1zebra pattern";
+		
+		System.out.println(var.indexOf("/"));
+		System.out.println(var.substring(0,var.indexOf("/")));
+		System.out.println(var.substring(var.indexOf("/") + 1));
+	}
 	
 	@Test
 	public void testThisNew() {
