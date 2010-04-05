@@ -1,5 +1,6 @@
 package aero.nettracer.serviceprovider.ws_1_0.res.spirit;
 
+import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
 
 import spirit.common.contracts.Bag;
@@ -57,7 +58,9 @@ public class Reservation implements ReservationInterface {
 
 			
 			NetTracerImplStub stub = new NetTracerImplStub(endpoint);
-			
+			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
+			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+
 			GetBookingInformationInputDocument bi = GetBookingInformationInputDocument.Factory.newInstance();
 			GetBookingInformationInput bi2 = bi.addNewGetBookingInformationInput();
 			bi2.setBagTagNumber("");
