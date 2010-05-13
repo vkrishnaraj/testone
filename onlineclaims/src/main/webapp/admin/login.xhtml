@@ -23,7 +23,7 @@
 							
 							
 		<h:form id="loginForm">
-			<h:messages showDetail="#{true}" showSummary="#{false}" />
+			
 
 			<h:panelGrid id="loginPanel"  columns="2">
 				<h:outputText  value="User Name" styleClass="btAirport"/>
@@ -41,7 +41,7 @@
 				<h:outputText  value="Type the code shown "/>
 				<h:inputText id="captcha" value="#{adminController.captchaBean.value}" tabindex="3"/>
 				<h:outputText value="&#160;" />
-				<h:outputText id="captchaStatus" value="#{adminController.captchaBean.status}" styleClass="loginerrormsg"/>		
+				<h:outputText id="captchaStatus" value="#{adminController.captchaBean.status}" styleClass="captchaerrormsg"/>		
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />

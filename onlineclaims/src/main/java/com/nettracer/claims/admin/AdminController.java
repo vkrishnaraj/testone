@@ -9,7 +9,10 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import com.nettracer.claims.faces.util.CaptchaBean;
+import com.nettracer.claims.faces.util.FacesUtil;
 
 /**
  * @author Utpal
@@ -17,6 +20,7 @@ import com.nettracer.claims.faces.util.CaptchaBean;
  * 				including Navigation rule and validation.
  */
 public class AdminController {
+	private static Logger logger = Logger.getLogger(AdminController.class);
 	CaptchaBean captchaBean =new CaptchaBean();
 	LoginBean loginBean=new LoginBean();
 	/**
@@ -24,8 +28,14 @@ public class AdminController {
 	 * @return String
 	 */
 	public String gotoSecondPage(){
+		logger.info("gotoSecondPage method is called");
+		if(!(loginBean.getUserName().equalsIgnoreCase("dummy") 
+				&& loginBean.getPassWord().equalsIgnoreCase("dummy"))){
+			FacesUtil.addError("Login parameters are invalid ! Please try again");
+			logger.warn("Username and Password are incorrect for admin");
+		}
 		clearCache();
-		return (captchaBean.check().equalsIgnoreCase("Correct") ? "gotoSecondPage" : null);
+		return ( captchaBean.check().equalsIgnoreCase("Correct") ? "gotoSecondPage" : null);
 	}
 	
 	/*
@@ -33,6 +43,7 @@ public class AdminController {
 	 * 
 	 */
 	public void clearCache(){
+		logger.info("clearCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesContext.getCurrentInstance();
 		/*ViewHandler viewHandler = context.getApplication().getViewHandler();
 		UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
