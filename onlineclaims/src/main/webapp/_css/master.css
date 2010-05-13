@@ -1,0 +1,225 @@
+/* PAGE ARCHITETCURE */
+body { margin-top:0; background:url(../_images/bg_vertical_gradient.png) fixed repeat-x bottom left #fff; 
+	/*IE6 hack*/ _background:#fff }
+
+/* BEGIN MAIN SITE WRAPPER */
+.pagewrapper { margin-left:auto; margin-right:auto; width:816px }
+.header, .wrappercontent, .footer { width:816px }
+.header { height:104px; background:url(../_images/header_main.png) no-repeat; 
+	/*IE6 hack*/ _background:url(../_images/header_main.jpg) no-repeat }
+.header img { /*position:relative;*/ float:left; clear:left; padding-left:8px }
+.header .logo { /*position:relative;*/ float:left; clear:left; padding-left:8px } /* use this one for the master page in the tombstone solution */
+.headerlogin { /*position:relative;*/ float:right; clear:right; padding:10px 28px 0 0 }
+.welcome { /*position:relative;*/ float:right; clear:right; width:auto }
+.namemiles { /*position:relative;*/ float:right; clear:none; width:auto; height:auto }
+.username label p { clear:none }
+.username { /*position:relative;*/ float:right; clear:right; width:auto }
+.miles { /*position:relative;*/ float:right; clear:right; width:auto }
+.iconcontainer { /*position:relative;*/ float:right; clear:right; height:100%; width:16px }
+.membericon { /*position:relative;*/ float:right; clear:right; height:auto; width:15px; margin-bottom:2px }
+.alerticon { /*position:relative;*/ float:right; clear:right; height:auto; width:15px }
+.mainnav { /*position:relative;*/ float:left; clear:left; padding:9px 0 0 29px; z-index:10000 }
+.searchcontainer { /*position:relative;*/ float:right; padding:0 20px 0 0; margin:6px 0 0 0 }
+.contactUs { /*position:relative;*/ float:left; clear:left; padding:2px 0 0 0 }
+.googlesearch { /*position:relative;*/ float:left; clear:none }
+.googlesearch input { background:#fff url(../_images/google_site_search.jpg) no-repeat 0 25%; width:150px }
+.googlego { /*position:relative;*/ float:left; clear:right }
+.googlego img { padding:3px 0 0 4px }
+.wrappercontent { height:auto; background:url(../_images/content_wrapper_bg.png) repeat-y; 
+	/*IE6 hack*/ _background:url(../_images/content_wrapper_bg.jpg) repeat-y }
+.wrappercontentbody { height:auto; padding:0px 33px 20px 33px }
+.footer { height:53px; background:url(../_images/footer_new.png) no-repeat; text-align:center; padding:20px 0 0 0; background-position:top; 
+	/*IE6 hack*/ _background:url(../_images/footer_new.jpg) no-repeat }
+/* END MAIN SITE WRAPPER */
+
+/* BEGIN INSIDE CONTAINERS */
+.container { float:left; height:auto; margin-top:20px; background-color:#fff }
+.containerfull { width:750px }
+.containerlarge { width:553px }
+.containermedium { width:440px }
+.containerhalf { width:365px }
+.containersmall { width:290px }
+.containeronethird { width:241px }
+.onethirdht { height:124px } /* used to set the height of confirmation page ads within double click */
+.containerxsmall { width:177px }
+.headerfull { width:710px }
+.headerlarge { width:513px }
+.headermedium { width:400px }
+.headerhalf { width:325px }
+.headersmall { width:250px }
+.headeronethird { width:201px }
+.headerxsmall { width:137px }
+.footerfull { width:726px }
+.footerlarge { width:529px }
+.footermedium { width:416px }
+.footerhalf { width:341px }
+.footersmall { width:266px }
+.footeronethird { width:217px }
+.footerxsmall { width:153px }
+.gradientsmall { background:url(../_images/content_gradient_small.jpg) repeat-x bottom }
+.gradientmedium { background:url(../_images/content_gradient_medium.jpg) repeat-x bottom }
+.gradientlarge { background:url(../_images/content_gradient_large.jpg) repeat-x bottom }
+.nogradient { background:url(../_images/content_gradient_none.gif) repeat-x bottom } /* needed to keep the content container borders from breaking in IE6 */
+.containerBL { /*position:relative;*/ float:left; clear:left; background:url(../_images/containerBL.jpg) no-repeat; height:12px; width:12px }
+.containerBLgradient { /*position:relative;*/ float:left; clear:left; background:url(../_images/containerBL_gradient.jpg) no-repeat; height:12px; width:12px }
+.containerBR { /*position:relative;*/ float:left; clear:right; background:url(../_images/containerBR.jpg) no-repeat; height:12px; width:12px }
+.containerBRgradient { /*position:relative;*/ float:left; clear:right; background:url(../_images/containerBR_gradient.jpg) no-repeat; height:12px; width:12px }
+.containercontent { /*height:auto;*/ border-left:#b5bdc6 solid 1px; border-right:#b5bdc6 solid 1px }
+.containerfooter, .containerfootergradient { /*position:relative;*/ float:left; clear:none; background-repeat:repeat-x; height:12px }
+.containerfooter { background-image:url(../_images/container_footer.jpg) }
+.containerfootergradient { background-image:url(../_images/container_footer_gradient.jpg) }
+.containerheader { /*position:relative;*/ float:left; clear:none; background:url(../_images/container_header_gradient.jpg) repeat-x; height:34px }
+.containerTL { /*position:relative;*/ float:left; clear:left; background:url(../_images/containerTL.jpg) no-repeat; height:34px; width:20px }
+.containerTR { /*position:relative;*/ float:left; clear:right; background:url(../_images/containerTR.jpg) no-repeat; height:34px; width:20px }
+.containerTLnogradient { float:left; clear:left; background:url(../_images/containerTL_nogradient.gif) no-repeat; height:10px; width:20px }
+.containerheadernogradient { float:left; clear:none; background:url(../_images/container_header_nogradient.gif) repeat-x; height:10px }
+.containerTRnogradient { float:left; clear:right; background:url(../_images/containerTR_nogradient.gif) no-repeat; height:10px; width:20px }
+.contentbody { margin:0 20px 0px 20px; height:auto; padding-bottom:10px }
+.contentbodynomargin { margin:0; height:auto }
+.headerlinks { float:right; padding:0; text-align:right; margin:9px 0 0 0 }
+.clear { clear:both }
+.leftmargin { margin-left:13px } /* Used when there are 3 onethird containers in a row ! */
+.notopmargin { margin-top:0 } /* Used when an inside container is first within the body section of a page */
+.contentbodyspacing { clear:both; height:20px }
+.topspacing { clear:both; height:10px }
+/* END INSIDE CONTAINERS */
+
+/* BEGIN GLOBAL BUTTON STYLE */
+.button140pxred {float: right; background:url(../_images/button2.gif)}
+.button140pxred:hover, .button140pxredl:hover  {cursor: pointer;}
+
+/*GLOBAL BUTTON STYLES*/
+.button140pxred, .button140pxredl{
+	background-image: url(../_images/button2.gif);
+	height: 20px;
+	width: 140px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #FFFFFF;
+	font-size: 11px;
+	background-repeat: no-repeat;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 1px;
+	padding-left: 0px;
+	margin: 0px;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 0px;
+}
+.button140pxredl {float: left;}
+.button140pxred {float: right;}
+.button140pxred:hover, .button140pxredl:hover  {cursor: pointer;}
+
+
+/* BEGIN GLOBAL SPACING FIXES */
+.fleft { float:left }
+.fright { float:right }
+.cleft { clear:left }
+.cnone { clear:none }
+.cright { clear:right }
+.spacenone { margin:0 }
+.spacetopxsm { margin-top:5px }
+.spacetopsm { margin-top:10px }
+.spacetopmd { margin-top:20px }
+.spacetoplg { margin-top:30px }
+.spacerightxsm { margin-right:5px }
+.spacerightsm { margin-right:10px }
+.spacerightmd { margin-right:20px }
+.spacerightlg { margin-right:30px }
+.spacebottomxsm { margin-bottom:5px }
+.spacebottomsm { margin-bottom:10px }
+.spacebottommd { margin-bottom:20px }
+.spacebottomlg { margin-bottom:30px }
+.spaceleftxsm { margin-left:5px }
+.spaceleftsm { margin-left:10px }
+.spaceleftmd { margin-left:20px }
+.spaceleftlg { margin-left:30px }
+.nopadding { padding:0 }
+.padrightxsm { padding-right:5px }
+.padrightsm { padding-right:10px }
+.padrightmd { padding-right:20px }
+.padrightlg { padding-right:30px }
+.padleftxsm { padding-left:5px }
+.padleftsm { padding-left:10px }
+.padleftmd { padding-left:20px }
+.padleftlg { padding-left:30px }
+.padtopxsm { padding-top:5px }
+.padtopsm { padding-top:10px }
+.padtopmd { padding-top:20px }
+.padtoplg { padding-top:30px }
+.padbottomxsm { padding-bottom:5px }
+.padbottomsm { padding-bottom:10px }
+.padbottommd { padding-bottom:20px }
+.padbottomlg { padding-bottom:30px }
+.htxsm { height:5px }
+.htsm { height:10px }
+.htmd { height:15px }
+.htlg { height:20px }
+.htxlg { height:25px }
+.htxxlg { height:30px }
+.autowidth { width:auto }
+.fullwidth { width:100% }
+/* END GLOBAL SPACING FIXES */
+
+/* BEGIN BORDERS */
+.topborder { border-top:1px solid #ccc }
+.rightborder { border-right:1px solid #ccc }
+.bottomborder { border-bottom:1px solid #ccc }
+.leftborder { border-left:1px solid #ccc }
+/* END BORDERS */
+
+/* BEGIN 2 COLUMN INSIDE CONTAINERS */
+.twocolumn { clear:both }
+.twocolumn .left { float:left; clear:left; width:45% }
+.twocolumn .right { float:right; clear:right; width:48%; padding-left:20px }
+
+.origitin, .nextday { margin-top:4px }
+.origitin ul, .nextday ul { margin:0; padding:0 }
+.origitin li { float:left; list-style-type:none; margin:0 10px 0 0 }
+.nextday li { list-style-type:none; padding-top:5px }
+/* END 2 COLUMN INSIDE CONTAINERS */
+
+.displayblock { display:block }
+.displayinline { display:inline }
+.displaynone { display:none }
+.wait { height:100%; padding:100px 0 100px 0 }
+/*.iconcal { vertical-align:top; padding-top:3px }*/
+.iconcal, .valignadj { vertical-align:-1px }
+.novalign { vertical-align:0 }
+/*.icon { vertical-align:top; padding-top:2px }*/
+.icon { vertical-align:0 }
+span.noborder input { border:none; background:none }
+.noborder { border:none }
+.chkbox { float:left; margin:5px 10px 0 0 }
+.chklist input { border:none; background:none }
+.radiobtn { vertical-align:middle }
+.valignmid { vertical-align:middle }
+.valigntop { vertical-align:top }
+.hand { cursor:pointer }
+.textleft { text-align:left }
+.textright { text-align:right }
+.textcenter { text-align:center }
+.back2mockups { font-size:1.1em; font-weight:bold; margin-top:20px; text-align:right }
+.back2mockups a { color:#c67f00 }
+.erroricon { float:left; clear:left; width:15% }
+.errormsg { float:left; clear:none; width:85% }
+td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:0 }
+.bmodule { float:left; background:url('../_images/banner_module.gif') no-repeat; height:116px; width:750px }
+.bmodule .bnr { height:90px; width:728px; margin:13px 0 0 11px }
+
+.datinfo { margin-left:5px; height:210px; width:99% }
+
+
+.footer_new { height:53px; background:url(../_images/footer_new.png) no-repeat; text-align:center; padding:20px 0 0 0; background-position:top; 
+	/*IE6 hack*/ _background:url(../_images/footer_new.jpg) no-repeat }
+	
+
+/* Composed by Olive Technology*/
+.loginAlign {
+	margin-left: auto; 
+	margin-right: auto; 
+	width: 408px;
+}
+.loginerrormsg { float:left; clear:none; color: red; margin-top: 2px; }

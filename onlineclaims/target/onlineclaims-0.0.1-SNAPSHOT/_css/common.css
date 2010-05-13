@@ -1,0 +1,77 @@
+body { font-size:62.5%; font-family:Arial, Helvetica, Verdana, Sans-serif; color:#333; background-color:#fff }
+
+p, .bodycopy { margin:0; font-size:1.1em; color:#333; line-height:12pt }
+
+h1, .title { font-size:1.8em; font-weight:normal }
+
+.containerheader h1 { margin-top:8px }
+
+.heading { font-size:1.4em; font-weight:normal/*; padding-right:10px*/ }
+	
+h2, .subheadprimary, .subheadsecondary { font-size:1.3em }
+	
+h3, .navmain, .formnavmain .formnavhighlight { font-size: 1.2em }
+	
+h4, td, .secondarynav, .formsecondarynav { font-size: 1.1em }
+
+h5, .ftadj { font-size: 1.0em }
+	
+h6 { font-size:0.9em; font-weight:normal }
+
+/* LINKS */
+a:link, a:visited { text-decoration:none; outline:none }
+
+a:hover, a:focus { text-decoration:none; outline:none }
+
+/* USER CONTROLS */
+input, textarea { font-family:Arial, Helvetica, sans-serif; font-size:1.0em; font-weight:normal; color:#333; padding:2px 0 2px 2px; border:solid 1px #708090; background:#fff }
+input, textarea { background-image:url(../_images/inputboxshadow.gif) }
+/*input, textarea { background-image:url(../_images/inputerrorshadow.gif); background-color:#ff7f7e }*/
+input.radionoBG { background-color:red }
+input.noborder { border:none; background:none }
+label { font-size:1.1em; color:#333 }
+select { font-family:Arial, Helvetica, sans-serif; font-size:1.0em; color:#333; padding:0; border:solid 1px #708090 }
+
+/* COLORS */
+.white, .navmain { color:#fff }
+
+.dkblue, a.dkblue, a.dkblue:visited, a.dkblue:hover, a.dkblue:focus, .header, .navsecondary, .formnavmain, .formnavsecondary, .dkblue a:link, .dkblue a:visited, .dkblue a:hover, .dkblue a:focus {
+	color: #24427c }
+
+a.dkblue, a.dkblue:link, a.dkblue:visited , a.dkblue:hover, a.dkblue:focus, .dkblue a, .dkblue a:link, .dkblue a:visited , .dkblue a:hover, .dkblue a:focus { text-decoration:underline; outline:none }
+
+/* this one is for the Details text that requires a click to see a 'tooltip' layer 
+Don't know why, but it only works when applied to the containing div or li, rather than the a tag iteself. */
+.statusclick a, .statusclick a:visited, .statusclick a:link { text-decoration:underline; color:#24427c }
+
+.red, .subheadsecondary { color:#a40025 }
+
+.ltblue, .ltblue a, .ltblue a:visited, .pricehighlight { color:#277db2 }
+
+.ltblue  a:hover, .ltblue a:link { text-decoration:none }
+
+.gold, .subheadprimary, .formnavhighlight { color:#c67f00 }
+
+.dkgrey, .bodycopy { color:#333 }
+
+.beige, .highlightbar { color:#f1f0ec }
+
+.blue, .menubar { color:#ecf4f8 }
+
+.bold, .subheadprimary, .formnavmain, strong { font-weight:bold }
+
+.nobold { font-weight:normal }
+
+.nowrap { white-space:nowrap }
+	
+.noborder { border:none }
+/* REQUIRED FIELD STYLE */
+
+.bullet-required { font-size:1.5em; color:#c67f00; vertical-align:top }
+
+.disabled { color:#ccc }
+
+.mask { background-color:#999; opacity:0.4; filter:progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=40) }
+.validationerrorlist ul { margin:5px 0 0 0; padding:0; list-style-position:inside; }
+.error label { color:#a40025 }
+.error input { background-image:url(../_images/inputerrorshadow.gif); background-color:#ff7f7e }

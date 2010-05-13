@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/layout/template.xhtml">
+
+	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
+	
+	<ui:define name="mainContent">
+	<div class="container containerfull">
+				<div class="containerTL"></div>
+				<div class="containerheader headerfull">
+				<h1 class="dkblue">Admin Landing</h1>
+			  </div>
+				<div class="containerTR"></div>
+				<div class="containercontent gradientsmall">
+					<div class="contentbodyspacing"></div>
+					<div class="contentbody">
+						
+						
+						<!-- Start body content -->
+		<h:form >
+			<h:panelGrid id="landingPanel"  columns="1">
+				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" tabindex="1" />
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:commandLink id="requiredFields" value="Maintain Required Fields" tabindex="2" />
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:commandLink id="application" value="Maintain Application" tabindex="3" />
+			</h:panelGrid>
+		</h:form>
+							
+					  	<!-- End body content -->
+				 	 </div>
+					<!-- ends contentbody -->
+				</div><!-- ends containercontent -->
+				<div id="divFooter">
+					<div class="containerBLgradient"></div>
+					<div class="containerfootergradient footerfull"></div>
+					<div class="containerBRgradient"></div>
+					<div class="clear"></div>
+				</div>
+			</div><!-- ends container -->
+			
+		
+	</ui:define>
+</ui:composition>
