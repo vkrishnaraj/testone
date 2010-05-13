@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.nettracer.claims</groupId>
-  <artifactId>onlineclaims</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>NetTracer Online Claims</name>
-  <!--Prepared, configured and Tested by Utpal  -->
-  
-  <dependencies>
-  <!-- Servlet and jsp  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.nettracer.claims</groupId>
+	<artifactId>onlineclaims</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>NetTracer Online Claims</name>
+	<!--Prepared, configured and Tested by Utpal  -->
+
+	<dependencies>
+		<!-- Servlet and jsp  -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -20,15 +21,15 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<!-- JSF and Myfaces Implementation Dependencies -->
-			<!-- Facelets dependency needed for template creation -->
+		<!-- Facelets dependency needed for template creation -->
 		<dependency>
 			<groupId>com.sun.facelets</groupId>
 			<artifactId>jsf-facelets</artifactId>
 			<version>1.1.10</version>
 		</dependency>
-		
+
 		<!-- MyFaces Implementation -->
 		<dependency>
 			<groupId>org.apache.myfaces.core</groupId>
@@ -46,8 +47,12 @@
 			<artifactId>tomahawk</artifactId>
 			<version>1.1.9</version>
 		</dependency>
-  		
-		
-		
-  </dependencies>
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+
+	</dependencies>
 </project>
