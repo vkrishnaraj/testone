@@ -225,10 +225,9 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .captchaerrormsg { float:left; clear:none; color: red; margin-top: 2px; }
 
 .loginerrormsg {  
-	margin-left: 25%; 
 	color: red; 
-	float:left; clear:none;list-style-position:inside;
-	font-size:1.6em;
-	font-size:1.6em;
-	margin-left:18%;
+	float:left; 
+	clear:none;
+	margin-top: 2px;
+	width:231px;
 }

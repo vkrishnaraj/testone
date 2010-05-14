@@ -40,17 +40,10 @@
 		<style type="text/css">@import url("../_css/topnav.css");</style>
 		<!--[if lt IE 7]><script type="text/javascript" src="_js/iehover-fix.js"></script><![endif]-->
 		<script type="text/javascript" src="../_js/safariCheck.js"></script>
-		<script type="text/javascript">
-			// Checking for Safari 3
-			// Safari 2 doesn't do background images in textboxes but Safari 3 does.
-			if ( (navigator.userAgent.toLowerCase().indexOf("safari") != -1) and (navigator.appVersion.toLowerCase().indexOf("version/3") == -1) ) {
-				document.getElementById("googleSiteSearch").value="Google Site Search";
-			}
-		</script>
 	</div>
 <div class="wrappercontent">
 	<div class="wrappercontentbody">
-			<h:messages styleClass="loginerrormsg" />
+			
 		<ui:insert name="mainContent" />
 		<div class="clear"></div>
 			
