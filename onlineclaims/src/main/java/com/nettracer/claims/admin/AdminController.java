@@ -37,7 +37,7 @@ public class AdminController {
 		if(!(loginBean.getUserName().equalsIgnoreCase("dummy") 
 				&& loginBean.getPassword().equalsIgnoreCase("dummy"))){
 			FacesUtil.addError("Incorrect username and password combination. Please try again.");
-			logger.warn("Username and Password are incorrect for admin");
+			logger.error("Username and Password are incorrect for admin");
 		}
 		clearCache();
 		if(captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)){
