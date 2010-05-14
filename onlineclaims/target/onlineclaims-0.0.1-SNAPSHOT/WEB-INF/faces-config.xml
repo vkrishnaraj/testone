@@ -10,10 +10,23 @@
 		<managed-bean-class>com.nettracer.claims.admin.AdminController</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>sessionBean</managed-bean-name>
+		<managed-bean-class>com.nettracer.claims.admin.SessionScopeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
 	<navigation-rule>
 		<navigation-case>
-			<from-outcome>gotoSecondPage</from-outcome>
+			<from-outcome>gotoLandingPage</from-outcome>
 			<to-view-id>/admin/landing.faces</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>logout</from-outcome>
+			<to-view-id>/admin/login.faces</to-view-id>
 			<redirect />
 		</navigation-case>
 	</navigation-rule>

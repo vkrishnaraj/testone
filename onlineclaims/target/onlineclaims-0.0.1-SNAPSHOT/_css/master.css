@@ -217,9 +217,24 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 	
 
 /* Composed by Olive Technology*/
-.loginAlign {
-	margin-left: auto; 
-	margin-right: auto; 
-	width: 408px;
+.loginAlign {margin-left: auto; margin-right: auto; width: 408px;}
+.captchaerrormsg { float:left; clear:none; color: red; margin-top: 2px; }
+
+.loginerrormsg {color: red; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
+
+.logoutnav { /*position:relative;*/ 
+	float:right; 
+	clear:left; 
+	padding:4px 0 0 715px; 
+	z-index:10000 ;
+	width:auto; 
+	display:block; 
+	text-decoration:none; 
+	font-size:13px; 
+	color:#fff; 
+	background:#2f5296 url(../_images/arrow_off.gif) center left no-repeat; 
+	padding:5px 30px 6px 15px;
+	left:auto;
+	margin-right: 10px;
+	margin-top: 3px;
 }
-.loginerrormsg { float:left; clear:none; color: red; margin-top: 2px; }

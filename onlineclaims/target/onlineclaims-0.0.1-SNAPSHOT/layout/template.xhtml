@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
 	
 <f:view contentType="text/html" encoding="UTF-8">
 <head>
@@ -34,29 +35,22 @@
 	-->
 <div class="pagewrapper">
 	<div class="header">
-		<a href="http://www.usairways.com/"><img src="http://content.usairways.com/en-US/Resources/images/layout/hp_header_logo.gif" alt="US Airways | Home Page" class="logo" /></a>
+		<a href="http://www.usairways.com/"><img src="../_images/logo_header.jpg" alt="US Airways | Home Page" class="logo" /></a>
 		<div class="clear"></div>
 		<style type="text/css">@import url("../_css/topnav.css");</style>
 		<!--[if lt IE 7]><script type="text/javascript" src="_js/iehover-fix.js"></script><![endif]-->
+		<!-- <script type="text/javascript" src="../_js/nav.js"></script> -->
+		<h:form>
+			<h:commandLink value="Log Out" rendered="#{sessionBean.logoutRenderer}" 
+						action="#{adminController.logout}" styleClass="logoutnav"/>
+		</h:form>
 		<script type="text/javascript" src="../_js/safariCheck.js"></script>
-		<script type="text/javascript">
-			// Checking for Safari 3
-			// Safari 2 doesn't do background images in textboxes but Safari 3 does.
-			if ( (navigator.userAgent.toLowerCase().indexOf("safari") != -1) and (navigator.appVersion.toLowerCase().indexOf("version/3") == -1) ) {
-				document.getElementById("googleSiteSearch").value="Google Site Search";
-			}
-		</script>
 	</div>
 <div class="wrappercontent">
 	<div class="wrappercontentbody">
-		
 			
-			
-			<ui:insert name="mainContent"/>
-			
-			
-		
-			<div class="clear"></div>
+		<ui:insert name="mainContent" />
+		<div class="clear"></div>
 			
 
 	</div><!-- ends wrappercontentbody -->

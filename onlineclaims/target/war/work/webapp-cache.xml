@@ -59,7 +59,10 @@
           <string>_js/safariCheck.js</string>
           <string>WEB-INF/classes/com/nettracer/claims/admin/AdminController.class</string>
           <string>WEB-INF/classes/com/nettracer/claims/admin/LoginBean.class</string>
+          <string>WEB-INF/classes/com/nettracer/claims/admin/SessionScopeBean.class</string>
           <string>WEB-INF/classes/com/nettracer/claims/faces/util/CaptchaBean.class</string>
+          <string>WEB-INF/classes/com/nettracer/claims/faces/util/FacesUtil.class</string>
+          <string>WEB-INF/classes/log4j.xml</string>
           <string>WEB-INF/lib/jstl-1.2.jar</string>
           <string>WEB-INF/lib/jsf-facelets-1.1.10.jar</string>
           <string>WEB-INF/lib/myfaces-api-1.1.7.jar</string>
@@ -82,6 +85,7 @@
           <string>WEB-INF/lib/batik-ext-1.6-1.jar</string>
           <string>WEB-INF/lib/xmlParserAPIs-2.0.2.jar</string>
           <string>WEB-INF/lib/itext-1.4.8.jar</string>
+          <string>WEB-INF/lib/log4j-1.2.13.jar</string>
         </pathsSet>
       </path-set>
     </entry>
@@ -157,6 +161,18 @@
         <optional>false</optional>
       </dependency>
       <targetFileName>tomahawk-1.1.9.jar</targetFileName>
+    </org.apache.maven.plugin.war.util.DependencyInfo>
+    <org.apache.maven.plugin.war.util.DependencyInfo>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.13</version>
+        <type>jar</type>
+        <scope>compile</scope>
+        <exclusions/>
+        <optional>false</optional>
+      </dependency>
+      <targetFileName>log4j-1.2.13.jar</targetFileName>
     </org.apache.maven.plugin.war.util.DependencyInfo>
   </dependenciesInfo>
 </webapp-structure>

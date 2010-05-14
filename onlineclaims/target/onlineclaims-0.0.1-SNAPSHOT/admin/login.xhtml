@@ -15,6 +15,7 @@
 			<div class="containerheader headerhalf"><h1 class="dkblue">Admin Login</h1></div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
+					
 					<div class="contentbodyspacing"></div>
 					<div class="contentbody">
 						<div id="htadj2ra"><!-- makes two inline divs the same height -->
@@ -23,15 +24,16 @@
 							
 							
 		<h:form id="loginForm">
-			<h:messages showDetail="#{true}" showSummary="#{false}" />
-
+			
+			<h:panelGrid id="mainPanel"  columns="1">
+				<h:messages styleClass="loginerrormsg" />
 			<h:panelGrid id="loginPanel"  columns="2">
 				<h:outputText  value="User Name" styleClass="btAirport"/>
 				<h:inputText id="userName" value="#{adminController.loginBean.userName}" styleClass="btAirport" tabindex="1"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText  value="Password" styleClass="btAirport"/>
-				<h:inputText id="passWord" value="#{adminController.loginBean.passWord}" styleClass="btAirport" tabindex="2"/>
+				<h:inputSecret id="password" value="#{adminController.loginBean.password}" styleClass="btAirport" tabindex="2"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:commandLink value="Try a different image &#160;&#160;&#160;&#160;&#160;&#160;" />		
@@ -41,11 +43,12 @@
 				<h:outputText  value="Type the code shown "/>
 				<h:inputText id="captcha" value="#{adminController.captchaBean.value}" tabindex="3"/>
 				<h:outputText value="&#160;" />
-				<h:outputText id="captchaStatus" value="#{adminController.captchaBean.status}" styleClass="loginerrormsg"/>		
+				<h:outputText id="captchaStatus" value="#{adminController.captchaBean.status}" styleClass="captchaerrormsg"/>		
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandButton id="adminLoginContinue" value="Continue" action="#{adminController.gotoSecondPage}" tabindex="4" styleClass="button140pxred button140pxredl"/>
+				<h:commandButton id="adminLoginContinue" value="Continue" action="#{adminController.gotoLandingPage}" tabindex="4" styleClass="button140pxred button140pxredl"/>
+			</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
 		
