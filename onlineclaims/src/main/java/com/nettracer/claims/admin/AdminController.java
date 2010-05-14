@@ -31,7 +31,7 @@ public class AdminController {
 		logger.info("gotoSecondPage method is called");
 		if(!(loginBean.getUserName().equalsIgnoreCase("dummy") 
 				&& loginBean.getPassWord().equalsIgnoreCase("dummy"))){
-			FacesUtil.addError("Login parameters are invalid ! Please try again");
+			FacesUtil.addError("Incorrect username and password combination. Please try again.");
 			logger.warn("Username and Password are incorrect for admin");
 		}
 		clearCache();
