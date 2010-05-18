@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/layout/template.xhtml">
+
+	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
+
+	<ui:define name="mainContent">
+	
+		<div class="container containerfull">
+		<div class="containerTL"></div>
+		<div class="containerheader headerfull">
+		<h1 class="dkblue">Descriptive Text</h1>
+		</div>
+		<div class="containerTR"></div>
+		<div class="containercontent gradientsmall">
+		<div class="contentbodyspacing"></div>
+		<div class="contentbody"><!-- Start body content --> <h:outputText
+			value="Lorem ipsum dolor sit ametconsectetur adipiscing 
+							elitabitur sed vehicula loremMauris porttitor sapien vel lorem fringilla ultricies" />
+
+		<!-- End body content --></div>
+		<!-- ends contentbody --></div>
+		<!-- ends containercontent -->
+		<div id="divFooter">
+		<div class="containerBLgradient"></div>
+		<div class="containerfootergradient footerfull"></div>
+		<div class="containerBRgradient"></div>
+		<div class="clear"></div>
+		</div>
+		</div>
+		<!-- ends container -->
+
+
+		<div class="container containerfull">
+		<div class="containerTL"></div>
+		<div class="containerheader headerfull">
+		<h1 class="dkblue">Maintain Required Fields</h1>
+		</div>
+		<div class="containerTR"></div>
+		<div class="containercontent gradientsmall">
+		<div class="contentbodyspacing"></div>
+		<div class="contentbody">
+		<!-- Start body content --> 
+		<h:form>
+			<h:dataTable id="mainTable" value="#{requiredFieldsController.requiredFieldsLabel}" var="item"
+				 styleClass="requiredFieldsTable">
+				
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{item.id}:" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Passenger Information" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState" 	value="#{item.delayedState}" >
+						<f:selectItems id="delayedStateitems" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState" 	value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState" value="#{item.pilferedState}" >
+						<f:selectItems id="pilferedStateitems" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</h:column>
+
+			</h:dataTable>
+			<h:commandButton  id="saveRequiredFields" value="Save" action="#{requiredFieldsController.saveRequiredFields}" 
+					tabindex="1" styleClass="button140pxred button140pxredl" />
+
+		</h:form> 
+		<!-- End body content -->
+		</div><!-- ends contentbody -->
+		</div><!-- ends containercontent -->
+		<div id="divFooter">
+		<div class="containerBLgradient"></div>
+		<div class="containerfootergradient footerfull"></div>
+		<div class="containerBRgradient"></div>
+		<div class="clear"></div>
+		</div>
+		</div>
+		<!-- ends container -->
+
+
+	</ui:define>
+</ui:composition>

@@ -52,7 +52,10 @@
 						<!-- Start body content -->
 		<h:form >
 			<h:panelGrid id="landingPanel"  columns="1">
-				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" tabindex="1" />
+				<h:messages styleClass="loginerrormsg" />
+				
+				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" 
+						action="#{requiredFieldsController.gotoRequiredFields}" tabindex="1" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:commandLink id="requiredFields" value="Maintain Required Fields" tabindex="2" />
