@@ -9,7 +9,7 @@
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
 
 	<ui:define name="mainContent">
-	
+
 		<div class="container containerfull">
 		<div class="containerTL"></div>
 		<div class="containerheader headerfull">
@@ -34,79 +34,82 @@
 		</div>
 		<!-- ends container -->
 
-
-		<div class="container containerfull">
-		<div class="containerTL"></div>
-		<div class="containerheader headerfull">
-		<h1 class="dkblue">Maintain Required Fields</h1>
-		</div>
-		<div class="containerTR"></div>
-		<div class="containercontent gradientsmall">
-		<div class="contentbodyspacing"></div>
-		<div class="contentbody">
-		<!-- Start body content --> 
 		<h:form>
-			<h:dataTable id="mainTable" value="#{requiredFieldsController.requiredFieldsLabel}" var="item"
-				 styleClass="requiredFieldsTable">
-				
-				<h:column>
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Maintain Required Fields</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content -->
+
+
+			<div id="verticalScroller">
+			<t:dataTable id="mainTable" 
+				value="#{requiredFieldsController.requiredFieldsLabel}" var="item" headerClass="TableHeader"
+				styleClass="requiredFieldsTable" rowIndexVar="row">
+
+				<t:column>
 					<f:facet name="header">
-						<h:outputText value="Page:" />
+						<h:outputText value="Fields" />
 					</f:facet>
-					<h:outputText value="Field #{item.id}:" />
-				</h:column>
-				
-				<h:column>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+
+				<t:column >
 					<f:facet name="header">
-						<h:outputText value="Passenger Information" />
+						<h:outputText value="Labels" />
 					</f:facet>
 					<h:outputText value="#{item.label}" />
-				</h:column>
-				<h:column>
+				</t:column>
+				<t:column>
 					<f:facet name="header">
 						<h:outputText value="Delayed" />
 					</f:facet>
-					<h:selectOneMenu id="delayedState" 	value="#{item.delayedState}" >
+					<h:selectOneMenu id="delayedState" value="#{item.delayedState}">
 						<f:selectItems id="delayedStateitems" value="#{selectItemlist}" />
 					</h:selectOneMenu>
 
-				</h:column>
+				</t:column>
 
-				<h:column>
+				<t:column>
 					<f:facet name="header">
 						<h:outputText value="Damaged" />
 					</f:facet>
-					<h:selectOneMenu id="damagedState" 	value="#{item.damagedState}">
+					<h:selectOneMenu id="damagedState" value="#{item.damagedState}">
 						<f:selectItems id="damagedStateitems" value="#{selectItemlist}" />
 					</h:selectOneMenu>
-				</h:column>
+				</t:column>
 
-				<h:column>
+				<t:column>
 					<f:facet name="header">
 						<h:outputText value="Pilfered" />
 					</f:facet>
-					<h:selectOneMenu id="pilferedState" value="#{item.pilferedState}" >
+					<h:selectOneMenu id="pilferedState" value="#{item.pilferedState}">
 						<f:selectItems id="pilferedStateitems" value="#{selectItemlist}" />
 					</h:selectOneMenu>
-				</h:column>
+				</t:column>
 
-			</h:dataTable>
-			<h:commandButton  id="saveRequiredFields" value="Save" action="#{requiredFieldsController.saveRequiredFields}" 
-					tabindex="1" styleClass="button140pxred button140pxredl" />
-
-		</h:form> 
-		<!-- End body content -->
-		</div><!-- ends contentbody -->
-		</div><!-- ends containercontent -->
-		<div id="divFooter">
-		<div class="containerBLgradient"></div>
-		<div class="containerfootergradient footerfull"></div>
-		<div class="containerBRgradient"></div>
-		<div class="clear"></div>
-		</div>
-		</div>
-		<!-- ends container -->
+			</t:dataTable></div>
 
 
+
+			<!-- End body content --></div>
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+			<div><h:commandButton id="saveRequiredFields" value="Save"
+				action="#{requiredFieldsController.saveRequiredFields}" tabindex="1"
+				styleClass="button140pxred button140pxredl" /></div>
+		</h:form>
 	</ui:define>
 </ui:composition>

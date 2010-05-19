@@ -18,7 +18,7 @@ import com.nettracer.claims.hibernate.HibernateDaoSupport;
 
 @Repository
 public class RequiredFieldsDao extends HibernateDaoSupport {
-	private static Logger logger = Logger.getLogger(HibernateDaoSupport.class);
+	private static Logger logger = Logger.getLogger(RequiredFieldsDao.class);
 
 	@SuppressWarnings("unchecked")
 	public List<Label> getAll() {
@@ -42,6 +42,7 @@ public class RequiredFieldsDao extends HibernateDaoSupport {
 	}
 
 	public void save(List<Label> requiredFieldsList) {
+		logger.info("Calling save method");
 		getHibernateTemplate().saveOrUpdateAll(requiredFieldsList);
 	}
 

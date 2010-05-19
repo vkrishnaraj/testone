@@ -62,6 +62,7 @@ public class AdminController {
 			FacesUtil
 					.addError("Incorrect username and password combination. Please try again.");
 			logger.error("Username and Password are incorrect for admin");
+			return null;
 		}
 		clearCache();
 		if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {

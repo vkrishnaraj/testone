@@ -50,9 +50,9 @@
 						
 						
 						<!-- Start body content -->
-		<h:form >
+		<h:form id="landingForm">
 			<h:panelGrid id="landingPanel"  columns="1">
-				<h:messages styleClass="loginerrormsg" />
+				<h:message id="landingMsg" styleClass="infomsg" />
 				
 				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" 
 						action="#{requiredFieldsController.gotoRequiredFields}" tabindex="1" />

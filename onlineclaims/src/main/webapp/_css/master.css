@@ -222,6 +222,8 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 .loginerrormsg {color: red; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
 
+.infomsg {color: green; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
+
 .logoutnav { /*position:relative;*/ 
 	float:right; 
 	clear:left; 
@@ -242,5 +244,31 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .requiredFieldsTable{
 	margin-left:auto;
 	margin-right:auto;
-	width:555px;
+	width:700px; 
 }
+
+#verticalScroller{
+	height: 250px; overflow: scroll; overflow-X: hidden;
+}
+
+}
+.TableRow1 {
+    background-color: #D0E6E0;
+}
+
+.TableRow2 {
+    background-color: #E8F7F1;
+}
+.TableColumn {
+    text-align: center;
+}
+
+
+.TableHeader {
+	color: #000000;
+    background-color: #F1F1F1;
+    padding: 3;
+    text-align: left;
+    border: none;
+}
+

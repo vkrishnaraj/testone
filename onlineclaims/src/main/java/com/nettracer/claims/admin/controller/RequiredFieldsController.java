@@ -75,7 +75,7 @@ public class RequiredFieldsController {
 				.getExternalContext().getSession(false);
 		if (null != session) {
 			requiredFieldsService.save(getRequiredFieldsLabel());
-			FacesUtil.addInfo("Required fields Data saved successfully.");
+			FacesUtil.addInfo("landingForm:landingMsg","Required fields Data saved successfully.");
 			logger.info("Required fields Data saved successfully.");
 			return "gotoLandingPage";
 		} else {
