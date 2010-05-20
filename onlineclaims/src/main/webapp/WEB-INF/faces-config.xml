@@ -23,9 +23,12 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>gotoMaintainApplication</from-outcome>
+			<to-view-id>/admin/maintainapplication.faces</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>logout</from-outcome>
 			<to-view-id>/admin/login.faces</to-view-id>
-			<redirect />
 		</navigation-case>
 	</navigation-rule>
 	<application>
