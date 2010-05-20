@@ -16,7 +16,6 @@
 		<navigation-case>
 			<from-outcome>gotoLandingPage</from-outcome>
 			<to-view-id>/admin/landing.faces</to-view-id>
-			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>gotoRequiredFields</from-outcome>
