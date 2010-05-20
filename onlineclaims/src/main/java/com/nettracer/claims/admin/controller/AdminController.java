@@ -3,16 +3,12 @@
  */
 package com.nettracer.claims.admin.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -22,10 +18,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.nettracer.claims.admin.LoginBean;
-import com.nettracer.claims.admin.RequiredFieldsBean;
 import com.nettracer.claims.admin.SessionScopeBean;
-import com.nettracer.claims.core.model.DropDown;
-import com.nettracer.claims.core.model.Label;
+import com.nettracer.claims.core.model.Company;
 import com.nettracer.claims.core.service.RequiredFieldsService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
@@ -48,6 +42,8 @@ public class AdminController {
 	@Autowired
 	RequiredFieldsService requiredFieldsService;
 
+	Company company=new Company();
+
 	/**
 	 * If the validation would successful for login page then navigate to 2nd
 	 * page. i.e. the landing page
@@ -68,17 +64,46 @@ public class AdminController {
 		if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 			FacesContext context = FacesUtil.getFacesContext();
 			HttpSession session = (HttpSession) context.getExternalContext()
-					.getSession(true);
+					.getSession(false);
 			SessionScopeBean sessionBean = (SessionScopeBean) session
 					.getAttribute("sessionBean");
 			sessionBean.setLogoutRenderer(true);
 			session.setAttribute("sessionBean", sessionBean);
+			session.setAttribute("logged", "logged");
 			return "gotoLandingPage";
 		} else {
 			return null;
 		}
 	}
+
+	public String gotoMaintainApplicationPage() {
+		logger.info("gotoMaintainApplicationPage method is called");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("logged")) {
+			Company company = requiredFieldsService.getApplicationData();
+			this.setCompany(company);
+			return "gotoMaintainApplication";
+		} else {
+			FacesUtil.addError("Your session has been expired. PLease log in again");
+			return "logout";
+		}
+	}
 	
+	public String saveApplication(){
+		logger.info("saveApplication called");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("logged") ) {
+			requiredFieldsService.saveApplication(this.getCompany());
+			FacesUtil.addInfo("Application Data saved successfully.");
+			logger.info("Application Data saved successfully.");
+			return "gotoLandingPage";
+		} else {
+			FacesUtil.addError("Your session has been expired. PLease log in again");
+			return "logout";
+		}
+	}
 
 	/*
 	 * Clear the browser cache(component value) from Apply request value phase
@@ -102,24 +127,11 @@ public class AdminController {
 		inputText = (HtmlInputText) htmlPanelGrid.findComponent("captcha");
 		inputText.setValue("");
 	}
-
-	/**
-	 * This method is used to logout the session
-	 * 
-	 * @return String
-	 */
-	public String logout() {
-		logger.info("invalidate method is called for logout");
-		FacesContext facesContext = FacesUtil.getFacesContext();
-		HttpSession session = (HttpSession) facesContext.getExternalContext()
-				.getSession(false);
-		if (session != null) {
-			session.invalidate();
-			FacesUtil.addInfo("You have successfully signed out.");
-			logger.info("User session is closed");
-		}
-		return "logout";
+	
+	public String logout(){
+		return FacesUtil.logout();
 	}
+
 
 	public CaptchaBean getCaptchaBean() {
 		return captchaBean;
@@ -145,5 +157,14 @@ public class AdminController {
 			RequiredFieldsService requiredFieldsService) {
 		this.requiredFieldsService = requiredFieldsService;
 	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+	
 
 }

@@ -9,6 +9,7 @@
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
 	
 	<ui:define name="mainContent">
+	<h:form id="appForm">
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -41,7 +42,7 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Admin Landing</h1>
+				<h1 class="dkblue">Administration | Maintain Application</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -50,22 +51,37 @@
 						
 						
 						<!-- Start body content -->
-		<h:form id="landingForm">
-				<h:messages id="landingMsg"  infoClass="infomsg"/>
-			<h:panelGrid id="landingPanel"  columns="1">
-				
-				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" 
-						 tabindex="1" />
+		
+				<h:messages id="appMsg"  errorClass="loginerrormsg"/>
+			<h:panelGrid id="appPanel"  columns="2" width="300">
+				<h:outputText id="app1" value="Company Code"  />
+				<h:inputText id="app2" value="#{adminController.company.code}"  tabindex="1"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandLink id="requiredFields" value="Maintain Required Fields" 
-						action="#{requiredFieldsController.gotoRequiredFields}" tabindex="2" />
+				<h:outputText id="app3" value="Company Name"  />
+				<h:inputText id="app4" value="#{adminController.company.name}"  tabindex="2"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandLink id="application" value="Maintain Application" tabindex="3" 
-					action="#{adminController.gotoMaintainApplicationPage}"/>
+				<h:outputText id="app5" value="Company Address"  />
+				<h:inputText id="app6" value="#{adminController.company.address}"  tabindex="3"/>
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:outputText id="app7" value="Company City"  />
+				<h:inputText id="app8" value="#{adminController.company.city}"  tabindex="4"/>
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:outputText id="app9" value="Company State"  />
+				<h:inputText id="app10" value="#{adminController.company.state}"  tabindex="5"/>
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:outputText id="app11" value="Company Country"  />
+				<h:inputText id="app12" value="#{adminController.company.country}"  tabindex="6"/>
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:outputText id="app13" value="Reply Address"  />
+				<h:inputText id="app14" value="#{adminController.company.replyAddress}"  tabindex="7"/>
 			</h:panelGrid>
-		</h:form>
+		
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -79,6 +95,10 @@
 				</div>
 			</div><!-- ends container -->
 			
-		
+			<div><h:commandButton id="saveApplication" value="Save"
+				action="#{adminController.saveApplication}" tabindex="8"
+				styleClass="button140pxred button140pxredl" /></div>
+			
+		</h:form>
 	</ui:define>
 </ui:composition>

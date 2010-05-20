@@ -222,7 +222,7 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 .loginerrormsg {color: red; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
 
-.infomsg {color: green; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
+.infomsg {color: green; list-style:none;font-size: 1.3em;}
 
 .logoutnav { /*position:relative;*/ 
 	float:right; 
@@ -270,5 +270,9 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
     padding: 3;
     text-align: left;
     border: none;
+}
+
+.appClass{
+	width :300px;	
 }
 

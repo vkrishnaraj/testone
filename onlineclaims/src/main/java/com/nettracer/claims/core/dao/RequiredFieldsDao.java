@@ -7,6 +7,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
+import com.nettracer.claims.core.model.Company;
 import com.nettracer.claims.core.model.DropDown;
 import com.nettracer.claims.core.model.Label;
 import com.nettracer.claims.hibernate.HibernateDaoSupport;
@@ -44,6 +45,30 @@ public class RequiredFieldsDao extends HibernateDaoSupport {
 	public void save(List<Label> requiredFieldsList) {
 		logger.info("Calling save method");
 		getHibernateTemplate().saveOrUpdateAll(requiredFieldsList);
+	}
+
+	public Company getApplicationData() {
+		logger.info("Calling getApplicationData");
+		return getCompany();
+	}
+
+	public void saveCompany(Company company) {
+		logger.info("Calling save method");
+		getHibernateTemplate().delete(getCompany());
+		getHibernateTemplate().save(company);
+	}
+	
+	private Company getCompany(){
+		return (Company)getSession().createSQLQuery("select * from company")
+		.addScalar("code", Hibernate.STRING)
+		.addScalar("name", Hibernate.STRING)
+		.addScalar("address", Hibernate.STRING)
+		.addScalar("city", Hibernate.STRING)
+		.addScalar("state", Hibernate.STRING)
+		.addScalar("country", Hibernate.STRING)
+		.addScalar("replyAddress", Hibernate.STRING)
+		.setResultTransformer(Transformers.aliasToBean(Company.class))
+		.uniqueResult();
 	}
 
 }

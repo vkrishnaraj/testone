@@ -43,8 +43,8 @@ public class RequiredFieldsController {
 	public String gotoRequiredFields() {
 		logger.info("gotoRequiredFields method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-				.getExternalContext().getSession(true);
-		if (null != session) {
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("logged")) {
 			// get all the labels for required fields
 			List<Label> requiredFields = requiredFieldsService.getAllRequiredFields();
 			logger.info("Size of requiredFieldsList=" + requiredFields.size());
@@ -73,9 +73,9 @@ public class RequiredFieldsController {
 		logger.info("saveRequiredFields method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
-		if (null != session) {
+		if (null != session && null != session.getAttribute("logged")) {
 			requiredFieldsService.save(getRequiredFieldsLabel());
-			FacesUtil.addInfo("landingForm:landingMsg","Required fields Data saved successfully.");
+			FacesUtil.addInfo("Required fields Data saved successfully.");
 			logger.info("Required fields Data saved successfully.");
 			return "gotoLandingPage";
 		} else {
