@@ -47,39 +47,39 @@
 
 
 			<div id="verticalScroller">
-			<t:dataTable id="mainTable" 
-				value="#{requiredFieldsController.requiredFieldsLabel}" var="item" headerClass="TableHeader"
-				styleClass="requiredFieldsTable" rowIndexVar="row">
+			<t:dataTable id="passengerTable" 
+				value="#{requiredFieldsController.allRequiredFields[0]}" var="item" headerClass="TableHeader"
+				styleClass="passengerTable" rowIndexVar="row">
 
 				<t:column>
 					<f:facet name="header">
-						<h:outputText value="Fields" />
+						<h:outputText value="Page:" />
 					</f:facet>
 					<h:outputText value="Field #{row+1}:" />
 				</t:column>
-
+				
 				<t:column >
 					<f:facet name="header">
-						<h:outputText value="Labels" />
+						<h:outputText value="Passenger Information" />
 					</f:facet>
 					<h:outputText value="#{item.label}" />
 				</t:column>
+				
 				<t:column>
 					<f:facet name="header">
 						<h:outputText value="Delayed" />
 					</f:facet>
-					<h:selectOneMenu id="delayedState" value="#{item.delayedState}">
-						<f:selectItems id="delayedStateitems" value="#{selectItemlist}" />
+					<h:selectOneMenu id="delayedState1" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems1" value="#{selectItemlist}" />
 					</h:selectOneMenu>
-
 				</t:column>
 
 				<t:column>
 					<f:facet name="header">
 						<h:outputText value="Damaged" />
 					</f:facet>
-					<h:selectOneMenu id="damagedState" value="#{item.damagedState}">
-						<f:selectItems id="damagedStateitems" value="#{selectItemlist}" />
+					<h:selectOneMenu id="damagedState1" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems1" value="#{selectItemlist}" />
 					</h:selectOneMenu>
 				</t:column>
 
@@ -87,13 +87,377 @@
 					<f:facet name="header">
 						<h:outputText value="Pilfered" />
 					</f:facet>
-					<h:selectOneMenu id="pilferedState" value="#{item.pilferedState}">
-						<f:selectItems id="pilferedStateitems" value="#{selectItemlist}" />
+					<h:selectOneMenu id="pilferedState1" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems1" value="#{selectItemlist}" />
 					</h:selectOneMenu>
 				</t:column>
-				
 
-			</t:dataTable></div>
+			</t:dataTable>
+			
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
+			<t:dataTable id="flightTable" 
+				value="#{requiredFieldsController.allRequiredFields[1]}" var="item" headerClass="TableHeader"
+				styleClass="flightTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="flightLabel">
+					<f:facet name="header">
+						<h:outputText value="Flight Information" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState2" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems2" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState2" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems2" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState2" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems2" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+			</t:dataTable>
+			
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
+			<t:dataTable id="baggageTable" 
+				value="#{requiredFieldsController.allRequiredFields[2]}" var="item" headerClass="TableHeader"
+				styleClass="baggageTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="baggageLabel">
+					<f:facet name="header">
+						<h:outputText value="Baggage Information" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState3" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems3" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState3" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems3" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState3" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems3" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+			</t:dataTable>
+			
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
+			<t:dataTable id="generalTable" 
+				value="#{requiredFieldsController.allRequiredFields[3]}" var="item" headerClass="TableHeader"
+				styleClass="fileUploadTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="generalLabel">
+					<f:facet name="header">
+						<h:outputText value="General Labels" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState4" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems4" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState4" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems4" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState4" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems4" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+			</t:dataTable>
+			
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
+			<t:dataTable id="fileUploadTable" 
+				value="#{requiredFieldsController.allRequiredFields[4]}" var="item" headerClass="TableHeader"
+				styleClass="fraudQuestionTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="uploadLabel">
+					<f:facet name="header">
+						<h:outputText value="File Upload" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState5" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems5" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState5" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems5" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState5" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems5" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+			</t:dataTable>
+			
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
+			<t:dataTable id="fraudQuestionTable" 
+				value="#{requiredFieldsController.allRequiredFields[5]}" var="item" headerClass="TableHeader"
+				styleClass="submitTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="fraudLabel">
+					<f:facet name="header">
+						<h:outputText value="Fraud Question" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState5" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems5" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState5" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems5" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState5" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems5" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+			</t:dataTable>
+			
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
+			<t:dataTable id="submitTable" 
+				value="#{requiredFieldsController.allRequiredFields[6]}" var="item" headerClass="TableHeader"
+				styleClass="savedTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="submitLabel">
+					<f:facet name="header">
+						<h:outputText value="Submit Claims" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState7" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems7" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState7" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems7" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState7" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems7" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+				</t:dataTable>
+				
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				
+				<t:dataTable id="savedTable" 
+				value="#{requiredFieldsController.allRequiredFields[7]}" var="item" headerClass="TableHeader"
+				styleClass="savedTable" rowIndexVar="row">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Page:" />
+					</f:facet>
+					<h:outputText value="Field #{row+1}:" />
+				</t:column>
+				
+				<t:column styleClass="savedLabel">
+					<f:facet name="header">
+						<h:outputText value="Saved Screen" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</t:column>
+				
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Delayed" />
+					</f:facet>
+					<h:selectOneMenu id="delayedState8" value="#{item.delayedState}">
+						<f:selectItems id="delayedStateitems8" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Damaged" />
+					</f:facet>
+					<h:selectOneMenu id="damagedState8" value="#{item.damagedState}">
+						<f:selectItems id="damagedStateitems8" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Pilfered" />
+					</f:facet>
+					<h:selectOneMenu id="pilferedState8" value="#{item.pilferedState}">
+						<f:selectItems id="pilferedStateitems8" value="#{selectItemlist}" />
+					</h:selectOneMenu>
+				</t:column>
+
+			</t:dataTable>
+			
+			</div>
 
 
 
