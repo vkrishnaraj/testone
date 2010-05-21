@@ -102,7 +102,7 @@
 		</dependency>
 		
 		<!-- Unit Testing -->
-		<dependency>
+		<!--<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.6</version>
@@ -113,23 +113,23 @@
 			<version>2.5.5</version>
 		</dependency>
 		
-		<!-- Richfaces dependencies -->
+		--><!-- Richfaces dependencies -->
 		<!--<dependency>
         	<groupId>org.richfaces.framework</groupId>
         	<artifactId>richfaces-api</artifactId>
-        	<version>3.2.2.GA</version>
+        	<version>3.2.0.GA</version>
     	</dependency>
 
     	<dependency>
         	<groupId>org.richfaces.framework</groupId>
         	<artifactId>richfaces-impl</artifactId>
-        	<version>3.2.2.GA</version>
+        	<version>3.2.0.GA</version>
     	</dependency>
 
    		 <dependency>
         	<groupId>org.richfaces</groupId>
-        	<artifactId>ui</artifactId>
-        	<version>3.2.2.GA</version>
+        	<artifactId>richfaces-ui</artifactId>
+        	<version>3.2.0.GA</version>
         	<exclusions>
         		<exclusion>
           			<groupId>commons-collections</groupId>
