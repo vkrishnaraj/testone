@@ -37,7 +37,7 @@ public class CaptchaBean {
 							. getCurrentInstance().getExternalContext().getSession(true))
 							. getAttribute(SESSION_KEY_NAME);
         
-        if(captchaValue.equalsIgnoreCase(value)) {
+        if(null != captchaValue && captchaValue.equalsIgnoreCase(value)) {
             status          = CORRECT;
         } else {
             status          = WRONG;

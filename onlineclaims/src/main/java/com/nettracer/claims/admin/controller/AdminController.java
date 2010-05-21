@@ -5,10 +5,10 @@ package com.nettracer.claims.admin.controller;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
+import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -42,7 +42,7 @@ public class AdminController {
 	@Autowired
 	RequiredFieldsService requiredFieldsService;
 
-	Company company=new Company();
+	Company company = new Company();
 
 	/**
 	 * If the validation would successful for login page then navigate to 2nd
@@ -53,27 +53,37 @@ public class AdminController {
 	public String gotoLandingPage() {
 		logger.info("gotoLandingPage method is called");
 		// Had to use hard coded value for testing
-		if (!(loginBean.getUserName().equalsIgnoreCase("dummy") && loginBean
+		if ((loginBean.getUserName().equalsIgnoreCase("dummy") && loginBean
 				.getPassword().equalsIgnoreCase("dummy"))) {
+			
+			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+				FacesContext context = FacesUtil.getFacesContext();
+				HttpSession session = (HttpSession) context.getExternalContext()
+						.getSession(false);
+				SessionScopeBean sessionBean = (SessionScopeBean) session
+						.getAttribute("sessionBean");
+				sessionBean.setLogoutRenderer(true);
+				session.setAttribute("sessionBean", sessionBean);
+				session.setAttribute("logged", "logged");
+				return "gotoLandingPage";
+			} else {
+				clearCaptchaCache();
+				return null;
+			}
+
+		} else {
 			FacesUtil
 					.addError("Incorrect username and password combination. Please try again.");
 			logger.error("Username and Password are incorrect for admin");
+			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)){
+				captchaBean.setStatus("");
+			}
+			clearInputCache();
+			clearCaptchaCache();
 			return null;
 		}
-		clearCache();
-		if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-			FacesContext context = FacesUtil.getFacesContext();
-			HttpSession session = (HttpSession) context.getExternalContext()
-					.getSession(false);
-			SessionScopeBean sessionBean = (SessionScopeBean) session
-					.getAttribute("sessionBean");
-			sessionBean.setLogoutRenderer(true);
-			session.setAttribute("sessionBean", sessionBean);
-			session.setAttribute("logged", "logged");
-			return "gotoLandingPage";
-		} else {
-			return null;
-		}
+
+		
 	}
 
 	public String gotoMaintainApplicationPage() {
@@ -85,22 +95,24 @@ public class AdminController {
 			this.setCompany(company);
 			return "gotoMaintainApplication";
 		} else {
-			FacesUtil.addError("Your session has been expired. PLease log in again");
+			FacesUtil
+					.addError("Your session has been expired. PLease log in again");
 			return "logout";
 		}
 	}
-	
-	public String saveApplication(){
+
+	public String saveApplication() {
 		logger.info("saveApplication called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
-		if (null != session && null != session.getAttribute("logged") ) {
+		if (null != session && null != session.getAttribute("logged")) {
 			requiredFieldsService.saveApplication(this.getCompany());
 			FacesUtil.addInfo("Application Data saved successfully.");
 			logger.info("Application Data saved successfully.");
 			return "gotoLandingPage";
 		} else {
-			FacesUtil.addError("Your session has been expired. PLease log in again");
+			FacesUtil
+					.addError("Your session has been expired. PLease log in again");
 			return "logout";
 		}
 	}
@@ -108,9 +120,9 @@ public class AdminController {
 	/*
 	 * Clear the browser cache(component value) from Apply request value phase
 	 */
-	public void clearCache() {
+	public void clearCaptchaCache() {
 		logger
-				.info("clearCache method is called to clear the wrong captcha input texts");
+				.info("clearCaptchaCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		/*
 		 * ViewHandler viewHandler = context.getApplication().getViewHandler();
@@ -127,11 +139,34 @@ public class AdminController {
 		inputText = (HtmlInputText) htmlPanelGrid.findComponent("captcha");
 		inputText.setValue("");
 	}
-	
-	public String logout(){
-		return FacesUtil.logout();
+
+	/*
+	 * Clear the browser cache(component value) from Apply request value phase
+	 */
+	public void clearInputCache() {
+		logger
+				.info("clearInputCache method is called to clear the wrong captcha input texts");
+		FacesContext context = FacesUtil.getFacesContext();
+		UIViewRoot viewRoot = context.getViewRoot();
+		HtmlInputText inputText = null;
+		HtmlForm htmlForm = (HtmlForm) viewRoot.findComponent("loginForm");
+		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) htmlForm
+				.findComponent("loginPanel");
+
+		inputText = (HtmlInputText) htmlPanelGrid.findComponent("userName");
+		if (null != inputText) {
+			inputText.setValue("");
+		}
+		HtmlInputSecret inputSecret = (HtmlInputSecret) htmlPanelGrid
+				.findComponent("password");
+		if (null != inputSecret) {
+			inputSecret.setValue("");
+		}
 	}
 
+	public String logout() {
+		return FacesUtil.logout();
+	}
 
 	public CaptchaBean getCaptchaBean() {
 		return captchaBean;
@@ -165,6 +200,5 @@ public class AdminController {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
 
 }

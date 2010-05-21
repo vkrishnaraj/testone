@@ -241,10 +241,74 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 	margin-top: 3px;
 }
 
-.requiredFieldsTable{
+.passengerTable{
 	margin-left:auto;
 	margin-right:auto;
 	width:700px; 
+}
+
+.flightTable{
+	margin-left:auto;
+	margin-right:auto;
+	width:700px; 
+}
+
+.baggageTable{
+	margin-left:auto;
+	margin-right:auto;
+	width:700px; 
+}
+
+.fileUploadTable{
+	margin-left:auto;
+	margin-right:auto;
+	width:700px; 
+}
+
+.fraudQuestionTable{
+	margin-left:auto;
+	margin-right:auto;
+	width:700px; 
+}
+
+.submitTable{
+	margin-left:auto;
+	margin-right:auto;
+	width:700px; 
+}
+
+.savedTable{
+	margin-left:auto;
+	margin-right:auto;
+	width:700px; 
+}
+
+.flightLabel{
+	width:251px;	
+}
+
+.baggageLabel{
+	width:251px;	
+}
+
+.generalLabel{
+	width:260px;	
+}
+
+.uploadLabel{
+	width:260px;	
+}
+
+.fraudLabel{
+	width:251px;	
+}
+
+.submitLabel{
+	width:260px;	
+}
+
+.savedLabel{
+	width:260px;	
 }
 
 #verticalScroller{

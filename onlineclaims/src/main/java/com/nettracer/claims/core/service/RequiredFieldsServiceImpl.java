@@ -18,13 +18,15 @@ import com.nettracer.claims.core.model.Label;
  */
 @Service
 public class RequiredFieldsServiceImpl implements RequiredFieldsService {
-
+	//private static Logger logger = Logger.getLogger(RequiredFieldsServiceImpl.class);
+	
 	@Autowired
 	private RequiredFieldsDao requiredFieldsDao;
 
-	public List<Label> getAllRequiredFields() {
+	public List<List<Label>> getAllRequiredFields() {
 		return getRequiredFieldsDao().getAll();
 	}
+	
 
 	public List<DropDown> getDropDowns() {
 		return getRequiredFieldsDao().getDropDowns();

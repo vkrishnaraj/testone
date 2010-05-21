@@ -37,6 +37,8 @@ public class Label  implements Serializable{
 	
 	private Long pilferedState;
 	
+	private String page;
+	
 
 	public Long getId() {
 		return id;
@@ -76,6 +78,14 @@ public class Label  implements Serializable{
 
 	public void setPilferedState(Long pilferedState) {
 		this.pilferedState = pilferedState;
+	}
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
 	}
 
 	

@@ -9,8 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.nettracer.claims.admin.controller.RequiredFieldsController;
-
 /**
  * @author Utpal
  *
@@ -55,7 +53,8 @@ public class FacesUtil {
 	 */
 	public static String logout() {
 		logger.info("invalidate method is called for logout");
-		HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+			.getExternalContext().getSession(false);
 		if (session != null) {
 			session.removeAttribute("logged");
 			session.invalidate();

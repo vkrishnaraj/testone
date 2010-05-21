@@ -33,7 +33,7 @@ public class RequiredFieldsController {
 	@Autowired
 	RequiredFieldsService requiredFieldsService;
 	
-	List<Label> requiredFieldsLabel;
+	List<List<Label>> allRequiredFields;
 	
 	/**
 	 * Navigate to required fields page
@@ -46,8 +46,7 @@ public class RequiredFieldsController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
 			// get all the labels for required fields
-			List<Label> requiredFields = requiredFieldsService.getAllRequiredFields();
-			logger.info("Size of requiredFieldsList=" + requiredFields.size());
+			setAllRequiredFields(requiredFieldsService.getAllRequiredFields());
 
 			// get all the dropdown values
 			List<DropDown> dropdownList = requiredFieldsService.getDropDowns();
@@ -57,8 +56,6 @@ public class RequiredFieldsController {
 			for (DropDown dropDown : dropdownList) {
 				selectItemlist.add(new SelectItem(dropDown.getId(),dropDown.getText()));
 			}
-			setRequiredFieldsLabel(requiredFields);
-			
 			session.setAttribute("selectItemlist", selectItemlist);
 			return "gotoRequiredFields";
 		} else {
@@ -68,13 +65,19 @@ public class RequiredFieldsController {
 	}
 	
 	
-
+/**
+ * 
+ * Save all the Edited required Fileds Values.
+ */
 	public String saveRequiredFields() {
 		logger.info("saveRequiredFields method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			requiredFieldsService.save(getRequiredFieldsLabel());
+			List<List<Label>> lists=(List<List<Label>>)getAllRequiredFields();
+			for(List<Label> labels:lists){
+				requiredFieldsService.save(labels);
+			}
 			FacesUtil.addInfo("Required fields Data saved successfully.");
 			logger.info("Required fields Data saved successfully.");
 			return "gotoLandingPage";
@@ -90,16 +93,25 @@ public class RequiredFieldsController {
 		logger.error("User session has been expired. Needs relogin");
 	}
 
-	public List<Label> getRequiredFieldsLabel() {
-		return requiredFieldsLabel;
-	}
-
-	public void setRequiredFieldsLabel(List<Label> requiredFieldsLabel) {
-		this.requiredFieldsLabel = requiredFieldsLabel;
-	}
+	
 
 	public void setRequiredFieldsService(RequiredFieldsService requiredFieldsService) {
 		this.requiredFieldsService = requiredFieldsService;
 	}
+
+
+
+	public List<List<Label>> getAllRequiredFields() {
+		return allRequiredFields;
+	}
+
+
+
+	public void setAllRequiredFields(List<List<Label>> allRequiredFields) {
+		this.allRequiredFields = allRequiredFields;
+	}
+
+
+
 	
 }
