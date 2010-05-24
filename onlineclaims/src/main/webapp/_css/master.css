@@ -340,3 +340,10 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 	width :300px;	
 }
 
+.languageCheckBox{
+	width :183px; vertical-align: text-top;
+}
+.languagePanel{
+	width :100%;
+}
+

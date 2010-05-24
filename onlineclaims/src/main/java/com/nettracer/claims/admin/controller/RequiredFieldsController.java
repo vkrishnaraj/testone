@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.nettracer.claims.core.model.DropDown;
 import com.nettracer.claims.core.model.Label;
-import com.nettracer.claims.core.service.RequiredFieldsService;
+import com.nettracer.claims.core.service.AdminService;
 import com.nettracer.claims.faces.util.FacesUtil;
 
 /**
@@ -31,7 +31,7 @@ import com.nettracer.claims.faces.util.FacesUtil;
 public class RequiredFieldsController {
 	private static Logger logger = Logger.getLogger(RequiredFieldsController.class);
 	@Autowired
-	RequiredFieldsService requiredFieldsService;
+	AdminService adminService;
 	
 	List<List<Label>> allRequiredFields;
 	
@@ -46,10 +46,10 @@ public class RequiredFieldsController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
 			// get all the labels for required fields
-			setAllRequiredFields(requiredFieldsService.getAllRequiredFields());
+			setAllRequiredFields(adminService.getAllRequiredFields());
 
 			// get all the dropdown values
-			List<DropDown> dropdownList = requiredFieldsService.getDropDowns();
+			List<DropDown> dropdownList = adminService.getDropDowns();
 
 			List<SelectItem> selectItemlist = new ArrayList<SelectItem>();
 			// construct the combobox values
@@ -76,7 +76,7 @@ public class RequiredFieldsController {
 		if (null != session && null != session.getAttribute("logged")) {
 			List<List<Label>> lists=(List<List<Label>>)getAllRequiredFields();
 			for(List<Label> labels:lists){
-				requiredFieldsService.save(labels);
+				adminService.save(labels);
 			}
 			FacesUtil.addInfo("Required fields Data saved successfully.");
 			logger.info("Required fields Data saved successfully.");
@@ -95,8 +95,8 @@ public class RequiredFieldsController {
 
 	
 
-	public void setRequiredFieldsService(RequiredFieldsService requiredFieldsService) {
-		this.requiredFieldsService = requiredFieldsService;
+	public void setRequiredFieldsService(AdminService requiredFieldsService) {
+		this.adminService = requiredFieldsService;
 	}
 
 
@@ -111,7 +111,19 @@ public class RequiredFieldsController {
 		this.allRequiredFields = allRequiredFields;
 	}
 
-
+	public String gotoContentsAndLanguagePage() {
+		logger.info("gotoContentsAndLanguagePage method is called");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("logged")) {
+			
+			return "gotoContentsAndLanguage";
+		} else {
+			FacesUtil
+					.addError("Your session has been expired. PLease log in again");
+			return "logout";
+		}
+	}
 
 	
 }

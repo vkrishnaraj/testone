@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import com.nettracer.claims.admin.LoginBean;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.Company;
-import com.nettracer.claims.core.service.RequiredFieldsService;
+import com.nettracer.claims.core.service.AdminService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 
@@ -40,7 +40,7 @@ public class AdminController {
 
 	LoginBean loginBean = new LoginBean();
 	@Autowired
-	RequiredFieldsService requiredFieldsService;
+	AdminService adminService;
 
 	Company company = new Company();
 
@@ -91,7 +91,7 @@ public class AdminController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			Company company = requiredFieldsService.getApplicationData();
+			Company company = adminService.getApplicationData();
 			this.setCompany(company);
 			return "gotoMaintainApplication";
 		} else {
@@ -106,7 +106,7 @@ public class AdminController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			requiredFieldsService.saveApplication(this.getCompany());
+			adminService.saveApplication(this.getCompany());
 			FacesUtil.addInfo("Application Data saved successfully.");
 			logger.info("Application Data saved successfully.");
 			return "gotoLandingPage";
@@ -184,13 +184,13 @@ public class AdminController {
 		this.loginBean = loginBean;
 	}
 
-	public RequiredFieldsService getRequiredFieldsService() {
-		return requiredFieldsService;
+	public AdminService getRequiredFieldsService() {
+		return adminService;
 	}
 
 	public void setRequiredFieldsService(
-			RequiredFieldsService requiredFieldsService) {
-		this.requiredFieldsService = requiredFieldsService;
+			AdminService requiredFieldsService) {
+		this.adminService = requiredFieldsService;
 	}
 
 	public Company getCompany() {

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
                               "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 <faces-config>
@@ -18,9 +17,12 @@
 			<to-view-id>/admin/landing.faces</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>gotoContentsAndLanguage</from-outcome>
+			<to-view-id>/admin/contentandlanguage.faces</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>gotoRequiredFields</from-outcome>
 			<to-view-id>/admin/requiredfields.faces</to-view-id>
-			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>gotoMaintainApplication</from-outcome>
@@ -29,6 +31,7 @@
 		<navigation-case>
 			<from-outcome>logout</from-outcome>
 			<to-view-id>/admin/login.faces</to-view-id>
+			<redirect/>
 		</navigation-case>
 	</navigation-rule>
 	<application>

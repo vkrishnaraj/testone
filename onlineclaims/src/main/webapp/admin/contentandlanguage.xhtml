@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/template.xhtml">
 
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
@@ -41,37 +42,57 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Admin Landing</h1>
+				<h1 class="dkblue">Administration | Maintain Content and Languages</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
 					<div class="contentbodyspacing"></div>
 					<div class="contentbody">
-						
-						
 						<!-- Start body content -->
 		<h:form id="landingForm">
-				<h:messages id="landingMsg"  infoClass="infomsg"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-			<h:panelGrid id="landingPanel"  columns="1">
-				
-				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" 
-						action="#{contentsAndLanguageController.gotoContentsAndLanguagePage}"
-						 tabindex="1" />
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:commandLink id="requiredFields" value="Maintain Required Fields" 
-						action="#{requiredFieldsController.gotoRequiredFields}" tabindex="2" />
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:commandLink id="application" value="Maintain Application" tabindex="3" 
-					action="#{adminController.gotoMaintainApplicationPage}"/>
+			
+			<h:panelGrid id="languagePanel" border="1" styleClass="languagePanel">
+				<h:outputText value="Select which languages that will be available to your passengers" />
+				<a4j:region>
+				<t:selectManyCheckbox id="langCheck" value="#{contentsAndLanguageController.activeLanguages}"
+							layout="pageDirection" layoutWidth="3"  
+							valueChangeListener="#{contentsAndLanguageController.manyCheckBoxListener}">
+					<f:selectItems value="#{contentsAndLanguageController.selectCheckBoxeslist}"/>
+					<a4j:support event="onclick" reRender="languageDropDown" />
+				</t:selectManyCheckbox>
+				</a4j:region>
 			</h:panelGrid>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="Select Language to Edit" />
+			<div>
+				<a4j:outputPanel id="languageDropDown"  ajaxRendered="true"  >
+				<t:selectOneMenu  value="#{contentsAndLanguageController.selectedLanguage}" >
+						<f:selectItems value="#{contentsAndLanguageController.languageDropDown}"/>
+						<a4j:support event="onselect" reRender="tabPanel" />
+				</t:selectOneMenu>
+				</a4j:outputPanel>
+			</div>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<div>
+				<a4j:outputPanel id="tabPanel"  ajaxRendered="true"  >
+					<t:panelTabbedPane id="panelTabbedPane" >
+						<t:panelTab id="passLoginTab" label="Passenger Login">
+							<h:panelGrid columns="2">
+								<h:outputText value="Claim Number"/>
+								<h:inputText value="" />
+							</h:panelGrid>
+						</t:panelTab>
+						<t:panelTab id="dirTab" label="Direction">
+							<h:outputText value="Direction"/>
+							<h:inputText value="" />
+						</t:panelTab>
+					</t:panelTabbedPane>
+				</a4j:outputPanel>
+			</div>
+				
 		</h:form>
-							
 					  	<!-- End body content -->
 				 	 </div>
 					<!-- ends contentbody -->
