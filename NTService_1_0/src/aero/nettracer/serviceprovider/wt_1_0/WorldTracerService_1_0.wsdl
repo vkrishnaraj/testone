@@ -161,6 +161,18 @@
                     <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="Qoh">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="tags" nillable="true" type="ax23:Tag"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Tag">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tagSequence" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="ForwardMessage">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
@@ -276,6 +288,21 @@
                 </xs:complexType>
             </xs:element>
             <xs:element name="suspendAhlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WorldTracerResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sendQoh">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
+                        <xs:element minOccurs="0" name="ohd" nillable="true" type="ax24:Qoh"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sendQohResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WorldTracerResponse"/>
@@ -645,6 +672,12 @@
     <wsdl:message name="createAhlResponse">
         <wsdl:part name="parameters" element="ns:createAhlResponse"/>
     </wsdl:message>
+    <wsdl:message name="sendQohRequest">
+        <wsdl:part name="parameters" element="ns:sendQoh"/>
+    </wsdl:message>
+    <wsdl:message name="sendQohResponse">
+        <wsdl:part name="parameters" element="ns:sendQohResponse"/>
+    </wsdl:message>
     <wsdl:message name="createBdoRequest">
         <wsdl:part name="parameters" element="ns:createBdo"/>
     </wsdl:message>
@@ -778,6 +811,10 @@
             <wsdl:input message="ns:createAhlRequest" wsaw:Action="urn:createAhl"/>
             <wsdl:output message="ns:createAhlResponse" wsaw:Action="urn:createAhlResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="sendQoh">
+            <wsdl:input message="ns:sendQohRequest" wsaw:Action="urn:sendQoh"/>
+            <wsdl:output message="ns:sendQohResponse" wsaw:Action="urn:sendQohResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="createBdo">
             <wsdl:input message="ns:createBdoRequest" wsaw:Action="urn:createBdo"/>
             <wsdl:output message="ns:createBdoResponse" wsaw:Action="urn:createBdoResponse"/>
@@ -881,6 +918,15 @@
         </wsdl:operation>
         <wsdl:operation name="createAhl">
             <soap:operation soapAction="urn:createAhl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendQoh">
+            <soap:operation soapAction="urn:sendQoh" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -1098,6 +1144,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="sendQoh">
+            <soap12:operation soapAction="urn:sendQoh" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="createBdo">
             <soap12:operation soapAction="urn:createBdo" style="document"/>
             <wsdl:input>
@@ -1306,6 +1361,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="createAhl"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sendQoh">
+            <http:operation location="WorldTracerService/sendQoh"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="sendQoh"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="sendQoh"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="createBdo">

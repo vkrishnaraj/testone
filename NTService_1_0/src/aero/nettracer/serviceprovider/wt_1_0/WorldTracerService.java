@@ -8,6 +8,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 
@@ -36,5 +37,6 @@ public class WorldTracerService {
 	public WorldTracerResponse suspendAhl(RequestHeader header, Ahl ahl) {return null;}
 	public WorldTracerResponse suspendOhd(RequestHeader header, Ohd ohd) {return null;}
 	public WorldTracerResponse reinstateOhd(RequestHeader header, Ohd ohd) {return null;}
+	public WorldTracerResponse sendQoh(RequestHeader header, Qoh ohd) {return null;}
 	
 }
