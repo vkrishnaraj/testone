@@ -1,9 +1,9 @@
-<project name="NTServices_1_0" default="build-war" basedir=".">
+<project name="NTServices_1_0" default="build-ear" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
 	<property environment="env" />
-	
+
 	<property name="war.name" value="NTServices_1_0" />
 	<property name="src.dir" location="${basedir}/src" />
 	<property name="dist.dir" location="${basedir}/dist" />
@@ -11,11 +11,11 @@
 	<property name="classes.dir" location="${basedir}/bin" />
 	<property name="webroot.dir" location="${basedir}/web" />
 	<property name="compile.classpath" location="${basedir}/web/WEB-INF/lib" />
-	
+
 	<property name="build.classes.dir" location="bin" />
 	<property name="lib" value="web/WEB-INF/lib" />
 	<property name="lib.build-client.dir" value="${root.dir}\\web/WEB-INF/lib" />
-	
+
 	<patternset id="jar.files">
 		<include name="**/*.jar" />
 		<include name="**/*.zip" />
@@ -29,11 +29,11 @@
 	</path>
 
 	<path id="project.classpath">
-		<fileset dir="${root.dir}\\web/WEB-INF/lib">
+		<fileset dir="${root.dir}\\lib">
 			<patternset refid="jar.files" />
 		</fileset>
 	</path>
-	
+
 	<property name="axis2.classpath" value="base.libraries" />
 	<property name="build.dir" value="${root.dir}\\bin" />
 
@@ -47,9 +47,9 @@
 		<ant target="WT_services_java2wsdl" />
 		<antcall target="services_wsdl2java" />
 		<ant target="WT_services_wsdl2java" />
-	</target>	
+	</target>
 
-	
+
 	<target name="services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 		<Java2WSDLTask classPath="${build.classes.dir}" 
@@ -107,9 +107,9 @@
 		<delete dir="${build.dir}/webservices/NTService/src" />
 		-->
 	</target>
-	
+
 	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.classpath" />
-	
+
 	<target name="schemaexport" description="Exports a generated schema to file">
 		<hibernatetool destdir="${build.dir}">
 			<classpath>
@@ -120,13 +120,36 @@
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
-	
-	<target name="build-war" id="build" description="Build WAR file">
+
+
+
+	<target name="build-ear" id="build" description="Build WAR file">
+		<delete file="${build.dir}/myapp.zip" failonerror="false">
+		</delete>
+		<ant target="build-war">
+		</ant>
+		<jar destfile="${dist.dir}/nt_mdb.jar" basedir="${build.dir}/services-war/WEB-INF/classes/" includes="**/MDB*.class">
+			
+		</jar>
+
+		<ear destfile="${dist.dir}/NTServices_1_0.ear" appxml="${src.dir}/../metadata/application.xml">
+			<fileset dir="${dist.dir}" includes="*.jar,*.war"/>
+		</ear>
 		
-		<delete file="${app.deploy.dir}/${war.name}.war" failonerror="false" />
+		<copy todir="${app.deploy.dir}" verbose="true">
+			<fileset file="${dist.dir}/NTServices_1_0.ear">
+			</fileset>
+		</copy>
+
+	</target>
+
+
+	<target name="build-war" id="build" description="Build WAR file">
+
+		<!--<delete file="${app.deploy.dir}/${war.name}.war" failonerror="false" />-->
 		<delete dir="${build.dir}/services-war" />
 		<mkdir dir="${build.dir}/services-war"/>
-		
+
 		<copy todir="${build.dir}/services-war" overwrite="true">
 			<fileset dir="${webroot.dir}" >
 				<include name="WEB-INF/**/*"/>
@@ -141,7 +164,7 @@
 		<war destfile="${dist.dir}/${war.name}.war" duplicate="preserve" compress="true" webxml="web/WEB-INF/web.xml">
 			<fileset dir="${build.dir}/services-war"/>
 		</war>
-		
+		<!--
 		<copy todir="${app.deploy.dir}" verbose="true">
 			<fileset dir="${dist.dir}">
 				
@@ -152,10 +175,11 @@
 				
 			</fileset>
 		</copy>
+		-->
 		<echo>WAR copied! ${app.deploy.dir}, c:\deploy</echo>
-		
+
 	</target>
-	
+
 	<!--
 	<target name="compile" depends="init">
 		<javac srcdir="${src.dir}" destdir="${build.classes.dir}">
@@ -167,13 +191,13 @@
 		<echo>Compilation complete!</echo>
 	</target>
 	-->
-	
+
 	<target name="init">
 		<mkdir dir="${build.classes.dir}" />
 		<mkdir dir="${dist.dir}" />
 	</target>
 
-	
+
 
 	<target name="Kiosk_services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
@@ -230,7 +254,7 @@
 		<delete dir="${build.dir}/webservices/NTService/resources" />
 		<delete dir="${build.dir}/webservices/NTService/src" />
 	</target>
-	
+
 
 	<target name="WT_services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
@@ -241,8 +265,8 @@
 		</Java2WSDLTask>
 	</target>
 
-	
-	
+
+
 	<target name="WT_services_wsdl2java">
 		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
 			<arg value="-uri" />
@@ -297,7 +321,7 @@
 		-->
 	</target>
 
-	
+
 	<target name="vendor_services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 		<Java2WSDLTask classPath="${build.classes.dir}" 

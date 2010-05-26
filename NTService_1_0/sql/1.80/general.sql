@@ -1,0 +1,1 @@
+insert into svc_profile_parameters values (4, 'http://tdcbagwebt01:8080/ws/NTForwards', 'FWD_NOTIFICATION_ENDPOINT');
