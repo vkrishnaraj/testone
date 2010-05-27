@@ -80,6 +80,12 @@ public class PaxViewController extends SimpleFormController {
 		if(myTag.equals("YES")) {
 			//jumpPage = false;  //reset - may not be necessary
 			req.getSession().setAttribute("jumpPage", "NO");
+			
+			//set language to appropriate one 
+//			if(req.getParameter("locale") != null && req.getParameter("locale").trim().length() > 0) {
+//				req.setAttribute("siteLanguage", req.getParameter("locale"));
+//			}
+			
 			return new ModelAndView(getJumpSuccessView(), "incident", advancedIncident);
 		}
 		

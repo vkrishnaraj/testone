@@ -1,6 +1,8 @@
 package com.bagnet.nettracer.paxview;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
+import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication;
 
 public class PaxCommunicationController extends SimpleFormController {
 	private boolean anyNewComment;
@@ -99,7 +102,29 @@ public class PaxCommunicationController extends SimpleFormController {
 		
 		
 		req.getSession().setAttribute("FORM_DATA", advancedIncident); 
+		
 		model.put("incident", advancedIncident);
+		
+		//testing code 
+		WS_PVPaxCommunication[] arr = advancedIncident.getPaxCommunication();
+		List<WS_PVPaxCommunication> myPaxCommunications = Arrays.asList(arr);
+		model.put("paxCommunications", myPaxCommunications);
+		return new ModelAndView(getSuccessView(), model);
+	}
+	
+	//@Override
+	protected ModelAndView processRequest(HttpServletRequest req, 
+			HttpServletResponse res, 
+			BindException errors) throws Exception {
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		
+		WS_PVIncident advancedIncident = (WS_PVIncident) req.getSession().getAttribute("FORM_DATA");
+		//testing code 
+		WS_PVPaxCommunication[] arr = advancedIncident.getPaxCommunication();
+		List<WS_PVPaxCommunication> myPaxCommunications = Arrays.asList(arr);
+		model.put("paxCommunications", myPaxCommunications);
+		
 		return new ModelAndView(getSuccessView(), model);
 	}
 
