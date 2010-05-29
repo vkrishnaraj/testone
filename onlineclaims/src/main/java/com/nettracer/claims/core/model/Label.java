@@ -4,11 +4,16 @@
 package com.nettracer.claims.core.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -39,7 +44,12 @@ public class Label  implements Serializable{
 	
 	private String page;
 	
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="label")
+	private List<Localetext> localetexts= new ArrayList<Localetext>();
+	
 
+	private transient String inputLocale;
+	
 	public Long getId() {
 		return id;
 	}
@@ -88,11 +98,23 @@ public class Label  implements Serializable{
 		this.page = page;
 	}
 
-	
+	public List<Localetext> getLocaletexts() {
+		return localetexts;
+	}
+
+	public void setLocaletexts(List<Localetext> localetexts) {
+		this.localetexts = localetexts;
+	}
+
+	public String getInputLocale() {
+		return inputLocale;
+	}
+
+	public void setInputLocale(String inputLocale) {
+		this.inputLocale = inputLocale;
+	}
 
 	
-
-		
 
 	
 	

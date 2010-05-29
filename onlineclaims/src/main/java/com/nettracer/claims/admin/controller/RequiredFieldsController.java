@@ -22,61 +22,70 @@ import com.nettracer.claims.faces.util.FacesUtil;
 
 /**
  * @author Utpal
- *
+ * 
  */
 
 @Component
 @Scope("session")
 @Qualifier("requiredFieldsController")
 public class RequiredFieldsController {
-	private static Logger logger = Logger.getLogger(RequiredFieldsController.class);
+	private static Logger logger = Logger
+			.getLogger(RequiredFieldsController.class);
 	@Autowired
 	AdminService adminService;
-	
+
 	List<List<Label>> allRequiredFields;
-	
+
 	/**
 	 * Navigate to required fields page
 	 * 
 	 * @return String
 	 */
 	public String gotoRequiredFields() {
-		logger.info("gotoRequiredFields method is called");
+		logger.debug("gotoRequiredFields method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
 			// get all the labels for required fields
-			setAllRequiredFields(adminService.getAllRequiredFields());
+			try {
+				setAllRequiredFields(adminService.getAllRequiredFields());
 
-			// get all the dropdown values
-			List<DropDown> dropdownList = adminService.getDropDowns();
+				// get all the dropdown values
+				List<DropDown> dropdownList = adminService.getDropDowns();
 
-			List<SelectItem> selectItemlist = new ArrayList<SelectItem>();
-			// construct the combobox values
-			for (DropDown dropDown : dropdownList) {
-				selectItemlist.add(new SelectItem(dropDown.getId(),dropDown.getText()));
+				List<SelectItem> selectItemlist = new ArrayList<SelectItem>();
+				// construct the combobox values
+				for (DropDown dropDown : dropdownList) {
+					selectItemlist.add(new SelectItem(dropDown.getId(),
+							dropDown.getText()));
+				}
+				session.setAttribute("selectItemlist", selectItemlist);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			session.setAttribute("selectItemlist", selectItemlist);
 			return "gotoRequiredFields";
 		} else {
 			addErrorOnInvalidSession();
 			return "logout";
 		}
 	}
-	
-	
-/**
- * 
- * Save all the Edited required Fileds Values.
- */
+
+	/**
+	 * 
+	 * Save all the Edited required Fileds Values.
+	 */
 	public String saveRequiredFields() {
-		logger.info("saveRequiredFields method is called");
+		logger.debug("saveRequiredFields method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			List<List<Label>> lists=(List<List<Label>>)getAllRequiredFields();
-			for(List<Label> labels:lists){
-				adminService.save(labels);
+			List<List<Label>> lists = (List<List<Label>>) getAllRequiredFields();
+			try {
+				for (List<Label> labels : lists) {
+					adminService.save(labels);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			FacesUtil.addInfo("Required fields Data saved successfully.");
 			logger.info("Required fields Data saved successfully.");
@@ -93,30 +102,24 @@ public class RequiredFieldsController {
 		logger.error("User session has been expired. Needs relogin");
 	}
 
-	
-
 	public void setRequiredFieldsService(AdminService requiredFieldsService) {
 		this.adminService = requiredFieldsService;
 	}
 
-
-
 	public List<List<Label>> getAllRequiredFields() {
 		return allRequiredFields;
 	}
-
-
 
 	public void setAllRequiredFields(List<List<Label>> allRequiredFields) {
 		this.allRequiredFields = allRequiredFields;
 	}
 
 	public String gotoContentsAndLanguagePage() {
-		logger.info("gotoContentsAndLanguagePage method is called");
+		logger.debug("gotoContentsAndLanguagePage method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			
+
 			return "gotoContentsAndLanguage";
 		} else {
 			FacesUtil
@@ -125,5 +128,4 @@ public class RequiredFieldsController {
 		}
 	}
 
-	
 }

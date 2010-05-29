@@ -9,6 +9,7 @@ import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bagnet.nettracer.ws.onlineclaims.impl.AuthAdminUserDocumentImpl;
 import com.nettracer.claims.admin.LoginBean;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.Company;
@@ -51,15 +53,16 @@ public class AdminController {
 	 * @return String
 	 */
 	public String gotoLandingPage() {
-		logger.info("gotoLandingPage method is called");
+		logger.debug("gotoLandingPage method is called");
 		// Had to use hard coded value for testing
+		
 		if ((loginBean.getUserName().equalsIgnoreCase("dummy") && loginBean
 				.getPassword().equalsIgnoreCase("dummy"))) {
-			
+
 			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 				FacesContext context = FacesUtil.getFacesContext();
-				HttpSession session = (HttpSession) context.getExternalContext()
-						.getSession(false);
+				HttpSession session = (HttpSession) context
+						.getExternalContext().getSession(false);
 				SessionScopeBean sessionBean = (SessionScopeBean) session
 						.getAttribute("sessionBean");
 				sessionBean.setLogoutRenderer(true);
@@ -74,8 +77,10 @@ public class AdminController {
 		} else {
 			FacesUtil
 					.addError("Incorrect username and password combination. Please try again.");
-			logger.error("Username and Password are incorrect for admin");
-			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)){
+			logger.error("Username and Password are incorrect for admin for the IP Adress: "
+							+((HttpServletRequest)FacesUtil.getFacesContext()
+							.getExternalContext().getRequest()).getRemoteAddr());
+			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 				captchaBean.setStatus("");
 			}
 			clearInputCache();
@@ -83,16 +88,19 @@ public class AdminController {
 			return null;
 		}
 
-		
 	}
 
 	public String gotoMaintainApplicationPage() {
-		logger.info("gotoMaintainApplicationPage method is called");
+		logger.debug("gotoMaintainApplicationPage method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			Company company = adminService.getApplicationData();
-			this.setCompany(company);
+			try {
+				Company company = adminService.getApplicationData();
+				this.setCompany(company);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return "gotoMaintainApplication";
 		} else {
 			FacesUtil
@@ -102,11 +110,15 @@ public class AdminController {
 	}
 
 	public String saveApplication() {
-		logger.info("saveApplication called");
+		logger.debug("saveApplication called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
-			adminService.saveApplication(this.getCompany());
+			try {
+				adminService.saveApplication(this.getCompany());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			FacesUtil.addInfo("Application Data saved successfully.");
 			logger.info("Application Data saved successfully.");
 			return "gotoLandingPage";
@@ -122,7 +134,7 @@ public class AdminController {
 	 */
 	public void clearCaptchaCache() {
 		logger
-				.info("clearCaptchaCache method is called to clear the wrong captcha input texts");
+				.debug("clearCaptchaCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		/*
 		 * ViewHandler viewHandler = context.getApplication().getViewHandler();
@@ -145,7 +157,7 @@ public class AdminController {
 	 */
 	public void clearInputCache() {
 		logger
-				.info("clearInputCache method is called to clear the wrong captcha input texts");
+				.debug("clearInputCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
@@ -188,8 +200,7 @@ public class AdminController {
 		return adminService;
 	}
 
-	public void setRequiredFieldsService(
-			AdminService requiredFieldsService) {
+	public void setRequiredFieldsService(AdminService requiredFieldsService) {
 		this.adminService = requiredFieldsService;
 	}
 

@@ -10,6 +10,7 @@
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
 	
 	<ui:define name="mainContent">
+	<h:form id="landingForm">
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -49,7 +50,7 @@
 					<div class="contentbodyspacing"></div>
 					<div class="contentbody">
 						<!-- Start body content -->
-		<h:form id="landingForm">
+		
 			
 			<h:panelGrid id="languagePanel" border="1" styleClass="languagePanel">
 				<h:outputText value="Select which languages that will be available to your passengers" />
@@ -67,32 +68,50 @@
 			<h:outputText value="Select Language to Edit" />
 			<div>
 				<a4j:outputPanel id="languageDropDown"  ajaxRendered="true"  >
-				<t:selectOneMenu  value="#{contentsAndLanguageController.selectedLanguage}" >
+				<t:selectOneMenu  value="#{contentsAndLanguageController.selectedLanguage}" 
+					valueChangeListener="#{contentsAndLanguageController.languageSelectionListener}">
 						<f:selectItems value="#{contentsAndLanguageController.languageDropDown}"/>
-						<a4j:support event="onselect" reRender="tabPanel" />
+						<a4j:support event="onchange" reRender="tabPanel" />
 				</t:selectOneMenu>
 				</a4j:outputPanel>
 			</div>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<div>
-				<a4j:outputPanel id="tabPanel"  ajaxRendered="true"  >
-					<t:panelTabbedPane id="panelTabbedPane" >
+				<a4j:outputPanel id="tabPanel"  ajaxRendered="true">
+					<t:panelTabbedPane id="panelTabbedPane"   
+						rendered="#{contentsAndLanguageController.renderTabPanel}">
+						
 						<t:panelTab id="passLoginTab" label="Passenger Login">
-							<h:panelGrid columns="2">
-								<h:outputText value="Claim Number"/>
-								<h:inputText value="" />
-							</h:panelGrid>
+							<ui:include src="passengerlogintab.xhtml" />
 						</t:panelTab>
-						<t:panelTab id="dirTab" label="Direction">
-							<h:outputText value="Direction"/>
-							<h:inputText value="" />
+						<t:panelTab id="dirTab" label="Directions">
+							<ui:include src="directiontab.xhtml" />
 						</t:panelTab>
+						<t:panelTab id="passInfoTab" label="Passenger Info">
+							<ui:include src="passengertab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="flightTab" label="About Your Flight">
+							<ui:include src="flighttab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="baggageTab" label="About Your Bags">
+							<ui:include src="baggagetab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="fraudTab" label="Fraud Questions">
+							<ui:include src="fraudquestiontab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="submitTab" label="Submit">
+							<ui:include src="submittab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="generalTab" label="General">
+							<ui:include src="generaltab.xhtml" />
+						</t:panelTab>
+						
 					</t:panelTabbedPane>
 				</a4j:outputPanel>
 			</div>
 				
-		</h:form>
+		
 					  	<!-- End body content -->
 				 	 </div>
 					<!-- ends contentbody -->
@@ -104,7 +123,10 @@
 					<div class="clear"></div>
 				</div>
 			</div><!-- ends container -->
-			
-		
+			<h:outputText value="&#160;" />
+			<div><h:commandButton id="saveCOntents" value="Save"
+				action="#{contentsAndLanguageController.save}" tabindex="1"
+				styleClass="button140pxred button140pxredl" /></div>
+		</h:form>
 	</ui:define>
 </ui:composition>

@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+
+	<ui:define name="mainContent">
+		<t:dataTable id="psngrDtbl"
+			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Login']}"
+			var="passenger" rowIndexVar="row">
+			<t:column>
+				<h:outputText value="Field #{row+1}:" />
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
+			</t:column>
+
+			<t:column>
+				<h:outputText value="#{passenger.label.label}" />
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+			</t:column>
+			
+			<t:column>
+				<h:inputText value="#{passenger.displayText}" >
+				</h:inputText>
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+			</t:column>
+		</t:dataTable>
+	</ui:define>
+
+
+
+</ui:composition>

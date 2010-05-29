@@ -334,6 +334,7 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
     padding: 3;
     text-align: left;
     border: none;
+    padding-bottom: 10px
 }
 
 .appClass{
