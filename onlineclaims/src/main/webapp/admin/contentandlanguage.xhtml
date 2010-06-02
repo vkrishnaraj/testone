@@ -10,7 +10,7 @@
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
 	
 	<ui:define name="mainContent">
-	<h:form id="landingForm">
+	<h:form id="contentLanguageForm">
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -52,37 +52,43 @@
 						<!-- Start body content -->
 		
 			
+				<h:outputText id="l1" value="Select which languages that will be available to your passengers" />
+				<div>
+					<h:outputText id="l2" value="&#160;" />
+				</div>
 			<h:panelGrid id="languagePanel" border="1" styleClass="languagePanel">
-				<h:outputText value="Select which languages that will be available to your passengers" />
-				<a4j:region>
 				<t:selectManyCheckbox id="langCheck" value="#{contentsAndLanguageController.activeLanguages}"
 							layout="pageDirection" layoutWidth="3"  
 							valueChangeListener="#{contentsAndLanguageController.manyCheckBoxListener}">
 					<f:selectItems value="#{contentsAndLanguageController.selectCheckBoxeslist}"/>
-					<a4j:support event="onclick" reRender="languageDropDown" />
+					<a4j:support id="ajax1" event="onclick" reRender="languageDropDown,tabPanel" />
 				</t:selectManyCheckbox>
-				</a4j:region>
 			</h:panelGrid>
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<h:outputText value="Select Language to Edit" />
 			<div>
-				<a4j:outputPanel id="languageDropDown"  ajaxRendered="true"  >
-				<t:selectOneMenu  value="#{contentsAndLanguageController.selectedLanguage}" 
+				<h:outputText id="l3" value="&#160;" />
+			</div>
+			<h:outputText id="l4" value="Select Language to Edit" />
+			<div>
+				<h:outputText id="l5" value="&#160;" />
+			</div>
+			<div>
+				<a4j:outputPanel id="languageDropDown"  ajaxRendered="true" >
+				<t:selectOneMenu id="langSelectorId" value="#{contentsAndLanguageController.selectedLanguage}" 
 					valueChangeListener="#{contentsAndLanguageController.languageSelectionListener}">
-						<f:selectItems value="#{contentsAndLanguageController.languageDropDown}"/>
-						<a4j:support event="onchange" reRender="tabPanel" />
+						<f:selectItem id="si1" itemLabel="Please Select a Language" itemValue="Please Select a Language"/>
+						<f:selectItems value="#{contentsAndLanguageController.languageDropDown}" />
+						<a4j:support id="ajax2" event="onchange" reRender="tabPanel" />
 				</t:selectOneMenu>
 				</a4j:outputPanel>
 			</div>
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
+			<h:outputText id="l6" value="&#160;" />
+			<h:outputText id="l7" value="&#160;" />
 			<div>
-				<a4j:outputPanel id="tabPanel"  ajaxRendered="true">
-					<t:panelTabbedPane id="panelTabbedPane"   
+				<a4j:outputPanel id="tabPanel"  ajaxRendered="true" >
+					<t:panelTabbedPane id="panelTabbedPane"   styleClass="panelTabbedPane" 
 						rendered="#{contentsAndLanguageController.renderTabPanel}">
 						
-						<t:panelTab id="passLoginTab" label="Passenger Login">
+						<t:panelTab id="passLoginTab" label="Passenger Login" >
 							<ui:include src="passengerlogintab.xhtml" />
 						</t:panelTab>
 						<t:panelTab id="dirTab" label="Directions">
@@ -124,8 +130,8 @@
 				</div>
 			</div><!-- ends container -->
 			<h:outputText value="&#160;" />
-			<div><h:commandButton id="saveCOntents" value="Save"
-				action="#{contentsAndLanguageController.save}" tabindex="1"
+			<div><h:commandButton id="saveContents" value="Save"
+				action="#{contentsAndLanguageController.save}" tabindex="1" 
 				styleClass="button140pxred button140pxredl" /></div>
 		</h:form>
 	</ui:define>

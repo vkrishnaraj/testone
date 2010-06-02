@@ -63,11 +63,13 @@ public class ContentsAndLanguageController {
 	private boolean renderTabPanel;
 	private String selectedLanguage; //holds the selected combobox value for selecting the language
 
-	private Map<String, List<Map<String, List<Localetext>>>> languageMap ;
+	private Map<String, List<Map<String, List<Localetext>>>> languageMap ; //master map
 	private List<Map<String, List<Localetext>>> pageMapsList ;
 	private Set<String> languageSelectedSet=new HashSet<String>();
 	private Map<String,Integer> indexMap= new HashMap<String,Integer>();
 	
+	
+
 
 	/**
 	 * Page navigation to Content and Language Page
@@ -79,6 +81,8 @@ public class ContentsAndLanguageController {
 		logger.debug("gotoContentsAndLanguagePage method is called");
 		languagesInSession.clear();
 		indexMap.clear();
+		activeLanguages.clear();
+		
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
@@ -89,19 +93,18 @@ public class ContentsAndLanguageController {
 			try {
 				List<Languages> allLanguages = adminService.getLanguages();
 				
-				for (Languages language : allLanguages) {
-					selectCheckBoxeslist.add(new SelectItem(language
-							.getDescription()));
+				for (Languages language : allLanguages) { //from DB
+					selectCheckBoxeslist.add(new SelectItem(language.getDescription())); //adding to checkbox list
 					if (language.getActiveStatus() == true) {
-						if (null == activeLanguages) {
-							activeLanguages = new ArrayList<String>();
-						}
 						activeLanguages.add(language.getDescription());
 						items.add(new SelectItem(language.getDescription()));
 						languageDropDown.clear();
-						languageDropDown.add(new SelectItem("Please Select a Language"));
+						//languageDropDown.add(new SelectItem("Please Select a Language"));
 						languageDropDown.addAll(items);
 					}
+				}
+				if(null != languageDropDown && languageDropDown.size() > 0){
+					setSelectedLanguage("Please Select a Language");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -114,48 +117,58 @@ public class ContentsAndLanguageController {
 		}
 	}
 
+	/**
+	 * Calling this method at the time of checkbox click.
+	 * 
+	 * @param valueChangeEvent
+	 */
 	@SuppressWarnings("unchecked")
 	public void manyCheckBoxListener(ValueChangeEvent valueChangeEvent) {
 		logger.debug("Listener:manyCheckBoxListener is called");
 		try {
-			List<String> checkBoxList = (List<String>) valueChangeEvent
-					.getNewValue();
+			List<String> checkBoxList = (List<String>) valueChangeEvent.getNewValue();
 			Set<SelectItem> items = new LinkedHashSet<SelectItem>();
 
 			for (String value : checkBoxList) {
 				items.add(new SelectItem(value));
 			}
 			setRenderTabPanel(items.size() > 0 ? true : false);
-			languageDropDown.clear();
-			languageDropDown.add(new SelectItem("Please Select a Language"));
+			//languageDropDown.clear();
+			//languageDropDown.add(new SelectItem("Please Select a Language"));
 			if (items.size() == 0) {
 				languageDropDown.clear();
+			}else{
+				languageDropDown.addAll(items); //construct the final drop down
 			}
-			languageDropDown.addAll(items);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Listener method call for the language drop down
+	 * 
+	 * @param valueChangeEvent
+	 */
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent) {
 		logger.debug("Listener:languageSelectionListener2 is called");
+		
 		try {
 			String languageSelected = (String) valueChangeEvent.getNewValue();
 			setRenderTabPanel(true); //render the Panel on language selection
 			HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 			.getExternalContext().getSession(false);
-			
 			session.setAttribute("lang", languageSelected);
 			languageSelectedSet.add(languageSelected);
 			
 			
 			for(String language:languageSelectedSet){
-				if(language.equals(languageSelected)){
+				if(null !=language && null !=languageSelected && language.equals(languageSelected)){
 					if(!languageMap.containsKey(language)){
-						pageMapsList.add(getAllPageMap(languageSelected));
+						pageMapsList.add(getAllPageMap(languageSelected)); //get all the values from DB
 						int index=pageMapsList.size()-1;
-						session.setAttribute("index", index);
+						session.setAttribute("index", index); //index value is needed and to be used in the xhtml page
 						indexMap.put(language,index);
 						if( ! languageSelected.equalsIgnoreCase("Please Select a Language")){
 							languageMap.put(languageSelected, pageMapsList);
@@ -171,6 +184,13 @@ public class ContentsAndLanguageController {
 		}
 	}
 	
+	/**
+	 * To get all the texts w.r.t. its corresponding languages and add it to a Map that would contain 
+	 * 	language as a key and the List of pages as the value.
+	 * 
+	 * @param languageSelected
+	 * @return Map<String, List<Localetext>>
+	 */
 	private Map<String, List<Localetext>> getAllPageMap(String languageSelected){
 		Map<String, List<Localetext>> tempPageMap = new HashMap<String, List<Localetext>>();
 		try {
@@ -222,6 +242,11 @@ public class ContentsAndLanguageController {
 		return tempPageMap;
 	}
 
+	/**
+	 * Persist the data for content and Language
+	 * 
+	 * @return String for page navigation
+	 */
 	public String save() {
 		logger.debug("save method called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
@@ -246,16 +271,16 @@ public class ContentsAndLanguageController {
 					adminService.saveContentLanguageMaps(tempLangMap);
 					FacesUtil.addInfo("Contents and Language information saved successfully.");
 					logger.info("Contents and Language information saved successfully.");
+					setSelectedLanguage("Please Select a Language");
 				}else{
 					FacesUtil.addInfo("No data to save");
 				}
 			} catch (SimplePersistenceException e) {
 				e.printStackTrace();
 			}
-			
 			return "gotoLandingPage";
 		} else {
-			FacesUtil.addError("Your session has been expired. PLease log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}
 	}
@@ -329,6 +354,7 @@ public class ContentsAndLanguageController {
 		this.indexMap = indexMap;
 	}
 
+	
 	
 
 	

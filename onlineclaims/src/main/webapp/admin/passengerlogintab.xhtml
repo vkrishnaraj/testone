@@ -8,7 +8,7 @@
 
 
 	<ui:define name="mainContent">
-		<t:dataTable id="psngrDtbl"
+		<t:dataTable id="psngrLoginDtbl" 
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Login']}"
 			var="passenger" rowIndexVar="row">
 			<t:column>
@@ -22,13 +22,22 @@
 				<h:outputText value="#{passenger.label.label}" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
 			</t:column>
 			
-			<t:column>
-				<h:inputText value="#{passenger.displayText}" >
+			<t:column >
+				<h:inputText id="passlogin" value="#{passenger.displayText}" required="true" 
+					label="Passenger Login Fields" >
 				</h:inputText>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
+				<div>
+					<t:message for="passlogin" replaceIdWithLabel="true" errorClass="contentlanguageerrormsg"/>
+				</div>
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
+				
 			</t:column>
 		</t:dataTable>
 	</ui:define>

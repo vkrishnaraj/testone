@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/template.xhtml">
 
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
@@ -51,7 +52,7 @@
 						
 						<!-- Start body content -->
 		<h:form id="landingForm">
-				<h:messages id="landingMsg"  infoClass="infomsg"/>
+				<t:messages id="landingMsg" errorClass="loginerrormsg"  infoClass="infomsg"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
@@ -60,7 +61,7 @@
 				
 				<h:commandLink id="contentLanguages" value="Maintain Content and Languages" 
 						action="#{contentsAndLanguageController.gotoContentsAndLanguagePage}"
-						 tabindex="1" />
+						 tabindex="1"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:commandLink id="requiredFields" value="Maintain Required Fields" 

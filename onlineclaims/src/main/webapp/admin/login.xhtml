@@ -26,7 +26,8 @@
 		<h:form id="loginForm">
 			
 			<h:panelGrid id="mainPanel"  columns="1">
-				<h:messages id="loginMsg" styleClass="loginerrormsg" />
+					<t:messages id="loginMsg" errorClass="loginerrormsg"  infoClass="infomsg" />
+					<h:outputText value="&#160;" />
 			<h:panelGrid id="loginPanel"  columns="2">
 				<h:outputText  value="User Name" styleClass="btAirport"/>
 				<h:inputText id="userName" value="#{adminController.loginBean.userName}" styleClass="btAirport" tabindex="1"/>

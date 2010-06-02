@@ -28,11 +28,14 @@
 			</t:column>
 			
 			<t:column>
-				<h:inputText id="fields" value="#{passenger.displayText}" >
+				<h:inputText id="passInput" value="#{passenger.displayText}"  required="true" label="Passenger Info Fields">
 				</h:inputText>
 					<div>
-						<h:outputText value="&#160;" />
-					</div>
+					<t:message for="passInput"  replaceIdWithLabel="true" errorClass="contentlanguageerrormsg"/>
+				</div>
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
 			</t:column>
 		</t:dataTable>
 	</ui:define>

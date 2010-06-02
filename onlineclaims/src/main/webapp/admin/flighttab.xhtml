@@ -8,9 +8,9 @@
 
 
 	<ui:define name="mainContent">
-		<t:dataTable id="psngrDtbl"
+		<t:dataTable id="flightDtbl"
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Flight']}"
-			var="passenger" rowIndexVar="row">
+			var="item" rowIndexVar="row">
 			<t:column>
 				<h:outputText value="Field #{row+1}:" />
 				<div>
@@ -19,16 +19,23 @@
 			</t:column>
 
 			<t:column>
-				<h:outputText value="#{passenger.label.label}" />
+				<h:outputText value="#{item.label.label}" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
 			</t:column>
 			
 			<t:column>
-				<h:inputText value="#{passenger.displayText}" >
+				<h:inputText id="flightInput" value="#{item.displayText}"  required="true" label="Flight Fields">
 				</h:inputText>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
+				<div>
+					<t:message for="flightInput"  replaceIdWithLabel="true" errorClass="contentlanguageerrormsg"/>
+				</div>
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
 			</t:column>
 		</t:dataTable>
 	</ui:define>
