@@ -133,13 +133,10 @@ public class ContentsAndLanguageController {
 				items.add(new SelectItem(value));
 			}
 			setRenderTabPanel(items.size() > 0 ? true : false);
-			//languageDropDown.clear();
+			languageDropDown.clear();
 			//languageDropDown.add(new SelectItem("Please Select a Language"));
-			if (items.size() == 0) {
-				languageDropDown.clear();
-			}else{
-				languageDropDown.addAll(items); //construct the final drop down
-			}
+			
+			languageDropDown.addAll(items); //construct the final drop down
 
 		} catch (Exception e) {
 			e.printStackTrace();
