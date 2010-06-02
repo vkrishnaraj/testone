@@ -56,7 +56,6 @@ public class ContentsAndLanguageController {
 
 	private List<SelectItem> selectCheckBoxeslist;
 
-	private Set<String> languagesInSession=new HashSet<String>();
 
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
 
@@ -79,9 +78,9 @@ public class ContentsAndLanguageController {
 
 	public String gotoContentsAndLanguagePage() {
 		logger.debug("gotoContentsAndLanguagePage method is called");
-		languagesInSession.clear();
 		indexMap.clear();
 		activeLanguages.clear();
+		languageDropDown.clear();
 		
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
@@ -125,18 +124,31 @@ public class ContentsAndLanguageController {
 	@SuppressWarnings("unchecked")
 	public void manyCheckBoxListener(ValueChangeEvent valueChangeEvent) {
 		logger.debug("Listener:manyCheckBoxListener is called");
+		languageMap.clear();
+		pageMapsList.clear();
 		try {
 			List<String> checkBoxList = (List<String>) valueChangeEvent.getNewValue();
 			Set<SelectItem> items = new LinkedHashSet<SelectItem>();
 
-			for (String value : checkBoxList) {
-				items.add(new SelectItem(value));
+			for (String languageValue : checkBoxList) {
+				items.add(new SelectItem(languageValue));
+				
+				//Logic to be implemented
+				if(!languageMap.containsKey(languageValue)){
+					pageMapsList.add(getAllPageMap(languageValue)); //get all the values from DB
+					if( ! languageValue.equalsIgnoreCase("Please Select a Language")){
+						languageMap.put(languageValue, pageMapsList);
+					}
+				}
+				//end of logic
 			}
 			setRenderTabPanel(items.size() > 0 ? true : false);
 			languageDropDown.clear();
 			//languageDropDown.add(new SelectItem("Please Select a Language"));
 			
 			languageDropDown.addAll(items); //construct the final drop down
+			
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -296,12 +308,6 @@ public class ContentsAndLanguageController {
 	}
 	public void setSelectCheckBoxeslist(List<SelectItem> selectCheckBoxeslist) {
 		this.selectCheckBoxeslist = selectCheckBoxeslist;
-	}
-	public Set<String> getLanguagesInSession() {
-		return languagesInSession;
-	}
-	public void setLanguagesInSession(Set<String> languagesInSession) {
-		this.languagesInSession = languagesInSession;
 	}
 	public Set<SelectItem> getLanguageDropDown() {
 		return languageDropDown;
