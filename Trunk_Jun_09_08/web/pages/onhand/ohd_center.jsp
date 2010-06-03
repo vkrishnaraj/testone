@@ -14,6 +14,11 @@
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
 <%
+  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+                                                               request.getAttribute("org.apache.struts.action.MESSAGE");
+  java.util.Locale myLocale = (java.util.Locale)session.getAttribute(
+                                                               "org.apache.struts.action.LOCALE");
+
    Agent a = (Agent) session.getAttribute("user");
    OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
    Station holdingStation = null;
@@ -113,6 +118,42 @@
   </SCRIPT>
 
 <script language="javascript">
+
+
+  function validateStatus(form)
+  {	
+	<%String Intial_OHD_StatusVal =  (String)session.getAttribute("Intial_OHD_StatusVal");%>
+	returnStatus = true;    
+    var initialVal = <%=Intial_OHD_StatusVal%>;
+	var x = document.getElementsByName("status.status_ID");
+	var inTransitVal = <%=TracingConstants.OHD_STATUS_IN_TRANSIT%>;
+	var matchInTransitVal = <%=TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT%>;
+	var selectedVal = x[0].value;
+
+	if(initialVal!=inTransitVal && initialVal!=matchInTransitVal)
+		{			
+		 if(selectedVal==inTransitVal)
+			{	
+				alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.status.change.otherStatus")%>'+' '+'<%= (String) myMessages.getMessage(myLocale, "STATUS_KEY_6")%>');
+				returnStatus = false; 
+			}
+
+		 if(selectedVal==matchInTransitVal)
+			{							
+				alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.status.change.otherStatus")%>'+' '+'<%= (String) myMessages.getMessage(myLocale, "STATUS_KEY_5")%>');
+				returnStatus = false;
+			}
+		}
+	
+		if((initialVal == inTransitVal && selectedVal!= inTransitVal ) || 
+				(initialVal == matchInTransitVal && selectedVal != matchInTransitVal))
+			{								
+				alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.status.change")%>');
+				returnStatus = false;
+			}
+		return returnStatus;
+  }
+  
   
 function gotoHistoricalReport() {
   o = document.OnHandForm;
@@ -1139,7 +1180,7 @@ function gotoHistoricalReport() {
     </c:if>
 
      <c:if test="${!empty OnHandForm.status}">
-         <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
+         <html:submit styleId="button" property="savetracing" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
           <bean:message key="button.saveohd" />
         </html:submit>
 	     <%
@@ -1154,7 +1195,7 @@ function gotoHistoricalReport() {
 		%>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-	                  <html:submit property="savetowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
+	                  <html:submit property="savetowt" styleId="button" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
 	                    <bean:message key="button.savetoWT" />
 	                  </html:submit>
 	                </logic:notEqual>
@@ -1166,7 +1207,7 @@ function gotoHistoricalReport() {
 	            %>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-	                  <html:submit property="amendtowt" styleId="button" onclick="return validatereqOHDForm(this.form);">
+	                  <html:submit property="amendtowt" styleId="button" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
 	                    <bean:message key="button.amendWT" />
 	                  </html:submit>
 	                </logic:notEqual>
@@ -1184,7 +1225,7 @@ function gotoHistoricalReport() {
             <td align="center" valign="top"><br>
             <logic:notEmpty name="OnHandForm" property="status">
               <html:submit property="savetracing" styleId="button"
-                onclick="return validatereqOHDForm(this.form);">
+                onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
                 <bean:message key="button.saveremark" />
               </html:submit>
             </logic:notEmpty></td>

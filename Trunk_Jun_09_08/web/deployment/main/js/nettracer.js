@@ -51,8 +51,10 @@ function openChart2(url,width,height,left)
 
     w = width;
     h = height;
-    l = left;
-	var options = "width=" + w + ",height=" + h +",left=" + l+",top=1";
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+ 
+	var options = "width=" + w + ",height=" + h +",left=" + left+",top=" + top;
 	chartWin = window.open(url,"bagtypechart",options);
 	
 }
@@ -138,6 +140,40 @@ function fillzero(o,maxlen) {
     }    
     return true;
 }
+
+
+function filldata(o,maxlen) 
+{
+
+                if(o == null) 
+	                {
+	                    return false;
+	                }
+    var currval = o.value;
+   
+    if(currval.indexOf('%') != -1)
+        {
+                    return false;
+        }
+    
+ 
+    currval = currval.replace(/\s/gi, '');
+    if (currval != null && currval.length > 0 && currval.length < 12 && currval.indexOf('BDO') < 0) 
+            {
+    		    var len = maxlen - currval.length -3;
+			    var zeros = "";
+			    var initialStr = 'BDO';
+			    for (i = 0;i<len;i++) 
+			            {
+			                zeros += "0";
+			            }
+			     o.value = initialStr + zeros+currval;
+	         }
+    
+    return true;
+}
+
+
 
 function getDate(type) {
   var D = new Date();
