@@ -12,6 +12,8 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="Manufacturer"
+ * @hibernate.cache usage="read-only"
+ * 
  */
 public class Manufacturer implements Serializable {
 	private int Manufacturer_ID;

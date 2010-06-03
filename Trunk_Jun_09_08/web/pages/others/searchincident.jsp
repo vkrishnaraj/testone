@@ -134,7 +134,7 @@ function updatePagination() {
                 <td>
                   <bean:message key="colname.mid_initial" />
                   <br>
-                  <html:text property="middlename" size="20" maxlength="20" styleClass="textfield" />
+                  <html:text property="middlename" size="20" maxlength="1" styleClass="textfield" />
                 </td>
               </tr>
               <tr>

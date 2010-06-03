@@ -17,6 +17,7 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
  * @author Administrator
  * 
  * @hibernate.class table="CompanyCode"
+ * @hibernate.cache usage="read-write"
  */
 public class Company implements Serializable {
 	private String CompanyCode_ID;

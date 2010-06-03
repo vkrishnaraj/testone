@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="Currency"
+ * @hibernate.cache usage="read-only"
  *  
  */
 public class Currency implements Serializable {

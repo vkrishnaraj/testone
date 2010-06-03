@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
+import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -47,6 +48,7 @@ import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
+import com.bagnet.nettracer.tracing.utils.IncidentCount;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
@@ -390,6 +392,14 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																							entries = x;
 																					} // end if
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CAPTCHAS)) {
+																					int x = SpecialFlagBMO.getSpecialFlagCount("captcha", true);
+																					if (x > 0) {
+																						dto.setDisplayCaptcha(true);
+																					}
+																					if (x != -1) {
+																						entries = x;
+																					} 																					
 																				}
 																				
 																			}

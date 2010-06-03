@@ -72,6 +72,8 @@ public class OHD implements Serializable {
 
 	private int faultStation = 0;
 	private int loss_code = 0;
+	private boolean tagSentToWt;
+	private int tagSentToWtStationId;
 	
 
 	public String getDisplaydate() {
@@ -136,7 +138,7 @@ public class OHD implements Serializable {
 	
 	/**
 	 * @hibernate.set cascade="all" inverse="true"
-	 *                order-by="itinerarytype,departdate,schdeparttime,itinerary_ID"
+	 *                order-by="itinerarytype,itinerary_ID"
 	 * @hibernate.key column="ohd_ID"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.OHD_Itinerary"
 	 * 
@@ -830,9 +832,63 @@ public class OHD implements Serializable {
 		return xd.getDescription();
 	}
 	
+	public String getX1() {
+		if (xdescelement_ID_1 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
+		return xd.getCode();
+	}
+
+	public String getX2() {
+		if (xdescelement_ID_2 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_2);
+		return xd.getCode();
+	}
+
+	public String getX3() {
+		if (xdescelement_ID_3 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
+		return xd.getCode();
+	}
+	
 	public String getXdescelement1Key() {
 		if (xdescelement_ID_1 <= 0) return "";
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
 		return xd.getKey();
 	}
+	public String getXdescelement2Key() {
+		if (xdescelement_ID_2 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_2);
+		return xd.getKey();
+	}
+	public String getXdescelement3Key() {
+		if (xdescelement_ID_3 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
+		return xd.getKey();
+	}
+
+	/**
+	 * @hibernate.property type="boolean"
+	 * @return
+	 */
+	public boolean isTagSentToWt() {
+  	return tagSentToWt;
+  }
+
+	public void setTagSentToWt(boolean tagSentToWt) {
+  	this.tagSentToWt = tagSentToWt;
+  }
+
+	/**
+	 * @hibernate.property type="integer"
+	 * 
+	 * @return Returns the ohd_type.
+	 */
+	public int getTagSentToWtStationId() {
+  	return tagSentToWtStationId;
+  }
+
+	public void setTagSentToWtStationId(int tagSentToWtStationId) {
+  	this.tagSentToWtStationId = tagSentToWtStationId;
+  }
+	
 }

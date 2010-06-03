@@ -15,7 +15,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSPVItem extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVItem.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.s336AA68855A9C7F4EC085B140BA0FFE6")
+            "schemaorg_apache_xmlbeans.system.sA32190FCCD380409BBAAD434D27BBA59")
                                                                                                                            .resolveHandle("wspvitem0b6etype");
 
     /**

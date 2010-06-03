@@ -1160,4 +1160,51 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="page172" PATH="enter_captcha" SHAPE="448,13553,0,0"
   SUBTYPE="tile" TITLE="enter_captcha" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="incident_checklist" NAME="forward164"
+  PATH="incidentchecklist" SHAPE="32,13233,0,0" TARGET="page173"
+  TITLE="incident_checklist" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="pax_communication" NAME="forward165"
+  PATH="pax_communication" SHAPE="32,13233,0,0" TARGET="page174"
+  TITLE="pax_communication" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="listnewpaxcommunication" NAME="forward166"
+  PATH="list_new_pax_communication" SHAPE="32,13233,0,0"
+  TARGET="page175" TITLE="listnewpaxcommunication" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="sendwtpxfsuccess" NAME="forward167"
+  PATH="send_wt_pxf_success" SHAPE="32,13233,0,0" TARGET="page176"
+  TITLE="sendwtpxfsuccess" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewworldtracerpxf" NAME="forward168"
+  PATH="view_worldtracerpxf" SHAPE="32,13233,0,0" TARGET="page177"
+  TITLE="viewworldtracerpxf" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#worldtracerpxf" NAME="action90"
+  PATH="/worldtracerpxf" SHAPE="32,13441,0,0" TITLE="worldTracerPXFForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#listNewPaxCommunication" NAME="action91"
+  PATH="/listNewPaxCommunication" SHAPE="32,13441,0,0"
+  TITLE="listNewPaxCommunicationForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#paxCommunication" NAME="action92"
+  PATH="/paxCommunication" SHAPE="32,13441,0,0"
+  TITLE="PaxCommunicationForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#incidentChecklist" NAME="action93"
+  PATH="/incidentChecklist" SHAPE="32,13441,0,0"
+  TITLE="incidentChecklistForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page173" PATH="incidentchecklist"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="incidentchecklist"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page174" PATH="pax_communication"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="pax_communication"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page175" PATH="list_new_pax_communication"
+  SHAPE="240,13250,0,0" SUBTYPE="tile"
+  TITLE="list_new_pax_communication" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page176" PATH="send_wt_pxf_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="send_wt_pxf_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page177" PATH="view_worldtracerpxf"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_worldtracerpxf"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#quickSearch" NAME="action94" PATH="/quickSearch"
+  SHAPE="32,13441,0,0" TITLE="quickSearchForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page179" PATH="ajax_quickSearchResponse"
+  SHAPE="656,13553,0,0" SUBTYPE="tile" TITLE="ajax_quickSearchResponse"
+  TYPE="page" model-entity="StrutsProcessItem"/>
 </PROCESS>

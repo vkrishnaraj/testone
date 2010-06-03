@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,6 +60,9 @@ public class UserPermissions {
 			Query q = sess.createQuery(sql.toString());
 			q.setInteger("groupId", agent.getUsergroup_id());
 
+			Set<GroupComponentPolicy> pSet = (Set<GroupComponentPolicy>) agent.getGroup().getComponentPolicies();
+			
+			
 			List list = q.list();
 			Object[] o = null;
 
@@ -217,21 +221,14 @@ public class UserPermissions {
 	 * @return
 	 */
 	public static boolean hasPermission(String componentName, Agent a) {
-		boolean ret = false;
-
-		Set l = a.getGroup().getComponentPolicies();
-
-		if (l != null) {
-			for (Iterator i = l.iterator(); i.hasNext();) {
-				GroupComponentPolicy policy = (GroupComponentPolicy) i.next();
-
-				if (policy.getComponent().getComponent_Name().equalsIgnoreCase(componentName)) {
-					ret = true;
-					break;
-				}
-			}
+		String uc = componentName.toUpperCase();
+		HashMap<String, GroupComponentPolicy> m = a.getGroup().getPermissionNameMap();
+		
+		if (m.containsKey(uc)) {
+			return true;
 		}
-		return ret;
+		return false;
+
 	}
 
 	/**
@@ -242,23 +239,22 @@ public class UserPermissions {
 	 * @return
 	 */
 	public static boolean hasLinkPermission(String actionLink, Agent a) {
-		boolean ret = false;
-
-		Set l = a.getGroup().getComponentPolicies();
-
-		if (l != null) {
-			for (Iterator i = l.iterator(); i.hasNext();) {
-				GroupComponentPolicy policy = (GroupComponentPolicy) i.next();
-
-				if (policy.getComponent().getComponent_action_link() != null
-						&& policy.getComponent().getComponent_action_link().indexOf(actionLink) != -1) {
-					ret = true;
-					break;
-				}
-			}
+	
+		int qIdx = actionLink.indexOf("?");
+		
+		String s = null;
+		if (qIdx > 0) {
+			s= actionLink.substring(0, qIdx);
+		} else {
+			s = actionLink;
 		}
-
-		return ret;
+		
+		HashMap<String, GroupComponentPolicy> m = a.getGroup().getPermissionLinkMap();
+		if (m.containsKey(s)) {
+			return true;
+		}
+		return false;
+		
 	}
 	
 	public static boolean hasLimitedSavePermission(Agent a, Incident inc) {

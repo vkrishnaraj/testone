@@ -7,26 +7,31 @@
 
     <session-factory>
     
-		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-		<property name="hibernate.connection.url">jdbc:sqlserver://192.168.2.128:1433;databaseName=usair</property>
-		<property name="connection.username">nettracer2</property>
-		<property name="connection.password">nettracer2</property>
-		<property name="show_sql">false</property>
-		<property name="jdbc.fetch_size">500</property> 
-		<property name="jdbc.batch_size">25</property> 
-		<property name="jdbc.use_scrollable_resultset">false</property> 
-		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
-		<property name="company.code">US</property>
-		<property name="hibernate.show_sql">false</property>
+	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
+	<property name="connection.url">jdbc:mysql://localhost:3306/jetblue_prod</property>
+	<property name="connection.username">nettracer</property>
+	<property name="connection.password">nettracer</property>
+	<property name="show_sql">true</property>
+	<property name="jdbc.fetch_size">50</property>
+	<property name="jdbc.batch_size">25</property>
+	<property name="jdbc.use_scrollable_resultset">false</property>
+	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	<property name="company.code">B6</property>
+		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.connection.isolation">1</property>
 			
 		<!-- c3p0 -->
 		<property name="hibernate.c3p0.acquire_increment">1</property> 
 		<property name="hibernate.c3p0.idle_test_period">100</property> <!-- seconds --> 
-		<property name="hibernate.c3p0.max_size">100</property> 
+		<property name="hibernate.c3p0.max_size">10</property> 
 		<property name="hibernate.c3p0.max_statements">0</property> 
 		<property name="hibernate.c3p0.min_size">10</property> 
 		<property name="hibernate.c3p0.timeout">5000</property> <!-- seconds --> 
+		
+		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>
+		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property> 
+		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_query_cache">false</property>
 		
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company.hbm.xml"/>
@@ -208,7 +213,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.ForwardNotice" />
 		<mapping class="com.bagnet.nettracer.tracing.db.ProactiveNotification" />
 		<mapping class="com.bagnet.nettracer.tracing.db.WT_PXF" />
-		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf" />
+		<mapping class="com.bagnet.nettracer.tracing.db.CrmFile" />		
     </session-factory>
 
 </hibernate-configuration>

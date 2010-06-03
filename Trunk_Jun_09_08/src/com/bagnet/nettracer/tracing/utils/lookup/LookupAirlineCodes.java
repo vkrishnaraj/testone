@@ -20,9 +20,10 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
  */
 public class LookupAirlineCodes {
 
-	private static final String PATTERN_10_DIGIT_BAG_TAG = "^\\d{10}$";
-	private static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{9}$";
-	private static final String PATTERN_8_CHAR_BAG_TAG = "^[a-zA-Z0-9]{2}\\d{6}$";
+	public static final String PATTERN_10_DIGIT_BAG_TAG = "^\\d{10}$";
+	public static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{9}$";
+	public static final String PATTERN_8_CHAR_BAG_TAG = "^[a-zA-Z0-9]{2}\\d{6}$";
+	
 
 	/**
 	 * Returns the two letter airline code when passed in the three

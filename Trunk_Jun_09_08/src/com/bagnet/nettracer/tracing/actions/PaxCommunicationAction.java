@@ -1,10 +1,12 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
@@ -19,11 +21,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CustomerViewableCommentBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -31,8 +35,11 @@ import com.bagnet.nettracer.tracing.db.CustomerViewableComment;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.PaxCommunication;
+import com.bagnet.nettracer.tracing.db.Remark;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.PaxCommunication.PaxCommunicationStatus;
 import com.bagnet.nettracer.tracing.db.audit.Audit_CustomerViewableComment;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.EmailParser;
@@ -41,6 +48,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
 
 import org.apache.log4j.Logger;
 import java.net.URL;
@@ -61,6 +69,9 @@ public class PaxCommunicationAction extends Action {
 		HttpSession session = request.getSession(); // check session/user
 		TracerUtils.checkSession(session);
 		
+		MessageResources messages = MessageResources
+										.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		
 		List<PaxCommunication> historicalPaxCommunicationsStatusNewEnteredByPax;
 		Object myHistoricalNewPaxCommentListObjFromSession = session.getAttribute("historicalNewPaxCommentList");
 		if (myHistoricalNewPaxCommentListObjFromSession != null) {
@@ -77,6 +88,8 @@ public class PaxCommunicationAction extends Action {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
+		
+		String myAgentHasEnteredANewMessage = messages.getMessage(new Locale(user.getCurrentlocale()), "message.agent.has.entered.new");
 		
 		//sending email related config
 		ServletContext sc = getServlet().getServletContext();
@@ -145,6 +158,37 @@ public class PaxCommunicationAction extends Action {
 				newPaxCommunication.setCreatedate(myDate);
 				//newPaxCommunication.setAcknowledge_timestamp(myDate);
 				HibernateUtils.save(newPaxCommunication, sess);
+				
+				// add a new entry in Remarks section
+				Remark r = new Remark();
+				r.setAgent(user);
+				r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+				//r.setRemarktext("An agent has entered a new message.");
+				r.setRemarktext(myAgentHasEnteredANewMessage);
+				r.setIncident(inc);
+				// Add a remark to the incident to complete the two-way reference.
+				Set remarks = inc.getRemarks();
+				remarks.add(r);
+				//save inc and audit inc here
+				HibernateUtils.save(inc, sess);  //this does not do all of what we want
+				// check if audit is enabled for this company....
+				Transaction transaction = sess.beginTransaction();  //persist audit incident
+				Incident iDTO = inc;
+				if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+						.getCompany().getVariable().getAudit_lost_delayed() == 1)
+						|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+								.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+						|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+								.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
+					Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, user);
+			
+					if (audit_dto != null) {
+						transaction = sess.beginTransaction();
+						sess.save(audit_dto);
+						transaction.commit();
+					}
+				}
+				
 				addNewAgentCommentSuccess = "YES";
 				//send email here
 				isSendEmail2PaxSuccess = sendEmail2Pax(user, inc, realpath, newAgentComment);

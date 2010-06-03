@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -37,6 +38,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -63,6 +65,8 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * 
  */
 public class DamagedAction extends CheckedAction {
+	private static Logger logger = Logger.getLogger(DamagedAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -133,7 +137,10 @@ public class DamagedAction extends CheckedAction {
 			theform.setAllow_remark_update(1);
 
 		/** ****************** handle requests ******************** */
-
+		
+		//TODO: set default weight unit
+		String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
+		theform.setOverall_weight_unit(myDefaultWeightUnit);
 		
 
 		// ajax call to change assigned agent dropdown
@@ -280,6 +287,7 @@ public class DamagedAction extends CheckedAction {
 					photo.setPicpath(picpath);
 					photo.setThumbpath(thumbpath);
 					photo.setItem(theform.getItem(fileindex, -1));
+					photo.setFileName(fileName);
 					ArrayList al = (ArrayList) theform.getItem(fileindex, -1).getPhotolist();
 					al.add(photo);
 				}
@@ -300,9 +308,23 @@ public class DamagedAction extends CheckedAction {
 		// save incident
 		if (request.getParameter("save") != null || request.getParameter("doclose") != null) {
 			Incident iDTO = new Incident();
+			
+			//key to determine whether the action is add new, close, or update
+			int saveActionType = ADD_NEW_RECORD;
+			
 			if (theform.getIncident_ID() == null || theform.getIncident_ID().length() == 0)
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
 
+			//TODO: update the key saveActionType: if no incident id, then it is addnew
+			String myIncidentId = theform.getIncident_ID();
+			if (!(myIncidentId == null || myIncidentId.equals(""))) {
+				if( request.getParameter("close") != null && request.getParameter("close").equals("1")) {
+					saveActionType = CLOSE_RECORD;
+				} else {
+					saveActionType = UPDATE_RECORD;
+				}
+			}
+			
 			ActionMessage error = null;
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user);
@@ -313,7 +335,16 @@ public class DamagedAction extends CheckedAction {
 			if (error == null) {
 				request.setAttribute("damaged", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
-				return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
+				
+				//logger.error(">>>>>>>>>saveActionType (1-addnew; 2-close; 3-update) : " + saveActionType);
+				if (saveActionType == UPDATE_RECORD) {
+					return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
+				} else if (saveActionType == CLOSE_RECORD) {
+					return (mapping.findForward(TracingConstants.CLOSE_FILE_SUCCESS));
+				} else {
+					return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
+				}
+		
 			} else if (error.getKey().equals("error.unable_to_close_incident")) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);

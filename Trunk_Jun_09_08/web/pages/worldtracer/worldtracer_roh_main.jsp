@@ -5,7 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 <html:form action="worldtracerroh.do" method="post">
 
   <SCRIPT LANGUAGE="JavaScript">

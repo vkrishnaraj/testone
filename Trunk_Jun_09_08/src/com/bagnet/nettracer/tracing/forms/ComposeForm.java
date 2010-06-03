@@ -254,4 +254,17 @@ public final class ComposeForm extends ActionForm {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+	
+    /**
+     * log
+     */
+    private String log = "";
+
+    public String getLog() {
+        return this.log;
+    }
+    
+    public void setLog(String log) {
+        this.log = log;
+    }
 }

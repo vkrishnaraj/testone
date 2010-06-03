@@ -22,12 +22,15 @@
       cssFormClass = "form2_pil";
     }
   }
+  IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
 %>
   
 <%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+
+<%@page import="java.util.List"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Itinerary"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -405,24 +408,134 @@
           <br>
           <br>
           
-
-<c:if test="${!empty incidentForm.incident_ID and !empty incidentObj and incidentForm.incident_ID == incidentObj.incident_ID}">
-<%
-
-      boolean bIncidentChecklist = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST, a);
-      boolean bIncidentChecklistReadOnly = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY, a);
-      if (bIncidentChecklist || bIncidentChecklistReadOnly) {
-%>
           <jsp:include page="/pages/includes/auto_checklist_incl.jsp" />
-<% 
-      }
-%>
-</c:if>
           
           <jsp:include page="/pages/includes/contactinfo_incl.jsp" />
           
           <a name="passit"></a>
-          <h1 class="green">
+	  <h1 class="green">
+
+		  <script language="javaScript">
+			  function swap(field, i, j) {
+
+				  var swap1 = document.getElementsByName('theitinerary[' + i + '].' + field)[0];
+				var swap2 = document.getElementsByName('theitinerary[' + j + '].' + field)[0];
+				var tmp = swap1.value;
+				swap1.value = swap2.value;
+				swap2.value = tmp;
+				}
+
+			function swapItin(moveUp, moveDown) {
+				swap('legfrom', moveUp, moveDown);	
+				swap('legto', moveUp, moveDown);	
+				swap('airline', moveUp, moveDown);	
+				swap('flightnum', moveUp, moveDown);	
+				swap('disdepartdate', moveUp, moveDown);	
+				swap('disarrivedate', moveUp, moveDown);	
+				swap('disschdeparttime', moveUp, moveDown);	
+				swap('disscharrivetime', moveUp, moveDown);	
+				swap('disactdeparttime', moveUp, moveDown);	
+				swap('disactarrivetime', moveUp, moveDown);	
+			}
+
+			function swapUpItin(elem, indexes) {
+				var idx = 0;
+
+				for (var i = 0; i < indexes.length; ++i) {
+					if (indexes[i] == elem) {
+						idx = i;
+						break;					
+					}
+				}
+
+				if (idx < 1) { return; }
+				var moveUp = indexes[idx];
+				var moveDown = indexes[idx - 1];
+				swapItin(moveUp, moveDown);
+			}	
+
+
+			function swapDownItin(elem, indexes) {
+				var idx = 0;
+
+				for (var i = 0; i < indexes.length; ++i) {
+					if (indexes[i] == elem) {
+						idx = i;
+						break;					
+					}
+				}
+
+				if (idx > indexes.length - 2) {	return;	}
+				var moveUp = indexes[idx+1];
+				var moveDown = indexes[idx];
+				swapItin(moveUp, moveDown);
+			}
+
+			function hideThisItinerary(deleteThis, indexes) {
+				var newArray = [];
+
+				for (x = 0; x < indexes.length; ++x) {
+					if (indexes[x] == deleteThis) {
+						document.getElementById('placeHolder' + deleteThis).innerHTML = "";		
+						if (x == 0) {
+							var remove = document.getElementById("moveUp" + (indexes[x + 1]));
+							removeElement(remove);
+						} else if (x == indexes.length-1) {
+							var remove = document.getElementById("moveDown" + (indexes[x - 1]));
+							removeElement(remove);
+						}
+					} else {
+						newArray.push(indexes[x]);
+					}
+				}
+				indexes = newArray;
+				return indexes;
+			}
+
+
+				 <% 
+				 	int itinSize = 0;
+				 	List list = myform.getItinerarylist();
+				 	String pItinIndexes = "";
+					String bItinIndexes = "";
+					int firstPIndex = -1;
+					int firstBIndex = -1;
+					int lastPIndex = 0;
+					int lastBIndex = 0;
+				 	for (int i = 0; i < list.size(); ++i) {
+				 		Itinerary itin = (Itinerary) list.get(i);
+				 		if (itin.getItinerarytype() == 0) {
+							pItinIndexes += i + ",";
+							if (firstPIndex == -1) {
+								firstPIndex = i;
+							}
+							lastPIndex = i;	
+				 		} else {
+							bItinIndexes += i + ",";
+							if (firstBIndex == -1) {
+								firstBIndex = i;
+							}
+							lastBIndex = i;
+				 		}
+				 	}
+				 	if (pItinIndexes.length() > 0) {
+				 		pItinIndexes = pItinIndexes.substring(0, pItinIndexes.length() - 1);
+				 	}
+				 	if (bItinIndexes.length() > 0) {
+				 		bItinIndexes = bItinIndexes.substring(0, bItinIndexes.length() - 1);
+					}
+					if (firstBIndex == -1) {
+						firstBIndex = 0;
+					}
+					if (firstPIndex == -1) {
+						firstPIndex = 0;
+					}
+
+				 	%>
+
+				 var pItinIndexes = [<%=pItinIndexes%>];
+				 var bItinIndexes = [<%=bItinIndexes%>];
+		  </script>
             <bean:message key="header.itinerary" />
 <%
             if (report_type == 0) {
@@ -439,10 +552,31 @@
                   <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
               </h1>
               <span class="reqfield">*</span>
-              <bean:message key="message.required" />
+	      <bean:message key="message.required" />
+	      <%
+	      int t = 0;
+	      %>
               <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
 	      <logic:equal name="theitinerary" property="itinerarytype" value="0">
-	      	<div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
+
+
+
+	      <span id="placeHolder<%=t%>" style="float:right">
+	      <%
+	      if (firstPIndex != t) {	
+		%>
+		<input type="button" class="button" id="moveUp<%=t%>" value="Move Up" onclick="swapUpItin(<%=t%>, pItinIndexes);"/>
+		<%
+		}
+		if (lastPIndex != t) {
+		%>
+		<input type="button" class="button"  id="moveDown<%=t%>" value="Move Down" onclick="swapDownItin(<%=t%>, pItinIndexes);"/>
+		<%
+		}
+		%>
+		</span>
+
+	      <div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
               <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
 			  <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="hidexItinerary<%=k %>">
                     <tr>
@@ -518,12 +652,13 @@
                     </tr>
                     <tr>
                       <td colspan="4">
-			  <input type="button" value="<bean:message key="button.delete_pass_itinerary" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
+			  <input type="button" value="<bean:message key="button.delete_pass_itinerary" />" onclick="pItinIndexes = hideThisItinerary(<%=k%>, pItinIndexes); hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
                       </td>
                     </tr>
 	               </table>
                   </div>
                 </logic:equal>
+                            		<% ++t; %>
               </logic:iterate>
 	         <center>
               <select name="addpassitNum">
@@ -558,8 +693,27 @@
                   <span class="reqfield">*</span>
                   <bean:message key="message.required" />
                   <a name="bagit"></a>
+                  <% t = 0; %>
                   <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
                     <logic:equal name="theitinerary" property="itinerarytype" value="1">
+                    
+
+	      <span id="placeHolder<%=t%>" style="float:right">
+	      <%
+	      if (firstBIndex != t) {	
+		%>
+		<input type="button" class="button" id="moveUp<%=t%>" value="Move Up" onclick="swapUpItin(<%=t%>, bItinIndexes);"/>
+		<%
+		}
+		if (lastBIndex != t) {
+		%>
+		<input type="button" class="button"  id="moveDown<%=t%>" value="Move Down" onclick="swapDownItin(<%=t%>, bItinIndexes);"/>
+		<%
+		}
+		%>
+		</span>
+
+	      
                       <div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
                       <html:hidden name="theitinerary" property="itinerarytype" value="1" indexed="true" />
                       <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
@@ -635,12 +789,13 @@
                         </tr>
                         <tr>
                           <td colspan="4">
-                          <input type="button" value="<bean:message key="button.delete_bag_itinerary" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
+                          <input type="button" value="<bean:message key="button.delete_bag_itinerary" />" onclick="bItinIndexes = hideThisItinerary(<%=k%>, bItinIndexes); hideThisItinerary(<%=k%>); hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
                           </td>
                         </tr>
                       </table>
                       </div>
                     </logic:equal>
+                    <% ++t; %>
                   </logic:iterate>
                   <center>
                                 <select name="addbagitNum">
@@ -668,7 +823,7 @@
                       <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#damaged_bag_reports/work_baggage_check_info.htm');return false;"><%
                       } else if (report_type == 1) {
 %>
-                        <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#top');return false;"><%
+                        <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htAUAB600013418m#lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#top');return false;"><%
                         } else if (report_type == 2) {
 %>
                           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#missing_articles_reports/work_with_baggage_check_information_(ma).htm#top');return false;"><%
@@ -698,7 +853,7 @@
                         </tr>
                         <tr>
                           <td>
-                            <bean:message key="colname.bag_loc" />
+                            <bean:message key="colname.bag_loc.req" />
                             <br>
                             <jsp:include page="/pages/includes/checkedlocation_incl.jsp" />
                           </td>
@@ -735,6 +890,25 @@
                             </html:select>
                           </td>
                         </tr>
+                      <!-- provide space for bag weight feature - start --> 
+						<%
+						    boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT, a);
+						    if (val) {
+						%> 
+			            <tr id="bag_weight">
+			              <td><bean:message key="colname.total.weight.and.units" /><br> 
+								<html:text property="overall_weight" size="8" maxlength="10" styleClass="textfield" />
+								<html:select property="overall_weight_unit" styleClass="dropdown" >
+									<html:option value="lbs">lbs</html:option>
+									<html:option value="kg">kg</html:option>
+						        </html:select>
+			              </td>
+			              <td colspan="2"></td>
+			            </tr>
+						<% 
+						    }
+						%>  
+			           <!-- provide space for bag weight feature - end -->
                       </table>
                       <br>
                       <br>
@@ -742,3 +916,5 @@
                       <a href="#"><bean:message key="link.to_top" /></a>
                       <br>
                       <br>
+
+

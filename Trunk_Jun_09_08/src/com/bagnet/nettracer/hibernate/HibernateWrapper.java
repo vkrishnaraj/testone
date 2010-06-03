@@ -5,8 +5,6 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
-
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 /**
  * @author Ankur Gupta
  * 
@@ -17,39 +15,36 @@ public class HibernateWrapper {
 	private static Logger logger = Logger.getLogger(HibernateWrapper.class);
 	private static AnnotationConfiguration cfg_prod = new AnnotationConfiguration();
 	private static AnnotationConfiguration cfg_prod_dirty = new AnnotationConfiguration();
-	private static AnnotationConfiguration cfg_demo = new AnnotationConfiguration();
-	private static AnnotationConfiguration cfg_qa = new AnnotationConfiguration();
+	private static AnnotationConfiguration cfg_prod_reporting = new AnnotationConfiguration();
 	
 	private static AnnotationConfiguration cfg_ntbak = new AnnotationConfiguration();
 	private static AnnotationConfiguration cfg_nt = new AnnotationConfiguration();
 
 	private static SessionFactory sf_prod;
 	private static SessionFactory sf_prod_dirty;
-	private static SessionFactory sf_demo;
-	private static SessionFactory sf_qa;
+	private static SessionFactory sf_prod_reporting;
+
 	
 	private static SessionFactory sf_ntbak;
 	private static SessionFactory sf_nt;
 	private static String hibernate_main_path = HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath();
 	private static String hibernate_dirty_path = HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml").getPath();
 	
-
+	private static String hibernate_reporting_path = null;
+	
 	static {
+		
+		try {
+			hibernate_reporting_path = HibernateWrapper.class.getResource("/hibernate_reporting.cfg.xml").getPath();
+		} catch (Exception e) {
+			hibernate_reporting_path = hibernate_dirty_path; 
+		}
+		
+		
 		try {
 
-			if (TracerProperties.get("app_type").equals("qa")) {
-//				addClasses(cfg_qa);
-				sf_qa = cfg_qa.configure(HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml")).buildSessionFactory();
-
-			} else if (TracerProperties.get("app_type").equals("demo")) {
-//				addClasses(cfg_demo);
-				sf_demo = cfg_demo.configure(HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml")).buildSessionFactory();
-			} else {
-//				addClasses(cfg_prod);
 				sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
 				sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
-//				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
-			}
 		} catch (Exception e) {
 			logger.fatal("Unable to initiate hibernate: " + e);
 			e.printStackTrace();
@@ -65,29 +60,10 @@ public class HibernateWrapper {
 		try {
 			// Obtain the correct session factory.
 			
-
-			
-			if (TracerProperties.get("app_type").equals("qa")) {
-				if (sf_qa == null) {
-//					addClasses(cfg_qa);
-					String hibernate_qa_path = HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml").getPath();
-					sf_qa = cfg_qa.configure(new File(hibernate_qa_path)).buildSessionFactory();
-				}
-				return sf_qa;
-			} else if (TracerProperties.get("app_type").equals("demo")) {
-				if (sf_demo == null) {
-//					addClasses(cfg_demo);
-					String hibernate_demo_path = HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml").getPath();
-					sf_demo = cfg_demo.configure(new File(hibernate_demo_path)).buildSessionFactory();
-				}
-				return sf_demo;
-			} else {
-				if (sf_prod == null) {
-//					addClasses(cfg_prod);
-					sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
-				}
-				return sf_prod;
+			if (sf_prod == null) {
+				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
 			}
+			return sf_prod;
 		} catch (Exception e) {
 			logger.fatal("unable to initiate hibernate: " + e);
 			return null;
@@ -106,27 +82,33 @@ public class HibernateWrapper {
 			
 
 			
-			if (TracerProperties.get("app_type").equals("qa")) {
-				if (sf_qa == null) {
-//					addClasses(cfg_qa);
-					String hibernate_qa_path = HibernateWrapper.class.getResource("/hibernate_qa.cfg.xml").getPath();
-					sf_qa = cfg_qa.configure(new File(hibernate_qa_path)).buildSessionFactory();
-				}
-				return sf_qa;
-			} else if (TracerProperties.get("app_type").equals("demo")) {
-				if (sf_demo == null) {
-//					addClasses(cfg_demo);
-					String hibernate_demo_path = HibernateWrapper.class.getResource("/hibernate_demo.cfg.xml").getPath();
-					sf_demo = cfg_demo.configure(new File(hibernate_demo_path)).buildSessionFactory();
-				}
-				return sf_demo;
-			} else {
+
 				if (sf_prod_dirty == null) {
-//					addClasses(cfg_prod);
 					sf_prod_dirty = cfg_prod_dirty.configure(new File(hibernate_dirty_path)).buildSessionFactory();
 				}
 				return sf_prod_dirty;
-			}
+			
+		} catch (Exception e) {
+			logger.fatal("unable to initiate hibernate: " + e);
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Retrieve the session from the session factory
+	 * 
+	 * @return session factory
+	 */
+	public static SessionFactory getReportingSession() {
+		try {
+			// Obtain the correct session factory for reporting - pointing to a different db.
+				if (sf_prod_reporting== null) {
+
+					sf_prod_reporting = cfg_prod_reporting.configure(new File(hibernate_reporting_path)).buildSessionFactory();
+				}
+				return sf_prod_reporting;
+			
 		} catch (Exception e) {
 			logger.fatal("unable to initiate hibernate: " + e);
 			return null;
@@ -135,13 +117,8 @@ public class HibernateWrapper {
 	}
 
 	public static AnnotationConfiguration getConfig() {
-		if (TracerProperties.get("app_type").equals("qa")) {
-			return cfg_qa;
-		} else if (TracerProperties.get("app_type").equals("demo")) {
-			return cfg_demo;
-		} else {
+
 			return cfg_prod;
-		}
 	}
 	public static SessionFactory getNtSession() {
 		try {

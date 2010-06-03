@@ -31,7 +31,7 @@
 				</html:option>
 				<c:forEach items="${lossCodes}" var="lc">
 				<html:option value="${lc.code_id}">
-					${lc.description}
+					${lc.combination}
 				</html:option>
 				</c:forEach>
 			</html:select>

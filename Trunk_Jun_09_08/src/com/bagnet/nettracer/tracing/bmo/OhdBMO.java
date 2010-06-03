@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -41,6 +42,7 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
+import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -70,7 +72,11 @@ public class OhdBMO {
 	 * @return true if succesful; false otherwise
 	 */
 	public boolean insertOHD(OHD iDTO, Agent mod_agent) {
-		return insertOHD(iDTO, mod_agent, null);
+		return insertOHD(iDTO, mod_agent, (Station)null);
+	}
+//	
+	public boolean insertOHD(OHD iDTO, Agent mod_agent, Session sess) {
+		return simpleSaveAndAuditOhd(iDTO, mod_agent, null, sess);
 	}
 	
 	/**
@@ -84,13 +90,42 @@ public class OhdBMO {
 	 *          Station that we would like object associated with in ID(???DA00001)
 	 * @return true if succesful; false otherwise
 	 */
+	
+	
+	public boolean simpleSaveAndAuditOhd(OHD iDTO, Agent mod_agent, Station createStation, Session sess) {
+		if (sess == null) {
+			return insertOHD(iDTO, mod_agent, createStation);
+		} else {
+			Transaction t = null;
+			try {
+				t = sess.beginTransaction();
+				sess.saveOrUpdate(iDTO);
+				t.commit();
+				
+				if (iDTO.getAgent().getStation().getCompany().getVariable().getAudit_ohd() == 1) {
+					//System.out.println(iDTO.getAgent().getStation().getCompany().getVariable().getAudit_ohd());
+					Audit_OHD audit_dto = AuditOHDUtils.getAuditOHD(iDTO, mod_agent);
+					if (audit_dto != null) {
+						t = sess.beginTransaction();
+						sess.save(audit_dto);
+						t.commit();
+					}
+				}
+				return true;
+			} catch (Exception e) {
+				logger.error("Error saving and auditing: ", e);
+				return false;
+				
+			}
+		}
+	}
+	
 	public boolean insertOHD(OHD iDTO, Agent mod_agent, Station createStation) {
 		Transaction t = null;
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			
-			OHD ohd = null;
 			OHD oldinc = null;
 			String incident_id = iDTO.getOHD_ID();
 			boolean isnew = false;
@@ -488,25 +523,27 @@ public class OhdBMO {
 	 * @return ohd based on id, null otherwise.
 	 */
 	public OHD findOHDByID(String ohd_ID) {
-		Session sess = null;
-		try {
-			String query = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd "
-					+ "where ohd.OHD_ID=:ohd_ID";
+		return findOHDByID(ohd_ID, null);
+
+	}
+	
+	public OHD findOHDByID(String ohd_ID, Session sess) {
+		if (ohd_ID == null || ohd_ID.length() == 0) {
+			return null;
+		}
+		boolean sessionNull = (sess == null);
+		
+		if (sessionNull) {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(query);
-			q.setString("ohd_ID", ohd_ID);
-			List list = q.list();
-			if (list.size() == 0) {
-				logger.debug("unable to find ohd: " + ohd_ID);
-				return null;
-			}
-			OHD iDTO = (OHD) list.get(0);
-			return iDTO;
+		}
+		
+		try {
+			return (OHD) sess.load(OHD.class, ohd_ID);
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
 			return null;
 		} finally {
-			if (sess != null) {
+			if (sess != null && sessionNull) {
 				try {
 					sess.close();
 				} catch (Exception e) {
@@ -607,10 +644,30 @@ public class OhdBMO {
 			}
 
 			sql.append(" where 1=1 ");
-
+//
+//			if (oDTO.getOhd_ID() != null && !oDTO.getOhd_ID().equals("")) {
+//				sql.append(" and ohd.OHD_ID like :OHD_ID ");
+//			}
+//			
+//			
 			if (oDTO.getOhd_ID() != null && !oDTO.getOhd_ID().equals("")) {
-				sql.append(" and ohd.OHD_ID like :OHD_ID ");
+				sql.append(" and (ohd.OHD_ID like :OHD_ID ");
+
+
+				if (oDTO.getWt_id().length() > 0) {
+
+					if (oDTO.isWtConditionOr()) {
+						sql.append(" or ohd.wtFile.wt_id like :wt_id )");
+					} else {
+						sql.append(" and ohd.wtFile.wt_id like :wt_id )");
+					}
+				} else {
+					sql.append(") ");
+				}
+			} else if (oDTO.getWt_id() != null && !oDTO.getWt_id().equals("")) {
+				sql.append(" and ohd.wtFile.wt_id like :wt_id ");
 			}
+			
 			if (oDTO.getTicketnumber() != null && !oDTO.getTicketnumber().equals("")) {
 				sql.append(" and ohd.claimnum like :claimnum ");
 			}
@@ -719,6 +776,11 @@ public class OhdBMO {
 			if (oDTO.getOhd_ID() != null && !oDTO.getOhd_ID().equals("")) {
 				q.setString("OHD_ID", oDTO.getOhd_ID());
 			}
+			
+			if (oDTO.getWt_id().length() > 0)
+				q.setString("wt_id", oDTO.getWt_id());
+
+			
 			if (oDTO.getTicketnumber() != null && !oDTO.getTicketnumber().equals("")) {
 				q.setString("claimnum", oDTO.getTicketnumber());
 			}
@@ -830,6 +892,7 @@ public class OhdBMO {
 		}
 		
 		Query q = null;
+		
 		try {
 			StringBuffer s = new StringBuffer(512);
 			
@@ -857,6 +920,24 @@ public class OhdBMO {
 
 			s.append(" where 1=1 ");
 
+			
+			if (siDTO.getOhd_id().length() > 0) {
+				s.append(" and (ohd.OHD_ID like :ohd_ID ");
+
+				if (siDTO.getWt_id().length() > 0) {
+
+					if (siDTO.isWtConditionOr()) {
+						s.append(" or ohd.wtFile.wt_id like :wt_id )");
+					} else {
+						s.append(" and ohd.wtFile.wt_id like :wt_id )");
+					}
+				} else {
+					s.append(") ");
+				}
+			} else if (siDTO.getWt_id().length() > 0) {
+				s.append(" and ohd.wtFile.wt_id like :wt_id ");
+			}
+			
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
@@ -926,7 +1007,6 @@ public class OhdBMO {
 			if (siDTO.getEmail().length() > 0) s.append(" and address.email like :email");
 
 			// bag
-			if (siDTO.getClaimchecknum().length() > 0) s.append(" and ohd.claimnum like :claimchecknum");
 
 			if (siDTO.getColor().length() > 0) s.append(" and ohd.color like :color");
 			if (siDTO.getBagtype().length() > 0) s.append(" and ohd.type like :bagtype");
@@ -969,9 +1049,12 @@ public class OhdBMO {
 			else if(siDTO.getStatus_ID() == TracingConstants.OHD_STATUS_ACTIVE) {
 				s.append(" and ohd.status.status_ID != :status_ID");
 			}
+			
+			intelligentSearchProcessing(siDTO, s);
+			
 
 			if (!iscount) s.append(" order by ohd.OHD_ID");
-			logger.info(s.toString());
+			
 			q = sess.createQuery(s.toString());
 			
 			if (rowsperpage > 0) {
@@ -979,6 +1062,18 @@ public class OhdBMO {
 				q.setFirstResult(startnum);
 				q.setMaxResults(rowsperpage);
 			}
+			
+
+			if (siDTO.getOhd_id().length() > 0)
+				q.setString("ohd_ID", siDTO.getOhd_id());
+			
+			if (siDTO.getWt_id().length() > 0)
+				q.setString("wt_id", siDTO.getWt_id());
+
+			
+			if (siDTO.getClaimchecknum2() != null)
+				q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
+
 			
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
@@ -1076,6 +1171,75 @@ public class OhdBMO {
 			return null;
 		} finally {
 			sess.close();
+		}
+	}
+	
+	
+	private void intelligentSearchProcessing(SearchIncidentForm siDTO, StringBuffer s) {
+		boolean tagPresent = siDTO.getClaimchecknum() != null && siDTO.getClaimchecknum().trim().length() > 0;
+		int searchType = siDTO.getIntelligentTagSearchType();
+		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
+			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
+			if (pattern.matcher(s).find()) {
+				siDTO.setIntelligentTagSearchType(10);
+			} else {
+				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
+				if (pattern.matcher(s).find()) {
+					siDTO.setIntelligentTagSearchType(9);
+				} else {
+					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
+					if (pattern.matcher(s).find()) {
+						siDTO.setIntelligentTagSearchType(8);
+					}
+				}
+			}
+		}
+		
+		
+			
+		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
+			String nineDigitWildcardTag = null;
+			String genericTag = null;
+			
+			String claimcheck = siDTO.getClaimchecknum().trim();
+			if (searchType == 10) {
+				nineDigitWildcardTag = "%" + s.substring(1);
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 9) {
+				nineDigitWildcardTag = "%" + s;
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 8) {
+				genericTag = claimcheck;
+				try {
+					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			}
+			
+			siDTO.setClaimchecknum(nineDigitWildcardTag);
+			siDTO.setClaimchecknum2(genericTag);
+			s.append(" and (ohd.claimnum like :claimchecknum or ohd.claimnum like :claimchecknum2) ");
+//			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
+//			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
+
+		} else if (siDTO.getClaimchecknum().length() > 0) {
+//			s.append(" and (item.claimchecknum like :claimchecknum");
+//			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
+			
+			s.append(" and ohd.claimnum like :claimchecknum ");
+
 		}
 	}
 	
@@ -1665,4 +1829,48 @@ public class OhdBMO {
 			}
 			return true;
 		}
+		public List<OHD> findTagsMoveToWt(String companyCode) {
+
+			Calendar c = new GregorianCalendar();
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.HOUR, (0-(5*24)));
+			Date ohdCutoff = c.getTime();
+
+			String queryString = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where " +
+			" ohd.wtFile is null " +  //no worldtracer file already
+			" and ohd.founddate >= :ohdCutoff " + // No older than 5 days old
+			" and ohd.claimnum is not null " +
+			" and (ohd.status.status_ID = :status1 or ohd.status.status_ID = :status2) " + // only open, in transit
+			" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
+			" and ohd.holdingStation.wt_stationcode is not null " +
+			" and (ohd.tagSentToWt = :false or (ohd.tagSentToWt = :true and ohd.tagSentToWtStationId != ohd.holdingStation.station_ID))" +
+			" and ohd.tagSentToWt = :false " +
+			" order by ohd.holdingStation.station_ID desc";
+			
+			Session sess = null;
+			try {
+				sess = HibernateWrapper.getDirtySession().openSession();
+				Query q = sess.createQuery(queryString);
+				q.setDate("ohdCutoff", ohdCutoff);
+				q.setParameter("status1", TracingConstants.OHD_STATUS_OPEN);
+				q.setParameter("status1", TracingConstants.OHD_STATUS_IN_TRANSIT);
+				q.setParameter("companyCode", companyCode);
+				q.setParameter("false", companyCode);
+				q.setBoolean("false", false);
+				q.setBoolean("true", true);
+
+				return q.list();
+			}
+			catch (Exception e) {
+				logger.error("unable to get move to WT OHD list: " + e);
+				return null;
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						logger.error("unable to close hibernate session: " + e);
+					}
+				}
+			}		}
 }

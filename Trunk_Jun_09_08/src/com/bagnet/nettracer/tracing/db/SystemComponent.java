@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Ankur Gupta
  * 
  * @hibernate.class table="SystemComponents"
+ * @hibernate.cache usage="read-only"
  */
 public class SystemComponent implements Serializable {
 	private int component_ID;

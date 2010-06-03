@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
@@ -17,6 +18,13 @@ import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.dsii.bdoservice.BdoServiceStub;
+import com.dsii.bdoservice.SubmitBdoJobDocument;
+import com.dsii.bdoservice.SubmitBdoJobResponseDocument;
+import com.dsii.bdoservice.SubmitBdoUpdateDocument;
+import com.dsii.bdoservice.SubmitBdoUpdateResponseDocument;
+import com.dsii.bdoservice.SubmitBdoJobDocument.SubmitBdoJob;
+import com.dsii.bdoservice.SubmitBdoUpdateDocument.SubmitBdoUpdate;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.AuthType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.BdoSubmitRequestType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.BdoType;
@@ -36,13 +44,6 @@ import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.ServiceLevelType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.StatusType;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.SubmitBdoJobRequestDocument.SubmitBdoJobRequest;
 import com.dsii.bdoservice.schemas._2008.bdo_2_0_xsd.UpdateBdoJobRequestDocument.UpdateBdoJobRequest;
-import com.dsii.bdoservice.BdoServiceStub;
-import com.dsii.bdoservice.SubmitBdoJobDocument;
-import com.dsii.bdoservice.SubmitBdoJobResponseDocument;
-import com.dsii.bdoservice.SubmitBdoUpdateDocument;
-import com.dsii.bdoservice.SubmitBdoUpdateResponseDocument;
-import com.dsii.bdoservice.SubmitBdoJobDocument.SubmitBdoJob;
-import com.dsii.bdoservice.SubmitBdoUpdateDocument.SubmitBdoUpdate;
 
 public class DSI implements BDOIntegration {
 	
@@ -254,11 +255,18 @@ public class DSI implements BDOIntegration {
 					ClaimInfoType claim = bdoType.addNewClaimInfo();
 					
 					Calendar claimTime = new GregorianCalendar();
+					int modifyTime = claimTime.get(Calendar.ZONE_OFFSET) / (1000*60*60);
+					claimTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+					
+					
+					
 					Calendar nowDateTime = new GregorianCalendar();
 					
 					if (bdo.getIncident() != null) {
 						ht.setClientReferenceNumber(bdo.getIncident().getIncident_ID());
 						claimTime.setTime(bdo.getIncident().getFullCreateDate());
+						claimTime.add(Calendar.HOUR, modifyTime);
+						
 					} else if (bdo.getOhd().getOHD_ID() != null) {
 						ht.setClientReferenceNumber(bdo.getOhd().getOHD_ID());
 					}

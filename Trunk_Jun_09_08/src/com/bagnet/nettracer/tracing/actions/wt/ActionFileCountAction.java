@@ -25,6 +25,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
@@ -86,18 +88,12 @@ public class ActionFileCountAction extends Action {
 			agentStation = user.getStation();
 		}
 		
-		
-		// CHANGES BEGINNING HERE
-		WorldTracerService service = SpringUtils.getWorldTracerService();
-		if (service.getWtConnector().doesUserNeedToEnterCaptcha(false)) {
-			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
-			response.sendRedirect("wtCaptcha.do");
-			return null;
-		}
-		// CHANGES ENDING HERE
 
 		String companyCode = user.getCompanycode_ID();
 		ActionFileManager afm = SpringUtils.getActionFileManager();
+		
+		
+		
 		String wtStation = agentStation.getWt_stationcode();
 		ActionFileStation afStation = null;
 
@@ -109,7 +105,7 @@ public class ActionFileCountAction extends Action {
 		}
 
 		try {
-			afStation = afm.getCounts(companyCode, wtStation, user);
+			afStation = afm.getCounts(companyCode, wtStation, user, WorldTracerWebService.getBasicDto(session));
 			request.setAttribute("afStation", afStation);
 			if (afStation == null || afStation.getCountMap() == null) {
 				request.setAttribute("afCounts", null);
@@ -117,14 +113,16 @@ public class ActionFileCountAction extends Action {
 				request.setAttribute("afCounts", afStation.getCountMap());
 			}
 			request.setAttribute("afTypes", ActionFileType.values());
+		} catch (CaptchaException e) {
+			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
+			response.sendRedirect("wtCaptcha.do");
+			return null;
 		} catch (WorldTracerLockException ex) {
 			ActionMessage error = new ActionMessage("message.wt.af.lock.error");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
 			mapping.findForward("error");
-		}
-
-		catch (WorldTracerDisabledException e) {
+		} catch (WorldTracerDisabledException e) {
 			ActionMessage error = new ActionMessage("message.wt.disabled");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);

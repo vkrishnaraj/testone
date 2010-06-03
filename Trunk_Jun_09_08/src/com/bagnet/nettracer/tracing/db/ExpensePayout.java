@@ -7,6 +7,8 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -397,5 +399,21 @@ public class ExpensePayout implements Serializable {
 		this.ohd = ohd;
 	}
 
+	@Transient
+	public String getDispComments() {
+		String result = "";
+		
+		DateFormat myFormat = new SimpleDateFormat(TracingConstants.DISPLAY_DATEFORMAT);
+		
+		Set<Comment> comments = getComments();
+		
+		for (Comment myComment : comments) {
+			result += myComment.getAgent().getUsername() + " ";
+			result += myFormat.format(myComment.getCreateDate()) + "\n";
+			result += myComment.getContent()+ "\n\n";
+		}
+		
+		return result;
+	}
 
 }

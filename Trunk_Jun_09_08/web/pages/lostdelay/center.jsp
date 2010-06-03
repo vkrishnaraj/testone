@@ -102,8 +102,9 @@
 
   </script>
   
-  <html:form action="lostDelay.do" method="post" onsubmit="return validateThis(this);">
-    <jsp:include page="/pages/includes/validation_incl.jsp" />
+  <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateThis(this);">
+    
+
     <html:hidden property="doprepopulate" value="" />
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -249,13 +250,14 @@
 
 
 
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <html:form action="lostDelay.do" method="post"
+
+  <html:form action="lostDelay.do" method="post" enctype="multipart/form-data"
     onsubmit="return validateRest(this);">
     <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />
     <html:hidden property="pcn_id" />
     <html:hidden property="notifiedOfRequirements"/>
+    <html:hidden property="remarkEnteredWhenNotifiedOfRequirements"/>
     <input type="hidden" name="historical_report" value="">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -522,7 +524,7 @@
               <td width="30%" nowrap="nowrap"><bean:message
                 key="colname.claimnum.req" /> :</td>
               <td><html:text name="claimcheck"
-                property="claimchecknum" size="13" maxlength="13"
+                property="claimchecknum" size="13" maxlength="10"
                 styleClass="textfield" indexed="true" /> <%
                   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
                 %> <logic:notEmpty name="claimcheck"
@@ -570,6 +572,20 @@
               </td>
             </tr>
           </logic:iterate>
+           <!-- provide space for bag weight feature - start -->
+           <!-- 
+            <tr id="bag_weight">
+              <td>Total Baggage Weight/Unit<br>
+					<input type="text" name="total_baggage_weight" maxlength="10" size="8" value="" class="textfield">
+					<select name="total_baggage_weight_unit">
+			          <option value="kilogram">kg</option>
+			          <option value="pound">lbs</option>
+			        </select>
+              </td>
+              <td colspan="2"></td>
+            </tr>
+             -->
+           <!-- provide space for bag weight feature - end -->
         </table>
         <center>
         <select name="addclaimcheckNum">

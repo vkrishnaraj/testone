@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -48,6 +49,10 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * Preferences - Java - Code Style - Code Templates
  */
 public class AddFoundItem extends Action {
+	public static final int ADD_NEW_RECORD = 1;
+	public static final int UPDATE_RECORD = 3;
+	private static Logger logger = Logger.getLogger(AddFoundItem.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -126,6 +131,7 @@ public class AddFoundItem extends Action {
 					LostAndFound_Photo photo = new LostAndFound_Photo();
 					photo.setPicpath(picpath);
 					photo.setThumbpath(thumbpath);
+					photo.setFileName(fileName);
 					Lform.getPhotoList().add(photo);
 				}
 			} else {
@@ -137,7 +143,12 @@ public class AddFoundItem extends Action {
 			return (mapping.findForward(TracingConstants.LOST_FOUND));
 		}
 
-		
+		//key to determine whether the action is add new, close, or update
+		int saveActionType = ADD_NEW_RECORD;
+		String myFoundItemRefId = Lform.getFile_ref_number();
+		if (!(myFoundItemRefId == null || myFoundItemRefId.equals(""))) {
+			saveActionType = UPDATE_RECORD;
+		}
 
 		
 		if (request.getParameter("save") != null) {
@@ -145,7 +156,13 @@ public class AddFoundItem extends Action {
 
 			if (bs.insertLostAndFound(Lform, user)) {
 				request.setAttribute("file_ref_number", Lform.getFile_ref_number());
-				return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
+				//logger.error(">>>>>>>>>saveActionType (1-addnew; 3-update) : " + saveActionType);
+				if (saveActionType == UPDATE_RECORD) {
+					return (mapping.findForward(TracingConstants.UPDATE_LOST_FOUND_SUCCESS));
+				} else {
+					return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
+				}
+				//return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
 			}
 		} else {
 			

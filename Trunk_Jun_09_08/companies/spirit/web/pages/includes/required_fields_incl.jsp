@@ -1,16 +1,16 @@
-<%@ page language="java" %>
+<%@ page contentType="text/javascript" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="org.apache.struts.action.Action" %>
-<%
-  Agent a = (Agent)session.getAttribute("user");
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 
-  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
-                                                               request.getAttribute("org.apache.struts.action.MESSAGE");
-  java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
-                                                               "org.apache.struts.action.LOCALE");
+<%
+Agent a = (Agent) session.getAttribute("user");
+ResourceBundle bundle = ResourceBundle.getBundle(
+					"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+
 %>
-  <script language="javascript">
-  
+
   
   function validatereq(form) {
   	return true;
@@ -18,41 +18,47 @@
   
   function validatereqFields(form, formType)
   {
+	var bagIndices = [];
+	
   	var theindex = 0;
   	var addressIndices = [];
   	for (var j=0;j<form.length;j++) {
+  		
 	    currentElement = form.elements[j];
 	    currentElementName=currentElement.name;
+	    var left = currentElementName.indexOf("[");
+	    var right = currentElementName.indexOf("]");
 		
 		if (currentElementName.indexOf("lastname") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.last_name") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.last_name") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
+	    } else if (currentElementName.indexOf("].color") != -1) {
+	    	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
 	    } else if (currentElementName.indexOf("firstname") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.first_name") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.first_name") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("address1") != -1) {
-	      var left = currentElementName.indexOf("[");
-	      var right = currentElementName.indexOf("]");
+	      
 	      addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
 	        
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.street_addr") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.street_addr") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("city") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.city") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.city") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      } 
@@ -62,24 +68,74 @@
 	        var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
 	
 	        if (form.elements[str].value == "US" && currentElement.value.length ==0) {
-		        alert("<%= (String)myMessages.getMessage(myLocale, "colname.state") %>" + " is required if country is set to 'United States'");
+		        alert("<%= (String)bundle.getString( "colname.state") %>" + " is required if country is set to 'United States'");
 		        currentElement.focus();
 		        return false;
 	      	}
+		//new code starts
+		
+	    } 
+	      else if (currentElementName.indexOf("checkedlocation") != -1)
+	      {  
+	        if (currentElement.value.length == 0 || currentElement.value == "0")
+	        {
+	          alert("<%= (String)bundle.getString( "colname.bag_loc") %>" + 
+	          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	          currentElement.focus();
+	          return false;
+	        }
+	      }
+
+	    else if (currentElementName.indexOf("].categorytype_ID") != -1 &&
+	               currentElementName.indexOf("inventorylist[") != -1 &&
+	               formType == 'damaged')  {  
+	          if (currentElement.value.length == 0)
+	          {
+	            alert("<%= (String)bundle.getString( "colname.category") %>" + 
+	            " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	            currentElement.focus();
+	            return false;
+	          }
+	    }else if (formType != 'pilfered' && currentElementName.indexOf("].categorytype_ID") != -1) {
+	          
+	          if (currentElement.value.length == 0)
+	          {
+	            alert("<%= (String)bundle.getString( "colname.category") %>" + 
+	            " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	            currentElement.focus();
+	            return false;
+	          }
+	    } else if (formType != 'pilfered' && currentElementName.indexOf("].description") != -1) {  
+	          if (currentElement.value.length == 0)
+	          {
+	            alert("<%= (String)bundle.getString( "colname.description") %>" + 
+	            " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	            currentElement.focus();
+	            return false;
+	          }
+	    } else if (formType == 'pilfered' && currentElementName.indexOf("].article") != -1) {  
+	          if (currentElement.value.length == 0)
+	          {
+	            alert("<%= (String)bundle.getString( "colname.article") %>" + 
+	            " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	            currentElement.focus();
+	            return false;
+	          }
+	    //new code ends     
 	    } else if (currentElementName.indexOf("].description") != -1 &&
 	               currentElementName.indexOf("inventorylist[") != -1 &&
-	               (formType == 'damaged' || formType == 'pilfered') ) 
+	               (formType == 'damaged' ) ) 
 		{
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.description") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.description") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("].damage") != -1) {
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.damagedesc") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.damagedesc") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
@@ -88,55 +144,69 @@
 	    } else if (currentElementName.indexOf("[" + theindex + "].legfrom") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("[" + theindex + "].legto") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("[" + theindex + "].airline") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("[" + theindex + "].flightnum") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("[" + theindex + "].disdepartdate") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.departdate") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("].color") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.color") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.color") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("].bagtype") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bagtype") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.bagtype") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    }
 	
   	}
+
+//	for (var j=0; j<bagIndices.length; j++) {
+//		var index = bagIndices[j];
+//		found = false;
+//		for (var k = 0; k < iBagIndices.length; k++) {
+//			if (iBagIndices[k] == index) {
+//				found = true;
+//			}
+//		}
+//		if (false) {
+//			alert("<%= (String)bundle.getString( "error.minimum.one.description") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+//			return false;
+//		}
+//	}
 	
   	for (var j=0;j<addressIndices.length;j++) {
   	    var index = addressIndices[j];
@@ -145,13 +215,13 @@
   		var work = document.getElementById("addresses[" + index + "].workphone");
   		  		
   		if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.mobile_ph") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.mobile_ph") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        mobile.focus();
 	        return false;
   		}
   	}
   
- 		return true;
+ 	return true;
   }
 	
  function validatereqOHDForm(form) {
@@ -162,14 +232,14 @@
 		if (currentElementName.indexOf("bagColor") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.color") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.color") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
 	    } else if (currentElementName.indexOf("bagType") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.bagtype") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+	        alert("<%= (String)bundle.getString( "colname.bagtype") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
 	      }
@@ -189,6 +259,32 @@
 	  return true;
 	}
 
-  function checkDeleteCount(bagNum) { return true; }
+
+	  
+	  function checkDeleteCount(bagNum) {
+		  inputs = document.getElementsByTagName("input");
+		  var invCount = 0;
+		  for(i = 0; i < inputs.length; i++) {
+		    if(inputs[i].name.indexOf("deleteinventory_" + bagNum) == 0) {
+		      invCount ++;
+		      if(invCount >= 2) break;
+		    }
+		  }
+		  if(invCount < 2) {
+		    alert("<%= (String)bundle.getString( "error.minimum.one.description") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    return false;
+		  }
+		  return true;
+		}
+
+
+  function validateReqBDO(form) {
+    returnValue = true;
+    
+    returnValue = validateBDO(form);
+    if (returnValue == false) { return returnValue; }
+
+
+    return true;
+  }
   function checkOhdDeleteCount(bagNum) { return true; }
-</script>

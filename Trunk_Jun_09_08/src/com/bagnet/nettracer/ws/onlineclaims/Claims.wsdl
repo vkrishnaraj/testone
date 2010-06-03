@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://onlineclaims.ws.nettracer.bagnet.com/xsd" xmlns:ns1="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://onlineclaims.ws.nettracer.bagnet.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://onlineclaims.ws.nettracer.bagnet.com">
+    <wsdl:types>
+        <xs:schema xmlns:ns="http://onlineclaims.ws.nettracer.bagnet.com" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://onlineclaims.ws.nettracer.bagnet.com">
+            <xs:element name="authAdminUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="auth" nillable="true" type="ns2:NtAuth"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="authAdminUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteFile">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="claimId" type="xs:long"/>
+                        <xs:element minOccurs="0" name="fileId" type="xs:long"/>
+                        <xs:element minOccurs="0" name="auth" nillable="true" type="ns2:NtAuth"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteFileResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="saveClaim">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="claim" nillable="true" type="ns2:Claim"/>
+                        <xs:element minOccurs="0" name="auth" nillable="true" type="ns2:NtAuth"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="saveClaimResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loadClaim">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="claimId" type="xs:long"/>
+                        <xs:element minOccurs="0" name="auth" nillable="true" type="ns2:NtAuth"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loadClaimResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns2:Claim"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="uploadFile">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
+                        <xs:element minOccurs="0" name="auth" nillable="true" type="ns2:NtAuth"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="uploadFileResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns2:File"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="authPassenger">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="passengerLastName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="auth" nillable="true" type="ns2:NtAuth"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="authPassengerResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns2:PassengerView"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax22="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="WS_PVAdvancedIncident">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="dispcreatetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_status" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax22:WS_PVItem"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax22:WS_PVPassenger"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_PVItem">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagstatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="claimchecknum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="state_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_PVPassenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="email" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homephone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="hotel" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobile" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="workphone" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax21="http://onlineclaims.ws.nettracer.bagnet.com/xsd" xmlns:ax23="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://onlineclaims.ws.nettracer.bagnet.com/xsd">
+            <xs:import namespace="http://pojo.core.ws.nettracer.bagnet.com/xsd"/>
+            <xs:complexType name="NtAuth">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Claim">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="accept" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="attemptToClaimAtArrival" type="xs:boolean"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="bag" nillable="true" type="ax21:Bag"/>
+                    <xs:element minOccurs="0" name="bagClearCustoms" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="baggageReroutedEnRoute" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="bagsDelayed" type="xs:int"/>
+                    <xs:element minOccurs="0" name="bagsStillMissing" type="xs:int"/>
+                    <xs:element minOccurs="0" name="bagsTravelWith" type="xs:int"/>
+                    <xs:element minOccurs="0" name="businessName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="chargedForExcessBaggage" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="checkedLocation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="claimId" type="xs:long"/>
+                    <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="declaredExcessValue" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="declaredValue" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="differentClaimCheck" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="file" nillable="true" type="ax21:File"/>
+                    <xs:element minOccurs="0" name="filedPreviousAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="filedPreviousClaim" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="filedPreviousClaimant" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="filedPrevoiusDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="firstName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="frequentFlierNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="haveToRecheck" type="xs:boolean"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax21:Itinerary"/>
+                    <xs:element minOccurs="0" name="lastName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastSawBaggage" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mailingAddress" nillable="true" type="ax21:Address"/>
+                    <xs:element minOccurs="0" name="middleInitial" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="occupation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="passengersTravelingWithYou" type="xs:int"/>
+                    <xs:element minOccurs="0" name="permanentAddress" nillable="true" type="ax21:Address"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="phone" nillable="true" type="ax21:Phone"/>
+                    <xs:element minOccurs="0" name="reportedToAnotherAirline" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="reroutedAirlineCity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="reroutedReason" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="socialSecurity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ticketWithAnotherAirline" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="tsaInspected" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="tsaInspectionLocation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tsaNotePresent" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="wasBagInspected" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="whereDidYouFileReport" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="whereWasBaggageChecked" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Bag">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="bagArrive" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="bagColor" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="brand" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="contents" nillable="true" type="ax21:Contents"/>
+                    <xs:element minOccurs="0" name="externalMarkings" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="feet" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="hardSided" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" name="locks" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="nameOnBag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="nameTag" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="pockets" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="pullStrap" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="purchaseDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="retractibleHandle" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="ribbonsOrMarkings" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="softSided" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="tag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="trim" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="wheels" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="zippers" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Contents">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="article" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="brand" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="currency" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="male" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="price" type="xs:double"/>
+                    <xs:element minOccurs="0" name="purchasedAt" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="purchasedDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="size" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="File">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="id" type="xs:long"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Itinerary">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivalCity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="date" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="departureCity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="flightNum" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Address">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="postalCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stateProvince" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Phone">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="phoneNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="phoneType" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PassengerView">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="authenticationSuccess" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="claimId" type="xs:long"/>
+                    <xs:element minOccurs="0" name="data" nillable="true" type="ax23:WS_PVAdvancedIncident"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="saveClaimRequest">
+        <wsdl:part name="parameters" element="ns0:saveClaim"/>
+    </wsdl:message>
+    <wsdl:message name="saveClaimResponse">
+        <wsdl:part name="parameters" element="ns0:saveClaimResponse"/>
+    </wsdl:message>
+    <wsdl:message name="authAdminUserRequest">
+        <wsdl:part name="parameters" element="ns0:authAdminUser"/>
+    </wsdl:message>
+    <wsdl:message name="authAdminUserResponse">
+        <wsdl:part name="parameters" element="ns0:authAdminUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="uploadFileRequest">
+        <wsdl:part name="parameters" element="ns0:uploadFile"/>
+    </wsdl:message>
+    <wsdl:message name="uploadFileResponse">
+        <wsdl:part name="parameters" element="ns0:uploadFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="authPassengerRequest">
+        <wsdl:part name="parameters" element="ns0:authPassenger"/>
+    </wsdl:message>
+    <wsdl:message name="authPassengerResponse">
+        <wsdl:part name="parameters" element="ns0:authPassengerResponse"/>
+    </wsdl:message>
+    <wsdl:message name="loadClaimRequest">
+        <wsdl:part name="parameters" element="ns0:loadClaim"/>
+    </wsdl:message>
+    <wsdl:message name="loadClaimResponse">
+        <wsdl:part name="parameters" element="ns0:loadClaimResponse"/>
+    </wsdl:message>
+    <wsdl:message name="deleteFileRequest">
+        <wsdl:part name="parameters" element="ns0:deleteFile"/>
+    </wsdl:message>
+    <wsdl:message name="deleteFileResponse">
+        <wsdl:part name="parameters" element="ns0:deleteFileResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="OnlineClaimsServicePortType">
+        <wsdl:operation name="saveClaim">
+            <wsdl:input message="ns0:saveClaimRequest" wsaw:Action="urn:saveClaim"/>
+            <wsdl:output message="ns0:saveClaimResponse" wsaw:Action="urn:saveClaimResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="authAdminUser">
+            <wsdl:input message="ns0:authAdminUserRequest" wsaw:Action="urn:authAdminUser"/>
+            <wsdl:output message="ns0:authAdminUserResponse" wsaw:Action="urn:authAdminUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="uploadFile">
+            <wsdl:input message="ns0:uploadFileRequest" wsaw:Action="urn:uploadFile"/>
+            <wsdl:output message="ns0:uploadFileResponse" wsaw:Action="urn:uploadFileResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="authPassenger">
+            <wsdl:input message="ns0:authPassengerRequest" wsaw:Action="urn:authPassenger"/>
+            <wsdl:output message="ns0:authPassengerResponse" wsaw:Action="urn:authPassengerResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="loadClaim">
+            <wsdl:input message="ns0:loadClaimRequest" wsaw:Action="urn:loadClaim"/>
+            <wsdl:output message="ns0:loadClaimResponse" wsaw:Action="urn:loadClaimResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="deleteFile">
+            <wsdl:input message="ns0:deleteFileRequest" wsaw:Action="urn:deleteFile"/>
+            <wsdl:output message="ns0:deleteFileResponse" wsaw:Action="urn:deleteFileResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="OnlineClaimsServiceSOAP11Binding" type="ns0:OnlineClaimsServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="saveClaim">
+            <soap:operation soapAction="urn:saveClaim" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="authAdminUser">
+            <soap:operation soapAction="urn:authAdminUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="uploadFile">
+            <soap:operation soapAction="urn:uploadFile" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="authPassenger">
+            <soap:operation soapAction="urn:authPassenger" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="loadClaim">
+            <soap:operation soapAction="urn:loadClaim" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteFile">
+            <soap:operation soapAction="urn:deleteFile" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OnlineClaimsServiceSOAP12Binding" type="ns0:OnlineClaimsServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="saveClaim">
+            <soap12:operation soapAction="urn:saveClaim" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="authAdminUser">
+            <soap12:operation soapAction="urn:authAdminUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="uploadFile">
+            <soap12:operation soapAction="urn:uploadFile" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="authPassenger">
+            <soap12:operation soapAction="urn:authPassenger" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="loadClaim">
+            <soap12:operation soapAction="urn:loadClaim" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteFile">
+            <soap12:operation soapAction="urn:deleteFile" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OnlineClaimsServiceHttpBinding" type="ns0:OnlineClaimsServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="saveClaim">
+            <http:operation location="OnlineClaimsService/saveClaim"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="saveClaim"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="saveClaim"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="authAdminUser">
+            <http:operation location="OnlineClaimsService/authAdminUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="authAdminUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="authAdminUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="uploadFile">
+            <http:operation location="OnlineClaimsService/uploadFile"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="uploadFile"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="uploadFile"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="authPassenger">
+            <http:operation location="OnlineClaimsService/authPassenger"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="authPassenger"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="authPassenger"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="loadClaim">
+            <http:operation location="OnlineClaimsService/loadClaim"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="loadClaim"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="loadClaim"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteFile">
+            <http:operation location="OnlineClaimsService/deleteFile"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="deleteFile"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="deleteFile"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="OnlineClaimsService">
+        <wsdl:port name="OnlineClaimsServiceSOAP11port_http" binding="ns0:OnlineClaimsServiceSOAP11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/OnlineClaimsService"/>
+        </wsdl:port>
+        <wsdl:port name="OnlineClaimsServiceSOAP12port_http" binding="ns0:OnlineClaimsServiceSOAP12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/OnlineClaimsService"/>
+        </wsdl:port>
+        <wsdl:port name="OnlineClaimsServiceHttpport" binding="ns0:OnlineClaimsServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/OnlineClaimsService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

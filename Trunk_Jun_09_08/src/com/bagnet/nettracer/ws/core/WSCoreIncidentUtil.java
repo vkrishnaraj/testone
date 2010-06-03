@@ -291,71 +291,78 @@ public class WSCoreIncidentUtil {
 		if (iDTO.getItemlist() != null) {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSItem itemarr = null;
 			for (Iterator i = iDTO.getItemlist().iterator(); i.hasNext();) {
-				itemarr = si.addNewItems();
+				
 				item = (Item) i.next();
 				
-				itemarr.setItemtype(iDTO.getItemtype().getDescription());
-				
-				itemarr.setBagstatus(item.getStatus() != null ? item.getStatus().getTextDescription(null) : null);
-				
-				String claimCheckNum = item.getClaimchecknum();
-				
-				try {
-					String tmpStr = LookupAirlineCodes.getTwoCharacterBagTag(claimCheckNum);
-					claimCheckNum = tmpStr;
-				} catch (Exception e) {
-					// Ignore bag tag exceptions and null pointer exceptions.
-				}
-				
-				itemarr.setClaimchecknum(claimCheckNum);
-				itemarr.setColor(item.getColor());
-				itemarr.setBagtype(item.getBagtype());
-				
-				if (item.getXdescelement_ID_1() > 0)
-					itemarr.setXdescelement1(item.getXdescelement1());
-				if (item.getXdescelement_ID_2() > 0)
-					itemarr.setXdescelement2(item.getXdescelement2());
-				if (item.getXdescelement_ID_3() > 0)
-					itemarr.setXdescelement3(item.getXdescelement3());
-				itemarr.setManufacturer(item.getManufacturer());
-				
-				itemarr.setLvlofdamage(item.getLvlofdamage());
-				itemarr.setDamage(item.getDamage());
-				itemarr.setResolutiondesc(item.getResolutiondesc());
-				if (item.getResolution() != null) 
-					itemarr.setResolutionstatus(item.getResolution().getStatus());
-				itemarr.setCost(item.getCost());
-				itemarr.setDrafts(item.getDrafts());
-				itemarr.setCurrencyID(item.getCurrency_ID());
-				
-				itemarr.setFnameonbag(item.getFnameonbag());
-				itemarr.setMnameonbag(item.getMnameonbag());
-				itemarr.setLnameonbag(item.getLnameonbag());
-				itemarr.setArrivedonairlineID(item.getArrivedonairline_ID());
-				itemarr.setArrivedondate(WSCoreUtil.formatDatetoString(item.getArrivedondate(),null));
-				itemarr.setArrivedonflightnum(item.getArrivedonflightnum());
-				
-				itemarr.setMatchedOhd(item.getOHD_ID());
-				
-				int d = 0;
-				
-				Item_Inventory inv = null;
-				if (item.getInventory() != null) {
-					com.bagnet.nettracer.ws.core.pojo.xsd.WSInventory oiarr = null;
+				if (item != null) {
+					itemarr = si.addNewItems();
 					
-					for (Iterator j = item.getInventory().iterator(); j.hasNext();) {
-						oiarr = itemarr.addNewInventories();
-						inv = (Item_Inventory) j.next();
-						oiarr.setCategory(inv.getCategory());
-						oiarr.setDescription(inv.getDescription());
-						itemarr.setInventoriesArray(d, oiarr);
-						d++;
+					
+					itemarr.setItemtype(iDTO.getItemtype().getDescription());
+					
+					itemarr.setBagstatus(item.getStatus() != null ? item.getStatus().getTextDescription(null) : null);
+					
+					String claimCheckNum = item.getClaimchecknum();
+					
+					try {
+						String tmpStr = LookupAirlineCodes.getTwoCharacterBagTag(claimCheckNum);
+						claimCheckNum = tmpStr;
+					} catch (Exception e) {
+						// Ignore bag tag exceptions and null pointer exceptions.
 					}
-
+					
+					itemarr.setClaimchecknum(claimCheckNum);
+					itemarr.setColor(item.getColor());
+					itemarr.setBagtype(item.getBagtype());
+					
+					if (item.getXdescelement_ID_1() > 0)
+						itemarr.setXdescelement1(item.getXdescelement1());
+					if (item.getXdescelement_ID_2() > 0)
+						itemarr.setXdescelement2(item.getXdescelement2());
+					if (item.getXdescelement_ID_3() > 0)
+						itemarr.setXdescelement3(item.getXdescelement3());
+					itemarr.setManufacturer(item.getManufacturer());
+					
+					itemarr.setLvlofdamage(item.getLvlofdamage());
+					itemarr.setDamage(item.getDamage());
+					itemarr.setResolutiondesc(item.getResolutiondesc());
+					if (item.getResolution() != null) 
+						itemarr.setResolutionstatus(item.getResolution().getStatus());
+					itemarr.setCost(item.getCost());
+					itemarr.setDrafts(item.getDrafts());
+					itemarr.setCurrencyID(item.getCurrency_ID());
+					
+					itemarr.setFnameonbag(item.getFnameonbag());
+					itemarr.setMnameonbag(item.getMnameonbag());
+					itemarr.setLnameonbag(item.getLnameonbag());
+					itemarr.setArrivedonairlineID(item.getArrivedonairline_ID());
+					itemarr.setArrivedondate(WSCoreUtil.formatDatetoString(item.getArrivedondate(),null));
+					itemarr.setArrivedonflightnum(item.getArrivedonflightnum());
+					
+					itemarr.setMatchedOhd(item.getOHD_ID());
+					
+					int d = 0;
+					
+					Item_Inventory inv = null;
+					if (item.getInventory() != null) {
+						com.bagnet.nettracer.ws.core.pojo.xsd.WSInventory oiarr = null;
+						
+						for (Iterator j = item.getInventory().iterator(); j.hasNext();) {
+							inv = (Item_Inventory) j.next();
+							
+							if (inv != null) {
+								oiarr = itemarr.addNewInventories();
+								oiarr.setCategory(inv.getCategory());
+								oiarr.setDescription(inv.getDescription());
+								itemarr.setInventoriesArray(d, oiarr);
+								d++;
+							}
+						}
+					}
+					
+					si.setItemsArray(c, itemarr);
+					c++;
 				}
-				
-				si.setItemsArray(c, itemarr);
-				c++;
 			}
 
 		}

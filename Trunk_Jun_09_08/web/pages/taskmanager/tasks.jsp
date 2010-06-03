@@ -52,7 +52,7 @@ function sortAgents(sortOrder) {
 
   </SCRIPT>
   
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="otherTasks.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateRest(this);">
     <logic:present name="file_type" scope="request">
       <html:hidden property="file_type" value="<%= (String)request.getAttribute("file_type") %>" />

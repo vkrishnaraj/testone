@@ -1,13 +1,26 @@
 package com.bagnet.clients.airtran;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.airtran.ArrayOfBookingContact;
+import com.airtran.ArrayOfJourney;
+import com.airtran.ArrayOfLeg;
+import com.airtran.ArrayOfPassenger;
+import com.airtran.ArrayOfPassengerAddress;
+import com.airtran.ArrayOfPassengerBag;
+import com.airtran.ArrayOfSegment;
+import com.airtran.Booking;
+import com.airtran.BookingContact;
+import com.airtran.BookingName;
+import com.airtran.Journey;
+import com.airtran.Leg;
+import com.airtran.PassengerAddress;
+import com.airtran.PassengerBag;
+import com.airtran.Segment;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -19,25 +32,10 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.navitaire.schemas.messages.booking.ArrayOfBaggage;
-import com.navitaire.schemas.messages.booking.ArrayOfBookingContact;
-import com.navitaire.schemas.messages.booking.ArrayOfBookingPassenger;
-import com.navitaire.schemas.messages.booking.ArrayOfPassengerAddress;
-import com.navitaire.schemas.messages.booking.Baggage;
-import com.navitaire.schemas.messages.booking.Booking;
-import com.navitaire.schemas.messages.booking.BookingContact;
-import com.navitaire.schemas.messages.booking.BookingPassenger;
-import com.navitaire.schemas.messages.booking.PassengerAddress;
-import com.navitaire.schemas.messages.itinerary.ArrayOfJourneyService;
-import com.navitaire.schemas.messages.itinerary.ArrayOfLeg;
-import com.navitaire.schemas.messages.itinerary.ArrayOfSegment;
-import com.navitaire.schemas.messages.itinerary.JourneyService;
-import com.navitaire.schemas.messages.itinerary.Leg;
-import com.navitaire.schemas.messages.itinerary.Segment;
+import com.usairways.lcc.aat_sharesws.services_asmx.ArrayOfBaggage;
+import com.usairways.lcc.aat_sharesws.services_asmx.Baggage;
 
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
@@ -140,8 +138,9 @@ public class ReservationIntegrationImpl extends
 		// passenger
 
 		// # of passengers on the plane
-		ArrayOfBookingPassenger aobp = thebook.getBookingPassengers();
-		BookingPassenger[] bpas = aobp.getBookingPassengerArray();
+		ArrayOfPassenger aobp = thebook.getPassengers();
+		
+		com.airtran.Passenger[] bpas = aobp.getPassengerArray();
 		if (bpas != null && bpas.length > 0)
 			theform.setNumpassengers(bpas.length);
 		else
@@ -152,10 +151,10 @@ public class ReservationIntegrationImpl extends
 				Passenger pa = theform.getPassenger(i);
 				Address addr = pa.getAddress(0);
 
-				BookingPassenger bp = bpas[i];
+				com.airtran.Passenger bp = bpas[i];
 
 				// name
-				com.navitaire.schemas.messages.common.Name bpn = bp.getName();
+				BookingName bpn = bp.getNames().getBookingNameArray(0);
 				if (bpn != null) {
 					pa.setFirstname(bpn.getFirstName());
 					pa.setMiddlename(bpn.getMiddleName());
@@ -191,8 +190,8 @@ public class ReservationIntegrationImpl extends
 				// ff#
 				AirlineMembership am = new AirlineMembership();
 				if (bpas != null && bpas.length > (i + 1)) {
-					BookingPassenger bpa = aobp.getBookingPassengerArray(i);
-					am.setMembershipnum(bpa.getCustomerNumber());
+//					com.airtran.Passenger bpa = aobp.getBookingPassengerArray(i);
+					am.setMembershipnum(bp.getCustomerNumber());
 				}
 				pa.setMembership(am);
 
@@ -203,13 +202,13 @@ public class ReservationIntegrationImpl extends
 
 		// get routing
 		int routingindex = 0;
-		ArrayOfJourneyService abjs = thebook.getJourneyServices();
-		JourneyService[] bjss = abjs.getJourneyServiceArray();
+		ArrayOfJourney abjs = thebook.getJourneys();
+		Journey[] bjss = abjs.getJourneyArray();
 		long deptime, nowtime;
 
 		if (bjss != null && bjss.length > 0) {
 			for (int i = 0; i < bjss.length; i++) {
-				JourneyService bjs = bjss[i];
+				Journey bjs = bjss[i];
 				ArrayOfSegment ass = bjs.getSegments();
 				Segment[] ss = ass.getSegmentArray();
 				if (ss != null && ss.length > 0) {
@@ -269,14 +268,15 @@ public class ReservationIntegrationImpl extends
 		int allindex = 0;
 		if (bpas != null && bpas.length > 0) {
 			for (int i = 0; i < bpas.length; i++) {
-				BookingPassenger bpa = bpas[i];
-				ArrayOfBaggage aob = bpa.getBaggageList();
-				Baggage[] baggages = aob.getBaggageArray();
+				com.airtran.Passenger bpa = bpas[i];
+				ArrayOfPassengerBag aob = bpa.getPassengerBags();
+				PassengerBag[] baggages = aob.getPassengerBagArray();
 				if (baggages != null && baggages.length > 0) {
 					for (int j = 0; j < baggages.length; j++) {
 
-						Baggage bag = baggages[j];
-						deptime = (bag.getCreatedDate().getTime().getTime()) / 3600000;
+						PassengerBag bag = baggages[j];
+						
+						deptime = (bag.getOSTagDate().getTime().getTime()) / 3600000;
 						nowtime = ((new Date()).getTime()) / 3600000;
 						if (nowtime - deptime <= 24 && nowtime >= deptime) {
 

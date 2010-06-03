@@ -117,6 +117,28 @@
                         :
                       </td>
                       <td>
+<logic:equal name="reportnum" scope="request" value="6">
+                        <html:select property="loss_code_combo" styleClass="dropdown" multiple="true">
+                          <html:option value="0">
+                            <bean:message key="select.please_select" />
+                          </html:option>
+                          <logic:iterate id="loss" name="losscodes" type="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code">
+<%
+                              String t = loss.getDescription();
+
+                              if (t.length() > 80) {
+                                t = t.substring(0, 80) + "...";
+                              }
+%>
+                            <option value="<bean:write name="loss" property="loss_code"/>">
+                            <bean:write name="loss" property="loss_code" />
+                            -
+                            <%= t %>
+                            </option>
+                          </logic:iterate>
+                        </html:select>
+</logic:equal>
+<logic:notEqual name="reportnum" scope="request" value="6">
                         <html:select property="loss_code" styleClass="dropdown">
                           <html:option value="0">
                             <bean:message key="select.please_select" />
@@ -136,6 +158,7 @@
                             </option>
                           </logic:iterate>
                         </html:select>
+</logic:notEqual>
                       </td>
                     </tr>
                   </logic:notEqual>
@@ -210,12 +233,22 @@
                       :
                     </td>
                     <td>
+<logic:equal name="reportnum" scope="request" value="6">
+                      <html:select property="status_id_combo" styleClass="dropdown" multiple="true">
+                        <html:option value="0">
+                          <bean:message key="select.all" />
+                        </html:option>
+                        <html:options collection="statuslist" property="status_ID" labelProperty="description" />
+                      </html:select>
+</logic:equal>
+<logic:notEqual name="reportnum" scope="request" value="6">
                       <html:select property="status_ID" styleClass="dropdown">
                         <html:option value="0">
                           <bean:message key="select.all" />
                         </html:option>
                         <html:options collection="statuslist" property="status_ID" labelProperty="description" />
                       </html:select>
+</logic:notEqual>
                     </td>
                   </tr>
                 </logic:notEqual>
@@ -269,7 +302,7 @@
                       :
                     </td>
                     <td>
-                      <html:select property="expensetype_ID" styleClass="dropdown">
+                      <html:select property="expensetype_id_combo" styleClass="dropdown" multiple="true">
                         <html:option value="0">
                           <bean:message key="select.all" />
                         </html:option>
@@ -277,6 +310,43 @@
                       </html:select>
                     </td>
                   </tr>
+                  <!-- new code starts -->
+                  <tr>
+                    <td>
+                      <bean:message key="colname.primary.sort.order" />
+                      :
+                    </td>
+                    <td>
+                      <html:select property="primary_sort_order" styleClass="dropdown">
+                        <html:option value="by_create_station">
+                          <bean:message key="select.primary.sort.order.create.station" />
+                        </html:option>
+                        <html:option value="by_agent_payment_station">
+                          <bean:message key="select.primary.sort.order.agent.payment.station" />
+                        </html:option>
+                        <html:option value="by_fault_station">
+                          <bean:message key="select.primary.sort.order.fault.station" />
+                        </html:option>
+                      </html:select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <bean:message key="colname.secondary.sort.order" />
+                      :
+                    </td>
+                    <td>
+                      <html:select property="secondary_sort_order" styleClass="dropdown">
+                        <html:option value="by_incident_id">
+                          <bean:message key="select.secondary.sort.order.incident.id" />
+                        </html:option>
+                        <html:option value="by_expense_agent_username">
+                          <bean:message key="select.secondary.sort.order.expense.agent.username" />
+                        </html:option>
+                      </html:select>
+                    </td>
+                  </tr>
+                  <!-- new code ends -->
                 </logic:equal>
                 <logic:notEqual name="reportnum" scope="request" value="5">
                   <tr>

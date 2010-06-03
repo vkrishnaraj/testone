@@ -38,7 +38,7 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="bdo.do" method="post" onsubmit="return validateReqBDO(this);">
     <logic:notPresent name="onhand" scope="request">
       <logic:notPresent name="mbr" scope="request">

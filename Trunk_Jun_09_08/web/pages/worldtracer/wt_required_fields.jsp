@@ -1,15 +1,16 @@
 <%@ page language="java" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="org.apache.struts.action.Action" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 
 <%
-  Agent a = (Agent) session.getAttribute("user");
+Agent a = (Agent) session.getAttribute("user");
+ResourceBundle bundle = ResourceBundle.getBundle(
+					"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 
-  org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
-      .getAttribute("org.apache.struts.action.MESSAGE");
-  java.util.Locale myLocale = (java.util.Locale) session
-      .getAttribute("org.apache.struts.action.LOCALE");
 %>
+
 
   function validatereqWtIncFields(form, formType, requireContents, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex)
   {
@@ -36,8 +37,8 @@
       if (currentElementName.indexOf("["+firstPaxIndex+"].lastname") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.last_name")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.last_name")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -46,8 +47,8 @@
       else if (currentElementName.indexOf("["+firstPaxIndex+"].firstname") != -1) {
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, 
-            "colname.first_name") %>" + " <%= (String)myMessages.getMessage(myLocale, 
+          alert("<%= (String)bundle.getString( 
+            "colname.first_name") %>" + " <%= (String)bundle.getString( 
             "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
@@ -60,8 +61,8 @@
           
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.street_addr")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.street_addr")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -73,8 +74,8 @@
           
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.street_addr")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.street_addr")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -84,7 +85,7 @@
       else if (currentElementName.indexOf("["+firstAddressIndex+"].city") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale, "colname.city")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString( "colname.city")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -95,8 +96,8 @@
           
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.country")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.country")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -108,8 +109,8 @@
           var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
   
           if (form.elements[str].value == "US" && currentElement.value.length ==0) {
-            alert("<%=(String) myMessages.getMessage(myLocale,
-                  "colname.state") + " " + myMessages.getMessage(myLocale,
+            alert("<%=(String) bundle.getString(
+                  "colname.state") + " " + bundle.getString(
                   "error.state.required")%>");
             currentElement.focus();
             return false;
@@ -121,8 +122,8 @@
     {
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.description")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.description")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -130,8 +131,8 @@
       } else if (currentElementName.indexOf("].damage") != -1) {
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.damagedesc")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.damagedesc")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -141,8 +142,8 @@
       } else if (currentElementName.indexOf("[" + theindex + "].legfrom") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages
-              .getMessage(myLocale, "colname.fromto")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle
+              .getString( "colname.fromto")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -150,8 +151,8 @@
       } else if (currentElementName.indexOf("[" + theindex + "].legto") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages
-              .getMessage(myLocale, "colname.fromto")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle
+              .getString( "colname.fromto")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -159,8 +160,8 @@
       } else if (currentElementName.indexOf("[" + theindex + "].airline") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.flightnum")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.flightnum")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -168,8 +169,8 @@
       } else if (currentElementName.indexOf("[" + theindex + "].flightnum") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.flightnum")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.flightnum")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -177,8 +178,8 @@
       } else if (currentElementName.indexOf("[" + theindex + "].disdepartdate") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.departdate")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.departdate")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -189,8 +190,8 @@
         bagIndices = bagIndices.concat(currentElementName.substring(left+1, right)); 
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-                  "colname.color")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+                  "colname.color")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -198,8 +199,8 @@
       } else if (currentElementName.indexOf("].bagtype") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.bagtype")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.bagtype")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -209,8 +210,8 @@
       else if (currentElementName.indexOf("].xdescelement_ID_1") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-                  "colname.x_desc")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+                  "colname.x_desc")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -219,8 +220,8 @@
      else if (currentElementName.indexOf("numpassengers") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.num_pass")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.num_pass")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -230,8 +231,8 @@
       else if (currentElementName.indexOf("].categorytype_ID") != -1) {  
         if (currentElement.value.length == 0 && reqContentFields)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.category")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.category")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -241,8 +242,8 @@
       else if (currentElementName.indexOf("].description") != -1) {  
         if (currentElement.value.length == 0 && reqContentFields)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.ld.description")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.ld.description")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -251,8 +252,8 @@
       else if (currentElementName.indexOf("].lvlofdamage") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.lvldamage")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.lvldamage")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -266,14 +267,14 @@
   var bag0 = document.getElementById("theitem["+firstItemIndex+"].lnameonbag");
   
   if(bag0 == null) {
-    alert("<%=(String) myMessages.getMessage(myLocale,
-              "header.bag_info")%>" + " <%=(String) myMessages.getMessage(myLocale,
+    alert("<%=(String) bundle.getString(
+              "header.bag_info")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
     return false;
   }
 
   if(ccCount > bagIndices.length) {
-        alert('<%= (String) myMessages.getMessage(myLocale, "error.validation.too.many.claimchecks")%>');
+        alert('<%= (String) bundle.getString( "error.validation.too.many.claimchecks")%>');
         document.getElementById("claimcheck["+firstClaimcheckIndex+"].claimchecknum").focus();
         return false;
   }
@@ -284,8 +285,8 @@
       var contents = document.getElementById("inventoryList[" + index + "].description");
             
       if (!contents && reqContentFields) {
-        alert("<%=(String) myMessages.getMessage(myLocale,
-          "colname.key_contents")%>" + " <%=(String) myMessages.getMessage(myLocale,
+        alert("<%=(String) bundle.getString(
+          "colname.key_contents")%>" + " <%=(String) bundle.getString(
           "error.validation.isRequired")%>");
         document.getElementById("theitem[" + j + "].lnameonbag").focus();
         return false;
@@ -317,8 +318,8 @@
 	    } else if (currentElementName.indexOf("[" + theindex + "].legfrom") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages
-							.getMessage(myLocale, "colname.fromto")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle
+							.getString( "colname.fromto")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -326,8 +327,8 @@
 	    } else if (currentElementName.indexOf("[" + theindex + "].legto") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages
-							.getMessage(myLocale, "colname.fromto")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle
+							.getString( "colname.fromto")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -335,8 +336,8 @@
 	    } else if (currentElementName.indexOf("[" + theindex + "].airline") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-							"colname.flightnum")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+							"colname.flightnum")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -344,8 +345,8 @@
 	    } else if (currentElementName.indexOf("[" + theindex + "].flightnum") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-							"colname.flightnum")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+							"colname.flightnum")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -353,8 +354,8 @@
 	    } else if (currentElementName.indexOf("[" + theindex + "].disdepartdate") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-							"colname.departdate")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+							"colname.departdate")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -363,8 +364,8 @@
 	    else if (currentElementName.indexOf("bagColor") != -1) { 
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-									"colname.color")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+									"colname.color")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -372,8 +373,8 @@
 	    } else if (currentElementName.indexOf("bagType") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-							"colname.bagtype")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+							"colname.bagtype")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -383,8 +384,8 @@
 	    else if (currentElementName.indexOf("XDesc1") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-									"colname.x_desc")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+									"colname.x_desc")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -393,8 +394,8 @@
 	    else if (currentElementName.indexOf("XDesc2") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-									"colname.x_desc")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+									"colname.x_desc")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;
@@ -403,8 +404,8 @@
 	    else if (currentElementName.indexOf("XDesc3") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
-	        alert("<%=(String) myMessages.getMessage(myLocale,
-									"colname.x_desc")%>" + " <%=(String) myMessages.getMessage(myLocale,
+	        alert("<%=(String) bundle.getString(
+									"colname.x_desc")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
 	        currentElement.focus();
 	        return false;

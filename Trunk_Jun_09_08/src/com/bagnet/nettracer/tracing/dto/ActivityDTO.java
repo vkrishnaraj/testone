@@ -23,6 +23,16 @@ public class ActivityDTO implements Serializable {
 	private boolean highPriority;
 	private int highPriorityNumber;
 
+	private boolean displayCaptcha;
+	
+	public boolean isDisplayCaptcha() {
+		return displayCaptcha;
+	}
+
+	public void setDisplayCaptcha(boolean displayCaptcha) {
+		this.displayCaptcha = displayCaptcha;
+	}
+
 	public int getHighPriorityNumber() {
 		return highPriorityNumber;
 	}

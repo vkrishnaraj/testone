@@ -984,7 +984,7 @@ public class WSCoreOHDUtil {
 	  		} 
 	  		so.setOhdId(onhand.getOHD_ID());
 				
-				HibernateUtils.save(log);
+			HibernateUtils.save(log);
 				
 	  		BeornDTO dto = new BeornDTO();
 	  		dto.setSpecialInstructions(insertFields.getSi().getSpecialInstructions());
@@ -997,6 +997,7 @@ public class WSCoreOHDUtil {
 	  		dto.setReasonForLoss("" + si.getLossCode());
 	  		dto.setTagNumber(si.getClaimCheckNumber());
 	  		dto.setOnhand(onhand.getOHD_ID());
+	  		dto.setLog(log);
 	  		
 	  		try {
 	  			SpringUtils.getClientEventHandler().doEventOnBeornWS(dto);

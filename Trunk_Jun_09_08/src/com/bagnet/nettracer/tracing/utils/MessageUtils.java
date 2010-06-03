@@ -101,12 +101,27 @@ public class MessageUtils {
 		}
 	}
 
+	/**
+	 * Method returns DIRTY result
+	 * 
+	 * @param stationId
+	 * @param rowsperpage
+	 * @param currpage
+	 * @param status_id
+	 * @param s_date
+	 * @param e_date
+	 * @param search_sub
+	 * @param search_file
+	 * @param user
+	 * @param sort
+	 * @return
+	 */
 	public static List getMessages(String stationId, int rowsperpage, int currpage, int status_id,
 			String s_date, String e_date, String search_sub, String search_file, Agent user, String sort) {
 		Session sess = null;
 
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getDirtySession().openSession();
 
 			String sql = "select message from "
 					+ "com.bagnet.nettracer.tracing.db.MessageCopy message where 1=1 ";
@@ -135,7 +150,7 @@ public class MessageUtils {
 			if (status_id != -1) {
 				sql += " and message.status.status_ID = :status_ID";
 			} else {
-				sql += " and message.status.status_ID <> :status_ID and message.status.status_ID <> "
+				sql += " and message.status.status_ID <> "
 					+ TracingConstants.MESSAGE_STATUS_SENT + " and message.status.status_ID <> " 
 					+ TracingConstants.MESSAGE_STATUS_DELETED;
 			}
@@ -145,11 +160,11 @@ public class MessageUtils {
 					sql += " order by message.parent_message.file_ref_number asc";
 				} else {
 					if (sort.equalsIgnoreCase("order_date")) {
-						sql += " order by message.parent_message.send_date desc ";
+						sql += " order by message.message_copy_id desc ";
 					}
 				}
 			} else {
-				sql += " order by message.parent_message.send_date desc ";
+				sql += " order by message.message_copy_id desc ";
 			}
 
 			Query q = sess.createQuery(sql);
@@ -172,7 +187,10 @@ public class MessageUtils {
 			if (search_sub != null && search_sub.trim().length() > 0) {
 				q.setString("subject", "%" + search_sub.trim() + "%");
 			}
-			q.setInteger("status_ID", status_id);
+			
+			if (status_id != -1) {
+				q.setInteger("status_ID", status_id);
+			}
 			return q.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -258,7 +276,7 @@ public class MessageUtils {
 	
 	public static int getMessagesCount(String stationId, int status_id, String s_date, String e_date,
 			String search_sub, String search_file, Agent user, String sort) {
-		return getMessagesCount(stationId, status_id, s_date, e_date, search_sub, search_file, user, sort, false);
+		return getMessagesCount(stationId, status_id, s_date, e_date, search_sub, search_file, user, sort, true);
 	}
 
 	public static int getMessagesCount(String stationId, int status_id, String s_date, String e_date,

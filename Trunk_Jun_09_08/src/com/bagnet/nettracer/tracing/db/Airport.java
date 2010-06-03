@@ -13,6 +13,7 @@ import java.io.Serializable;
  * 
  * create date - Jul 14, 2004
  * @hibernate.class table="Airport"
+ * @hibernate.cache usage="read-only"
  */
 public class Airport implements Serializable {
 	private int id;

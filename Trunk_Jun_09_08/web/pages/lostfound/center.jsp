@@ -45,8 +45,7 @@ function gotoHistoricalReport() {
 
   </SCRIPT>
   
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
-  <jsp:include page="/pages/includes/validation_lf.jsp" />
+    <jsp:include page="/pages/includes/validation_lf.jsp" />
 <%
   String found = (String)request.getAttribute("found");
 %>
@@ -372,6 +371,8 @@ function gotoHistoricalReport() {
 		                          <td align=center>
 		                            <a href='showImage?ID=<bean:write name="photo" property="picpath"/>' target="top"><img src='showImage?ID=<bean:write name="photo" property="thumbpath"/>'></a>
 		                            <br>
+		                            <a href='showImage?ID=<bean:write name="photo" property="picpath"/>' target="top"><bean:write name="photo" property="fileName"/></a>
+                            		<br>
 		                            <html:submit styleId="button" property="deletePhoto" indexed="true">
 		                              <bean:message key="button.delete_photo" />
 		                            </html:submit>

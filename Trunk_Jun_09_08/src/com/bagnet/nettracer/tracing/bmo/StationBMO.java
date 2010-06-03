@@ -13,6 +13,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.LzUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class StationBMO {
@@ -145,6 +146,9 @@ public class StationBMO {
 			// create station
 			s = new Station();
 			s.setCompany(c);
+			List lzList = LzUtils.getIncidentLzStations(c.getCompanyCode_ID());
+			int defaultLz = LzUtils.getDefaultLz(lzList);
+			s.setLz_ID(defaultLz);
 			s.setStationcode(stationCode.toUpperCase());
 			s.setStationdesc(stationCode.toUpperCase());
 			s.setActive(true);

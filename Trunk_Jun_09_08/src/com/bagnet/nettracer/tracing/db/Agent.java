@@ -15,6 +15,7 @@ import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
  * @author Administrator
  * 
  * @hibernate.class table="Agent"
+ * @hibernate.cache usage="read-write"
  */
 public class Agent implements Serializable {
 

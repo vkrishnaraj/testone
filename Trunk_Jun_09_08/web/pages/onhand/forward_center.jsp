@@ -232,7 +232,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 </script>
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
   <html:form action="forward_message.do" method="post" onsubmit="return validateThis(this);">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>

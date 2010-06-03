@@ -35,7 +35,7 @@
       </td>
     </tr>
 
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
 <tr>
   <td colspan="3" id="navmenucell">
   <div class="menu">

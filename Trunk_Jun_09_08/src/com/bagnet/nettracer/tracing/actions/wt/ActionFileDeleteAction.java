@@ -25,6 +25,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 
 public class ActionFileDeleteAction extends Action {
@@ -92,7 +94,13 @@ public class ActionFileDeleteAction extends Action {
 		String wtStation = agentStation.getWt_stationcode();
 		
 		ActionFileManager afm = SpringUtils.getActionFileManager();
-		afm.eraseActionFile(companyCode, wtStation, aft, day, itemNum, user);
+		try {
+			afm.eraseActionFile(companyCode, wtStation, aft, day, itemNum, user, WorldTracerWebService.getBasicDto(session));
+		} catch (CaptchaException e) {
+			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
+			response.sendRedirect("wtCaptcha.do");
+			return null;
+		}
 
 		ActionRedirect redirect = new ActionRedirect(mapping.findForward("success"));
 		redirect.addParameter("category", catName);

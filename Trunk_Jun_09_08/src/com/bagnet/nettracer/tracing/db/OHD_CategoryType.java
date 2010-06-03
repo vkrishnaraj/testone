@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  * @author Administrator
  * 
  * @hibernate.class table="OHD_CategoryType"
+ * @hibernate.cache usage="read-only"
  */
 public class OHD_CategoryType extends LocaleBasedObject implements Serializable {
 	private int OHD_CategoryType_ID;

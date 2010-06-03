@@ -236,6 +236,24 @@ function removeElement(obj) {
 	parent.removeChild(obj);
 }
 
+
+function getProcessingContent() {
+	var h = '<div style="margin-top: 5px; text-align: center">';
+	h += '<h5>Please wait...</h5>';
+	h += '</div>';
+	return h;
+}
+
+function getLoadingContent() {
+	jQuery('#dialog').dialog('option', 'buttons', {} );
+	var h = '<div style="margin-top: 50px; text-align: center">';
+	h += '<img width="64" height="64" src="/tracer/deployment/main/images/loading2.gif" /><br />';
+	h += '<h5>Loading...</h5>';
+	h += '</div>';
+	return h;
+}
+
+
 function getLoadingContent() {
 	jQuery('#dialog').dialog('option', 'buttons', {} );
 	var h = '<div style="margin-top: 50px; text-align: center">';
@@ -253,3 +271,4 @@ function getSavingContent() {
 	h += '</div>';
 	return h;
 }
+

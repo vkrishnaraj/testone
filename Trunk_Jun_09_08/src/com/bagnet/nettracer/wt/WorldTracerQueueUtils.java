@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.wt;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,9 +12,11 @@ import org.hibernate.Transaction;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.WorldTracerFWDForm;
@@ -78,19 +81,37 @@ public class WorldTracerQueueUtils {
 			if (sess != null) sess.close();
 		}
 	}
-	public static boolean createOrReplaceQueue(WorldTracerQueue entry) throws Exception {
+	public static boolean createOrReplaceQueue(WorldTracerQueue entry) throws WorldTracerException  {
 		
 		Session sess = null;
 		Transaction t = null;
+		boolean abort = false;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
+			
+			
+			List<WorldTracerQueue> oldEntries = alreadyQueued(entry, sess);
+			if(oldEntries != null && oldEntries.size() > 0) {
+				for (WorldTracerQueue oldEntry: oldEntries) {
+					if (oldEntry instanceof WtqCloseAhl) {
+						abort = true;
+					}
+				}
+			}
+			
+			// Do not save the new action because there is a pending close AHL action
+			if (abort) {
+				return false;
+			}
+			
 			t = sess.beginTransaction();
-			WorldTracerQueue oldEntry = alreadyQueued(entry, sess);
-			if(oldEntry != null) {
-				oldEntry.setReplacement(entry);
-				oldEntry.setStatus(WtqStatus.REPLACED);
-				sess.save(entry);
-				sess.update(oldEntry);
+			if(oldEntries != null && oldEntries.size() > 0) {
+				for (WorldTracerQueue oldEntry: oldEntries) {
+					oldEntry.setReplacement(entry);
+					oldEntry.setStatus(WtqStatus.REPLACED);
+					sess.save(entry);
+					sess.update(oldEntry);
+				}
 			}
 			else {
 				sess.save(entry);
@@ -101,7 +122,7 @@ public class WorldTracerQueueUtils {
 			if (t != null) {
 				t.rollback();
 			}
-			throw e;
+			throw new WorldTracerException("Unknown exception ", e);
 		} finally {
 			if (sess != null) sess.close();
 		}
@@ -194,20 +215,17 @@ public class WorldTracerQueueUtils {
 	 *            wt_queue object that is checked for existence
 	 * @return queue object if it already is in db, or null if not there
 	 */
-	private static WorldTracerQueue alreadyQueued(WorldTracerQueue wtq, Session sess) {
+	private static List<WorldTracerQueue> alreadyQueued(WorldTracerQueue wtq, Session sess) {
 		Query q = sess.createQuery(wtq.getExistsQuery());
 		Object[] params = wtq.getExistsParameters();
 		for(int i = 0; i < params.length; i++) {
-			q.setParameter(i, params[i]);
+			if (params[i] instanceof List) {
+				q.setParameterList("list", (ArrayList) params[i]);
+			} else {
+				q.setParameter(i, params[i]);
+			}
 		}
-		q.setMaxResults(1);
-		List<WorldTracerQueue> result = q.list();
-		if(result.size() > 0) {
-			return result.get(0);
-		}
-		else {
-			return null;
-		}
+		return q.list();
 	}
 	
 	
@@ -224,8 +242,8 @@ public class WorldTracerQueueUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			
-			WorldTracerQueue oldEntry = alreadyQueued(entry, sess);
-			if(oldEntry != null) {
+			List<WorldTracerQueue> oldEntries = alreadyQueued(entry, sess);
+			if(oldEntries != null && oldEntries.size() > 0) {
 				return false;
 			}
 			else {
@@ -259,6 +277,32 @@ public class WorldTracerQueueUtils {
 				sess.save(entry);
 				t.commit();
 			}
+			return true;
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+		
+	}
+	
+	public static boolean createOnlyTagQueue(WtqQoh entry) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+
+//			if(alreadyAnyOhdQueued(entry, sess)) {
+//				return false;
+//			}
+//			else {
+				t = sess.beginTransaction();
+				sess.save(entry);
+				t.commit();
+//			}
 			return true;
 		} catch (Exception e) {
 			if (t != null) {

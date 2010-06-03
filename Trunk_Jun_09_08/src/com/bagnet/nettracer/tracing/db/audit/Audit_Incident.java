@@ -84,6 +84,37 @@ public class Audit_Incident implements Serializable {
 	private String modify_reason;
 	
 	private String language;
+	
+	/**
+	 * @return Returns the overall_weight.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public Double getOverall_weight() {
+		return overall_weight;
+	}
+
+	public void setOverall_weight(Double overall_weight) {
+		this.overall_weight = overall_weight;
+	}
+
+	/**
+	 * @return Returns the overall_weight_unit.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getOverall_weight_unit() {
+		return overall_weight_unit;
+	}
+
+	public void setOverall_weight_unit(String overall_weight_unit) {
+		this.overall_weight_unit = overall_weight_unit;
+	}
+
+	private Double overall_weight;
+	private String overall_weight_unit;
+	
+	
 	/**
 	 * @return Returns the language.
 	 * 

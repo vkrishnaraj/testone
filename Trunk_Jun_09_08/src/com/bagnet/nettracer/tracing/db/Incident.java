@@ -7,9 +7,9 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,6 +84,7 @@ public class Incident implements Serializable {
 	private Date ohd_lasttraced;
 	
 	private WorldTracerFile wtFile;	//world tracer id
+	private CrmFile crmFile;
 	private Set<Passenger> passengers;
 
 	private List<Item> itemlist;
@@ -108,6 +109,44 @@ public class Incident implements Serializable {
 	private List<ExpensePayout>expenselist;
 	
 	private String language;
+	
+	private IncidentControl incidentControl;
+	
+	public void setIncidentControl(IncidentControl value) {
+		this.incidentControl = value;
+	}
+	/**
+	 * @return Returns the claim.
+	 * 
+	 *  
+	 */
+	@OneToOne(mappedBy = "incident")
+	public IncidentControl getIncidentControl() {
+		return incidentControl;
+	}
+	
+	
+
+	public Double getOverall_weight() {
+		return overall_weight;
+	}
+
+	public void setOverall_weight(Double overall_weight) {
+		this.overall_weight = roundToTwoDecimals(overall_weight);
+	}
+
+	public String getOverall_weight_unit() {
+		return overall_weight_unit;
+	}
+
+	public void setOverall_weight_unit(String overall_weight_unit) {
+		this.overall_weight_unit = overall_weight_unit;
+	}
+	
+	private Double overall_weight;
+	private String overall_weight_unit;
+	
+	
 	public String getLanguage() {
 		return language;
 	}
@@ -378,7 +417,7 @@ public class Incident implements Serializable {
 	}
 
 	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "departdate, schdeparttime, itinerary_ID")
+	@org.hibernate.annotations.OrderBy(clause = "itinerary_ID")
 	@Fetch(FetchMode.SELECT)
 	public Set<Itinerary> getItinerary() {
 		return itinerary;
@@ -1102,4 +1141,17 @@ public class Incident implements Serializable {
 		return Incident_ID.equals(o.getIncident_ID());
 	}
 
+	@OneToOne(mappedBy = "incident")
+	public CrmFile getCrmFile() {
+		return crmFile;
+	}
+
+	public void setCrmFile(CrmFile crmFile) {
+		this.crmFile = crmFile;
+	}
+
+	private Double roundToTwoDecimals(Double d) {
+    	DecimalFormat twoDForm = new DecimalFormat("#.##");
+    	return Double.valueOf(twoDForm.format(d));
+	}
 }

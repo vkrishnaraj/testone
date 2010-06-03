@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -26,6 +27,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -52,6 +54,7 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
  * create date - Jul 15, 2004
  */
 public class OHDUtils {
+	private static Logger logger = Logger.getLogger(OHDUtils.class);
 
 	public static List getRequests(int station_id, ViewRequestForm form, String sort,
 			int rowsperpage, int currpage) {
@@ -888,6 +891,109 @@ public class OHDUtils {
 
 
 			Query q = sess.createQuery(sql);
+			q.setInteger("station_ID", station_id);
+			q.setInteger("status_ID", TracingConstants.MBR_STATUS_OPEN);
+			q.setInteger("status_ID2", TracingConstants.MBR_STATUS_PENDING);
+			q.setInteger("status_ID3", TracingConstants.MBR_STATUS_TEMP);
+
+
+			List list = q.list();
+			if (list.size() > 0) {
+				return ((Long) list.get(0)).intValue();
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	//delayed: incidentTypeId=1; pilferage: incidentTypeId=2; damaged: incidentTypeId=3; 
+	public static int getIncomingIncidentCount(int station_id, int incidentTypeId, boolean dirtyRead) {
+		Session sess = null;
+		try {
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			String sql = "select count(incident.incident_ID) from "
+					+ "com.bagnet.nettracer.tracing.db.Incident incident where 1=1 ";
+			sql += " and incident.itemtype.itemType_ID = :itemType_ID";
+			sql += " and incident.stationassigned.station_ID = :station_ID";
+			sql += " and (incident.status.status_ID = :status_ID or incident.status.status_ID = :status_ID2 or incident.status.status_ID = :status_ID3)";
+
+
+			Query q = sess.createQuery(sql);
+			q.setInteger("itemType_ID", incidentTypeId);
+			q.setInteger("station_ID", station_id);
+			q.setInteger("status_ID", TracingConstants.MBR_STATUS_OPEN);
+			q.setInteger("status_ID2", TracingConstants.MBR_STATUS_PENDING);
+			q.setInteger("status_ID3", TracingConstants.MBR_STATUS_TEMP);
+
+
+			List list = q.list();
+			if (list.size() > 0) {
+				return ((Long) list.get(0)).intValue();
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	//within last 24 hours
+	public static int getIncomingIncidentInLast24HoursCount(int station_id, boolean dirtyRead) {
+		Session sess = null;
+		try {
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			String sql = "select count(incident.incident_ID)";
+			sql += " from com.bagnet.nettracer.tracing.db.Incident incident ";
+			sql += " join incident.incidentControl incidentcontrol";
+			sql += " where 1=1 ";
+			sql += " and incidentcontrol.assignedDate >= :startassigneddate";
+			sql += " and incident.stationassigned.station_ID = :station_ID";
+			sql += " and (incident.status.status_ID = :status_ID or incident.status.status_ID = :status_ID2 or incident.status.status_ID = :status_ID3)";
+
+
+			Query q = sess.createQuery(sql);
+			
+			int numberOfHoursBack = 24;
+			try {
+				numberOfHoursBack = PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_NT_COMPANY_TIME_RANGE_WITHIN_LAST);
+			} catch (Exception e) {
+				logger.error("unable to retrieve value from properties table.");
+			}
+			Date myHoursBackFromNowDate = TracerDateTime.getGMTDate();
+			myHoursBackFromNowDate.setTime(myHoursBackFromNowDate.getTime() - 60*60*1000*numberOfHoursBack); 
+			q.setTimestamp("startassigneddate", myHoursBackFromNowDate);
+			
+			
 			q.setInteger("station_ID", station_id);
 			q.setInteger("status_ID", TracingConstants.MBR_STATUS_OPEN);
 			q.setInteger("status_ID2", TracingConstants.MBR_STATUS_PENDING);

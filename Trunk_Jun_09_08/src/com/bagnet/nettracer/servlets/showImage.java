@@ -2,6 +2,7 @@ package com.bagnet.nettracer.servlets;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,14 +30,40 @@ public class showImage extends HttpServlet {
 			IOException {
 		doPost(req, res);
 	}
-
+	
+	private static String fileMimeTypeSelector(String imageID) {
+		String result = "image/jpeg";
+		if ( !(imageID == null || imageID.equals(""))) {
+			String myFileExt = imageID.substring(imageID.lastIndexOf('.')+1, imageID.length());
+			if (myFileExt.equalsIgnoreCase("doc")) {
+				result = "application/msword";
+			} else if (myFileExt.equalsIgnoreCase("xls")) {
+				result = "application/vnd.ms-excel";
+			} else if (myFileExt.equalsIgnoreCase("pdf")) {
+				result = "application/pdf";
+			} else if (myFileExt.equalsIgnoreCase("tif")) {
+				result = "image/tiff";
+			} else if (myFileExt.equalsIgnoreCase("tiff")) {
+				result = "image/x-tiff";
+			} else {
+				result = "application/octet-stream";
+			}
+		}
+		
+		return result;
+	}
+	
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException,
 			IOException {
 		HttpSession session = req.getSession(true);
 
 		String imageID = req.getParameter("ID");
-	
+		
 		File file = new File(TracerProperties.get("image_store") + imageID);
+		
+		if (! file.exists()) {
+			file = new File(TracerProperties.get("image_store") + "image-file-icon.png");
+		}
 
 		InputStream is = new FileInputStream(file);
 
@@ -68,7 +95,9 @@ public class showImage extends HttpServlet {
 
 		// Close the input stream and return bytes
 		is.close();
-		res.setContentType("image/jpeg");
+		//res.setContentType("image/jpeg");
+		String fileMimeType = fileMimeTypeSelector(imageID);
+		res.setContentType(fileMimeType);
 		OutputStream out = res.getOutputStream();
 		res.setContentLength(img.length);
 		out.write(img);

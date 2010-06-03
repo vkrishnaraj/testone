@@ -2,13 +2,16 @@ package com.bagnet.nettracer.ws.v1_1;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CustomerViewableCommentBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
@@ -18,10 +21,13 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.PaxCommunication;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.PaxCommunication.PaxCommunicationStatus;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
 import com.bagnet.nettracer.ws.v1_1.GetPaxViewDocument.GetPaxView;
 import com.bagnet.nettracer.ws.v1_1.WritePassengerCommentDocument.WritePassengerComment;
 import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WSPVClaimChecks;
@@ -276,7 +282,33 @@ public class PaxViewImplementation extends PaxViewSkeleton {
 		newPaxCommunication.setCreatedate(TracerDateTime.getGMTDate());
 		newPaxCommunication.setAcknowledge_timestamp(null);
 		HibernateUtils.save(newPaxCommunication, null);
-
+		
+		//persist remarks by pax and associated incident and audit incident
+		Remark r = new Remark();
+		r.setAgent(null);
+		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+		r.setRemarktext("Passenger has entered a new message.");
+		r.setIncident(inc);
+		// Add a remark to the incident to complete the two-way reference.
+		Set remarks = inc.getRemarks();
+		remarks.add(r);
+		HibernateUtils.save(inc, null);  //this does not do all of what we want
+		
+		// check if audit is enabled for this company....
+		Incident iDTO = inc;
+		if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+				.getCompany().getVariable().getAudit_lost_delayed() == 1)
+				|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+						.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+				|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+						.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
+			Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, null);
+	
+			if (audit_dto != null) {
+				HibernateUtils.save(audit_dto, null);
+			}
+		}
+		
 		WSPVIncident i = getPaxViewData(inc, true);
 		responseDocument.addNewWritePassengerCommentResponse().setReturn(i);
 		

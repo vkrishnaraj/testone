@@ -53,6 +53,7 @@ public final class BDOForm extends ValidatorForm {
 	private String delivery_integration_id;
 	private String currency;
 	private String cost;
+	private boolean canceled;
 	
 	
     private String wt_id;
@@ -426,6 +427,14 @@ public final class BDOForm extends ValidatorForm {
 
 	public void setCost(String cost) {
 		this.cost = cost;
+	}
+
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled;
 	}
 
 

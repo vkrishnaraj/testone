@@ -150,7 +150,7 @@
   
 
 
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 
 <html:form action="worldtracerfoh.do" method="post">
 	

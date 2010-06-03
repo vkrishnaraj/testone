@@ -1,17 +1,18 @@
-<%@ page language="java"%>
+<%@ page contentType="text/javascript" %> 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="org.apache.struts.action.Action"%>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 
 <%
 	Agent a = (Agent) session.getAttribute("user");
 
-	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
-			.getAttribute("org.apache.struts.action.MESSAGE");
-	java.util.Locale myLocale = (java.util.Locale) session
-			.getAttribute("org.apache.struts.action.LOCALE");
+ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+
 %>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<script language="javascript">
+
   
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
@@ -43,7 +44,7 @@
 		} else {
 			returnValue = false;
 			departureField.focus();
-			alert("<%= (String)myMessages.getMessage(myLocale, "error.usair.arrivalanddeparturedates.rule") %>");
+			alert("<%= (String)bundle.getString( "error.usair.arrivalanddeparturedates.rule") %>");
 		}
     }
        	
@@ -100,8 +101,8 @@
         var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
  
         if (form.elements[str].value == "US" && currentElement.value.length ==0) {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-            "colname.zip") + " " + myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+            "colname.zip") + " " + bundle.getString(
             "error.state.required")%>");
           currentElement.focus();
           return false;
@@ -110,8 +111,8 @@
       else if (currentElementName.indexOf(".email") != -1) {  
         if (!checkEmail(currentElement.value))
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "ld_pass_email")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "ld_pass_email")%>" + " <%=(String) bundle.getString(
               "error.validation.email")%>");
           currentElement.focus();
           return false;
@@ -120,8 +121,8 @@
       else if (currentElementName.indexOf(".disarrivedate") != -1) {  
         if (currentElement.value.length == 0)
         {
-          alert("<%=(String) myMessages.getMessage(myLocale,
-              "colname.arrdate")%>" + " <%=(String) myMessages.getMessage(myLocale,
+          alert("<%=(String) bundle.getString(
+              "colname.arrdate")%>" + " <%=(String) bundle.getString(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
@@ -131,8 +132,8 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.num_pass") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.num_pass") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -141,8 +142,8 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.num_bag_checked") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.num_bag_checked") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -151,8 +152,8 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bags_rec") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.bags_rec") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -161,8 +162,8 @@
       {  
         if (currentElement.value.length == 0 || currentElement.value == "0")
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_loc") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.bag_loc") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -172,8 +173,8 @@
       {  
         if (currentElement.value.length == 0 || currentElement.value == "0")
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.article") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.article") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -197,7 +198,7 @@
     var work = document.getElementById("addresses[" + firstAddressIndex + "].workphone");
         
     if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
-      alert("<%= (String)myMessages.getMessage(myLocale, "colname.phone") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+      alert("<%= (String)bundle.getString( "colname.phone") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
       mobile.focus();
       return false;
     }
@@ -232,8 +233,8 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.bag_arrived_date") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.bag_arrived_date") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -243,8 +244,8 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.description") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.description") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -280,35 +281,35 @@
           if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legfrom") != -1) {  
             if (currentElement.value.length == 0)
             {
-              alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
               currentElement.focus();
               return false;
             }
           } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legto") != -1) {
             if (currentElement.value.length == 0)
             {
-              alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
               currentElement.focus();
               return false;
             }
           } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".airline") != -1) {
             if (currentElement.value.length == 0)
             {
-              alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
               currentElement.focus();
               return false;
             }
           } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".flightnum") != -1) {
             if (currentElement.value.length == 0)
             {
-              alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
               currentElement.focus();
               return false;
             }
           } else if (currentElementName.indexOf("disdepartdate") != -1) {
             if (currentElement.value.length == 0)
             {
-              alert("<%= (String)myMessages.getMessage(myLocale, "colname.departdate") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+              alert("<%= (String)bundle.getString( "colname.departdate") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
               currentElement.focus();
               return false;
             }
@@ -330,8 +331,8 @@
         {  
           if (currentElement.value.length == 0)
           {
-            alert("<%= (String)myMessages.getMessage(myLocale, "colname.losscode") %>" + 
-            " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+            alert("<%= (String)bundle.getString( "colname.losscode") %>" + 
+            " <%= (String)bundle.getString( "error.validation.isRequired") %>");
             currentElement.focus();
             return false;
           }
@@ -340,8 +341,8 @@
         {  
           if (currentElement.value.length == 0)
           {
-            alert("<%= (String)myMessages.getMessage(myLocale, "colname.faultstation") %>" + 
-            " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+            alert("<%= (String)bundle.getString( "colname.faultstation") %>" + 
+            " <%= (String)bundle.getString( "error.validation.isRequired") %>");
             currentElement.focus();
             return false;
           }
@@ -350,28 +351,28 @@
     	    if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legfrom") != -1) {  
     	      if (currentElement.value.length == 0)
     	      {
-    	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+    	        alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
     	        currentElement.focus();
     	        return false;
     	      }
     	    } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legto") != -1) {
     	      if (currentElement.value.length == 0)
     	      {
-    	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.fromto") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+    	        alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
     	        currentElement.focus();
     	        return false;
     	      }
     	    } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".airline") != -1) {
     	      if (currentElement.value.length == 0)
     	      {
-    	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+    	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
     	        currentElement.focus();
     	        return false;
     	      }
     	    } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".flightnum") != -1) {
     	      if (currentElement.value.length == 0)
     	      {
-    	        alert("<%= (String)myMessages.getMessage(myLocale, "colname.flightnum") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+    	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
     	        currentElement.focus();
     	        return false;
     	      }
@@ -395,8 +396,8 @@
       {  
         if (currentElement.value.length == 0)
         {
-          alert("<%= (String)myMessages.getMessage(myLocale, "colname.deliverydate") %>" + 
-          " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
+          alert("<%= (String)bundle.getString( "colname.deliverydate") %>" + 
+          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
           currentElement.focus();
           return false;
         }
@@ -408,4 +409,3 @@
 
   function checkDeleteCount(bagNum) { return true; }
   function checkOhdDeleteCount(bagNum) { return true; }
-</script>

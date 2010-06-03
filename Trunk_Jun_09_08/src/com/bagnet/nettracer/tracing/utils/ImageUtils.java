@@ -37,7 +37,7 @@ public class ImageUtils {
 	private static final int THUMB_WIDTH = 120;
 	private static final int THUMB_HEIGHT = 80;
 	private static final int THUMB_QUALITY = 80;
-	private static Logger logger = Logger.getLogger(TracerUtils.class);
+	private static Logger logger = Logger.getLogger(ImageUtils.class);
 
 	public static boolean generateThumbImageAndSave(String sourceFileName, String destFileName) {
 		boolean success = false;
@@ -88,6 +88,18 @@ public class ImageUtils {
 	public static boolean doUpload(FormFile theFile,Agent user, String folder,String picpath,String thumbpath) {
 
 		try {
+			//to find out the file extension: if image, then create thumb
+			boolean isThisImageFile = false;
+			String myFileName = theFile.getFileName();
+			String myFileExt = myFileName.substring(myFileName.lastIndexOf('.')+1, myFileName.length());
+			if (myFileExt.equalsIgnoreCase("gif")
+//				|| myFileExt.equalsIgnoreCase("tif")
+//				|| myFileExt.equalsIgnoreCase("gif")
+				|| myFileExt.equalsIgnoreCase("jpg")
+				|| myFileExt.equalsIgnoreCase("jpeg")) {
+				
+				isThisImageFile = true;
+			}
 			
 			// check file size
 			int allowedsize = user.getStation().getCompany().getVariable().getMax_image_file_size();
@@ -124,11 +136,16 @@ public class ImageUtils {
 			outs.flush();
 			outs.close();
 			
-			// generate thumbnail
-			logger.info("Right before success");
-			boolean success = ImageUtils.generateThumbImageAndSave(sfileName, dfileName);
-			logger.info("Success: " + success);
-			return success;
+			if (isThisImageFile) {
+				// generate thumbnail
+				//logger.info("Right before success");
+				boolean success = ImageUtils.generateThumbImageAndSave(sfileName, dfileName);
+				//logger.info("Success: " + success);
+				return success;
+			} else {
+				return true;
+			}
+
 		} catch (FileNotFoundException fnfe) {
 			logger.error("Exception A: " + fnfe.getMessage());
 			//Error creating file
@@ -143,7 +160,7 @@ public class ImageUtils {
 	
 	
 	public static boolean makeFolder(String folder) {
-		logger.error("Folder name:" + folder);
+		//logger.error("Folder name:" + folder);
 		File dir = new File(folder);
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {

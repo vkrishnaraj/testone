@@ -1,16 +1,16 @@
 package com.bagnet.nettracer.cronjob.wt;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 
-import com.bagnet.clients.us.wt.UsWorldTracerRuleMap;
 import com.bagnet.nettracer.cronjob.ErrorHandler;
-import com.bagnet.nettracer.cronjob.NettracerCron;
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -32,7 +32,9 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
@@ -46,19 +48,19 @@ import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLoggedOutException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
-import com.bagnet.nettracer.wt.connector.NewWorldTracerConnector;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnectionException;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.DefaultWorldTracerService;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
-import com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class WorldTracerQueueWorker implements Runnable {
 
 	private static final Logger logger = Logger.getLogger(WorldTracerQueueWorker.class);
 	
-	private static Short loggedOutCount = 0;
 	
 	private WorldTracerService wtService;
 	private WTQueueBmo wtqBmo;
@@ -81,11 +83,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		DefaultWorldTracerService dwts = (DefaultWorldTracerService) wtService;
 		dwts.setWtCompanyCode(defAgent.getCompanycode_ID());
 		
-		NewWorldTracerConnector connector = new NewWorldTracerConnector((WorldTracerConnectionPool)NettracerCron.ctx.getBean("wtConnectionPool"));
-		if (wtRuleMap == null) {
-			wtRuleMap = new UsWorldTracerRuleMap();
-		}
-		connector.setWtRuleMap(wtRuleMap);
+		WorldTracerWebService connector = WorldTracerWebService.getInstance();
 		dwts.setWtConnector(connector);
 		
 		
@@ -106,6 +104,10 @@ public class WorldTracerQueueWorker implements Runnable {
 			wtService.getWtConnector().initialize();
 			IncidentBMO iBmo = new IncidentBMO();
 			OhdBMO ohdBmo = new OhdBMO();
+			
+			WebServiceDto dto = new WebServiceDto();
+			dto.setCronUser(true);
+			dto.setUseAvailableConnectionsIfAvailable(true);
 
 			Long queue_id;
 			
@@ -119,7 +121,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					String wtId = null;
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
 					try {
-						wtId = wtService.insertIncident(incident);
+						wtId = wtService.insertIncident(incident, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -128,7 +130,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+
 						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -138,7 +140,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+
 						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -146,9 +148,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
-					catch (Throwable ex) {
-						// TODO
+					} catch (CaptchaException e) {
+						logger.warn("unable to export incident; captcha exception: " + incident.getIncident_ID() + " - " + e.getMessage(), e);						
+						throw new CaptchaException();
+					} catch (Throwable ex) {
+						
 						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -162,12 +166,20 @@ public class WorldTracerQueueWorker implements Runnable {
 					wtqBmo.updateQueue(queue);
 					incident.setWtFile(new WorldTracerFile(wtId));
 					iBmo.updateIncidentNoAudit(incident);
-				}
-				else if(queue instanceof WtqCreateOhd) {
-					String wtId = null;
-					OHD ohd = ((WtqOhdAction) queue).getOhd();
+				} 
+				// TODO: BEGIN
+				else if(queue instanceof WtqQoh) {
+					String response = null;
 					try {
-						wtId = wtService.insertOhd(ohd);
+						response = wtService.insertQoh(((WtqQoh) queue), dto);
+						Collection<WtqOhdTag> tags = ((WtqQoh) queue).getOhdTags();
+						for (WtqOhdTag tag: tags) {
+							
+							OHD ohd = tag.getOhd();
+							ohd.setTagSentToWt(true);
+							ohd.setTagSentToWtStationId(ohd.getHoldingStation().getStation_ID());
+							ohdBmo.updateOhdNoAudit(ohd);
+						}
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -176,7 +188,58 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+						 
+						logger.warn("unable to export ohd tag list for queue ID: " + queue.getWt_queue_id() + " - " + ex.getMessage(), ex);
+						queue.setAttempts(queue.getAttempts() + 1);
+						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+							queue.setStatus(WtqStatus.FAIL);
+						}
+						wtqBmo.updateQueue(queue);
+						continue;
+					}
+					catch (WorldTracerConnectionException ex) {
+
+						logger.warn("unable to export ohd tag list for queue ID: " + queue.getWt_queue_id() + " - " + ex.getMessage(), ex);
+						queue.setAttempts(queue.getAttempts() + 1);
+						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+							queue.setStatus(WtqStatus.FAIL);
+						}
+						wtqBmo.updateQueue(queue);
+						continue;
+					} catch (CaptchaException ex) {
+						logger.warn("unable to export ohd tag list for queue ID: " + queue.getWt_queue_id() + " - " + ex.getMessage(), ex);						
+						throw new CaptchaException();
+						
+					} 
+					catch (Throwable ex) {
+						logger.warn("unable to export ohd tag list for queue ID: " + queue.getWt_queue_id() + " - " + ex.getMessage(), ex);
+						queue.setAttempts(queue.getAttempts() + 1);
+						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+							queue.setStatus(WtqStatus.FAIL);
+						}
+						wtqBmo.updateQueue(queue);
+						continue;
+					}
+					logger.info("created wt qoh: " + response);
+					queue.setStatus(WtqStatus.SUCCESS);
+					wtqBmo.updateQueue(queue);
+
+				}
+				// TODO: END
+				else if(queue instanceof WtqCreateOhd) {
+					String wtId = null;
+					OHD ohd = ((WtqOhdAction) queue).getOhd();
+					try {
+						wtId = wtService.insertOhd(ohd, dto);
+					}
+					catch(WorldTracerLoggedOutException ex) {
+						errorHandler.sendEmail("Unable to Login", ex, false, false);
+						logger.warn("weren't able to login so sleeping for 5 minutes");
+						Thread.sleep(5 * 60 * 1000);
+						continue;
+					}
+					catch (WorldTracerException ex) {
+						 
 						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -186,7 +249,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+
 						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -194,7 +257,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to export ohd; captcha exception: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
+						throw new CaptchaException();
+						
+					} 
 					catch (Throwable ex) {
 						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
@@ -214,7 +281,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
 					String result = "";
 					try {
-						result = wtService.closeIncident(incident);
+						result = wtService.closeIncident(incident, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -239,7 +306,10 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to close incident; captcha exception: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
 						logger.warn("unable to close incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
@@ -259,7 +329,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					String wtId = null;
 					OHD ohd = ((WtqOhdAction) queue).getOhd();
 					try {
-						wtId = wtService.closeOHD(ohd);
+						wtId = wtService.closeOHD(ohd, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -268,7 +338,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+
 						logger.warn("unable to close wt ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -285,7 +355,10 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to export ohd; captcha exception: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
 						logger.warn("unable to close ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
@@ -305,7 +378,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					String wtId = null;
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
 					try {
-						wtId = wtService.suspendIncident(incident);
+						wtId = wtService.suspendIncident(incident, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -314,7 +387,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+
 						logger.warn("unable to supsend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -324,7 +397,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+
 						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -332,9 +405,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+
 						logger.warn("unable to suspend incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -353,7 +429,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					String wtId = null;
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
 					try {
-						wtId = wtService.reinstateIncident(incident);
+						wtId = wtService.reinstateIncident(incident, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -362,7 +438,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+
 						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -372,7 +448,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+
 						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -380,9 +456,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);				
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+
 						logger.warn("unable to reinstate incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -401,7 +480,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					String wtId = null;
 					OHD ohd = ((WtqOhdAction) queue).getOhd();
 					try {
-						wtId = wtService.suspendOhd(ohd);
+						wtId = wtService.suspendOhd(ohd, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -410,7 +489,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+
 						logger.warn("unable to supsend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -421,7 +500,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+
 						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -429,9 +508,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+
 						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -450,7 +532,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					String wtId = null;
 					OHD ohd = ((WtqOhdAction) queue).getOhd();
 					try {
-						wtId = wtService.reinstateOhd(ohd);
+						wtId = wtService.reinstateOhd(ohd, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -459,7 +541,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
 						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -469,7 +550,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
 						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -477,9 +557,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);				
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
 						logger.warn("unable to reinstate ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -497,7 +579,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				}
 				else if(queue instanceof WtqFwdGeneral) {
 					try {
-						String result = wtService.sendFwdMsg((WtqFwdGeneral) queue, queue.getAgent() == null ? defaultWtAgent : queue.getAgent());
+						String result = wtService.sendFwdMsg((WtqFwdGeneral) queue, queue.getAgent() == null ? defaultWtAgent : queue.getAgent(), dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -506,7 +588,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
 						logger.warn("unable to send fwd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -516,7 +597,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
 						logger.warn("unable to send fwd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -524,9 +604,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to send fwd", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
 						logger.warn("unable to send fwd:", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -541,7 +623,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				}
 				else if(queue instanceof WtqFwdOhd) {
 					try {
-						String result = wtService.forwardOhd((WtqFwdOhd) queue);
+						String result = wtService.forwardOhd((WtqFwdOhd) queue, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -550,7 +632,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
 						logger.warn("unable to fwd ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -560,7 +641,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
 						logger.warn("unable to fwd ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -568,9 +648,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to fwd ohd; captcha exception", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
 						logger.warn("unable to fwd ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -598,7 +680,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						// this one is a little complicated. gotta have an ahl and
 						// an ohd
 						// then we need to map them up...
-						String result = wtService.requestQoh(wtq);
+						String result = wtService.requestQoh(wtq, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -607,7 +689,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
 						logger.warn("unable to request qoh", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -617,7 +698,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
 						logger.warn("unable to request qoh", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -625,9 +705,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to request qoh", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
 						logger.warn("unable to request qoh", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -655,7 +737,7 @@ public class WorldTracerQueueWorker implements Runnable {
 							ohdBmo.insertOHD(ohd, defaultWtAgent);
 						}
 						*/
-						String result = wtService.requestOhd(wtq);
+						String result = wtService.requestOhd(wtq, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -664,7 +746,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
 						logger.warn("unable to request ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -674,7 +755,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
 						logger.warn("unable to request ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -682,9 +762,11 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to request ohd", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
 						logger.warn("unable to request ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -701,7 +783,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					Incident incident = null;
 					try {
 						incident = ((WtqIncidentAction) queue).getIncident();
-						String result = wtService.amendAhl(incident);
+						String result = wtService.amendAhl(incident, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -717,7 +799,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+						
 						logger.warn("unable to amend ahl", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -727,7 +809,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+						
 						logger.warn("unable to amend ahl", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -735,9 +817,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to amend ahl", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+						
 						logger.warn("unable to amend ahl", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -753,7 +838,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				else if(queue instanceof WtqAmendOhd) {
 					try {
 						OHD ohd = ((WtqOhdAction) queue).getOhd();
-						String result = wtService.amendOhd(ohd);
+						String result = wtService.amendOhd(ohd, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -762,7 +847,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+						
 						logger.warn("unable to amend ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -772,7 +857,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+						
 						logger.warn("unable to amend ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -780,9 +865,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to amend ohd", ex);					
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+						
 						logger.warn("unable to amend ohd", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -802,7 +890,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						if(bdo == null) {
 							throw new WorldTracerException("Cannot export BDO, invalid bdo referenced in queue");
 						}
-						String result = wtService.insertBdo(bdo);
+						String result = wtService.insertBdo(bdo, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -811,7 +899,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+						
 						logger.warn("unable to insert bdo", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -821,7 +909,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+						
 						logger.warn("unable to insert bdo", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -829,9 +917,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to insert bdo", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+						
 						logger.warn("unable to insert bdo", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -857,7 +948,7 @@ public class WorldTracerQueueWorker implements Runnable {
 							eraseTask.setStatus(WtqStatus.FAIL);
 						}
 						else {
-							wtService.eraseActionFile(waf);
+							wtService.eraseActionFile(waf, dto);
 							wafBmo.deleteActionFile(waf);
 							eraseTask.setStatus(WtqStatus.SUCCESS);
 						}
@@ -867,7 +958,10 @@ public class WorldTracerQueueWorker implements Runnable {
 						logger.warn("weren't able to login so sleeping for 5 minutes");
 						Thread.sleep(5 * 60 * 1000);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to delete action file for eraseTask task:", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Exception e) {
 						logger.error("unable to delete action file for eraseTask task: " + eraseTask.getWt_queue_id(), e);
 					} finally {
@@ -891,7 +985,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					try {
 						WtqRequestPxf wtq = (WtqRequestPxf) queue;
 						// we need to map them up...
-						result = wtService.sendPxf(wtq);
+						result = wtService.sendPxf(wtq, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -900,7 +994,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerException ex) {
-						// TODO
+						
 						logger.warn("unable to send pxf", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -910,7 +1004,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						continue;
 					}
 					catch (WorldTracerConnectionException ex) {
-						// TODO
+						
 						logger.warn("unable to send pxf", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -918,9 +1012,12 @@ public class WorldTracerQueueWorker implements Runnable {
 						}
 						wtqBmo.updateQueue(queue);
 						continue;
-					}
+					} catch (CaptchaException ex) {
+						logger.warn("unable to send pxf", ex);						
+						throw new CaptchaException();
+					} 
 					catch (Throwable ex) {
-						// TODO
+						
 						logger.warn("unable to send pxf", ex);
 						queue.setAttempts(queue.getAttempts() + 1);
 						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
@@ -934,9 +1031,13 @@ public class WorldTracerQueueWorker implements Runnable {
 					wtqBmo.updateQueue(queue);
 				}
 			}
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
 			logger.error("Queue Worker Failure: ", e);
 			throw new RuntimeException(e);
+		} catch (CaptchaException e) {
+			// ABORT
+			logger.error("Received Captcha Exception; will notify user of error", e);
+			SpecialFlagBMO.setSpecialFlagResetTimestampByCron("captcha");
 		} finally {
 			WorldTracerConnector conn = wtService.getWtConnector();
 			conn.logout();

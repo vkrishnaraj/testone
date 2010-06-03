@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  * @author Administrator
  * 
  * @hibernate.class table="Status"
+ * @hibernate.cache usage="read-only"
  */
 public class Status extends LocaleBasedObject implements Serializable {
 	

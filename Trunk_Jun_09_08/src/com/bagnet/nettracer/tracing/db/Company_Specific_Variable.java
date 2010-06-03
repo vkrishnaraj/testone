@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="company_specific_variable"
+ * @hibernate.cache usage="read-write"
  */
 public class Company_Specific_Variable implements Serializable {
 	private String companyCode_ID;

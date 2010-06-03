@@ -5,7 +5,6 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -42,11 +42,13 @@ import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.IncidentControl;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Incident_Range;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
+import com.bagnet.nettracer.tracing.db.Item_BDO;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
@@ -87,6 +89,147 @@ public class IncidentBMO {
 		return insertIncident(iDTO, assoc_ID, mod_agent, false);
 	}
 
+
+
+	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent, Session sess) throws HibernateException {
+		return insertIncidentWithSession(iDTO, assoc_ID, mod_agent, false, sess);
+	}
+	
+	public int insertIncidentWithSession(Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus, Session sess) throws HibernateException {
+		boolean oldStatusKept = false;
+		Transaction t = null;
+		try {
+		
+			Incident oldinc = null;
+			String incident_id = iDTO.getIncident_ID();
+			boolean isnew = false;
+			if (incident_id == null || incident_id.length() <= 0) {
+				isnew = true;
+				iDTO.setIncident_ID(getIncidentID(iDTO.getStationcreated()));
+				
+				long versionId = IncidentChecklistBMO.getActiveChecklistVersion(null).getVersion_id();
+				iDTO.setChecklist_version(versionId);
+			} else {
+				oldinc = findIncidentByID(incident_id);
+				if (oldinc == null)
+					isnew = true;
+			}
+			
+		
+			t = sess.beginTransaction();
+		
+			// save incident
+			if (iDTO.getIncident_ID() != null) {
+				iDTO.setLastupdated(TracerDateTime.getGMTDate());
+				if (isnew)
+					sess.save(iDTO);
+				else {
+					if (iDTO.getChecklist_version() == 0) {
+						iDTO.setChecklist_version(oldinc.getChecklist_version());
+					}
+					if (checkClosedStatus) {
+						Status oldStatus = oldinc.getStatus();
+						iDTO.setStatus(oldStatus);
+						iDTO.setClosedate(oldinc.getClosedate());
+						oldStatusKept = true;
+					}
+		
+					if (oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
+						iDTO.setWtFile(oldinc.getWtFile());
+					}
+		
+					// delete first then insert
+					sess.delete(oldinc);
+					iDTO = clearIncidentIds(iDTO);
+					sess.save(iDTO);
+				}
+				t.commit();
+			} else {
+				return 0;
+			}
+		
+			// change the photo names from temppath_ to incident_ID _
+		
+			if (isnew) {
+				// update airtran
+				if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()) {
+					String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
+							TracingConstants.DB_DATETIMEFORMAT, null, iDTO.get_TIMEZONE());
+		
+					SpringUtils.getReservationIntegration().writeCommentToPNR(
+							"Baggage Claim (" + iDTO.getIncident_ID() + ") created on " + formateddatetime,
+							iDTO.getRecordlocator());
+				}
+		
+			}
+		
+			// check to see if we opened the report, if we did, then open all
+			// matches
+			// if (iDTO.getStatus().getStatus_ID() ==
+			// TracingConstants.MBR_STATUS_OPEN) {
+			// MatchUtils.openMatches(iDTO.getIncident_ID(), null);
+			// }
+		
+			// check to see if we closed the report, if we did, then close all
+			// matches
+			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
+				MatchUtils.closeMatches(iDTO.getIncident_ID(), null, true);
+			}
+		
+			// association report
+			if (assoc_ID == null || assoc_ID.length() == 0)
+				assoc_ID = iDTO.getIncident_ID();
+			Incident_Assoc ia = new Incident_Assoc();
+			ia.setAssoc_ID(assoc_ID);
+			ia.setIncident_ID(iDTO.getIncident_ID());
+			ia.setItemtype_ID(iDTO.getItemtype().getItemType_ID());
+		
+			List list = sess.createCriteria(Incident_Assoc.class).add(Example.create(ia)).list();
+		
+			if (list == null || list.size() == 0) {
+				t = sess.beginTransaction();
+				sess.save(ia);
+				t.commit();
+			}
+		
+			// check if audit is enabled for this company....
+			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+					.getCompany().getVariable().getAudit_lost_delayed() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
+				Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, mod_agent);
+		
+				if (audit_dto != null) {
+					t = sess.beginTransaction();
+					sess.save(audit_dto);
+					t.commit();
+				}
+			}
+		
+		} catch (StaleObjectStateException e) {
+			logger.error("unable to insert into database because someone else updated the table already: " + e);
+		
+			if (t != null)
+				t.rollback();
+			return -1;
+		} catch (Exception e) {
+			logger.error("unable to insert into database: " + e);
+		
+			if (t != null)
+				t.rollback();
+			return 0;
+		} finally {
+		
+			sess.close();
+		}
+		if (oldStatusKept) {
+			return 2;
+		}
+		return 1;
+	}
+	
 	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus)
 			throws HibernateException {
 		boolean oldStatusKept = false;
@@ -115,8 +258,19 @@ public class IncidentBMO {
 			// save incident
 			if (iDTO.getIncident_ID() != null) {
 				iDTO.setLastupdated(TracerDateTime.getGMTDate());
-				if (isnew)
+		
+				IncidentControl myIncidentControl;
+				
+				if (isnew) {
 					sess.save(iDTO);
+					
+					// TODO: iDTO.getNewfANGLEDdATE TO GET CURRENT GMT DATE /LASTUPDATED DATE - Byron
+					myIncidentControl = new IncidentControl();
+					myIncidentControl.setAssignedDate(iDTO.getLastupdated());
+					myIncidentControl.setIncident(iDTO);
+					sess.save(myIncidentControl);
+				}
+
 				else {
 					if (iDTO.getChecklist_version() == 0) {
 						iDTO.setChecklist_version(oldinc.getChecklist_version());
@@ -132,6 +286,16 @@ public class IncidentBMO {
 						iDTO.setWtFile(oldinc.getWtFile());
 					}
 
+
+					// The purpose is to allow a user to identify specific incidents that were assigned to them in a given date range.
+					if (oldinc.getStationassigned().getStation_ID() != iDTO.getStationassigned().getStation_ID()) {
+						//get the id of the IncidentControl obj
+						myIncidentControl = oldinc.getIncidentControl();
+						myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
+						//sess.saveOrUpdate(myIncidentControl);
+						sess.update(myIncidentControl);
+					}
+					
 					// delete first then insert
 					sess.delete(oldinc);
 					iDTO = clearIncidentIds(iDTO);
@@ -315,6 +479,55 @@ public class IncidentBMO {
 		}
 		return 1;
 	}
+	
+	
+	public int saveAndAuditIncident(Incident incident, Agent mod_agent, Session sess) throws HibernateException {
+		boolean sessionNull = (sess == null);
+		
+		Transaction t = null;
+		
+		if (sessionNull) {
+			sess = HibernateWrapper.getSession().openSession();
+		}
+		
+		try {
+			
+			Audit_Incident audit_dto = null;
+			if ((incident.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && incident.getAgent().getStation()
+					.getCompany().getVariable().getAudit_lost_delayed() == 1)
+					|| (incident.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && incident.getAgent()
+							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+					|| (incident.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && incident.getAgent()
+							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
+				audit_dto = AuditIncidentUtils.getAuditIncident(incident, mod_agent);
+			}
+
+			t = sess.beginTransaction();
+			sess.update(incident);
+			if (audit_dto != null) {
+				sess.save(audit_dto);
+			}
+			t.commit();
+
+		} catch (StaleObjectStateException e) {
+			logger.error("unable to insert into database because someone else updated the table already: " + e);
+
+			if (t != null)
+				t.rollback();
+			return -1;
+		} catch (Exception e) {
+			logger.error("unable to insert into database: " + e);
+
+			if (t != null)
+				t.rollback();
+			return 0;
+		} finally {
+			if (sess != null && sessionNull) {
+				sess.close();
+			}
+		}
+		return 1;
+	}
 
 	/**
 	 * This is to be used solely by the tag number trace feature that may occur
@@ -404,24 +617,26 @@ public class IncidentBMO {
 	}
 
 	public static Incident getIncidentByID(String incident_ID, Session sess) {
+		if (incident_ID == null || incident_ID.length() == 0) return null;
 		boolean sessionNull = (sess == null);
 
 		try {
 			if (sessionNull) {
 				sess = HibernateWrapper.getSession().openSession();
 			}
-			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
-			q.setParameter("incident_ID", incident_ID);
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find incident: " + incident_ID);
-				return null;
-			}
-			Incident iDTO = (Incident) list.get(0);
-
-			return iDTO;
+			return (Incident) sess.load(Incident.class, incident_ID);
+//			Query q = sess
+//					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
+//			q.setParameter("incident_ID", incident_ID);
+//			List list = q.list();
+//
+//			if (list.size() == 0) {
+//				logger.debug("unable to find incident: " + incident_ID);
+//				return null;
+//			}
+//			Incident iDTO = (Incident) list.get(0);
+//
+//			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
 			e.printStackTrace();
@@ -438,35 +653,38 @@ public class IncidentBMO {
 	}
 
 	public Incident findIncidentByID(String incident_ID) {
-		Session sess = null;
+		return getIncidentByID(incident_ID, null);
+//		Session sess = null;
+//
+//		try {
+//			sess = HibernateWrapper.getSession().openSession();
+//			return (Incident) sess.load(Incident.class, incident_ID);
 
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
-			q.setParameter("incident_ID", incident_ID);
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find incident: " + incident_ID);
-				return null;
-			}
-			Incident iDTO = (Incident) list.get(0);
-
-			return iDTO;
-		} catch (Exception e) {
-			logger.error("unable to retrieve incident: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					logger.error("unable to close connection: " + e);
-				}
-			}
-		}
+//			Query q = sess
+//					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
+//			q.setParameter("incident_ID", incident_ID);
+//			List list = q.list();
+//
+//			if (list.size() == 0) {
+//				logger.debug("unable to find incident: " + incident_ID);
+//				return null;
+//			}
+//			Incident iDTO = (Incident) list.get(0);
+//
+//			return iDTO;
+//		} catch (Exception e) {
+//			logger.error("unable to retrieve incident: " + e);
+//			e.printStackTrace();
+//			return null;
+//		} finally {
+//			if (sess != null) {
+//				try {
+//					sess.close();
+//				} catch (Exception e) {
+//					logger.error("unable to close connection: " + e);
+//				}
+//			}
+//		}
 	}
 
 	public TraceIncident findTraceIncidentByID(String incident_ID) {
@@ -474,18 +692,19 @@ public class IncidentBMO {
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess
-					.createQuery("from com.bagnet.nettracer.tracing.db.TraceIncident incident where incident.incident_ID= :incident_ID");
-			q.setParameter("incident_ID", incident_ID);
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find incident: " + incident_ID);
-				return null;
-			}
-			TraceIncident iDTO = (TraceIncident) list.get(0);
-
-			return iDTO;
+			return (TraceIncident) sess.load(TraceIncident.class, incident_ID);
+//			Query q = sess
+//					.createQuery("from com.bagnet.nettracer.tracing.db.TraceIncident incident where incident.incident_ID= :incident_ID");
+//			q.setParameter("incident_ID", incident_ID);
+//			List list = q.list();
+//
+//			if (list.size() == 0) {
+//				logger.debug("unable to find incident: " + incident_ID);
+//				return null;
+//			}
+//			TraceIncident iDTO = (TraceIncident) list.get(0);
+//
+//			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
 			e.printStackTrace();
@@ -615,21 +834,47 @@ public class IncidentBMO {
 			else
 				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
 
-			if (siDTO.getClaimchecknum().length() > 0)
+			boolean tagPresent = false;
+			if (siDTO.getClaimchecknum().length() > 0) {
 				s.append(" left outer join incident.itemlist item ");
+				s.append(" left outer join incident.claimchecks claimcheck ");
+				tagPresent = true;
+			}
 			if (siDTO.getAirline().length() > 0 || siDTO.getFlightnum().length() > 0)
 				s.append(" join incident.itinerary itinerary ");
-			if (siDTO.getClaimchecknum().length() > 0)
-				s.append(" left outer join incident.claimchecks claimcheck ");
+			
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
 					|| siDTO.getLastname().length() > 0 || siDTO.getCompanycode_ID().length() > 0
 					|| siDTO.getMembershipnum().length() > 0)
 				s.append(" join incident.passengers passenger ");
+			
+			//add the join clause here for station assignment datetime
+			if (siDTO.getS_station_assignment_time().length() > 0 
+					|| siDTO.getAssigned2StationWithin24hrs() == 1) {
+				s.append(" join incident.incidentControl incidentcontrol");
+			}
 
 			s.append(" where 1=1 ");
 
-			if (siDTO.getIncident_ID().length() > 0)
-				s.append(" and incident.incident_ID like :incident_ID ");
+			if (siDTO.getIncident_ID().length() > 0) {
+				s.append(" and (incident.incident_ID like :incident_ID ");
+
+				if (siDTO.getWt_id().length() > 0) {
+
+					if (siDTO.isWtConditionOr()) {
+						s.append(" or incident.wtFile.wt_id like :wt_id )");
+					} else {
+						s.append(" and incident.wtFile.wt_id like :wt_id )");
+					}
+				} else {
+					s.append(") ");
+				}
+			} else if (siDTO.getWt_id().length() > 0) {
+				s.append(" and incident.wtFile.wt_id like :wt_id ");
+			}
+			
+			
+
 
 			if (siDTO.getTicketnumber().length() > 0)
 				s.append("and incident.ticketnumber like :ticketnumber ");
@@ -686,6 +931,36 @@ public class IncidentBMO {
 							+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))");
 				}
 			}
+			
+			//TODO: regarding station assignment date
+			Date sAssignedDate = null, eAssignedDate = null;
+			Date sAssignedDate1 = null, eAssignedDate1 = null; // add one for time zone
+			Date sAssignedTime = null; // time to compare (04:00 if eastern, for example)
+			ArrayList assignedDateList = IncidentUtils.calculateDateDiff(siDTO.getS_station_assignment_time(), 
+											siDTO.getE_station_assignment_time(), tz, user);
+			if (assignedDateList == null) {
+				return null;
+			}
+			sAssignedDate = (Date) assignedDateList.get(0);
+			sAssignedDate1 = (Date) assignedDateList.get(1);
+			eAssignedDate = (Date) assignedDateList.get(2);
+			eAssignedDate1 = (Date) assignedDateList.get(3);
+			sAssignedTime = (Date) assignedDateList.get(4);
+			
+			if (sAssignedDate != null) {
+				if (eAssignedDate != null && sAssignedDate != eAssignedDate) {
+					s.append(" and (incidentcontrol.assignedDate= :startassigneddate )"
+							+ " or (incidentcontrol.assignedDate= :endassigneddate1 )"
+							+ " or (incidentcontrol.assignedDate > :startassigneddate and incidentcontrol.assignedDate <= :endassigneddate)");
+
+				} else {
+					s.append(" and (incidentcontrol.assignedDate= :startassigneddate )"
+							+ " or (incidentcontrol.assignedDate= :startassigneddate1)");
+				}
+			} else if (siDTO.getAssigned2StationWithin24hrs() == 1) {
+				s.append(" and incidentcontrol.assignedDate >= :startassigneddate ");		
+			}
+			
 
 			if (siDTO.getCompanycreated_ID().length() > 0)
 				s.append(" and incident.stationcreated.company.companyCode_ID = :companycreated_ID");
@@ -708,10 +983,8 @@ public class IncidentBMO {
 				s.append(" and passenger.membership.companycode_ID like :companyCode_ID)");
 			}
 
-			if (siDTO.getClaimchecknum().length() > 0) {
-				s.append(" and (item.claimchecknum like :claimchecknum");
-				s.append(" or claimcheck.claimchecknum like :claimchecknum)");
-			}
+			intelligentSearchProcessing(siDTO, s, tagPresent);
+			
 
 			if (siDTO.getAirline().length() > 0) {
 				s.append(" and itinerary.airline like :airline");
@@ -738,6 +1011,9 @@ public class IncidentBMO {
 
 			if (siDTO.getIncident_ID().length() > 0)
 				q.setString("incident_ID", siDTO.getIncident_ID());
+			
+			if (siDTO.getWt_id().length() > 0)
+				q.setString("wt_id", siDTO.getWt_id());
 
 			if (siDTO.getItemType_ID() > 0) {
 				q.setInteger("itemType_ID", siDTO.getItemType_ID());
@@ -768,6 +1044,39 @@ public class IncidentBMO {
 					q.setTime("starttime", stime);
 				}
 			}
+			
+			//TODO: station assignment date related
+			if (sAssignedDate != null) {
+				if (eAssignedDate != null && sAssignedDate != eAssignedDate) {
+					q.setDate("startassigneddate", sAssignedDate);
+					q.setDate("endassigneddate", eAssignedDate);
+					q.setDate("endassigneddate1", eAssignedDate1);
+
+				} else {
+					q.setDate("startassigneddate", sAssignedDate);
+					q.setDate("startassigneddate1", sAssignedDate1);
+				}
+			} else if (siDTO.getAssigned2StationWithin24hrs() == 1) {
+				//TODO: figure out the date we need here
+				//Date myLast24HoursFromNowDate = TracerDateTime.getGMTDate();
+				//myLast24HoursFromNowDate.setTime(myLast24HoursFromNowDate.getTime() - Timer.ONE_HOUR * 24);  
+				//q.setDate("startassigneddate", myLast24HoursFromNowDate);
+				
+				int numberOfHoursBack =24;
+				try {
+					numberOfHoursBack = PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_NT_COMPANY_TIME_RANGE_WITHIN_LAST);
+				} catch (Exception e) {
+					logger.error("unable to retrieve value from properties table.");
+				}
+				Date myHoursBackFromNowDate = TracerDateTime.getGMTDate();
+				myHoursBackFromNowDate.setTime(myHoursBackFromNowDate.getTime() - 60*60*1000*numberOfHoursBack); 
+				q.setTimestamp("startassigneddate", myHoursBackFromNowDate);
+			}
+			
+			if (siDTO.getAssigned2StationWithin24hrs() == 1) {
+				
+			}
+		
 
 			if (siDTO.getCompanycreated_ID().length() > 0)
 				q.setString("companycreated_ID", siDTO.getCompanycreated_ID());
@@ -800,6 +1109,9 @@ public class IncidentBMO {
 
 			if (siDTO.getClaimchecknum().length() > 0)
 				q.setString("claimchecknum", siDTO.getClaimchecknum().trim());
+			
+			if (siDTO.getClaimchecknum2().length() > 0)
+				q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
 
 			if (siDTO.getAirline().length() > 0) {
 				q.setString("airline", siDTO.getAirline().toUpperCase());
@@ -820,6 +1132,71 @@ public class IncidentBMO {
 			return null;
 		} finally {
 			sess.close();
+		}
+	}
+
+	private void intelligentSearchProcessing(SearchIncident_DTO siDTO, StringBuffer s, boolean tagPresent) {
+
+		int searchType = siDTO.getIntelligentTagSearchType();
+		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
+			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
+			if (pattern.matcher(s).find()) {
+				siDTO.setIntelligentTagSearchType(10);
+			} else {
+				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
+				if (pattern.matcher(s).find()) {
+					siDTO.setIntelligentTagSearchType(9);
+				} else {
+					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
+					if (pattern.matcher(s).find()) {
+						siDTO.setIntelligentTagSearchType(8);
+					}
+				}
+			}
+		}
+		
+		
+			
+		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
+			String nineDigitWildcardTag = null;
+			String genericTag = null;
+			
+			String claimcheck = siDTO.getClaimchecknum().trim();
+			if (searchType == 10) {
+				nineDigitWildcardTag = "%" + claimcheck.substring(1);
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 9) {
+				nineDigitWildcardTag = "%" + claimcheck;
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 8) {
+				genericTag = claimcheck;
+				try {
+					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			}
+			
+			siDTO.setClaimchecknum(nineDigitWildcardTag);
+			siDTO.setClaimchecknum2(genericTag);
+			
+			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
+			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
+
+		} else if (siDTO.getClaimchecknum().length() > 0) {
+			s.append(" and (item.claimchecknum like :claimchecknum");
+			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
 		}
 	}
 
@@ -1142,6 +1519,7 @@ public class IncidentBMO {
 				s.append(" and address.email like :email");
 
 			// bag
+
 			if (siDTO.getClaimchecknum().length() > 0) {
 				s.append(" and (item.claimchecknum like :claimchecknum");
 				s.append(" or claimcheck.claimchecknum like :claimchecknum)");
@@ -1393,7 +1771,15 @@ public class IncidentBMO {
 						o2.setPhoto_ID(0);
 					}
 				}
-
+				
+				if (item.getItem_bdo() != null && item.getItem_bdo().size() > 0) {
+					for (Iterator j = item.getItem_bdo().iterator(); j.hasNext();) {
+						Item_BDO o2 = (Item_BDO) j.next();
+						o2.setId(0);
+					}
+				}
+				
+				
 			}
 		}
 

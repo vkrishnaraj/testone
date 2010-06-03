@@ -20,12 +20,14 @@ import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.bmo.ActionFileStationBMO;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.utils.ParsingUtils;
 
 public class ActionFileManagerImpl implements ActionFileManager {
 
 	private static final Logger logger = Logger
-			.getLogger(ActionFileManager.class);
+			.getLogger(ActionFileManagerImpl.class);
 
 	private ActionFileStationBMO afsBmo;
 
@@ -47,8 +49,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 
 	@Override
 	public ActionFileStation getCounts(String companyCode, String wtStation,
-			Agent user) throws WorldTracerDisabledException,
-			WorldTracerException {
+			Agent user, WebServiceDto dto) throws WorldTracerDisabledException, WorldTracerException, CaptchaException {
 
 		ActionFileStation afStation = null;
 		Lock lock = null;
@@ -72,9 +73,9 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			if(lock == null) {
 				throw new WorldTracerLockException("unable to load counts");
 			}
-			afStation = afsBmo.updateStation(companyCode, wtStation, user);
+			afStation = afsBmo.updateStation(companyCode, wtStation, user, dto);
 			
-		} catch (Exception e) {
+		} catch (WorldTracerException e) {
 			throw new WorldTracerException("unable to update counts", e);
 		} finally {
 			if (lock != null) {
@@ -87,8 +88,8 @@ public class ActionFileManagerImpl implements ActionFileManager {
 
 
 	public List<Worldtracer_Actionfiles> getSummary(String companyCode,
-			String wtStation, ActionFileType category, int day, Agent user) throws Exception {
-		ActionFileStation afs = this.getCounts(companyCode, wtStation, user);
+			String wtStation, ActionFileType category, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerDisabledException {
+		ActionFileStation afs = this.getCounts(companyCode, wtStation, user, dto);
 		if(afs.summaryLoaded(category, day)) {
 			return wafBmo.findActionFileSummary(companyCode, wtStation, category, day);
 		}
@@ -113,7 +114,9 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			if(lock == null) {
 				throw new WorldTracerLockException("unable to load counts");
 			}
-			return afsBmo.updateSummary(companyCode, wtStation, category, day, user);
+			return afsBmo.updateSummary(companyCode, wtStation, category, day, user, dto);
+		} catch (CaptchaException e) {
+			throw new CaptchaException();
 		} catch (Exception e) {
 			throw new WorldTracerException("unable to load summary", e);
 		} finally {
@@ -124,14 +127,14 @@ public class ActionFileManagerImpl implements ActionFileManager {
 	}
 
 	public void updateDetails(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum, Agent user)
+			ActionFileType category, int day, int fileNum, Agent user, WebServiceDto dto)
 			throws WorldTracerException {
 		WorldTracerService wtService = SpringUtils.getWorldTracerService();
 		try {
 			wtService.getWtConnector().initialize();
 
 			String result = wtService.getActionFileDetail(companyCode,
-					wtStation, category, day, fileNum, user);
+					wtStation, category, day, fileNum, user, dto);
 			String ahl_id = ParsingUtils.parseAhlId(result);
 			String ohd_id = ParsingUtils.parseOhdId(result);
 			double percent = ParsingUtils.parsePercentMatch(result);
@@ -151,8 +154,8 @@ public class ActionFileManagerImpl implements ActionFileManager {
 	}
 
 	public boolean eraseActionFile(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum, Agent user) throws Exception {
-		ActionFileStation afs = this.getCounts(companyCode, wtStation, user);
+			ActionFileType category, int day, int fileNum, Agent user, WebServiceDto dto) throws CaptchaException, WorldTracerDisabledException, WorldTracerException {
+		ActionFileStation afs = this.getCounts(companyCode, wtStation, user, dto);
 		Worldtracer_Actionfiles waf = afsBmo.eraseActionFile(companyCode, wtStation, category, day, fileNum, afs);
 		WtqEraseActionFile wq = new WtqEraseActionFile();
 		wq.setAgent(user);

@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  * @author Ankur Gupta
  * 
  * @hibernate.class table="priority"
+ * @hibernate.cache usage="read-only"
  */
 public class Priority extends LocaleBasedObject implements Serializable {
 

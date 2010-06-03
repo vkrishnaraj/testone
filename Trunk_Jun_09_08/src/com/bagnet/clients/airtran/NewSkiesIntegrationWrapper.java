@@ -5,8 +5,6 @@
  */
 package com.bagnet.clients.airtran;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -14,19 +12,17 @@ import org.apache.log4j.Logger;
 
 import com.airtran.AddBookingCommentsESDocument;
 import com.airtran.AddBookingCommentsESResponseDocument;
+import com.airtran.Booking;
 import com.airtran.EnplanementBookingServiceStub;
 import com.airtran.GetBookingInformationESDocument;
 import com.airtran.GetBookingInformationESResponseDocument;
 import com.airtran.GetEnplanementsESDocument;
 import com.airtran.GetEnplanementsESResponseDocument;
-import com.bagnet.clients.defaul.ReservationIntegrationImpl;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
-import com.navitaire.schemas.messages.booking.Booking;
 
 /**
  * @author matt
  * 
- * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
 public class NewSkiesIntegrationWrapper {

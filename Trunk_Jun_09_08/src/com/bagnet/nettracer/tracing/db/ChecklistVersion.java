@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.IndexColumn;
@@ -23,6 +25,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
 
 @Entity
 @Table(name = "CHECKLIST_VERSION")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class ChecklistVersion extends LocaleBasedObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

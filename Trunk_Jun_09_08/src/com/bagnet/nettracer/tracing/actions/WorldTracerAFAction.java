@@ -39,6 +39,7 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 
 /**
  * @author matt
@@ -91,10 +92,10 @@ public class WorldTracerAFAction extends Action {
 			if (foundinc == null) {
 				WorldTracerConnector wtc;
 				String result = null;
-				wtc = SpringUtils.getWorldTracerConnector();
+				wtc = WorldTracerWebService.getInstance();
 				try {
 					wtc.initialize();
-					result = wtc.findAHL(request.getParameter("ahl_id"));
+					result = wtc.findAHL(request.getParameter("ahl_id"), wtc.getDto(session));
 				} catch (RuntimeException e) {
 
 					e.printStackTrace();
@@ -115,11 +116,11 @@ public class WorldTracerAFAction extends Action {
 			OHD foundinc = WorldTracerUtils.findOHDByWTID(request
 					.getParameter("ohd_id"));
 			if (foundinc == null) {
-				WorldTracerConnector wtc = SpringUtils.getWorldTracerConnector();
+				WorldTracerConnector wtc = WorldTracerWebService.getInstance();
 				String result = null;
 				try {
 					wtc.initialize();
-					result = wtc.findOHD(request.getParameter("ohd_id"));
+					result = wtc.findOHD(request.getParameter("ohd_id"), wtc.getDto(session));
 					
 				} catch (WorldTracerRecordNotFoundException ex) {
 					logger.error("ohd not found");

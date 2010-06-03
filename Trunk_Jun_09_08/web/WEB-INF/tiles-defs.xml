@@ -24,7 +24,11 @@
     </definition>
   
  	<definition name="incidentchecklist" path="/pages/includes/incident_checklist.jsp">
-        <put name="center"   value="/pages/includes/incident_checklist.jsp"/>
+ 		<put name="center" value="/pages/includes/incident_checklist.jsp" />
+    </definition>
+    
+     <definition name="ajax_push_to_crm" path="/pages/includes/push_to_crm.jsp">
+     <put name="center" value="/pages/includes/push_to_crm.jsp" />
     </definition>
     
 	<definition name="homepage" path="/deployment/main/layouts/main_layout.jsp">
@@ -67,6 +71,14 @@
         <put name="center"   value="/pages/others/insertsuccess.jsp"/>
     </definition>
     
+    <definition name="update_file_success" extends="user_menu">
+        <put name="center"   value="/pages/others/updatesuccess.jsp"/>
+    </definition>
+    
+    <definition name="close_file_success" extends="user_menu">
+        <put name="center"   value="/pages/others/closefilesuccess.jsp"/>
+    </definition>
+    
     <definition name="invalid_token" extends="user_menu">
         <put name="center"   value="/pages/others/invalid_token.jsp"/>
     </definition>
@@ -103,6 +115,10 @@
         <put name="center"   value="/pages/lostfound/lostfound_success.jsp"/>
     </definition>
     
+    <definition name="update_lost_found_success" extends="user_menu">
+        <put name="center"   value="/pages/lostfound/update_lostfound_success.jsp"/>
+    </definition>
+    
     <definition name="lostdelay" extends="user_menu">
         <put name="center"   value="/pages/lostdelay/center.jsp"/>
     </definition>
@@ -117,6 +133,10 @@
     
     <definition name="close_onhandsuccess" extends="user_menu">
         <put name="center"   value="/pages/onhand/close_on_hand_success.jsp"/>
+    </definition>
+    
+    <definition name="confirm_close_onhand_success" extends="user_menu">
+        <put name="center"   value="/pages/onhand/confirm_close_on_hand_success.jsp"/>
     </definition>
 
     <definition name="missing_articles" extends="user_menu">
@@ -197,6 +217,10 @@
     
     <definition name="insert_onhand_success" extends="user_menu">
         <put name="center"   value="/pages/onhand/insert_on_hand_success.jsp"/>
+    </definition>
+    
+    <definition name="update_onhand_success" extends="user_menu">
+        <put name="center"   value="/pages/onhand/update_on_hand_success.jsp"/>
     </definition>
 
     <definition name="mass_onhand_success" extends="user_menu">
@@ -708,5 +732,11 @@
     </definition> 
     <definition name="suspend_rit" path="/pages/worldtracer/worldtracer_sus_rit.jsp">
     </definition> 
+    
+    <definition name="ajax_quickSearchResponse" path="/pages/ajax_divs/quicksearch.jsp">
+    </definition>
+    
+    <definition name="ajax_toggle" path="/pages/ajax_divs/blank.jsp">
+    </definition>
 	
  </tiles-definitions>

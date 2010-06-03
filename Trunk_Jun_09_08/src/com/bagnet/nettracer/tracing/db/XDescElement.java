@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  * @author Administrator
  * 
  * @hibernate.class table="XDescElement"
+ * @hibernate.cache usage="read-only"
  */
 public class XDescElement extends LocaleBasedObject  implements Serializable {
 	private int XDesc_ID;

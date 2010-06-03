@@ -69,6 +69,36 @@ public class Audit_Item implements Serializable {
 
 	private Audit_Incident audit_incident;
 	
+	/**
+	 * @return Returns the bag_weight.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public Double getBag_weight() {
+		return bag_weight;
+	}
+
+	public void setBag_weight(Double bag_weight) {
+		this.bag_weight = bag_weight;
+	}
+	
+	/**
+	 * @return Returns the bag_weight_unit.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getBag_weight_unit() {
+		return bag_weight_unit;
+	}
+
+	public void setBag_weight_unit(String bag_weight_unit) {
+		this.bag_weight_unit = bag_weight_unit;
+	}
+
+	private Double bag_weight;
+	private String bag_weight_unit;
+	
+	
 	public Audit_Item() {
 		super();
 	}

@@ -52,6 +52,10 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 	private static final Logger logger = Logger.getLogger(ScannerDataSourceImpl.class);
 
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber) {
+		return getScannerData(startDate, endDate, bagTagNumber, 2);
+	}
+	
+	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
 		String endpoint = PropertyBMO.getValue(PROPERTY_SCAN_HISTORY_ENDPOINT);
 		
 		
@@ -62,8 +66,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			e.printStackTrace();
 		}
 		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CHUNKED, Boolean.FALSE);
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(2*60*1000));
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(2*60*1000));
+		stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeout*60*1000));
+		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeout*60*1000));
 		
 		ScannerDTO newDto = new ScannerDTO();
 		ArrayList<ScannerDataDTO> list = new ArrayList<ScannerDataDTO>();
@@ -85,21 +89,22 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 
 		GetScanPointsResponseDocument responseDoc = null;
 		try {
-			System.out.println("Scanner request: " + scanDoc);
-			logger.info("Scanner request: " + scanDoc);
 			
+			//logger.debug("Scanner request: " + scanDoc);
 			responseDoc = stub.getScanPoints(scanDoc);
 			
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			logger.error("Exception thrown with Scan Request: " + bagTagNumber, e);
+			newDto.setErrorResponse("scanner.communicationError");
+			return newDto;
 		}
 		
 		Out out = responseDoc.getGetScanPointsResponse().getOut();
-		System.out.println("Scanner Response: " + responseDoc);
-		logger.info("Scanner response: " + responseDoc);
+		
+		logger.debug("Scanner response: " + responseDoc);
 		
 		for (int i = 0; i < 16; ++i) {
-			logger.info("Iteration: " + i);
+			//logger.info("Iteration: " + i);
 			Object[] arr = null;
 			switch (i) {
 				case 0: if (out.getBulkUnloadArray() != null) arr = out.getBulkUnloadArray(); break;
@@ -121,12 +126,10 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			
 			
 			if (arr != null && arr.length > 0) {
-				
-				logger.info(arr);
+
+				//logger.info(arr);
 				for (int j = 0; j < arr.length; ++j) {
 					Object obj = arr[j];
-//					for (Object obj : arr) {
-						logger.info(obj);
 						
 						String type = "Scan";
 						StringBuffer comment = new StringBuffer();
@@ -228,7 +231,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						if (obj instanceof QohScanType) {
 							type = "QOH Scan";
 							QohScanType o = (QohScanType) obj;
-							comment.append("Comment: " + o.getComment() + "<br />");
+							ifNotNull(comment, "Comment: ", o.getComment(), "<br />");
 						} 
 						
 						
@@ -263,8 +266,6 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						String dateString = sdf.format(newdate);
 						ScannerDataDTO dtoItem = new ScannerDataDTO(dateString, city, type, comment.toString(), ohdId, time);
 						list.add(dtoItem);
-
-//					}
 				}
 
 			}

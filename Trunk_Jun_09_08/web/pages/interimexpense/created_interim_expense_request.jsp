@@ -9,7 +9,7 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <script language="javascript">
     
 

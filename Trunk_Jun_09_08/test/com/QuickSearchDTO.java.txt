@@ -1,0 +1,25 @@
+package com;
+
+import java.util.List;
+
+public class QuickSearchDTO {
+	private String redirect = null;
+	private List<Object> list;
+
+	public String getRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
+	}
+
+	public List<Object> getList() {
+		return list;
+	}
+
+	public void setList(List<Object> list) {
+		this.list = list;
+	}
+
+}

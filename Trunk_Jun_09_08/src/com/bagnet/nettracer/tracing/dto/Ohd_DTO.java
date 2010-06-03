@@ -47,6 +47,13 @@ public class Ohd_DTO {
 	private boolean closed;
 
 	private String agent;
+	private String wt_id;
+	private boolean wtConditionOr;
+	private String claimcheck;
+	private String nineDigitWildcardTag;
+	private String genericTag;
+	private boolean intelligentTagSearch;
+	private int intelligentTagSearchType;
 
 	public void populate(OHD ohd) {
 
@@ -481,5 +488,61 @@ public class Ohd_DTO {
 	 */
 	public void setHeldCompany(String heldCompany) {
 		this.heldCompany = heldCompany;
+	}
+	
+	public String getWt_id() {
+		return wt_id == null ? "" : wt_id.trim();
+	}
+
+	public void setWt_id(String wt_id) {
+		this.wt_id = wt_id;
+	}
+
+	public boolean isWtConditionOr() {
+		return wtConditionOr;
+	}
+
+	public void setWtConditionOr(boolean wtConditionOr) {
+		this.wtConditionOr = wtConditionOr;
+	}
+
+	public String getClaimcheck() {
+		return claimcheck;
+	}
+
+	public void setClaimcheck(String claimcheck) {
+		this.claimcheck = claimcheck;
+	}
+
+	public String getNineDigitWildcardTag() {
+		return nineDigitWildcardTag;
+	}
+
+	public void setNineDigitWildcardTag(String nineDigitWildcardTag) {
+		this.nineDigitWildcardTag = nineDigitWildcardTag;
+	}
+
+	public String getGenericTag() {
+		return genericTag;
+	}
+
+	public void setGenericTag(String genericTag) {
+		this.genericTag = genericTag;
+	}
+
+	public boolean isIntelligentTagSearch() {
+		return intelligentTagSearch;
+	}
+
+	public void setIntelligentTagSearch(boolean intelligentTagSearch) {
+		this.intelligentTagSearch = intelligentTagSearch;
+	}
+
+	public int getIntelligentTagSearchType() {
+		return intelligentTagSearchType;
+	}
+
+	public void setIntelligentTagSearchType(int intelligentTagSearchType) {
+		this.intelligentTagSearchType = intelligentTagSearchType;
 	}
 }

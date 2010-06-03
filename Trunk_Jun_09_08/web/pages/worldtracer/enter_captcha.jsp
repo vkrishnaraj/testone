@@ -13,6 +13,7 @@
 
 
 <html:form action="wtCaptcha.do" method="post">
+	<html:hidden property="taskManagerEntry"/>
 	<tr>
 		
 		<td id="middlecolumn">

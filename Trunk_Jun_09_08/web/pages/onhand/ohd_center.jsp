@@ -13,6 +13,10 @@
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+
+<%@page import="java.util.List"%>
+<%@page import="com.bagnet.nettracer.tracing.db.OHD_Itinerary"%>
 <%
   org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
                                                                request.getAttribute("org.apache.struts.action.MESSAGE");
@@ -29,7 +33,7 @@
 %>
 
 
-<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+
 <logic:present name="prepopulate" scope="request">
    <script language="javascript">
 
@@ -61,7 +65,7 @@
    </script>
   
   <html:form action="addOnHandBag.do" method="post" onsubmit="return validateThis(this);">
-    <jsp:include page="/pages/includes/validation_incl.jsp" />
+    
     <html:hidden property="doprepopulate" value="" />
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -172,7 +176,7 @@ function gotoHistoricalReport() {
   }
 
   </SCRIPT>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 <html:form action="addOnHandBag.do" method="post"
   enctype="multipart/form-data" onsubmit="return validateRest(this);">
   <tr>
@@ -860,14 +864,127 @@ function gotoHistoricalReport() {
     <br>
     <br>
     <a name="itinerary"></a>
+		  <script language="javaScript">
+			  function swap(field, i, j) {
+
+				  var swap1 = document.getElementsByName('itinerarylist[' + i + '].' + field)[0];
+				var swap2 = document.getElementsByName('itinerarylist[' + j + '].' + field)[0];
+				var tmp = swap1.value;
+				swap1.value = swap2.value;
+				swap2.value = tmp;
+				}
+
+			function swapItin(moveUp, moveDown) {
+				var k = 0;
+				swap('legfrom', moveUp, moveDown);	
+				swap('legto', moveUp, moveDown);	
+				swap('airline', moveUp, moveDown);	
+				swap('flightnum', moveUp, moveDown);	
+				swap('disdepartdate', moveUp, moveDown);	
+				swap('disarrivedate', moveUp, moveDown);	
+				swap('disschdeparttime', moveUp, moveDown);	
+				swap('disscharrivetime', moveUp, moveDown);	
+				swap('disactdeparttime', moveUp, moveDown);	
+				swap('disactarrivetime', moveUp, moveDown);	
+			}
+
+			function swapUpItin(elem, indexes) {
+				var idx = 0;
+
+				for (var i = 0; i < indexes.length; ++i) {
+					if (indexes[i] == elem) {
+						idx = i;
+						break;					
+					}
+				}
+
+				if (idx < 1) { return; }
+				var moveUp = indexes[idx];
+				var moveDown = indexes[idx - 1];
+				swapItin(moveUp, moveDown);
+			}	
+
+
+			function swapDownItin(elem, indexes) {
+				var idx = 0;
+
+				for (var i = 0; i < indexes.length; ++i) {
+					if (indexes[i] == elem) {
+						idx = i;
+						break;					
+					}
+				}
+
+				if (idx > indexes.length - 2) {	return;	}
+				var moveUp = indexes[idx+1];
+				var moveDown = indexes[idx];
+				swapItin(moveUp, moveDown);
+			}
+
+
+
+				 <% 
+				 	int itinSize = 0;
+				 	List list = onHandForm.getItinerarylist();
+				 	
+					String bItinIndexes = "";
+					
+					int firstBIndex = -1;
+					
+					int lastBIndex = 0;
+				 	for (int i = 0; i < list.size(); ++i) {
+				 		OHD_Itinerary itin = (OHD_Itinerary) list.get(i);
+				 		
+						bItinIndexes += i + ",";
+						if (firstBIndex == -1) {
+							firstBIndex = i;
+						}
+						lastBIndex = i;
+				 		
+				 	}
+
+				 	if (bItinIndexes.length() > 0) {
+				 		bItinIndexes = bItinIndexes.substring(0, bItinIndexes.length() - 1);
+					}
+					if (firstBIndex == -1) {
+						firstBIndex = 0;
+					}
+
+
+				 	%>
+
+				 var bItinIndexes = [<%=bItinIndexes%>];
+		  </script>
     <h1 class="green"><bean:message key="header.ohd_bag_itinerary" />
     <a href="#"
       onclick="openHelp('pages/WebHelp/nettracerhelp.htm#on-hand_reports/work_with_baggage_itineraries_(oh).htm#add_baggage_itinerary');return false;"><img
       src="deployment/main/images/nettracer/button_help.gif" width="20"
       height="21" border="0"></a></h1>
-    <span class="reqfield">*</span> <bean:message key="Required" /> <logic:iterate
+    <span class="reqfield">*</span> <bean:message key="Required" />
+
+      	      <%
+	      int t = 0;
+	      %>
+    <logic:iterate
       id="itinerarylist" indexId="k" name="OnHandForm"
       property="itinerarylist">
+	  
+	      <span id="placeHolder<%=t%>" style="float:right">
+	      <%
+	      if (firstBIndex != t) {	
+		%>
+		<input type="button" class="button" id="moveUp<%=t%>" value="Move Up" onclick="swapUpItin(<%=t%>, bItinIndexes);"/>
+		<%
+		}
+		if (lastBIndex != t) {
+		%>
+
+		<input type="button" class="button"  id="moveDown<%=t%>" value="Move Down" onclick="swapDownItin(<%=t%>, bItinIndexes);"/>
+		<%
+		}
+		%>
+		</span>
+	  
       <table class="form2_ohd" cellspacing="0" cellpadding="0">
         <tr>
           <td><bean:message key="colname.ohd.fromto.req" /> <br>
@@ -944,7 +1061,9 @@ function gotoHistoricalReport() {
           </html:submit></td>
         </tr>
       </table>
+    <% ++t; %>
     </logic:iterate>
+    
     <center><html:submit property="additinerary"
       styleId="button">
       <bean:message key="button.add_bag_itinerary" />
@@ -1028,6 +1147,9 @@ function gotoHistoricalReport() {
                   target="top"><img
                   src='showImage?ID=<bean:write name="photo" property="thumbpath"/>'></a>
                 <br>
+                <a href='showImage?ID=<bean:write name="photo" property="picpath"/>' target="top">
+                  <bean:write name="photo" property="fileName"/></a>
+                            <br>
                 <html:submit styleId="button" property="deletePhoto"
                   indexed="true">
                   <bean:message key="button.delete_photo" />
@@ -1272,3 +1394,4 @@ function gotoHistoricalReport() {
 
   </SCRIPT>
 </logic:notPresent>
+

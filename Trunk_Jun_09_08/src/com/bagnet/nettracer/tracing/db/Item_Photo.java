@@ -23,6 +23,24 @@ public class Item_Photo implements Serializable {
 	private String picpath;
 	private Item item;
 	
+	private String fileName;
+	
+
+	public String getFileName() {
+		String result = "";
+		if (fileName == null || fileName.equals("")) {
+			result = picpath.substring(picpath.lastIndexOf('/')+1, picpath.length());
+		} else {
+			result = fileName;
+		}
+		
+		return result;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public String toXML() {
 		StringBuffer sb = new StringBuffer();
 

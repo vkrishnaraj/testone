@@ -58,7 +58,7 @@ function updatePagination() {
 
 
   </script>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="SearchExpenses.do" method="post" onsubmit="fillzero(this.incident_id, 13);">
    <input type=hidden name=approve1 value="">
     <input type=hidden name=payout_ID value="">

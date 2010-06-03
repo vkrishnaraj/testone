@@ -36,6 +36,48 @@ public class StatReport_ExpDTO {
 	private String agent_username;
 	private Date draftpaiddate;
 	
+	private String claim_number;
+	private String agent_station_code;
+	
+	private String currencyType = "";
+	
+	private String expenseType_description;
+	
+	public String getExpenseType_description() {
+		ExpenseType myExpenseType = new ExpenseType();
+		myExpenseType.setExpensetype_ID(expenseType_ID);
+		expenseType_description = myExpenseType.getDescription();
+		return expenseType_description;
+	}
+
+	public void setExpenseType_description(String expenseType_description) {
+		this.expenseType_description = expenseType_description;
+	}
+
+	public String getCurrencyType() {
+		return currencyType;
+	}
+
+	public void setCurrencyType(String currencyType) {
+		this.currencyType = currencyType;
+	}
+
+	public String getAgent_station_code() {
+		return agent_station_code;
+	}
+
+	public void setAgent_station_code(String agent_station_code) {
+		this.agent_station_code = agent_station_code;
+	}
+
+	public String getClaim_number() {
+		return claim_number;
+	}
+
+	public void setClaim_number(String claim_number) {
+		this.claim_number = claim_number;
+	}
+
 	public String getAgent_username() {
 		return agent_username;
 	}

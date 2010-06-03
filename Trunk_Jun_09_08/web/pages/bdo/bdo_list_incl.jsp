@@ -141,7 +141,11 @@
 %>
               <tr>
                 <td nowrap>
-                  <a href="bdo.do?bdo_id=<bean:write name="bdos" property="BDO_ID"/>"><bean:write name="bdos" property="BDO_ID_ref" /></a>
+                  <a href="bdo.do?bdo_id=<bean:write name="bdos" property="BDO_ID"/>"><bean:write name="bdos" property="BDO_ID_ref" /></a><br />
+                  <logic:equal name="bdos" property="canceled" value="true">
+                  &nbsp;&nbsp;(<bean:message key="bdo.canceled" />)
+                  </logic:equal>
+                  
                 </td>
                 <td nowrap>
                   <bean:write name="bdos" property="dispcreatetime" />

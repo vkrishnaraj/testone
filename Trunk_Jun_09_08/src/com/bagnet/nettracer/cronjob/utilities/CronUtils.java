@@ -19,6 +19,7 @@ import org.hibernate.Transaction;
 import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.tracing.actions.BillingAction;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -32,7 +33,10 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.dto.BillingDTO;
 import com.bagnet.nettracer.tracing.forms.BillingForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 
 public class CronUtils {
@@ -166,12 +170,12 @@ public class CronUtils {
 	
 	public void emailPreviousMonthsBillingReport() {
 		Agent user = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
-		System.out.println(user.getUsername());
+		
 		BillingForm form = new BillingForm();
 
 		// Determine Dates
 		Calendar a = new GregorianCalendar();
-		System.out.println("Current date: " + a.getTime());
+		logger.info("Current date: " + a.getTime());
 		
 		int previousMonth = a.get(Calendar.MONTH) - 1;
 		a.set(Calendar.MONTH, previousMonth);
@@ -182,8 +186,8 @@ public class CronUtils {
 		a.set(Calendar.DAY_OF_MONTH, a.getActualMaximum(Calendar.DAY_OF_MONTH));
 		String endtime = new SimpleDateFormat(TracingConstants.DISPLAY_DATEFORMAT).format(a.getTime());
 		
-		System.out.println("Starttime: " + starttime);
-		System.out.println("Endtime: " + endtime);
+		logger.info("Starttime: " + starttime);
+		logger.info("Endtime: " + endtime);
 		
 		// Generate The Report
 		form.setCompanycode_ID(companyCode);
@@ -196,7 +200,7 @@ public class CronUtils {
 		Query q = BillingAction.generateQuery(form, sess, user);
 		
 		if (q == null) {
-			System.out.println("Exception...");
+			logger.info("Exception...");
 			return;
 		}
 		
@@ -234,13 +238,13 @@ public class CronUtils {
 		mb.append("<tr bgcolor=\"lightgreen\"><td width=\"200\"><strong>Sum Total:</strong></td><td><strong>" + sum +"</strong></td></tr>");
 		mb.append("</table>");
 
-		System.out.println(mb.toString());
+		logger.info(mb.toString());
 		
 		
 		
 		try {
 			HtmlEmail he = new HtmlEmail();
-			System.out.println(company.getVariable().getEmail_host());
+			logger.info(company.getVariable().getEmail_host());
 			he.setHostName(company.getVariable().getEmail_host());
 			he.setSmtpPort(company.getVariable().getEmail_port());
 			he.setFrom("support@nettracer.aero");
@@ -253,7 +257,7 @@ public class CronUtils {
 			he.send();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Errors...");
+			logger.info("Errors...");
 		}
 	}
 	
@@ -298,7 +302,7 @@ public class CronUtils {
 		ArrayList<String> alerts = new ArrayList<String>();
 		
 		int pendingSize = checkPendingSize();
-		if (pendingSize > 15) {
+		if (pendingSize > 100) {
 			alerts.add("Pending Size: " + pendingSize);
 		}
 		
@@ -329,7 +333,7 @@ public class CronUtils {
 				he.setTo(toList);
 				he.setSubject("Alert: " + companyCode);
 				he.setHtmlMsg(output.toString());
-				System.out.println(output.toString());
+				logger.info(output.toString());
 				he.setCharset("UTF-8");
 				he.send();
 			} catch (Exception e) {
@@ -338,8 +342,7 @@ public class CronUtils {
 
 		}
 	}
-
-	// TODO Auto-generated method stub	
+	
 	private int checkSQLServerSequentialFailures() {
 		
 		String sql = "SELECT top 50 wtq_status FROM wt_queue " +
@@ -413,11 +416,11 @@ public class CronUtils {
 				}
 				output.append("</table><br /><br />");
 			}
-			System.out.println(output.toString());
+			logger.info(output.toString());
 			try {
 				Company company = CompanyBMO.getCompany(companyCode);
 				HtmlEmail he = new HtmlEmail();
-				System.out.println(company.getVariable().getEmail_host());
+				logger.info(company.getVariable().getEmail_host());
 				he.setHostName(company.getVariable().getEmail_host());
 				he.setSmtpPort(company.getVariable().getEmail_port());
 				he.setFrom("support@nettracer.aero");
@@ -430,7 +433,7 @@ public class CronUtils {
 				he.send();
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Errors...");
+				logger.info("Errors...");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -501,5 +504,47 @@ public class CronUtils {
 				logger.error("closeUSAirOldMassOhdsInSQLServer: Exception encountered", e);
 			}
 		}
+	}
+	
+	public void sendUSFilesToCRM() {
+		Session sess = HibernateWrapper.getSession().openSession();
+
+		String query = "select i.incident_ID from Incident i left outer join i.crmFile c" + " where i.crmFile.incident is null and i.createdate >= :startDate "
+				+ " and ((i.createdate < :incCutoff) or (i.createdate = :incCutoff and i.createtime <= :incTimeCutoff)) " 
+				+ " and i.status.status_ID = :openStatus order by i.createdate asc, i.createtime asc";
+
+		Query q = sess.createQuery(query);
+		
+		Date startDate = DateUtils.convertToGMTDate(PropertyBMO.getValue("us.crm.start.date"), TracingConstants.DB_DATEFORMAT);
+		logger.info("**Start Date: " + startDate);
+
+		Calendar c = new GregorianCalendar();
+		c.setTime(TracerDateTime.getGMTDate());
+		c.add(Calendar.HOUR, (0 - 96));
+		Date incCutoff = c.getTime();
+
+
+		q.setDate("startDate", startDate);
+		q.setDate("incCutoff", incCutoff);
+		q.setTime("incTimeCutoff", incCutoff);
+		q.setInteger("openStatus", TracingConstants.MBR_STATUS_OPEN);
+
+		List<String> results = (List<String>) q.list();
+
+		logger.info("Total results: " + results.size());
+		int countUpdated = 0;
+
+		for (String o : results) {
+			ClientEventHandler h = new com.bagnet.clients.us.ClientEventHandlerImpl();
+			h.sendCrm(o, sess);
+			countUpdated += 1;
+			// TODO: REMOVE LIMIT
+			if (countUpdated >= 1) {
+				break;
+			}
+		}
+			
+		logger.info("Total files sent to CRM: " + countUpdated);
+		sess.close();
 	}
 }

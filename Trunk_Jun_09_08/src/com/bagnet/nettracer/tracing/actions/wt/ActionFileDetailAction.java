@@ -22,6 +22,8 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
@@ -80,14 +82,7 @@ public class ActionFileDetailAction extends Action {
 			agentStation = user.getStation();
 		}
 		
-		WorldTracerService service = SpringUtils.getWorldTracerService();
-		if (service.getWtConnector().doesUserNeedToEnterCaptcha(false)) {
-			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
-			response.sendRedirect("wtCaptcha.do");
-			return null;
-		}
 
-		
 		ActionMessages errors = new ActionMessages();
 		
 		String companyCode = user.getCompanycode_ID();
@@ -106,7 +101,13 @@ public class ActionFileDetailAction extends Action {
 		int day = Integer.parseInt(request.getParameter("day"));
 		int itemNum = Integer.parseInt(request.getParameter("itemNum"));
 		ActionFileType aft = ActionFileType.valueOf(catName);
-		afm.updateDetails(companyCode, wtStation, aft, day, itemNum, user);
+		try {
+			afm.updateDetails(companyCode, wtStation, aft, day, itemNum, user, WorldTracerWebService.getBasicDto(session));
+		} catch (CaptchaException e) {
+			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
+			response.sendRedirect("wtCaptcha.do");
+			return null;
+		}
 		
 		ActionRedirect redirect = new ActionRedirect(mapping.findForward("success"));
 		redirect.addParameter("category", catName);

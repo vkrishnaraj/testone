@@ -85,13 +85,24 @@ public final class ManageAgents extends Action {
 
 		dForm.set("companyCode", companyCode);
 
-		if ((request.getParameter("edit") != null && !request.getParameter("edit").equals("")) || request.getParameter("self_edit") != null) {
+		Agent quickSearchAgent = null;
+		
+		if (request.getParameter("searchAgentUsername") != null) {
+
+				String quickSearchString = request.getParameter("searchAgentUsername");
+				quickSearchAgent = AdminUtils.getAgentBasedOnUsername(quickSearchString, companyCode);
+		}
+		
+		if ((request.getParameter("edit") != null && !request.getParameter("edit").equals("")) || request.getParameter("self_edit") != null || quickSearchAgent != null) {
 			Agent a = null;
 			if (request.getParameter("self_edit") != null) {
 				a = user;
 			} else {
-				String agentID = request.getParameter("agentId");
-				a = AdminUtils.getAgent(agentID);
+				if (quickSearchAgent != null) {
+					a = quickSearchAgent;
+				} else {
+					a = AdminUtils.getAgent(request.getParameter("agentId"));
+				}
 			}
 			dForm.set("agent_id", "" + a.getAgent_ID());
 			dForm.set("station_id", "" + a.getStation().getStation_ID());
@@ -170,7 +181,7 @@ public final class ManageAgents extends Action {
 
 		if (request.getParameter("self_edit") != null) {
 			return mapping.findForward(TracingConstants.EDIT_SELF);
-		} else if (request.getParameter("addNew") != null || request.getParameter("edit") != null) {
+		} else if (request.getParameter("addNew") != null || request.getParameter("edit") != null || quickSearchAgent != null) {
 			if (request.getParameter("addNew") != null) {
 				request.setAttribute("aNew", "1");
 				dForm.set("max_ws_sessions", "0");

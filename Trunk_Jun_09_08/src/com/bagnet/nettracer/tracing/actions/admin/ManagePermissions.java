@@ -79,9 +79,9 @@ public final class ManagePermissions extends Action {
 
 				int audit_id = -1;
 
-				if (audit_group != null) audit_id = audit_group.getAudit_id();
-
-				AdminUtils.saveComponents(groupID, audit_id, request, user);
+				
+				
+				AdminUtils.saveComponents(groupID, audit_group, request, user);
 
 			} catch (Exception ex) {
 				ActionMessage error = new ActionMessage("error.creating.component");

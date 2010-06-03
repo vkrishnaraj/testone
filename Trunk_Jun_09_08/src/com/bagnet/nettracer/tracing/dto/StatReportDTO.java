@@ -24,6 +24,15 @@ public class StatReportDTO {
 	private String cendtime;
 	private String[] station_ID;
 	private int status_ID;
+	private Integer[] status_id_combo;
+
+	public Integer[] getStatus_id_combo() {
+		return status_id_combo;
+	}
+
+	public void setStatus_id_combo(Integer[] status_id_combo) {
+		this.status_id_combo = status_id_combo;
+	}
 
 	private int boarded;
 	private int perpassengers;
@@ -31,6 +40,15 @@ public class StatReportDTO {
 	private int numtop;
 
 	private int expensetype_ID;
+	private Integer[] expensetype_id_combo;
+
+	public Integer[] getExpensetype_id_combo() {
+		return expensetype_id_combo;
+	}
+
+	public void setExpensetype_id_combo(Integer[] expensetype_id_combo) {
+		this.expensetype_id_combo = expensetype_id_combo;
+	}
 
 	private String b_stationcode;
 	private String e_stationcode;
@@ -40,7 +58,34 @@ public class StatReportDTO {
 
 	private String[] faultstation_ID;
 	private int loss_code;
+	private Integer[] loss_code_combo;
+	private String primary_sort_order;
+	private String secondary_sort_order;
 	
+	public String getSecondary_sort_order() {
+		return secondary_sort_order;
+	}
+
+	public void setSecondary_sort_order(String secondary_sort_order) {
+		this.secondary_sort_order = secondary_sort_order;
+	}
+	
+	public String getPrimary_sort_order() {
+		return primary_sort_order;
+	}
+
+	public void setPrimary_sort_order(String primary_sort_order) {
+		this.primary_sort_order = primary_sort_order;
+	}
+
+	public Integer[] getLoss_code_combo() {
+		return loss_code_combo;
+	}
+
+	public void setLoss_code_combo(Integer[] loss_code_combo) {
+		this.loss_code_combo = loss_code_combo;
+	}
+
 	private String[] holdingstation_ID;
 
 	private int groupby;
@@ -60,6 +105,34 @@ public class StatReportDTO {
 
 	public void setCompany_ID(String[] company_ID) {
 		this.company_ID = company_ID;
+	}
+	
+	private String paxflightstarttime;
+	private String paxflightendtime;
+	private String[] createstation_ID;
+
+	public String[] getCreatestation_ID() {
+		return createstation_ID;
+	}
+
+	public void setCreatestation_ID(String[] createstation_ID) {
+		this.createstation_ID = createstation_ID;
+	}
+
+	public String getPaxflightstarttime() {
+		return paxflightstarttime;
+	}
+
+	public void setPaxflightstarttime(String paxflightstarttime) {
+		this.paxflightstarttime = paxflightstarttime;
+	}
+
+	public String getPaxflightendtime() {
+		return paxflightendtime;
+	}
+
+	public void setPaxflightendtime(String paxflightendtime) {
+		this.paxflightendtime = paxflightendtime;
 	}
 
 	/**

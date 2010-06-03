@@ -43,8 +43,31 @@ function updatePagination() {
     return true;
 }
 
+
+var buttonSelected = null;
+function validateThis(form) {
+    if (buttonSelected == null) {
+      return true;
+    } else {
+      if (validateRest(form) == true)  {
+          form.save.value="1";
+          disableButton(buttonSelected);
+          return true;
+      }
+      buttonSelected = null;
+      return false;
+    } 
+    return true;
+}
+
+
+function disableButton(aButton) {
+  	aButton.disabled = true;
+  	aButton.value= "Sending, <bean:message key='ajax.please_wait' />";
+}
+  
 </script>
-<html:form action="message.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return true;">
+<html:form action="message.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateThis(this);">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
     
@@ -114,6 +137,11 @@ function updatePagination() {
                   <a href="#" onclick="openWindow('pages/popups/airlines.jsp?key=recp_list[<%= k %>].company_code&submitform=1','airlines',500,600);return false;"><img src="deployment/main/images/nettracer/airline_codes.gif" border=0></a>
                   &nbsp;
                   <html:select name="recp_list" styleClass="dropdown" property="station_id" indexed="true">
+
+                      <option value="0" <% if (recp_list.getStation_id() == 0) { %> Selected <% } %>>
+                      	Please Select
+                      </option> 
+                
 <%
 					Agent a = (Agent) session.getAttribute("user");
 					if (UserPermissions.hasPermission(
@@ -142,7 +170,7 @@ function updatePagination() {
                     </logic:iterate>
                   </html:select>
                 </logic:notEqual>
-                <logic:equal name="recp_list" property="station_id" value="0">
+                <logic:equal name="recp_list" property="company_code" value="">
                   <html:text name="recp_list" property="company_code" size="3" maxlength="3" styleClass="textfield" indexed="true" onblur="submit()" />
                   <a href="#" onclick="openWindow('pages/popups/airlines.jsp?key=recp_list[<%= k %>].company_code&submitform=1','airlines',500,600);return false;"><img src="deployment/main/images/nettracer/airline_codes.gif" border=0></a>
                 </logic:equal>
@@ -190,7 +218,7 @@ function updatePagination() {
             <td colspan="2" align="center">
               <INPUT Id="button" type="button" value="Back" onClick="history.back()">
               &nbsp;
-              <html:submit styleId="button" property="send">
+              <html:submit styleId="button" property="send" onclick="buttonSelected = this;">
                 <bean:message key="send_message" />
               </html:submit>
             </td>

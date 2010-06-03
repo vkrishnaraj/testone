@@ -7,8 +7,10 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,6 +57,7 @@ public class Item implements Serializable {
 	private Date purchaseDate;
 	private Incident incident;
 	private BDO bdo;
+	private Set<Item_BDO> item_bdo;
 	private String _DATEFORMAT;
 	//private int categorytype_ID = 0;
 
@@ -71,6 +74,37 @@ public class Item implements Serializable {
 	private String locale;
 	
 	private int wt_bag_selected;
+	private boolean isItemOrBdoCanceled;
+	/**
+	 * @return Returns the bag_weight;
+	 * 
+	 * @hibernate.property type="double" 
+	 */
+	public double getBag_weight() {
+		return bag_weight;
+	}
+
+	public void setBag_weight(double bag_weight) {
+		this.bag_weight = roundToTwoDecimals(bag_weight);
+	}
+
+	/**
+	 * @return Returns the bag_weight_unit;
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getBag_weight_unit() {
+		return bag_weight_unit;
+	}
+
+	public void setBag_weight_unit(String bag_weight_unit) {
+		this.bag_weight_unit = bag_weight_unit;
+	}
+
+	private double bag_weight;
+	private String bag_weight_unit;
+	
+	
 	/**
 	 * @return Returns the wt_bag_selected;.
 	 * 
@@ -214,21 +248,42 @@ public class Item implements Serializable {
 	
 	
 
-	/**
-	 * @return Returns the bdo.
-	 * 
-	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.BDO"
-	 *                        column="bdo_ID" not-null="false"
-	 */
+//	/**
+//	 * @return Returns the bdo.
+//	 * 
+//	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.BDO"
+//	 *                        column="bdo_ID" not-null="false"
+//	 */
 	public BDO getBdo() {
-		return bdo;
+		if (item_bdo == null || item_bdo.size() == 0) {
+			return null;
+		} else {
+			Iterator<Item_BDO> i = item_bdo.iterator();
+			Item_BDO last = null;
+			while(i.hasNext()) {
+				last = (Item_BDO) i.next(); 
+			}
+			
+			bdo = last.getBdo();
+			isItemOrBdoCanceled = last.isCanceled() || bdo.isCanceled();
+			return bdo;
+		}
 	}
-	/**
-	 * @param bdo The bdo to set.
-	 */
-	public void setBdo(BDO bdo) {
-		this.bdo = bdo;
+	
+	public boolean isBdoEntryCanceled() {
+		if (bdo == null) {
+			getBdo();
+		} 
+		return isItemOrBdoCanceled;
 	}
+	
+//	/**
+//	 * @param bdo The bdo to set.
+//	 */
+//	public void setBdo(BDO bdo) {
+//		this.bdo = bdo;
+//	}
+
 	/**
 	 * @return Returns the photoes.
 	 * 
@@ -857,6 +912,24 @@ public class Item implements Serializable {
 		return xd.getDescription();
 	}
 	
+	public String getX1() {
+		if (xdescelement_ID_1 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
+		return xd.getCode();
+	}
+
+	public String getX2() {
+		if (xdescelement_ID_2 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_2);
+		return xd.getCode();
+	}
+
+	public String getX3() {
+		if (xdescelement_ID_3 <= 0) return "";
+		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
+		return xd.getCode();
+	}
+	
 	public String getXdescelement1Key() {
 		if (xdescelement_ID_1 <= 0) return "";
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_1);
@@ -873,6 +946,26 @@ public class Item implements Serializable {
 		if (xdescelement_ID_3 <= 0) return "";
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getKey();
+	}
+
+	/**
+	 * @hibernate.set inverse="true" order-by="bdo_ID"
+	 * @hibernate.key column="item_ID"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item_BDO"
+	 * @hibernate.index column="bdo_ID" 
+	 * @return Returns the items.
+	 */
+	public Set<Item_BDO> getItem_bdo() {
+		return item_bdo;
+	}
+
+	public void setItem_bdo(Set<Item_BDO> item_bdo) {
+		this.item_bdo = item_bdo;
+	}
+	
+	private double roundToTwoDecimals(double d) {
+    	DecimalFormat twoDForm = new DecimalFormat("#.##");
+    	return Double.valueOf(twoDForm.format(d));
 	}
 	
 }

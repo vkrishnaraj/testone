@@ -13,6 +13,7 @@ import java.util.Set;
  * @author Administrator
  * 
  * @hibernate.class table="work_shift"
+ * @hibernate.cache usage="read-only"
  */
 public class Work_Shift implements Serializable {
 

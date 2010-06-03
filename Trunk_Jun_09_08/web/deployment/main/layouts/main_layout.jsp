@@ -14,6 +14,9 @@
    Agent agent = (Agent)session.getAttribute("user");
    int total_menu = 0;
  
+   java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+   "org.apache.struts.action.LOCALE");
+   
    String forwardURI = (String) request.getAttribute(org.apache.catalina.Globals.FORWARD_REQUEST_URI_ATTR);
    
    if (forwardURI != null && forwardURI.contains("/WebHelp/")) {
@@ -33,12 +36,13 @@ response.addDateHeader("Expires", -1);
 }
 %>
 
-<html>
+
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%><html>
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
 <title>NetTracer</title>
-
 
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/designScripts.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
@@ -46,22 +50,40 @@ response.addDateHeader("Expires", -1);
 
 
 <logic:present name="user" scope="session">
+
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-1.3.2.min.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-ui-1.7.2.custom.min.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.form.js"></script>
-<link href="<%=request.getContextPath()%>/deployment/main/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.bgiframe.min.js"></script>
+<script language="javascript" SRC="<%=request.getContextPath()%>/deployment/main/js/date.js"></SCRIPT>
+<script language="javascript" SRC="<%=request.getContextPath()%>/deployment/main/js/field_validation.js"></SCRIPT>
 
+
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+
+<script language="javascript" src="<%=request.getContextPath()%>/pages/dynamic/sessionjs.jsp?<%=session.getId() %><%=agent.getUsername() %><%=myLocale.getDisplayLanguage() %>"></script>
+<link href="<%=request.getContextPath()%>/deployment/main/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
+<link href="<%=request.getContextPath()%>/pages/dynamic/sessionscss.jsp?<%=session.getId() %><%=agent.getUsername() %><%=myLocale.getDisplayLanguage() %>" rel="stylesheet" type="text/css" />
+<style type="text/css">
+ body{
+  <%
+  	if (session.getAttribute("bodyFontSize") == null) {
+  		session.setAttribute("bodyFontSize", ".7em");
+  	}
+  %>
+  font-size: <%=session.getAttribute("bodyFontSize") %>;
+ }
+</style>
 <!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
 </logic:present>
 <link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css" />
 <link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css" />
 <link href="<%=request.getContextPath()%>/deployment/main/css/styles.css" rel="stylesheet" type="text/css" />
+  
 
-
-<logic:present name="user" scope="session">
-<jsp:include page="menucss.jsp"/>
-</logic:present>
 
 </head>
 
@@ -76,7 +98,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 <logic:notPresent name="user" scope="session">
 
-
+<div id="ntcontent" style="font-size: .7em">
 <table cellspacing="0" id="bodytable"> 
   <tr> 
     <td id="topcell">
@@ -148,20 +170,40 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 </logic:notPresent>
 
-
-
-
 <logic:present name="user" scope="session">
+<div id="footer">
+	  <span id="footerR">&nbsp; </span>
 
+	  <span id="footerC" >
+	  MCOB600000026 | AUAB600013418 | -->
+	  <!--
+	  <a href="#" onclick="resizeFooter()">RESIZE FOOTER</a>  |
+	  <a href="#" onclick="changeFontSize()">FONT SIZE</a> | 
+	  <img src="deployment/main/images/fontsize.png" width="40" height="40" style="display: inline" />
+	  -->
+	  <INPUT TYPE="TEXT" SIZE="15" MAXLENGTH="16" VALUE="Quick Search" ID="quickSearchQuery" onClick="this.value=''" onKeyDown="quickSearchKey()" style="
+ 	  background:#FFFFFF url(deployment/main/images/search.png) no-repeat 2px 2px; 
+	  font-size: 12px;
+	  height: 12px;
+	border:0px solid #CCCCCC;
+	margin:3px 0px 0px 0px;
+	padding: 4px 4px 4px 22px;
+	display:inline;
+	  
+	  
+	  "/></span>
+	  <span id="footerL">&nbsp; </span>
+</div>
 
+<div id="ntcontent">
 
 <table cellspacing="0" id="bodytable"> 
   <tr> 
     <td id="topcell">
   <table cellspacing="0" id="toplayouttable"> 
         <tr> 
-          <td id="header" class="cssstandardthreecolumn">
-        <div id="headercontent">
+		<td id="header" class="cssstandardthreecolumn">
+		  <div id="headercontent" style="float:right">
         <table id="headercontent">
           <tr>
             <td><bean:message key="Logged_as"/>:</td>
@@ -182,7 +224,9 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
             <td colspan="2"><a href="logoff.do">[ <bean:message key="logout"/> ]</a></td>
           </tr>
         </table>
-        </div>
+</div>
+
+	
       </td> 
         </tr> 
 
@@ -266,10 +310,6 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 </div>
 
    
-   
-        
-
-
       </td> 
           </tr> 
        </table>
@@ -292,11 +332,8 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
   } 
   %>
 
-  
 </logic:present>
-       
       </td> 
-
         </tr> 
       </table>
   </td> 
@@ -315,285 +352,12 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
     </td>
   </tr> 
 </table>
-
+</div>
 <logic:present name="user" scope="session">
-<DIV ID="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></DIV>
-
+<html:form action="quickSearch.do" method="post"><input id="quickSearchQuery2" type="hidden" name="quickSearch" value=""/></html:form>
+<DIV ID="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:201"></DIV>
 <iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
-
-<script language="javascript">
-function hasurlfocus(col) {
-
-	
-	var r = document.body.createControlRange();
-	var x = document.getElementById("menucol_" + col + ".0");
-	
-	
-	x.contentEditable = 'true';
-	r.addElement(x);
-	x.contentEditable = 'false';
-	r.select();
-	
-
-}
-
-function nourlfocus(col) {
-	var x = document.getElementById("menucol_" + col + ".0");
-	x.focus();
-
-}
-
-function goleft() {
-	var currentFocus = document.activeElement.id;
-
-	if (currentFocus != null && currentFocus.length > 0) {
-		
-		var index = currentFocus.indexOf("_");
-		var index2 = currentFocus.indexOf(".");
-
-		var num;
-		if (index > 0 && currentFocus.indexOf("menucol")>=0) {
-			num = currentFocus.substring(index+1,index2);
-			num = num - 1;
-			
-			if (num == 0) {
-				var x = document.getElementById("menucol_0.0");
-				x.focus();
-				return;
-			}
-			if (num < 0) num = <%=total_menu%> - 1;
-
-			var x = document.getElementById("menucol_" + num + ".0");
-	
-			x.focus();
-			
-
-		}
-		
-	}
-	return false;
-
-}
-
-function goright() {
-	var currentFocus = document.activeElement.id;
-	if (currentFocus != null && currentFocus.length > 0) {
-		
-		var index = currentFocus.indexOf("_");
-		var index2 = currentFocus.indexOf(".");
-
-		var num;
-		if (index > 0 && currentFocus.indexOf("menucol")>=0) {
-			num = currentFocus.substring(index+1,index2);
-			num++;
-
-			if (num > (<%=total_menu%> - 1)) {
-				var x = document.getElementById("menucol_0.0");
-				x.focus();
-				return;
-			}
-			
-			var x = document.getElementById("menucol_" + num + ".0");
-			x.focus();
-
-		}
-		
-	}
-	return false;
-}
-
-function goup() {
-	var currentFocus = document.activeElement.id;
-	if (currentFocus != null && currentFocus.length > 0) {
-		
-		var index = currentFocus.indexOf(".");
-
-		var num;
-		if (index > 0 && currentFocus.indexOf("menucol")>=0) {
-			num = currentFocus.substring(index+1);
-			num=num-1;
-			if (num<0) {
-				num = 0;
-				for (i=20;i>0;i=i-1) {
-					if (document.getElementById(currentFocus.substring(0,index+1) + i) != null) {
-						num = i;
-						break;
-					}
-				}
-			}
-			
-			var r = document.body.createControlRange();
-			var x = document.getElementById(currentFocus.substring(0,index+1) + num);
-			x.focus();
-	
-		}
-		
-	}
-	return false;
-}
-
-function godown() {
-	var currentFocus = document.activeElement.id;
-	if (currentFocus != null && currentFocus.length > 0) {
-		
-		var index = currentFocus.indexOf(".");
-
-		var num;
-		if (index > 0 && currentFocus.indexOf("menucol")>=0) {
-			num = currentFocus.substring(index+1);
-			num++;
-			if (document.getElementById(currentFocus.substring(0,index+1) + num) == null) {
-				num = 0;
-			}
-			
-			var r = document.body.createControlRange();
-			var x = document.getElementById(currentFocus.substring(0,index+1) + num);
-			x.focus();
-	
-		}
-		
-	}
-	return false;
-}
-
-
-document.onkeydown = function(){
-	var currentFocus = document.activeElement.id;
-
-	if (window.event && window.event.keyCode == 117 ) {
-		window.event.keyCode = 505;
-		document.location.href="<%=request.getContextPath()%>/lostDelay.do?express=1";
-		return;
-	}
-
-	if (window.event && window.event.keyCode == 118 ) {
-		window.event.keyCode = 505;
-		document.location.href="<%=request.getContextPath()%>/damaged.do?express=1";
-		return;
-	}
-
-	if (window.event && window.event.keyCode == 119 ) {
-		window.event.keyCode = 505;
-		document.location.href="<%=request.getContextPath()%>/missing.do?express=1";
-		return;
-	}	
-
-	if (window.event && window.event.keyCode == 120 ) {
-		window.event.keyCode = 505;
-		document.location.href="<%=request.getContextPath()%>/expressOnHandBag.do?express=1";
-		return;
-	}	
-
-	if (window.event && window.event.keyCode == 121 ) {
-		window.event.keyCode = 505;
-		document.location.href="<%=request.getContextPath()%>/logon.do?taskmanager=1";
-		return;
-	}		
-
-
-	if (window.event && window.event.keyCode == 123 ) {
-		window.event.keyCode = 505;
-		openHelp('pages/WebHelp/nettracerhelp.htm');
-		return;
-	}		
-	
-
-	if (window.event && window.event.keyCode == 77 && window.event.ctrlKey) {
-		hasurlfocus(0);
-	}
-    
-    if (window.event && window.event.keyCode == 78 && window.event.ctrlKey) {
-      return false;
-    }
-
-	if (window.event && window.event.keyCode == 69 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(1);
-	}
-
- 	if (window.event && window.event.keyCode == 71 && window.event.ctrlKey) {
- 		window.event.keyCode = 505;
-		nourlfocus(2);
-	}
-
-	if (window.event && window.event.keyCode == 73 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(3);
-	}
-
-	if (window.event && window.event.keyCode == 79 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(4);
-	}
-
-	if (window.event && window.event.keyCode == 85 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(5);
-	}
-
-	if (window.event && window.event.keyCode == 83 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(6);
-	}
-
-	if (window.event && window.event.keyCode == 84 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(6);
-	}
-
-	if (window.event && window.event.keyCode == 82 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(7);
-	}
-
-	if (window.event && window.event.keyCode == 68 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(8);
-	}
-
-	if (window.event && window.event.keyCode == 76 && window.event.ctrlKey) {
-		window.event.keyCode = 505;
-		nourlfocus(9);
-	}
-
-	if(window.event && window.event.keyCode == 37 && currentFocus.indexOf("menucol") >= 0) { 
-		window.event.keyCode = 505;
-		goleft();
-	}
-	
-
-	if(window.event && window.event.keyCode == 39 && currentFocus.indexOf("menucol") >= 0) { 
-		window.event.keyCode = 505;
-		goright();
-	}
-	
-
-	if(window.event && window.event.keyCode == 38 && currentFocus.indexOf("menucol") >= 0) { 
-		window.event.keyCode = 505;
-		goup();
-	}	
-
-	if(window.event && window.event.keyCode == 40 && currentFocus.indexOf("menucol") >= 0) { 
-		window.event.keyCode = 505;
-		godown();
-	}
-	
-
-	if (window.event && window.event.keyCode == 27) {
-		var root = document.getElementById("menuList");
-		hideAllMenus(root,root);
-	}
-
-
-
-	if(window.event && window.event.keyCode == 505) { 
-		return false; 
-	}
-}
-
-</script>
 </logic:present>
-<jsp:include page="/pages/includes/analytics.jsp" />
 </body>
 </html>
 <% } %>

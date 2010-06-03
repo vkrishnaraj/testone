@@ -2,6 +2,8 @@ package com.bagnet.nettracer.integrations.events;
 
 import java.util.Date;
 
+import com.bagnet.nettracer.tracing.db.OHD_Log;
+
 public class BeornDTO {
 
 	private String tagNumber;
@@ -14,6 +16,7 @@ public class BeornDTO {
 	private String faultStation;
 	private String specialInstructions;
 	private String onhand;
+	private OHD_Log log;
 
 	public String getOnhand() {
 		return onhand;
@@ -155,6 +158,14 @@ public class BeornDTO {
 	 */
 	public void setFinalFlightDepartureDate(Date finalFlightDepartureDate) {
 		this.finalFlightDepartureDate = finalFlightDepartureDate;
+	}
+
+	public OHD_Log getLog() {
+		return log;
+	}
+
+	public void setLog(OHD_Log log) {
+		this.log = log;
 	}
 
 }

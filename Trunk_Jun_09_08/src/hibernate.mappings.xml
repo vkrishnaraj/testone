@@ -185,4 +185,28 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.ChecklistTaskOption" />
 		<mapping class="com.bagnet.nettracer.tracing.db.IncidentChecklist" />
 		<mapping class="com.bagnet.nettracer.tracing.db.AuditIncidentChecklist" />
+		<mapping class="com.bagnet.nettracer.tracing.db.SpecialFlag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.CrmFile" />
+		<mapping class="com.bagnet.nettracer.tracing.db.Item_BDO" />
+		
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCAddress" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCFile" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCContents" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPhone" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCItinerary" />
+		
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCAddress" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCFile" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCContents" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCPhone" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCItinerary" />
+		
+		<mapping class="com.bagnet.nettracer.tracing.db.IncidentControl" />
+		<mapping class="com.bagnet.nettracer.tracing.db.PaxMessageTrigger" />		
+		
+		
 		

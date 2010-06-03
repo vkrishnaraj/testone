@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="timezone"
+ * @hibernate.cache usage="read-only"
  */
 public class TimeZone implements Serializable {
 	private int id;

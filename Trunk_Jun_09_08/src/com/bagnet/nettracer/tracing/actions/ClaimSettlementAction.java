@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -27,6 +29,7 @@ import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -46,6 +49,8 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class ClaimSettlementAction extends Action {
+	private static Logger logger = Logger.getLogger(ClaimSettlementAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -214,8 +219,6 @@ public class ClaimSettlementAction extends Action {
 		TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(a.getCurrenttimezone()).getTimezone());
 		inc.set_TIMEZONE(tz);
 		
-		
-		
 		form.setIncident_ID(inc.getIncident_ID());
 		form.setIncidentItemType(inc.getItemtype().getDescription());
 		form.setIncidentStatus(inc.getStatus().getTextDescription(a));
@@ -265,6 +268,11 @@ public class ClaimSettlementAction extends Action {
 		form.setDateTakeover(convertDate(cs.getDateTakeover(), a));
 		form.setOfferDue(convertDate(cs.getOfferDue(), a));
 		form.setClaimType(cs.getClaimType());
+		
+		form.setOverall_weight(cs.getOverall_weight());
+		
+		//String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
+		//logger.error(">>>>>>>>>>>>default weight unit : " + myDefaultWeightUnit);
 		
 		// Page 2
 		form.setFirstName(cs.getFirstName());
@@ -362,6 +370,8 @@ public class ClaimSettlementAction extends Action {
 				cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
 				cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
 				cs.setRevisitedBy(form.getRevisitedBy());
+				
+				cs.setOverall_weight(form.getOverall_weight());
 
 				break;
 			case 2:
@@ -465,6 +475,16 @@ public class ClaimSettlementAction extends Action {
 		ClaimSettlement cs = new ClaimSettlement();
 		cs.setIncident(incident);
 		
+		//overall weight gets copied
+		//TODO: do a conversion from kg to lbs if in kg
+		Double myWeight = incident.getOverall_weight();
+		String myWeight_unit = incident.getOverall_weight_unit();
+		if (myWeight_unit.equalsIgnoreCase("kg")) {
+			myWeight = myWeight * 2.20462262;
+		}
+		myWeight = roundToTwoDecimals(myWeight);
+		cs.setOverall_weight(myWeight);
+		
 		if (incident.getPassenger_list().size() > 0) {
 			Passenger pax = (Passenger) incident.getPassenger_list().get(0);
 			
@@ -544,5 +564,8 @@ public class ClaimSettlementAction extends Action {
 		return DateUtils.formatDate(d, a.getDateformat().getFormat(), null, null);
 	}
 	
-	
+	private Double roundToTwoDecimals(Double d) {
+    	DecimalFormat twoDForm = new DecimalFormat("#.##");
+    	return Double.valueOf(twoDForm.format(d));
+	}
 }

@@ -25,6 +25,7 @@ public class ReservationIntegrationImpl extends
 		
 		HttpSession session = request.getSession();
 		Agent user = (Agent) session.getAttribute("user");
+		form.setAgent(user);
 		
 		// Get objects to populate
 		Passenger currentPax = form.getPassenger(0);

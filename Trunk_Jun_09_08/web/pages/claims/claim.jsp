@@ -21,7 +21,18 @@
   <SCRIPT LANGUAGE="JavaScript">
     
 	var cal1xx = new CalendarPopup();	
-
+	
+    function changebutton() {
+        document.claimForm.saveclaim.disabled = true;
+        document.claimForm.saveclaim.value = "<bean:message key="ajax.please_wait" />";
+        document.claimForm.save.disabled = false;
+      }
+      
+      function undoChangebutton() {
+        document.claimForm.saveclaim.disabled = false;
+        document.claimForm.saveclaim.value = "<bean:message key="button.claim.resolution.save" />";
+        document.claimForm.save.disabled = true;
+      }
 
   </SCRIPT>
   

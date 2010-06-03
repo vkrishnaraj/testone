@@ -61,4 +61,31 @@ public class EmailParser {
 			return null;
 		}
 	}
+	
+	public static String parsePaxMessageTrigger(String template, HashMap h) {
+		try {
+			int i1, i2;
+			String toparse = null;
+			String tmpValue = null;
+			while (template.indexOf("{") >= 0) {
+				i1 = template.indexOf('{');
+				i2 = template.indexOf('}', i1);
+				if (i2 > i1) {
+					toparse = template.substring(i1 + 1, i2);
+					tmpValue = (String) h.get(toparse); // get the parsed string
+					if (tmpValue != null) {
+						toparse = tmpValue;
+					}
+					if (tmpValue == null) {
+						toparse = "";
+					}
+					template = template.substring(0, i1) + toparse + template.substring(i2 + 1);
+				}
+			}
+
+			return template;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

@@ -90,7 +90,7 @@ function sortAgents(sortOrder) {
 
 
   </script>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="listNewPaxCommunication.do" method="post" onsubmit="fillzero(this.search_file_ref, 13); return true;">
     <input type=hidden name="message_ids" value="">
     <input type=hidden name="delete1" value="">

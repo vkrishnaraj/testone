@@ -12,6 +12,7 @@ import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
  * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
  * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
  * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
+ * @hibernate.cache usage="read-write"
  */
 public class DeliverCompany implements Serializable {
 	

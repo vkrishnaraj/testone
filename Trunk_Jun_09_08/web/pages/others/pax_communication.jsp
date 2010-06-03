@@ -6,6 +6,21 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 
+<script language="JavaScript">
+    function spellCheck()
+    {
+        // Build an array of form elements (not there values)
+        var elements = new Array(0);
+
+        // Your form elements that you want to have spell checked
+        elements[elements.length] = document.PaxCommunicationForm.agentNewComment;
+
+        // Start the spell checker
+        startSpellCheck( "deployment/spellcheck/", elements );
+    }
+
+</script>
+
 <tr>
   <td colspan="3" id="pageheadercell">
   <div id="pageheaderleft">
@@ -41,7 +56,7 @@
   </td>
 </tr>
 <tr>
-  <td id="middlecolumn"><html:form action="paxCommunication.do" method="post">
+  <td id="middlecolumn"><html:form action="paxCommunication.do" method="post" >
     <html:hidden property="incident_id"/>
     <html:hidden property="id"/>
 
@@ -61,7 +76,7 @@
       </tr>
       <tr>
         <td align="center"><html:textarea property="text"
-          name="PaxCommunicationForm" cols="80" rows="15" style="background-color: #EDEDED" readonly="readonly"></html:textarea> <br />
+          name="PaxCommunicationForm" cols="80" rows="15" style="background-color: #EDEDED" readonly="true"></html:textarea> <br />
         </td>
       </tr>
      <logic:notEqual name="PaxCommunicationForm" property="readOnly" value="true">
@@ -82,9 +97,10 @@
       </logic:equal> 
       -->
       <tr><td><center><bean:message key="please.type.new.message.here" /></center></td></tr>
+            <tr><td align="right"><button id="button" type="button" onclick="openspellchecker(); return false;">Spell Check</button></td></tr>
       <tr>
-        <td align="center"><html:textarea property="agentNewComment"
-          name="PaxCommunicationForm" cols="80" rows="7"></html:textarea> <br />
+        <td align="center"><html:textarea property="agentNewComment" 
+          name="PaxCommunicationForm" cols="80" rows="7" styleId="agentNewComment"></html:textarea><br />
           <logic:notEqual name="PaxCommunicationForm" property="isThereNewPaxComment" value="YES">
             <html:submit property="save" styleId="button">
               <bean:message key="button.send.message" />
@@ -97,6 +113,27 @@
 		  </logic:equal>
         </td>
       </tr>
+      
+<div id="modalalertdiv" style="display:none;">
+
+<script type="text/javascript">
+
+function openspellchecker(){
+		jQuery.ui.dialog.defaults.bgiframe = true;
+       		jQuery("#dialog").dialog({bgiframe : true,
+ 				autoOpen: false, modal: true, draggable: true, resizable: false, 
+ 				width: 370, height: 340, title: 'NetTracer - Spell Check', position: ['center',100] 
+		});
+		jQuery('#dialog-inner-content').html('<iframe src ="deployment/spellcheck/spellcheck-entry.jsp?op=1&element_0=forms[0].elements[\'agentNewComment\']" width="100%" height="300"><p>Your browser does not support iframes.</p></iframe>');	//put iframe here
+		jQuery("#dialog").dialog("open");	
+
+} //End "openspellchecker" function
+
+function closespellchecker() {
+	jQuery("#dialog").dialog("close");
+}
+
+</script>
      </logic:notEqual>
     </table>
   </html:form>

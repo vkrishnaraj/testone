@@ -230,5 +230,18 @@ public class DateUtils {
 		return a.get(Calendar.YEAR) == b.get(Calendar.YEAR) 
 			&& a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) == b.get(Calendar.DATE);
 	}
+	
+	public static boolean isDateRangeOutsideLimit(Date startDate, Date endDate, long MAX_NUMBER_OF_DAYS) {
+		boolean result = false;
+		
+		long myEndL = endDate.getTime() + endDate.getTimezoneOffset();
+		long myStartL = startDate.getTime() + startDate.getTimezoneOffset();
+		long MILLISECS_PER_DAY = 24 * 60 * 60 * 1000;
+		long dateRangeInDays = (myEndL - myStartL) / MILLISECS_PER_DAY; 
+		if (dateRangeInDays > MAX_NUMBER_OF_DAYS) {
+			result = true;
+		}		
+		return result;
+	}	
 
 }

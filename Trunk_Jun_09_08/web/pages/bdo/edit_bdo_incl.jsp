@@ -10,9 +10,16 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.BDOForm"%>
-<script language=javascript>
-  
 
+
+
+<%@page import="com.bagnet.nettracer.tracing.utils.StringTemplateProcessor"%>
+<%@page import="org.apache.struts.util.MessageResources"%>
+<%@page import="java.util.Locale"%><link type="text/css" title="combobox" href="<%=request.getContextPath()%>/deployment/main/css/jQuery.CustomCombobox-min.css" rel="stylesheet" />
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jQuery.CustomCombobox-1.2.1-min.js"></script>
+
+<script language="javascript">
+  
 function toggledc(o) {
 	o.changeservice.value = "1";
 
@@ -33,13 +40,25 @@ function toggledc(o) {
       }
     }
 
+    function cancelBdo() {
+    	var answer = confirm('<bean:message key="bdo.cancel.confirmation" />');
+    	if (answer) {
+        	window.location = 'cancelBdo.do?bdo_id=<bean:write name="BDOForm" property="BDO_ID" />';
+    	}
+    }
 
-
+    function cancelItem(item) {
+    	var answer = confirm('<bean:message key="bdo.cancel.item.confirmation" />');
+    	if (answer) {
+        	window.location = 'cancelBdo.do?bdo_id=<bean:write name="BDOForm" property="BDO_ID" />&item_id=' + item;
+    	}
+    }
 
 </script>
 
 <%
-  Agent a = (Agent)session.getAttribute("user");
+Agent a = (Agent)session.getAttribute("user");
+BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 %>
   <bean:define id="ohd" name="BDOForm" property="ohd" type="com.bagnet.nettracer.tracing.db.OHD"/>
   <tr>
@@ -86,26 +105,33 @@ function toggledc(o) {
     
     <td id="middlecolumn">
       
-      <div id="maincontent">
+	    <div id="maincontent">
+		    <span style="float: left">
         <h1 class="green">
           <bean:message key="header.bdo_general" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#bdo/bdo.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-        </h1>
+  </h1>
+        <span class="reqfield">*</span>
+        <bean:message key="message.required" />
+
+  </span>
         
+        <span style="align:right; float:right;">
         <logic:present name="wt_id" scope="request">
          
-        <p align="right">
         <% if(request.getAttribute("wt_id")!=null&&!request.getAttribute("wt_id").equals(""))
         	out.println("WorldTracer ID:");
         	out.println(request.getAttribute("wt_id"));
-        %>	
-        </p>
+        %>
+        
         
         </logic:present>
+		<logic:equal name="BDOForm" property="canceled" value="false">
+			<a href="#" onclick="cancelBdo()"><bean:message key="button.cancel.bdo"/></a>
+		</logic:equal>        
+        </span>
         
-        <span class="reqfield">*</span>
-        <bean:message key="message.required" />
-        <font color=red>
+        <font color="red">
           <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
         </font>
         
@@ -208,7 +234,134 @@ function toggledc(o) {
         <a name="contact"></a>
         <h1 class="green">
           <bean:message key="header.passenger_info" />
-        </h1>
+  	</h1>
+	<br/>
+
+<script type="text/javascript">
+	var passengerArr = ["passenger[0].lastname", "passenger[0].firstname", "passenger[0].middlename"];
+	var addressArr = ["passenger[0].address1", "passenger[0].address2", "passenger[0].city", "passenger[0].state_ID", "passenger[0].province","passenger[0].zip","passenger[0].countrycode_ID","passenger[0].dispvalid_bdate", "passenger[0].dispvalid_edate","passenger[0].","passenger[0].email"];
+	var phoneArr = ["passenger[0].homephone", "passenger[0].workphone", "passenger[0].altphone", "passenger[0].mobile", "passenger[0].pager", "passenger[0].hotel"];
+	
+	function mapData(item, arr) {
+	    var data = item.data("source").data;
+	    for (var i in arr) {
+		var element = document.getElementsByName(arr[i])[0];
+		if (element != null && element.type != null) {
+			if (element.type == 'text') {
+				value = data[arr[i]];
+				if (value == null) { element.value = '';} else {
+					element.value = data[arr[i]]; 
+				}
+			} else if (element.type == 'select-one') {
+				for (var x=0; x< element.length; x++) {
+					if(element[x].value == data[arr[i]]) {
+						element[x].selected = true;
+					}
+				}
+			}
+		}
+	    }
+    }
+
+    jQuery(document).ready(function() {
+
+        function DropdownData() {
+            this.shortd = "";
+	    this.longd = "";
+	    this.data = {};
+	    }
+
+	var passengers = [<%=myform.getPassengerlist().size() %>];
+        var addresses = [<%=myform.getPassengerlist().size() %>];
+	var phonenumbers = [<%=myform.getPassengerlist().size() %>]; 
+
+	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
+
+		<%
+		MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		Locale locale = new Locale(a.getCurrentlocale());
+		
+		StringTemplateProcessor p = new StringTemplateProcessor();
+		p.addClass(passenger);
+		String paxNames = p.fillValues("{firstname} {lastname}");
+		String paxData = p.fillValues("'passenger[0].firstname': '{firstname}', 'passenger[0].lastname': '{lastname}'");
+		
+		
+		String addShort = messages.getMessage(locale, "gen.passenger") + " " + i + " " + messages.getMessage(locale, "gen.address");
+		String addLong = p.fillValues("{firstname} {lastname} <br />{address1} {address2}<br/>{city}, {state_ID}{province} {zip}<br />{countrycode_ID}");
+		String addData = p.fillValues("'passenger[0].address1': '{address1}', 'passenger[0].address2': '{address2}', 'passenger[0].city': '{city}', 'passenger[0].state_ID': '{state_ID}', 'passenger[0].province': '{province}','passenger[0].zip': '{zip}','passenger[0].countrycode_ID': '{countrycode_ID}','passenger[0].dispvalid_bdate': '{dispvalid_bdate}', 'passenger[0].dispvalid_edate': '{dispvalid_edate}','passenger[0].email':'{email}'");
+		
+		String phoneShort = messages.getMessage(locale, "gen.passenger") + " " + i + " " + messages.getMessage(locale, "gen.phone");
+		String phoneLong = p.fillValues("Name: {firstname} {lastname}<br />Home: {homephone}<br/> Work: {workphone}<br/>Others: {altphone}{mobile} {pager}<br/> Hotel: {hotel} ");
+		String phoneData = p.fillValues("'passenger[0].homephone': '{homephone}', 'passenger[0].workphone': '{workphone}', 'passenger[0].altphone': '{altphone}', 'passenger[0].mobile': '{mobile}', 'passenger[0].pager': '{pager}', 'passenger[0].hotel':'{hotel}'");
+		%>
+
+		var pax = new DropdownData();
+		pax.shortd = "<%=paxNames %>";
+		pax.longd = "<%=paxNames %>";
+		pax.data={<%=paxData%>};
+		passengers[<%=i%>] = pax;
+
+        var address = new DropdownData();
+	    address.shortd = "<%=addShort%>";
+		address.longd = "<%=addLong%>";
+		address.data={<%=addData%>};
+		addresses[<%=i%>] = address;
+
+        var phone = new DropdownData();
+	    phone.shortd = "<%=phoneShort%>";
+		phone.longd = "<%=phoneLong%>";
+		phone.data={<%=phoneData%>};
+	    phonenumbers[<%=i%>] = phone;
+	</logic:iterate>
+
+
+        var template = "<div style='border-bottom:1px gray dashed;'>" +
+                            "{longd}" +
+                       "</div>";
+
+        var c = jQuery(".addressList").customcombobox(addresses, {
+            width: 400,
+            template: template,
+            topMsg: '<bean:message key="pick.a.address" />',
+            displayPropertyName: "shortd",
+            useEdgeDetection: true,
+	    onSelect: function(item) {
+	    	mapData(item, addressArr);
+            }
+        });
+        
+        var c = jQuery(".passengerList").customcombobox(passengers, {
+            width: 400,
+            template: template,
+            topMsg: '<bean:message key="pick.a.passenger" />',
+            displayPropertyName: "shortd",
+            useEdgeDetection: true,
+            onSelect: function(item) {
+	    	mapData(item, passengerArr);
+            }
+	    });
+
+        var c = jQuery(".phoneList").customcombobox(phonenumbers, {
+            width: 400,
+            template: template,
+            topMsg: '<bean:message key="pick.a.address" />',
+            displayPropertyName: "shortd",
+            useEdgeDetection: true,
+            onSelect: function(item) {
+	    	mapData(item, phoneArr);
+            }
+        });
+
+
+    });
+</script>
+<span class="passengerList" style="margin-right: 10px;"></span>
+<span class="addressList" style="margin-right: 10px;"></span>
+<span class="phoneList"  style="margin-right: 10px;"></span>
+<span class="bagList"  style="margin-right: 10px;"></span>
+
+
         <logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
@@ -461,13 +614,21 @@ function toggledc(o) {
             </logic:notEqual>
             <tr>
               <td valign=top>
-                <b><logic:equal name="BDOForm" property="choosebags" value="1">
+                <b>
+                <logic:equal name="BDOForm" property="choosebags" value="1">
                 
                 <input type="checkbox" name="bagchosen" value="<%= theitem.getBagnumber() %>">
               </logic:equal>
               <bean:message key="colname.bag_number" />
               : &nbsp;&nbsp;
               <%= theitem.getBagnumber() + 1 %>
+              <logic:notEqual name="BDOForm" property="choosebags" value="1">
+              	<logic:equal name="BDOForm" property="canceled" value="false">
+              		<% if (theitem != null && theitem.getBdo() != null &&  theitem.getBdo().getBDO_ID() == myform.getBDO_ID() && (theitem.getStatus().getStatus_ID() == TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY || theitem.getStatus().getStatus_ID() == TracingConstants.ITEM_STATUS_TOBEDELIVERED)) { %>
+              			<br /><a href="#" onclick="cancelItem(<%=theitem.getItem_ID() %>)"><bean:message key="button.cancel.item"/></a>
+              		<% } %>
+              	</logic:equal>
+              </logic:notEqual>
             </td>
             <td valign=top>
               <bean:message key="colname.bag_status" />
@@ -522,11 +683,16 @@ function toggledc(o) {
     <tr>
       <td align="center" valign="top">
         <br>
+        <logic:equal name="BDOForm" property="canceled" value="true">
+        	<bean:message key="bdo.cannot.save.due.to.cancel" />
+        </logic:equal>
+        <logic:equal name="BDOForm" property="canceled" value="false">
         <html:hidden property="save" value = ""/>
                 <html:hidden property="save" value = ""/>
         <html:button property="saveButton" styleId="button" onclick="changebutton(); if(validateReqBDO(document.BDOForm)) {document.BDOForm.submit();} else {undoChangebutton();}">
           <bean:message key="button.bdo_send" />
         </html:button>
+        </logic:equal>
         <logic:present name="showprint" scope="request">
         &nbsp;&nbsp;
         <input id="button" type="button" name="print" value="<bean:message key="button.bdo_sendprint" />" onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','BDOReceipt',800,600);return false;">

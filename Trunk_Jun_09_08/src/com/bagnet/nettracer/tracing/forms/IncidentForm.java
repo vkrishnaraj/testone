@@ -16,6 +16,7 @@ import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.CrmFile;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -78,15 +79,45 @@ public final class IncidentForm extends ValidatorForm {
 	private Date printedreceipt;
 	private String bagTagNumber;
 	private String language;
+	
+	private Double overall_weight;
+	private String overall_weight_unit;
 
+	public String getOverall_weight_unit() {
+		return overall_weight_unit;
+	}
+	public void setOverall_weight_unit(String overall_weight_unit) {
+		this.overall_weight_unit = overall_weight_unit;
+	}
+	public Double getOverall_weight() {
+		return overall_weight;
+	}
+	public void setOverall_weight(Double overall_weight) {
+		this.overall_weight = overall_weight;
+	}
+	
+	
 	// airline membership
 	private Company company;
 	private String membershipnum;
 	private String membershipstatus;
 	private String otherSystemInformation;
+	private CrmFile crmFile;
 	
 	private boolean notifiedOfRequirements;
+	private boolean remarkEnteredWhenNotifiedOfRequirements;
 	
+	
+	//a WestJet feature
+	public boolean isRemarkEnteredWhenNotifiedOfRequirements() {
+		return remarkEnteredWhenNotifiedOfRequirements;
+	}
+	public void setRemarkEnteredWhenNotifiedOfRequirements(
+			boolean remarkEnteredWhenNotifiedOfRequirements) {
+		this.remarkEnteredWhenNotifiedOfRequirements = remarkEnteredWhenNotifiedOfRequirements;
+	}
+
+
 	private WorldTracerFile wtFile;
 	{
 		String defChecked = TracerProperties.get(TracerProperties.DEFAULT_CHECKED_LOCATION);
@@ -154,6 +185,7 @@ public final class IncidentForm extends ValidatorForm {
 		if(defChecked != null) {
 			checkedlocation = defChecked;
 		}
+		
 	}
 
 	/*
@@ -1178,5 +1210,13 @@ public final class IncidentForm extends ValidatorForm {
 
 	public void setPcn_id(String pcn_id) {
 		this.pcn_id = pcn_id;
+	}
+
+	public CrmFile getCrmFile() {
+		return crmFile;
+	}
+
+	public void setCrmFile(CrmFile crmFile) {
+		this.crmFile = crmFile;
 	}
 }

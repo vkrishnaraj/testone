@@ -6,6 +6,9 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
+
 <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <tr>
   
@@ -36,9 +39,104 @@
         	</div>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
+		
+		
+						<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+				<%@ page import="org.hibernate.Session"%>
+				<%@ page import="com.bagnet.nettracer.hibernate.HibernateWrapper"%>
+				<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+				<%@ page import="org.hibernate.SQLQuery"%>
+				<%@ page import="org.hibernate.Hibernate"%>
+				<%@ page import="java.util.List"%>
+				
+
+				<%
+				Agent a = (Agent) session.getAttribute("user");
+				ResourceBundle bundle = ResourceBundle.getBundle(
+						"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+				
+				boolean p1 = UserPermissions.hasPermission("System Return Rates", a);
+				boolean p2 = UserPermissions.hasPermission("Station Return Rates", a);
+
+
+				if (p1 || p2) {
+					Session sess = null;
+					try {
+						int station_id = a.getStation().getStation_ID();
+						sess = HibernateWrapper.getDirtySession().openSession();
+						SQLQuery query = sess.createSQLQuery("select textArea1, textArea2 from z_task_manager_notice where station_id = " + station_id);
+						query.addScalar("textArea1", Hibernate.STRING);	
+						query.addScalar("textArea2", Hibernate.STRING);
+						List queryResults = query.list();
+						if (queryResults != null && queryResults.size() > 0) {
+							Object[] array = (Object[]) queryResults.get(0);
+							
+							if (p1 && array.length >= 2 && array[1] != null) {
+								String system = ((String)array[1]).replaceAll("000000000000","");
+								%><%=system %><%
+
+							}
+							if (p2 && array.length >= 1 && array[0] != null) {
+								String station = ((String)array[0]).replaceAll("000000000000","");
+								station = station.replaceAll("n/a%","n/a");
+								%><%=station %><%
+
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("Error displaying return rate statistics: " + e);
+					} finally {
+						sess.close();
+					}
+				}
+
+				%>
+		
+		
+		
         <table class="form2" cellspacing="0" cellpadding="0">
           <logic:present name="activityList" scope="session">
-          
+             
+            <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
+              <logic:equal name="activityDTO" property="group" value="-1">
+              		<logic:equal name="activityDTO" property="entries" value="0">
+              		</logic:equal>
+              		<logic:greaterThan name="activityDTO" property="entries" value="0">
+              			<bean:define id="captchaFlag" value="yes"/>
+              		</logic:greaterThan>
+              </logic:equal>
+            </logic:iterate>
+            
+            <logic:equal name="activityDTO" property="displayCaptcha" value="true">
+            	Display Captcha
+            </logic:equal>   
+            <logic:present name="captchaFlag"> 
+	            <tr>
+	              <td class="header" style="background-color: red">
+	                <b><bean:message key="tasks.captchas" /></b>
+	              </td>
+	              <td class="header" style="background-color: red">
+	                <b><bean:message key="entries" /></b>
+	              </td>
+	            </tr>
+	            <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
+	              <logic:equal name="activityDTO" property="group" value="-1">
+	                <tr>
+	                  <td>
+	                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+	                  </td>
+	                  <td>
+	                    <bean:write name="activityDTO" property="entries" />
+	                  </td>
+	                </tr>
+	              </logic:equal>
+	            </logic:iterate>
+	            
+	            <tr>
+				  <td colspan="2" class="white">&nbsp;</td>
+				</tr>
+            </logic:present>
+                     
             <tr>
               <td class="header">
                 <b><bean:message key="tasks.incidents" /></b>
@@ -51,7 +149,27 @@
               <logic:equal name="activityDTO" property="group" value="1">
                 <tr>
                   <td>
-                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+            <%
+				String myKey = activityDTO.getActivityinfo().replaceAll(" ", "_");
+				String myCaptionForLink = (String)bundle.getString( myKey);
+				//check to see if the text has preceeding triple &nbsp; - if so, place the indentation outside the href link
+				String myIndent = "";
+				String mySearch = "&nbsp;";
+				String result = "";
+				
+				int myIndex;
+				int totalNumberOfCharacters = myCaptionForLink.length();
+				do {
+					myIndex = myCaptionForLink.indexOf(mySearch);
+					if (myIndex != -1) {
+						result = myCaptionForLink.substring(0, myIndex);
+						myIndent += mySearch;
+						result += myCaptionForLink.substring(myIndex + mySearch.length());
+						myCaptionForLink = result;
+					}
+				} while (myIndex != -1);
+			%>
+                    <%=myIndent %><a href='<bean:write name="activityDTO" property="activityloc"/>'><%=myCaptionForLink %></a>
                   </td>
                   <td>
                     <bean:write name="activityDTO" property="entries" />

@@ -50,6 +50,7 @@ import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 /**
@@ -83,7 +84,7 @@ public class SearchIncidentAction extends Action {
 				WorldTracerService wts = SpringUtils.getWorldTracerService();
 				try {
 					wts.getWtConnector().initialize();
-					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE, user);
+					foundinc = wts.getIncidentForAHL(request.getParameter("wt_id"), WTStatus.ACTIVE, user, WorldTracerWebService.getBasicDto(session));
 				}
 				catch(WorldTracerRecordNotFoundException ex) {
 					ActionMessages errors = new ActionMessages();

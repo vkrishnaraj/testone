@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 <html:form action="worldtracerpxf.do" method="post" onsubmit="return validateWorldTracerPXFForm(this);">
 	<html:javascript formName="worldTracerPXFForm" />
 
@@ -39,31 +39,8 @@
         </font>
          
           <table class="form2" cellspacing="0" cellpadding="0">
-          	<!-- All Stations Section -->
-          	<tr>
-          		<td><html:radio property="pxfOption" value="ALL_STATIONS" /></td>
-          		<td>All Stations</td>
-          		<td>&nbsp;</td>
-          		<td><html:select name="worldTracerPXFForm" property="allStationsArea" styleClass="dropdown">
-					<html:option value="AA">AA Area</html:option>
-					<html:option value="FW">FW Area</html:option>
-					<html:option value="AP">AP Area</html:option>
-				</html:select></td>
-          	</tr>
-          	<!-- Region Section -->
             <tr>
-            	<td><html:radio property="pxfOption" value="REGION" /></td>
-            	<td>Region</td>
-            	<td><html:text property="regionCode" size="5" maxlength="3" styleClass="textfield"/></td>
-            	<td><html:select name="worldTracerPXFForm" property="regionArea" styleClass="dropdown">
-					<html:option value="AA">AA Area</html:option>
-					<html:option value="FW">FW Area</html:option>
-					<html:option value="AP">AP Area</html:option>
-				</html:select></td>
-            </tr>
-            <!-- Action Message Addresses Section -->
-            <tr>
-            	<td><html:radio property="pxfOption" value="ACTION_MESSAGE_ADDRESS" /></td>
+
             	<td>Action Message Address</td>
             	<td>&nbsp;</td>
             	<td>&nbsp;</td>

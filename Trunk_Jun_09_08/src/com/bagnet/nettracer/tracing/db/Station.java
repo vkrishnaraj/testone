@@ -9,6 +9,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
  * @author Administrator
  * 
  * @hibernate.class table="Station"
+ * @hibernate.cache usage="read-write"
  */
 public class Station implements Serializable {
 

@@ -189,6 +189,17 @@ public class ClaimSettlement {
 
 	@Column(length = 9)
 	private String zip;
+	
+	@Basic
+	private double overall_weight;
+
+	public double getOverall_weight() {
+		return overall_weight;
+	}
+
+	public void setOverall_weight(double overall_weight) {
+		this.overall_weight = overall_weight;
+	}
 
 	public String getAddress1() {
 		return address1;

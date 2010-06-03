@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  * @author Administrator
  * 
  * @hibernate.class table = "ExpenseType"
+ * @hibernate.cache usage="read-only"
  */
 public class ExpenseType extends LocaleBasedObject implements Serializable {
 	private int Expensetype_ID;

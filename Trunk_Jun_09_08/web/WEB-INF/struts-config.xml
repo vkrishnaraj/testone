@@ -10,10 +10,16 @@
 			<form-property name="username" type="java.lang.String" />
 			<form-property name="password" type="java.lang.String" />
 		</form-bean>
+		<form-bean name="toggleForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="toggleType" type="java.lang.Integer" />
+			<form-property name="fontSize" type="java.lang.String" />
+			<form-property name="fsarIdx" type="java.lang.Integer" />
+		</form-bean>
 		<form-bean name="passresetForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="password1" type="java.lang.String" />
 			<form-property name="password2" type="java.lang.String" />
 		</form-bean>
+		<form-bean name="quickSearchForm" type="com.bagnet.nettracer.tracing.forms.QuickSearchForm" />
 		<form-bean name="manualQueueForm" type="com.bagnet.nettracer.tracing.forms.ManualQueueForm" />
 		<form-bean name="incidentForm" type="com.bagnet.nettracer.tracing.forms.IncidentForm" />
 		<form-bean name="forwardOnHandForm" type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
@@ -241,6 +247,8 @@
 		<forward name="success" path="user_menu" />
 		<forward name="error" path="error_page" />
 		<forward name="insertsuccess" path="insert_success" />
+		<forward name="updatesuccess" path="update_file_success" />
+		<forward name="closesuccess" path="close_file_success" />
 		<forward name="invalidtoken" path="invalid_token" />
 		<forward name="searchincident" path="search_incident" />
 		<forward name="searchOnHand" path="search_onhand" />
@@ -264,6 +272,7 @@
 		<forward name="ldhistorical" path="ld_historical" />
 		<forward name="damagedhistorical" path="damaged_historical" />
 		<forward name="insertonhandsuccess" path="insert_onhand_success" />
+		<forward name="updateonhandsuccess" path="update_onhand_success" />
 		<forward name="massonhandsuccess" path="mass_onhand_success" />
 		<forward name="claimmain" path="claim_resolution" />
 		<forward name="claimprorate" path="claim_prorate" />
@@ -357,6 +366,7 @@
 		<forward name="viewmassohd" path="viewmass_ohd" />
 		<forward name="lostfound" path="lost_found" />
 		<forward name="lostfound_success" path="lost_found_success" />
+		<forward name="update_lostfound_success" path="update_lost_found_success" />
 		<forward name="searchlostfound" path="search_lostfound" />
 		<forward name="passview" path="pass_view_only" />
 		<forward name="osi" path="osi" />
@@ -364,6 +374,7 @@
 		<forward name="pax_communication" path="pax_communication" />
 		<forward name="listnewpaxcommunication" path="list_new_pax_communication" />
 		<forward name="closeonhandsuccess" path="close_onhandsuccess" />
+		<forward name="confirmcloseonhandsuccess" path="confirm_close_onhand_success" />
 		<forward name="expensepayoutapprovedsuccess" path="expense_payoutapprovedsuccess" />
 		<forward name="expensepayoutdeniedsuccess" path="expense_payoutdeniedsuccess" />
 		<forward name="bdo" path="bdo_page" />
@@ -375,6 +386,7 @@
 
 		
 		<forward name="incident_checklist" path="incidentchecklist" />
+		<forward name="ajax_push_to_crm" path="ajax_push_to_crm" />
 
 		<forward name="interimexpenserequest" path="interim_expenserequest" />
 		<forward name="createdinterimexpenserequest" path="created_interimexpenserequest" />
@@ -427,7 +439,7 @@
 		<forward name="auditClaimsCompareDetail" path="audit_ClaimsCompareDetail" />
 
 		<forward name="billingReport" path="billing_Report" />
-
+		
 		<forward name="ajax_agentassigned" path="ajax_agentassigned" />
 		<forward name="ajax_faultstation" path="ajax_faultstation" />
 		<forward name="ajax_faultstationall" path="ajax_faultstationall" />
@@ -499,6 +511,9 @@
 			<forward name="save_success" path="claim_resolution.do" redirect="true"></forward>
 		</action>
 		
+		
+		<action path="/cancelBdo" type="com.bagnet.nettracer.tracing.actions.CancelBdoAction" scope="request" validate="false" ></action>
+		
 		<action path="/BatchApproveExpenses" parameter="BatchApprove" type="com.bagnet.nettracer.tracing.actions.expense.BatchApproveExpenseAction" name="interimExpenseRequestForm" scope="request" validate="false" >
 		</action>
 		
@@ -528,7 +543,7 @@
 		<action path="/request_on_hand" type="com.bagnet.nettracer.tracing.actions.RequestOnHandAction" name="requestOnHandForm" scope="request" validate="false"></action>
 
 		<!-- reporting -->
-		<action path="/statReport" type="com.bagnet.nettracer.tracing.actions.StatReportAction" name="statReportForm" scope="request" validate="false"></action>
+		<action path="/statReport" type="com.bagnet.nettracer.tracing.actions.StatReportAction" name="statReportForm" scope="session" validate="false"></action>
 
 		<!-- View Matches -->
 		<action path="/viewMatches" type="com.bagnet.nettracer.tracing.actions.match.ViewMatch" name="viewMatchForm" scope="request" validate="false"></action>
@@ -585,6 +600,7 @@
 		<action path="/worldtracersusrit" type="com.bagnet.nettracer.tracing.actions.WorldTracerSUSRITAction" name="worldTracerSusRitForm" scope="request" validate="false"></action>
 
 		<action path="/incidentChecklist" type="com.bagnet.nettracer.tracing.actions.IncidentChecklistAction" name="incidentChecklistForm" scope="session" validate="false"></action>
+		<action path="/pushToCrm" type="com.bagnet.nettracer.tracing.actions.PushToCrmAction" name="toggleForm" scope="request" validate="false"></action>
 
 		<!-- Administer Groups -->
 		<action path="/createGroup" type="com.bagnet.nettracer.tracing.actions.admin.ManageGroups" name="groupForm" scope="request" validate="false"></action>
@@ -700,6 +716,17 @@
 				name="searchWtLogsForm" scope="request" validate="false">
 			<forward name="success" path="worldtracer_log"/>
 		</action>
+		
+		<action path="/quickSearch" type="com.bagnet.nettracer.tracing.actions.QuickSearchAction" name="quickSearchForm" scope="request" validate="false">
+			<forward name="success" path="ajax_quickSearchResponse"/>
+		</action>
+		
+		<action path="/toggle" type="com.bagnet.nettracer.tracing.actions.ToggleAction" name="toggleForm" scope="request" validate="false">
+			<forward name="success" path="ajax_toggle"/>
+		</action>
+		
+
+		
 
 	</action-mappings>
 

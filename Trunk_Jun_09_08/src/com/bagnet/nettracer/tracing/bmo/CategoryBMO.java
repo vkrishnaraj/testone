@@ -15,6 +15,7 @@ public class CategoryBMO {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
+			
 			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(
 					Expression.eq("OHD_CategoryType_ID", new Integer(code)));
 			List retList = cri.list();

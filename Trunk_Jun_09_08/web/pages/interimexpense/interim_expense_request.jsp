@@ -10,7 +10,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
   <script language="javascript">
     
 function goprev() {

@@ -717,7 +717,8 @@ function gotoHistoricalReport() {
                 <tr align="center">
                   <logic:iterate id="photo" name="OnHandForm" property="photoList">
                     <td>
-                      <a href='showImage?ID=<%= ((OHD_Photo)photo).getPicpath() %>' target="top"><img src="showImage?ID=<%= ((OHD_Photo)photo).getThumbpath() %>"></a>
+                      <a href='showImage?ID=<%= ((OHD_Photo)photo).getPicpath() %>' target="top"><img src="showImage?ID=<%= ((OHD_Photo)photo).getThumbpath() %>"></a><br>
+                      <a href='showImage?ID=<bean:write name="photo" property="picpath"/>' target="top"><bean:write name="photo" property="fileName"/></a><br>
                     </td>
                   </logic:iterate>
                 </tr>

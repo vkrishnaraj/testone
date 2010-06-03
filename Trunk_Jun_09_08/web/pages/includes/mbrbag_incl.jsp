@@ -228,6 +228,25 @@
               </div>
             </td>
           </tr>
+          <!-- provide space for bag weight feature - start -->
+	      <%
+			    boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT, a);
+			    if (val) {
+		  %> 
+          <tr id="bag_weight">
+              <td><bean:message key="colname.bag.weight.and.units" /><br>
+					<html:text name="theitem" property="bag_weight" size="8" maxlength="10" styleClass="textfield" indexed="true" />
+        			<html:select name="theitem" property="bag_weight_unit" styleClass="dropdown" indexed="true">
+						<html:option value="lbs">lbs</html:option>
+						<html:option value="kg">kg</html:option>
+			        </html:select>
+              </td>
+              <td colspan="2"></td>
+          </tr>
+       	  <% 
+			    }
+		  %>  
+          <!-- provide space for bag weight feature - end -->         
           <tr>
             <td colspan="3">
 
@@ -308,7 +327,11 @@
 
               &nbsp;&nbsp;&nbsp;&nbsp;
               <logic:present name="theitem" property="bdo">
+              
               <bean:message key="header.bdo" />: <a href="bdo.do?bdo_id=<bean:write name="theitem" property="bdo.BDO_ID" />"><bean:write name="theitem" property="bdo.BDO_ID_ref" /></a>
+              <% if (theitem.isBdoEntryCanceled()) { %>
+              	(<bean:message key="bdo.canceled"/>)
+              <% } %>
               </logic:present>
             </td>
           </tr>
@@ -362,6 +385,7 @@
               </td>
             </tr>
 <%
+          }
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DAMAGED_PHOTOS, a)) {
 %>
               <tr>
@@ -387,6 +411,8 @@
                           <td align="center">
                             <a href='showImage?ID=<bean:write name="photolist" property="picpath"/>' target="top"><img src='showImage?ID=<bean:write name="photolist" property="thumbpath"/>'></a>
                             <br>
+                            <a href='showImage?ID=<bean:write name="photolist" property="picpath"/>' target="top"><bean:write name="photolist" property="fileName"/></a>
+                            <br>
                             <input type="submit" name="removePhoto_<%= i %>_<%= j %>" id="button" value="<bean:message key="button.delete_photo"/>">
                           </td>
 <%
@@ -411,7 +437,7 @@
             </tr>
 <%
           }
-        }
+//        }
 %>
         <tr>
           <td colspan="3">

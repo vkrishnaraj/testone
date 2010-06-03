@@ -115,7 +115,88 @@ iframe {
 	position: absolute;
 	z-index: -1;
 	filter: progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0);
+	}
+
+ body{
+  margin:0;
+  padding:0 0 30px 0;
+ }
+	
+ div#footer{
+  position:absolute;
+  bottom:0;
+  width:750px;
+  margin-left: -375px;
+  left: 50%;
+  height:30px;
+  background-color:gray;
+  color:white;
+ }
+ @media screen{
+  body>div#footer{
+   position: fixed;
+  }
+ }
+ * html body{
+  overflow:hidden;
+ } 
+ * html div#content{
+  height:100%;
+  overflow:auto;
+ }
+
+
+input.textfield,
+input.disabledtextfield {
+	height:15px;
+	border:1px solid #569ECD;
+	margin:2px 0px 1px 0px;
+	padding: 0px;
+	display:inline;
+}
+
+
+
+
+div#dialog-inner-content h1{
+	margin-bottom: 5px;
+	font-size: 1.3em;
+	color:#004990;
+}
+
+
+
+.modaltable {
+	white-space: nowrap;
+	font-size: .9em;
+	vertical-align: top;
+	width: 97%;
+}
+
+tr.mh {
+	vertical-align: top;
+	background-color:#004990;
+	color:#fff;
+	font-color:#fff;
+}
+
+
+td.mh {
+	vertical-align: top;
+	background-color:#004990;
+	color:#fff;
+	font-color:#fff;
+}
+
+.modaltdG {
+	vertical-align: top;
+	background-color:#D1E4F1;
+}
+.modaltdW {
+	vertical-align: top;
+	background-color:#FFF;
 }
 
 </style>
+
 

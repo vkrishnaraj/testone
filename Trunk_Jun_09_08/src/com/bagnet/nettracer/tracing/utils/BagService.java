@@ -125,6 +125,7 @@ public class BagService {
 		boolean escape = false;
 		List<LabelValueBean> ohds = form.getOhdList();
 		//String expedite_num = form.getExpediteNumber();
+		ArrayList<OHD_Log> logs = new ArrayList<OHD_Log>();
 		
 		for (LabelValueBean ohdBean: ohds) {
 			String onhandnum = ohdBean.getLabel();
@@ -284,6 +285,13 @@ public class BagService {
 			if(escape)
 				break;
 		}
+		
+		try {
+			SpringUtils.getClientEventHandler().doEventOnForward(logs);
+		} catch (Exception e) {
+			logger.error("Error performing client-specific BEORN Action...");
+			e.printStackTrace();
+		}
 		return true;
 	}
 
@@ -387,6 +395,7 @@ public class BagService {
 		bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
 		bdto.setTagNumber(form.getBag_tag());
 		bdto.setOnhand(oDTO.getOHD_ID());
+		bdto.setLog(log);
 		
 		try {
 			SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);
@@ -546,7 +555,8 @@ public class BagService {
 							&& item.getManufacturer_ID() == 0
 							&& item.getXdescelement_ID_1() == TracingConstants.XDESC_TYPE_X
 							&& item.getXdescelement_ID_2() == TracingConstants.XDESC_TYPE_X
-							&& item.getXdescelement_ID_3() == TracingConstants.XDESC_TYPE_X) {
+							&& item.getXdescelement_ID_3() == TracingConstants.XDESC_TYPE_X
+							&& item.getBag_weight() == 0) {
 						boolean t_rem = true;
 						for(int j = item.getInventory().size() - 1; j >= 0; j--) {
 							ii = (Item_Inventory) item.getInventorylist().get(j);
@@ -776,6 +786,7 @@ public class BagService {
 							
 							HashMap h = new HashMap();
 							h.put("PASS_NAME", passname);
+														
 							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(currentLocale), "email.mishandled"));
@@ -784,6 +795,9 @@ public class BagService {
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
 								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
+								
+								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
+										new Locale(currentLocale), "email.mishandled.content.apologize.text"));
 							}
 							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
 								h.put("REPORT_TYPE", messages.getMessage(
@@ -792,6 +806,9 @@ public class BagService {
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title"));
 								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged")));
+								
+								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
+										new Locale(currentLocale), "email.damaged.content.apologize.text"));
 							} 
 							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
 								h.put("REPORT_TYPE", messages.getMessage(
@@ -800,7 +817,11 @@ public class BagService {
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title"));
 								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing")));
+								
+								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
+										new Locale(currentLocale), "email.missing.content.apologize.text"));
 							}
+							
 						
 							if (tmpHtmlFileName != null) {
 								htmlFileName = tmpHtmlFileName;
@@ -834,19 +855,24 @@ public class BagService {
 								}
 							}
 							h.put("CLAIM_CHECKS", sb.toString());
-							
-							//he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
-
-							//he.setSubject("Report for your " + h.get("REPORT_TYPE") + " has been filed.");
 
 							// set embedded images
+							String myEmailHeaderImage = TracingConstants.BANNER_IMAGE;
+							String strImageLogoFromPropertiesFile = 
+								messages.getMessage(new Locale(currentLocale), "email.to.pax.header.image.file");
+							if (strImageLogoFromPropertiesFile != null && strImageLogoFromPropertiesFile.equalsIgnoreCase("")) {
+								myEmailHeaderImage = strImageLogoFromPropertiesFile;
+							}
+							
 							if (embedImage) {
-								String img1 = he.embed(new URL("file:/" + imagepath + TracingConstants.BANNER_IMAGE),
-										TracingConstants.BANNER_IMAGE);
+								String img1 = he.embed(new URL("file:/" + imagepath + myEmailHeaderImage),
+										myEmailHeaderImage);
 								h.put("BANNER_IMAGE", img1);
 							}
 								
 							String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
+							
+							//logger.error("entire html email:" + msg);
 							
 							if(msg != null) {
 								he.setHtmlMsg(msg);
@@ -980,7 +1006,7 @@ public class BagService {
 		}
 
 		Item item = null;
-		// incase there are no bags, put one there anyways
+		// in case there are no bags, put one there anyways
 		if(theform.getItemlist().size() == 0) {
 			item = (Item) theform.getItem(0, iDTO.getItemtype_ID());
 			// item.setItem_ID(0); // for hibernate insert only
@@ -1020,11 +1046,18 @@ public class BagService {
 		}
 
 		if(itemtype == TracingConstants.MISSING_ARTICLES) {
-			ArrayList al = new ArrayList(iDTO.getArticles());
-			if(al.size() <= 0)
+			ArrayList<Articles> al = new ArrayList(iDTO.getArticles());
+			if(al.size() <= 0) {
 				theform.getArticle(0);
-			else
+			}
+			else {
+				//to iterate through list to set DATEFORMAT -
+				for (Articles myArticle: al) {
+					myArticle.set_DATEFORMAT(user.getDateformat().getFormat());
+				}
 				theform.setArticlelist(al);
+			}
+				
 		}
 		theform.setClaimchecklist(new ArrayList(iDTO.getClaimchecks()));
 		if(theform.getClaimchecklist().size() == 0) {

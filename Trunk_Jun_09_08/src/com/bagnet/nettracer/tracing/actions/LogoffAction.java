@@ -1,7 +1,5 @@
 package com.bagnet.nettracer.tracing.actions;
 
-import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,10 +32,14 @@ public class LogoffAction extends Action {
 
 	// --------------------------------------------------------- Public Methods
 
+	
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		
+
 		// Extract attributes we will need
-		Locale locale = getLocale(request);
+//		Locale locale = getLocale(request);
 		HttpSession session = request.getSession();
 
 		// check session
@@ -66,4 +68,5 @@ public class LogoffAction extends Action {
 		response.addDateHeader("Expires", -1);
 		return mapping.findForward(TracingConstants.LOGON);
 	}
+
 }

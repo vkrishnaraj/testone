@@ -37,7 +37,7 @@
 	}
 
   </script>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="forwardBag.do" method="post">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>

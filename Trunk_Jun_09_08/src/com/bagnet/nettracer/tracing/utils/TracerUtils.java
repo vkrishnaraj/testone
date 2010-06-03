@@ -91,8 +91,15 @@ public class TracerUtils {
 	private static ConcurrentHashMap<Integer, String> cachedManufacturerMap = new ConcurrentHashMap<Integer, String>();
 	private static ConcurrentHashMap<Integer, String> cachedXDescElementMap = new ConcurrentHashMap<Integer, String>();
 	
-	private static MessageResources messages = MessageResources
-			.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+	private static MessageResources messages = null;
+	
+	static {
+		try {
+			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		} catch (Exception e) {
+			// Ignore
+		}
+	}
 
 	public static void populateLostItem(LostFoundIncidentForm theform,
 			Agent user, HttpServletRequest request) {
@@ -183,6 +190,10 @@ public class TracerUtils {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.MBR_STATUS_TEMP);
 		theform.setStatus(status);
+		
+		//set default weight unit
+		String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
+		theform.setOverall_weight_unit(myDefaultWeightUnit);
 
 		// set report method
 		theform.setReportmethod(user.getStation().getCompany().getVariable()
@@ -226,6 +237,10 @@ public class TracerUtils {
 		i.setBagnumber(0);
 		i.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 
+		//TODO: default weight unit related code here
+		i.setBag_weight_unit(myDefaultWeightUnit);
+		
+		
 		// set new claimcheck
 		Incident_Claimcheck ic = theform.getClaimcheck(0);
 
@@ -460,8 +475,16 @@ public class TracerUtils {
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.draft"), "DRAFT"));
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.voucher"), "VOUCH"));
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.mileage"), "MILE"));
-		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.incidental"), "INC"));
-		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.ccrefund"), "CCREF"));
+		
+		String m = messages.getMessage(new Locale(locale), "payment.incidental");
+		if (m != null && m.length() > 0) {
+			result.add(new LabelValueBean(m, "INC"));
+		}
+		
+		m = messages.getMessage(new Locale(locale), "payment.ccrefund");
+		if (m != null && m.length() > 0) {
+			result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.ccrefund"), "CCREF"));
+		}
 		return result;
 	}
 
@@ -951,7 +974,7 @@ public class TracerUtils {
 		al.add(new KeyValueBean("COLOR_KEY_GN", "GN", user));
 		al.add(new KeyValueBean("COLOR_KEY_PU", "PU", user));
 		al.add(new KeyValueBean("COLOR_KEY_MC", "MC", user));
-		al.add(new KeyValueBean("COLOR_KEY_TD", "TD", user));
+//		al.add(new KeyValueBean("COLOR_KEY_TD", "TD", user));
 		al.add(new KeyValueBean("COLOR_KEY_PR", "PR", user));
 
 		return al;

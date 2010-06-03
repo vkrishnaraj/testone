@@ -365,10 +365,6 @@
     	                  <bean:message key="radio.html" />
     	                  <html:radio property="outputtype" value="2" />
     	                  <bean:message key="radio.xls" />
-    	                  <html:radio property="outputtype" value="3" />
-    	                  <bean:message key="radio.csv" />
-    	                  <html:radio property="outputtype" value="4" />
-    	                  <bean:message key="radio.xml" />
                       <% } else { %>
                         <html:radio property="outputtype" value="1" />
                         <bean:message key="radio.html" />

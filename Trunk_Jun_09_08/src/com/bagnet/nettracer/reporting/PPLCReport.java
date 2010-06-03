@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
@@ -44,6 +45,16 @@ public class PPLCReport {
 		parameters.put("primaryPhone", theform.getBusinessPhone());
 		parameters.put("membershipNum", theform.getMembership());
 		parameters.put("claimNum", theform.getIncident_ID());
+		
+		//TODO: weight
+		String myWeight = "";
+		Double myOverallWeight = theform.getOverall_weight();
+		String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
+		
+		if (myOverallWeight > 0) {
+			myWeight = myOverallWeight + " " + myDefaultWeightUnit;
+		}
+		parameters.put("weight", myWeight);
 		
 		parameters.put("REPORT_RESOURCE_BUNDLE", ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language)));
 		File logo = new File(sc.getRealPath("/") + "reports/images/logo.gif");

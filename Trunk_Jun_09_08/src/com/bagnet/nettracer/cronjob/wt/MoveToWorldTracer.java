@@ -7,7 +7,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -23,6 +22,8 @@ import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
@@ -44,6 +45,8 @@ public class MoveToWorldTracer {
 	private static final String WT_EARLY_MOVE_OHD_HOURS = "wt.early.move.ohd.hours";
 	private static final String WT_EARLY_MOVE_AHL_HOURS = "wt.early.move.ahl.hours";
 
+	private static final String WT_MOVE_ALL_TAGS_TO_WT = "wt.move.tags.to.wt";
+
 	public MoveToWorldTracer(String agentName, String companyCode) throws WorldTracerException {
 		ogadmin = AdminUtils.getAgentBasedOnUsername(agentName, companyCode);
 		if(ogadmin == null) {
@@ -55,7 +58,7 @@ public class MoveToWorldTracer {
 	}
 
 	public void moveFiles() {
-		// TODO
+
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(companyCode);
 
 		// did we get company variables?
@@ -69,13 +72,42 @@ public class MoveToWorldTracer {
 			logger.info("Move to Worldtracer aborted: worldtracer writing not turned on for " + companyCode);
 			return;
 		}
-
+		
 		int ohdHours = csv.getOhd_to_wt_hours();
 		int incDays = csv.getMbr_to_wt_days();
 		int ohdOal = csv.getOal_ohd_hours();
 		int incOal = csv.getOal_inc_hours();
 
 		String temp2 = PropertyBMO.getValue(WT_EARLY_MOVE_OHD_HOURS);
+
+
+		boolean moveTagsToWt = PropertyBMO.isTrue(WT_MOVE_ALL_TAGS_TO_WT);
+		if (moveTagsToWt) {
+			try {
+				List<OHD> ohds = obmo.findTagsMoveToWt(companyCode);
+				ArrayList<List<OHD>> buckets = new ArrayList<List<OHD>>();
+				int lastHoldingStationId = 0;
+				ArrayList<OHD> bucket = null; 
+				for (OHD ohd: ohds) {
+					if (ohd.getHoldingStation().getStation_ID() != lastHoldingStationId || bucket.size() >= 10) {
+						bucket = new ArrayList<OHD>();
+						buckets.add(bucket);
+					}
+					bucket.add(ohd);
+					lastHoldingStationId = ohd.getHoldingStation().getStation_ID();
+				}
+				
+				for (List<OHD>processBucket: buckets) {
+					queueBucket(processBucket);
+				}
+			} catch (Exception e) {
+				logger.error("Unable to queue OHD TAG create in Move to WT thread", e);
+			}
+			// TODO: Try/catch to prevent additional failures
+		}
+		// TODO: END OF NEW DEVELOPMENT
+		
+		
 		List<String> earlyMoveStations = PropertyBMO.getValueList(WT_EARLY_MOVE_STATION);
 
 		if(temp2 != null && earlyMoveStations != null) {
@@ -361,6 +393,21 @@ public class MoveToWorldTracer {
 		wtq.setAgent(ogadmin);
 		wtq.setOhd(ohd);
 		WorldTracerQueueUtils.createOnlyOhdQueue(wtq, ohd.getLastupdated());
+	}
+	
+	private void queueBucket(List<OHD> ohds) throws Exception {
+
+		WtqQoh wtq = new WtqQoh();
+		wtq.setAgent(ogadmin);
+		
+		ArrayList<WtqOhdTag> tags = new ArrayList<WtqOhdTag>();
+		for (OHD ohd: ohds) {
+			WtqOhdTag o = new WtqOhdTag();
+			o.setOhd(ohd);
+		}
+		
+		wtq.setOhdTags(tags);
+		WorldTracerQueueUtils.createOnlyTagQueue(wtq);
 	}
 
 	public void setObmo(OhdBMO obmo) {

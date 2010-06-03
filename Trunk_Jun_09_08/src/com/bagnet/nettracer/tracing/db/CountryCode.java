@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="CountryCode"
+ * @hibernate.cache usage="read-only"
  */
 public class CountryCode implements Serializable {
 	private String CountryCode_ID;

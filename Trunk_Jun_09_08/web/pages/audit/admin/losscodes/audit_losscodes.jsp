@@ -300,7 +300,7 @@ function updatePagination() {
                       <bean:write name="code" property="description" />
                     </td>
                     <td>
-                      <bean:write name="code" property="locale" />
+                      &nbsp;
                     </td>
                     <td>
                       <bean:write name="code" property="reason_modified" />

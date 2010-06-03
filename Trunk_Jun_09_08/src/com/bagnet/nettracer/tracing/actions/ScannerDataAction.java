@@ -156,14 +156,16 @@ public class ScannerDataAction extends Action {
 			}
 			
 			try {
-				bagTagNumber = LookupAirlineCodes.getFullBagTag(bagTagNumber);
-				dynaForm.set("bagTagNumber", bagTagNumber);
+//				bagTagNumber = LookupAirlineCodes.getFullBagTag(bagTagNumber);
+				bagTagNumber = LookupAirlineCodes.getTwoCharacterBagTag(bagTagNumber);
+				
 			} catch (BagtagException e) {
-				ActionMessage error = new ActionMessage("scanner.error.format");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
-				return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
+//				ActionMessage error = new ActionMessage("scanner.error.format");
+//				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+//				saveMessages(request, errors);
+//				return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
 			}
+			dynaForm.set("bagTagNumber", bagTagNumber);
 			
 			// Obtain the appropriate scannerDataSource
 			ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);

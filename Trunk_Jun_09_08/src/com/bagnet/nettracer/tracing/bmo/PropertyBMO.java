@@ -14,7 +14,7 @@ public class PropertyBMO {
 
 	private static Logger logger = Logger.getLogger(PropertyBMO.class);
 
-	private static ConcurrentHashMap<String, List<String>> propCache = new ConcurrentHashMap<String, List<String>>();
+	private static ConcurrentHashMap<String, Object> propCache = new ConcurrentHashMap<String, Object>();
 
 	// PROPERTIES USED TO LIMIT STATIONS TO CODE TO
 	public static final String PROPERTY_LIMIT_LD_STATIONS = "losscode.ld.limitstations";
@@ -53,6 +53,24 @@ public class PropertyBMO {
 
 	public static final String HIGH_PRIORITY_PAX_COMMUNICATION_HOURS = "high.priority.pax.com.hours";
 
+	public static final String PROPERTY_NT_CENTRAL_ENDPOINT = "nt.central.endpoint";
+	public static final String PROPERTY_NT_CENTRAL_USERNAME = "nt.central.username";
+	public static final String PROPERTY_NT_CENTRAL_PASSWORD = "nt.central.password";
+	
+	public static final String PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT = "nt.company.weight.unit.default";
+
+	public static final String PROPERTY_NT_COMPANY_TIME_RANGE_WITHIN_LAST = "nt.company.time.range.within.last";
+
+	public static final String SEND_FORWARD_NOTIFICATIONS = "send.forward.notifications";
+
+	public static final String CRM_INTEGRATION_ENDPOINT = "crm.integration.endpoint";
+	public static final String US_CRM_COUNTRY_MAP = "us.crm.country.map";
+
+	public static final String CUSTOM_DELAY_RECEIPT_FILES = "custom.delay.receipt.files";
+	public static final String CUSTOM_DAMAGE_RECEIPT_FILES = "custom.damage.receipt.files";
+	public static final String CUSTOM_MISSING_RECEIPT_FILES = "custom.missing.receipt.files";
+	
+
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 
@@ -62,7 +80,7 @@ public class PropertyBMO {
 	 */
 	private static List<String> getValues(String keyVal) throws HibernateException {
 		if(propCache.containsKey(keyVal)) {
-			return propCache.get(keyVal);
+			return (List<String>) propCache.get(keyVal);
 		}
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -119,4 +137,13 @@ public class PropertyBMO {
 			return 0;
 		}
 	}
+	
+	public static Object getObject(String key) {
+		return propCache.get(key);
+	}
+	
+	public static void setObject(String key, Object o) {
+		propCache.put(key, o);
+	}
+	
 }

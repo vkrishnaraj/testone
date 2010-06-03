@@ -8,6 +8,7 @@ package com.bagnet.nettracer.reporting;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -28,6 +30,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
+import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
@@ -59,7 +62,7 @@ public class LostDelayReceipt {
 		if (language == null) {
 			language = TracingConstants.DEFAULT_LOCALE;
 		}
-
+		
 		String airline = theform.getStationcreated().getCompany().getCompanydesc();
 		parameters.put("title", messages.getMessage(new Locale(language), titleProperty));
 
@@ -124,6 +127,7 @@ public class LostDelayReceipt {
 		parameters.put("phone", phno);
 		parameters.put("address1", pa.getAddress(0).getAddress1());
 		parameters.put("address2", pa.getAddress(0).getAddress2());
+		parameters.put("email_address", pa.getAddress(0).getEmail());
 		parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
 				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
 				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
@@ -150,9 +154,28 @@ public class LostDelayReceipt {
 				sb.append(",");
 			}
 		}
+		
 		if (sb.length() > 0)
 			parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
 		
+		//new code - reconcile later
+		StringBuffer sbClaimCheckNumber = new StringBuffer();
+		List<Item> myItemList = theform.getItemlist();
+		for (int i = 0; i < myItemList.size(); i++) {
+			String myClaimCheckNumber = ((Item) myItemList.get(i)).getClaimchecknum();
+			if (!(myClaimCheckNumber == null || myClaimCheckNumber.equals(""))) {
+				sbClaimCheckNumber.append(myClaimCheckNumber.trim());
+				sbClaimCheckNumber.append(",");
+			}
+		}
+		if (sbClaimCheckNumber.length() > 0) {
+			int claimCheckNumberLength = sbClaimCheckNumber.toString().length() - 1;
+			String claim_check_num = sbClaimCheckNumber.toString().substring(0, claimCheckNumberLength);
+			parameters.put("claim_check_num", claim_check_num);
+			logger.info("claim_check_num:" + claim_check_num);
+		}
+		
+		//end of new code
 
 
 		parameters.put("pnr_locator", theform.getRecordlocator());
@@ -188,7 +211,9 @@ public class LostDelayReceipt {
 			IncidentBMO ibmo = new IncidentBMO();
 			ibmo.incrementPrintedReceipt(theform.getIncident_ID());
 			
-			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, "LostDelayReceipt", sc.getRealPath("/"), outputtype);
+			String filename = rbmo.getReportFileName(TracingConstants.LOST_DELAY, language);
+			
+			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, filename, sc.getRealPath("/"), outputtype);
 
 		} catch (Exception e) {
 			logger.error("unable to create claim prorate report: " + e);

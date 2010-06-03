@@ -200,3 +200,91 @@ function hideAllMenus(elementItem, root) {
 		}
 	}
 }
+
+
+
+function quickSearchKey4(e) {
+		var searchContent = document.getElementById('quickSearchQuery3').value;
+		document.getElementById('quickSearchQuery').value= searchContent;
+		document.getElementById('quickSearchQuery2').value= searchContent;
+		quickSearchKey2();
+		}
+
+function quickSearchKey3(e) {
+	var key = event.keyCode;
+	if (key == 13 && lock == false) {
+		lock = true;
+		var searchContent = document.getElementById('quickSearchQuery3').value;
+		searchContent = searchContent.replace(/^\s+|\s+$/g,"");
+		document.getElementById('quickSearchQuery').value= searchContent;
+		document.getElementById('quickSearchQuery2').value= searchContent;
+		quickSearchKey2(true);
+	}
+}
+
+var lock = false;
+function quickSearchKey(e) {
+	var key = event.keyCode;
+	if (key == 13 && lock == false) {
+		lock = true;
+		quickSearchKey2(false);
+		
+	}
+}
+
+function quickSearchKey2(skip) {
+		var searchContent = document.getElementById('quickSearchQuery').value;
+		if (!skip) {
+			searchContent = searchContent.replace(/^\s+|\s+$/g,"");
+		}
+		searchContent = searchContent.replace(/%/g,"%25");
+		document.getElementById("quickSearchQuery2").value = searchContent;
+		if (searchContent.indexOf(':') >= 1) {
+			var id = searchContent.substr(searchContent.indexOf(':') + 1,searchContent.length);
+			if (searchContent.indexOf('I:') == 0 || searchContent.indexOf('i:') == 0) {
+				window.document.location.href='searchIncident.do?incident='+id;
+			} else if (searchContent.indexOf('O:') == 0 || searchContent.indexOf('o:') == 0) {
+				window.document.location.href='addOnHandBag.do?ohd_ID='+id;
+			} else if (searchContent.indexOf('A:') == 0 || searchContent.indexOf('a:') == 0) {
+				window.document.location.href='agentAdmin.do?searchAgentUsername='+id;
+			} else if (searchContent.indexOf('S:') == 0 || searchContent.indexOf('s:') == 0) {
+				window.document.location.href='stationAdmin.do?edit=1&searchStationCode='+id;
+			} else if (searchContent.indexOf('AI:') == 0 || searchContent.indexOf('ai:') == 0) {
+				window.document.location.href='audit_mbr.do?detail=1&incident_ID='+id;
+			} else if (searchContent.indexOf('AO:') == 0 || searchContent.indexOf('ao:') == 0) {
+				window.document.location.href='audit_ohd.do?detail=1&ohd_ID='+id;
+			}
+		} else {
+
+       		jQuery.ui.dialog.defaults.bgiframe = true;
+       		jQuery("#dialog").dialog({bgiframe : true,
+ 				autoOpen: false, modal: true, draggable: false, resizable: false, 
+ 				width: 700, height: 500, title: 'Quick Search' 
+		});
+		jQuery('#dialog-inner-content').html(getLoadingContent());	
+		jQuery("#dialog").dialog("open");	
+		jQuery('#dialog-inner-content').load("quickSearch.do?search=" + searchContent, {}, function() { /* AFTER LOADING CONTENT */});
+		lock = false;
+	}
+}
+
+function qPrepopulateIncident(type, content, pnrOrTag) {
+	var id = ''
+	
+	if (pnrOrTag == 0) {
+		id = 'doprepopulate=11&qPrepopulate=1&recordlocator=' + content;
+	} else {
+		id = 'doprepopulate=11&qPrepopulate=1&bagTagNumber=' + content;
+	}
+	
+	if (type == 1) {
+		window.document.location.href='lostDelay.do?'+id;
+	} else if (type == 2) {
+		window.document.location.href='missing.do?'+id;
+	} else if (type == 3) {
+		window.document.location.href='damaged.do?'+id;
+	} else if (type == 4) {
+		window.document.location.href='addOnHandBag.do?'+id;
+	}
+  
+}

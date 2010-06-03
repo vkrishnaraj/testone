@@ -13,6 +13,7 @@ import java.io.Serializable;
  * 
  * create date - Jul 14, 2004
  * @hibernate.class table="LocaleReceipt"
+ * @hibernate.cache usage="read-only"
  */
 public class ReceiptDbLocale implements Serializable {
 	private String locale_id;

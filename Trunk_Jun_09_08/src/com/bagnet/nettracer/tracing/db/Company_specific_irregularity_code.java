@@ -13,6 +13,7 @@ import java.io.Serializable;
  * 
  * create date - Jul 14, 2004
  * @hibernate.class table="company_irregularity_codes"
+ * @hibernate.cache usage="read-write"
  */
 public class Company_specific_irregularity_code implements Serializable {
 	private int code_id;

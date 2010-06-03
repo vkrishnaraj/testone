@@ -90,6 +90,26 @@ public class ViewIncomingIncidents extends Action {
 		ArrayList resultlist = null;
 		int rowcount = -1;
 
+		//set a trap to test the different itemType_ID: 0-all, 1-lostdelay, 2-damaged, 3-pilferage
+		String strIncidentType = request.getParameter("type");
+		int myIncidentType = 0;
+		if (strIncidentType != null) {
+			if (strIncidentType.equalsIgnoreCase("1")) {
+				myIncidentType = 1;
+			} else if (strIncidentType.equalsIgnoreCase("2")) {
+				myIncidentType = 2;
+			} else {
+				myIncidentType = 3;
+			}
+		}
+		daform.setItemType_ID(myIncidentType);
+		
+		//assigned to station within last 24 hours feature for westjet
+		String strLast24hours = request.getParameter("withinLast") + "";
+		if (strLast24hours.equalsIgnoreCase("24")) {
+			daform.setAssigned2StationWithin24hrs(1);  //magic number 1 signifies yes 
+		}
+		
 		// get number of records found
 		if ((resultlist = bs.findIncident(daform, user, 0, 0, true, true)) == null || resultlist.size() <= 0) {
 			ActionMessages errors = new ActionMessages();

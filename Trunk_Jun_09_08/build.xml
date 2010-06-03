@@ -145,6 +145,7 @@
 				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
 				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
 				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/CrmFile.java"/>
 			</fileset>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
 		</hibernatedoclet>
@@ -211,10 +212,11 @@
 				<exclude name="WEB-INF/classes/**/*.*" />
 			</fileset>
 		</copy>
-		
+		<!--
 		<replaceregexp match="\s+" replace=" " flags="g" byline="false">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
 		</replaceregexp>
+		-->
 		
 		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
@@ -304,6 +306,7 @@
 		<copy todir="${basedir}/src" file="companies/tracer/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/tracer/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/tracer/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/tracer/hibernate_reporting.cfg.xml" />
 
 		<antcall target="fast_all">
 			<param name="ant_project_name" value="tracer" />
@@ -330,6 +333,7 @@
 		<copy todir="${basedir}/src" file="companies/airtran/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/airtran/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/airtran/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/airtran/hibernate_reporting.cfg.xml" />
 
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
 
@@ -377,6 +381,7 @@
 		<copy todir="${basedir}/src" file="companies/azul/environment/training/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_reporting.cfg.xml" />
 		<property name="environment" value="training" />
 		<antcall target="donotrun-build-azul" />
 	</target>
@@ -390,6 +395,7 @@
 		<copy todir="${basedir}/src" file="companies/azul/environment/production/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_reporting.cfg.xml" />
 		<antcall target="donotrun-build-azul" />
 	</target>
 
@@ -431,6 +437,7 @@
 		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_dirty.cfg.xml" />
+        <copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_reporting.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
@@ -444,6 +451,7 @@
 		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_reporting.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
@@ -457,6 +465,7 @@
 		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_reporting.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
@@ -470,6 +479,7 @@
 		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_reporting.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
@@ -520,6 +530,8 @@
 
 	<target name="build-jetblue-dev" depends="delete">
 		<property name="ant_project_name" value="jetblue" />
+		<property name="include.demo" value="1" />
+		<property name="include.us" value="1" />
 		<property name="ant_war_name" value="b6dev" />
 		<property name="jetblue.init.complete" value="true" />
 		<property name="environment.name" value="dev"/>
@@ -532,6 +544,14 @@
 		<property name="ant_war_name" value="b6qa" />
 		<property name="jetblue.init.complete" value="true" />
 		<property name="environment.name" value="qa"/>
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+	
+	<target name="build-jetblue-qa-sabre" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="b6qa-sabre" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="qa-sabre"/>
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 
@@ -557,6 +577,7 @@
 		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_reporting.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/jetblue/report_email_es.html" />
 		<antcall target="jetblue-libraries-create" />
@@ -634,6 +655,7 @@
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_reporting.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email_fr.html" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt.jrxml" />
@@ -951,7 +973,92 @@
 		</Java2WSDLTask>
 
 	</target>
+	
+	<target name="aaa_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" 
+			className="com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService" 
+			outputLocation="src/com/bagnet/nettracer/ws/onlineclaims" outputFileName="Claims.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+	
+	<target name="aaa_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/onlineclaims/Claims.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/claims" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		
+		<!--
+		<copy todir="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF" file="${build.dir}/webservices/claims/resources/services.xml" />
+		-->
+		
+		<!-- copy java files to src 
+		-->
+		<copy todir="${basedir}/src">
+			<fileset dir="${build.dir}/webservices/claims/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+		<!--
+
+		 make jar file for schema
+		
+		<mkdir dir="${build.dir}/webservices/claims/temp" />
+		<move todir="${build.dir}/webservices/claims/temp">
+			<fileset dir="${build.dir}/webservices/claims/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		
+		<jar destfile="${build.dir}/webservices/claims/onlineclaims_schemas.jar" basedir="${build.dir}/webservices/claims/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/claims/onlineclaims_schemas.jar" />
+		
+		<replace file="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceImplementation]]></replacevalue>
+		</replace>-->
+		
+
+		<!-- clean up -->
+		
+		<!--<delete dir="${build.dir}/webservices/claims" />-->
+	</target>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<target name="passengerview_wsdl2java">
 		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
 			<arg value="-uri" />
@@ -1037,7 +1144,13 @@
 	<target name="hibernate_generate_core" description="Generates Hibernate class descriptor files.">
 		<hibernatedoclet>
 			<fileset dir="src">
+				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/CrmFile.java"/>
+				
 				<include name="com/bagnet/nettracer/tracing/db/*.java" />
+				
 				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
 			</fileset>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${build.dir}/${ant_project_name}/classes" version="3.0" />
@@ -1101,7 +1214,10 @@
 
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_reporting.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
+		
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/cron/config/log4j.properties" />
@@ -1308,7 +1424,7 @@
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}/classes" />
 			</classpath>
-			<annotationconfiguration configurationfile="companies/westjet/environment/prod/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="companies/jetblue/environment/dev/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
@@ -1360,7 +1476,8 @@
 	</target>
 
 	<target name="jetblue-libraries-create">
-		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-b6/JetBlueReservation.jar" failonerror="false"/>
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-crmclient.jar" failonerror="false"/>
+		
 	</target>
 
 	<target name="jetblue-libraries-cleanup">

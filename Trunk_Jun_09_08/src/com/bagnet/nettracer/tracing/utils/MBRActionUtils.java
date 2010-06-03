@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -130,6 +131,9 @@ public class MBRActionUtils {
 				item.setCurrency_ID(user.getDefaultcurrency());
 				// set item status if it is not being set to open
 				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
+				//set default weight unit
+				String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
+				item.setBag_weight_unit(myDefaultWeightUnit);
 			}
 			request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
 			return true;
@@ -733,6 +737,7 @@ public class MBRActionUtils {
 					return error;
 				} else {
 					if (!(ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN || ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT || ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT)) {
+						
 						// ohd is not open
 						item.setOHD_ID("");
 						error = new ActionMessage("error.match_noonhand");
@@ -808,8 +813,9 @@ public class MBRActionUtils {
 						BDO bdo = item.getBdo();
 						if (bdo != null) {
 							// if bdo created, then set bdo to ohd instead
-							bdo.setIncident(null);
-							item.setBdo(null);
+//							bdo.setIncident(null);
+//							item.setBdo(null);
+							BDOUtils.cancelBdo(bdo.getBDO_ID(), item.getItem_ID(), (Agent) request.getSession().getAttribute("user"));
 							BDOUtils.insertBDOtoDB(bdo, user);
 						}
 						
@@ -873,8 +879,9 @@ public class MBRActionUtils {
 				BDO bdo = item.getBdo();
 				if (bdo != null) {
 					// if bdo created, then set bdo to ohd instead
-					bdo.setIncident(null);
-					item.setBdo(null);
+//					bdo.setIncident(null);
+//					item.setBdo(null);
+					BDOUtils.cancelBdo(bdo.getBDO_ID(), item.getItem_ID(), (Agent) request.getSession().getAttribute("user"));
 					BDOUtils.insertBDOtoDB(bdo, user);
 				}
 				

@@ -12,6 +12,7 @@
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/nettracer_westjet2</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/nettracer_westjet</property>
 		<property name="hibernate.connection.username">nettracer</property>
 		<property name="hibernate.connection.password">nettracer</property>
 		<property name="hibernate.show_sql">false</property>
@@ -30,6 +31,10 @@
 		<property name="hibernate.c3p0.min_size">10</property> 
 		<property name="hibernate.c3p0.timeout">5000</property> <!-- seconds --> 
 		
+		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property>
+		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_query_cache">false</property>
 		&mappings;
     </session-factory>
 

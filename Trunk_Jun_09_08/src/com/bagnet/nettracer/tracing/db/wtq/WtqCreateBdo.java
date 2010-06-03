@@ -9,7 +9,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.BDO;
-import com.bagnet.nettracer.tracing.db.Incident;
 
 @Entity
 @DiscriminatorValue("CREATE_BDO")

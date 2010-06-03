@@ -76,6 +76,7 @@ import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -218,6 +219,7 @@ public class OnHandAction extends CheckedAction {
 					OHD_Photo photo = new OHD_Photo();
 					photo.setPicpath(picpath);
 					photo.setThumbpath(thumbpath);
+					photo.setFileName(fileName);
 					theform.getPhotoList().add(photo);
 				}
 			}
@@ -231,9 +233,18 @@ public class OnHandAction extends CheckedAction {
 		}		// save temporary.
 		else if((request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
 				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null || request.getParameter("amendtowt") != null) {
+			//TODO: key to determine whether the action is add new, close, or update
+			int saveActionType = ADD_NEW_RECORD;
+			
 			OHD oDTO = null;
-			if(theform.getOhd_id() != null)
+			if(theform.getOhd_id() != null) {
 				oDTO = bs.findOHDByID(theform.getOhd_id());
+				//TODO: somewhere it needs to be set to close type
+				if (oDTO != null) {
+					saveActionType = UPDATE_RECORD;
+				}
+			}
+				
 			if(oDTO == null) {
 				oDTO = new OHD();
 				oDTO.setAgent(user);
@@ -279,12 +290,20 @@ public class OnHandAction extends CheckedAction {
 			if(request.getParameter("savetowt") != null && oDTO.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_OPEN) {
 				rohd = false;
 			}
-			else if(request.getParameter("savetracing") != null || request.getParameter("savetowt") != null  || request.getParameter("amendtowt") != null) {
+			else if(request.getParameter("savetracing") != null 
+					|| request.getParameter("savetowt") != null  
+					|| request.getParameter("amendtowt") != null
+					|| (request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))) {
 
 				//in all situations we save the nettracer copy of the file
 				rohd = bs.insertOnHand(oDTO, theform, list, user, theform.getFound_station(), theform.getFound_company(), theform.getWtFile());
 				
 				//they did a save of any kind and the status is now closed, we need to close the WT file
+				if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
+
+					saveActionType = CLOSE_RECORD;
+				}
+				
 				if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED && oDTO.getWtFile() != null && !oDTO.getWtFile().getWt_status().equals(WTStatus.CLOSED)) {
 					WtqOhdAction wtq = new WtqCloseOhd();
 					wtq.setAgent(user);
@@ -326,8 +345,18 @@ public class OnHandAction extends CheckedAction {
 					request.setAttribute("ohdidlist", list);
 					return mapping.findForward(TracingConstants.MASS_ON_HAND_SUCCESS);
 				}
-				else
-					return (mapping.findForward(TracingConstants.INSERT_ON_HAND_SUCCESS));
+				else {
+					//logger.error(">>>>>>>>>saveActionType (1-addnew; 2-close; 3-update) : " + saveActionType);
+					if (saveActionType == UPDATE_RECORD) {
+						return (mapping.findForward(TracingConstants.UPDATE_ON_HAND_SUCCESS));
+					} else if (saveActionType == CLOSE_RECORD) {
+						return (mapping.findForward(TracingConstants.CONFIRM_CLOSE_ON_HAND_SUCCESS));
+						
+					} else {
+						return (mapping.findForward(TracingConstants.INSERT_ON_HAND_SUCCESS));
+					}
+					
+				}
 			}
 			else {
 				if(request.getParameter("express") != null)
@@ -457,7 +486,7 @@ public class OnHandAction extends CheckedAction {
 					
 					try {
 						wts.getWtConnector().initialize();
-						foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE, user);
+						foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE, user, WorldTracerWebService.getBasicDto(session));
 						
 						if (foundohd == null) {
 							errors = new ActionMessages();

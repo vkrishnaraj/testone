@@ -18,6 +18,7 @@ public class TracingConstants {
 	public final static String OWENS_GROUP = "OW";
 	public final static boolean LIMIT_FAULT_AIRLINE = true;
 	//System components
+	public final static String SYSTEM_COMPONENT_NAME_CANCEL_BDO = "Cancel BDO";
 	public final static String SYSTEM_COMPONENT_NAME_BDOS_FOR_STATIONS = "BDOs For Stations";
 	public final static String SYSTEM_COMPONENT_NAME_AUDIT_ON_HAND = "Audit On hand";
 	public final static String SYSTEM_COMPONENT_NAME_VIEW_MATCHES = "View Matches";
@@ -60,6 +61,13 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS = "Maintain Web Service Agents";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_BAGS = "Incoming Bags";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS = "Incoming Incidents";
+	
+	//TODO: adding three sub items under last one to get the itemized view for WS
+	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
+	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_PILFERAGE = "Incoming Incidents Type Pilferage";
+	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DAMAGED = "Incoming Incidents Type Damaged";
+	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_LAST_24_HOURS = "Local PIRs And DPRs In Last 24 Hours";
+	
 	public final static String SYSTEM_COMPONENT_NAME_FORWARD_MESSAGE = "Forward Message";
 	public final static String SYSTEM_COMPONENT_NAME_FORWARD_BAGS_TO_LZ = "Forward Bags to LZ";
 	public final static String SYSTEM_COMPONENT_NAME_EXPRESS_ON_HAND_BAG = "Express On-hand Bag";
@@ -88,6 +96,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_BAGS_IN_STATION = "On-hand Bags";
 	public final static String SYSTEM_COMPONENT_NAME_SCANNER_DATA = "Scanner Data";
 	public final static String SYSTEM_COMPONENT_NAME_FORWARD_NOTICES = "Forward Copies";
+	public final static String SYSTEM_COMPONENT_NAME_CAPTCHAS = "Captcha";
 	
 	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
@@ -150,6 +159,9 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST = "Incident Checklist";
 	public final static String SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY = "Incident Checklist Read Only";
 
+	public final static String SYSTEM_COMPONENT_NAME_PUSH_LD = "Push Lost Delay to CRM";
+	public final static String SYSTEM_COMPONENT_NAME_PUSH_DAM = "Push Damaged to CRM";
+	public final static String SYSTEM_COMPONENT_NAME_PUSH_PIL = "Push Pilferage to CRM";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -225,6 +237,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_REMARK = "Remark Update Missing";
 	public final static String SYSTEM_COMPONENT_NAME_DAMAGED_BAG_REMARK = "Remark Update Damaged";
 	public static final String SYSTEM_COMPONENT_NAME_OHD_UPDATE_ALL = "Update OHD";
+	
+	public static final String SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT = "Baggage Weight";
 	
 	
 	// itinerary types
@@ -439,6 +453,9 @@ public class TracingConstants {
 
 	// form submit result
 	public final static String INSERT_SUCCESS = "insertsuccess";
+	// to distinguish update from addnew
+	public final static String UPDATE_FILE_SUCCESS = "updatesuccess";
+	public final static String CLOSE_FILE_SUCCESS = "closesuccess";
 
 	//view reminders
 	public final static String VIEW_REMINDERS_LIST = "viewReminders";
@@ -492,6 +509,7 @@ public class TracingConstants {
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";
 	public final static String MASS_ON_HAND_SUCCESS = "massonhandsuccess";
+	public final static String UPDATE_ON_HAND_SUCCESS = "updateonhandsuccess";
 
 	//success on forward
 	public final static String FORWARD_ON_HAND_SUCCESS = "forwardonhandsuccess";
@@ -518,6 +536,8 @@ public class TracingConstants {
 	public final static String REQUEST_ON_HAND_SUCCESS = "requestonhandsuccess";
 
 	public final static String CLOSE_ON_HAND_SUCCESS = "closeonhandsuccess";
+	
+	public final static String CONFIRM_CLOSE_ON_HAND_SUCCESS = "confirmcloseonhandsuccess";
 
 	public final static String EXPENSE_PAYOUT_APPROVED_SUCCESS = "expensepayoutapprovedsuccess";
 
@@ -542,8 +562,12 @@ public class TracingConstants {
 	public final static String SEARCH_LOST_FOUND = "searchlostfound";
 	public final static String LOST_FOUND = "lostfound";
 	public final static String LOST_FOUND_SUCCESS = "lostfound_success";
+	
+	public final static String UPDATE_LOST_FOUND_SUCCESS = "update_lostfound_success";
+	
 	public final static String AUTO_CHECKLIST_STEP_ONE = "auto_checklist_step_one";
 	public final static String INCIDENT_CHECKLIST = "incident_checklist";
+	public final static String AJAX_PUSH_TO_CRM = "ajax_push_to_crm";
 
 	// customer view only
 	public final static String PASS_VIEW_ONLY = "passview";
@@ -735,6 +759,7 @@ public class TracingConstants {
 	public static final String JSP_DELETE_INVENTORY = "inventory";
 	public static final String JSP_DELETE_PAX = "pax";
 	public static final String JSP_DELETE_ARTICLE = "article";
+	public static final String WEB_SERVICE_DTO = "web.service.dto";
 	
 	
 	public static String getDBDateFormat(Properties properties) {

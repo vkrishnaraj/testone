@@ -128,6 +128,19 @@ function updatePagination() {
                   </html:select>
                 </td>
               </tr>
+              
+              <tr>
+                <td colspan="2" nowrap>
+                  <bean:message key="colname.station.assignment.date.range" />
+                  (
+                  <%= a.getDateformat().getFormat() %>)
+                  <br>
+                  <html:text property="s_station_assignment_time" size="10" maxlength="10" styleClass="textfield" onkeypress="document.searchIncidentForm.assigned2StationWithin24hrs.checked = false;" onchange="document.searchIncidentForm.assigned2StationWithin24hrs.checked = false;" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="document.searchIncidentForm.assigned2StationWithin24hrs.checked = false;cal1xx.select(document.searchIncidentForm.s_station_assignment_time,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
+                  <html:text property="e_station_assignment_time" size="10" maxlength="10" styleClass="textfield" onkeypress="document.searchIncidentForm.assigned2StationWithin24hrs.checked = false;" onchange="document.searchIncidentForm.assigned2StationWithin24hrs.checked = false;" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="document.searchIncidentForm.assigned2StationWithin24hrs.checked = false;cal1xx.select(document.searchIncidentForm.e_station_assignment_time,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+                  <br>
+                  <html:checkbox property="assigned2StationWithin24hrs" value="1" onclick="if (this.checked == true) {document.searchIncidentForm.s_station_assignment_time.value = '';document.searchIncidentForm.e_station_assignment_time.value = ''; } else if (this.checked == false){}"><bean:message key="colname.assigned.to.station.within.24.hours" /></html:checkbox>
+                </td>
+              </tr>
 
               <tr>
                 <td colspan="2" align="center" valign="top">

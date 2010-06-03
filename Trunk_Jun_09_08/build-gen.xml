@@ -71,6 +71,7 @@
 		<delete file="${basedir}/src/hibernate_dirty.cfg.xml" />
 		<delete file="${basedir}/src/hibernate_demo.cfg.xml" />
 		<delete file="${basedir}/src/hibernate_qa.cfg.xml" />
+		<delete file="${basedir}/src/hibernate_reporting.cfg.xml" />
 		<delete file="${basedir}/src/tracer.properties" />
 		<delete file="${basedir}/web/reports/LostDelayReceipt.jrxml" />
 		<delete file="${basedir}/web/reports/LostDelayReceipt.jasper" />
@@ -279,6 +280,8 @@
 				<include name="wrapper.dll" />
 			</fileset>
 		</copy>
+		<copy todir="c:\deploy" file="${artifact.dir}/${ant_project_name}/${jarprefix}tracer-cron.jar"/>
+		
 		<zip destfile="${artifact.dir}/${ant_project_name}/zip/cron-svc.zip">
 			<fileset dir="${build.dir}/dist/cron/" />
 		</zip>
@@ -301,6 +304,7 @@
 		
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />

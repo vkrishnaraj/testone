@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -27,18 +28,21 @@ public class StringUtils {
 		ar.add(" the ");
 		ar.add(" that ");
 		ar.add(" and ");
+		ar.add(" none ");
 		ArrayList headar = new ArrayList();
 		headar.add("a ");
 		headar.add("an ");
 		headar.add("the ");
 		headar.add("that ");
 		headar.add("and ");
+		headar.add("none ");
 		ArrayList endar = new ArrayList();
 		endar.add(" a");
 		endar.add(" an");
 		endar.add(" the");
 		endar.add(" that");
 		endar.add(" and");
+		endar.add(" none");
 		String temps = null;
 		int index = 0;
 		try {
@@ -268,4 +272,27 @@ public class StringUtils {
   	}
   }
     
+  public static int[] convertStringArray2IntArray(String[] sArray) throws Exception {
+	  int result[] = null;
+	  if (sArray != null) {
+		  result = new int[sArray.length];
+		  for (int i = 0; i < sArray.length; i++) {
+			  result[i] = Integer.parseInt(sArray[i]);
+		  }
+	  }
+	  
+	  return result;
+  }
+  
+  public static List<Integer> convertStringArrayList2IntegerArrayList(List<String> sArrayList) throws Exception {
+	  List<Integer> result = null;
+	  if (sArrayList != null) {
+		  result = new ArrayList<Integer>(sArrayList.size());
+		  for (String myStr: sArrayList) {
+			  result.add(Integer.parseInt(myStr));
+		  }
+	  }
+	  
+	  return result;
+  }
 }

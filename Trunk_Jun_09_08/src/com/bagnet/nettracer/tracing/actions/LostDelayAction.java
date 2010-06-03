@@ -8,12 +8,18 @@ package com.bagnet.nettracer.tracing.actions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
@@ -23,11 +29,13 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.upload.FormFile;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -40,6 +48,8 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item_Photo;
+import com.bagnet.nettracer.tracing.db.LostAndFound_Photo;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
@@ -57,6 +67,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
@@ -71,6 +82,8 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 public class LostDelayAction extends CheckedAction {
+	private static Logger logger = Logger.getLogger(LostDelayAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -303,6 +316,95 @@ public class LostDelayAction extends CheckedAction {
 		if((loc = MBRActionUtils.actionAddAssoc(theform, request, user)) != null) {
 			return (mapping.findForward(loc));
 		}
+		
+		//image file save feature
+		int itemindex = -1, photoindex = -1;
+		int fileindex = -1;
+		StringTokenizer stt = null;
+		Enumeration e = request.getParameterNames();
+		while (e.hasMoreElements()) {
+			String parameter = (String) e.nextElement();
+			try {
+				if (parameter.indexOf("removePhoto") > -1) {
+					stt = new StringTokenizer(parameter, "_");
+					if (stt.hasMoreElements())
+						stt.nextToken();
+					if (stt.hasMoreElements())
+						itemindex = Integer.parseInt(stt.nextToken());
+					if (stt.hasMoreElements())
+						photoindex = Integer.parseInt(stt.nextToken());
+				}
+			} catch (Exception removephotoe) {
+				// tempering with data, should never happen
+			}
+			if (parameter.indexOf("uploadPhoto") > -1) {
+				fileindex = Integer.parseInt(parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]")));
+			}
+		}
+
+		if (itemindex >= 0 && photoindex >= 0) {
+			// don't remove photo for now.
+			Item_Photo thephoto = (Item_Photo) theform.getItem(itemindex, -1).getPhotolist().get(photoindex);
+			theform.getItem(itemindex, -1).getPhotolist().remove(photoindex);
+			request.setAttribute("upload", Integer.toString(itemindex));
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
+
+		if (fileindex >= 0) {
+			// add photo
+			request.setAttribute("upload", Integer.toString(fileindex));
+
+			
+			
+			// Save the file in the local directory.
+			Hashtable files = theform.getMultipartRequestHandler().getFileElements();
+			FormFile theFile = (FormFile) files.get("imagefile" + fileindex);
+			if (theFile != null && theFile.getFileSize() > 0) {
+				String st = Long.toString((new Date()).getTime());
+				String lead = "";
+				if (theform.getIncident_ID() != null && theform.getIncident_ID().length() > 0)
+					lead = theform.getIncident_ID();
+				
+				// now make subfolder with year and month
+				Calendar cal = new GregorianCalendar();
+				int year = cal.get(Calendar.YEAR);
+				int month = cal.get(Calendar.MONTH) + 1;
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				
+				//compute the folder name
+				String folder = user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
+				
+				//paths to be stored in the db
+				String fileName = theFile.getFileName();
+				String picpath = folder + lead + "_" + st + "_" + fileName;
+				String thumbpath = folder + lead + "_" + st + "_thumb_" + fileName;
+				
+				boolean uploadresult = ImageUtils.doUpload(theFile, user, folder, picpath, thumbpath);
+				if (!uploadresult) {
+					error = new ActionMessage("error.uploadfile");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+					return (mapping.findForward(TracingConstants.LD_MAIN));
+				} else {
+					// add the image to the DB.
+					Item_Photo photo = new Item_Photo();
+					photo.setPicpath(picpath);
+					photo.setThumbpath(thumbpath);
+					photo.setItem(theform.getItem(fileindex, -1));
+					photo.setFileName(fileName);
+					ArrayList al = (ArrayList) theform.getItem(fileindex, -1).getPhotolist();
+					al.add(photo);
+				}
+			} else {
+				// upload file errors.
+				error = new ActionMessage("error.uploadfile");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}	
+		
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
+		//end of new image file save feature code - G
 
 
 		// save incident
@@ -312,6 +414,9 @@ public class LostDelayAction extends CheckedAction {
 				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null ) {
 
 			Incident iDTO = new Incident();
+			
+			//key to determine whether the action is add new, close, or update
+			int saveActionType = ADD_NEW_RECORD;
 
 			// if save for tracing, change status to open,
 			if(request.getParameter("savetracing") != null)
@@ -327,6 +432,16 @@ public class LostDelayAction extends CheckedAction {
 				error = new ActionMessage("error.wt_save_closed");
 			}
 			else {
+				//TODO: update the key saveActionType: if no incident id, then it is addnew
+				String myIncidentId = theform.getIncident_ID();
+				if (!(myIncidentId == null || myIncidentId.equals(""))) {
+					if( request.getParameter("close") != null && request.getParameter("doclose") != null) {
+						saveActionType = CLOSE_RECORD;
+					} else {
+						saveActionType = UPDATE_RECORD;
+					}
+				}
+				
 				if( request.getParameter("close") != null && request.getParameter("doclose") != null) {
 					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, false);
 				}
@@ -377,7 +492,16 @@ public class LostDelayAction extends CheckedAction {
 			if(error == null) {
 				request.setAttribute("lostdelay", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
-				return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
+				
+				//logger.error(">>>>>>>>>saveActionType (1-addnew; 2-close; 3-update) : " + saveActionType);
+				
+				if (saveActionType == UPDATE_RECORD) {
+					return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
+				} else if (saveActionType == CLOSE_RECORD) {
+					return (mapping.findForward(TracingConstants.CLOSE_FILE_SUCCESS));
+				} else {
+					return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
+				}
 			}
 			else if(error.getKey().equals("error.unable_to_close_incident")) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -452,7 +576,7 @@ public class LostDelayAction extends CheckedAction {
 						request.setAttribute("incident", incident);
 						return (mapping.findForward(TracingConstants.LD_MAIN));
 					}
-				} catch(Exception e) {
+				} catch(Exception ex) {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.wt_cancel_pending"));	
 				}
 			}

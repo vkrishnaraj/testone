@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  * @author Administrator
  * 
  * @hibernate.class table="ItemType"
+ * @hibernate.cache usage="read-only"
  */
 public class ItemType extends LocaleBasedObject implements Serializable {
 	private int ItemType_ID;
@@ -44,9 +45,9 @@ public class ItemType extends LocaleBasedObject implements Serializable {
 	 * 
 	 * @hibernate.property type="string" length="10"
 	 */
-	public String getDescription() {
-		return description;
-	}
+//	public String getDescription() {
+//		return description;
+//	}
 
 	/**
 	 * @param description

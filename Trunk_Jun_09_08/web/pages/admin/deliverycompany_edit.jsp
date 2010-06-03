@@ -12,7 +12,7 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="bdoAdmin.do" method="post" onsubmit="return validateMaintainDeliveryCompanyForm(this);">
     <html:javascript formName="MaintainDeliveryCompanyForm" />
     <html:hidden name="MaintainDeliveryCompanyForm" property="delivercompany_ID" />

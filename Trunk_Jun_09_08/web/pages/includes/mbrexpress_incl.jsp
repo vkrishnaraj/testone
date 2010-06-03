@@ -219,7 +219,7 @@
                           :
                         </td>
                         <td>
-                          <html:text name="claimcheck" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
+                          <html:text name="claimcheck" property="claimchecknum" size="13" maxlength="10" styleClass="textfield" indexed="true" />
                         </td>
                       </tr>
                       <tr id="claimcheck_<%=i %>_1">
@@ -373,7 +373,7 @@
 								            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%">
 								              <tr id="<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>">
 								                <td>
-								                  <bean:message key="colname.category" /><br>
+								                  <bean:message key="colname.category.req" /><br>
 								                  <html:select property='<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].categorytype_ID" %>' styleClass="dropdown">
 								                    <html:option value="">
 								                      <bean:message key="select.please_select" />
@@ -544,7 +544,8 @@
                           <tr>
                             <td>
                               <a name='addarticle<%= i %>'></a>
-                              <bean:message key="colname.article" />
+                              
+                              <bean:message key="colname.article.req" />
                               :
                             </td>
                             <td>

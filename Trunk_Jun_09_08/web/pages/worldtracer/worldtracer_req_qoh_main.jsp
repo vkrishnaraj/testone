@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 <html:form action="worldtracerqoh.do" method="post" onsubmit="return validateWorldTracerReqQOHForm(this);">
 	<html:javascript formName="worldTracerReqQOHForm" />
 

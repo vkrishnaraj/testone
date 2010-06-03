@@ -1,24 +1,24 @@
-/*
- * Created on Jul 14, 2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
  * @author Administrator
  * 
  * @hibernate.class table="UserGroup"
+ * @hibernate.cache usage="read-write"
+
  */
 public class UserGroup implements Serializable {
 	private int UserGroup_ID;
 	private String description;
 	private String description2;
 	private Set componentPolicies;
+	private HashMap<String, GroupComponentPolicy> permissionNameMap = null;
+	private HashMap<String, GroupComponentPolicy> permissionLinkMap = null;
 	
 	private String companycode_ID;
 
@@ -26,6 +26,7 @@ public class UserGroup implements Serializable {
 	 * @hibernate.set cascade="all-delete-orphan" order-by="policy_id"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.GroupComponentPolicy"
 	 * @hibernate.key column="group_id"
+	 * @hibernate.cache usage="read-write"
 	 * @return Returns the componentPolicies.
 	 */
 	public Set getComponentPolicies() {
@@ -109,5 +110,42 @@ public class UserGroup implements Serializable {
 		UserGroup_ID = userGroup_ID;
 	}
 
+	public HashMap<String, GroupComponentPolicy> getPermissionNameMap() {
+		if (permissionNameMap == null) {
+			permissionNameMap = new HashMap<String, GroupComponentPolicy>();
+			Set<GroupComponentPolicy> l = (Set<GroupComponentPolicy>)this.getComponentPolicies();
 
+			if (l != null) {
+				for (GroupComponentPolicy p: l) {
+					permissionNameMap.put(p.getComponent().getComponent_Name().toUpperCase(), p);
+				}
+			}
+		}
+		return permissionNameMap;	
+	}
+
+	public HashMap<String, GroupComponentPolicy> getPermissionLinkMap() {
+		if (permissionLinkMap == null) {
+			permissionLinkMap = new HashMap<String, GroupComponentPolicy>();
+			Set<GroupComponentPolicy> l = (Set<GroupComponentPolicy>)this.getComponentPolicies();
+
+			if (l != null) {
+				for (GroupComponentPolicy p: l) {
+					String s = p.getComponent().getComponent_action_link();
+					if (s != null) {
+						int qIdx = s.indexOf("?");
+						
+						if (qIdx > 0) {
+							s = s.substring(0, qIdx);
+						}
+						
+						permissionLinkMap.put(s, p);
+					}
+				}
+			}
+		}
+		return permissionLinkMap;	
+	}
+
+	
 }

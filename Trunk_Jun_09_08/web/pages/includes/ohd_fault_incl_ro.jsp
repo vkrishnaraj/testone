@@ -38,7 +38,7 @@ OnHandForm onHandForm = (OnHandForm) session.getAttribute("OnHandForm");
 					<bean:message key="none"/>
 				</c:when>
 				<c:otherwise>
-					<%= LossCodeBMO.getCode(onHandForm.getLoss_code()).getDescription() %>					
+					<%= LossCodeBMO.getCode(onHandForm.getLoss_code()).getCombination() %>					
 				</c:otherwise>
 			</c:choose>
 		</td>

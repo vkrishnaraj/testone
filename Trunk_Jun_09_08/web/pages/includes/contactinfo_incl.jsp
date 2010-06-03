@@ -224,7 +224,7 @@
                       </logic:notEqual>
                 </td>
                 <td>
-                  <bean:message key="colname.zip" />
+                  <bean:message key="colname.zip.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].zip" %>' size="15" maxlength="11" styleClass="textfield" />
                 </td>

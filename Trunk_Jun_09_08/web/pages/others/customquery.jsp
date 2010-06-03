@@ -763,7 +763,7 @@ function updatePagination() {
                         </td>
                         <td>
                           <strong>
-                            <bean:message key="colname.found_station" />
+                            <bean:message key="colname.holding_station" />
                           </strong>
                         </td>
                         <td>
@@ -810,10 +810,10 @@ function updatePagination() {
                             <bean:write name="ohd" property="type" />
                           </td>
                           <td>
-                            <bean:write name="ohd" property="foundAtStation.company.companyCode_ID" />
+                            <bean:write name="ohd" property="holdingStation.company.companyCode_ID" />
                           </td>
                           <td>
-                            <bean:write name="ohd" property="foundAtStation.stationcode" />
+                            <bean:write name="ohd" property="holdingStation.stationcode" />
                           </td>
                           <td>
                             <logic:notEmpty name="ohd" property="passenger">

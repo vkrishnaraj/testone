@@ -14,6 +14,7 @@ import java.util.Set;
  * @author Ankur Gupta
  * 
  * @hibernate.class table="group_component_policy"
+ * @hibernate.cache usage="read-write"
  */
 public class GroupComponentPolicy implements Serializable {
 	private int policy_id;
@@ -45,6 +46,7 @@ public class GroupComponentPolicy implements Serializable {
 	 * @hibernate.many-to-many column="permission_id"
 	 *                                    class="com.bagnet.nettracer.tracing.db.SystemPermission"
 	 * @hibernate.key column="policy_id"
+	 * @hibernate.cache usage="read-write"
 	 * @return Returns the componentPermissions.
 	 */
 	public Set getComponentPermissions() {

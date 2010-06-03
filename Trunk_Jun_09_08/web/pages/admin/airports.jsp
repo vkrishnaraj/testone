@@ -34,7 +34,7 @@
 	}
 
 </script>
-<jsp:include page="/pages/includes/validation_incl.jsp" />
+
 <html:form action="airportAdmin.do" method="post">
   <tr>
     <td colspan="3" id="pageheadercell">

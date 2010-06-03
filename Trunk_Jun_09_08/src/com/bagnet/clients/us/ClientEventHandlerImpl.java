@@ -10,12 +10,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
+import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
@@ -35,6 +39,37 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 	private String newline = "+";
 	
 	@Override
+	public void doEventOnForward(ForwardOhd fw) {
+		try {
+			ForwardIntegrationImpl fwd = new ForwardIntegrationImpl();
+			fwd.sendMessage(fw);
+		} catch (Exception e) {
+			logger.error("Exception encountered processing forward", e);
+		}
+	}
+	
+	@Override
+	public void doEventOnForward(ForwardMessage fw) {
+		try {
+			ForwardIntegrationImpl fwd = new ForwardIntegrationImpl();
+			fwd.sendMessage(fw);
+		} catch (Exception e) {
+			logger.error("Exception encountered processing forward", e);
+		}
+	}
+
+	
+	@Override
+	public void doEventOnForward(List<OHD_Log> logs) {
+		try {
+			ForwardIntegrationImpl fwd = new ForwardIntegrationImpl();
+			fwd.sendMessage(logs);
+		} catch (Exception e) {
+			logger.error("Exception encountered processing forward", e);
+		}
+	}
+	
+	@Override
 	public void doEventOnBeornWS(BeornDTO dto) {
 		
 		/*
@@ -48,6 +83,10 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		 * Mishandling Station          PHX
 		 * Telex Address                LAXOOUS
 		 */
+		
+		ArrayList<OHD_Log> logs = new ArrayList<OHD_Log>();
+		logs.add(dto.getLog());
+		doEventOnForward(logs);
 		
 		if (stringExists(dto.getSpecialInstructions())) {
 			StringBuffer str = new StringBuffer(256);
@@ -400,4 +439,9 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		}
 	}
 
+	@Override
+	public Incident sendCrm(String i, Session sess) {
+		CrmIntegration integ = new CrmIntegration();
+		return integ.sendIncident(i, sess);
+	}
 }

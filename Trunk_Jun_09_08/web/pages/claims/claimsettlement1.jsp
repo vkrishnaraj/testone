@@ -178,9 +178,18 @@
             onClick="cal1xx.select2(document.claimSettlementForm, 'secondContact','itcalendar2','MM/dd/yyyy'); return false;">
           </td>
         </tr>
+        <!-- total weight input box begins -->
         <tr>
           <td colspan="2" class="header"><Strong><bean:message key="claimsettlement.pplcActions" /></strong></td>
         </tr>
+        <tr>
+          <td>Total Baggage Weight</td>
+          <td>
+			<html:text name="claimSettlementForm" property="overall_weight" size="8" maxlength="10" styleClass="textfield" />
+			lb
+          </td>
+        </tr>
+        <!-- total weight input box ends -->
         <tr>
           <td align="center" colspan="2">
           <%

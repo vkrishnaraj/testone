@@ -5,6 +5,7 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.awt.Color;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,13 +40,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
+import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporter;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
-import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
@@ -56,6 +56,26 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
+
+import ar.com.fdvs.dj.core.DynamicJasperHelper;
+import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.CustomExpression;
+import ar.com.fdvs.dj.domain.DJCalculation;
+import ar.com.fdvs.dj.domain.DynamicReport;
+import ar.com.fdvs.dj.domain.Style;
+import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
+import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
+import ar.com.fdvs.dj.domain.builders.GroupBuilder;
+import ar.com.fdvs.dj.domain.constants.Font;
+import ar.com.fdvs.dj.domain.constants.GroupLayout;
+import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
+import ar.com.fdvs.dj.domain.constants.Page;
+import ar.com.fdvs.dj.domain.constants.Transparency;
+import ar.com.fdvs.dj.domain.constants.VerticalAlign;
+import ar.com.fdvs.dj.domain.entities.DJGroup;
+import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
+import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
 
 import com.bagnet.nettracer.datasources.JRIncidentDataSource;
 import com.bagnet.nettracer.datasources.JROnhandDataSource;
@@ -83,6 +103,7 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -916,6 +937,7 @@ public class ReportBMO {
 			sess.close();
 		}
 	}
+	
 
 	/**
 	 * claim payout report
@@ -954,15 +976,21 @@ public class ReportBMO {
 				faultq = " and fault.station_ID in (:fault_ID) ";
 			}
 			String losscodeq = "";
-			if (srDTO.getLoss_code() > 0) {
-				losscodeq = " and exp.incident.loss_code = :loss_code";
+//			if (srDTO.getLoss_code() > 0) {
+//				losscodeq = " and exp.incident.loss_code = :loss_code_combo ";
+//			}
+			if (srDTO.getLoss_code_combo() != null && srDTO.getLoss_code_combo()[0].intValue() > 0) {
+				losscodeq = " and exp.incident.loss_code in (:loss_code_combo) ";
 			}
 
 			String statusq = "";
-			if (srDTO.getStatus_ID() >= 1) {
-				statusq = " and exp.incident.status.status_ID= :status_ID ";
+//			if (srDTO.getStatus_ID() >= 1) {
+//				statusq = " and exp.incident.status.status_ID= :status_ID ";
+//			}
+			if (srDTO.getStatus_id_combo() != null && srDTO.getStatus_id_combo()[0].intValue() >= 1) {
+				statusq = " and exp.incident.status.status_ID in (:status_id_combo) ";
 			}
-
+			
 			String agentq = "";
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0) {
 				agentq = " and exp.agent.username like :agent_username ";
@@ -1039,8 +1067,11 @@ public class ReportBMO {
 			}
 
 			String typeq = "";
-			if (srDTO.getExpensetype_ID() > 0) {
-				typeq = " and exp.expensetype.expensetype_ID = :expensetype_ID ";
+//			if (srDTO.getExpensetype_ID() > 0) {
+//				typeq = " and exp.expensetype.expensetype_ID = :expensetype_ID ";
+//			}
+			if (srDTO.getExpensetype_id_combo() != null && srDTO.getExpensetype_id_combo()[0].intValue() > 0) {
+				typeq = " and exp.expensetype.expensetype_ID in (:expensetype_id_combo) ";
 			}
 
 			String addspart = "";
@@ -1050,7 +1081,7 @@ public class ReportBMO {
 			String sql = "SELECT sum(exp.checkamt), exp.currency, sum(exp.voucheramt), sum(exp.mileageamt),"
 					+ " exp.expensetype.expensetype_ID, exp.expenselocation.station_ID,exp.expenselocation.stationcode,exp.draftpaiddate,"
 					+ addspart
-					+ " fault.station_ID,fault.stationcode, exp.incident.loss_code,exp.agent.username "
+					+ " fault.station_ID,fault.stationcode,exp.incident.loss_code,exp.agent.username,exp.incident.incident_ID,exp.agent.station.stationcode "
 					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.incident.faultstation fault where 1=1 "
 					+ mbrtypeq
 					+ stationq
@@ -1062,22 +1093,81 @@ public class ReportBMO {
 					+ typeq
 					+ companylimit
 					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.expensetype.expensetype_ID,exp.draftpaiddate, "
-					+ addspart + " exp.currency, exp.incident.loss_code,exp.agent.username "
-					+ " order by exp.expenselocation.stationcode,exp.expensetype.expensetype_ID";
+					+ addspart + " exp.currency, exp.incident.loss_code,exp.agent.username ";
+//  				+ " order by exp.expenselocation.stationcode,exp.expensetype.expensetype_ID";
+			
+			String myPrimarySortOrder = srDTO.getPrimary_sort_order();
+			String mySecondarySortOrder = srDTO.getSecondary_sort_order();
+			String myReportStyle = "11";
+
+			if (mySecondarySortOrder.equalsIgnoreCase("by_incident_id")) {
+				if (myPrimarySortOrder.equalsIgnoreCase("by_create_station")) {
+					myReportStyle = "11";
+					sql += " order by exp.expenselocation.stationcode, exp.incident.incident_ID";
+				} else if (myPrimarySortOrder
+						.equalsIgnoreCase("by_agent_payment_station")) {
+					myReportStyle = "20";
+					sql += " order by exp.agent.station.stationcode, exp.incident.incident_ID";
+				} else if (myPrimarySortOrder
+						.equalsIgnoreCase("by_fault_station")) {
+					myReportStyle = "12";
+					sql += " order by exp.incident.faultstation.stationcode, exp.incident.incident_ID";
+				}
+			} else if (mySecondarySortOrder
+					.equalsIgnoreCase("by_expense_agent_username")) {
+				if (myPrimarySortOrder.equalsIgnoreCase("by_create_station")) {
+					myReportStyle = "31";
+					sql += " order by exp.expenselocation.stationcode, exp.agent.username";
+				} else if (myPrimarySortOrder
+						.equalsIgnoreCase("by_agent_payment_station")) {
+					myReportStyle = "40";
+					sql += " order by exp.agent.station.stationcode, exp.agent.username";
+				} else if (myPrimarySortOrder
+						.equalsIgnoreCase("by_fault_station")) {
+					myReportStyle = "32";
+					sql += " order by exp.incident.faultstation.stationcode, exp.agent.username";
+				}
+			}
+
+			
+			
+			// print the entire sql to debug
+			//logger.error("create_exp_rpt - entire sql: " + sql);
 			Query q = sess.createQuery(sql);
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
-			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
-				q.setParameterList("station_ID", srDTO.getStation_ID());
-
-			if (srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0"))
-				q.setParameterList("fault_ID", srDTO.getFaultstation_ID());
-			if (srDTO.getLoss_code() > 0)
-				q.setInteger("loss_code", srDTO.getLoss_code());
-
-			if (srDTO.getStatus_ID() >= 1)
-				q.setInteger("status_ID", srDTO.getStatus_ID());
-
+			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
+				//q.setParameterList("station_ID", srDTO.getStation_ID());
+				String sArray[] = srDTO.getStation_ID();
+				List<String> stationIdStringList = Arrays.asList(sArray);
+				List<Integer> stationIdIntegerList = StringUtils.convertStringArrayList2IntegerArrayList(stationIdStringList);
+				q.setParameterList("station_ID", stationIdIntegerList);
+			}
+			
+			if (srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
+				//q.setParameterList("fault_ID", srDTO.getFaultstation_ID());
+				String sArray[] = srDTO.getFaultstation_ID();
+				List<String> faultStationIdStringList = Arrays.asList(sArray);
+				List<Integer> faultStationIdIntegerList = StringUtils.convertStringArrayList2IntegerArrayList(faultStationIdStringList);
+				q.setParameterList("fault_ID", faultStationIdIntegerList);
+			}
+		
+//			if (srDTO.getLoss_code() > 0)
+//				q.setInteger("loss_code", srDTO.getLoss_code());
+			Integer[] myLoss_code_combo = srDTO.getLoss_code_combo();
+			if (myLoss_code_combo != null && myLoss_code_combo[0].intValue() > 0) {
+				q.setParameterList("loss_code_combo", Arrays.asList(myLoss_code_combo));
+				parameters.put("showsubtotal", "show");
+			}
+			
+//			if (srDTO.getStatus_ID() >= 1)
+//				q.setInteger("status_ID", srDTO.getStatus_ID());
+			Integer[] myStatus_id_combo = srDTO.getStatus_id_combo();
+			if (myStatus_id_combo != null && myStatus_id_combo[0].intValue() >= 1) {
+				q.setParameterList("status_id_combo", Arrays.asList(myStatus_id_combo));
+				//parameters.put("showsubtotal", "show");
+			}
+			
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0) {
 				q.setString("agent_username", srDTO.getAgent());
 			}
@@ -1097,10 +1187,17 @@ public class ReportBMO {
 			if (pedate != null)
 				q.setDate("penddate", pedate);
 
-			if (srDTO.getExpensetype_ID() > 0)
-				q.setInteger("expensetype_ID", srDTO.getExpensetype_ID());
+//			if (srDTO.getExpensetype_ID() > 0)
+//				q.setInteger("expensetype_ID", srDTO.getExpensetype_ID());
+			Integer[] myExpensetype_id_combo = srDTO.getExpensetype_id_combo();
+			if (myExpensetype_id_combo != null && myExpensetype_id_combo[0].intValue() > 0) {
+				q.setParameterList("expensetype_id_combo", Arrays.asList(myExpensetype_id_combo));
+				//parameters.put("showsubtotal", "show");
+			}			
+			
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
 			List templist = q.list();
+			
 			List list = new ArrayList();
 			if (templist.size() == 0) {
 				logger.debug("no data for report");
@@ -1143,6 +1240,16 @@ public class ReportBMO {
 
 				exp.setLoss_code(((Integer) o[++j]).intValue());
 				exp.setAgent_username((String) o[++j]);
+				
+				// deal with claim number here
+				exp.setClaim_number((String) o[++j]);
+				
+				// deal with agent station code here
+				exp.setAgent_station_code((String) o[++j]);
+				
+				// deal with expense type description here
+				//exp.setExpenseType_description((String) o[++j]);
+				
 				list.add(exp);
 			}
 			// populate station and status
@@ -1155,7 +1262,14 @@ public class ReportBMO {
 			} else {
 				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
-			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+			
+
+			
+			parameters.put("reportStyle", myReportStyle);
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+			
+			return getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -2686,7 +2800,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 		// added virtualizer to reduce memory
 		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
-		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", 1000);
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", 501);
 		
 		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
@@ -2945,6 +3059,764 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	public String getErrormsg() {
 		return errormsg;
 	}
+
+	//dj reporting starts
+	private static CustomExpression getSubTotalCustomExpression() {
+		return new CustomExpression() {
+
+			public Object evaluate(Map fields, Map variables, Map parameters) {
+				String subTotal = "Sub-Total: ";
+				return subTotal;
+			}
+
+			public String getClassName() {
+				return String.class.getName();
+			}
+
+		};
+	}
+	
+	public static DynamicReport buildExcelReport(int reportStyle, Locale reportLocale, ResourceBundle resourceBundle) throws Exception {
+
+
+		/**
+		 * Creates the DynamicReportBuilder and sets the basic options for
+		 * the report
+		 */
+		FastReportBuilder drb = new FastReportBuilder();
+		
+		//getting report header title from reource bundle
+		String reportHeadingCreateStation = "Create Station Default";
+		String reportHeadingIncidentNumber = "Incident #";
+		String reportHeadingFaultStation = "Fault Station";
+		String reportHeadingLossCode = "Loss Code";
+		String reportHeadingAgent = "Agent";
+		String reportHeadingAgentStation = "Agent Station";
+		String reportHeadingPaidDate = "Paid Date";
+		String reportHeadingPaymentType = "Payment Type";
+		String reportHeadingCheckAmount = "Check Amount";
+		String reportHeadingVoucher = "Voucher";
+		String reportHeadingMileage = "Mileage";
+		
+		String myCreateStation = resourceBundle.getString("report.disbursement.heading.create.station");
+		if (!( myCreateStation == null || myCreateStation.equalsIgnoreCase("") )) {
+			reportHeadingCreateStation = myCreateStation;
+		}
+		
+		String myIncidentNumber = resourceBundle.getString("report.disbursement.heading.incident.number");
+		if (!( myIncidentNumber == null || myIncidentNumber.equalsIgnoreCase("") )) {
+			reportHeadingIncidentNumber = myIncidentNumber;
+		}
+		
+		String myFaultStation = resourceBundle.getString("report.disbursement.heading.fault.station");
+		if (!( myFaultStation == null || myFaultStation.equalsIgnoreCase("") )) {
+			reportHeadingFaultStation = myFaultStation;
+		}
+		
+		String myLossCode = resourceBundle.getString("report.disbursement.heading.loss.code");
+		if (!( myLossCode == null || myLossCode.equalsIgnoreCase("") )) {
+			reportHeadingLossCode = myLossCode;
+		}
+		
+		String myAgent = resourceBundle.getString("report.disbursement.heading.agent");
+		if (!( myAgent == null || myAgent.equalsIgnoreCase("") )) {
+			reportHeadingAgent = myAgent;
+		}
+		
+		String myAgentStation = resourceBundle.getString("report.disbursement.heading.agent.station");
+		if (!( myAgentStation == null || myAgentStation.equalsIgnoreCase("") )) {
+			reportHeadingAgentStation = myAgentStation;
+		}
+		
+		String myPaidDate = resourceBundle.getString("report.disbursement.heading.paid.date");
+		if (!( myPaidDate == null || myPaidDate.equalsIgnoreCase("") )) {
+			reportHeadingPaidDate = myPaidDate;
+		}
+		
+		String myPaymentType = resourceBundle.getString("report.disbursement.heading.payment.type");
+		if (!( myPaymentType == null || myPaymentType.equalsIgnoreCase("") )) {
+			reportHeadingPaymentType = myPaymentType;
+		}
+		
+		String myCheckAmount = resourceBundle.getString("report.disbursement.heading.check.amount");
+		if (!( myCheckAmount == null || myCheckAmount.equalsIgnoreCase("") )) {
+			reportHeadingCheckAmount = myCheckAmount;
+		}
+		
+		String myVoucher = resourceBundle.getString("report.disbursement.heading.voucher");
+		if (!( myVoucher == null || myVoucher.equalsIgnoreCase("") )) {
+			reportHeadingVoucher = myVoucher;
+		}
+		
+		String myMileage = resourceBundle.getString("report.disbursement.heading.mileage");
+		if (!( myMileage == null || myMileage.equalsIgnoreCase("") )) {
+			reportHeadingMileage = myMileage;
+		}
+		
+		//sort out the report styles
+        switch (reportStyle) {
+            case 11:  
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+        		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+        		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+        		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+        		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+        		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+            case 12: 
+            	drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+        		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+        		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+        		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+        		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+        		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+            case 20:  
+            	drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+        		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+        		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+        		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+        		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+        		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+            case 31:  	    			
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+        		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+        		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+        		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+        		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+        		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+            case 32:  	   
+            	drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+        		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+        		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+        		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+        		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+        		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+            case 40:  
+            	drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+        		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+        		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+        		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+        		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+        		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+            default: 	    			
+        		drb = drb.addColumn(reportHeadingCreateStation,"stationcode",String.class.getName(),14);
+	    		drb = drb.addColumn(reportHeadingIncidentNumber,"claim_number",String.class.getName(),30);
+	    		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
+	    		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
+	    		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
+	    		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
+	    		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
+	    		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+	    		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
+	    		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
+	    		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
+	    		drb = drb.addColumn(reportHeadingMileage,"mileageamt",Integer.class.getName(),12);
+    			break;
+        }
+		
+		//drb.setReportLocale(new Locale("pt","BR"));
+        //drb.setReportLocale(new Locale("fr","FR"));
+        drb.setReportLocale(reportLocale);
+		
+		drb.setSubtitle("This report was generated on " + new Date());
+		
+		Page page = new Page();
+		drb.setPageSizeAndOrientation(page.Page_A4_Landscape());
+		//drb.setPrintBackgroundOnOddRows(true);
+		drb.setPrintBackgroundOnOddRows(false);
+		drb.setIgnorePagination(true);
+		DynamicReport dr = drb.setTitle("Disbursement Report").setUseFullPageWidth(true).build();
+
+		return dr;
+	}
+
+	private static DynamicReportBuilder excelReportStyleSelector() {
+		DynamicReportBuilder result = null;
+		
+		return result;
+	}
+	
+	private static DynamicReportBuilder reportStyleSelector(DynamicReportBuilder drb, 
+			Map<String, AbstractColumn> reportColumns, int reportStyle) throws Exception {
+		
+		if (reportColumns != null) {
+			Style groupVariables = new Style("groupVariables");
+			groupVariables.setHorizontalAlign(HorizontalAlign.LEFT);
+			groupVariables.setVerticalAlign(VerticalAlign.BOTTOM);
+			
+			AbstractColumn columnCreateStation = reportColumns.get("columnCreateStation");
+			AbstractColumn columnClaimNumber = reportColumns.get("columnClaimNumber");
+			AbstractColumn columnaFaultStationCode = reportColumns.get("columnaFaultStationCode");
+			AbstractColumn columnaLossCode = reportColumns.get("columnaLossCode");
+			AbstractColumn columnAgentCode = reportColumns.get("columnAgentCode");
+			AbstractColumn columnaAgentStationCode = reportColumns.get("columnaAgentStationCode");
+			AbstractColumn columnaPaidDate = reportColumns.get("columnaPaidDate");
+			AbstractColumn columnaPayType = reportColumns.get("columnaPayType");
+			AbstractColumn columnCheckAmount = reportColumns.get("columnCheckAmount");
+			AbstractColumn columnCurrencyType = reportColumns.get("columnCurrencyType");
+			AbstractColumn columnVoucher = reportColumns.get("columnVoucher");
+			AbstractColumn columnMileage = reportColumns.get("columnMileage");
+			
+			DJGroup g1 = null;
+			GroupBuilder gb1 = null;
+			AbstractColumn groupByColumn = columnCreateStation;  //default
+			
+			//sort out the report styles
+	        switch (reportStyle) {
+	            case 11:  
+	    			drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnClaimNumber);
+	    			drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnaAgentStationCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage); 
+	    			
+	    			groupByColumn = columnCreateStation; 
+	    			break;
+	            case 12:  
+	            	drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnClaimNumber);
+	    			drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnaAgentStationCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage); 
+	    			
+	    			groupByColumn = columnaFaultStationCode;
+	    			break;
+	            case 20:  
+	            	drb.addColumn(columnaAgentStationCode);
+	    			drb.addColumn(columnClaimNumber);
+	    			drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage); 
+	    			
+	    			groupByColumn = columnaAgentStationCode;
+	    			break;
+	            case 31:  	    			
+	            	drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnaAgentStationCode);
+	            	drb.addColumn(columnClaimNumber);
+	    			drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage);
+	    			
+	    			groupByColumn = columnCreateStation;
+	    			break;
+	            case 32:  	    			
+	            	drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnaAgentStationCode);
+	    			drb.addColumn(columnClaimNumber);
+	            	drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage); 
+	    			
+	    			groupByColumn = columnaFaultStationCode;
+	    			break;
+	            case 40:  	  
+	            	drb.addColumn(columnaAgentStationCode);
+	            	drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnClaimNumber);
+	    			drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage); 
+	    			
+	    			groupByColumn = columnaAgentStationCode;
+	    			break;
+	            default: 	    			
+	            	drb.addColumn(columnCreateStation);
+	    			drb.addColumn(columnClaimNumber);
+	    			drb.addColumn(columnaFaultStationCode);
+	    			drb.addColumn(columnaLossCode);
+	    			drb.addColumn(columnAgentCode);
+	    			drb.addColumn(columnaAgentStationCode);
+	    			drb.addColumn(columnaPaidDate);
+	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnCheckAmount);
+	    			drb.addColumn(columnCurrencyType);
+	    			drb.addColumn(columnVoucher);
+	    			drb.addColumn(columnMileage); 
+	    			
+	    			groupByColumn = columnCreateStation;
+	    			break;
+	        }
+
+	        gb1 = new GroupBuilder();
+	        g1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
+			.addFooterVariable(columnMileage,DJCalculation.SUM,groupVariables) // idem for the columnaQuantity column
+			.addFooterVariable(columnVoucher, DJCalculation.SUM,groupVariables)
+			.addFooterVariable(columnCheckAmount,DJCalculation.SUM,groupVariables) // tell the group place a variable footer of the column "columnAmount" with the SUM of allvalues of the columnAmount in this group.
+			.addFooterVariable(columnaPayType, getSubTotalCustomExpression(),groupVariables)
+			.setGroupLayout(GroupLayout.DEFAULT)
+			.setFooterVariablesHeight(new Integer(20))
+			.setFooterHeight(new Integer(50))
+			.setHeaderVariablesHeight(new Integer(35))
+			.build();
+
+			drb.addGroup(g1);
+			
+//			//: playing with charts
+//			DJChartBuilder cb = new DJChartBuilder();                             
+//			//DJChart chart =  cb.addType(DJChart.BAR_CHART)                        
+//			DJChart chart =  cb.setType(DJChart.BAR_CHART)
+//	                            .setOperation(DJChart.CALCULATION_SUM)         
+//	                            .setColumnsGroup(g1)                          
+//	                            .addColumn(columnCheckAmount)                      
+//	                            .build();	
+//			
+//			drb.addChart(chart);    //add chart
+		
+		}
+		
+		return drb;
+	}
+	
+	private static DynamicReport buildReport(int reportStyle, Locale reportLocale, ResourceBundle resourceBundle) throws Exception {
+
+		//getting report header title from resource bundle
+		String reportHeadingCreateStation = "Create Station";
+		String reportHeadingIncidentNumber = "Incident #";
+		String reportHeadingFaultStation = "Fault Station";
+		String reportHeadingLossCode = "Loss Code";
+		String reportHeadingAgent = "Agent";
+		String reportHeadingAgentStation = "Agent Station";
+		String reportHeadingPaidDate = "Paid Date";
+		String reportHeadingPaymentType = "Payment Type";
+		String reportHeadingCheckAmount = "Check Amount";
+		String reportHeadingVoucher = "Voucher";
+		String reportHeadingMileage = "Mileage";
+		
+		String myCreateStationFromResource = resourceBundle.getString("report.disbursement.heading.create.station");
+		if (!( myCreateStationFromResource == null || myCreateStationFromResource.equalsIgnoreCase("") )) {
+			reportHeadingCreateStation = myCreateStationFromResource;
+		}
+
+		String myIncidentNumber = resourceBundle.getString("report.disbursement.heading.incident.number");
+		if (!( myIncidentNumber == null || myIncidentNumber.equalsIgnoreCase("") )) {
+			reportHeadingIncidentNumber = myIncidentNumber;
+		}
+		
+		String myFaultStation = resourceBundle.getString("report.disbursement.heading.fault.station");
+		if (!( myFaultStation == null || myFaultStation.equalsIgnoreCase("") )) {
+			reportHeadingFaultStation = myFaultStation;
+		}
+		
+		String myLossCode = resourceBundle.getString("report.disbursement.heading.loss.code");
+		if (!( myLossCode == null || myLossCode.equalsIgnoreCase("") )) {
+			reportHeadingLossCode = myLossCode;
+		}
+		
+		String myAgent = resourceBundle.getString("report.disbursement.heading.agent");
+		if (!( myAgent == null || myAgent.equalsIgnoreCase("") )) {
+			reportHeadingAgent = myAgent;
+		}
+		
+		String myAgentStation = resourceBundle.getString("report.disbursement.heading.agent.station");
+		if (!( myAgentStation == null || myAgentStation.equalsIgnoreCase("") )) {
+			reportHeadingAgentStation = myAgentStation;
+		}
+		
+		String myPaidDate = resourceBundle.getString("report.disbursement.heading.paid.date");
+		if (!( myPaidDate == null || myPaidDate.equalsIgnoreCase("") )) {
+			reportHeadingPaidDate = myPaidDate;
+		}
+		
+		String myPaymentType = resourceBundle.getString("report.disbursement.heading.payment.type");
+		if (!( myPaymentType == null || myPaymentType.equalsIgnoreCase("") )) {
+			reportHeadingPaymentType = myPaymentType;
+		}
+		
+		String myCheckAmount = resourceBundle.getString("report.disbursement.heading.check.amount");
+		if (!( myCheckAmount == null || myCheckAmount.equalsIgnoreCase("") )) {
+			reportHeadingCheckAmount = myCheckAmount;
+		}
+		
+		String myVoucher = resourceBundle.getString("report.disbursement.heading.voucher");
+		if (!( myVoucher == null || myVoucher.equalsIgnoreCase("") )) {
+			reportHeadingVoucher = myVoucher;
+		}
+		
+		String myMileage = resourceBundle.getString("report.disbursement.heading.mileage");
+		if (!( myMileage == null || myMileage.equalsIgnoreCase("") )) {
+			reportHeadingMileage = myMileage;
+		}
+		
+		Style detailStyle = new Style("detail");
+
+		Style headerStyle = new Style("header");
+		headerStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		headerStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+		headerStyle.setTransparency(Transparency.OPAQUE);
+
+		Style headerVariables = new Style("headerVariables");
+		headerVariables.setHorizontalAlign(HorizontalAlign.RIGHT);
+		headerVariables.setVerticalAlign(VerticalAlign.TOP);
+		headerVariables.setFont(new Font(12, Font._FONT_TIMES_NEW_ROMAN, true));
+
+		Style groupVariables = new Style("groupVariables");
+		groupVariables.setHorizontalAlign(HorizontalAlign.LEFT);
+		groupVariables.setVerticalAlign(VerticalAlign.BOTTOM);
+
+		Style titleStyle = new Style("titleStyle");
+		titleStyle.setFont(new Font(16, Font._FONT_TIMES_NEW_ROMAN, true));
+		titleStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+		
+		Style oddRowStyle = new Style();
+//		oddRowStyle.setBorder(Border.NO_BORDER);
+//		oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+//		oddRowStyle.setTransparency(Transparency.OPAQUE);
+
+		DynamicReportBuilder drb = new DynamicReportBuilder();
+		drb.setPageSizeAndOrientation(Page.Page_A4_Landscape());
+		
+		//drb.setReportLocale(new Locale("pt","BR"));
+		
+		Integer margin = new Integer(20);
+		drb
+			.setTitleStyle(titleStyle)
+			.setTitle("Disbursement Report")					
+			.setSubtitle("This report was generated on " + new Date())
+			.setDetailHeight(new Integer(15)).setLeftMargin(margin)
+			.setRightMargin(margin).setTopMargin(margin).setBottomMargin(margin)
+			.setPrintBackgroundOnOddRows(true)
+			.setGrandTotalLegend("Grand Total :   ")
+			.setGrandTotalLegendStyle(headerVariables)
+			.setOddRowBackgroundStyle(oddRowStyle);
+
+
+		AbstractColumn columnCreateStation = ColumnBuilder.getNew()
+				.setColumnProperty("stationcode", String.class.getName()).setTitle(
+						reportHeadingCreateStation).setWidth(new Integer(40))
+				.setStyle(detailStyle).setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnClaimNumber = ColumnBuilder.getNew()
+				.setColumnProperty("claim_number", String.class.getName()).setTitle(
+						reportHeadingIncidentNumber).setWidth(new Integer(84)).setStyle(
+						detailStyle).setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnaFaultStationCode = ColumnBuilder.getNew()
+				.setColumnProperty("faultstationcode", String.class.getName())
+				.setTitle(reportHeadingFaultStation).setWidth(new Integer(40)).setStyle(
+						detailStyle).setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnaLossCode = ColumnBuilder.getNew()
+				.setColumnProperty("loss_code", Integer.class.getName()).setTitle(
+						reportHeadingLossCode).setWidth(new Integer(30)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnAgentCode = ColumnBuilder.getNew()
+				.setColumnProperty("agent_username", String.class.getName()).setTitle(reportHeadingAgent)
+				.setWidth(new Integer(44)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnaAgentStationCode = ColumnBuilder.getNew()
+				.setColumnProperty("agent_station_code", String.class.getName()).setTitle(
+						reportHeadingAgentStation).setWidth(new Integer(40)).setStyle(
+						detailStyle).setHeaderStyle(headerStyle).build();
+		
+		AbstractColumn columnaPaidDate = ColumnBuilder.getNew()
+				.setColumnProperty("draftpaiddate", Date.class.getName()).setTitle(
+						reportHeadingPaidDate).setWidth(new Integer(50)).setPattern("MM/dd/yyyy").setStyle(
+								detailStyle).setHeaderStyle(headerStyle).build();
+		
+		AbstractColumn columnaPayType = ColumnBuilder.getNew()
+				.setColumnProperty("expenseType_description", String.class.getName()).setTitle(
+						reportHeadingPaymentType).setWidth(new Integer(40)).setStyle(
+						detailStyle).setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnCheckAmount = ColumnBuilder.getNew()
+				.setColumnProperty("checkamt", Double.class.getName()).setTitle(
+						reportHeadingCheckAmount).setWidth(new Integer(54))
+				.setPattern("$ 0.00").setStyle(detailStyle).setHeaderStyle(
+						headerStyle).build();
+		
+		AbstractColumn columnCurrencyType = ColumnBuilder.getNew()
+		.setColumnProperty("currency_ID", String.class.getName()).setTitle(
+				" ").setWidth(new Integer(20)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build();
+		
+		AbstractColumn columnVoucher = ColumnBuilder.getNew()
+				.setColumnProperty("voucheramt", Double.class.getName()).setTitle(
+						reportHeadingVoucher).setWidth(new Integer(54))
+				.setPattern("$ 0.00").setStyle(detailStyle).setHeaderStyle(
+						headerStyle).build();
+		
+		AbstractColumn columnMileage = ColumnBuilder.getNew()
+				.setColumnProperty("mileageamt", Integer.class.getName()).setTitle(
+						reportHeadingMileage).setWidth(new Integer(32))
+						.setStyle(detailStyle).setHeaderStyle(
+						headerStyle).build();
+
+		//: grand totals
+		drb.addGlobalFooterVariable(columnCheckAmount, DJCalculation.SUM,headerVariables);
+		drb.addGlobalFooterVariable(columnVoucher, DJCalculation.SUM,headerVariables);
+		drb.addGlobalFooterVariable(columnMileage, DJCalculation.SUM,headerVariables);
+		drb.setGlobalFooterVariableHeight(new Integer(45));
+		
+		
+		Map<String, AbstractColumn> reportColumns = new HashMap<String, AbstractColumn>();
+		reportColumns.put("columnCreateStation", columnCreateStation);
+		reportColumns.put("columnClaimNumber", columnClaimNumber);
+		reportColumns.put("columnaFaultStationCode", columnaFaultStationCode);
+		reportColumns.put("columnaLossCode", columnaLossCode);
+		reportColumns.put("columnAgentCode", columnAgentCode);
+		reportColumns.put("columnaAgentStationCode", columnaAgentStationCode);
+		reportColumns.put("columnaPaidDate", columnaPaidDate);
+		reportColumns.put("columnaPayType", columnaPayType);
+		reportColumns.put("columnCheckAmount", columnCheckAmount);
+		reportColumns.put("columnCurrencyType", columnCurrencyType);
+		reportColumns.put("columnVoucher", columnVoucher);
+		reportColumns.put("columnMileage", columnMileage);
+		
+		drb = reportStyleSelector(drb, reportColumns, reportStyle);
+
+		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGMENT_CENTER);
+		drb.setUseFullPageWidth(true);
+		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGMENT_CENTER);
+		
+		DynamicReport dr = drb.build();
+		return dr;
+	}
+	
+	public static String getReportFileDj(JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, ReportBMO rbmo) throws Exception {
+		/** look for compiled reports, if can't find it, compile xml report * */
+
+		// added virtualizer to reduce memory
+		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
+		//JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(2, rootpath + "/reports/tmp", 501);
+		
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + "/reports/tmp", 501);
+		virtualizer.setReadOnly(false);
+		
+		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
+//		if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+//			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+//		}
+		
+		DynamicReport dr;
+		JasperPrint jasperPrint;
+		try {
+			
+			int reportStyle = 11;
+			if (parameters.get("reportStyle") != null) {
+				String myReportStyle = (String) parameters.get("reportStyle");
+				reportStyle = Integer.parseInt(myReportStyle);
+			}
+			
+			Locale reportLocale = new Locale("en", "US");
+			if (parameters.get("reportLocale") != null) {
+				reportLocale = (Locale) parameters.get("reportLocale");
+			}
+			
+			ResourceBundle myResources = null;
+			if (parameters.get("REPORT_RESOURCE_BUNDLE") != null) {
+				myResources = (ResourceBundle) parameters.get("REPORT_RESOURCE_BUNDLE");
+			}
+			
+			if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+				dr = buildExcelReport(reportStyle, reportLocale, myResources);
+			} else {
+				dr = buildReport(reportStyle, reportLocale, myResources);
+			}
+			
+			JasperReport jasperReport = DynamicJasperHelper.generateJasperReport(dr, new ClassicLayoutManager(), parameters);
+			if (ds != null) {
+				jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
+			} else {
+				jasperPrint = JasperFillManager.fillReport(jasperReport, parameters);
+			}
+			
+			virtualizer.setReadOnly(true);
+	
+			if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
+				outfile += ".html";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					outfile += ".pdf";
+				} else {
+					outfile += ".html";
+					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+				}
+				
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS)
+				outfile += ".xls";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV)
+				outfile += ".csv";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XML)
+				outfile += ".xml";
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
+				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
+				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					outfile += ".pdf";
+					outputtype = TracingConstants.REPORT_OUTPUT_PDF;
+				} else {
+					outfile += ".html";
+					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
+					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
+				}
+			}
+				
+	
+			String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
+			JRExporter exporter = null;
+	
+			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+				JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
+				exporter = new JRHtmlExporter();
+	
+				Map imagesMap = new HashMap();
+				
+				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
+				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
+				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
+				
+				exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN, false);
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				
+//				File outputFile = new File(outputpath);
+//				FileOutputStream fos = new FileOutputStream(outputFile);
+//				
+//				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+//				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, fos);				
+				
+				exporter.exportReport();
+			}
+	
+			//: switch to JExcelApiExporter
+			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
+				JExcelApiExporter alternativeExporter = new JExcelApiExporter();
+				Map excelParameters = new HashMap();
+				excelParameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jasperPrint);
+				excelParameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				excelParameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+				excelParameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+				excelParameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+				//excelParameters.put(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+				excelParameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, Boolean.TRUE); 
+				excelParameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
+				
+				alternativeExporter.setParameters(excelParameters);
+				alternativeExporter.exportReport();
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_CSV) {
+				exporter = new JRCsvExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.exportReport();
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) {
+				exporter = new JRXmlExporter();
+	
+				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
+				exporter.exportReport();
+			}
+		} catch (JRMaxFilesException e) {
+			logger.error("JRMaxFilesException encountered...");
+			logger.error("Report Name: " + reportname);
+			Agent user = (Agent) request.getSession().getAttribute("user");
+			logger.error("User ID: " + user.getAgent_ID() + " User Name: " + user.getUsername());
+			
+			for (Object obj: parameters.keySet()) {
+				logger.error("Parameter: " + obj.toString() + "  Value: " + parameters.get(obj).toString());
+			}
+			outfile = null;
+			if (rbmo != null) {
+				rbmo.setErrormsg("error.maxpages");
+			}
+		}
+		
+		virtualizer.cleanup();
+		
+		return outfile;
+	}
+	//dj reporting ends
+
+
 
 	/**
 	 * @param errormsg
@@ -3291,5 +4163,40 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		virtualizer.cleanup();
 		
 		return outfile;
+	}
+	
+	public String getReportFileName(int incidentType, String reportLocale) {
+		String customFiles = null;
+		String locale = "";
+		switch (incidentType) {
+		case TracingConstants.LOST_DELAY:
+			customFiles = PropertyBMO.getValue(PropertyBMO.CUSTOM_DELAY_RECEIPT_FILES);
+			locale = customFileCheck(reportLocale, customFiles, locale);
+			return "LostDelayReceipt" + locale;
+			
+		case TracingConstants.DAMAGED_BAG :
+			customFiles = PropertyBMO.getValue(PropertyBMO.CUSTOM_DAMAGE_RECEIPT_FILES);
+			locale = customFileCheck(reportLocale, customFiles, locale);
+			return "DamageReceipt" + locale;
+			
+		case TracingConstants.MISSING_ARTICLES:
+			customFiles = PropertyBMO.getValue(PropertyBMO.CUSTOM_MISSING_RECEIPT_FILES);
+			locale = customFileCheck(reportLocale, customFiles, locale);
+			return "MissingReceipt" + locale;
+			
+		}
+		return null;
+	}
+
+	private String customFileCheck(String reportLocale, String customFiles, String locale) {
+		String[] list = customFiles.split(",");
+		if (reportLocale != null) {
+			for (String x: list) {
+				if (x.equalsIgnoreCase(reportLocale)) {
+					locale = "_" + reportLocale.toLowerCase();
+				}
+			}
+		}
+		return locale;
 	}
 }

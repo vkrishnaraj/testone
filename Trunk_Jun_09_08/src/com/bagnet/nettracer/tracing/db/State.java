@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="State"
+ * @hibernate.cache usage="read-only"
  */
 public class State implements Serializable {
 	private String State_ID;

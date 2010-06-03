@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table = "DateFormat"
+ * @hibernate.cache usage="read-only"
  */
 public class NTDateFormat implements Serializable {
 	private int Dateformat_ID;

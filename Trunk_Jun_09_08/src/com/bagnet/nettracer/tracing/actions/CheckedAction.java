@@ -19,4 +19,8 @@ public abstract class CheckedAction extends Action {
 		saveToken(request);
 		return true;
 	}
+	
+	public static final int ADD_NEW_RECORD = 1;
+	public static final int CLOSE_RECORD = 2;
+	public static final int UPDATE_RECORD = 3;
 }

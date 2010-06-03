@@ -84,6 +84,17 @@ public final class ClaimSettlementForm extends ActionForm {
 	private List<ClaimSettlementBag> bagList;
 
 	private ArrayList<SettlementBagInventory> contentList;
+	
+	private Double overall_weight;
+	
+
+	public Double getOverall_weight() {
+		return overall_weight;
+	}
+
+	public void setOverall_weight(Double overall_weight) {
+		this.overall_weight = overall_weight;
+	}
 
 	public String getIncident_ID() {
 		return incident_ID;

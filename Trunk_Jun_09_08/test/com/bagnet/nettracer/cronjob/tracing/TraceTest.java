@@ -1,26 +1,20 @@
 package com.bagnet.nettracer.cronjob.tracing;
 
 
-//import java.util.Calendar;
-//import java.util.Date;
-//import java.util.GregorianCalendar;
-//
-//import org.junit.After;
-//import org.junit.AfterClass;
-//import org.junit.Before;
-//import org.junit.BeforeClass;
-//import org.junit.Test;
-//
-////import com.bagnet.nettracer.cronjob.tracing.dto.Score;
+import org.junit.Test;
+
+import com.bagnet.nettracer.cronjob.tracing.dto.Score;
+
+//import com.bagnet.nettracer.cronjob.tracing.dto.Score;
 
 public class TraceTest {
 	
-////	public double trace(String incident_ID, String ohd_ID) {
-////		//Score score = Trace.trace(incident_ID, ohd_ID, null);
-////		System.out.print("Comparing Incident: " + incident_ID + " to OHD: " + ohd_ID +"\n\n");
-////		//System.out.print(score.toString());
-////		//return score.getOverallScore();
-////	}
+	public double trace(String incident_ID, String ohd_ID) {
+		Score score = Trace.trace(incident_ID, ohd_ID, null);
+		System.out.print("Comparing Incident: " + incident_ID + " to OHD: " + ohd_ID +"\n\n");
+		System.out.print(score.toString());
+		return score.getOverallScore();
+	}
 //	
 //	@BeforeClass
 //	public static void setUpBeforeClass() throws Exception {
@@ -39,17 +33,13 @@ public class TraceTest {
 //	}
 //	
 //	
-//	@Test
-//	public void testTrace1() {
-//		// 217905
-//		// 100% overall match
-//		// 100% claim check
-//		// 100% record locator
-//		String incident_ID = "YQBWS00000178";
-//		String ohd_ID = "YQBWS00000187";
-//		double actual = trace(incident_ID, ohd_ID);
-//		//assertEquals(100, actual, .01);
-//	}
+	@Test
+	public void testTrace1() {
+		String incident_ID = "IALUS00001087";
+		String ohd_ID = "JFLUS00009106";
+		double actual = trace(incident_ID, ohd_ID);
+
+	}
 //	
 //	
 //	

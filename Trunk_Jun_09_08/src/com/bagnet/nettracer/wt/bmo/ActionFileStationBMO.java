@@ -18,6 +18,8 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileCount;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class ActionFileStationBMO extends HibernateDaoSupport {
@@ -34,7 +36,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 	}
 
 	@Transactional
-	public ActionFileStation updateStation(String companyCode, String wtStation, Agent user) throws Exception {
+	public ActionFileStation updateStation(String companyCode, String wtStation, Agent user, WebServiceDto dto) throws CaptchaException  {
 		ActionFileStation afStation = getAfStation(companyCode, wtStation);
 		Session sess = getSession(false);
 		if (!isCurrent(afStation)) {
@@ -42,7 +44,10 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 			Map<ActionFileType, ActionFileCount> countMap;
 			try {
 				wtService.getWtConnector().initialize();
-				countMap = wtService.getActionFileCount(companyCode, wtStation, user);
+				
+				countMap = wtService.getActionFileCount(companyCode, wtStation, user, dto);
+			} catch (CaptchaException e) {
+				throw e;
 			} finally {
 				wtService.getWtConnector().logout();
 			}
@@ -151,13 +156,13 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 
 	@Transactional
 	public List<Worldtracer_Actionfiles> updateSummary(String companyCode, String wtStation,
-			ActionFileType category, int day, Agent user) throws Exception {
+			ActionFileType category, int day, Agent user, WebServiceDto dto) throws CaptchaException, Exception {
 		WorldTracerService wtService = SpringUtils.getWorldTracerService();
 		ActionFileStation afStation = getAfStation(companyCode, wtStation);
 		if(afStation == null) return null;
 		try {
 			wtService.getWtConnector().initialize();
-			List<Worldtracer_Actionfiles> result = wtService.getActionFileSummary(companyCode, wtStation, category, day, user);
+			List<Worldtracer_Actionfiles> result = wtService.getActionFileSummary(companyCode, wtStation, category, day, user, dto);
 			
 			if(result == null || result.size() < 1) {
 				return null;
@@ -211,10 +216,11 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 				sess.save(af);
 			}
 			return result;
+		} catch (CaptchaException e) {
+			throw e;
 		} finally {
 			wtService.getWtConnector().logout();
 		}
-
 	}
 
 	@Transactional

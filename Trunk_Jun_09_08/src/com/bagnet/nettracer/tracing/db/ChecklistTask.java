@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.apache.struts.util.MessageResources;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.IndexColumn;
@@ -23,6 +25,8 @@ import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name = "CHECKLIST_TASK")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+
 public class ChecklistTask {
 	private long id;
 	//private long version_id;

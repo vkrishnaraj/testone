@@ -40,7 +40,7 @@ function updatePagination() {
 }
 
   </script>
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="audit_company.do" method="post">
     <input type="hidden" name="audit_id">
     <tr>

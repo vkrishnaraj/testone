@@ -3,16 +3,26 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
-
-
+<c:if test="${!empty incidentForm.incident_ID and !empty incidentObj and incidentForm.incident_ID == incidentObj.incident_ID}">
 <%
-  Agent a = (Agent)session.getAttribute("user");
+	  Agent a = (Agent)session.getAttribute("user");
+      boolean bIncidentChecklist = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST, a);
+      boolean bIncidentChecklistReadOnly = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY, a);
+      boolean ldCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_LD, a);
+      boolean damCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_DAM, a);
+      boolean pilCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_PIL, a);
+
+      if (bIncidentChecklist || bIncidentChecklistReadOnly || ldCrmIntegration || damCrmIntegration || pilCrmIntegration) {
+
+  
   String cssFormClass;
  
   int report_type = 0;
@@ -29,15 +39,19 @@
   }
 %>
   <h1 class="green">
-    <bean:message key="header.incident.checklist" />
+    <bean:message key="header.additional.functions" />
   </h1>
       
       <div id="pax_0">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-          <script type="text/javascript" src="../jquery.bgiframe.js"></script>
+		 
+		  <%
+		  if (bIncidentChecklist || bIncidentChecklistReadOnly) {
+		  %>
           <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.bgiframe.min.js"></script>
             <td align="center"> 
+              
               &nbsp;<br />
               <script type="text/javascript">
           		function checklistModalBox() {
@@ -54,7 +68,36 @@
 			<input type="button" value="View Incident Checklist" onclick="checklistModalBox();" id="button" />
 
               <br />&nbsp;
+            
+           <% 			  
+		  } if (
+				  (report_type == 0 && damCrmIntegration) || 
+				  (report_type == 1 && ldCrmIntegration) || 
+				  (report_type == 2 && pilCrmIntegration)) {
+		  %>
+		  
+		              <hr width="50%"/>
+              <script type="text/javascript">
+				
+				function pushDataToCrm() {
+					jQuery('#crmContent').html(getProcessingContent());
+					jQuery('#crmContent').load("pushToCrm.do?incident_id=<bean:write name='incidentForm' property='incident_ID'/>");
+				}
+          	 </script>
+
+              
+              
+              
+              <div id="crmContent">
+              
+              <jsp:include page="/pages/includes/push_to_crm.jsp" />
+              
+			  </div>
+              
             </td>
+		   <% 			  
+		  } 
+		  %>
           </tr>
         </table>
         </div>
@@ -66,3 +109,7 @@
       <br>
       <br>
 
+<% 
+      }
+%>
+</c:if>

@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -44,7 +46,8 @@ public class BDO implements Serializable {
 	private Incident incident;
 
 	private Set passengers; // passenger name and addresses
-	private Set items;
+//	private Set items;
+	private Set<Item_BDO> item_bdo;
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -55,6 +58,7 @@ public class BDO implements Serializable {
 	private int integrationDelivercompany_ID;
 	private String delivery_comments;
 	private Set expensePayouts;
+	private boolean canceled;
 	
 	
 	/**
@@ -76,30 +80,38 @@ public class BDO implements Serializable {
 		this.passengers = passengers;
 	}
 
-	/**
-	 * @return Returns the items.
-	 * 
-	 * @hibernate.set cascade="all" inverse="true" order-by="Item_ID"
-	 * @hibernate.key column="bdo_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item"
-	 */
+//	/**
+//	 * @return Returns the items.
+//	 * 
+//	 * @hibernate.set cascade="all" inverse="true" order-by="Item_ID"
+//	 * @hibernate.key column="bdo_ID"
+//	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item"
+//	 */
 	public Set getItems() {
-		return items;
+		LinkedHashSet<Item> set = new LinkedHashSet<Item>();
+		if (item_bdo != null) {
+			for (Item_BDO i: item_bdo) {
+				set.add(i.getItem());
+			}
+		}
+		return set;
 	}
-
-	/**
-	 * @param items
-	 *          The items to set.
-	 */
-	public void setItems(Set items) {
-		this.items = items;
-	}
+//	
+//	
+//
+//	/**
+//	 * @param items
+//	 *          The items to set.
+//	 */
+//	public void setItems(Set items) {
+//		this.items = items;
+//	}
 
 	/**
 	 * @return Returns the bagcount.
 	 */
 	public int getBagcount() {
-		if (items != null && items.size() > 0) return items.size();
+		if (item_bdo != null && item_bdo.size() > 0) return item_bdo.size();
 		else if (incident == null && ohd != null) return 1;
 		else return 0;
 	}
@@ -475,4 +487,32 @@ public class BDO implements Serializable {
 		expensePayouts = new HashSet();
 		expensePayouts.add(createNewBdoPayout);
 	}
+
+	/**
+	 * @return
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled;
+	}
+
+	/**
+	 * @hibernate.set cascade="all" inverse="true" order-by="item_ID"
+	 * @hibernate.key column="bdo_id"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item_BDO"
+	 * @hibernate.index column="item_ID"
+	 * @return Returns the items.
+	 */
+	public Set<Item_BDO> getItem_bdo() {
+		return item_bdo;
+	}
+
+	public void setItem_bdo(Set<Item_BDO> item_bdo) {
+		this.item_bdo = item_bdo;
+	}
+
 }

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<mapping map-null="false">
+		<class-a>
+			aero.nettracer.serviceprovider.wt_1_0.common.Pxf
+		</class-a>
+		<class-b>
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Pxf
+		</class-b>
+		<field >
+			<a>pxfDetails</a>
+			<b>pxfDetailsArray</b>
+		</field>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>
+			aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse
+		</class-a>
+		<class-b>
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse
+		</class-b>
+		<field >
+			<a>counts</a>
+			<b>countsArray</b>
+		</field>
+		<field>
+			<a>actionFiles</a>
+			<b>actionFilesArray</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>
+			aero.nettracer.serviceprovider.ws_1_0.common.RequestHeader
+		</class-a>
+		<class-b>
+			aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader
+		</class-b>
+		<field >
+			<a>parameters</a>
+			<b>parametersArray</b>
+		</field>
+	</mapping>
+
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Ahl
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl
+		</class-b>
+		<field>
+			<a>pax</a>
+			<b>paxArray</b>
+		</field>
+		<field>
+			<a>paxItinerary</a>
+			<b>paxItineraryArray</b>
+		</field>
+		<field>
+			<a>bagItinerary</a>
+			<b>bagItineraryArray</b>
+		</field>
+		<field>
+			<a>item</a>
+			<b>itemArray</b>
+		</field>
+		<field>
+			<a>claimCheck</a>
+			<b>claimCheckArray</b>
+		</field>
+		<field>
+			<a>expenses</a>
+			<b>expensesArray</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Item
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Item
+		</class-b>
+		<field>
+			<a>content</a>
+			<b>contentArray</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Ohd
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd
+		</class-b>
+		<field >
+			<a>pax</a>
+			<b>paxArray</b>
+		</field>
+		<field>
+			<a>paxItinerary</a>
+			<b>paxItineraryArray</b>
+		</field>
+		<field>
+			<a>bagItinerary</a>
+			<b>bagItineraryArray</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.RequestOhd
+		</class-b>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardOhd
+		</class-b>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+		<field >
+			<a>fwdName</a>
+			<b>fwdNameArray</b>
+		</field>
+		<field >
+			<a>itinerary</a>
+			<b>itineraryArray</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.ForwardMessage
+		</class-b>
+		<field >
+			<a>teletype</a>
+			<b>teletypeArray</b>
+		</field>
+		<field >
+			<a>name</a>
+			<b>nameArray</b>
+		</field>
+		<field >
+			<a>itinerary</a>
+			<b>itineraryArray</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Bdo
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Bdo
+		</class-b>
+		<field >
+			<a>passengers</a>
+			<b>passengersArray</b>
+		</field>
+		<field >
+			<a>items</a>
+			<b>itemsArray</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>aero.nettracer.serviceprovider.wt_1_0.common.Qoh
+		</class-a>
+		<class-b>aero.nettracer.serviceprovider.wt_1_0.common.xsd.Qoh
+		</class-b>
+		<field >
+			<a>tags</a>
+			<b>tagsArray</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim
+		</class-a>
+		<class-b>com.bagnet.nettracer.ws.onlineclaims.xsd.Claim
+		</class-b>
+		<field >
+			<a>bag</a>
+			<b>bagArray</b>
+		</field>
+		<field >
+			<a>phone</a>
+			<b>phoneArray</b>
+		</field>
+		<field >
+			<a>itinerary</a>
+			<b>itineraryArray</b>
+		</field>
+		<field >
+			<a>file</a>
+			<b>fileArray</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>com.bagnet.nettracer.tracing.db.onlineclaims.OCBag
+		</class-a>
+		<class-b>com.bagnet.nettracer.ws.onlineclaims.xsd.Bag
+		</class-b>
+		<field >
+			<a>contents</a>
+			<b>contentsArray</b>
+		</field>
+	</mapping>
+
+</mappings>

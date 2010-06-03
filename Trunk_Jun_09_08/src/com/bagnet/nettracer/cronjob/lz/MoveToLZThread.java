@@ -32,12 +32,15 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.IncidentControl;
 import com.bagnet.nettracer.tracing.db.Lz;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.LzUtils;
+import com.bagnet.nettracer.tracing.utils.SmsEmailService;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
 
@@ -357,6 +360,12 @@ public class MoveToLZThread {
 				Set<Remark> remarks = inc.getRemarks();
 				remarks.add(r);
 				
+				// TODO: Update incident newFangledAssignedDate - Byron
+				//get the id of the IncidentControl obj
+				IncidentControl myIncidentControl = inc.getIncidentControl();
+				myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
+				sess.update(myIncidentControl);
+				
 				// Save the incident
 				t = sess.beginTransaction();
 				sess.saveOrUpdate(inc);
@@ -377,6 +386,13 @@ public class MoveToLZThread {
 						t.commit();
 					}
 				}
+				
+				//TODO: sms and email trigger
+				// move to LZ - transfer to HDQ - triggers SMS and email message 
+				// sent to pax
+				SmsEmailService smsEmailService = new SmsEmailService();
+				smsEmailService.sendMoveToLzMessage(inc);
+				
 			}
 		}
 	}
@@ -461,6 +477,7 @@ public class MoveToLZThread {
 			
 		return buckets;
 	}
+	
 }
 
 class Bucket extends ArrayList {

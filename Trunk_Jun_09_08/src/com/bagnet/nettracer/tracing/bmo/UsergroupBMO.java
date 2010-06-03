@@ -24,14 +24,8 @@ public class UsergroupBMO {
 	public static UserGroup getUsergroup(int usergroup_ID) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.UserGroup usergroup where usergroup_id= :usergroup_id");
-			q.setInteger("usergroup_id", usergroup_ID);
-			List list = q.list();
-			if (list == null || list.size() == 0) {
-				logger.debug("unable to find status");
-				return null;
-			}
-			return (UserGroup) list.get(0);
+			return (UserGroup) sess.load(UserGroup.class, usergroup_ID);
+			
 		} catch (Exception e) {
 			logger.error("unable to retrieve station from database: " + e);
 			e.printStackTrace();

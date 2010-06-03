@@ -88,7 +88,7 @@ function disableButton(aButton) {
   </script>
   
   <html:form action="damaged.do" method="post" onsubmit="return validateThis(this);">
-    <jsp:include page="/pages/includes/validation_incl.jsp" />
+    
     <html:hidden property="doprepopulate" value="" />
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -124,12 +124,13 @@ function disableButton(aButton) {
 <logic:notPresent name="prepopulate" scope="request">
 
 
-  <jsp:include page="/pages/includes/validation_incl.jsp" />
+  
   <html:form action="damaged.do" method="post"
     enctype="multipart/form-data" onsubmit="return validateRest(this);">
     <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />
     <html:hidden property="notifiedOfRequirements"/>
+    <html:hidden property="remarkEnteredWhenNotifiedOfRequirements"/>
     <input type="hidden" name="historical_report" value="">
     <tr>
       <td colspan="3" id="pageheadercell">

@@ -62,7 +62,44 @@ public final class SearchIncidentForm extends ValidatorForm {
 	private int category_ID;
 	private String description = "";
 	private int noAssignedAgent;
+	private String ohd_id = "";
+	private String wt_id = "";
+	private boolean wtConditionOr;
+	private boolean intelligentTagSearch;
+	private int intelligentTagSearchType;
+	private String claimchecknum2;
+	
+	private String s_station_assignment_time = "";
+	private String e_station_assignment_time = "";
+	private int assigned2StationWithin24hrs;
+	
+	
+	
+	public int getAssigned2StationWithin24hrs() {
+		return assigned2StationWithin24hrs;
+	}
 
+	public void setAssigned2StationWithin24hrs(int assigned2StationWithin24hrs) {
+		this.assigned2StationWithin24hrs = assigned2StationWithin24hrs;
+	}
+
+	public String getS_station_assignment_time() {
+		return s_station_assignment_time;
+	}
+
+	public void setS_station_assignment_time(String s_station_assignment_time) {
+		this.s_station_assignment_time = s_station_assignment_time;
+	}
+
+	public String getE_station_assignment_time() {
+		return e_station_assignment_time;
+	}
+
+	public void setE_station_assignment_time(String e_station_assignment_time) {
+		this.e_station_assignment_time = e_station_assignment_time;
+	}
+
+	
 	/**
 	 * @return Returns the claimchecknum.
 	 */
@@ -686,7 +723,8 @@ public final class SearchIncidentForm extends ValidatorForm {
 	 */
 	public String getItemTypeString() {
 		if (itemType_ID > 0) {
-			return ItemTypeBMO.getItemType(itemType_ID).getDescription();
+			//return ItemTypeBMO.getItemType(itemType_ID).getDescription();
+			return ItemTypeBMO.getItemType(itemType_ID).getKey();
 		}
 		return null;
 	}
@@ -708,5 +746,53 @@ public final class SearchIncidentForm extends ValidatorForm {
 			retValue.append(XDescElementsBMO.getXdescelementcode(xdescelement_ID3));
 		}
 		return retValue.toString();
+	}
+
+	public String getOhd_id() {
+		return ohd_id;
+	}
+
+	public void setOhd_id(String ohd_id) {
+		this.ohd_id = ohd_id;
+	}
+
+	public String getWt_id() {
+		return wt_id;
+	}
+
+	public void setWt_id(String wt_id) {
+		this.wt_id = wt_id;
+	}
+
+	public boolean isWtConditionOr() {
+		return wtConditionOr;
+	}
+
+	public void setWtConditionOr(boolean wtConditionOr) {
+		this.wtConditionOr = wtConditionOr;
+	}
+
+	public boolean isIntelligentTagSearch() {
+		return intelligentTagSearch;
+	}
+
+	public void setIntelligentTagSearch(boolean intelligentTagSearch) {
+		this.intelligentTagSearch = intelligentTagSearch;
+	}
+
+	public int getIntelligentTagSearchType() {
+		return intelligentTagSearchType;
+	}
+
+	public void setIntelligentTagSearchType(int intelligentTagSearchType) {
+		this.intelligentTagSearchType = intelligentTagSearchType;
+	}
+
+	public String getClaimchecknum2() {
+		return claimchecknum2;
+	}
+
+	public void setClaimchecknum2(String claimchecknum2) {
+		this.claimchecknum2 = claimchecknum2;
 	}
 }

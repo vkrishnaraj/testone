@@ -186,8 +186,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
   </SCRIPT>
   
 
-  
-  <jsp:include page="/pages/includes/required_fields_incl.jsp" />
+
   
   <html:form action="forward_on_hand.do" method="post" onsubmit="return (validateForwardOHD(this) && setExpediteNum(this)); ">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />

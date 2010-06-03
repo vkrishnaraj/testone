@@ -1,10 +1,13 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +23,7 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Airport;
@@ -389,6 +393,7 @@ public class AdminUtils {
 	 *          the component's id
 	 * @return true if the permission exists in the particular group
 	 */
+	@Deprecated
 	public static boolean checkIfPermissionExists(int group_id, int component_id) {
 		Session sess = null;
 		try {
@@ -477,24 +482,27 @@ public class AdminUtils {
 	 * @return group based on id
 	 */
 	public static UserGroup getGroup(String groupId) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(UserGroup.class).add(Expression.eq("userGroup_ID", new Integer(groupId)));
-			return (UserGroup) cri.list().get(0);
-		} catch (Exception e) {
-			logger.fatal(e.getMessage());
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					logger.fatal(e.getMessage());
-				}
-			}
-		}
+		return UsergroupBMO.getUsergroup(Integer.parseInt(groupId));
 	}
+//	public static UserGroup getGroup(String groupId) {
+//		Session sess = null;
+//		try {
+//			sess = HibernateWrapper.getSession().openSession();
+//			Criteria cri = sess.createCriteria(UserGroup.class).add(Expression.eq("userGroup_ID", new Integer(groupId)));
+//			return (UserGroup) cri.list().get(0);
+//		} catch (Exception e) {
+//			logger.fatal(e.getMessage());
+//			return null;
+//		} finally {
+//			if (sess != null) {
+//				try {
+//					sess.close();
+//				} catch (Exception e) {
+//					logger.fatal(e.getMessage());
+//				}
+//			}
+//		}
+//	}
 
 	/**
 	 * Retrieves the "Guest" group related to the companyCode
@@ -656,8 +664,9 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Company_Specific_Variable.class).add(Expression.eq("companyCode_ID", companycode));
-			return (Company_Specific_Variable) cri.list().get(0);
+			return (Company_Specific_Variable) sess.load(Company_Specific_Variable.class, companycode);
+//			Criteria cri = sess.createCriteria(Company_Specific_Variable.class).add(Expression.eq("companyCode_ID", companycode));
+//			return (Company_Specific_Variable) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.fatal(e.getMessage());
@@ -1078,8 +1087,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Agent.class).add(Expression.eq("agent_ID", new Integer(agentID)));
-			return (Agent) cri.list().get(0);
+			return (Agent) sess.load(Agent.class, Integer.parseInt(agentID));
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1448,11 +1456,35 @@ public class AdminUtils {
 	 * @return
 	 */
 	public static TreeMap getComponentTreeMap(String groupID, Agent user) {
+		
+		
+		boolean isOwensGrp = user.getStation().getCompany().getCompanyCode_ID().equals(TracingConstants.OWENS_GROUP);
+		UserGroup currentUsersGroup = user.getGroup();
+		HashMap<Integer, Integer> currentUserPermissionMap = new HashMap<Integer, Integer>();
+		Set<GroupComponentPolicy> l = (Set<GroupComponentPolicy>)currentUsersGroup.getComponentPolicies();
+
+		if (l != null) {
+			for (GroupComponentPolicy p: l) {
+				currentUserPermissionMap.put(p.getComponent().getComponent_ID(), 1);
+			}
+		}
+		
+		UserGroup queryingGroup = UsergroupBMO.getUsergroup(Integer.parseInt(groupID));
+		HashMap<Integer, Integer> queryUserPermissionMap = new HashMap<Integer, Integer>();
+		l = (Set<GroupComponentPolicy>)queryingGroup.getComponentPolicies();
+
+		if (l != null) {
+			for (GroupComponentPolicy p: l) {
+				queryUserPermissionMap.put(p.getComponent().getComponent_ID(), 1);
+			}
+		}
+		
+		
 		TreeMap permissionMap = new TreeMap();
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-
+			
 			//Obtain all parent components
 			StringBuffer sql = new StringBuffer(1024);
 			sql.append("select distinct component from com.bagnet.nettracer.tracing.db.SystemComponent component ");
@@ -1465,18 +1497,10 @@ public class AdminUtils {
 			for (Iterator i = componentList.iterator(); i.hasNext();) {
 				SystemComponent component = (SystemComponent) i.next();
 				//If the component exists in the parent group id..
-				if (user.getStation().getCompany().getCompanyCode_ID().equals(TracingConstants.OWENS_GROUP)
-						|| AdminUtils.checkIfPermissionExists(user.getUsergroup_id(), component.getComponent_ID())) {
+				if (isOwensGrp|| currentUserPermissionMap.containsKey(component.getComponent_ID())) {
 
 					//do for parent component.
-					boolean isChecked = true;
-					//check if this component belongs to the current group.
-					Criteria cri = sess.createCriteria(GroupComponentPolicy.class);
-					cri.createCriteria("usergroup").add(Expression.eq("userGroup_ID", new Integer(groupID)));
-					cri.createCriteria("component").add(Expression.eq("component_ID", new Integer(component.getComponent_ID())));
-					List someList = cri.list();
-					if (someList == null || someList.size() < 1)
-						isChecked = false;
+					boolean isChecked = queryUserPermissionMap.containsKey(component.getComponent_ID());
 					int checked = isChecked ? 1 : 0;
 					TreeMap parentMap = new TreeMap();
 					permissionMap.put("" + component.getComponent_Name() + "#" + component.getComponent_ID() + "#" + checked, parentMap);
@@ -1485,19 +1509,10 @@ public class AdminUtils {
 					List childList = getChildComponents(component.getComponent_ID());
 					for (Iterator j = childList.iterator(); j.hasNext();) {
 						SystemComponent component2 = (SystemComponent) j.next();
-						if (user.getStation().getCompany().getCompanyCode_ID().equals(TracingConstants.OWENS_GROUP)
-								|| AdminUtils.checkIfPermissionExists(user.getUsergroup_id(), component2.getComponent_ID())) {
+						if (isOwensGrp || currentUserPermissionMap.containsKey(component2.getComponent_ID())) {
 
 							//do for parent component.
-							boolean isChecked2 = true;
-							//check if this component belongs to the current group.
-							Criteria cri2 = sess.createCriteria(GroupComponentPolicy.class);
-							cri2.createCriteria("usergroup").add(Expression.eq("userGroup_ID", new Integer(groupID)));
-							cri2.createCriteria("component").add(Expression.eq("component_ID", new Integer(component2.getComponent_ID())));
-							List someList2 = cri2.list();
-							if (someList2 == null || someList2.size() < 1)
-								isChecked2 = false;
-							int checked2 = isChecked2 ? 1 : 0;
+							boolean isChecked2 = queryUserPermissionMap.containsKey(component2.getComponent_ID());
 
 							ComponentDTO cDTO = new ComponentDTO();
 							cDTO.populate(component2, isChecked2);
@@ -1518,7 +1533,10 @@ public class AdminUtils {
 				}
 			}
 		}
+		
+		
 		return permissionMap;
+		
 	}
 
 	public static List getChildComponents(int parent_id) {
@@ -1559,7 +1577,7 @@ public class AdminUtils {
 	 * @param request
 	 * @throws Exception
 	 */
-	public static void saveComponents(String groupID, int audit_group_id, HttpServletRequest request, Agent user) {
+	public static void saveComponents(String groupID, Audit_UserGroup audit_group, HttpServletRequest request, Agent user) {
 		Session sess = null;
 		Transaction t = null;
 		try {
@@ -1591,13 +1609,11 @@ public class AdminUtils {
 
 					sess.save(policy);
 
-					if (audit_group_id > 0) {
+					if (audit_group.getAudit_id() > 0) {
 						if (user.getStation().getCompany().getVariable().getAudit_group() == 1) {
 							Audit_GroupComponentPolicy plicy2 = new Audit_GroupComponentPolicy();
 							BeanUtils.copyProperties(plicy2, policy);
-							Audit_UserGroup au = new Audit_UserGroup();
-							au.setUserGroup_ID(audit_group_id);
-							plicy2.setAudit_usergroup(au);
+							plicy2.setAudit_usergroup(audit_group);
 							HibernateUtils.saveNew(plicy2);
 						}
 					}

@@ -236,15 +236,30 @@ public class Articles implements Serializable {
 
 		return obj;
 	}
+	
+	/**
+	* @return Returns the _DATEFORMAT.
+	*/
+	public String get_DATEFORMAT() {
+		if (_DATEFORMAT == null && incident != null) {
+			if (incident.get_DATEFORMAT() != null) {
+				_DATEFORMAT = incident.get_DATEFORMAT();
+			} else {
+				_DATEFORMAT = incident.getAgent().getDateformat().getFormat();
+			}
+		}
+	
+		return _DATEFORMAT;
+	}
 
 	/**
 	 * @return Returns the _DATEFORMAT.
 	 */
-	public String get_DATEFORMAT() {
-		if (_DATEFORMAT == null && incident != null) _DATEFORMAT = incident.getAgent().getDateformat()
-				.getFormat();
-		return _DATEFORMAT;
-	}
+//	public String get_DATEFORMAT() {
+//		if (_DATEFORMAT == null && incident != null) _DATEFORMAT = incident.getAgent().getDateformat()
+//				.getFormat();
+//		return _DATEFORMAT;
+//	}
 
 	/**
 	 * @param _dateformat

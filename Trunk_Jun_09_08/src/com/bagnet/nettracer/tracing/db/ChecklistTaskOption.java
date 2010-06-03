@@ -10,10 +10,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.struts.util.MessageResources;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 // for auto checklist feature
 @Entity
 @Table(name = "CHECKLIST_TASK_OPTION")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class ChecklistTaskOption {
 	
 	private long id;

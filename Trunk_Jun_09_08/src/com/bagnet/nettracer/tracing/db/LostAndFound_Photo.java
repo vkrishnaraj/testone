@@ -18,6 +18,35 @@ public class LostAndFound_Photo implements Serializable {
 	private String thumbpath;
 	private String picpath;
 
+	private String fileName;
+	
+	private String fileReferenceNumber;
+	
+	
+
+	public String getFileReferenceNumber() {
+		return fileReferenceNumber;
+	}
+
+	public void setFileReferenceNumber(String fileReferenceNumber) {
+		this.fileReferenceNumber = fileReferenceNumber;
+	}
+
+	public String getFileName() {
+		String result = "";
+		if (fileName == null || fileName.equals("")) {
+			result = picpath.substring(picpath.lastIndexOf('/')+1, picpath.length());
+		} else {
+			result = fileName;
+		}
+		
+		return result;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
 	private LostAndFoundIncident lostandfoundincident;
 
 	/**

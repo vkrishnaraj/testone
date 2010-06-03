@@ -10,7 +10,6 @@ import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
-import com.bagnet.nettracer.wt.svc.WorldTracerConnectionPool;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class SpringUtils {
@@ -58,9 +57,9 @@ public class SpringUtils {
 		return (WorldTracerService) getBean(WORLDTRACER_SERVICE);
 	}
 	
-	public static WorldTracerConnector getWorldTracerConnector() {
-		return (WorldTracerConnector) getBean(WORLDTRACER_CONNECTOR);
-	}
+//	public static WorldTracerConnector getWorldTracerConnector() {
+//		return (WorldTracerConnector) getBean(WORLDTRACER_CONNECTOR);
+//	}
 	
 	public static ClientEventHandler getClientEventHandler() {
 		return (ClientEventHandler) getBean(EVENT_HANDLER);
@@ -74,9 +73,6 @@ public class SpringUtils {
 		return (ActionFileManager) getBean(ACTIONFILE_MANAGER);
 	}
 	
-	public static WorldTracerConnectionPool getWtConnectionPool() {
-		return (WorldTracerConnectionPool) getBean(WORLDTRACER_CONNECTION_POOL);
-	}
 	
 	public static RuleMapper getWtRuleMap() {
 		return (RuleMapper) getBean(WORLDTRACER_RULE_MAP);

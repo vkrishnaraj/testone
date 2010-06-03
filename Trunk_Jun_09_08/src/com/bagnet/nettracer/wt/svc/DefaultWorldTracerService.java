@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,16 +22,12 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.bagnet.nettracer.aop.WorldTracerTx;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
-import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
-import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
-import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
-import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -38,12 +35,8 @@ import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
-import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
-import com.bagnet.nettracer.tracing.db.OHD_Inventory;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
-import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
@@ -51,17 +44,21 @@ import com.bagnet.nettracer.tracing.db.wt.ActionFileCount;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
+import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule.Format;
 import com.bagnet.nettracer.wt.utils.ActionFileDto;
 
@@ -99,19 +96,20 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	private static final String UNKNOWN_AIRLINE = "YY";
 
+	public DefaultWorldTracerService() {
+		this.setWtConnector(WorldTracerWebService.getInstance());
+	}
+	
 	@WorldTracerTx(type = TxType.CREATE_AHL)
-	public String insertIncident(Incident incident) throws WorldTracerException {
+	public String insertIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		String wt_id = null;
 
 		try {
-			Map<WorldTracerField, List<String>> fieldMap = createFieldMap(incident);  //Create error, corrected field IT
+			wt_id = wtConnector.insertIncident(incident, incident.getStationassigned().getCompany().getCompanyCode_ID(), incident.getStationassigned().getWt_stationcode(), dto);
 
-			if (fieldMap == null) {
-				throw new WorldTracerException("Unable to generate incident mapping");
-			}
-			wt_id = wtConnector.insertIncident(fieldMap,incident.getStationassigned().getCompany().getCompanyCode_ID(), incident.getStationassigned().getWt_stationcode());
-
-		} catch (Exception e) {
+		} catch (CaptchaException e) {
+			throw e;
+		}catch (Exception e) {
 			logger.error("Full exception: ", e);
 			e.printStackTrace();
 			if (e instanceof WorldTracerException) {
@@ -124,93 +122,80 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.CLOSE_AHL)
-	public String closeIncident(Incident incident) throws WorldTracerException {
+	public String closeIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 
 		if (incident.getWt_id() == null) {
 			throw new WorldTracerException("no associated worldtracer file");
 		}
-		Map<WorldTracerField, List<String>> fieldMap = createCloseFieldMap(incident);
-
-		String wt_id = wtConnector.closeIncident(fieldMap, incident.getWtFile().getWt_id(), incident
-				.getStationassigned().getWt_stationcode());
+		String wt_id = wtConnector.closeIncident(incident, incident.getWtFile().getWt_id(), incident
+				.getStationassigned().getWt_stationcode(), dto);
 
 		return wt_id;
 
 	}
 
 	@WorldTracerTx(type = TxType.CREATE_OHD)
-	public String insertOhd(OHD ohd) throws WorldTracerException {
-
-		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(ohd);
-
-		if (fieldMap == null) {
-			throw new WorldTracerException("Unable to generate ohd mapping");
-		}
+	public String insertOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 
 		String wt_id = null;
 
-		wt_id = wtConnector.insertOhd(fieldMap, ohd.getFoundAtStation().getCompany().getCompanyCode_ID(), ohd
-				.getHoldingStation().getWt_stationcode());
+		wt_id = wtConnector.insertOhd(ohd, ohd.getFoundAtStation().getCompany().getCompanyCode_ID(), ohd
+				.getHoldingStation().getWt_stationcode(), dto);
 
 		return wt_id;
 	}
 
 	@WorldTracerTx(type = TxType.CLOSE_OHD)
-	public String closeOHD(OHD ohd) throws WorldTracerException {
+	public String closeOHD(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (ohd.getWt_id() == null) {
 			throw new WorldTracerException("Can't close ohd, no associated wt file");
-		}
-		Map<WorldTracerField, List<String>> fieldMap = createCloseFieldMap(ohd);
-
-		if (fieldMap == null) {
-			throw new WorldTracerException("Unable to generate close ohd mapping");
 		}
 
 		String wt_id = null;
 
-		wt_id = wtConnector.closeOhd(fieldMap, ohd.getWt_id(), ohd.getHoldingStation().getWt_stationcode());
+		wt_id = wtConnector.closeOhd(ohd, ohd.getWt_id(), ohd.getHoldingStation().getWt_stationcode(), dto);
 
 		return wt_id;
 	}
 
 	@WorldTracerTx(type = TxType.REINSTATE_AHL)
-	public String reinstateIncident(Incident incident) throws WorldTracerException {
+	public String reinstateIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (incident.getWt_id() == null) {
 			throw new WorldTracerException("no associated worldtracer file");
 		}
-		wtConnector.reinstateAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()));
+		wtConnector.reinstateAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()), dto);
 		return incident.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.REINSTATE_OHD)
-	public String reinstateOhd(OHD ohd) throws WorldTracerException {
+	public String reinstateOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (ohd.getWt_id() == null) {
 			throw new WorldTracerException("Can't reinstate ohd, no associated wt file");
 		}
-		wtConnector.reinstateOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()));
+		wtConnector.reinstateOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()), dto);
 		return ohd.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.SUSPEND_AHL)
-	public String suspendIncident(Incident incident) throws WorldTracerException {
+	public String suspendIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (incident.getWt_id() == null) {
 			throw new WorldTracerException("no associated worldtracer file");
 		}
-		wtConnector.suspendAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()));
+		wtConnector.suspendAHL(incident.getWt_id(), getAgentEntry(incident.getAgent()), dto);
 		return incident.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.SUSPEND_OHD)
-	public String suspendOhd(OHD ohd) throws WorldTracerException {
+	public String suspendOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (ohd.getWt_id() == null) {
 			throw new WorldTracerException("Can't suspend ohd, no associated wt file");
 		}
-		wtConnector.suspendOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()));
+		wtConnector.suspendOHD(ohd.getWt_id(), getAgentEntry(ohd.getAgent()), dto);
 		return ohd.getWt_id();
 	}
 
 	@WorldTracerTx(type = TxType.CREATE_BDO)
-	public String insertBdo(BDO bdo) throws WorldTracerException {
+	public String insertBdo(BDO bdo, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 
 		if (bdo.getStation().getWt_stationcode() == null || bdo.getStation().getWt_stationcode().trim().length() < 1) {
 			throw new WorldTracerException("BDO station " + bdo.getStation().getStationcode()
@@ -227,7 +212,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		}
 
 		return wtConnector.createBdo(fieldMap, bdo.getIncident() != null ? bdo.getIncident().getWt_id() : null, bdo
-				.getOhd() != null ? bdo.getOhd().getWt_id() : null, bdo.getDelivercompany(), bdo.getStation());
+				.getOhd() != null ? bdo.getOhd().getWt_id() : null, bdo.getDelivercompany(), bdo.getStation(), dto, bdo);
 	}
 
 	private Map<WorldTracerField, List<String>> createBdoFieldMap(BDO bdo) throws WorldTracerException {
@@ -281,22 +266,22 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.ERASE_AF)
-	public void eraseActionFile(Worldtracer_Actionfiles waf) throws WorldTracerException {
+	public void eraseActionFile(Worldtracer_Actionfiles waf, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		wtConnector.eraseActionFile(waf.getStation(), waf.getAirline(), waf.getAction_file_type(),
-				waf.getDay(), waf.getItem_number());
+				waf.getDay(), waf.getItem_number(), dto);
 	}
 
 	@WorldTracerTx(type = TxType.IMPORT_AHL)
-	public Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user) throws WorldTracerException {
-		String result = wtConnector.findAHL(wt_id);
+	public Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		String result = wtConnector.findAHL(wt_id, dto);
 		//Incident foundinc = WTIncident.parseWTIncident(result, status, user);
 		Incident foundinc = WTIncident.parseWTIncident(result, status, user);
 		return foundinc;
 	}
 
 	@WorldTracerTx(type = TxType.IMPORT_OHD)
-	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent user) throws WorldTracerException {
-		String result = wtConnector.findOHD(wt_id);
+	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		String result = wtConnector.findOHD(wt_id, dto);
 		// for now show all as active
 		//OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
 		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, user);
@@ -304,63 +289,39 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.FWD_OHD)
-	public String forwardOhd(WtqFwdOhd fwd) throws WorldTracerException {
+	public String forwardOhd(WtqFwdOhd fwd, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 
 		if (fwd.getOhd() == null || fwd.getOhd().getWt_id() == null) {
 			throw new WorldTracerException("No associated worldtracer file");
 		}
-		Map<WorldTracerField, List<String>> fieldMap = createFwdFieldMap(fwd);
-
-		if (fieldMap == null) {
-			throw new WorldTracerException("Unable to generate fwdOHD mapping");
-		}
+		
 
 		String result = null;
 
-		result = wtConnector.forwardOhd(fieldMap, fwd.getOhd().getWt_id(), fwd.getMatchingAhl());
+		result = wtConnector.forwardOhd(fwd, dto);
 
 		return result;
 	}
 
 	@WorldTracerTx(type = TxType.FWD_GENERAL)
-	public String sendFwdMsg(WtqFwdGeneral fwd, Agent defaultAgent) throws WorldTracerException {
-		Map<WorldTracerField, List<String>> fieldMap = createFwdFieldMap(fwd);
+	public String sendFwdMsg(WtqFwdGeneral fwd, Agent defaultAgent, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+	
 
-		if (fieldMap == null) {
-			throw new WorldTracerException("Unable to generate fwdOHD mapping");
-		}
 
-		if (fwd.getLossCode() != 0) {
-			addIncidentFieldEntry(WorldTracerField.RL, Integer.toString(fwd.getLossCode()), fieldMap);
-		}
 
-		addIncidentFieldEntry(WorldTracerField.RC, fwd.getLossComments(), fieldMap);
-		
-		String from_station = fwd.getFrom_station();
-		if(from_station == null || from_station.trim().length() < 1) {
-			from_station = defaultAgent.getStation().getWt_stationcode();
-		}
-
-		String result = wtConnector.sendFwd(fieldMap, from_station, fwd.getAgent()
-				.getCompanycode_ID());
+		String result = wtConnector.sendFwd(fwd, dto);
 		return result;
 	}
 
 	@WorldTracerTx(type = TxType.AMEND_AHL)
-	public String amendAhl(Incident incident) throws WorldTracerException {
+	public String amendAhl(Incident incident, WebServiceDto dto) throws WorldTracerException {
 		if (incident.getWt_id() == null) {
 			throw new WorldTracerException("no associated worldtracer file");
 		}
 		String wt_id = null;
 
 		try {
-			Map<WorldTracerField, List<String>> fieldMap = createFieldMap(incident);
-
-			if (fieldMap == null) {
-				throw new WorldTracerException("Unable to generate incident mapping");
-			}
-
-			wt_id = wtConnector.amendAhl(fieldMap, incident.getWt_id());
+			wt_id = wtConnector.amendAhl(incident, incident.getWt_id(), dto);
 
 		} catch (Exception e) {
 			if (e instanceof WorldTracerException) {
@@ -373,25 +334,20 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.AMEND_OHD)
-	public String amendOhd(OHD ohd) throws WorldTracerException {
+	public String amendOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (ohd.getWt_id() == null) {
 			throw new WorldTracerException("no associated worldtracer file");
-		}
-		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(ohd);
-
-		if (fieldMap == null) {
-			throw new WorldTracerException("Unable to generate ohd mapping");
 		}
 
 		String result = null;
 
-		result = wtConnector.amendOhd(fieldMap, ohd.getWt_id());
+		result = wtConnector.amendOhd(ohd, ohd.getWt_id(), dto);
 
 		return result;
 	}
 
 	@WorldTracerTx(type = TxType.REQUEST_QOH)
-	public String requestQoh(WtqRequestQoh wtq) throws WorldTracerException {
+	public String requestQoh(WtqRequestQoh wtq, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (wtq.getIncident() == null || wtq.getIncident().getWt_id() == null) {
 			throw new WorldTracerException("no associated WT file");
 		}
@@ -404,16 +360,16 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		addConvertedTag(wtq.getBagTagNumber(), WorldTracerField.TN, fieldMap, wtq.getAgent().getCompanycode_ID());
 
 		return wtConnector.requestQoh(wtq.getFromStation().toUpperCase(), wtq.getFromAirline().toUpperCase(), wtq
-				.getIncident().getWt_id(), fieldMap);
+				.getIncident().getWt_id(), fieldMap, dto, wtq);
 	}
 
 	@WorldTracerTx(type = TxType.REQUEST_OHD)
-	public String requestOhd(WtqRequestOhd roh) throws WorldTracerException {
+	public String requestOhd(WtqRequestOhd roh, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		if (roh.getIncident() == null || roh.getIncident().getWt_id() == null) {
 			throw new WorldTracerException("no associated WT file");
 		}
 		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(roh);
-		String result = wtConnector.requestOhd(roh.getWt_ohd(), roh.getIncident().getWt_id(), fieldMap);
+		String result = wtConnector.requestOhd(roh.getWt_ohd(), roh.getIncident().getWt_id(), fieldMap, dto, roh);
 		return result;
 	}
 
@@ -446,16 +402,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	}
 
-	private Map<WorldTracerField, List<String>> createCloseFieldMap(OHD ohd) {
-		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
-		addIncidentFieldEntry(WorldTracerField.AG, getAgentEntry(ohd.getAgent()), result);
-		return result;
-	}
-
 	private static String getAgentEntry(Agent ag) {
 				if(ag != null)
-			return (ag.getUsername().length() > 7 ? ag.getUsername().substring(0, 7) : ag.getUsername()) + "/"
-				+ ag.getCompanycode_ID();
+			return (ag.getUsername().length() > 7 ? ag.getUsername().substring(0, 7) : ag.getUsername());
 		return "NTRACER";
 	}
 
@@ -521,103 +470,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		return result;
 	}
 
-	private Map<WorldTracerField, List<String>> createFieldMap(OHD ohd) throws WorldTracerException {
-		if (ohd == null) {
-			return null;
-		}
-
-		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
-
-		if (ohd.getColor() == null || ohd.getColor().trim().length() <= 0 || ohd.getType() == null
-				|| ohd.getType().trim().length() != 2) {
-			throw new WorldTracerException("OHD missing color / type");
-		}
-
-		String colorType = "";
-		if ("TD".equals(ohd.getColor().trim())) {
-			colorType = "BN";
-		} else {
-			colorType = ohd.getColor().trim();
-		}
-
-		String type = ohd.getType().trim();
-		if (!VALID_BAG_TYPES.contains(type)) {
-			type = DEFAULT_BAG_TYPE;
-		}
-		colorType += type;
-
-		String desc1 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_1()));
-		String desc2 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_2()));
-		String desc3 = mapXDesc(XDescElementsBMO.getXdescelementcode(ohd.getXdescelement_ID_3()));
-
-		colorType += getDescString(desc1, desc2, desc3);
-
-		addIncidentFieldEntry(WorldTracerField.CT, colorType, result);
-
-		if (ohd.getClaimnum() != null && ohd.getClaimnum().trim().length() > 0) {
-			addClaimCheckNum(ohd.getClaimnum(), result, ohd.getAgent().getCompanycode_ID());
-		}
-
-		addIncidentFieldEntry(WorldTracerField.BI, ohd.getManufacturer(), result);
-
-		addIncidentFieldEntry(WorldTracerField.PR, ohd.getRecord_locator(), result);
-
-		addIncidentFieldEntry(WorldTracerField.SL, ohd.getStorage_location(), result);
-
-		if (ohd.getMembership() != null) {
-			String membership = ohd.getMembership().getMembershipnum(); 
-			if (ohd.getMembership().getCompanycode_ID() != null) {
-				membership = ohd.getMembership().getCompanycode_ID() + membership;
-			}
-			addIncidentFieldEntry(WorldTracerField.FL, membership, result);
-		}
-
-		if (ohd.getItinerary() == null || ohd.getItinerary().size() == 0) {
-			throw new WorldTracerException("OHD missing itinerary");
-		}
-		for (OHD_Itinerary itin : (Iterable<OHD_Itinerary>) ohd.getItinerary()) {
-			getOhdItineraryInfo(itin, result);
-		}
-
-		addIncidentFieldEntry(WorldTracerField.NM, ohd.getLastname(), result);
-
-		addIncidentFieldEntry(WorldTracerField.PT, ohd.getFirstname(), result);
-
-		for (OHD_Passenger p : (Iterable<OHD_Passenger>) ohd.getPassengers()) {
-			getOhdPaxInfo(p, result);
-		}
-
-		if (ohd.getItems() != null) {
-			Map<String, List<String>> temp = new HashMap<String, List<String>>();
-			for (OHD_Inventory inv : (Iterable<OHD_Inventory>) ohd.getItems()) {
-				OHD_CategoryType cat = CategoryBMO.getCategory(inv.getOHD_categorytype_ID(), TracingConstants.DEFAULT_LOCALE);
-				if (cat == null) {
-					continue;
-				}
-				String category = cat.getWtCategory();
-				String contents = inv.getDescription().trim().toUpperCase();
-				if (category == null || contents == null || category.trim().length() == 0
-						|| contents.trim().length() == 0)
-					continue;
-				if (temp.get(category) == null) {
-					temp.put(category, new ArrayList<String>());
-				}
-				temp.get(category).add(contents);
-			}
-			if (temp.size() > 0) {
-				// pass 0 for bagnum so no numbers on field
-				String entry = ContentRule.buildEntry(temp, 0);
-				if (entry != null) {
-					addIncidentFieldEntry(WorldTracerField.CC, entry, result);
-				}
-			}
-		}
-
-		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ohd.getAgent()), result);
-		return result;
-
-	}
-
 	private String getDescString(String... descs) {
 		// need to remove duplicates
 		Set<String> foo = new HashSet<String>(Arrays.asList(descs));
@@ -652,59 +504,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		}
 		return code;
 	}
-
-	private void getOhdPaxInfo(OHD_Passenger p, Map<WorldTracerField, List<String>> result) {
-		OHD_Address address = p.getAddress(0);
-		if (p.getLastname() == null || p.getLastname().trim().length() <= 0) {
-			if (address != null) {
-				addWtOhdAddress(result, address, WorldTracerField.TA);
-			}
-		} else {
-			// add the name
-			addIncidentFieldEntry(WorldTracerField.NM, p.getLastname().trim(), result);
-
-			// add the initials
-			String initials = null;
-			if (p.getFirstname() != null && p.getFirstname().trim().length() > 0) {
-				initials = p.getFirstname().trim().substring(0, 1) + p.getLastname().trim().substring(0, 1);
-			} else {
-				initials = p.getLastname().trim().substring(0, 1);
-			}
-			addIncidentFieldEntry(WorldTracerField.IT, initials, result);
-
-			// add the passenger title (salutation)
-			addIncidentFieldEntry(WorldTracerField.PT, p.getFirstname(), result);
-
-			// add permanent address
-			if (address != null) {
-				addWtOhdAddress(result, address, WorldTracerField.PA);
-			}
-		}
-		if (address != null) {
-			if (!result.containsKey(WorldTracerField.AB)) {
-				addWtOhdAddress(result, address, WorldTracerField.AB);
-			}
-			// add email
-			addIncidentFieldEntry(WorldTracerField.EA, wtEscape(address.getEmail()), result);
-
-			// add home phone
-			addIncidentFieldEntry(WorldTracerField.PN, wtPhone(address.getHomephone()), result);
-
-			// add work phone
-			addIncidentFieldEntry(WorldTracerField.TP, wtPhone(address.getWorkphone()), result);
-
-			// add cell phone
-			addIncidentFieldEntry(WorldTracerField.CP, wtPhone(address.getMobile()), result);
-
-			// add fax num
-			addIncidentFieldEntry(WorldTracerField.FX, wtPhone(address.getAltphone()), result);
-
-			// add country
-			addIncidentFieldEntry(WorldTracerField.CO, address.getCountrycode_ID(), result);
-		}
-
-	}
-
 
 	private void addWtOhdAddress(Map<WorldTracerField, List<String>> result, OHD_Address address,
 			WorldTracerField addressField) {
@@ -860,66 +659,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		addIncidentFieldEntry(WorldTracerField.PB, "0000", result);
 		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(ntIncident.getAgent()),
 				result);
-		return result;
-	}
-
-	private Map<WorldTracerField, List<String>> createCloseFieldMap(Incident incident) {
-		Map<WorldTracerField, List<String>> result = new EnumMap<WorldTracerField, List<String>>(WorldTracerField.class);
-		String cs_fmt = "%02d %s/%s%1.2f";
-		int claimCount = 0;
-		if (incident.getClaim() != null) {
-			String cost;
-
-			if (incident.getExpenses() != null) {
-				for (ExpensePayout expense : incident.getExpenses()) {
-					if (expense.getApproval_date() != null && expense.getCurrency_ID() != null) {
-						claimCount++;
-						if ("ADV".equals(expense.getPaycode())) {
-							cost = String.format(cs_fmt, claimCount, "A", expense.getCurrency_ID(), expense
-									.getCheckamt());
-						} else if ("DEL".equals(expense.getPaycode())) {
-							cost = String.format(cs_fmt, claimCount, "D", expense.getCurrency_ID(), expense
-									.getCheckamt());
-						} else if ("FIN".equals(expense.getPaycode())) {
-							cost = String.format(cs_fmt, claimCount, "F", expense.getCurrency_ID(), expense
-									.getCheckamt());
-						} else if ("INS".equals(expense.getPaycode())) {
-							cost = String.format(cs_fmt, claimCount, "I", expense.getCurrency_ID(), expense
-									.getCheckamt());
-						} else {
-							cost = String.format(cs_fmt, claimCount, "X", expense.getCurrency_ID(), expense
-									.getCheckamt());
-						}
-						addIncidentFieldEntry(WorldTracerField.CS, cost, result);
-					}
-				}
-			}
-		}
-		// see if we added a CS
-		if (claimCount == 0) {
-			addIncidentFieldEntry(WorldTracerField.CS, "01 X/USD0.00", result);
-		}
-
-		if (incident.getLoss_code() != 0) {
-			addIncidentFieldEntry(WorldTracerField.RL, Integer.toString(incident.getLoss_code()), result);
-			Company_specific_irregularity_code csic = LossCodeBMO.getLossCode(incident.getLoss_code(),
-					TracingConstants.LOST_DELAY, AdminUtils.getCompany(wtCompanyCode));
-			addIncidentFieldEntry(WorldTracerField.RC, csic.getDescription(), result);
-		} else {
-			addIncidentFieldEntry(WorldTracerField.RL, "79", result);
-			addIncidentFieldEntry(WorldTracerField.RC, "Created in error", result);
-		}
-		if (incident.getFaultstation() != null) {
-			Station fs = StationBMO.getStationByCode(incident.getFaultstationcode());
-			if (fs.getWt_stationcode() == null || fs.getWt_stationcode().trim().length() < 1) {
-				addIncidentFieldEntry(WorldTracerField.FS, incident.getStationcreated().getWt_stationcode(), result);
-			} else {
-				addIncidentFieldEntry(WorldTracerField.FS, fs.getWt_stationcode(), result);
-			}
-		} else {
-			addIncidentFieldEntry(WorldTracerField.FS, incident.getStationcreated().getWt_stationcode(), result);
-		}
-		addIncidentFieldEntry(WorldTracerField.AG, DefaultWorldTracerService.getAgentEntry(incident.getAgent()), result);
 		return result;
 	}
 
@@ -1158,10 +897,10 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.AF_COUNT)
-	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user) {
+	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user, WebServiceDto dto) throws CaptchaException {
 		EnumMap<ActionFileType, int[]> result;
 		try {
-			result = this.wtConnector.getActionFileCounts(companyCode, wtStation);
+			result = this.wtConnector.getActionFileCounts(companyCode, wtStation, dto);
 		} catch (WorldTracerException e) {
 			return null;
 		}
@@ -1184,9 +923,9 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	
 	@WorldTracerTx(type = TxType.AF_SUMMARY)
 	public List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode,
-			String wtStation, ActionFileType afType, int day, Agent user) throws WorldTracerException {
+			String wtStation, ActionFileType afType, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 		List<ActionFileDto> stuff;
-		stuff = wtConnector.getActionFileSummary(companyCode, wtStation, afType, day);
+		stuff = wtConnector.getActionFileSummary(companyCode, wtStation, afType, day, dto);
 		
 		if(stuff == null || stuff.size() < 1) return null;
 		
@@ -1217,20 +956,19 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	@WorldTracerTx(type = TxType.AF_DETAIL)
 	public String getActionFileDetail(String companyCode,
 			String wtStation, ActionFileType afType, int day, int itemNum,
-			Agent user) throws WorldTracerException {
-		String result = wtConnector.getActionFileDetails(companyCode, wtStation, afType, day, itemNum);
+			Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		String result = wtConnector.getActionFileDetails(companyCode, wtStation, afType, day, itemNum, dto);
 		return result;
 	}
 	
 	@WorldTracerTx(type = TxType.SEND_PXF)
-	public String sendPxf(WtqRequestPxf wtq) throws WorldTracerException {
-		
-		//check here to make sure we get the exact objs
+	public String sendPxf(WtqRequestPxf wtq, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		return wtConnector.sendPxf(wtq, dto);
+	}
 
-//		Map<WorldTracerField, List<String>> fieldMap = createFieldMap(wtq);
-//		addConvertedTag(wtq.getBagTagNumber(), WorldTracerField.TN, fieldMap, wtq.getAgent().getCompanycode_ID());
-
-		return wtConnector.sendPxf(wtq);
+	@WorldTracerTx(type = TxType.CREATE_QOH)
+	public String insertQoh(WtqQoh wtqQoh, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		return wtConnector.sendQoh(wtqQoh, dto);
 	}
 
 

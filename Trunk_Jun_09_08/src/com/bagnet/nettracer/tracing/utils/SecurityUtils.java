@@ -21,6 +21,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
@@ -40,12 +41,86 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
  */
 public class SecurityUtils {
 
+	Logger logger = Logger.getLogger(SecurityUtils.class);
+	
 	/**
 	 *  
 	 */
 	public SecurityUtils() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Agent authAdminUser(String username, String password) {
+		
+		Agent agent = null;
+		Session sess = null;
+		
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			
+			Criteria criteria = sess.createCriteria(Agent.class);
+			criteria.add(Expression.eq("username", username));
+			criteria.add(Expression.eq("password", TEA.encryptTEA(password)));
+			List results = criteria.list();
+			
+			if (results == null || results.size() < 1) {
+
+				// Add 1 to # of times login failed.
+				Criteria criteria2 = sess.createCriteria(Agent.class);
+				criteria2.add(Expression.eq("username", username));
+
+				List results2 = criteria2.list();
+				if (results2.size() == 1) {
+					agent = (Agent)results2.get(0);
+					int maxFailedAttempts = AdminUtils.getCompVariable(agent.getCompanycode_ID()).getMax_failed_logins();
+					
+					if (maxFailedAttempts > 0) {
+						int failedAttempts = agent.getFailed_logins() + 1;
+						agent.setFailed_logins(failedAttempts);
+						
+						if (failedAttempts >= maxFailedAttempts && !agent.isAccount_locked()) {
+							agent.setAccount_locked(true);
+							HibernateUtils.save(agent);
+							
+							if (AdminUtils.getCompVariable(agent.getCompanycode_ID()).getAudit_agent() == 1) {
+								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(agent, agent);
+								if (audit_agent != null) {
+									HibernateUtils.saveNew(audit_agent);
+								}
+							}		
+						} else {
+							HibernateUtils.save(agent);
+						}
+					}
+					
+				}
+				if (agent != null) {
+					agent = null;
+				} else {
+					agent = null;
+				}
+			} else {
+				agent = (Agent) results.get(0);
+				if (!agent.isActive() || agent.isAccount_locked()) {
+					agent = null;
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error ("Admin User Authentication login error...", e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return agent;
 	}
 
 	/**

@@ -2,7 +2,6 @@ package com.bagnet.nettracer.tracing.actions.wt;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +30,9 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
-import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class ActionFileSummaryAction extends Action {
 	
@@ -89,12 +89,6 @@ public class ActionFileSummaryAction extends Action {
 			agentStation = user.getStation();
 		}
 		
-		WorldTracerService service = SpringUtils.getWorldTracerService();
-		if (service.getWtConnector().doesUserNeedToEnterCaptcha(false)) {
-			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
-			response.sendRedirect("wtCaptcha.do");
-			return null;
-		}
 		
 		ActionMessages errors = new ActionMessages();
 		
@@ -115,9 +109,12 @@ public class ActionFileSummaryAction extends Action {
 		ActionFileType aft = ActionFileType.valueOf(catName);
 		List<Worldtracer_Actionfiles> result = null;
 		try {
-			result= afm.getSummary(companyCode, wtStation, aft, day, user);
-		}
-		catch (WorldTracerLockException ex) {
+			result= afm.getSummary(companyCode, wtStation, aft, day, user, WorldTracerWebService.getBasicDto(session));
+		} catch (CaptchaException e) {
+			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
+			response.sendRedirect("wtCaptcha.do");
+			return null;
+		} catch (WorldTracerLockException ex) {
 			ActionMessage error = new ActionMessage("message.wt.af.lock.error");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);

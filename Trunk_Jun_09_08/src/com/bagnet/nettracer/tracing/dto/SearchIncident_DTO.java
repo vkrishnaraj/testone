@@ -26,6 +26,7 @@ public class SearchIncident_DTO {
 	private String airline;
 	private String flightnum;
 	private String claimchecknum;
+	private String claimchecknum2;
 	private String firstname;
 	private String middlename;
 	private String lastname;
@@ -35,7 +36,37 @@ public class SearchIncident_DTO {
 	private int[] status_IDs;	// used for search incoming incidents
 	private int noAssignedAgent;
 	private String recordlocator;
+	private String wt_id;
+	private boolean wtConditionOr;
+	private boolean intelligentTagSearch;
+	private int intelligentTagSearchType;
+
+	private String s_station_assignment_time = "";
+	private String e_station_assignment_time = "";
+	private int assigned2StationWithin24hrs;
 	
+	
+	
+	public int getAssigned2StationWithin24hrs() {
+		return assigned2StationWithin24hrs;
+	}
+
+	public void setAssigned2StationWithin24hrs(int assigned2StationWithin24hrs) {
+		this.assigned2StationWithin24hrs = assigned2StationWithin24hrs;
+	}
+
+	public String getS_station_assignment_time() {
+		return s_station_assignment_time == null ? "" : s_station_assignment_time.trim();
+	}
+
+
+	public String getE_station_assignment_time() {
+		return e_station_assignment_time == null ? "" : e_station_assignment_time.trim();
+	}
+
+	public void setE_station_assignment_time(String e_station_assignment_time) {
+		this.e_station_assignment_time = e_station_assignment_time;
+	}
 
 	/**
 	 * @return Returns the agent.
@@ -374,5 +405,46 @@ public class SearchIncident_DTO {
 		this.faultstation_ID = faultstation_ID;
 	}
 
+
+	public String getWt_id() {
+		return wt_id == null ? "" : wt_id.trim();
+	}
+
+	public void setWt_id(String wt_id) {
+		this.wt_id = wt_id;
+	}
+
+	public boolean isWtConditionOr() {
+		return wtConditionOr;
+	}
+
+	public void setWtConditionOr(boolean wtConditionOr) {
+		this.wtConditionOr = wtConditionOr;
+	}
+
+
+	public boolean isIntelligentTagSearch() {
+		return intelligentTagSearch;
+	}
+
+	public void setIntelligentTagSearch(boolean intelligentTagSearch) {
+		this.intelligentTagSearch = intelligentTagSearch;
+	}
+
+	public int getIntelligentTagSearchType() {
+		return intelligentTagSearchType;
+	}
+
+	public void setIntelligentTagSearchType(int intelligentTagSearchType) {
+		this.intelligentTagSearchType = intelligentTagSearchType;
+	}
+
+	public String getClaimchecknum2() {
+		return claimchecknum2 == null ? "" : claimchecknum2.trim();
+	}
+
+	public void setClaimchecknum2(String claimchecknum2) {
+		this.claimchecknum2 = claimchecknum2;
+	}	
 	
 }

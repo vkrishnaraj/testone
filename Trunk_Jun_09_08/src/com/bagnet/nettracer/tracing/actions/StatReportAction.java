@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.exceptions.AmountOfDataOutOfRangeException;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -30,6 +32,7 @@ import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.forms.StatReportForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -106,8 +109,23 @@ public class StatReportAction extends Action {
 				rBMO.setErrormsg("error.missingRequired");
 			}
 			
+			Date startDate = DateUtils.convertToDate(daform.getStarttime(), user.getDateformat().getFormat(), user
+					.getCurrentlocale());
+
+			Date endDate = DateUtils.convertToDate(daform.getEndtime(), user.getDateformat().getFormat(), user
+					.getCurrentlocale());
+			
+			//deal with date range not to exceed 93 days rule here
+//			long PAWOB_REPORT_DATE_RANGE_MAX_NUMBER_OF_DAYS = 93L;
+//			if (startDate != null && endDate!= null) {
+//				boolean isDateRangeOutsideLimit = DateUtils.isDateRangeOutsideLimit(startDate, endDate, PAWOB_REPORT_DATE_RANGE_MAX_NUMBER_OF_DAYS);
+//				if (isDateRangeOutsideLimit) {
+//					rBMO.setErrormsg("error.amount.of.data.exceeds.limit");
+//				}
+//			}
+
 			if (reportfile == null || reportfile.equals("")) {
-				
+				//no data to report
 				if (rBMO.getErrormsg() != null && rBMO.getErrormsg().length() > 0) {
 					ActionMessage error = new ActionMessage(rBMO.getErrormsg());
 					errors.add(ActionMessages.GLOBAL_MESSAGE,error);
@@ -118,6 +136,15 @@ public class StatReportAction extends Action {
 				
 				saveMessages(request, errors);
 			} else {
+				//deal with date range not to exceed 93 days rule here
+				long PAWOB_REPORT_DATE_RANGE_MAX_NUMBER_OF_DAYS = 93L;
+				if (startDate != null && endDate!= null) {
+					boolean isDateRangeOutsideLimit = DateUtils.isDateRangeOutsideLimit(startDate, endDate, PAWOB_REPORT_DATE_RANGE_MAX_NUMBER_OF_DAYS);
+					if (isDateRangeOutsideLimit) {
+						rBMO.setErrormsg("error.amount.of.data.exceeds.limit");
+					}
+				}				
+
 				request.setAttribute("reportfile", reportfile);
 				if (request.getAttribute("outputtype") == null) {
 					request.setAttribute("outputtype", Integer.toString(daform.getOutputtype()));

@@ -18,6 +18,7 @@
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/usair/hibernate_reporting.cfg.xml" />
 		
 		<antcall target="build-usair-common" />
 	</target>
@@ -30,6 +31,7 @@
 		<copy todir="${basedir}/src" file="companies/usair/dev/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_reporting.cfg.xml" />
 		<antcall target="build-usair-common" />
 	</target>
 	
@@ -41,6 +43,7 @@
 		<copy todir="${basedir}/src" file="companies/usair/beta/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/beta/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/beta/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/usair/beta/hibernate_reporting.cfg.xml" />
 		<antcall target="build-usair-common" />
 	</target>
 	
@@ -52,6 +55,7 @@
 		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_reporting.cfg.xml" />
 		<copy todir="${basedir}/web/WEB-INF" file="companies/usair/context.xml" />
 		<antcall target="build-usair-common" />
 	</target>
@@ -145,6 +149,7 @@
 		<property name="jarprefix" value="local-"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
+		<copy file="c:\workspace\NT_1_76\other\build\dist\cron\lib\local-tracer-cron.jar" todir="c:\cron-svc\lib"></copy>
 	</target>
 
 
