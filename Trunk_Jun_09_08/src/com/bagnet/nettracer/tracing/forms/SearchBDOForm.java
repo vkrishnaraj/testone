@@ -11,6 +11,7 @@ public final class SearchBDOForm extends ValidatorForm {
 
 	private String incident_ID;
 	private String ohd_ID;
+	private String bdo_ID;
 	private String lastname;
 	private String firstname;
 	private String middlename;
@@ -196,6 +197,15 @@ public final class SearchBDOForm extends ValidatorForm {
 	 */
 	public String getDeliverydate() {
 		return deliverydate;
+	}
+
+	public String getBdo_ID() {
+			return bdo_ID;
+		
+	}
+
+	public void setBdo_ID(String bdo_ID) {
+			this.bdo_ID = bdo_ID;
 	}
 
 	/**

@@ -488,7 +488,7 @@ public class OnHandAction extends CheckedAction {
 				}
 
 				TracerUtils.populateOnHand(theform, request);
-				bs.fillTheOhdForm(foundohd, theform, user);
+				bs.fillTheOhdForm(foundohd, theform, user, request);
 				addFaultStation((List<Station>) request.getAttribute(FAULT_STATION_LIST), foundohd.getFaultstation_ID());
 				addLossCode((List<Company_specific_irregularity_code>) request.getAttribute("lossCodes"), foundohd.getLoss_code());
 				theform.setFoundDate(TracerDateTime.getGMTDate());
@@ -511,7 +511,7 @@ public class OnHandAction extends CheckedAction {
 					// if OHD_ID exists; load exisiting on-hand
 					theform.setAgent(user);
 					OHD ohd;
-					if((ohd = bs.findOnHand(onhand_id, theform, user)) == null) {
+					if((ohd = bs.findOnHand(onhand_id, theform, user, request)) == null) {
 						ActionMessage error = new ActionMessage("error.no.onhandreport");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
@@ -820,7 +820,7 @@ public class OnHandAction extends CheckedAction {
 		OnHandForm form = new OnHandForm();
 		BagService bs = new BagService();
 		try {
-			bs.findOnHand(ohd_id, form, user);
+			bs.findOnHand(ohd_id, form, user, request);
 		}
 		catch (Exception e) {
 		}

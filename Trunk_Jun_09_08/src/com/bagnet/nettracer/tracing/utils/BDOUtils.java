@@ -877,7 +877,8 @@ public class BDOUtils {
 				s.append(" and bdo.incident.incident_ID like :incident_ID ");
 			if (siDTO.getOhd_ID().length() > 0)
 				s.append(" and bdo.ohd.OHD_ID like :ohd_ID ");
-
+			if (siDTO.getBdo_ID().length() >0)
+				s.append(" and bdo.BDO_ID like :bdo_ID "); 
 			if (siDTO.getAgent().length() > 0)
 				s.append(" and bdo.agent.username like :agent ");
 
@@ -952,7 +953,55 @@ public class BDOUtils {
 				q.setString("incident_ID", siDTO.getIncident_ID());
 			if (siDTO.getOhd_ID().length() > 0)
 				q.setString("ohd_ID", siDTO.getOhd_ID());
-
+				
+			if (siDTO.getBdo_ID() != null && siDTO.getBdo_ID().length() > 0)
+				{										
+					String getBDO_ID = siDTO.getBdo_ID();
+					if (getBDO_ID.contains("%"))
+					{										
+						 if (getBDO_ID.indexOf("BDO")==0)
+							 {
+							 	getBDO_ID = getBDO_ID.replace("BDO", "");
+								 							
+							 }
+						 if (getBDO_ID.indexOf("BD")==0)
+							 {
+							 	getBDO_ID = getBDO_ID.replace("BD", "");
+								 							
+							 }
+						 if (getBDO_ID.indexOf("B")==0)
+							 {
+							 	getBDO_ID = getBDO_ID.replace("B", "");
+								 							
+							 }
+						
+					   q.setString("bdo_ID", getBDO_ID);
+				    }
+										
+				else {
+							
+						Long val = null;
+							
+							String bdoid = null;
+							
+							if(getBDO_ID !=null && getBDO_ID.contains("BDO"))
+							{
+								String temp = getBDO_ID.replace("BDO", "");
+								try
+									{								
+										 val = Long.parseLong(temp);
+										 bdoid = String.valueOf(val);									  									  
+									}
+								catch(NumberFormatException e)
+									{
+										bdoid = siDTO.getBdo_ID();
+									}
+							}
+							q.setString("bdo_ID", bdoid);
+						}
+				}
+		
+			
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
 					q.setDate("startdate", sdate);

@@ -1688,21 +1688,21 @@ public class BagService {
 		return true;
 	}
 
-	public OHD findOnHand(String ohd_ID, OnHandForm theform, Agent user) throws Exception {
+	public OHD findOnHand(String ohd_ID, OnHandForm theform, Agent user, HttpServletRequest request) throws Exception {
 		OhdBMO oBMO = new OhdBMO();
 		OHD iDTO = oBMO.findOHDByID(ohd_ID);
 		if(iDTO == null)
 			return null;
 		theform.setOhd_id(iDTO.getOHD_ID());
-		fillTheOhdForm(iDTO, theform, user);
-
-
+		fillTheOhdForm(iDTO, theform, user, request);
 		return iDTO;
 	}
 	
-	public void fillTheOhdForm(OHD iDTO, OnHandForm theform, Agent user)
-			throws IllegalAccessException, InvocationTargetException {
 
+	public void fillTheOhdForm(OHD iDTO, OnHandForm theform, Agent user, HttpServletRequest request	)
+			throws IllegalAccessException, InvocationTargetException {
+		
+		HttpSession session = request.getSession();
 		theform.setAgent_initials(iDTO.getAgent().getUsername());
 		theform.setBagColor(iDTO.getColor());
 		theform.setBagTagNumber(iDTO.getClaimnum());
@@ -1748,9 +1748,12 @@ public class BagService {
 		theform.setFoundTime(completedate);
 		theform.setFoundDate(completedate);
 		theform.setStatus(iDTO.getStatus());
-
+		
+		// Setting OHD Status in Session
+		
+		String Intial_OHD_StatusVal = Integer.toString(iDTO.getStatus().getStatus_ID());
+		session.setAttribute("Intial_OHD_StatusVal", Intial_OHD_StatusVal);
 		theform.setDisposal_status((iDTO.getDisposal_status() == null ? (new Status()) : iDTO.getDisposal_status()));
-
 		theform.setPassengerList(new ArrayList(iDTO.getPassengers()));
 
 		if(theform.getPassengerList().size() < 1) {

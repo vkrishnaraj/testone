@@ -88,12 +88,17 @@ function updatePagination() {
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
+               <td>
+                  <bean:message key="header.bdo_number" />
+                  <br>
+                  <html:text property="bdo_ID" size="20" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);filldata(this,13);" />
+                </td>
                 <td>
                   <bean:message key="header.bdo_report" />
                   <br>
                   <html:text property="incident_ID" size="20" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
-                <td colspan=2>
+                <td>
                   <bean:message key="header.bdo_bag" />
                   <br>
                   <html:text property="ohd_ID" size="20" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
@@ -113,7 +118,7 @@ function updatePagination() {
                 <td>
                   <bean:message key="colname.mid_initial" />
                   <br>
-                  <html:text property="middlename" size="20" maxlength="20" styleClass="textfield" />
+                  <html:text property="middlename" size="20" maxlength="1" styleClass="textfield" />
                 </td>
               </tr>
               <tr>

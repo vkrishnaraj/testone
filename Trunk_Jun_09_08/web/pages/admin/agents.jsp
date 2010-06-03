@@ -118,7 +118,7 @@
               :
             </td>
             <td colspan="3">
-              <html:text property="agentSearchName" size="12" maxlength="10" styleClass="textfield" />
+              <html:text property="agentSearchName" size="12" maxlength="20" styleClass="textfield" />
             </td>
           </tr>
           <tr>
@@ -127,7 +127,7 @@
               :
             </td>
             <td colspan="3">
-              <html:text property="agentSearchFName" size="12" maxlength="10" styleClass="textfield" />
+              <html:text property="agentSearchFName" size="12" maxlength="20" styleClass="textfield" />
             </td>
           </tr>
           <tr>

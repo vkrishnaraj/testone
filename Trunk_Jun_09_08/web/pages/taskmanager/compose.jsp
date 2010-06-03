@@ -5,6 +5,10 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <SCRIPT LANGUAGE="JavaScript">
   function textCounter(field, countfield, maxlimit) {
     if (field.value.length > maxlimit) {
@@ -111,19 +115,25 @@ function updatePagination() {
                   &nbsp;
                   <html:select name="recp_list" styleClass="dropdown" property="station_id" indexed="true">
 <%
+					Agent a = (Agent) session.getAttribute("user");
+					if (UserPermissions.hasPermission(
+					         TracingConstants.SYSTEM_COMPONENT_NAME_SEND_MSG_ALL, a)) {
+
                     if (recp_list.getStation_id() == -1) {
 %>
                       <option value="-1" selected>
                       <bean:message key="select.all" />
                       </option>
 <%
-                    } else {
+                    } else 
+                    	{
 %>
-                      <option value="-1" selected>
-                      <bean:message key="select.all" />
-                      </option>
+	                      <option value="-1" selected>
+	                      <bean:message key="select.all" />
+	                      </option>
 <%
-                    }
+                   	 }
+					}
 %>
                     <logic:iterate id="station" name="recp_list" property="stationList" type="com.bagnet.nettracer.tracing.db.Station">
                       <option value="<bean:write name="station" property="station_ID"/>" <% if (recp_list.getStation_id() == station.getStation_ID()) { %> selected <% } %>>
