@@ -29,7 +29,6 @@ public class AdminDao extends HibernateDaoSupport {
 	
 	private static final String PASSENGER_LOGIN = "Login";
 	private static final String DIRECTION = "Direction";
-	private static final String PASSENGER_INFO = "Passenger";
 	private static final String FLIGHT_INFO = "Flight";
 	private static final String BAGGAGE_INFO = "Baggage";
 	private static final String GENERAL_INFO = "General";
@@ -44,7 +43,7 @@ public class AdminDao extends HibernateDaoSupport {
 
 		List<List<Label>> labelList = new ArrayList<List<Label>>();
 		labelList.add((List<Label>) getSession().createCriteria(Label.class)
-				.add(Restrictions.like("page", PASSENGER_INFO + "%")).list());
+				.add(Restrictions.like("page", "Passenger Information")).list());
 
 		labelList.add((List<Label>) getSession().createCriteria(Label.class)
 				.add(Restrictions.like("page", FLIGHT_INFO + "%")).list());
@@ -143,7 +142,7 @@ public class AdminDao extends HibernateDaoSupport {
 				"INNER JOIN FETCH lt.languages lg " +
 				"INNER JOIN FETCH lt.label lb " +
 				"WHERE lg.id = ? AND lb.page LIKE ? "
-				,new Object[]{languageId,PASSENGER_INFO+ "%"}));
+				,new Object[]{languageId,"Passenger Information"}));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -270,7 +269,7 @@ public class AdminDao extends HibernateDaoSupport {
 				"INNER JOIN FETCH lt.languages lg " +
 				"INNER JOIN FETCH lt.label lb " +
 				"WHERE lg.id = ? AND lb.page LIKE ? "
-				,new Object[]{languageId, "%"+PASSENGER_LOGIN+ "%"}));
+				,new Object[]{languageId, "%"+PASSENGER_LOGIN}));
 	}
 	
 	private Long getLanguageId(String languageDescription){
@@ -319,15 +318,6 @@ public class AdminDao extends HibernateDaoSupport {
 	 * Save the Content and Language Data
 	 * 
 	 */
-	public void saveContentLanguage(List<List<Localetext>> list)
-			throws SimplePersistenceException {
-
-		for (List<Localetext> lists:list) {
-			for(Localetext text:lists){
-				getHibernateTemplate().update(text);
-			}
-		}
-	}
 
 	@SuppressWarnings("unchecked")
 	public void saveContentLanguageMaps(Map<String, List<Map<String, List<Localetext>>>> languageMap) 
