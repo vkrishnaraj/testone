@@ -12,13 +12,13 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.axis2.AxisFault;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.bagnet.nettracer.ws.onlineclaims.impl.AuthAdminUserDocumentImpl;
 import com.nettracer.claims.admin.LoginBean;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.Company;
@@ -51,10 +51,35 @@ public class AdminController {
 	 * page. i.e. the landing page
 	 * 
 	 * @return String
+	 * @throws AxisFault 
 	 */
 	public String gotoLandingPage() {
 		logger.debug("gotoLandingPage method is called");
 		// Had to use hard coded value for testing
+		
+		/*try{
+			 // Prepare stub with endpoint
+            OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub("http://74.188.84.58:8080/tracer/services/OnlineClaimsService");
+
+            // Prepare XML documents for request
+            AuthAdminUserDocument request = AuthAdminUserDocument.Factory.newInstance();
+            AuthAdminUser subDoc1 = request.addNewAuthAdminUser();
+            subDoc1.setUsername("onlineclaims");
+            subDoc1.setPassword("B651kLN5");
+            // Set System Username & PW
+            NtAuth subDoc2 = subDoc1.addNewAuth();
+            subDoc2.setUsername("utpal");
+            subDoc2.setPassword("heman@123");
+            //request.setAuthAdminUser(subDoc1);
+            // Perform Web Service Request
+            AuthAdminUserResponseDocument response = stub.authAdminUser(request);
+            // Process response
+            boolean successfulLogin = response.getAuthAdminUserResponse().getReturn();
+            logger.info("Value of successfulLogin: "+successfulLogin);
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}*/
 		
 		if ((loginBean.getUserName().equalsIgnoreCase("dummy") && loginBean
 				.getPassword().equalsIgnoreCase("dummy"))) {
@@ -66,6 +91,7 @@ public class AdminController {
 				SessionScopeBean sessionBean = (SessionScopeBean) session
 						.getAttribute("sessionBean");
 				sessionBean.setLogoutRenderer(true);
+				sessionBean.setLandingRenderer(false);
 				session.setAttribute("sessionBean", sessionBean);
 				session.setAttribute("logged", "logged");
 				return "gotoLandingPage";
@@ -96,6 +122,8 @@ public class AdminController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
 			try {
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(true);
 				Company company = adminService.getApplicationData();
 				this.setCompany(company);
 			} catch (Exception e) {
@@ -103,8 +131,12 @@ public class AdminController {
 			}
 			return "gotoMaintainApplication";
 		} else {
+			if(session != null){
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(false);
+			}
 			FacesUtil
-					.addError("Your session has been expired. PLease log in again");
+					.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}
 	}
@@ -113,6 +145,8 @@ public class AdminController {
 		logger.debug("saveApplication called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
+		SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+		sessionBean.setLandingRenderer(false);
 		if (null != session && null != session.getAttribute("logged")) {
 			try {
 				adminService.saveApplication(this.getCompany());
@@ -124,7 +158,7 @@ public class AdminController {
 			return "gotoLandingPage";
 		} else {
 			FacesUtil
-					.addError("Your session has been expired. PLease log in again");
+					.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}
 	}
@@ -178,6 +212,16 @@ public class AdminController {
 
 	public String logout() {
 		return FacesUtil.logout();
+	}
+	
+	public String landingLink(){
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+		.getExternalContext().getSession(false);
+		if(session != null){
+			SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+			sessionBean.setLandingRenderer(false);
+		}
+		return "gotoLandingPage";
 	}
 
 	public CaptchaBean getCaptchaBean() {

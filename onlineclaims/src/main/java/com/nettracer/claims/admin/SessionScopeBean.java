@@ -11,6 +11,7 @@ public class SessionScopeBean {
 	
 	
 	private boolean logoutRenderer;
+	private boolean landingRenderer;
 
 	public boolean getLogoutRenderer() {
 		return logoutRenderer;
@@ -19,5 +20,14 @@ public class SessionScopeBean {
 	public void setLogoutRenderer(boolean logoutRenderer) {
 		this.logoutRenderer = logoutRenderer;
 	}
+
+	public boolean isLandingRenderer() {
+		return landingRenderer;
+	}
+
+	public void setLandingRenderer(boolean landingRenderer) {
+		this.landingRenderer = landingRenderer;
+	}
+	
 
 }

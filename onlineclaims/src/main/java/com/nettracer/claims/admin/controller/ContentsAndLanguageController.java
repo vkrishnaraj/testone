@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
@@ -36,8 +38,8 @@ import com.nettracer.claims.faces.util.FacesUtil;
 @Scope("session")
 @Qualifier("contentsAndLanguageController")
 public class ContentsAndLanguageController {
-	private static Logger logger = Logger
-			.getLogger(ContentsAndLanguageController.class);
+	private static Logger logger = Logger.getLogger(ContentsAndLanguageController.class);
+	
 	private static final String PASSENGER_LOGIN = "Login";
 	private static final String DIRECTION = "Direction";
 	private static final String PASSENGER_INFO = "Passenger";
@@ -53,20 +55,14 @@ public class ContentsAndLanguageController {
 	AdminService adminService;
 
 	private List<String> activeLanguages = new ArrayList<String>();
-
 	private List<SelectItem> selectCheckBoxeslist;
-
-
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
-
 	private boolean renderTabPanel;
 	private String selectedLanguage; //holds the selected combobox value for selecting the language
-
 	private Map<String, List<Map<String, List<Localetext>>>> languageMap ; //master map
 	private List<Map<String, List<Localetext>>> pageMapsList ;
 	private Set<String> languageSelectedSet=new HashSet<String>();
 	private Map<String,Integer> indexMap= new HashMap<String,Integer>();
-	
 	
 
 
@@ -81,10 +77,14 @@ public class ContentsAndLanguageController {
 		indexMap.clear();
 		activeLanguages.clear();
 		languageDropDown.clear();
+		setRenderTabPanel(false);
 		
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
+			SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+			sessionBean.setLandingRenderer(true); //for landing page link
+			
 			languageMap = new HashMap<String, List<Map<String, List<Localetext>>>>();
 			pageMapsList = new ArrayList<Map<String, List<Localetext>>>();
 			selectCheckBoxeslist = new ArrayList<SelectItem>();
@@ -100,6 +100,19 @@ public class ContentsAndLanguageController {
 						languageDropDown.clear();
 						//languageDropDown.add(new SelectItem("Please Select a Language"));
 						languageDropDown.addAll(items);
+						
+						//Logic :set all the tab panel data internally
+						if(!languageMap.containsKey(language.getDescription())){
+							pageMapsList.add(getAllPageMap(language.getDescription())); //get all the values from DB
+							
+							//setting the index for xhtml page
+							int index=pageMapsList.size()-1;
+							//session.setAttribute("index", index); //index value is needed and to be used in the xhtml page
+							indexMap.put(language.getDescription(),index);
+							
+							languageMap.put(language.getDescription(), pageMapsList);
+						}
+					//end of logic
 					}
 				}
 				if(null != languageDropDown && languageDropDown.size() > 0){
@@ -110,6 +123,10 @@ public class ContentsAndLanguageController {
 			}
 			return "gotoContentsAndLanguage";
 		} else {
+			if(session != null){
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(false); //for landing page link
+			}
 			FacesUtil
 					.addError("Your session has been expired. PLease log in again");
 			return "logout";
@@ -127,29 +144,44 @@ public class ContentsAndLanguageController {
 		languageMap.clear();
 		pageMapsList.clear();
 		try {
-			List<String> checkBoxList = (List<String>) valueChangeEvent.getNewValue();
+			List<String> newCheckBoxList = (List<String>) valueChangeEvent.getNewValue();
+			//List<String> oldCheckBoxList = (List<String>) valueChangeEvent.getOldValue();
 			Set<SelectItem> items = new LinkedHashSet<SelectItem>();
 
-			for (String languageValue : checkBoxList) {
+			for (String languageValue : newCheckBoxList) {
 				items.add(new SelectItem(languageValue));
 				
-				//Logic to be implemented
+			//Logic :If an admin wants to uncheck a language to deactivate it without touching the drop down
 				if(!languageMap.containsKey(languageValue)){
 					pageMapsList.add(getAllPageMap(languageValue)); //get all the values from DB
 					if( ! languageValue.equalsIgnoreCase("Please Select a Language")){
+						//setting the index for xhtml page
+						int index=pageMapsList.size()-1;
+						indexMap.put(languageValue,index);
 						languageMap.put(languageValue, pageMapsList);
 					}
 				}
-				//end of logic
+			//end of logic
 			}
-			setRenderTabPanel(items.size() > 0 ? true : false);
+			if(items.size() == 0){
+				setRenderTabPanel(false); //don't display the tab panel if all the languages are unchecked
+			}
+			
+			
 			languageDropDown.clear();
 			//languageDropDown.add(new SelectItem("Please Select a Language"));
-			
 			languageDropDown.addAll(items); //construct the final drop down
 			
+			//set the drop down value --not working right now in the GUI level
+			/*if(oldCheckBoxList.size() < newCheckBoxList.size()){
+				for(String newLanguageValue :  newCheckBoxList){
+					if( ! oldCheckBoxList.contains(newLanguageValue)){
+						setSelectedLanguage(newLanguageValue);//set the drop down value for the newly checked language
+					}
+				}
+				
+			}*/
 			
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,6 +203,24 @@ public class ContentsAndLanguageController {
 			session.setAttribute("lang", languageSelected);
 			languageSelectedSet.add(languageSelected);
 			
+			/*if(languageDropDown.size() >0){
+				pageMapsList.clear();
+				for(SelectItem item: languageDropDown){
+					if(!((String)item.getValue()).equalsIgnoreCase("Please Select a Language")){
+						if(!languageMap.containsKey((String)item.getValue())){
+							pageMapsList.add(getAllPageMap((String)item.getValue())); //get all the values from DB
+							int index=pageMapsList.size()-1;
+							session.setAttribute("index", index); //index value is needed and to be used in the xhtml page
+							indexMap.put((String)item.getValue(),index);
+							languageMap.put((String)item.getValue(), pageMapsList);
+						}else {
+							session.setAttribute("index", indexMap.get((String)item.getValue()));
+						}
+						
+					}
+				
+				}
+			}*/
 			
 			for(String language:languageSelectedSet){
 				if(null !=language && null !=languageSelected && language.equals(languageSelected)){
@@ -281,6 +331,8 @@ public class ContentsAndLanguageController {
 					FacesUtil.addInfo("Contents and Language information saved successfully.");
 					logger.info("Contents and Language information saved successfully.");
 					setSelectedLanguage("Please Select a Language");
+					SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+					sessionBean.setLandingRenderer(false);
 				}else{
 					FacesUtil.addInfo("No data to save");
 				}
@@ -289,6 +341,10 @@ public class ContentsAndLanguageController {
 			}
 			return "gotoLandingPage";
 		} else {
+			if(session != null){
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(false);
+			}
 			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}

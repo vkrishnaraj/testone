@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.DropDown;
 import com.nettracer.claims.core.model.Label;
 import com.nettracer.claims.core.service.AdminService;
@@ -46,6 +47,8 @@ public class RequiredFieldsController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
+			SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+			sessionBean.setLandingRenderer(true); //for landing page link
 			// get all the labels for required fields
 			try {
 				setAllRequiredFields(adminService.getAllRequiredFields());
@@ -65,6 +68,10 @@ public class RequiredFieldsController {
 			}
 			return "gotoRequiredFields";
 		} else {
+			if(session != null){
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(false); //for landing page link
+			}
 			addErrorOnInvalidSession();
 			return "logout";
 		}
@@ -79,6 +86,8 @@ public class RequiredFieldsController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(false);
 			List<List<Label>> lists = (List<List<Label>>) getAllRequiredFields();
 			try {
 				for (List<Label> labels : lists) {
@@ -91,6 +100,10 @@ public class RequiredFieldsController {
 			logger.info("Required fields Data saved successfully.");
 			return "gotoLandingPage";
 		} else {
+			if(session != null){
+				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
+				sessionBean.setLandingRenderer(false); //for landing page link
+			}
 			addErrorOnInvalidSession();
 			return "logout";
 		}
@@ -114,18 +127,5 @@ public class RequiredFieldsController {
 		this.allRequiredFields = allRequiredFields;
 	}
 
-	public String gotoContentsAndLanguagePage() {
-		logger.debug("gotoContentsAndLanguagePage method is called");
-		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-				.getExternalContext().getSession(false);
-		if (null != session && null != session.getAttribute("logged")) {
-
-			return "gotoContentsAndLanguage";
-		} else {
-			FacesUtil
-					.addError("Your session has been expired. PLease log in again");
-			return "logout";
-		}
-	}
 
 }
