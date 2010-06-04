@@ -26,8 +26,6 @@ public interface AdminService {
 	public void saveApplication(Company company) throws SimplePersistenceException;
 	public List<Languages> getLanguages() throws SimplePersistenceException;
 	public List<Localetext> getContents(String languageDescription) throws SimplePersistenceException;
-	public void saveContentLanguage(List<List<Localetext>> list) 
-			throws SimplePersistenceException;
 	public List<Localetext> getPassengerContents(String languageSelected) throws SimplePersistenceException;
 	public List<Localetext> getFlightContents(String languageSelected) throws SimplePersistenceException;
 	public void saveContentLanguageMaps(

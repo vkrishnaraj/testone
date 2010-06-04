@@ -56,9 +56,6 @@ public class AdminServiceImpl implements AdminService {
 		return getAdminDao().getContents(languageDescription);
 	}
 	
-	public void saveContentLanguage(List<List<Localetext>> list) throws SimplePersistenceException {
-		getAdminDao().saveContentLanguage(list);
-	}
 	
 	@Override
 	public List<Localetext> getPassengerContents(String languageSelected)
