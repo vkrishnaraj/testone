@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import com.bagnet.nettracer.tracing.bmo.PaxMessageTriggerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.PaxMessageTrigger;
@@ -26,20 +27,22 @@ public class SmsEmailService {
 	private static Logger logger = Logger.getLogger(SmsEmailService.class);
 	
 	public void sendMoveToLzMessage(Incident incident) {
-		sendMessage("MOVE_LZ", incident);
+		//sendMessage("MOVE_LZ", incident);
 		//only send email when pax email is on file
 		//only send email when file is open, 
 		//status is lost or delayed, or BDOs
+		sendHtmlMessage("MOVE_LZ", incident);
 		
 	}
 
 	public void sendBdoMessage(Incident incident) {
-		sendMessage("BDO", incident);
+		//sendMessage("BDO", incident);
 		
 		
 		//only send email when pax email is on file
 		//only send email when file is open, 
 		//status is lost or delayed, or BDOs
+		sendHtmlMessage("BDO", incident);
 	}
 	
 	public void send24HoursMessage(Incident incident) {
@@ -174,7 +177,7 @@ public class SmsEmailService {
 					
 					if (myPaxMessageTrigger != null) {
 						
-						System.out.println("all green light - ready to send email: key=" + myKey);
+						//System.out.println("all green light - ready to send email: key=" + myKey);
 						  //proceed to send email
 					      // Recipient's email ID needs to be mentioned.
 					      String to = "bsmith@nettracer.aero";
@@ -230,9 +233,16 @@ public class SmsEmailService {
 					         
 					         //new approach
 					         HtmlEmail he = new HtmlEmail();
-					         he.setHostName(host);
-					         he.setSmtpPort(intPort);
-					         he.setFrom(from);
+//					         he.setHostName(host);
+//					         he.setSmtpPort(intPort);
+//					         he.setFrom(from);
+					         
+					         Agent agent = incident.getAgent();
+							 he.setHostName(agent.getStation().getCompany().getVariable().getEmail_host());
+							 he.setSmtpPort(agent.getStation().getCompany().getVariable().getEmail_port());
+							 he.setFrom(agent.getStation().getCompany().getVariable().getEmail_from());					         
+					        
+					         
 							 ArrayList<InternetAddress> al = new ArrayList<InternetAddress>();
 							 al.add(new InternetAddress(to));
 							 he.setTo(al);
