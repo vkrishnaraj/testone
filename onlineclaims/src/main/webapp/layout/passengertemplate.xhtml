@@ -41,10 +41,8 @@
 		<!--[if lt IE 7]><script type="text/javascript" src="_js/iehover-fix.js"></script><![endif]-->
 		<!-- <script type="text/javascript" src="../_js/nav.js"></script> -->
 		<h:form>
-			<h:commandLink value="Log Out" rendered="#{sessionBean.logoutRenderer}" 
-						action="#{adminController.logout}" styleClass="logoutnav"/>
-			<h:commandLink value="Landing Page" rendered="#{sessionBean.landingRenderer}" 
-						action="#{adminController.landingLink}" styleClass="landingnav"/>
+			<h:commandLink value="Log Out" rendered="#{sessionPassengerBean.logoutRenderer}"
+						action="#{passengerController.passengerLogout}" styleClass="logoutnav"/>
 		</h:form>
 		<script type="text/javascript" src="../_js/safariCheck.js"></script>
 	</div>

@@ -222,6 +222,8 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 .loginerrormsg {color: red; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
 
+
+
 .infomsg {color: green; list-style:none;font-size: 1.3em;}
 
 .logoutnav { /*position:relative;*/ 
@@ -337,14 +339,51 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
     padding-bottom: 10px
 }
 
-.appClass{
+.appClass {
 	width :300px;	
 }
 
-.languageCheckBox{
+.languageCheckBox {
 	width :183px; vertical-align: text-top;
 }
-.languagePanel{
+.languagePanel {
 	width :100%;
 }
 
+/* Needed for content and language page*/
+
+.contentlanguageerrormsg {color: red; float:left; clear:none; margin-top: 2px; width:190px; list-style:none;}
+
+.panelTabbedPane {width : 100%}
+
+.directionTextArea {width : 320%}
+
+.langSelectManyCheckBox {margin-top: 5px; margin-bottom: 5px; margin-left: 10px; }
+
+.landingnav { /*position:relative;*/ 
+	float:right; 
+	clear:left; 
+	padding:4px 0 0 715px; 
+	z-index:10000 ;
+	width:auto; 
+	display:block; 
+	text-decoration:none; 
+	font-size:13px; 
+	color:#fff; 
+	background:#2f5296 url(../_images/arrow_off.gif) center left no-repeat; 
+	padding:5px 30px 6px 15px;
+	left:auto;
+	margin-right: 10px;
+	margin-top: 3px;
+}
+
+
+
+/* ---------------------------- Passenger Module ----------------------------------------*/
+
+#langSelect {
+	float:right; 
+	margin-top: 20px;
+	font-family:Arial, Helvetica, sans-serif; font-size:1.0em; color:#333; padding:0; border:solid 1px #708090 
+
+}
