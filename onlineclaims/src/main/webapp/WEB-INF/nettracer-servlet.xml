@@ -26,13 +26,14 @@
 	<context:component-scan base-package="com.nettracer.claims.core.dao"/>
 	<!--<context:component-scan base-package="com.nettracer.claims.core.model"/>-->
 	<context:component-scan base-package="com.nettracer.claims.admin.controller"/>
+	<context:component-scan base-package="com.nettracer.claims.passenger.controller"/>
 
      
      <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/nettracerdb" />
 		<property name="username" value="root" />
-		<property name="password" value="rootpw" />
+		<property name="password" value="" />
 	</bean> 
 	
 	
@@ -70,11 +71,13 @@
 
 	<!--
 		Assign the above AOP transaction advice to all classes in the
-		com.trifecta.commerce.services package that end with "Service"
+		com.nettracer.claims.core.service package that end with "Service"
 	-->
 	<aop:config> 
 		<aop:pointcut id="claimsServiceMethods" expression="execution(* com.nettracer.claims.core.service.*Service.*(..))" /> 
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="claimsServiceMethods" />
 	</aop:config>
+	
+	<!-- Webservices Integration -->
 	
 </beans>
