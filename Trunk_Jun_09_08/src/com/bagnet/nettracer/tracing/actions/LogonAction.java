@@ -400,6 +400,30 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																					
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED)) {
+																					//itemized 1 for delayed
+																					int x = OHDUtils.getIncomingIncidentCount(s.getStation_ID(), 1, true);
+																					if (x != -1) {
+																						entries = x;
+																					} 																					
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_PILFERAGE)) {
+																					//itemized 2 for pilferage
+																					int x = OHDUtils.getIncomingIncidentCount(s.getStation_ID(), 2, true);
+																					if (x != -1) {
+																						entries = x;
+																					} 																					
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DAMAGED)) {
+																					//itemized 3 for damaged
+																					int x = OHDUtils.getIncomingIncidentCount(s.getStation_ID(), 3, true);
+																					if (x != -1) {
+																						entries = x;
+																					} 																					
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_LAST_24_HOURS)) {
+																					//itemized 3 for damaged
+																					int x = OHDUtils.getIncomingIncidentInLast24HoursCount(s.getStation_ID(), true);
+																					if (x != -1) {
+																						entries = x;
+																					} 																					
 																				}
 																				
 																			}
