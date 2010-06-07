@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.hibernate.HibernateDaoSupport;
 
@@ -28,12 +29,38 @@ public class PassengerDao extends HibernateDaoSupport {
 	private static final String SAVED_SREEN = "Saved";
 	
 	
-	public List<Localetext> getPassengerContents(String languageSelected) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	/**
+	 * Passenger side label display.
+	 * 
+	 * @param languageSelected
+	 * @return
+	 */
 
+	@SuppressWarnings("unchecked")
+	public List<Localetext> getPassengerLoginContents(String languageSelected) {
+		logger.debug("Calling getPassengerLoginContents to fetch all the Passenger Login labels");
+		
+		Long languageId = getLanguageId(languageSelected);
+		
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page LIKE ? "
+				,new Object[]{languageId, "%"+PASSENGER_LOGIN}));
+	}
 	
+	
+
+	private Long getLanguageId(String languageDescription){
+		logger.debug("Calling getLanguageId to get the language id");
+		if(null == languageDescription || languageDescription.equalsIgnoreCase("Please Select a Language")){
+			return null;
+		}
+		return ((Languages) getHibernateTemplate().find(
+				"from Languages where description= ?", languageDescription)
+				.get(0)).getId();
+	}
 	
 
 }

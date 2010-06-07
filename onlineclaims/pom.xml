@@ -142,6 +142,18 @@
 			<version>5.0.5</version>
 		</dependency>
 		
+		<!-- Web Service Integration-->
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2</artifactId>
+			<version>1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		
 		<!-- Unit Testing -->
 		<!--<dependency>
 			<groupId>junit</groupId>

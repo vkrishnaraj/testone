@@ -52,16 +52,34 @@ public class FacesUtil {
 	 * @return String
 	 */
 	public static String logout() {
-		logger.info("invalidate method is called for logout");
+		logger.debug("logout method is called");
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
 		if (session != null) {
 			session.removeAttribute("logged");
 			session.invalidate();
-			addInfo("You have been successfully signed out.");
+			addError("You have been successfully signed out.");
 			logger.info("User session is closed");
 		}
 		return "logout";
+	}
+	
+	/**
+	 * This method is used to logout the session
+	 * 
+	 * @return String
+	 */
+	public static String passengerLogout() {
+		logger.debug("passengerLogout method is called");
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+			.getExternalContext().getSession(false);
+		if (session != null) {
+			session.removeAttribute("passengerLogout");
+			session.invalidate();
+			addError("You have been successfully signed out.");
+			logger.info("User session is closed");
+		}
+		return "passengerLogout";
 	}
 
 	

@@ -257,6 +257,13 @@ public class AdminDao extends HibernateDaoSupport {
 				"WHERE lg.id = ? AND lb.page LIKE ? "
 				,new Object[]{languageId, "%"+DIRECTION+ "%"}));
 	}
+	
+	/**
+	 * Passenger side label display.
+	 * 
+	 * @param languageSelected
+	 * @return
+	 */
 
 	@SuppressWarnings("unchecked")
 	public List<Localetext> getPassengerLoginContents(String languageSelected) {

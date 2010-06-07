@@ -7,6 +7,11 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>sessionPassengerBean</managed-bean-name>
+		<managed-bean-class>com.nettracer.claims.admin.SessionScopeBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>requiredFieldsBean</managed-bean-name>
 		<managed-bean-class>com.nettracer.claims.admin.RequiredFieldsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -31,7 +36,12 @@
 		<navigation-case>
 			<from-outcome>logout</from-outcome>
 			<to-view-id>/admin/login.faces</to-view-id>
-			<redirect/>
+		</navigation-case>
+		
+			<!-- Passenger side Navigation -->
+			<navigation-case>
+			<from-outcome>passengerLogout</from-outcome>
+			<to-view-id>/passenger/login.faces</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<application>

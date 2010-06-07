@@ -78,6 +78,9 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="claimsServiceMethods" />
 	</aop:config>
 	
+	<!-- Passenger Module configuration -->
+	<bean id="passengerBootstrap" class="com.nettracer.claims.admin.bootstrap.PassengerBootstrap" />
+	
 	<!-- Webservices Integration -->
 	
 </beans>

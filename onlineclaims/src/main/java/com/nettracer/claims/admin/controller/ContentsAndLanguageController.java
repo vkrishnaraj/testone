@@ -193,7 +193,7 @@ public class ContentsAndLanguageController {
 	 * @param valueChangeEvent
 	 */
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent) {
-		logger.debug("Listener:languageSelectionListener2 is called");
+		logger.debug("Listener:languageSelectionListener is called");
 		
 		try {
 			String languageSelected = (String) valueChangeEvent.getNewValue();
