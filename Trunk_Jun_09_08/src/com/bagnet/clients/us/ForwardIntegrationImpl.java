@@ -174,7 +174,7 @@ public class ForwardIntegrationImpl {
 	}
 
 	public void sendMessage(ForwardOhd fw) {
-		if (PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
+		if (!PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
 			return;
 		}
 		// Generate Payload
