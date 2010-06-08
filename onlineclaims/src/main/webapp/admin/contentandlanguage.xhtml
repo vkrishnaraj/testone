@@ -58,9 +58,9 @@
 				</div>
 			<h:panelGrid id="languagePanel" border="1" styleClass="languagePanel">
 				<t:selectManyCheckbox id="langCheck" value="#{contentsAndLanguageController.activeLanguages}"
-							layout="pageDirection" layoutWidth="3"  
+							layout="lineDirection" layoutWidth="3"  styleClass="langSelectManyCheckBox"  
 							valueChangeListener="#{contentsAndLanguageController.manyCheckBoxListener}">
-					<f:selectItems value="#{contentsAndLanguageController.selectCheckBoxeslist}"/>
+					<f:selectItems value="#{contentsAndLanguageController.selectCheckBoxeslist}" />
 					<a4j:support id="ajax1" event="onclick" reRender="languageDropDown,tabPanel" />
 				</t:selectManyCheckbox>
 			</h:panelGrid>
