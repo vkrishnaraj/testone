@@ -54,6 +54,7 @@ public class Ohd_DTO {
 	private String genericTag;
 	private boolean intelligentTagSearch;
 	private int intelligentTagSearchType;
+	private String claimcheck2;
 
 	public void populate(OHD ohd) {
 
@@ -506,6 +507,7 @@ public class Ohd_DTO {
 		this.wtConditionOr = wtConditionOr;
 	}
 
+	
 	public String getClaimcheck() {
 		return claimcheck;
 	}
@@ -544,5 +546,13 @@ public class Ohd_DTO {
 
 	public void setIntelligentTagSearchType(int intelligentTagSearchType) {
 		this.intelligentTagSearchType = intelligentTagSearchType;
+	}
+
+	public String getClaimcheck2() {
+		return claimcheck2;
+	}
+
+	public void setClaimcheck2(String claimcheck2) {
+		this.claimcheck2 = claimcheck2;
 	}
 }

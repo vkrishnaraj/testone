@@ -24,7 +24,5 @@
 
 <%
 
-// Uncomment to not ignore all capital letter acronyms (CIA)
-// configuration.setBoolean( configuration.SPELL_IGNOREUPPERCASE, false );
 
 %>

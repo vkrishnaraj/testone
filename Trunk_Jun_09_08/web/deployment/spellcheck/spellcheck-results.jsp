@@ -81,15 +81,15 @@ ResourceBundle spellcheckBundle = ResourceBundle.getBundle( "spellcheckBundle", 
 <script>
 <!--
 
-    // The master Array
+    
     var checkedElements=new Array(0);
     var currentElement = 0;
     var currentEvent = -1;
 
-    // The skip Array
+
     var skipArray=new Array(0);
 
-    // The processed Objects Associative Array
+
     var singleIgnoredArray=new Object();
 
     <%
@@ -125,16 +125,16 @@ ResourceBundle spellcheckBundle = ResourceBundle.getBundle( "spellcheckBundle", 
         %>
 
 
-            //Results for a new element:
+            
             checkedElements[<%=element%>] = new Array(3);
 
-            //Element Name (opener.document.xxx):
+            
             checkedElements[<%=element%>][0] = '<%=formElement.replaceAll("'","\\\\'")%>';
 
-            // Number of spelling errors:
+            
             checkedElements[<%=element%>][1] = new Array(<%=spellCheckEvents.size()%>);
 
-            // Original Value:
+            
             checkedElements[<%=element%>][2] = '<%=value.replaceAll("'","\\\\'").replaceAll("\r\n","\\\\r\\\\n")%>';
 
 
@@ -148,25 +148,25 @@ ResourceBundle spellcheckBundle = ResourceBundle.getBundle( "spellcheckBundle", 
                 String firstChar = invalidWord.substring(0,1);
                 String lastChar = invalidWord.substring( invalidWord.length() -1 );
                 boolean firstLetterCaps = firstChar.equals( firstChar.toUpperCase() );
-                boolean allCaps = firstLetterCaps && lastChar.equals( lastChar.toUpperCase() ); // Assume that all in the middle are too
+                boolean allCaps = firstLetterCaps && lastChar.equals( lastChar.toUpperCase() ); 
 
                 %>
-                // Holder for the information about the event:
+                
                 checkedElements[<%=element%>][1][<%=x%>]=new Array(3);
 
-                //Invalid Word:
+                
                 checkedElements[<%=element%>][1][<%=x%>][0]='<%=invalidWord.replaceAll("'","\\\\'")%>';
 
-                //Word Context Position:
+                
                 checkedElements[<%=element%>][1][<%=x%>][1]=<%=spellCheckEvent.getWordContextPosition()%>;
 
-                //Number of Suggestions (size of next array):
+                
                 <%
                 List suggestions = spellCheckEvent.getSuggestions();
                 %>
                 checkedElements[<%=element%>][1][<%=x%>][2]=new Array(<%=suggestions.size()%>);
 
-                // Suggestions:
+                
                 <%
                 for( int y = 0; y < suggestions.size(); y++ )
                 {
@@ -194,11 +194,7 @@ ResourceBundle spellcheckBundle = ResourceBundle.getBundle( "spellcheckBundle", 
 
     %>
 
-    // Disable the right click context menu
-    //document.oncontextmenu = new Function("return false");
-
-    // Focus the suggestions box
-    document.correct.suggestions.focus();
+        document.correct.suggestions.focus();
     
 //-->
 </script>

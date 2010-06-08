@@ -1336,6 +1336,7 @@ public class BagService {
 			IncidentBMO iBMO = new IncidentBMO();
 			SearchIncident_DTO siDTO = new SearchIncident_DTO();
 			BeanUtils.copyProperties(siDTO, daform);
+			siDTO.setIntelligentTagSearch(true);
 			return (ArrayList) iBMO.findIncident(siDTO, user, rowsperpage, currpage, iscount, dirtyRead);
 		}
 		catch (Exception e) {
@@ -1351,6 +1352,7 @@ public class BagService {
 
 	public ArrayList customQuery(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchtype, boolean dirtyRead) {
+		daform.setIntelligentTagSearch(true);
 		try {
 
 			if(searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4")) {
@@ -1641,6 +1643,7 @@ public class BagService {
 			oDTO.setOHD_categorytype_ID("" + daform.getCategory_ID());
 			oDTO.setFoundCompany(daform.getCompanycreated_ID());
 			oDTO.setHeldCompany(daform.getCompanycode_ID());
+			oDTO.setIntelligentTagSearch(true);
 			if(daform.getStationcreated_ID() > 0) {
 				oDTO.setFoundStation(StationBMO.getStation(daform.getStationcreated_ID()).getStationcode());
 			}

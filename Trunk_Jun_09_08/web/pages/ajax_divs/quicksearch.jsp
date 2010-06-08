@@ -55,7 +55,7 @@
 	<br />
 </c:if>
 
-<!-- //////////////////////////////////////////// -->
+
 
 	<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.displayIncList == true}">
 		<h1>Matching Incidents</h1>
@@ -196,13 +196,13 @@
 			</table>
 
 		<c:if test="${quickSearchForm.dto.IMore == true}">
-			<div style="text-align:center;"><a href=""><bean:message key="result.toomanymatches"/></a></div>
+			<div style="text-align:center;"><a href="searchIncident.do"><bean:message key="result.toomanymatches"/></a></div>
 		</c:if>
 		</c:if>
 	</c:if>
 
 
-	<!-- //////////////////////////////////////////// -->
+	
 
 <br />
 	<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.displayOhdList == true}">
@@ -369,7 +369,7 @@
 </table>
 
 		<c:if test="${quickSearchForm.dto.OMore == true}">
-		<div style="text-align:center;"><a href=""><bean:message key="result.toomanymatches"/></a></div>
+		<div style="text-align:center;"><a href="searchOnHand.do"><bean:message key="result.toomanymatches"/></a></div>
 		</c:if>
 		</c:if>
 	</c:if>
@@ -389,22 +389,8 @@
 			<span style="float:left"><h1>Scan Data</h1></span>
 		
 <span style="float:right; vertical-align: top; font-size: .8em">
-	<table cellpadding="1" cellspacing="1" valign="top">
-		<tr>
-			<td>Start Date</td>
-			<td>
-				<input type="text" name="scanStartDate" id="scanStartDate" maxlength="10" size="14" value="03/20/2010" class="textfield"> 
-				<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.scanStartDate,'calendar','MM/dd/yyyy'); return false;">
-			</td>
-			<td>&nbsp;End Date</td>
-			<td>
-				<input type="text" name="scanEndDate" id="scanEndDate" maxlength="10" size="14" value="03/23/2010" class="textfield"> 
-				<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="var aaa = document.getElementById('scanEndDate'); cal1xx.select(aaa,'calendar','MM/dd/yyyy'); return false;"> 
-				&nbsp;&nbsp;<button type="button" id="button" onclick="var aaaa = document.body.scanEndDate; alert(aaaa);">Update Dates</button>
-				</td>
-		</tr>
-	</table>
-	</span>
+Automated Search Dates: <c:out  value="${quickSearchForm.dto.startDate}"/> - <c:out  value="${quickSearchForm.dto.endDate}"/>
+</span>
 <table class="modaltable" cellspacing="2" cellpadding="2">
 
 	<tr class="mh">

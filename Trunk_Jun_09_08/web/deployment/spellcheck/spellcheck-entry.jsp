@@ -44,9 +44,9 @@
             <input type="hidden" name="<%=param%>_name" value="<%=value%>"/>
             <input type="hidden" name="<%=param%>_value"/>
             <script>
-            <!--
+            
                 document.entry.<%=param%>_value.value = parent.document.<%=value%>.value;
-            //-->
+            
             </script>
             <%
         }

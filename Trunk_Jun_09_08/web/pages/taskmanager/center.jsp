@@ -152,7 +152,7 @@
             <%
 				String myKey = activityDTO.getActivityinfo().replaceAll(" ", "_");
 				String myCaptionForLink = (String)bundle.getString( myKey);
-				//check to see if the text has preceeding triple &nbsp; - if so, place the indentation outside the href link
+				
 				String myIndent = "";
 				String mySearch = "&nbsp;";
 				String result = "";

@@ -37,6 +37,21 @@ public class ReservationIntegrationImpl extends
 	private final int HOURS_FORWARD_ITINERARY = 12;
 	private String pnrContents;
 	private DefaultFormFieldMapper fMap = new DefaultFormFieldMapper();
+	private static ArrayList<String> firstClass = new ArrayList<String>();
+	private static ArrayList<String> businessClass = new ArrayList<String>();
+	
+	static {
+		firstClass.add("F");
+		firstClass.add("A");
+		firstClass.add("O");
+		firstClass.add("P");
+
+		businessClass.add("C");
+		businessClass.add("D");
+		businessClass.add("Z");
+		businessClass.add("I");
+		businessClass.add("J");
+	}
 
 
 	private ArrayList<String> getBooking(HttpServletRequest request,
@@ -304,6 +319,7 @@ public class ReservationIntegrationImpl extends
 	
 				AirlineMembership fMem = new AirlineMembership();
 				fMem.setMembershipnum(pax.getFrequentFlierNumber());
+				fMem.setMembershipstatus(pax.getFrequentFlierStatus());
 				fPax.setMembership(fMem);
 				
 				// Not currently using these two web-service provided fields:
@@ -372,6 +388,7 @@ public class ReservationIntegrationImpl extends
 		
 		int itinCount = 0;
 
+		String highestClassService = null;
 		// Passenger Itinerary
 		if (booking.getPassengerItinerary() != null) {
 			Itinerary[] itin = booking.getPassengerItinerary().getItineraryArray();
@@ -398,7 +415,10 @@ public class ReservationIntegrationImpl extends
 
 							// Create carrier in database in not present.
 							CompanyBMO.createCompany(seg.getCarrierCode(), session);
-
+							
+							
+							highestClassService = processService(seg.getServiceClass(), highestClassService); 
+							
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
@@ -430,6 +450,15 @@ public class ReservationIntegrationImpl extends
 				com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.PASSENGER_ROUTING);
 				fItin.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
 				itinCount ++;
+			}
+		}
+		
+		if (highestClassService != null) {
+			for (com.bagnet.nettracer.tracing.db.Passenger pax : form.getPassengerlist()) {
+				if (pax.getMembership() != null) {
+					AirlineMembership mem = pax.getMembership();
+					mem.setMembershipstatus(mem.getMembershipstatus() + "/" + highestClassService);
+				}
 			}
 		}
 		
@@ -492,6 +521,22 @@ public class ReservationIntegrationImpl extends
 			fItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
 			itinCount ++;
 		}
+	}
+
+	
+	
+	private String processService(String serviceClass, String highestClassService) {
+		
+		if (serviceClass == null && highestClassService!= null) {
+			return highestClassService;
+		} else if (businessClass.contains(serviceClass) && (highestClassService == null || !highestClassService.equalsIgnoreCase("Business"))) {
+			return "Business";
+		} else if (firstClass.contains(serviceClass) && (highestClassService == null || !highestClassService.equalsIgnoreCase("First"))) {
+			return "First";
+		} else if (highestClassService == null) {
+			return "Coach";
+		}
+		return highestClassService;
 	}
 	
 }

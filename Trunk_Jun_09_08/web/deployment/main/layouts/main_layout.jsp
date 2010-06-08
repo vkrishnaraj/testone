@@ -171,17 +171,19 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 </logic:notPresent>
 
 <logic:present name="user" scope="session">
+
+<%
+String ua = request.getHeader( "User-Agent" );
+boolean isMSIE6 = ( ua != null && ua.indexOf( "MSIE 6" ) != -1 );
+boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
+if (!isMSIE6 && isMSIE) {
+%>
+
 <div id="footer">
 	  <span id="footerR">&nbsp; </span>
 
 	  <span id="footerC" >
-	  MCOB600000026 | AUAB600013418 | -->
-	  <!--
-	  <a href="#" onclick="resizeFooter()">RESIZE FOOTER</a>  |
-	  <a href="#" onclick="changeFontSize()">FONT SIZE</a> | 
-	  <img src="deployment/main/images/fontsize.png" width="40" height="40" style="display: inline" />
-	  -->
-	  <INPUT TYPE="TEXT" SIZE="15" MAXLENGTH="16" VALUE="Quick Search" ID="quickSearchQuery" onClick="this.value=''" onKeyDown="quickSearchKey()" style="
+	  <INPUT TYPE="TEXT" SIZE="15" MAXLENGTH="16" VALUE="Quick Search" ID="quickSearchQuery" onClick="if(this.value=='Quick Search') {this.value=''}" onKeyDown="quickSearchKey()" style="
  	  background:#FFFFFF url(deployment/main/images/search.png) no-repeat 2px 2px; 
 	  font-size: 12px;
 	  height: 12px;
@@ -194,7 +196,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 	  "/></span>
 	  <span id="footerL">&nbsp; </span>
 </div>
-
+<% } %>
 <div id="ntcontent">
 
 <table cellspacing="0" id="bodytable"> 
@@ -361,3 +363,4 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 </body>
 </html>
 <% } %>
+

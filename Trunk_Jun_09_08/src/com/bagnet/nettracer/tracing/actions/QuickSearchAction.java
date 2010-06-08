@@ -42,24 +42,24 @@ public class QuickSearchAction extends Action {
 	private static final String REDIRECT_TAG_NUMBER_SEARCH = "tagNumberSearch";
 	private static final String REDIRECT_PNR_SEARCH = "pnrSearch";
 	private static final String REDIRECT_NT_ID_SEARCH = "idSearch";
-	private static final String REDIRECT_BDO_SEARCH = "bdoSearch";
-	private static final String REDIRECT_EXPERT = "expertSearch";
+//	private static final String REDIRECT_BDO_SEARCH = "bdoSearch";
+//	private static final String REDIRECT_EXPERT = "expertSearch";
 	private static final String REDIRECT_SUCCESS = "success";
 	// private static final String REDIRECT_INCIDENT_SEARCH = "incidentSearch";
 	// private static final String REDIRECT_ONHAND_SEARCH = "onhandSearch";
 	private static final String PATTERN_PNR = "^[A-Z0-9]{6}$";
 	private static final String PATTERN_NT_ID = "^[A-Z]{3}[0-9A-Z]{2}%{0,1}\\d{0,7}%{0,1}\\d{0,7}$";
 	private static final String PATTERN_BDO_ID = "^BDO%{0,1}\\d{0,10}%{0,1}\\d{0,9}$";
-	private static final String PATTERN_EXPERT_FUNCTION = "^[A-Z]{1,3}:";
-	private static final String EXPERT_INCIDENT = "I:";
-	private static final String EXPERT_OHD = "O:";
-	private static final String EXPERT_AGENT = "A:";
-	private static final String EXPERT_STATION = "S:";
-	private static final String EXPERT_MASS = "M:";
-	private static final String EXPERT_PICKUP = "P:";
-	private static final String EXPERT_AUDIT_INCIDENT = "AI:";
-	private static final String EXPERT_AUDIT_OHD = "AO:";
-	private static final String EXPERT_TAG = "T:";
+//	private static final String PATTERN_EXPERT_FUNCTION = "^[A-Z]{1,3}:";
+//	private static final String EXPERT_INCIDENT = "I:";
+//	private static final String EXPERT_OHD = "O:";
+//	private static final String EXPERT_AGENT = "A:";
+//	private static final String EXPERT_STATION = "S:";
+//	private static final String EXPERT_MASS = "M:";
+//	private static final String EXPERT_PICKUP = "P:";
+//	private static final String EXPERT_AUDIT_INCIDENT = "AI:";
+//	private static final String EXPERT_AUDIT_OHD = "AO:";
+//	private static final String EXPERT_TAG = "T:";
 
 	private static final int MAX_RESULTS = 10;
 
@@ -89,7 +89,7 @@ public class QuickSearchAction extends Action {
 		Pattern twoCharPattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
 		Pattern pnrPattern = Pattern.compile(PATTERN_PNR);
 		Pattern ntIdPattern1 = Pattern.compile(PATTERN_NT_ID);
-		Pattern bdoPattern = Pattern.compile(PATTERN_BDO_ID);
+//		Pattern bdoPattern = Pattern.compile(PATTERN_BDO_ID);
 
 		boolean scanResults = false;
 //		Boolean scanResultsObj = (Boolean) session.getAttribute("toggleTagSearch");

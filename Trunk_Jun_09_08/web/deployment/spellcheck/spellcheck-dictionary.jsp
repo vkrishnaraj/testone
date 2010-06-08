@@ -35,12 +35,8 @@ synchronized( this )
     {
         ClassLoader myLoader = this.getClass().getClassLoader();
         
-        // Note: we could use a different dictionary and phonet file...
-        //  It also, might be nice to create a map of locale's to dictionaries...
         dictionary = new SpellDictionaryHashMap(new InputStreamReader( myLoader.getResourceAsStream("spellcheck-english.0" ) ) );
         
-        // We could use the phonet.en file - however I think that the DoubleMetaphone is doing a better job (mi->my, nam->name).
-        //    ,new InputStreamReader( myLoader.getResourceAsStream( "phonet.en" ) )
     
         application.setAttribute( "dictionary", dictionary );
     }

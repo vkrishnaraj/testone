@@ -49,7 +49,7 @@
      */
     function suggestionsKeyPress()
     {
-        if (window.event && window.event.keyCode == 13) // Enter Key
+        if (window.event && window.event.keyCode == 13) 
         {
             suggestionsDoubleClick();
             return false;
@@ -86,7 +86,7 @@
      */
     function miscKeyPress()
     {
-        if (window.event && window.event.keyCode == 27) // Escape Key
+        if (window.event && window.event.keyCode == 27) 
         {
             window.parent.closespellchecker();
             return false;
@@ -171,16 +171,16 @@
 
         if ( !(currentElement >= checkedElements.length) && currentEvent >= checkedElements[currentElement][1].length )
         {
-            // This currentEvent is too high. I need to cycle to the next Element
+            
             currentElement++;
-            skipArray=new Array(0); // reset the skipArray - we can only skip easily within one element (a slight limitation for now)
-            singleIgnoredArray=new Object(); // reset the singleIgnoredArray - duplicate ignore's on the same word needs to skip the first one
+            skipArray=new Array(0); 
+            singleIgnoredArray=new Object(); 
             currentEvent=0;
         }
 
         if ( currentElement >= checkedElements.length )
         {
-            // I am out of elements
+            
             alert( '<%=spellcheckBundle.getString("SpellCheckCompleteMessage").replaceAll("'","\\\\'")%>' );
             window.parent.closespellchecker();
             return;
@@ -192,10 +192,10 @@
             return;
         }
 
-        // Get the original word from the array
+        
         var originalWord = checkedElements[currentElement][1][currentEvent][0];
 
-        // If this word is in the skip array - skip it!
+        
         for ( var x = 0; x < skipArray.length; x++ )
         {
             if ( skipArray[x] == originalWord )
@@ -206,19 +206,19 @@
 
         }
 
-        // Invalid Word
+        
         document.correct.original.value = originalWord;
 
-        // Clear suggestions box
+        
         document.correct.suggestions.options.length=0;
 
-        // Add suggestion words
+        
         for( var sug = 0; sug < checkedElements[currentElement][1][currentEvent][2].length; sug++ )
         {
             document.correct.suggestions.options[sug] = new Option(checkedElements[currentElement][1][currentEvent][2][sug]);
         }
 
-        // Fill replaceWith box
+        
         if ( document.correct.suggestions.options.length > 0 )
         {
             document.correct.replaceWith.value = document.correct.suggestions.options[0].text;

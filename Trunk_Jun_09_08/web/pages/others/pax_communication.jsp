@@ -9,13 +9,13 @@
 <script language="JavaScript">
     function spellCheck()
     {
-        // Build an array of form elements (not there values)
+        
         var elements = new Array(0);
 
-        // Your form elements that you want to have spell checked
+        
         elements[elements.length] = document.PaxCommunicationForm.agentNewComment;
 
-        // Start the spell checker
+        
         startSpellCheck( "deployment/spellcheck/", elements );
     }
 
@@ -124,10 +124,10 @@ function openspellchecker(){
  				autoOpen: false, modal: true, draggable: true, resizable: false, 
  				width: 370, height: 340, title: 'NetTracer - Spell Check', position: ['center',100] 
 		});
-		jQuery('#dialog-inner-content').html('<iframe src ="deployment/spellcheck/spellcheck-entry.jsp?op=1&element_0=forms[0].elements[\'agentNewComment\']" width="100%" height="300"><p>Your browser does not support iframes.</p></iframe>');	//put iframe here
+		jQuery('#dialog-inner-content').html('<iframe src ="deployment/spellcheck/spellcheck-entry.jsp?op=1&element_0=forms[0].elements[\'agentNewComment\']" width="100%" height="300"><p>Your browser does not support iframes.</p></iframe>');	
 		jQuery("#dialog").dialog("open");	
 
-} //End "openspellchecker" function
+} 
 
 function closespellchecker() {
 	jQuery("#dialog").dialog("close");

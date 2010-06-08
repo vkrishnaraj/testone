@@ -1,3 +1,4 @@
+<%@ page contentType="text/css" %>
 <%@page import="java.util.TimeZone"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
@@ -117,7 +118,7 @@ a.starter:hover, a.starter:active, a.starter:focus {
 }
 
 
-.nav iframe {
+.naviframe iframe {
 	position: absolute;
 	z-index: -1;
 	filter: progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0);
@@ -127,7 +128,8 @@ a.starter:hover, a.starter:active, a.starter:focus {
 <%
 String ua = request.getHeader( "User-Agent" );
 boolean isMSIE6 = ( ua != null && ua.indexOf( "MSIE 6" ) != -1 );
-if (!isMSIE6) {
+boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
+if (!isMSIE6 && isMSIE) {
 %>
 
 
@@ -323,3 +325,4 @@ td.mh {
 	cursor: hand;
 	cursor: pointer;
 }
+

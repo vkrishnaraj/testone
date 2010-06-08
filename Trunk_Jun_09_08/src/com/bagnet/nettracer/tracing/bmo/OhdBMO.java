@@ -41,8 +41,6 @@ import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
-import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
-import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -668,9 +666,9 @@ public class OhdBMO {
 				sql.append(" and ohd.wtFile.wt_id like :wt_id ");
 			}
 			
-			if (oDTO.getTicketnumber() != null && !oDTO.getTicketnumber().equals("")) {
-				sql.append(" and ohd.claimnum like :claimnum ");
-			}
+//			if (oDTO.getTicketnumber() != null && !oDTO.getTicketnumber().equals("")) {
+//				sql.append(" and ohd.claimnum like :claimnum ");
+//			}
 
 			if (oDTO.getAgent() != null && oDTO.getAgent().length() > 0) sql.append(" and ohd.agent.username like :agent ");
 
@@ -726,7 +724,8 @@ public class OhdBMO {
 				sql.append(" and ohd.status.status_ID = :status_ID ");
 			}
 			
-			
+			oDTO.setClaimcheck(oDTO.getTicketnumber().trim());
+			intelligentSearchProcessing(oDTO, sql);
 			
 			if (oDTO.getAirline() != null && oDTO.getAirline().length() > 0) {
 				sql.append(" and itinerary.airline like :airline");
@@ -781,9 +780,10 @@ public class OhdBMO {
 				q.setString("wt_id", oDTO.getWt_id());
 
 			
-			if (oDTO.getTicketnumber() != null && !oDTO.getTicketnumber().equals("")) {
-				q.setString("claimnum", oDTO.getTicketnumber());
+			if (oDTO.getClaimcheck() != null && !oDTO.getClaimcheck().equals("")) {
+				q.setString("claimchecknum", oDTO.getClaimcheck().trim());
 			}
+			
 
 			if (oDTO.getFoundCompany() != null && !oDTO.getFoundCompany().equals("")) {
 				q.setString("fcompanyCode", oDTO.getFoundCompany());
@@ -793,7 +793,10 @@ public class OhdBMO {
 				q.setString("fstationcode", oDTO.getFoundStation().trim().toUpperCase());
 			}
 			
+			if (oDTO.getClaimcheck2() != null)
+				q.setString("claimchecknum2", oDTO.getClaimcheck2().trim());
 
+			
 			if (oDTO.getHeldCompany() != null && !oDTO.getHeldCompany().equals("")) {
 				q.setString("hcompanyCode", oDTO.getHeldCompany());
 			}
@@ -1135,7 +1138,7 @@ public class OhdBMO {
 			}
 
 			if (siDTO.getClaimchecknum().length() > 0) q.setString("claimchecknum", siDTO
-					.getClaimchecknum());
+					.getClaimchecknum().trim());
 
 			if (siDTO.getColor().length() > 0) q.setString("color", siDTO.getColor().toUpperCase());
 			if (siDTO.getBagtype().length() > 0) q.setString("bagtype", siDTO.getBagtype().toUpperCase());
@@ -1180,16 +1183,19 @@ public class OhdBMO {
 		int searchType = siDTO.getIntelligentTagSearchType();
 		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
 			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
-			if (pattern.matcher(s).find()) {
+			if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
 				siDTO.setIntelligentTagSearchType(10);
+				searchType = 10;
 			} else {
 				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
-				if (pattern.matcher(s).find()) {
+				if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
 					siDTO.setIntelligentTagSearchType(9);
+					searchType = 9;
 				} else {
 					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
-					if (pattern.matcher(s).find()) {
+					if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
 						siDTO.setIntelligentTagSearchType(8);
+						searchType = 8;
 					}
 				}
 			}
@@ -1238,6 +1244,71 @@ public class OhdBMO {
 //			s.append(" and (item.claimchecknum like :claimchecknum");
 //			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
 			
+			s.append(" and ohd.claimnum like :claimchecknum ");
+
+		}
+	}
+	
+	private void intelligentSearchProcessing(Ohd_DTO siDTO, StringBuffer s) {
+		boolean tagPresent = siDTO.getClaimcheck() != null && siDTO.getClaimcheck().trim().length() > 0;
+		int searchType = siDTO.getIntelligentTagSearchType();
+		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
+			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
+			if (pattern.matcher(siDTO.getClaimcheck()).find()) {
+				siDTO.setIntelligentTagSearchType(10);
+				searchType = 10;
+			} else {
+				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
+				if (pattern.matcher(siDTO.getClaimcheck()).find()) {
+					siDTO.setIntelligentTagSearchType(9);
+					searchType = 9;
+				} else {
+					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
+					if (pattern.matcher(siDTO.getClaimcheck()).find()) {
+						siDTO.setIntelligentTagSearchType(8);
+						searchType = 8;
+					}
+				}
+			}
+		}
+		
+		
+			
+		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
+			String nineDigitWildcardTag = null;
+			String genericTag = null;
+			
+			String claimcheck = siDTO.getClaimcheck().trim();
+			if (searchType == 10) {
+				nineDigitWildcardTag = "%" + s.substring(1);
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 9) {
+				nineDigitWildcardTag = "%" + s;
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 8) {
+				genericTag = claimcheck;
+				try {
+					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			}
+			
+			siDTO.setClaimcheck(nineDigitWildcardTag);
+			siDTO.setClaimcheck2(genericTag);
+			s.append(" and (ohd.claimnum like :claimchecknum or ohd.claimnum like :claimchecknum2) ");
+		} else if (siDTO.getClaimcheck() != null && siDTO.getClaimcheck().length() > 0) {
 			s.append(" and ohd.claimnum like :claimchecknum ");
 
 		}

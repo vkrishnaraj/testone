@@ -25,7 +25,6 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -175,6 +174,7 @@ public class SearchIncidentAction extends Action {
 			int rowcount = -1;
 
 			// get number of records found
+			
 			if ((resultlist = bs.findIncident(daform, user, 0, 0, true, true)) == null || resultlist.size() <= 0) {
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.nosearchresult");

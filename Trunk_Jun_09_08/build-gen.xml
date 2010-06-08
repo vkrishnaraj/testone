@@ -320,6 +320,10 @@
 			<fileset dir="src">
 				<include name="com/bagnet/nettracer/tracing/db/*.java" />
 				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/CrmFile.java"/>
 			</fileset>
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${build.dir}/${ant_project_name}/classes" version="3.0" />
 		</hibernatedoclet>

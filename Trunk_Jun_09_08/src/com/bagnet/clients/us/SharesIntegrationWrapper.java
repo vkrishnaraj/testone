@@ -38,7 +38,7 @@ public class SharesIntegrationWrapper {
 			sp.setMessage(message);
 			
 
-			SendPrintMessageResponseDocument responseDoc = stub.SendPrintMessage(printDoc);
+			SendPrintMessageResponseDocument responseDoc = stub.sendPrintMessage(printDoc);
 			responseDoc.addNewSendPrintMessageResponse();
 	
 		} catch (Exception e) {
@@ -61,7 +61,7 @@ public class SharesIntegrationWrapper {
 				ac.setRecordLocator(recordLocator);
 
 				AddBookingCommentsResponseDocument responseDoc = stub
-						.AddBookingComments(acDoc);
+						.addBookingComments(acDoc);
 				responseDoc.getAddBookingCommentsResponse();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -105,7 +105,7 @@ public class SharesIntegrationWrapper {
 			}
 
 			GetBookingInformationResponseDocument responseDoc = stub
-					.GetBookingInformation(biDoc);
+					.getBookingInformation(biDoc);
 			booking = responseDoc.getGetBookingInformationResponse()
 					.getGetBookingInformationResult();		
 
@@ -143,7 +143,7 @@ public class SharesIntegrationWrapper {
 				return false;
 			}
 
-			GetPnrContentsResponseDocument responseDoc = stub.GetPnrContents(biDoc);
+			GetPnrContentsResponseDocument responseDoc = stub.getPnrContents(biDoc);
 			pnrContents = responseDoc.getGetPnrContentsResponse()
 					.getGetPnrContentsResult();
 		} catch (Exception e) {

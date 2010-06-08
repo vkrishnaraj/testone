@@ -982,7 +982,7 @@ public class IncidentBMO {
 				s.append(" and (passenger.membership.membershipnum like :membershipnum");
 				s.append(" and passenger.membership.companycode_ID like :companyCode_ID)");
 			}
-
+			
 			intelligentSearchProcessing(siDTO, s, tagPresent);
 			
 
@@ -1140,15 +1140,83 @@ public class IncidentBMO {
 		int searchType = siDTO.getIntelligentTagSearchType();
 		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
 			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
-			if (pattern.matcher(s).find()) {
+			if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
+				siDTO.setIntelligentTagSearchType(10);
+				searchType = 10;
+			} else {
+				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
+				if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
+					siDTO.setIntelligentTagSearchType(9);
+					searchType = 9;
+				} else {
+					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
+					if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
+						siDTO.setIntelligentTagSearchType(8);
+						searchType = 8;
+					}
+				}
+			}
+		}
+		
+		
+			
+		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
+			String nineDigitWildcardTag = null;
+			String genericTag = null;
+			
+			String claimcheck = siDTO.getClaimchecknum().trim();
+			if (searchType == 10) {
+				nineDigitWildcardTag = "%" + claimcheck.substring(1);
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 9) {
+				nineDigitWildcardTag = "%" + claimcheck;
+				try {
+					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			} else if (searchType == 8) {
+				genericTag = claimcheck;
+				try {
+					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+				} catch (BagtagException e) {
+					// Ignore
+					e.printStackTrace();
+				}
+			}
+			
+			siDTO.setClaimchecknum(nineDigitWildcardTag);
+			siDTO.setClaimchecknum2(genericTag);
+			
+			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
+			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
+
+		} else if (siDTO.getClaimchecknum().length() > 0) {
+			s.append(" and (item.claimchecknum like :claimchecknum");
+			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
+		}
+	}
+	
+	private void intelligentSearchProcessing(SearchIncidentForm siDTO, StringBuffer s, boolean tagPresent) {
+
+		int searchType = siDTO.getIntelligentTagSearchType();
+		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
+			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
+			if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
 				siDTO.setIntelligentTagSearchType(10);
 			} else {
 				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
-				if (pattern.matcher(s).find()) {
+				if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
 					siDTO.setIntelligentTagSearchType(9);
 				} else {
 					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
-					if (pattern.matcher(s).find()) {
+					if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
 						siDTO.setIntelligentTagSearchType(8);
 					}
 				}
@@ -1394,6 +1462,7 @@ public class IncidentBMO {
 	 */
 	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchType, boolean dirtyRead) throws HibernateException {
+		boolean tagPresent = false;
 		Session sess = null;
 
 		if (dirtyRead) {
@@ -1423,8 +1492,10 @@ public class IncidentBMO {
 				s.append(" join item.inventory inventory ");
 			if (siDTO.getFlightnum().length() > 0 || siDTO.getAirline().length() > 0)
 				s.append(" join incident.itinerary itinerary ");
-			if (siDTO.getClaimchecknum().length() > 0)
+			if (siDTO.getClaimchecknum().length() >  0) {
 				s.append(" left outer join incident.claimchecks claimcheck ");
+				tagPresent = true;
+			}
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
 					|| siDTO.getLastname().length() > 0 || siDTO.getCompanycode_ID().length() > 0
 					|| siDTO.getMembershipnum().length() > 0 || siDTO.getAddress1().length() > 0
@@ -1494,6 +1565,8 @@ public class IncidentBMO {
 				s.append(" and passenger.membership.companycode_ID like :companyCode_ID)");
 			}
 
+			intelligentSearchProcessing(siDTO, s, tagPresent);
+			
 			// addresses
 
 			if (siDTO.getAddress1().length() > 0)
@@ -1520,10 +1593,12 @@ public class IncidentBMO {
 
 			// bag
 
-			if (siDTO.getClaimchecknum().length() > 0) {
-				s.append(" and (item.claimchecknum like :claimchecknum");
-				s.append(" or claimcheck.claimchecknum like :claimchecknum)");
-			}
+//			if (siDTO.getClaimchecknum().length() > 0) {
+//				s.append(" and (item.claimchecknum like :claimchecknum");
+//				s.append(" or claimcheck.claimchecknum like :claimchecknum)");
+//			}
+			
+			
 
 			if (siDTO.getColor().length() > 0)
 				s.append(" and item.color like :color");
@@ -1645,6 +1720,8 @@ public class IncidentBMO {
 
 			if (siDTO.getClaimchecknum().length() > 0)
 				q.setString("claimchecknum", siDTO.getClaimchecknum().trim());
+			if (siDTO.getClaimchecknum2() != null && siDTO.getClaimchecknum2().length() > 0)
+				q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
 
 			if (siDTO.getColor().length() > 0)
 				q.setString("color", siDTO.getColor().toUpperCase());
