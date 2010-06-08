@@ -7,10 +7,23 @@
 	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/passengertemplate.xhtml">
 
+	
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
 	
 	<ui:define name="mainContent">
-		
+	<script type="text/javascript" src="../_js/passengerFont.js"></script>
+	<h:form id="directionForm">
+		<div id="langSelect">
+			<a id="font1" style="font-size: 8pt;" href="javascript:decreaseFontSize();">A</a>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font2" style="font-size: 10pt;" href="javascript:mediumFontSize();">A</a>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
+		</div>
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -23,9 +36,10 @@
 						
 						
 						<!-- Start body content -->
-		<h:form id="directionForm">
-			Test	
-		</h:form>
+		
+			<h:outputText id="dirpass"  styleClass="passfontstyle"
+			value="#{passengerController.passengerDirectionList[0].displayText}"/>	
+		
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -39,6 +53,19 @@
 				</div>
 			</div><!-- ends container -->
 			
-		
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<div><h:commandButton id="dirforward" 
+				value="#{passengerController.passengerDirectionList[1].displayText}"
+				 tabindex="0"
+				styleClass="button140pxred button140pxredl passfontstyle" /></div>
+			
+		</h:form>
 	</ui:define>
 </ui:composition>
