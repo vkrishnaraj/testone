@@ -16,6 +16,7 @@
 	<link rel="javascript" type="text/javascript" href="../_js/iehover-fix.js"/>
 	<link rel="javascript" type="text/javascript" href="../_js/nav.js"/>
 	<link rel="javascript" type="text/javascript" href="../_js/safariCheck.js"/>
+	<link rel="javascript" type="text/javascript" href="../_js/passengerFont.js"/>
 	
 	<style type="text/css">
 	.footer_new { height:53px; background:url(../_images/footer_new.png) no-repeat; text-align:center; padding:20px 0 0 0; background-position:top; 
@@ -42,7 +43,7 @@
 		<!-- <script type="text/javascript" src="../_js/nav.js"></script> -->
 		<h:form>
 			<h:commandLink value="Log Out" rendered="#{sessionPassengerBean.logoutRenderer}"
-						action="#{passengerController.passengerLogout}" styleClass="logoutnav"/>
+						action="#{passengerController.passengerLogout}" styleClass="passlogoutnav"/>
 		</h:form>
 		<script type="text/javascript" src="../_js/safariCheck.js"></script>
 	</div>
@@ -68,3 +69,4 @@
 </body>
 </f:view>
 </html>
+

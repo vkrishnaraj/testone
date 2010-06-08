@@ -14,6 +14,10 @@
 	<script type="text/javascript" src="../_js/passengerFont.js"></script>
 	<h:form id="directionForm">
 		<div id="langSelect">
+			<h:outputText value="FontSize" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
 			<a id="font1" style="font-size: 8pt;" href="javascript:decreaseFontSize();">A</a>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
@@ -63,7 +67,7 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<div><h:commandButton id="dirforward" 
 				value="#{passengerController.passengerDirectionList[1].displayText}"
-				 tabindex="0"
+				 tabindex="0" action="#{passengerController.gotoPassengerInfo}"
 				styleClass="button140pxred button140pxredl passfontstyle" /></div>
 			
 		</h:form>
