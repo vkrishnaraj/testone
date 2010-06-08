@@ -61,6 +61,19 @@ public class PassengerDao extends HibernateDaoSupport {
 				"from Languages where description= ?", languageDescription)
 				.get(0)).getId();
 	}
+
+
+
+	public List<Localetext> getPassengerDirection(String selectedLanguage) {
+		Long languageId = getLanguageId(selectedLanguage);
+		
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page LIKE ? "
+				,new Object[]{languageId, "%"+DIRECTION}));
+	}
 	
 
 }

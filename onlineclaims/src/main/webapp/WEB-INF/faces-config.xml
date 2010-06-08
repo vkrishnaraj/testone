@@ -8,7 +8,7 @@
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>sessionPassengerBean</managed-bean-name>
-		<managed-bean-class>com.nettracer.claims.admin.SessionScopeBean</managed-bean-class>
+		<managed-bean-class>com.nettracer.claims.passenger.SessionPassengerBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
@@ -40,9 +40,14 @@
 		
 			<!-- Passenger side Navigation -->
 			<navigation-case>
-			<from-outcome>passengerLogout</from-outcome>
-			<to-view-id>/passenger/login.faces</to-view-id>
-		</navigation-case>
+				<from-outcome>passengerLogout</from-outcome>
+				<to-view-id>/passenger/login.faces</to-view-id>
+			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoDirectionPage</from-outcome>
+				<to-view-id>/passenger/direction.faces</to-view-id>
+			</navigation-case>
 	</navigation-rule>
 	<application>
 		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
