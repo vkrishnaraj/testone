@@ -158,6 +158,8 @@ public class TracingConstants {
 	
 	public final static String SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST = "Incident Checklist";
 	public final static String SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY = "Incident Checklist Read Only";
+	
+		public final static String SYSTEM_COMPONENT_NAME_SEND_MSG_ALL = "Send Messages to all Stations";
 
 	public final static String SYSTEM_COMPONENT_NAME_PUSH_LD = "Push Lost Delay to CRM";
 	public final static String SYSTEM_COMPONENT_NAME_PUSH_DAM = "Push Damaged to CRM";
