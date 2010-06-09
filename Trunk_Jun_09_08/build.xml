@@ -662,6 +662,9 @@
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt_fr.jrxml" />
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/westjet/custom_ui.properties" />
