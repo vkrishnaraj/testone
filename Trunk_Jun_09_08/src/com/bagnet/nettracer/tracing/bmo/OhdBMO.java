@@ -1137,7 +1137,7 @@ public class OhdBMO {
 				q.setString("companyCode_ID", siDTO.getCompanycode_ID());
 			}
 
-			if (siDTO.getClaimchecknum().length() > 0) q.setString("claimchecknum", siDTO
+			if (siDTO.getClaimchecknum() != null && siDTO.getClaimchecknum().length() > 0) q.setString("claimchecknum", siDTO
 					.getClaimchecknum().trim());
 
 			if (siDTO.getColor().length() > 0) q.setString("color", siDTO.getColor().toUpperCase());
