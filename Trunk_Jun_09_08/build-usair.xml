@@ -70,6 +70,21 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_he.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_he.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_he.jrxml" />
+		
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_nl.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_nl.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_nl.jrxml" />
+		
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_it.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_it.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_it.jrxml" />
+		
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_pt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_pt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_pt.jrxml" />
 			
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
@@ -94,6 +109,22 @@
 		<copy tofile="${basedir}/src/report_email_ld_es.html" file="companies/usair/report_email_ld.html" />
 		<copy tofile="${basedir}/src/report_email_dam_es.html" file="companies/usair/report_email_dam.html" />
 		<copy tofile="${basedir}/src/report_email_pil_es.html" file="companies/usair/report_email_pil.html" /> 
+		
+		<copy tofile="${basedir}/src/report_email_ld_he.html" file="companies/usair/report_email_ld_he.html" />
+		<copy tofile="${basedir}/src/report_email_dam_he.html" file="companies/usair/report_email_dam_he.html" />
+		<copy tofile="${basedir}/src/report_email_pil_he.html" file="companies/usair/report_email_pil_he.html" /> 
+		
+		<copy tofile="${basedir}/src/report_email_ld_nl.html" file="companies/usair/report_email_ld_nl.html" />
+		<copy tofile="${basedir}/src/report_email_dam_nl.html" file="companies/usair/report_email_dam_nl.html" />
+		<copy tofile="${basedir}/src/report_email_pil_nl.html" file="companies/usair/report_email_pil_nl.html" /> 
+		
+		<copy tofile="${basedir}/src/report_email_ld_pt.html" file="companies/usair/report_email_ld_pt.html" />
+		<copy tofile="${basedir}/src/report_email_dam_pt.html" file="companies/usair/report_email_dam_pt.html" />
+		<copy tofile="${basedir}/src/report_email_pil_pt.html" file="companies/usair/report_email_pil_pt.html" /> 
+				
+		<copy tofile="${basedir}/src/report_email_ld_it.html" file="companies/usair/report_email_ld_it.html" />
+		<copy tofile="${basedir}/src/report_email_dam_it.html" file="companies/usair/report_email_dam_it.html" />
+		<copy tofile="${basedir}/src/report_email_pil_it.html" file="companies/usair/report_email_pil_it.html" /> 
 		
 		
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
