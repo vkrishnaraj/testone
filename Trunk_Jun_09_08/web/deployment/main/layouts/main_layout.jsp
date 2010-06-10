@@ -354,10 +354,10 @@ if (!isMSIE6 && isMSIE) {
     </td>
   </tr> 
 </table>
+<div id="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></div>
 </div>
 <logic:present name="user" scope="session">
 <html:form action="quickSearch.do" method="post"><input id="quickSearchQuery2" type="hidden" name="quickSearch" value=""/></html:form>
-<DIV ID="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:201"></DIV>
 <iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
 </logic:present>
 </body>

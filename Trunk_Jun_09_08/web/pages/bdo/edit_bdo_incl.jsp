@@ -119,9 +119,9 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
         <span style="align:right; float:right;">
         <logic:present name="wt_id" scope="request">
          
-        <% if(request.getAttribute("wt_id")!=null&&!request.getAttribute("wt_id").equals(""))
+        <% if(request.getAttribute("wt_id")!= null && !request.getAttribute("wt_id").equals(""))
         	out.println("WorldTracer ID:");
-        	out.println(request.getAttribute("wt_id"));
+        	out.println(request.getAttribute("wt_id <br/>"));
         %>
         
         

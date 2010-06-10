@@ -2,6 +2,7 @@ package com.bagnet.clients.us;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.usairways.lcc.aat_sharesws.services_asmx.Baggage;
 import com.usairways.lcc.aat_sharesws.services_asmx.Booking;
 import com.usairways.lcc.aat_sharesws.services_asmx.Itinerary;
@@ -171,6 +173,19 @@ public class ReservationIntegrationImpl extends
 		// Record Locator
 		form.setRecordlocator(booking.getRecordLocator());
 		Agent user = (Agent) request.getSession().getAttribute("user");
+		
+		if (form.get_DATEFORMAT() == null) {
+			form.set_DATEFORMAT(user.getDateformat().getFormat());
+		}
+		
+		if (form.get_TIMEFORMAT() == null) {
+			form.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		}
+		
+		if (form.get_TIMEZONE() == null) {
+			form.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+		}
+		
 		form.setHolding_company(user.getCompanycode_ID());
 		form.setHolding_station(user.getStation().getStationcode());
 		
@@ -318,6 +333,9 @@ public class ReservationIntegrationImpl extends
 				fPax.setLastname(fMap.mapString(NetTracerField.PAX_LAST_NAME, pax.getLastName()));
 	
 				AirlineMembership fMem = new AirlineMembership();
+				if (pax.getFrequentFlierNumber() != null && pax.getFrequentFlierNumber().length() > 0) {
+					fMem.setCompanycode_ID("US");
+				}
 				fMem.setMembershipnum(pax.getFrequentFlierNumber());
 				fMem.setMembershipstatus(pax.getFrequentFlierStatus());
 				fPax.setMembership(fMem);

@@ -1,17 +1,15 @@
 /*
  * Created on Aug 10, 2004
  *
- * TODO To change the template for this generated file go to
+ * 
  * Window - Preferences - Java - Code Style - Code Templates
  */
 package com.bagnet.nettracer.reporting;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -22,13 +20,9 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
-import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 /**
  * @author Matt
@@ -70,11 +64,12 @@ public class DamageReceipt {
 
 			ReportBMO rbmo = new ReportBMO(request);
 			
-			
 			IncidentBMO ibmo = new IncidentBMO();
 			ibmo.incrementPrintedReceipt(theform.getIncident_ID());
 			
-			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, "DamageReceipt", sc.getRealPath("/"), outputtype);
+			String filename = rbmo.getReportFileName(TracingConstants.DAMAGED_BAG, language);
+			
+			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, filename, sc.getRealPath("/"), outputtype);
 
 		} catch (Exception e) {
 			logger.error("Unable to create damage report: " + e);
