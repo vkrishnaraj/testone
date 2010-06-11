@@ -103,6 +103,7 @@ public class QuickSearchAction extends Action {
 		if (tenDigitPattern.matcher(s).find()) {
 			logger.info("Tag Number... 1");
 			if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
+				dto.setPrepopType(1);
 				dto.setPrepop(true);
 			}
 			netTracerTagSearch(user, s, dto, 10, scanResults);
@@ -110,6 +111,7 @@ public class QuickSearchAction extends Action {
 		} else if (nineDigitPattern.matcher(s).find()) {
 			logger.info("Tag Number... 2");
 			if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
+				dto.setPrepopType(1);
 				dto.setPrepop(true);
 			}
 			netTracerTagSearch(user, s, dto, 9, scanResults);
@@ -117,6 +119,7 @@ public class QuickSearchAction extends Action {
 		} else if (twoCharPattern.matcher(s).find()) {
 			logger.info("Tag Number... 3");
 			if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
+				dto.setPrepopType(1);
 				dto.setPrepop(true);
 			}
 			netTracerTagSearch(user, s, dto, 8, scanResults);

@@ -334,8 +334,9 @@ public class ReservationIntegrationImpl extends
 	
 				AirlineMembership fMem = new AirlineMembership();
 				if (pax.getFrequentFlierNumber() != null && pax.getFrequentFlierNumber().length() > 0) {
-					fMem.setCompanycode_ID("US");
+//					fMem.setCompanycode_ID("US");
 				}
+				
 				fMem.setMembershipnum(pax.getFrequentFlierNumber());
 				fMem.setMembershipstatus(pax.getFrequentFlierStatus());
 				fPax.setMembership(fMem);
@@ -428,6 +429,7 @@ public class ReservationIntegrationImpl extends
 							includeSegment = true;
 						}
 						*/
+						highestClassService = processService(seg.getServiceClass(), highestClassService);
 						
 						if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
 
@@ -435,7 +437,7 @@ public class ReservationIntegrationImpl extends
 							CompanyBMO.createCompany(seg.getCarrierCode(), session);
 							
 							
-							highestClassService = processService(seg.getServiceClass(), highestClassService); 
+							 
 							
 							fItin.setAirline(seg.getCarrierCode());
 							fItin.setFlightnum(seg.getFlightNumber());

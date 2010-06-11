@@ -1924,7 +1924,7 @@ public class OhdBMO {
 				Query q = sess.createQuery(queryString);
 				q.setDate("ohdCutoff", ohdCutoff);
 				q.setParameter("status1", TracingConstants.OHD_STATUS_OPEN);
-				q.setParameter("status1", TracingConstants.OHD_STATUS_IN_TRANSIT);
+				q.setParameter("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
 				q.setParameter("companyCode", companyCode);
 				q.setParameter("false", companyCode);
 				q.setBoolean("false", false);

@@ -29,7 +29,7 @@ public class ForwardIntegrationImpl {
 
 	
 	public void sendMessage(List<OHD_Log> logs) {
-		if (PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
+		if (!PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
 			return;
 		}
 		// Generate Payload
@@ -81,7 +81,7 @@ public class ForwardIntegrationImpl {
 	}
 	
 	public void sendMessage(ForwardMessage fw) {
-		if (PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
+		if (!PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
 			return;
 		}
 

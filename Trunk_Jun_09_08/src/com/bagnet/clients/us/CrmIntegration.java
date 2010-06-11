@@ -55,7 +55,7 @@ public class CrmIntegration {
 						status = CRMStatus.SUCCESS;
 					}
 				} catch (RemoteException e) {
-
+					logger.info("Web Service Failure: ", e);
 				} finally {
 					f.setIncident(i);
 					f.setStatus(status);

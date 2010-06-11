@@ -13,6 +13,9 @@
 <% LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
    Agent agent = (Agent)session.getAttribute("user");
    int total_menu = 0;
+   String ua = request.getHeader( "User-Agent" );
+   boolean isMSIE6 = ( ua != null && ua.indexOf( "MSIE 6" ) != -1 );
+   boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
  
    java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
    "org.apache.struts.action.LOCALE");
@@ -98,7 +101,11 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 <logic:notPresent name="user" scope="session">
 
+<%
+if (!isMSIE6 && isMSIE) {
+%>
 <div id="ntcontent" style="font-size: .7em">
+	<% } %>	
 <table cellspacing="0" id="bodytable"> 
   <tr> 
     <td id="topcell">
@@ -173,9 +180,6 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <logic:present name="user" scope="session">
 
 <%
-String ua = request.getHeader( "User-Agent" );
-boolean isMSIE6 = ( ua != null && ua.indexOf( "MSIE 6" ) != -1 );
-boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 if (!isMSIE6 && isMSIE) {
 %>
 
@@ -355,7 +359,13 @@ if (!isMSIE6 && isMSIE) {
   </tr> 
 </table>
 <div id="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></div>
+
+<%
+if (!isMSIE6 && isMSIE) {
+%>
 </div>
+
+<% } %>
 <logic:present name="user" scope="session">
 <html:form action="quickSearch.do" method="post"><input id="quickSearchQuery2" type="hidden" name="quickSearch" value=""/></html:form>
 <iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
@@ -363,4 +373,5 @@ if (!isMSIE6 && isMSIE) {
 </body>
 </html>
 <% } %>
+
 
