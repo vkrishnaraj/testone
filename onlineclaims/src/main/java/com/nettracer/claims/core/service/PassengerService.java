@@ -9,6 +9,7 @@ import com.nettracer.claims.core.model.DropDown;
 import com.nettracer.claims.core.model.Label;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
+import com.nettracer.claims.core.model.MultilingualLabel;
 
 /**
  * @author Utpal Patra
@@ -27,4 +28,8 @@ public interface PassengerService {
 	public List<Localetext> getSubmitContents(String languageSelected) throws SimplePersistenceException;
 	public List<Localetext> getSavedContents(String languageSelected) throws SimplePersistenceException;
 	public List<Localetext> getDirectionContents(String languageSelected) throws SimplePersistenceException;*/
+
+	public List<Localetext> getPassengerDirection(String selectedLanguage)throws SimplePersistenceException;
+
+	public MultilingualLabel getPassengerInfo(String selectedLanguage) throws SimplePersistenceException;
 }

@@ -388,6 +388,13 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 }
 
+#step {
+	float:left; 
+	margin-top: 20px;
+	font-family:Arial, Helvetica, sans-serif; font-size:1.0em; color:#333; padding:0; border:solid 1px #708090 
+
+}
+
 .passfontstyle{
 	font-size: 8pt;
 
@@ -440,4 +447,17 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 	font-size:11px;
 	font-weight:bold;
 	margin-top:17px;
+}
+
+.requiredField{
+	font: bolder;	
+	font-size: 20px;
+}
+
+.passInout{
+	width: 125px;
+}
+
+.subHeader{
+	font-weight: bold;
 }

@@ -14,8 +14,8 @@
 	<script type="text/javascript" src="../_js/passengerFont.js"></script>
 	<h:form id="appForm">
 	<div>
-		<div>
-			<h:outputText value="Step 1 of 6" />
+		<div id="step">
+			<t:outputText value="Step 1 of 6" />
 		</div>
 		
 		<div id="langSelect">
@@ -48,7 +48,7 @@
 						
 						<!-- Start body content -->
 						
-						<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfoDescriptiveText}" />
+						<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfoDescriptiveText}" />
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -107,23 +107,34 @@
 				</div>
 				
 				<div>
-					<h:outputText value="#{passengerController.passengerInfoLabel.permanentAddress}" />	
+					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress}" styleClass="subHeader"/>	
 				</div>
 				<div>
-					<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfolastName}" />
-					<h:outputText value="*" rendered=""/>
-					<h:outputText value=":"/>
-					<h:inputText id="pi2" value=""  tabindex="1"/>
+					<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfolastName}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.lastNameDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi2" value=""  styleClass="passInout"
+							required="#{passengerController.passengerInfoLabel.lastNameDelayedState eq 2}" tabindex="1"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<h:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
-					<h:outputText value="*" rendered="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}"/>
-					<h:outputText value=":"/>
-					<h:inputText id="pi3" value=""  tabindex="2"/>
+					<t:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+						 	rendered="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi3" value="" styleClass="passInout"
+							required="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}" tabindex="2"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<h:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
-					<h:outputText value="*" rendered="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}"/>
-					<h:outputText value=":"/>
-					<h:inputText id="pi4" value=""  tabindex="3"/>
+					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi4" value="" style="width:25px" 
+							required="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}" tabindex="3"/>
 					
 						
 				</div>
@@ -147,8 +158,8 @@
 			</div>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<div><h:commandButton id="saveApplication" value="Save"
-				action="#{adminController.saveApplication}" tabindex="8"
+			<div><h:commandButton id="savePassInfo" value="Save"
+				 tabindex="8"
 				styleClass="button140pxred button140pxredl" /></div>
 			
 		</h:form>
