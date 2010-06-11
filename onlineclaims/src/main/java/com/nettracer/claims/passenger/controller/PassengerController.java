@@ -24,9 +24,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
+import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
-import com.nettracer.claims.core.service.AdminService;
+import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.core.service.PassengerService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
@@ -51,8 +52,10 @@ public class PassengerController {
 	//private List<Map<String, List<Localetext>>> pageMapsList ;
 	private Map<String, List<Localetext>> pageMaps ;
 	private List<Localetext> loginPageList;
-	private String selectedLanguage; //holds the dropdown value for language selection
+	private String selectedLanguage="English-US"; //holds the dropdown value for language selection
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
+	private List<Localetext> passengerDirectionList;
+	private MultilingualLabel passengerInfoLabel;
 	
 	/*@Autowired
 	AdminService adminService;*/
@@ -79,10 +82,10 @@ public class PassengerController {
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent){
 		logger.info("Listener:languageSelectionListener is called");
 		try {
-			String languageSelected = (String) valueChangeEvent.getNewValue();
-			HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-					.getExternalContext().getSession(false);
-			loginPageList=passengerService.getPassengerLoginContents(languageSelected);
+			selectedLanguage = (String) valueChangeEvent.getNewValue();
+			/*HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+					.getExternalContext().getSession(false);*/
+			loginPageList=passengerService.getPassengerLoginContents(selectedLanguage);
 			
 			
 		} catch (Exception e) {
@@ -116,6 +119,14 @@ public class PassengerController {
 				sessionPassengerBean.setLogoutRenderer(true);
 				session.setAttribute("sessionPassengerBean", sessionPassengerBean);
 				session.setAttribute("loggedPassenger", "loggedPassenger");
+				
+				try {
+					passengerDirectionList=passengerService.getPassengerDirection(selectedLanguage);
+					session.setAttribute("passengerDirectionList", passengerDirectionList);
+				} catch (SimplePersistenceException e) {
+					e.printStackTrace();
+				}
+				
 				return "gotoDirectionPage";
 			} else {
 				clearCaptchaCache();
@@ -136,6 +147,32 @@ public class PassengerController {
 		}
 
 	}
+	
+	/**
+	 * This is the 1st step for a passenger to fill up his claims form
+	 * 
+	 * @return String
+	 */
+	
+	public String gotoPassengerInfo(){
+		logger.debug("gotoPassengerInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				passengerInfoLabel = passengerService.getPassengerInfo(selectedLanguage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoPassengerInfo";
+		} else {
+			
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
 
 	
 
@@ -154,9 +191,9 @@ public class PassengerController {
 		 */
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
-		HtmlForm htmlForm = (HtmlForm) viewRoot.findComponent("loginForm");
+		HtmlForm htmlForm = (HtmlForm) viewRoot.findComponent("loginPassengerForm");
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) htmlForm
-				.findComponent("loginPanel");
+				.findComponent("loginPassengerPanel");
 
 		inputText = (HtmlInputText) htmlPanelGrid.findComponent("captcha");
 		inputText.setValue("");
@@ -245,5 +282,21 @@ public class PassengerController {
 		this.languageDropDown = languageDropDown;
 	}
 
+
+
+
+	public List<Localetext> getPassengerDirectionList() {
+		return passengerDirectionList;
+	}
+
+
+
+
+	public MultilingualLabel getPassengerInfoLabel() {
+		return passengerInfoLabel;
+	}
+
+	
+	
 
 }
