@@ -410,3 +410,34 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 	margin-right: 10px;
 	
 }
+
+.helpButton {
+	float:right; 
+	margin-top: -6px;
+	cursor:pointer;
+
+}
+
+/* Modal Panel Style*/ 
+.dr-mpnl-pnl-b{
+	border: 1px;
+	border-style: solid;	
+}
+
+.dr-mpnl-pnl-b {
+	padding:34px;
+}
+
+.modalPanelBody{
+	padding:15px 20px;
+	background:url("../images/po_body_gradient.gif") repeat-x scroll center bottom #FFFFFF;
+	border-collapse:collapse;
+}
+
+.dr-mpnl-pnl-text {
+	color:#000000;
+	font-family:Arial,Verdana,sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	margin-top:17px;
+}

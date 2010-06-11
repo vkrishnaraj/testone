@@ -3,11 +3,12 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	template="/layout/template.xhtml">
+	template="/layout/passengertemplate.xhtml">
 
-	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
+	<ui:define name="pageTitle">NetTracer: Application | Passenger Information</ui:define>
 	
 	<ui:define name="mainContent">
 	<script type="text/javascript" src="../_js/passengerFont.js"></script>
@@ -47,7 +48,7 @@
 						
 						<!-- Start body content -->
 						
-						<h:outputText value="#{passengerController.passengerLabel.passengerInfoDescriptiveText}" />
+						<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfoDescriptiveText}" />
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -65,7 +66,12 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Application | Passenger Information</h1>
+				<h1 class="dkblue">Application | Passenger Information
+				<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
+							height="30" width="30" styleClass="helpButton"/>							
+							<rich:componentControl for="helpmodalpanel"  
+								attachTo="helpButton" operation="show" event="onclick" /> 
+				</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -78,64 +84,50 @@
 				<h:messages id="passInfoMsg"  errorClass="loginerrormsg"/>
 				
 				<div>
-					<h:outputText value="#{passengerController.passengerLabel.requiredFieldMessage}" />	
-					<t:popup styleClass="popClass" closePopupOnExitingElement="true"
-         										   closePopupOnExitingPopup="true"
-         										   displayAtDistanceX="0"
-         										   displayAtDistanceY="0">
-   					<h:outputText value="Help Text"	style="font-weight:bold;"/>
-					<f:facet name="popup">
-						<h:commandLink >
-							<h:graphicImage url="../_images/helpButton.gif" alt="help button"/>
-						</h:commandLink>
-					</f:facet>
-					</t:popup>
-					
+					<h:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" />	
+				</div>	
+				
+				
+				<div>
+					<rich:modalPanel id="helpmodalpanel" autosized="true" minHeight="380" 
+						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
+						<f:facet name="controls">
+								<h:panelGroup >
+									<a4j:commandLink value="Close" 
+									style="text-decoration: underline; cursor: pointer; margin-right: 22px;" 
+											immediate="true"	id="linkToHidePanel" />
+										<rich:componentControl for="helpmodalpanel"
+											attachTo="linkToHidePanel" operation="hide" event="onclick" />
+								</h:panelGroup>
+						</f:facet>
+						<h:panelGrid styleClass="modalPanelBody">
+							<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfoHelp}"/>
+						</h:panelGrid>
+					</rich:modalPanel>
 				</div>
 				
 				<div>
-					<h:outputText value="#{passengerController.passengerLabel.permanentAddress}" />	
+					<h:outputText value="#{passengerController.passengerInfoLabel.permanentAddress}" />	
 				</div>
 				<div>
-					<h:outputText value="#{passengerController.passengerLabel.passengerInfolastName}" />
+					<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfolastName}" />
+					<h:outputText value="*" rendered=""/>
+					<h:outputText value=":"/>
 					<h:inputText id="pi2" value=""  tabindex="1"/>
 					
-					<h:outputText value="#{passengerController.passengerLabel.firstName}" />
-					<h:inputText id="pi2" value=""  tabindex="2"/>
+					<h:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
+					<h:outputText value="*" rendered="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}"/>
+					<h:outputText value=":"/>
+					<h:inputText id="pi3" value=""  tabindex="2"/>
 					
-					<h:outputText value="#{passengerController.passengerLabel.middleInitial}" />
-					<h:inputText id="pi2" value=""  tabindex="3"/>
+					<h:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
+					<h:outputText value="*" rendered="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}"/>
+					<h:outputText value=":"/>
+					<h:inputText id="pi4" value=""  tabindex="3"/>
 					
 						
 				</div>
-			<h:panelGrid id="appPanel"  columns="2" width="300">
-				<h:outputText id="app1" value="Company Code"  />
-				<h:inputText id="app2" value="#{adminController.company.code}"  tabindex="1"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText id="app3" value="Company Name"  />
-				<h:inputText id="app4" value="#{adminController.company.name}"  tabindex="2"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText id="app5" value="Company Address"  />
-				<h:inputText id="app6" value="#{adminController.company.address}"  tabindex="3"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText id="app7" value="Company City"  />
-				<h:inputText id="app8" value="#{adminController.company.city}"  tabindex="4"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText id="app9" value="Company State"  />
-				<h:inputText id="app10" value="#{adminController.company.state}"  tabindex="5"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText id="app11" value="Company Country"  />
-				<h:inputText id="app12" value="#{adminController.company.country}"  tabindex="6"/>
-				<h:outputText value="&#160;" />
-				<h:outputText value="&#160;" />
-				<h:outputText id="app13" value="Reply Address"  />
-				<h:inputText id="app14" value="#{adminController.company.replyAddress}"  tabindex="7"/>
-			</h:panelGrid>
+			
 		
 							
 					  	<!-- End body content -->
@@ -150,6 +142,10 @@
 				</div>
 			</div><!-- ends container -->
 			
+			<div>
+				<h:outputText value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<div><h:commandButton id="saveApplication" value="Save"
 				action="#{adminController.saveApplication}" tabindex="8"
