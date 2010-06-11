@@ -256,10 +256,15 @@ public class SmsEmailService {
 							 
 							 URL resource = Thread.currentThread().getContextClassLoader()
 								.getResource("com/bagnet/clients/us/resources/usair-logo.jpg");
-							 System.out.println("resource is set to:" + resource.toString());
-							 String img1 = he.embed(new URL(resource.toString()),
-									 imageFileName);
-				
+							 
+							 String img1 = "";
+							 if (resource != null) {
+								 System.out.println("resource is set to:" + resource.toString());
+								 img1 = he.embed(new URL(resource.toString()),
+										 imageFileName);
+					
+								 
+							 }
 							 h.put("LOGO_IMG", img1);
 							 
 							 String rawEmailContent = myPaxMessageTrigger.getEmailContentText();

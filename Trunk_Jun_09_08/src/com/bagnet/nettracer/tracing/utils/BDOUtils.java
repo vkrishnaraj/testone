@@ -795,6 +795,12 @@ public class BDOUtils {
 					ohd.getRemarks().add(rem);
 					sess.save(rem);
 				}
+				
+				SmsEmailService smsEmailService = new SmsEmailService();
+				Incident myIncident = bdo.getIncident();
+				if (myIncident != null) {
+					smsEmailService.sendBdoMessage(myIncident);
+				}				
 			}
 
 			sess.saveOrUpdate(bdo);
