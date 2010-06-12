@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+				<div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress}" styleClass="subHeader"/>	
+				</div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfolastName}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.lastNameDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi2" value=""  styleClass="passInout"
+							required="#{passengerController.passengerInfoLabel.lastNameDelayedState eq 2}" tabindex="1"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+						 	rendered="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi3" value="" styleClass="passInout"
+							required="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}" tabindex="2"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi4" value="" style="width:25px" 
+							required="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}" tabindex="3"/>
+					
+					<div><h:outputText value="&#160;" /></div>
+					
+					<div>		
+						<t:outputText value="#{passengerController.passengerInfoLabel.addressLine1}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.passengerInfoLabel.addressLine1DelayedState eq 2}"/>
+						<t:outputText value=":"/>
+						<t:inputText id="pi5" value="" style="width:77%" 
+								required="#{passengerController.passengerInfoLabel.addressLine1DelayedState eq 2}" tabindex="4"/>
+					</div>
+					
+					<div><h:outputText value="&#160;" /></div>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.addressLine2}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.addressLine2DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi6" value="" style="width:77%" 
+							required="#{passengerController.passengerInfoLabel.addressLine2DelayedState eq 2}" tabindex="5"/>
+					
+					<div><h:outputText value="&#160;" /></div>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.city}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.cityDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi7" value="" style="width:12%" 
+							required="#{passengerController.passengerInfoLabel.cityDelayedState eq 2}" tabindex="6"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.stateRegion}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.stateRegionDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi8" value="" style="width:12%" 
+							required="#{passengerController.passengerInfoLabel.stateRegionDelayedState eq 2}" tabindex="7"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.postalCode}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.postalCodeDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi9" value="" style="width:12%" 
+							required="#{passengerController.passengerInfoLabel.postalCodeDelayedState eq 2}" tabindex="8"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.country}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.countryDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi10" value="" style="width:8%" 
+							required="#{passengerController.passengerInfoLabel.countryDelayedState eq 2}" tabindex="9"/>
+					
+					<div><h:outputText value="&#160;" /></div>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.emailAddress}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.emailAddressDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi11" value="" style="width:30%" 
+							required="#{passengerController.passengerInfoLabel.emailAddressDelayedState eq 2}" tabindex="10"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<rich:spacer width="15px"/>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.occupation}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.occupationDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi12" value="" style="width:30%" 
+							required="#{passengerController.passengerInfoLabel.occupationDelayedState eq 2}" tabindex="11"/>
+					<div><h:outputText value="&#160;" /></div>
+					
+					<div>
+						<t:outputText value="#{passengerController.passengerInfoLabel.businessName}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.passengerInfoLabel.businessNameDelayedState eq 2}"/>
+						<t:outputText value=":"/>
+						<t:inputText id="pi13" value="" style="width:30%" 
+								required="#{passengerController.passengerInfoLabel.businessNameDelayedState eq 2}" tabindex="12"/>
+					</div>
+				
+</ui:composition>
