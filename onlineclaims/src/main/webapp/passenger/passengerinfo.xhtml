@@ -80,12 +80,14 @@
 						
 						
 						<!-- Start body content -->
-		
-				<h:messages id="passInfoMsg"  errorClass="loginerrormsg"/>
 				
 				<div>
-					<h:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" />	
+					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" />	
 				</div>	
+				<div><h:outputText value="&#160;" /></div>
+				<div>
+					<h:messages id="passInfoMsg"  errorClass="loginerrormsg"/>
+				</div>
 				
 				
 				<div>
@@ -107,38 +109,11 @@
 				</div>
 				
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress}" styleClass="subHeader"/>	
+					<ui:include src="passenger-permanentaddress.xhtml" />
 				</div>
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfolastName}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.lastNameDelayedState eq 2}"/>
-					<t:outputText value=":"/>
-					<t:inputText id="pi2" value=""  styleClass="passInout"
-							required="#{passengerController.passengerInfoLabel.lastNameDelayedState eq 2}" tabindex="1"/>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-						 	rendered="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}"/>
-					<t:outputText value=":"/>
-					<t:inputText id="pi3" value="" styleClass="passInout"
-							required="#{passengerController.passengerInfoLabel.firstNameDelayedState eq 2}" tabindex="2"/>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}"/>
-					<t:outputText value=":"/>
-					<t:inputText id="pi4" value="" style="width:25px" 
-							required="#{passengerController.passengerInfoLabel.middleInitialDelayedState eq 2}" tabindex="3"/>
-					
-						
+					<ui:include src="passenger-mailingaddress.xhtml" />
 				</div>
-			
 		
 							
 					  	<!-- End body content -->
@@ -154,11 +129,15 @@
 			</div><!-- ends container -->
 			
 			<div>
-				<h:outputText value="&#160;" />
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
 			</div>
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<div><h:commandButton id="savePassInfo" value="Save"
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<div>
+			<h:commandButton id="savePassInfo" value="Save"
 				 tabindex="8"
 				styleClass="button140pxred button140pxredl" /></div>
 			

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+				<div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddress}" styleClass="subHeader"/>	
+				</div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine1}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi14" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.mailingAddressLine1DelayedState eq 2}" tabindex="13"/>
+					<div><h:outputText value="&#160;" /></div>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine2}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi15" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.mailingAddressLine2DelayedState eq 2}" tabindex="14"/>
+					<div><h:outputText value="&#160;" /></div>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.mailingCityDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi16" value="" style="width:12%" 
+							required="#{passengerController.passengerInfoLabel.mailingCityDelayedState eq 2}" tabindex="15"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.mailingStateRegionDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi17" value="" style="width:12%" 
+							required="#{passengerController.passengerInfoLabel.mailingStateRegionDelayedState eq 2}" tabindex="16"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi18" value="" style="width:12%" 
+							required="#{passengerController.passengerInfoLabel.mailingPostalCodeDelayedState eq 2}" tabindex="17"/>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.mailingCountryDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi19" value="" style="width:8%" 
+							required="#{passengerController.passengerInfoLabel.mailingCountryDelayedState eq 2}" tabindex="18"/>
+					
+					<div><h:outputText value="&#160;" /></div>
+					
+				
+</ui:composition>

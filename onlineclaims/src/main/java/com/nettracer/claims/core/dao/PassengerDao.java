@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.hibernate.HibernateDaoSupport;
@@ -37,7 +38,7 @@ public class PassengerDao extends HibernateDaoSupport {
 	 */
 
 	@SuppressWarnings("unchecked")
-	public List<Localetext> getPassengerLoginContents(String languageSelected) {
+	public List<Localetext> getPassengerLoginContents(String languageSelected) throws SimplePersistenceException{
 		logger.debug("Calling getPassengerLoginContents to fetch all the Passenger Login labels");
 		
 		Long languageId = getLanguageId(languageSelected);
@@ -52,7 +53,7 @@ public class PassengerDao extends HibernateDaoSupport {
 	
 	
 
-	private Long getLanguageId(String languageDescription){
+	private Long getLanguageId(String languageDescription)throws SimplePersistenceException{
 		logger.debug("Calling getLanguageId to get the language id");
 		if(null == languageDescription || languageDescription.equalsIgnoreCase("Please Select a Language")){
 			return null;
@@ -64,7 +65,8 @@ public class PassengerDao extends HibernateDaoSupport {
 
 
 
-	public List<Localetext> getPassengerDirection(String selectedLanguage) {
+	@SuppressWarnings("unchecked")
+	public List<Localetext> getPassengerDirection(String selectedLanguage) throws SimplePersistenceException{
 		Long languageId = getLanguageId(selectedLanguage);
 		
 		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
@@ -73,6 +75,20 @@ public class PassengerDao extends HibernateDaoSupport {
 				"INNER JOIN FETCH lt.label lb " +
 				"WHERE lg.id = ? AND lb.page LIKE ? "
 				,new Object[]{languageId, "%"+DIRECTION}));
+	}
+
+
+
+	@SuppressWarnings("unchecked")
+	public List<Localetext> getPassengerInfo(String selectedLanguage) throws SimplePersistenceException{
+		Long languageId = getLanguageId(selectedLanguage);
+		
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page LIKE ? "
+				,new Object[]{languageId, "Passenger Information"}));
 	}
 	
 
