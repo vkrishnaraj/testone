@@ -245,6 +245,23 @@ public class SmsEmailService {
 					         
 							 ArrayList<InternetAddress> al = new ArrayList<InternetAddress>();
 							 al.add(new InternetAddress(to));
+							 
+							String toemail = "";
+							List<Passenger> myPassengerList = incident.getPassenger_list();
+							Passenger pax;
+							if (myPassengerList != null && myPassengerList.size() > 0) {
+								pax = (Passenger) myPassengerList.get(0);
+								if(pax != null) {
+									com.bagnet.nettracer.tracing.db.Address myAddress = pax.getAddress(0);
+									if(myAddress != null) {
+										toemail = "" + myAddress.getEmail();
+									}
+								}
+							}	
+							if(!toemail.equals("")) {
+								al.add(new InternetAddress(toemail));
+							}
+							 
 							 he.setTo(al);
 							 he.setSubject(mySubjectLine);
 								
@@ -254,8 +271,11 @@ public class SmsEmailService {
 //							 String img1 = he.embed(new URL("file:/C:/Java/workspace/nt_176/bin/com/bagnet/clients/us/resources/usair-logo.jpg"),
 //									 "usair-logo.jpg");
 							 
+//							 URL resource = Thread.currentThread().getContextClassLoader()
+//								.getResource("com/bagnet/clients/us/resources/usair-logo.jpg");
+							 
 							 URL resource = Thread.currentThread().getContextClassLoader()
-								.getResource("com/bagnet/clients/us/resources/usair-logo.jpg");
+								.getResource("tracer/deployment/main/images/usair-logo.jpg");
 							 
 							 String img1 = "";
 							 if (resource != null) {
