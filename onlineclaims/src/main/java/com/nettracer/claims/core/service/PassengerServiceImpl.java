@@ -82,19 +82,19 @@ public class PassengerServiceImpl implements PassengerService {
 				}else if(localetext.getLabel().getLabel().contains("AddressLine2")){
 					multilingualLabel.setAddressLine2(localetext.getDisplayText());
 					multilingualLabel.setAddressLine2DelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("City")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("City")){
 					multilingualLabel.setCity(localetext.getDisplayText());
 					multilingualLabel.setCityDelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("State")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("State/Region")){
 					multilingualLabel.setStateRegion(localetext.getDisplayText());
 					multilingualLabel.setStateRegionDelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("Postal")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Postal Code")){
 					multilingualLabel.setPostalCode(localetext.getDisplayText());
 					multilingualLabel.setPostalCodeDelayedState(localetext.getLabel().getDelayedState().longValue());
 				}else if(localetext.getLabel().getLabel().contains("Email")){
 					multilingualLabel.setEmailAddress(localetext.getDisplayText());
 					multilingualLabel.setEmailAddressDelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("Country")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Country")){
 					multilingualLabel.setCountry(localetext.getDisplayText());
 					multilingualLabel.setCountryDelayedState(localetext.getLabel().getDelayedState().longValue());
 				}else if(localetext.getLabel().getLabel().contains("Occupation")){
@@ -111,18 +111,46 @@ public class PassengerServiceImpl implements PassengerService {
 				}else if(localetext.getLabel().getLabel().contains("Mailing Address Line 2")){
 					multilingualLabel.setMailingAddressLine2(localetext.getDisplayText());
 					multilingualLabel.setMailingAddressLine2DelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("Mailing City")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Mailing City")){
 					multilingualLabel.setMailingCity(localetext.getDisplayText());
 					multilingualLabel.setMailingCityDelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("Mailing State/Region")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Mailing State/Region")){
 					multilingualLabel.setMailingStateRegion(localetext.getDisplayText());
 					multilingualLabel.setMailingStateRegionDelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("Mailing Postal Code")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Mailing Postal Code")){
 					multilingualLabel.setMailingPostalCode(localetext.getDisplayText());
 					multilingualLabel.setMailingPostalCodeDelayedState(localetext.getLabel().getDelayedState().longValue());
-				}else if(localetext.getLabel().getLabel().contains("MailingCountry")){
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("MailingCountry")){
 					multilingualLabel.setMailingCountry(localetext.getDisplayText());
 					multilingualLabel.setMailingCountryDelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Voice Contact")){
+					multilingualLabel.setVoiceContact(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 1")){
+					multilingualLabel.setPhone1(localetext.getDisplayText());
+					multilingualLabel.setPhone1DelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 2")){
+					multilingualLabel.setPhone2(localetext.getDisplayText());
+					multilingualLabel.setPhone2DelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 3")){
+					multilingualLabel.setPhone3(localetext.getDisplayText());
+					multilingualLabel.setPhone3DelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 4")){
+					multilingualLabel.setPhone4(localetext.getDisplayText());
+					multilingualLabel.setPhone4DelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Personal Information")){
+					multilingualLabel.setPersonalInformation(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Frequent Flyer Number")){
+					multilingualLabel.setFrequentFlyerNumber(localetext.getDisplayText());
+					multilingualLabel.setFrequentFlyerNumberDelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Social Security Number")){
+					multilingualLabel.setSocialSecurityNumber(localetext.getDisplayText());
+					multilingualLabel.setSocialSecurityNumberDelayedState(localetext.getLabel().getDelayedState().longValue());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Save")){
+					multilingualLabel.setPassengerInfoSave(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Cancel")){
+					multilingualLabel.setPassengerInfoCancel(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Forward")){
+					multilingualLabel.setPassengerInfoForward(localetext.getDisplayText());
 				}
 				
 			}

@@ -42,7 +42,10 @@
 					<h:outputText value="&#160;" />
 			<h:panelGrid id="loginPassengerPanel"  columns="2">
 				<h:outputText  value="#{passengerController.loginPageList[0].displayText}" styleClass="btAirport"/>
-				<h:inputText id="claimNumber" value="#{passengerController.loginBean.claimNumber}" styleClass="btAirport" tabindex="1"/>
+				<h:inputText id="claimNumber" value="#{passengerController.loginBean.claimNumber}" 
+					styleClass="btAirport" tabindex="1" label="Claim Number">
+					<f:validateLength maximum="20"/>
+				</h:inputText>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText  value="#{passengerController.loginPageList[1].displayText}" styleClass="btAirport"/>

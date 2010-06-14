@@ -15,7 +15,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1DelayedState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi14" value=""  style="77%"
+					<t:inputText id="pi14" value=""   style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1DelayedState eq 2}" tabindex="13"/>
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -24,7 +24,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2DelayedState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi15" value=""  style="77%"
+					<t:inputText id="pi15" value=""   style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2DelayedState eq 2}" tabindex="14"/>
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -60,8 +60,9 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingCountryDelayedState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi19" value="" style="width:8%" 
-							required="#{passengerController.passengerInfoLabel.mailingCountryDelayedState eq 2}" tabindex="18"/>
+					<h:selectOneMenu value="" tabindex="18"  style="width :8%">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
 					
 					<div><h:outputText value="&#160;" /></div>
 					

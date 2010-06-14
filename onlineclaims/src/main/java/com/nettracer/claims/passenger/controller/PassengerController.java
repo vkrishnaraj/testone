@@ -174,7 +174,10 @@ public class PassengerController {
 		}
 	}
 
-	
+	public String cancel(){
+		//reset functionality to be implemented
+		return null;
+	}
 
 	/*
 	 * Clear the browser cache(component value) from Apply request value phase

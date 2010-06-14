@@ -114,7 +114,12 @@
 				<div>
 					<ui:include src="passenger-mailingaddress.xhtml" />
 				</div>
-		
+				<div>
+					<ui:include src="passenger-voicecontact.xhtml" />
+				</div>
+				<div>
+					<ui:include src="passenger-personalinfo.xhtml" />
+				</div>
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -137,9 +142,27 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<div>
-			<h:commandButton id="savePassInfo" value="Save"
-				 tabindex="8"
-				styleClass="button140pxred button140pxredl" /></div>
+			
+				<rich:spacer width="250px"/>
+			
+				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
+				 		tabindex="18"
+						styleClass="button140pxred button140pxred2" />
+				
+				<rich:spacer width="20px"/>
+			
+				<h:commandButton id="cancelPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoCancel}"
+				 	tabindex="19" immediate="true" action="#{passengerController.cancel}"
+					styleClass="button140pxred button140pxred2" />
+					
+				<rich:spacer width="20px"/>
+				
+				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
+				 	tabindex="20"
+					styleClass="button140pxred button140pxred2" />
+				
+			
+			</div>
 			
 		</h:form>
 	</ui:define>

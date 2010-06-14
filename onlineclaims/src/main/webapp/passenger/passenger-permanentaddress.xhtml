@@ -92,8 +92,9 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.countryDelayedState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi10" value="" style="width:8%" 
-							required="#{passengerController.passengerInfoLabel.countryDelayedState eq 2}" tabindex="9"/>
+					<h:selectOneMenu value="" tabindex="9" style="width :8%">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
 					
 					<div><h:outputText value="&#160;" /></div>
 					

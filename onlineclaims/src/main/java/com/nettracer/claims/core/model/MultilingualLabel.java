@@ -3,7 +3,7 @@ package com.nettracer.claims.core.model;
 
 
 /**
- * @author Utpal Description: This is needed for binding the Application Data
+ * @author Utpal Description: This is needed for binding the multilingual labels
  *         with the front end
  */
 
@@ -52,6 +52,7 @@ public class MultilingualLabel {
 	private String passengerInfoCancel;
 	private String passengerInfoForward;
 	
+	
 	private Long lastNameDelayedState;
 	private Long firstNameDelayedState;
 	private Long middleInitialDelayedState;
@@ -70,6 +71,13 @@ public class MultilingualLabel {
 	private Long mailingStateRegionDelayedState;
 	private Long mailingPostalCodeDelayedState;
 	private Long mailingCountryDelayedState;
+	
+	private Long phone1DelayedState;
+	private Long phone2DelayedState;
+	private Long phone3DelayedState;
+	private Long phone4DelayedState;
+	private Long frequentFlyerNumberDelayedState;
+	private Long socialSecurityNumberDelayedState;
 	
 	public String getClaimNumber() {
 		return claimNumber;
@@ -415,6 +423,44 @@ public class MultilingualLabel {
 	}
 	public void setMailingCountryDelayedState(Long mailingCountryDelayedState) {
 		this.mailingCountryDelayedState = mailingCountryDelayedState;
+	}
+	public Long getPhone1DelayedState() {
+		return phone1DelayedState;
+	}
+	public void setPhone1DelayedState(Long phone1DelayedState) {
+		this.phone1DelayedState = phone1DelayedState;
+	}
+	public Long getPhone2DelayedState() {
+		return phone2DelayedState;
+	}
+	public void setPhone2DelayedState(Long phone2DelayedState) {
+		this.phone2DelayedState = phone2DelayedState;
+	}
+	public Long getPhone3DelayedState() {
+		return phone3DelayedState;
+	}
+	public void setPhone3DelayedState(Long phone3DelayedState) {
+		this.phone3DelayedState = phone3DelayedState;
+	}
+	public Long getPhone4DelayedState() {
+		return phone4DelayedState;
+	}
+	public void setPhone4DelayedState(Long phone4DelayedState) {
+		this.phone4DelayedState = phone4DelayedState;
+	}
+	public Long getFrequentFlyerNumberDelayedState() {
+		return frequentFlyerNumberDelayedState;
+	}
+	public void setFrequentFlyerNumberDelayedState(
+			Long frequentFlyerNumberDelayedState) {
+		this.frequentFlyerNumberDelayedState = frequentFlyerNumberDelayedState;
+	}
+	public Long getSocialSecurityNumberDelayedState() {
+		return socialSecurityNumberDelayedState;
+	}
+	public void setSocialSecurityNumberDelayedState(
+			Long socialSecurityNumberDelayedState) {
+		this.socialSecurityNumberDelayedState = socialSecurityNumberDelayedState;
 	}  
 	
 	

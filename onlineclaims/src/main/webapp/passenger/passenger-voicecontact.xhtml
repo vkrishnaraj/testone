@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+				<div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.voiceContact}" styleClass="subHeader"/>	
+				</div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.phone1}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.phone1DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi20" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.phone1DelayedState eq 2}" tabindex="14"/>
+					<h:outputText value="&#160;" />
+					<h:selectOneMenu value=""  styleClass="passengerSelect">
+						<f:selectItem itemLabel="Home" itemValue="Home"/>
+					</h:selectOneMenu>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.phone2}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.phone2DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi21" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.phone2DelayedState eq 2}" tabindex="15"/>
+					<h:outputText value="&#160;" />
+					<h:selectOneMenu value=""  styleClass="passengerSelect">
+						<f:selectItem itemLabel="Mobile" itemValue="Mobile"/>
+					</h:selectOneMenu>
+					<div><h:outputText value="&#160;" /></div>
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.phone3}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.phone3DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi22" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.phone3DelayedState eq 2}" tabindex="16"/>
+					<h:outputText value="&#160;" />
+					<h:selectOneMenu value="" styleClass="passengerSelect">
+						<f:selectItem itemLabel="Fax" itemValue="Fax"/>
+					</h:selectOneMenu>
+					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.phone4}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.phone4DelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi23" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.phone4DelayedState eq 2}" tabindex="17"/>
+					<h:outputText value="&#160;" />
+					<h:selectOneMenu value=""  styleClass="passengerSelect">
+						<f:selectItem itemLabel="Business" itemValue="Business"/>
+					</h:selectOneMenu>
+					<div><h:outputText value="&#160;" /></div>
+					
+				
+</ui:composition>

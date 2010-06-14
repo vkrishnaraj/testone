@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+				<div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.personalInformation}" styleClass="subHeader"/>	
+				</div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.frequentFlyerNumber}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumberDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi24" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.frequentFlyerNumberDelayedState eq 2}" tabindex="16"/>
+					<h:outputText value="&#160;" />
+					
+					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumberDelayedState eq 2}"/>
+					<t:outputText value=":"/>
+					<t:inputText id="pi25" value=""  style="77%"
+							required="#{passengerController.passengerInfoLabel.socialSecurityNumberDelayedState eq 2}" tabindex="17"/>
+					<div><h:outputText value="&#160;" /></div>
+					
+					
+					
+				
+</ui:composition>
