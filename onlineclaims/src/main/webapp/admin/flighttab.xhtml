@@ -10,7 +10,7 @@
 	<ui:define name="mainContent">
 		<t:dataTable id="flightDtbl"
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Flight']}"
-			var="item" rowIndexVar="row">
+			var="flight" rowIndexVar="row">
 			<t:column>
 				<h:outputText value="Field #{row+1}:" />
 				<div>
@@ -19,7 +19,7 @@
 			</t:column>
 
 			<t:column>
-				<h:outputText value="#{item.label.label}" />
+				<h:outputText value="#{flight.label.label}" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<div>
@@ -28,11 +28,7 @@
 			</t:column>
 			
 			<t:column>
-				<h:inputText id="flightInput" value="#{item.displayText}"   label="Flight Fields">
-				</h:inputText>
-				<div>
-					<t:message for="flightInput"  replaceIdWithLabel="true" errorClass="contentlanguageerrormsg"/>
-				</div>
+				<h:inputText id="flightInput" value="#{flight.displayText}"   label="Flight Fields" />
 				<div>
 					<h:outputText value="&#160;" />
 				</div>

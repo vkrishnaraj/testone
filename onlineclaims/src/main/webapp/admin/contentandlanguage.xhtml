@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
 	template="/layout/template.xhtml">
 
 	<ui:define name="pageTitle">NetTracer Admin Landing</ui:define>
@@ -52,37 +53,37 @@
 						<!-- Start body content -->
 		
 			
-				<h:outputText id="l1" value="Select which languages that will be available to your passengers" />
+				<h:outputText  value="Select which languages that will be available to your passengers" />
 				<div>
-					<h:outputText id="l2" value="&#160;" />
+					<h:outputText  value="&#160;" />
 				</div>
 			<h:panelGrid id="languagePanel" border="1" styleClass="languagePanel">
 				<t:selectManyCheckbox id="langCheck" value="#{contentsAndLanguageController.activeLanguages}"
 							layout="lineDirection" layoutWidth="3"  styleClass="langSelectManyCheckBox"  
 							valueChangeListener="#{contentsAndLanguageController.manyCheckBoxListener}">
 					<f:selectItems value="#{contentsAndLanguageController.selectCheckBoxeslist}" />
-					<a4j:support id="ajax1" event="onclick" reRender="languageDropDown,tabPanel" />
+					<a4j:support  event="onclick" reRender="languageDropDown,tabPanel" />
 				</t:selectManyCheckbox>
 			</h:panelGrid>
 			<div>
-				<h:outputText id="l3" value="&#160;" />
+				<h:outputText  value="&#160;" />
 			</div>
-			<h:outputText id="l4" value="Select Language to Edit" />
+			<h:outputText  value="Select Language to Edit" />
 			<div>
-				<h:outputText id="l5" value="&#160;" />
+				<h:outputText  value="&#160;" />
 			</div>
 			<div>
 				<a4j:outputPanel id="languageDropDown"  ajaxRendered="true" >
-				<t:selectOneMenu id="langSelectorId" value="#{contentsAndLanguageController.selectedLanguage}" 
+				<h:selectOneMenu id="langSelectorId" value="#{contentsAndLanguageController.selectedLanguage}" 
 					valueChangeListener="#{contentsAndLanguageController.languageSelectionListener}">
-						<f:selectItem id="si1" itemLabel="Please Select a Language" itemValue="Please Select a Language"/>
+						<f:selectItem  itemLabel="Please Select a Language" itemValue="Please Select a Language"/>
 						<f:selectItems value="#{contentsAndLanguageController.languageDropDown}" />
-						<a4j:support id="ajax2" event="onchange" reRender="tabPanel" />
-				</t:selectOneMenu>
+						<a4j:support  event="onchange" reRender="tabPanel" />
+				</h:selectOneMenu>
 				</a4j:outputPanel>
 			</div>
-			<h:outputText id="l6" value="&#160;" />
-			<h:outputText id="l7" value="&#160;" />
+			<h:outputText  value="&#160;" />
+			<h:outputText  value="&#160;" />
 			<div>
 				<a4j:outputPanel id="tabPanel"  ajaxRendered="true" >
 					<t:panelTabbedPane id="panelTabbedPane"   styleClass="panelTabbedPane" 
