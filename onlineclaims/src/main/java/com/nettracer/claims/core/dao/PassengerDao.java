@@ -90,6 +90,18 @@ public class PassengerDao extends HibernateDaoSupport {
 				"WHERE lg.id = ? AND lb.page LIKE ? "
 				,new Object[]{languageId, "Passenger Information"}));
 	}
+
+
+	@SuppressWarnings("unchecked")
+	public List<Localetext> getFlightLabels(String selectedLanguage)  throws SimplePersistenceException{
+		Long languageId = getLanguageId(selectedLanguage);
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page LIKE ? "
+				,new Object[]{languageId, "Flight Information"}));
+	}
 	
 
 }
