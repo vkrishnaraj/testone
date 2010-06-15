@@ -271,11 +271,12 @@ public class SmsEmailService {
 //							 String img1 = he.embed(new URL("file:/C:/Java/workspace/nt_176/bin/com/bagnet/clients/us/resources/usair-logo.jpg"),
 //									 "usair-logo.jpg");
 							 
-//							 URL resource = Thread.currentThread().getContextClassLoader()
-//								.getResource("com/bagnet/clients/us/resources/usair-logo.jpg");
-							 
 							 URL resource = Thread.currentThread().getContextClassLoader()
-								.getResource("tracer/deployment/main/images/usair-logo.jpg");
+								.getResource("com/bagnet/clients/us/resources/usair-logo.jpg");
+							 
+//							 URL resource = Thread.currentThread().getContextClassLoader()
+//								.getResource("tracer/deployment/main/images/usair-logo.jpg");
+							
 							 
 							 String img1 = "";
 							 if (resource != null) {
@@ -286,6 +287,13 @@ public class SmsEmailService {
 								 
 							 }
 							 h.put("LOGO_IMG", img1);
+							 
+//							 String imagepath = "";
+//							 ServletContext sc = getServlet().getServletContext();
+//							 String realpath = sc.getRealPath("/");
+//							 String imgLogo = he.embed(new URL("file:/" + imagepath + "usair-logo.jpg"),
+//									"usair-logo.jpg");
+//							 h.put("BANNER_IMAGE", imgLogo);
 							 
 							 String rawEmailContent = myPaxMessageTrigger.getEmailContentText();
 							 String myEmailContent = EmailParser.parsePaxMessageTrigger(rawEmailContent, h);
