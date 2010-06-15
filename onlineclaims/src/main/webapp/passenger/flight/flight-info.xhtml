@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+				<div>
+					<t:outputText value="#{passengerController.flightLabel.aboutYourFlight}" styleClass="subHeader"/>	
+				</div>
+					
+					<t:outputText value="#{passengerController.flightLabel.totalTravelBag}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.flightLabel.totalTravelBagState eq 2}"/>
+					<t:outputText value=":"/>
+					<h:selectOneMenu value=""   tabindex="1">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
+					
+					<rich:spacer width="15px"/>
+					
+					<t:outputText value="#{passengerController.flightLabel.noOfLostBag}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.flightLabel.noOfLostBagState eq 2}"/>
+					<t:outputText value=":"/>
+					<h:selectOneMenu value=""   tabindex="2">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
+					
+					
+					<t:outputText value="#{passengerController.flightLabel.bagCheckedLocation}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.flightLabel.bagCheckedLocationState eq 2}"/>
+					<t:outputText value=":"/>
+					<h:selectOneMenu value=""   tabindex="3">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
+					
+					<rich:spacer width="15px"/>
+					
+					<t:outputText value="#{passengerController.flightLabel.noOfPassenger}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.flightLabel.noOfPassengerState eq 2}"/>
+					<t:outputText value=":"/>
+					<h:selectOneMenu value=""  tabindex="4">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.recheckBag}" />
+					<h:outputText value="&#160;" />
+					<h:outputLabel value="*" styleClass="requiredField" 
+							rendered="#{passengerController.flightLabel.recheckBagState eq 2}"/>
+					<t:outputText value=":"/>
+					<h:selectOneMenu value=""   tabindex="5">
+						<f:selectItem itemLabel="--" itemValue=""/>
+					</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.inspectbag}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.inspectbagState eq 2}"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="6">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.chargeExcessBaggage}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="7" required="true">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.bagNumber}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" required="true" tabindex="8"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.missingBag}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" required="true" tabindex="9"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.bagClaimCheck}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.bagClaimCheckState}"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="#{passengerController.flightLabel.bagClaimCheckState}" tabindex="10"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.declarePayExcessValue}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" required="true" tabindex="11"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.declaredValue}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.declaredValueState}"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="#{passengerController.flightLabel.declaredValueState}" tabindex="12"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.placeBagChecked}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.placeBagCheckedState}"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="13" 
+								required="#{passengerController.flightLabel.placeBagCheckedState}">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.clearCustomBag}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.clearCustomBagState}"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="14" 
+								required="#{passengerController.flightLabel.clearCustomBagState}">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.bagWeight}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.bagWeightState}"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="#{passengerController.flightLabel.bagWeightState}" tabindex="15"/>
+					</div>
+					
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.rerouteBag}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="16" 
+								required="true">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.differentClaimCheck}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.differentClaimCheckState}"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="17" 
+								required="#{passengerController.flightLabel.differentClaimCheckState}">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.reroutedCityAirline}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.reroutedCityAirlineState}"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="#{passengerController.flightLabel.reroutedCityAirlineState}" tabindex="18"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.reason}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.reasonState}"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="#{passengerController.flightLabel.reasonState}" tabindex="19"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="20" 
+								required="true">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.whenBagSeen}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="true"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="true" tabindex="21"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.fileReportCity}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.fileReportCityState}"/>
+						<t:outputText value=":"/>
+						<t:inputText  value="" styleClass="passInout" 
+							required="#{passengerController.flightLabel.fileReportCityState}" tabindex="22"/>
+					</div>
+					
+					<div>
+						<t:outputText value="#{passengerController.flightLabel.reportAnotherAirline}" />
+						<h:outputText value="&#160;" />
+						<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.flightLabel.reportAnotherAirlineState}"/>
+						<t:outputText value=":"/>
+						<h:selectOneMenu value=""   tabindex="23" 
+								required="#{passengerController.flightLabel.reportAnotherAirlineState}">
+							<f:selectItem itemLabel="--" itemValue=""/>
+						</h:selectOneMenu>
+					</div>
+					
+				
+</ui:composition>

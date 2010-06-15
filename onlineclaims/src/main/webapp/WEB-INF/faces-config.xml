@@ -48,6 +48,16 @@
 				<from-outcome>gotoDirectionPage</from-outcome>
 				<to-view-id>/passenger/direction.faces</to-view-id>
 			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoPassengerInfo</from-outcome>
+				<to-view-id>/passenger/passengerinfo.faces</to-view-id>
+			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoFlightDetails</from-outcome>
+				<to-view-id>/passenger/flightinfo.faces</to-view-id>
+			</navigation-case>
 	</navigation-rule>
 	<application>
 		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>

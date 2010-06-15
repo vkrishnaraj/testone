@@ -8,14 +8,14 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="/layout/passengertemplate.xhtml">
 
-	<ui:define name="pageTitle">NetTracer: Application | Passenger Information</ui:define>
+	<ui:define name="pageTitle">NetTracer: Application | About Your Flight</ui:define>
 	
 	<ui:define name="mainContent">
 	<script type="text/javascript" src="../_js/passengerFont.js"></script>
 	<h:form id="appForm">
 	<div>
 		<div id="step">
-			<t:outputText value="Step 1 of 6" />
+			<t:outputText value="Step 2 of 6" />
 		</div>
 		
 		<div id="langSelect">
@@ -48,7 +48,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfoDescriptiveText}" />
+						<t:outputText value="#{passengerController.flightLabel.flightDescriptiveText}" />
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -66,7 +66,7 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Application | Passenger Information
+				<h1 class="dkblue">Application | About Your Flight
 				<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel"  
@@ -82,11 +82,11 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" />	
+					<t:outputText value="#{passengerController.flightLabel.flightRequiredFieldMessage}" />	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<h:messages id="passInfoMsg"  errorClass="loginerrormsg"/>
+					<h:messages id="flightMsg"  errorClass="loginerrormsg"/>
 				</div>
 				
 				
@@ -103,25 +103,22 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfoHelp}"/>
+							<h:outputText value="#{passengerController.flightLabel.flightHelp}"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
 				
 				<div>
-					<ui:include src="passenger-permanentaddress.xhtml" />
+					<ui:include src="flight/flight-info.xhtml" />
+				</div>
+			<!--	<div>
+					<ui:include src="flight/ticket-info.xhtml" />
 				</div>
 				<div>
-					<ui:include src="passenger-mailingaddress.xhtml" />
-				</div>
-				<div>
-					<ui:include src="passenger-voicecontact.xhtml" />
-				</div>
-				<div>
-					<ui:include src="passenger-personalinfo.xhtml" />
+					<ui:include src="flight/itenerary.xhtml" />
 				</div>
 							
-					  	<!-- End body content -->
+					  	--><!-- End body content -->
 				 	 </div>
 					<!-- ends contentbody -->
 				</div><!-- ends containercontent -->
@@ -158,7 +155,7 @@
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
-				 	tabindex="20" action="#{passengerController.gotoFlightDetails}"
+				 	tabindex="20"
 					styleClass="button140pxred button140pxred2" />
 				
 			

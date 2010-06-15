@@ -1,7 +1,6 @@
 package com.nettracer.claims.core.service;
 
 import java.util.List;
-import java.lang.reflect.Field;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,6 @@ public class PassengerServiceImpl implements PassengerService {
 	@Override
 	public MultilingualLabel getPassengerInfo(String selectedLanguage)
 			throws SimplePersistenceException {
-		// TODO Auto-generated method stub
 		
 		MultilingualLabel multilingualLabel=new MultilingualLabel();
 		List<Localetext> localetextList=passengerDao.getPassengerInfo(selectedLanguage);
@@ -160,8 +158,96 @@ public class PassengerServiceImpl implements PassengerService {
 		return multilingualLabel;
 	}
 
-	
+	@Override
+	public MultilingualLabel getFlightLabels(String selectedLanguage)
+			throws SimplePersistenceException {
+		MultilingualLabel multilingualLabel=new MultilingualLabel();
+		List<Localetext> localetextList=passengerDao.getFlightLabels(selectedLanguage);
+		if(localetextList != null){
+			for(Localetext localetext:localetextList){
+				if(localetext.getLabel().getLabel().contains("flightDescriptiveText")){
+					multilingualLabel.setFlightDescriptiveText(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("flightRequiredFieldMessage")){
+					multilingualLabel.setFlightRequiredFieldMessage(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("flightHelp")){
+					multilingualLabel.setFlightHelp(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("aboutYourFlight")){
+					multilingualLabel.setAboutYourFlight(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("totalTravelBag")){
+					multilingualLabel.setTotalTravelBag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("noOfLostBag")){
+					multilingualLabel.setNoOfLostBag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("bagCheckedLocation")){
+					multilingualLabel.setBagCheckedLocation(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("noOfPassenger")){
+					multilingualLabel.setNoOfPassenger(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("recheckBag")){
+					multilingualLabel.setRecheckBag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("inspectbag")){
+					multilingualLabel.setInspectbag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("chargeExcessBaggage")){
+					multilingualLabel.setChargeExcessBaggage(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("bagNumber")){
+					multilingualLabel.setBagNumber(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("missingBag")){
+					multilingualLabel.setMissingBag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("bagClaimCheck")){
+					multilingualLabel.setBagClaimCheck(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("declarePayExcessValue")){
+					multilingualLabel.setDeclarePayExcessValue(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("declaredValue")){
+					multilingualLabel.setDeclaredValue(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("placeBagChecked")){
+					multilingualLabel.setPlaceBagChecked(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("clearCustomBag")){
+					multilingualLabel.setClearCustomBag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("bagWeight")){
+					multilingualLabel.setBagWeight(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("rerouteBag")){
+					multilingualLabel.setRerouteBag(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("differentClaimCheck")){
+					multilingualLabel.setDifferentClaimCheck(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("reroutedCityAirline")){
+					multilingualLabel.setReroutedCityAirline(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("reason")){
+					multilingualLabel.setReason(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("immediateClaimAttempt")){
+					multilingualLabel.setImmediateClaimAttempt(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("whenBagSeen")){
+					multilingualLabel.setWhenBagSeen(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("fileReportCity")){
+					multilingualLabel.setFileReportCity(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("reportAnotherAirline")){
+					multilingualLabel.setReportAnotherAirline(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("aboutYourTicket")){
+					multilingualLabel.setAboutYourTicket(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("differentAirlineTicket")){
+					multilingualLabel.setDifferentAirlineTicket(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("ticketNumber")){
+					multilingualLabel.setTicketNumber(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("bagTagNumbers")){
+					multilingualLabel.setBagTagNumbers(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("bagArrival")){
+					multilingualLabel.setBagArrival(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("flightYes")){
+					multilingualLabel.setFlightYes(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("flightNo")){
+					multilingualLabel.setFlightNo(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("itenerary")){
+					multilingualLabel.setItenerary(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("fromToAirports")){
+					multilingualLabel.setFromToAirports(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("airlineFlightNo")){
+					multilingualLabel.setAirlineFlightNo(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("flightDate")){
+					multilingualLabel.setFlightDate(localetext.getDisplayText());
+				}
+			}
+			return multilingualLabel;
+		}else{
+			return null;
+		}
+	}
 
-	
 
 }

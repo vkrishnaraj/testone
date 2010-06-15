@@ -56,6 +56,7 @@ public class PassengerController {
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
 	private List<Localetext> passengerDirectionList;
 	private MultilingualLabel passengerInfoLabel;
+	private MultilingualLabel flightLabel;
 	
 	/*@Autowired
 	AdminService adminService;*/
@@ -167,16 +168,44 @@ public class PassengerController {
 			}
 			return "gotoPassengerInfo";
 		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
+	/**
+	 * Reset all the input fields to their default values.
+	 * 
+	 * 
+	 */
+	public String cancel(){
+		//reset functionality to be implemented
+		return null;
+	}
+	
+	/**
+	 * This is the 2nd step for a passenger to fill up his claims form i.e. the Flight details
+	 * 
+	 * @return String
+	 */
+	public String gotoFlightDetails(){
+		logger.debug("gotoFlightDetails method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				flightLabel = passengerService.getFlightLabels(selectedLanguage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoFlightDetails";
+		} else {
 			
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
-	}
-
-	public String cancel(){
-		//reset functionality to be implemented
-		return null;
 	}
 
 	/*
@@ -298,6 +327,22 @@ public class PassengerController {
 	public MultilingualLabel getPassengerInfoLabel() {
 		return passengerInfoLabel;
 	}
+
+
+
+
+	public MultilingualLabel getFlightLabel() {
+		return flightLabel;
+	}
+
+
+
+
+	public void setFlightLabel(MultilingualLabel flightLabel) {
+		this.flightLabel = flightLabel;
+	}
+
+
 
 	
 	

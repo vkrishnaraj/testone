@@ -3,11 +3,14 @@ package com.nettracer.claims.core.dao;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
+import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.hibernate.HibernateDaoSupport;
 
 /**
