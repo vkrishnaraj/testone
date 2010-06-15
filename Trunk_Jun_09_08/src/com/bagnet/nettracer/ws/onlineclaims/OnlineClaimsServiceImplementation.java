@@ -21,6 +21,7 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse;
 import com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.bagnet.nettracer.ws.passengerview.PassengerViewUtil;
@@ -195,7 +196,11 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 
 			try {
 				sess = HibernateWrapper.getSession().openSession();
-
+				Incident inc = (Incident) sess.load(Incident.class, incidentId);
+				sess.close();
+				
+				sess = HibernateWrapper.getSession().openSession();
+				
 				OnlineClaimsDao dao = new OnlineClaimsDao();
 				OnlineClaim c = null;
 				c = dao.getOnlineClaim(incidentId);
@@ -208,8 +213,9 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 					c.setStatus(ClaimStatus.NEW.toString());
 					dao.saveOnlineClaimWsUseOnly(c, incidentId, null);
 				}
-				
-				res2.setReturn(dao.convertClaimDbToWs(c));
+				Claim ret = dao.convertClaimDbToWs(c);
+				ret.setClaimType(inc.getItemtype().getItemType_ID());
+				res2.setReturn(ret);
 				
 			} catch (AuthorizationException e) { 
 				// Ignore AuthorizationException

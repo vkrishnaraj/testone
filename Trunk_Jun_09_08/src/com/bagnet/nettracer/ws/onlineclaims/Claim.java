@@ -5,7 +5,7 @@ import java.util.Date;
 public class Claim {
 
 	private long claimId;
-	
+	private int claimType;
 	private String accept;
 	private String status;
 	private String lastName;
@@ -418,6 +418,14 @@ public class Claim {
 
 	public void setAccept(String accept) {
 		this.accept = accept;
+	}
+
+	public int getClaimType() {
+		return claimType;
+	}
+
+	public void setClaimType(int claimType) {
+		this.claimType = claimType;
 	}
 
 }
