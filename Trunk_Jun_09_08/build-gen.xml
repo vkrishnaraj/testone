@@ -79,6 +79,12 @@
 		<delete file="${basedir}/web/reports/DamageReceipt.jasper" />
 		<delete file="${basedir}/web/reports/MissingReceipt.jrxml" />
 		<delete file="${basedir}/web/reports/MissingReceipt.jasper" />
+		<delete file="${basedir}/web/reports/LostDelayReceipt_fr.jrxml" />
+		<delete file="${basedir}/web/reports/LostDelayReceipt_fr.jasper" />
+		<delete file="${basedir}/web/reports/DamageReceipt_fr.jrxml" />
+		<delete file="${basedir}/web/reports/DamageReceipt_fr.jasper" />
+		<delete file="${basedir}/web/reports/MissingReceipt_fr.jrxml" />
+		<delete file="${basedir}/web/reports/MissingReceipt_fr.jasper" />
 	</target>
 	
 	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile-web">
@@ -254,6 +260,8 @@
 					<include name="**/*.xml" />
 					<include name="**/*.html" />
 					<include name="**/*.wsdl" />
+					<include name="**/*.0" />
+					<include name="**/*.jpg" />
 				</patternset>
 			</fileset>
 		</copy>
