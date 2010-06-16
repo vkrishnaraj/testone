@@ -117,6 +117,7 @@
 					<include name="**/*.html" />
 					<include name="**/*.wsdl" />
 					<include name="**/*.0" />
+					<include name="**/*.jpg" />
 				</patternset>
 			</fileset>
 		</copy>
