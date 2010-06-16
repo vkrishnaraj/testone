@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
@@ -73,7 +72,7 @@ public class ContentsAndLanguageController {
 	 */
 
 	public String gotoContentsAndLanguagePage() {
-		logger.debug("gotoContentsAndLanguagePage method is called");
+		logger.info("gotoContentsAndLanguagePage method is called");
 		indexMap.clear();
 		activeLanguages.clear();
 		languageDropDown.clear();
@@ -140,7 +139,7 @@ public class ContentsAndLanguageController {
 	 */
 	@SuppressWarnings("unchecked")
 	public void manyCheckBoxListener(ValueChangeEvent valueChangeEvent) {
-		logger.debug("Listener:manyCheckBoxListener is called");
+		logger.info("Listener:manyCheckBoxListener is called");
 		languageMap.clear();
 		pageMapsList.clear();
 		try {
@@ -193,7 +192,7 @@ public class ContentsAndLanguageController {
 	 * @param valueChangeEvent
 	 */
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent) {
-		logger.debug("Listener:languageSelectionListener is called");
+		logger.info("Listener:languageSelectionListener is called");
 		
 		try {
 			String languageSelected = (String) valueChangeEvent.getNewValue();
@@ -251,6 +250,7 @@ public class ContentsAndLanguageController {
 	 * @return Map<String, List<Localetext>>
 	 */
 	private Map<String, List<Localetext>> getAllPageMap(String languageSelected){
+		logger.info("getAllPageMap method called");
 		Map<String, List<Localetext>> tempPageMap = new HashMap<String, List<Localetext>>();
 		try {
 			List<Localetext> passengerLogins = adminService.getPassengerLoginContents(languageSelected);
@@ -307,7 +307,7 @@ public class ContentsAndLanguageController {
 	 * @return String for page navigation
 	 */
 	public String save() {
-		logger.debug("save method called");
+		logger.info("save method called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("logged")) {
@@ -334,7 +334,7 @@ public class ContentsAndLanguageController {
 					SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
 					sessionBean.setLandingRenderer(false);
 				}else{
-					FacesUtil.addInfo("No data to save");
+					FacesUtil.addInfo("At least one language should be selected");
 				}
 			} catch (SimplePersistenceException e) {
 				e.printStackTrace();
