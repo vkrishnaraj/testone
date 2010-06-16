@@ -53,30 +53,30 @@ public class MultilingualLabel {
 	private String passengerInfoForward;
 	
 	//required Fields For Passenger Info Page
-	private Long lastNameDelayedState;
-	private Long firstNameDelayedState;
-	private Long middleInitialDelayedState;
-	private Long addressLine1DelayedState;
-	private Long addressLine2DelayedState;
-	private Long cityDelayedState;
-	private Long stateRegionDelayedState;
-	private Long postalCodeDelayedState;
-	private Long countryDelayedState;
-	private Long emailAddressDelayedState;
-	private Long occupationDelayedState;
-	private Long businessNameDelayedState;
-	private Long mailingAddressLine1DelayedState;
-	private Long mailingAddressLine2DelayedState;
-	private Long mailingCityDelayedState;
-	private Long mailingStateRegionDelayedState;
-	private Long mailingPostalCodeDelayedState;
-	private Long mailingCountryDelayedState;
-	private Long phone1DelayedState;
-	private Long phone2DelayedState;
-	private Long phone3DelayedState;
-	private Long phone4DelayedState;
-	private Long frequentFlyerNumberDelayedState;
-	private Long socialSecurityNumberDelayedState;
+	private Long lastNameState;
+	private Long firstNameState;
+	private Long middleInitialState;
+	private Long addressLine1State;
+	private Long addressLine2State;
+	private Long cityState;
+	private Long stateRegionState;
+	private Long postalCodeState;
+	private Long countryState;
+	private Long emailAddressState;
+	private Long occupationState;
+	private Long businessNameState;
+	private Long mailingAddressLine1State;
+	private Long mailingAddressLine2State;
+	private Long mailingCityState;
+	private Long mailingStateRegionState;
+	private Long mailingPostalCodeState;
+	private Long mailingCountryState;
+	private Long phone1State;
+	private Long phone2State;
+	private Long phone3State;
+	private Long phone4State;
+	private Long frequentFlyerNumberState;
+	private Long socialSecurityNumberState;
 	
 	//Labels For Flight Info Page
 	private String flightDescriptiveText;
@@ -390,154 +390,154 @@ public class MultilingualLabel {
 	public void setPassengerInfoForward(String passengerInfoForward) {
 		this.passengerInfoForward = passengerInfoForward;
 	}
-	public Long getLastNameDelayedState() {
-		return lastNameDelayedState;
+	public Long getLastNameState() {
+		return lastNameState;
 	}
-	public void setLastNameDelayedState(Long lastNameDelayedState) {
-		this.lastNameDelayedState = lastNameDelayedState;
+	public void setLastNameState(Long lastNameState) {
+		this.lastNameState = lastNameState;
 	}
-	public Long getFirstNameDelayedState() {
-		return firstNameDelayedState;
+	public Long getFirstNameState() {
+		return firstNameState;
 	}
-	public void setFirstNameDelayedState(Long firstNameDelayedState) {
-		this.firstNameDelayedState = firstNameDelayedState;
+	public void setFirstNameState(Long firstNameState) {
+		this.firstNameState = firstNameState;
 	}
-	public Long getMiddleInitialDelayedState() {
-		return middleInitialDelayedState;
+	public Long getMiddleInitialState() {
+		return middleInitialState;
 	}
-	public void setMiddleInitialDelayedState(Long middleInitialDelayedState) {
-		this.middleInitialDelayedState = middleInitialDelayedState;
+	public void setMiddleInitialState(Long middleInitialState) {
+		this.middleInitialState = middleInitialState;
 	}
-	public Long getAddressLine1DelayedState() {
-		return addressLine1DelayedState;
+	public Long getAddressLine1State() {
+		return addressLine1State;
 	}
-	public void setAddressLine1DelayedState(Long addressLine1DelayedState) {
-		this.addressLine1DelayedState = addressLine1DelayedState;
+	public void setAddressLine1State(Long addressLine1State) {
+		this.addressLine1State = addressLine1State;
 	}
-	public Long getAddressLine2DelayedState() {
-		return addressLine2DelayedState;
+	public Long getAddressLine2State() {
+		return addressLine2State;
 	}
-	public void setAddressLine2DelayedState(Long addressLine2DelayedState) {
-		this.addressLine2DelayedState = addressLine2DelayedState;
+	public void setAddressLine2State(Long addressLine2State) {
+		this.addressLine2State = addressLine2State;
 	}
-	public Long getCityDelayedState() {
-		return cityDelayedState;
+	public Long getCityState() {
+		return cityState;
 	}
-	public void setCityDelayedState(Long cityDelayedState) {
-		this.cityDelayedState = cityDelayedState;
+	public void setCityState(Long cityState) {
+		this.cityState = cityState;
 	}
-	public Long getStateRegionDelayedState() {
-		return stateRegionDelayedState;
+	public Long getStateRegionState() {
+		return stateRegionState;
 	}
-	public void setStateRegionDelayedState(Long stateRegionDelayedState) {
-		this.stateRegionDelayedState = stateRegionDelayedState;
+	public void setStateRegionState(Long stateRegionState) {
+		this.stateRegionState = stateRegionState;
 	}
-	public Long getPostalCodeDelayedState() {
-		return postalCodeDelayedState;
+	public Long getPostalCodeState() {
+		return postalCodeState;
 	}
-	public void setPostalCodeDelayedState(Long postalCodeDelayedState) {
-		this.postalCodeDelayedState = postalCodeDelayedState;
+	public void setPostalCodeState(Long postalCodeState) {
+		this.postalCodeState = postalCodeState;
 	}
-	public Long getCountryDelayedState() {
-		return countryDelayedState;
+	public Long getCountryState() {
+		return countryState;
 	}
-	public void setCountryDelayedState(Long countryDelayedState) {
-		this.countryDelayedState = countryDelayedState;
+	public void setCountryState(Long countryState) {
+		this.countryState = countryState;
 	}
-	public Long getEmailAddressDelayedState() {
-		return emailAddressDelayedState;
+	public Long getEmailAddressState() {
+		return emailAddressState;
 	}
-	public void setEmailAddressDelayedState(Long emailAddressDelayedState) {
-		this.emailAddressDelayedState = emailAddressDelayedState;
+	public void setEmailAddressState(Long emailAddressState) {
+		this.emailAddressState = emailAddressState;
 	}
-	public Long getOccupationDelayedState() {
-		return occupationDelayedState;
+	public Long getOccupationState() {
+		return occupationState;
 	}
-	public void setOccupationDelayedState(Long occupationDelayedState) {
-		this.occupationDelayedState = occupationDelayedState;
+	public void setOccupationState(Long occupationState) {
+		this.occupationState = occupationState;
 	}
-	public Long getBusinessNameDelayedState() {
-		return businessNameDelayedState;
+	public Long getBusinessNameState() {
+		return businessNameState;
 	}
-	public void setBusinessNameDelayedState(Long businessNameDelayedState) {
-		this.businessNameDelayedState = businessNameDelayedState;
+	public void setBusinessNameState(Long businessNameState) {
+		this.businessNameState = businessNameState;
 	}
-	public Long getMailingAddressLine1DelayedState() {
-		return mailingAddressLine1DelayedState;
+	public Long getMailingAddressLine1State() {
+		return mailingAddressLine1State;
 	}
-	public void setMailingAddressLine1DelayedState(
-			Long mailingAddressLine1DelayedState) {
-		this.mailingAddressLine1DelayedState = mailingAddressLine1DelayedState;
+	public void setMailingAddressLine1State(
+			Long mailingAddressLine1State) {
+		this.mailingAddressLine1State = mailingAddressLine1State;
 	}
-	public Long getMailingAddressLine2DelayedState() {
-		return mailingAddressLine2DelayedState;
+	public Long getMailingAddressLine2State() {
+		return mailingAddressLine2State;
 	}
-	public void setMailingAddressLine2DelayedState(
-			Long mailingAddressLine2DelayedState) {
-		this.mailingAddressLine2DelayedState = mailingAddressLine2DelayedState;
+	public void setMailingAddressLine2State(
+			Long mailingAddressLine2State) {
+		this.mailingAddressLine2State = mailingAddressLine2State;
 	}
-	public Long getMailingCityDelayedState() {
-		return mailingCityDelayedState;
+	public Long getMailingCityState() {
+		return mailingCityState;
 	}
-	public void setMailingCityDelayedState(Long mailingCityDelayedState) {
-		this.mailingCityDelayedState = mailingCityDelayedState;
+	public void setMailingCityState(Long mailingCityState) {
+		this.mailingCityState = mailingCityState;
 	}
-	public Long getMailingStateRegionDelayedState() {
-		return mailingStateRegionDelayedState;
+	public Long getMailingStateRegionState() {
+		return mailingStateRegionState;
 	}
-	public void setMailingStateRegionDelayedState(
-			Long mailingStateRegionDelayedState) {
-		this.mailingStateRegionDelayedState = mailingStateRegionDelayedState;
+	public void setMailingStateRegionState(
+			Long mailingStateRegionState) {
+		this.mailingStateRegionState = mailingStateRegionState;
 	}
-	public Long getMailingPostalCodeDelayedState() {
-		return mailingPostalCodeDelayedState;
+	public Long getMailingPostalCodeState() {
+		return mailingPostalCodeState;
 	}
-	public void setMailingPostalCodeDelayedState(Long mailingPostalCodeDelayedState) {
-		this.mailingPostalCodeDelayedState = mailingPostalCodeDelayedState;
+	public void setMailingPostalCodeState(Long mailingPostalCodeState) {
+		this.mailingPostalCodeState = mailingPostalCodeState;
 	}
-	public Long getMailingCountryDelayedState() {
-		return mailingCountryDelayedState;
+	public Long getMailingCountryState() {
+		return mailingCountryState;
 	}
-	public void setMailingCountryDelayedState(Long mailingCountryDelayedState) {
-		this.mailingCountryDelayedState = mailingCountryDelayedState;
+	public void setMailingCountryState(Long mailingCountryState) {
+		this.mailingCountryState = mailingCountryState;
 	}
-	public Long getPhone1DelayedState() {
-		return phone1DelayedState;
+	public Long getPhone1State() {
+		return phone1State;
 	}
-	public void setPhone1DelayedState(Long phone1DelayedState) {
-		this.phone1DelayedState = phone1DelayedState;
+	public void setPhone1State(Long phone1State) {
+		this.phone1State = phone1State;
 	}
-	public Long getPhone2DelayedState() {
-		return phone2DelayedState;
+	public Long getPhone2State() {
+		return phone2State;
 	}
-	public void setPhone2DelayedState(Long phone2DelayedState) {
-		this.phone2DelayedState = phone2DelayedState;
+	public void setPhone2State(Long phone2State) {
+		this.phone2State = phone2State;
 	}
-	public Long getPhone3DelayedState() {
-		return phone3DelayedState;
+	public Long getPhone3State() {
+		return phone3State;
 	}
-	public void setPhone3DelayedState(Long phone3DelayedState) {
-		this.phone3DelayedState = phone3DelayedState;
+	public void setPhone3State(Long phone3State) {
+		this.phone3State = phone3State;
 	}
-	public Long getPhone4DelayedState() {
-		return phone4DelayedState;
+	public Long getPhone4State() {
+		return phone4State;
 	}
-	public void setPhone4DelayedState(Long phone4DelayedState) {
-		this.phone4DelayedState = phone4DelayedState;
+	public void setPhone4State(Long phone4State) {
+		this.phone4State = phone4State;
 	}
-	public Long getFrequentFlyerNumberDelayedState() {
-		return frequentFlyerNumberDelayedState;
+	public Long getFrequentFlyerNumberState() {
+		return frequentFlyerNumberState;
 	}
-	public void setFrequentFlyerNumberDelayedState(
-			Long frequentFlyerNumberDelayedState) {
-		this.frequentFlyerNumberDelayedState = frequentFlyerNumberDelayedState;
+	public void setFrequentFlyerNumberState(
+			Long frequentFlyerNumberState) {
+		this.frequentFlyerNumberState = frequentFlyerNumberState;
 	}
-	public Long getSocialSecurityNumberDelayedState() {
-		return socialSecurityNumberDelayedState;
+	public Long getSocialSecurityNumberState() {
+		return socialSecurityNumberState;
 	}
-	public void setSocialSecurityNumberDelayedState(
-			Long socialSecurityNumberDelayedState) {
-		this.socialSecurityNumberDelayedState = socialSecurityNumberDelayedState;
+	public void setSocialSecurityNumberState(
+			Long socialSecurityNumberState) {
+		this.socialSecurityNumberState = socialSecurityNumberState;
 	}
 	public String getFlightDescriptiveText() {
 		return flightDescriptiveText;

@@ -1,5 +1,6 @@
 package com.nettracer.claims.passenger.controller;
 
+import java.rmi.RemoteException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +24,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.model.MultilingualLabel;
+import com.nettracer.claims.core.model.PassengerBean;
 import com.nettracer.claims.core.service.PassengerService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 import com.nettracer.claims.passenger.LoginBean;
 import com.nettracer.claims.passenger.SessionPassengerBean;
+import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
 /**
  * @author Utpal Description: This is the main controller for all the managed
@@ -49,6 +55,8 @@ public class PassengerController {
 	
 	CaptchaBean captchaBean = new CaptchaBean();
 	LoginBean loginBean = new LoginBean();
+	private PassengerBean passengerBean;
+	private Long baggageState;
 	//private List<Map<String, List<Localetext>>> pageMapsList ;
 	private Map<String, List<Localetext>> pageMaps ;
 	private List<Localetext> loginPageList;
@@ -63,6 +71,9 @@ public class PassengerController {
 	
 	@Autowired
 	PassengerService passengerService;
+	
+	@Autowired
+	OnlineClaimsWS onlineClaimsWS;
 	
 	public PassengerController(){
 		logger.info("PassengerController constructor");
@@ -105,12 +116,10 @@ public class PassengerController {
 	 */
 	public String gotoDirectionPage() {
 		logger.debug("gotoDirectionPage method is called");
-		// Had to use hard coded value for testing
+		 try {
+			PassengerView passengerView= onlineClaimsWS.getPassengerView(loginBean.getClaimNumber(), loginBean.getLastName());
 		
-		
-		if ((loginBean.getClaimNumber().equals("dummy")  && loginBean
-				.getLastName().equals("dummy"))) {
-
+		if (passengerView.getAuthenticationSuccess()) {
 			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 				FacesContext context = FacesUtil.getFacesContext();
 				HttpSession session = (HttpSession) context
@@ -121,13 +130,25 @@ public class PassengerController {
 				session.setAttribute("sessionPassengerBean", sessionPassengerBean);
 				session.setAttribute("loggedPassenger", "loggedPassenger");
 				
-				try {
-					passengerDirectionList=passengerService.getPassengerDirection(selectedLanguage);
-					session.setAttribute("passengerDirectionList", passengerDirectionList);
-				} catch (SimplePersistenceException e) {
-					e.printStackTrace();
-				}
+				baggageState=passengerView.getClaimId();
+				passengerDirectionList=passengerService.getPassengerDirection(selectedLanguage);
+				session.setAttribute("passengerDirectionList", passengerDirectionList);
 				
+				WSPVAdvancedIncident passengerData=passengerView.getData();
+				WSPVPassenger[] passengerDatarray=passengerData.getPassengersArray();
+				passengerBean = new PassengerBean();
+				if(passengerDatarray.length == 1){
+					passengerBean.setEmailAddress(passengerDatarray[0].getEmail());
+					passengerBean.setFirstName(passengerDatarray[0].getFirstname());
+					passengerBean.setLastName(passengerDatarray[0].getLastname());
+					passengerBean.setMiddleInitial(passengerDatarray[0].getMiddlename());
+					passengerBean.setPhone1(passengerDatarray[0].getHomephone());
+					passengerBean.setPhone2(passengerDatarray[0].getMobile());
+					passengerBean.setPhone4(passengerDatarray[0].getWorkphone());
+					passengerBean.setHotel(passengerDatarray[0].getHotel());
+				}
+				session.setAttribute("passengerBean", passengerBean);	
+				session.setAttribute("baggageState", baggageState);	
 				return "gotoDirectionPage";
 			} else {
 				clearCaptchaCache();
@@ -146,7 +167,16 @@ public class PassengerController {
 			clearCaptchaCache();
 			return null;
 		}
-
+		 } catch (AxisFault e) {
+             e.printStackTrace();
+             return null;
+		 } catch (RemoteException e) {
+             e.printStackTrace();
+             return null;
+		 } catch (SimplePersistenceException e) {
+    	   e.printStackTrace();
+    	   	return null;
+	}
 	}
 	
 	/**
@@ -162,7 +192,9 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				passengerInfoLabel = passengerService.getPassengerInfo(selectedLanguage);
+				baggageState = (Long)session.getAttribute("baggageState");
+				passengerInfoLabel = passengerService.getPassengerInfo(selectedLanguage,baggageState);
+				passengerBean = (PassengerBean)session.getAttribute("passengerBean");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -196,6 +228,7 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				flightLabel = passengerService.getFlightLabels(selectedLanguage);
+				passengerBean = (PassengerBean)session.getAttribute("passengerBean");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -340,6 +373,20 @@ public class PassengerController {
 
 	public void setFlightLabel(MultilingualLabel flightLabel) {
 		this.flightLabel = flightLabel;
+	}
+
+
+
+
+	public PassengerBean getPassengerBean() {
+		return passengerBean;
+	}
+
+
+
+
+	public void setPassengerBean(PassengerBean passengerBean) {
+		this.passengerBean = passengerBean;
 	}
 
 

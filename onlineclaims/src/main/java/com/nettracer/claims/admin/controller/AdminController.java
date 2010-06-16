@@ -3,6 +3,8 @@
  */
 package com.nettracer.claims.admin.controller;
 
+import java.rmi.RemoteException;
+
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputSecret;
@@ -19,6 +21,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument;
+import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument;
+import com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceStub;
+import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.AuthAdminUser;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.nettracer.claims.admin.LoginBean;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.Company;
@@ -56,61 +63,64 @@ public class AdminController {
 	public String gotoLandingPage() {
 		logger.debug("gotoLandingPage method is called");
 		// Had to use hard coded value for testing
-		
-		/*try{
-			 // Prepare stub with endpoint
-            OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub("http://74.188.84.58:8080/tracer/services/OnlineClaimsService");
 
-            // Prepare XML documents for request
-            AuthAdminUserDocument request = AuthAdminUserDocument.Factory.newInstance();
-            AuthAdminUser subDoc1 = request.addNewAuthAdminUser();
-            subDoc1.setUsername("onlineclaims");
-            subDoc1.setPassword("B651kLN5");
-            // Set System Username & PW
-            NtAuth subDoc2 = subDoc1.addNewAuth();
-            subDoc2.setUsername("utpal");
-            subDoc2.setPassword("heman@123");
-            //request.setAuthAdminUser(subDoc1);
-            // Perform Web Service Request
-            AuthAdminUserResponseDocument response = stub.authAdminUser(request);
-            // Process response
-            boolean successfulLogin = response.getAuthAdminUserResponse().getReturn();
-            logger.info("Value of successfulLogin: "+successfulLogin);
+		try{
+			// Prepare stub with endpoint
+			OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub("http://74.188.84.58:8080/tracer/services/OnlineClaimsService");
 
-		}catch(Exception e){
-			e.printStackTrace();
-		}*/
-		
-		if ((loginBean.getUserName().equalsIgnoreCase("dummy") && loginBean
-				.getPassword().equalsIgnoreCase("dummy"))) {
+			// Prepare XML documents for request
+			AuthAdminUserDocument request = AuthAdminUserDocument.Factory.newInstance();
+			AuthAdminUser subDoc1 = request.addNewAuthAdminUser();
+			subDoc1.setUsername(loginBean.getUserName());
+			subDoc1.setPassword(loginBean.getPassword());
+			// Set System Username & PW
+			NtAuth subDoc2 = subDoc1.addNewAuth();
+			subDoc2.setUsername("onlineclaims");
+			subDoc2.setPassword("B651kLN5");
+			// Perform Web Service Request
+			AuthAdminUserResponseDocument response = stub.authAdminUser(request);
+			// Process response
+			boolean successfulLogin = response.getAuthAdminUserResponse().getReturn();
+			logger.info("Value of successfulLogin: "+successfulLogin);
 
-			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-				FacesContext context = FacesUtil.getFacesContext();
-				HttpSession session = (HttpSession) context
-						.getExternalContext().getSession(false);
-				SessionScopeBean sessionBean = (SessionScopeBean) session
-						.getAttribute("sessionBean");
-				sessionBean.setLogoutRenderer(true);
-				sessionBean.setLandingRenderer(false);
-				session.setAttribute("sessionBean", sessionBean);
-				session.setAttribute("logged", "logged");
-				return "gotoLandingPage";
+
+
+			if (successfulLogin) {
+
+				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+					FacesContext context = FacesUtil.getFacesContext();
+					HttpSession session = (HttpSession) context
+					.getExternalContext().getSession(false);
+					SessionScopeBean sessionBean = (SessionScopeBean) session
+					.getAttribute("sessionBean");
+					sessionBean.setLogoutRenderer(true);
+					sessionBean.setLandingRenderer(false);
+					session.setAttribute("sessionBean", sessionBean);
+					session.setAttribute("logged", "logged");
+					return "gotoLandingPage";
+				} else {
+					clearCaptchaCache();
+					return null;
+				}
+
 			} else {
+				FacesUtil
+				.addError("Incorrect username and password combination. Please try again.");
+				logger.error("Username and Password are incorrect for admin for the IP Adress: "
+						+((HttpServletRequest)FacesUtil.getFacesContext()
+								.getExternalContext().getRequest()).getRemoteAddr());
+				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+					captchaBean.setStatus("");
+				}
+				clearInputCache();
 				clearCaptchaCache();
 				return null;
 			}
-
-		} else {
-			FacesUtil
-					.addError("Incorrect username and password combination. Please try again.");
-			logger.error("Username and Password are incorrect for admin for the IP Adress: "
-							+((HttpServletRequest)FacesUtil.getFacesContext()
-							.getExternalContext().getRequest()).getRemoteAddr());
-			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-				captchaBean.setStatus("");
-			}
-			clearInputCache();
-			clearCaptchaCache();
+		}catch (AxisFault e) {
+			e.printStackTrace();
+			return null;
+		} catch (RemoteException e) {
+			e.printStackTrace();
 			return null;
 		}
 

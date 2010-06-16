@@ -49,7 +49,7 @@ public class PassengerServiceImpl implements PassengerService {
 	}
 
 	@Override
-	public MultilingualLabel getPassengerInfo(String selectedLanguage)
+	public MultilingualLabel getPassengerInfo(String selectedLanguage,Long baggageState)
 			throws SimplePersistenceException {
 		
 		MultilingualLabel multilingualLabel=new MultilingualLabel();
@@ -67,82 +67,82 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setPassengerInfoDescriptiveText(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().contains("Last")){
 					multilingualLabel.setPassengerInfolastName(localetext.getDisplayText());
-					multilingualLabel.setLastNameDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setLastNameState(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("First")){
 					multilingualLabel.setFirstName(localetext.getDisplayText());
-					multilingualLabel.setFirstNameDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setFirstNameState(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("Middle")){
 					multilingualLabel.setMiddleInitial(localetext.getDisplayText());
-					multilingualLabel.setMiddleInitialDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMiddleInitialState(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("AddressLine1")){
 					multilingualLabel.setAddressLine1(localetext.getDisplayText());
-					multilingualLabel.setAddressLine1DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setAddressLine1State(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("AddressLine2")){
 					multilingualLabel.setAddressLine2(localetext.getDisplayText());
-					multilingualLabel.setAddressLine2DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setAddressLine2State(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("City")){
 					multilingualLabel.setCity(localetext.getDisplayText());
-					multilingualLabel.setCityDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setCityState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("State/Region")){
 					multilingualLabel.setStateRegion(localetext.getDisplayText());
-					multilingualLabel.setStateRegionDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setStateRegionState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Postal Code")){
 					multilingualLabel.setPostalCode(localetext.getDisplayText());
-					multilingualLabel.setPostalCodeDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setPostalCodeState(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("Email")){
 					multilingualLabel.setEmailAddress(localetext.getDisplayText());
-					multilingualLabel.setEmailAddressDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setEmailAddressState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Country")){
 					multilingualLabel.setCountry(localetext.getDisplayText());
-					multilingualLabel.setCountryDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setCountryState(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("Occupation")){
 					multilingualLabel.setOccupation(localetext.getDisplayText());
-					multilingualLabel.setOccupationDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setOccupationState(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("Business")){
 					multilingualLabel.setBusinessName(localetext.getDisplayText());
-					multilingualLabel.setBusinessNameDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setBusinessNameState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("MailingAddress")){
 					multilingualLabel.setMailingAddress(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().contains("Mailing Address Line 1")){
 					multilingualLabel.setMailingAddressLine1(localetext.getDisplayText());
-					multilingualLabel.setMailingAddressLine1DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMailingAddressLine1State(baggageState);
 				}else if(localetext.getLabel().getLabel().contains("Mailing Address Line 2")){
 					multilingualLabel.setMailingAddressLine2(localetext.getDisplayText());
-					multilingualLabel.setMailingAddressLine2DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMailingAddressLine2State(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Mailing City")){
 					multilingualLabel.setMailingCity(localetext.getDisplayText());
-					multilingualLabel.setMailingCityDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMailingCityState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Mailing State/Region")){
 					multilingualLabel.setMailingStateRegion(localetext.getDisplayText());
-					multilingualLabel.setMailingStateRegionDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMailingStateRegionState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Mailing Postal Code")){
 					multilingualLabel.setMailingPostalCode(localetext.getDisplayText());
-					multilingualLabel.setMailingPostalCodeDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMailingPostalCodeState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("MailingCountry")){
 					multilingualLabel.setMailingCountry(localetext.getDisplayText());
-					multilingualLabel.setMailingCountryDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setMailingCountryState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Voice Contact")){
 					multilingualLabel.setVoiceContact(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 1")){
 					multilingualLabel.setPhone1(localetext.getDisplayText());
-					multilingualLabel.setPhone1DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setPhone1State(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 2")){
 					multilingualLabel.setPhone2(localetext.getDisplayText());
-					multilingualLabel.setPhone2DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setPhone2State(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 3")){
 					multilingualLabel.setPhone3(localetext.getDisplayText());
-					multilingualLabel.setPhone3DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setPhone3State(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Phone 4")){
 					multilingualLabel.setPhone4(localetext.getDisplayText());
-					multilingualLabel.setPhone4DelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setPhone4State(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Personal Information")){
 					multilingualLabel.setPersonalInformation(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Frequent Flyer Number")){
 					multilingualLabel.setFrequentFlyerNumber(localetext.getDisplayText());
-					multilingualLabel.setFrequentFlyerNumberDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setFrequentFlyerNumberState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Social Security Number")){
 					multilingualLabel.setSocialSecurityNumber(localetext.getDisplayText());
-					multilingualLabel.setSocialSecurityNumberDelayedState(localetext.getLabel().getDelayedState().longValue());
+					multilingualLabel.setSocialSecurityNumberState(baggageState);
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Save")){
 					multilingualLabel.setPassengerInfoSave(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().equalsIgnoreCase("Cancel")){

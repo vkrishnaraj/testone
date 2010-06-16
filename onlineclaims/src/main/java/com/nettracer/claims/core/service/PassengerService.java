@@ -31,7 +31,7 @@ public interface PassengerService {
 
 	public List<Localetext> getPassengerDirection(String selectedLanguage)throws SimplePersistenceException;
 
-	public MultilingualLabel getPassengerInfo(String selectedLanguage) throws SimplePersistenceException;
+	public MultilingualLabel getPassengerInfo(String selectedLanguage, Long baggageState) throws SimplePersistenceException;
 
 	public MultilingualLabel getFlightLabels(String selectedLanguage) throws SimplePersistenceException;
 
