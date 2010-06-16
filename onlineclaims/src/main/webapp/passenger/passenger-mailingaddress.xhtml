@@ -13,52 +13,52 @@
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine1}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1DelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi14" value=""   style="width:77%" 
-							required="#{passengerController.passengerInfoLabel.mailingAddressLine1DelayedState eq 2}" tabindex="13"/>
+							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"/>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine2}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2DelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi15" value=""   style="width:77%" 
-							required="#{passengerController.passengerInfoLabel.mailingAddressLine2DelayedState eq 2}" tabindex="14"/>
+							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"/>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingCityDelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi16" value="" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.mailingCityDelayedState eq 2}" tabindex="15"/>
+							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingStateRegionDelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi17" value="" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.mailingStateRegionDelayedState eq 2}" tabindex="16"/>
+							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeDelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi18" value="" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.mailingPostalCodeDelayedState eq 2}" tabindex="17"/>
+							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingCountryDelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
 					<t:outputText value=":"/>
 					<h:selectOneMenu value="" tabindex="18"  style="width :8%">
 						<f:selectItem itemLabel="--" itemValue=""/>

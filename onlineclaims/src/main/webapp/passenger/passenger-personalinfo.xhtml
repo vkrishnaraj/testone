@@ -13,19 +13,19 @@
 					<t:outputText value="#{passengerController.passengerInfoLabel.frequentFlyerNumber}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumberDelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi24" value=""  style="77%"
-							required="#{passengerController.passengerInfoLabel.frequentFlyerNumberDelayedState eq 2}" tabindex="16"/>
+							required="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 2}" tabindex="16"/>
 					<h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumberDelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi25" value=""  style="77%"
-							required="#{passengerController.passengerInfoLabel.socialSecurityNumberDelayedState eq 2}" tabindex="17"/>
+							required="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}" tabindex="17"/>
 					<div><h:outputText value="&#160;" /></div>
 					
 					

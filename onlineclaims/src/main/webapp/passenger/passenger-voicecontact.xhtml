@@ -13,10 +13,10 @@
 					<t:outputText value="#{passengerController.passengerInfoLabel.phone1}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phone1DelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.phone1State eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi20" value=""  style="77%"
-							required="#{passengerController.passengerInfoLabel.phone1DelayedState eq 2}" tabindex="14"/>
+							required="#{passengerController.passengerInfoLabel.phone1State eq 2}" tabindex="14"/>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value=""  styleClass="passengerSelect">
 						<f:selectItem itemLabel="Home" itemValue="Home"/>
@@ -26,10 +26,10 @@
 					<t:outputText value="#{passengerController.passengerInfoLabel.phone2}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phone2DelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.phone2State eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi21" value=""  style="77%"
-							required="#{passengerController.passengerInfoLabel.phone2DelayedState eq 2}" tabindex="15"/>
+					<t:inputText id="pi21" value="#{passengerBean.phone2}"  style="77%"
+							required="#{passengerController.passengerInfoLabel.phone2State eq 2}" tabindex="15"/>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value=""  styleClass="passengerSelect">
 						<f:selectItem itemLabel="Mobile" itemValue="Mobile"/>
@@ -39,10 +39,10 @@
 					<t:outputText value="#{passengerController.passengerInfoLabel.phone3}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phone3DelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.phone3State eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi22" value=""  style="77%"
-							required="#{passengerController.passengerInfoLabel.phone3DelayedState eq 2}" tabindex="16"/>
+							required="#{passengerController.passengerInfoLabel.phone3State eq 2}" tabindex="16"/>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value="" styleClass="passengerSelect">
 						<f:selectItem itemLabel="Fax" itemValue="Fax"/>
@@ -53,10 +53,10 @@
 					<t:outputText value="#{passengerController.passengerInfoLabel.phone4}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phone4DelayedState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.phone4State eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi23" value=""  style="77%"
-							required="#{passengerController.passengerInfoLabel.phone4DelayedState eq 2}" tabindex="17"/>
+							required="#{passengerController.passengerInfoLabel.phone4State eq 2}" tabindex="17"/>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value=""  styleClass="passengerSelect">
 						<f:selectItem itemLabel="Business" itemValue="Business"/>

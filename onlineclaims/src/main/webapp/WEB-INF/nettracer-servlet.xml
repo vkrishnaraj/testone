@@ -23,6 +23,7 @@
     
 	<context:component-scan base-package="com.nettracer.claims.hibernate"/>
 	<context:component-scan base-package="com.nettracer.claims.core.service"/>
+	<context:component-scan base-package="com.nettracer.claims.webservices.client"/>
 	<context:component-scan base-package="com.nettracer.claims.core.dao"/>
 	<!--<context:component-scan base-package="com.nettracer.claims.core.model"/>-->
 	<context:component-scan base-package="com.nettracer.claims.admin.controller"/>
@@ -78,7 +79,7 @@
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="claimsServiceMethods" />
 	</aop:config>
 	
-	<!-- Passenger Module configuration -->
+	<!-- Passenger Module configuration (Initialize at server start up)-->
 	<bean id="passengerBootstrap" class="com.nettracer.claims.admin.bootstrap.PassengerBootstrap" />
 	
 	<!-- Webservices Integration -->
