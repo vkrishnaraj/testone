@@ -15,7 +15,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.lastNameState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi2" value="#{passengerBean.lastName}"  styleClass="passInout"
+					<t:inputText id="pi2" value="#{passengerBean.passengers[0].lastName}"  styleClass="passInout"
 							required="#{passengerController.passengerInfoLabel.lastNameState eq 2}" tabindex="1"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -24,7 +24,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 						 	rendered="#{passengerController.passengerInfoLabel.firstNameState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi3" value="#{passengerBean.firstName}" styleClass="passInout"
+					<t:inputText id="pi3" value="#{passengerBean.passengers[0].firstName}" styleClass="passInout"
 							required="#{passengerController.passengerInfoLabel.firstNameState eq 2}" tabindex="2"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -33,7 +33,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.middleInitialState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi4" value="" style="width:25px" 
+					<t:inputText id="pi4" value="#{passengerBean.passengers[0].middleInitial}" style="width:25px" 
 							required="#{passengerController.passengerInfoLabel.middleInitialState eq 2}" tabindex="3"/>
 					
 					<div><h:outputText value="&#160;" /></div>
@@ -44,7 +44,7 @@
 						<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.passengerInfoLabel.addressLine1State eq 2}"/>
 						<t:outputText value=":"/>
-						<t:inputText id="pi5" value="" style="width:77%" 
+						<t:inputText id="pi5" value="#{passengerBean.address[0].addressLine1}" style="width:77%" 
 								required="#{passengerController.passengerInfoLabel.addressLine1State eq 2}" tabindex="4"/>
 					</div>
 					
@@ -55,7 +55,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.addressLine2State eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi6" value="" style="width:77%" 
+					<t:inputText id="pi6" value="#{passengerBean.address[0].addressLine2}" style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.addressLine2State eq 2}" tabindex="5"/>
 					
 					<div><h:outputText value="&#160;" /></div>
@@ -65,7 +65,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.cityState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi7" value="" style="width:12%" 
+					<t:inputText id="pi7" value="#{passengerBean.address[0].city}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.cityState eq 2}" tabindex="6"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -74,7 +74,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.stateRegionState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi8" value="" style="width:12%" 
+					<t:inputText id="pi8" value="#{passengerBean.address[0].stateRegion}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.stateRegionState eq 2}" tabindex="7"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -83,7 +83,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.postalCodeState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi9" value="" style="width:12%" 
+					<t:inputText id="pi9" value="#{passengerBean.address[0].postalCode}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.postalCodeState eq 2}" tabindex="8"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -92,7 +92,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.countryState eq 2}"/>
 					<t:outputText value=":"/>
-					<h:selectOneMenu value="" tabindex="9" style="width :8%">
+					<h:selectOneMenu value="#{passengerBean.address[0].country}" tabindex="9" style="width :8%">
 						<f:selectItem itemLabel="--" itemValue=""/>
 					</h:selectOneMenu>
 					
@@ -103,7 +103,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.emailAddressState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi11" value="#{passengerBean.emailAddress}" style="width:30%" 
+					<t:inputText id="pi11" value="#{passengerBean.address[0].emailAddress}" style="width:30%" 
 							required="#{passengerController.passengerInfoLabel.emailAddressState eq 2}" tabindex="10"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -114,7 +114,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.occupationState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi12" value="" style="width:30%" 
+					<t:inputText id="pi12" value="#{passengerBean.address[0].occupation}" style="width:30%" 
 							required="#{passengerController.passengerInfoLabel.occupationState eq 2}" tabindex="11"/>
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -124,7 +124,7 @@
 						<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.passengerInfoLabel.businessNameState eq 2}"/>
 						<t:outputText value=":"/>
-						<t:inputText id="pi13" value="" style="width:30%" 
+						<t:inputText id="pi13" value="#{passengerBean.address[0].businessName}" style="width:30%" 
 								required="#{passengerController.passengerInfoLabel.businessNameState eq 2}" tabindex="12"/>
 					</div>
 					
