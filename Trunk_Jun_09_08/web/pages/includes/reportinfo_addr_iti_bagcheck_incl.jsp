@@ -476,7 +476,10 @@
 
 				for (x = 0; x < indexes.length; ++x) {
 					if (indexes[x] == deleteThis) {
-						document.getElementById('placeHolder' + deleteThis).innerHTML = "";		
+						document.getElementById('placeHolder' + deleteThis).innerHTML = "";	
+						if (indexes.length == 1){
+							continue;
+						}
 						if (x == 0) {
 							var remove = document.getElementById("moveUp" + (indexes[x + 1]));
 							removeElement(remove);
@@ -789,7 +792,7 @@
                         </tr>
                         <tr>
                           <td colspan="4">
-                          <input type="button" value="<bean:message key="button.delete_bag_itinerary" />" onclick="bItinIndexes = hideThisItinerary(<%=k%>, bItinIndexes); hideThisItinerary(<%=k%>); hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
+                          <input type="button" value="<bean:message key="button.delete_bag_itinerary" />" onclick="bItinIndexes = hideThisItinerary(<%=k%>, bItinIndexes); hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')" id="button">
                           </td>
                         </tr>
                       </table>
