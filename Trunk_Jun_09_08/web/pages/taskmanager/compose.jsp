@@ -45,7 +45,7 @@ function updatePagination() {
 
 
 var buttonSelected = null;
-function validateThis(form) {
+function validateLocalThis(form) {
     if (buttonSelected == null) {
       return true;
     } else {
@@ -67,7 +67,7 @@ function disableButton(aButton) {
 }
   
 </script>
-<html:form action="message.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateThis(this);">
+<html:form action="message.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateLocalThis(this);">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
     
@@ -149,14 +149,14 @@ function disableButton(aButton) {
 
                     if (recp_list.getStation_id() == -1) {
 %>
-                      <option value="-1" selected>
+                      <option value="-1" >
                       <bean:message key="select.all" />
                       </option>
 <%
                     } else 
                     	{
 %>
-	                      <option value="-1" selected>
+	                      <option value="-1" >
 	                      <bean:message key="select.all" />
 	                      </option>
 <%

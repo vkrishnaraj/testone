@@ -15,8 +15,7 @@
 
 <%@page import="com.bagnet.nettracer.tracing.utils.StringTemplateProcessor"%>
 <%@page import="org.apache.struts.util.MessageResources"%>
-<%@page import="java.util.Locale"%><link type="text/css" title="combobox" href="<%=request.getContextPath()%>/deployment/main/css/jQuery.CustomCombobox-min.css" rel="stylesheet" />
-<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jQuery.CustomCombobox-1.2.1-min.js"></script>
+<%@page import="java.util.Locale"%>
 
 <script language="javascript">
   
@@ -241,6 +240,32 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 	var passengerArr = ["passenger[0].lastname", "passenger[0].firstname", "passenger[0].middlename"];
 	var addressArr = ["passenger[0].address1", "passenger[0].address2", "passenger[0].city", "passenger[0].state_ID", "passenger[0].province","passenger[0].zip","passenger[0].countrycode_ID","passenger[0].dispvalid_bdate", "passenger[0].dispvalid_edate","passenger[0].","passenger[0].email"];
 	var phoneArr = ["passenger[0].homephone", "passenger[0].workphone", "passenger[0].altphone", "passenger[0].mobile", "passenger[0].pager", "passenger[0].hotel"];
+
+    var passengers = [<%=myform.getPassengerlist().size() %>];
+    var addresses = [<%=myform.getPassengerlist().size() %>];
+    var phonenumbers = [<%=myform.getPassengerlist().size() %>]; 
+
+    function mapSimpleData(index, dataSet, arr) {
+	    if (index == "") { return; }
+	    var data = dataSet[index-1].data;
+	    for (var i in arr) {
+		var element = document.getElementsByName(arr[i])[0];
+		if (element != null && element.type != null) {
+			if (element.type == 'text') {
+				value = data[arr[i]];
+				if (value == null) { element.value = '';} else {
+					element.value = data[arr[i]]; 
+				}
+			} else if (element.type == 'select-one') {
+				for (var x=0; x< element.length; x++) {
+					if(element[x].value == data[arr[i]]) {
+						element[x].selected = true;
+					}
+				}
+			}
+		}
+	    }
+    }
 	
 	function mapData(item, arr) {
 	    var data = item.data("source").data;
@@ -263,6 +288,7 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 	    }
     }
 
+
     jQuery(document).ready(function() {
 
         function DropdownData() {
@@ -271,9 +297,6 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 	    this.data = {};
 	    }
 
-	var passengers = [<%=myform.getPassengerlist().size() %>];
-        var addresses = [<%=myform.getPassengerlist().size() %>];
-	var phonenumbers = [<%=myform.getPassengerlist().size() %>]; 
 
 	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
 
@@ -316,50 +339,43 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 	</logic:iterate>
 
 
-        var template = "<div style='border-bottom:1px gray dashed;'>" +
-                            "{longd}" +
-                       "</div>";
-
-        var c = jQuery(".addressList").customcombobox(addresses, {
-            width: 400,
-            template: template,
-            topMsg: '<bean:message key="pick.a.address" />',
-            displayPropertyName: "shortd",
-            useEdgeDetection: true,
-	    onSelect: function(item) {
-	    	mapData(item, addressArr);
-            }
-        });
-        
-        var c = jQuery(".passengerList").customcombobox(passengers, {
-            width: 400,
-            template: template,
-            topMsg: '<bean:message key="pick.a.passenger" />',
-            displayPropertyName: "shortd",
-            useEdgeDetection: true,
-            onSelect: function(item) {
-	    	mapData(item, passengerArr);
-            }
-	    });
-
-        var c = jQuery(".phoneList").customcombobox(phonenumbers, {
-            width: 400,
-            template: template,
-            topMsg: '<bean:message key="pick.a.address" />',
-            displayPropertyName: "shortd",
-            useEdgeDetection: true,
-            onSelect: function(item) {
-	    	mapData(item, phoneArr);
-            }
-        });
 
 
     });
 </script>
-<span class="passengerList" style="margin-right: 10px;"></span>
-<span class="addressList" style="margin-right: 10px;"></span>
-<span class="phoneList"  style="margin-right: 10px;"></span>
-<span class="bagList"  style="margin-right: 10px;"></span>
+<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, passengers, passengerArr); ">
+	<option value=""><bean:message key="pick.a.passenger" /></option>
+	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
+	<%
+		StringTemplateProcessor p = new StringTemplateProcessor();
+		p.addClass(passenger);
+		String paxNames = p.fillValues("{firstname} {lastname}");
+		%>
+		<option value="<%=i%>"><%=paxNames%></option>
+	</logic:iterate>
+</select>
+<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, addresses, addressArr); ">
+	<option value=""><bean:message key="pick.a.address" /></option>
+	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
+	<%
+		StringTemplateProcessor p = new StringTemplateProcessor();
+		p.addClass(passenger);
+		String addLong = p.fillValues("{address1} {address2}, {city}, {state_ID}{province} {zip}  {countrycode_ID}");
+	%>
+		<option value="<%=i%>"><%=addLong%></option>
+	</logic:iterate>
+</select>
+<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, phonenumbers, phoneArr); ">
+	<option value=""><bean:message key="pick.a.phonenumber" /></option>
+	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
+	<%
+		StringTemplateProcessor p = new StringTemplateProcessor();
+		p.addClass(passenger);
+		String phoneLong = p.fillValues("Home: {homephone}, Work: {workphone}, Others: {altphone} {mobile} {pager}, Hotel: {hotel} ");
+	%>
+		<option value="<%=i%>"><%=phoneLong%></option>
+	</logic:iterate>
+</select>
 
 
         <logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
@@ -399,7 +415,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
               </td>
             </tr>
 <%
-            if (i.intValue() == 0) {
+if (i.intValue() == 0) {
+
 %>
               <tr>
                 <td colspan=2>
@@ -701,3 +718,4 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
     </tr>
   </table>
   
+

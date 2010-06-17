@@ -70,6 +70,8 @@ response.addDateHeader("Expires", -1);
 <script language="javascript" src="<%=request.getContextPath()%>/pages/dynamic/sessionjs.jsp?<%=session.getId() %><%=agent.getUsername() %><%=myLocale.getDisplayLanguage() %>"></script>
 <link href="<%=request.getContextPath()%>/deployment/main/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
 <link href="<%=request.getContextPath()%>/pages/dynamic/sessionscss.jsp?<%=session.getId() %><%=agent.getUsername() %><%=myLocale.getDisplayLanguage() %>" rel="stylesheet" type="text/css" />
+<!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
+</logic:present>
 <style type="text/css">
  body{
   <%
@@ -80,8 +82,6 @@ response.addDateHeader("Expires", -1);
   font-size: <%=session.getAttribute("bodyFontSize") %>;
  }
 </style>
-<!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
-</logic:present>
 <link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css" />
 <link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css" />
 <link href="<%=request.getContextPath()%>/deployment/main/css/styles.css" rel="stylesheet" type="text/css" />
@@ -101,11 +101,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 <logic:notPresent name="user" scope="session">
 
-<%
-if (!isMSIE6 && isMSIE) {
-%>
-<div id="ntcontent" style="font-size: .7em">
-	<% } %>	
+	
 <table cellspacing="0" id="bodytable"> 
   <tr> 
     <td id="topcell">
@@ -173,35 +169,12 @@ if (!isMSIE6 && isMSIE) {
 <p>&nbsp;</p>
 <img src="<%=request.getContextPath()%>/deployment/main/images/nettracer/poweredby_net_tracer.jpg"  alt="Powered by Net Tracer" class="imgAlignBottom">
 
-</div>
+
 
 </logic:notPresent>
 
 <logic:present name="user" scope="session">
 
-<%
-if (!isMSIE6 && isMSIE) {
-%>
-
-<div id="footer">
-	  <span id="footerR">&nbsp; </span>
-
-	  <span id="footerC" >
-	  <INPUT TYPE="TEXT" SIZE="15" MAXLENGTH="16" VALUE="Quick Search" ID="quickSearchQuery" onClick="if(this.value=='Quick Search') {this.value=''}" onKeyDown="quickSearchKey()" style="
- 	  background:#FFFFFF url(deployment/main/images/search.png) no-repeat 2px 2px; 
-	  font-size: 12px;
-	  height: 12px;
-	border:0px solid #CCCCCC;
-	margin:3px 0px 0px 0px;
-	padding: 4px 4px 4px 22px;
-	display:inline;
-	  
-	  
-	  "/></span>
-	  <span id="footerL">&nbsp; </span>
-</div>
-<% } %>
-<div id="ntcontent">
 
 <table cellspacing="0" id="bodytable"> 
   <tr> 
@@ -360,12 +333,6 @@ if (!isMSIE6 && isMSIE) {
 </table>
 <div id="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></div>
 
-<%
-if (!isMSIE6 && isMSIE) {
-%>
-</div>
-
-<% } %>
 <logic:present name="user" scope="session">
 <html:form action="quickSearch.do" method="post"><input id="quickSearchQuery2" type="hidden" name="quickSearch" value=""/></html:form>
 <iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>

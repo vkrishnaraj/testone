@@ -338,7 +338,14 @@ public class ReservationIntegrationImpl extends
 				}
 				
 				fMem.setMembershipnum(pax.getFrequentFlierNumber());
-				fMem.setMembershipstatus(pax.getFrequentFlierStatus());
+				if (pax.getFrequentFlierNumber() != null && pax.getFrequentFlierNumber().trim().length() > 0) {
+					if (pax.getFrequentFlierStatus() != null && pax.getFrequentFlierStatus().length() > 0) {
+						fMem.setMembershipstatus(pax.getFrequentFlierStatus());	
+					} else {
+						fMem.setMembershipstatus("Basic");
+					}
+					
+				}
 				fPax.setMembership(fMem);
 				
 				// Not currently using these two web-service provided fields:

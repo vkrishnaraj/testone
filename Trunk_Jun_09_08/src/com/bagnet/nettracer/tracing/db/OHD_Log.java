@@ -17,8 +17,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.StringUtils;
-import com.ctc.wstx.util.StringUtil;
 
 /**
  * @author Ankur Gupta

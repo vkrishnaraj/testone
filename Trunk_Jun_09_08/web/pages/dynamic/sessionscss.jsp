@@ -1,4 +1,6 @@
+
 <%@ page contentType="text/css" %>
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
@@ -71,7 +73,7 @@ a.starter:hover, a.starter:active, a.starter:focus {
 %>
 
 			#menubuilder<%=j%> {
-				width: 200px;
+				width: <%=TracerProperties.get("menu.width") %>px;
 				z-index:100;
 			}    
 <%

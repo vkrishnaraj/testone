@@ -152,9 +152,18 @@
         }
     }  
 
-     
     else if (currentElementName.indexOf("companyCode_ID") != -1) {
-
+        var pos = currentElementName.indexOf(".");
+        var str = currentElementName.substring(0,pos+1) + "membership.membershipnum";
+        if (form.elements[str].value.length > 0 && currentElement.value.length == 0) {
+            alert("<%= (String)bundle.getString("error.validation.airline") %>");
+            currentElement.focus();
+            return false;
+        }
+    }   
+     
+    else if (currentElementName.indexOf("companycode_ID") != -1) {
+	alert('hi');
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "membership.membershipnum";
 
@@ -1394,9 +1403,9 @@ document.onkeydown = function(){
 		nourlfocus(5);
 	}
 
-	if (window.event && window.event.keyCode == 83 && window.event.ctrlKey) {
+	if (window.event && (window.event.keyCode == 113 || (window.event.keyCode == 83 && window.event.ctrlKey))) {
 		window.event.keyCode = 505;
-		nourlfocus(6);
+		loadQuickSearchModal();
 	}
 
 	if (window.event && window.event.keyCode == 84 && window.event.ctrlKey) {
@@ -1453,3 +1462,4 @@ document.onkeydown = function(){
 		return false; 
 	}
 }
+

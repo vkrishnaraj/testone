@@ -202,10 +202,22 @@ function hideAllMenus(elementItem, root) {
 }
 
 
+function loadQuickSearchModal() {
+
+jQuery("#dialog").dialog({bgiframe : true,
+				autoOpen: false, modal: true, draggable: false, resizable: false, 
+				width: 700, height: 500, title: 'Quick Search' 
+	});
+
+	jQuery('#dialog-inner-content').html('<div style="text-align: center; padding: 5 5 5 5; border-bottom: 2px blue solid;"><strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br />');	
+	jQuery("#dialog").dialog("open");
+	var currentElement = document.getElementById("dialog-inner-content");
+	currentElement.focus();
+}
+
 
 function quickSearchKey4(e) {
 		var searchContent = document.getElementById('quickSearchQuery3').value;
-		document.getElementById('quickSearchQuery').value= searchContent;
 		document.getElementById('quickSearchQuery2').value= searchContent;
 		quickSearchKey2();
 		}
@@ -216,7 +228,6 @@ function quickSearchKey3(e) {
 		lock = true;
 		var searchContent = document.getElementById('quickSearchQuery3').value;
 		searchContent = searchContent.replace(/^\s+|\s+$/g,"");
-		document.getElementById('quickSearchQuery').value= searchContent;
 		document.getElementById('quickSearchQuery2').value= searchContent;
 		quickSearchKey2(true);
 	}
@@ -233,12 +244,11 @@ function quickSearchKey(e) {
 }
 
 function quickSearchKey2(skip) {
-		var searchContent = document.getElementById('quickSearchQuery').value;
+		var searchContent = document.getElementById('quickSearchQuery2').value;
 		if (!skip) {
 			searchContent = searchContent.replace(/^\s+|\s+$/g,"");
 		}
 		searchContent = searchContent.replace(/%/g,"%25");
-		document.getElementById("quickSearchQuery2").value = searchContent;
 		if (searchContent.indexOf(':') >= 1) {
 			var id = searchContent.substr(searchContent.indexOf(':') + 1,searchContent.length);
 			if (searchContent.indexOf('I:') == 0 || searchContent.indexOf('i:') == 0) {
@@ -288,3 +298,4 @@ function qPrepopulateIncident(type, content, pnrOrTag) {
 	}
   
 }
+
