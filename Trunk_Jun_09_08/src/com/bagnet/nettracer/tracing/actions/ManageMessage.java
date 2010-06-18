@@ -178,7 +178,8 @@ public class ManageMessage extends Action {
 		}
 
 		//Perform the send of the message.
-		if (request.getParameter("send") != null) {
+		boolean isSendingMessage = request.getParameter("send") != null && request.getParameter("send").length() > 0;
+		if (isSendingMessage) {
 			//Put in the send box.
 			Message msg = new Message();
 			msg.setSend_date(TracerDateTime.getGMTDate());
@@ -332,7 +333,7 @@ public class ManageMessage extends Action {
 		}
 
 		//show agent's inbox
-		if (request.getParameter("search") != null || request.getParameter("send") != null
+		if (request.getParameter("search") != null || isSendingMessage
 				|| request.getParameter("delete") != null
 				|| (request.getParameter("new") == null && request.getParameter("inbox") != null)) {
 			int messageCount = 0;

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -32,6 +34,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -1134,6 +1137,7 @@ public class BDOUtils {
 	}
 
 	public static void cancelBdo(int bdo_id, int item_id, Agent a) {
+		MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
 		Session sess = null;
 		BDO bdo = null;
@@ -1193,7 +1197,15 @@ public class BDOUtils {
 									bStatus.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 									ohd.setStatus(bStatus);
 								}
-
+								Set<Remark> ohdRemarks = ohd.getRemarks();
+								Remark r = new Remark();
+								r.setAgent(a);
+								r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+								r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()), "remark.cancel.ohd.bdo") + " " + bdo.getBDO_ID_ref());
+								r.setOhd(ohd);
+								// Add a remark to the OHD saying the bag is forwarded.
+								ohdRemarks.add(r);
+								
 								oBMO.insertOHD(ohd, a, sess);
 							} else {
 								// OR OPEN IF NOT MATCHED
@@ -1205,6 +1217,15 @@ public class BDOUtils {
 						}
 					}
 
+					Set<Remark> remarks = inc.getRemarks();
+					Remark r = new Remark();
+					r.setAgent(a);
+					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+					r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()), "remark.cancel.full.bdo") + " " + bdo.getBDO_ID_ref());
+					r.setIncident(inc);
+					// Add a remark to the OHD saying the bag is forwarded.
+					remarks.add(r);
+					
 					// Save incident
 					IncidentBMO ibmo = new IncidentBMO();
 					ibmo.saveAndAuditIncident(inc, a, sess);
@@ -1219,6 +1240,16 @@ public class BDOUtils {
 						bStatus.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 						ohd.setStatus(bStatus);
 					}
+					
+					Set<Remark> ohdRemarks = ohd.getRemarks();
+					Remark r = new Remark();
+					r.setAgent(a);
+					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+					r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()), "remark.cancel.ohd.bdo") + " " + bdo.getBDO_ID_ref());
+					r.setOhd(ohd);
+					// Add a remark to the OHD saying the bag is forwarded.
+					ohdRemarks.add(r);
+					
 					oBMO.insertOHD(ohd, a, sess);
 				}
 			} else {
@@ -1251,7 +1282,16 @@ public class BDOUtils {
 								bStatus.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 								ohd.setStatus(bStatus);
 							}
-
+							
+							Set<Remark> ohdRemarks = ohd.getRemarks();
+							Remark r = new Remark();
+							r.setAgent(a);
+							r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+							r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()), "remark.cancel.ohd.bdo") + " " + bdo.getBDO_ID_ref());
+							r.setOhd(ohd);
+							// Add a remark to the OHD saying the bag is forwarded.
+							ohdRemarks.add(r);
+							
 							oBMO.insertOHD(ohd, a, sess);
 						} else {
 							// OR OPEN IF NOT MATCHED
@@ -1261,6 +1301,16 @@ public class BDOUtils {
 
 						}
 					}
+					
+					Set<Remark> remarks = inc.getRemarks();
+					Remark r = new Remark();
+					r.setAgent(a);
+					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+					r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()), "remark.cancel.partial.bdo") + " " + bdo.getBDO_ID_ref());
+					r.setIncident(inc);
+					// Add a remark to the OHD saying the bag is forwarded.
+					remarks.add(r);
+					
 					IncidentBMO ibmo = new IncidentBMO();
 					ibmo.saveAndAuditIncident(inc, a, sess);
 
@@ -1274,6 +1324,16 @@ public class BDOUtils {
 						bStatus.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 						ohd.setStatus(bStatus);
 					}
+					
+					Set<Remark> ohdRemarks = ohd.getRemarks();
+					Remark r = new Remark();
+					r.setAgent(a);
+					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+					r.setRemarktext(messages.getMessage(new Locale(a.getCurrentlocale()), "remark.cancel.ohd.bdo") + " " + bdo.getBDO_ID_ref());
+					r.setOhd(ohd);
+					// Add a remark to the OHD saying the bag is forwarded.
+					ohdRemarks.add(r);
+					
 					oBMO.insertOHD(ohd, a, sess);
 				}
 			}
