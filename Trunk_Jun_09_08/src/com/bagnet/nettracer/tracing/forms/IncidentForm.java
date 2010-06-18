@@ -618,7 +618,13 @@ public final class IncidentForm extends ValidatorForm {
 	}
 
 	public void setAgentassigned_ID(int agent_ID) {
-		getAgentassigned().setAgent_ID(agent_ID);
+		Agent aAssigned = getAgentassigned();
+		
+		if (aAssigned != null) {
+			aAssigned = new Agent();
+			aAssigned.setAgent_ID(agent_ID);
+			this.setAgentassigned(aAssigned);
+		}
 	}
 	/**
 	 * @return Returns the stationcreated.
