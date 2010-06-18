@@ -142,25 +142,31 @@ public class ContentsAndLanguageController {
 		logger.info("Listener:manyCheckBoxListener is called");
 		languageMap.clear();
 		pageMapsList.clear();
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
 		try {
 			List<String> newCheckBoxList = (List<String>) valueChangeEvent.getNewValue();
 			//List<String> oldCheckBoxList = (List<String>) valueChangeEvent.getOldValue();
 			Set<SelectItem> items = new LinkedHashSet<SelectItem>();
 
-			for (String languageValue : newCheckBoxList) {
-				items.add(new SelectItem(languageValue));
+			if(newCheckBoxList.size() >0){
 				
-			//Logic :If an admin wants to uncheck a language to deactivate it without touching the drop down
-				if(!languageMap.containsKey(languageValue)){
-					pageMapsList.add(getAllPageMap(languageValue)); //get all the values from DB
-					if( ! languageValue.equalsIgnoreCase("Please Select a Language")){
-						//setting the index for xhtml page
-						int index=pageMapsList.size()-1;
-						indexMap.put(languageValue,index);
-						languageMap.put(languageValue, pageMapsList);
+				for (String languageValue : newCheckBoxList) {
+					items.add(new SelectItem(languageValue));
+					
+					//Logic :If an admin wants to uncheck a language to deactivate it without touching the drop down
+					if(!languageMap.containsKey(languageValue)){
+						pageMapsList.add(getAllPageMap(languageValue)); //get all the values from DB
+						if( ! languageValue.equalsIgnoreCase("Please Select a Language")){
+							//setting the index for xhtml page
+							int index=pageMapsList.size()-1;
+							indexMap.put(languageValue,index);
+							languageMap.put(languageValue, pageMapsList);
+						}
 					}
+					//end of logic
 				}
-			//end of logic
+				session.setAttribute("index", indexMap.get(getSelectedLanguage())); //checkbox bug fixed
 			}
 			if(items.size() == 0){
 				setRenderTabPanel(false); //don't display the tab panel if all the languages are unchecked
@@ -201,25 +207,6 @@ public class ContentsAndLanguageController {
 			.getExternalContext().getSession(false);
 			session.setAttribute("lang", languageSelected);
 			languageSelectedSet.add(languageSelected);
-			
-			/*if(languageDropDown.size() >0){
-				pageMapsList.clear();
-				for(SelectItem item: languageDropDown){
-					if(!((String)item.getValue()).equalsIgnoreCase("Please Select a Language")){
-						if(!languageMap.containsKey((String)item.getValue())){
-							pageMapsList.add(getAllPageMap((String)item.getValue())); //get all the values from DB
-							int index=pageMapsList.size()-1;
-							session.setAttribute("index", index); //index value is needed and to be used in the xhtml page
-							indexMap.put((String)item.getValue(),index);
-							languageMap.put((String)item.getValue(), pageMapsList);
-						}else {
-							session.setAttribute("index", indexMap.get((String)item.getValue()));
-						}
-						
-					}
-				
-				}
-			}*/
 			
 			for(String language:languageSelectedSet){
 				if(null !=language && null !=languageSelected && language.equals(languageSelected)){
