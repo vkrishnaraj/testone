@@ -229,7 +229,7 @@ width: 8px;
 
  body{
   margin:0;
-  overflow:hidden;
+  
   <%
   	if (session.getAttribute("bodyFontSize") == null) {
   		session.setAttribute("bodyFontSize", ".7em");

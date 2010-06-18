@@ -163,7 +163,6 @@
     }   
      
     else if (currentElementName.indexOf("companycode_ID") != -1) {
-	alert('hi');
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "membership.membershipnum";
 

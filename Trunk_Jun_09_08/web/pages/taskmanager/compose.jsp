@@ -50,7 +50,7 @@ function validateLocalThis(form) {
       return true;
     } else {
       if (validateRest(form) == true)  {
-          form.save.value="1";
+          form.send.value="1";
           disableButton(buttonSelected);
           return true;
       }
@@ -69,6 +69,7 @@ function disableButton(aButton) {
 </script>
 <html:form action="message.do" method="post" onsubmit="fillzero(this.file_ref_number, 13); return validateLocalThis(this);">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
+  <input type="hidden" name="send"/>
   <tr>
     
     <td id="middlecolumn">
@@ -218,7 +219,7 @@ function disableButton(aButton) {
             <td colspan="2" align="center">
               <INPUT Id="button" type="button" value="Back" onClick="history.back()">
               &nbsp;
-              <html:submit styleId="button" property="send" onclick="buttonSelected = this;">
+              <html:submit styleId="button" property="send2" onclick="buttonSelected = this;">
                 <bean:message key="send_message" />
               </html:submit>
             </td>
