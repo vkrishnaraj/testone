@@ -32,6 +32,7 @@ import com.nettracer.claims.core.model.Company;
 import com.nettracer.claims.core.service.AdminService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
+import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
 /**
  * @author Utpal Description: This is the main controller for all the managed
@@ -44,12 +45,14 @@ import com.nettracer.claims.faces.util.FacesUtil;
 public class AdminController {
 	private static Logger logger = Logger.getLogger(AdminController.class);
 	private static final String CAPTCHA_STATUS = "Correct";
-	// These would be replaced with spring IOC
 	CaptchaBean captchaBean = new CaptchaBean();
 
 	LoginBean loginBean = new LoginBean();
 	@Autowired
 	AdminService adminService;
+	
+	@Autowired
+	OnlineClaimsWS onlineClaimsWS;
 
 	Company company = new Company();
 
@@ -58,34 +61,13 @@ public class AdminController {
 	 * page. i.e. the landing page
 	 * 
 	 * @return String
-	 * @throws AxisFault 
+	 * 
 	 */
 	public String gotoLandingPage() {
 		logger.debug("gotoLandingPage method is called");
-		// Had to use hard coded value for testing
-
 		try{
-			// Prepare stub with endpoint
-			OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub("http://74.188.84.58:8080/tracer/services/OnlineClaimsService");
 
-			// Prepare XML documents for request
-			AuthAdminUserDocument request = AuthAdminUserDocument.Factory.newInstance();
-			AuthAdminUser subDoc1 = request.addNewAuthAdminUser();
-			subDoc1.setUsername(loginBean.getUserName());
-			subDoc1.setPassword(loginBean.getPassword());
-			// Set System Username & PW
-			NtAuth subDoc2 = subDoc1.addNewAuth();
-			subDoc2.setUsername("onlineclaims");
-			subDoc2.setPassword("B651kLN5");
-			// Perform Web Service Request
-			AuthAdminUserResponseDocument response = stub.authAdminUser(request);
-			// Process response
-			boolean successfulLogin = response.getAuthAdminUserResponse().getReturn();
-			logger.info("Value of successfulLogin: "+successfulLogin);
-
-
-
-			if (successfulLogin) {
+			if (onlineClaimsWS.authAdminUser(loginBean.getUserName(), loginBean.getPassword())) {
 
 				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 					FacesContext context = FacesUtil.getFacesContext();
@@ -122,8 +104,10 @@ public class AdminController {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return null;
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-
+		return null;
 	}
 
 	public String gotoMaintainApplicationPage() {
@@ -180,12 +164,6 @@ public class AdminController {
 		logger
 				.debug("clearCaptchaCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
-		/*
-		 * ViewHandler viewHandler = context.getApplication().getViewHandler();
-		 * UIViewRoot viewRoot = viewHandler.createView(context,
-		 * context.getViewRoot().getViewId()); context.setViewRoot(viewRoot);
-		 * context.renderResponse(); // Optional
-		 */
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
 		HtmlForm htmlForm = (HtmlForm) viewRoot.findComponent("loginForm");

@@ -22,4 +22,6 @@ public interface OnlineClaimsWS {
 			throws AxisFault, RemoteException;
 
 	public PassengerBean getPassengerData(WSPVAdvancedIncident passengerData);
+
+	public boolean savePassengerInfo(PassengerBean passengerBean) throws AxisFault, RemoteException;
 }
