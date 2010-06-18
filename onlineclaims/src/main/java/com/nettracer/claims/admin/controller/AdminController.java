@@ -106,8 +106,8 @@ public class AdminController {
 			return null;
 		}catch(Exception e){
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	public String gotoMaintainApplicationPage() {
