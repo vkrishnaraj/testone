@@ -92,8 +92,9 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.countryState eq 2}"/>
 					<t:outputText value=":"/>
-					<h:selectOneMenu value="#{passengerBean.address[0].country}" tabindex="9" style="width :8%">
+					<h:selectOneMenu value="#{passengerBean.address[0].country}" tabindex="9" style="width :15%">
 						<f:selectItem itemLabel="--" itemValue=""/>
+						<f:selectItems value="#{passengerController.selectItems}"/>
 					</h:selectOneMenu>
 					
 					<div><h:outputText value="&#160;" /></div>

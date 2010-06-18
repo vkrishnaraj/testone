@@ -15,7 +15,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi14" value="#{null != passengerBean.address[1] ? passengerBean.address[1].addressLine1 : ''}"   style="width:77%" 
+					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"/>
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -24,7 +24,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi15" value="#{null != passengerBean.address[1] ? passengerBean.address[1].addressLine2 : ''}"   style="width:77%" 
+					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"   style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"/>
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -33,7 +33,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi16" value="#{null != passengerBean.address[1] ? passengerBean.address[1].city : ''}" style="width:12%" 
+					<t:inputText id="pi16" value="#{passengerBean.address[1].city }" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -42,7 +42,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi17" value="#{null != passengerBean.address[1] ? passengerBean.address[1].stateRegion : ''}" style="width:12%" 
+					<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -51,7 +51,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi18" value="#{null != passengerBean.address[1] ? passengerBean.address[1].postalCode : ''}" style="width:12%" 
+					<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"/>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
@@ -60,8 +60,9 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
 					<t:outputText value=":"/>
-					<h:selectOneMenu value="#{null != passengerBean.address[1] ? passengerBean.address[1].country : ''}" tabindex="18"  style="width :8%">
+					<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18"  style="width :15%">
 						<f:selectItem itemLabel="--" itemValue=""/>
+						<f:selectItems value="#{passengerController.selectItems}"/>
 					</h:selectOneMenu>
 					
 					<div><h:outputText value="&#160;" /></div>

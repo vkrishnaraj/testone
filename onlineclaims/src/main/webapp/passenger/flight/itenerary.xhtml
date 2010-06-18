@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<div><t:outputText
+		value="#{passengerController.flightLabel.aboutYourItenerary}"
+		styleClass="subHeader" /></div>
+
+	<rich:dataTable id="ticketTable" var="item" headerClass="TableHeader"
+		value="#{passengerBean.bagTagList}" border="0">
+
+		<f:facet name="header">
+			<rich:columnGroup>
+				<rich:column colspan="2">
+					<h:outputText value="From/ To Airports" />
+				</rich:column>
+				<rich:column colspan="2">
+					<h:outputText value="Airline/ Flight Number" />
+				</rich:column>
+				<rich:column>
+					<h:outputText value="Date" />
+				</rich:column>
+
+			</rich:columnGroup>
+		</f:facet>
+
+
+		<rich:column>
+			<h:panelGrid columns="2">
+				<t:inputText value="" styleClass="passInout" required="true" />
+				<h:graphicImage url="../../_images/flightlist.gif"
+					alt="List of Flights" height="20" width="20"
+					styleClass="helpButton" />
+			</h:panelGrid>
+		</rich:column>
+
+		<rich:column>
+			<h:panelGrid columns="2">
+				<t:inputText value="" styleClass="passInout" required="true" />
+				<h:graphicImage url="../../_images/flightlist.gif"
+					alt="List of Flights" height="20" width="20"
+					styleClass="helpButton" />
+			</h:panelGrid>
+		</rich:column>
+
+		<rich:column>
+			<h:panelGrid columns="2">
+				<t:inputText value="" styleClass="passInout" required="true" />
+				<h:outputText value="/" />
+			</h:panelGrid>
+		</rich:column>
+
+		<rich:column>
+			<t:inputText value="" styleClass="passInout" required="true" />
+		</rich:column>
+
+		<rich:column>
+			<t:inputDate value="" styleClass="passInout" required="true"
+				popupCalendar="true" />
+		</rich:column>
+
+	</rich:dataTable>
+
+	<div><h:outputText value="&#160;" /></div>
+
+
+</ui:composition>
