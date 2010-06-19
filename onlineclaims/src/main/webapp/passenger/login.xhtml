@@ -12,9 +12,9 @@
 <ui:define name="mainContent">
 	<h:form id="loginPassengerForm">
 			<div id="langSelect">
-				<t:selectOneMenu id="passLangSelectorId" value="#{passengerController.selectedLanguage}" 
-					valueChangeListener="#{passengerController.languageSelectionListener}">
-						<f:selectItems value="#{passengerController.languageDropDown}" />
+				<t:selectOneMenu id="passLangSelectorId" value="#{passengerLoginController.selectedLanguage}" 
+					valueChangeListener="#{passengerLoginController.languageSelectionListener}">
+						<f:selectItems value="#{passengerLoginController.languageDropDown}" />
 						<a4j:support event="onchange" reRender="passOutPutPanel" />
 				</t:selectOneMenu>
 			</div>
@@ -41,31 +41,31 @@
 					<t:messages id="passLoginMsg" errorClass="loginerrormsg"  infoClass="infomsg" />
 					<h:outputText value="&#160;" />
 			<h:panelGrid id="loginPassengerPanel"  columns="2">
-				<h:outputText  value="#{passengerController.loginPageList[0].displayText}" styleClass="btAirport"/>
-				<h:inputText id="claimNumber" value="#{passengerController.loginBean.claimNumber}" 
+				<h:outputText  value="#{passengerLoginController.loginPageList[0].displayText}" styleClass="btAirport"/>
+				<h:inputText id="claimNumber" value="#{passengerLoginController.loginBean.claimNumber}" 
 					styleClass="btAirport" tabindex="1" label="Claim Number">
 					<f:validateLength maximum="20"/>
 				</h:inputText>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:outputText  value="#{passengerController.loginPageList[1].displayText}" styleClass="btAirport"/>
-				<h:inputText id="lastName" value="#{passengerController.loginBean.lastName}" styleClass="btAirport" tabindex="2"/>
+				<h:outputText  value="#{passengerLoginController.loginPageList[1].displayText}" styleClass="btAirport"/>
+				<h:inputText id="lastName" value="#{passengerLoginController.loginBean.lastName}" styleClass="btAirport" tabindex="2"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandLink value="#{passengerController.loginPageList[2].displayText} &#160;&#160;&#160;&#160;&#160;&#160;" />		
-				<t:captcha captchaSessionKeyName="#{passengerController.captchaBean.sessionKeyName}" imageHeight="45" imageWidth="128"/>
+				<h:commandLink value="#{passengerLoginController.loginPageList[2].displayText} &#160;&#160;&#160;&#160;&#160;&#160;" />		
+				<t:captcha captchaSessionKeyName="#{passengerLoginController.captchaBean.sessionKeyName}" imageHeight="45" imageWidth="128"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:outputText  value="#{passengerController.loginPageList[3].displayText}"/>
-				<h:inputText id="captcha" value="#{passengerController.captchaBean.value}" tabindex="3"/>
+				<h:outputText  value="#{passengerLoginController.loginPageList[3].displayText}"/>
+				<h:inputText id="captcha" value="#{passengerLoginController.captchaBean.value}" tabindex="3"/>
 				<h:outputText value="&#160;" />
-				<h:outputText id="captchaStatus" value="#{passengerController.captchaBean.status}" 
+				<h:outputText id="captchaStatus" value="#{passengerLoginController.captchaBean.status}" 
 						styleClass="captchaerrormsg"/>		
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandButton id="passLoginContinue" value="#{passengerController.loginPageList[4].displayText}" 
-					action="#{passengerController.gotoDirectionPage}" tabindex="4" styleClass="button140pxred button140pxredl"/>
+				<h:commandButton id="passLoginContinue" value="#{passengerLoginController.loginPageList[4].displayText}" 
+					action="#{passengerLoginController.gotoDirectionPage}" tabindex="4" styleClass="button140pxred button140pxredl"/>
 			</h:panelGrid>
 			</h:panelGrid>
 			</a4j:outputPanel>
