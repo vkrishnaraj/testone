@@ -156,6 +156,9 @@ public class MultilingualLabel {
 	private Long airlineFlightNoState;
 	private Long flightDateState;
 	
+	//itenerary
+	private String aboutYourItenerary;
+	
 	public String getClaimNumber() {
 		return claimNumber;
 	}
@@ -946,6 +949,12 @@ public class MultilingualLabel {
 	}
 	public void setFlightDateState(Long flightDateState) {
 		this.flightDateState = flightDateState;
+	}
+	public String getAboutYourItenerary() {
+		return aboutYourItenerary;
+	}
+	public void setAboutYourItenerary(String aboutYourItenerary) {
+		this.aboutYourItenerary = aboutYourItenerary;
 	}  
 	
 	

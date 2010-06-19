@@ -41,8 +41,9 @@
 						</h:panelGroup>
 						
 						<h:panelGroup >
-							<rich:dataTable id="ticketTable"  var="item" headerClass="TableHeader" 
-										value="#{passengerBean.bagTagList}" border="0">
+						<a4j:outputPanel id="ticketTablePanel" ajaxRendered="true">
+							<rich:dataTable id="ticketTable"   headerClass="TableHeader" 
+										value="#{passengerController.passengerBean.bagTagList}" border="0" var="item">
 								<rich:column>
 									<f:facet name="header">
 										<h:panelGroup >
@@ -51,7 +52,7 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<t:inputText  binding="#{item.htmlInputText}" styleClass="passInout" tabindex="3"
+									<h:inputText value="#{item.bagTagNumber}" styleClass="passInout" tabindex="3"
 										required="true" />
 								</rich:column>
 								
@@ -63,12 +64,13 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<h:selectOneRadio  layout="spread" binding="#{item.htmlSelectOneRadio}">
+									<h:selectOneRadio   value="#{item.bagArrivalStatus}">
 										<f:selectItem itemLabel="Yes" itemValue="Yes" />
 										<f:selectItem itemLabel="No" itemValue="No" />
 									</h:selectOneRadio>
 								</rich:column>
 							</rich:dataTable>
+							</a4j:outputPanel>
 						</h:panelGroup>
 						
 					</h:panelGrid>

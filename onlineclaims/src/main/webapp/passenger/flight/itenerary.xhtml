@@ -34,8 +34,10 @@
 			<h:panelGrid columns="2">
 				<t:inputText value="" styleClass="passInout" required="true" />
 				<h:graphicImage url="../../_images/flightlist.gif"
-					alt="List of Flights" height="20" width="20"
+					alt="List of Flights" height="20" width="20" id="flightImage"
 					styleClass="helpButton" />
+				<rich:componentControl for="flightModalPanel" attachTo="flightImage"
+					operation="show" event="onclick" />
 			</h:panelGrid>
 		</rich:column>
 
@@ -43,8 +45,10 @@
 			<h:panelGrid columns="2">
 				<t:inputText value="" styleClass="passInout" required="true" />
 				<h:graphicImage url="../../_images/flightlist.gif"
-					alt="List of Flights" height="20" width="20"
+					alt="List of Flights" height="20" width="20" id="flightImage2"
 					styleClass="helpButton" />
+				<rich:componentControl for="flightModalPanel"
+					attachTo="flightImage2" operation="show" event="onclick" />
 			</h:panelGrid>
 		</rich:column>
 
@@ -67,6 +71,40 @@
 	</rich:dataTable>
 
 	<div><h:outputText value="&#160;" /></div>
+	<div><rich:modalPanel id="flightModalPanel" autosized="true"
+		minHeight="380" zindex="10" minWidth="380" height="380" width="500"
+		left="200" top="100">
+		<a4j:outputPanel id="firecodepanel">
+			<rich:dataTable width="523" align="center" rendered="true" rows="8"
+				id="airportCodeTable" columnsWidth="10%,20%"
+				value="#{passengerController.airportCodeList}" var="itemCode"
+				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+				<f:facet name="header">
+					<rich:columnGroup>
+						<rich:column>
+							<h:outputText styleClass="headerText" value="Code(s)" />
+						</rich:column>
+						<rich:column>
+							<h:outputText styleClass="headerText" value="Airport Description" />
+						</rich:column>
+					</rich:columnGroup>
+				</f:facet>
+				<rich:column>
+					<a4j:commandLink id="linkForCode" reRender="fireCode"
+						limitToList="true"
+						actionListener="#{fireDistrictController.selectedFireCode}"
+						value="#{itemCode.key}">
+						<rich:componentControl for="districtmodalpanel"
+							attachTo="linkForCode" operation="hide" event="onclick" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column>
+					<h:outputText value="#{itemCode.description}" />
+				</rich:column>
 
+			</rich:dataTable>
+		</a4j:outputPanel>
+	</rich:modalPanel></div>
 
 </ui:composition>

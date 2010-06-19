@@ -1,6 +1,8 @@
 package com.nettracer.claims.core.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 
 
@@ -19,15 +21,40 @@ public class PassengerBean {
 	private String passengerInfoHelp;
 	private String permanentAddress;
 	private String passengerInfolastName;
-	private List<Address> address;
-	private List<Passenger> passengers;
+	private List<Address> address=new ArrayList<Address>();
+	private List<Passenger> passengers=new ArrayList<Passenger>();
 	private String personalInformation;
 	private String frequentFlyerNumber;
 	private String socialSecurityNumber;
 	private String passengerInfoSave;
 	private String passengerInfoCancel;
 	private String passengerInfoForward;
-	
+	private String incidentID;
+	private Integer bagsTravelWith;
+	private Integer lostBag;
+	private String bagCheckLocation;
+	private Integer noOfPassenger;
+	private Boolean recheckBag;
+	private Boolean inspectbag;
+	private Boolean chargeExcessBaggage;
+	private Integer noOfCheckedBag;
+	private Integer noOfmissingBag;
+	private String bagClaimCheck;
+	private String declarePayExcessValue;
+	private Integer declaredValue;
+	private String placeBagChecked;
+	private Boolean clearCustomBag;
+	private Double bagWeight;
+	private Boolean rerouteBag;
+	private Boolean differentClaimCheck;
+	private String reroutedCityAirline;
+	private String reason;
+	private Boolean immediateClaimAttempt;
+	private String whenBagSeen;
+	private String fileReportCity;
+	private Boolean reportAnotherAirline;
+	private List<Bag> bagTagList = new ArrayList<Bag>() ; //for datatable for bag tag number in page2
+	private String aboutYourItenerary;
 	
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
@@ -107,7 +134,162 @@ public class PassengerBean {
 	public void setPassengers(List<Passenger> passengers) {
 		this.passengers = passengers;
 	}
-	
+	public String getIncidentID() {
+		return incidentID;
+	}
+	public void setIncidentID(String incidentID) {
+		this.incidentID = incidentID;
+	}
+	public Integer getBagsTravelWith() {
+		return bagsTravelWith;
+	}
+	public void setBagsTravelWith(Integer bagsTravelWith) {
+		this.bagsTravelWith = bagsTravelWith;
+	}
+	public Integer getLostBag() {
+		return lostBag;
+	}
+	public void setLostBag(Integer lostBag) {
+		this.lostBag = lostBag;
+	}
+	public String getBagCheckLocation() {
+		return bagCheckLocation;
+	}
+	public void setBagCheckLocation(String bagCheckLocation) {
+		this.bagCheckLocation = bagCheckLocation;
+	}
+	public Integer getNoOfPassenger() {
+		return noOfPassenger;
+	}
+	public void setNoOfPassenger(Integer noOfPassenger) {
+		this.noOfPassenger = noOfPassenger;
+	}
+	public Boolean getRecheckBag() {
+		return recheckBag;
+	}
+	public void setRecheckBag(Boolean recheckBag) {
+		this.recheckBag = recheckBag;
+	}
+	public Boolean getInspectbag() {
+		return inspectbag;
+	}
+	public void setInspectbag(Boolean inspectbag) {
+		this.inspectbag = inspectbag;
+	}
+	public Boolean getChargeExcessBaggage() {
+		return chargeExcessBaggage;
+	}
+	public void setChargeExcessBaggage(Boolean chargeExcessBaggage) {
+		this.chargeExcessBaggage = chargeExcessBaggage;
+	}
+	public Integer getNoOfCheckedBag() {
+		return noOfCheckedBag;
+	}
+	public void setNoOfCheckedBag(Integer noOfCheckedBag) {
+		this.noOfCheckedBag = noOfCheckedBag;
+	}
+	public Integer getNoOfmissingBag() {
+		return noOfmissingBag;
+	}
+	public void setNoOfmissingBag(Integer noOfmissingBag) {
+		this.noOfmissingBag = noOfmissingBag;
+	}
+	public String getBagClaimCheck() {
+		return bagClaimCheck;
+	}
+	public void setBagClaimCheck(String bagClaimCheck) {
+		this.bagClaimCheck = bagClaimCheck;
+	}
+	public String getDeclarePayExcessValue() {
+		return declarePayExcessValue;
+	}
+	public void setDeclarePayExcessValue(String declarePayExcessValue) {
+		this.declarePayExcessValue = declarePayExcessValue;
+	}
+	public Integer getDeclaredValue() {
+		return declaredValue;
+	}
+	public void setDeclaredValue(Integer declaredValue) {
+		this.declaredValue = declaredValue;
+	}
+	public String getPlaceBagChecked() {
+		return placeBagChecked;
+	}
+	public void setPlaceBagChecked(String placeBagChecked) {
+		this.placeBagChecked = placeBagChecked;
+	}
+	public Boolean getClearCustomBag() {
+		return clearCustomBag;
+	}
+	public void setClearCustomBag(Boolean clearCustomBag) {
+		this.clearCustomBag = clearCustomBag;
+	}
+	public Double getBagWeight() {
+		return bagWeight;
+	}
+	public void setBagWeight(Double bagWeight) {
+		this.bagWeight = bagWeight;
+	}
+	public Boolean getRerouteBag() {
+		return rerouteBag;
+	}
+	public void setRerouteBag(Boolean rerouteBag) {
+		this.rerouteBag = rerouteBag;
+	}
+	public Boolean getDifferentClaimCheck() {
+		return differentClaimCheck;
+	}
+	public void setDifferentClaimCheck(Boolean differentClaimCheck) {
+		this.differentClaimCheck = differentClaimCheck;
+	}
+	public String getReroutedCityAirline() {
+		return reroutedCityAirline;
+	}
+	public void setReroutedCityAirline(String reroutedCityAirline) {
+		this.reroutedCityAirline = reroutedCityAirline;
+	}
+	public Boolean getImmediateClaimAttempt() {
+		return immediateClaimAttempt;
+	}
+	public void setImmediateClaimAttempt(Boolean immediateClaimAttempt) {
+		this.immediateClaimAttempt = immediateClaimAttempt;
+	}
+	public String getWhenBagSeen() {
+		return whenBagSeen;
+	}
+	public void setWhenBagSeen(String whenBagSeen) {
+		this.whenBagSeen = whenBagSeen;
+	}
+	public String getFileReportCity() {
+		return fileReportCity;
+	}
+	public void setFileReportCity(String fileReportCity) {
+		this.fileReportCity = fileReportCity;
+	}
+	public Boolean getReportAnotherAirline() {
+		return reportAnotherAirline;
+	}
+	public void setReportAnotherAirline(Boolean reportAnotherAirline) {
+		this.reportAnotherAirline = reportAnotherAirline;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	public List<Bag> getBagTagList() {
+		return  bagTagList;
+	}
+	public void setBagTagList(List<Bag> bagTagList) {
+		this.bagTagList = bagTagList;
+	}
+	public String getAboutYourItenerary() {
+		return aboutYourItenerary;
+	}
+	public void setAboutYourItenerary(String aboutYourItenerary) {
+		this.aboutYourItenerary = aboutYourItenerary;
+	}	
 	
 	
 	
