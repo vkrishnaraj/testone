@@ -127,7 +127,6 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
 import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;
@@ -1867,10 +1866,10 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			// STEP 1: BEGINNING OF FUNCTION SPECIFIC LOGIC
 			Qoh qoh = new Qoh();
 			Station holdingStation = null;
-			Collection<WtqOhdTag> x = wtqQoh.getOhdTags();
+			Collection<OHD> x = wtqQoh.getOhdTags();
 			ArrayList<Tag> tags = new ArrayList<Tag>();
-			for (WtqOhdTag t: x) {
-				OHD ohd = t.getOhd();
+			for (OHD ohd: x) {
+				
 				if (holdingStation == null) {
 					holdingStation = ohd.getHoldingStation();
 				}

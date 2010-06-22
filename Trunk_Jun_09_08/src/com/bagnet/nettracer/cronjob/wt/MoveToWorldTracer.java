@@ -22,7 +22,6 @@ import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
 import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -389,10 +388,9 @@ public class MoveToWorldTracer {
 		WtqQoh wtq = new WtqQoh();
 		wtq.setAgent(ogadmin);
 
-		ArrayList<WtqOhdTag> tags = new ArrayList<WtqOhdTag>();
+		ArrayList<OHD> tags = new ArrayList<OHD>();
 		for (OHD ohd : ohds) {
-			WtqOhdTag o = new WtqOhdTag();
-			o.setOhd(ohd);
+			tags.add(ohd);
 		}
 
 		wtq.setOhdTags(tags);

@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.wt.connector;
 
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
 import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf;

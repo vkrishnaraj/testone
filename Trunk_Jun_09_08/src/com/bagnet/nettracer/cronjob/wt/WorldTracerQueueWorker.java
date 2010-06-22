@@ -32,9 +32,8 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdGeneral;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
-import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
-import com.bagnet.nettracer.tracing.db.wtq.WtqOhdTag;
+import com.bagnet.nettracer.tracing.db.wtq.WtqQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
@@ -43,7 +42,6 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
-import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerLoggedOutException;
@@ -172,10 +170,9 @@ public class WorldTracerQueueWorker implements Runnable {
 					String response = null;
 					try {
 						response = wtService.insertQoh(((WtqQoh) queue), dto);
-						Collection<WtqOhdTag> tags = ((WtqQoh) queue).getOhdTags();
-						for (WtqOhdTag tag: tags) {
+						Collection<OHD> tags = ((WtqQoh) queue).getOhdTags();
+						for (OHD ohd: tags) {
 							
-							OHD ohd = tag.getOhd();
 							ohd.setTagSentToWt(true);
 							ohd.setTagSentToWtStationId(ohd.getHoldingStation().getStation_ID());
 							ohdBmo.updateOhdNoAudit(ohd);

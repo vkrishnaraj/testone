@@ -5,8 +5,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import org.hibernate.annotations.Proxy;
-
 @Embeddable
 public class WtqSegment {
 	
