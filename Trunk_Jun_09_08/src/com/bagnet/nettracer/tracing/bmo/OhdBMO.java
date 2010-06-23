@@ -1209,7 +1209,7 @@ public class OhdBMO {
 			
 			String claimcheck = siDTO.getClaimchecknum().trim();
 			if (searchType == 10) {
-				nineDigitWildcardTag = "%" + s.substring(1);
+				nineDigitWildcardTag = "%" + claimcheck.substring(1);
 				try {
 					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
 				} catch (BagtagException e) {
@@ -1217,7 +1217,7 @@ public class OhdBMO {
 					e.printStackTrace();
 				}
 			} else if (searchType == 9) {
-				nineDigitWildcardTag = "%" + s;
+				nineDigitWildcardTag = "%" + claimcheck;
 				try {
 					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
 				} catch (BagtagException e) {

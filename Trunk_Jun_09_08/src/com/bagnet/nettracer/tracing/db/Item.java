@@ -949,7 +949,7 @@ public class Item implements Serializable {
 	}
 
 	/**
-	 * @hibernate.set inverse="true" order-by="bdo_ID"
+	 * @hibernate.set cascade="all" inverse="true" order-by="bdo_ID"
 	 * @hibernate.key column="item_ID"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item_BDO"
 	 * @hibernate.index column="bdo_ID" 

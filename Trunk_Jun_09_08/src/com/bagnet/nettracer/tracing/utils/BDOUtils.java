@@ -974,7 +974,7 @@ public class BDOUtils {
 								 							
 							 }
 						
-					   q.setString("bdo_ID", getBDO_ID);
+					   q.setString("bdo_ID", getBDO_ID.toUpperCase());
 				    }
 										
 				else {
@@ -996,7 +996,7 @@ public class BDOUtils {
 										bdoid = siDTO.getBdo_ID();
 									}
 							}
-							q.setString("bdo_ID", bdoid);
+							q.setString("bdo_ID", bdoid.toUpperCase());
 						}
 				}
 		

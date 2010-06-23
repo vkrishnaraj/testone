@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
@@ -290,21 +291,28 @@ public class WorldTracerQueueUtils {
 	}
 	
 	public static boolean createOnlyTagQueue(WtqQoh entry) throws Exception {
+		logger.info(entry.getWt_queue_id() + ":");
+		for (OHD ohd: entry.getOhdTags()) {
+			logger.info("  " + ohd.getOHD_ID());
+		}
 		Session sess = null;
 		Transaction t = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-
-//			if(alreadyAnyOhdQueued(entry, sess)) {
-//				return false;
-//			}
-//			else {
+			
+			List<WorldTracerQueue> oldEntries = alreadyQueued(entry, sess);
+			if(oldEntries != null && oldEntries.size() > 0) {
+				return false;
+			}
+			else {
 				t = sess.beginTransaction();
 				sess.save(entry);
 				t.commit();
-//			}
+			}
 			return true;
 		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
 			if (t != null) {
 				t.rollback();
 			}

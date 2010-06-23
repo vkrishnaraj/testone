@@ -64,10 +64,10 @@ public class ReservationIntegrationImpl extends
 			// Record Locator
 			
 			boolean result = true;
-			if (form.getRecordlocator() != null && form.getRecordlocator().trim().length() > 0) {
+			if (form.getRecordlocator() != null && form.getRecordlocator().trim().length() > 0 && request.getParameter("recordlocator") != null) {
 				// If searching bag record locator				
 				result = wrapper.getBookingByKey(form.getRecordlocator(), null);
-			} else if (form.getBagTagNumber() != null && form.getBagTagNumber().trim().length() > 0) {
+			} else if (form.getBagTagNumber() != null && form.getBagTagNumber().trim().length() > 0 && request.getParameter("bagTagNumber") != null) {
 				// If searching by bag tag number
 				result = wrapper.getBookingByKey(null, form.getBagTagNumber());
 			} else {
@@ -173,6 +173,7 @@ public class ReservationIntegrationImpl extends
 		// Record Locator
 		form.setRecordlocator(booking.getRecordLocator());
 		Agent user = (Agent) request.getSession().getAttribute("user");
+		form.setAgent(user);
 		
 		if (form.get_DATEFORMAT() == null) {
 			form.set_DATEFORMAT(user.getDateformat().getFormat());

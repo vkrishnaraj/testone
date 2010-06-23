@@ -191,6 +191,7 @@
 		<property name="jarprefix" value="dev-"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
+		<copy file="c:\workspace\trunk\other\build\artifacts\usair\dev-tracer-cron.jar" todir="c:\upload"></copy>
 	</target>
 
 

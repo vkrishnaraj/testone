@@ -1874,7 +1874,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 					holdingStation = ohd.getHoldingStation();
 				}
 				
-				String claimNum = ohd.getClaimnum();
+				String claimNum = ohd.getClaimnum().trim();
 				
 				Tag tag = new Tag();
 				tag.setTagSequence(claimNum);
@@ -1895,9 +1895,10 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			
 			
 			// STEP 2: SEND REQUEST
+			logger.info(d);
 			SendQohResponseDocument r = stub.sendQoh(d);
 			WorldTracerResponse response = r.getSendQohResponse().getReturn();
-
+			logger.info(response);
 			// STEP 3: BASIC PROCESS OF RESPONSE
 			processResponseAndUpdateDto(dto, response);
 

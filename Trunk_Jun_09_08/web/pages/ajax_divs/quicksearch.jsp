@@ -17,7 +17,7 @@
 <div style="text-align: center; padding: 5 5 5 5; border-bottom: 2px blue solid;">
 	<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
 &nbsp;
-<button type="button" id="button" onclick="quickSearchKey4();">Search</button>
+<button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>
 <br />
 </div>
 <br />
@@ -38,14 +38,14 @@
 		<option value="2">Pilfered</option>
 	</select>
 	<button type="button" id="button"
-		onclick="qPrepopulateIncident(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}"/>);">Create
+		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}"/>);">Create
 	Incident</button>
 	&nbsp; &nbsp; <%
  	if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON)) {
  %>
 	or &nbsp; &nbsp;
 	<button type="button" id="button"
-		onclick="qPrepopulateIncident(4, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}" />);">Create
+		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(4, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}" />);">Create
 	On-Hand</button>
 	<%
 		}

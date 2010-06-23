@@ -9,10 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -38,15 +40,15 @@ public class WtqQoh extends WorldTracerQueue {
 		ArrayList<String> ohdIds = new ArrayList<String>();
 		
 		for (OHD tag: ohdTags) {
-			ohdIds.add(tag.getClaimnum());
+			ohdIds.add(tag.getOHD_ID());
 		}
-		return new Object[] { ohdIds, this.getStatus() };
+		return new Object[] { ohdIds };
 	}
 
 	@Override
 	@Transient
 	public String getExistsQuery() {
-		return "from WtqMoh moh where moh.ohdTags.ohd.ohd_ID in (:list) and moh.status = ?";
+		return "from WtqQoh qoh join qoh.ohdTags ohd where ohd.OHD_ID in (:list) ";
 	}
 
 	public void setOhdTags(Collection<OHD> ohdTags) {

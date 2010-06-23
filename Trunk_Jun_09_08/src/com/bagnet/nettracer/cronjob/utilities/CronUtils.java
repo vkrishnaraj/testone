@@ -523,7 +523,7 @@ public class CronUtils {
 		Query q = sess.createQuery(query);
 		
 		Date startDate = DateUtils.convertToGMTDate(PropertyBMO.getValue("us.crm.start.date"), TracingConstants.DB_DATEFORMAT);
-		logger.info("**Start Date: " + startDate);
+//		logger.info("**Start Date: " + startDate);
 
 		Calendar c = new GregorianCalendar();
 		c.setTime(TracerDateTime.getGMTDate());
@@ -538,7 +538,7 @@ public class CronUtils {
 
 		List<String> results = (List<String>) q.list();
 
-		logger.info("Total results: " + results.size());
+		logger.info("Total files ready to send to CRM: " + results.size());
 		int countUpdated = 0;
 
 		for (String o : results) {
@@ -560,7 +560,6 @@ public class CronUtils {
 			try {
 
 				// String query =
-				// "select Incident_ID, createdate, createtime from incident ";
 				String query = "select * from incident ";
 				query += "where status_ID = 12 ";
 				query += "and itemtype_ID = 1 ";
@@ -612,10 +611,10 @@ public class CronUtils {
 				// consecutive days
 				String myTime = timeformat.format(startCal.getTime());
 				if ((myTime.compareTo("00:00:00") >= 0) && (myTime.compareTo("01:00:00") <= 0)) {
-					System.out.println(" our time is in that critical spot...");
+					logger.info(" our time is in that critical spot...");
 					query += timeQuery_2;
 				} else {
-					System.out.println(" our time is NOT in that critical spot...");
+					logger.info(" our time is NOT in that critical spot...");
 					query += timeQuery_1;
 				}
 
@@ -640,7 +639,7 @@ public class CronUtils {
 				hibQuery.setString(2, newEndDate);
 				hibQuery.setString(3, newEndTime);
 
-				System.out.println("the entire sql is:" + hibQuery.toString());
+				logger.info("the entire sql is:" + hibQuery.toString());
 
 				// execute query, and return
 				List myList = hibQuery.list();
@@ -650,12 +649,12 @@ public class CronUtils {
 					Incident myItem = (Incident) itr.next();
 
 					String myIncidentId = myItem.getIncident_ID();
-					System.out.println("incidentId=" + myIncidentId);
+					logger.info("incidentId=" + myIncidentId);
 
 					Incident myIncident = IncidentBMO.getIncidentByID(myIncidentId, session);
 
 					if (myIncident == null) {
-						// System.out.println("incident is null, try another one.");
+						// logger.info("incident is null, try another one.");
 					} else {
 						SmsEmailService smsEmailService = new SmsEmailService();
 						smsEmailService.send24HoursMessage(myIncident);
@@ -669,7 +668,7 @@ public class CronUtils {
 					int numOfRowInserted = hibInsertQuery.executeUpdate();
 					t.commit();
 					if (numOfRowInserted > 0) {
-						System.out.println("new item with incidentId=" + myIncidentId + " has been inserted.");
+						logger.info("new item with incidentId=" + myIncidentId + " has been inserted.");
 					}
 
 				}
