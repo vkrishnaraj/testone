@@ -21,11 +21,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument;
-import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument;
-import com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceStub;
-import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.AuthAdminUser;
-import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.nettracer.claims.admin.LoginBean;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.Company;
