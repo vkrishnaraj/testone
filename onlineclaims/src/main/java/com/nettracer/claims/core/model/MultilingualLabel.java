@@ -12,6 +12,7 @@ public class MultilingualLabel {
 	//Labels For Passenger Login Page --not in use yet
 	private String claimNumber;  
 	private String lastName;  
+	private String tryDiffImage;
 	private String captchaText;  
 	private String continueButton;  
 	private String descriptiveText;
@@ -116,6 +117,7 @@ public class MultilingualLabel {
 	private String flightYes;
 	private String flightNo;
 	
+	private String flightPrevious;
 	/*private String flightSave;
 	private String flightCancel;
 	private String flightForward;*/
@@ -948,6 +950,18 @@ public class MultilingualLabel {
 	}
 	public void setAboutYourItenerary(String aboutYourItenerary) {
 		this.aboutYourItenerary = aboutYourItenerary;
+	}
+	public String getTryDiffImage() {
+		return tryDiffImage;
+	}
+	public void setTryDiffImage(String tryDiffImage) {
+		this.tryDiffImage = tryDiffImage;
+	}
+	public String getFlightPrevious() {
+		return flightPrevious;
+	}
+	public void setFlightPrevious(String flightPrevious) {
+		this.flightPrevious = flightPrevious;
 	}  
 	
 	

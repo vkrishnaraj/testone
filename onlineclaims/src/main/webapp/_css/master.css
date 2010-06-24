@@ -222,7 +222,13 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 .loginerrormsg {color: red; float:left;	clear:none;	margin-top: 2px; width:231px;list-style:none;}
 
-
+.passerrormsg {
+	clear:none;
+	color:red;
+	margin-top:2px;
+	width:450px;
+	font-size: 8pt;
+}
 
 .infomsg {color: green; list-style:none;font-size: 1.3em;}
 
@@ -466,3 +472,20 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .passengerSelect { font-family:Arial, Helvetica, sans-serif; font-size:1.0em; color:#333; padding:0; border:solid 1px #708090 ; width:65px; }
 
 .button140pxred2 {float: none;}
+
+.rich-calendar-input{width: 60px;}
+
+.helpModalPanel{text-decoration: underline; cursor: pointer; margin-right: 22px;}
+
+#font1{font-size: 8pt;}
+#font2{font-size: 10pt;}
+#font3{font-size: 12pt;}
+
+.passselectOneMenu{width :15%;}
+.passselectOneMenu30{width :30%;}
+.passInput77{width :77%;}
+.passInput12{width :12%;}
+.passInput15{width :15%;}
+
+.width120px{width: 120px;}
+.width40px{width: 40px;}
