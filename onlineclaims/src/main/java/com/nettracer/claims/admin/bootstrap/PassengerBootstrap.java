@@ -3,12 +3,7 @@
  */
 package com.nettracer.claims.admin.bootstrap;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
@@ -17,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.service.AdminService;
-import com.nettracer.claims.core.service.PassengerService;
 
 /**
  * @author utpal
@@ -25,7 +19,7 @@ import com.nettracer.claims.core.service.PassengerService;
  */
 public class PassengerBootstrap implements InitializingBean {
 	private static Logger logger = Logger.getLogger(PassengerBootstrap.class);
-	private static final String PASSENGER_LOGIN = "Login";
+	/*private static final String PASSENGER_LOGIN = "Login";
 	private static final String DIRECTION = "Direction";
 	private static final String PASSENGER_INFO = "Passenger";
 	private static final String FLIGHT_INFO = "Flight";
@@ -34,7 +28,7 @@ public class PassengerBootstrap implements InitializingBean {
 	private static final String SUBMIT_CLAIM = "Submit";
 	private static final String GENERAL_INFO = "General";
 	private static final String UPLOAD_INFO = "Upload";
-	private static final String SAVED_SREEN = "Saved";
+	private static final String SAVED_SREEN = "Saved";*/
 	
 	private static List<Localetext> loginPageList;
 	private static List<Languages> languageDropDown;
@@ -51,7 +45,8 @@ public class PassengerBootstrap implements InitializingBean {
 		logger.info("afterPropertiesSet of  PassengerBootstrap is Invoked");
 		
 		languageDropDown=adminService.getLanguages();
-		loginPageList=getAllPageMap("English-US").get(PASSENGER_LOGIN); //by default language is US-English
+		loginPageList=adminService.getPassengerLoginContents("English-US"); //by default language is US-English
+		//loginPageList=getAllPageMap("English-US").get(PASSENGER_LOGIN); 
 		logger.info("Size of loginPageList= "+loginPageList);
 	}
 	
@@ -74,7 +69,7 @@ public class PassengerBootstrap implements InitializingBean {
 	 * @param languageSelected
 	 * @return Map<String, List<Localetext>>
 	 */
-	private Map<String, List<Localetext>> getAllPageMap(String languageSelected){
+	/*private Map<String, List<Localetext>> getAllPageMap(String languageSelected){
 		Map<String, List<Localetext>> tempPageMap = new HashMap<String, List<Localetext>>();
 		try {
 			List<Localetext> passengerLogins = adminService.getPassengerLoginContents(languageSelected);
@@ -123,7 +118,7 @@ public class PassengerBootstrap implements InitializingBean {
 			e.printStackTrace();
 		}
 		return tempPageMap;
-	}
+	}*/
 
 	
 

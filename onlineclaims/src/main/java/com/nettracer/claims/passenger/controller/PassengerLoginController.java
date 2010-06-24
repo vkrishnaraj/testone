@@ -31,6 +31,7 @@ import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
+import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.core.model.PassengerBean;
 import com.nettracer.claims.core.service.PassengerService;
 import com.nettracer.claims.faces.util.CaptchaBean;
@@ -64,7 +65,7 @@ public class PassengerLoginController {
 	private List<Localetext> passengerDirectionList;
 	private Long baggageState;
 	private PassengerBean passengerBean;
-	
+	private MultilingualLabel loginLabel;
 	/*
 	 * @Autowired AdminService adminService;
 	 */
@@ -78,17 +79,38 @@ public class PassengerLoginController {
 
 	public PassengerLoginController() {
 		logger.info("PassengerController constructor");
-		List<Languages> languagesList = PassengerBootstrap
-				.getLanguageDropDown();
+		List<Languages> languagesList = PassengerBootstrap.getLanguageDropDown();
 		for (Languages language : languagesList) {
 			if (language.getActiveStatus() == true) {
 				languageDropDown.add(new SelectItem(language.getDescription()));
 			}
 		}
 		loginPageList = PassengerBootstrap.getLoginPageList();
-		logger
-				.info("Size of loginPageList inside PassengerController constructor= "
-						+ loginPageList.size());
+		logger.info("Size of loginPageList inside PassengerController constructor= "+ loginPageList.size());
+		if(loginPageList != null && loginPageList.size() >0){
+			setLoginLabels();
+		}
+	}
+	
+	/**
+	 * Set the labels for login page
+	 * 
+	 */
+	private void setLoginLabels(){
+		loginLabel = new MultilingualLabel();
+		for(Localetext localetext:loginPageList){
+			if(localetext.getLabel().getLabel().contains("Claim Number")){
+				loginLabel.setClaimNumber(localetext.getDisplayText());
+			}else if(localetext.getLabel().getLabel().contains("Last Name")){
+				loginLabel.setLastName(localetext.getDisplayText());
+			}else if(localetext.getLabel().getLabel().contains("Try a different image")){
+				loginLabel.setTryDiffImage(localetext.getDisplayText());
+			}else if(localetext.getLabel().getLabel().contains("Type the code shown")){
+				loginLabel.setCaptchaText(localetext.getDisplayText());
+			}else if(localetext.getLabel().getLabel().contains("Continue")){
+				loginLabel.setContinueButton(localetext.getDisplayText());
+			}
+		}
 	}
 
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent) {
@@ -103,8 +125,10 @@ public class PassengerLoginController {
 			 * HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 			 * .getExternalContext().getSession(false);
 			 */
-			loginPageList = passengerService
-					.getPassengerLoginContents(selectedLanguage);
+			loginPageList = passengerService.getPassengerLoginContents(selectedLanguage);
+			if(loginPageList != null && loginPageList.size() >0){
+				setLoginLabels();
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -302,6 +326,14 @@ public class PassengerLoginController {
 
 	public void setPassengerBean(PassengerBean passengerBean) {
 		this.passengerBean = passengerBean;
+	}
+
+	public MultilingualLabel getLoginLabel() {
+		return loginLabel;
+	}
+
+	public void setLoginLabel(MultilingualLabel loginLabel) {
+		this.loginLabel = loginLabel;
 	}
 
 	

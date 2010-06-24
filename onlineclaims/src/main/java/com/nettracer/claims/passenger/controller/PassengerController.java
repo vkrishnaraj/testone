@@ -52,8 +52,6 @@ import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 @Qualifier("passengerController")
 public class PassengerController {
 	private static Logger logger = Logger.getLogger(PassengerController.class);
-	private static final String CAPTCHA_STATUS = "Correct";
-	
 	
 	CaptchaBean captchaBean = new CaptchaBean();
 	LoginBean loginBean = new LoginBean();
@@ -325,8 +323,7 @@ public class PassengerController {
 	 * Clear the browser cache(component value) from Apply request value phase
 	 */
 	public void clearInputCache() {
-		logger
-				.debug("clearInputCache method is called to clear the wrong captcha input texts");
+		logger.debug("clearInputCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
@@ -345,7 +342,9 @@ public class PassengerController {
 		}
 	}
 	
-	
+	public void flightPrevious(){
+		logger.debug("flightPrevious method is called to go to previuos page");
+	}
 	
 
 	public String passengerLogout() {
