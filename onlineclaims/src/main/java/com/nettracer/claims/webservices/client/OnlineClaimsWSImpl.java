@@ -25,6 +25,7 @@ import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Phone;
 import com.nettracer.claims.core.model.Address;
+import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Passenger;
 import com.nettracer.claims.core.model.PassengerBean;
 
@@ -95,9 +96,18 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			addresses.add(address);
 			passengers.add(passenger);
 		}
+		if(addresses.size() ==1){
+			Address address=new Address();
+			addresses.add(address);
+		}
 		WSPVItem[] itemArray=passengerData.getItemsArray();
 		for (int i = 0; i < itemArray.length; i++) {
 			
+		}
+		if(passengerBean.getItineraryList().size() == 0){
+			for(int i=0;i<5;i++){
+				passengerBean.getItineraryList().add(new Itinerary());
+			}
 		}
 		passengerBean.setAddress(addresses);
 		passengerBean.setPassengers(passengers);

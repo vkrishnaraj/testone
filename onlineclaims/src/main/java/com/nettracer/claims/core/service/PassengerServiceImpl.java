@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.nettracer.claims.core.dao.AdminDao;
 import com.nettracer.claims.core.dao.PassengerDao;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
+import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.CountryCode;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.model.MultilingualLabel;
@@ -267,8 +268,8 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setFlightYes(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().contains("flightNo")){
 					multilingualLabel.setFlightNo(localetext.getDisplayText());
-				}else if(localetext.getLabel().getLabel().contains("itenerary")){
-					multilingualLabel.setItenerary(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("Itinerary")){
+					multilingualLabel.setAboutYourItenerary(localetext.getDisplayText());
 				}else if(localetext.getLabel().getLabel().contains("fromToAirports")){
 					multilingualLabel.setFromToAirports(localetext.getDisplayText());
 					multilingualLabel.setFromToAirportsState(requiredFieldStatus);
@@ -292,5 +293,8 @@ public class PassengerServiceImpl implements PassengerService {
 		return countries;
 	}
 
-
+	@Override
+	public List<Airport> getAirportList() throws SimplePersistenceException{
+		return passengerDao.getAirportList();
+	}
 }

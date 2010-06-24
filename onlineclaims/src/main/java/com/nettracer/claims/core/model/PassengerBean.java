@@ -55,6 +55,7 @@ public class PassengerBean {
 	private Boolean reportAnotherAirline;
 	private List<Bag> bagTagList = new ArrayList<Bag>() ; //for datatable for bag tag number in page2
 	private String aboutYourItenerary;
+	private List<Itinerary> itineraryList= new ArrayList<Itinerary>();
 	
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
@@ -289,6 +290,12 @@ public class PassengerBean {
 	}
 	public void setAboutYourItenerary(String aboutYourItenerary) {
 		this.aboutYourItenerary = aboutYourItenerary;
+	}
+	public List<Itinerary> getItineraryList() {
+		return itineraryList;
+	}
+	public void setItineraryList(List<Itinerary> itineraryList) {
+		this.itineraryList = itineraryList;
 	}	
 	
 	

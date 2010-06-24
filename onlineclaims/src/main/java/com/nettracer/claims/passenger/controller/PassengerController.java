@@ -15,7 +15,10 @@ import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
@@ -26,8 +29,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Bag;
 import com.nettracer.claims.core.model.CountryCode;
+import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.core.model.PassengerBean;
@@ -64,7 +69,9 @@ public class PassengerController {
 	private List<SelectItem> selectItems=new ArrayList<SelectItem>();
 	private Set<SelectItem> lostBagItems=new HashSet<SelectItem>();
 	private boolean differentClaimCheckView;
-	
+	private DataModel airportCodeList;
+	private DataModel itineraryList;
+	private int itineraryTableIndex;
 	
 	/*@Autowired
 	AdminService adminService;*/
@@ -173,6 +180,8 @@ public class PassengerController {
 				baggageState = (Long)session.getAttribute("baggageState");
 				String selectedLanguage=(String)session.getAttribute("selectedLanguage" );
 				flightLabel = passengerService.getFlightLabels(selectedLanguage,baggageState);
+				airportCodeList = (DataModel)session.getAttribute("airportCodeList");
+				this.itineraryList= new ListDataModel(passengerBean.getItineraryList());
 				//passengerBean = (PassengerBean)session.getAttribute("passengerBean");
 				//if(0 == passengerBean.getBagTagList().size()){
 					//passengerBean.getBagTagList().add(new HtmlBagComponent());
@@ -226,6 +235,68 @@ public class PassengerController {
 			differentClaimCheckView=false; //readonly =true
 		}
 	}
+	
+	/**
+	 * To select the airport code from modal panel and assign to appropriate row for itinerary datatable.
+	 * @param event
+	 */
+	public void selectedAirportCode(ActionEvent event){
+		logger.info("Listener: selectedAirportCode method");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+		.getExternalContext().getSession(false);
+		Itinerary itineraryLocal= null;
+		try{
+			Airport airport= (Airport)getAirportCodeList().getRowData();
+			/*if(session.getAttribute("itinerary") != null){
+				 itineraryLocal=(Itinerary)session.getAttribute("itinerary");
+			}else{
+				 itineraryLocal= new Itinerary();
+			}*/
+			
+			if(getItineraryList().isRowAvailable()){
+				itineraryLocal=(Itinerary)getItineraryList().getRowData();
+				itineraryLocal.setDepartureCity(airport.getAirportCode());
+			}else{
+				 itineraryLocal= new Itinerary();
+				itineraryLocal.setDepartureCity(airport.getAirportCode());
+			}
+			session.setAttribute("itinerary", itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
+			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * To select the airport code from modal panel and assign to appropriate row for itinerary datatable.
+	 * @param event
+	 */
+	public void selectedAirportCode2(ActionEvent event){
+		logger.info("Listener: selectedAirportCode2 method");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+		.getExternalContext().getSession(false);
+		Itinerary itineraryLocal= null;
+		try{
+			Airport airport= (Airport)getAirportCodeList().getRowData();
+			if(session.getAttribute("itinerary") != null){
+				 itineraryLocal=(Itinerary)session.getAttribute("itinerary");
+			}else{
+				 itineraryLocal= new Itinerary();
+			}
+			if(getItineraryList().isRowAvailable()){
+				itineraryLocal=(Itinerary)getItineraryList().getRowData();
+				itineraryLocal.setArrivalCity(airport.getAirportCode());
+			}else{
+				itineraryLocal.setArrivalCity(airport.getAirportCode());
+			}
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
+			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 
 	/*
 	 * Clear the browser cache(component value) from Apply request value phase
@@ -358,6 +429,31 @@ public class PassengerController {
 	public void setOnlineClaimsWS(OnlineClaimsWS onlineClaimsWS) {
 		this.onlineClaimsWS = onlineClaimsWS;
 	}
+
+	public DataModel getAirportCodeList() {
+		return airportCodeList;
+	}
+
+	public void setAirportCodeList(DataModel airportCodeList) {
+		this.airportCodeList = airportCodeList;
+	}
+
+	public DataModel getItineraryList() {
+		return itineraryList;
+	}
+
+	public void setItineraryList(DataModel itineraryList) {
+		this.itineraryList = itineraryList;
+	}
+
+	public int getItineraryTableIndex() {
+		return itineraryTableIndex;
+	}
+
+	public void setItineraryTableIndex(int itineraryTableIndex) {
+		this.itineraryTableIndex = itineraryTableIndex;
+	}
+
 	
 	
 }

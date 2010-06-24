@@ -8,11 +8,12 @@ import java.util.Set;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
-import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -141,9 +142,12 @@ public class PassengerLoginController {
 				
 				passengerBean = onlineClaimsWS.getPassengerData(passengerData);
 				
+				DataModel airportCodeList = new ListDataModel(passengerService.getAirportList());
+				
 				session.setAttribute("passengerBean", passengerBean);	
 				session.setAttribute("baggageState", baggageState);	
 				session.setAttribute("selectedLanguage", selectedLanguage);	
+				session.setAttribute("airportCodeList", airportCodeList);
 				return "gotoDirectionPage";
 			} else {
 				clearCaptchaCache();

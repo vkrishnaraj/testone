@@ -116,10 +116,6 @@ public class MultilingualLabel {
 	private String flightYes;
 	private String flightNo;
 	
-	private String itenerary;
-	private String fromToAirports;
-	private String airlineFlightNo;
-	private String flightDate;
 	/*private String flightSave;
 	private String flightCancel;
 	private String flightForward;*/
@@ -158,6 +154,9 @@ public class MultilingualLabel {
 	
 	//itenerary
 	private String aboutYourItenerary;
+	private String fromToAirports;
+	private String airlineFlightNo;
+	private String flightDate;
 	
 	public String getClaimNumber() {
 		return claimNumber;
@@ -745,12 +744,6 @@ public class MultilingualLabel {
 	}
 	public void setFlightNo(String flightNo) {
 		this.flightNo = flightNo;
-	}
-	public String getItenerary() {
-		return itenerary;
-	}
-	public void setItenerary(String itenerary) {
-		this.itenerary = itenerary;
 	}
 	public String getFromToAirports() {
 		return fromToAirports;
