@@ -41,22 +41,22 @@
 					<t:messages id="passLoginMsg" errorClass="loginerrormsg"  infoClass="infomsg" />
 					<h:outputText value="&#160;" />
 			<h:panelGrid id="loginPassengerPanel"  columns="2">
-				<h:outputText  value="#{passengerLoginController.loginPageList[0].displayText}" styleClass="btAirport"/>
+				<h:outputText  value="#{passengerLoginController.loginLabel.claimNumber}" styleClass="btAirport"/>
 				<h:inputText id="claimNumber" value="#{passengerLoginController.loginBean.claimNumber}" 
 					styleClass="btAirport" tabindex="1" label="Claim Number">
 					<f:validateLength maximum="20"/>
 				</h:inputText>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:outputText  value="#{passengerLoginController.loginPageList[1].displayText}" styleClass="btAirport"/>
+				<h:outputText  value="#{passengerLoginController.loginLabel.lastName}" styleClass="btAirport"/>
 				<h:inputText id="lastName" value="#{passengerLoginController.loginBean.lastName}" styleClass="btAirport" tabindex="2"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandLink value="#{passengerLoginController.loginPageList[2].displayText} &#160;&#160;&#160;&#160;&#160;&#160;" />		
+				<h:commandLink value="#{passengerLoginController.loginLabel.tryDiffImage} &#160;&#160;&#160;&#160;&#160;&#160;" />		
 				<t:captcha captchaSessionKeyName="#{passengerLoginController.captchaBean.sessionKeyName}" imageHeight="45" imageWidth="128"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:outputText  value="#{passengerLoginController.loginPageList[3].displayText}"/>
+				<h:outputText  value="#{passengerLoginController.loginLabel.captchaText}"/>
 				<h:inputText id="captcha" value="#{passengerLoginController.captchaBean.value}" tabindex="3"/>
 				<h:outputText value="&#160;" />
 				<h:outputText id="captchaStatus" value="#{passengerLoginController.captchaBean.status}" 
@@ -64,7 +64,7 @@
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandButton id="passLoginContinue" value="#{passengerLoginController.loginPageList[4].displayText}" 
+				<h:commandButton id="passLoginContinue" value="#{passengerLoginController.loginLabel.continueButton}" 
 					action="#{passengerLoginController.gotoDirectionPage}" tabindex="4" styleClass="button140pxred button140pxredl"/>
 			</h:panelGrid>
 			</h:panelGrid>
