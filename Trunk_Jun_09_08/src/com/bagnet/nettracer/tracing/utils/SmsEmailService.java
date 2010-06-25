@@ -98,8 +98,6 @@ public class SmsEmailService {
 
 
 							ArrayList<InternetAddress> al = new ArrayList<InternetAddress>();
-							al.add(new InternetAddress(toemail));
-							he.setTo(al);
 
 							List<Passenger> myPassengerList = incident.getPassenger_list();
 							Passenger pax;
@@ -140,9 +138,9 @@ public class SmsEmailService {
 
 						} catch (MessagingException mex) {
 							mex.printStackTrace();
-							logger.info("MessagingException" + mex);
+							logger.info("MessagingException" + mex, mex);
 						} catch (Exception maile) {
-							logger.error("Unable to send mail due to smtp error: " + maile);
+							logger.error("Unable to send mail due to smtp error: " + maile, maile);
 
 						}
 					}

@@ -1895,7 +1895,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			
 			
 			// STEP 2: SEND REQUEST
-			logger.info(d);
+			
 			SendQohResponseDocument r = stub.sendQoh(d);
 			WorldTracerResponse response = r.getSendQohResponse().getReturn();
 			logger.info(response);

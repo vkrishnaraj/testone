@@ -210,7 +210,7 @@ public class MoveToLZThread {
 				
 
 				// fix data corruptions
-				st.executeUpdate("update item set bdo_id = null,status_ID=47 WHERE (BDO_ID NOT IN (SELECT bdo_id FROM bdo))");
+//				st.executeUpdate("update item set bdo_id = null,status_ID=47 WHERE (BDO_ID NOT IN (SELECT bdo_id FROM bdo))");
 				st.executeUpdate("delete from message_copies where (message_id not in (select message_id from message))");
 				
 				sql = "SELECT station.companycode_id,incident.* FROM incident join station on incident.stationcreated_id = station.station_id WHERE (Incident_ID NOT IN (SELECT report_num FROM billing))";

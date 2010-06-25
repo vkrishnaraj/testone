@@ -85,7 +85,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			
 		sp.setStartTime(startCal);
 		sp.setEndTime(endCal);
-		sp.setTag(bagTagNumber);
+		sp.setTag(bagTagNumber.trim().toUpperCase());
 
 		GetScanPointsResponseDocument responseDoc = null;
 		try {

@@ -1074,9 +1074,6 @@ public class OhdBMO {
 				q.setString("wt_id", siDTO.getWt_id());
 
 			
-			if (siDTO.getClaimchecknum2() != null)
-				q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
-
 			
 			if (sdate != null) {
 				if (edate != null && sdate != edate) {
@@ -1137,9 +1134,13 @@ public class OhdBMO {
 				q.setString("companyCode_ID", siDTO.getCompanycode_ID());
 			}
 
-			if (siDTO.getClaimchecknum() != null && siDTO.getClaimchecknum().length() > 0) q.setString("claimchecknum", siDTO
-					.getClaimchecknum().trim());
+			if (siDTO.getClaimchecknum() != null && siDTO.getClaimchecknum().length() > 0) 
+				q.setString("claimchecknum", siDTO.getClaimchecknum().trim());
 
+			if (siDTO.getClaimchecknum2() != null && siDTO.getClaimchecknum2().length() > 0)
+				q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
+
+			
 			if (siDTO.getColor().length() > 0) q.setString("color", siDTO.getColor().toUpperCase());
 			if (siDTO.getBagtype().length() > 0) q.setString("bagtype", siDTO.getBagtype().toUpperCase());
 			if (siDTO.getXdescelement_ID1() > 0) q.setInteger("xdesc1", siDTO.getXdescelement_ID1());
@@ -1208,42 +1209,43 @@ public class OhdBMO {
 			String genericTag = null;
 			
 			String claimcheck = siDTO.getClaimchecknum().trim();
-			if (searchType == 10) {
-				nineDigitWildcardTag = "%" + claimcheck.substring(1);
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
+			
+			if (claimcheck.indexOf("%") == -1) {
+				if (searchType == 10) {
+					nineDigitWildcardTag = "%" + claimcheck.substring(1);
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 9) {
+					nineDigitWildcardTag = "%" + claimcheck;
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 8) {
+					genericTag = claimcheck;
+					try {
+						nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						nineDigitWildcardTag = claimcheck;
+					}
 				}
-			} else if (searchType == 9) {
-				nineDigitWildcardTag = "%" + claimcheck;
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
-			} else if (searchType == 8) {
-				genericTag = claimcheck;
-				try {
-					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
+				
+				siDTO.setClaimchecknum(nineDigitWildcardTag);
+				siDTO.setClaimchecknum2(genericTag);
 			}
-			
-			siDTO.setClaimchecknum(nineDigitWildcardTag);
-			siDTO.setClaimchecknum2(genericTag);
 			s.append(" and (ohd.claimnum like :claimchecknum or ohd.claimnum like :claimchecknum2) ");
-//			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
-//			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
 
-		} else if (siDTO.getClaimchecknum().length() > 0) {
-//			s.append(" and (item.claimchecknum like :claimchecknum");
-//			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
-			
+		} else if (siDTO.getClaimchecknum().trim().length() > 0) {
 			s.append(" and ohd.claimnum like :claimchecknum ");
 
 		}
@@ -1279,34 +1281,40 @@ public class OhdBMO {
 			String genericTag = null;
 			
 			String claimcheck = siDTO.getClaimcheck().trim();
-			if (searchType == 10) {
-				nineDigitWildcardTag = "%" + s.substring(1);
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
-			} else if (searchType == 9) {
-				nineDigitWildcardTag = "%" + s;
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
-			} else if (searchType == 8) {
-				genericTag = claimcheck;
-				try {
-					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
-			}
 			
-			siDTO.setClaimcheck(nineDigitWildcardTag);
-			siDTO.setClaimcheck2(genericTag);
+			if (claimcheck.indexOf("%") == -1) {
+				if (searchType == 10) {
+					nineDigitWildcardTag = "%" + s.substring(1);
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 9) {
+					nineDigitWildcardTag = "%" + s;
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 8) {
+					genericTag = claimcheck;
+					try {
+						nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						nineDigitWildcardTag = claimcheck;
+					}
+				}
+
+				siDTO.setClaimcheck(nineDigitWildcardTag);
+				siDTO.setClaimcheck2(genericTag);
+			}
 			s.append(" and (ohd.claimnum like :claimchecknum or ohd.claimnum like :claimchecknum2) ");
 		} else if (siDTO.getClaimcheck() != null && siDTO.getClaimcheck().length() > 0) {
 			s.append(" and ohd.claimnum like :claimchecknum ");
@@ -1913,7 +1921,7 @@ public class OhdBMO {
 			" and ohd.claimnum is not null " +
 			" and (ohd.status.status_ID = :status1 or ohd.status.status_ID = :status2) " + // only open, in transit
 			" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
-			" and ohd.holdingStation.wt_stationcode is not null " +
+			" and ohd.holdingStation.wt_stationcode is not null and ohd.holdingStation.wt_stationcode != '' " +
 			" and (ohd.tagSentToWt = :false or (ohd.tagSentToWt = :true and ohd.tagSentToWtStationId != ohd.holdingStation.station_ID))" +
 			" and ohd.tagSentToWt = :false " +
 			" order by ohd.holdingStation.station_ID desc";

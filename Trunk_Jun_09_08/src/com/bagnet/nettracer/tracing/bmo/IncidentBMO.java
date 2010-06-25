@@ -1165,35 +1165,39 @@ public class IncidentBMO {
 			String genericTag = null;
 			
 			String claimcheck = siDTO.getClaimchecknum().trim();
-			if (searchType == 10) {
-				nineDigitWildcardTag = "%" + claimcheck.substring(1);
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
+			if (claimcheck.indexOf("%") == -1) {
+				if (searchType == 10) {
+					nineDigitWildcardTag = "%" + claimcheck.substring(1);
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 9) {
+					nineDigitWildcardTag = "%" + claimcheck;
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 8) {
+					genericTag = claimcheck;
+					try {
+						nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						nineDigitWildcardTag = claimcheck;
+					}
 				}
-			} else if (searchType == 9) {
-				nineDigitWildcardTag = "%" + claimcheck;
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
-			} else if (searchType == 8) {
-				genericTag = claimcheck;
-				try {
-					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
+
+				siDTO.setClaimchecknum(nineDigitWildcardTag);
+				siDTO.setClaimchecknum2(genericTag);
 			}
-			
-			siDTO.setClaimchecknum(nineDigitWildcardTag);
-			siDTO.setClaimchecknum2(genericTag);
-			
 			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
 			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
 
@@ -1230,35 +1234,40 @@ public class IncidentBMO {
 			String genericTag = null;
 			
 			String claimcheck = siDTO.getClaimchecknum().trim();
-			if (searchType == 10) {
-				nineDigitWildcardTag = "%" + claimcheck.substring(1);
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
+
+			if (claimcheck.indexOf("%") == -1) {
+				if (searchType == 10) {
+					nineDigitWildcardTag = "%" + claimcheck.substring(1);
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 9) {
+					nineDigitWildcardTag = "%" + claimcheck;
+					try {
+						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						genericTag = claimcheck;
+					}
+				} else if (searchType == 8) {
+					genericTag = claimcheck;
+					try {
+						nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
+					} catch (BagtagException e) {
+						// Ignore
+						logger.error("Unable to convert bag tag: " + claimcheck);
+						nineDigitWildcardTag = claimcheck;
+					}
 				}
-			} else if (searchType == 9) {
-				nineDigitWildcardTag = "%" + claimcheck;
-				try {
-					genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
-			} else if (searchType == 8) {
-				genericTag = claimcheck;
-				try {
-					nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
-				} catch (BagtagException e) {
-					// Ignore
-					e.printStackTrace();
-				}
+
+				siDTO.setClaimchecknum(nineDigitWildcardTag);
+				siDTO.setClaimchecknum2(genericTag);
 			}
-			
-			siDTO.setClaimchecknum(nineDigitWildcardTag);
-			siDTO.setClaimchecknum2(genericTag);
-			
 			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
 			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
 

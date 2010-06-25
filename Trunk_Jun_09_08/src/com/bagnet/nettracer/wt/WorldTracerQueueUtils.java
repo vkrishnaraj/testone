@@ -291,7 +291,7 @@ public class WorldTracerQueueUtils {
 	}
 	
 	public static boolean createOnlyTagQueue(WtqQoh entry) throws Exception {
-		logger.info(entry.getWt_queue_id() + ":");
+//		logger.info(entry.getWt_queue_id() + ":");
 		for (OHD ohd: entry.getOhdTags()) {
 			logger.info("  " + ohd.getOHD_ID());
 		}
