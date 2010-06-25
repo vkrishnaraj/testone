@@ -254,7 +254,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{claim_check_num}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-48" mode="Opaque" x="54" y="414" width="145" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-48" mode="Opaque" x="42" y="415" width="157" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
