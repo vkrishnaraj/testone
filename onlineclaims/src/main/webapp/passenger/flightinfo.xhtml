@@ -7,7 +7,10 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="/layout/passengertemplate.xhtml">
-
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	</head>
+	
 	<ui:define name="pageTitle">NetTracer: Application | About Your Flight</ui:define>
 	
 	<ui:define name="mainContent">
@@ -19,19 +22,19 @@
 		</div>
 		
 		<div id="langSelect">
-			<h:outputText value="FontSize" />
+			<h:outputText value="Font Size" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<a id="font1" style="font-size: 8pt;" href="javascript:decreaseFontSize();">A</a>
+			<a id="font1"  href="javascript:decreaseFontSize();">A</a>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<a id="font2" style="font-size: 10pt;" href="javascript:mediumFontSize();">A</a>
+			<a id="font2"  href="javascript:mediumFontSize();">A</a>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
+			<a id="font3"  href="javascript:increaseFontSize();">A</a>
 		</div>
 	
 	</div>
@@ -69,7 +72,7 @@
 				<h1 class="dkblue">Application | About Your Flight
 				<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
-							<rich:componentControl for="helpmodalpanel"  
+							<rich:componentControl for="helpmodalpanel2"  
 								attachTo="helpButton" operation="show" event="onclick" /> 
 				</h1>
 			  </div>
@@ -86,19 +89,17 @@
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<h:messages id="flightMsg"  errorClass="loginerrormsg"/>
+					<rich:messages id="flightMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
 				</div>
 				
-				
 				<div>
-					<rich:modalPanel id="helpmodalpanel" autosized="true" minHeight="380" 
+					<rich:modalPanel id="helpmodalpanel2" autosized="true" minHeight="380" 
 						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
 						<f:facet name="controls">
 								<h:panelGroup >
 									<a4j:commandLink value="Close" 
-									style="text-decoration: underline; cursor: pointer; margin-right: 22px;" 
 											immediate="true"	id="linkToHidePanel" />
-										<rich:componentControl for="helpmodalpanel"
+										<rich:componentControl for="helpmodalpanel2"
 											attachTo="linkToHidePanel" operation="hide" event="onclick" />
 								</h:panelGroup>
 						</f:facet>
@@ -148,8 +149,8 @@
 				
 				<rich:spacer width="20px"/>
 			
-				<h:commandButton id="cancelPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoCancel}"
-				 	tabindex="19" immediate="true" action="#{passengerController.cancel}"
+				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.flightPrevious}"
+				 	tabindex="19" immediate="true"  onclick="history.go(-1); return false"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
@@ -162,5 +163,9 @@
 			</div>
 			
 		</h:form>
+		<a4j:region >
+			<div><ui:include src="flight/flight-panel.xhtml" /></div>
+			<div><ui:include src="flight/flight-panel2.xhtml" /></div>
+		</a4j:region>
 	</ui:define>
 </ui:composition>

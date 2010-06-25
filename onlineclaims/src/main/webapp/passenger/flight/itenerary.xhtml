@@ -7,104 +7,105 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
+
+
 	<div><t:outputText
 		value="#{passengerController.flightLabel.aboutYourItenerary}"
 		styleClass="subHeader" /></div>
-
-	<rich:dataTable id="ticketTable" var="item" headerClass="TableHeader"
-		value="#{passengerBean.bagTagList}" border="0">
-
-		<f:facet name="header">
-			<rich:columnGroup>
-				<rich:column colspan="2">
-					<h:outputText value="From/ To Airports" />
-				</rich:column>
-				<rich:column colspan="2">
-					<h:outputText value="Airline/ Flight Number" />
-				</rich:column>
-				<rich:column>
-					<h:outputText value="Date" />
-				</rich:column>
-
-			</rich:columnGroup>
-		</f:facet>
-
-
-		<rich:column>
-			<h:panelGrid columns="2">
-				<t:inputText value="" styleClass="passInout" required="true" />
-				<h:graphicImage url="../../_images/flightlist.gif"
-					alt="List of Flights" height="20" width="20" id="flightImage"
-					styleClass="helpButton" />
-				<rich:componentControl for="flightModalPanel" attachTo="flightImage"
-					operation="show" event="onclick" />
-			</h:panelGrid>
-		</rich:column>
-
-		<rich:column>
-			<h:panelGrid columns="2">
-				<t:inputText value="" styleClass="passInout" required="true" />
-				<h:graphicImage url="../../_images/flightlist.gif"
-					alt="List of Flights" height="20" width="20" id="flightImage2"
-					styleClass="helpButton" />
-				<rich:componentControl for="flightModalPanel"
-					attachTo="flightImage2" operation="show" event="onclick" />
-			</h:panelGrid>
-		</rich:column>
-
-		<rich:column>
-			<h:panelGrid columns="2">
-				<t:inputText value="" styleClass="passInout" required="true" />
-				<h:outputText value="/" />
-			</h:panelGrid>
-		</rich:column>
-
-		<rich:column>
-			<t:inputText value="" styleClass="passInout" required="true" />
-		</rich:column>
-
-		<rich:column>
-			<t:inputDate value="" styleClass="passInout" required="true"
-				popupCalendar="true" />
-		</rich:column>
-
-	</rich:dataTable>
-
 	<div><h:outputText value="&#160;" /></div>
-	<div><rich:modalPanel id="flightModalPanel" autosized="true"
-		minHeight="380" zindex="10" minWidth="380" height="380" width="500"
-		left="200" top="100">
-		<a4j:outputPanel id="firecodepanel">
-			<rich:dataTable width="523" align="center" rendered="true" rows="8"
-				id="airportCodeTable" columnsWidth="10%,20%"
-				value="#{passengerController.airportCodeList}" var="itemCode"
-				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
-				<f:facet name="header">
-					<rich:columnGroup>
-						<rich:column>
-							<h:outputText styleClass="headerText" value="Code(s)" />
-						</rich:column>
-						<rich:column>
-							<h:outputText styleClass="headerText" value="Airport Description" />
-						</rich:column>
-					</rich:columnGroup>
-				</f:facet>
-				<rich:column>
-					<a4j:commandLink id="linkForCode" reRender="fireCode"
-						limitToList="true"
-						actionListener="#{fireDistrictController.selectedFireCode}"
-						value="#{itemCode.key}">
-						<rich:componentControl for="districtmodalpanel"
-							attachTo="linkForCode" operation="hide" event="onclick" />
-					</a4j:commandLink>
-				</rich:column>
-				<rich:column>
-					<h:outputText value="#{itemCode.description}" />
-				</rich:column>
+	<a4j:region  renderRegionOnly="true">	
+	<a4j:outputPanel ajaxRendered="true" id="flightCode">
+		<rich:dataTable id="iteneraryTicketTableItenerary" var="item"
+			headerClass="TableHeader" columnsWidth="7%,7%,7%,7%,13%"
+			value="#{passengerController.itineraryList}" border="0" width="90%"
+			rowKeyVar="rowIndex">
 
-			</rich:dataTable>
-		</a4j:outputPanel>
-	</rich:modalPanel></div>
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column colspan="2">
+						<h:outputText value="From/ To Airports" />
+					</rich:column>
+					<rich:column colspan="2">
+						<h:outputText value="Airline/ Flight Number" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Date" />
+					</rich:column>
+
+				</rich:columnGroup>
+			</f:facet>
+
+
+			<rich:column>
+				<h:panelGrid columns="2">
+				<a4j:region  renderRegionOnly="true">	
+					<h:inputText value="#{item.departureCity}" size="7" readonly="true"/>
+					<h:panelGroup>
+						<a4j:commandLink value="" immediate="true" id="flightImageLink">
+
+							<rich:componentControl for="flightModalPanel"
+								attachTo="flightImageLink" operation="show" event="onclick" />
+
+							<a4j:actionparam name="itineraryTableIndex"
+								assignTo="#{passengerController.itineraryTableIndex}"
+								value="#{rowIndex}" />
+
+							<h:graphicImage url="../_images/flightlist.gif"
+								alt="List of Flights" height="20" width="20" id="flightImage"
+								styleClass="helpButton" />
+
+						</a4j:commandLink>
+					</h:panelGroup>
+					</a4j:region>
+				</h:panelGrid>
+			</rich:column>
+
+
+			<rich:column>
+				<h:panelGrid columns="2">
+					<h:inputText value="#{item.arrivalCity}" size="7" readonly="true"/>
+					<h:panelGroup>
+						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
+
+							<rich:componentControl for="flightModalPanel2"
+								attachTo="flightImageLink2" operation="show" event="onclick" />
+
+							<a4j:actionparam name="itineraryTableIndex2"
+								assignTo="#{passengerController.itineraryTableIndex}"
+								value="#{rowIndex}" />
+
+							<h:graphicImage url="../_images/flightlist.gif"
+								alt="List of Flights" height="20" width="20" id="flightImage2"
+								styleClass="helpButton" />
+
+						</a4j:commandLink>
+					</h:panelGroup>
+				</h:panelGrid>
+			</rich:column>
+
+			<rich:column>
+				<h:panelGrid columns="2">
+					<h:inputText value="#{item.flightNum}" size="7" />
+					<h:outputText value="/" />
+				</h:panelGrid>
+			</rich:column>
+
+			<rich:column>
+				<t:inputText value=""  size="7"/>
+			</rich:column>
+
+			<rich:column width="20">
+			<a4j:outputPanel id="calendar" layout="block">
+				<rich:calendar value="#{item.journeyDate}" 
+					popup="true" />
+				</a4j:outputPanel>
+			</rich:column>
+
+		</rich:dataTable>
+
+	</a4j:outputPanel>
+	</a4j:region>
+	<div><h:outputText value="&#160;" /></div>
+
 
 </ui:composition>

@@ -53,9 +53,14 @@ public class PassengerBean {
 	private String whenBagSeen;
 	private String fileReportCity;
 	private Boolean reportAnotherAirline;
+	private Boolean differentAirlineTicket;
+	private String ticketNumber;
 	private List<Bag> bagTagList = new ArrayList<Bag>() ; //for datatable for bag tag number in page2
 	private String aboutYourItenerary;
 	private List<Itinerary> itineraryList= new ArrayList<Itinerary>();
+	
+	//For About Your Flight Page
+	private List<Bag> bagList;
 	
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
@@ -296,6 +301,24 @@ public class PassengerBean {
 	}
 	public void setItineraryList(List<Itinerary> itineraryList) {
 		this.itineraryList = itineraryList;
+	}
+	public List<Bag> getBagList() {
+		return bagList;
+	}
+	public void setBagList(List<Bag> bagList) {
+		this.bagList = bagList;
+	}
+	public Boolean getDifferentAirlineTicket() {
+		return differentAirlineTicket;
+	}
+	public void setDifferentAirlineTicket(Boolean differentAirlineTicket) {
+		this.differentAirlineTicket = differentAirlineTicket;
+	}
+	public String getTicketNumber() {
+		return ticketNumber;
+	}
+	public void setTicketNumber(String ticketNumber) {
+		this.ticketNumber = ticketNumber;
 	}	
 	
 	

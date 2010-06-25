@@ -2,7 +2,6 @@ package com.nettracer.claims.passenger.controller;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +64,7 @@ public class PassengerController {
 	private MultilingualLabel passengerInfoLabel;
 	private MultilingualLabel flightLabel;
 	private List<SelectItem> selectItems=new ArrayList<SelectItem>();
-	private Set<SelectItem> lostBagItems=new HashSet<SelectItem>();
-	private boolean differentClaimCheckView;
+	private Set<SelectItem> lostBagItems=new LinkedHashSet<SelectItem>();
 	private DataModel airportCodeList;
 	private DataModel itineraryList;
 	private int itineraryTableIndex;
@@ -198,39 +196,76 @@ public class PassengerController {
 	}
 	
 	/**
-	 * Calling this method at selection of the no of baggage
+	 * Calling this method at selection of the no of baggage on top of the flight details page
 	 * 
 	 * @param valueChangeEvent
 	 */
 	public void bagSelectListener(ValueChangeEvent valueChangeEvent){
 		logger.info("bagSelectListener method");
 		Integer noOfBags=(Integer)valueChangeEvent.getNewValue();
-		if(noOfBags > 0){
+		if(null != lostBagItems){
 			lostBagItems.clear();
+		}
+		if(null != passengerBean.getBagTagList()){
+			passengerBean.getBagTagList().clear();
+		}
+		if(null != noOfBags && noOfBags > 0){
 			List<Bag> bagList= new ArrayList<Bag>();
 			for(int i=1; i <= noOfBags;i++){
 				lostBagItems.add(new SelectItem(new Integer(i)));
 				Bag bag=new Bag();
 				bagList.add(bag);
-				passengerBean.setBagTagList(bagList);
+				passengerBean.setBagTagList(bagList); //for about your ticket bag tag table
+				
+				//Logic for step 3 o 6 About Your Bag (multiple page)
+				passengerBean.setBagList(bagList);
 			}
 		}
 	}
 	
-	
-	public void rerouteBagListener(ValueChangeEvent valueChangeEvent){
-		logger.info("rerouteBagListener method");
-		Boolean rerouteBag=(Boolean)valueChangeEvent.getNewValue();
-		if(rerouteBag){
-			differentClaimCheckView=false; //readonly =true
+	/**
+	 * Calling this method to set the required attribute for Excess Value field.
+	 * 
+	 * @param valueChangeEvent
+	 */
+	public void excessValueListener(ValueChangeEvent valueChangeEvent){
+		logger.info("ValueChangeListener called: excessValueListener");
+		String valueDeclared=(String)valueChangeEvent.getNewValue();
+		if(null != valueDeclared && valueDeclared.equals("true")){
+			flightLabel.setDeclaredValueState(2L);
+		}else{
+			flightLabel.setDeclaredValueState(1L);
 		}
 	}
 	
+	/**
+	 * Calling this method to set the required attribute for Estimated Bag Weight field.
+	 * 
+	 * @param valueChangeEvent
+	 */
+	public void clearCustomListener(ValueChangeEvent valueChangeEvent){
+		logger.info("ValueChangeListener called: clearCustomListener");
+		Boolean clearCustom=(Boolean)valueChangeEvent.getNewValue();
+		if(null != clearCustom && clearCustom){
+			flightLabel.setBagWeightState(2L);
+		}else{
+			flightLabel.setBagWeightState(1L);
+		}
+	}
+	
+	
+	/**
+	 * Calling this method to set the required attribute for Rerouted City field.
+	 * 
+	 * @param valueChangeEvent
+	 */
 	public void differentClaimCheckListener(ValueChangeEvent valueChangeEvent){
-		logger.info("differentClaimCheckListener method");
-		Boolean diffClaimCheck=(Boolean)valueChangeEvent.getNewValue();
-		if(diffClaimCheck){
-			differentClaimCheckView=false; //readonly =true
+		logger.info("ValueChangeListener called: differentClaimCheckListener");
+		Boolean differentClaim=(Boolean)valueChangeEvent.getNewValue();
+		if(null != differentClaim && differentClaim){
+			flightLabel.setReroutedCityAirlineState(2L);
+		}else{
+			flightLabel.setReroutedCityAirlineState(1L);
 		}
 	}
 	
@@ -418,12 +453,6 @@ public class PassengerController {
 		this.lostBagItems = lostBagItems;
 	}
 
-	public boolean getDifferentClaimCheckView() {
-		return differentClaimCheckView;
-	}
-	public void setDifferentClaimCheckView(boolean differentClaimCheckView) {
-		this.differentClaimCheckView = differentClaimCheckView;
-	}
 
 	public void setOnlineClaimsWS(OnlineClaimsWS onlineClaimsWS) {
 		this.onlineClaimsWS = onlineClaimsWS;

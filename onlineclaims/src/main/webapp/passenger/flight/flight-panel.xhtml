@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<a4j:form id="flightModalPanelForm">
+	<rich:modalPanel id="flightModalPanel" autosized="true" 
+		zindex="10" minWidth="380" height="250" width="500" left="200"
+		top="20">
+		<f:facet name="controls">
+			<h:panelGroup>
+				<a4j:commandLink value="Close" immediate="true" 
+					id="linkToHidePanel3" />
+				<rich:componentControl for="flightModalPanel"
+					attachTo="linkToHidePanel3" operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		
+				<rich:dataTable width="523" align="center" rows="15"
+					id="airportCodeTable" columnsWidth="10%,20%"
+					value="#{passengerController.airportCodeList}" var="itemCode"
+					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+
+
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText styleClass="headerText" value="Code(s)" />
+							</rich:column>
+							<rich:column>
+								<h:outputText styleClass="headerText"
+									value="Airport Description" />
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column>
+						<a4j:commandLink id="linkForCode" value="#{itemCode.airportCode}" 
+							reRender="flightCode" limitToList="true"
+							actionListener="#{passengerController.selectedAirportCode}" />
+						<rich:componentControl for="flightModalPanel" 
+							attachTo="linkForCode" operation="hide" event="onclick" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="#{itemCode.airportDesc}" />
+					</rich:column>
+
+					<f:facet name="footer">
+							<rich:datascroller id="scroller1" align="center" limitToList="true" 
+									reRender="airportCodeTable"	for="airportCodeTable" />
+					</f:facet>
+				</rich:dataTable>
+	</rich:modalPanel>
+	</a4j:form>
+
+</ui:composition>

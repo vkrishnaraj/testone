@@ -12,14 +12,14 @@
 	
 	<ui:define name="mainContent">
 	<script type="text/javascript" src="../_js/passengerFont.js"></script>
-	<h:form id="appForm">
+	<a4j:form id="appForm">
 	<div>
 		<div id="step">
 			<t:outputText value="Step 1 of 6" />
 		</div>
 		
 		<div id="langSelect">
-			<h:outputText value="FontSize" />
+			<h:outputText value="Font Size" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
@@ -86,9 +86,9 @@
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<h:messages id="passInfoMsg"  errorClass="loginerrormsg"/>
+					<rich:messages id="passInfoMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
 				</div>
-				
+				<rich:spacer width="100%" height="10" title=""/>
 				
 				<div>
 					<rich:modalPanel id="helpmodalpanel" autosized="true" minHeight="380" 
@@ -108,13 +108,13 @@
 					</rich:modalPanel>
 				</div>
 				
-				<!--<div>
+				<div>
 					<ui:include src="passenger-permanentaddress.xhtml" />
 				</div>
-				--><!--<div>
+				<div>
 					<ui:include src="passenger-mailingaddress.xhtml" />
 				</div>
-				--><div>
+				<div>
 					<ui:include src="passenger-voicecontact.xhtml" />
 				</div>
 				<div>
@@ -164,6 +164,6 @@
 			
 			</div>
 			
-		</h:form>
+		</a4j:form>
 	</ui:define>
 </ui:composition>
