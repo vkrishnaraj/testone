@@ -18,7 +18,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi2" value="#{passengerBean.passengers[0].lastName}"  styleClass="passInout"
 							required="#{passengerController.passengerInfoLabel.lastNameState eq 2}" tabindex="1"
-							label="#{passengerController.passengerInfoLabel.passengerInfolastName}"/>
+							label="#{passengerController.passengerInfoLabel.passengerInfolastName}">
+						<f:validateLength maximum="20"/>
+					</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
@@ -28,7 +30,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi3" value="#{passengerBean.passengers[0].firstName}" styleClass="passInout"
 							required="#{passengerController.passengerInfoLabel.firstNameState eq 2}" tabindex="2"
-							label="#{passengerController.passengerInfoLabel.firstName}"/>
+							label="#{passengerController.passengerInfoLabel.firstName}">
+						<f:validateLength maximum="20"/>
+					</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
@@ -38,7 +42,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi4" value="#{passengerBean.passengers[0].middleInitial}" style="width:25px" 
 							required="#{passengerController.passengerInfoLabel.middleInitialState eq 2}" tabindex="3"
-							label="#{passengerController.passengerInfoLabel.middleInitial}"/>
+							label="#{passengerController.passengerInfoLabel.middleInitial}">
+						<f:validateLength maximum="1"/>
+					</t:inputText>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -50,7 +56,9 @@
 						<t:outputText value=":"/>
 						<t:inputText id="pi5" value="#{passengerBean.address[0].addressLine1}" style="width:77%" 
 								required="#{passengerController.passengerInfoLabel.addressLine1State eq 2}" tabindex="4"
-								label="#{passengerController.passengerInfoLabel.addressLine1}"/>
+								label="#{passengerController.passengerInfoLabel.addressLine1}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					</div>
 					
 					<div><h:outputText value="&#160;" /></div>
@@ -62,7 +70,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi6" value="#{passengerBean.address[0].addressLine2}" style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.addressLine2State eq 2}" tabindex="5"
-							label="#{passengerController.passengerInfoLabel.addressLine2}"/>
+							label="#{passengerController.passengerInfoLabel.addressLine2}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -73,7 +83,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi7" value="#{passengerBean.address[0].city}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.cityState eq 2}" tabindex="6"
-							label="#{passengerController.passengerInfoLabel.city}"/>
+							label="#{passengerController.passengerInfoLabel.city}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.stateRegion}" />
@@ -83,7 +95,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi8" value="#{passengerBean.address[0].stateRegion}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.stateRegionState eq 2}" tabindex="7"
-							label="#{passengerController.passengerInfoLabel.stateRegion}"/>
+							label="#{passengerController.passengerInfoLabel.stateRegion}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.postalCode}" />
@@ -93,7 +107,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi9" value="#{passengerBean.address[0].postalCode}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.postalCodeState eq 2}" tabindex="8"
-							label="#{passengerController.passengerInfoLabel.postalCode}"/>
+							label="#{passengerController.passengerInfoLabel.postalCode}">
+							<f:validateLength maximum="20"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.country}" />
@@ -116,7 +132,10 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi11" value="#{passengerBean.address[0].emailAddress}" styleClass="passselectOneMenu30"
 							required="#{passengerController.passengerInfoLabel.emailAddressState eq 2}" tabindex="10"
-							label="#{passengerController.passengerInfoLabel.emailAddress}"/>
+							label="#{passengerController.passengerInfoLabel.emailAddress}">
+							<f:validateLength maximum="50"/>
+							<t:validateEmail summaryMessage="Invalid Email Address"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<rich:spacer width="15px"/>
@@ -128,7 +147,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi12" value="#{passengerBean.address[0].occupation}" styleClass="passselectOneMenu30" 
 							required="#{passengerController.passengerInfoLabel.occupationState eq 2}" tabindex="11"
-							label="#{passengerController.passengerInfoLabel.occupation}"/>
+							label="#{passengerController.passengerInfoLabel.occupation}">
+							<f:validateLength maximum="20"/>
+						</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<div>
@@ -139,7 +160,9 @@
 						<t:outputText value=":"/>
 						<t:inputText id="pi13" value="#{passengerBean.address[0].businessName}" styleClass="passselectOneMenu30" 
 								required="#{passengerController.passengerInfoLabel.businessNameState eq 2}" tabindex="12"
-								label="#{passengerController.passengerInfoLabel.businessName}"/>
+								label="#{passengerController.passengerInfoLabel.businessName}">
+							<f:validateLength maximum="20"/>
+						</t:inputText>
 					</div>
 					
 					<div><rich:spacer width="100%" height="15" title="" /></div>

@@ -18,7 +18,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"
-							label="#{passengerController.passengerInfoLabel.mailingAddressLine1}"/>
+							label="#{passengerController.passengerInfoLabel.mailingAddressLine1}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine2}" />
@@ -28,7 +30,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"
-							label="#{passengerController.passengerInfoLabel.mailingAddressLine2}" />
+							label="#{passengerController.passengerInfoLabel.mailingAddressLine2}" >
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" />
@@ -38,7 +42,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  styleClass="passInput12"
 							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"
-							label="#{passengerController.passengerInfoLabel.mailingCity}"/>
+							label="#{passengerController.passengerInfoLabel.mailingCity}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" />
@@ -48,7 +54,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  styleClass="passInput12"
 							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"
-							label="#{passengerController.passengerInfoLabel.mailingStateRegion}"/>
+							label="#{passengerController.passengerInfoLabel.mailingStateRegion}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" />
@@ -58,7 +66,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"  styleClass="passInput12" 
 							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"
-							label="#{passengerController.passengerInfoLabel.mailingPostalCode}"/>
+							label="#{passengerController.passengerInfoLabel.mailingPostalCode}">
+							<f:validateLength maximum="20"/>
+						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" />

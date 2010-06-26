@@ -19,7 +19,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi20" value="#{passengerBean.address[0].phone1}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phone1State eq 2}" tabindex="14"
-							label="#{passengerController.passengerInfoLabel.phone1}"/>
+							label="#{passengerController.passengerInfoLabel.phone1}">
+						<f:validateLength maximum="50"/>
+					</t:inputText>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value="Home"  styleClass="passengerSelect">
 						<f:selectItem itemLabel="Home" itemValue="Home"/>
@@ -33,7 +35,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi21" value="#{passengerBean.address[0].phone2}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phone2State eq 2}" tabindex="15"
-							label="#{passengerController.passengerInfoLabel.phone2}"/>
+							label="#{passengerController.passengerInfoLabel.phone2}">
+						<f:validateLength maximum="50"/>
+					</t:inputText>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value="Mobile"  styleClass="passengerSelect">
 						<f:selectItem itemLabel="Mobile" itemValue="Mobile"/>
@@ -47,7 +51,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi22" value="#{passengerBean.address[0].phone3}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phone3State eq 2}" tabindex="16"
-							label="#{passengerController.passengerInfoLabel.phone3}"/>
+							label="#{passengerController.passengerInfoLabel.phone3}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value="Fax" styleClass="passengerSelect">
 						<f:selectItem itemLabel="Fax" itemValue="Fax"/>
@@ -62,7 +68,9 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi23" value="#{passengerBean.address[0].phone4}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phone4State eq 2}" tabindex="17"
-							label="#{passengerController.passengerInfoLabel.phone4}"/>
+							label="#{passengerController.passengerInfoLabel.phone4}">
+							<f:validateLength maximum="50"/>
+						</t:inputText>
 					<h:outputText value="&#160;" />
 					<h:selectOneMenu value="Business"  styleClass="passengerSelect">
 						<f:selectItem itemLabel="Business" itemValue="Business"/>
