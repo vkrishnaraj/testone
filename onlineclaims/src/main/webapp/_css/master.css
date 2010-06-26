@@ -421,6 +421,7 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 	padding:5px 30px 6px 15px;
 	left:auto;
 	margin-right: 10px;
+	margin-top: 3px;
 	
 }
 
@@ -489,3 +490,4 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 .width120px{width: 120px;}
 .width40px{width: 40px;}
+.pointer { cursor:pointer;}

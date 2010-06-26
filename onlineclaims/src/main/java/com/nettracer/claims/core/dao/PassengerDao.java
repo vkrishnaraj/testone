@@ -101,7 +101,7 @@ public class PassengerDao extends HibernateDaoSupport {
 				"SELECT lt FROM Localetext lt " +
 				"INNER JOIN FETCH lt.languages lg " +
 				"INNER JOIN FETCH lt.label lb " +
-				"WHERE lg.id = ? AND lb.page LIKE ? "
+				"WHERE lg.id = ? AND lb.page = ? "
 				,new Object[]{languageId, "Flight Information"}));
 	}
 

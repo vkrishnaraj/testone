@@ -178,6 +178,26 @@ public class PassengerController {
 				flightLabel = passengerService.getFlightLabels(selectedLanguage,baggageState);
 				airportCodeList = (DataModel)session.getAttribute("airportCodeList");
 				this.itineraryList= new ListDataModel(passengerBean.getItineraryList());
+				if(null != passengerBean.getDeclarePayExcessValue() 
+						&& passengerBean.getDeclarePayExcessValue()){
+					flightLabel.setDeclaredValueState(2L);
+				}else{
+					flightLabel.setDeclaredValueState(1L);
+				}
+				
+				if(null != passengerBean.getClearCustomBag() 
+						&& passengerBean.getClearCustomBag()){
+					flightLabel.setBagWeightState(2L);
+				}else{
+					flightLabel.setBagWeightState(1L);
+				}
+				
+				if(null != passengerBean.getRerouteBag() 
+						&& passengerBean.getRerouteBag()){
+					flightLabel.setReroutedCityAirlineState(2L);
+				}else{
+					flightLabel.setReroutedCityAirlineState(1L);
+				}
 				//passengerBean = (PassengerBean)session.getAttribute("passengerBean");
 				//if(0 == passengerBean.getBagTagList().size()){
 					//passengerBean.getBagTagList().add(new HtmlBagComponent());
@@ -230,8 +250,8 @@ public class PassengerController {
 	 */
 	public void excessValueListener(ValueChangeEvent valueChangeEvent){
 		logger.info("ValueChangeListener called: excessValueListener");
-		String valueDeclared=(String)valueChangeEvent.getNewValue();
-		if(null != valueDeclared && valueDeclared.equals("true")){
+		Boolean valueDeclared=(Boolean)valueChangeEvent.getNewValue();
+		if(null != valueDeclared && valueDeclared){
 			flightLabel.setDeclaredValueState(2L);
 		}else{
 			flightLabel.setDeclaredValueState(1L);

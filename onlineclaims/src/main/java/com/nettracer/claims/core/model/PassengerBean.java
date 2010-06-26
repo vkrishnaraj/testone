@@ -40,8 +40,8 @@ public class PassengerBean {
 	private Integer noOfCheckedBag;
 	private Integer noOfmissingBag;
 	private String bagClaimCheck;
-	private String declarePayExcessValue;
-	private Integer declaredValue;
+	private Boolean declarePayExcessValue;
+	private Double declaredValue;
 	private String placeBagChecked;
 	private Boolean clearCustomBag;
 	private Double bagWeight;
@@ -206,16 +206,16 @@ public class PassengerBean {
 	public void setBagClaimCheck(String bagClaimCheck) {
 		this.bagClaimCheck = bagClaimCheck;
 	}
-	public String getDeclarePayExcessValue() {
+	public Boolean getDeclarePayExcessValue() {
 		return declarePayExcessValue;
 	}
-	public void setDeclarePayExcessValue(String declarePayExcessValue) {
+	public void setDeclarePayExcessValue(Boolean declarePayExcessValue) {
 		this.declarePayExcessValue = declarePayExcessValue;
 	}
-	public Integer getDeclaredValue() {
+	public Double getDeclaredValue() {
 		return declaredValue;
 	}
-	public void setDeclaredValue(Integer declaredValue) {
+	public void setDeclaredValue(Double declaredValue) {
 		this.declaredValue = declaredValue;
 	}
 	public String getPlaceBagChecked() {
