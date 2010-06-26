@@ -40,7 +40,7 @@
 					<rich:column>
 						<a4j:commandLink id="linkForCode" value="#{itemCode.airportCode}" 
 							reRender="flightCode" limitToList="true" immediate="true"
-							actionListener="#{passengerController.selectedAirportCode}" />
+							actionListener="#{passengerController.selectFromAirportCode}" />
 						<rich:componentControl for="flightModalPanel" 
 							attachTo="linkForCode" operation="hide" event="onclick" />
 					</rich:column>
