@@ -39,7 +39,8 @@
 			<rich:column>
 				<h:panelGrid columns="2">
 				<a4j:region  renderRegionOnly="true">	
-					<h:inputText value="#{item.departureCity}" size="7" readonly="true"/>
+					<h:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
+						label="DepartureCity Row#{rowIndex+1}" readonly="true"/>
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink">
 
@@ -63,7 +64,9 @@
 
 			<rich:column>
 				<h:panelGrid columns="2">
-					<h:inputText value="#{item.arrivalCity}" size="7" readonly="true"/>
+					<t:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
+						label="ArrivalCity Row#{rowIndex+1}" disabledOnClientSide="true" 
+						required="#{item.departureCity ne null ? true : false}"/>
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
 
@@ -85,18 +88,26 @@
 
 			<rich:column>
 				<h:panelGrid columns="2">
-					<h:inputText value="#{item.flightNum}" size="7" />
+					<h:inputText value="#{item.airline}" size="7" id="airline#{rowIndex+1}"
+						required="#{item.departureCity ne null ? true : false}"
+						label="Airline Row#{rowIndex+1}" />
 					<h:outputText value="/" />
 				</h:panelGrid>
 			</rich:column>
 
 			<rich:column>
-				<t:inputText value=""  size="7"/>
+				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
+						required="#{item.departureCity ne null ? true : false}"
+						label="FlightNumber Row#{rowIndex+1}">
+					<f:validateLength maximum="5"/>
+				</t:inputText>
 			</rich:column>
 
 			<rich:column width="20">
 			<a4j:outputPanel id="calendar" layout="block">
-				<rich:calendar value="#{item.journeyDate}" 
+				<rich:calendar value="#{item.journeyDate}"  id="journeyDate#{rowIndex+1}"
+						required="#{item.departureCity ne null ? true : false}"
+						label="Date of Journey Row#{rowIndex+1}"
 					popup="true" />
 				</a4j:outputPanel>
 			</rich:column>

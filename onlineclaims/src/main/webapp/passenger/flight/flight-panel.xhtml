@@ -8,11 +8,11 @@
 
 	<a4j:form id="flightModalPanelForm">
 	<rich:modalPanel id="flightModalPanel" autosized="true" 
-		zindex="10" minWidth="380" height="250" width="500" left="200"
-		top="20">
+		zindex="10" minWidth="380" height="250" width="500" left="200"	top="20">
+		
 		<f:facet name="controls">
 			<h:panelGroup>
-				<a4j:commandLink value="Close" immediate="true" 
+				<h:graphicImage value="../_images/close.png" styleClass="pointer"
 					id="linkToHidePanel3" />
 				<rich:componentControl for="flightModalPanel"
 					attachTo="linkToHidePanel3" operation="hide" event="onclick" />
@@ -39,7 +39,7 @@
 					</f:facet>
 					<rich:column>
 						<a4j:commandLink id="linkForCode" value="#{itemCode.airportCode}" 
-							reRender="flightCode" limitToList="true"
+							reRender="flightCode" limitToList="true" immediate="true"
 							actionListener="#{passengerController.selectedAirportCode}" />
 						<rich:componentControl for="flightModalPanel" 
 							attachTo="linkForCode" operation="hide" event="onclick" />

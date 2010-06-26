@@ -20,7 +20,9 @@
 										rendered="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"/>
 								</h:panelGroup>
 								
-								<h:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"   tabindex="24">
+								<h:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"  
+										required="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"
+										id="differentAirlineTicket" tabindex="24" label="Different Airline Ticket">
 									<f:selectItem itemLabel="--" itemValue=""/>
 									<f:selectItem itemLabel="Yes" itemValue="true"/>
 									<f:selectItem itemLabel="No" itemValue="false"/>
@@ -32,11 +34,15 @@
 								<h:panelGroup > 
 									<t:outputText value="#{passengerController.flightLabel.ticketNumber}" />
 									<h:outputLabel value="*" styleClass="requiredField" 
-										rendered="#{passengerController.flightLabel.ticketNumber eq 2}"/>
+										rendered="#{passengerController.flightLabel.ticketNumberState eq 2}"/>
 								</h:panelGroup>
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
-									styleClass="passInout" required="true" tabindex="25" />
+										styleClass="passInout" tabindex="25" id="ticketNumber"
+										label="Ticket Number"
+										required="#{passengerController.flightLabel.ticketNumberState eq 2}"  >
+									<f:validateLength maximum="6"/>
+								</t:inputText>
 			
 							</h:panelGrid>
 						</h:panelGroup>
@@ -44,7 +50,7 @@
 						<h:panelGroup >
 						<a4j:region renderRegionOnly="true" >
 						<a4j:outputPanel id="ticketTablePanel" ajaxRendered="true" >
-							<rich:dataTable id="ticketTable"   headerClass="TableHeader" 
+							<rich:dataTable id="ticketTable"   headerClass="TableHeader" rowKeyVar="rowIndex"
 										value="#{passengerBean.bagTagList}" border="0" var="item">
 								<rich:column>
 									<f:facet name="header">
@@ -54,7 +60,10 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<h:inputText value="#{item.bagTagNumber}" styleClass="passInout" tabindex="3" />
+									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true"
+											label="Bag Tag Number Row#{rowIndex+1}">
+										<f:validateLength maximum="10"/>
+									</t:inputText>
 								</rich:column>
 								
 								<rich:column>
@@ -65,7 +74,8 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<h:selectOneRadio   value="#{item.bagArrivalStatus}">
+									<h:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
+										label="Bag Arrival Status Row#{rowIndex+1}">
 										<f:selectItem itemLabel="Yes" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
 									</h:selectOneRadio>
