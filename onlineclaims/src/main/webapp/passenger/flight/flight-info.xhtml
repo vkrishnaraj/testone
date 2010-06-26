@@ -29,8 +29,10 @@
 			<t:outputText value=":" />
 		</h:panelGroup>
 
-		<h:selectOneMenu value="#{passengerBean.bagsTravelWith}" tabindex="1" immediate="true"
-			valueChangeListener="#{passengerController.bagSelectListener}">
+		<h:selectOneMenu value="#{passengerBean.bagsTravelWith}" tabindex="1" 
+				required="#{passengerController.flightLabel.totalTravelBagState eq 2}"
+				valueChangeListener="#{passengerController.bagSelectListener}" id="bagsTravelWith"
+				label="BagsTravelWith">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="1" itemValue="1" />
 			<f:selectItem itemLabel="2" itemValue="2" />
@@ -49,7 +51,9 @@
 			<t:outputText value=":" />
 		</h:panelGroup>
 		<a4j:outputPanel id="lostBag" ajaxRendered="true">
-			<h:selectOneMenu id="lostBagMenu" value="#{passengerBean.lostBag}" tabindex="2">
+			<h:selectOneMenu id="lostBagMenu" value="#{passengerBean.lostBag}" tabindex="2"
+				required="#{passengerController.flightLabel.noOfLostBagState eq 2}"
+				label="No. of Bags Lost">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItems value="#{passengerController.lostBagItems}" />
 			</h:selectOneMenu>
@@ -70,8 +74,13 @@
 			<t:outputText value=":" />
 		</h:panelGroup>
 		<h:selectOneMenu value="#{passengerBean.bagCheckLocation}"
-			tabindex="3">
+			required="#{passengerController.flightLabel.bagCheckedLocationState eq 2}"
+			tabindex="3" id="bagCheckLocation" label="Bag Check Location">
 			<f:selectItem itemLabel="--" itemValue="" />
+			<f:selectItem itemLabel="Ticket Counter" itemValue="Ticket Counter" />
+			<f:selectItem itemLabel="Gate" itemValue="Gate" />
+			<f:selectItem itemLabel="Curbside" itemValue="Curbside" />
+			<f:selectItem itemLabel="Other" itemValue="Other" />
 		</h:selectOneMenu>
 
 		<rich:spacer width="14" height="10" title="" />
@@ -84,7 +93,9 @@
 				rendered="#{passengerController.flightLabel.noOfPassengerState eq 2}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
-		<h:selectOneMenu value="#{passengerBean.noOfPassenger}" tabindex="4">
+		<h:selectOneMenu id="noOfPassenger" value="#{passengerBean.noOfPassenger}" tabindex="4"
+				required="#{passengerController.flightLabel.noOfPassengerState eq 2}"
+				label="No Of Passenger">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="1" itemValue="1" />
 			<f:selectItem itemLabel="2" itemValue="2" />
@@ -108,7 +119,9 @@
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.recheckBag}" tabindex="5">
+		<h:selectOneMenu id="recheckBag" value="#{passengerBean.recheckBag}" tabindex="5"
+				required="#{passengerController.flightLabel.recheckBagState eq 2}"
+				label="Baggage Rerouted">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -128,7 +141,9 @@
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.inspectbag}" tabindex="6">
+		<h:selectOneMenu value="#{passengerBean.inspectbag}" tabindex="6" id="inspectbag"
+				required="#{passengerController.flightLabel.inspectbagState eq 2}"
+				label="Bag Inspection">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -148,8 +163,8 @@
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.chargeExcessBaggage}"
-			tabindex="7" required="true">
+		<h:selectOneMenu value="#{passengerBean.chargeExcessBaggage}" label="Charge Excess Baggage"
+			tabindex="7" required="true" id="chargeExcessBaggage">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -168,8 +183,10 @@
 
 		<rich:spacer width="18" title="" />
 
-		<t:inputText value="#{passengerBean.noOfCheckedBag}"
-			styleClass="passInout" required="true" tabindex="8" />
+		<t:inputText value="#{passengerBean.noOfCheckedBag}" id="noOfCheckedBag"
+			styleClass="passInout" required="true" tabindex="8"  label="No Of Checked Bag">
+				<f:validateLongRange maximum="20"/>
+		</t:inputText>
 
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -184,8 +201,10 @@
 
 		<rich:spacer width="18" title="" />
 
-		<t:inputText value="#{passengerBean.noOfmissingBag}"
-			styleClass="passInout" required="true" tabindex="9" />
+		<t:inputText value="#{passengerBean.noOfmissingBag}" id="noOfmissingBag"
+			styleClass="passInout" required="true" tabindex="9" label="No Of Missing Bag">
+				<f:validateLongRange maximum="20"/>
+		</t:inputText>
 
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -203,7 +222,7 @@
 		<rich:spacer width="18" title="" />
 
 		<t:inputText value="#{passengerBean.bagClaimCheck}"
-			styleClass="passInout"
+			styleClass="passInout" id="bagClaimCheck"  label="Bag Claim Check"
 			required="#{passengerController.flightLabel.bagClaimCheckState eq 2}"
 			tabindex="10" />
 			
@@ -222,7 +241,8 @@
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.declarePayExcessValue}"	tabindex="11" required="true"
-			valueChangeListener="#{passengerController.excessValueListener}" immediate="true">
+			id="declarePayExcessValue" label="Declared Pay Excess Value"
+			valueChangeListener="#{passengerController.excessValueListener}" >
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -246,36 +266,13 @@
 		<rich:spacer width="18" title="" />
 		
 		<a4j:outputPanel id="declValText" ajaxRendered="true">
-		<t:inputText value="#{passengerBean.declaredValue}"
+		<t:inputText value="#{passengerBean.declaredValue}" id="declaredValue"
 			styleClass="passInout" disabled="#{passengerController.flightLabel.declaredValueState  ne 2}"
 			required="#{passengerController.flightLabel.declaredValueState  eq 2}"
-			tabindex="12" />
+			tabindex="12"  label="Declared Value">
+				<f:validateDoubleRange maximum="3300"/>
+		</t:inputText>
 		</a4j:outputPanel>
-		
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
-
-		<h:panelGroup>
-			<t:outputText
-				value="#{passengerController.flightLabel.placeBagChecked}" />
-			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.placeBagCheckedState  eq 2}" />
-			<t:outputText value=":" />
-		</h:panelGroup>
-
-		<rich:spacer width="18" title="" />
-
-		<h:selectOneMenu value="#{passengerBean.placeBagChecked}"
-			tabindex="13"
-			required="#{passengerController.flightLabel.placeBagCheckedState  eq 2}">
-			<f:selectItem itemLabel="--" itemValue="" />
-			<f:selectItem itemLabel="Ticket Counter" itemValue="Ticket Counter" />
-			<f:selectItem itemLabel="Gate" itemValue="Gate" />
-			<f:selectItem itemLabel="Curbside" itemValue="Curbside" />
-			<f:selectItem itemLabel="Other" itemValue="Other" />
-		</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -292,8 +289,9 @@
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="14" immediate="true"
-			valueChangeListener="#{passengerController.clearCustomListener}">
+		<h:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="14"
+			required="true" label="Clear Custom Bag"
+			valueChangeListener="#{passengerController.clearCustomListener}"  id="clearCustomBag">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -317,8 +315,8 @@
 		<rich:spacer width="18" title="" />
 
 		<a4j:outputPanel id="weightInput" ajaxRendered="true">
-		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout"
-			disabled="#{passengerController.flightLabel.bagWeightState  ne 2}"
+		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout" label="Bag Weight"
+			disabled="#{passengerController.flightLabel.bagWeightState  ne 2}" id="bagWeight"
 			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="15" />
 		</a4j:outputPanel>
 		
@@ -336,7 +334,7 @@
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.rerouteBag}" tabindex="16"
-			required="true">
+			required="true" id="rerouteBag" label="Baggage rerouted">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -358,6 +356,7 @@
 		<rich:spacer width="18" title="" />
 
 			<h:selectOneMenu value="#{passengerBean.differentClaimCheck}" tabindex="17" immediate="true"
+				 id="differentClaimCheck"
 				valueChangeListener="#{passengerController.differentClaimCheckListener}">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -383,7 +382,7 @@
 		
 		<a4j:outputPanel id="rerouteCityInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
-			tabindex="18"
+			tabindex="18" id="reroutedCityAirline" label="Airline rerouted by"
 			disabled="#{passengerController.flightLabel.reroutedCityAirlineState  ne 2}"  />
 		</a4j:outputPanel>
 		
@@ -401,7 +400,8 @@
 		
 		<rich:spacer width="18" title="" />
 		
-		<t:inputText value="#{passengerBean.reason}" styleClass="passInout"	 tabindex="19" />
+		<t:inputText value="#{passengerBean.reason}" label="Reason"
+			styleClass="passInout"	 tabindex="19"  id="reason"/>
 		
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -416,7 +416,8 @@
 		
 		<rich:spacer width="18" title="" />
 		
-		<h:selectOneMenu value="#{passengerBean.immediateClaimAttempt}" tabindex="20" required="true">
+		<h:selectOneMenu value="#{passengerBean.immediateClaimAttempt}" id="immediateClaimAttempt" 
+				tabindex="20" required="true" label="Immediate Claim Attempt">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -436,7 +437,8 @@
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.whenBagSeen}" styleClass="passInout"
-			required="true" tabindex="21" />
+			label="When Bag Seen"
+			required="true" tabindex="21"  id="whenBagSeen"/>
 			
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -452,8 +454,9 @@
 		
 		<rich:spacer width="18" title="" />
 		
-		<t:inputText value="#{passengerBean.fileReportCity}" styleClass="passInout"
-			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="22" />
+		<t:inputText value="#{passengerBean.fileReportCity}" styleClass="passInout"  id="fileReportCity"
+			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="22" 
+			label="File Report City"/>
 			
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -469,7 +472,8 @@
 		
 		<rich:spacer width="18" title="" />
 		
-		<h:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="23"
+		<h:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="23"  id="reportAnotherAirline"
+			label="Report Another Airline"
 			required="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItem itemLabel="Yes" itemValue="true" />
