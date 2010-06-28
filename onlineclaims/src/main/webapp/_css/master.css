@@ -397,8 +397,8 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 #step {
 	float:left; 
 	margin-top: 20px;
-	font-family:Arial, Helvetica, sans-serif; font-size:1.0em; color:#333; padding:0; border:solid 1px #708090 
-
+	font-family:Arial, Helvetica, sans-serif; font-size:8pt; color:#333; padding:0; border:solid 1px #708090; 
+	font-weight:bolder;
 }
 
 .passfontstyle{
@@ -473,6 +473,7 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .passengerSelect { font-family:Arial, Helvetica, sans-serif; font-size:1.0em; color:#333; padding:0; border:solid 1px #708090 ; width:65px; }
 
 .button140pxred2 {float: none;}
+.button140pxred3 {float: right;}
 
 .rich-calendar-input{width: 60px;}
 
@@ -491,3 +492,10 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .width120px{width: 120px;}
 .width40px{width: 40px;}
 .pointer { cursor:pointer;}
+
+/*Saved Screen*/
+.savedScreenPanleGrid {text-align: center; }
+.savedScreenPanel {text-align: center; height: 200px;}
+#savedDiv{margin-top: 70px;}
+.typeAccept{margin-left: 15px;}
+.signature{margin-left: 25px;}

@@ -160,6 +160,30 @@ public class MultilingualLabel {
 	private String airlineFlightNo;
 	private String flightDate;
 	
+	
+	
+	//For Claim Submission -step 6
+	private String submitClaimDescriptiveText;
+	private String submitClaimHelp;
+	private String submitClaimRequiredFieldMessage;
+	private String useOfInformation;
+	private String reservedRights;
+	private String agreement;
+	private String typeAccept;
+	private String confirmation;
+	private String luggageLostDate;
+	private String signature;
+	private String signedDate;
+	private String print;
+	private String claimSubmit;
+	
+	private Long typeAcceptState;
+	
+	//For saved Screen
+	private String savedScreenHelp;
+	private String savedMessage;
+	private String returnLink;
+	
 	public String getClaimNumber() {
 		return claimNumber;
 	}
@@ -962,6 +986,110 @@ public class MultilingualLabel {
 	}
 	public void setFlightPrevious(String flightPrevious) {
 		this.flightPrevious = flightPrevious;
+	}
+	public String getSavedScreenHelp() {
+		return savedScreenHelp;
+	}
+	public void setSavedScreenHelp(String savedScreenHelp) {
+		this.savedScreenHelp = savedScreenHelp;
+	}
+	public String getSavedMessage() {
+		return savedMessage;
+	}
+	public void setSavedMessage(String savedMessage) {
+		this.savedMessage = savedMessage;
+	}
+	public String getReturnLink() {
+		return returnLink;
+	}
+	public void setReturnLink(String returnLink) {
+		this.returnLink = returnLink;
+	}
+	public String getSubmitClaimDescriptiveText() {
+		return submitClaimDescriptiveText;
+	}
+	public void setSubmitClaimDescriptiveText(String submitClaimDescriptiveText) {
+		this.submitClaimDescriptiveText = submitClaimDescriptiveText;
+	}
+	public String getSubmitClaimHelp() {
+		return submitClaimHelp;
+	}
+	public void setSubmitClaimHelp(String submitClaimHelp) {
+		this.submitClaimHelp = submitClaimHelp;
+	}
+	public String getSubmitClaimRequiredFieldMessage() {
+		return submitClaimRequiredFieldMessage;
+	}
+	public void setSubmitClaimRequiredFieldMessage(
+			String submitClaimRequiredFieldMessage) {
+		this.submitClaimRequiredFieldMessage = submitClaimRequiredFieldMessage;
+	}
+	
+	public String getUseOfInformation() {
+		return useOfInformation;
+	}
+	public void setUseOfInformation(String useOfInformation) {
+		this.useOfInformation = useOfInformation;
+	}
+	public String getReservedRights() {
+		return reservedRights;
+	}
+	public void setReservedRights(String reservedRights) {
+		this.reservedRights = reservedRights;
+	}
+	public String getAgreement() {
+		return agreement;
+	}
+	public void setAgreement(String agreement) {
+		this.agreement = agreement;
+	}
+	public String getTypeAccept() {
+		return typeAccept;
+	}
+	public void setTypeAccept(String typeAccept) {
+		this.typeAccept = typeAccept;
+	}
+	public String getConfirmation() {
+		return confirmation;
+	}
+	public void setConfirmation(String confirmation) {
+		this.confirmation = confirmation;
+	}
+	public String getLuggageLostDate() {
+		return luggageLostDate;
+	}
+	public void setLuggageLostDate(String luggageLostDate) {
+		this.luggageLostDate = luggageLostDate;
+	}
+	public String getSignature() {
+		return signature;
+	}
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+	public String getSignedDate() {
+		return signedDate;
+	}
+	public void setSignedDate(String signedDate) {
+		this.signedDate = signedDate;
+	}
+	public String getPrint() {
+		return print;
+	}
+	public void setPrint(String print) {
+		this.print = print;
+	}
+	public Long getTypeAcceptState() {
+		return typeAcceptState;
+	}
+	public void setTypeAcceptState(Long typeAcceptState) {
+		this.typeAcceptState = typeAcceptState;
+	}
+	public String getClaimSubmit() {
+		return claimSubmit;
+	}
+	public void setClaimSubmit(String claimSubmit) {
+		this.claimSubmit = claimSubmit;
 	}  
 	
 	

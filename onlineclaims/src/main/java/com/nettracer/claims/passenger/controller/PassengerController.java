@@ -43,7 +43,8 @@ import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
 /**
  * @author Utpal Description: This is the main controller for all the managed
- *         beans including Navigation rule and validation for the passenger side.
+ *         beans including Navigation rule and validation for the passenger
+ *         side.
  */
 
 @Component
@@ -51,86 +52,93 @@ import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 @Qualifier("passengerController")
 public class PassengerController {
 	private static Logger logger = Logger.getLogger(PassengerController.class);
-	
+
 	CaptchaBean captchaBean = new CaptchaBean();
 	LoginBean loginBean = new LoginBean();
 	private PassengerBean passengerBean;
 	private Long baggageState;
-	//private List<Map<String, List<Localetext>>> pageMapsList ;
-	private Map<String, List<Localetext>> pageMaps ;
+	// private List<Map<String, List<Localetext>>> pageMapsList ;
+	private Map<String, List<Localetext>> pageMaps;
 	private List<Localetext> loginPageList;
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
 	private List<Localetext> passengerDirectionList;
 	private MultilingualLabel passengerInfoLabel;
 	private MultilingualLabel flightLabel;
-	private List<SelectItem> selectItems=new ArrayList<SelectItem>();
-	private Set<SelectItem> lostBagItems=new LinkedHashSet<SelectItem>();
+	private MultilingualLabel submitClaimLabel;
+	private MultilingualLabel savedScreenLabel;
+	private List<SelectItem> selectItems = new ArrayList<SelectItem>();
+	private Set<SelectItem> lostBagItems = new LinkedHashSet<SelectItem>();
 	private DataModel airportCodeList;
 	private DataModel itineraryList;
 	private int itineraryTableIndex;
-	
-	/*@Autowired
-	AdminService adminService;*/
-	
+
+	/*
+	 * @Autowired AdminService adminService;
+	 */
+
 	@Autowired
 	PassengerService passengerService;
-	
+
 	@Autowired
 	OnlineClaimsWS onlineClaimsWS;
-	
 
-
-	
-	
 	/**
 	 * This is the 1st step for a passenger to fill up his claims form
 	 * 
 	 * @return String
 	 */
-	
-	public String gotoPassengerInfo(){
+
+	public String gotoPassengerInfo() {
 		logger.debug("gotoPassengerInfo method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				baggageState = (Long)session.getAttribute("baggageState");
-				String selectedLanguage=(String)session.getAttribute("selectedLanguage" );
-				passengerInfoLabel = passengerService.getPassengerInfo(selectedLanguage,baggageState);
-				this.passengerBean = (PassengerBean)session.getAttribute("passengerBean");
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session
+						.getAttribute("selectedLanguage");
+				passengerInfoLabel = passengerService.getPassengerInfo(
+						selectedLanguage, baggageState);
+				this.passengerBean = (PassengerBean) session
+						.getAttribute("passengerBean");
 				List<CountryCode> countries = passengerService.getCountries();
-				for(CountryCode countryCode : countries){
-					selectItems.add(new SelectItem(countryCode.getId(), countryCode.getCountry()));
+				for (CountryCode countryCode : countries) {
+					selectItems.add(new SelectItem(countryCode.getId(),
+							countryCode.getCountry()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "gotoPassengerInfo";
 		} else {
-			FacesUtil.addError("Your session has been expired. Please log in again");
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
-	
+
 	/**
 	 * Save the Passenger Data on passengerinfo page
 	 * 
 	 */
-	
-	public void savePassengerInfo(){
+
+	public void savePassengerInfo() {
 		logger.debug("savePassengerInfo method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
-			try{
-				//passengerBean = (PassengerBean)session.getAttribute("passengerBean");
-				boolean saveData=onlineClaimsWS.savePassengerInfo(passengerBean);
-				if(saveData){
-					FacesUtil.addInfo("Passenger infomation saved successfully.");
+			try {
+				// passengerBean =
+				// (PassengerBean)session.getAttribute("passengerBean");
+				boolean saveData = onlineClaimsWS
+						.savePassengerInfo(passengerBean);
+				if (saveData) {
+					FacesUtil
+							.addInfo("Passenger infomation saved successfully.");
 					logger.info("Passenger infomation saved successfully.");
-				}else{
+				} else {
 					logger.error("Error in persisting the Data");
 					FacesUtil.addError("Error in persisting the Data");
 				}
@@ -142,7 +150,8 @@ public class PassengerController {
 				FacesUtil.addError("Connection failure, Please try again");
 			}
 		} else {
-			FacesUtil.addError("Your session has been expired. Please log in again");
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
 		}
 	}
 
@@ -151,205 +160,277 @@ public class PassengerController {
 	 * 
 	 * 
 	 */
-	public String cancel(){
+	public String cancel() {
 		FacesContext context = FacesUtil.getFacesContext();
-		  ViewHandler viewHandler = context.getApplication().getViewHandler();
-		  UIViewRoot viewRoot = viewHandler.createView(context,
-		  context.getViewRoot().getViewId()); context.setViewRoot(viewRoot);
-		  context.renderResponse(); // Optional
-		 
+		ViewHandler viewHandler = context.getApplication().getViewHandler();
+		UIViewRoot viewRoot = viewHandler.createView(context, context
+				.getViewRoot().getViewId());
+		context.setViewRoot(viewRoot);
+		context.renderResponse(); // Optional
+
 		return null;
 	}
-	
+
 	/**
-	 * This is the 2nd step for a passenger to fill up his claims form i.e. the Flight details
+	 * This is the 2nd step for a passenger to fill up his claims form i.e. the
+	 * Flight details
 	 * 
 	 * @return String
 	 */
-	public String gotoFlightDetails(){
+	public String gotoFlightDetails() {
 		logger.debug("gotoFlightDetails method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				baggageState = (Long)session.getAttribute("baggageState");
-				String selectedLanguage=(String)session.getAttribute("selectedLanguage" );
-				flightLabel = passengerService.getFlightLabels(selectedLanguage,baggageState);
-				airportCodeList = (DataModel)session.getAttribute("airportCodeList");
-				this.itineraryList= new ListDataModel(passengerBean.getItineraryList());
-				if(null != passengerBean.getDeclarePayExcessValue() 
-						&& passengerBean.getDeclarePayExcessValue()){
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session
+						.getAttribute("selectedLanguage");
+				flightLabel = passengerService.getFlightLabels(
+						selectedLanguage, baggageState);
+				airportCodeList = (DataModel) session
+						.getAttribute("airportCodeList");
+				this.itineraryList = new ListDataModel(passengerBean
+						.getItineraryList());
+				if (null != passengerBean.getDeclarePayExcessValue()
+						&& passengerBean.getDeclarePayExcessValue()) {
 					flightLabel.setDeclaredValueState(2L);
-				}else{
+				} else {
 					flightLabel.setDeclaredValueState(1L);
 				}
-				
-				if(null != passengerBean.getClearCustomBag() 
-						&& passengerBean.getClearCustomBag()){
+
+				if (null != passengerBean.getClearCustomBag()
+						&& passengerBean.getClearCustomBag()) {
 					flightLabel.setBagWeightState(2L);
-				}else{
+				} else {
 					flightLabel.setBagWeightState(1L);
 				}
-				
-				if(null != passengerBean.getRerouteBag() 
-						&& passengerBean.getRerouteBag()){
+
+				if (null != passengerBean.getRerouteBag()
+						&& passengerBean.getRerouteBag()) {
 					flightLabel.setReroutedCityAirlineState(2L);
-				}else{
+				} else {
 					flightLabel.setReroutedCityAirlineState(1L);
 				}
-				//passengerBean = (PassengerBean)session.getAttribute("passengerBean");
-				//if(0 == passengerBean.getBagTagList().size()){
-					//passengerBean.getBagTagList().add(new HtmlBagComponent());
-				//}
-				//session.setAttribute("passengerBean", passengerBean);
+				// passengerBean =
+				// (PassengerBean)session.getAttribute("passengerBean");
+				// if(0 == passengerBean.getBagTagList().size()){
+				// passengerBean.getBagTagList().add(new HtmlBagComponent());
+				// }
+				// session.setAttribute("passengerBean", passengerBean);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "gotoFlightDetails";
 		} else {
-			
+
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
-	
+
 	/**
-	 * Calling this method at selection of the no of baggage on top of the flight details page
+	 * Calling this method at selection of the no of baggage on top of the
+	 * flight details page
 	 * 
 	 * @param valueChangeEvent
 	 */
-	public void bagSelectListener(ValueChangeEvent valueChangeEvent){
+	public void bagSelectListener(ValueChangeEvent valueChangeEvent) {
 		logger.info("bagSelectListener method");
-		Integer noOfBags=(Integer)valueChangeEvent.getNewValue();
-		if(null != lostBagItems){
+		Integer noOfBags = (Integer) valueChangeEvent.getNewValue();
+		if (null != lostBagItems) {
 			lostBagItems.clear();
 		}
-		if(null != passengerBean.getBagTagList()){
+		if (null != passengerBean.getBagTagList()) {
 			passengerBean.getBagTagList().clear();
 		}
-		if(null != noOfBags && noOfBags > 0){
-			List<Bag> bagList= new ArrayList<Bag>();
-			for(int i=1; i <= noOfBags;i++){
+		if (null != noOfBags && noOfBags > 0) {
+			List<Bag> bagList = new ArrayList<Bag>();
+			for (int i = 1; i <= noOfBags; i++) {
 				lostBagItems.add(new SelectItem(new Integer(i)));
-				Bag bag=new Bag();
+				Bag bag = new Bag();
 				bagList.add(bag);
-				passengerBean.setBagTagList(bagList); //for about your ticket bag tag table
-				
-				//Logic for step 3 o 6 About Your Bag (multiple page)
+				passengerBean.setBagTagList(bagList); // for about your ticket
+														// bag tag table
+
+				// Logic for step 3 o 6 About Your Bag (multiple page)
 				passengerBean.setBagList(bagList);
 			}
 		}
 	}
-	
+
 	/**
 	 * Calling this method to set the required attribute for Excess Value field.
 	 * 
 	 * @param valueChangeEvent
 	 */
-	public void excessValueListener(ValueChangeEvent valueChangeEvent){
+	public void excessValueListener(ValueChangeEvent valueChangeEvent) {
 		logger.info("ValueChangeListener called: excessValueListener");
-		Boolean valueDeclared=(Boolean)valueChangeEvent.getNewValue();
-		if(null != valueDeclared && valueDeclared){
+		Boolean valueDeclared = (Boolean) valueChangeEvent.getNewValue();
+		if (null != valueDeclared && valueDeclared) {
 			flightLabel.setDeclaredValueState(2L);
-		}else{
+		} else {
 			flightLabel.setDeclaredValueState(1L);
 		}
 	}
-	
+
 	/**
-	 * Calling this method to set the required attribute for Estimated Bag Weight field.
+	 * Calling this method to set the required attribute for Estimated Bag
+	 * Weight field.
 	 * 
 	 * @param valueChangeEvent
 	 */
-	public void clearCustomListener(ValueChangeEvent valueChangeEvent){
+	public void clearCustomListener(ValueChangeEvent valueChangeEvent) {
 		logger.info("ValueChangeListener called: clearCustomListener");
-		Boolean clearCustom=(Boolean)valueChangeEvent.getNewValue();
-		if(null != clearCustom && clearCustom){
+		Boolean clearCustom = (Boolean) valueChangeEvent.getNewValue();
+		if (null != clearCustom && clearCustom) {
 			flightLabel.setBagWeightState(2L);
-		}else{
+		} else {
 			flightLabel.setBagWeightState(1L);
 		}
 	}
-	
-	
+
 	/**
-	 * Calling this method to set the required attribute for Rerouted City field.
+	 * Calling this method to set the required attribute for Rerouted City
+	 * field.
 	 * 
 	 * @param valueChangeEvent
 	 */
-	public void differentClaimCheckListener(ValueChangeEvent valueChangeEvent){
+	public void differentClaimCheckListener(ValueChangeEvent valueChangeEvent) {
 		logger.info("ValueChangeListener called: differentClaimCheckListener");
-		Boolean differentClaim=(Boolean)valueChangeEvent.getNewValue();
-		if(null != differentClaim && differentClaim){
+		Boolean differentClaim = (Boolean) valueChangeEvent.getNewValue();
+		if (null != differentClaim && differentClaim) {
 			flightLabel.setReroutedCityAirlineState(2L);
-		}else{
+		} else {
 			flightLabel.setReroutedCityAirlineState(1L);
 		}
 	}
-	
+
 	/**
-	 * To select the airport code from modal panel and assign to appropriate row for itinerary datatable.
+	 * To select the airport code from modal panel and assign to appropriate row
+	 * for itinerary datatable.
+	 * 
 	 * @param event
 	 */
-	public void selectedAirportCode(ActionEvent event){
+	public void selectFromAirportCode(ActionEvent event) {
 		logger.info("Listener: selectedAirportCode method");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-		.getExternalContext().getSession(false);
-		Itinerary itineraryLocal= null;
-		try{
-			Airport airport= (Airport)getAirportCodeList().getRowData();
-			/*if(session.getAttribute("itinerary") != null){
-				 itineraryLocal=(Itinerary)session.getAttribute("itinerary");
-			}else{
-				 itineraryLocal= new Itinerary();
-			}*/
-			
-			if(getItineraryList().isRowAvailable()){
-				itineraryLocal=(Itinerary)getItineraryList().getRowData();
+				.getExternalContext().getSession(false);
+		Itinerary itineraryLocal = null;
+		try {
+			Airport airport = (Airport) getAirportCodeList().getRowData();
+			/*
+			 * if(session.getAttribute("itinerary") != null){
+			 * itineraryLocal=(Itinerary)session.getAttribute("itinerary");
+			 * }else{ itineraryLocal= new Itinerary(); }
+			 */
+
+			if (getItineraryList().isRowAvailable()) {
+				itineraryLocal = (Itinerary) getItineraryList().getRowData();
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
-			}else{
-				 itineraryLocal= new Itinerary();
+			} else {
+				itineraryLocal = new Itinerary();
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
 			}
 			session.setAttribute("itinerary", itineraryLocal);
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),
+					itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * To select the airport code from modal panel and assign to appropriate row for itinerary datatable.
+	 * To select the airport code from modal panel and assign to appropriate row
+	 * for itinerary datatable.
+	 * 
 	 * @param event
 	 */
-	public void selectedAirportCode2(ActionEvent event){
+	public void selectToAirportCode(ActionEvent event) {
 		logger.info("Listener: selectedAirportCode2 method");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-		.getExternalContext().getSession(false);
-		Itinerary itineraryLocal= null;
-		try{
-			Airport airport= (Airport)getAirportCodeList().getRowData();
-			if(session.getAttribute("itinerary") != null){
-				 itineraryLocal=(Itinerary)session.getAttribute("itinerary");
-			}else{
-				 itineraryLocal= new Itinerary();
+				.getExternalContext().getSession(false);
+		Itinerary itineraryLocal = null;
+		try {
+			Airport airport = (Airport) getAirportCodeList().getRowData();
+			if (session.getAttribute("itinerary") != null) {
+				itineraryLocal = (Itinerary) session.getAttribute("itinerary");
+			} else {
+				itineraryLocal = new Itinerary();
 			}
-			if(getItineraryList().isRowAvailable()){
-				itineraryLocal=(Itinerary)getItineraryList().getRowData();
+			if (getItineraryList().isRowAvailable()) {
+				itineraryLocal = (Itinerary) getItineraryList().getRowData();
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
-			}else{
+			} else {
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
 			}
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),
+					itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Navigation for the Claim submission Page.i.e. step 6
+	 * 
+	 * @return String
+	 */
+	public String gotoSubmitClaim() {
+		logger.debug("gotoSubmitClaim method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session
+						.getAttribute("selectedLanguage");
+				submitClaimLabel = passengerService.getSubmitClaimLabel(
+						selectedLanguage, baggageState);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoSubmitClaim";
+		} else {
+
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
+	/**
+	 * Navigation for the last page
+	 * 
+	 * @return String
+	 */
+	public String gotoSavedScreen() {
+		logger
+				.debug("gotoSavedScreen method is called to go to the last screen after submitting "
+						+ "	a successful claim");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				savedScreenLabel = passengerService.getSavedScreenLabel(selectedLanguage, baggageState);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoSavedScreen";
+		} else {
+
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
 
 	/*
 	 * Clear the browser cache(component value) from Apply request value phase
@@ -366,7 +447,8 @@ public class PassengerController {
 		 */
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
-		HtmlForm htmlForm = (HtmlForm) viewRoot.findComponent("loginPassengerForm");
+		HtmlForm htmlForm = (HtmlForm) viewRoot
+				.findComponent("loginPassengerForm");
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) htmlForm
 				.findComponent("loginPassengerPanel");
 
@@ -378,11 +460,13 @@ public class PassengerController {
 	 * Clear the browser cache(component value) from Apply request value phase
 	 */
 	public void clearInputCache() {
-		logger.debug("clearInputCache method is called to clear the wrong captcha input texts");
+		logger
+				.debug("clearInputCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
-		HtmlForm htmlForm = (HtmlForm) viewRoot.findComponent("loginPassengerForm");
+		HtmlForm htmlForm = (HtmlForm) viewRoot
+				.findComponent("loginPassengerForm");
 		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) htmlForm
 				.findComponent("loginPassengerPanel");
 
@@ -396,11 +480,6 @@ public class PassengerController {
 			inputSecret.setValue("");
 		}
 	}
-	
-	public void flightPrevious(){
-		logger.debug("flightPrevious method is called to go to previuos page");
-	}
-	
 
 	public String passengerLogout() {
 		return FacesUtil.passengerLogout();
@@ -425,46 +504,59 @@ public class PassengerController {
 	public Map<String, List<Localetext>> getPageMaps() {
 		return pageMaps;
 	}
+
 	public void setPageMaps(Map<String, List<Localetext>> pageMaps) {
 		this.pageMaps = pageMaps;
 	}
+
 	public List<Localetext> getLoginPageList() {
 		return loginPageList;
 	}
+
 	public void setLoginPageList(List<Localetext> loginPageList) {
 		this.loginPageList = loginPageList;
 	}
+
 	public Set<SelectItem> getLanguageDropDown() {
 		return languageDropDown;
 	}
+
 	public void setLanguageDropDown(Set<SelectItem> languageDropDown) {
 		this.languageDropDown = languageDropDown;
 	}
+
 	public List<Localetext> getPassengerDirectionList() {
 		return passengerDirectionList;
 	}
+
 	public MultilingualLabel getPassengerInfoLabel() {
 		return passengerInfoLabel;
 	}
+
 	public MultilingualLabel getFlightLabel() {
 		return flightLabel;
 	}
+
 	public void setFlightLabel(MultilingualLabel flightLabel) {
 		this.flightLabel = flightLabel;
 	}
+
 	public PassengerBean getPassengerBean() {
 		return passengerBean;
 	}
+
 	public void setPassengerBean(PassengerBean passengerBean) {
 		this.passengerBean = passengerBean;
 	}
+
 	public List<SelectItem> getSelectItems() {
 		return selectItems;
 	}
+
 	public void setSelectItems(List<SelectItem> selectItems) {
 		this.selectItems = selectItems;
 	}
-	
+
 	public Set<SelectItem> getLostBagItems() {
 		return lostBagItems;
 	}
@@ -472,7 +564,6 @@ public class PassengerController {
 	public void setLostBagItems(Set<SelectItem> lostBagItems) {
 		this.lostBagItems = lostBagItems;
 	}
-
 
 	public void setOnlineClaimsWS(OnlineClaimsWS onlineClaimsWS) {
 		this.onlineClaimsWS = onlineClaimsWS;
@@ -502,6 +593,16 @@ public class PassengerController {
 		this.itineraryTableIndex = itineraryTableIndex;
 	}
 
-	
-	
+	public MultilingualLabel getSubmitClaimLabel() {
+		return submitClaimLabel;
+	}
+
+	public MultilingualLabel getSavedScreenLabel() {
+		return savedScreenLabel;
+	}
+
+	public void setSavedScreenLabel(MultilingualLabel savedScreenLabel) {
+		this.savedScreenLabel = savedScreenLabel;
+	}
+
 }

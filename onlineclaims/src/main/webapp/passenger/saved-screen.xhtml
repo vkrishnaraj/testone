@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/passengertemplate.xhtml">
+
+	<ui:define name="pageTitle">Application | Saved Screen</ui:define>
+	
+	<ui:define name="mainContent">
+	<script type="text/javascript" src="../_js/passengerFont.js"></script>
+	<h:form id="appForm">
+		
+		<div id="langSelect">
+			<h:outputText value="Font Size" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font1"  href="javascript:decreaseFontSize();">A</a>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font2"  href="javascript:mediumFontSize();">A</a>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font3"  href="javascript:increaseFontSize();">A</a>
+		</div>
+		
+		
+	<div class="container containerfull">
+				<div class="containerTL"></div>
+				<div class="containerheader headerfull">
+				<h1 class="dkblue">Saved Screen
+					<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
+							height="30" width="30" styleClass="helpButton"/>							
+							<rich:componentControl for="helpmodalpanel8"  
+								attachTo="helpButton" operation="show" event="onclick" />
+				</h1>
+			  </div>
+				<div class="containerTR"></div>
+				<div class="containercontent gradientsmall">
+					<div class="contentbodyspacing"></div>
+					<div class="contentbody">
+						
+						
+						<!-- Start body content -->
+				<div>
+					<rich:modalPanel id="helpmodalpanel8" autosized="true" minHeight="380" 
+						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
+						<f:facet name="controls">
+								<h:panelGroup >
+									<a4j:commandLink value="Close" limitToList="true"
+											immediate="true"	id="linkToHidePanel" />
+										<rich:componentControl for="helpmodalpanel8"
+											attachTo="linkToHidePanel" operation="hide" event="onclick" />
+								</h:panelGroup>
+						</f:facet>
+						<h:panelGrid styleClass="modalPanelBody">
+							<h:outputText value="#{passengerController.savedScreenLabel.savedScreenHelp}"/>
+						</h:panelGrid>
+					</rich:modalPanel>
+				</div>
+		
+		<rich:panel styleClass="savedScreenPanel">
+			<div id="savedDiv">
+				<h:outputText value="#{passengerController.savedScreenLabel.savedMessage}" 
+				styleClass="saveMsg"/>
+			</div>
+		</rich:panel>
+		
+		<rich:spacer width="100%" height="20" title=""/>
+			<h:panelGrid  columns="1" styleClass="savedScreenPanleGrid" width="100%">
+				
+				<h:commandLink id="returnLink" value="#{passengerController.savedScreenLabel.returnLink}" 
+						action="#{passengerController.gotoPassengerInfo}"
+						 tabindex="1" style="text-decoration: underline;"/>
+			</h:panelGrid>
+		
+							
+					  	<!-- End body content -->
+				 	 </div>
+					<!-- ends contentbody -->
+				</div><!-- ends containercontent -->
+				<div id="divFooter">
+					<div class="containerBLgradient"></div>
+					<div class="containerfootergradient footerfull"></div>
+					<div class="containerBRgradient"></div>
+					<div class="clear"></div>
+				</div>
+			</div><!-- ends container -->
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<div>
+				<rich:spacer width="250px"/>
+			
+			
+				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.flightPrevious}"
+				 	tabindex="4" immediate="true" onclick="history.go(-1); return false"
+					styleClass="button140pxred button140pxred3" />
+			
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

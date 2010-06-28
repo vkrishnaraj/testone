@@ -291,6 +291,81 @@ public class PassengerServiceImpl implements PassengerService {
 			return null;
 		}
 	}
+	
+	/**
+	 * Get the labels for submit claim page
+	 */
+	@Override
+	public MultilingualLabel getSubmitClaimLabel(String selectedLanguage,
+			Long submitBaggageState) throws SimplePersistenceException {
+		MultilingualLabel multilingualLabel=new MultilingualLabel();
+		Long requiredFieldFlightStatus =null;
+		List<Localetext> localetextList=passengerDao.getSubmitClaimLabel(selectedLanguage);
+		if(localetextList != null && localetextList.size() >0){
+			for(Localetext localetext:localetextList){
+				requiredFieldFlightStatus =  submitBaggageState == 1L ? localetext.getLabel().getDelayedState() 
+											: submitBaggageState == 2L ? localetext.getLabel().getPilferedState()
+											: localetext.getLabel().getDamagedState(); 
+				if(localetext.getLabel().getLabel().contains("submitClaimDescriptiveText")){
+					multilingualLabel.setSubmitClaimDescriptiveText(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("submitClaimHelp")){
+					multilingualLabel.setSubmitClaimHelp(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("submitClaimRequiredFieldMessage")){
+					multilingualLabel.setSubmitClaimRequiredFieldMessage(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("useOfInformation")){
+					multilingualLabel.setUseOfInformation(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("reservedRights")){
+					multilingualLabel.setReservedRights(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("agreement")){
+					multilingualLabel.setAgreement(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("typeAccept")){
+					multilingualLabel.setTypeAccept(localetext.getDisplayText());
+					multilingualLabel.setTypeAcceptState(requiredFieldFlightStatus);
+				}else if(localetext.getLabel().getLabel().contains("confirmation")){
+					multilingualLabel.setConfirmation(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("luggageLostDate")){
+					multilingualLabel.setLuggageLostDate(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("signature")){
+					multilingualLabel.setSignature(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("signedDate")){
+					multilingualLabel.setSignedDate(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("print")){
+					multilingualLabel.setPrint(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("claimSubmit")){
+					multilingualLabel.setClaimSubmit(localetext.getDisplayText());
+				}
+				requiredFieldFlightStatus=null;
+			}
+			return multilingualLabel;
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * Get the labels for Saved Screen page
+	 */
+	
+	@Override
+	public MultilingualLabel getSavedScreenLabel(String selectedLanguage,
+			Long savedBaggageState) throws SimplePersistenceException {
+		MultilingualLabel multilingualLabel=new MultilingualLabel();
+		List<Localetext> localetextList=passengerDao.getSavedScreenLabel(selectedLanguage);
+		if(localetextList != null && localetextList.size() >0){
+			for(Localetext localetext:localetextList){
+				if(localetext.getLabel().getLabel().contains("savedMessage")){
+					multilingualLabel.setSavedMessage(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("savedScreenHelp")){
+					multilingualLabel.setSavedScreenHelp(localetext.getDisplayText());
+				}else if(localetext.getLabel().getLabel().contains("returnLink")){
+					multilingualLabel.setReturnLink(localetext.getDisplayText());
+				}
+			}
+			return multilingualLabel;
+		}else{
+			return null;
+		}
+	}
 
 	@Override
 	public List<CountryCode> getCountries() throws SimplePersistenceException {
@@ -302,4 +377,8 @@ public class PassengerServiceImpl implements PassengerService {
 	public List<Airport> getAirportList() throws SimplePersistenceException{
 		return passengerDao.getAirportList();
 	}
+
+	
+
+	
 }

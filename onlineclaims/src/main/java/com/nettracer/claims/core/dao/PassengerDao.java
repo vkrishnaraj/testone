@@ -104,8 +104,29 @@ public class PassengerDao extends HibernateDaoSupport {
 				"WHERE lg.id = ? AND lb.page = ? "
 				,new Object[]{languageId, "Flight Information"}));
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Localetext> getSubmitClaimLabel(String selectedLanguage)  throws SimplePersistenceException{
+		Long languageId = getLanguageId(selectedLanguage);
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page = ? "
+				,new Object[]{languageId, "Submit Claim"}));
+	}
 
 
+	@SuppressWarnings("unchecked")
+	public List<Localetext> getSavedScreenLabel(String selectedLanguage)  throws SimplePersistenceException {
+		Long languageId = getLanguageId(selectedLanguage);
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page = ? "
+				,new Object[]{languageId, "Saved Screen"}));
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<CountryCode> getCountries()  throws SimplePersistenceException {
@@ -118,6 +139,14 @@ public class PassengerDao extends HibernateDaoSupport {
 	public List<Airport> getAirportList() {
 		return (List<Airport>)getHibernateTemplate().loadAll(Airport.class) ;
 	}
+
+
+
+	
+
+
+
+	
 	
 
 }

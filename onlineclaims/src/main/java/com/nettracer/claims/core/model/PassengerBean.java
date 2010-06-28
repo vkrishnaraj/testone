@@ -59,8 +59,13 @@ public class PassengerBean {
 	private String aboutYourItenerary;
 	private List<Itinerary> itineraryList= new ArrayList<Itinerary>();
 	
+	
 	//For About Your Flight Page
 	private List<Bag> bagList;
+	
+	
+	//For Submit CLaim Page
+	private String typeAccept;
 	
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
@@ -319,6 +324,12 @@ public class PassengerBean {
 	}
 	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
+	}
+	public String getTypeAccept() {
+		return typeAccept;
+	}
+	public void setTypeAccept(String typeAccept) {
+		this.typeAccept = typeAccept;
 	}	
 	
 	

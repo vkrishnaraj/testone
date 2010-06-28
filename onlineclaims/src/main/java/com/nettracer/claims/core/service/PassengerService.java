@@ -25,4 +25,10 @@ public interface PassengerService {
 
 	public List<Airport> getAirportList() throws SimplePersistenceException;
 
+	public MultilingualLabel getSubmitClaimLabel(String selectedLanguage,
+			Long baggageState) throws SimplePersistenceException;
+
+	public MultilingualLabel getSavedScreenLabel(String selectedLanguage,
+			Long baggageState) throws SimplePersistenceException;
+
 }
