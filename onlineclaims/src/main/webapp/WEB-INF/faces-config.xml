@@ -58,6 +58,24 @@
 				<from-outcome>gotoFlightDetails</from-outcome>
 				<to-view-id>/passenger/flightinfo.faces</to-view-id>
 			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoSubmitClaim</from-outcome>
+				<to-view-id>/passenger/submit-claim.faces</to-view-id>
+				<redirect/>
+			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoSavedScreen</from-outcome>
+				<to-view-id>/passenger/saved-screen.faces</to-view-id>
+				<redirect/>
+			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoFraudQuestion</from-outcome>
+				<to-view-id>/passenger/fraud-question.faces</to-view-id>
+				<redirect/>
+			</navigation-case>
 	</navigation-rule>
 	<application>
 		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>

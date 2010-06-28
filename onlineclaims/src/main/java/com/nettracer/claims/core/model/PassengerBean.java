@@ -1,6 +1,7 @@
 package com.nettracer.claims.core.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -63,6 +64,15 @@ public class PassengerBean {
 	//For About Your Flight Page
 	private List<Bag> bagList;
 	
+	//For Fraud Question
+	private Boolean anotherClaim;
+	private String whichAirline;
+	private String dateOfClaim;
+	private String claimantName;
+	private Boolean tsaInspect;
+	private Boolean bagConfirmNote;
+	private String inspectionPlace;
+	private String additionalComments;
 	
 	//For Submit CLaim Page
 	private String typeAccept;
@@ -330,6 +340,54 @@ public class PassengerBean {
 	}
 	public void setTypeAccept(String typeAccept) {
 		this.typeAccept = typeAccept;
+	}
+	public Boolean getAnotherClaim() {
+		return anotherClaim;
+	}
+	public void setAnotherClaim(Boolean anotherClaim) {
+		this.anotherClaim = anotherClaim;
+	}
+	public String getWhichAirline() {
+		return whichAirline;
+	}
+	public void setWhichAirline(String whichAirline) {
+		this.whichAirline = whichAirline;
+	}
+	public String getDateOfClaim() {
+		return dateOfClaim;
+	}
+	public void setDateOfClaim(String dateOfClaim) {
+		this.dateOfClaim = dateOfClaim;
+	}
+	public String getClaimantName() {
+		return claimantName;
+	}
+	public void setClaimantName(String claimantName) {
+		this.claimantName = claimantName;
+	}
+	public Boolean getTsaInspect() {
+		return tsaInspect;
+	}
+	public void setTsaInspect(Boolean tsaInspect) {
+		this.tsaInspect = tsaInspect;
+	}
+	public Boolean getBagConfirmNote() {
+		return bagConfirmNote;
+	}
+	public void setBagConfirmNote(Boolean bagConfirmNote) {
+		this.bagConfirmNote = bagConfirmNote;
+	}
+	public String getInspectionPlace() {
+		return inspectionPlace;
+	}
+	public void setInspectionPlace(String inspectionPlace) {
+		this.inspectionPlace = inspectionPlace;
+	}
+	public String getAdditionalComments() {
+		return additionalComments;
+	}
+	public void setAdditionalComments(String additionalComments) {
+		this.additionalComments = additionalComments;
 	}	
 	
 	

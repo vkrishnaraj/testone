@@ -160,7 +160,30 @@ public class MultilingualLabel {
 	private String airlineFlightNo;
 	private String flightDate;
 	
+	//For Fraud Question -- Step 5 of 6
+	private String fraudQuestionDescriptiveText;
+	private String fraudQuestionRequiredFieldMessage;
+	private String fraudQuestionHelp;
+	private String moreClaim;
+	private String anotherClaim;
+	private String yesAbove;
+	private String whichAirline;
+	private String dateOfClaim;
+	private String claimantName;
+	private String tsaInfo;
+	private String tsaInspect;
+	private String bagConfirmNote;
+	private String inspectionPlace;
+	private String additionalComments;
 	
+	private Long anotherClaimState;
+	private Long whichAirlineState;
+	private Long dateOfClaimState;
+	private Long claimantNameState;
+	private Long tsaInspectState;
+	private Long bagConfirmNoteState;
+	private Long inspectionPlaceState;
+	private Long additionalCommentsState;
 	
 	//For Claim Submission -step 6
 	private String submitClaimDescriptiveText;
@@ -1090,6 +1113,139 @@ public class MultilingualLabel {
 	}
 	public void setClaimSubmit(String claimSubmit) {
 		this.claimSubmit = claimSubmit;
+	}
+	public String getFraudQuestionDescriptiveText() {
+		return fraudQuestionDescriptiveText;
+	}
+	public void setFraudQuestionDescriptiveText(String fraudQuestionDescriptiveText) {
+		this.fraudQuestionDescriptiveText = fraudQuestionDescriptiveText;
+	}
+	public String getFraudQuestionRequiredFieldMessage() {
+		return fraudQuestionRequiredFieldMessage;
+	}
+	public void setFraudQuestionRequiredFieldMessage(
+			String fraudQuestionRequiredFieldMessage) {
+		this.fraudQuestionRequiredFieldMessage = fraudQuestionRequiredFieldMessage;
+	}
+	public String getFraudQuestionHelp() {
+		return fraudQuestionHelp;
+	}
+	public void setFraudQuestionHelp(String fraudQuestionHelp) {
+		this.fraudQuestionHelp = fraudQuestionHelp;
+	}
+	public String getMoreClaim() {
+		return moreClaim;
+	}
+	public void setMoreClaim(String moreClaim) {
+		this.moreClaim = moreClaim;
+	}
+	public String getAnotherClaim() {
+		return anotherClaim;
+	}
+	public void setAnotherClaim(String anotherClaim) {
+		this.anotherClaim = anotherClaim;
+	}
+	public String getYesAbove() {
+		return yesAbove;
+	}
+	public void setYesAbove(String yesAbove) {
+		this.yesAbove = yesAbove;
+	}
+	public String getWhichAirline() {
+		return whichAirline;
+	}
+	public void setWhichAirline(String whichAirline) {
+		this.whichAirline = whichAirline;
+	}
+	public String getClaimantName() {
+		return claimantName;
+	}
+	public void setClaimantName(String claimantName) {
+		this.claimantName = claimantName;
+	}
+	public String getTsaInfo() {
+		return tsaInfo;
+	}
+	public void setTsaInfo(String tsaInfo) {
+		this.tsaInfo = tsaInfo;
+	}
+	public String getTsaInspect() {
+		return tsaInspect;
+	}
+	public void setTsaInspect(String tsaInspect) {
+		this.tsaInspect = tsaInspect;
+	}
+	public String getInspectionPlace() {
+		return inspectionPlace;
+	}
+	public void setInspectionPlace(String inspectionPlace) {
+		this.inspectionPlace = inspectionPlace;
+	}
+	public String getAdditionalComments() {
+		return additionalComments;
+	}
+	public void setAdditionalComments(String additionalComments) {
+		this.additionalComments = additionalComments;
+	}
+	public String getDateOfClaim() {
+		return dateOfClaim;
+	}
+	public void setDateOfClaim(String dateOfClaim) {
+		this.dateOfClaim = dateOfClaim;
+	}
+	public Long getAnotherClaimState() {
+		return anotherClaimState;
+	}
+	public void setAnotherClaimState(Long anotherClaimState) {
+		this.anotherClaimState = anotherClaimState;
+	}
+	public Long getWhichAirlineState() {
+		return whichAirlineState;
+	}
+	public void setWhichAirlineState(Long whichAirlineState) {
+		this.whichAirlineState = whichAirlineState;
+	}
+	public Long getDateOfClaimState() {
+		return dateOfClaimState;
+	}
+	public void setDateOfClaimState(Long dateOfClaimState) {
+		this.dateOfClaimState = dateOfClaimState;
+	}
+	public Long getClaimantNameState() {
+		return claimantNameState;
+	}
+	public void setClaimantNameState(Long claimantNameState) {
+		this.claimantNameState = claimantNameState;
+	}
+	public Long getTsaInspectState() {
+		return tsaInspectState;
+	}
+	public void setTsaInspectState(Long tsaInspectState) {
+		this.tsaInspectState = tsaInspectState;
+	}
+	public Long getInspectionPlaceState() {
+		return inspectionPlaceState;
+	}
+	public void setInspectionPlaceState(Long inspectionPlaceState) {
+		this.inspectionPlaceState = inspectionPlaceState;
+	}
+	public Long getAdditionalCommentsState() {
+		return additionalCommentsState;
+	}
+	public void setAdditionalCommentsState(Long additionalCommentsState) {
+		this.additionalCommentsState = additionalCommentsState;
+	}
+	public String getBagConfirmNote() {
+		return bagConfirmNote;
+	}
+	public void setBagConfirmNote(String bagConfirmNote) {
+		this.bagConfirmNote = bagConfirmNote;
+	}
+	public Long getBagConfirmNoteState() {
+		return bagConfirmNoteState;
+	}
+	public void setBagConfirmNoteState(Long bagConfirmNoteState) {
+		this.bagConfirmNoteState = bagConfirmNoteState;
 	}  
 	
 	

@@ -493,6 +493,11 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .width40px{width: 40px;}
 .pointer { cursor:pointer;}
 
+/* Fraud Question*/
+.width1{width:62%;}
+.width2{width:12%;}
+.width3{width:25%;}
+
 /*Saved Screen*/
 .savedScreenPanleGrid {text-align: center; }
 .savedScreenPanel {text-align: center; height: 200px;}

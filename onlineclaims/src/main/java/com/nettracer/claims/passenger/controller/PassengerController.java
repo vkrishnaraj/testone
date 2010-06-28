@@ -64,6 +64,7 @@ public class PassengerController {
 	private List<Localetext> passengerDirectionList;
 	private MultilingualLabel passengerInfoLabel;
 	private MultilingualLabel flightLabel;
+	private MultilingualLabel fraudQuestionLabel;
 	private MultilingualLabel submitClaimLabel;
 	private MultilingualLabel savedScreenLabel;
 	private List<SelectItem> selectItems = new ArrayList<SelectItem>();
@@ -374,6 +375,33 @@ public class PassengerController {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * Navigation for the Fraud Question Page.i.e. step 5
+	 * 
+	 * @return String
+	 */
+	public String gotoFraudQuestion() {
+		logger.info("gotoFraudQuestion method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				fraudQuestionLabel = passengerService.getFraudQuestionLabel(selectedLanguage, baggageState);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoFraudQuestion";
+		} else {
+
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
 
 	/**
 	 * Navigation for the Claim submission Page.i.e. step 6
@@ -381,7 +409,7 @@ public class PassengerController {
 	 * @return String
 	 */
 	public String gotoSubmitClaim() {
-		logger.debug("gotoSubmitClaim method is called");
+		logger.info("gotoSubmitClaim method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
@@ -411,7 +439,7 @@ public class PassengerController {
 	 */
 	public String gotoSavedScreen() {
 		logger
-				.debug("gotoSavedScreen method is called to go to the last screen after submitting "
+				.info("gotoSavedScreen method is called to go to the last screen after submitting "
 						+ "	a successful claim");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
@@ -437,7 +465,7 @@ public class PassengerController {
 	 */
 	public void clearCaptchaCache() {
 		logger
-				.debug("clearCaptchaCache method is called to clear the wrong captcha input texts");
+				.info("clearCaptchaCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		/*
 		 * ViewHandler viewHandler = context.getApplication().getViewHandler();
@@ -603,6 +631,10 @@ public class PassengerController {
 
 	public void setSavedScreenLabel(MultilingualLabel savedScreenLabel) {
 		this.savedScreenLabel = savedScreenLabel;
+	}
+
+	public MultilingualLabel getFraudQuestionLabel() {
+		return fraudQuestionLabel;
 	}
 
 }
