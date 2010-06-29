@@ -92,6 +92,8 @@ public class ViewIncomingIncidents extends Action {
 
 		//set a trap to test the different itemType_ID: 0-all, 1-lostdelay, 2-damaged, 3-pilferage
 		String strIncidentType = request.getParameter("type");
+		String myItemTypeId = request.getParameter("itemType_ID");
+		
 		int myIncidentType = 0;
 		if (strIncidentType != null) {
 			if (strIncidentType.equalsIgnoreCase("1")) {
@@ -101,7 +103,15 @@ public class ViewIncomingIncidents extends Action {
 			} else {
 				myIncidentType = 3;
 			}
-		}
+		} else if (myItemTypeId != null) {
+			if (myItemTypeId.equalsIgnoreCase("1")) {
+				myIncidentType = 1;
+			} else if (myItemTypeId.equalsIgnoreCase("2")) {
+				myIncidentType = 2;
+			} else if (myItemTypeId.equalsIgnoreCase("3")) {
+				myIncidentType = 3;
+			}
+		} 
 		daform.setItemType_ID(myIncidentType);
 		
 		//assigned to station within last 24 hours feature for westjet
