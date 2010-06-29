@@ -57,7 +57,7 @@
 		</dependency>
 		
 		<!-- Ajax4Jsf Integration with Myfaces -->
-		<dependency>
+		<!--<dependency>
 			<artifactId>ajax4jsf</artifactId>
 			<groupId>org.ajax4jsf</groupId>
 			<version>1.1.0</version>
@@ -88,7 +88,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- Log4j -->
+		--><!-- Log4j -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -142,13 +142,29 @@
 			<version>5.0.5</version>
 		</dependency>
 		
-		<!-- Web Service Integration-->
 		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2</artifactId>
-			<version>1.5</version>
+			<groupId>OnlineClaimsService-client</groupId>
+			<artifactId>OnlineClaimsService-client</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!--<dependency>
+   			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-parent</artifactId>
+			<version>1.5.1</version>
 		</dependency>
 		<dependency>
+   			<groupId>org.apache.axis2</groupId>
+			<artifactId>distribution</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		
+		--><!-- Web Service Integration-->
+		<!--<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		--><dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
 			<version>2.4.0</version>
@@ -166,23 +182,23 @@
 			<version>2.5.5</version>
 		</dependency>
 		
-		--><!-- Richfaces dependencies -->
-		<!--<dependency>
+		--><!-- Richfaces dependencies --> <!-- updated from 3.2.0.GA to 3.3.1.GA -->
+		<dependency>
         	<groupId>org.richfaces.framework</groupId>
         	<artifactId>richfaces-api</artifactId>
-        	<version>3.2.0.GA</version>
+        	<version>3.3.1.GA</version>
     	</dependency>
 
     	<dependency>
         	<groupId>org.richfaces.framework</groupId>
         	<artifactId>richfaces-impl</artifactId>
-        	<version>3.2.0.GA</version>
+        	<version>3.3.1.GA</version>
     	</dependency>
 
    		 <dependency>
-        	<groupId>org.richfaces</groupId>
+        	<groupId>org.richfaces.ui</groupId>
         	<artifactId>richfaces-ui</artifactId>
-        	<version>3.2.0.GA</version>
+        	<version>3.3.1.GA</version>
         	<exclusions>
         		<exclusion>
           			<groupId>commons-collections</groupId>
@@ -193,7 +209,7 @@
 
 		
 
-	--></dependencies>
+	</dependencies>
 
 	<build>
 		<finalName>onlineclaims</finalName>
