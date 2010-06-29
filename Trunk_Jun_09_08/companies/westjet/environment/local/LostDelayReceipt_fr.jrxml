@@ -134,7 +134,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Veuillez visiter  <style isBold="true" pdfFontName="Helvetica-Bold">website</style> pour consulter le tarif des vols intérieurs de WestJet ou <style isBold="true" pdfFontName="Helvetica-Bold">website</style> pour consulter le tarif des vols internationaux de WestJet.]]></text>
+				<text><![CDATA[Veuillez visiter  <style isBold="true" pdfFontName="Helvetica-Bold">https://westjet.nettracer.aero</style> pour consulter le tarif des vols intérieurs de WestJet ou <style isBold="true" pdfFontName="Helvetica-Bold">https://westjet.nettracer.aero</style> pour consulter le tarif des vols internationaux de WestJet.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement key="textField-39" mode="Opaque" x="295" y="441" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>

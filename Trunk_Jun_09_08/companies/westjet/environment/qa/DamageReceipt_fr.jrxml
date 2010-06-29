@@ -110,7 +110,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Si vous souhaitez envoyer un message à WestJet, obtenir une mise à jour de votre dossier ou encore obtenir plus d’information, veuillez visiter <style isBold="true" pdfFontName="Helvetica-Bold">https://westjetqa.nettracer.aero</style>.]]></text>
+				<text><![CDATA[Si vous souhaitez envoyer un message à WestJet, obtenir une mise à jour de votre dossier ou encore obtenir plus d’information, veuillez visiter <style isBold="true" pdfFontName="Helvetica-Bold">https://westjet.nettracer.aero</style>.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-34" mode="Opaque" x="43" y="304" width="469" height="64" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
