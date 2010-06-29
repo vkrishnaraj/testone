@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
@@ -27,7 +28,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
@@ -38,6 +38,7 @@ import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.core.model.Passenger;
 import com.nettracer.claims.core.model.PassengerBean;
+import com.nettracer.claims.core.service.AdminService;
 import com.nettracer.claims.core.service.PassengerService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
@@ -71,9 +72,7 @@ public class PassengerLoginController {
 	private Long baggageState;
 	private PassengerBean passengerBean;
 	private MultilingualLabel loginLabel;
-	/*
-	 * @Autowired AdminService adminService;
-	 */
+	
 
 	@Autowired
 	PassengerService passengerService;
@@ -82,9 +81,28 @@ public class PassengerLoginController {
 	OnlineClaimsWS onlineClaimsWS;
 
 	public PassengerLoginController() {
-		logger.info("PassengerController constructor");
-		List<Languages> languagesList = PassengerBootstrap
+		logger.info("PassengerController constructor-1");
+		/*List<Languages> languagesList = PassengerBootstrap
 				.getLanguageDropDown();
+		for (Languages language : languagesList) {
+			if (language.getActiveStatus() == true) {
+				languageDropDown.add(new SelectItem(language.getDescription()));
+			}
+		}
+		loginPageList = PassengerBootstrap.getLoginPageList();
+		logger.info("Size of loginPageList inside PassengerController constructor= "+ loginPageList.size());
+		if (loginPageList != null && loginPageList.size() > 0) {
+			setLoginLabels();
+		}*/
+	}
+	
+	@Autowired
+	public PassengerLoginController(AdminService adminService) {
+		logger.info("PassengerController constructor-2");
+		List<Languages> languagesList;
+		try {
+			languagesList = adminService.getLanguages();
+		
 		for (Languages language : languagesList) {
 			if (language.getActiveStatus() == true) {
 				languageDropDown.add(new SelectItem(language.getDescription()));
@@ -97,7 +115,17 @@ public class PassengerLoginController {
 		if (loginPageList != null && loginPageList.size() > 0) {
 			setLoginLabels();
 		}
+		} catch (SimplePersistenceException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	
+	@PostConstruct
+	public void populateLanguageDropDown() {
+        // populates the populateLanguageDropDown upon initialization...
+    }
+
 
 	/**
 	 * Set the labels for login page
