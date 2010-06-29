@@ -794,7 +794,13 @@ public class BagService {
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_LD);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
-								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
+								
+								String myEmailSubjectLine = TracerProperties.get("email.subjectline.lostdelay.key");
+								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
+									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
+								} else {
+									he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
+								}
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.mishandled.content.apologize.text"));
@@ -805,7 +811,13 @@ public class BagService {
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_DAM);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title"));
-								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged")));
+								
+								String myEmailSubjectLine = TracerProperties.get("email.subjectline.damaged.key");
+								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
+									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
+								} else {
+									he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged")));
+								}
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.damaged.content.apologize.text"));
@@ -816,7 +828,13 @@ public class BagService {
 								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_PIL);
 								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title"));
-								he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing")));
+								
+								String myEmailSubjectLine = TracerProperties.get("email.subjectline.pilfered.key");
+								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
+									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
+								} else {
+									he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing")));
+								}
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.missing.content.apologize.text"));
