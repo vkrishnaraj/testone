@@ -70,7 +70,7 @@
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
 
-							<rich:componentControl for="flightModalPanel2"
+							<rich:componentControl for="#{passengerController.modalPanel}"
 								attachTo="flightImageLink2" operation="show" event="onclick" />
 
 							<a4j:actionparam name="itineraryTableIndex2"
@@ -107,6 +107,7 @@
 			<a4j:outputPanel id="calendar" layout="block">
 				<rich:calendar value="#{item.journeyDate}"  id="journeyDate#{rowIndex+1}"
 						required="#{item.departureCity ne null ? true : false}"
+						enableManualInput="false" datePattern="MM/dd/yyyy" 
 						label="Date of Journey Row#{rowIndex+1}"
 					popup="true" />
 				</a4j:outputPanel>

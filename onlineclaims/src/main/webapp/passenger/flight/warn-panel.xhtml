@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+		<a4j:form  id="warnModalPanelForm">
+	<rich:modalPanel id="warnModalPanel" autosized="true" 
+		minHeight="200" zindex="10"  minWidth="380" height="200" width="300" left="200"	top="20">
+		 <f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="../_images/close.png" styleClass="pointer"
+					id="linkwarnModalPanel" />
+				<rich:componentControl for="warnModalPanel"
+					attachTo="linkwarnModalPanel" operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+			<h:panelGrid>
+				<h:outputText value="Please Select the Boarding point first" />
+				<a4j:commandButton immediate="true" value="OK" id="warnButton" styleClass="pointer"/>
+				<rich:componentControl for="warnModalPanel"
+					attachTo="warnButton" operation="hide" event="onclick" />
+			</h:panelGrid>
+		</rich:modalPanel>
+			</a4j:form>
+
+</ui:composition>
