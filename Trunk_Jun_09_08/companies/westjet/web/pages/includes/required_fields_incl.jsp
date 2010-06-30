@@ -341,17 +341,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
             currentElement.focus();
             return false;
           }
-        }
-      else if (currentElementName.indexOf("].description") != -1)
-      {  
-        if (currentElement.value.length == 0)
-        {
-          alert("<%= (String)bundle.getString( "colname.description") %>" + 
-          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-          currentElement.focus();
-          return false;
-        }
-      } 	
+        }	
       else if (currentElementName.indexOf(".legfrom") != -1) {  
           if (currentElement.value.length == 0)
           {
