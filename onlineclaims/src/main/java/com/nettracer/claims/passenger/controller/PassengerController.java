@@ -336,11 +336,27 @@ public class PassengerController {
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
 			}
 			session.setAttribute("itinerary", itineraryLocal);
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),
-					itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(), itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Call for validation of itinerary table
+	 * 
+	 * 
+	 */
+	public String getModalPanel(){
+		logger.info("getModalPanel method");
+		if(passengerBean.getItineraryList() != null  
+				&& passengerBean.getItineraryList().get(getItineraryTableIndex()) != null
+				&& passengerBean.getItineraryList().get(getItineraryTableIndex()).getDepartureCity() != null ){
+			return "flightModalPanel2";
+		}else{
+			return "warnModalPanel";
 		}
 	}
 
@@ -368,13 +384,14 @@ public class PassengerController {
 			} else {
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
 			}
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),
-					itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	
 	/**
@@ -392,6 +409,15 @@ public class PassengerController {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
 				fraudQuestionLabel = passengerService.getFraudQuestionLabel(selectedLanguage, baggageState);
+				if(passengerBean.getAnotherClaim()){
+					fraudQuestionLabel.setWhichAirlineState(2L);
+					fraudQuestionLabel.setDateOfClaimState(2L);
+					fraudQuestionLabel.setClaimantNameState(2L);
+				}else{
+					fraudQuestionLabel.setWhichAirlineState(1L);
+					fraudQuestionLabel.setDateOfClaimState(1L);
+					fraudQuestionLabel.setClaimantNameState(1L);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -400,6 +426,25 @@ public class PassengerController {
 
 			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Listener for the Fraud Question Page.i.e. step 5
+	 * 
+	 * 
+	 */
+	public void selectAnotherClaim(ValueChangeEvent valueChangeEvent) {
+		logger.info("Listener: selectAnotherClaim called");
+		Boolean anotherClaim = (Boolean) valueChangeEvent.getNewValue();
+		if(anotherClaim){
+			fraudQuestionLabel.setWhichAirlineState(2L);
+			fraudQuestionLabel.setDateOfClaimState(2L);
+			fraudQuestionLabel.setClaimantNameState(2L);
+		}else{
+			fraudQuestionLabel.setWhichAirlineState(1L);
+			fraudQuestionLabel.setDateOfClaimState(1L);
+			fraudQuestionLabel.setClaimantNameState(1L);
 		}
 	}
 

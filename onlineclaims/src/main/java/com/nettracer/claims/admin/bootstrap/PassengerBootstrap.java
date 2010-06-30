@@ -31,7 +31,7 @@ public class PassengerBootstrap implements InitializingBean {
 	private static final String SAVED_SREEN = "Saved";*/
 	
 	private static List<Localetext> loginPageList;
-	private static List<Languages> languageDropDown;
+	//private static List<Languages> languageDropDown;
 
 	@Autowired
 	AdminService adminService;
@@ -44,7 +44,7 @@ public class PassengerBootstrap implements InitializingBean {
 		// TODO Auto-generated method stub
 		logger.info("afterPropertiesSet of  PassengerBootstrap is Invoked");
 		
-		languageDropDown=adminService.getLanguages();
+		//languageDropDown=adminService.getLanguages();
 		loginPageList=adminService.getPassengerLoginContents("English-US"); //by default language is US-English
 		//loginPageList=getAllPageMap("English-US").get(PASSENGER_LOGIN); 
 		logger.info("Size of loginPageList= "+loginPageList);
@@ -56,9 +56,9 @@ public class PassengerBootstrap implements InitializingBean {
 	
 	
 	
-	public static List<Languages> getLanguageDropDown() {
+	/*public static List<Languages> getLanguageDropDown() {
 		return languageDropDown;
-	}
+	}*/
 
 	
 
