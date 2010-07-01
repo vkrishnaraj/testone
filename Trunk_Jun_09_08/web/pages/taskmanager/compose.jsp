@@ -134,7 +134,7 @@ function disableButton(aButton) {
             <TD width="87%">
               <logic:iterate id="recp_list" indexId="k" name="composeForm" property="recp_list" type="com.bagnet.nettracer.tracing.db.Recipient">
                 <logic:notEqual name="recp_list" property="company_code" value="">
-                  <html:text name="recp_list" property="company_code" size="3" maxlength="3" styleClass="textfield" indexed="true" onblur="submit()" />
+                  <html:text name="recp_list" property="company_code" size="3" maxlength="3" styleClass="textfield" indexed="true" onchange="submit()" />
                   <a href="#" onclick="openWindow('pages/popups/airlines.jsp?key=recp_list[<%= k %>].company_code&submitform=1','airlines',500,600);return false;"><img src="deployment/main/images/nettracer/airline_codes.gif" border=0></a>
                   &nbsp;
                   <html:select name="recp_list" styleClass="dropdown" property="station_id" indexed="true">
