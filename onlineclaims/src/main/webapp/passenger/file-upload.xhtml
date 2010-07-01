@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/layout/passengertemplate.xhtml">
+
+	<ui:define name="pageTitle">Application | File Upload</ui:define>
+	
+	<ui:define name="mainContent">
+	<script type="text/javascript" src="../_js/passengerFont.js"></script>
+	<h:form id="appForm" enctype="multipart/form-data">
+	<div>
+		<div id="step">
+			<t:outputText value="Step 4 of 6" />
+		</div>
+		
+		<div id="langSelect">
+			<h:outputText value="Font Size" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font1" style="font-size: 8pt;" href="javascript:decreaseFontSize();">A</a>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font2" style="font-size: 10pt;" href="javascript:mediumFontSize();">A</a>
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
+		</div>
+	
+	</div>
+	<div class="container containerfull">
+				<div class="containerTL"></div>
+				<div class="containerheader headerfull">
+				<h1 class="dkblue">Descriptive Text</h1>
+			  	</div>
+				<div class="containerTR"></div>
+				<div class="containercontent gradientsmall">
+					<div class="contentbodyspacing"></div>
+					<div class="contentbody">
+						
+						
+						<!-- Start body content -->
+						
+						<t:outputText value="#{passengerController.fileUploadLabel.fileUploadDescriptiveText}" />
+							
+					  	<!-- End body content -->
+				 	 </div>
+					<!-- ends contentbody -->
+				</div><!-- ends containercontent -->
+				<div id="divFooter">
+					<div class="containerBLgradient"></div>
+					<div class="containerfootergradient footerfull"></div>
+					<div class="containerBRgradient"></div>
+					<div class="clear"></div>
+				</div>
+			</div><!-- ends container -->
+			
+		
+	<div class="container containerfull">
+				<div class="containerTL"></div>
+				<div class="containerheader headerfull">
+				<h1 class="dkblue">Application | File Upload
+				<h:graphicImage url="../_images/helpButton.gif" id="helpButton5" alt="Help" 
+							height="30" width="30" styleClass="helpButton"/>							
+							<rich:componentControl for="helpmodalpanel5"  
+								attachTo="helpButton5" operation="show" event="onclick" /> 
+				</h1>
+			  </div>
+				<div class="containerTR"></div>
+				<div class="containercontent gradientsmall">
+					<div class="contentbodyspacing"></div>
+					<div class="contentbody">
+						
+						
+						<!-- Start body content -->
+				
+				<div>
+					<t:outputText value="#{passengerController.fileUploadLabel.fileUploadRequiredFieldMessage}" />	
+				</div>	
+				<div><h:outputText value="&#160;" /></div>
+				<div>
+					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+				</div>
+				<rich:spacer width="100%" height="10" title=""/>
+				
+				<div>
+					<rich:modalPanel id="helpmodalpanel5" autosized="true" minHeight="380" 
+						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
+						<f:facet name="controls">
+								<h:panelGroup >
+									<a4j:commandLink value="Close" 
+									style="text-decoration: underline; cursor: pointer; margin-right: 22px;" 
+											immediate="true"	id="linkToHidePanel5" />
+										<rich:componentControl for="helpmodalpanel5"
+											attachTo="linkToHidePanel5" operation="hide" event="onclick" />
+								</h:panelGroup>
+						</f:facet>
+						<h:panelGrid styleClass="modalPanelBody" width="100%">
+							<t:outputText value="#{passengerController.fileUploadLabel.fileUploadHelp}"/>
+						</h:panelGrid>
+					</rich:modalPanel>
+				</div>
+				
+				
+				
+				<div>
+					<t:outputText value="#{passengerController.fileUploadLabel.fileUpload}" styleClass="subHeader"/>	
+				</div>
+				<div>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<div>
+				<h:panelGrid columns="1" width="49%"  columnClasses="width1">
+					<t:outputText value="#{passengerController.fileUploadLabel.fileInstruction}"/>
+				</h:panelGrid>
+				</div>
+				<rich:spacer width="100%" height="30" title=""/>
+				<h:panelGrid columns="2" width="100%">
+					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection}"/>
+					<t:inputFileUpload id="fileupload" value="#{passengerController.upFile}" size="60" /><p/>
+				</h:panelGrid>
+				
+				<rich:spacer width="100%" height="20" title=""/>
+				<div>
+				<h:panelGrid columns="2" width="100%">
+				<rich:spacer width="80"  title=""/>
+				<h:commandButton value="#{passengerController.fileUploadLabel.addReceipts}" 
+					 	action="#{passengerController.upload}">
+					 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
+				</h:commandButton>
+				</h:panelGrid>
+				</div>
+				<div>
+    				<!--<t:outputText value="File Uploaded Successfully." rendered="#{passengerController.rendSuccess}" 
+						style="color:green;font-weight:bold"/>
+    				<t:outputText value="Error in File Uploading." 	rendered="#{passengerController.rendFailure}" 
+						style="color:red;font-weight:bold"/>
+				--></div>
+				
+				<rich:spacer width="100%" height="30" title=""/>
+				
+				<div>
+					<t:outputText value="#{passengerController.fileUploadLabel.receiptsToBeUploaded}" styleClass="subHeader"/>	
+				</div>
+				<div>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<a4j:outputPanel id="filePanel" ajaxRendered="true">
+					<t:dataTable width="200" align="center" id="fileTable"
+						value="#{passengerController.fileDataModelList}" var="file">
+						
+						<h:column>
+							<h:outputText value="#{file.name}" />
+						</h:column>
+						<h:column>
+							<a4j:commandButton  value="#{passengerController.fileUploadLabel.remove}" 
+								reRender="filePanel" limitToList="true" immediate="true"
+								actionListener="#{passengerController.removeFileListener}"/>
+						</h:column>
+					
+					</t:dataTable>
+				
+				</a4j:outputPanel>
+				
+				
+					  	<!-- End body content -->
+				 	 </div>
+					<!-- ends contentbody -->
+				</div><!-- ends containercontent -->
+				<div id="divFooter">
+					<div class="containerBLgradient"></div>
+					<div class="containerfootergradient footerfull"></div>
+					<div class="containerBRgradient"></div>
+					<div class="clear"></div>
+				</div>
+			</div><!-- ends container -->
+			
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<div>
+			
+				<rich:spacer width="250px"/>
+			
+				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
+				 		tabindex="3" action="#"
+						styleClass="button140pxred button140pxred2" />
+				
+				<rich:spacer width="20px"/>
+			
+				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.flightPrevious}"
+				 	tabindex="4" immediate="true" onclick="history.go(-1); return false"
+					styleClass="button140pxred button140pxred2" />
+					
+				<rich:spacer width="20px"/>
+				
+				<h:commandButton id="forwardSubmit" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
+				 	tabindex="5" action="#{passengerController.gotoFraudQuestion}"
+					styleClass="button140pxred button140pxred2" />
+				
+			
+			</div>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

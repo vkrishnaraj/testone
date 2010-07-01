@@ -16,6 +16,7 @@
 		<managed-bean-class>com.nettracer.claims.admin.RequiredFieldsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>gotoLandingPage</from-outcome>
@@ -68,6 +69,12 @@
 			<navigation-case>
 				<from-outcome>gotoSavedScreen</from-outcome>
 				<to-view-id>/passenger/saved-screen.faces</to-view-id>
+				<redirect/>
+			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoFileUpload</from-outcome>
+				<to-view-id>/passenger/file-upload.faces</to-view-id>
 				<redirect/>
 			</navigation-case>
 			
