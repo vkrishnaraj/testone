@@ -71,5 +71,60 @@ public class TracerDateTime {
 		int value = (int)(difference / 1000 / 3600);
 		return 0-value;
 	}
+	
+	public static Date getGMTDateDay() {
+		try {
+			Date now = new Date(); // current system date
+			DateFormat df = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
+			df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			
+			Date newdate = DateUtils.convertToDate(df.format(now), TracingConstants.DB_DATEFORMAT, null);
 
+			return newdate;
+		} catch (Exception e) {
+			return new Date();
+		}
+	}
+
+	public static Date getGMTDateTime() {
+		try {
+			Date now = new Date(); // current system date
+			DateFormat df = new SimpleDateFormat(TracingConstants.DB_TIMEFORMAT);
+			df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			
+			Date newdate = DateUtils.convertToDate(df.format(now), TracingConstants.DB_TIMEFORMAT, null);
+
+			return newdate;
+		} catch (Exception e) {
+			return new Date();
+		}
+	}
+	
+	public static String getGMTDateDayString() {
+		String newdate = "";
+		try {
+			Date now = new Date(); // current system date
+			DateFormat df = new SimpleDateFormat("EEE MMM dd");
+			//df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			
+			newdate = df.format(now);
+		} catch (Exception e) {
+			logger.error("Exception with date : " + e.getMessage());
+		}
+		return newdate;
+	}
+
+	public static String getGMTDateTimeString() {
+		String newdate = "";
+		try {
+			Date now = new Date(); // current system date
+			DateFormat df = new SimpleDateFormat("HH:mm:ss zzz yyyy");
+			//df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			
+			newdate = df.format(now);
+		} catch (Exception e) {
+			logger.error("Exception with date : " + e.getMessage());
+		}
+		return newdate;
+	}
 }

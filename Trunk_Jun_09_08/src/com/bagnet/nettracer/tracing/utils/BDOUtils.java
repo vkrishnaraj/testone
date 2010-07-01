@@ -1156,7 +1156,14 @@ public class BDOUtils {
 			}
 
 			if (fullCancel) {
-				bdo.setDelivery_comments(bdo.getDelivery_comments() + "\n\n***BDO Canceled by user: " + a.getUsername() + " at " + TracerDateTime.getGMTDate());
+				//bdo.setDelivery_comments(bdo.getDelivery_comments() + "\n\n***BDO Canceled by user: " + a.getUsername() + " at " + TracerDateTime.getGMTDate());
+				bdo.setDelivery_comments(bdo.getDelivery_comments() 
+						+ "\n\n***BDO Canceled by user: " 
+						+ a.getUsername() 
+						+ " on " 
+						+ TracerDateTime.getGMTDateDayString()
+						+ " at "
+						+ TracerDateTime.getGMTDateTimeString());
 				bdo.setCanceled(true);
 
 				sess.save(bdo);
