@@ -160,6 +160,18 @@ public class MultilingualLabel {
 	private String airlineFlightNo;
 	private String flightDate;
 	
+	//For FIle Upload Page -- step 4 of 6
+	private String fileUploadDescriptiveText;
+	private String fileUploadRequiredFieldMessage;
+	private String fileUploadHelp;
+	private String fileUpload;
+	private String fileInstruction;
+	private String fileSelection;
+	private String receiptsToBeUploaded;
+	private String addReceipts;
+	private String browse;
+	private String remove;
+	
 	//For Fraud Question -- Step 5 of 6
 	private String fraudQuestionDescriptiveText;
 	private String fraudQuestionRequiredFieldMessage;
@@ -1246,6 +1258,67 @@ public class MultilingualLabel {
 	}
 	public void setBagConfirmNoteState(Long bagConfirmNoteState) {
 		this.bagConfirmNoteState = bagConfirmNoteState;
+	}
+	public String getFileUploadDescriptiveText() {
+		return fileUploadDescriptiveText;
+	}
+	public void setFileUploadDescriptiveText(String fileUploadDescriptiveText) {
+		this.fileUploadDescriptiveText = fileUploadDescriptiveText;
+	}
+	public String getFileUploadRequiredFieldMessage() {
+		return fileUploadRequiredFieldMessage;
+	}
+	public void setFileUploadRequiredFieldMessage(
+			String fileUploadRequiredFieldMessage) {
+		this.fileUploadRequiredFieldMessage = fileUploadRequiredFieldMessage;
+	}
+	public String getFileUploadHelp() {
+		return fileUploadHelp;
+	}
+	public void setFileUploadHelp(String fileUploadHelp) {
+		this.fileUploadHelp = fileUploadHelp;
+	}
+	public String getFileUpload() {
+		return fileUpload;
+	}
+	public void setFileUpload(String fileUpload) {
+		this.fileUpload = fileUpload;
+	}
+	public String getFileInstruction() {
+		return fileInstruction;
+	}
+	public void setFileInstruction(String fileInstruction) {
+		this.fileInstruction = fileInstruction;
+	}
+	public String getFileSelection() {
+		return fileSelection;
+	}
+	public void setFileSelection(String fileSelection) {
+		this.fileSelection = fileSelection;
+	}
+	public String getReceiptsToBeUploaded() {
+		return receiptsToBeUploaded;
+	}
+	public void setReceiptsToBeUploaded(String receiptsToBeUploaded) {
+		this.receiptsToBeUploaded = receiptsToBeUploaded;
+	}
+	public String getBrowse() {
+		return browse;
+	}
+	public void setBrowse(String browse) {
+		this.browse = browse;
+	}
+	public String getAddReceipts() {
+		return addReceipts;
+	}
+	public void setAddReceipts(String addReceipts) {
+		this.addReceipts = addReceipts;
+	}
+	public String getRemove() {
+		return remove;
+	}
+	public void setRemove(String remove) {
+		this.remove = remove;
 	}  
 	
 	

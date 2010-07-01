@@ -102,7 +102,7 @@ public class AdminController {
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
-		}
+		}//return null;
 	}
 
 	public String gotoMaintainApplicationPage() {

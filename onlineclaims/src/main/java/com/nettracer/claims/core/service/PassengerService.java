@@ -34,4 +34,7 @@ public interface PassengerService {
 	public MultilingualLabel getFraudQuestionLabel(String selectedLanguage,
 			Long baggageState) throws SimplePersistenceException;
 
+	public MultilingualLabel getFileUploadLabel(String selectedLanguage,
+			Long baggageState) throws SimplePersistenceException;
+
 }

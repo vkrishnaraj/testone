@@ -464,6 +464,53 @@ public class PassengerServiceImpl implements PassengerService {
 			return null;
 		}
 	}
+	
+	/**
+	 * Get the labels for File Upload page
+	 */
+	@Override
+	public MultilingualLabel getFileUploadLabel(String selectedLanguage,
+			Long fileBaggageState) throws SimplePersistenceException {
+
+		MultilingualLabel multilingualLabel = new MultilingualLabel();
+		//Long requiredFieldFileStatus = null;
+		List<Localetext> localetextList = passengerDao.getFileUploadLabel(selectedLanguage);
+		if (localetextList != null && localetextList.size() > 0) {
+			for (Localetext localetext : localetextList) {
+				
+				/*requiredFieldFileStatus = fileBaggageState == 1L ? localetext.getLabel().getDelayedState()
+						: fileBaggageState == 2L ? localetext.getLabel().getPilferedState() 
+						: localetext.getLabel().getDamagedState();*/
+
+				if (localetext.getLabel().getLabel().contains("Descriptive text")) {
+					multilingualLabel.setFileUploadDescriptiveText(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Required Field Message")) {
+					multilingualLabel.setFileUploadRequiredFieldMessage(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("File Help")) {
+					multilingualLabel.setFileUploadHelp(localetext.getDisplayText());
+				}else if (localetext.getLabel().getLabel().contains("File Upload")) {
+					multilingualLabel.setFileUpload(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("File Selection")) {
+					multilingualLabel.setFileSelection(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Receipts to be uploaded")) {
+					multilingualLabel.setReceiptsToBeUploaded(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Add Receipts")) {
+					multilingualLabel.setAddReceipts(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Remove")) {
+					multilingualLabel.setRemove(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("File Instruction")) {
+					multilingualLabel.setFileInstruction(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Browse")) {
+					multilingualLabel.setBrowse(localetext.getDisplayText());
+				} 
+				//requiredFieldFileStatus = null;
+			}
+			return multilingualLabel;
+		} else {
+			return null;
+		}
+	
+	}
 
 	/**
 	 * Get the labels for Fraud Question page
@@ -644,5 +691,7 @@ public class PassengerServiceImpl implements PassengerService {
 	public List<Airport> getAirportList() throws SimplePersistenceException {
 		return passengerDao.getAirportList();
 	}
+
+	
 
 }

@@ -1,8 +1,9 @@
 package com.nettracer.claims.core.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import com.nettracer.claims.faces.util.File;
 
 
 
@@ -63,6 +64,10 @@ public class PassengerBean {
 	
 	//For About Your Flight Page
 	private List<Bag> bagList;
+	
+	//File Upload
+	private List<com.nettracer.claims.faces.util.File> files
+			=new ArrayList<com.nettracer.claims.faces.util.File>();
 	
 	//For Fraud Question
 	private Boolean anotherClaim;
@@ -388,6 +393,12 @@ public class PassengerBean {
 	}
 	public void setAdditionalComments(String additionalComments) {
 		this.additionalComments = additionalComments;
+	}
+	public List<File> getFiles() {
+		return files;
+	}
+	public void setFiles(List<File> files) {
+		this.files = files;
 	}	
 	
 	

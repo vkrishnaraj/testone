@@ -1,5 +1,8 @@
 package com.nettracer.claims.passenger.controller;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -19,10 +22,14 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.axis2.AxisFault;
 import org.apache.log4j.Logger;
+import org.apache.myfaces.custom.fileupload.UploadedFile;
+import org.richfaces.event.UploadEvent;
+import org.richfaces.model.UploadItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -38,6 +45,8 @@ import com.nettracer.claims.core.model.PassengerBean;
 import com.nettracer.claims.core.service.PassengerService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
+import com.nettracer.claims.faces.util.File;
+import com.nettracer.claims.faces.util.FileUploadBean;
 import com.nettracer.claims.passenger.LoginBean;
 import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
@@ -64,6 +73,7 @@ public class PassengerController {
 	private List<Localetext> passengerDirectionList;
 	private MultilingualLabel passengerInfoLabel;
 	private MultilingualLabel flightLabel;
+	private MultilingualLabel fileUploadLabel;
 	private MultilingualLabel fraudQuestionLabel;
 	private MultilingualLabel submitClaimLabel;
 	private MultilingualLabel savedScreenLabel;
@@ -72,11 +82,16 @@ public class PassengerController {
 	private DataModel airportCodeList;
 	private DataModel itineraryList;
 	private int itineraryTableIndex;
+	private FileUploadBean fileUploadBean;
+	private int uploadsAvailable = 10;
+	// ------------------- File Upload Myfaces
+	private UploadedFile upFile;
+	boolean rendSuccess = false;
+	boolean rendFailure = false;
+	private DataModel fileDataModelList;
+	// -- End File Upload
 
-	/*
-	 * @Autowired AdminService adminService;
-	 */
-
+	
 	@Autowired
 	PassengerService passengerService;
 
@@ -254,7 +269,7 @@ public class PassengerController {
 				Bag bag = new Bag();
 				bagList.add(bag);
 				passengerBean.setBagTagList(bagList); // for about your ticket
-														// bag tag table
+				// bag tag table
 
 				// Logic for step 3 o 6 About Your Bag (multiple page)
 				passengerBean.setBagList(bagList);
@@ -336,26 +351,28 @@ public class PassengerController {
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
 			}
 			session.setAttribute("itinerary", itineraryLocal);
-			passengerBean.getItineraryList().set(getItineraryTableIndex(), itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),
+					itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * Call for validation of itinerary table
 	 * 
 	 * 
 	 */
-	public String getModalPanel(){
+	public String getModalPanel() {
 		logger.info("getModalPanel method");
-		if(passengerBean.getItineraryList() != null  
-				&& passengerBean.getItineraryList().get(getItineraryTableIndex()) != null
-				&& passengerBean.getItineraryList().get(getItineraryTableIndex()).getDepartureCity() != null ){
+		if (passengerBean.getItineraryList() != null
+				&& passengerBean.getItineraryList().get(
+						getItineraryTableIndex()) != null
+				&& passengerBean.getItineraryList().get(
+						getItineraryTableIndex()).getDepartureCity() != null) {
 			return "flightModalPanel2";
-		}else{
+		} else {
 			return "warnModalPanel";
 		}
 	}
@@ -384,15 +401,118 @@ public class PassengerController {
 			} else {
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
 			}
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),
+					itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Navigation for the File Upload Page.i.e. step 4
+	 * 
+	 * @return String
+	 */
+	public String gotoFileUpload() {
+		logger.info("gotoFileUpload method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session
+						.getAttribute("selectedLanguage");
+				fileUploadLabel = passengerService.getFileUploadLabel(
+						selectedLanguage, baggageState);
+				passengerBean.getFiles().clear();
+				session.setAttribute("passengerBean", passengerBean);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoFileUpload";
+		} else {
+
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
 	
+	/**
+	 * 
+	 * File Upload Logic
+	 * @throws IOException
+	 */
+	public String upload() throws IOException {
+		logger.info("upload called");
+		try {
+			if(upFile != null){
+
+				int extDot = upFile.getName().lastIndexOf('.');
+				if (extDot > 0) {
+					String extension = upFile.getName().substring(extDot + 1);
+					if (extension.equals("jpg") || extension.equals("gif") || extension.equals("pdf")) {
+						InputStream stream = upFile.getInputStream();
+						long size = upFile.getSize();
+						byte[] buffer = new byte[(int) size];
+						stream.read(buffer, 0, (int) size);
+						stream.close();
+						rendSuccess = true;
+						rendFailure = false;
+						logger.info("File Uploaded Successfully.");
+						File file = new File();
+						byte[] data = upFile.getBytes();
+						file.setName(upFile.getName());
+						file.setLength(upFile.getSize());
+						file.setData(data);
+						if(passengerBean.getFiles() !=null){
+							passengerBean.getFiles().add(file);
+							fileDataModelList=new ListDataModel(passengerBean.getFiles());
+						}
+						file=null; 
+						return "ok";
+					}else{
+						logger.error("File type not supported");
+						FacesUtil.addError("File type not supported");
+					}
+				}
+
+			}
+			return "no";
+		} catch (Exception ioe) {
+			logger.info("File Upload Unsuccessful.");
+			ioe.printStackTrace();
+			rendSuccess = false;
+			rendFailure = true;
+			return "no";
+		}
+	}
 	
-	
+
+	/**
+	 * 
+	 * Remove a File from the main file list
+	 * 
+	 */
+	public void removeFileListener(ActionEvent event){
+		logger.info("removeFileListener called");
+		File file= (File)fileDataModelList.getRowData();
+		List<File> files=passengerBean.getFiles();
+		int fileSize=files.size();
+		for(int i=fileSize-1;i>=0; i--){
+			File f=files.get(i);
+			if(f.getName().equals(file.getName())){
+				passengerBean.getFiles().remove(i);
+			}
+		}
+		fileDataModelList=null;
+		fileDataModelList=new ListDataModel(passengerBean.getFiles());
+		
+	}
+	// -------------------End of File Upload
 	
 	/**
 	 * Navigation for the Fraud Question Page.i.e. step 5
@@ -407,13 +527,15 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
-				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				fraudQuestionLabel = passengerService.getFraudQuestionLabel(selectedLanguage, baggageState);
-				if(passengerBean.getAnotherClaim()){
+				String selectedLanguage = (String) session
+						.getAttribute("selectedLanguage");
+				fraudQuestionLabel = passengerService.getFraudQuestionLabel(
+						selectedLanguage, baggageState);
+				if (null != passengerBean.getAnotherClaim() && passengerBean.getAnotherClaim()) {
 					fraudQuestionLabel.setWhichAirlineState(2L);
 					fraudQuestionLabel.setDateOfClaimState(2L);
 					fraudQuestionLabel.setClaimantNameState(2L);
-				}else{
+				} else {
 					fraudQuestionLabel.setWhichAirlineState(1L);
 					fraudQuestionLabel.setDateOfClaimState(1L);
 					fraudQuestionLabel.setClaimantNameState(1L);
@@ -424,11 +546,12 @@ public class PassengerController {
 			return "gotoFraudQuestion";
 		} else {
 
-			FacesUtil.addError("Your session has been expired. Please log in again");
+			FacesUtil
+					.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
-	
+
 	/**
 	 * Listener for the Fraud Question Page.i.e. step 5
 	 * 
@@ -437,11 +560,11 @@ public class PassengerController {
 	public void selectAnotherClaim(ValueChangeEvent valueChangeEvent) {
 		logger.info("Listener: selectAnotherClaim called");
 		Boolean anotherClaim = (Boolean) valueChangeEvent.getNewValue();
-		if(anotherClaim){
+		if (anotherClaim) {
 			fraudQuestionLabel.setWhichAirlineState(2L);
 			fraudQuestionLabel.setDateOfClaimState(2L);
 			fraudQuestionLabel.setClaimantNameState(2L);
-		}else{
+		} else {
 			fraudQuestionLabel.setWhichAirlineState(1L);
 			fraudQuestionLabel.setDateOfClaimState(1L);
 			fraudQuestionLabel.setClaimantNameState(1L);
@@ -491,8 +614,10 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
-				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				savedScreenLabel = passengerService.getSavedScreenLabel(selectedLanguage, baggageState);
+				String selectedLanguage = (String) session
+						.getAttribute("selectedLanguage");
+				savedScreenLabel = passengerService.getSavedScreenLabel(
+						selectedLanguage, baggageState);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -533,8 +658,7 @@ public class PassengerController {
 	 * Clear the browser cache(component value) from Apply request value phase
 	 */
 	public void clearInputCache() {
-		logger
-				.debug("clearInputCache method is called to clear the wrong captcha input texts");
+		logger.debug("clearInputCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
@@ -680,6 +804,108 @@ public class PassengerController {
 
 	public MultilingualLabel getFraudQuestionLabel() {
 		return fraudQuestionLabel;
+	}
+
+	public MultilingualLabel getFileUploadLabel() {
+		return fileUploadLabel;
+	}
+
+	public FileUploadBean getFileUploadBean() {
+		return fileUploadBean;
+	}
+
+	public void setFileUploadBean(FileUploadBean fileUploadBean) {
+		this.fileUploadBean = fileUploadBean;
+	}
+
+	public int getUploadsAvailable() {
+		return uploadsAvailable;
+	}
+
+	public void setUploadsAvailable(int uploadsAvailable) {
+		this.uploadsAvailable = uploadsAvailable;
+	}
+
+	// -------------------Myfaces File Upload
+	public UploadedFile getUpFile() {
+		return upFile;
+	}
+
+	public void setUpFile(UploadedFile upFile) {
+		this.upFile = upFile;
+	}
+
+	public boolean getRendSuccess() {
+		return rendSuccess;
+	}
+
+	public void setRendSuccess(boolean rendSuccess) {
+		this.rendSuccess = rendSuccess;
+	}
+
+	public boolean getRendFailure() {
+		return rendFailure;
+	}
+
+	public void setRendFailure(boolean rendFailure) {
+		this.rendFailure = rendFailure;
+	}
+
+	public DataModel getFileDataModelList() {
+		return fileDataModelList;
+	}
+
+	public void setFileDataModelList(DataModel fileDataModelList) {
+		this.fileDataModelList = fileDataModelList;
+	}
+	
+	
+	/**
+	 * Test Code : to be deleted later on : Richfaces File Upload
+	 * @param event
+	 * @throws Exception
+	 */
+	public void fileUploadListener(UploadEvent event) throws Exception {
+		logger.info("File Upload Listener called");
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		ServletContext servletContext = (ServletContext) facesContext
+				.getExternalContext().getContext();
+		String fullPath = servletContext.getRealPath("/") + "WEB-INF" + "\\"
+				+ "uploadedFiles\\";
+		UploadItem item = event.getUploadItem();
+		if (item != null) {
+			if (item.getFileName() != null) {
+				File file = new File();
+				byte[] data = item.getData();
+				String fulpath = item.getFileName();
+				String fileName = fulpath
+						.substring(fulpath.lastIndexOf("\\") + 1);
+				String totalPath = fullPath
+						+ fileName.substring(fileName.lastIndexOf("\\") + 1);
+				java.io.File f = new java.io.File(totalPath);
+				if (!f.exists()) {
+					f.createNewFile();
+
+				} else {
+					f.delete();
+					f.createNewFile();
+				}
+				// FileOutputStream fos = new
+				// FileOutputStream(fullPath+fileName.substring(fileName.lastIndexOf("\\")
+				// + 1));
+				FileOutputStream fos = new FileOutputStream(totalPath);
+				if (data != null) {
+					fos.write(data);
+					file.setLength(new Long(item.getData().length));
+					fos.close();
+				}
+				file.setName(fulpath);
+				file.setData(data);
+				// passBean.getFiles().add(file);
+				uploadsAvailable--;
+			}
+		}
+
 	}
 
 }
