@@ -105,7 +105,7 @@ public class TracerDateTime {
 		try {
 			Date now = new Date(); // current system date
 			DateFormat df = new SimpleDateFormat("EEE MMM dd");
-			//df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			df.setTimeZone(TimeZone.getTimeZone("GMT"));
 			
 			newdate = df.format(now);
 		} catch (Exception e) {
@@ -119,7 +119,7 @@ public class TracerDateTime {
 		try {
 			Date now = new Date(); // current system date
 			DateFormat df = new SimpleDateFormat("HH:mm:ss zzz yyyy");
-			//df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			df.setTimeZone(TimeZone.getTimeZone("GMT"));
 			
 			newdate = df.format(now);
 		} catch (Exception e) {
