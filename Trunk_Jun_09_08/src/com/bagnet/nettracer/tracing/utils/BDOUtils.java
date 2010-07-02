@@ -434,6 +434,7 @@ public class BDOUtils {
 
 	private static void manageItemBdoList(BDO bdo, Item item) {
 		Set<Item_BDO> ibdo_list = item.getItem_bdo();
+		Item_BDO itemBdo = null;
 		if (ibdo_list == null) {
 			ibdo_list = new LinkedHashSet<Item_BDO>();
 			item.setItem_bdo(ibdo_list);
@@ -445,27 +446,33 @@ public class BDOUtils {
 			bdo.setItem_bdo(bdo_item_list);
 		}
 
-		findAndMapItemToBdo(bdo, item, ibdo_list);
-		findAndMapItemToBdo(bdo, item, bdo_item_list);
+		itemBdo = findAndMapItemToBdo(bdo, item, ibdo_list, null);
+		findAndMapItemToBdo(bdo, item, bdo_item_list, itemBdo);
 	}
 
-	private static void findAndMapItemToBdo(BDO bdo, Item item, Set<Item_BDO> ibdo_list) {
-		Item_BDO ibdo = null;
+	private static Item_BDO findAndMapItemToBdo(BDO bdo, Item item, Set<Item_BDO> ibdo_list, Item_BDO ibdo) {
 		Item_BDO tmp = null;
+	
 		Iterator<Item_BDO> i = ibdo_list.iterator();
+		boolean isFound = false;
 		while (i.hasNext()) {
 			tmp = i.next();
 			if (tmp.getBdo().getBDO_ID() == bdo.getBDO_ID() && tmp.getItem().getItem_ID() == item.getItem_ID()) {
 				ibdo = tmp;
+				isFound = true;
+				break;
 			}
 		}
-
+	
 		if (ibdo == null) {
 			ibdo = new Item_BDO();
 			ibdo.setItem(item);
 			ibdo.setBdo(bdo);
 			ibdo_list.add(ibdo);
+		} else if (isFound == false && ibdo != null) {
+			ibdo_list.add(ibdo);
 		}
+		return ibdo;
 	}
 
 	public static boolean insertBDO(BDO bdo, Agent agent) throws Exception {

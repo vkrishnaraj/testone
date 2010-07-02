@@ -554,7 +554,7 @@ public class CronUtils {
 	public void process24HoursEmails() {
 		try {
 			Session session = HibernateWrapper.getSession().openSession();
-
+			
 			ResultSet rs = null;
 			Transaction t = null;
 			try {

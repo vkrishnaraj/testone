@@ -67,7 +67,7 @@ public class SmsEmailService {
 				if (language == null) {
 					language = "en";
 				}
-				if (email != null) {
+				if (email != null && email.trim().length() > 0) {
 					// send email
 
 					// PaxMessageTrigger - dao.method(key, language); -
@@ -94,26 +94,26 @@ public class SmsEmailService {
 							he.setSmtpPort(agent.getStation().getCompany().getVariable().getEmail_port());
 							he.setFrom(agent.getStation().getCompany().getVariable().getEmail_from());
 
-							String toemail = null;
+//							String toemail = null;
 
 
 							ArrayList<InternetAddress> al = new ArrayList<InternetAddress>();
 
 							List<Passenger> myPassengerList = incident.getPassenger_list();
 							Passenger pax;
-							if (myPassengerList != null && myPassengerList.size() > 0) {
-								pax = (Passenger) myPassengerList.get(0);
-								if (pax != null) {
-									com.bagnet.nettracer.tracing.db.Address myAddress = pax.getAddress(0);
-									if (myAddress != null) {
-										toemail = myAddress.getEmail();
-									}
-								}
-							}
+//							if (myPassengerList != null && myPassengerList.size() > 0) {
+//								pax = (Passenger) myPassengerList.get(0);
+//								if (pax != null) {
+//									com.bagnet.nettracer.tracing.db.Address myAddress = pax.getAddress(0);
+//									if (myAddress != null) {
+//										toemail = myAddress.getEmail();
+//									}
+//								}
+//							}
 							
-							if (toemail != null) {
-								al.add(new InternetAddress(toemail));
-							}
+//							if (toemail != null) {
+								al.add(new InternetAddress(email));
+//							}
 
 							he.setTo(al);
 							he.setSubject(mySubjectLine);
