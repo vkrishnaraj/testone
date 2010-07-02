@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+
 import javax.mail.internet.InternetAddress;
 
 import org.apache.log4j.Logger;
@@ -314,8 +315,12 @@ public class CronUtils {
 		}
 		
 		int lastSequentialFailures = checkSQLServerSequentialFailures();
+		int percentFailure = checkSQLServerPercentageFailures();
 		if (lastSequentialFailures > 20) {
 			alerts.add("Failures (max 50): " + lastSequentialFailures);
+		}
+		if (percentFailure > 24){
+			alerts.add("Total Failures out of last 50 transactions: " + percentFailure);
 		}
 		
 		if (alerts.size() > 0) {
@@ -333,8 +338,10 @@ public class CronUtils {
 				ArrayList toList = new ArrayList();
 				String toString = PropertyBMO.getValue("ALERT_SMS_EMAILS");
 				toList.add(new InternetAddress("support@nettracer.aero"));
-				for (String sms: toString.split(",")) {
-					toList.add(new InternetAddress(sms));
+				if (toString != null){
+					for (String sms: toString.split(",")) {
+						toList.add(new InternetAddress(sms));
+					}
 				}
 				
 				he.setTo(toList);
@@ -350,7 +357,19 @@ public class CronUtils {
 		}
 	}
 	
-	private int checkSQLServerSequentialFailures() {
+	protected int checkSQLServerPercentageFailures(){	
+		String sql = "SELECT count(wtq_status) FROM " +
+				"(SELECT top 50 wtq_status FROM wt_queue ORDER BY CREATEDATE DESC) count_table " +
+				"WHERE wtq_status = 'FAIL'";
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		SQLQuery query = sess.createSQLQuery(sql);
+		List<Integer> list = (List<Integer>) query.list();
+		sess.close();
+		return ((Integer)list.get(0)).intValue();
+	}
+	
+	protected int checkSQLServerSequentialFailures() {
 		
 		String sql = "SELECT top 50 wtq_status FROM wt_queue " +
 		"ORDER BY CREATEDATE DESC";
@@ -375,7 +394,7 @@ public class CronUtils {
 		return sequentialFails;
 	}
 
-	private int checkPendingSize() {
+	protected int checkPendingSize() {
 		String sql = "SELECT count(*) as icount FROM wt_queue " +
 		"WHERE wtq_status = 'PENDING'";
 		Session sess = HibernateWrapper.getSession().openSession();

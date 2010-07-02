@@ -216,6 +216,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.WT_PXF" />
 		<mapping class="com.bagnet.nettracer.tracing.db.wtq.WtqRequestPxf" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CrmFile" />
+		<mapping class="com.bagnet.nettracer.tracing.db.Item_BDO" />
+		<mapping class="com.bagnet.nettracer.tracing.db.IncidentControl" />
     </session-factory>
 
 </hibernate-configuration>
