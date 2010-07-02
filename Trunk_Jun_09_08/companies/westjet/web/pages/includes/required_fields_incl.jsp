@@ -262,6 +262,14 @@ ResourceBundle bundle = ResourceBundle.getBundle(
       else if(currentElementName.indexOf("].claimchecknum") != -1 && currentElement.value.length > 0) {
           ccCount += 1;
         }
+      else if (currentElementName.indexOf("].claimchecknum") != -1) {
+        if (currentElement.value.length == 0)
+        {
+          alert('<%= (String)bundle.getString("colname.bag_tag_number") + " " + (String)bundle.getString("error.validation.isRequired") %>');
+          currentElement.focus();
+          return false;
+        }    
+      }
       else if (currentElementName.indexOf("].color") != -1) {
     	  bagIndices = bagIndices.concat(currentElementName.substring(left+1, right));
       }
