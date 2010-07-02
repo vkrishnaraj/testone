@@ -1251,8 +1251,16 @@ public class BDOUtils {
 					oBMO.insertOHD(ohd, a, sess);
 				}
 			} else {
-				bdo.setDelivery_comments(bdo.getDelivery_comments() + "\n\n***Item Canceled by user: " + a.getUsername() + " at " + TracerDateTime.getGMTDate());
+				//bdo.setDelivery_comments(bdo.getDelivery_comments() + "\n\n***Item Canceled by user: " + a.getUsername() + " at " + TracerDateTime.getGMTDate());
 
+				bdo.setDelivery_comments(bdo.getDelivery_comments() 
+						+ "\n\n***BDO Canceled by user: " 
+						+ a.getUsername() 
+						+ " on " 
+						+ TracerDateTime.getGMTDateDayString()
+						+ " at "
+						+ TracerDateTime.getGMTDateTimeString());
+				
 				sess.save(bdo);
 				inc = bdo.getIncident();
 
