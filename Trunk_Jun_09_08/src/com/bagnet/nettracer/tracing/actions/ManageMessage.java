@@ -97,6 +97,10 @@ public class ManageMessage extends Action {
 			MessageCopy message = MessageUtils.getMessageCopy(request.getParameter("message_copy_id"));
 			message.set_DATEFORMAT(user.getDateformat().getFormat());
 			message.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			
+			message.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+					user.getDefaulttimezone()).getTimezone()));
+			
 			theForm.setRecp_list(new ArrayList(message.getParent_message().getRecipients()));
 			theForm.setMessage_id("" + message.getMessage_copy_id());
 			theForm.setDate(message.getDisp_send_date());
