@@ -160,6 +160,55 @@ public class MultilingualLabel {
 	private String airlineFlightNo;
 	private String flightDate;
 	
+	//For Bag Info Page -- step 3 of 6
+	private String bagDescriptiveText;
+	private String bagRequiredFieldMessage;
+	private String bagHelp;
+	private String aboutYourBag;
+	private String bagNumberLabel;
+	private String bagTagNumber;
+	private String nameonBag;
+	private String brandOftheBag;
+	private String externalMarkings;
+	private String bagPurchaseDate;
+	private String colorChart;
+	private String bagChart;
+	private String bagColor;
+	private String bagType;
+	private String selectAppropriate;
+	private String hardSided;
+	private String wheelsRollers;
+	private String feet;
+	private String trim;
+	private String softSided;
+	private String zippers;
+	private String retractableHandel;
+	private String pockets;
+	private String locks;
+	private String pullStrap;
+	private String nameTag;
+	private String ribbonsPersonalMarkings;
+	private String descriptionOfContents;
+	private String gender;
+	private String article;
+	private String color;
+	private String size;
+	private String brandOrDescription;
+	private String storePurchased;
+	private String purchasedDate;
+	private String price;
+	private String currency;
+	private String addMoreItems;
+	
+	private Long bagTagNumberState;
+	private Long nameonBagState;
+	private Long brandOftheBagState;
+	private Long externalMarkingsState;
+	private Long bagPurchaseDateState;
+	private Long bagColorState;
+	private Long bagTypeState;
+
+	
 	//For FIle Upload Page -- step 4 of 6
 	private String fileUploadDescriptiveText;
 	private String fileUploadRequiredFieldMessage;
@@ -1319,6 +1368,276 @@ public class MultilingualLabel {
 	}
 	public void setRemove(String remove) {
 		this.remove = remove;
+	}
+	public String getBagDescriptiveText() {
+		return bagDescriptiveText;
+	}
+	public void setBagDescriptiveText(String bagDescriptiveText) {
+		this.bagDescriptiveText = bagDescriptiveText;
+	}
+	public String getBagRequiredFieldMessage() {
+		return bagRequiredFieldMessage;
+	}
+	public void setBagRequiredFieldMessage(String bagRequiredFieldMessage) {
+		this.bagRequiredFieldMessage = bagRequiredFieldMessage;
+	}
+	public String getBagHelp() {
+		return bagHelp;
+	}
+	public void setBagHelp(String bagHelp) {
+		this.bagHelp = bagHelp;
+	}
+	public String getAboutYourBag() {
+		return aboutYourBag;
+	}
+	public void setAboutYourBag(String aboutYourBag) {
+		this.aboutYourBag = aboutYourBag;
+	}
+	public String getBagNumberLabel() {
+		return bagNumberLabel;
+	}
+	public void setBagNumberLabel(String bagNumberLabel) {
+		this.bagNumberLabel = bagNumberLabel;
+	}
+	public String getBagTagNumber() {
+		return bagTagNumber;
+	}
+	public void setBagTagNumber(String bagTagNumber) {
+		this.bagTagNumber = bagTagNumber;
+	}
+	public String getNameonBag() {
+		return nameonBag;
+	}
+	public void setNameonBag(String nameonBag) {
+		this.nameonBag = nameonBag;
+	}
+	public String getBrandOftheBag() {
+		return brandOftheBag;
+	}
+	public void setBrandOftheBag(String brandOftheBag) {
+		this.brandOftheBag = brandOftheBag;
+	}
+	public String getExternalMarkings() {
+		return externalMarkings;
+	}
+	public void setExternalMarkings(String externalMarkings) {
+		this.externalMarkings = externalMarkings;
+	}
+	public String getBagPurchaseDate() {
+		return bagPurchaseDate;
+	}
+	public void setBagPurchaseDate(String bagPurchaseDate) {
+		this.bagPurchaseDate = bagPurchaseDate;
+	}
+	public String getColorChart() {
+		return colorChart;
+	}
+	public void setColorChart(String colorChart) {
+		this.colorChart = colorChart;
+	}
+	public String getBagChart() {
+		return bagChart;
+	}
+	public void setBagChart(String bagChart) {
+		this.bagChart = bagChart;
+	}
+	public String getBagColor() {
+		return bagColor;
+	}
+	public void setBagColor(String bagColor) {
+		this.bagColor = bagColor;
+	}
+	public String getBagType() {
+		return bagType;
+	}
+	public void setBagType(String bagType) {
+		this.bagType = bagType;
+	}
+	public String getSelectAppropriate() {
+		return selectAppropriate;
+	}
+	public void setSelectAppropriate(String selectAppropriate) {
+		this.selectAppropriate = selectAppropriate;
+	}
+	public String getHardSided() {
+		return hardSided;
+	}
+	public void setHardSided(String hardSided) {
+		this.hardSided = hardSided;
+	}
+	public String getWheelsRollers() {
+		return wheelsRollers;
+	}
+	public void setWheelsRollers(String wheelsRollers) {
+		this.wheelsRollers = wheelsRollers;
+	}
+	public String getFeet() {
+		return feet;
+	}
+	public void setFeet(String feet) {
+		this.feet = feet;
+	}
+	public String getTrim() {
+		return trim;
+	}
+	public void setTrim(String trim) {
+		this.trim = trim;
+	}
+	public String getSoftSided() {
+		return softSided;
+	}
+	public void setSoftSided(String softSided) {
+		this.softSided = softSided;
+	}
+	public String getZippers() {
+		return zippers;
+	}
+	public void setZippers(String zippers) {
+		this.zippers = zippers;
+	}
+	public String getRetractableHandel() {
+		return retractableHandel;
+	}
+	public void setRetractableHandel(String retractableHandel) {
+		this.retractableHandel = retractableHandel;
+	}
+	public String getPockets() {
+		return pockets;
+	}
+	public void setPockets(String pockets) {
+		this.pockets = pockets;
+	}
+	public String getLocks() {
+		return locks;
+	}
+	public void setLocks(String locks) {
+		this.locks = locks;
+	}
+	public String getPullStrap() {
+		return pullStrap;
+	}
+	public void setPullStrap(String pullStrap) {
+		this.pullStrap = pullStrap;
+	}
+	public String getNameTag() {
+		return nameTag;
+	}
+	public void setNameTag(String nameTag) {
+		this.nameTag = nameTag;
+	}
+	public String getRibbonsPersonalMarkings() {
+		return ribbonsPersonalMarkings;
+	}
+	public void setRibbonsPersonalMarkings(String ribbonsPersonalMarkings) {
+		this.ribbonsPersonalMarkings = ribbonsPersonalMarkings;
+	}
+	public String getDescriptionOfContents() {
+		return descriptionOfContents;
+	}
+	public void setDescriptionOfContents(String descriptionOfContents) {
+		this.descriptionOfContents = descriptionOfContents;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getArticle() {
+		return article;
+	}
+	public void setArticle(String article) {
+		this.article = article;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	public String getBrandOrDescription() {
+		return brandOrDescription;
+	}
+	public void setBrandOrDescription(String brandOrDescription) {
+		this.brandOrDescription = brandOrDescription;
+	}
+	public String getStorePurchased() {
+		return storePurchased;
+	}
+	public void setStorePurchased(String storePurchased) {
+		this.storePurchased = storePurchased;
+	}
+	public String getPurchasedDate() {
+		return purchasedDate;
+	}
+	public void setPurchasedDate(String purchasedDate) {
+		this.purchasedDate = purchasedDate;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public String getAddMoreItems() {
+		return addMoreItems;
+	}
+	public void setAddMoreItems(String addMoreItems) {
+		this.addMoreItems = addMoreItems;
+	}
+	public Long getBagTagNumberState() {
+		return bagTagNumberState;
+	}
+	public void setBagTagNumberState(Long bagTagNumberState) {
+		this.bagTagNumberState = bagTagNumberState;
+	}
+	public Long getNameonBagState() {
+		return nameonBagState;
+	}
+	public void setNameonBagState(Long nameonBagState) {
+		this.nameonBagState = nameonBagState;
+	}
+	public Long getBrandOftheBagState() {
+		return brandOftheBagState;
+	}
+	public void setBrandOftheBagState(Long brandOftheBagState) {
+		this.brandOftheBagState = brandOftheBagState;
+	}
+	public Long getExternalMarkingsState() {
+		return externalMarkingsState;
+	}
+	public void setExternalMarkingsState(Long externalMarkingsState) {
+		this.externalMarkingsState = externalMarkingsState;
+	}
+	public Long getBagPurchaseDateState() {
+		return bagPurchaseDateState;
+	}
+	public void setBagPurchaseDateState(Long bagPurchaseDateState) {
+		this.bagPurchaseDateState = bagPurchaseDateState;
+	}
+	public Long getBagColorState() {
+		return bagColorState;
+	}
+	public void setBagColorState(Long bagColorState) {
+		this.bagColorState = bagColorState;
+	}
+	public Long getBagTypeState() {
+		return bagTypeState;
+	}
+	public void setBagTypeState(Long bagTypeState) {
+		this.bagTypeState = bagTypeState;
 	}  
 	
 	

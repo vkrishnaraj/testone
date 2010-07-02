@@ -23,13 +23,13 @@ public class PassengerDao extends HibernateDaoSupport {
 	
 	private static final String PASSENGER_LOGIN = "Login";
 	private static final String DIRECTION = "Direction";
-	private static final String FLIGHT_INFO = "Flight";
+	/*private static final String FLIGHT_INFO = "Flight";
 	private static final String BAGGAGE_INFO = "Baggage";
 	private static final String GENERAL_INFO = "General";
 	private static final String UPLOAD_INFO = "Upload";
 	private static final String FRAUD_QUESTIONS = "Fraud";
 	private static final String SUBMIT_CLAIM = "Submit";
-	private static final String SAVED_SREEN = "Saved";
+	private static final String SAVED_SREEN = "Saved";*/
 	
 	
 	/**
@@ -106,6 +106,17 @@ public class PassengerDao extends HibernateDaoSupport {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Localetext> getBagDetailsLabel(String selectedLanguage) throws SimplePersistenceException  {
+		Long languageId = getLanguageId(selectedLanguage);
+		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
+				"SELECT lt FROM Localetext lt " +
+				"INNER JOIN FETCH lt.languages lg " +
+				"INNER JOIN FETCH lt.label lb " +
+				"WHERE lg.id = ? AND lb.page LIKE ? "
+				,new Object[]{languageId, "Baggage Information"}));
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Localetext> getFileUploadLabel(String selectedLanguage)  throws SimplePersistenceException {
 		Long languageId = getLanguageId(selectedLanguage);
 		return (languageId == null ? null : (List<Localetext>) getHibernateTemplate().find(
@@ -161,6 +172,4 @@ public class PassengerDao extends HibernateDaoSupport {
 	public List<Airport> getAirportList() {
 		return (List<Airport>)getHibernateTemplate().loadAll(Airport.class) ;
 	}
-
-
 }

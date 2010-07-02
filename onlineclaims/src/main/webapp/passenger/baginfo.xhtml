@@ -7,18 +7,16 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="/layout/passengertemplate.xhtml">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-	</head>
 	
-	<ui:define name="pageTitle">NetTracer: Application | About Your Flight</ui:define>
+	
+	<ui:define name="pageTitle">NetTracer: Application | About Your Bags</ui:define>
 	
 	<ui:define name="mainContent">
 	<script type="text/javascript" src="../_js/passengerFont.js"></script>
 	<h:form id="appForm">
 	<div>
 		<div id="step">
-			<t:outputText value="Step 2 of 6" />
+			<t:outputText value="Step 3 of 6" />
 		</div>
 		
 		<div id="langSelect">
@@ -51,7 +49,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.flightLabel.flightDescriptiveText}" />
+						<t:outputText value="#{passengerController.bagDetailsLabel.bagDescriptiveText}" />
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -69,11 +67,11 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Application | About Your Flight
-				<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
+				<h1 class="dkblue">Application | About Your Bags
+				<h:graphicImage url="../_images/helpButton.gif" id="helpButton4" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
-							<rich:componentControl for="helpmodalpanel3"  
-								attachTo="helpButton" operation="show" event="onclick" /> 
+							<rich:componentControl for="helpmodalpanel4"  
+								attachTo="helpButton4" operation="show" event="onclick" /> 
 				</h1>
 			  </div>
 				<div class="containerTR"></div>
@@ -85,39 +83,33 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.flightLabel.flightRequiredFieldMessage}" />	
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagRequiredFieldMessage}" />	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<rich:messages id="flightMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+					<rich:messages id="bagMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				
 				<div>
-					<rich:modalPanel id="helpmodalpanel3" autosized="true" minHeight="380" 
+					<rich:modalPanel id="helpmodalpanel4" autosized="true" minHeight="380" 
 						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
 						<f:facet name="controls">
 								<h:panelGroup >
 									<a4j:commandLink value="Close" limitToList="true"
 											immediate="true"	id="linkToHidePanel" />
-										<rich:componentControl for="helpmodalpanel3"
+										<rich:componentControl for="helpmodalpanel4"
 											attachTo="linkToHidePanel" operation="hide" event="onclick" />
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.flightLabel.flightHelp}"/>
+							<h:outputText value="#{passengerController.bagDetailsLabel.bagHelp}"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
 				
 				<div>
-					<ui:include src="flight/flight-info.xhtml" />
-				</div>
-				<div>
-					<ui:include src="flight/ticket-info.xhtml" />
-				</div>
-				<div>
-					<ui:include src="flight/itenerary.xhtml" />
+					<ui:include src="bag/aboutyourbag.xhtml" />
 				</div>
 							
 					  	<!-- End body content -->
@@ -157,17 +149,12 @@
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
-				 	tabindex="20" action="#{passengerController.gotoBagDetails}"
+				 	tabindex="20" action="#{passengerController.gotoFileUpload}"
 					styleClass="button140pxred button140pxred2" />
 				
 			
 			</div>
 			
 		</h:form>
-		<a4j:region >
-			<div><ui:include src="flight/flight-panel.xhtml" /></div>
-			<div><ui:include src="flight/flight-panel2.xhtml" /></div>
-			<div><ui:include src="flight/warn-panel.xhtml" /></div>
-		</a4j:region>
 	</ui:define>
 </ui:composition>

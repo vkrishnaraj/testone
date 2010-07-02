@@ -73,6 +73,7 @@ public class PassengerController {
 	private List<Localetext> passengerDirectionList;
 	private MultilingualLabel passengerInfoLabel;
 	private MultilingualLabel flightLabel;
+	private MultilingualLabel bagDetailsLabel;
 	private MultilingualLabel fileUploadLabel;
 	private MultilingualLabel fraudQuestionLabel;
 	private MultilingualLabel submitClaimLabel;
@@ -148,11 +149,9 @@ public class PassengerController {
 			try {
 				// passengerBean =
 				// (PassengerBean)session.getAttribute("passengerBean");
-				boolean saveData = onlineClaimsWS
-						.savePassengerInfo(passengerBean);
+				boolean saveData = onlineClaimsWS.savePassengerInfo(passengerBean);
 				if (saveData) {
-					FacesUtil
-							.addInfo("Passenger infomation saved successfully.");
+					FacesUtil.addInfo("Passenger infomation saved successfully.");
 					logger.info("Passenger infomation saved successfully.");
 				} else {
 					logger.error("Error in persisting the Data");
@@ -179,8 +178,7 @@ public class PassengerController {
 	public String cancel() {
 		FacesContext context = FacesUtil.getFacesContext();
 		ViewHandler viewHandler = context.getApplication().getViewHandler();
-		UIViewRoot viewRoot = viewHandler.createView(context, context
-				.getViewRoot().getViewId());
+		UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
 		context.setViewRoot(viewRoot);
 		context.renderResponse(); // Optional
 
@@ -268,12 +266,11 @@ public class PassengerController {
 				lostBagItems.add(new SelectItem(new Integer(i)));
 				Bag bag = new Bag();
 				bagList.add(bag);
-				passengerBean.setBagTagList(bagList); // for about your ticket
-				// bag tag table
-
-				// Logic for step 3 o 6 About Your Bag (multiple page)
-				passengerBean.setBagList(bagList);
 			}
+			passengerBean.setBagTagList(bagList); // for about your ticket, bag tag table
+			// Logic for step 3 o 6 About Your Bag (multiple page)
+			passengerBean.setBagList(bagList);
+			
 		}
 	}
 
@@ -406,6 +403,34 @@ public class PassengerController {
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * Navigation for the Bagage Details Page.i.e. step 3
+	 * 
+	 * @return String
+	 */
+	public String gotoBagDetails() {
+		logger.info("gotoBagDetails method is called");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+		.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				bagDetailsLabel = passengerService.getBagDetailsLabel(selectedLanguage, baggageState);
+				//session.setAttribute("passengerBean", passengerBean);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "gotoBagDetails";
+		} else {
+
+			FacesUtil
+			.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
 		}
 	}
 
@@ -858,6 +883,14 @@ public class PassengerController {
 	public void setFileDataModelList(DataModel fileDataModelList) {
 		this.fileDataModelList = fileDataModelList;
 	}
+
+	public MultilingualLabel getBagDetailsLabel() {
+		return bagDetailsLabel;
+	}
+
+	public void setBagDetailsLabel(MultilingualLabel bagDetailsLabel) {
+		this.bagDetailsLabel = bagDetailsLabel;
+	}
 	
 	
 	/**
@@ -865,7 +898,7 @@ public class PassengerController {
 	 * @param event
 	 * @throws Exception
 	 */
-	public void fileUploadListener(UploadEvent event) throws Exception {
+	/*public void fileUploadListener(UploadEvent event) throws Exception {
 		logger.info("File Upload Listener called");
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		ServletContext servletContext = (ServletContext) facesContext
@@ -906,6 +939,6 @@ public class PassengerController {
 			}
 		}
 
-	}
+	}*/
 
 }

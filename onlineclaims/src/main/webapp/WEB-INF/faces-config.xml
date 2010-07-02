@@ -43,21 +43,31 @@
 			<navigation-case>
 				<from-outcome>passengerLogout</from-outcome>
 				<to-view-id>/passenger/login.faces</to-view-id>
+				<redirect/>
 			</navigation-case>
 			
 			<navigation-case>
 				<from-outcome>gotoDirectionPage</from-outcome>
 				<to-view-id>/passenger/direction.faces</to-view-id>
+				<redirect/>
 			</navigation-case>
 			
 			<navigation-case>
 				<from-outcome>gotoPassengerInfo</from-outcome>
 				<to-view-id>/passenger/passengerinfo.faces</to-view-id>
+				<redirect/>
 			</navigation-case>
 			
 			<navigation-case>
 				<from-outcome>gotoFlightDetails</from-outcome>
 				<to-view-id>/passenger/flightinfo.faces</to-view-id>
+				<redirect/>
+			</navigation-case>
+			
+			<navigation-case>
+				<from-outcome>gotoBagDetails</from-outcome>
+				<to-view-id>/passenger/baginfo.faces</to-view-id>
+				<redirect/>
 			</navigation-case>
 			
 			<navigation-case>

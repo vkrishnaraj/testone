@@ -57,12 +57,15 @@ public class PassengerBean {
 	private Boolean reportAnotherAirline;
 	private Boolean differentAirlineTicket;
 	private String ticketNumber;
-	private List<Bag> bagTagList = new ArrayList<Bag>() ; //for datatable for bag tag number in page2
+	private List<Bag> bagTagList = new ArrayList<Bag>() ; //for datatable for bag tag number in page2:ticket-info.xhtml
 	private String aboutYourItenerary;
 	private List<Itinerary> itineraryList= new ArrayList<Itinerary>();
 	
 	
 	//For About Your Flight Page
+	//private List<Bag> bagList;
+	
+	//For about Your Bag Page
 	private List<Bag> bagList;
 	
 	//File Upload

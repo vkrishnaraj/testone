@@ -37,4 +37,7 @@ public interface PassengerService {
 	public MultilingualLabel getFileUploadLabel(String selectedLanguage,
 			Long baggageState) throws SimplePersistenceException;
 
+	public MultilingualLabel getBagDetailsLabel(String selectedLanguage,
+			Long baggageState) throws SimplePersistenceException;
+
 }
