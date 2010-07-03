@@ -37,7 +37,7 @@ public class ISharesTestCases {
 		WorldTracerActionType type =  WorldTracerActionType.ACTION_FILE_COUNTS;
 		ActionFileRequestData payload = new ActionFileRequestData();
 		payload.setAirline("US");
-		payload.setStation("XAX");
+		payload.setStation("PHX");
 		
 		// Initialize other data (do not change)
 		WorldTracerResponse response = new WorldTracerResponse();
@@ -79,7 +79,7 @@ public class ISharesTestCases {
 
 	}
 	
-	@Test
+//	@Test
 	public void testPlaceActionFileFile()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
@@ -116,7 +116,7 @@ public class ISharesTestCases {
 		int i = 0;
 	}
 	
-	@Test
+//	@Test
 	public void testEraseSuccessActionFile() throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
@@ -142,7 +142,7 @@ public class ISharesTestCases {
 	}	
 	
 
-	@Test
+//	@Test
 	public void testEraseFailureActionFile()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
@@ -167,7 +167,7 @@ public class ISharesTestCases {
 		Assert.assertEquals(false, response.isSuccess());
 	}	
 
-	@Test
+//	@Test
 	public void testRequestOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
@@ -211,7 +211,7 @@ public class ISharesTestCases {
 		Assert.assertEquals(true, response.isSuccess());
 	}
 	
-	@Test
+//	@Test
 	public void testRequestQuickOhd() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
@@ -257,7 +257,7 @@ public class ISharesTestCases {
 		Assert.assertEquals(true, response.isSuccess());
 	}
 	
-	@Test
+//	@Test
 	public void testGetActionFileSummary() throws CommandNotProperlyFormedException, WorldTracerException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Payload & Type
@@ -290,7 +290,7 @@ public class ISharesTestCases {
 		Assert.assertEquals(true, response.isSuccess());
 	}
 	
-	@Test
+//	@Test
 	public void testBDO()	throws CommandNotProperlyFormedException, HttpException, IOException, WorldTracerTimeoutException {
 		
 		// Create Pay load & Type
