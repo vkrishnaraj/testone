@@ -138,11 +138,9 @@ public class PassengerLoginController {
 				loginLabel.setClaimNumber(localetext.getDisplayText());
 			} else if (localetext.getLabel().getLabel().contains("Last Name")) {
 				loginLabel.setLastName(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains(
-					"Try a different image")) {
+			} else if (localetext.getLabel().getLabel().contains("Try a different image")) {
 				loginLabel.setTryDiffImage(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains(
-					"Type the code shown")) {
+			} else if (localetext.getLabel().getLabel().contains("Type the code shown")) {
 				loginLabel.setCaptchaText(localetext.getDisplayText());
 			} else if (localetext.getLabel().getLabel().contains("Continue")) {
 				loginLabel.setContinueButton(localetext.getDisplayText());
@@ -195,24 +193,18 @@ public class PassengerLoginController {
 					SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
 							.getAttribute("sessionPassengerBean");
 					sessionPassengerBean.setLogoutRenderer(true);
-					session.setAttribute("sessionPassengerBean",
-							sessionPassengerBean);
+					session.setAttribute("sessionPassengerBean",sessionPassengerBean);
 					session.setAttribute("loggedPassenger", "loggedPassenger");
 
 					baggageState = passengerView.getClaimId();
-					passengerDirectionList = passengerService
-							.getPassengerDirection(selectedLanguage);
-					session.setAttribute("passengerDirectionList",
-							passengerDirectionList);
+					passengerDirectionList = passengerService.getPassengerDirection(selectedLanguage);
+					session.setAttribute("passengerDirectionList",passengerDirectionList);
 
-					WSPVAdvancedIncident passengerData = passengerView
-							.getData();
+					WSPVAdvancedIncident passengerData = passengerView.getData();
 
-					passengerBean = onlineClaimsWS
-							.getPassengerData(passengerData);
+					passengerBean = onlineClaimsWS.getPassengerData(passengerData);
 
-					DataModel airportCodeList = new ListDataModel(
-							passengerService.getAirportList());
+					DataModel airportCodeList = new ListDataModel(passengerService.getAirportList());
 
 					session.setAttribute("passengerBean", passengerBean);
 					session.setAttribute("baggageState", baggageState);

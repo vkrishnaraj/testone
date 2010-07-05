@@ -1,6 +1,5 @@
 package com.nettracer.claims.passenger.controller;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -22,14 +21,11 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.axis2.AxisFault;
 import org.apache.log4j.Logger;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
-import org.richfaces.event.UploadEvent;
-import org.richfaces.model.UploadItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -37,6 +33,7 @@ import org.springframework.stereotype.Component;
 
 import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Bag;
+import com.nettracer.claims.core.model.Content;
 import com.nettracer.claims.core.model.CountryCode;
 import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Localetext;
@@ -83,6 +80,7 @@ public class PassengerController {
 	private DataModel airportCodeList;
 	private DataModel itineraryList;
 	private int itineraryTableIndex;
+	private int bagIndex;
 	private FileUploadBean fileUploadBean;
 	private int uploadsAvailable = 10;
 	// ------------------- File Upload Myfaces
@@ -268,11 +266,11 @@ public class PassengerController {
 				bagList.add(bag);
 			}
 			passengerBean.setBagTagList(bagList); // for about your ticket, bag tag table
-			// Logic for step 3 o 6 About Your Bag (multiple page)
-			passengerBean.setBagList(bagList);
 			
 		}
 	}
+	
+	
 
 	/**
 	 * Calling this method to set the required attribute for Excess Value field.
@@ -418,20 +416,61 @@ public class PassengerController {
 		.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
+				if (null != passengerBean.getBagList()) {
+					passengerBean.getBagList().clear();
+				}
+				List<Bag> bagTagList=passengerBean.getBagTagList();
+				List<Bag> lostBagList=new ArrayList<Bag>();
+				if(bagTagList != null && bagTagList.size() >0){
+					for(Bag lostBag:bagTagList){
+						if(Boolean.parseBoolean(lostBag.getBagArrivalStatus()) == false){
+							lostBagList.add(lostBag);
+						}
+					}
+					if(passengerBean.getLostBag() != lostBagList.size()){
+						FacesUtil.addError("No. of Lost Bag and Bag Arrival radion button status does not match");
+						return null;
+					}
+					// Logic for step 3 o 6 About Your Bag (multiple page)
+					passengerBean.setBagList(lostBagList);
+					
+					List<Bag> bags=passengerBean.getBagList();
+					for(Bag b:bags){
+						List<Content> contentList=new ArrayList<Content>();
+						if(b.getContentList() != null){
+							b.getContentList().clear();
+						}
+						for(int i=1;i<=4;i++){
+							Content content=new Content();
+							contentList.add(content);
+						}
+						b.setContentList(contentList);
+						contentList=null;
+					}
+					
+				}
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
 				bagDetailsLabel = passengerService.getBagDetailsLabel(selectedLanguage, baggageState);
 				//session.setAttribute("passengerBean", passengerBean);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "gotoBagDetails";
 		} else {
-
-			FacesUtil
-			.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
+	}
+	
+	
+	public String addMoreItems(){
+		logger.info("addMoreItems method call");
+		List<Bag> bags=passengerBean.getBagList();
+		Bag bag=bags.get(getBagIndex());
+		bag.getContentList().add(new Content());
+		return null;
 	}
 
 	/**
@@ -494,6 +533,14 @@ public class PassengerController {
 						file.setLength(upFile.getSize());
 						file.setData(data);
 						if(passengerBean.getFiles() !=null){
+							List<File> existingFiles=passengerBean.getFiles();
+							for(File existingFile:existingFiles){
+								if(upFile.getName().equals(existingFile.getName())){
+									logger.warn("File is already existing");
+									FacesUtil.addError("File is already existing");
+									return "no";
+								}
+							}
 							passengerBean.getFiles().add(file);
 							fileDataModelList=new ListDataModel(passengerBean.getFiles());
 						}
@@ -891,6 +938,16 @@ public class PassengerController {
 	public void setBagDetailsLabel(MultilingualLabel bagDetailsLabel) {
 		this.bagDetailsLabel = bagDetailsLabel;
 	}
+
+	public int getBagIndex() {
+		return bagIndex;
+	}
+
+	public void setBagIndex(int bagIndex) {
+		this.bagIndex = bagIndex;
+	}
+	
+	
 	
 	
 	/**

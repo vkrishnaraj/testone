@@ -483,7 +483,7 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setBagDescriptiveText(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Required Field Message")) {
 					multilingualLabel.setBagRequiredFieldMessage(localetext.getDisplayText());
-				} else if (localetext.getLabel().getLabel().contains("flightHelp")) {
+				} else if (localetext.getLabel().getLabel().contains("Help")) {
 					multilingualLabel.setBagHelp(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("About Your Bag")) {
 					multilingualLabel.setAboutYourBag(localetext.getDisplayText());
@@ -516,7 +516,7 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setBagTypeState(requiredFieldBagStatus);
 				} else if (localetext.getLabel().getLabel().contains("appropriate")) {
 					multilingualLabel.setSelectAppropriate(localetext.getDisplayText());
-				} else if (localetext.getLabel().getLabel().contains("HardSided")) {
+				} else if (localetext.getLabel().getLabel().contains("Hard Sided")) {
 					multilingualLabel.setHardSided(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Wheels/Rollers")) {
 					multilingualLabel.setWheelsRollers(localetext.getDisplayText());

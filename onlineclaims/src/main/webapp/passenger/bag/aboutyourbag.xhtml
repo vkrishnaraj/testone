@@ -14,7 +14,7 @@
 	
 	<a4j:repeat value="#{passengerBean.bagList}" var="item" rowKeyVar="rowIndex">
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel}"	styleClass="subHeader" /> 
+		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel}:"	styleClass="subHeader" /> 
 		<t:outputText value="#{rowIndex+1}" />
 	</div>
 	<rich:spacer width="100%" height="20" title="" />
@@ -36,6 +36,9 @@
 					<f:validateLength  maximum="20"/>
 				</t:inputText>
 				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
+				
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag}" />
 					<h:outputText value="&#160;" />
@@ -50,8 +53,11 @@
 					<f:validateLength maximum="20"/>
 				</t:inputText>
 				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
+				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings}" />
+					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings}" styleClass="wrapText"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}"/>
@@ -63,10 +69,10 @@
 								label="#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}">
 					<f:validateLength maximum="50"/>
 				</t:inputText>
-			
-				<rich:spacer width="60%" />
-				<rich:colorPicker immediate="true" value=""/>
 				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
+			
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor}" />
 					<h:outputText value="&#160;" />
@@ -75,11 +81,10 @@
 					<t:outputText value=":"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{item.bagColor}" style="width:77%" displayValueOnly="true" 
-								required="#{passengerController.bagDetailsLabel.bagColorState eq 2}" tabindex="6"
-								label="#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}">
-					<f:validateLength maximum="20"/>
-				</t:inputText>
+				<rich:colorPicker immediate="true" value="#{item.bagColor}"  id="colorPicker"
+					required="#{passengerController.bagDetailsLabel.bagColorState eq 2}" tabindex="6"
+					label="#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}"/>
+				
 			
 			</h:panelGrid>
 		</h:panelGroup>
@@ -102,6 +107,9 @@
 					<f:validateLength maximum="20"/>
 				</t:inputText>
 				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
+				
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate}" />
 					<h:outputText value="&#160;" />
@@ -115,9 +123,15 @@
 						enableManualInput="false" datePattern="MM/dd/yyyy" 
 						label="#{passengerController.bagDetailsLabel.bagPurchaseDate} Page:#{rowIndex+1}"
 					popup="true" />
+					
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
 				
 				<rich:spacer width="60%" />
 				<a4j:commandLink value="#{passengerController.bagDetailsLabel.bagChart}" immediate="true"/>
+				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagType}" />
@@ -127,7 +141,7 @@
 					<t:outputText value=":"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{item.bagType}" style="width:77%" displayValueOnly="true" 
+				<t:inputText  value="#{item.bagType}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.bagTypeState eq 2}" tabindex="7"
 								label="#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}" />
 			</h:panelGrid>
@@ -140,64 +154,76 @@
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	
-	<h:panelGrid columns="12">
-		<h:selectBooleanCheckbox value="#{item.bagType}" 
+	<h:panelGrid columns="16">
+		<h:selectBooleanCheckbox value="#{item.hardSided}" 
 			label="#{passengerController.bagDetailsLabel.hardSided} Page:#{rowIndex+1}"/>
+		<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.hardSided}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.wheelsRollers}" 
 			label="#{passengerController.bagDetailsLabel.wheelsRollers} Page:#{rowIndex+1}"/>
+		<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.wheelsRollers}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.feet}" 
 			label="#{passengerController.bagDetailsLabel.feet} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.feet}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.trim}" 
 			label="#{passengerController.bagDetailsLabel.trim} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.trim}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.softSided}" 
 			label="#{passengerController.bagDetailsLabel.softSided} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.softSided}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.zippers}" 
 			label="#{passengerController.bagDetailsLabel.zippers} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.zippers}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.retractableHandel}" 
 			label="#{passengerController.bagDetailsLabel.retractableHandel} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.retractableHandel}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.pockets}" 
 			label="#{passengerController.bagDetailsLabel.pockets} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.pockets}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.locks}" 
 			label="#{passengerController.bagDetailsLabel.locks} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.locks}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.pullStrap}" 
 			label="#{passengerController.bagDetailsLabel.pullStrap} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.pullStrap}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.nameTag}" 
 			label="#{passengerController.bagDetailsLabel.nameTag} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.nameTag}"/>
 		<rich:spacer width="30"/>
 		
 		<h:selectBooleanCheckbox value="#{item.ribbonsPersonalMarkings}" 
 			label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings} Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings}"/>
 		<rich:spacer width="30"/>
 	</h:panelGrid>
@@ -209,9 +235,9 @@
 	<rich:spacer width="100%" height="10" title="" />
 	
 	<a4j:region renderRegionOnly="true">
-		<a4j:outputPanel ajaxRendered="true">
-			<rich:dataTable width="100%" align="center" rows="4" id="contentTable" 
-					value="#{item.contentList}" var="contentItem"
+		<a4j:outputPanel id="contentPanel" ajaxRendered="true">
+			<rich:dataTable align="center"  id="contentTable" 
+					value="#{item.contentList}" var="contentItem" 
 					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
 				<f:facet name="header">
@@ -247,35 +273,35 @@
 				</f:facet>
 				
 				<rich:column>
-					<h:selectOneMenu value="#{contentItem.male}">
+					<h:selectOneMenu value="#{contentItem.male}"  >
 						<f:selectItem itemValue="" itemLabel="--" />
 						<f:selectItem itemValue="true" itemLabel="Male" />
 						<f:selectItem itemValue="false" itemLabel="Female" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.article}" />
+					<h:inputText value="#{contentItem.article}" size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.color}" />
+					<h:inputText value="#{contentItem.color}"  size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.size}" />
+					<h:inputText value="#{contentItem.size}"  size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.brandOrDescription}" />
+					<h:inputText value="#{contentItem.brandOrDescription}"  size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.storePurchased}" />
+					<h:inputText value="#{contentItem.storePurchased}"  size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.purchasedDate}" />
+					<h:inputText value="#{contentItem.purchasedDate}"  size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.price}" />
+					<h:inputText value="#{contentItem.price}"  size="8"/>
 				</rich:column>
 				<rich:column>
-					<h:selectOneMenu value="#{contentItem.currency}">
+					<h:selectOneMenu value="#{contentItem.currency}"  >
 						<f:selectItem itemValue="" itemLabel="--" />
 						<f:selectItem itemValue="$" itemLabel="$" />
 						<f:selectItem itemValue="Rs" itemLabel="Rs" />
@@ -285,8 +311,16 @@
 		</a4j:outputPanel>
 	</a4j:region>
 	
-	<div>
-		<a4j:commandButton value="#{passengerController.bagDetailsLabel.addMoreItems}"  />
+	<rich:spacer width="100%" height="10" title="" />
+	<div id="addItem">
+		<a4j:commandButton value="#{passengerController.bagDetailsLabel.addMoreItems}"  immediate="true"
+			action="#{passengerController.addMoreItems}" reRender="contentPanel" >
+			
+			<a4j:actionparam name="contentIndex"
+								assignTo="#{passengerController.bagIndex}"
+								value="#{rowIndex}" />
+			
+		</a4j:commandButton>
 	</div>
 	<rich:spacer width="100%" height="60" title="" />
 	</a4j:repeat>

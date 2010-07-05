@@ -493,6 +493,17 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .width40px{width: 40px;}
 .pointer { cursor:pointer;}
 
+
+/*Bag Info*/
+#addItem{text-align: center;}
+.wrapText{white-space: nowrap;}
+
+.rich-color-picker-span input {
+	border:1px solid;
+	vertical-align:middle;
+	width:83px;
+}
+
 /* Fraud Question*/
 .width1{width:62%;}
 .width2{width:12%;}

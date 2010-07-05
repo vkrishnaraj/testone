@@ -76,7 +76,7 @@ public class PassengerDao extends HibernateDaoSupport {
 				"INNER JOIN FETCH lt.languages lg " +
 				"INNER JOIN FETCH lt.label lb " +
 				"WHERE lg.id = ? AND lb.page LIKE ? "
-				,new Object[]{languageId, "%"+DIRECTION}));
+				,new Object[]{languageId, "%"+DIRECTION+"%"}));
 	}
 
 
