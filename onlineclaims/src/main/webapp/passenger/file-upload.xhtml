@@ -201,7 +201,7 @@
 				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.flightPrevious}"
-				 	tabindex="4" immediate="true" onclick="history.go(-1); return false"
+				 	tabindex="4" immediate="true" action="#{passengerController.goBackToBagDetails}"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>

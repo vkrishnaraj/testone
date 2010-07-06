@@ -151,7 +151,7 @@
 				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.flightPrevious}"
-				 	tabindex="19" immediate="true"  onclick="history.go(-1); return false"
+				 	tabindex="19" immediate="true"  action="#{passengerController.goBackToPassengerDetails}"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
