@@ -458,7 +458,7 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 
 .requiredField{
 	font: bolder;	
-	font-size: 20px;
+	font-size: 1.1em;
 }
 
 .passInout{
@@ -493,6 +493,17 @@ td.dottedhr { background:url(../_images/dots.gif) repeat-x; height:4px; padding:
 .width40px{width: 40px;}
 .pointer { cursor:pointer;}
 
+/* Ticket Info page */
+.ticketInfo { font-size: 0.9em;}
+
+/* itinerary */
+.cityButton {
+	float:right; 
+	margin-top: 0px;
+	margin-left: 3px;
+	cursor:pointer;
+
+}
 
 /*Bag Info*/
 #addItem{text-align: center;}
