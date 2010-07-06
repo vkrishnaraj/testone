@@ -571,7 +571,7 @@ public class PassengerController {
 			.getExternalContext().getSession(false);
 		baggageState = (Long) session.getAttribute("baggageState");
 		try {
-			FileHelper.deleteImage(baggageState.intValue(), upFile.getName());
+			FileHelper.deleteImage(baggageState.intValue(), file.getName());
 			for(int i=fileSize-1;i>=0; i--){
 				File f=files.get(i);
 				if(f.getName().equals(file.getName())){
