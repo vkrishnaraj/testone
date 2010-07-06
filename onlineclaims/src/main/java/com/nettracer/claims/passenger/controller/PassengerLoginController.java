@@ -217,10 +217,8 @@ public class PassengerLoginController {
 				}
 
 			} else {
-				FacesUtil
-						.addError("Incorrect Claim Number and Last Name combination. Please try again.");
-				logger
-						.error("Claim Number and Last Name are incorrect for admin for the IP Adress: "
+				FacesUtil.addError("Incorrect Claim Number and Last Name combination. Please try again.");
+				logger.error("Claim Number and Last Name are incorrect for admin for the IP Adress: "
 								+ ((HttpServletRequest) FacesUtil
 										.getFacesContext().getExternalContext()
 										.getRequest()).getRemoteAddr());
@@ -233,8 +231,7 @@ public class PassengerLoginController {
 			}
 		} catch (AxisFault e) {
 			logger.error("AxisFault Error");
-			FacesUtil
-					.addError("There is a Problem with the webservices, Please try again");
+			FacesUtil.addError("There is a Problem with the webservices, Please try again");
 			// Codes for testing :hardcoded data.
 			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 

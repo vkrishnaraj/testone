@@ -43,6 +43,7 @@ import com.nettracer.claims.core.service.PassengerService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 import com.nettracer.claims.faces.util.File;
+import com.nettracer.claims.faces.util.FileHelper;
 import com.nettracer.claims.faces.util.FileUploadBean;
 import com.nettracer.claims.passenger.LoginBean;
 import com.nettracer.claims.webservices.client.OnlineClaimsWS;
@@ -111,24 +112,19 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
-				String selectedLanguage = (String) session
-						.getAttribute("selectedLanguage");
-				passengerInfoLabel = passengerService.getPassengerInfo(
-						selectedLanguage, baggageState);
-				this.passengerBean = (PassengerBean) session
-						.getAttribute("passengerBean");
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				passengerInfoLabel = passengerService.getPassengerInfo(selectedLanguage, baggageState);
+				this.passengerBean = (PassengerBean) session.getAttribute("passengerBean");
 				List<CountryCode> countries = passengerService.getCountries();
 				for (CountryCode countryCode : countries) {
-					selectItems.add(new SelectItem(countryCode.getId(),
-							countryCode.getCountry()));
+					selectItems.add(new SelectItem(countryCode.getId(),countryCode.getCountry()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "gotoPassengerInfo";
 		} else {
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
@@ -163,8 +159,7 @@ public class PassengerController {
 				FacesUtil.addError("Connection failure, Please try again");
 			}
 		} else {
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 		}
 	}
 
@@ -197,16 +192,11 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
-				String selectedLanguage = (String) session
-						.getAttribute("selectedLanguage");
-				flightLabel = passengerService.getFlightLabels(
-						selectedLanguage, baggageState);
-				airportCodeList = (DataModel) session
-						.getAttribute("airportCodeList");
-				this.itineraryList = new ListDataModel(passengerBean
-						.getItineraryList());
-				if (null != passengerBean.getDeclarePayExcessValue()
-						&& passengerBean.getDeclarePayExcessValue()) {
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				flightLabel = passengerService.getFlightLabels(	selectedLanguage, baggageState);
+				airportCodeList = (DataModel) session.getAttribute("airportCodeList");
+				this.itineraryList = new ListDataModel(passengerBean.getItineraryList());
+				if (null != passengerBean.getDeclarePayExcessValue()&& passengerBean.getDeclarePayExcessValue()) {
 					flightLabel.setDeclaredValueState(2L);
 				} else {
 					flightLabel.setDeclaredValueState(1L);
@@ -237,8 +227,7 @@ public class PassengerController {
 			return "gotoFlightDetails";
 		} else {
 
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
@@ -541,6 +530,10 @@ public class PassengerController {
 									return "no";
 								}
 							}
+							HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+									.getExternalContext().getSession(false);
+							baggageState = (Long) session.getAttribute("baggageState");
+							FileHelper.saveImage(baggageState.intValue(), upFile.getName(), data);
 							passengerBean.getFiles().add(file);
 							fileDataModelList=new ListDataModel(passengerBean.getFiles());
 						}
@@ -574,14 +567,24 @@ public class PassengerController {
 		File file= (File)fileDataModelList.getRowData();
 		List<File> files=passengerBean.getFiles();
 		int fileSize=files.size();
-		for(int i=fileSize-1;i>=0; i--){
-			File f=files.get(i);
-			if(f.getName().equals(file.getName())){
-				passengerBean.getFiles().remove(i);
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+			.getExternalContext().getSession(false);
+		baggageState = (Long) session.getAttribute("baggageState");
+		try {
+			FileHelper.deleteImage(baggageState.intValue(), upFile.getName());
+			for(int i=fileSize-1;i>=0; i--){
+				File f=files.get(i);
+				if(f.getName().equals(file.getName())){
+					passengerBean.getFiles().remove(i);
+				}
 			}
+			fileDataModelList=null;
+			fileDataModelList=new ListDataModel(passengerBean.getFiles());
+		} catch (IOException e) {
+			logger.info("File can not be deleted");
+			e.printStackTrace();
 		}
-		fileDataModelList=null;
-		fileDataModelList=new ListDataModel(passengerBean.getFiles());
+		
 		
 	}
 	// -------------------End of File Upload
@@ -747,6 +750,112 @@ public class PassengerController {
 				.findComponent("lastName");
 		if (null != inputSecret) {
 			inputSecret.setValue("");
+		}
+	}
+	
+	/**
+	 * Navigation for thePassengerDetails while clicking on Previous Button
+	 * 
+	 * @return String
+	 */
+	public String goBackToPassengerDetails() {
+		logger.debug("goBackToPassengerDetails method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoPassengerInfo";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Navigation for the FlightDetails while clicking on Previous Button
+	 * 
+	 * @return String
+	 */
+	public String goBackToFlightDetails() {
+		logger.debug("goBackToFlightDetails method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoFlightDetails";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	/**
+	 * Navigation for the Bag Details while clicking on Previous Button
+	 * 
+	 * @return String
+	 */
+	public String goBackToBagDetails() {
+		logger.debug("goBackToBagDetails method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoBagDetails";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	/**
+	 * Navigation for the FileUpload while clicking on Previous Button
+	 * 
+	 * @return String
+	 */
+	public String goBackToFileUpload() {
+		logger.debug("goBackToFileUpload method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoFileUpload";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Navigation for the FraudQuestion while clicking on Previous Button
+	 * 
+	 * @return String
+	 */
+	public String goBackToFraudQuestion() {
+		logger.debug("goBackToFraudQuestion method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoFraudQuestion";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Navigation for the FraudQuestion while clicking on Previous Button
+	 * 
+	 * @return String
+	 */
+	public String goBackToSubmitClaim() {
+		logger.debug("goBackToFraudQuestion method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoSubmitClaim";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
 		}
 	}
 
