@@ -475,11 +475,9 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
-				String selectedLanguage = (String) session
-						.getAttribute("selectedLanguage");
-				fileUploadLabel = passengerService.getFileUploadLabel(
-						selectedLanguage, baggageState);
-				passengerBean.getFiles().clear();
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				fileUploadLabel = passengerService.getFileUploadLabel(selectedLanguage, baggageState);
+				//passengerBean.getFiles().clear();
 				session.setAttribute("passengerBean", passengerBean);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -508,23 +506,25 @@ public class PassengerController {
 				if (extDot > 0) {
 					String extension = upFile.getName().substring(extDot + 1);
 					if (extension.equals("jpg") || extension.equals("gif") || extension.equals("pdf")) {
-						InputStream stream = upFile.getInputStream();
-						long size = upFile.getSize();
-						byte[] buffer = new byte[(int) size];
-						stream.read(buffer, 0, (int) size);
+						//InputStream stream = upFile.getInputStream();
+						//long size = upFile.getSize();
+						//byte[] buffer = new byte[(int) size];
+						/*stream.read(buffer, 0, (int) size);
 						stream.close();
 						rendSuccess = true;
-						rendFailure = false;
-						logger.info("File Uploaded Successfully.");
+						rendFailure = false;*/
+						String fileName=upFile.getName().contains("\\") 
+							? upFile.getName().substring(upFile.getName().lastIndexOf("\\")+1, upFile.getName().length())
+							: upFile.getName(); //Fixing the bugs in IE
 						File file = new File();
 						byte[] data = upFile.getBytes();
-						file.setName(upFile.getName());
+						file.setName(fileName);
 						file.setLength(upFile.getSize());
 						file.setData(data);
 						if(passengerBean.getFiles() !=null){
 							List<File> existingFiles=passengerBean.getFiles();
 							for(File existingFile:existingFiles){
-								if(upFile.getName().equals(existingFile.getName())){
+								if(fileName.equals(existingFile.getName())){
 									logger.warn("File is already existing");
 									FacesUtil.addError("File is already existing");
 									return "no";
@@ -533,9 +533,10 @@ public class PassengerController {
 							HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 									.getExternalContext().getSession(false);
 							baggageState = (Long) session.getAttribute("baggageState");
-							FileHelper.saveImage(baggageState.intValue(), upFile.getName(), data);
+							FileHelper.saveImage(baggageState.intValue(), fileName, data);
 							passengerBean.getFiles().add(file);
 							fileDataModelList=new ListDataModel(passengerBean.getFiles());
+							logger.info("File Uploaded Successfully.");
 						}
 						file=null; 
 						return "ok";
@@ -814,7 +815,7 @@ public class PassengerController {
 		logger.debug("goBackToFileUpload method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-				.getExternalContext().getSession(false);
+			.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			return "gotoFileUpload";
 		} else {
