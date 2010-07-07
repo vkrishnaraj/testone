@@ -523,9 +523,12 @@ public enum MatchElement {
 
 		for (Incident_Claimcheck iClaim : (Set<Incident_Claimcheck>) incident
 				.getClaimchecks()) {
+			String originalIncString = null;
+			String originalOhdString = ohd.getClaimnum();
 			if (iClaim.getClaimchecknum().trim().length() > 0) {
 				String incTenDigitTag = null;
 				try {
+					originalIncString = iClaim.getClaimchecknum();
 					incTenDigitTag = LookupAirlineCodes.getFullBagTag(iClaim
 							.getClaimchecknum(), PassiveTrace.AirlineConversionMap);
 					if (!iClaim.getClaimchecknum().equals(incTenDigitTag)) {
@@ -544,8 +547,12 @@ public enum MatchElement {
 						ohdTenDigitTag = ohdTenDigitTag.substring(1);
 					}
 					result = MatchUtils.stringCompare(e, incTenDigitTag, ohdTenDigitTag);
+					result.setIncidentContents(originalIncString);
+					result.setOhdContents(originalOhdString);
 				} else {
 					result = MatchUtils.stringCompare(e, incTenDigitTag, ohdTenDigitTag);
+					result.setIncidentContents(originalIncString);
+					result.setOhdContents(originalOhdString);
 				}
 
 				if (result != null) {
