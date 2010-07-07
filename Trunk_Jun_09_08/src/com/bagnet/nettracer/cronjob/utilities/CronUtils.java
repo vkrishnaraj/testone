@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.cronjob.utilities;
 
 import java.sql.ResultSet;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +8,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-
 
 import javax.mail.internet.InternetAddress;
 
@@ -44,7 +42,6 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.SmsEmailService;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 
 public class CronUtils {
@@ -570,6 +567,7 @@ public class CronUtils {
 		sess.close();
 	}
 	
+	
 	public void process24HoursEmails() {
 		try {
 			Session session = HibernateWrapper.getSession().openSession();
@@ -604,7 +602,6 @@ public class CronUtils {
 				SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 				SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
 
-				DateFormat datetimeformatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 				// test case one
 				// Date myChosenDate =
 				// (Date)datetimeformatter.parse("2010.02.03 00:30:00");
@@ -618,13 +615,13 @@ public class CronUtils {
 				// (Date)datetimeformatter.parse("2010.01.11 00:40:10");
 
 				// test case four "2010.01.31 23:55:56"
-				Date myChosenDate = (Date) datetimeformatter.parse("2010.02.01 23:55:56");
+//				Date myChosenDate = (Date) datetimeformatter.parse("2010.02.01 23:55:56");
 
 				Calendar endCal = Calendar.getInstance();
 				Calendar startCal = Calendar.getInstance();
 
-				endCal.setTime(myChosenDate);
-				startCal.setTime(myChosenDate);
+//				endCal.setTime(myChosenDate);
+//				startCal.setTime(myChosenDate);
 
 				// figure out whether the two times fall on the same day or two
 				// consecutive days
@@ -659,6 +656,7 @@ public class CronUtils {
 				hibQuery.setString(3, newEndTime);
 
 				logger.info("the entire sql is:" + hibQuery.toString());
+				logger.info("  Date range:" + newStartDate + " " + newStartTime + " " + newEndDate + " "+ newEndTime);
 
 				// execute query, and return
 				List myList = hibQuery.list();
@@ -668,7 +666,7 @@ public class CronUtils {
 					Incident myItem = (Incident) itr.next();
 
 					String myIncidentId = myItem.getIncident_ID();
-					logger.info("incidentId=" + myIncidentId);
+					logger.info("  Processing 24 hour emails incident: " + myIncidentId);
 
 					Incident myIncident = IncidentBMO.getIncidentByID(myIncidentId, session);
 
@@ -687,7 +685,7 @@ public class CronUtils {
 					int numOfRowInserted = hibInsertQuery.executeUpdate();
 					t.commit();
 					if (numOfRowInserted > 0) {
-						logger.info("new item with incidentId=" + myIncidentId + " has been inserted.");
+						logger.info("    New email sent for incident: " + myIncidentId);
 					}
 
 				}
