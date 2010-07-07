@@ -86,13 +86,107 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             super(sType);
         }
         
-        private static final javax.xml.namespace.QName FILENAME$0 = 
+        private static final javax.xml.namespace.QName CLAIMID$0 = 
+            new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "claimId");
+        private static final javax.xml.namespace.QName FILENAME$2 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "filename");
-        private static final javax.xml.namespace.QName FILE$2 = 
+        private static final javax.xml.namespace.QName FILE$4 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "file");
-        private static final javax.xml.namespace.QName AUTH$4 = 
+        private static final javax.xml.namespace.QName AUTH$6 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "auth");
         
+        
+        /**
+         * Gets the "claimId" element
+         */
+        public long getClaimId()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CLAIMID$0, 0);
+                if (target == null)
+                {
+                    return 0L;
+                }
+                return target.getLongValue();
+            }
+        }
+        
+        /**
+         * Gets (as xml) the "claimId" element
+         */
+        public org.apache.xmlbeans.XmlLong xgetClaimId()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlLong target = null;
+                target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(CLAIMID$0, 0);
+                return target;
+            }
+        }
+        
+        /**
+         * True if has "claimId" element
+         */
+        public boolean isSetClaimId()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                return get_store().count_elements(CLAIMID$0) != 0;
+            }
+        }
+        
+        /**
+         * Sets the "claimId" element
+         */
+        public void setClaimId(long claimId)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CLAIMID$0, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CLAIMID$0);
+                }
+                target.setLongValue(claimId);
+            }
+        }
+        
+        /**
+         * Sets (as xml) the "claimId" element
+         */
+        public void xsetClaimId(org.apache.xmlbeans.XmlLong claimId)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlLong target = null;
+                target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(CLAIMID$0, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(CLAIMID$0);
+                }
+                target.set(claimId);
+            }
+        }
+        
+        /**
+         * Unsets the "claimId" element
+         */
+        public void unsetClaimId()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                get_store().remove_element(CLAIMID$0, 0);
+            }
+        }
         
         /**
          * Gets the "filename" element
@@ -103,7 +197,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$0, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$2, 0);
                 if (target == null)
                 {
                     return null;
@@ -121,7 +215,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$2, 0);
                 return target;
             }
         }
@@ -135,7 +229,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$2, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -149,7 +243,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(FILENAME$0) != 0;
+                return get_store().count_elements(FILENAME$2) != 0;
             }
         }
         
@@ -162,10 +256,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$0, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$2, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILENAME$0);
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILENAME$2);
                 }
                 target.setStringValue(filename);
             }
@@ -180,10 +274,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$2, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$0);
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$2);
                 }
                 target.set(filename);
             }
@@ -198,10 +292,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$2, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$0);
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$2);
                 }
                 target.setNil();
             }
@@ -215,7 +309,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(FILENAME$0, 0);
+                get_store().remove_element(FILENAME$2, 0);
             }
         }
         
@@ -228,7 +322,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILE$2, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILE$4, 0);
                 if (target == null)
                 {
                     return null;
@@ -246,7 +340,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlBase64Binary target = null;
-                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$2, 0);
+                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$4, 0);
                 return target;
             }
         }
@@ -260,7 +354,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlBase64Binary target = null;
-                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$2, 0);
+                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$4, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -274,7 +368,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(FILE$2) != 0;
+                return get_store().count_elements(FILE$4) != 0;
             }
         }
         
@@ -287,10 +381,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILE$2, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILE$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILE$2);
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILE$4);
                 }
                 target.setByteArrayValue(file);
             }
@@ -305,10 +399,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlBase64Binary target = null;
-                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$2, 0);
+                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlBase64Binary)get_store().add_element_user(FILE$2);
+                    target = (org.apache.xmlbeans.XmlBase64Binary)get_store().add_element_user(FILE$4);
                 }
                 target.set(file);
             }
@@ -323,10 +417,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlBase64Binary target = null;
-                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$2, 0);
+                target = (org.apache.xmlbeans.XmlBase64Binary)get_store().find_element_user(FILE$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlBase64Binary)get_store().add_element_user(FILE$2);
+                    target = (org.apache.xmlbeans.XmlBase64Binary)get_store().add_element_user(FILE$4);
                 }
                 target.setNil();
             }
@@ -340,7 +434,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(FILE$2, 0);
+                get_store().remove_element(FILE$4, 0);
             }
         }
         
@@ -353,7 +447,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null)
                 {
                     return null;
@@ -371,7 +465,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -385,7 +479,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(AUTH$4) != 0;
+                return get_store().count_elements(AUTH$6) != 0;
             }
         }
         
@@ -398,10 +492,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null)
                 {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$4);
+                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
                 }
                 target.set(auth);
             }
@@ -416,7 +510,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$4);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
                 return target;
             }
         }
@@ -430,10 +524,10 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null)
                 {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$4);
+                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
                 }
                 target.setNil();
             }
@@ -447,7 +541,7 @@ public class UploadFileDocumentImpl extends org.apache.xmlbeans.impl.values.XmlC
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(AUTH$4, 0);
+                get_store().remove_element(AUTH$6, 0);
             }
         }
     }

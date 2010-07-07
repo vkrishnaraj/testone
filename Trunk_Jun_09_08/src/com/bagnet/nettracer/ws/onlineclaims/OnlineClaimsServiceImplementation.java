@@ -6,7 +6,15 @@
  */
 package com.bagnet.nettracer.ws.onlineclaims;
 
-import org.apache.axis2.AxisFault;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.transaction.Transaction;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -14,14 +22,20 @@ import com.bagnet.nettracer.tracing.dao.AuthorizationException;
 import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim.ClaimStatus;
+import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse;
 import com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse;
+import com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument.UploadFile;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.File;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.bagnet.nettracer.ws.passengerview.PassengerViewUtil;
@@ -30,12 +44,16 @@ import com.bagnet.nettracer.ws.passengerview.PassengerViewUtil;
  *  OnlineClaimsServiceSkeleton java skeleton for the axisService
  */
 public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkeleton {
+	private static final String UNABLE_TO_CREATE_DIRECTORY = "Unable to create directory";
 	/**
 	 * Auto generated method signature
 	 * @param saveClaim
 	 * @throws AuthorizationException 
 	 */
+	Logger logger = Logger.getLogger(OnlineClaimsServiceImplementation.class);
+	
 	public com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument saveClaim(com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument saveClaim) {
+		logger.info("Save claim request: \n" + saveClaim);
 		NtAuth auth = saveClaim.getSaveClaim().getAuth();
 		authenticate(auth);
 		
@@ -249,9 +267,66 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 		NtAuth auth = uploadFile.getUploadFile().getAuth();
 		authenticate(auth);
 
+		UploadFileResponseDocument resDoc = UploadFileResponseDocument.Factory.newInstance();
+		File resFile = resDoc.addNewUploadFileResponse().addNewReturn();
 		
-		//TODO : fill this with the necessary business logic
-		throw new java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#uploadFile");
+		
+		Calendar cal = new GregorianCalendar();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+
+		UploadFile u = uploadFile.getUploadFile();
+		String lead = Long.toString(u.getClaimId());
+		String st = Long.toString((new Date()).getTime());
+
+		String fileName = "CLAIM_" + lead + "_" + st + "_" + u.getFilename();
+		String filePath = "CLAIMS" + "/" + year + "/" + month + "/" + day + "/";;
+		String image_store = TracerProperties.get("image_store");
+		String picpath = image_store + filePath + fileName;
+		
+		if (!ImageUtils.makeFolder(image_store + filePath)) {
+			logger.error(UNABLE_TO_CREATE_DIRECTORY);
+			throw new RuntimeException(UNABLE_TO_CREATE_DIRECTORY);
+		}
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		org.hibernate.Transaction t = null;
+		
+		try {
+			FileOutputStream fos = new FileOutputStream(picpath);
+			byte[] f = u.getFile();
+			fos.write(f);
+			fos.flush();
+	    fos.close();
+	    
+	    
+	    OnlineClaimsDao d = new OnlineClaimsDao();
+	    OnlineClaim claim = d.getOnlineClaim(u.getClaimId());
+	    
+	    OCFile thefile = new OCFile();
+	    thefile.setClaim(claim);
+	    thefile.setDateUploaded(TracerDateTime.getGMTDate());
+	    thefile.setFilename(fileName);
+	    
+	    t = sess.beginTransaction();
+	    sess.save(thefile);
+	    t.commit();
+	    sess.close();
+	    resFile.setFilename(fileName);
+	    resFile.setId(thefile.getId());
+	    claim.getFile();
+	    
+    } catch (IOException e) {
+	    e.printStackTrace();
+    } catch (Exception e) {
+    	if (t != null) {
+    		t.rollback();
+    	}
+    }	finally {    
+    	if (sess != null)	sess.close();
+    }
+		return resDoc;
 	}
 
 }

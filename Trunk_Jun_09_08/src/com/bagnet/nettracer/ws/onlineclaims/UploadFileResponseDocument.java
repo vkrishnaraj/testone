@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface UploadFileResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFileResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("uploadfileresponseac23doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFileResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("uploadfileresponseac23doctype");
     
     /**
      * Gets the "uploadFileResponse" element
@@ -42,7 +42,7 @@ public interface UploadFileResponseDocument extends org.apache.xmlbeans.XmlObjec
     public interface UploadFileResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFileResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("uploadfileresponse7249elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFileResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("uploadfileresponse7249elemtype");
         
         /**
          * Gets the "return" element

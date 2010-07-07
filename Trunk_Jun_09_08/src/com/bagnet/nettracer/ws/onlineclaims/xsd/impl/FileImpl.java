@@ -23,6 +23,8 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "filename");
     private static final javax.xml.namespace.QName ID$2 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "id");
+    private static final javax.xml.namespace.QName PATH$4 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "path");
     
     
     /**
@@ -239,6 +241,131 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             get_store().remove_element(ID$2, 0);
+        }
+    }
+    
+    /**
+     * Gets the "path" element
+     */
+    public java.lang.String getPath()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$4, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "path" element
+     */
+    public org.apache.xmlbeans.XmlString xgetPath()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "path" element
+     */
+    public boolean isNilPath()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "path" element
+     */
+    public boolean isSetPath()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(PATH$4) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "path" element
+     */
+    public void setPath(java.lang.String path)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PATH$4);
+            }
+            target.setStringValue(path);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "path" element
+     */
+    public void xsetPath(org.apache.xmlbeans.XmlString path)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$4);
+            }
+            target.set(path);
+        }
+    }
+    
+    /**
+     * Nils the "path" element
+     */
+    public void setNilPath()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$4);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "path" element
+     */
+    public void unsetPath()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(PATH$4, 0);
         }
     }
 }

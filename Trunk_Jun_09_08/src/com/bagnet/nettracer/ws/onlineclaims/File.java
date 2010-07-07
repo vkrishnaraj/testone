@@ -4,6 +4,7 @@ public class File {
 
 	private long id;
 	private String filename;
+	private String path;
 	
 	public long getId() {
   	return id;
@@ -16,5 +17,11 @@ public class File {
   }
 	public void setFilename(String filename) {
   	this.filename = filename;
+  }
+	public String getPath() {
+  	return path;
+  }
+	public void setPath(String path) {
+  	this.path = path;
   }
 }

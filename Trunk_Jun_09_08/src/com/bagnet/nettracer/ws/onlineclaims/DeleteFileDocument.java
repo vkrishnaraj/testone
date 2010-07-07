@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface DeleteFileDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFileDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("deletefilef2ecdoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFileDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("deletefilef2ecdoctype");
     
     /**
      * Gets the "deleteFile" element
@@ -42,7 +42,7 @@ public interface DeleteFileDocument extends org.apache.xmlbeans.XmlObject
     public interface DeleteFile extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFile.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("deletefile17e9elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFile.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("deletefile17e9elemtype");
         
         /**
          * Gets the "claimId" element

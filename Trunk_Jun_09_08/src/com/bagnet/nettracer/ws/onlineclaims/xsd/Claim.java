@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("claimd979type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s16F40E8718DC66FAA429E7A8E1C40F42").resolveHandle("claimd979type");
     
     /**
      * Gets the "accept" element

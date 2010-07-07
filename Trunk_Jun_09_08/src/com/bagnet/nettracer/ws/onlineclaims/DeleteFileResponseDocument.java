@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface DeleteFileResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFileResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("deletefileresponse1dcddoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFileResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("deletefileresponse1dcddoctype");
     
     /**
      * Gets the "deleteFileResponse" element
@@ -42,7 +42,7 @@ public interface DeleteFileResponseDocument extends org.apache.xmlbeans.XmlObjec
     public interface DeleteFileResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFileResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("deletefileresponse0089elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(DeleteFileResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("deletefileresponse0089elemtype");
         
         /**
          * Gets the "return" element

@@ -3,22 +3,6 @@
     <wsdl:types>
         <xs:schema xmlns:ax22="http://onlineclaims.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://onlineclaims.ws.nettracer.bagnet.com">
             <xs:import namespace="http://onlineclaims.ws.nettracer.bagnet.com/xsd"/>
-            <xs:element name="uploadFile">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
-                        <xs:element minOccurs="0" name="auth" nillable="true" type="ax22:NtAuth"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="uploadFileResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax22:File"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
             <xs:element name="saveClaim">
                 <xs:complexType>
                     <xs:sequence>
@@ -50,22 +34,6 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="ax22:Claim"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="deleteFile">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="claimId" type="xs:long"/>
-                        <xs:element minOccurs="0" name="fileId" type="xs:long"/>
-                        <xs:element minOccurs="0" name="auth" nillable="true" type="ax22:NtAuth"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="deleteFileResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -141,18 +109,6 @@
         </xs:schema>
         <xs:schema xmlns:ax24="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://onlineclaims.ws.nettracer.bagnet.com/xsd">
             <xs:import namespace="http://pojo.core.ws.nettracer.bagnet.com/xsd"/>
-            <xs:complexType name="NtAuth">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="File">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="id" type="xs:long"/>
-                </xs:sequence>
-            </xs:complexType>
             <xs:complexType name="Claim">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="accept" nillable="true" type="xs:string"/>
@@ -243,6 +199,13 @@
                     <xs:element minOccurs="0" name="size" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="File">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" name="path" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="Itinerary">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
@@ -268,6 +231,12 @@
                     <xs:element minOccurs="0" name="phoneType" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="NtAuth">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="PassengerView">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="authenticationSuccess" type="xs:boolean"/>
@@ -283,12 +252,6 @@
     <wsdl:message name="loadClaimResponse">
         <wsdl:part name="parameters" element="ns:loadClaimResponse"/>
     </wsdl:message>
-    <wsdl:message name="deleteFileRequest">
-        <wsdl:part name="parameters" element="ns:deleteFile"/>
-    </wsdl:message>
-    <wsdl:message name="deleteFileResponse">
-        <wsdl:part name="parameters" element="ns:deleteFileResponse"/>
-    </wsdl:message>
     <wsdl:message name="authPassengerRequest">
         <wsdl:part name="parameters" element="ns:authPassenger"/>
     </wsdl:message>
@@ -301,12 +264,6 @@
     <wsdl:message name="authAdminUserResponse">
         <wsdl:part name="parameters" element="ns:authAdminUserResponse"/>
     </wsdl:message>
-    <wsdl:message name="uploadFileRequest">
-        <wsdl:part name="parameters" element="ns:uploadFile"/>
-    </wsdl:message>
-    <wsdl:message name="uploadFileResponse">
-        <wsdl:part name="parameters" element="ns:uploadFileResponse"/>
-    </wsdl:message>
     <wsdl:message name="saveClaimRequest">
         <wsdl:part name="parameters" element="ns:saveClaim"/>
     </wsdl:message>
@@ -318,10 +275,6 @@
             <wsdl:input message="ns:loadClaimRequest" wsaw:Action="urn:loadClaim"/>
             <wsdl:output message="ns:loadClaimResponse" wsaw:Action="urn:loadClaimResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="deleteFile">
-            <wsdl:input message="ns:deleteFileRequest" wsaw:Action="urn:deleteFile"/>
-            <wsdl:output message="ns:deleteFileResponse" wsaw:Action="urn:deleteFileResponse"/>
-        </wsdl:operation>
         <wsdl:operation name="authPassenger">
             <wsdl:input message="ns:authPassengerRequest" wsaw:Action="urn:authPassenger"/>
             <wsdl:output message="ns:authPassengerResponse" wsaw:Action="urn:authPassengerResponse"/>
@@ -329,10 +282,6 @@
         <wsdl:operation name="authAdminUser">
             <wsdl:input message="ns:authAdminUserRequest" wsaw:Action="urn:authAdminUser"/>
             <wsdl:output message="ns:authAdminUserResponse" wsaw:Action="urn:authAdminUserResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="uploadFile">
-            <wsdl:input message="ns:uploadFileRequest" wsaw:Action="urn:uploadFile"/>
-            <wsdl:output message="ns:uploadFileResponse" wsaw:Action="urn:uploadFileResponse"/>
         </wsdl:operation>
         <wsdl:operation name="saveClaim">
             <wsdl:input message="ns:saveClaimRequest" wsaw:Action="urn:saveClaim"/>
@@ -359,15 +308,6 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="deleteFile">
-            <soap:operation soapAction="urn:deleteFile" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="authAdminUser">
             <soap:operation soapAction="urn:authAdminUser" style="document"/>
             <wsdl:input>
@@ -379,15 +319,6 @@
         </wsdl:operation>
         <wsdl:operation name="saveClaim">
             <soap:operation soapAction="urn:saveClaim" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="uploadFile">
-            <soap:operation soapAction="urn:uploadFile" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -416,15 +347,6 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="deleteFile">
-            <soap12:operation soapAction="urn:deleteFile" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="authAdminUser">
             <soap12:operation soapAction="urn:authAdminUser" style="document"/>
             <wsdl:input>
@@ -436,15 +358,6 @@
         </wsdl:operation>
         <wsdl:operation name="saveClaim">
             <soap12:operation soapAction="urn:saveClaim" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="uploadFile">
-            <soap12:operation soapAction="urn:uploadFile" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -473,15 +386,6 @@
                 <mime:content type="text/xml" part="authPassenger"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="deleteFile">
-            <http:operation location="OnlineClaimsService/deleteFile"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="deleteFile"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="deleteFile"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="authAdminUser">
             <http:operation location="OnlineClaimsService/authAdminUser"/>
             <wsdl:input>
@@ -498,15 +402,6 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="saveClaim"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="uploadFile">
-            <http:operation location="OnlineClaimsService/uploadFile"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="uploadFile"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="uploadFile"/>
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>

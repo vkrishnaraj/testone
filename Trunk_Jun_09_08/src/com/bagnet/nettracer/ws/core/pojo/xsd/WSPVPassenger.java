@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSPVPassenger extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVPassenger.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("wspvpassenger8887type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVPassenger.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s16F40E8718DC66FAA429E7A8E1C40F42").resolveHandle("wspvpassenger8887type");
     
     /**
      * Gets the "email" element

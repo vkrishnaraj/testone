@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface File extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("file3dabtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s16F40E8718DC66FAA429E7A8E1C40F42").resolveHandle("file3dabtype");
     
     /**
      * Gets the "filename" element
@@ -87,6 +87,46 @@ public interface File extends org.apache.xmlbeans.XmlObject
      * Unsets the "id" element
      */
     void unsetId();
+    
+    /**
+     * Gets the "path" element
+     */
+    java.lang.String getPath();
+    
+    /**
+     * Gets (as xml) the "path" element
+     */
+    org.apache.xmlbeans.XmlString xgetPath();
+    
+    /**
+     * Tests for nil "path" element
+     */
+    boolean isNilPath();
+    
+    /**
+     * True if has "path" element
+     */
+    boolean isSetPath();
+    
+    /**
+     * Sets the "path" element
+     */
+    void setPath(java.lang.String path);
+    
+    /**
+     * Sets (as xml) the "path" element
+     */
+    void xsetPath(org.apache.xmlbeans.XmlString path);
+    
+    /**
+     * Nils the "path" element
+     */
+    void setNilPath();
+    
+    /**
+     * Unsets the "path" element
+     */
+    void unsetPath();
     
     /**
      * A factory class with static methods for creating instances

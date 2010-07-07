@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface UploadFileDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFileDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("uploadfile3742doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFileDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("uploadfile3742doctype");
     
     /**
      * Gets the "uploadFile" element
@@ -42,7 +42,37 @@ public interface UploadFileDocument extends org.apache.xmlbeans.XmlObject
     public interface UploadFile extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFile.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("uploadfile53a9elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UploadFile.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB761FFC9C65C105A1900CD40FE557D9F").resolveHandle("uploadfile53a9elemtype");
+        
+        /**
+         * Gets the "claimId" element
+         */
+        long getClaimId();
+        
+        /**
+         * Gets (as xml) the "claimId" element
+         */
+        org.apache.xmlbeans.XmlLong xgetClaimId();
+        
+        /**
+         * True if has "claimId" element
+         */
+        boolean isSetClaimId();
+        
+        /**
+         * Sets the "claimId" element
+         */
+        void setClaimId(long claimId);
+        
+        /**
+         * Sets (as xml) the "claimId" element
+         */
+        void xsetClaimId(org.apache.xmlbeans.XmlLong claimId);
+        
+        /**
+         * Unsets the "claimId" element
+         */
+        void unsetClaimId();
         
         /**
          * Gets the "filename" element

@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface AuthPassengerDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassengerDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("authpassenger3265doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassengerDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s16F40E8718DC66FAA429E7A8E1C40F42").resolveHandle("authpassenger3265doctype");
     
     /**
      * Gets the "authPassenger" element
@@ -42,7 +42,7 @@ public interface AuthPassengerDocument extends org.apache.xmlbeans.XmlObject
     public interface AuthPassenger extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassenger.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s54E7E95C22892E67F3FD97F6F042424C").resolveHandle("authpassenger33a3elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassenger.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s16F40E8718DC66FAA429E7A8E1C40F42").resolveHandle("authpassenger33a3elemtype");
         
         /**
          * Gets the "passengerLastName" element
