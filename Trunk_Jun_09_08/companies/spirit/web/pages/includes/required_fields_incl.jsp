@@ -261,7 +261,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 
 
 	  
-	  function checkDeleteCount(bagNum) {
+	  function checkDeleteCount(bagNum, report_type)(bagNum) {
 		  inputs = document.getElementsByTagName("input");
 		  var invCount = 0;
 		  for(i = 0; i < inputs.length; i++) {

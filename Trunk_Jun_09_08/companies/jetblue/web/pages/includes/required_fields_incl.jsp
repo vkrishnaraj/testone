@@ -234,7 +234,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     var isAware = false;
   <% }%>
 
-  function checkDeleteCount(bagNum) {
+  function checkDeleteCount(bagNum, report_type) {
 	  inputs = document.getElementsByTagName("input");
 	  var invCount = 0;
 	  for(i = 0; i < inputs.length; i++) {

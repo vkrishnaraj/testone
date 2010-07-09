@@ -405,7 +405,7 @@
                                 <% 
                       String check = "true";
                       if (report_type !=2) {
-                        check = "checkDeleteCount("+i+")";
+                        check = "checkDeleteCount(" + i + " ," + report_type + ")";
                       }
                         %>
 								                        <input type="button" name="deleteinventory_<%=i %>" value="<bean:message key="button.delete_content"/>" 

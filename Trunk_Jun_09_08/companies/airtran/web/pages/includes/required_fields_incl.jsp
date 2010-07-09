@@ -446,5 +446,5 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     return true;
   }
 
-  function checkDeleteCount(bagNum) { return true; }
+  function checkDeleteCount(bagNum, report_type){ return true; }
 </script>

@@ -287,7 +287,22 @@ public class PaxViewImplementation extends PaxViewSkeleton {
 		Remark r = new Remark();
 		r.setAgent(null);
 		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-		r.setRemarktext("Passenger has entered a new message.");
+		
+
+//		String currentLocale = theform.getLanguage();
+//		
+//		if(currentLocale == null || currentLocale.trim().length() < 1) {
+//			currentLocale = iDTO.getAgent().getCurrentlocale();
+//		}
+		
+		MessageResources messages = MessageResources
+		.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		String remarkText = messages.getMessage("paxview.passengercomment.remark");
+		if (remarkText != null){
+			r.setRemarktext(remarkText);
+		} else {
+			r.setRemarktext("Passenger has entered a new message.");
+		}
 		r.setIncident(inc);
 		// Add a remark to the incident to complete the two-way reference.
 		Set remarks = inc.getRemarks();

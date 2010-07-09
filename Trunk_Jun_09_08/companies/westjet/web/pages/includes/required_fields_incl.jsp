@@ -507,7 +507,8 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   <% }%>
   
   
-  function checkDeleteCount(bagNum) {
+  function checkDeleteCount(bagNum, report_type) {
+  	  if (report_type == 1){ 
 	  inputs = document.getElementsByTagName("input");
 	  var invCount = 0;
 	  for(i = 0; i < inputs.length; i++) {
@@ -522,43 +523,10 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	    document.forms[0].remarkEnteredWhenNotifiedOfRequirements.value = true;
 	    return isAware;
 	  }
-	  return true;
-	}
-<%
-/*
-  function checkDeleteCount(bagNum) {
-	  inputs = document.getElementsByTagName("input");
-	  var invCount = 0;
-	  for(i = 0; i < inputs.length; i++) {
-	    if(inputs[i].name.indexOf("deleteinventory_" + bagNum) == 0) {
-	      invCount ++;
-	      if(invCount >= 4) break;
-	    }
-	  }
-	  if(invCount <= 3 && !isAware) {
-	    isAware = confirm("An explanatory remark must be entered when reporting baggage with no content fields. Would you like to continue?");
-	    document.forms[0].notifiedOfRequirements.value = true;
-	    document.forms[0].remarkEnteredWhenNotifiedOfRequirements.value = true;
-	    return isAware;
 	  }
 	  return true;
 	}
-*/
-%>
 
   function checkOhdDeleteCount() {
-	  inputs = document.getElementsByTagName("input");
-	  var invCount = 0;
-	  for(i = 0; i < inputs.length; i++) {
-	    if(inputs[i].name.indexOf("deleteItem[") == 0) {
-	      invCount ++;
-	      if(invCount > 1) break;
-	    }
-	  }
-	  if(invCount <= 1 && !isAware) {
-	    isAware = confirm("An explanatory remark must be entered when reporting baggage with no content fields. Would you like to continue?");
-	    document.forms[0].notifiedOfRequirements.value = true;
-	    return isAware;
-	  }
 	  return true;
 	}

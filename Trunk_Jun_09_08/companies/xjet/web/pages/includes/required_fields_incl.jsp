@@ -237,6 +237,6 @@
 	  return true;
 	}
 
-    function checkDeleteCount(bagNum) { return true; }
+	function checkDeleteCount(bagNum, report_type) { return true; }
     function checkOhdDeleteCount(bagNum) { return true; }
   </script>
