@@ -61,7 +61,7 @@
 				<text><![CDATA[Reçu pour bagages retardés]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-3" mode="Opaque" x="200" y="26" width="347" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-3" mode="Opaque" x="200" y="28" width="347" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Times New Roman" size="13" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
