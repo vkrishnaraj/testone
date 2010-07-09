@@ -63,38 +63,6 @@
         /**
          * Auto generated method signature
          * 
-                                     * @param uploadFile
-         */
-        
-                 public com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument uploadFile
-                  (
-                  com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument uploadFile
-                  )
-            {
-                //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#uploadFile");
-        }
-     
-         
-        /**
-         * Auto generated method signature
-         * 
-                                     * @param deleteFile
-         */
-        
-                 public com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument deleteFile
-                  (
-                  com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument deleteFile
-                  )
-            {
-                //TODO : fill this with the necessary business logic
-                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#deleteFile");
-        }
-     
-         
-        /**
-         * Auto generated method signature
-         * 
                                      * @param authPassenger
          */
         

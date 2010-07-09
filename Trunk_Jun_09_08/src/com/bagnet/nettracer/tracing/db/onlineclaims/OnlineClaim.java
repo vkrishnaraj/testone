@@ -55,10 +55,10 @@ public class OnlineClaim {
 	@Column(length = 1)
 	private String middleInitial;
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private OCAddress permanentAddress;
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private OCAddress mailingAddress;
 
 	@Column(length = 40)

@@ -66,10 +66,10 @@ public class AOCClaim {
 	@Column(length = 1)
 	private String middleInitial;
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private AOCAddress permanentAddress;
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private AOCAddress mailingAddress;
 
 	@Column(length = 40)

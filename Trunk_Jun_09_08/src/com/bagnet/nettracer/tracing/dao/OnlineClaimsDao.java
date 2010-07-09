@@ -11,7 +11,17 @@ import org.springframework.beans.BeanUtils;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCBag;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCContents;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCItinerary;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCPhone;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCBag;
+import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCContents;
+import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCItinerary;
+import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCPhone;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import common.Logger;
 
@@ -86,16 +96,20 @@ public class OnlineClaimsDao {
 			t = sess.beginTransaction();
 			
 			if (!isNew && !contactUpdateOnly) {
+				
+				mapSubObjToParentObjects(existingDbClaim);
+				
 				sess.saveOrUpdate(existingDbClaim);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
 				sess.save(ac);
 			} else if (!isNew && contactUpdateOnly) {
+				mapSubObjToParentObjects(existingDbClaim);
 				// Updating the existing claim, not replacing it.
 				sess.saveOrUpdate(existingDbClaim);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
 				sess.save(ac);
 			} else {
-				
+				mapSubObjToParentObjects(claim);
 				sess.save(claim);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
 				sess.save(ac);
@@ -114,6 +128,33 @@ public class OnlineClaimsDao {
 	}
 
 
+	private void mapSubObjToParentObjects(OnlineClaim claim) {
+		for (OCBag i: claim.getBag()) {
+			if (i.getClaim() == null)
+				i.setClaim(claim);
+			for (OCContents j: i.getContents()) {
+				if (j.getBag() == null)
+					j.setBag(i);
+			}
+		}
+		
+		for (OCFile i : claim.getFile()) {
+			if (i.getClaim() == null)
+				i.setClaim(claim);
+		}
+
+		for (OCItinerary i : claim.getItinerary()) {
+			if (i.getClaim() == null)
+				i.setClaim(claim);
+		}
+
+		for (OCPhone i : claim.getPhone()) {
+			if (i.getClaim() == null)
+				i.setClaim(claim);
+		}		
+		
+	}
+
 	private void contactOnlyUpdateMapping(OnlineClaim origin, OnlineClaim dest) {
 		dest.setLastName(origin.getLastName());
 		dest.setFirstName(origin.getFirstName());
@@ -131,6 +172,25 @@ public class OnlineClaimsDao {
 	private com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim generateAuditClaim(OnlineClaim claim, Agent agent_modified) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 		com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim retVal = mapper.map(claim, com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim.class);
+		for (AOCBag i: retVal.getBag()) {
+			i.setClaim(retVal);
+			for (AOCContents j: i.getContents()) {
+				j.setBag(i);
+			}
+		}
+		
+		for (AOCFile i : retVal.getFile()) {
+			i.setClaim(retVal);
+		}
+
+		for (AOCItinerary i : retVal.getItinerary()) {
+			i.setClaim(retVal);
+		}
+
+		for (AOCPhone i : retVal.getPhone()) {
+			i.setClaim(retVal);
+		}		
+		
 		retVal.setAgent_modified(agent_modified);
 		retVal.setTime_modified(TracerDateTime.getGMTDate());
 		return retVal;

@@ -30,6 +30,10 @@ public class AOCFile {
 	@Column(length = 50)
 	private String filename;
 	
+	@Column(length = 100)
+	private String path;
+	
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateUploaded;
 	
@@ -57,4 +61,10 @@ public class AOCFile {
 	public void setAid(long aid) {
 		this.aid = aid;
 	}
+  public String getPath() {
+  	return path;
+  }
+	public void setPath(String path) {
+  	this.path = path;
+  }
 }

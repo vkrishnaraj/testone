@@ -93,38 +93,6 @@
             }
                 
            /**
-            * auto generated Axis2 call back method for uploadFile method
-            * override this method for handling normal response from uploadFile operation
-            */
-           public void receiveResultuploadFile(
-                    com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument result
-                        ) {
-           }
-
-          /**
-           * auto generated Axis2 Error handler
-           * override this method for handling error response from uploadFile operation
-           */
-            public void receiveErroruploadFile(java.lang.Exception e) {
-            }
-                
-           /**
-            * auto generated Axis2 call back method for deleteFile method
-            * override this method for handling normal response from deleteFile operation
-            */
-           public void receiveResultdeleteFile(
-                    com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument result
-                        ) {
-           }
-
-          /**
-           * auto generated Axis2 Error handler
-           * override this method for handling error response from deleteFile operation
-           */
-            public void receiveErrordeleteFile(java.lang.Exception e) {
-            }
-                
-           /**
             * auto generated Axis2 call back method for authPassenger method
             * override this method for handling normal response from authPassenger operation
             */

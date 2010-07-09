@@ -90,58 +90,22 @@
                                         envelope = toEnvelope(getSOAPFactory(msgContext), authAdminUserResponse5, false);
                                     } else 
 
-            if("uploadFile".equals(methodName)){
-                
-                com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument uploadFileResponse7 = null;
-	                        com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument wrappedParam =
-                                                             (com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument)fromOM(
-                                    msgContext.getEnvelope().getBody().getFirstElement(),
-                                    com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument.class,
-                                    getEnvelopeNamespaces(msgContext.getEnvelope()));
-                                                
-                                               uploadFileResponse7 =
-                                                   
-                                                   
-                                                         skel.uploadFile(wrappedParam)
-                                                    ;
-                                            
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), uploadFileResponse7, false);
-                                    } else 
-
-            if("deleteFile".equals(methodName)){
-                
-                com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument deleteFileResponse9 = null;
-	                        com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument wrappedParam =
-                                                             (com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument)fromOM(
-                                    msgContext.getEnvelope().getBody().getFirstElement(),
-                                    com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument.class,
-                                    getEnvelopeNamespaces(msgContext.getEnvelope()));
-                                                
-                                               deleteFileResponse9 =
-                                                   
-                                                   
-                                                         skel.deleteFile(wrappedParam)
-                                                    ;
-                                            
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), deleteFileResponse9, false);
-                                    } else 
-
             if("authPassenger".equals(methodName)){
                 
-                com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument authPassengerResponse11 = null;
+                com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument authPassengerResponse7 = null;
 	                        com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument wrappedParam =
                                                              (com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               authPassengerResponse11 =
+                                               authPassengerResponse7 =
                                                    
                                                    
                                                          skel.authPassenger(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), authPassengerResponse11, false);
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), authPassengerResponse7, false);
                                     
             } else {
               throw new java.lang.RuntimeException("method not found");
@@ -566,278 +530,6 @@
             }
         
 
-            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument param, boolean optimizeContent)
-            throws org.apache.axis2.AxisFault{
-
-            
-                    return toOM(param);
-                
-
-            }
-
-            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument param)
-                    throws org.apache.axis2.AxisFault {
-
-                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
-                while (!xmlReader.isStartElement()) {
-                    try {
-                        xmlReader.next();
-                    } catch (javax.xml.stream.XMLStreamException e) {
-                        throw org.apache.axis2.AxisFault.makeFault(e);
-                    }
-                }
-
-                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
-
-                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
-                            throws javax.xml.stream.XMLStreamException {
-                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
-                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
-                            mtomxmlStreamWriter.getOutputStream().flush();
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
-                        }
-                    }
-
-                    public javax.xml.stream.XMLStreamReader getReader()
-                            throws javax.xml.stream.XMLStreamException {
-                        return param.newXMLStreamReader();
-                    }
-                };
-            
-                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
-                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                        omDataSource);
-            }
-        
-
-            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument param, boolean optimizeContent)
-            throws org.apache.axis2.AxisFault{
-
-            
-                    return toOM(param);
-                
-
-            }
-
-            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument param)
-                    throws org.apache.axis2.AxisFault {
-
-                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
-                while (!xmlReader.isStartElement()) {
-                    try {
-                        xmlReader.next();
-                    } catch (javax.xml.stream.XMLStreamException e) {
-                        throw org.apache.axis2.AxisFault.makeFault(e);
-                    }
-                }
-
-                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
-
-                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
-                            throws javax.xml.stream.XMLStreamException {
-                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
-                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
-                            mtomxmlStreamWriter.getOutputStream().flush();
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
-                        }
-                    }
-
-                    public javax.xml.stream.XMLStreamReader getReader()
-                            throws javax.xml.stream.XMLStreamException {
-                        return param.newXMLStreamReader();
-                    }
-                };
-            
-                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
-                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                        omDataSource);
-            }
-        
-
-            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument param, boolean optimizeContent)
-            throws org.apache.axis2.AxisFault{
-
-            
-                    return toOM(param);
-                
-
-            }
-
-            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument param)
-                    throws org.apache.axis2.AxisFault {
-
-                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
-                while (!xmlReader.isStartElement()) {
-                    try {
-                        xmlReader.next();
-                    } catch (javax.xml.stream.XMLStreamException e) {
-                        throw org.apache.axis2.AxisFault.makeFault(e);
-                    }
-                }
-
-                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
-
-                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
-                            throws javax.xml.stream.XMLStreamException {
-                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
-                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
-                            mtomxmlStreamWriter.getOutputStream().flush();
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
-                        }
-                    }
-
-                    public javax.xml.stream.XMLStreamReader getReader()
-                            throws javax.xml.stream.XMLStreamException {
-                        return param.newXMLStreamReader();
-                    }
-                };
-            
-                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
-                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                        omDataSource);
-            }
-        
-
-            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument param, boolean optimizeContent)
-            throws org.apache.axis2.AxisFault{
-
-            
-                    return toOM(param);
-                
-
-            }
-
-            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument param)
-                    throws org.apache.axis2.AxisFault {
-
-                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
-                while (!xmlReader.isStartElement()) {
-                    try {
-                        xmlReader.next();
-                    } catch (javax.xml.stream.XMLStreamException e) {
-                        throw org.apache.axis2.AxisFault.makeFault(e);
-                    }
-                }
-
-                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
-
-                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
-                            throws javax.xml.stream.XMLStreamException {
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
-                        }
-                    }
-
-                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
-                            throws javax.xml.stream.XMLStreamException {
-                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
-                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
-                        try {
-                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
-                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
-                            mtomxmlStreamWriter.getOutputStream().flush();
-                        } catch (java.io.IOException e) {
-                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
-                        }
-                    }
-
-                    public javax.xml.stream.XMLStreamReader getReader()
-                            throws javax.xml.stream.XMLStreamException {
-                        return param.newXMLStreamReader();
-                    }
-                };
-            
-                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
-                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
-                        omDataSource);
-            }
-        
-
             private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument param, boolean optimizeContent)
             throws org.apache.axis2.AxisFault{
 
@@ -1000,24 +692,6 @@
                             return envelope;
                             }
                         
-                            private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument param, boolean optimizeContent)
-                            throws org.apache.axis2.AxisFault {
-                            org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
-                            if (param != null){
-                            envelope.getBody().addChild(toOM(param, optimizeContent));
-                            }
-                            return envelope;
-                            }
-                        
-                            private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument param, boolean optimizeContent)
-                            throws org.apache.axis2.AxisFault {
-                            org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
-                            if (param != null){
-                            envelope.getBody().addChild(toOM(param, optimizeContent));
-                            }
-                            return envelope;
-                            }
-                        
                             private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument param, boolean optimizeContent)
                             throws org.apache.axis2.AxisFault {
                             org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
@@ -1115,58 +789,6 @@
             new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
             }else{
             return com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching());
-            }
-            }
-
-        
-
-            if (com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument.class.equals(type)){
-            if (extraNamespaces!=null){
-            return com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching(),
-            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
-            }else{
-            return com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching());
-            }
-            }
-
-        
-
-            if (com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument.class.equals(type)){
-            if (extraNamespaces!=null){
-            return com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching(),
-            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
-            }else{
-            return com.bagnet.nettracer.ws.onlineclaims.UploadFileResponseDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching());
-            }
-            }
-
-        
-
-            if (com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument.class.equals(type)){
-            if (extraNamespaces!=null){
-            return com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching(),
-            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
-            }else{
-            return com.bagnet.nettracer.ws.onlineclaims.DeleteFileDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching());
-            }
-            }
-
-        
-
-            if (com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument.class.equals(type)){
-            if (extraNamespaces!=null){
-            return com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument.Factory.parse(
-            param.getXMLStreamReaderWithoutCaching(),
-            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
-            }else{
-            return com.bagnet.nettracer.ws.onlineclaims.DeleteFileResponseDocument.Factory.parse(
             param.getXMLStreamReaderWithoutCaching());
             }
             }

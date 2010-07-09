@@ -19,9 +19,9 @@ public class AOCAddress {
 	private long aid;
 	
 	
-	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim.class)
-	@JoinColumn(name = "auditClaimId", nullable = false)
-	private AOCClaim claim;
+//	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim.class)
+//	@JoinColumn(name = "auditClaimId", nullable = false)
+//	private AOCClaim claim;
 	
 	@Column(length = 50)
 	private String address1;
@@ -90,13 +90,13 @@ public class AOCAddress {
 	}
 
 
-	public AOCClaim getClaim() {
-		return claim;
-	}
-
-	public void setClaim(AOCClaim claim) {
-		this.claim = claim;
-	}
+//	public AOCClaim getClaim() {
+//		return claim;
+//	}
+//
+//	public void setClaim(AOCClaim claim) {
+//		this.claim = claim;
+//	}
 
 	public long getAid() {
 		return aid;
