@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/layout/passengertemplate.xhtml">
+
+	<ui:define name="pageTitle">Application | Print Your Claim</ui:define>
+	
+	<ui:define name="mainContent">
+	<a4j:form id="printForm">
+	
+			
+		
+	<div class="container containerfull">
+				<div class="containerTL"></div>
+				<div class="containerheader headerfull">
+				<h1 class="dkblue">Application | Your Claim Information
+				</h1>
+			  </div>
+				<div class="containerTR"></div>
+				<div class="containercontent gradientsmall">
+					<div class="contentbodyspacing"></div>
+					<div class="contentbody">
+						
+						
+						<!-- Start body content -->
+							<div>
+								<ui:include src="print/passenger-permanentaddress.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/passenger-mailingaddress.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/passenger-voicecontact.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/passenger-personalinfo.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/flight-info.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/ticket-info.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/itenerary.xhtml" />
+							</div>
+							<div>
+								<ui:include src="print/aboutyourbag.xhtml" />
+							</div>
+							<div>
+							<div>
+								<t:outputText value="#{passengerController.fileUploadLabel.receiptsToBeUploaded}" styleClass="subHeader"/>	
+							</div>
+							<div>
+								<rich:spacer width="100%" height="10" title=""/>
+							</div>
+								<t:dataTable width="200" align="center" id="printfileTable"
+									value="#{passengerController.fileDataModelList}" var="file">
+									<h:column>
+										<h:outputText value="#{file.name}" />
+									</h:column>
+								</t:dataTable>
+							</div>
+							<div>
+								<ui:include src="print/question.xhtml" />
+							</div>
+
+							
+					  	<!-- End body content -->
+				 	 </div>
+					<!-- ends contentbody -->
+				</div><!-- ends containercontent -->
+				<div id="divFooter">
+					<div class="containerBLgradient"></div>
+					<div class="containerfootergradient footerfull"></div>
+					<div class="containerBRgradient"></div>
+					<div class="clear"></div>
+				</div>
+			</div><!-- ends container -->
+			
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<div>
+				<rich:spacer width="115px"/>
+			
+				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print}"
+				 		tabindex="2" action="#" immediate="true" onclick="window.print();return false"
+						styleClass="button140pxred button140pxred2" />
+			
+			</div>
+			
+		</a4j:form>
+	</ui:define>
+</ui:composition>

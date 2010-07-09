@@ -39,17 +39,11 @@
 			<rich:column>
 				<h:panelGrid columns="2">
 				<a4j:region  renderRegionOnly="true">	
-					<h:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
+					<t:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
+						displayValueOnly="true"
 						label="DepartureCity Row#{rowIndex+1}" readonly="true"/>
 					<h:panelGroup>
-						<a4j:commandLink value="" immediate="true" id="flightImageLink">
-
-							<rich:componentControl for="flightModalPanel"
-								attachTo="flightImageLink" operation="show" event="onclick" />
-
-							<a4j:actionparam name="itineraryTableIndex"
-								assignTo="#{passengerController.itineraryTableIndex}"
-								value="#{rowIndex}" />
+						<a4j:commandLink value="" immediate="true" id="flightImageLink" disabled="true">
 
 							<h:graphicImage url="../_images/flightlist.gif"
 								alt="List of Flights" height="20" width="20" id="flightImage"
@@ -65,17 +59,11 @@
 			<rich:column>
 				<h:panelGrid columns="2">
 					<t:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
-						label="ArrivalCity Row#{rowIndex+1}" disabledOnClientSide="true" 
+						label="ArrivalCity Row#{rowIndex+1}" 
+						displayValueOnly="true"
 						required="#{item.departureCity ne null ? true : false}"/>
 					<h:panelGroup>
-						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
-
-							<rich:componentControl for="#{passengerController.modalPanel}"
-								attachTo="flightImageLink2" operation="show" event="onclick" />
-
-							<a4j:actionparam name="itineraryTableIndex2"
-								assignTo="#{passengerController.itineraryTableIndex}"
-								value="#{rowIndex}" />
+						<a4j:commandLink value="" immediate="true" id="flightImageLink2" disabled="true">
 
 							<h:graphicImage url="../_images/flightlist.gif"
 								alt="List of Flights" height="20" width="20" id="flightImage2"
@@ -90,6 +78,7 @@
 				<h:panelGrid columns="2">
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
 					required="#{item.departureCity ne null ? true : false}"
+					displayValueOnly="true"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="AA" itemLabel="American Airlines"/>
@@ -105,6 +94,7 @@
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
 						required="#{item.departureCity ne null ? true : false}"
+						displayValueOnly="true"
 						label="FlightNumber Row#{rowIndex+1}">
 					<f:validateLength maximum="5"/>
 				</t:inputText>
@@ -115,8 +105,8 @@
 				<rich:calendar value="#{item.journeyDate}"  id="journeyDate#{rowIndex+1}"
 						required="#{item.departureCity ne null ? true : false}"
 						enableManualInput="false" datePattern="MMM/dd/yyyy" 
-						label="Date of Journey Row#{rowIndex+1}"  inputSize="11"
-						jointPoint="top-right" showWeeksBar="false" mode="client"
+						label="Date of Journey Row#{rowIndex+1}"  inputSize="11" readonly="true"
+						jointPoint="top-right" showWeeksBar="false" mode="client" disabled="true"
 						popup="true" immediate="true">
 					<f:converter  converterId="DateConverter" />
 				</rich:calendar>

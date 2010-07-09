@@ -254,9 +254,9 @@ public class PassengerLoginController {
 					for (int i = 0; i < 2; i++) {
 						Address address = new Address();
 						address.setEmailAddress("utpal@test.com");
-						address.setPhone1("123456789");
-						address.setPhone2("987654352");
-						address.setPhone4("000111222");
+						address.setPhoneHome("123456789");
+						address.setPhoneMobile("987654352");
+						address.setPhoneBusiness("000111222");
 						address.setHotel("Hotel1");
 						addresses.add(address);
 					}

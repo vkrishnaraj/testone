@@ -21,6 +21,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.axis2.AxisFault;
@@ -35,6 +36,7 @@ import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Bag;
 import com.nettracer.claims.core.model.Content;
 import com.nettracer.claims.core.model.CountryCode;
+import com.nettracer.claims.core.model.Currency;
 import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.model.MultilingualLabel;
@@ -81,7 +83,9 @@ public class PassengerController {
 	private DataModel airportCodeList;
 	private DataModel itineraryList;
 	private int itineraryTableIndex;
+	private int bagPageIndex;
 	private int bagIndex;
+	private List<SelectItem> currencyList ;
 	private FileUploadBean fileUploadBean;
 	private int uploadsAvailable = 10;
 	// ------------------- File Upload Myfaces
@@ -90,7 +94,8 @@ public class PassengerController {
 	boolean rendFailure = false;
 	private DataModel fileDataModelList;
 	// -- End File Upload
-
+	private String bagChartType;
+	private List<Bag> bags ;
 	
 	@Autowired
 	PassengerService passengerService;
@@ -226,7 +231,6 @@ public class PassengerController {
 			}
 			return "gotoFlightDetails";
 		} else {
-
 			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
@@ -385,8 +389,7 @@ public class PassengerController {
 			} else {
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
 			}
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),
-					itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -417,13 +420,14 @@ public class PassengerController {
 						}
 					}
 					if(passengerBean.getLostBag() != lostBagList.size()){
-						FacesUtil.addError("No. of Lost Bag and Bag Arrival radion button status does not match");
+						FacesUtil.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
 						return null;
 					}
+					currencyList=Currency.getCurrencies();
 					// Logic for step 3 o 6 About Your Bag (multiple page)
 					passengerBean.setBagList(lostBagList);
 					
-					List<Bag> bags=passengerBean.getBagList();
+					bags=passengerBean.getBagList();
 					for(Bag b:bags){
 						List<Content> contentList=new ArrayList<Content>();
 						if(b.getContentList() != null){
@@ -436,6 +440,7 @@ public class PassengerController {
 						b.setContentList(contentList);
 						contentList=null;
 					}
+					passengerBean.setBagList(bags);
 					
 				}
 				baggageState = (Long) session.getAttribute("baggageState");
@@ -453,13 +458,34 @@ public class PassengerController {
 		}
 	}
 	
-	
+	/**
+	 * Adding More items per Baggage
+	 * 
+	 * @return String
+	 */
 	public String addMoreItems(){
 		logger.info("addMoreItems method call");
-		List<Bag> bags=passengerBean.getBagList();
-		Bag bag=bags.get(getBagIndex());
+		Bag bag=getBags().get(getBagIndex());
 		bag.getContentList().add(new Content());
-		return null;
+		bags.set(getBagIndex(), bag);
+		passengerBean.setBagList(bags);
+		/*FacesContext context = FacesUtil.getFacesContext();
+		context.renderResponse();*/
+		return "";
+	}
+	
+	/**
+	 * Select the Bag Type from the pop up Image.
+	 * 
+	 * @return String
+	 */
+	public String selectBagChart(){
+		logger.info("selectBagChart method call");
+		Bag bag=getBags().get(getBagPageIndex());
+		bag.setBagType(getBagChartType());
+		bags.set(getBagIndex(), bag);
+		passengerBean.setBagList(bags);
+		return "";
 	}
 
 	/**
@@ -469,7 +495,6 @@ public class PassengerController {
 	 */
 	public String gotoFileUpload() {
 		logger.info("gotoFileUpload method is called");
-
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
@@ -484,9 +509,7 @@ public class PassengerController {
 			}
 			return "gotoFileUpload";
 		} else {
-
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
@@ -501,7 +524,6 @@ public class PassengerController {
 		logger.info("upload called");
 		try {
 			if(upFile != null){
-
 				int extDot = upFile.getName().lastIndexOf('.');
 				if (extDot > 0) {
 					String extension = upFile.getName().substring(extDot + 1);
@@ -654,27 +676,24 @@ public class PassengerController {
 	 */
 	public String gotoSubmitClaim() {
 		logger.info("gotoSubmitClaim method is called");
-
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
-				String selectedLanguage = (String) session
-						.getAttribute("selectedLanguage");
-				submitClaimLabel = passengerService.getSubmitClaimLabel(
-						selectedLanguage, baggageState);
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				submitClaimLabel = passengerService.getSubmitClaimLabel(selectedLanguage, baggageState);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "gotoSubmitClaim";
 		} else {
-
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
+	
+	
 
 	/**
 	 * Navigation for the last page
@@ -689,19 +708,22 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
+				if(passengerBean.getTypeAccept().trim().equals("")){
+					FacesUtil.addError("Please Type the word -ACCEPT in Capital Letters");
+					return null;
+				}
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session
 						.getAttribute("selectedLanguage");
-				savedScreenLabel = passengerService.getSavedScreenLabel(
-						selectedLanguage, baggageState);
+				savedScreenLabel = passengerService.getSavedScreenLabel(selectedLanguage, baggageState);
 			} catch (Exception e) {
 				e.printStackTrace();
+				return null;
 			}
 			return "gotoSavedScreen";
 		} else {
 
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
 	}
@@ -859,6 +881,7 @@ public class PassengerController {
 			return "passengerLogout";
 		}
 	}
+	
 
 	public String passengerLogout() {
 		return FacesUtil.passengerLogout();
@@ -1056,9 +1079,39 @@ public class PassengerController {
 	public void setBagIndex(int bagIndex) {
 		this.bagIndex = bagIndex;
 	}
-	
-	
-	
+
+	public List<SelectItem> getCurrencyList() {
+		return currencyList;
+	}
+
+	public void setCurrencyList(List<SelectItem> currencyList) {
+		this.currencyList = currencyList;
+	}
+
+	public String getBagChartType() {
+		return bagChartType;
+	}
+
+	public void setBagChartType(String bagChartType) {
+		this.bagChartType = bagChartType;
+	}
+
+	public int getBagPageIndex() {
+		return bagPageIndex;
+	}
+
+	public void setBagPageIndex(int bagPageIndex) {
+		this.bagPageIndex = bagPageIndex;
+	}
+
+	public List<Bag> getBags() {
+		return bags;
+	}
+
+	public void setBags(List<Bag> bags) {
+		this.bags = bags;
+	}
+
 	
 	/**
 	 * Test Code : to be deleted later on : Richfaces File Upload

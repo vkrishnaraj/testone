@@ -19,10 +19,10 @@ public class Address {
 	private String hotel;
 	private String occupation;
 	private String businessName;
-	private String phone1;
-	private String phone2;
-	private String phone3;
-	private String phone4;
+	private String phoneHome;
+	private String phoneMobile;
+	private String phoneFax;
+	private String phoneBusiness;
 	public String getAddressLine1() {
 		return addressLine1;
 	}
@@ -83,30 +83,31 @@ public class Address {
 	public void setBusinessName(String businessName) {
 		this.businessName = businessName;
 	}
-	public String getPhone1() {
-		return phone1;
+	public String getPhoneHome() {
+		return phoneHome;
 	}
-	public void setPhone1(String phone1) {
-		this.phone1 = phone1;
+	public void setPhoneHome(String phoneHome) {
+		this.phoneHome = phoneHome;
 	}
-	public String getPhone2() {
-		return phone2;
+	public String getPhoneMobile() {
+		return phoneMobile;
 	}
-	public void setPhone2(String phone2) {
-		this.phone2 = phone2;
+	public void setPhoneMobile(String phoneMobile) {
+		this.phoneMobile = phoneMobile;
 	}
-	public String getPhone3() {
-		return phone3;
+	public String getPhoneFax() {
+		return phoneFax;
 	}
-	public void setPhone3(String phone3) {
-		this.phone3 = phone3;
+	public void setPhoneFax(String phoneFax) {
+		this.phoneFax = phoneFax;
 	}
-	public String getPhone4() {
-		return phone4;
+	public String getPhoneBusiness() {
+		return phoneBusiness;
 	}
-	public void setPhone4(String phone4) {
-		this.phone4 = phone4;
+	public void setPhoneBusiness(String phoneBusiness) {
+		this.phoneBusiness = phoneBusiness;
 	}
+	
 	
 	
 }

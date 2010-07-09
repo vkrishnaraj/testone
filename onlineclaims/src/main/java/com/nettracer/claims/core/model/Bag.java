@@ -1,5 +1,7 @@
 package com.nettracer.claims.core.model;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -10,7 +12,7 @@ public class Bag {
 	private String nameonBag;
 	private String brandOftheBag;
 	private String externalMarkings;
-	private String bagPurchaseDate;
+	private Date bagPurchaseDate;
 	private String bagColor;
 	private String bagType;
 	private Boolean hardSided;
@@ -26,7 +28,7 @@ public class Bag {
 	private Boolean nameTag;
 	private Boolean ribbonsPersonalMarkings;
 	
-	private List<Content> contentList;
+	private List<Content> contentList=new ArrayList<Content>();
 
 	public String getBagTagNumber() {
 		return bagTagNumber;
@@ -68,11 +70,11 @@ public class Bag {
 		this.externalMarkings = externalMarkings;
 	}
 
-	public String getBagPurchaseDate() {
+	public Date getBagPurchaseDate() {
 		return bagPurchaseDate;
 	}
 
-	public void setBagPurchaseDate(String bagPurchaseDate) {
+	public void setBagPurchaseDate(Date bagPurchaseDate) {
 		this.bagPurchaseDate = bagPurchaseDate;
 	}
 

@@ -31,9 +31,9 @@
 							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:inputText id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="77%"
+						displayValueOnly="true"
 							required="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}" tabindex="17"
 							readonly="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 3}"
-							displayValueOnly="true"
 							label="#{passengerController.passengerInfoLabel.socialSecurityNumber}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>

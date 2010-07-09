@@ -57,174 +57,106 @@ public class PassengerServiceImpl implements PassengerService {
 			Long baggageState) throws SimplePersistenceException {
 		MultilingualLabel multilingualLabel = new MultilingualLabel();
 		Long requiredFieldStatus = null;
-		List<Localetext> localetextList = passengerDao
-				.getPassengerInfo(selectedLanguage);
+		List<Localetext> localetextList = passengerDao.getPassengerInfo(selectedLanguage);
 		if (localetextList != null && localetextList.size() > 0) {
 
 			for (Localetext localetext : localetextList) {
 
-				requiredFieldStatus = baggageState == 1L ? localetext
-						.getLabel().getDelayedState()
-						: baggageState == 2L ? localetext.getLabel()
-								.getPilferedState() : localetext.getLabel()
-								.getDamagedState();
-				if (localetext.getLabel().getLabel().contains(
-						"requiredFieldMessage")) {
-					multilingualLabel.setRequiredFieldMessage(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().contains(
-						"Permanent")) {
-					multilingualLabel.setPermanentAddress(localetext
-							.getDisplayText());
+				requiredFieldStatus = baggageState == 1L ? localetext.getLabel().getDelayedState()
+						: baggageState == 2L ? localetext.getLabel().getPilferedState() 
+						: localetext.getLabel()	.getDamagedState();
+				if (localetext.getLabel().getLabel().contains("requiredFieldMessage")) {
+					multilingualLabel.setRequiredFieldMessage(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Permanent")) {
+					multilingualLabel.setPermanentAddress(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Help")) {
-					multilingualLabel.setPassengerInfoHelp(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().contains(
-						"Descriptive")) {
-					multilingualLabel
-							.setPassengerInfoDescriptiveText(localetext
-									.getDisplayText());
+					multilingualLabel.setPassengerInfoHelp(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Descriptive")) {
+					multilingualLabel.setPassengerInfoDescriptiveText(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Last")) {
-					multilingualLabel.setPassengerInfolastName(localetext
-							.getDisplayText());
+					multilingualLabel.setPassengerInfolastName(localetext.getDisplayText());
 					multilingualLabel.setLastNameState(requiredFieldStatus);
 				} else if (localetext.getLabel().getLabel().contains("First")) {
 					multilingualLabel.setFirstName(localetext.getDisplayText());
 					multilingualLabel.setFirstNameState(requiredFieldStatus);
 				} else if (localetext.getLabel().getLabel().contains("Middle")) {
-					multilingualLabel.setMiddleInitial(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setMiddleInitialState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().contains(
-						"AddressLine1")) {
-					multilingualLabel.setAddressLine1(localetext
-							.getDisplayText());
+					multilingualLabel.setMiddleInitial(localetext.getDisplayText());
+					multilingualLabel.setMiddleInitialState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().contains("AddressLine1")) {
+					multilingualLabel.setAddressLine1(localetext.getDisplayText());
 					multilingualLabel.setAddressLine1State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().contains(
-						"AddressLine2")) {
-					multilingualLabel.setAddressLine2(localetext
-							.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("AddressLine2")) {
+					multilingualLabel.setAddressLine2(localetext.getDisplayText());
 					multilingualLabel.setAddressLine2State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"City")) {
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("City")) {
 					multilingualLabel.setCity(localetext.getDisplayText());
 					multilingualLabel.setCityState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"State/Region")) {
-					multilingualLabel.setStateRegion(localetext
-							.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("State/Region")) {
+					multilingualLabel.setStateRegion(localetext	.getDisplayText());
 					multilingualLabel.setStateRegionState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Postal Code")) {
-					multilingualLabel
-							.setPostalCode(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Postal Code")) {
+					multilingualLabel.setPostalCode(localetext.getDisplayText());
 					multilingualLabel.setPostalCodeState(requiredFieldStatus);
 				} else if (localetext.getLabel().getLabel().contains("Email")) {
-					multilingualLabel.setEmailAddress(localetext
-							.getDisplayText());
+					multilingualLabel.setEmailAddress(localetext.getDisplayText());
 					multilingualLabel.setEmailAddressState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Country")) {
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Country")) {
 					multilingualLabel.setCountry(localetext.getDisplayText());
 					multilingualLabel.setCountryState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().contains(
-						"Occupation")) {
-					multilingualLabel
-							.setOccupation(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Occupation")) {
+					multilingualLabel.setOccupation(localetext.getDisplayText());
 					multilingualLabel.setOccupationState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel()
-						.contains("Business")) {
-					multilingualLabel.setBusinessName(localetext
-							.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Business Name")) {
+					multilingualLabel.setBusinessName(localetext.getDisplayText());
 					multilingualLabel.setBusinessNameState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"MailingAddress")) {
-					multilingualLabel.setMailingAddress(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().contains(
-						"Mailing Address Line 1")) {
-					multilingualLabel.setMailingAddressLine1(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setMailingAddressLine1State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().contains(
-						"Mailing Address Line 2")) {
-					multilingualLabel.setMailingAddressLine2(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setMailingAddressLine2State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Mailing City")) {
-					multilingualLabel.setMailingCity(localetext
-							.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("MailingAddress")) {
+					multilingualLabel.setMailingAddress(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Mailing Address Line 1")) {
+					multilingualLabel.setMailingAddressLine1(localetext.getDisplayText());
+					multilingualLabel.setMailingAddressLine1State(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().contains("Mailing Address Line 2")) {
+					multilingualLabel.setMailingAddressLine2(localetext.getDisplayText());
+					multilingualLabel.setMailingAddressLine2State(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Mailing City")) {
+					multilingualLabel.setMailingCity(localetext.getDisplayText());
 					multilingualLabel.setMailingCityState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Mailing State/Region")) {
-					multilingualLabel.setMailingStateRegion(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setMailingStateRegionState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Mailing Postal Code")) {
-					multilingualLabel.setMailingPostalCode(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setMailingPostalCodeState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"MailingCountry")) {
-					multilingualLabel.setMailingCountry(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setMailingCountryState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Voice Contact")) {
-					multilingualLabel.setVoiceContact(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Phone 1")) {
-					multilingualLabel.setPhone1(localetext.getDisplayText());
-					multilingualLabel.setPhone1State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Phone 2")) {
-					multilingualLabel.setPhone2(localetext.getDisplayText());
-					multilingualLabel.setPhone2State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Phone 3")) {
-					multilingualLabel.setPhone3(localetext.getDisplayText());
-					multilingualLabel.setPhone3State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Phone 4")) {
-					multilingualLabel.setPhone4(localetext.getDisplayText());
-					multilingualLabel.setPhone4State(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Personal Information")) {
-					multilingualLabel.setPersonalInformation(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Frequent Flyer Number")) {
-					multilingualLabel.setFrequentFlyerNumber(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setFrequentFlyerNumberState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Social Security Number")) {
-					multilingualLabel.setSocialSecurityNumber(localetext
-							.getDisplayText());
-					multilingualLabel
-							.setSocialSecurityNumberState(requiredFieldStatus);
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Save")) {
-					multilingualLabel.setPassengerInfoSave(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Cancel")) {
-					multilingualLabel.setPassengerInfoCancel(localetext
-							.getDisplayText());
-				} else if (localetext.getLabel().getLabel().equalsIgnoreCase(
-						"Forward")) {
-					multilingualLabel.setPassengerInfoForward(localetext
-							.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Mailing State/Region")) {
+					multilingualLabel.setMailingStateRegion(localetext.getDisplayText());
+					multilingualLabel.setMailingStateRegionState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Mailing Postal Code")) {
+					multilingualLabel.setMailingPostalCode(localetext.getDisplayText());
+					multilingualLabel.setMailingPostalCodeState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("MailingCountry")) {
+					multilingualLabel.setMailingCountry(localetext.getDisplayText());
+					multilingualLabel.setMailingCountryState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Voice Contact")) {
+					multilingualLabel.setVoiceContact(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Phone Home")) {
+					multilingualLabel.setPhoneHome(localetext.getDisplayText());
+					multilingualLabel.setPhoneHomeState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Phone Mobile")) {
+					multilingualLabel.setPhoneMobile(localetext.getDisplayText());
+					multilingualLabel.setPhoneMobileState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Phone Fax")) {
+					multilingualLabel.setPhoneFax(localetext.getDisplayText());
+					multilingualLabel.setPhoneFaxState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().contains("Phone Business")) {
+					multilingualLabel.setPhoneBusiness(localetext.getDisplayText());
+					multilingualLabel.setPhoneBusinessState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Personal Information")) {
+					multilingualLabel.setPersonalInformation(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Frequent Flyer Number")) {
+					multilingualLabel.setFrequentFlyerNumber(localetext	.getDisplayText());
+					multilingualLabel.setFrequentFlyerNumberState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Social Security Number")) {
+					multilingualLabel.setSocialSecurityNumber(localetext.getDisplayText());
+					multilingualLabel.setSocialSecurityNumberState(requiredFieldStatus);
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Save")) {
+					multilingualLabel.setPassengerInfoSave(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Cancel")) {
+					multilingualLabel.setPassengerInfoCancel(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Forward")) {
+					multilingualLabel.setPassengerInfoForward(localetext.getDisplayText());
 				}
 				requiredFieldStatus = null;
 			}
@@ -243,219 +175,118 @@ public class PassengerServiceImpl implements PassengerService {
 		.getFlightLabels(selectedLanguage);
 		if (localetextList != null && localetextList.size() > 0) {
 			for (Localetext localetext : localetextList) {
-				requiredFieldFlightStatus = flightBaggageState == 1L ? localetext
-						.getLabel().getDelayedState()
-						: flightBaggageState == 2L ? localetext.getLabel()
-								.getPilferedState() : localetext.getLabel()
-								.getDamagedState();
-								if (localetext.getLabel().getLabel().contains(
-								"flightDescriptiveText")) {
-									multilingualLabel.setFlightDescriptiveText(localetext
-											.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"flightRequiredFieldMessage")) {
-									multilingualLabel.setFlightRequiredFieldMessage(localetext
-											.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"flightHelp")) {
-									multilingualLabel
-									.setFlightHelp(localetext.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"About Your Flight")) {
-									multilingualLabel.setAboutYourFlight(localetext
-											.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"How many bags did you travel with")) {
-									multilingualLabel.setTotalTravelBag(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setTotalTravelBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"How many bags were lost/delayed")) {
-									multilingualLabel.setNoOfLostBag(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setNoOfLostBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Where did you check your bag")) {
-									multilingualLabel.setBagCheckedLocation(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setBagCheckedLocationState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Number of Passengers travelling with you")) {
-									multilingualLabel.setNoOfPassenger(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setNoOfPassengerState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Did you have to recheck your baggage")) {
-									multilingualLabel
-									.setRecheckBag(localetext.getDisplayText());
-									multilingualLabel
-									.setRecheckBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Was your bag inspected")) {
-									multilingualLabel
-									.setInspectbag(localetext.getDisplayText());
-									multilingualLabel
-									.setInspectbagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Were you charged for excess baggage")) {
-									multilingualLabel.setChargeExcessBaggage(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setChargeExcessBaggageState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"No of bags checked")) {
+				requiredFieldFlightStatus = flightBaggageState == 1L ? localetext.getLabel().getDelayedState()
+						: flightBaggageState == 2L ? localetext.getLabel().getPilferedState() 
+						: localetext.getLabel().getDamagedState();
+						
+								if (localetext.getLabel().getLabel().contains("flightDescriptiveText")) {
+									multilingualLabel.setFlightDescriptiveText(localetext.getDisplayText());
+								} else if (localetext.getLabel().getLabel().contains("flightRequiredFieldMessage")) {
+									multilingualLabel.setFlightRequiredFieldMessage(localetext.getDisplayText());
+								} else if (localetext.getLabel().getLabel().contains("flightHelp")) {
+									multilingualLabel.setFlightHelp(localetext.getDisplayText());
+								} else if (localetext.getLabel().getLabel().contains("About Your Flight")) {
+									multilingualLabel.setAboutYourFlight(localetext.getDisplayText());
+								} else if (localetext.getLabel().getLabel().contains("How many bags did you travel with")) {
+									multilingualLabel.setTotalTravelBag(localetext.getDisplayText());
+									multilingualLabel.setTotalTravelBagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("How many bags were lost/delayed")) {
+									multilingualLabel.setNoOfLostBag(localetext.getDisplayText());
+									multilingualLabel.setNoOfLostBagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Where did you check your bag")) {
+									multilingualLabel.setBagCheckedLocation(localetext.getDisplayText());
+									multilingualLabel.setBagCheckedLocationState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Number of Passengers travelling with you")) {
+									multilingualLabel.setNoOfPassenger(localetext.getDisplayText());
+									multilingualLabel.setNoOfPassengerState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Did you have to recheck your baggage")) {
+									multilingualLabel.setRecheckBag(localetext.getDisplayText());
+									multilingualLabel.setRecheckBagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Was your bag inspected")) {
+									multilingualLabel.setInspectbag(localetext.getDisplayText());
+									multilingualLabel.setInspectbagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Were you charged for excess baggage")) {
+									multilingualLabel.setChargeExcessBaggage(localetext.getDisplayText());
+									multilingualLabel.setChargeExcessBaggageState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("No of bags checked")) {
 									multilingualLabel.setBagNumber(localetext.getDisplayText());
-									multilingualLabel
-									.setBagNumberState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"No of bags missing")) {
-									multilingualLabel
-									.setMissingBag(localetext.getDisplayText());
-									multilingualLabel
-									.setMissingBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Bag Claim Check ")) {
-									multilingualLabel.setBagClaimCheck(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setBagClaimCheckState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"pay for excess value")) {
-									multilingualLabel.setDeclarePayExcessValue(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setDeclarePayExcessValueState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Value Declared")) {
-									multilingualLabel.setDeclaredValue(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setDeclaredValueState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Where did you check your baggage")) {
-									multilingualLabel.setPlaceBagChecked(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setPlaceBagCheckedState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"bag clear customs")) {
-									multilingualLabel.setClearCustomBag(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setClearCustomBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Estimated Weight")) {
+									multilingualLabel.setBagNumberState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("No of bags missing")) {
+									multilingualLabel.setMissingBag(localetext.getDisplayText());
+									multilingualLabel.setMissingBagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Bag Claim Check ")) {
+									multilingualLabel.setBagClaimCheck(localetext.getDisplayText());
+									multilingualLabel.setBagClaimCheckState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("pay for excess value")) {
+									multilingualLabel.setDeclarePayExcessValue(localetext.getDisplayText());
+									multilingualLabel.setDeclarePayExcessValueState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Value Declared")) {
+									multilingualLabel.setDeclaredValue(localetext.getDisplayText());
+									multilingualLabel.setDeclaredValueState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Where did you check your baggage")) {
+									multilingualLabel.setPlaceBagChecked(localetext.getDisplayText());
+									multilingualLabel.setPlaceBagCheckedState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("bag clear customs")) {
+									multilingualLabel.setClearCustomBag(localetext.getDisplayText());
+									multilingualLabel.setClearCustomBagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Estimated Weight")) {
 									multilingualLabel.setBagWeight(localetext.getDisplayText());
-									multilingualLabel
-									.setBagWeightState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"baggage rerouted or rechecked enroute")) {
-									multilingualLabel
-									.setRerouteBag(localetext.getDisplayText());
-									multilingualLabel
-									.setRerouteBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"given a different claim check")) {
-									multilingualLabel.setDifferentClaimCheck(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setDifferentClaimCheckState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"City/Airline rerouted by")) {
-									multilingualLabel.setReroutedCityAirline(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setReroutedCityAirlineState(requiredFieldFlightStatus);
+									multilingualLabel.setBagWeightState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("baggage rerouted or rechecked enroute")) {
+									multilingualLabel.setRerouteBag(localetext.getDisplayText());
+									multilingualLabel.setRerouteBagState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("given a different claim check")) {
+									multilingualLabel.setDifferentClaimCheck(localetext.getDisplayText());
+									multilingualLabel.setDifferentClaimCheckState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("City/Airline rerouted by")) {
+									multilingualLabel.setReroutedCityAirline(localetext.getDisplayText());
+									multilingualLabel.setReroutedCityAirlineState(requiredFieldFlightStatus);
 								} else if (localetext.getLabel().getLabel().contains("Reason")) {
 									multilingualLabel.setReason(localetext.getDisplayText());
 									multilingualLabel.setReasonState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Did you attempt to claim immediately ")) {
-									multilingualLabel.setImmediateClaimAttempt(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setImmediateClaimAttemptState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"last see your baggage")) {
-									multilingualLabel.setWhenBagSeen(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setWhenBagSeenState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"US Airways city did you file your report")) {
-									multilingualLabel.setFileReportCity(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setFileReportCityState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"mishandling reported")) {
-									multilingualLabel.setReportAnotherAirline(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setReportAnotherAirlineState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"About Your Ticket")) {
-									multilingualLabel.setAboutYourTicket(localetext
-											.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"ticket with a different airline")) {
-									multilingualLabel.setDifferentAirlineTicket(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setDifferentAirlineTicketState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Ticket Number")) {
-									multilingualLabel.setTicketNumber(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setTicketNumberState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Bag Tag Numbers")) {
-									multilingualLabel.setBagTagNumbers(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setBagTagNumbersState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Did this Bag Arrive")) {
-									multilingualLabel
-									.setBagArrival(localetext.getDisplayText());
-									multilingualLabel
-									.setBagArrivalState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"flightYes")) {
+								} else if (localetext.getLabel().getLabel().contains("Did you attempt to claim immediately ")) {
+									multilingualLabel.setImmediateClaimAttempt(localetext.getDisplayText());
+									multilingualLabel.setImmediateClaimAttemptState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("last see your baggage")) {
+									multilingualLabel.setWhenBagSeen(localetext.getDisplayText());
+									multilingualLabel.setWhenBagSeenState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("US Airways city did you file your report")) {
+									multilingualLabel.setFileReportCity(localetext.getDisplayText());
+									multilingualLabel.setFileReportCityState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("mishandling reported")) {
+									multilingualLabel.setReportAnotherAirline(localetext.getDisplayText());
+									multilingualLabel.setReportAnotherAirlineState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("About Your Ticket")) {
+									multilingualLabel.setAboutYourTicket(localetext.getDisplayText());
+								} else if (localetext.getLabel().getLabel().contains("ticket with a different airline")) {
+									multilingualLabel.setDifferentAirlineTicket(localetext.getDisplayText());
+									multilingualLabel.setDifferentAirlineTicketState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Ticket Number")) {
+									multilingualLabel.setTicketNumber(localetext.getDisplayText());
+									multilingualLabel.setTicketNumberState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Bag Tag Numbers")) {
+									multilingualLabel.setBagTagNumbers(localetext.getDisplayText());
+									multilingualLabel.setBagTagNumbersState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Did this Bag Arrive")) {
+									multilingualLabel.setBagArrival(localetext.getDisplayText());
+									multilingualLabel.setBagArrivalState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("flightYes")) {
 									multilingualLabel.setFlightYes(localetext.getDisplayText());
-								} else if (localetext.getLabel().getLabel()
-										.contains("flightNo")) {
+								} else if (localetext.getLabel().getLabel().contains("flightNo")) {
 									multilingualLabel.setFlightNo(localetext.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"About your Itinerary")) {
-									multilingualLabel.setAboutYourItenerary(localetext
-											.getDisplayText());
-								} else if (localetext.getLabel().getLabel().contains(
-								"From/To Airports")) {
-									multilingualLabel.setFromToAirports(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setFromToAirportsState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains(
-								"Airline/Flight Number")) {
-									multilingualLabel.setAirlineFlightNo(localetext
-											.getDisplayText());
-									multilingualLabel
-									.setAirlineFlightNoState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("About your Itinerary")) {
+									multilingualLabel.setAboutYourItenerary(localetext.getDisplayText());
+								} else if (localetext.getLabel().getLabel().contains("From/To Airports")) {
+									multilingualLabel.setFromToAirports(localetext.getDisplayText());
+									multilingualLabel.setFromToAirportsState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Airline/Flight Number")) {
+									multilingualLabel.setAirlineFlightNo(localetext.getDisplayText());
+									multilingualLabel.setAirlineFlightNoState(requiredFieldFlightStatus);
 								} else if (localetext.getLabel().getLabel().contains("Date")) {
-									multilingualLabel
-									.setFlightDate(localetext.getDisplayText());
-									multilingualLabel
-									.setFlightDateState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel()
-										.contains("Previous")) {
-									multilingualLabel.setFlightPrevious(localetext
-											.getDisplayText());
+									multilingualLabel.setFlightDate(localetext.getDisplayText());
+									multilingualLabel.setFlightDateState(requiredFieldFlightStatus);
+								} else if (localetext.getLabel().getLabel().contains("Previous")) {
+									multilingualLabel.setFlightPrevious(localetext.getDisplayText());
 								}
 								requiredFieldFlightStatus = null;
 			}

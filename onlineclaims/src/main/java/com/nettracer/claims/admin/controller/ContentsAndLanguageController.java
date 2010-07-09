@@ -126,8 +126,7 @@ public class ContentsAndLanguageController {
 				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
 				sessionBean.setLandingRenderer(false); //for landing page link
 			}
-			FacesUtil
-					.addError("Your session has been expired. PLease log in again");
+			FacesUtil.addError("Your session has been expired. PLease log in again");
 			return "logout";
 		}
 	}

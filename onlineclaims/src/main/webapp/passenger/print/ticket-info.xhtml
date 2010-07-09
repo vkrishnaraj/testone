@@ -20,14 +20,15 @@
 										rendered="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"/>
 								</h:panelGroup>
 								
-								<h:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"  
+								<t:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"  
 										required="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"
 										readonly="#{passengerController.flightLabel.differentAirlineTicketState eq 3}"
+										displayValueOnly="true"
 										id="differentAirlineTicket" tabindex="24" label="Different Airline Ticket">
 									<f:selectItem itemLabel="--" itemValue=""/>
 									<f:selectItem itemLabel="Yes" itemValue="true"/>
 									<f:selectItem itemLabel="No" itemValue="false"/>
-								</h:selectOneMenu>
+								</t:selectOneMenu>
 								
 								<rich:spacer  height="15" title="" />
 								<rich:spacer  height="15" title="" />
@@ -40,7 +41,7 @@
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="25" id="ticketNumber"
-										label="Ticket Number"
+										label="Ticket Number" displayValueOnly="true"
 										readonly="#{passengerController.flightLabel.ticketNumberState eq 3}"
 										required="#{passengerController.flightLabel.ticketNumberState eq 2}"  >
 									<f:validateLength maximum="6"/>
@@ -63,6 +64,7 @@
 										</h:panelGroup>
 									</f:facet>
 									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true"
+										displayValueOnly="true"
 											label="Bag Tag Number Row#{rowIndex+1}">
 										<f:validateLength maximum="10"/>
 									</t:inputText>
@@ -76,11 +78,12 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<h:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
+									<t:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
+										displayValueOnly="true"
 										label="Bag Arrival Status Row#{rowIndex+1}">
 										<f:selectItem itemLabel="Yes" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
-									</h:selectOneRadio>
+									</t:selectOneRadio>
 								</rich:column>
 							</rich:dataTable>
 							</a4j:outputPanel>

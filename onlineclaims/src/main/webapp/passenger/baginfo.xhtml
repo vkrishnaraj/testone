@@ -83,7 +83,8 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagRequiredFieldMessage}" />	
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagRequiredFieldMessage}"  
+							styleClass="requiredField"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -156,5 +157,8 @@
 			</div>
 			
 		</h:form>
+		<a4j:region >
+			<div><ui:include src="bag/bagtypechart.xhtml" /></div>
+		</a4j:region>
 	</ui:define>
 </ui:composition>

@@ -12,7 +12,7 @@ public class Itinerary{
 	private String departureCity ;
 	private String arrivalCity ;
 	private String flightNum ;
-	private String journeyDate;
+	private Date journeyDate;
 	public String getAirline() {
 		return airline;
 	}
@@ -37,10 +37,10 @@ public class Itinerary{
 	public void setFlightNum(String flightNum) {
 		this.flightNum = flightNum;
 	}
-	public String getJourneyDate() {
+	public Date getJourneyDate() {
 		return journeyDate;
 	}
-	public void setJourneyDate(String journeyDate) {
+	public void setJourneyDate(Date journeyDate) {
 		this.journeyDate = journeyDate;
 	}
 	

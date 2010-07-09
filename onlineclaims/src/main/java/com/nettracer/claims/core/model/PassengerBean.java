@@ -1,6 +1,7 @@
 package com.nettracer.claims.core.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.nettracer.claims.faces.util.File;
@@ -75,7 +76,7 @@ public class PassengerBean {
 	//For Fraud Question
 	private Boolean anotherClaim;
 	private String whichAirline;
-	private String dateOfClaim;
+	private Date dateOfClaim;
 	private String claimantName;
 	private Boolean tsaInspect;
 	private Boolean bagConfirmNote;
@@ -361,10 +362,10 @@ public class PassengerBean {
 	public void setWhichAirline(String whichAirline) {
 		this.whichAirline = whichAirline;
 	}
-	public String getDateOfClaim() {
+	public Date getDateOfClaim() {
 		return dateOfClaim;
 	}
-	public void setDateOfClaim(String dateOfClaim) {
+	public void setDateOfClaim(Date dateOfClaim) {
 		this.dateOfClaim = dateOfClaim;
 	}
 	public String getClaimantName() {

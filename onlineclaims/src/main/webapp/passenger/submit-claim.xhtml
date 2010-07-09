@@ -48,7 +48,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.submitClaimLabel.submitClaimDescriptiveText}" />
+						<t:outputText value="#{passengerController.submitClaimLabel.submitClaimDescriptiveText}" styleClass="font1-1em"/>
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -82,7 +82,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.submitClaimLabel.submitClaimRequiredFieldMessage}" />	
+					<t:outputText value="#{passengerController.submitClaimLabel.submitClaimRequiredFieldMessage}" styleClass="font1-1em"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -103,7 +103,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<t:outputText value="#{passengerController.submitClaimLabel.submitClaimHelp}"/>
+							<t:outputText value="#{passengerController.submitClaimLabel.submitClaimHelp}" styleClass="font1-1em"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
@@ -122,11 +122,13 @@
 				</div>
 				
 				<div>
+					<t:inputHidden id="accept" value="ACCEPT" />
 					<h:panelGrid columns="2" width="100%">
-						<t:outputText value="#{passengerController.submitClaimLabel.typeAccept}" 
-								styleClass="typeAccept"/>
-						<t:inputText value="#{passengerBean.typeAccept}" label="Acception Field" tabindex="1">
-							<f:validateLength maximum="6"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.typeAccept}*" 
+								styleClass="typeAccept" />
+						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept" 
+							label="Acception Field" tabindex="1" >
+							<t:validateEqual for="accept" summaryMessage="Please Type the word -ACCEPT in Capital Letters"/>
 						</t:inputText>
 					</h:panelGrid>
 					<rich:spacer width="100%" height="10" title=""/>
@@ -182,7 +184,7 @@
 				<rich:spacer width="115px"/>
 			
 				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print}"
-				 		tabindex="2" action="#" immediate="true" onclick="window.print();return false"
+				 		tabindex="2" action="#" immediate="true" onclick="window.open('${facesContext.externalContext.requestContextPath}/passenger/print-page.faces','P','width=750,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no, scrollbars=yes,resizable=yes,copyhistory=no');"
 						styleClass="button140pxred button140pxred2" />
 			
 				<rich:spacer width="20px"/>

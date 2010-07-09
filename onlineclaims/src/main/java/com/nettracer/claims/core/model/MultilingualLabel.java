@@ -42,10 +42,10 @@ public class MultilingualLabel {
 	private String mailingPostalCode;
 	private String mailingCountry;
 	private String voiceContact;
-	private String phone1;
-	private String phone2;
-	private String phone3;
-	private String phone4;
+	private String phoneHome;
+	private String phoneMobile;
+	private String phoneFax;
+	private String phoneBusiness;
 	private String personalInformation;
 	private String frequentFlyerNumber;
 	private String socialSecurityNumber;
@@ -72,10 +72,10 @@ public class MultilingualLabel {
 	private Long mailingStateRegionState;
 	private Long mailingPostalCodeState;
 	private Long mailingCountryState;
-	private Long phone1State;
-	private Long phone2State;
-	private Long phone3State;
-	private Long phone4State;
+	private Long phoneHomeState;
+	private Long phoneMobileState;
+	private Long phoneFaxState;
+	private Long phoneBusinessState;
 	private Long frequentFlyerNumberState;
 	private Long socialSecurityNumberState;
 	
@@ -442,29 +442,30 @@ public class MultilingualLabel {
 	public void setVoiceContact(String voiceContact) {
 		this.voiceContact = voiceContact;
 	}
-	public String getPhone1() {
-		return phone1;
+	
+	public String getPhoneHome() {
+		return phoneHome;
 	}
-	public void setPhone1(String phone1) {
-		this.phone1 = phone1;
+	public void setPhoneHome(String phoneHome) {
+		this.phoneHome = phoneHome;
 	}
-	public String getPhone2() {
-		return phone2;
+	public String getPhoneMobile() {
+		return phoneMobile;
 	}
-	public void setPhone2(String phone2) {
-		this.phone2 = phone2;
+	public void setPhoneMobile(String phoneMobile) {
+		this.phoneMobile = phoneMobile;
 	}
-	public String getPhone3() {
-		return phone3;
+	public String getPhoneFax() {
+		return phoneFax;
 	}
-	public void setPhone3(String phone3) {
-		this.phone3 = phone3;
+	public void setPhoneFax(String phoneFax) {
+		this.phoneFax = phoneFax;
 	}
-	public String getPhone4() {
-		return phone4;
+	public String getPhoneBusiness() {
+		return phoneBusiness;
 	}
-	public void setPhone4(String phone4) {
-		this.phone4 = phone4;
+	public void setPhoneBusiness(String phoneBusiness) {
+		this.phoneBusiness = phoneBusiness;
 	}
 	public String getPersonalInformation() {
 		return personalInformation;
@@ -613,29 +614,30 @@ public class MultilingualLabel {
 	public void setMailingCountryState(Long mailingCountryState) {
 		this.mailingCountryState = mailingCountryState;
 	}
-	public Long getPhone1State() {
-		return phone1State;
+	
+	public Long getPhoneHomeState() {
+		return phoneHomeState;
 	}
-	public void setPhone1State(Long phone1State) {
-		this.phone1State = phone1State;
+	public void setPhoneHomeState(Long phoneHomeState) {
+		this.phoneHomeState = phoneHomeState;
 	}
-	public Long getPhone2State() {
-		return phone2State;
+	public Long getPhoneMobileState() {
+		return phoneMobileState;
 	}
-	public void setPhone2State(Long phone2State) {
-		this.phone2State = phone2State;
+	public void setPhoneMobileState(Long phoneMobileState) {
+		this.phoneMobileState = phoneMobileState;
 	}
-	public Long getPhone3State() {
-		return phone3State;
+	public Long getPhoneFaxState() {
+		return phoneFaxState;
 	}
-	public void setPhone3State(Long phone3State) {
-		this.phone3State = phone3State;
+	public void setPhoneFaxState(Long phoneFaxState) {
+		this.phoneFaxState = phoneFaxState;
 	}
-	public Long getPhone4State() {
-		return phone4State;
+	public Long getPhoneBusinessState() {
+		return phoneBusinessState;
 	}
-	public void setPhone4State(Long phone4State) {
-		this.phone4State = phone4State;
+	public void setPhoneBusinessState(Long phoneBusinessState) {
+		this.phoneBusinessState = phoneBusinessState;
 	}
 	public Long getFrequentFlyerNumberState() {
 		return frequentFlyerNumberState;
