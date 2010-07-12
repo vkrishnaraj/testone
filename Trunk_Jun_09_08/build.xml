@@ -315,6 +315,31 @@
 		</antcall>
 		<antcall target="delete" />
 	</target>
+	
+	<target name="build-alaska-demo" depends="delete">
+		<property name="ant_project_name" value="alaska" />
+		<property name="ant_war_name" value="alaska" />
+		<property name="include.demo" value="1" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/alaska/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/alaska/report_email.html" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/alaska/ApplicationResources.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/alaska/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/alaska/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/alaska/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/alaska/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/alaska/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/alaska/hibernate_reporting.cfg.xml" />
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="alaska" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
 
 
 
