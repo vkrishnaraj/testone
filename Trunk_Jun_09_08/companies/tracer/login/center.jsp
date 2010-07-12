@@ -10,6 +10,7 @@
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
 
+<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
     <table class=login2 width="50%" align=center>
       	<tr>
         	<td align="center" colspan=2>
@@ -77,3 +78,4 @@
                     </td>
                   </tr>
                 </table>
+</html:form>
