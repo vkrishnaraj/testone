@@ -157,6 +157,10 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setPassengerInfoCancel(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().equalsIgnoreCase("Forward")) {
 					multilingualLabel.setPassengerInfoForward(localetext.getDisplayText());
+				}else if (localetext.getLabel().getLabel().equalsIgnoreCase("You must enter a value for the field")) {
+					multilingualLabel.setPassengerRequiredValueField(localetext.getDisplayText());
+				}else if (localetext.getLabel().getLabel().equalsIgnoreCase("You must enter a value for the Question")) {
+					multilingualLabel.setPassengerRequiredQuestionField(localetext.getDisplayText());
 				}
 				requiredFieldStatus = null;
 			}

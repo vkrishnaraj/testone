@@ -10,6 +10,8 @@ package com.nettracer.claims.faces.util;
 public class File {
 	private String name;
 	private String mime;
+	private String path;
+	private Long id;
 	private Long length;
 	private byte[] data;
 
@@ -53,4 +55,21 @@ public class File {
 	public String getMime() {
 		return mime;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 }

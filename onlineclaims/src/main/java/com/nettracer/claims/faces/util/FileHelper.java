@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
  */
 public class FileHelper {
 	private static final String BASE_PATH = "c:/nettracer_claims_files/";
+	private static String path;
 
 	public static boolean saveImage(int claimId, String fileName, byte[] file) throws IOException {
 		
@@ -29,6 +30,7 @@ public class FileHelper {
 			return false;
 		}
 		
+		path=filePath;
 		//write the file to the file specified
 		OutputStream outs = new FileOutputStream(filePath + "/" + fileName);
 		outs.write(file);
@@ -38,6 +40,8 @@ public class FileHelper {
 		return true;
 		
 	}
+
+	
 
 	public static boolean makeFolder(String folder) {
 		java.io.File dir = new java.io.File(folder);
@@ -80,5 +84,9 @@ public class FileHelper {
 		
 		return success;
 		
+	}
+
+	public static String getPath() {
+		return path ;
 	}
 }

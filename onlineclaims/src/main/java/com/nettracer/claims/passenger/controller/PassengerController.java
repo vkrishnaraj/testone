@@ -1,7 +1,6 @@
 package com.nettracer.claims.passenger.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -21,7 +20,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.axis2.AxisFault;
@@ -102,6 +100,8 @@ public class PassengerController {
 
 	@Autowired
 	OnlineClaimsWS onlineClaimsWS;
+
+	private static long fileId=1L;
 
 	/**
 	 * This is the 1st step for a passenger to fill up his claims form
@@ -543,6 +543,7 @@ public class PassengerController {
 						file.setName(fileName);
 						file.setLength(upFile.getSize());
 						file.setData(data);
+						file.setId(fileId++);
 						if(passengerBean.getFiles() !=null){
 							List<File> existingFiles=passengerBean.getFiles();
 							for(File existingFile:existingFiles){
@@ -556,6 +557,7 @@ public class PassengerController {
 									.getExternalContext().getSession(false);
 							baggageState = (Long) session.getAttribute("baggageState");
 							FileHelper.saveImage(baggageState.intValue(), fileName, data);
+							file.setPath(FileHelper.getPath());
 							passengerBean.getFiles().add(file);
 							fileDataModelList=new ListDataModel(passengerBean.getFiles());
 							logger.info("File Uploaded Successfully.");
