@@ -1,0 +1,3 @@
+error.error500.desc=There is an error with your request. Please try again.
+error.error_noperm.desc=You do not have permission to access this page.
+timeout.error.message=Your session has timed out. Please login again.
