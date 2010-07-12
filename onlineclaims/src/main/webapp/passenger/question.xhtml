@@ -127,7 +127,7 @@
 				</div>
 				
 				<div>
-				<h:panelGrid columns="3" width="60%">
+				<h:panelGrid columns="3" width="65%">
 					<h:panelGroup>	
 					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInspect}"/>	
 					<h:outputText value="&#160;" />
@@ -135,7 +135,7 @@
 									rendered="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
-					<h:selectOneRadio   value="#{passengerBean.tsaInspect}"  label="Tsa Inspected"
+					<h:selectOneRadio   value="#{passengerBean.tsaInspect}"  label="Tsa Inspected" 
 						required="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}">
 										<f:selectItem itemLabel="Yes" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
@@ -154,6 +154,7 @@
 					<rich:spacer width="20px"/>	
 					
 					<h:selectOneRadio   value="#{passengerBean.bagConfirmNote}"	label="Bag Confirm Note"
+						layout="lineDirection"
 						required="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 2}">
 						<f:selectItem itemLabel="Yes" itemValue="true"/>
 						<f:selectItem itemLabel="No" itemValue="false"/>

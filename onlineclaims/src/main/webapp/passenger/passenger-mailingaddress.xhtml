@@ -19,6 +19,8 @@
 					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"
 							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+										'#{passengerController.passengerInfoLabel.mailingAddressLine1}'" 
 							label="#{passengerController.passengerInfoLabel.mailingAddressLine1}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
@@ -32,64 +34,84 @@
 					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"
 							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+										'#{passengerController.passengerInfoLabel.mailingAddressLine2}'" 
 							label="#{passengerController.passengerInfoLabel.mailingAddressLine2}" >
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
-					<t:outputText value=":"/>
-					<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  styleClass="passInput12"
+					<h:panelGrid columns="12" width="90%">
+						<h:panelGroup>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" />
+							<h:outputText value="&#160;" />
+							<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
+							<t:outputText value=":"/>
+						</h:panelGroup>
+						<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  size="8"
 							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"
 							readonly="#{passengerController.passengerInfoLabel.mailingCityState eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+										'#{passengerController.passengerInfoLabel.mailingCity}'" 
 							label="#{passengerController.passengerInfoLabel.mailingCity}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
-					<t:outputText value=":"/>
-					<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  styleClass="passInput12"
+						<rich:spacer  width="10" title="" />	
+						
+						<h:panelGroup>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" />
+							<h:outputText value="&#160;" />
+							<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
+							<t:outputText value=":"/>
+						</h:panelGroup>
+						<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  size="8"
 							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"
 							readonly="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+										'#{passengerController.passengerInfoLabel.mailingStateRegion}'" 
 							label="#{passengerController.passengerInfoLabel.mailingStateRegion}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
-					<t:outputText value=":"/>
-					<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"  styleClass="passInput12" 
+						<rich:spacer  width="10" title="" />
+						
+						<h:panelGroup>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" />
+							<h:outputText value="&#160;" />
+							<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
+							<t:outputText value=":"/>
+						</h:panelGroup>
+						<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"   size="8"
 							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"
 							readonly="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.mailingPostalCode}'" 
 							label="#{passengerController.passengerInfoLabel.mailingPostalCode}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
-					<t:outputText value=":"/>
-					<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18"   styleClass="passInput15"
+						<rich:spacer  width="10" title="" />
+						
+						<h:panelGroup>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" />
+							<h:outputText value="&#160;" />
+							<h:outputLabel value="*" styleClass="requiredField" 
+								rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
+							<t:outputText value=":"/>
+						</h:panelGroup>
+						<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18"   
 								required="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"
 								readonly="#{passengerController.passengerInfoLabel.mailingCountryState eq 3}"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.mailingCountry}'" 
 						   		label="#{passengerController.passengerInfoLabel.mailingCountry}">
-						<f:selectItem itemLabel="--" itemValue=""/>
-						<f:selectItems value="#{passengerController.selectItems}"/>
-					</h:selectOneMenu>
+							<f:selectItem itemLabel="--" itemValue=""/>
+							<f:selectItems value="#{passengerController.selectItems}"/>
+						</h:selectOneMenu>
+						<rich:spacer  width="10" title="" />	
+					</h:panelGrid>
 					
-					<div><rich:spacer width="100%" height="15" title="" /></div>
+					<rich:spacer  width="100%" title="" height="20"/>
 					
-				
 </ui:composition>

@@ -12,27 +12,7 @@ function decreaseFontSize() {
       p[i].style.fontSize = s+"pt";
    }   
    
-   var input = document.getElementsByTagName('input');
-   for(i=0;i<input.length;i++) {
-	      if(input[i].style.fontSize) {
-	         var s = parseInt(input[i].style.fontSize.replace("pt",""));
-	         s=8;
-	      } else {
-	         var s = 8;
-	      }
-	      input[i].style.fontSize = s+"pt";
-	   } 
-   
-   var a = document.getElementsByTagName('a');
-   for(i=0;i<a.length;i++) {
-	      if(a[i].style.fontSize) {
-	         var s = parseInt(a[i].style.fontSize.replace("pt",""));
-	         s=8;
-	      } else {
-	         var s = 8;
-	      }
-	      a[i].style.fontSize = s+"pt";
-	   } 
+  
   
    var para = document.getElementsByTagName('p');
    for(i=0;i<para.length;i++) {
@@ -62,27 +42,8 @@ function decreaseFontSize() {
 		      p[i].style.fontSize = s+"pt";
 	   }
 	   
-	   var input = document.getElementsByTagName('input');
-	   for(i=0;i<input.length;i++) {
-		      if(input[i].style.fontSize) {
-		         var s = parseInt(input[i].style.fontSize.replace("pt",""));
-		         s=10;
-		      } else {
-		         var s = 10;
-		      }
-		      input[i].style.fontSize = s+"pt";
-		   } 
-	   
-	   var a = document.getElementsByTagName('a');
-	   for(i=0;i<a.length;i++) {
-		      if(a[i].style.fontSize) {
-		         var s = parseInt(a[i].style.fontSize.replace("pt",""));
-		         s=10;
-		      } else {
-		         var s = 10;
-		      }
-		      a[i].style.fontSize = s+"pt";
-		   } 
+	 
+	  
 	   
 	   var para = document.getElementsByTagName('p');
 	   for(i=0;i<para.length;i++) {
@@ -114,27 +75,8 @@ function increaseFontSize() {
 	      p[i].style.fontSize = s+"pt";
 	   }
 	   
-	   var input = document.getElementsByTagName('input');
-	   for(i=0;i<input.length;i++) {
-		      if(input[i].style.fontSize) {
-		         var s = parseInt(input[i].style.fontSize.replace("pt",""));
-		         s=12;
-		      } else {
-		         var s = 12;
-		      }
-		      input[i].style.fontSize = s+"pt";
-		   } 
-	   
-	   var a = document.getElementsByTagName('a');
-	   for(i=0;i<a.length;i++) {
-		      if(a[i].style.fontSize) {
-		         var s = parseInt(a[i].style.fontSize.replace("pt",""));
-		         s=12;
-		      } else {
-		         var s = 12;
-		      }
-		      a[i].style.fontSize = s+"pt";
-		   } 
+	  
+	
 	   
 	   var para = document.getElementsByTagName('p');
 	   for(i=0;i<para.length;i++) {

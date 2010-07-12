@@ -66,6 +66,8 @@
 				<h:panelGrid columns="2">
 					<t:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
 						label="ArrivalCity Row#{rowIndex+1}" disabledOnClientSide="true" 
+						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+											'ArrivalCity Row#{rowIndex+1}'" immediate="true"
 						required="#{item.departureCity ne null ? true : false}"/>
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
@@ -90,6 +92,8 @@
 				<h:panelGrid columns="2">
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
 					required="#{item.departureCity ne null ? true : false}"
+					requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+											'Airline Row#{rowIndex+1}'"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="AA" itemLabel="American Airlines"/>
@@ -105,6 +109,8 @@
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
 						required="#{item.departureCity ne null ? true : false}"
+						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+											'FlightNumber Row#{rowIndex+1}'"
 						label="FlightNumber Row#{rowIndex+1}">
 					<f:validateLength maximum="5"/>
 				</t:inputText>
@@ -117,6 +123,8 @@
 						enableManualInput="false" datePattern="MMM/dd/yyyy" 
 						label="Date of Journey Row#{rowIndex+1}"  inputSize="11"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
+						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+											'Date of Journey Row#{rowIndex+1}'"
 						popup="true" immediate="true">
 					<f:converter  converterId="DateConverter" />
 				</rich:calendar>

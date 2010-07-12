@@ -19,11 +19,13 @@
 					<t:inputText id="pi24" value="#{passengerBean.frequentFlyerNumber}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 2}" tabindex="16"
 							readonly="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 3}"
-							displayValueOnly="true"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.frequentFlyerNumber}'"
 							label="#{passengerController.passengerInfoLabel.frequentFlyerNumber}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 					<h:outputText value="&#160;" />
+					<rich:spacer  width="10" title="" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber}" />
 					<h:outputText value="&#160;" />
@@ -33,7 +35,8 @@
 					<t:inputText id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}" tabindex="17"
 							readonly="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 3}"
-							displayValueOnly="true"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.socialSecurityNumber}'"
 							label="#{passengerController.passengerInfoLabel.socialSecurityNumber}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>

@@ -20,6 +20,8 @@
 					<t:inputText id="pi20" value="#{passengerBean.address[0].phoneHome}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneHomeState eq 2}" tabindex="14"
 							readonly="#{passengerController.passengerInfoLabel.phoneHomeState eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.phoneHome}'"
 							label="#{passengerController.passengerInfoLabel.phoneHome}">
 						<f:validateLength maximum="50"/>
 					</t:inputText>
@@ -33,6 +35,8 @@
 					<t:inputText id="pi21" value="#{passengerBean.address[0].phoneMobile}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneMobileState eq 2}" tabindex="15"
 							readonly="#{passengerController.passengerInfoLabel.phoneMobileState eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.phoneMobile}'"
 							label="#{passengerController.passengerInfoLabel.phoneMobile}">
 						<f:validateLength maximum="50"/>
 					</t:inputText>
@@ -46,6 +50,8 @@
 					<t:inputText id="pi22" value="#{passengerBean.address[0].phoneFax}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneFaxState eq 2}" tabindex="16"
 							readonly="#{passengerController.passengerInfoLabel.phoneFaxState eq 3}"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.phoneFax}'"
 							label="#{passengerController.passengerInfoLabel.phoneFax}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
@@ -60,6 +66,8 @@
 					<t:inputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneBusinessState eq 2}" tabindex="17"
 							readonly="#{passengerController.passengerInfoLabel.phoneBusinessState eq 3}"
+							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+									'#{passengerController.passengerInfoLabel.phoneFax}'"
 							label="#{passengerController.passengerInfoLabel.phoneBusiness}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
