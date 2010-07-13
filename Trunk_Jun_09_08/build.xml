@@ -1335,6 +1335,14 @@
 		<property name="sub_path" value="" />
 		<antcall target="build-cron-service" />
 	</target>
+	
+	<target name="alaska-build-cron-demo">
+		<property name="ant_project_name" value="alaska" />
+		<property name="sub_path" value="demo/" />
+		<property name="jarprefix" value="alaska-demo-" />
+		<property name="cron.job.config.file" value="companies/alaska/jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
 
 	<target name="usair-build-cron-all">
 		<antcall target="usair-build-cron-dev" />
