@@ -161,17 +161,7 @@
             return false;
         }
     }   
-     
-    else if (currentElementName.indexOf("companycode_ID") != -1) {
-        var pos = currentElementName.indexOf(".");
-        var str = currentElementName.substring(0,pos+1) + "membership.membershipnum";
-
-        if (form.elements[str].value.length > 0 && currentElement.value.length == 0) {
-            alert("<%= (String)bundle.getString("error.validation.airline") %>");
-            currentElement.focus();
-            return false;
-        }
-    }   
+      
     else if (currentElementName.indexOf("zip") != -1)
     {
 
