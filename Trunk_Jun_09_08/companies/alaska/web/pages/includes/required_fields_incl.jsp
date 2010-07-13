@@ -41,11 +41,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 		var diffDateDepartDateArrive = myDateArrive - myDateDepart;
 		if((diffDateDepartDateArrive < one_day_plus_one) && (diffDateDepartDateArrive >= 0)) {
 			returnValue = true;
-		} else {
-			returnValue = false;
-			departureField.focus();
-			alert("<%= (String)bundle.getString( "error.usair.arrivalanddeparturedates.rule") %>");
-		}
+		} 
     }
        	
 	
