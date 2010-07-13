@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<ui:define name="pageTitle">Application | Submit Your Claim</ui:define>
+	
+	<ui:define name="mainContent">
+	<a4j:form id="appForm">
+			
+						
+						<!-- Start body content -->
+				
+				<div>
+					<t:outputText value="#{passengerController.submitClaimLabel.submitClaimRequiredFieldMessage}" styleClass="font1-1em"/>	
+				</div>	
+				<div><h:outputText value="&#160;" /></div>
+				<div>
+					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+				</div>
+				<rich:spacer width="100%" height="10" title=""/>
+				
+				<div>
+					<rich:modalPanel id="helpmodalpanel7" autosized="true" minHeight="380" 
+						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
+						<f:facet name="controls">
+								<h:panelGroup >
+									<a4j:commandLink value="Close" 
+									style="text-decoration: underline; cursor: pointer; margin-right: 22px;" 
+											immediate="true"	id="linkToHidePanel" />
+										<rich:componentControl for="helpmodalpanel7"
+											attachTo="linkToHidePanel" operation="hide" event="onclick" />
+								</h:panelGroup>
+						</f:facet>
+						<h:panelGrid styleClass="modalPanelBody">
+							<t:outputText value="#{passengerController.submitClaimLabel.submitClaimHelp}" styleClass="font1-1em"/>
+						</h:panelGrid>
+					</rich:modalPanel>
+				</div>
+				
+				<div>
+					<rich:panel>
+						<h:panelGrid >
+							<t:outputText value="#{passengerController.submitClaimLabel.useOfInformation}:"/>
+							<rich:spacer width="100%" height="10" title=""/>
+							<t:outputText value="#{passengerController.submitClaimLabel.reservedRights}"/>
+							<rich:spacer width="100%" height="10" title=""/>
+							<t:outputText value="#{passengerController.submitClaimLabel.agreement}"/>
+						</h:panelGrid>
+					</rich:panel>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				
+				<div>
+					<t:inputHidden id="accept" value="ACCEPT" />
+					<h:panelGrid columns="2" width="100%">
+						<t:outputText value="#{passengerController.submitClaimLabel.typeAccept}*" 
+								styleClass="typeAccept" />
+						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept"
+							readonly="true" 
+							label="Acception Field" tabindex="1" >
+						</t:inputText>
+					</h:panelGrid>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				
+				<div>
+					<rich:panel>
+						<t:outputText value="#{passengerController.submitClaimLabel.confirmation}"/>
+					</rich:panel>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				
+				<div>
+					<h:panelGrid columns="2" width="62%">
+						<t:outputText value="#{passengerController.submitClaimLabel.luggageLostDate}"/>
+						<t:outputLabel value="________________________________________________"/>
+					</h:panelGrid>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				
+				<div>
+					<h:panelGrid columns="4" width="100%">
+						<t:outputText value="#{passengerController.submitClaimLabel.signature}"/>
+						<t:outputLabel value="________________________________________________" styleClass="signature"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.signedDate}"/>
+						<t:outputLabel value="__________________"/>
+					</h:panelGrid>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+
+			
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div>
+				<h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			<h:outputText value="&#160;" styleClass="passfontstyle"/>
+			
+		</a4j:form>
+	</ui:define>
+</ui:composition>

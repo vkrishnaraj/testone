@@ -5,8 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:t="http://myfaces.apache.org/tomahawk"
-	template="/layout/passengertemplate.xhtml">
+	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 	<ui:define name="pageTitle">Application | Print Your Claim</ui:define>
 	
@@ -69,6 +68,13 @@
 							<div>
 								<ui:include src="print/question.xhtml" />
 							</div>
+							<div>
+								<ui:include src="print/submit-claim.xhtml" />
+							</div>
+							<div>
+								<!--<ui:include src="print/saved-screen.xhtml" />-->
+							</div>
+							
 
 							
 					  	<!-- End body content -->

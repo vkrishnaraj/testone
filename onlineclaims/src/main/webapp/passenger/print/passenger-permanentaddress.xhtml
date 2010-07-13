@@ -18,8 +18,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi2" value="#{passengerBean.passengers[0].lastName}"  styleClass="passInout"
 							required="#{passengerController.passengerInfoLabel.lastNameState eq 2}" tabindex="1"
-							readonly="#{passengerController.passengerInfoLabel.lastNameState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.passengerInfolastName}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
@@ -32,8 +31,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi3" value="#{passengerBean.passengers[0].firstName}" styleClass="passInout"
 							required="#{passengerController.passengerInfoLabel.firstNameState eq 2}" tabindex="2"
-							readonly="#{passengerController.passengerInfoLabel.firstNameState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.firstName}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
@@ -46,8 +44,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi4" value="#{passengerBean.passengers[0].middleInitial}" style="width:25px" 
 							required="#{passengerController.passengerInfoLabel.middleInitialState eq 2}" tabindex="3"
-							readonly="#{passengerController.passengerInfoLabel.middleInitialState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.middleInitial}">
 						<f:validateLength maximum="1"/>
 					</t:inputText>
@@ -62,8 +59,7 @@
 						<t:outputText value=":"/>
 						<t:inputText id="pi5" value="#{passengerBean.address[0].addressLine1}" style="width:77%" 
 								required="#{passengerController.passengerInfoLabel.addressLine1State eq 2}" tabindex="4"
-								readonly="#{passengerController.passengerInfoLabel.addressLine1State eq 3}"
-								displayValueOnly="true"
+								readonly="true"
 								label="#{passengerController.passengerInfoLabel.addressLine1}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
@@ -78,8 +74,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi6" value="#{passengerBean.address[0].addressLine2}" style="width:77%" 
 							required="#{passengerController.passengerInfoLabel.addressLine2State eq 2}" tabindex="5"
-							readonly="#{passengerController.passengerInfoLabel.addressLine2State eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.addressLine2}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
@@ -93,8 +88,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi7" value="#{passengerBean.address[0].city}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.cityState eq 2}" tabindex="6"
-							readonly="#{passengerController.passengerInfoLabel.cityState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.city}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
@@ -107,8 +101,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi8" value="#{passengerBean.address[0].stateRegion}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.stateRegionState eq 2}" tabindex="7"
-							readonly="#{passengerController.passengerInfoLabel.stateRegionState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.stateRegion}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
@@ -121,8 +114,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi9" value="#{passengerBean.address[0].postalCode}" style="width:12%" 
 							required="#{passengerController.passengerInfoLabel.postalCodeState eq 2}" tabindex="8"
-							readonly="#{passengerController.passengerInfoLabel.postalCodeState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.postalCode}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
@@ -134,8 +126,7 @@
 							rendered="#{passengerController.passengerInfoLabel.countryState eq 2}"/>
 					<t:outputText value=":"/>
 					<t:selectOneMenu value="#{passengerBean.address[0].country}" tabindex="9" styleClass="passselectOneMenu"
-						readonly="#{passengerController.passengerInfoLabel.countryState eq 3}" 
-						displayValueOnly="true"
+						readonly="true"
 						label="#{passengerController.passengerInfoLabel.country}">
 						<f:selectItem itemLabel="--" itemValue=""/>
 						<f:selectItems value="#{passengerController.selectItems}"/>
@@ -150,8 +141,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi11" value="#{passengerBean.address[0].emailAddress}" styleClass="passselectOneMenu30"
 							required="#{passengerController.passengerInfoLabel.emailAddressState eq 2}" tabindex="10"
-							readonly="#{passengerController.passengerInfoLabel.emailAddressState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.emailAddress}">
 							<f:validateLength maximum="50"/>
 							<t:validateEmail summaryMessage="Invalid Email Address"/>
@@ -167,8 +157,7 @@
 					<t:outputText value=":"/>
 					<t:inputText id="pi12" value="#{passengerBean.address[0].occupation}" styleClass="passselectOneMenu30" 
 							required="#{passengerController.passengerInfoLabel.occupationState eq 2}" tabindex="11"
-							readonly="#{passengerController.passengerInfoLabel.occupationState eq 3}"
-							displayValueOnly="true"
+							readonly="true"
 							label="#{passengerController.passengerInfoLabel.occupation}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
@@ -182,8 +171,7 @@
 						<t:outputText value=":"/>
 						<t:inputText id="pi13" value="#{passengerBean.address[0].businessName}" styleClass="passselectOneMenu30" 
 								required="#{passengerController.passengerInfoLabel.businessNameState eq 2}" tabindex="12"
-								readonly="#{passengerController.passengerInfoLabel.businessNameState eq 3}"
-								displayValueOnly="true"
+								readonly="true"
 								label="#{passengerController.passengerInfoLabel.businessName}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>

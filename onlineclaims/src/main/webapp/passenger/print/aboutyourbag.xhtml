@@ -33,8 +33,7 @@
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}" tabindex="1"
-								readonly="#{passengerController.bagDetailsLabel.bagTagNumberState eq 3}"
-								displayValueOnly="true"
+								readonly="true"
 								label="#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}">
 					<f:validateLength  maximum="20"/>
 				</t:inputText>
@@ -52,8 +51,7 @@
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.nameonBagState eq 2}" tabindex="2"
-								readonly="#{passengerController.bagDetailsLabel.nameonBagState eq 3}"
-								displayValueOnly="true"
+								readonly="true"
 								label="#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
@@ -71,8 +69,7 @@
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}" tabindex="4"
-								readonly="#{passengerController.bagDetailsLabel.externalMarkingsState eq 3}"
-								displayValueOnly="true"
+								readonly="true"
 								label="#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}">
 					<f:validateLength maximum="50"/>
 				</t:inputText>
@@ -90,8 +87,7 @@
 				</h:panelGroup>
 				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
 					required="#{passengerController.bagDetailsLabel.bagColorState eq 2}" 
-					readonly="#{passengerController.bagDetailsLabel.bagColorState eq 3}"
-					displayValueOnly="true"
+					readonly="true"
 					label="#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="BE" itemLabel="Beige"/>
@@ -126,8 +122,7 @@
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}" tabindex="3"
-								readonly="#{passengerController.bagDetailsLabel.brandOftheBagState eq 3}"
-								displayValueOnly="true"
+								readonly="true"
 								label="#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
@@ -311,37 +306,37 @@
 				</f:facet>
 				
 				<rich:column>
-					<t:selectOneMenu value="#{contentItem.male}" displayValueOnly="true">
+					<t:selectOneMenu value="#{contentItem.male}" readonly="true">
 						<f:selectItem itemValue="" itemLabel="--" />
 						<f:selectItem itemValue="true" itemLabel="Male" />
 						<f:selectItem itemValue="false" itemLabel="Female" />
 					</t:selectOneMenu>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.article}" size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.article}" size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.color}"  size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.color}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.size}"  size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.size}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.brandOrDescription}"  size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.brandOrDescription}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.storePurchased}"  size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.storePurchased}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.purchasedDate}"  size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.purchasedDate}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.price}"  size="6" displayValueOnly="true"/>
+					<t:inputText value="#{contentItem.price}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
 					<h:selectOneMenu value="#{contentItem.currency}"  >
 						<f:selectItem itemValue="" itemLabel="--" />
-						<f:selectItems value="#{passengerController.currencyList}" displayValueOnly="true"/>
+						<f:selectItems value="#{passengerController.currencyList}" readonly="true"/>
 					</h:selectOneMenu>
 				</rich:column>
 				</rich:dataTable>

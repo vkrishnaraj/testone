@@ -224,9 +224,11 @@
 		<rich:spacer width="18" title="" />
 
 		<t:inputText value="#{passengerBean.noOfmissingBag}" id="noOfmissingBag"
+			required="#{passengerController.flightLabel.missingBagState eq 2}"
+			readonly="#{passengerController.flightLabel.missingBagState eq 3}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.missingBag}'"
-			styleClass="passInout" required="true" tabindex="9" label="No Of Missing Bag">
+			styleClass="passInout"  tabindex="9" label="No Of Missing Bag">
 				<f:validateLongRange maximum="20"/>
 		</t:inputText>
 
@@ -395,6 +397,8 @@
 
 			<h:selectOneMenu value="#{passengerBean.differentClaimCheck}" tabindex="17" immediate="true"
 				 id="differentClaimCheck"
+				 required="#{passengerController.flightLabel.differentClaimCheckState  eq 2}"
+				 readonly="#{passengerController.flightLabel.differentClaimCheckState  eq 3}"
 				 requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.differentClaimCheck}'"
 				valueChangeListener="#{passengerController.differentClaimCheckListener}">
@@ -423,6 +427,8 @@
 		<a4j:outputPanel id="rerouteCityInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
 			tabindex="18" id="reroutedCityAirline" label="Airline rerouted by"
+			 required="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2}"
+			 readonly="#{passengerController.flightLabel.reroutedCityAirlineState  eq 3}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.reroutedCityAirline}'"
 			disabled="#{passengerController.flightLabel.reroutedCityAirlineState  ne 2}"  />
@@ -461,7 +467,7 @@
 		<h:selectOneMenu value="#{passengerBean.immediateClaimAttempt}" id="immediateClaimAttempt" 
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.immediateClaimAttempt}'"
-				tabindex="20" required="true" label="Immediate Claim Attempt">
+			  	tabindex="20" required="true" label="Immediate Claim Attempt">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />

@@ -49,7 +49,11 @@
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:outputText  value="#{passengerLoginController.loginLabel.lastName}" styleClass="btAirport"/>
-				<h:inputText id="lastName" value="#{passengerLoginController.loginBean.lastName}" styleClass="btAirport" tabindex="2"/>
+				<h:inputText id="lastName" value="#{passengerLoginController.loginBean.lastName}" styleClass="btAirport" tabindex="2"
+					style="text-transform: uppercase;">
+					<f:validateLength maximum="20"/>
+					<f:converter converterId="convertToUpper"/> 
+				</h:inputText>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:commandLink value="#{passengerLoginController.loginLabel.tryDiffImage} &#160;&#160;&#160;&#160;&#160;&#160;" />		

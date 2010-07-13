@@ -41,8 +41,7 @@
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="25" id="ticketNumber"
-										label="Ticket Number" displayValueOnly="true"
-										readonly="#{passengerController.flightLabel.ticketNumberState eq 3}"
+										label="Ticket Number" readonly="true"
 										required="#{passengerController.flightLabel.ticketNumberState eq 2}"  >
 									<f:validateLength maximum="6"/>
 								</t:inputText>
@@ -63,8 +62,7 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true"
-										displayValueOnly="true"
+									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" readonly="true"
 											label="Bag Tag Number Row#{rowIndex+1}">
 										<f:validateLength maximum="10"/>
 									</t:inputText>
@@ -78,8 +76,7 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<t:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
-										displayValueOnly="true"
+									<t:selectOneRadio   value="#{item.bagArrivalStatus}" readonly="true"
 										label="Bag Arrival Status Row#{rowIndex+1}">
 										<f:selectItem itemLabel="Yes" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>

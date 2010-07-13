@@ -52,6 +52,8 @@ public class MultilingualLabel {
 	private String passengerInfoSave;
 	private String passengerInfoCancel;
 	private String passengerInfoForward;
+	private String passengerRequiredValueField;
+	private String passengerRequiredQuestionField;
 	
 	//required Fields For Passenger Info Page
 	private Long lastNameState;
@@ -1640,6 +1642,19 @@ public class MultilingualLabel {
 	}
 	public void setBagTypeState(Long bagTypeState) {
 		this.bagTypeState = bagTypeState;
+	}
+	public String getPassengerRequiredValueField() {
+		return passengerRequiredValueField;
+	}
+	public void setPassengerRequiredValueField(String passengerRequiredValueField) {
+		this.passengerRequiredValueField = passengerRequiredValueField;
+	}
+	public String getPassengerRequiredQuestionField() {
+		return passengerRequiredQuestionField;
+	}
+	public void setPassengerRequiredQuestionField(
+			String passengerRequiredQuestionField) {
+		this.passengerRequiredQuestionField = passengerRequiredQuestionField;
 	}  
 	
 	

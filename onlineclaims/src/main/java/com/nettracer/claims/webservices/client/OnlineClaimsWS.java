@@ -21,7 +21,7 @@ public interface OnlineClaimsWS {
 	PassengerView getPassengerView(String claimNumber, String lastName)
 			throws AxisFault, RemoteException;
 
-	public PassengerBean getPassengerData(WSPVAdvancedIncident passengerData);
+	public PassengerBean getPassengerData(WSPVAdvancedIncident passengerData) throws AxisFault, RemoteException;
 
 	public boolean savePassengerInfo(PassengerBean passengerBean) throws AxisFault, RemoteException;
 }

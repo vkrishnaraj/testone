@@ -37,48 +37,23 @@
 
 
 			<rich:column>
-				<h:panelGrid columns="2">
-				<a4j:region  renderRegionOnly="true">	
 					<t:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
-						displayValueOnly="true"
-						label="DepartureCity Row#{rowIndex+1}" readonly="true"/>
-					<h:panelGroup>
-						<a4j:commandLink value="" immediate="true" id="flightImageLink" disabled="true">
-
-							<h:graphicImage url="../_images/flightlist.gif"
-								alt="List of Flights" height="20" width="20" id="flightImage"
-								styleClass="cityButton" />
-
-						</a4j:commandLink>
-					</h:panelGroup>
-					</a4j:region>
-				</h:panelGrid>
+						readonly="true"
+						label="DepartureCity Row#{rowIndex+1}"/>
 			</rich:column>
 
 
 			<rich:column>
-				<h:panelGrid columns="2">
 					<t:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
 						label="ArrivalCity Row#{rowIndex+1}" 
-						displayValueOnly="true"
+						readonly="true"
 						required="#{item.departureCity ne null ? true : false}"/>
-					<h:panelGroup>
-						<a4j:commandLink value="" immediate="true" id="flightImageLink2" disabled="true">
-
-							<h:graphicImage url="../_images/flightlist.gif"
-								alt="List of Flights" height="20" width="20" id="flightImage2"
-								styleClass="cityButton" />
-
-						</a4j:commandLink>
-					</h:panelGroup>
-				</h:panelGrid>
 			</rich:column>
 
 			<rich:column>
 				<h:panelGrid columns="2">
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
-					required="#{item.departureCity ne null ? true : false}"
-					displayValueOnly="true"
+					required="#{item.departureCity ne null ? true : false}" readonly="true"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="AA" itemLabel="American Airlines"/>
@@ -94,7 +69,7 @@
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
 						required="#{item.departureCity ne null ? true : false}"
-						displayValueOnly="true"
+						readonly="true"
 						label="FlightNumber Row#{rowIndex+1}">
 					<f:validateLength maximum="5"/>
 				</t:inputText>

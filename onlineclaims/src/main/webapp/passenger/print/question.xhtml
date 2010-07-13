@@ -63,7 +63,7 @@
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="whichInput" ajaxRendered="true">
 						<t:inputText value="#{passengerBean.whichAirline}" label="Which Airline" tabindex="1"
-								displayValueOnly="true"
+								readonly="true"
 								required="#{passengerController.fraudQuestionLabel.whichAirlineState eq 2}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
@@ -111,7 +111,7 @@
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="claimantNameInput" ajaxRendered="true">
 						<t:inputText value="#{passengerBean.claimantName}" label="Claimant Name" tabindex="2"
-							displayValueOnly="true"
+							readonly="true"
 								required="#{passengerController.fraudQuestionLabel.claimantNameState eq 2}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
@@ -180,7 +180,7 @@
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
 					<t:inputText value="#{passengerBean.inspectionPlace}" label="Place Of Inspection" tabindex="3"
-						displayValueOnly="true"
+						readonly="true"
 						size="60" required="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
@@ -203,7 +203,7 @@
 				
 				<div>
 					<t:inputTextarea value="#{passengerBean.additionalComments}" tabindex="4" cols="120" rows="6"
-						displayValueOnly="true"
+						readonly="true"
 						required="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 2}">
 						<f:validateLength maximum="1500"/>
 					</t:inputTextarea>

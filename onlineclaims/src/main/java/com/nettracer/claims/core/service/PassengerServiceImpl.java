@@ -218,7 +218,7 @@ public class PassengerServiceImpl implements PassengerService {
 								} else if (localetext.getLabel().getLabel().contains("No of bags missing")) {
 									multilingualLabel.setMissingBag(localetext.getDisplayText());
 									multilingualLabel.setMissingBagState(requiredFieldFlightStatus);
-								} else if (localetext.getLabel().getLabel().contains("Bag Claim Check ")) {
+								} else if (localetext.getLabel().getLabel().contains("Bag Claim Check")) {
 									multilingualLabel.setBagClaimCheck(localetext.getDisplayText());
 									multilingualLabel.setBagClaimCheckState(requiredFieldFlightStatus);
 								} else if (localetext.getLabel().getLabel().contains("pay for excess value")) {
@@ -391,7 +391,7 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setStorePurchased(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Purchased Date")) {
 					multilingualLabel.setPurchasedDate(localetext.getDisplayText());
-				} else if (localetext.getLabel().getLabel().contains("price")) {
+				} else if (localetext.getLabel().getLabel().contains("Price")) {
 					multilingualLabel.setPrice(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Currency")) {
 					multilingualLabel.setCurrency(localetext.getDisplayText());

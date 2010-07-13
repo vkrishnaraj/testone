@@ -94,6 +94,7 @@ public class PassengerController {
 	// -- End File Upload
 	private String bagChartType;
 	private List<Bag> bags ;
+	private boolean gotoBagDetailsFlag;
 	
 	@Autowired
 	PassengerService passengerService;
@@ -139,7 +140,7 @@ public class PassengerController {
 	 * 
 	 */
 
-	public void savePassengerInfo() {
+	public String savePassengerInfo() {
 		logger.debug("savePassengerInfo method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
@@ -152,19 +153,24 @@ public class PassengerController {
 				if (saveData) {
 					FacesUtil.addInfo("Passenger infomation saved successfully.");
 					logger.info("Passenger infomation saved successfully.");
+					return gotoSavedScreen();
 				} else {
 					logger.error("Error in persisting the Data");
 					FacesUtil.addError("Error in persisting the Data");
+					return null;
 				}
 			} catch (AxisFault e) {
 				e.printStackTrace();
 				FacesUtil.addError("Error in persisting the Data");
+				return null;
 			} catch (RemoteException e) {
 				e.printStackTrace();
 				FacesUtil.addError("Connection failure, Please try again");
+				return null;
 			}
 		} else {
 			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
 		}
 	}
 
@@ -220,18 +226,31 @@ public class PassengerController {
 				} else {
 					flightLabel.setReroutedCityAirlineState(1L);
 				}
-				// passengerBean =
-				// (PassengerBean)session.getAttribute("passengerBean");
-				// if(0 == passengerBean.getBagTagList().size()){
-				// passengerBean.getBagTagList().add(new HtmlBagComponent());
-				// }
-				// session.setAttribute("passengerBean", passengerBean);
+				
+				//webservice integration code
+
+				Integer noOfBags = passengerBean.getBagsTravelWith();
+				if (null != noOfBags && noOfBags > 0) {
+					if (null != lostBagItems) {
+						lostBagItems.clear();
+					}
+					for (int i = 1; i <= noOfBags; i++) {
+						lostBagItems.add(new SelectItem(new Integer(i)));
+					}
+				}
+				
+				if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
+					gotoBagDetailsFlag =true; //set flag for webservice data and previous button
+				}
+			
+				//end of webservice integration
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return "gotoFlightDetails";
 		} else {
-			FacesUtil.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please login again");
 			return "passengerLogout";
 		}
 	}
@@ -408,46 +427,53 @@ public class PassengerController {
 		.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				if (null != passengerBean.getBagList()) {
-					passengerBean.getBagList().clear();
-				}
-				List<Bag> bagTagList=passengerBean.getBagTagList();
-				List<Bag> lostBagList=new ArrayList<Bag>();
-				if(bagTagList != null && bagTagList.size() >0){
-					for(Bag lostBag:bagTagList){
-						if(Boolean.parseBoolean(lostBag.getBagArrivalStatus()) == false){
-							lostBagList.add(lostBag);
-						}
-					}
-					if(passengerBean.getLostBag() != lostBagList.size()){
-						FacesUtil.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
-						return null;
-					}
-					currencyList=Currency.getCurrencies();
-					// Logic for step 3 o 6 About Your Bag (multiple page)
-					passengerBean.setBagList(lostBagList);
+				if(gotoBagDetailsFlag == false){ //for forward button after pressing the previous button
 					
+					if (null != passengerBean.getBagList()) {
+						passengerBean.getBagList().clear();
+					}
+					List<Bag> bagTagList=passengerBean.getBagTagList();
+					List<Bag> lostBagList=new ArrayList<Bag>();
+					if(bagTagList != null && bagTagList.size() >0){
+						for(Bag lostBag:bagTagList){
+							if(Boolean.parseBoolean(lostBag.getBagArrivalStatus()) == false){
+								lostBagList.add(lostBag);
+							}
+						}
+						if(passengerBean.getLostBag() != lostBagList.size()){
+							FacesUtil.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
+							return null;
+						}
+						currencyList=Currency.getCurrencies();
+						// Logic for step 3 o 6 About Your Bag (multiple page)
+						passengerBean.setBagList(lostBagList);
+
+						bags=passengerBean.getBagList();
+						for(Bag b:bags){
+							List<Content> contentList=new ArrayList<Content>();
+							if(b.getContentList() != null){
+								b.getContentList().clear();
+							}
+							for(int i=1;i<=4;i++){
+								Content content=new Content();
+								contentList.add(content);
+							}
+							b.setContentList(contentList);
+							contentList=null;
+						}
+						passengerBean.setBagList(bags);
+					}
+					gotoBagDetailsFlag=true;
+				}else{
 					bags=passengerBean.getBagList();
-					for(Bag b:bags){
-						List<Content> contentList=new ArrayList<Content>();
-						if(b.getContentList() != null){
-							b.getContentList().clear();
-						}
-						for(int i=1;i<=4;i++){
-							Content content=new Content();
-							contentList.add(content);
-						}
-						b.setContentList(contentList);
-						contentList=null;
-					}
-					passengerBean.setBagList(bags);
-					
+					currencyList=Currency.getCurrencies();
 				}
+
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
 				bagDetailsLabel = passengerService.getBagDetailsLabel(selectedLanguage, baggageState);
 				//session.setAttribute("passengerBean", passengerBean);
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -502,7 +528,9 @@ public class PassengerController {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
 				fileUploadLabel = passengerService.getFileUploadLabel(selectedLanguage, baggageState);
-				//passengerBean.getFiles().clear();
+				if(null != passengerBean.getFiles() && passengerBean.getFiles().size() >0){
+					fileDataModelList=new ListDataModel(passengerBean.getFiles());
+				}
 				session.setAttribute("passengerBean", passengerBean);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -807,6 +835,9 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
+				gotoBagDetailsFlag =true; //flag for previous button 
+			}
 			return "gotoFlightDetails";
 		} else {
 			FacesUtil.addError("Your session has been expired. Please log in again");

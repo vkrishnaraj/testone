@@ -34,6 +34,8 @@
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}" tabindex="1"
 								readonly="#{passengerController.bagDetailsLabel.bagTagNumberState eq 3}"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}">
 					<f:validateLength  maximum="20"/>
 				</t:inputText>
@@ -52,6 +54,8 @@
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.nameonBagState eq 2}" tabindex="2"
 								readonly="#{passengerController.bagDetailsLabel.nameonBagState eq 3}"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
@@ -70,6 +74,8 @@
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}" tabindex="4"
 								readonly="#{passengerController.bagDetailsLabel.externalMarkingsState eq 3}"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}">
 					<f:validateLength maximum="50"/>
 				</t:inputText>
@@ -88,6 +94,8 @@
 				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
 					required="#{passengerController.bagDetailsLabel.bagColorState eq 2}" 
 					readonly="#{passengerController.bagDetailsLabel.bagColorState eq 3}"
+					requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}'" 
 					label="#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="BE" itemLabel="Beige"/>
@@ -123,6 +131,8 @@
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}" tabindex="3"
 								readonly="#{passengerController.bagDetailsLabel.brandOftheBagState eq 3}"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
@@ -144,6 +154,8 @@
 						enableManualInput="false" datePattern="MMM/dd/yyyy"  inputSize="11"
 						label="#{passengerController.bagDetailsLabel.bagPurchaseDate} Page:#{rowIndex+1}"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
+						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.bagPurchaseDate} Page:#{rowIndex+1}'" 
 					popup="true"  immediate="true" >
 					<f:converter  converterId="DateConverter" />
 				</rich:calendar>
@@ -178,6 +190,8 @@
 				<t:inputText  value="#{bagItem.bagType}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.bagTypeState eq 2}" tabindex="7"
 								disabled="true"
+								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+								'#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}" />
 				</a4j:outputPanel>
 			</h:panelGrid>
