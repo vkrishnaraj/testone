@@ -360,15 +360,16 @@ public class DamagedAction extends CheckedAction {
 		 * incident on html rewrite link
 		 */
 		String incident = request.getParameter("incident_ID");
+		Incident inc = null;
 		if (incident != null && incident.length() > 0) {
-			if (bs.findIncidentByID(incident, theform, user, TracingConstants.DAMAGED_BAG) == null) {
+			if ((inc = bs.findIncidentByID(incident, theform, user, TracingConstants.DAMAGED_BAG)) == null) {
 				ActionMessage error = new ActionMessage("error.noincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
 			request.setAttribute("incident", incident);
-			
+			session.setAttribute("incidentObj", inc);
 
 		} else {
 			// prepopulate

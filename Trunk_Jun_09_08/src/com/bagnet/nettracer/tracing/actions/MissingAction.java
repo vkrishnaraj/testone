@@ -351,6 +351,7 @@ public class MissingAction extends CheckedAction {
 		 * incident on html rewrite link
 		 */
 		String incident = request.getParameter("incident_ID");
+		Incident inc = null;
 		if (incident != null && incident.length() > 0) {
 			if (bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES) == null) {
 				ActionMessage error = new ActionMessage("error.noincident");
@@ -359,7 +360,7 @@ public class MissingAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
 			request.setAttribute("incident", incident);
-			
+			session.setAttribute("incidentObj", inc);
 
 		} else {
 			

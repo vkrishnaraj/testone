@@ -40,18 +40,18 @@ public class ReservationIntegrationImpl extends
 		Itinerary ic = form.getItinerary(1, TracingConstants.BAGGAGE_ROUTING);
 //		Itinerary id = form.getItinerary(3, TracingConstants.BAGGAGE_ROUTING);
 		Incident_Claimcheck claim1 = form.getClaimcheck(0);
-		Incident_Claimcheck claim2 = form.getClaimcheck(1);
+//		Incident_Claimcheck claim2 = form.getClaimcheck(1);
 		form.getItem(0, -1);
 
 		
 		// Populate objects
-		claim1.setClaimchecknum("US000001");
+		claim1.setClaimchecknum("AS456789");
 		
 		form.setRecordlocator("ALASKA");
 		form.setNumpassengers(1);
 		form.setNumbagchecked(1);
 		form.setNumbagreceived(0);
-		form.setTicketnumber("0AS1234567890");
+		form.setTicketnumber("0271234567890");
 		
 		form.setOtherSystemInformation("ALASKA\n1.1BRABSON/JIMMY\n1 DA 726A 31DEC T DFWFLL HK2   130P  410P\nTKT/TIME LIMIT\n1.T-TL/X/1200/06MAR/MOW016\nAA FACTS\n1.OSI AA TKTL TL/X/1200/06MAR/MOW016\n2.OSI CLAIMED FROM SU PNR LOC MGDOLE\nPHONES\n1.H-555-555-5555\nREMARKS\n1.H-PAX CALLED TO CONF RES AUG10\n");
 		
@@ -74,7 +74,7 @@ public class ReservationIntegrationImpl extends
 		ia.setAirline("AS");
 		ia.setLegfrom("MCO");
 		ia.setLegto("SEA");
-		ia.setFlightnum("AS12");
+		ia.setFlightnum("1100");
 		
 		GregorianCalendar dt = new GregorianCalendar(2010,6,14,6,30);
 		GregorianCalendar at = new GregorianCalendar(2010,6,14,9,30);
@@ -89,7 +89,7 @@ public class ReservationIntegrationImpl extends
 		ic.setAirline("AS");
 		ic.setLegfrom("MCO");
 		ic.setLegto("SEA");
-		ic.setFlightnum("AS12");
+		ic.setFlightnum("1100");
 		
 		ic.setDepartdate(dt.getTime());
 		ic.setSchdeparttime(dt.getTime());
@@ -120,25 +120,25 @@ public class ReservationIntegrationImpl extends
 //		id.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
 		
 		
-		Item item = form.getItem(0, incidentType);
-		item.setColor("BU");
-		item.setFnameonbag("Jimmy");
-		item.setLnameonbag("Brabson");
-		item.setBagtype("22");
-		item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
-		item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
-		item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
-		item.setBagnumber(0);
-		item.setStatus(StatusBMO.getStatus(
-				TracingConstants.ITEM_STATUS_OPEN));
+//		Item item = form.getItem(0, incidentType);
+//		item.setColor("BU");
+//		item.setFnameonbag("Jimmy");
+//		item.setLnameonbag("Brabson");
+//		item.setBagtype("22");
+//		item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+//		item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+//		item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
+//		item.setBagnumber(0);
+//		item.setStatus(StatusBMO.getStatus(
+//				TracingConstants.ITEM_STATUS_OPEN));
 		
-		ArrayList inventorylist = new ArrayList();
-		Item_Inventory toAdd = new Item_Inventory();
-		toAdd.setCategorytype_ID(29);
-		toAdd.setDescription("Mickey Mouse shirt");
-		inventorylist.add(toAdd);
+//		ArrayList inventorylist = new ArrayList();
+//		Item_Inventory toAdd = new Item_Inventory();
+//		toAdd.setCategorytype_ID(29);
+//		toAdd.setDescription("Mickey Mouse shirt");
+//		inventorylist.add(toAdd);
 		
-		item.setInventorylist(inventorylist);
+//		item.setInventorylist(inventorylist);
 		
 		session.setAttribute("incidentForm", form);
 		
