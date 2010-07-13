@@ -45,6 +45,8 @@
       var buttonSelected = null;
 
       function validateThis(form) {
+		 return true;
+          
          if (buttonSelected == null) {
             return true;
          } else {
@@ -178,7 +180,7 @@ function gotoHistoricalReport() {
   </SCRIPT>
 
 <html:form action="addOnHandBag.do" method="post"
-  enctype="multipart/form-data" onsubmit="return validateRest(this);">
+  enctype="multipart/form-data" onsubmit="return true;">
   <tr>
     <td colspan="3" id="pageheadercell">
     <div id="pageheaderleft">

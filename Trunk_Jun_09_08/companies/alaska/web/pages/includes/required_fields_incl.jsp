@@ -85,7 +85,6 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     }
     
     returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
-    if (returnValue == false) { return returnValue; }
     
     for (var j=0;j < form.length; j++) {
 	  currentElement = form.elements[j];
@@ -100,85 +99,8 @@ ResourceBundle bundle = ResourceBundle.getBundle(
         var pos = currentElementName.indexOf(".");
         var str = currentElementName.substring(0,pos+1) + "countrycode_ID";
  
-        if (form.elements[str].value == "US" && currentElement.value.length ==0) {
-          alert("<%=(String) bundle.getString(
-            "colname.zip") + " " + bundle.getString(
-            "error.state.required")%>");
-          currentElement.focus();
-          return false;
-        }
       }
-      else if (currentElementName.indexOf(".email") != -1) {  
-        if (!checkEmail(currentElement.value))
-        {
-          alert("<%=(String) bundle.getString(
-              "ld_pass_email")%>" + " <%=(String) bundle.getString(
-              "error.validation.email")%>");
-          currentElement.focus();
-          return false;
-        }
-      } 
-      else if (currentElementName.indexOf(".disarrivedate") != -1) {  
-        if (currentElement.value.length == 0)
-        {
-          alert("<%=(String) bundle.getString(
-              "colname.arrdate")%>" + " <%=(String) bundle.getString(
-              "error.validation.isRequired")%>");
-          currentElement.focus();
-          return false;
-        } 
-      } 
-      else if (currentElementName.indexOf("numpassengers") != -1)
-      {  
-        if (currentElement.value.length == 0)
-        {
-          alert("<%= (String)bundle.getString( "colname.num_pass") %>" + 
-          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-          currentElement.focus();
-          return false;
-        }
-      }
-      else if (currentElementName.indexOf("numbagchecked") != -1)
-      {  
-        if (currentElement.value.length == 0)
-        {
-          alert("<%= (String)bundle.getString( "colname.num_bag_checked") %>" + 
-          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-          currentElement.focus();
-          return false;
-        }
-      }
-      else if (currentElementName.indexOf("numbagreceived") != -1)
-      {  
-        if (currentElement.value.length == 0)
-        {
-          alert("<%= (String)bundle.getString( "colname.bags_rec") %>" + 
-          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-          currentElement.focus();
-          return false;
-        }
-      } 
-      else if (currentElementName.indexOf("checkedlocation") != -1)
-      {  
-        if (currentElement.value.length == 0 || currentElement.value == "0")
-        {
-          alert("<%= (String)bundle.getString( "colname.bag_loc") %>" + 
-          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-          currentElement.focus();
-          return false;
-        }
-      }
-      
-      else if (currentElementName.indexOf("].article") != -1)
-      {  
-        if (currentElement.value.length == 0 || currentElement.value == "0")
-        {
-          alert("<%= (String)bundle.getString( "colname.article") %>" + 
-          " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-          currentElement.focus();
-          return false;
-        }
-      }
+
       else if (currentElementName.indexOf("theitinerary[") != -1 && currentElementName.indexOf("disdepartdate") != -1) {  
           
           var left = currentElementName.indexOf("[");
@@ -187,25 +109,46 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	      if (currentElement.value.length != 0)
 	      {
 		    retVal = validateUSAirArrivalAndDepartureDatesRule(myItineraryDateIndex,'theitinerary[');
-		    if (retVal == false) { return false; }
+		    
 	      }
       } 
+      
+      else if (currentElementName.indexOf("].color") != -1) { 
+        var left = currentElementName.indexOf("[");
+        var right = currentElementName.indexOf("]");
+       
+        if (currentElement.value.length == 0)
+        {
+          alert("<%=(String) bundle.getString(
+                  "colname.color")%>" + " <%=(String) bundle.getString(
+              "error.validation.isRequired")%>");
+          currentElement.focus();
+          return false;
+        }
+      } else if (currentElementName.indexOf("].bagtype") != -1) {  
+        if (currentElement.value.length == 0)
+        {
+          alert("<%=(String) bundle.getString(
+              "colname.bagtype")%>" + " <%=(String) bundle.getString(
+              "error.validation.isRequired")%>");
+          currentElement.focus();
+          return false;
+        }
+        
+      }
     }
     
 
     var mobile = document.getElementById("addresses[" + firstAddressIndex + "].mobile");
     var home = document.getElementById("addresses[" + firstAddressIndex + "].homephone");
     var work = document.getElementById("addresses[" + firstAddressIndex + "].workphone");
-        
-    if (mobile.value.length == 0 && home.value.length== 0 && work.value.length == 0) {
-      alert("<%= (String)bundle.getString( "colname.phone") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-      mobile.focus();
-      return false;
-    }
 
   }
     
   function validatereqOHDForm(form) {
+    return true;
+    
+    
     returnValue = true;
     var addressIndices = [];
 
