@@ -83,7 +83,7 @@ form {
 	background-color:#E0EDFB;
 }
 #bodytable #bottomcell {
-	background-color:#306790;
+	background-color:#004990;
 	vertical-align:bottom;
 	border-top:1px solid #000000;
 }
@@ -105,32 +105,33 @@ div.headerright {
 
 td#header {
 	height: 78px;
+	background-color: #FFF;
 }
 td#header.cssstandardthreecolumn { 
 	background-image:url(../images/nettracer/header_bg_noconf.gif);
 	background-repeat:no-repeat;
-	background-color:#204B78;
+	background-color: #FFF;
 }
 div#headercontent {
 	float:right;
 	margin:3px;
 }
 table#headercontent td{
-	color:#fff;
+	color:#004990;
 	text-align:right;
 }
 table#headercontent a{
-	color:#ffffff;
+	color:#004990;
 	text-decoration:none;
 }
 table#headercontent a:hover{
-	color:#ffffff;
+	color:#004990;
 	text-decoration:underline;
 }
 
 /* horizontal text links menu */
 td#headermenucell {
-	background-color:#306790;
+	background-color:#004990;
 	vertical-align:middle;
 	height: 24px;
 	text-align:left;
@@ -181,7 +182,6 @@ div#pageheaderright {
 	float:right;
 	text-align:right;
 }
-
 table#pageheaderright td {
 	padding:0px;
 	text-align:left;
@@ -335,13 +335,14 @@ div#maincontent table.form2{
 	background-color:#D1E4F1;
 }
 
+
 td.white{
 	background-color:#fff;
 	height:10px;
 }
 
 td.header{
-	background-color:#306790;
+	background-color:#004990;
 	color:#fff;
 }
 
@@ -354,7 +355,7 @@ div#maincontent table.form2_ld{
 }
 
 div#maincontent table.form2_dam{
-	background-color:#D1E4F1;
+	background-color:#5B8CE5;
 }
 div#maincontent table.form2_pil{
 	background-color:#D1E4F1;
@@ -404,17 +405,17 @@ div#copyright a {
 	color:#fff;
 }
 span.reqfield {
-	color:#B51717;
+	color:#306790;
 }
 div.helplink {
 	float:right;
 }
 div.helplink a{
-	color:#B51717;
+	color:#306790;
 	text-decoration:none;
 }
 div.helplink a:hover,a:active{
-	color:#B51717;
+	color:#306790;
 	text-decoration:underline;
 }
 

@@ -9,7 +9,7 @@
 
       <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
       <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-        <% if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON)) { %>
+        <% if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) { %>
           <tr>
             <td colspan="2"><strong><bean:message key="please_enter_one" /></strong><br />&nbsp;</td>
           </tr>
