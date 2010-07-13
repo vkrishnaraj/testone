@@ -19,7 +19,7 @@
       boolean ldCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_LD, a);
       boolean damCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_DAM, a);
       boolean pilCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_PIL, a);
-
+		out.println("***HERE I AM: " + ldCrmIntegration + " " + damCrmIntegration + " " + pilCrmIntegration);
       if (bIncidentChecklist || bIncidentChecklistReadOnly || ldCrmIntegration || damCrmIntegration || pilCrmIntegration) {
 
   

@@ -17,7 +17,9 @@
 <%@page import="org.apache.struts.util.MessageResources"%>
 <%@page import="java.util.Locale"%>
 
-<script language="javascript">
+
+<%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
   
 function toggledc(o) {
 	o.changeservice.value = "1";
@@ -42,6 +44,7 @@ function toggledc(o) {
     function cancelBdo() {
     	var answer = confirm('<bean:message key="bdo.cancel.confirmation" />');
     	if (answer) {
+			emailAlertNotice();
         	window.location = 'cancelBdo.do?bdo_id=<bean:write name="BDOForm" property="BDO_ID" />';
     	}
     }
@@ -49,6 +52,7 @@ function toggledc(o) {
     function cancelItem(item) {
     	var answer = confirm('<bean:message key="bdo.cancel.item.confirmation" />');
     	if (answer) {
+    		emailAlertNotice();
         	window.location = 'cancelBdo.do?bdo_id=<bean:write name="BDOForm" property="BDO_ID" />&item_id=' + item;
     	}
     }
@@ -120,7 +124,7 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
          
         <% if(request.getAttribute("wt_id")!= null && !request.getAttribute("wt_id").equals("") && !request.getAttribute("wt_id").equals("null"))
         	out.println("WorldTracer ID:");
-        	out.println(request.getAttribute("wt_id <br/>"));
+        	out.println(request.getAttribute("wt_id") + "<br/>");
         %>
         
         
@@ -244,6 +248,25 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
     var passengers = [<%=myform.getPassengerlist().size() %>];
     var addresses = [<%=myform.getPassengerlist().size() %>];
     var phonenumbers = [<%=myform.getPassengerlist().size() %>]; 
+
+    function emailAlertNotice() {
+        <% if (myform != null && myform.getIncident() != null && myform.getIncident().getPassenger_list() != null ) { 
+        	if (myform.getIncident().getPassenger_list().size() > 0 && myform.getIncident().getPassenger_list().get(0) != null) {
+        		Passenger p = (Passenger) myform.getIncident().getPassenger_list().get(0);
+        		if (p.getAddresses() != null && p.getAddresses().size() > 0) {
+        			Address address = p.getAddress(0);
+        			if (address != null && address.getEmail() != null && address.getEmail().length() > 0) {
+        				%>
+        				alert('<bean:message key="bdo.cancel.email.notice" />');			
+        				<%
+        			}
+        		}
+        	}
+        }
+        %>
+
+
+    }
 
     function mapSimpleData(index, dataSet, arr) {
 	    if (index == "") { return; }
