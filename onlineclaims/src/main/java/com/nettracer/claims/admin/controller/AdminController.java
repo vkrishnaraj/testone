@@ -66,10 +66,8 @@ public class AdminController {
 
 				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 					FacesContext context = FacesUtil.getFacesContext();
-					HttpSession session = (HttpSession) context
-					.getExternalContext().getSession(false);
-					SessionScopeBean sessionBean = (SessionScopeBean) session
-					.getAttribute("sessionBean");
+					HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+					SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
 					sessionBean.setLogoutRenderer(true);
 					sessionBean.setLandingRenderer(false);
 					session.setAttribute("sessionBean", sessionBean);
@@ -124,8 +122,7 @@ public class AdminController {
 				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
 				sessionBean.setLandingRenderer(false);
 			}
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}
 	}
@@ -146,8 +143,7 @@ public class AdminController {
 			logger.info("Application Data saved successfully.");
 			return "gotoLandingPage";
 		} else {
-			FacesUtil
-					.addError("Your session has been expired. Please log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}
 	}

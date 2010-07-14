@@ -124,9 +124,11 @@ public class ContentsAndLanguageController {
 		} else {
 			if(session != null){
 				SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
-				sessionBean.setLandingRenderer(false); //for landing page link
+				if(null != sessionBean){
+					sessionBean.setLandingRenderer(false); //for landing page link
+				}
 			}
-			FacesUtil.addError("Your session has been expired. PLease log in again");
+			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "logout";
 		}
 	}
