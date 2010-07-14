@@ -81,6 +81,8 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     }
     
     returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
+    if (returnValue == false) { return returnValue; }
+    
     
     for (var j=0;j < form.length; j++) {
 	  currentElement = form.elements[j];
