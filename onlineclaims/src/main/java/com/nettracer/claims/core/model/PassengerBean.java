@@ -85,6 +85,7 @@ public class PassengerBean {
 	
 	//For Submit CLaim Page
 	private String typeAccept;
+	private String status;
 	
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
@@ -403,6 +404,12 @@ public class PassengerBean {
 	}
 	public void setFiles(List<File> files) {
 		this.files = files;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}	
 	
 	

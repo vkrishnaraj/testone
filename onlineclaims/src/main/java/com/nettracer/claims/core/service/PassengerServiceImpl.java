@@ -161,11 +161,15 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setPassengerRequiredValueField(localetext.getDisplayText());
 				}else if (localetext.getLabel().getLabel().equalsIgnoreCase("You must enter a value for the Question")) {
 					multilingualLabel.setPassengerRequiredQuestionField(localetext.getDisplayText());
+				}else if (localetext.getLabel().getLabel().equalsIgnoreCase("Validation Message")) {
+					multilingualLabel.setFieldLength(localetext.getDisplayText());
+				}else if (localetext.getLabel().getLabel().equalsIgnoreCase("Value Can't be greater than")) {
+					multilingualLabel.setFieldValue(localetext.getDisplayText());
 				}
 				requiredFieldStatus = null;
 			}
 		} else {
-			return null;
+			return null;	
 		}
 		return multilingualLabel;
 	}

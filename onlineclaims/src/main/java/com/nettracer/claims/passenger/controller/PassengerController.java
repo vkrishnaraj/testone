@@ -136,7 +136,7 @@ public class PassengerController {
 	}
 
 	/**
-	 * Save the Passenger Data on passengerinfo page
+	 * Save the Passenger Data on submit claim page
 	 * 
 	 */
 
@@ -147,17 +147,14 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				// passengerBean =
-				// (PassengerBean)session.getAttribute("passengerBean");
 				boolean saveData = onlineClaimsWS.savePassengerInfo(passengerBean);
+				session.setAttribute("saveData", saveData);
 				if (saveData) {
 					FacesUtil.addInfo("Passenger infomation saved successfully.");
 					logger.info("Passenger infomation saved successfully.");
-					return gotoSavedScreen();
 				} else {
 					logger.error("Error in persisting the Data");
 					FacesUtil.addError("Error in persisting the Data");
-					return null;
 				}
 			} catch (AxisFault e) {
 				e.printStackTrace();
@@ -168,6 +165,40 @@ public class PassengerController {
 				FacesUtil.addError("Connection failure, Please try again");
 				return null;
 			}
+			return null;
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Submit the Passenger Data on submit claim page
+	 * 
+	 */
+
+	public String submitPassengerInfo() {
+		logger.debug("submitPassengerInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+		.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			Object obj=session.getAttribute("saveData");
+			if(null != obj){
+				boolean saveData = (Boolean)obj;
+				if (saveData) {
+					return gotoSavedScreen();
+				} else {
+					logger.error("Claim submission is not successful");
+					FacesUtil.addError("Claim submission is not successful");
+					return null;
+				}
+			}else{
+				logger.error("Please save your claim before proceed");
+				FacesUtil.addError("Please save your claim before proceed");
+				return null;
+			}
+			
 		} else {
 			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
@@ -180,13 +211,23 @@ public class PassengerController {
 	 * 
 	 */
 	public String cancel() {
-		FacesContext context = FacesUtil.getFacesContext();
-		ViewHandler viewHandler = context.getApplication().getViewHandler();
-		UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
-		context.setViewRoot(viewRoot);
-		context.renderResponse(); // Optional
+		logger.debug("cancel method is called");
 
-		return null;
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+		.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+		/*	FacesContext context = FacesUtil.getFacesContext();
+			ViewHandler viewHandler = context.getApplication().getViewHandler();
+			UIViewRoot viewRoot = viewHandler.createView(context, context.getViewRoot().getViewId());
+			context.setViewRoot(viewRoot);
+			context.renderResponse(); // Optional
+*/
+			return "gotoDirectionPage";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+		
 	}
 
 	/**
@@ -228,19 +269,20 @@ public class PassengerController {
 				}
 				
 				//webservice integration code
-
-				Integer noOfBags = passengerBean.getBagsTravelWith();
-				if (null != noOfBags && noOfBags > 0) {
-					if (null != lostBagItems) {
-						lostBagItems.clear();
+				if(null != passengerBean.getStatus() && !passengerBean.getStatus().equalsIgnoreCase("NEW")){
+					Integer noOfBags = passengerBean.getBagsTravelWith();
+					if (null != noOfBags && noOfBags > 0) {
+						if (null != lostBagItems) {
+							lostBagItems.clear();
+						}
+						for (int i = 1; i <= noOfBags; i++) {
+							lostBagItems.add(new SelectItem(new Integer(i)));
+						}
 					}
-					for (int i = 1; i <= noOfBags; i++) {
-						lostBagItems.add(new SelectItem(new Integer(i)));
+					
+					if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
+						gotoBagDetailsFlag =true; //set flag for webservice data and previous button
 					}
-				}
-				
-				if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
-					gotoBagDetailsFlag =true; //set flag for webservice data and previous button
 				}
 			
 				//end of webservice integration

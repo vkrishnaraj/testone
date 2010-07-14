@@ -82,18 +82,7 @@ public class PassengerLoginController {
 
 	public PassengerLoginController() {
 		logger.info("PassengerController constructor-1");
-		/*List<Languages> languagesList = PassengerBootstrap
-				.getLanguageDropDown();
-		for (Languages language : languagesList) {
-			if (language.getActiveStatus() == true) {
-				languageDropDown.add(new SelectItem(language.getDescription()));
-			}
-		}
-		loginPageList = PassengerBootstrap.getLoginPageList();
-		logger.info("Size of loginPageList inside PassengerController constructor= "+ loginPageList.size());
-		if (loginPageList != null && loginPageList.size() > 0) {
-			setLoginLabels();
-		}*/
+		
 	}
 	
 	@Autowired
@@ -109,8 +98,7 @@ public class PassengerLoginController {
 			}
 		}
 		loginPageList = PassengerBootstrap.getLoginPageList();
-		logger
-				.info("Size of loginPageList inside PassengerController constructor= "
+		logger.info("Size of loginPageList inside PassengerController constructor= "
 						+ loginPageList.size());
 		if (loginPageList != null && loginPageList.size() > 0) {
 			setLoginLabels();
@@ -121,10 +109,10 @@ public class PassengerLoginController {
 	}
 	
 	
-	@PostConstruct
+	/*@PostConstruct
 	public void populateLanguageDropDown() {
         // populates the populateLanguageDropDown upon initialization...
-    }
+    }*/
 
 
 	/**
@@ -144,6 +132,8 @@ public class PassengerLoginController {
 				loginLabel.setCaptchaText(localetext.getDisplayText());
 			} else if (localetext.getLabel().getLabel().contains("Continue")) {
 				loginLabel.setContinueButton(localetext.getDisplayText());
+			}else if (localetext.getLabel().getLabel().contains("Value Can't be greater than")) {
+				loginLabel.setValidateLength(localetext.getDisplayText());
 			}
 		}
 	}

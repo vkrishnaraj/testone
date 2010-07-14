@@ -236,6 +236,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setInspectionPlace(claim.getTsaInspectionLocation());
         passengerBean.setAdditionalComments(claim.getComments());
         passengerBean.setTypeAccept(claim.getAccept());
+        
+        passengerBean.setStatus(claim.getStatus());
        
        return passengerBean;
 									

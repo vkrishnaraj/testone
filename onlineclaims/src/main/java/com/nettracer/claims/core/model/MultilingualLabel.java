@@ -16,6 +16,7 @@ public class MultilingualLabel {
 	private String captchaText;  
 	private String continueButton;  
 	private String descriptiveText;
+	private String validateLength;
 	
 	//Labels For Passenger Info Page
 	private String passengerInfoDescriptiveText;
@@ -54,6 +55,8 @@ public class MultilingualLabel {
 	private String passengerInfoForward;
 	private String passengerRequiredValueField;
 	private String passengerRequiredQuestionField;
+	private String fieldLength;
+	private String fieldValue;
 	
 	//required Fields For Passenger Info Page
 	private Long lastNameState;
@@ -1655,6 +1658,24 @@ public class MultilingualLabel {
 	public void setPassengerRequiredQuestionField(
 			String passengerRequiredQuestionField) {
 		this.passengerRequiredQuestionField = passengerRequiredQuestionField;
+	}
+	public String getFieldLength() {
+		return fieldLength;
+	}
+	public void setFieldLength(String fieldLength) {
+		this.fieldLength = fieldLength;
+	}
+	public String getFieldValue() {
+		return fieldValue;
+	}
+	public void setFieldValue(String fieldValue) {
+		this.fieldValue = fieldValue;
+	}
+	public String getValidateLength() {
+		return validateLength;
+	}
+	public void setValidateLength(String validateLength) {
+		this.validateLength = validateLength;
 	}  
 	
 	
