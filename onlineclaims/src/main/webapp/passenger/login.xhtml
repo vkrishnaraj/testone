@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
 	template="/layout/passengertemplate.xhtml">
 
 	<ui:define name="pageTitle">Application | Passenger Login</ui:define>
@@ -37,30 +38,35 @@
 			<h:outputText id="l7" value="&#160;" />
 			
 			<a4j:outputPanel  id="passOutPutPanel"  ajaxRendered="true">
-			<h:panelGrid id="mainPassPanel"  columns="1">
+			<h:panelGrid id="mainPassPanel"  columns="1"  width="296">
 					<t:messages id="passLoginMsg" errorClass="loginerrormsg"  infoClass="infomsg" />
 					<h:outputText value="&#160;" />
-			<h:panelGrid id="loginPassengerPanel"  columns="2">
-				<h:outputText  value="#{passengerLoginController.loginLabel.claimNumber}" styleClass="btAirport"/>
+			<h:panelGrid id="loginPassengerPanel"  columns="2" width="296"  style="margin-left: 23px">
+				<h:outputText  value="#{passengerLoginController.loginLabel.claimNumber}"  styleClass="formLabel"/>
 				<h:inputText id="claimNumber" value="#{passengerLoginController.loginBean.claimNumber}" 
-					styleClass="btAirport" tabindex="1" label="Claim Number">
+					validatorMessage="#{passengerLoginController.loginLabel.claimNumber} :
+								#{passengerLoginController.loginLabel.validateLength} 20"
+					 tabindex="1" label="Claim Number">
 					<f:validateLength maximum="20"/>
 				</h:inputText>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:outputText  value="#{passengerLoginController.loginLabel.lastName}" styleClass="btAirport"/>
-				<h:inputText id="lastName" value="#{passengerLoginController.loginBean.lastName}" styleClass="btAirport" tabindex="2"
+				<h:outputText  value="#{passengerLoginController.loginLabel.lastName}" styleClass="formLabel"/>
+				<h:inputText id="lastName" value="#{passengerLoginController.loginBean.lastName}"  tabindex="2"
+					validatorMessage="#{passengerLoginController.loginLabel.lastName} :
+								#{passengerLoginController.loginLabel.validateLength} 20"
 					style="text-transform: uppercase;">
 					<f:validateLength maximum="20"/>
 					<f:converter converterId="convertToUpper"/> 
 				</h:inputText>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:commandLink value="#{passengerLoginController.loginLabel.tryDiffImage} &#160;&#160;&#160;&#160;&#160;&#160;" />		
+				<h:commandLink value="#{passengerLoginController.loginLabel.tryDiffImage}" 
+						styleClass="commandLink" style="text-decoration: underline;"/>		
 				<t:captcha captchaSessionKeyName="#{passengerLoginController.captchaBean.sessionKeyName}" imageHeight="45" imageWidth="128"/>
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
-				<h:outputText  value="#{passengerLoginController.loginLabel.captchaText}"/>
+				<h:outputText  value="#{passengerLoginController.loginLabel.captchaText}"  styleClass="formLabel"/>
 				<h:inputText id="captcha" value="#{passengerLoginController.captchaBean.value}" tabindex="3"/>
 				<h:outputText value="&#160;" />
 				<h:outputText id="captchaStatus" value="#{passengerLoginController.captchaBean.status}" 
@@ -69,7 +75,7 @@
 				<h:outputText value="&#160;" />
 				<h:outputText value="&#160;" />
 				<h:commandButton id="passLoginContinue" value="#{passengerLoginController.loginLabel.continueButton}" 
-					action="#{passengerLoginController.gotoDirectionPage}" tabindex="4" styleClass="button140pxred button140pxredl"/>
+					action="#{passengerLoginController.gotoDirectionPage}" tabindex="4" styleClass="button140pxred loginbutton140pxred"/>
 			</h:panelGrid>
 			</h:panelGrid>
 			</a4j:outputPanel>
