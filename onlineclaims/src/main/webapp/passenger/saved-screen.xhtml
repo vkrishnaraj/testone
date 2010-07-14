@@ -35,11 +35,11 @@
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
 				<h1 class="dkblue">Saved Screen
+				</h1>
 					<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel8"  
 								attachTo="helpButton" operation="show" event="onclick" />
-				</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -60,7 +60,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.savedScreenLabel.savedScreenHelp}"/>
+							<h:outputText value="#{passengerController.savedScreenLabel.savedScreenHelp}" styleClass="bodycopy"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
@@ -68,7 +68,7 @@
 		<rich:panel styleClass="savedScreenPanel">
 			<div id="savedDiv">
 				<h:outputText value="#{passengerController.savedScreenLabel.savedMessage}" 
-				styleClass="saveMsg"/>
+				styleClass="bodycopy"/>
 			</div>
 		</rich:panel>
 		
@@ -76,7 +76,7 @@
 			<h:panelGrid  columns="1" styleClass="savedScreenPanleGrid" width="100%">
 				
 				<h:commandLink id="returnLink" value="#{passengerController.savedScreenLabel.returnLink}" 
-						action="#{passengerController.gotoPassengerInfo}"
+						action="#{passengerController.gotoPassengerInfo}" styleClass="commandLink"
 						 tabindex="1" style="text-decoration: underline;"/>
 			</h:panelGrid>
 		

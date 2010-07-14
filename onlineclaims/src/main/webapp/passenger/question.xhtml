@@ -19,7 +19,7 @@
 				<h:panelGrid columns="3" width="88%"  columnClasses="width1,width2,width3">
 					<h:panelGrid columns="1" width="100%" >
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.fraudQuestionLabel.anotherClaim}"/>
+							<t:outputText value="#{passengerController.fraudQuestionLabel.anotherClaim}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 							<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.fraudQuestionLabel.anotherClaimState eq 2}"/>
@@ -43,7 +43,7 @@
 				</div>
 				<rich:spacer width="100%" height="10" title=""/>
 				<div>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.yesAbove}:" styleClass="font1-1em"/>	
+					<h:outputText value="#{passengerController.fraudQuestionLabel.yesAbove}:" styleClass="formLabel"/>	
 				</div>
 				<div>
 					<h:panelGrid columns="4">
@@ -55,7 +55,7 @@
 					
 						<rich:spacer width="60px"/>
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.fraudQuestionLabel.whichAirline}:"/>
+							<t:outputText value="#{passengerController.fraudQuestionLabel.whichAirline}:" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 							<a4j:outputPanel id="which" ajaxRendered="true">
 							<h:outputLabel value="*" styleClass="requiredField" 
@@ -67,6 +67,8 @@
 						<t:inputText value="#{passengerBean.whichAirline}" label="Which Airline" tabindex="1"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.whichAirline}'" 
+								validatorMessage="#{passengerController.fraudQuestionLabel.whichAirline} :
+								#{passengerController.passengerInfoLabel.fieldLength} 20"
 								required="#{passengerController.fraudQuestionLabel.whichAirlineState eq 2}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
@@ -79,7 +81,7 @@
 						
 						<rich:spacer width="60px"/>
 						<h:panelGroup>
-						<t:outputText value="#{passengerController.fraudQuestionLabel.dateOfClaim}"/>
+						<t:outputText value="#{passengerController.fraudQuestionLabel.dateOfClaim}:" styleClass="formLabel"/>
 						<h:outputText value="&#160;" />
 						
 						<a4j:outputPanel id="dateOfClaim" ajaxRendered="true">
@@ -106,7 +108,7 @@
 					
 						<rich:spacer width="60px"/>
 						<h:panelGroup>	
-						<t:outputText value="#{passengerController.fraudQuestionLabel.claimantName}"/>
+						<t:outputText value="#{passengerController.fraudQuestionLabel.claimantName}:" styleClass="formLabel"/>
 						<h:outputText value="&#160;" />
 						<a4j:outputPanel id="claimantName" ajaxRendered="true">
 							<h:outputLabel value="*" styleClass="requiredField" 
@@ -118,6 +120,8 @@
 						<t:inputText value="#{passengerBean.claimantName}" label="Claimant Name" tabindex="2"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.claimantName}'" 
+								validatorMessage="#{passengerController.fraudQuestionLabel.claimantName} :
+									#{passengerController.passengerInfoLabel.fieldLength} 20"
 								required="#{passengerController.fraudQuestionLabel.claimantNameState eq 2}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
@@ -137,7 +141,7 @@
 				<div>
 				<h:panelGrid columns="3" width="65%">
 					<h:panelGroup>	
-					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInspect}"/>	
+					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInspect}:" styleClass="formLabel"/>	
 					<h:outputText value="&#160;" />
 							<h:outputLabel value="*" styleClass="requiredField" 
 									rendered="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}"/>
@@ -156,7 +160,7 @@
 					<rich:spacer  height="10" title=""/>
 					
 					<h:panelGroup>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.bagConfirmNote}"/>
+					<t:outputText value="#{passengerController.fraudQuestionLabel.bagConfirmNote}:" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 							<h:outputLabel value="*" styleClass="requiredField" 
 									rendered="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 2}"/>
@@ -183,7 +187,7 @@
 				
 				<div>
 					<h:panelGroup>	
-					<t:outputText value="#{passengerController.fraudQuestionLabel.inspectionPlace}:" styleClass="font1-1em"/>
+					<t:outputText value="#{passengerController.fraudQuestionLabel.inspectionPlace}:" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 							<h:outputLabel value="*" styleClass="requiredField" 
 									rendered="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}"/>
@@ -193,6 +197,8 @@
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.inspectionPlace}'" 
 						readonly="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 3}"
+						validatorMessage="#{passengerController.fraudQuestionLabel.inspectionPlace} :
+									#{passengerController.passengerInfoLabel.fieldLength} 20"
 						size="60" required="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
@@ -217,6 +223,8 @@
 					<h:inputTextarea value="#{passengerBean.additionalComments}" tabindex="4" cols="120" rows="6"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.additionalComments}'" 
+						validatorMessage="#{passengerController.fraudQuestionLabel.additionalComments} :
+									#{passengerController.passengerInfoLabel.fieldLength} 1500"
 						readonly="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 3}"		
 						required="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 2}">
 						<f:validateLength maximum="1500"/>

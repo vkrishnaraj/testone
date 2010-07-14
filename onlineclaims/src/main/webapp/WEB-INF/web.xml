@@ -20,7 +20,8 @@
 	<!-- refer to: http://www.javaplex.com/blog/optimizing-jsf-richfaces-applications/
 		This config will enforce the container to compress all the richfaces 
 		resources including images, stylesheets, javascript to be compressed before sending to client. 
-		It will make significant reduced load time. -->
+		It will make significant reduced load time.
+-->
 	<context-param>
 		<param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name>
 		<param-value>true</param-value>
@@ -35,13 +36,15 @@
 
 	<!-- This JSF richfaces optimization tip will make sure that all the javascript, 
 		files & libraries assosiated with richfaces should be downloaded at client side at the time 
-		of first request from client. -->
+		of first request from client.
+-->
 	<context-param>
 		<param-name>org.richfaces.LoadScriptStrategy</param-name>
 		<param-value>all</param-value>
 	</context-param>
 	<!-- This JSF richfaces optimization tip to enable cache richfaces components at client side 
-		and boost up significant performance hit. -->
+		and boost up significant performance hit.
+-->
 	<filter>
 		<display-name>Ajax4jsf Filter</display-name>
 		<filter-name>ajax4jsf</filter-name>

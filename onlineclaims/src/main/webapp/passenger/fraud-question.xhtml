@@ -49,7 +49,7 @@
 						<!-- Start body content -->
 						
 						<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionDescriptiveText}" 
-						styleClass="font1-1em"/>
+						styleClass="bodycopy"/>
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -68,11 +68,11 @@
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
 				<h1 class="dkblue">Application | Fraud Question
+				</h1>
 				<h:graphicImage url="../_images/helpButton.gif" id="helpButton6" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel6"  
 								attachTo="helpButton6" operation="show" event="onclick" /> 
-				</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -83,7 +83,7 @@
 						<!-- Start body content -->
 						
 						<div>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionRequiredFieldMessage}" styleClass="font1-1em"/>	
+					<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionRequiredFieldMessage}" styleClass="bodycopy"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -103,9 +103,11 @@
 											attachTo="linkToHidePanel" operation="hide" event="onclick" />
 								</h:panelGroup>
 						</f:facet>
+						<div id="verticalScroller">
 						<h:panelGrid styleClass="modalPanelBody" width="100%">
-							<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionHelp}" styleClass="font1-1em"/>
+							<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionHelp}" styleClass="bodycopy"/>
 						</h:panelGrid>
+						</div>
 					</rich:modalPanel>
 				</div>
 				

@@ -50,7 +50,7 @@
 						<!-- Start body content -->
 						
 						<h:panelGrid  width="95%">
-							<t:outputText value="#{passengerController.bagDetailsLabel.bagDescriptiveText}" />
+							<t:outputText value="#{passengerController.bagDetailsLabel.bagDescriptiveText}" styleClass="bodycopy"/>
 						</h:panelGrid>
 							
 					  	<!-- End body content -->
@@ -70,11 +70,11 @@
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
 				<h1 class="dkblue">Application | About Your Bags
+				</h1>
 				<h:graphicImage url="../_images/helpButton.gif" id="helpButton4" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel4"  
 								attachTo="helpButton4" operation="show" event="onclick" /> 
-				</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -106,7 +106,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.bagDetailsLabel.bagHelp}"/>
+							<h:outputText value="#{passengerController.bagDetailsLabel.bagHelp}"  styleClass="bodycopy"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>

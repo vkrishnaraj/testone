@@ -48,7 +48,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.fileUploadLabel.fileUploadDescriptiveText}" styleClass="font1-1em"/>
+						<t:outputText value="#{passengerController.fileUploadLabel.fileUploadDescriptiveText}" styleClass="bodycopy"/>
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -67,11 +67,11 @@
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
 				<h1 class="dkblue">Application | File Upload
+				</h1>
 				<h:graphicImage url="../_images/helpButton.gif" id="helpButton5" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel5"  
 								attachTo="helpButton5" operation="show" event="onclick" /> 
-				</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -82,7 +82,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.fileUploadLabel.fileUploadRequiredFieldMessage}" styleClass="font1-1em"/>	
+					<t:outputText value="#{passengerController.fileUploadLabel.fileUploadRequiredFieldMessage}" styleClass="bodycopy"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -103,7 +103,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody" width="100%">
-							<t:outputText value="#{passengerController.fileUploadLabel.fileUploadHelp}" styleClass="font1-1em"/>
+							<t:outputText value="#{passengerController.fileUploadLabel.fileUploadHelp}" styleClass="bodycopy"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
@@ -118,12 +118,12 @@
 				</div>
 				<div>
 				<h:panelGrid columns="1" width="49%"  columnClasses="width1">
-					<t:outputText value="#{passengerController.fileUploadLabel.fileInstruction}"/>
+					<t:outputText value="#{passengerController.fileUploadLabel.fileInstruction}" styleClass="bodycopy"/>
 				</h:panelGrid>
 				</div>
 				<rich:spacer width="100%" height="30" title=""/>
 				<h:panelGrid columns="2" width="100%">
-					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection}"/>
+					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection}" styleClass="formLabel"/>
 					<t:inputFileUpload id="fileupload" value="#{passengerController.upFile}" size="60" /><p/>
 				</h:panelGrid>
 				
@@ -132,7 +132,7 @@
 				<h:panelGrid columns="2" width="100%">
 				<rich:spacer width="80"  title=""/>
 				<h:commandButton value="#{passengerController.fileUploadLabel.addReceipts}" 
-					 	action="#{passengerController.upload}">
+					 	action="#{passengerController.upload}" styleClass="button140pxred button140pxred2" >
 					 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
 				</h:commandButton>
 				</h:panelGrid>
@@ -157,11 +157,14 @@
 						value="#{passengerController.fileDataModelList}" var="file">
 						
 						<h:column>
-							<h:outputText value="#{file.name}" />
+							<h:outputText value="#{file.name}" styleClass="formLabel"/>
+						</h:column>
+						<h:column>
+							<rich:spacer width="25" title=""/>
 						</h:column>
 						<h:column>
 							<a4j:commandButton  value="#{passengerController.fileUploadLabel.remove}" 
-								reRender="filePanel" limitToList="true" immediate="true"
+								reRender="filePanel" limitToList="true" immediate="true" styleClass="button140pxred button140pxred2" 
 								actionListener="#{passengerController.removeFileListener}"/>
 						</h:column>
 					

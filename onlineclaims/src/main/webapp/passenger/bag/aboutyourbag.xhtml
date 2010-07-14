@@ -24,11 +24,11 @@
 		<h:panelGroup >
 			<h:panelGrid columns="2">
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagTagNumber}"  styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagTagNumber}"  styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
@@ -36,6 +36,8 @@
 								readonly="#{passengerController.bagDetailsLabel.bagTagNumberState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}'" 
+								validatorMessage="#{passengerController.bagDetailsLabel.bagTagNumber} :
+								#{passengerController.passengerInfoLabel.fieldLength} 20"
 								label="#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}">
 					<f:validateLength  maximum="20"/>
 				</t:inputText>
@@ -44,11 +46,11 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.nameonBagState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
@@ -56,6 +58,8 @@
 								readonly="#{passengerController.bagDetailsLabel.nameonBagState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}'" 
+								validatorMessage="#{passengerController.bagDetailsLabel.nameonBag} :
+								#{passengerController.passengerInfoLabel.fieldLength} 20"
 								label="#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
@@ -68,7 +72,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
@@ -76,6 +80,8 @@
 								readonly="#{passengerController.bagDetailsLabel.externalMarkingsState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}'" 
+								validatorMessage="#{passengerController.bagDetailsLabel.externalMarkings} :
+								#{passengerController.passengerInfoLabel.fieldLength} 50"
 								label="#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}">
 					<f:validateLength maximum="50"/>
 				</t:inputText>
@@ -84,18 +90,18 @@
 				<rich:spacer  height="10" title="" />
 			
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagColorState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
 					required="#{passengerController.bagDetailsLabel.bagColorState eq 2}" 
 					readonly="#{passengerController.bagDetailsLabel.bagColorState eq 3}"
 					requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}'" 
+								'#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}'"
 					label="#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="BE" itemLabel="Beige"/>
@@ -121,11 +127,11 @@
 				<rich:spacer width="100%" height="20"/>
 				<rich:spacer width="100%" height="20"/>
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.brandOftheBag}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.brandOftheBag}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
@@ -133,6 +139,8 @@
 								readonly="#{passengerController.bagDetailsLabel.brandOftheBagState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}'" 
+								validatorMessage="#{passengerController.bagDetailsLabel.brandOftheBag} :
+								#{passengerController.passengerInfoLabel.fieldLength} 20" 
 								label="#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
@@ -141,11 +149,11 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagPurchaseDateState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<rich:calendar value="#{bagItem.bagPurchaseDate}" 
@@ -163,9 +171,9 @@
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
 				
-				<rich:spacer width="60%" />
-				<a4j:commandLink value="#{passengerController.bagDetailsLabel.bagChart}" styleClass="ticketInfo"
-					id="bagChart" immediate="true" limitToList="true">
+				<rich:spacer width="55%" />
+				<a4j:commandLink value="#{passengerController.bagDetailsLabel.bagChart}" styleClass="commandLink"
+					id="bagChart" immediate="true" limitToList="true" style="text-decoration:underline;">
 				
 				<rich:componentControl for="bagChartModalPanel" 
 								attachTo="bagChart" operation="show" event="onclick" />
@@ -179,11 +187,11 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagType}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagType}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagTypeState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">
@@ -292,31 +300,31 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.gender}" styleClass="font1-1em"/>
+							<h:outputLabel  value="#{passengerController.bagDetailsLabel.gender}" styleClass="subheadColumn"/>
 						</rich:column>
 						<rich:column>
-							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.article}" styleClass="font1-1em"/>
+							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.article}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.color}" styleClass="font1-1em"/>
+							<h:outputLabel  value="#{passengerController.bagDetailsLabel.color}" styleClass="subheadColumn"/>
 						</rich:column>
 						<rich:column>
-							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.size}" styleClass="font1-1em"/>
+							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.size}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.brandOrDescription}" styleClass="font1-1em"/>
+							<h:outputLabel  value="#{passengerController.bagDetailsLabel.brandOrDescription}" styleClass="subheadColumn"/>
 						</rich:column>
 						<rich:column>
-							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.storePurchased}" styleClass="font1-1em"/>
+							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.storePurchased}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.purchasedDate}" styleClass="font1-1em"/>
+							<h:outputLabel  value="#{passengerController.bagDetailsLabel.purchasedDate}" styleClass="subheadColumn"/>
 						</rich:column>
 						<rich:column>
-							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.price}" styleClass="font1-1em"/>
+							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.price}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.currency}" styleClass="font1-1em"/>
+							<h:outputLabel  value="#{passengerController.bagDetailsLabel.currency}" styleClass="subheadColumn"/>
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>

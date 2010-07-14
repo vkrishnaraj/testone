@@ -8,66 +8,74 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.voiceContact}" styleClass="subHeader"/>	
+					<t:outputText  value="#{passengerController.passengerInfoLabel.voiceContact}" styleClass="subHeader"/>	
 				</div>
 					<div><rich:spacer width="100%" height="15" title="" /></div>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneHome}" />
+					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneHome}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneHomeState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi20" value="#{passengerBean.address[0].phoneHome}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneHomeState eq 2}" tabindex="14"
 							readonly="#{passengerController.passengerInfoLabel.phoneHomeState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.passengerInfoLabel.phoneHome}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.phoneHome} :
+								#{passengerController.passengerInfoLabel.fieldLength} 20"
 							label="#{passengerController.passengerInfoLabel.phoneHome}">
 						<f:validateLength maximum="50"/>
 					</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneMobile}" />
+					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneMobile}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneMobileState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi21" value="#{passengerBean.address[0].phoneMobile}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneMobileState eq 2}" tabindex="15"
 							readonly="#{passengerController.passengerInfoLabel.phoneMobileState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.passengerInfoLabel.phoneMobile}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.phoneMobile} :
+								#{passengerController.passengerInfoLabel.fieldLength} 50"
 							label="#{passengerController.passengerInfoLabel.phoneMobile}">
 						<f:validateLength maximum="50"/>
 					</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneFax}" />
+					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneFax}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneFaxState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi22" value="#{passengerBean.address[0].phoneFax}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneFaxState eq 2}" tabindex="16"
 							readonly="#{passengerController.passengerInfoLabel.phoneFaxState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.passengerInfoLabel.phoneFax}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.phoneFax} :
+								#{passengerController.passengerInfoLabel.fieldLength} 50"
 							label="#{passengerController.passengerInfoLabel.phoneFax}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneBusiness}" />
+					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneBusiness}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneBusinessState eq 2}"/>
-					<t:outputText value=":"/>
+					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}"  style="77%"
 							required="#{passengerController.passengerInfoLabel.phoneBusinessState eq 2}" tabindex="17"
 							readonly="#{passengerController.passengerInfoLabel.phoneBusinessState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.passengerInfoLabel.phoneFax}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.phoneBusiness} :
+								#{passengerController.passengerInfoLabel.fieldLength} 50"
 							label="#{passengerController.passengerInfoLabel.phoneBusiness}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>

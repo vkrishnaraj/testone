@@ -23,13 +23,13 @@
 			<f:facet name="header">
 				<rich:columnGroup>
 					<rich:column colspan="2">
-						<h:outputText value="From/ To Airports"  styleClass="ticketInfo"/>
+						<h:outputText value="From/ To Airports"  styleClass="subheadColumn"/>
 					</rich:column>
 					<rich:column colspan="2">
-						<h:outputText value="Airline/ Flight Number"  styleClass="ticketInfo"/>
+						<h:outputText value="Airline/ Flight Number"  styleClass="subheadColumn"/>
 					</rich:column>
 					<rich:column>
-						<h:outputText value="Date"  styleClass="ticketInfo"/>
+						<h:outputText value="Date"  styleClass="subheadColumn"/>
 					</rich:column>
 
 				</rich:columnGroup>
@@ -38,7 +38,7 @@
 
 			<rich:column>
 				<h:panelGrid columns="2">
-				<a4j:region  renderRegionOnly="true">	
+				<a4j:region  renderRegionOnly="true" >	
 					<h:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
 						label="DepartureCity Row#{rowIndex+1}" readonly="true"/>
 					<h:panelGroup>
