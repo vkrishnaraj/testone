@@ -547,12 +547,17 @@ public enum MatchElement {
 						ohdTenDigitTag = ohdTenDigitTag.substring(1);
 					}
 					result = MatchUtils.stringCompare(e, incTenDigitTag, ohdTenDigitTag);
-					result.setIncidentContents(originalIncString);
-					result.setOhdContents(originalOhdString);
+					if (result != null) {
+						result.setIncidentContents(originalIncString);
+						result.setOhdContents(originalOhdString);
+					}
+					
 				} else {
 					result = MatchUtils.stringCompare(e, incTenDigitTag, ohdTenDigitTag);
-					result.setIncidentContents(originalIncString);
-					result.setOhdContents(originalOhdString);
+					if (result != null) {
+						result.setIncidentContents(originalIncString);
+						result.setOhdContents(originalOhdString);
+					}
 				}
 
 				if (result != null) {

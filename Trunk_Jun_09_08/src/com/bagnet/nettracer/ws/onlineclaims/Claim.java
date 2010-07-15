@@ -51,6 +51,7 @@ public class Claim {
 	private boolean tsaNotePresent;
 	private String tsaInspectionLocation;
 	private String comments;
+	private String ticketNumber;
 
 	public long getClaimId() {
 		return claimId;
@@ -405,12 +406,12 @@ public class Claim {
 	}
 
 	public File[] getFile() {
-  	return file;
-  }
+		return file;
+	}
 
 	public void setFile(File[] file) {
-  	this.file = file;
-  }
+		this.file = file;
+	}
 
 	public String getAccept() {
 		return accept;
@@ -426,6 +427,14 @@ public class Claim {
 
 	public void setClaimType(int claimType) {
 		this.claimType = claimType;
+	}
+
+	public String getTicketNumber() {
+		return ticketNumber;
+	}
+
+	public void setTicketNumber(String ticketNumber) {
+		this.ticketNumber = ticketNumber;
 	}
 
 }

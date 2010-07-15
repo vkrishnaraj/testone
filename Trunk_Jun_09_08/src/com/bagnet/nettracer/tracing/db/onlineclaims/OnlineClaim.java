@@ -194,6 +194,10 @@ public class OnlineClaim {
 	@Column(length = 1500)
 	private String comments;
 
+	@Column(length = 13)
+	private String ticketNumber;
+
+	
 	public long getClaimId() {
 		return claimId;
 	}
@@ -621,4 +625,12 @@ public class OnlineClaim {
 	public void setAccept(String accept) {
 		this.accept = accept;
 	}
+
+	public String getTicketNumber() {
+  	return ticketNumber;
+  }
+
+	public void setTicketNumber(String ticketNumber) {
+  	this.ticketNumber = ticketNumber;
+  }
 }
