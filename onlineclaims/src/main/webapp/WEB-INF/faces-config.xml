@@ -60,7 +60,6 @@
   <navigation-case>
    <from-outcome>passengerLogout</from-outcome>
    <to-view-id>/passenger/login.faces</to-view-id>
-   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoDirectionPage</from-outcome>
