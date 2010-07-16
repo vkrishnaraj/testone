@@ -9,6 +9,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.nettracer.claims.admin.SessionScopeBean;
+import com.nettracer.claims.passenger.SessionPassengerBean;
+
 /**
  * @author Utpal
  *
@@ -58,8 +61,12 @@ public class FacesUtil {
 		if (session != null) {
 			session.removeAttribute("logged");
 			session.invalidate();
+			SessionScopeBean sessionBean=(SessionScopeBean)session.getAttribute("sessionBean");
+			sessionBean.setLogoutRenderer(false);
+			sessionBean.setLandingRenderer(false);
+			session.setAttribute("sessionBean", sessionBean);
 			addError("You have been successfully signed out.");
-			logger.info("User session is closed");
+			logger.info("Admin has signed out");
 		}
 		return "logout";
 	}
@@ -74,10 +81,14 @@ public class FacesUtil {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
 		if (session != null) {
-			session.removeAttribute("passengerLogout");
+			//session.removeAttribute("passengerLogout");//
+			session.removeAttribute("loggedPassenger");
+			SessionPassengerBean sessionPassengerBean=(SessionPassengerBean)session.getAttribute("sessionPassengerBean");
+			sessionPassengerBean.setLogoutRenderer(false);
+			session.setAttribute("sessionPassengerBean", sessionPassengerBean);
 			session.invalidate();
 			addError("You have been successfully signed out.");
-			logger.info("User session is closed");
+			logger.info("User has signed out");
 		}
 		return "passengerLogout";
 	}

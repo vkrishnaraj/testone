@@ -247,7 +247,9 @@ public class PassengerController {
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
 				flightLabel = passengerService.getFlightLabels(	selectedLanguage, baggageState);
 				airportCodeList = (DataModel) session.getAttribute("airportCodeList");
-				this.itineraryList = new ListDataModel(passengerBean.getItineraryList());
+				if(null == itineraryList){
+					this.itineraryList = new ListDataModel(passengerBean.getItineraryList());
+				}
 				if (null != passengerBean.getDeclarePayExcessValue()&& passengerBean.getDeclarePayExcessValue()) {
 					flightLabel.setDeclaredValueState(2L);
 				} else {
@@ -396,12 +398,11 @@ public class PassengerController {
 				itineraryLocal = (Itinerary) getItineraryList().getRowData();
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
 			} else {
-				itineraryLocal = new Itinerary();
+				itineraryLocal = passengerBean.getItineraryList().get(getItineraryTableIndex());
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
 			}
 			session.setAttribute("itinerary", itineraryLocal);
-			passengerBean.getItineraryList().set(getItineraryTableIndex(),
-					itineraryLocal);
+			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -442,7 +443,7 @@ public class PassengerController {
 			if (session.getAttribute("itinerary") != null) {
 				itineraryLocal = (Itinerary) session.getAttribute("itinerary");
 			} else {
-				itineraryLocal = new Itinerary();
+				itineraryLocal = passengerBean.getItineraryList().get(getItineraryTableIndex());
 			}
 			if (getItineraryList().isRowAvailable()) {
 				itineraryLocal = (Itinerary) getItineraryList().getRowData();

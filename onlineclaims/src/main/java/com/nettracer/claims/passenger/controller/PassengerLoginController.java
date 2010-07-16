@@ -150,8 +150,7 @@ public class PassengerLoginController {
 			 * HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 			 * .getExternalContext().getSession(false);
 			 */
-			loginPageList = passengerService
-					.getPassengerLoginContents(selectedLanguage);
+			loginPageList = passengerService.getPassengerLoginContents(selectedLanguage);
 			if (loginPageList != null && loginPageList.size() > 0) {
 				setLoginLabels();
 			}
@@ -171,8 +170,7 @@ public class PassengerLoginController {
 	public String gotoDirectionPage() {
 		logger.debug("gotoDirectionPage method is called");
 		FacesContext context = FacesUtil.getFacesContext();
-		HttpSession session = (HttpSession) context.getExternalContext()
-				.getSession(false);
+		HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 		try {
 			PassengerView passengerView = onlineClaimsWS.getPassengerView(
 					loginBean.getClaimNumber(), loginBean.getLastName());
@@ -298,8 +296,7 @@ public class PassengerLoginController {
 	 * Clear the browser cache(component value) from Apply request value phase
 	 */
 	public void clearCaptchaCache() {
-		logger
-				.debug("clearCaptchaCache method is called to clear the wrong captcha input texts");
+		logger.debug("clearCaptchaCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		/*
 		 * ViewHandler viewHandler = context.getApplication().getViewHandler();
@@ -322,22 +319,18 @@ public class PassengerLoginController {
 	 * Clear the browser cache(component value) from Apply request value phase
 	 */
 	public void clearInputCache() {
-		logger
-				.debug("clearInputCache method is called to clear the wrong captcha input texts");
+		logger.debug("clearInputCache method is called to clear the wrong captcha input texts");
 		FacesContext context = FacesUtil.getFacesContext();
 		UIViewRoot viewRoot = context.getViewRoot();
 		HtmlInputText inputText = null;
 		HtmlForm htmlForm = (HtmlForm) viewRoot
 				.findComponent("loginPassengerForm");
-		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) htmlForm
-				.findComponent("loginPassengerPanel");
-
+		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) htmlForm.findComponent("loginPassengerPanel");
 		inputText = (HtmlInputText) htmlPanelGrid.findComponent("claimNumber");
 		if (null != inputText) {
 			inputText.setValue("");
 		}
-		HtmlInputText inputSecret = (HtmlInputText) htmlPanelGrid
-				.findComponent("lastName");
+		HtmlInputText inputSecret = (HtmlInputText) htmlPanelGrid.findComponent("lastName");
 		if (null != inputSecret) {
 			inputSecret.setValue("");
 		}
