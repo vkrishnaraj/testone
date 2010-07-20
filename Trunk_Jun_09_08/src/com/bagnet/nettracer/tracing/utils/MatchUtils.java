@@ -211,6 +211,7 @@ public class MatchUtils {
 			if (sort != null) {
 				if (sort.equals("mbr")) sortq = " order by match.mbr.incident_ID asc";
 				if (sort.equals("ohd")) sortq = " order by match.ohd.OHD_ID asc";
+				if (sort.equals("date")) sortq = " order by match.match_made_on desc";
 			}
 
 			if (sort == null || sort.equals("")) {

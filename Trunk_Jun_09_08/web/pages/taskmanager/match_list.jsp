@@ -118,7 +118,7 @@ function updatePagination() {
                 <b><a href="viewMatches.do?sort="><bean:message key="header.match_percent" /></a></b>
               </td>
               <td>
-                <b><bean:message key="header.match_date" /></b>
+                <b><a href="viewMatches.do?sort=date"><bean:message key="header.match_date" /></b>
               </td>
               <td>
                 <b><bean:message key="header.match_details" /></b>
