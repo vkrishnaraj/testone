@@ -10,7 +10,6 @@
 			<list>
 				<ref bean="cronMoveToLzTrigger" />
 				<ref bean="cronNewPassiveTracerTrigger" />
-				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronOldPassiveTracerTrigger" />
 			</list>
 		</property>
