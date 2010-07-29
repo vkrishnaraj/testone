@@ -496,8 +496,8 @@ public class MBRActionUtils {
 	 */
 	public static String actionAddAssoc(IncidentForm theform, HttpServletRequest request, Agent user) throws Exception {
 		String loc = null;
-		int type = 0;
-
+		int type = 0; 
+		
 		HttpSession session = request.getSession();
 
 		if (request.getParameter("add_assoc_report") != null) {
@@ -608,7 +608,11 @@ public class MBRActionUtils {
 					item.setPhotolist(new ArrayList());
 					item2 = new Item();
 					BeanUtils.copyProperties(item2, item);
-
+					
+					//to fix a bug reported by USAIR - hibernate exception 
+					//when saving associated incident, when original LD incident has a BDO
+					item2.setItem_bdo(null);
+					
 					// clear inventory
 					al2 = new ArrayList();
 					for (int j = 0; j < item.getInventorylist().size(); j++) {
