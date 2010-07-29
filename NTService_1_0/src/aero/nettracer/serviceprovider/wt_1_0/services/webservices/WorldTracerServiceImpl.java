@@ -1730,7 +1730,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			d1.addNewPOS().addNewSource().setAirlineVendorID(dto.getUser().getProfile().getAirline());
 
 			RecordIdentifierType t1 = d1.addNewRecordID();
-			t1.setRecordType(RecordType.ON_HAND);
+			t1.setRecordType(RecordType.DELAYED);
 
 			RecordReferenceType t2 = t1.addNewRecordReference();
 			String ahlId = ahl.getAhlId();
