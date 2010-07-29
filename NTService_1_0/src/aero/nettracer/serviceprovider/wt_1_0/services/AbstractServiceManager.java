@@ -14,6 +14,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -40,9 +41,9 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 				boolean process = preProcess(dto, response);
 				if (process) {
 					switch (type) {
-					case GET_AHL:
-						Ahl ahl5 = (Ahl) dto.getPayload();
-						response = getAhl(dto, ahl5, response);
+					case SEND_QOH:
+						Qoh qoh = (Qoh) dto.getPayload();
+						response = sendQoh(dto, qoh, response);
 						break;
 					case CREATE_AHL:
 						Ahl ahl4 = (Ahl) dto.getPayload();
@@ -65,7 +66,6 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						response = reinstateAhl(dto, ahl, response);
 						break;
 					case GET_OHD:
-						//TODO: Complete
 						Ohd ohd1 = (Ohd) dto.getPayload();
 						response = getOhd(dto, ohd1, response);
 						break;
@@ -137,6 +137,11 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 						Ohd ohd5 = (Ohd) dto.getPayload();
 						response = suspendOhd(dto, ohd5, response);
 						break;
+					case GET_AHL:
+						Ahl ahl5 = (Ahl) dto.getPayload();
+						response = getAhl(dto, ahl5, response);
+						break;
+
 					}
 				}
 			} catch (WorldTracerException e) {
@@ -188,6 +193,7 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 		return response;
 
 	}
+
 
 	@Override
 	public boolean preProcess(WorldTracerActionDTO dto,

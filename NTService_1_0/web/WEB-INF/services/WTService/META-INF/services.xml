@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was auto-generated from WSDL -->
-<!-- by the Apache Axis2 version: 1.3  Built on : Aug 10, 2007 (04:45:47 LKT) -->
+<!-- by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT) -->
 <serviceGroup>
     <service name="WorldTracerService">
         <messageReceivers>
@@ -9,98 +9,101 @@
         <parameter name="ServiceClass">aero.nettracer.serviceprovider.wt_1_0.WorldTracerServiceImpl</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="forwardOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:forwardOhd</actionMapping>
+            <outputActionMapping>urn:forwardOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="suspendAhl" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:suspendAhl</actionMapping>
+            <outputActionMapping>urn:suspendAhlResponse</outputActionMapping>
+        </operation>
+        <operation name="getActionFileDetails" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:getActionFileDetails</actionMapping>
+            <outputActionMapping>urn:getActionFileDetailsResponse</outputActionMapping>
+        </operation>
+        <operation name="amendAhl" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:amendAhl</actionMapping>
+            <outputActionMapping>urn:amendAhlResponse</outputActionMapping>
+        </operation>
+        <operation name="createBdo" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:createBdo</actionMapping>
+            <outputActionMapping>urn:createBdoResponse</outputActionMapping>
+        </operation>
         <operation name="establishWtrConnection" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
             <actionMapping>urn:establishWtrConnection</actionMapping>
             <outputActionMapping>urn:establishWtrConnectionResponse</outputActionMapping>
         </operation>
-        <operation name="closeOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:closeOhd</actionMapping>
-            <outputActionMapping>urn:closeOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="forwardOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:forwardOhd</actionMapping>
-            <outputActionMapping>urn:forwardOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="getAhl" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getAhl</actionMapping>
-            <outputActionMapping>urn:getAhlResponse</outputActionMapping>
-        </operation>
-        <operation name="createAhl" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:createAhl</actionMapping>
-            <outputActionMapping>urn:createAhlResponse</outputActionMapping>
-        </operation>
-        <operation name="eraseActionFile" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:eraseActionFile</actionMapping>
-            <outputActionMapping>urn:eraseActionFileResponse</outputActionMapping>
-        </operation>
-        <operation name="amendOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:amendOhd</actionMapping>
-            <outputActionMapping>urn:amendOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="getActionFileSummary" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getActionFileSummary</actionMapping>
-            <outputActionMapping>urn:getActionFileSummaryResponse</outputActionMapping>
-        </operation>
-        <operation name="getOhd" mep="http://www.w3.org/ns/wsdl/in-out">
+        <operation name="getOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
             <actionMapping>urn:getOhd</actionMapping>
             <outputActionMapping>urn:getOhdResponse</outputActionMapping>
         </operation>
-        <operation name="getActionFileCounts" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getActionFileCounts</actionMapping>
-            <outputActionMapping>urn:getActionFileCountsResponse</outputActionMapping>
+        <operation name="getAhl" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:getAhl</actionMapping>
+            <outputActionMapping>urn:getAhlResponse</outputActionMapping>
         </operation>
-        <operation name="requestOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:requestOhd</actionMapping>
-            <outputActionMapping>urn:requestOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="amendAhl" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:amendAhl</actionMapping>
-            <outputActionMapping>urn:amendAhlResponse</outputActionMapping>
-        </operation>
-        <operation name="createBdo" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:createBdo</actionMapping>
-            <outputActionMapping>urn:createBdoResponse</outputActionMapping>
-        </operation>
-        <operation name="requestQuickOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:requestQuickOhd</actionMapping>
-            <outputActionMapping>urn:requestQuickOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="getActionFileDetails" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getActionFileDetails</actionMapping>
-            <outputActionMapping>urn:getActionFileDetailsResponse</outputActionMapping>
-        </operation>
-        <operation name="sendForwardMessage" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:sendForwardMessage</actionMapping>
-            <outputActionMapping>urn:sendForwardMessageResponse</outputActionMapping>
-        </operation>
-        <operation name="placeActionFile" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:placeActionFile</actionMapping>
-            <outputActionMapping>urn:placeActionFileResponse</outputActionMapping>
-        </operation>
-        <operation name="createOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:createOhd</actionMapping>
-            <outputActionMapping>urn:createOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="reinstateAhl" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:reinstanteAhl</actionMapping>
-            <outputActionMapping>urn:reinstateAhlResponse</outputActionMapping>
-        </operation>
-        <operation name="closeAhl" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:closeAhl</actionMapping>
-            <outputActionMapping>urn:closeAhlResponse</outputActionMapping>
-        </operation>
-        <operation name="suspendAhl" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:suspendAhl</actionMapping>
-            <outputActionMapping>urn:suspendAhlResponse</outputActionMapping>
-        </operation>
-        <operation name="reinstateOhd" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:reinstanteOhd</actionMapping>
-            <outputActionMapping>urn:reinstateOhdResponse</outputActionMapping>
-        </operation>
-        <operation name="suspendOhd" mep="http://www.w3.org/ns/wsdl/in-out">
+        <operation name="suspendOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
             <actionMapping>urn:suspendOhd</actionMapping>
             <outputActionMapping>urn:suspendOhdResponse</outputActionMapping>
         </operation>
-
+        <operation name="requestQuickOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:requestQuickOhd</actionMapping>
+            <outputActionMapping>urn:requestQuickOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="reinstateAhl" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:reinstateAhl</actionMapping>
+            <outputActionMapping>urn:reinstateAhlResponse</outputActionMapping>
+        </operation>
+        <operation name="getActionFileCounts" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:getActionFileCounts</actionMapping>
+            <outputActionMapping>urn:getActionFileCountsResponse</outputActionMapping>
+        </operation>
+        <operation name="requestOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:requestOhd</actionMapping>
+            <outputActionMapping>urn:requestOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="getActionFileSummary" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:getActionFileSummary</actionMapping>
+            <outputActionMapping>urn:getActionFileSummaryResponse</outputActionMapping>
+        </operation>
+        <operation name="closeOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:closeOhd</actionMapping>
+            <outputActionMapping>urn:closeOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="sendQoh" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:sendQoh</actionMapping>
+            <outputActionMapping>urn:sendQohResponse</outputActionMapping>
+        </operation>
+        <operation name="createOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:createOhd</actionMapping>
+            <outputActionMapping>urn:createOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="sendForwardMessage" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:sendForwardMessage</actionMapping>
+            <outputActionMapping>urn:sendForwardMessageResponse</outputActionMapping>
+        </operation>
+        <operation name="eraseActionFile" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:eraseActionFile</actionMapping>
+            <outputActionMapping>urn:eraseActionFileResponse</outputActionMapping>
+        </operation>
+        <operation name="amendOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:amendOhd</actionMapping>
+            <outputActionMapping>urn:amendOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="createAhl" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:createAhl</actionMapping>
+            <outputActionMapping>urn:createAhlResponse</outputActionMapping>
+        </operation>
+        <operation name="reinstateOhd" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:reinstateOhd</actionMapping>
+            <outputActionMapping>urn:reinstateOhdResponse</outputActionMapping>
+        </operation>
+        <operation name="closeAhl" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:closeAhl</actionMapping>
+            <outputActionMapping>urn:closeAhlResponse</outputActionMapping>
+        </operation>
+        <operation name="placeActionFile" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://wt_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:placeActionFile</actionMapping>
+            <outputActionMapping>urn:placeActionFileResponse</outputActionMapping>
+        </operation>
     </service>
 </serviceGroup>

@@ -10,6 +10,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import org.apache.log4j.Logger;
+
 import aero.nettracer.integrations.us.scanners.SendForward;
 import aero.nettracer.integrations.us.scanners.data.Forward;
 
@@ -19,9 +21,14 @@ import aero.nettracer.integrations.us.scanners.data.Forward;
 })
 public class MDBForwardBag implements MessageListener {
 
+	private static final String FORWARD_MESSAGE_RECEIVED = "Forward message received...";
+	Logger logger = Logger.getLogger(MDBForwardBag.class);
+	
 	@Override
 	public void onMessage(Message message) {
 
+		logger.info(FORWARD_MESSAGE_RECEIVED);
+		
 		Connection conn = null;
 
 		long singleCallTime = 0;
@@ -45,6 +52,7 @@ public class MDBForwardBag implements MessageListener {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception encountered: ", e);
 		} finally {
 			
 			System.out.println("This single test took approximately: " + singleCallTime + " ms");
@@ -56,5 +64,4 @@ public class MDBForwardBag implements MessageListener {
 			}
 		}
 	}
-
 }

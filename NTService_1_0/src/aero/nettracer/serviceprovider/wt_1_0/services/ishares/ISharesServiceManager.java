@@ -11,6 +11,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -248,6 +249,13 @@ public class ISharesServiceManager extends AbstractServiceManager implements
 	@Override
 	public WorldTracerResponse suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
 			CommandNotProperlyFormedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WorldTracerResponse sendQoh(WorldTracerActionDTO dto, Qoh qoh, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			WorldTracerTimeoutException, CommandNotProperlyFormedException {
 		// TODO Auto-generated method stub
 		return null;
 	}

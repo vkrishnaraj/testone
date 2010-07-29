@@ -141,6 +141,10 @@
 			</fileset>
 		</copy>
 
+		<copy todir="c:/upload" verbose="true">
+			<fileset file="${dist.dir}/NTServices_1_0.ear">
+			</fileset>
+		</copy>
 	</target>
 
 

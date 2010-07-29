@@ -20,6 +20,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -1120,5 +1121,52 @@ public class WorldTracerServiceImpl extends WorldTracerServiceSkeleton {
 		
 		return response;
 	}
+	
+    
+    public aero.nettracer.serviceprovider.wt_1_0.SendQohResponseDocument sendQoh(aero.nettracer.serviceprovider.wt_1_0.SendQohDocument sendQoh) {
+    	WorldTracerActionType type = WorldTracerActionType.SEND_QOH;
+    	
+    	RequestHeader header = sendQoh.getSendQoh().getHeader();
+    	User user = null;
+    	String username = header.getUsername();
+    	String password = header.getUsername();
+    	boolean userAuthorized = true;
+    	
+    	try {
+			user = ServiceUtilities.getAndAuthorizeUser(username, password, PermissionType.WORLDTRACER);
+		} catch (UserNotAuthorizedException e) {
+			userAuthorized = false;
+		}
+		
+		WorldTracerResponse xreturn = WorldTracerResponse.Factory.newInstance();
+
+		if (userAuthorized) {
+			aero.nettracer.serviceprovider.wt_1_0.common.xsd.Qoh input = sendQoh.getSendQoh().getOhd();
+			logger.info(input);
+			Qoh payload = DozerBeanMapperSingletonWrapper.getInstance().map(input, Qoh.class);
+			WorldTracerActionDTO dto = new WorldTracerActionDTO(type, user, payload, true, header);
+    		
+    		try {
+				aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse sResponse = ServicesManager.getInstance().performAction(dto);
+				xreturn = convertToWebServiceResponse(sResponse);
+			} catch (UserNotAuthorizedException e) {
+				userAuthorized = false;
+			} catch (ConfigurationException e) {
+				WebServiceError error = xreturn.addNewError();
+				error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			}
+    	} 
+
+    	if (!userAuthorized){
+    		WebServiceError error = xreturn.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+    	}
+    	
+    	SendQohResponseDocument response = SendQohResponseDocument.Factory.newInstance();
+		response.addNewSendQohResponse().setReturn(xreturn);
+		
+		return response;
+	}
+
 
 }

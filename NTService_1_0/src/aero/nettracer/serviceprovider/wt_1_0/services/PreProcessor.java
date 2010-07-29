@@ -405,7 +405,7 @@ public class PreProcessor {
 			    && p.getFfAirline().length() > 0) {
 				membership = p.getFfAirline() + membership;
 			}
-			BasicRule rule = new BasicRule(7, 7, 10, Format.ALPHA_NUMERIC);
+			BasicRule rule = new BasicRule(1, 25, 10, Format.ALPHA_NUMERIC);
 			addIncidentFieldEntry(WorldTracerField.FL, rule.formatEntry(membership), result);
 		}
 		if (address != null) {
@@ -690,7 +690,7 @@ public class PreProcessor {
 			if (ohd.getPax()[0].getFfAirline() != null) {
 				membership = ohd.getPax()[0].getFfAirline() + membership;
 			}
-			BasicRule rule = new BasicRule(7, 7, 10, Format.ALPHA_NUMERIC);
+			BasicRule rule = new BasicRule(1, 25, 10, Format.ALPHA_NUMERIC);
 			addIncidentFieldEntry(WorldTracerField.FL, rule.formatEntry(membership), result);
 		}
 

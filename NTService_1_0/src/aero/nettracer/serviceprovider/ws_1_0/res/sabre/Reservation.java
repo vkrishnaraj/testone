@@ -81,6 +81,18 @@ import com.sabre.webservices.websvc.SessionValidateRQServiceStub;
 
 public class Reservation implements ReservationInterface {
 
+	/*
+	 * Sabre Versions:
+	 * AddRemarkRQ 				2003A.TsabreXML1.3.1
+	 * EndTransactionRQ			2003A.TsabreXML1.4.1
+	 * OTATravelItineraryReadRQ	2003A.TsabreXML1.14.1
+	 * IgnoreTransactionRQ		2003A.TsabreXML1.0.1
+	 * SabreCommandRQ			2003A.TsabreXML1.6.1
+	 * 
+	 * webservices.sabre.com - Developer Resource Center
+	 * Username: bsmith@nettracer.aero
+	 * Password: flash99
+	 */
 	private static final String CREATE_PREFIX = "CREATE SESSION: ";
 	private static final String CLOSE_PREFIX = "CLOSE SESSION: ";
 	private static final String LOAD_PNR_NO_DATA = "DISPLAY_PNR NO DATA: ";
@@ -532,7 +544,7 @@ public class Reservation implements ReservationInterface {
 					.newInstance();
 			rqDoc.addNewSabreCommandLLSRQ().addNewRequest().setHostCommand(
 					command);
-
+			rqDoc.getSabreCommandLLSRQ().setVersion("2003A.TsabreXML1.6.1");
 			logger.info(NATIVE_COMMAND + connParams.getLoggingString()
 					+ " Command: " + command);
 

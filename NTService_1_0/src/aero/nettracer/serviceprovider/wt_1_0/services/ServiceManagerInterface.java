@@ -11,6 +11,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -42,6 +43,7 @@ public interface ServiceManagerInterface {
 	public abstract WorldTracerResponse establish(WorldTracerActionDTO dto, Object obj, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, WorldTracerTimeoutException, CommandNotProperlyFormedException;
 	public abstract WorldTracerResponse suspendOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, WorldTracerTimeoutException, CommandNotProperlyFormedException;
 	public abstract WorldTracerResponse reinstateOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, WorldTracerTimeoutException, CommandNotProperlyFormedException;
+	public abstract WorldTracerResponse sendQoh(WorldTracerActionDTO dto, Qoh qoh, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException, WorldTracerTimeoutException, CommandNotProperlyFormedException;
 
 }
 

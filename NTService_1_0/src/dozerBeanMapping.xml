@@ -192,38 +192,5 @@
 		</field>
 	</mapping>
 
-	<mapping map-null="false">
-		<class-a>com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim
-		</class-a>
-		<class-b>com.bagnet.nettracer.ws.onlineclaims.xsd.Claim
-		</class-b>
-		<field >
-			<a>bag</a>
-			<b>bagArray</b>
-		</field>
-		<field >
-			<a>phone</a>
-			<b>phoneArray</b>
-		</field>
-		<field >
-			<a>itinerary</a>
-			<b>itineraryArray</b>
-		</field>
-		<field >
-			<a>file</a>
-			<b>fileArray</b>
-		</field>
-	</mapping>
-
-	<mapping map-null="false">
-		<class-a>com.bagnet.nettracer.tracing.db.onlineclaims.OCBag
-		</class-a>
-		<class-b>com.bagnet.nettracer.ws.onlineclaims.xsd.Bag
-		</class-b>
-		<field >
-			<a>contents</a>
-			<b>contentsArray</b>
-		</field>
-	</mapping>
 
 </mappings>

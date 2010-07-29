@@ -46,7 +46,9 @@ import aero.nettracer.serviceprovider.wt_1_0.common.Itinerary;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
+import aero.nettracer.serviceprovider.wt_1_0.common.Tag;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService;
@@ -112,6 +114,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRReinstateRecordsRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument;
@@ -142,6 +145,8 @@ import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForward
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBagRecReadRS;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument.WTROnhandBagRecUpdateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument.WTRQuickOnhandBagsCreateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument.WTRQuickOnhandBagsCreateRQ.BagTags;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ.SupplimentalInfo;
@@ -157,18 +162,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final String SECURITY = "Security";
 	private static final String APACHE_RAMPART_INFLOW_HANDLER = "Apache Rampart inflow handler";
 	private static final Integer INTEGER_4_MINUTES = new Integer(4 * 60 * 1000);
-	private static final String C_SECURE_CACERTS = "c:\\secure\\cacerts";
-	private static final String CHANGEIT = "changeit";
+//	private static final String C_SECURE_CACERTS = "c:\\secure\\cacerts";
+//	private static final String CHANGEIT = "changeit";
 	private static final String UNABLE_TO_GENERATE_INCIDENT_MAPPING = "Unable to generate incident mapping";
 	private static final String WEB_SERVICE_CONNECTION_ISSUE = "Web Service Connection Issue";
 	private static final String UNKNOWN_FAILURE = "Unknown Failure";
 	private static final String WEB_SERVICE_ERROR_MESSAGE = "WS Error: ";
 	private static final String EXCEPTION_FOUND_RESPONSE = "Exception found... Response: ";
 	private static final String ACTION_BEING_PERFORMED = "Action Being Performed: ";
-	private static final String JAVAX_NET_SSL_TRUST_STORE_PASSWORD = "javax.net.ssl.trustStorePassword";
-	private static final String JAVAX_NET_SSL_TRUST_STORE = "javax.net.ssl.trustStore";
+//	private static final String JAVAX_NET_SSL_TRUST_STORE_PASSWORD = "javax.net.ssl.trustStorePassword";
+//	private static final String JAVAX_NET_SSL_TRUST_STORE = "javax.net.ssl.trustStore";
 	private static final String RAMPART = "rampart";
-	private static final String POLICY_XML = "/policy.xml";
+	private static final String POLICY_XML = "policy.xml";
 	private static final String INSERT_INTO_WT_WS_TRANS_LOG_GMTTIME_DESCRIPTION_VALUES = "INSERT INTO WT_WS_TRANS_LOG (gmttime, description) VALUES (?, ?)";
 	private static final String METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES = "Method not available via web services.";
 	private static final Logger logger = Logger.getLogger(WorldTracerServiceImpl.class);
@@ -245,13 +250,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		return PolicyEngine.getPolicy(builder.getDocumentElement());
 	}
 
-	private static void configureClient(org.apache.axis2.client.Stub stub) throws AxisFault {
+	private static void configureClient(org.apache.axis2.client.Stub stub, String envIdentifier) throws AxisFault {
 
-		System.setProperty(JAVAX_NET_SSL_TRUST_STORE, C_SECURE_CACERTS);
-		System.setProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD, CHANGEIT);
-
-		System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE));
-		System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD));
+//		System.setProperty(JAVAX_NET_SSL_TRUST_STORE, C_SECURE_CACERTS);
+//		System.setProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD, CHANGEIT);
+//
+//		System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE));
+//		System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD));
 
 		ServiceClient client = stub._getServiceClient();
 
@@ -260,7 +265,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 		client.engageModule(RAMPART);
 		try {
-			client.getAxisService().getPolicySubject().attachPolicy(loadPolicy(POLICY_XML));
+			String policy = "/" + envIdentifier + "_" + POLICY_XML;
+			logger.debug("Policy: " + policy);
+			client.getAxisService().getPolicySubject().attachPolicy(loadPolicy(policy));
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -314,7 +321,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRCloseRecordsRQDocument d = WTRCloseRecordsRQDocument.Factory.newInstance();
 			WTRCloseRecordsRQ d1 = d.addNewWTRCloseRecordsRQ();
@@ -374,6 +381,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -406,7 +414,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTROnhandBagCreateRQDocument d = WTROnhandBagCreateRQDocument.Factory.newInstance();
 			WTROnhandBagCreateRQ d1 = d.addNewWTROnhandBagCreateRQ();
@@ -658,6 +666,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -668,7 +677,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRReinstateRecordsRQDocument d = WTRReinstateRecordsRQDocument.Factory.newInstance();
 			WTRTracingStateChangeRQType d1 = d.addNewWTRReinstateRecordsRQ();
@@ -727,6 +736,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -738,7 +748,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRSuspendRecordsRQDocument d = WTRSuspendRecordsRQDocument.Factory.newInstance();
 			WTRTracingStateChangeRQType d1 = d.addNewWTRSuspendRecordsRQ();
@@ -797,6 +807,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -819,7 +830,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.CREATE_AHL);
 
 			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRDelayedBagsCreateRQDocument d = WTRDelayedBagsCreateRQDocument.Factory.newInstance();
 			WTRDelayedBagsCreateRQ d1 = d.addNewWTRDelayedBagsCreateRQ();
@@ -1003,8 +1014,32 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS);
 			if (fieldList != null && fieldList.size() > 0) {
-				p1.setStatus(fieldList.get(0));
-				p1.setFareBasis(fieldList.get(0));
+				String status = fieldList.get(0);
+				if (status.contains("/")) {
+					String[] st = null;
+					if (status != null) {
+						st = status.split("/");
+						if (st.length > 0) {
+							p1.setStatus(st[0]);
+						}
+						if (st.length > 1) {
+							String fareType = st[1].substring(0, 1);
+							String fareBasis = null;
+							if (fareType.equalsIgnoreCase("B")) {
+								fareBasis = "C";
+							} else if (fareType.equalsIgnoreCase("F")) {
+								fareBasis = "F";
+							} else {
+								fareBasis = "Y";
+							}
+							p1.setFareBasis(fareBasis);
+						}
+					}
+				} else {
+					p1.setStatus(status);
+					p1.setFareBasis(status);
+				}
+				
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PT);
@@ -1164,6 +1199,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -1176,7 +1212,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public void suspendAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
 		try {
 			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRSuspendRecordsRQDocument d = WTRSuspendRecordsRQDocument.Factory.newInstance();
 			WTRTracingStateChangeRQType d1 = d.addNewWTRSuspendRecordsRQ();
@@ -1235,6 +1271,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -1243,7 +1280,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public void reinstateAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
 		try {
 			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRReinstateRecordsRQDocument d = WTRReinstateRecordsRQDocument.Factory.newInstance();
 			WTRTracingStateChangeRQType d1 = d.addNewWTRReinstateRecordsRQ();
@@ -1302,6 +1339,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -1339,7 +1377,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			throws WorldTracerException {
 		try {
 			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRCloseRecordsRQDocument d = WTRCloseRecordsRQDocument.Factory.newInstance();
 			WTRCloseRecordsRQ d1 = d.addNewWTRCloseRecordsRQ();
@@ -1407,6 +1445,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -1422,7 +1461,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			RushBagServiceStub stub = new RushBagServiceStub(getRushEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRForwardOnhandBagsRQDocument d = WTRForwardOnhandBagsRQDocument.Factory.newInstance();
 			WTRForwardOnhandBagsRQ d1 = d.addNewWTRForwardOnhandBagsRQ();
@@ -1548,6 +1587,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -1561,7 +1601,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			Map<WorldTracerField, List<String>> fieldMap = PreProcessor.createFwdFieldMap(msg, dto);
 
 			RushBagServiceStub stub = new RushBagServiceStub(getRushEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRRushBagsCreateRQDocument d = WTRRushBagsCreateRQDocument.Factory.newInstance();
 			WTRRushBagsCreateRQ d1 = d.addNewWTRRushBagsCreateRQ();
@@ -1574,7 +1614,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			s1.setAirlineCode(msg.getFromAirline());
 			s1.setStationCode(msg.getFromStation());
 
-			// TODO: HERE
+
 			if (false) {
 //				RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
 //				RecordReferenceType d4 = d3.addNewRecordReference();
@@ -1697,6 +1737,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -1720,7 +1761,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRReadRecordRQDocument d = WTRReadRecordRQDocument.Factory.newInstance();
 			WTRReadRecordRQ d1 = d.addNewWTRReadRecordRQ();
@@ -1782,6 +1823,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -2026,7 +2068,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRReadRecordRQDocument d = WTRReadRecordRQDocument.Factory.newInstance();
 			WTRReadRecordRQ d1 = d.addNewWTRReadRecordRQ();
@@ -2144,6 +2186,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -2175,7 +2218,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTROnhandBagRecUpdateRQDocument d = WTROnhandBagRecUpdateRQDocument.Factory.newInstance();
 			WTROnhandBagRecUpdateRQ d1 = d.addNewWTROnhandBagRecUpdateRQ();
@@ -2432,6 +2475,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -2455,7 +2499,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			EnumMap<WorldTracerField, WorldTracerRule<String>> RULES = wtRuleMap.getRule(TxType.AMEND_AHL);
 
 			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
-			configureClient(stub);
+			configureClient(stub, getEnvironment(dto));
 
 			WTRDelayedBagsRecUpdateRQDocument d = WTRDelayedBagsRecUpdateRQDocument.Factory.newInstance();
 			WTRDelayedBagsRecUpdateRQ d1 = d.addNewWTRDelayedBagsRecUpdateRQ();
@@ -2626,7 +2670,43 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				p1.addNewFrequentFlyerID().setStringValue(fieldList.get(0));
 			}
 
+
+			
+			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS);
+
+			
+			
+			if (fieldList != null && fieldList.size() > 0) {
+				String status = fieldList.get(0);
+				if (status.contains("/")) {
+					String[] st = null;
+					if (status != null) {
+						st = status.split("/");
+						if (st.length > 0) {
+							p1.addNewStatus().setStringValue(st[0]);
+						}
+						if (st.length > 1) {
+							String fareType = st[1].substring(0, 1);
+							String fareBasis = null;
+							if (fareType.equalsIgnoreCase("B")) {
+								fareBasis = "C";
+							} else if (fareType.equalsIgnoreCase("F")) {
+								fareBasis = "F";
+							} else {
+								fareBasis = "Y";
+							}
+							p1.addNewFareBasis().setStringValue(fareBasis);
+						}
+					}
+				} else {
+					p1.addNewStatus().setStringValue(status);
+					p1.addNewFareBasis().setStringValue(status);
+				}
+				
+			}
+			
+			
 			if (fieldList != null && fieldList.size() > 0) {
 				p1.addNewStatus().setStringValue(fieldList.get(0));
 				p1.addNewFareBasis().setStringValue(fieldList.get(0));
@@ -2814,6 +2894,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
 			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
 			throw e;
 		}
@@ -2830,6 +2911,108 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	
 	private String getRushEndpoint(WorldTracerActionDTO dto) {
 		return dto.getUser().getProfile().getParameters().get(ParameterType.RUSH_ENDPOINT);
+	}
+	
+	private String getEnvironment(WorldTracerActionDTO dto) {
+		String retVal = dto.getUser().getProfile().getParameters().get(ParameterType.CLIENT_ENVIRONMENT);
+		if (retVal == null)
+			return "";
+		else
+			return retVal;
+	}
+
+
+	public void sendQoh(WorldTracerActionDTO dto, Qoh qoh, WorldTracerResponse response) throws WorldTracerException {
+//		try {
+//			airtag = BagTagConversion.getTwoCharacterBagTag(airtag);
+//		} catch (BagtagException e) {
+//			logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
+//		}
+//
+//		BagTagType t3 = d2.addNewBagTag();
+//		t3.setAirlineCode(airtag.substring(0, 2));
+//		t3.setTagSequence(airtag.substring(2));
+		try {
+
+			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
+			configureClient(stub, getEnvironment(dto));
+
+			WTRQuickOnhandBagsCreateRQDocument d = WTRQuickOnhandBagsCreateRQDocument.Factory.newInstance();
+			WTRQuickOnhandBagsCreateRQ d1 = d.addNewWTRQuickOnhandBagsCreateRQ();
+			
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(dto.getUser().getProfile().getAirline());
+			StationAirlineType station = d1.addNewRefStationAirline();
+			station.setAirlineCode(dto.getUser().getProfile().getAirline());
+			station.setStationCode(qoh.getStationCode());
+			
+			d1.setAgentID(PreProcessor.getAgentEntry(null));
+			
+			BagTags tags = d1.addNewBagTags();
+			
+			for (Tag t: qoh.getTags()) {
+				String airtag = null;
+				try {
+					// I have opted to ignore the airline code for our web services and am including the whole
+					// tag in the tag sequence field.
+					airtag = t.getTagSequence();
+					airtag = BagTagConversion.getTwoCharacterBagTag(airtag);
+					
+					BagTagType tag = tags.addNewBagTag();
+					tag.setAirlineCode(airtag.substring(0, 2));
+					tag.setTagSequence(airtag.substring(2));
+					
+				} catch (BagtagException e) {
+					logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
+				}
+			}
+			
+			WTRStatusRSDocument wsresponse = null;
+
+			try {
+				String label = "Send QOH";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				wsresponse = stub.quickCreate(d);
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
+
+		
 	}
 
 	

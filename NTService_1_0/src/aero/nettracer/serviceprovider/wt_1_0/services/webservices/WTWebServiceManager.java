@@ -7,6 +7,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
@@ -15,6 +16,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.NotLoggedIntoWorldTracerEx
 import aero.nettracer.serviceprovider.wt_1_0.services.ServiceManagerInterface;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerAlreadyClosedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerTimeoutException;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 
 
@@ -212,6 +214,16 @@ public class WTWebServiceManager extends AbstractServiceManager implements
 		// TODO Auto-generated method stub
 		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
 		impl.suspendOhd(dto, ohd, response);
+		return response;
+	}
+
+
+
+	@Override
+	public WorldTracerResponse sendQoh(WorldTracerActionDTO dto, Qoh qoh, WorldTracerResponse response) throws WorldTracerException, NotLoggedIntoWorldTracerException,
+			WorldTracerTimeoutException, CommandNotProperlyFormedException {
+		WorldTracerServiceImpl impl = new WorldTracerServiceImpl(dto);
+		impl.sendQoh(dto, qoh, response);
 		return response;
 	}
 
