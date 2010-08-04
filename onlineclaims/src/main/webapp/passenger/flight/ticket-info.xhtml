@@ -25,7 +25,7 @@
 										readonly="#{passengerController.flightLabel.differentAirlineTicketState eq 3}"
 										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.differentAirlineTicket}'"
-										id="differentAirlineTicket" tabindex="24" label="Different Airline Ticket">
+										id="differentAirlineTicket" tabindex="23" label="Different Airline Ticket">
 									<f:selectItem itemLabel="--" itemValue=""/>
 									<f:selectItem itemLabel="Yes" itemValue="true"/>
 									<f:selectItem itemLabel="No" itemValue="false"/>
@@ -41,7 +41,7 @@
 								</h:panelGroup>
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
-										styleClass="passInout" tabindex="25" id="ticketNumber"
+										styleClass="passInout" tabindex="24" id="ticketNumber"
 										label="Ticket Number"
 										readonly="#{passengerController.flightLabel.ticketNumberState eq 3}"
 										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  

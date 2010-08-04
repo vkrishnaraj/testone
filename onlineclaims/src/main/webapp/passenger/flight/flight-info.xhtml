@@ -332,7 +332,7 @@
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="14"
+		<h:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="13"
 			required="true" label="Clear Custom Bag"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.clearCustomBag}'"
@@ -364,7 +364,7 @@
 			disabled="#{passengerController.flightLabel.bagWeightState  ne 2}" id="bagWeight"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.bagWeight}'"
-			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="15" />
+			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="14" />
 		</a4j:outputPanel>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -380,7 +380,7 @@
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.rerouteBag}" tabindex="16"
+		<h:selectOneMenu value="#{passengerBean.rerouteBag}" tabindex="15"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.rerouteBag}'"
 			required="true" id="rerouteBag" label="Baggage rerouted">
@@ -404,7 +404,7 @@
 
 		<rich:spacer width="18" title="" />
 
-			<h:selectOneMenu value="#{passengerBean.differentClaimCheck}" tabindex="17" immediate="true"
+			<h:selectOneMenu value="#{passengerBean.differentClaimCheck}" tabindex="16" immediate="true"
 				 id="differentClaimCheck"
 				 required="#{passengerController.flightLabel.differentClaimCheckState  eq 2}"
 				 readonly="#{passengerController.flightLabel.differentClaimCheckState  eq 3}"
@@ -435,7 +435,7 @@
 		
 		<a4j:outputPanel id="rerouteCityInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
-			tabindex="18" id="reroutedCityAirline" label="Airline rerouted by"
+			tabindex="17" id="reroutedCityAirline" label="Airline rerouted by"
 			 required="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2}"
 			 readonly="#{passengerController.flightLabel.reroutedCityAirlineState  eq 3}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
@@ -462,7 +462,7 @@
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.reason}" label="Reason"
-			styleClass="passInout"	 tabindex="19"  id="reason"/>
+			styleClass="passInout"	 tabindex="18"  id="reason"/>
 		
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
@@ -482,7 +482,7 @@
 					'#{passengerController.flightLabel.immediateClaimAttempt}'"
 			validatorMessage="#{passengerController.flightLabel.immediateClaimAttempt} :
 								#{passengerController.passengerInfoLabel.fieldLength} 50"
-			  	tabindex="20" required="true" label="Immediate Claim Attempt">
+			  	tabindex="19" required="true" label="Immediate Claim Attempt">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -507,7 +507,7 @@
 					'#{passengerController.flightLabel.whenBagSeen}'"
 			validatorMessage="#{passengerController.flightLabel.whenBagSeen} :
 								#{passengerController.passengerInfoLabel.fieldLength} 50"
-			required="true" tabindex="21"  id="whenBagSeen">
+			required="true" tabindex="20"  id="whenBagSeen">
 			<f:validateLength maximum="50"/>
 		</t:inputText>
 			
@@ -526,7 +526,7 @@
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.fileReportCity}" styleClass="passInout"  id="fileReportCity"
-			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="22" 
+			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="21" 
 			readonly="#{passengerController.flightLabel.fileReportCityState eq 3}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.fileReportCity}'"
@@ -550,7 +550,7 @@
 		
 		<rich:spacer width="18" title="" />
 		
-		<h:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="23"  id="reportAnotherAirline"
+		<h:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="22"  id="reportAnotherAirline"
 			label="Report Another Airline"
 			readonly="#{passengerController.flightLabel.reportAnotherAirlineState eq 3}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
