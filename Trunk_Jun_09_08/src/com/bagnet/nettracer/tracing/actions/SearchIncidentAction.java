@@ -71,6 +71,9 @@ public class SearchIncidentAction extends Action {
 		}
 		// user clicked on a incident after search result has returned
 		String incident = request.getParameter("incident");
+		if (incident != null) {
+			incident = incident.toUpperCase();
+		}
 		
 		BagService bs = new BagService();
 		IncidentForm theform = new IncidentForm();
