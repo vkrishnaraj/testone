@@ -204,6 +204,7 @@ public class MultilingualLabel {
 	private String price;
 	private String currency;
 	private String addMoreItems;
+	private String clickBagTypeImage;
 	
 	private Long bagTagNumberState;
 	private Long nameonBagState;
@@ -1676,6 +1677,12 @@ public class MultilingualLabel {
 	}
 	public void setValidateLength(String validateLength) {
 		this.validateLength = validateLength;
+	}
+	public String getClickBagTypeImage() {
+		return clickBagTypeImage;
+	}
+	public void setClickBagTypeImage(String clickBagTypeImage) {
+		this.clickBagTypeImage = clickBagTypeImage;
 	}  
 	
 	
