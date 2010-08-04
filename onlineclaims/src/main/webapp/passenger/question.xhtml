@@ -95,7 +95,7 @@
 							datePattern="MMM/dd/yyyy" required="#{passengerController.fraudQuestionLabel.dateOfClaimState eq 2}"
 							jointPoint="top-right" showWeeksBar="false" mode="client" immediate="true"  inputSize="11"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.dateOfClaim}'" 
+								'#{passengerController.fraudQuestionLabel.dateOfClaim}'" tabindex="2"
 							popup="true" enableManualInput="false" >
 							<f:converter  converterId="DateConverter" />
 						</rich:calendar>
@@ -117,7 +117,7 @@
 						</h:panelGroup>	
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="claimantNameInput" ajaxRendered="true">
-						<t:inputText value="#{passengerBean.claimantName}" label="Claimant Name" tabindex="2"
+						<t:inputText value="#{passengerBean.claimantName}" label="Claimant Name" tabindex="3"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.claimantName}'" 
 								validatorMessage="#{passengerController.fraudQuestionLabel.claimantName} :

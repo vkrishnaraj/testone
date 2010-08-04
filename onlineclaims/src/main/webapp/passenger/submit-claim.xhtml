@@ -128,9 +128,10 @@
 					<h:panelGrid columns="2" width="100%">
 						<t:outputText value="#{passengerController.submitClaimLabel.typeAccept}*" 
 								styleClass="typeAccept" />
-						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept" 
+						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept" required="true"
+							requiredMessage="Please Type the word- ACCEPT in Capital Letters"
 							label="Acception Field" tabindex="1" >
-							<t:validateEqual for="accept" summaryMessage="Please Type the word -ACCEPT in Capital Letters"/>
+							<t:validateEqual for="accept" summaryMessage="Please Type the word- ACCEPT in Capital Letters"/>
 						</t:inputText>
 					</h:panelGrid>
 					<rich:spacer width="100%" height="10" title=""/>
@@ -183,7 +184,7 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<div>
-				<rich:spacer width="115px"/>
+				<rich:spacer width="129px"/>
 			
 				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print}"
 				 		tabindex="2" action="#" immediate="true" onclick="window.open('${facesContext.externalContext.requestContextPath}/passenger/print-page.faces','P','width=750,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no, scrollbars=yes,resizable=yes,copyhistory=no');"
