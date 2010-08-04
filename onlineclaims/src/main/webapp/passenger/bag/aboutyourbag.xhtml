@@ -31,8 +31,8 @@
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}" tabindex="1"
+				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" tabindex="0"
+								required="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}" 
 								readonly="#{passengerController.bagDetailsLabel.bagTagNumberState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}'" 
@@ -54,7 +54,7 @@
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.nameonBagState eq 2}" tabindex="2"
+								required="#{passengerController.bagDetailsLabel.nameonBagState eq 2}" 
 								readonly="#{passengerController.bagDetailsLabel.nameonBagState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}'" 
@@ -76,7 +76,7 @@
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}" tabindex="4"
+								required="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}" 
 								readonly="#{passengerController.bagDetailsLabel.externalMarkingsState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}'" 
@@ -135,7 +135,7 @@
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}" tabindex="3"
+								required="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}" 
 								readonly="#{passengerController.bagDetailsLabel.brandOftheBagState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}'" 
@@ -196,7 +196,7 @@
 				</h:panelGroup>
 				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">
 				<t:inputText  value="#{bagItem.bagType}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.bagTypeState eq 2}" tabindex="7"
+								required="#{passengerController.bagDetailsLabel.bagTypeState eq 2}" 
 								disabled="true"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}'" 
