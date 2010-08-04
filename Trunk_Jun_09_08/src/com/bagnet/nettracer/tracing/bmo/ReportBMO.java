@@ -59,6 +59,7 @@ import org.hibernate.criterion.Expression;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.AutoText;
 import ar.com.fdvs.dj.domain.CustomExpression;
 import ar.com.fdvs.dj.domain.DJCalculation;
 import ar.com.fdvs.dj.domain.DynamicReport;
@@ -210,7 +211,7 @@ public class ReportBMO {
 				
 				List<String> myCompanyIdList = Arrays.asList(myCompanyList);
 				
-				//TODO: when companyList contains only this airline, stationq stays unchanged
+				//when companyList contains only this airline, stationq stays unchanged
 				//boolean reset2AllStations = true;
 				int numOfCompanyInList = myCompanyIdList.size();
 				if (numOfCompanyInList == 1) {
@@ -242,6 +243,8 @@ public class ReportBMO {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
 			String sql = "select incident.stationassigned_ID,s1.stationcode as ascode,faultstation_ID,s2.stationcode as fscode, s2.station_id as fsid, s2.companycode_ID as fccode, "
+			//testing my theory for Assigned Station related problem
+			//String sql = "select incident.stationassigned_ID,s1.stationcode as ascode,s1.station_id as asid,faultstation_ID,s2.stationcode as fscode, s2.station_id as fsid, s2.companycode_ID as fccode, "
 					 + "incident.incident_ID,incident.itemType_ID,incident.loss_code,incident.createdate,incident.createtime,status.status_ID as stdesc,itemtype.description as itdesc, "
 					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum "
 					 + "from station s1,station s2,status,itemtype,agent,incident " 
@@ -254,11 +257,44 @@ public class ReportBMO {
 			if (srDTO.getItemType_ID() >= 1)
 				sql += " and incident.itemtype_ID=" + srDTO.getItemType_ID();
 
-			if (srDTO.getStatus_ID() >= 1)
-				sql += " and incident.status_ID=" + srDTO.getStatus_ID();
+			//change status to multi-select approach
+//			if (srDTO.getStatus_ID() >= 1)
+//				sql += " and incident.status_ID=" + srDTO.getStatus_ID();
 			
-			if (srDTO.getLoss_code() > 0) 
-				sql += " and incident.loss_code=" + srDTO.getLoss_code();
+			String statusIdList = "";
+			String myMbrSubtitleStatus = "";
+			if (srDTO.getStatus_id_combo() != null) {
+				for (int i = 0; i < srDTO.getStatus_id_combo().length; i++) {
+					statusIdList += srDTO.getStatus_id_combo()[i] + ",";
+					myMbrSubtitleStatus += TracerUtils.getText(Status.getKey(srDTO.getStatus_id_combo()[i]), user) + ",";
+				}
+				
+				int statusIdListLength = statusIdList.length();
+				if (statusIdListLength > 0 && srDTO.getStatus_id_combo()[0].intValue() >= 1) {
+					statusIdList = statusIdList.substring(0,statusIdListLength - 1);
+					sql += " and incident.status_ID in (" + statusIdList + ") ";
+					
+					myMbrSubtitleStatus = myMbrSubtitleStatus.substring(0,myMbrSubtitleStatus.length() - 1);
+				}
+			}
+			
+			parameters.put("mbr_subtitle_status", myMbrSubtitleStatus);
+			
+			// change loss code to multi-select approach
+//			if (srDTO.getLoss_code() > 0) 
+//				sql += " and incident.loss_code=" + srDTO.getLoss_code();
+			String lossCodeList = "";
+			if (srDTO.getLoss_code_combo() != null) {
+				for (int i = 0; i < srDTO.getLoss_code_combo().length; i++) {
+					lossCodeList += srDTO.getLoss_code_combo()[i] + ",";
+				}
+				
+				int lossCodeListLength = lossCodeList.length();
+				if (lossCodeListLength > 0 && srDTO.getLoss_code_combo()[0].intValue() >= 1) {
+					lossCodeList = lossCodeList.substring(0,lossCodeListLength - 1);
+					sql += " and incident.loss_code in (" + lossCodeList + ") ";
+				}
+			}			
 			
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0) {
 				sql += " and agent.username like '" + srDTO.getAgent() + "'";
@@ -355,16 +391,37 @@ public class ReportBMO {
 
 				edate = null;
 			}
-
 			
 			if (srDTO.getGroupby() == GROUP_BY_FAULT_STATION) {
 				sql += " order by fsid, incident.itemtype_ID,incident.incident_ID,it.itinerary_ID";
+				
+				//reportStyle : first digit represents GroupBy; second digit represents Option
+				//ex : 00-Groupby Assigned Station, Summary; 01-Groupby Assigned Station, Detail;
+				//     10-Groupby Fault Station, Summary; 11-Groupby Fault Station, Detail
+				//determine report style for dj
+				// summary or detail; summary = 0; detail = 1
+				if (srDTO.getSumordet() == 1) {
+					parameters.put("reportStyle", "11");
+				} else {
+					parameters.put("reportStyle", "10");
+				}
+				
 			} else {
 				// DEFAULT (0) is grouped by station assigned
 				sql += " order by incident.stationassigned_ID,incident.itemtype_ID,incident.incident_ID,it.itinerary_ID";
+				//sql += " order by asid,incident.itemtype_ID,incident.incident_ID,it.itinerary_ID";
+				
+				//determine report style for dj
+				if (srDTO.getSumordet() == 1) {
+					parameters.put("reportStyle", "01");
+				} else {
+					parameters.put("reportStyle", "00");
+				}
 			}
 			
 			rs = stmt.executeQuery(sql);
+			
+			//logger.error(">>>>Entire sql : " + sql);
 
 			
 			//		 put in date and timeformat and timezone of current user
@@ -508,7 +565,14 @@ public class ReportBMO {
 				parameters.put("showdetail", "1");
 			}
 
-			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
+			//toggle between old and new implementations
+//			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list2);
+			
+			return MBRReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
+			
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -2866,7 +2930,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				exporter.exportReport();
 			}
 	
-			//TODO: switch to JExcelApiExporter
+			//switch to JExcelApiExporter
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
 /*				exporter = new JRXlsExporter();
 	
@@ -3647,7 +3711,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		
 		drb = reportStyleSelector(drb, reportColumns, reportStyle);
 
-		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGMENT_CENTER);
+		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGMENT_CENTER,90,30);
 		drb.setUseFullPageWidth(true);
 		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGMENT_CENTER);
 		
@@ -4035,17 +4099,17 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		
 	}
 	
-	//TODO: custom dynamic report for AirTran MBR Report
+	//custom dynamic report for AirTran MBR Report
 	public static String getDynamicReportFile(List list, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request) throws Exception {
 		//JasperReport jasperReport = getCompiledReport(reportname, rootpath);
 		
-		//TODO: compose JasperReport and prepare list
+		// compose JasperReport and prepare list
 		JasperReport jasperReport = null;
 		JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
 		return getDynamicReportFile(jasperReport, ds, parameters, reportname, rootpath, outputtype, request, null);
 	}
 	
-	//TODO: custom dynamic report for AirTran MBR Report
+	// custom dynamic report for AirTran MBR Report
 	public static String getDynamicReportFile(JasperReport jasperReport, JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, ReportBMO rbmo) throws Exception {
 		/** look for compiled reports, if can't find it, compile xml report * */
 		

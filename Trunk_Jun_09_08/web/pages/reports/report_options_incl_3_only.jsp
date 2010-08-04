@@ -96,7 +96,7 @@
                         :
                       </td>
                       <td>
-                        <html:select property="loss_code" styleClass="dropdown">
+                        <html:select property="loss_code_combo" styleClass="dropdown" multiple="true">
                           <html:option value="0">
                             <bean:message key="select.please_select" />
                           </html:option>
@@ -125,7 +125,7 @@
                       :
                     </td>
                     <td>
-                      <html:select property="status_ID" styleClass="dropdown">
+                      <html:select property="status_id_combo" styleClass="dropdown" multiple="true">
                         <html:option value="0">
                           <bean:message key="select.all" />
                         </html:option>
