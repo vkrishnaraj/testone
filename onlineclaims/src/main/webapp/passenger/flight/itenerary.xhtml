@@ -40,7 +40,7 @@
 				<h:panelGrid columns="2">
 				<a4j:region  renderRegionOnly="true" >	
 					<h:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
-						label="DepartureCity Row#{rowIndex+1}" readonly="true"/>
+						label="DepartureCity Row#{rowIndex+1}" maxlength="3"/>
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink">
 
@@ -64,11 +64,11 @@
 
 			<rich:column>
 				<h:panelGrid columns="2">
-					<t:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
-						label="ArrivalCity Row#{rowIndex+1}" disabledOnClientSide="true" 
+					<h:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
+						label="ArrivalCity Row#{rowIndex+1}" maxlength="3" 
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'ArrivalCity Row#{rowIndex+1}'" immediate="true"
-						required="#{item.departureCity ne null ? true : false}"/>
+						required="#{!empty item.departureCity ? true : false}"/>
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
 
@@ -91,7 +91,7 @@
 			<rich:column>
 				<h:panelGrid columns="2">
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
-					required="#{item.departureCity ne null ? true : false}"
+					required="#{!empty item.departureCity ? true : false}"
 					requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'Airline Row#{rowIndex+1}'"
 					label="Airline Row#{rowIndex+1}">
@@ -108,7 +108,7 @@
 
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
-						required="#{item.departureCity ne null ? true : false}"
+						required="#{!empty item.departureCity ? true : false}"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'FlightNumber Row#{rowIndex+1}'"
 						label="FlightNumber Row#{rowIndex+1}">
@@ -119,7 +119,7 @@
 			<rich:column width="20">
 			<a4j:outputPanel id="calendar" layout="block">
 				<rich:calendar value="#{item.journeyDate}"  id="journeyDate#{rowIndex+1}"
-						required="#{item.departureCity ne null ? true : false}"
+						required="#{!empty item.departureCity ? true : false}"
 						enableManualInput="false" datePattern="MMM/dd/yyyy" 
 						label="Date of Journey Row#{rowIndex+1}"  inputSize="11"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
