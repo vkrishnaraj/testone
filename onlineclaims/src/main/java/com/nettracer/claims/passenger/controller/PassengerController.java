@@ -458,6 +458,21 @@ public class PassengerController {
 		}
 	}
 	
+	/**
+	 * Adding More  Segment for the itinerary
+	 * 
+	 * @return String
+	 */
+	public String addNewSegment(){
+		logger.info("addNewSegment method call");
+		passengerBean.getItineraryList().add(new Itinerary());
+		getItineraryList().setWrappedData(passengerBean.getItineraryList());
+		//setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
+		/*FacesContext context = FacesUtil.getFacesContext();
+		context.renderResponse();*/
+		return "";
+	}
+	
 	
 	/**
 	 * Navigation for the Bagage Details Page.i.e. step 3
@@ -508,8 +523,25 @@ public class PassengerController {
 					}
 					gotoBagDetailsFlag=true;
 				}else{
-					bags=passengerBean.getBagList();
-					currencyList=Currency.getCurrencies();
+					List<Bag> bagTagList=passengerBean.getBagTagList();
+					List<Bag> lostBagList=new ArrayList<Bag>();
+					if(bagTagList != null && bagTagList.size() >0){
+						for(Bag lostBag:bagTagList){
+							if(Boolean.parseBoolean(lostBag.getBagArrivalStatus()) == false){
+								lostBagList.add(lostBag);
+							}
+						}
+						if(passengerBean.getLostBag() != lostBagList.size()){
+							FacesUtil.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
+							return null;
+						}
+						currencyList=Currency.getCurrencies();
+						// Logic for step 3 o 6 About Your Bag (multiple page)
+						passengerBean.setBagList(lostBagList);
+
+						bags=lostBagList;
+						
+					}
 				}
 
 				baggageState = (Long) session.getAttribute("baggageState");

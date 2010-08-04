@@ -279,7 +279,7 @@
 		<h:selectOneMenu value="#{passengerBean.declarePayExcessValue}"	tabindex="11" required="true"
 			id="declarePayExcessValue" label="Declared Pay Excess Value"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.declarePayExcessValue}'"
+					'#{passengerController.flightLabel.declarePayExcessValue}'" immediate="true"
 			valueChangeListener="#{passengerController.excessValueListener}" >
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />

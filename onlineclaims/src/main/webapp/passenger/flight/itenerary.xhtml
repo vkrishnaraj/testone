@@ -13,7 +13,7 @@
 		value="#{passengerController.flightLabel.aboutYourItenerary}"
 		styleClass="subHeader" /></div>
 	<div><h:outputText value="&#160;" /></div>
-	<a4j:region  renderRegionOnly="true">	
+	<a4j:region  renderRegionOnly="true" selfRendered="true">	
 	<a4j:outputPanel ajaxRendered="true" id="flightCode">
 		<rich:dataTable id="iteneraryTicketTableItenerary" var="item"
 			headerClass="TableHeader" columnsWidth="7%,7%,7%,7%,13%"
@@ -132,8 +132,15 @@
 			</rich:column>
 
 		</rich:dataTable>
-
 	</a4j:outputPanel>
+	
+	<rich:spacer width="100%" height="20" title="" />
+	<div id="addItem">
+		<a4j:commandButton value="#{passengerController.flightLabel.addNewSegment}"  
+			 ajaxSingle="true" action="#{passengerController.addNewSegment}" limitToList="true"
+			reRender="flightCode" styleClass="ticketInfo">
+		</a4j:commandButton>
+	</div>
 	</a4j:region>
 	<div><h:outputText value="&#160;" /></div>
 

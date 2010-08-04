@@ -295,6 +295,8 @@ public class PassengerServiceImpl implements PassengerService {
 									multilingualLabel.setFlightDateState(requiredFieldFlightStatus);
 								} else if (localetext.getLabel().getLabel().contains("Previous")) {
 									multilingualLabel.setFlightPrevious(localetext.getDisplayText());
+								}else if (localetext.getLabel().getLabel().contains("Add New Segment")) {
+									multilingualLabel.setAddNewSegment(localetext.getDisplayText());
 								}
 								requiredFieldFlightStatus = null;
 			}
@@ -350,7 +352,7 @@ public class PassengerServiceImpl implements PassengerService {
 				} else if (localetext.getLabel().getLabel().contains("Bag Color")) {
 					multilingualLabel.setBagColor(localetext.getDisplayText());
 					multilingualLabel.setBagColorState(requiredFieldBagStatus);
-				} else if (localetext.getLabel().getLabel().contains("Bag Type")) {
+				} else if (localetext.getLabel().getLabel().equals("Bag Type")) {
 					multilingualLabel.setBagType(localetext.getDisplayText());
 					multilingualLabel.setBagTypeState(requiredFieldBagStatus);
 				} else if (localetext.getLabel().getLabel().contains("appropriate")) {
@@ -401,6 +403,8 @@ public class PassengerServiceImpl implements PassengerService {
 					multilingualLabel.setCurrency(localetext.getDisplayText());
 				} else if (localetext.getLabel().getLabel().contains("Add More Items")) {
 					multilingualLabel.setAddMoreItems(localetext.getDisplayText());
+				} else if (localetext.getLabel().getLabel().contains("Click Bag Type Image")) {
+					multilingualLabel.setClickBagTypeImage(localetext.getDisplayText());
 				}  
 				requiredFieldBagStatus = null;
 			}

@@ -126,6 +126,7 @@ public class MultilingualLabel {
 	/*private String flightSave;
 	private String flightCancel;
 	private String flightForward;*/
+	private String addNewSegment;
 	
 	//required Fields For Flight Page
 	private Long totalTravelBagState;
@@ -1683,6 +1684,12 @@ public class MultilingualLabel {
 	}
 	public void setClickBagTypeImage(String clickBagTypeImage) {
 		this.clickBagTypeImage = clickBagTypeImage;
+	}
+	public String getAddNewSegment() {
+		return addNewSegment;
+	}
+	public void setAddNewSegment(String addNewSegment) {
+		this.addNewSegment = addNewSegment;
 	}  
 	
 	
