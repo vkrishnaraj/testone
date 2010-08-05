@@ -252,7 +252,7 @@
 
 		<t:selectOneMenu value="#{passengerBean.declarePayExcessValue}"	tabindex="11" required="true"
 			id="declarePayExcessValue" label="Declared Pay Excess Value"
-			displayValueOnly="true"
+			readonly="true"
 			valueChangeListener="#{passengerController.excessValueListener}" >
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -279,7 +279,6 @@
 		<a4j:outputPanel id="declValText" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.declaredValue}" id="declaredValue"
 			styleClass="passInout" disabled="#{passengerController.flightLabel.declaredValueState  ne 2}"
-			required="#{passengerController.flightLabel.declaredValueState  eq 2}"
 			readonly="true"
 			tabindex="12"  label="Declared Value">
 				<f:validateDoubleRange maximum="3300"/>
@@ -302,8 +301,8 @@
 		<rich:spacer width="18" title="" />
 
 		<t:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="14"
-			required="true" label="Clear Custom Bag"
-			displayValueOnly="true"
+			 label="Clear Custom Bag"
+			readonly="true"
 			valueChangeListener="#{passengerController.clearCustomListener}"  id="clearCustomBag">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -330,7 +329,7 @@
 		<a4j:outputPanel id="weightInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout" label="Bag Weight"
 			disabled="#{passengerController.flightLabel.bagWeightState  ne 2}" id="bagWeight"
-			displayValueOnly="true"
+			readonly="true"
 			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="15" />
 		</a4j:outputPanel>
 		
@@ -348,7 +347,7 @@
 		<rich:spacer width="18" title="" />
 
 		<t:selectOneMenu value="#{passengerBean.rerouteBag}" tabindex="16"
-			displayValueOnly="true"
+			readonly="true"
 			required="true" id="rerouteBag" label="Baggage rerouted">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -371,7 +370,7 @@
 		<rich:spacer width="18" title="" />
 
 			<t:selectOneMenu value="#{passengerBean.differentClaimCheck}" tabindex="17" immediate="true"
-				displayValueOnly="true"
+				readonly="true"
 				 id="differentClaimCheck"
 				valueChangeListener="#{passengerController.differentClaimCheckListener}">
 				<f:selectItem itemLabel="--" itemValue="" />
@@ -398,7 +397,7 @@
 		
 		<a4j:outputPanel id="rerouteCityInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
-			displayValueOnly="true"
+			readonly="true"
 			tabindex="18" id="reroutedCityAirline" label="Airline rerouted by"
 			disabled="#{passengerController.flightLabel.reroutedCityAirlineState  ne 2}"  />
 		</a4j:outputPanel>
@@ -418,7 +417,7 @@
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.reason}" label="Reason"
-			displayValueOnly="true"
+			readonly="true"
 			styleClass="passInout"	 tabindex="19"  id="reason"/>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -457,7 +456,7 @@
 		
 		<t:inputText value="#{passengerBean.whenBagSeen}" styleClass="passInout"
 			label="When Bag Seen" displayValueOnly="true"
-			required="true" tabindex="21"  id="whenBagSeen"/>
+			 tabindex="21"  id="whenBagSeen"/>
 			
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
