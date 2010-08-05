@@ -598,14 +598,29 @@ public class PassengerController {
 		logger.info("gotoFileUpload method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
+		List<File> actualFiles=null;
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				baggageState = (Long) session.getAttribute("baggageState");
+				baggageState = (Long) session.getAttribute("baggageState"); //claimtype in webservice
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
 				fileUploadLabel = passengerService.getFileUploadLabel(selectedLanguage, baggageState);
 				if(null != passengerBean.getFiles() && passengerBean.getFiles().size() >0){
 					fileDataModelList=new ListDataModel(passengerBean.getFiles());
 				}
+				
+				/*
+				  //To take list of files from hard drive
+				 List<java.io.File> existingFiles=FileHelper.getImages(baggageState.intValue()); 
+				if(null != existingFiles && existingFiles.size() >0){
+					actualFiles=new ArrayList<File>();
+					for(java.io.File f:existingFiles){
+						File actulaFile=new File();
+						actulaFile.setName(f.getName());
+						actulaFile.setLength(f.length());
+						actualFiles.add(actulaFile);
+					}
+					fileDataModelList=new ListDataModel(actualFiles);
+				}*/
 				session.setAttribute("passengerBean", passengerBean);
 			} catch (Exception e) {
 				e.printStackTrace();
