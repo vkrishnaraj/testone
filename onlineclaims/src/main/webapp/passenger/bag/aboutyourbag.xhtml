@@ -197,7 +197,7 @@
 				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">
 				<t:inputText  value="#{bagItem.bagType}" style="width:77%" 
 								required="#{passengerController.bagDetailsLabel.bagTypeState eq 2}" 
-								disabled="true"
+								disabledOnClientSide="true"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}" />
