@@ -66,7 +66,7 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true"
+									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true" 
 											requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.bagTagNumbers}'"
 											label="Bag Tag Number Row#{rowIndex+1}">
@@ -86,8 +86,8 @@
 										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.bagArrival}'"
 										label="Bag Arrival Status Row#{rowIndex+1}">
-										<f:selectItem itemLabel="Yes" itemValue="true"/>
-										<f:selectItem itemLabel="No" itemValue="false"/>
+										<f:selectItem itemLabel="Yes" itemValue="true" />
+										<f:selectItem itemLabel="No" itemValue="false" />
 									</h:selectOneRadio>
 								</rich:column>
 							</rich:dataTable>
