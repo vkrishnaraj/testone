@@ -178,12 +178,9 @@
 							required="#{passengerController.passengerInfoLabel.emailAddressState eq 2}" tabindex="10"
 							readonly="#{passengerController.passengerInfoLabel.emailAddressState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.passengerInfoLabel.emailAddress}'" 
-							validatorMessage="#{passengerController.passengerInfoLabel.emailAddress} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
+								'#{passengerController.passengerInfoLabel.emailAddress}'" maxlength="50"
 							label="#{passengerController.passengerInfoLabel.emailAddress}">
-							<f:validateLength maximum="50"/>
-							<t:validateEmail summaryMessage="Invalid Email Address"/>
+							<t:validateEmail summaryMessage="#{passengerController.passengerInfoLabel.emailAddress} :Invalid Email Address" />
 						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
