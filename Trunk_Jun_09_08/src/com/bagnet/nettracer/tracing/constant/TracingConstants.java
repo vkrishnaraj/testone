@@ -178,6 +178,8 @@ public class TracingConstants {
 	public final static int TABLE_EXPENSEPAYOUT = 11;
 	public final static int TABLE_MESSAGE = 5;
 	public final static int TABLE_TASK = 4;
+	public final static int TABLE_TASK_MANAGER = 13;
+	public final static int TABLE_BAGBUZZ = 14;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -343,6 +345,16 @@ public class TracingConstants {
 	public final static int ITEM_STATUS_TOBEDELIVERED = 49;
 	public final static int ITEM_STATUS_PROCESSFORDELIVERY = 50;
 	public final static int ITEM_STATUS_IN_TRANSIT = 56;
+	
+	// Task Manager status
+	public final static int TASK_MANAGER_OPEN = 83;
+	public final static int TASK_MANAGER_PROCESSED = 84;
+	public final static int TASK_MANAGER_CLOSED = 85;
+	
+	// BagBuzz status
+	public final static int BAGBUZZ_NEW = 86;
+	public final static int BAGBUZZ_PUBLISHED = 87;
+	public final static int BAGBUZZ_DELETED = 88;
 	
 	// item xdesc element type x
 	public final static int XDESC_TYPE_X = 7;
