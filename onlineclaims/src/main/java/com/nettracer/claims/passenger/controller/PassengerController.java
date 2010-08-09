@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputSecret;
@@ -458,6 +457,7 @@ public class PassengerController {
 		}
 	}
 	
+	
 	/**
 	 * Adding More  Segment for the itinerary
 	 * 
@@ -598,7 +598,7 @@ public class PassengerController {
 		logger.info("gotoFileUpload method is called");
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
-		List<File> actualFiles=null;
+		//List<File> actualFiles=null;
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState"); //claimtype in webservice
@@ -1237,7 +1237,7 @@ public class PassengerController {
 
 	
 	/**
-	 * Test Code : to be deleted later on : Richfaces File Upload
+	 * Test Code : to be deleted later on : Richfaces File Upload -not compatible with this application
 	 * @param event
 	 * @throws Exception
 	 */
