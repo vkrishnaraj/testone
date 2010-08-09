@@ -560,7 +560,6 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 	}
 	
 	private void setWSFiles(List<File> files, Claim claim) {
-		// TODO Auto-generated method stub
 		com.bagnet.nettracer.ws.onlineclaims.xsd.File[] wsFileArray=null;
 		com.bagnet.nettracer.ws.onlineclaims.xsd.File wsFile=null;
 		File file=null;
