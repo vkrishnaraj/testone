@@ -75,9 +75,10 @@ public class MBRReportBMO {
 		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
 		
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + "/reports/tmp", 501);
+		//JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(10, rootpath + "/reports/tmp", 501);
 		virtualizer.setReadOnly(false);
 		
-		parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
+		//parameters.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 		
 		if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
 			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
@@ -320,6 +321,7 @@ public class MBRReportBMO {
 		
 		Style detailStyle = new Style("detail");
 		detailStyle.setVerticalAlign(VerticalAlign.TOP);
+		detailStyle.setFont(new Font(11, Font._FONT_ARIAL, false));
 
 		Style headerStyle = new Style("header");
 		headerStyle.setBackgroundColor(Color.LIGHT_GRAY);
@@ -369,6 +371,8 @@ public class MBRReportBMO {
 			} else {
 				mySubtitle += "   Status: " + parameters.get("mbr_subtitle_status");
 			}
+		} else {
+			mySubtitle += "   Status: All";
 		}
 		if (parameters.get("agent_username") != null) {
 			mySubtitle += "   Agent: " + parameters.get("agent_username");
