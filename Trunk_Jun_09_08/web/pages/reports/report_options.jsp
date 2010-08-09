@@ -363,8 +363,10 @@
     	                  <bean:message key="radio.pdf" />
     	                  <html:radio property="outputtype" value="1" />
     	                  <bean:message key="radio.html" />
-    	                  <html:radio property="outputtype" value="2" />
-    	                  <bean:message key="radio.xls" />
+    	                  <logic:notEqual name="reportnum" scope="request" value="4">
+	    	                  <html:radio property="outputtype" value="2" />
+	    	                  <bean:message key="radio.xls" />
+	    	              </logic:notEqual>
                       <% } else { %>
                         <html:radio property="outputtype" value="1" />
                         <bean:message key="radio.html" />
