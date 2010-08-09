@@ -270,11 +270,15 @@ public class ReportBMO {
 				}
 				
 				int statusIdListLength = statusIdList.length();
-				if (statusIdListLength > 0 && srDTO.getStatus_id_combo()[0].intValue() >= 1) {
-					statusIdList = statusIdList.substring(0,statusIdListLength - 1);
-					sql += " and incident.status_ID in (" + statusIdList + ") ";
-					
-					myMbrSubtitleStatus = myMbrSubtitleStatus.substring(0,myMbrSubtitleStatus.length() - 1);
+				if (statusIdListLength > 0) {
+					if (srDTO.getStatus_id_combo()[0].intValue() >= 1) {
+						statusIdList = statusIdList.substring(0,statusIdListLength - 1);
+						sql += " and incident.status_ID in (" + statusIdList + ") ";
+						
+						myMbrSubtitleStatus = myMbrSubtitleStatus.substring(0,myMbrSubtitleStatus.length() - 1);
+					} else {
+						myMbrSubtitleStatus = "";
+					}
 				}
 			}
 			
@@ -2549,16 +2553,40 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			ResultSet rs = null;
 			String sql = "select ohd.found_station_ID,s1.stationcode as fscode,holding_station_ID,s2.stationcode as hscode, "
 					 + "ohd.OHD_ID,ohd.founddate,ohd.foundtime,status.description as stdesc,"
-					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum "
+					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum,s3.stationcode as faultstationcode,cic.loss_code " 
 					 + "from station s1,station s2,status,agent,ohd " 
 					 + "left outer join ohd_passenger p on p.OHD_ID = ohd.OHD_ID "
 					 + "left outer join ohd_itinerary it on it.OHD_ID = ohd.OHD_ID "
+					 + "left outer join station s3 on s3.station_ID = ohd.faultStation_ID "  
+					 + "left outer join company_irregularity_codes cic on cic.code_id = ohd.loss_code "   
 					 + "where s1.station_ID = ohd.found_station_ID and s2.station_ID = ohd.holding_station_ID "
 					 + "and status.status_ID = ohd.status_ID and agent.Agent_ID = ohd.agent_ID and "
 					 + "s1.companycode_ID = '" + user.getStation().getCompany().getCompanyCode_ID() + "' ";
 
-			if (srDTO.getStatus_ID() >= 1)
-				sql += " and ohd.status_ID=" + srDTO.getStatus_ID();
+//			if (srDTO.getStatus_ID() >= 1)
+//				sql += " and ohd.status_ID=" + srDTO.getStatus_ID();
+			String statusIdList = "";
+			String myOhdSubtitleStatus = "";
+			if (srDTO.getStatus_id_combo() != null) {
+				for (int i = 0; i < srDTO.getStatus_id_combo().length; i++) {
+					statusIdList += srDTO.getStatus_id_combo()[i] + ",";
+					myOhdSubtitleStatus += TracerUtils.getText(Status.getKey(srDTO.getStatus_id_combo()[i]), user) + ",";
+				}
+				
+				int statusIdListLength = statusIdList.length();
+				if (statusIdListLength > 0) {
+					if (srDTO.getStatus_id_combo()[0].intValue() >= 1) {
+						statusIdList = statusIdList.substring(0,statusIdListLength - 1);
+						sql += " and ohd.status_ID in (" + statusIdList + ") ";
+						
+						myOhdSubtitleStatus = myOhdSubtitleStatus.substring(0,myOhdSubtitleStatus.length() - 1);
+					} else {
+						myOhdSubtitleStatus = "";
+					}
+				} 
+			}	
+			
+			parameters.put("ohd_subtitle_status", myOhdSubtitleStatus);
 			
 			if(earlyBag) {
 				sql += " and ohd.earlyBag = true ";
@@ -2697,6 +2725,11 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					sr.setFoundtime(rs.getTime("foundtime"));
 					sr.setStatusdesc(rs.getString("stdesc"));
 					
+					//TODO: new requirements: fault city & fault code
+					sr.setFaultstationcode(rs.getString("faultstationcode"));
+					sr.setLoss_code(rs.getInt("loss_code"));
+					
+					
 					// passenger
 					if (rs.getString("lastname") != null && rs.getString("lastname").length() > 0)
 						temppassname += rs.getString("lastname");
@@ -2780,8 +2813,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (sr != null) list2.add(sr);
 
 			if (srDTO.getStatus_ID() >= 1) {
-				if (sr != null)
+				if (sr != null) {
 					parameters.put("status", sr.getStatusdesc());
+				}	
 			} else {
 				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
@@ -2789,9 +2823,18 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			// summary or detail; summary = 0; detail = 1
 			if (srDTO.getSumordet() == 1) {
 				parameters.put("showdetail", "1");
+				parameters.put("reportStyle", "10");
+			} else {
+				parameters.put("reportStyle", "00");
 			}
 
-			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
+			//TODO: toggle between old and new implementations
+//			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
+
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list2);
+			
+			return OHDReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);			
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
