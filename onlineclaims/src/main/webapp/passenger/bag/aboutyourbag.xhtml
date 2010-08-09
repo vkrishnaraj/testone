@@ -291,7 +291,7 @@
 		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents}" styleClass="subHeader" />
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
-	<a4j:region renderRegionOnly="true">
+	<a4j:region renderRegionOnly="true"  selfRendered ="true">
 		<a4j:outputPanel id="contentPanel" >
 			<rich:dataTable align="center"  id="contentTable" 
 					value="#{bagItem.contentList}" var="contentItem" 
