@@ -292,7 +292,7 @@
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	<a4j:region renderRegionOnly="true">
-		<a4j:outputPanel id="contentPanel" ajaxRendered="true">
+		<a4j:outputPanel id="contentPanel" >
 			<rich:dataTable align="center"  id="contentTable" 
 					value="#{bagItem.contentList}" var="contentItem" 
 					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
@@ -369,10 +369,10 @@
 	<rich:spacer width="100%" height="10" title="" />
 	<div id="addItem">
 		<a4j:commandButton value="#{passengerController.bagDetailsLabel.addMoreItems}"  
-			 ajaxSingle="true" action="#{passengerController.addMoreItems}" 
-			reRender="contentPanel" styleClass="ticketInfo">
+			  action="#{passengerController.addMoreItems}" limitToList="true"
+			reRender="contentTable" styleClass="ticketInfo">
 			
-			<a4j:actionparam name="contentIndex"
+			<a4j:actionparam name="contentIndex" 
 								assignTo="#{passengerController.bagIndex}"
 								value="#{rowIndex}" />
 			
