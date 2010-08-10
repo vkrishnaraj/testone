@@ -61,7 +61,7 @@ public class PassengerBean {
 	private List<Bag> bagTagList = new ArrayList<Bag>() ; //for datatable for bag tag number in page2:ticket-info.xhtml
 	private String aboutYourItenerary;
 	private List<Itinerary> itineraryList= new ArrayList<Itinerary>();
-	
+	private Long claimId;
 	
 	//For About Your Flight Page
 	//private List<Bag> bagList;
@@ -410,6 +410,12 @@ public class PassengerBean {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Long getClaimId() {
+		return claimId;
+	}
+	public void setClaimId(Long claimId) {
+		this.claimId = claimId;
 	}	
 	
 	

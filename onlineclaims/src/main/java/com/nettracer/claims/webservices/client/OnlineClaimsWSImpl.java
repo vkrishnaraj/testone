@@ -147,6 +147,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         LoadClaimResponseDocument  response=stub.loadClaim(request);
         Claim  claim=response.getLoadClaimResponse().getReturn();
         
+        passengerBean.setClaimId(claim.getClaimId()); //mandatory field for the web service
         com.bagnet.nettracer.ws.onlineclaims.xsd.Address wsPermanentAddress=claim.getPermanentAddress();
         Address permanentAddress=passengerBean.getAddress().get(0);
         if(null != permanentAddress && null !=wsPermanentAddress){
@@ -160,13 +161,13 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         	permanentAddress.setOccupation(claim.getOccupation());
         	
         	Phone[] phone=claim.getPhoneArray();
-        	permanentAddress.setPhoneHome(phone[0].getPhoneType().equalsIgnoreCase("Home") 
+        	permanentAddress.setPhoneHome(phone[0].getPhoneType().contains("Home") 
         			? phone[0].getPhoneNumber() : ""); 
-        	permanentAddress.setPhoneMobile(phone[0].getPhoneType().equalsIgnoreCase("Mobile") 
+        	permanentAddress.setPhoneMobile(phone[0].getPhoneType().contains("Mobile") 
         			? phone[0].getPhoneNumber() : ""); 
-        	permanentAddress.setPhoneBusiness(phone[0].getPhoneType().equalsIgnoreCase("Business") 
+        	permanentAddress.setPhoneBusiness(phone[0].getPhoneType().contains("Business") 
         			? phone[0].getPhoneNumber() : ""); 
-        	permanentAddress.setPhoneFax(phone[0].getPhoneType().equalsIgnoreCase("Fax") 
+        	permanentAddress.setPhoneFax(phone[0].getPhoneType().contains("Fax") 
         			? phone[0].getPhoneNumber() : ""); 
         	passengerBean.getAddress().set(0, permanentAddress);
         }
@@ -252,6 +253,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		 SaveClaim subDoc1 = request.addNewSaveClaim();
 		 Claim claim= Claim.Factory.newInstance();
+		 claim.setClaimId(passengerBean.getClaimId()); //mandatory field for save through web service
 		 claim.setLastName(passengerBean.getPassengers().get(0).getLastName());
 		 claim.setFirstName(passengerBean.getPassengers().get(0).getFirstName());
 		 claim.setMiddleInitial(passengerBean.getPassengers().get(0).getMiddleInitial());
