@@ -67,21 +67,20 @@
      </td>
    </tr>
 
-
-  <tr>
-    <td>
-      <bean:message key="colname.status" />
-      :
-    </td>
-    <td>
-      <html:select property="status_ID" styleClass="dropdown">
-        <html:option value="0">
-          <bean:message key="select.all" />
-        </html:option>
-        <html:options collection="ohdStatusList" property="status_ID" labelProperty="description" />
-      </html:select>
-    </td>
-  </tr>
+   <tr>
+     <td>
+       <bean:message key="colname.status" />
+       :
+     </td>
+     <td>
+       <html:select property="status_id_combo" styleClass="dropdown" multiple="true">
+         <html:option value="0">
+           <bean:message key="select.all" />
+         </html:option>
+         <html:options collection="ohdStatusList" property="status_ID" labelProperty="description" />
+       </html:select>
+     </td>
+   </tr>
 
  <tr>
    <td>

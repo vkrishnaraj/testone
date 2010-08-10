@@ -36,7 +36,22 @@ public class StatReport_OHD_DTO {
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
 	
+	private String faultstationcode;
+	private int loss_code;
 
+	
+	public String getFaultstationcode() {
+		return faultstationcode;
+	}
+	public void setFaultstationcode(String faultstationcode) {
+		this.faultstationcode = faultstationcode;
+	}
+	public int getLoss_code() {
+		return loss_code;
+	}
+	public void setLoss_code(int loss_code) {
+		this.loss_code = loss_code;
+	}
 	
 	/**
 	 * @return the holdingstation
