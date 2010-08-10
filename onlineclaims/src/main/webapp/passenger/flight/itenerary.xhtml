@@ -67,7 +67,7 @@
 					<h:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
 						label="ArrivalCity Row#{rowIndex+1}" maxlength="3" 
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'ArrivalCity Row#{rowIndex+1}'" immediate="true"
+											'ArrivalCity Row#{rowIndex+1}'" 
 						required="#{!empty item.departureCity ? true : false}"/>
 					<h:panelGroup>
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
@@ -125,7 +125,7 @@
 						jointPoint="top-right" showWeeksBar="false" mode="client"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'Date of Journey Row#{rowIndex+1}'"
-						popup="true" immediate="true">
+						popup="true" >
 					<f:converter  converterId="DateConverter" />
 				</rich:calendar>
 				</a4j:outputPanel>
