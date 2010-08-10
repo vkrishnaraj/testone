@@ -1284,7 +1284,7 @@ public class OhdBMO {
 			
 			if (claimcheck.indexOf("%") == -1) {
 				if (searchType == 10) {
-					nineDigitWildcardTag = "%" + s.substring(1);
+					nineDigitWildcardTag = "%" + claimcheck.substring(1);
 					try {
 						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
 					} catch (BagtagException e) {
@@ -1293,7 +1293,7 @@ public class OhdBMO {
 						genericTag = claimcheck;
 					}
 				} else if (searchType == 9) {
-					nineDigitWildcardTag = "%" + s;
+					nineDigitWildcardTag = "%" + claimcheck;
 					try {
 						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
 					} catch (BagtagException e) {
