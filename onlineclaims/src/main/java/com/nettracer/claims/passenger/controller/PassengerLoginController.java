@@ -221,7 +221,7 @@ public class PassengerLoginController {
 			logger.error("AxisFault Error");
 			FacesUtil.addError("There is a Problem with the webservices, Please try again");
 			// Codes for testing :hardcoded data.
-			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+			/*if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 
 				SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
 						.getAttribute("sessionPassengerBean");
@@ -278,10 +278,10 @@ public class PassengerLoginController {
 			} else {
 				clearCaptchaCache();
 				return null;
-			}
+			}*/
 
 			// e.printStackTrace();
-			// return null;
+			 return null;
 		} catch (RemoteException e) {
 			logger.error("Error:RemoteException");
 			e.printStackTrace();

@@ -148,28 +148,37 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         Claim  claim=response.getLoadClaimResponse().getReturn();
         
         passengerBean.setClaimId(claim.getClaimId()); //mandatory field for the web service
+        passengerBean.setMiddleInitial(claim.getMiddleInitial());
+        passengerBean.setBusinessName(claim.getBusinessName());
+    	passengerBean.setOccupation(claim.getOccupation());
         com.bagnet.nettracer.ws.onlineclaims.xsd.Address wsPermanentAddress=claim.getPermanentAddress();
         Address permanentAddress=passengerBean.getAddress().get(0);
-        if(null != permanentAddress && null !=wsPermanentAddress){
+        if(null != permanentAddress ){
+        	if(null !=wsPermanentAddress){
         	permanentAddress.setAddressLine1(wsPermanentAddress.getAddress1());
         	permanentAddress.setAddressLine2(wsPermanentAddress.getAddress2());
         	permanentAddress.setCity(wsPermanentAddress.getCity());
         	permanentAddress.setCountry(wsPermanentAddress.getCountry());
         	permanentAddress.setPostalCode(wsPermanentAddress.getPostalCode());
         	permanentAddress.setStateRegion(wsPermanentAddress.getStateProvince());
-        	permanentAddress.setBusinessName(claim.getBusinessName());
-        	permanentAddress.setOccupation(claim.getOccupation());
+        	}
+        	
         	
         	Phone[] phone=claim.getPhoneArray();
-        	permanentAddress.setPhoneHome(phone[0].getPhoneType().contains("Home") 
-        			? phone[0].getPhoneNumber() : ""); 
-        	permanentAddress.setPhoneMobile(phone[0].getPhoneType().contains("Mobile") 
-        			? phone[0].getPhoneNumber() : ""); 
-        	permanentAddress.setPhoneBusiness(phone[0].getPhoneType().contains("Business") 
-        			? phone[0].getPhoneNumber() : ""); 
-        	permanentAddress.setPhoneFax(phone[0].getPhoneType().contains("Fax") 
-        			? phone[0].getPhoneNumber() : ""); 
+        	
+        	for (int i = 0; i < phone.length; i++) {
+        		if(phone[i].getPhoneType().contains("Home")){
+        			permanentAddress.setPhoneHome(phone[i].getPhoneNumber());
+        		}else if(phone[i].getPhoneType().contains("Mobile") ){
+        			permanentAddress.setPhoneMobile(phone[i].getPhoneNumber());
+        		}else if(phone[i].getPhoneType().contains("Business") ){
+        			permanentAddress.setPhoneBusiness(phone[i].getPhoneNumber());
+        		}else if(phone[i].getPhoneType().contains("Fax") ){
+        			permanentAddress.setPhoneFax(phone[i].getPhoneNumber());
+        		}
+			}
         	passengerBean.getAddress().set(0, permanentAddress);
+        	
         }
         
         com.bagnet.nettracer.ws.onlineclaims.xsd.Address wsMailingAddress=claim.getMailingAddress();
@@ -256,8 +265,30 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 claim.setClaimId(passengerBean.getClaimId()); //mandatory field for save through web service
 		 claim.setLastName(passengerBean.getPassengers().get(0).getLastName());
 		 claim.setFirstName(passengerBean.getPassengers().get(0).getFirstName());
-		 claim.setMiddleInitial(passengerBean.getPassengers().get(0).getMiddleInitial());
+		 claim.setMiddleInitial(passengerBean.getMiddleInitial());
 		 claim.setEmailAddress(passengerBean.getAddress().get(0).getEmailAddress());
+		 claim.setOccupation(passengerBean.getOccupation());
+		 claim.setBusinessName(passengerBean.getBusinessName());
+		 
+		 com.bagnet.nettracer.ws.onlineclaims.xsd.Address wsPermanentAddress=
+			 com.bagnet.nettracer.ws.onlineclaims.xsd.Address.Factory.newInstance();
+		 wsPermanentAddress.setAddress1(passengerBean.getAddress().get(0).getAddressLine1());
+		 wsPermanentAddress.setAddress2(passengerBean.getAddress().get(0).getAddressLine2());
+		 wsPermanentAddress.setCity(passengerBean.getAddress().get(0).getCity());
+		 wsPermanentAddress.setCountry(passengerBean.getAddress().get(0).getCountry());
+		 wsPermanentAddress.setPostalCode(passengerBean.getAddress().get(0).getPostalCode());
+		 wsPermanentAddress.setStateProvince(passengerBean.getAddress().get(0).getStateRegion());
+		 claim.setPermanentAddress(wsPermanentAddress);
+		 
+		 com.bagnet.nettracer.ws.onlineclaims.xsd.Address wsMailingAddress=
+			 com.bagnet.nettracer.ws.onlineclaims.xsd.Address.Factory.newInstance();
+		 wsMailingAddress.setAddress1(passengerBean.getAddress().get(1).getAddressLine1());
+		 wsMailingAddress.setAddress2(passengerBean.getAddress().get(1).getAddressLine2());
+		 wsMailingAddress.setCity(passengerBean.getAddress().get(1).getCity());
+		 wsMailingAddress.setCountry(passengerBean.getAddress().get(1).getCountry());
+		 wsMailingAddress.setPostalCode(passengerBean.getAddress().get(1).getPostalCode());
+		 wsMailingAddress.setStateProvince(passengerBean.getAddress().get(1).getStateRegion());
+		 claim.setMailingAddress(wsMailingAddress);
 		 
 		 Phone phone1=Phone.Factory.newInstance();
 		 phone1.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneHome());
@@ -361,7 +392,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				itinerary.setArrivalCity(wsItinerary[i].getArrivalCity());
 				itinerary.setAirline(wsItinerary[i].getAirline());
 				itinerary.setFlightNum(wsItinerary[i].getFlightNum());
-				//itinerary.setJourneyDate(wsItinerary[i].getDate().getTime());
+				itinerary.setJourneyDate(wsItinerary[i].getDate().getTime());
 				itineraryList.add(itinerary); //Garbage collection
 				itinerary=null;
 			}
@@ -472,9 +503,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					wsItinerary.setArrivalCity(itinerary.getArrivalCity());
 					wsItinerary.setAirline(itinerary.getAirline());
 					wsItinerary.setFlightNum(itinerary.getFlightNum());
-					//calendar=Calendar.getInstance();
-			       // calendar.setTime(null != itinerary.getJourneyDate() ? itinerary.getJourneyDate() :new Date());
-					//wsItinerary.setDate(calendar);
+					calendar=Calendar.getInstance();
+			        calendar.setTime(null != itinerary.getJourneyDate() ? itinerary.getJourneyDate() :new Date());
+					wsItinerary.setDate(calendar);
 					calendar=null;//GC
 					wsItineraries[i]=wsItinerary;
 					wsItinerary=null;//GC
@@ -505,9 +536,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					wsBag.setNameOnBag(bag.getNameonBag());
 					wsBag.setBrand(bag.getBrandOftheBag());
 					wsBag.setExternalMarkings(bag.getExternalMarkings());
-					//calendar=Calendar.getInstance();
-					//calendar.setTime(bag.getBagPurchaseDate());
-					//wsBag.setPurchaseDate(calendar);
+					calendar=Calendar.getInstance();
+					calendar.setTime(bag.getBagPurchaseDate());
+					wsBag.setPurchaseDate(calendar);
 					calendar=null;//GC
 					
 					wsBag.setBagColor(bag.getBagColor());

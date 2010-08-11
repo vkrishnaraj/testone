@@ -24,6 +24,9 @@ public class PassengerBean {
 	private String passengerInfoHelp;
 	private String permanentAddress;
 	private String passengerInfolastName;
+	private String 	middleInitial;
+	private String occupation;
+	private String businessName;
 	private List<Address> address=new ArrayList<Address>();
 	private List<Passenger> passengers=new ArrayList<Passenger>();
 	private String personalInformation;
@@ -416,6 +419,24 @@ public class PassengerBean {
 	}
 	public void setClaimId(Long claimId) {
 		this.claimId = claimId;
+	}
+	public String getMiddleInitial() {
+		return middleInitial;
+	}
+	public void setMiddleInitial(String middleInitial) {
+		this.middleInitial = middleInitial;
+	}
+	public String getOccupation() {
+		return occupation;
+	}
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+	public String getBusinessName() {
+		return businessName;
+	}
+	public void setBusinessName(String businessName) {
+		this.businessName = businessName;
 	}	
 	
 	
