@@ -284,6 +284,8 @@ public class PassengerController {
 					if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
 						gotoBagDetailsFlag =true; //set flag for webservice data and previous button
 					}
+				}else{
+					//TODO for status SUBMITTED
 				}
 			
 				//end of webservice integration
