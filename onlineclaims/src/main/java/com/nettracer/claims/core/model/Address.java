@@ -17,8 +17,6 @@ public class Address {
 	private String country;
 	private String emailAddress;
 	private String hotel;
-	private String occupation;
-	private String businessName;
 	private String phoneHome;
 	private String phoneMobile;
 	private String phoneFax;
@@ -70,18 +68,6 @@ public class Address {
 	}
 	public void setHotel(String hotel) {
 		this.hotel = hotel;
-	}
-	public String getOccupation() {
-		return occupation;
-	}
-	public void setOccupation(String occupation) {
-		this.occupation = occupation;
-	}
-	public String getBusinessName() {
-		return businessName;
-	}
-	public void setBusinessName(String businessName) {
-		this.businessName = businessName;
 	}
 	public String getPhoneHome() {
 		return phoneHome;
