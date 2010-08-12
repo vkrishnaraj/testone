@@ -27,9 +27,19 @@ public interface OnlineClaimsWS {
 	public Claim getClaim(WSPVAdvancedIncident passengerData,
 			String lastName) throws AxisFault, RemoteException;
 
-	PassengerBean getPassengerData(WSPVAdvancedIncident passengerData,
+	public PassengerBean getPassengerData(WSPVAdvancedIncident passengerData,
 			Claim claim) throws AxisFault, RemoteException;
 
-	boolean saveFlightInfo(PassengerBean passengerBean, Claim claim)
+	public boolean saveFlightInfo(PassengerBean passengerBean, Claim claim)
 			throws AxisFault, RemoteException;
+
+	public boolean saveBagInfo(PassengerBean passengerBean, Claim claim)
+			throws AxisFault, RemoteException;
+
+	public boolean saveFileInfo(PassengerBean passengerBean, Claim claim)throws AxisFault, RemoteException;
+
+	public boolean saveFraudQuestion(PassengerBean passengerBean,
+			Claim claim)throws AxisFault, RemoteException;
+
+	public boolean saveFinalCLaim(PassengerBean passengerBean, Claim claim)throws AxisFault, RemoteException;
 }

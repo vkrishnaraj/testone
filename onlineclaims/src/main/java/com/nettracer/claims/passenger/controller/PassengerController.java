@@ -174,7 +174,7 @@ public class PassengerController {
 	}
 	
 	/**
-	 * Save the Passenger Data on Passenger Contact Info page
+	 * Save the Flight Data on Flight Info page
 	 * 
 	 */
 
@@ -211,6 +211,160 @@ public class PassengerController {
 		}
 	}
 	
+	
+	/**
+	 * Save the Bag information
+	 * 
+	 */
+
+	public String saveBagInfo() {
+		logger.debug("saveBagInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				boolean saveBagData = onlineClaimsWS.saveBagInfo(passengerBean,
+													(Claim)session.getAttribute("claim"));
+				//session.setAttribute("saveBagData", saveBagData);
+				if (saveBagData) {
+					FacesUtil.addInfo("Bag infomation saved successfully.");
+					logger.info("Bag infomation saved successfully.");
+				} else {
+					logger.error("Error in persisting the Data");
+					FacesUtil.addError("Error in persisting the Data");
+				}
+			} catch (AxisFault e) {
+				e.printStackTrace();
+				FacesUtil.addError("Error in persisting the Data");
+				return null;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				FacesUtil.addError("Connection failure, Please try again");
+				return null;
+			}
+			return null;
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	
+	/**
+	 * Save the File information
+	 * 
+	 */
+
+	public String saveFileInfo() {
+		logger.debug("saveFileInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				boolean saveFile = onlineClaimsWS.saveFileInfo(passengerBean,
+													(Claim)session.getAttribute("claim"));
+				//session.setAttribute("saveFile", saveFile);
+				if (saveFile) {
+					FacesUtil.addInfo("File infomation saved successfully.");
+					logger.info("File infomation saved successfully.");
+				} else {
+					logger.error("Error in persisting the Data");
+					FacesUtil.addError("Error in persisting the Data");
+				}
+			} catch (AxisFault e) {
+				e.printStackTrace();
+				FacesUtil.addError("Error in persisting the Data");
+				return null;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				FacesUtil.addError("Connection failure, Please try again");
+				return null;
+			}
+			return null;
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Save the FraudQuestion
+	 * 
+	 */
+
+	public String saveFraudQuestion() {
+		logger.debug("saveFileInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				boolean savefraud = onlineClaimsWS.saveFraudQuestion(passengerBean,
+													(Claim)session.getAttribute("claim"));
+				//session.setAttribute("savefraud", savefraud);
+				if (savefraud) {
+					FacesUtil.addInfo("FraudQuestion infomation saved successfully.");
+					logger.info("FraudQuestion infomation saved successfully.");
+				} else {
+					logger.error("Error in persisting the Data");
+					FacesUtil.addError("Error in persisting the Data");
+				}
+			} catch (AxisFault e) {
+				e.printStackTrace();
+				FacesUtil.addError("Error in persisting the Data");
+				return null;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				FacesUtil.addError("Connection failure, Please try again");
+				return null;
+			}
+			return null;
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Save the Final Claim
+	 * 
+	 */
+
+	public String saveFinalCLaim() {
+		logger.debug("saveFileInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				boolean finalClaim = onlineClaimsWS.saveFinalCLaim(passengerBean,
+													(Claim)session.getAttribute("claim"));
+				session.setAttribute("finalClaim", finalClaim);
+				if (finalClaim) {
+					FacesUtil.addInfo("Claim  saved successfully.");
+					logger.info("CLaim  saved successfully.");
+				} else {
+					logger.error("Error in persisting the Data");
+					FacesUtil.addError("Error in persisting the Data");
+				}
+			} catch (AxisFault e) {
+				e.printStackTrace();
+				FacesUtil.addError("Error in persisting the Data");
+				return null;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				FacesUtil.addError("Connection failure, Please try again");
+				return null;
+			}
+			return null;
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
 	/**
 	 * Submit the Passenger Data on submit claim page
 	 * 
@@ -222,10 +376,10 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 		.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
-			Object obj=session.getAttribute("saveData");
+			Object obj=session.getAttribute("finalClaim");
 			if(null != obj){
-				boolean saveData = (Boolean)obj;
-				if (saveData) {
+				boolean finalClaim = (Boolean)obj;
+				if (finalClaim) {
 					return gotoSavedScreen();
 				} else {
 					logger.error("Claim submission is not successful");
