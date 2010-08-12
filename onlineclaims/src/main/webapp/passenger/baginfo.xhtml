@@ -140,6 +140,8 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
+						  action="#{passengerController.savePassengerInfo}"
+				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>

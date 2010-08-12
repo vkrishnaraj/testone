@@ -141,7 +141,9 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
-				 		tabindex="4" action="#"
+				 		tabindex="4" 
+				 		 action="#{passengerController.savePassengerInfo}"
+				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>

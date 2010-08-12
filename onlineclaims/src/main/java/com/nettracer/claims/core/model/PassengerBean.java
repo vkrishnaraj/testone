@@ -25,6 +25,7 @@ public class PassengerBean {
 	private String permanentAddress;
 	private String passengerInfolastName;
 	private String 	middleInitial;
+	private String emailAddress;
 	private String occupation;
 	private String businessName;
 	private List<Address> address=new ArrayList<Address>();
@@ -437,6 +438,12 @@ public class PassengerBean {
 	}
 	public void setBusinessName(String businessName) {
 		this.businessName = businessName;
+	}
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}	
 	
 	

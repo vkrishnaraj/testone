@@ -153,10 +153,14 @@
 				<rich:spacer  height="10" title="" />
 				
 				<rich:spacer width="60%" />
+				<h:panelGroup >
 				<a4j:commandLink value="#{passengerController.bagDetailsLabel.bagChart}" styleClass="ticketInfo"
+					rendered="#{!passengerController.readOnlyOnSubmitted}"
 					id="bagChart" immediate="true" disabled="true">
 						
 				</a4j:commandLink>
+				<h:outputText value=""/>
+				</h:panelGroup>
 				
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -334,7 +338,8 @@
 					<t:inputText value="#{contentItem.price}"  size="6" readonly="true"/>
 				</rich:column>
 				<rich:column>
-					<h:selectOneMenu value="#{contentItem.currency}"  >
+					<h:selectOneMenu value="#{contentItem.currency}"  
+						disabled="true">
 						<f:selectItem itemValue="" itemLabel="--" />
 						<f:selectItems value="#{passengerController.currencyList}" readonly="true"/>
 					</h:selectOneMenu>

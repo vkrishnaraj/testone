@@ -16,7 +16,7 @@
 	<a4j:region  renderRegionOnly="true" selfRendered="true">	
 	<a4j:outputPanel  id="flightCode" >
 		<rich:dataTable id="iteneraryTicketTableItenerary" var="item"
-			headerClass="TableHeader" columnsWidth="7%,7%,7%,7%,13%"
+			headerClass="TableHeader" columnsWidth="7%,7%,7%,7%,13%" 
 			value="#{passengerController.itineraryList}" border="0" width="90%"
 			rowKeyVar="rowIndex">
 
@@ -40,8 +40,9 @@
 				<h:panelGrid columns="2">
 				<a4j:region  renderRegionOnly="true" >	
 					<h:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
+						readonly="#{passengerController.readOnlyOnSubmitted}"
 						label="DepartureCity Row#{rowIndex+1}" maxlength="3"/>
-					<h:panelGroup>
+					<h:panelGroup rendered="#{!passengerController.readOnlyOnSubmitted}">
 						<a4j:commandLink value="" immediate="true" id="flightImageLink">
 
 							<rich:componentControl for="flightModalPanel"
@@ -68,8 +69,9 @@
 						label="ArrivalCity Row#{rowIndex+1}" maxlength="3" 
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'ArrivalCity Row#{rowIndex+1}'" 
+						disabled="#{passengerController.readOnlyOnSubmitted}"
 						required="#{!empty item.departureCity ? true : false}"/>
-					<h:panelGroup>
+					<h:panelGroup rendered="#{!passengerController.readOnlyOnSubmitted}">
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
 
 							<rich:componentControl for="#{passengerController.modalPanel}"
@@ -92,6 +94,7 @@
 				<h:panelGrid columns="2">
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
 					required="#{!empty item.departureCity ? true : false}"
+					disabled="#{passengerController.readOnlyOnSubmitted}"
 					requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'Airline Row#{rowIndex+1}'"
 					label="Airline Row#{rowIndex+1}">
@@ -109,6 +112,7 @@
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
 						required="#{!empty item.departureCity ? true : false}"
+						readonly="#{passengerController.readOnlyOnSubmitted}"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'FlightNumber Row#{rowIndex+1}'"
 						label="FlightNumber Row#{rowIndex+1}">
@@ -125,6 +129,7 @@
 						jointPoint="top-right" showWeeksBar="false" mode="client"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'Date of Journey Row#{rowIndex+1}'"
+						disabled="#{passengerController.readOnlyOnSubmitted}"
 						popup="true" >
 					<f:converter  converterId="DateConverter" />
 				</rich:calendar>
@@ -136,7 +141,7 @@
 	
 	<rich:spacer width="100%" height="20" title="" />
 	<div id="addItem">
-		<a4j:commandButton value="#{passengerController.flightLabel.addNewSegment}"  
+		<a4j:commandButton value="#{passengerController.flightLabel.addNewSegment}"  rendered="#{!passengerController.readOnlyOnSubmitted}"
 			 action="#{passengerController.addNewSegment}" reRender="iteneraryTicketTableItenerary" limitToList="true"
 			 styleClass="ticketInfo">
 		</a4j:commandButton>

@@ -130,6 +130,7 @@
 								styleClass="typeAccept" />
 						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept" required="true"
 							requiredMessage="Please Type the word- ACCEPT in Capital Letters"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							label="Acception Field" tabindex="1" >
 							<t:validateEqual for="accept" summaryMessage="Please Type the word- ACCEPT in Capital Letters"/>
 						</t:inputText>
@@ -194,6 +195,7 @@
 			
 				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
 				 		tabindex="3" action="#{passengerController.savePassengerInfo}"
+				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
@@ -206,6 +208,7 @@
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.submitClaimLabel.claimSubmit}"
 				 	tabindex="5" action="#{passengerController.submitPassengerInfo}"
+				 	disabled="#{passengerController.readOnlyOnSubmitted}"
 					styleClass="button140pxred button140pxred2" />
 				
 			

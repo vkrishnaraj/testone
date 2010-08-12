@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Bag;
 import com.nettracer.claims.core.model.Content;
@@ -94,6 +95,7 @@ public class PassengerController {
 	private String bagChartType;
 	private List<Bag> bags ;
 	private boolean gotoBagDetailsFlag;
+	private boolean readOnlyOnSubmitted;
 	
 	@Autowired
 	PassengerService passengerService;
@@ -135,7 +137,7 @@ public class PassengerController {
 	}
 
 	/**
-	 * Save the Passenger Data on submit claim page
+	 * Save the Passenger Data on Passenger Contact Info page
 	 * 
 	 */
 
@@ -146,11 +148,49 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				boolean saveData = onlineClaimsWS.savePassengerInfo(passengerBean);
+				boolean saveData = onlineClaimsWS.savePassengerInfo(passengerBean,(Claim)session.getAttribute("claim"));
 				session.setAttribute("saveData", saveData);
 				if (saveData) {
 					FacesUtil.addInfo("Passenger infomation saved successfully.");
 					logger.info("Passenger infomation saved successfully.");
+				} else {
+					logger.error("Error in persisting the Data");
+					FacesUtil.addError("Error in persisting the Data");
+				}
+			} catch (AxisFault e) {
+				e.printStackTrace();
+				FacesUtil.addError("Error in persisting the Data");
+				return null;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				FacesUtil.addError("Connection failure, Please try again");
+				return null;
+			}
+			return null;
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+	
+	/**
+	 * Save the Passenger Data on Passenger Contact Info page
+	 * 
+	 */
+
+	public String saveFlightInfo() {
+		logger.debug("saveFlightInfo method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				boolean saveFlightData = onlineClaimsWS.saveFlightInfo(passengerBean,
+													(Claim)session.getAttribute("claim"));
+				//session.setAttribute("saveFlightData", saveFlightData);
+				if (saveFlightData) {
+					FacesUtil.addInfo("Flight infomation saved successfully.");
+					logger.info("Flight infomation saved successfully.");
 				} else {
 					logger.error("Error in persisting the Data");
 					FacesUtil.addError("Error in persisting the Data");
@@ -271,21 +311,23 @@ public class PassengerController {
 				
 				//webservice integration code
 				if(null != passengerBean.getStatus() && !passengerBean.getStatus().equalsIgnoreCase("NEW")){
-					Integer noOfBags = passengerBean.getBagsTravelWith();
-					if (null != noOfBags && noOfBags > 0) {
-						if (null != lostBagItems) {
-							lostBagItems.clear();
-						}
-						for (int i = 1; i <= noOfBags; i++) {
-							lostBagItems.add(new SelectItem(new Integer(i)));
-						}
-					}
-					
-					if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
-						gotoBagDetailsFlag =true; //set flag for webservice data and previous button
-					}
+					readOnlyOnSubmitted=true;
 				}else{
-					//TODO for status SUBMITTED
+					readOnlyOnSubmitted=false;
+				}
+				
+				Integer noOfBags = passengerBean.getBagsTravelWith();
+				if (null != noOfBags && noOfBags > 0) {
+					if (null != lostBagItems) {
+						lostBagItems.clear();
+					}
+					for (int i = 1; i <= noOfBags; i++) {
+						lostBagItems.add(new SelectItem(new Integer(i)));
+					}
+				}
+				
+				if(null != passengerBean.getBagList() && passengerBean.getBagList().size()>0){
+					gotoBagDetailsFlag =true; //set flag for webservice data and previous button
 				}
 			
 				//end of webservice integration
@@ -1235,6 +1277,14 @@ public class PassengerController {
 
 	public void setBags(List<Bag> bags) {
 		this.bags = bags;
+	}
+
+	public boolean isReadOnlyOnSubmitted() {
+		return readOnlyOnSubmitted;
+	}
+
+	public void setReadOnlyOnSubmitted(boolean readOnlyOnSubmitted) {
+		this.readOnlyOnSubmitted = readOnlyOnSubmitted;
 	}
 
 	

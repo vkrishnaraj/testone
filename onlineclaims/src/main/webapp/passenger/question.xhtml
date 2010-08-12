@@ -29,6 +29,7 @@
 					<h:panelGrid columns="1" width="60%" >
 					<h:selectOneRadio   value="#{passengerBean.anotherClaim}" label="Another Claim"
 							valueChangeListener="#{passengerController.selectAnotherClaim}"
+							disabled="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.anotherClaim}'" 
 							required="#{passengerController.fraudQuestionLabel.anotherClaimState eq 2}">
@@ -65,6 +66,7 @@
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="whichInput" ajaxRendered="true">
 						<t:inputText value="#{passengerBean.whichAirline}" label="Which Airline" tabindex="1"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.whichAirline}'" 
 								validatorMessage="#{passengerController.fraudQuestionLabel.whichAirline} :
@@ -96,6 +98,7 @@
 							jointPoint="top-right" showWeeksBar="false" mode="client"  inputSize="11"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.dateOfClaim}'" tabindex="2"
+							disabled="#{passengerController.readOnlyOnSubmitted}"
 							popup="true" enableManualInput="false" >
 							<f:converter  converterId="DateConverter" />
 						</rich:calendar>
@@ -120,6 +123,7 @@
 						<t:inputText value="#{passengerBean.claimantName}" label="Claimant Name" tabindex="3"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.claimantName}'" 
+								readonly="#{passengerController.readOnlyOnSubmitted}"
 								validatorMessage="#{passengerController.fraudQuestionLabel.claimantName} :
 									#{passengerController.passengerInfoLabel.fieldLength} 20"
 								required="#{passengerController.fraudQuestionLabel.claimantNameState eq 2}">
@@ -148,6 +152,7 @@
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
 					<h:selectOneRadio   value="#{passengerBean.tsaInspect}"  label="Tsa Inspected" 
+						disabled="#{passengerController.readOnlyOnSubmitted}"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.tsaInspect}'" 
 						required="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}">
@@ -169,6 +174,7 @@
 					
 					<h:selectOneRadio   value="#{passengerBean.bagConfirmNote}"	label="Bag Confirm Note"
 						layout="lineDirection"
+						disabled="#{passengerController.readOnlyOnSubmitted}"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.bagConfirmNote}'" 
 						readonly="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 3}"
@@ -196,7 +202,8 @@
 					<t:inputText value="#{passengerBean.inspectionPlace}" label="Place Of Inspection" tabindex="3"
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.inspectionPlace}'" 
-						readonly="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 3}"
+						readonly="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 3
+							|| passengerController.readOnlyOnSubmitted}"
 						validatorMessage="#{passengerController.fraudQuestionLabel.inspectionPlace} :
 									#{passengerController.passengerInfoLabel.fieldLength} 20"
 						size="60" required="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}">
@@ -225,7 +232,8 @@
 								'#{passengerController.fraudQuestionLabel.additionalComments}'" 
 						validatorMessage="#{passengerController.fraudQuestionLabel.additionalComments} :
 									#{passengerController.passengerInfoLabel.fieldLength} 1500"
-						readonly="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 3}"		
+						readonly="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 3}"	
+						disabled="#{passengerController.readOnlyOnSubmitted}"	
 						required="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 2}">
 						<f:validateLength maximum="1500"/>
 					</h:inputTextarea>

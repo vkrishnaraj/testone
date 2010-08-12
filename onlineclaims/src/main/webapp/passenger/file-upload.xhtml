@@ -124,17 +124,22 @@
 				<rich:spacer width="100%" height="30" title=""/>
 				<h:panelGrid columns="2" width="100%">
 					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection}" styleClass="formLabel"/>
-					<t:inputFileUpload id="fileupload" value="#{passengerController.upFile}" size="60" /><p/>
+					<t:inputFileUpload id="fileupload" value="#{passengerController.upFile}" size="60" 
+						disabled="#{passengerController.readOnlyOnSubmitted}"/><p/>
 				</h:panelGrid>
 				
 				<rich:spacer width="100%" height="20" title=""/>
 				<div>
 				<h:panelGrid columns="2" width="100%">
 				<rich:spacer width="145"  title=""/>
+				<h:panelGroup>
 				<h:commandButton value="#{passengerController.fileUploadLabel.addReceipts}" 
+						rendered="#{!passengerController.readOnlyOnSubmitted}"
 					 	action="#{passengerController.upload}" styleClass="button140pxred button140pxred2" >
 					 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
 				</h:commandButton>
+				<h:outputText value=""/>
+				</h:panelGroup>
 				</h:panelGrid>
 				</div>
 				<div>
@@ -164,6 +169,7 @@
 						</h:column>
 						<h:column>
 							<a4j:commandButton  value="#{passengerController.fileUploadLabel.remove}" 
+								disabled="#{passengerController.readOnlyOnSubmitted}"
 								reRender="filePanel" limitToList="true" immediate="true" styleClass="button140pxred button140pxred2" 
 								actionListener="#{passengerController.removeFileListener}"/>
 						</h:column>
@@ -198,7 +204,8 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
-				 		tabindex="1" action="#"
+				 		tabindex="1" action="#{passengerController.savePassengerInfo}"
+				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>

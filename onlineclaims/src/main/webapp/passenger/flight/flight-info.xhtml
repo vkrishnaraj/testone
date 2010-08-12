@@ -31,6 +31,7 @@
 
 		<h:selectOneMenu value="#{passengerBean.bagsTravelWith}" tabindex="1" 
 				required="#{passengerController.flightLabel.totalTravelBagState eq 2}"
+				disabled="#{passengerController.readOnlyOnSubmitted}"
 				valueChangeListener="#{passengerController.bagSelectListener}" id="bagsTravelWith"
 				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.totalTravelBag}'"
@@ -56,6 +57,7 @@
 			<h:selectOneMenu id="lostBagMenu" value="#{passengerBean.lostBag}" tabindex="2"
 				required="#{passengerController.flightLabel.noOfLostBagState eq 2}"
 				readonly="#{passengerController.flightLabel.noOfLostBagState eq 3}"
+				disabled="#{passengerController.readOnlyOnSubmitted}"
 				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.noOfLostBag}'"
 				label="No. of Bags Lost">
@@ -81,6 +83,7 @@
 		<h:selectOneMenu value="#{passengerBean.bagCheckLocation}"
 			required="#{passengerController.flightLabel.bagCheckedLocationState eq 2}"
 			readonly="#{passengerController.flightLabel.bagCheckedLocationState eq 3}"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.bagCheckedLocation}'"
 			tabindex="3" id="bagCheckLocation" label="Bag Check Location">
@@ -103,6 +106,7 @@
 		</h:panelGroup>
 		<h:selectOneMenu id="noOfPassenger" value="#{passengerBean.noOfPassenger}" tabindex="4"
 				required="#{passengerController.flightLabel.noOfPassengerState eq 2}"
+				disabled="#{passengerController.readOnlyOnSubmitted}"
 				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.noOfPassenger}'"
 				readonly="#{passengerController.flightLabel.noOfPassengerState eq 3}"
@@ -133,6 +137,7 @@
 		<h:selectOneMenu id="recheckBag" value="#{passengerBean.recheckBag}" tabindex="5"
 				required="#{passengerController.flightLabel.recheckBagState eq 2}"
 				readonly="#{passengerController.flightLabel.recheckBagState eq 3}"
+				disabled="#{passengerController.readOnlyOnSubmitted}"
 				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.recheckBag}'"
 				label="Baggage Rerouted">
@@ -158,6 +163,7 @@
 		<h:selectOneMenu value="#{passengerBean.inspectbag}" tabindex="6" id="inspectbag"
 				required="#{passengerController.flightLabel.inspectbagState eq 2}"
 				readonly="#{passengerController.flightLabel.inspectbagState eq 3}"
+				disabled="#{passengerController.readOnlyOnSubmitted}"
 				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.inspectbag}'"
 				label="Bag Inspection">
@@ -181,6 +187,7 @@
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.chargeExcessBaggage}" label="Charge Excess Baggage"
+		disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.chargeExcessBaggage}'"
 			tabindex="7" required="true" id="chargeExcessBaggage">
@@ -207,6 +214,7 @@
 					'#{passengerController.flightLabel.bagNumber}'"
 			validatorMessage="#{passengerController.flightLabel.bagNumberg} :
 								#{passengerController.passengerInfoLabel.fieldLength} 20"
+			readonly="#{passengerController.readOnlyOnSubmitted}"
 			styleClass="passInout" required="true" tabindex="8"  label="No Of Checked Bag">
 				<f:validateLongRange maximum="20"/>
 		</t:inputText>
@@ -226,7 +234,8 @@
 
 		<t:inputText value="#{passengerBean.noOfmissingBag}" id="noOfmissingBag"
 			required="#{passengerController.flightLabel.missingBagState eq 2}"
-			readonly="#{passengerController.flightLabel.missingBagState eq 3}"
+			readonly="#{passengerController.flightLabel.missingBagState eq 3 
+							|| passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.missingBag}'"
 			validatorMessage="#{passengerController.flightLabel.missingBag} :
@@ -253,7 +262,8 @@
 		<t:inputText value="#{passengerBean.bagClaimCheck}"
 			styleClass="passInout" id="bagClaimCheck"  label="Bag Claim Check"
 			required="#{passengerController.flightLabel.bagClaimCheckState eq 2}"
-			readonly="#{passengerController.flightLabel.bagClaimCheckState eq 3}"
+			readonly="#{passengerController.flightLabel.bagClaimCheckState eq 3 
+							|| passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 									'#{passengerController.flightLabel.bagClaimCheck}'"
 			validatorMessage="#{passengerController.flightLabel.bagClaimCheck} :
@@ -280,6 +290,7 @@
 			id="declarePayExcessValue" label="Declared Pay Excess Value"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.declarePayExcessValue}'" immediate="true"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
 			valueChangeListener="#{passengerController.excessValueListener}" >
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -307,7 +318,8 @@
 		<t:inputText value="#{passengerBean.declaredValue}" id="declaredValue"
 			styleClass="passInout" disabled="#{passengerController.flightLabel.declaredValueState  ne 2}"
 			required="#{passengerController.flightLabel.declaredValueState  eq 2}"
-			readonly="#{passengerController.flightLabel.declaredValueState eq 3}"
+			readonly="#{passengerController.flightLabel.declaredValueState eq 3
+						|| passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.declaredValue}'"
 			validatorMessage="#{passengerController.flightLabel.declaredValue} :
@@ -326,14 +338,15 @@
 				value="#{passengerController.flightLabel.clearCustomBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="true" />
+				rendered="true and #{passengerController.readOnlyOnSubmitted}" />
 			<t:outputText value=":" styleClass="formLabel"/>
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="13"
-			required="true" label="Clear Custom Bag"
+			required="true and #{passengerController.readOnlyOnSubmitted}" label="Clear Custom Bag"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.clearCustomBag}'"
 			valueChangeListener="#{passengerController.clearCustomListener}"  id="clearCustomBag">
@@ -361,7 +374,8 @@
 
 		<a4j:outputPanel id="weightInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout" label="Bag Weight"
-			disabled="#{passengerController.flightLabel.bagWeightState  ne 2}" id="bagWeight"
+			disabled="#{passengerController.flightLabel.bagWeightState  ne 2
+						|| passengerController.readOnlyOnSubmitted}" id="bagWeight"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.bagWeight}'"
 			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="14" />
@@ -374,7 +388,8 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.rerouteBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
+			<h:outputLabel value="*" styleClass="requiredField" 
+				rendered="true and #{passengerController.readOnlyOnSubmitted}" />
 			<t:outputText value=":" styleClass="formLabel"/>
 		</h:panelGroup>
 
@@ -383,7 +398,8 @@
 		<h:selectOneMenu value="#{passengerBean.rerouteBag}" tabindex="15"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.rerouteBag}'"
-			required="true" id="rerouteBag" label="Baggage rerouted">
+			disabled="#{passengerController.readOnlyOnSubmitted}"		
+			required="true and #{passengerController.readOnlyOnSubmitted}" id="rerouteBag" label="Baggage rerouted">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -408,6 +424,7 @@
 				 id="differentClaimCheck"
 				 required="#{passengerController.flightLabel.differentClaimCheckState  eq 2}"
 				 readonly="#{passengerController.flightLabel.differentClaimCheckState  eq 3}"
+				 disabled="#{passengerController.readOnlyOnSubmitted}"
 				 requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.differentClaimCheck}'"
 				valueChangeListener="#{passengerController.differentClaimCheckListener}">
@@ -436,8 +453,10 @@
 		<a4j:outputPanel id="rerouteCityInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
 			tabindex="17" id="reroutedCityAirline" label="Airline rerouted by"
-			 required="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2}"
-			 readonly="#{passengerController.flightLabel.reroutedCityAirlineState  eq 3}"
+			 required="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2 
+			 		and passengerController.readOnlyOnSubmitted}"
+			 readonly="#{passengerController.flightLabel.reroutedCityAirlineState  eq 3
+			 		|| passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.reroutedCityAirline}'"
 			validatorMessage="#{passengerController.flightLabel.reroutedCityAirlineState} :
@@ -462,6 +481,7 @@
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.reason}" label="Reason"
+			readonly="#{passengerController.readOnlyOnSubmitted}"
 			styleClass="passInout"	 tabindex="18"  id="reason"/>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -471,13 +491,15 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"	rendered="true" /> 
+			<h:outputLabel value="*" styleClass="requiredField"	rendered="true and 
+				passengerController.readOnlyOnSubmitted" /> 
 			<t:outputText value=":" styleClass="formLabel"/> 
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
 		
 		<h:selectOneMenu value="#{passengerBean.immediateClaimAttempt}" id="immediateClaimAttempt" 
+			disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.immediateClaimAttempt}'"
 			validatorMessage="#{passengerController.flightLabel.immediateClaimAttempt} :
@@ -495,7 +517,8 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.whenBagSeen}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"	rendered="true" /> 
+			<h:outputLabel value="*" styleClass="requiredField"	rendered="true
+				and passengerController.readOnlyOnSubmitted" /> 
 			<t:outputText value=":" styleClass="formLabel"/>
 		</h:panelGroup>
 		
@@ -507,7 +530,8 @@
 					'#{passengerController.flightLabel.whenBagSeen}'"
 			validatorMessage="#{passengerController.flightLabel.whenBagSeen} :
 								#{passengerController.passengerInfoLabel.fieldLength} 50"
-			required="true" tabindex="20"  id="whenBagSeen">
+			readonly="#{passengerController.readOnlyOnSubmitted}"
+			required="true and passengerController.readOnlyOnSubmitted" tabindex="20"  id="whenBagSeen">
 			<f:validateLength maximum="50"/>
 		</t:inputText>
 			
@@ -528,6 +552,7 @@
 		<t:inputText value="#{passengerBean.fileReportCity}" styleClass="passInout"  id="fileReportCity"
 			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="21" 
 			readonly="#{passengerController.flightLabel.fileReportCityState eq 3}"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.fileReportCity}'"
 			validatorMessage="#{passengerController.flightLabel.fileReportCity} :
@@ -553,6 +578,7 @@
 		<h:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="22"  id="reportAnotherAirline"
 			label="Report Another Airline"
 			readonly="#{passengerController.flightLabel.reportAnotherAirlineState eq 3}"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 					'#{passengerController.flightLabel.reportAnotherAirline}'"
 			required="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}">

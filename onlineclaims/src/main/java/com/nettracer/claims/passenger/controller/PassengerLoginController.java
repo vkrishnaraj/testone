@@ -1,13 +1,11 @@
 package com.nettracer.claims.passenger.controller;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
@@ -28,15 +26,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
-import com.nettracer.claims.core.model.Address;
-import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
 import com.nettracer.claims.core.model.MultilingualLabel;
-import com.nettracer.claims.core.model.Passenger;
 import com.nettracer.claims.core.model.PassengerBean;
 import com.nettracer.claims.core.service.AdminService;
 import com.nettracer.claims.core.service.PassengerService;
@@ -190,10 +186,13 @@ public class PassengerLoginController {
 
 					WSPVAdvancedIncident passengerData = passengerView.getData();
 
-					passengerBean = onlineClaimsWS.getPassengerData(passengerData);
+					Claim claim=onlineClaimsWS.getClaim(passengerData,loginBean.getLastName());
+					passengerBean = onlineClaimsWS.getPassengerData(passengerData,claim);
+					passengerBean.setIncidentID(passengerData.getIncidentID());
 
 					DataModel airportCodeList = new ListDataModel(passengerService.getAirportList());
 
+					session.setAttribute("claim", claim);
 					session.setAttribute("passengerBean", passengerBean);
 					session.setAttribute("baggageState", baggageState);
 					session.setAttribute("selectedLanguage", selectedLanguage);

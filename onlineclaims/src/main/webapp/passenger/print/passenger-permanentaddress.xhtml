@@ -42,7 +42,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.middleInitialState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi4" value="#{passengerBean.passengers[0].middleInitial}" style="width:25px" 
+					<t:inputText id="pi4" value="#{passengerBean.middleInitial}" style="width:25px" 
 							required="#{passengerController.passengerInfoLabel.middleInitialState eq 2}" tabindex="3"
 							readonly="true"
 							label="#{passengerController.passengerInfoLabel.middleInitial}">
@@ -155,7 +155,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.occupationState eq 2}"/>
 					<t:outputText value=":"/>
-					<t:inputText id="pi12" value="#{passengerBean.address[0].occupation}" styleClass="passselectOneMenu30" 
+					<t:inputText id="pi12" value="#{passengerBean.occupation}" styleClass="passselectOneMenu30" 
 							required="#{passengerController.passengerInfoLabel.occupationState eq 2}" tabindex="11"
 							readonly="true"
 							label="#{passengerController.passengerInfoLabel.occupation}">
@@ -169,7 +169,7 @@
 						<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.passengerInfoLabel.businessNameState eq 2}"/>
 						<t:outputText value=":"/>
-						<t:inputText id="pi13" value="#{passengerBean.address[0].businessName}" styleClass="passselectOneMenu30" 
+						<t:inputText id="pi13" value="#{passengerBean.businessName}" styleClass="passselectOneMenu30" 
 								required="#{passengerController.passengerInfoLabel.businessNameState eq 2}" tabindex="12"
 								readonly="true"
 								label="#{passengerController.passengerInfoLabel.businessName}">

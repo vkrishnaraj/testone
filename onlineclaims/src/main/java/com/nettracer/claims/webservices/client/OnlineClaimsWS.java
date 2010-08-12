@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import org.apache.axis2.AxisFault;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.nettracer.claims.core.model.PassengerBean;
 
@@ -21,7 +22,14 @@ public interface OnlineClaimsWS {
 	PassengerView getPassengerView(String claimNumber, String lastName)
 			throws AxisFault, RemoteException;
 
-	public PassengerBean getPassengerData(WSPVAdvancedIncident passengerData) throws AxisFault, RemoteException;
+	boolean savePassengerInfo(PassengerBean passengerBean, Claim claim)	throws AxisFault, RemoteException;
 
-	public boolean savePassengerInfo(PassengerBean passengerBean) throws AxisFault, RemoteException;
+	public Claim getClaim(WSPVAdvancedIncident passengerData,
+			String lastName) throws AxisFault, RemoteException;
+
+	PassengerBean getPassengerData(WSPVAdvancedIncident passengerData,
+			Claim claim) throws AxisFault, RemoteException;
+
+	boolean saveFlightInfo(PassengerBean passengerBean, Claim claim)
+			throws AxisFault, RemoteException;
 }

@@ -23,6 +23,7 @@
 								<h:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"  
 										required="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"
 										readonly="#{passengerController.flightLabel.differentAirlineTicketState eq 3}"
+										disabled="#{passengerController.readOnlyOnSubmitted}"
 										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.differentAirlineTicket}'"
 										id="differentAirlineTicket" tabindex="23" label="Different Airline Ticket">
@@ -43,7 +44,8 @@
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="24" id="ticketNumber"
 										label="Ticket Number"
-										readonly="#{passengerController.flightLabel.ticketNumberState eq 3}"
+										readonly="#{passengerController.flightLabel.ticketNumberState eq 3 
+											|| passengerController.readOnlyOnSubmitted}"
 										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.ticketNumber}'"
 										required="#{passengerController.flightLabel.ticketNumberState eq 2}"  >
@@ -69,6 +71,7 @@
 									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true" 
 											requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.bagTagNumbers}'"
+											readonly="#{passengerController.readOnlyOnSubmitted}"
 											label="Bag Tag Number Row#{rowIndex+1}">
 										<f:validateLength maximum="10"/>
 									</t:inputText>
@@ -85,6 +88,7 @@
 									<h:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
 										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 											'#{passengerController.flightLabel.bagArrival}'"
+											disabled="#{passengerController.readOnlyOnSubmitted}"
 										label="Bag Arrival Status Row#{rowIndex+1}">
 										<f:selectItem itemLabel="Yes" itemValue="true" />
 										<f:selectItem itemLabel="No" itemValue="false" />

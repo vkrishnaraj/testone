@@ -174,7 +174,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.emailAddressState eq 2}"/>
 					<t:outputText value=":" styleClass="formLabel"/>
-					<t:inputText id="pi11" value="#{passengerBean.address[0].emailAddress}" styleClass="passselectOneMenu30"
+					<t:inputText id="pi11" value="#{passengerBean.emailAddress}" styleClass="passselectOneMenu30"
 							required="#{passengerController.passengerInfoLabel.emailAddressState eq 2}" tabindex="10"
 							readonly="#{passengerController.passengerInfoLabel.emailAddressState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
