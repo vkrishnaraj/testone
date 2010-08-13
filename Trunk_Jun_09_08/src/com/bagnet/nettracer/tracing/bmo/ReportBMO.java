@@ -817,6 +817,36 @@ public class ReportBMO {
 			if (srDTO.getStatus_ID() >= 1) {
 				statusq = " and itinerary.incident.status.status_ID= :status_ID ";
 			}
+			
+			//TODO: new status multiple selection approach
+			String multiStatusQ = "";
+			
+			String myMbrPerFlightSubtitleStatus = "";
+			if (srDTO.getStatus_id_combo() != null) {
+				for (int i = 0; i < srDTO.getStatus_id_combo().length; i++) {
+					myMbrPerFlightSubtitleStatus += TracerUtils.getText(Status.getKey(srDTO.getStatus_id_combo()[i]), user) + ",";
+				}
+				
+				if (srDTO.getStatus_id_combo()[0].intValue() >= 1) {
+					multiStatusQ = " and itinerary.incident.status.status_ID in (:status_ID) ";
+					
+					myMbrPerFlightSubtitleStatus = myMbrPerFlightSubtitleStatus.substring(0,myMbrPerFlightSubtitleStatus.length() - 1);
+				} else {
+					myMbrPerFlightSubtitleStatus = "";
+				}
+				
+			}
+			
+			if (srDTO.getStatus_ID() >= 1) {
+				myMbrPerFlightSubtitleStatus += TracerUtils.getText(Status.getKey(srDTO.getStatus_ID()), user);
+			}
+			
+			parameters.put("mbr_per_flight_subtitle_status", myMbrPerFlightSubtitleStatus);
+			
+//			logger.error("mbr_per_flight_subtitle_status is set to : " + myMbrPerFlightSubtitleStatus);
+//			logger.error("multiStatusQ=" + multiStatusQ);
+			
+			
 			String companylimit = " and itinerary.incident.stationassigned.company.companyCode_ID = :companyCode_ID ";
 
 			
@@ -888,7 +918,8 @@ public class ReportBMO {
 						+ "com.bagnet.nettracer.tracing.db.Itinerary itinerary "
 						+ " where itinerary.itinerarytype = 0 and itinerary.flightnum <> '' "
 						+ stationq
-						+ statusq
+						+ statusq      //old approach to status
+//						+ multiStatusQ
 						+ dateq
 						+ mbrtypeq
 						+ companylimit
@@ -900,6 +931,14 @@ public class ReportBMO {
 					q.setInteger("itemType_ID", srDTO.getItemType_ID());
 				if (srDTO.getStatus_ID() >= 1)
 					q.setInteger("status_ID", srDTO.getStatus_ID());
+				
+				//TODO: new approach to support multiple status selection
+				if (srDTO.getStatus_id_combo() != null) {
+					if (srDTO.getStatus_id_combo()[0].intValue() >= 1) {
+						q.setParameterList("status_ID", srDTO.getStatus_id_combo());
+					}
+				}			
+				
 				if (sdate != null) {
 					q.setDate("startdate", sdate);
 					if (edate == null) q.setDate("startdate1", sdate1);
@@ -996,7 +1035,15 @@ public class ReportBMO {
 				return "";
 			}
 			parameters.put("numtop", new Integer(srDTO.getNumtop()));
-			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+			
+			//TODO: toggle between old and new implementations
+//			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+			
+			return MBRPerFlightReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);			
+			
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
