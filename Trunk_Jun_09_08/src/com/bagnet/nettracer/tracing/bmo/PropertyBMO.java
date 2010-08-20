@@ -70,6 +70,7 @@ public class PropertyBMO {
 	public static final String CUSTOM_DAMAGE_RECEIPT_FILES = "custom.damage.receipt.files";
 	public static final String CUSTOM_MISSING_RECEIPT_FILES = "custom.missing.receipt.files";
 	
+	public static final String PROPERTY_BDO_CANCEL_EMAIL_ALERT = "bdo.cancle.email.alert";
 
 	/**
 	 * Retrieves the value of the property from the database.
