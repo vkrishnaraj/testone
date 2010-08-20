@@ -1843,6 +1843,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				}
 			}
 			stationq = sb.toString();
+			
+//			logger.error("entire stationq=" + stationq);
 
 			// fault station and loss code
 			String faultq = "";
@@ -1961,6 +1963,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			
 			Query q = sess.createQuery(sql);
 			
+			//logger.error("station report final sql=" + sql);
+			
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
 			if (srDTO.getStatus_ID() >= 1)
@@ -2017,6 +2021,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			// summary or detail; summary = 0; detail = 1
 			if (srDTO.getSumordet() == 1) {
 				parameters.put("showdetail", "1");
+				parameters.put("reportStyle", "10");
+			} else {
+				parameters.put("reportStyle", "00");
 			}
 
 			Object[] o = null, o2 = null, o3 = null;
@@ -2103,8 +2110,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			}
 
 			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
+
+//			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+//			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list2);
+//			
+//			return StationReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
 		} catch (Exception e) {
-			logger.error("unable to create report " + e);
+			logger.error("unable to create station report " + e);
 			e.printStackTrace();
 			return null;
 		} finally {
