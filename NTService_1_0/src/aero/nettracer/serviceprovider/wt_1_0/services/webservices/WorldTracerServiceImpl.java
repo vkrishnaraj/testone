@@ -162,16 +162,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final String SECURITY = "Security";
 	private static final String APACHE_RAMPART_INFLOW_HANDLER = "Apache Rampart inflow handler";
 	private static final Integer INTEGER_4_MINUTES = new Integer(4 * 60 * 1000);
-//	private static final String C_SECURE_CACERTS = "c:\\secure\\cacerts";
-//	private static final String CHANGEIT = "changeit";
+	// private static final String C_SECURE_CACERTS = "c:\\secure\\cacerts";
+	// private static final String CHANGEIT = "changeit";
 	private static final String UNABLE_TO_GENERATE_INCIDENT_MAPPING = "Unable to generate incident mapping";
 	private static final String WEB_SERVICE_CONNECTION_ISSUE = "Web Service Connection Issue";
 	private static final String UNKNOWN_FAILURE = "Unknown Failure";
 	private static final String WEB_SERVICE_ERROR_MESSAGE = "WS Error: ";
 	private static final String EXCEPTION_FOUND_RESPONSE = "Exception found... Response: ";
 	private static final String ACTION_BEING_PERFORMED = "Action Being Performed: ";
-//	private static final String JAVAX_NET_SSL_TRUST_STORE_PASSWORD = "javax.net.ssl.trustStorePassword";
-//	private static final String JAVAX_NET_SSL_TRUST_STORE = "javax.net.ssl.trustStore";
+	// private static final String JAVAX_NET_SSL_TRUST_STORE_PASSWORD =
+	// "javax.net.ssl.trustStorePassword";
+	// private static final String JAVAX_NET_SSL_TRUST_STORE =
+	// "javax.net.ssl.trustStore";
 	private static final String RAMPART = "rampart";
 	private static final String POLICY_XML = "policy.xml";
 	private static final String INSERT_INTO_WT_WS_TRANS_LOG_GMTTIME_DESCRIPTION_VALUES = "INSERT INTO WT_WS_TRANS_LOG (gmttime, description) VALUES (?, ?)";
@@ -180,21 +182,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static BigDecimal VERSION_0_PT_1 = new BigDecimal(0.1).setScale(1, RoundingMode.HALF_UP);
 	public static final DateFormat ITIN_DATE_FORMAT = new SimpleDateFormat("ddMMM", Locale.US);
 
-
 	public static final WorldTracerRule<String> BASIC_RULE = new BasicRule(1, 57, 1, aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format.FREE_FLOW);
 	private static final boolean FORCE_FAILURE = false;
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
+
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
 	}
-	
 
 	public void writeToLog(String description) {
 		Session sess = HibernateWrapper.getSession().openSession();
 		Transaction t = sess.beginTransaction();
 		try {
-			SQLQuery query = sess
-					.createSQLQuery(INSERT_INTO_WT_WS_TRANS_LOG_GMTTIME_DESCRIPTION_VALUES);
+			SQLQuery query = sess.createSQLQuery(INSERT_INTO_WT_WS_TRANS_LOG_GMTTIME_DESCRIPTION_VALUES);
 			query.setTimestamp(0, ServiceUtilities.getGMTDate());
 			query.setString(1, StringUtils.substring(description, 0, 60));
 			query.executeUpdate();
@@ -252,11 +252,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	private static void configureClient(org.apache.axis2.client.Stub stub, String envIdentifier) throws AxisFault {
 
-//		System.setProperty(JAVAX_NET_SSL_TRUST_STORE, C_SECURE_CACERTS);
-//		System.setProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD, CHANGEIT);
-//
-//		System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE));
-//		System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD));
+		// System.setProperty(JAVAX_NET_SSL_TRUST_STORE, C_SECURE_CACERTS);
+		// System.setProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD, CHANGEIT);
+		//
+		// System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE));
+		// System.out.println(System.getProperty(JAVAX_NET_SSL_TRUST_STORE_PASSWORD));
 
 		ServiceClient client = stub._getServiceClient();
 
@@ -388,8 +388,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	}
 
-
-
 	public void createOhd(WorldTracerActionDTO dto, Ohd ohd, WorldTracerResponse response) throws WorldTracerException {
 		/*
 		 * SUCCESS MESSAGE: <wtr:WTR_BagsCreateRS Version="0.1"
@@ -485,7 +483,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getDepartureCity() == null || itin.getDepartureCity().trim().length() <= 0
 						|| itin.getArrivalCity() == null || itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null || itinCount > 4) {
 				} else {
-					
 
 					FlightOptionalDateOrARNKType p3 = f1.addNewFlightSegment();
 					FlightOptionalDateType p5 = p3.addNewFlightDate();
@@ -583,28 +580,29 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			ContentsType c2 = null;
 			if (contentsList != null) {
-				
+
 				for (int i = 0; i < contentsList.size() && i < 12; i++) {
-	
+
 					if (i == 0) {
 						c2 = d2.addNewBagContents();
 					}
-					
+
 					String contentsX = contentsList.get(i);
 					String[] bagContents = contentsX.split(".- ");
-					
+
 					int countPerBag = bagContents.length;
 					String lastCategory = null;
+
 					for (int j = 0; j < countPerBag && j < 12; j++) {
 						String contents = bagContents[j];
 						int index = contents.indexOf("/");
-						
+
 						ContentType c = c2.addNewContent();
 						if (lastCategory == null) {
 							lastCategory = contents.substring(0, index);
 						}
-						c.setCategory(lastCategory);
 						
+						c.setCategory(lastCategory);
 						c.setDescription(contents.substring(index + 1));
 					}
 				}
@@ -905,7 +903,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			BaggageItinerary iti = t2.addNewBaggageItinerary();
 			DelayedBags t22 = t2.addNewDelayedBags();
-			
+
 			int itinCountA = 0;
 
 			for (Itinerary itin : incident.getBagItinerary()) {
@@ -974,6 +972,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							String bagInfo = contentsList.get(i);
 							String[] bagContents = bagInfo.split(".- ");
 							int countPerBag = bagContents.length;
+							String lastCategory = null;
+
 							for (int j = 0; j < countPerBag && j < 12; j++) {
 								String contents = bagContents[j];
 								if (j == 0)
@@ -981,7 +981,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								int index = contents.indexOf("/");
 
 								ContentType c = cx.addNewContent();
-								c.setCategory(contents.substring(0, index));
+								if (lastCategory == null) {
+									lastCategory = contents.substring(0, index);
+								}
+								
+								c.setCategory(lastCategory);
 								c.setDescription(contents.substring(index + 1));
 							}
 						}
@@ -998,15 +1002,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				Initials pi1 = p1.addNewInitials();
 				for (int j = 0; j < fieldList.size(); j++) {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-					
+
 					pp1.addName(name);
-					
+
 					if (fieldList2 != null && fieldList2.size() > j) {
 						pi1.addNewIntial().setStringValue(fieldList2.get(j));
 					}
 				}
 			}
-				
+
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.FL);
 			if (fieldList != null && fieldList.size() > 0) {
 				p1.setFrequentFlyerID(fieldList.get(0));
@@ -1039,7 +1043,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					p1.setStatus(status);
 					p1.setFareBasis(status);
 				}
-				
+
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PT);
@@ -1205,9 +1209,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		}
 
 	}
-
-
-
 
 	public void suspendAhl(WorldTracerActionDTO dto, Ahl ahl, WorldTracerResponse response) throws WorldTracerException {
 		try {
@@ -1410,7 +1411,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			// Process Response and/or Error Messages
-			if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getSuccess() != null && wsresponse.getWTRStatusRS().getErrors() == null  && wsresponse.getWTRStatusRS().getWarnings() == null) {
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getSuccess() != null && wsresponse.getWTRStatusRS().getErrors() == null
+					&& wsresponse.getWTRStatusRS().getWarnings() == null) {
 				response.setSuccess(true);
 			} else {
 				StringBuffer errorMsg = new StringBuffer();
@@ -1423,7 +1425,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 						}
 					}
-					
+
 					if (wsresponse.getWTRStatusRS().getWarnings() != null) {
 						WarningType[] errors = wsresponse.getWTRStatusRS().getWarnings().getWarningArray();
 						for (WarningType error : errors) {
@@ -1441,7 +1443,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (returnError.length() > 0) {
 					returnError = UNKNOWN_FAILURE;
 				}
-
 
 			}
 		} catch (AxisFault axisFault) {
@@ -1488,10 +1489,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					if (j == 0) {
 						names = d1.addNewNames();
 					}
-	
+
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					names.addName(name);
-	
+
 				}
 			}
 
@@ -1593,8 +1594,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		}
 	}
 
-
-
 	public void sendForwardMessage(WorldTracerActionDTO dto, ForwardMessage msg, WorldTracerResponse response) throws WorldTracerException {
 		EnumMap<WorldTracerField, WorldTracerRule<String>> fwdRules = wtRuleMap.getRule(TxType.FWD_GENERAL);
 		try {
@@ -1614,18 +1613,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			s1.setAirlineCode(msg.getFromAirline());
 			s1.setStationCode(msg.getFromStation());
 
-
 			if (false) {
-//				RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
-//				RecordReferenceType d4 = d3.addNewRecordReference();
-//				d4.setAirlineCode(arg0);
-//				d4.setReferenceNumber(arg0);
-//				d4.setStationCode(arg0);
+				// RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
+				// RecordReferenceType d4 = d3.addNewRecordReference();
+				// d4.setAirlineCode(arg0);
+				// d4.setReferenceNumber(arg0);
+				// d4.setStationCode(arg0);
 			}
-			
+
 			RushBagGroupType rb = d1.addNewRushBagGroup();
 			RushBagType rbt = rb.addNewRushBags().addNewRushBag();
-			
 
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -1798,7 +1795,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			// Process Response and/or Error Messages
-			if (wsresponse != null && wsresponse.getWTRDelayedBagRecReadRS() != null && wsresponse.getWTRDelayedBagRecReadRS().getSuccess() != null) {
+			if (wsresponse != null && wsresponse.getWTRDelayedBagRecReadRS() != null && wsresponse.getWTRDelayedBagRecReadRS().getDelayedBagGroup() != null) {
 
 				handleResponse(response, ahlId, wsresponse);
 
@@ -1856,7 +1853,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				try {
 					rahl.setNumberPaxAffected(Integer.parseInt(wsp.getNoOfPassengers()));
 				} catch (Exception e) {
-					// ignore
+					logger.error("Parsing issue: " + e, e);
 				}
 
 				ArrayList<Passenger> paxList = new ArrayList<Passenger>();
@@ -1992,7 +1989,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								}
 
 							} catch (Exception e) {
-								// Ignore
+								logger.error("Parsing issue: " + e, e);
 							}
 						}
 
@@ -2037,7 +2034,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						rahl.setBagItinerary(itin.toArray(new Itinerary[itin.size()]));
 					}
 				} catch (Exception e) {
-					// ignore
+					logger.error("Parsing issue: " + e, e);
 				}
 			}
 
@@ -2095,7 +2092,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
 				if (FORCE_FAILURE) {
 					return;
-				}				
+				}
 				writeToLog(label);
 				wsresponse = stub.read(d);
 				logger.info(wsresponse);
@@ -2296,7 +2293,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getDepartureCity() == null || itin.getDepartureCity().trim().length() <= 0
 						|| itin.getArrivalCity() == null || itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null || itinCount > 4) {
 				} else {
-					
 
 					FlightOptionalDateOrARNKType p3 = f1.addNewFlightSegment();
 					FlightOptionalDateType p5 = p3.addNewFlightDate();
@@ -2331,9 +2327,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					}
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = names.addNewName();
-					nm.setSeq(j+1);
+					nm.setSeq(j + 1);
 					nm.setStringValue(name);
-					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS HERE
+					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS
+					// HERE
 					// if (fieldList2 != null && fieldList2.size() > j) {
 					// p1.addNewInitials().addNewIntial().setStringValue(fieldList2.get(j));
 					// }
@@ -2363,7 +2360,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					StringLength0To58AmendType bad = ba.addNewAddressLine();
-					bad.setSeq(i+1);
+					bad.setSeq(i + 1);
 					bad.setStringValue(address);
 				}
 			}
@@ -2373,9 +2370,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			WorldTracerField field = DefaultWorldTracerService.WorldTracerField.EA;
 			fieldList = fieldMap.get(field);
 
-			 if (fieldList != null && fieldList.size() > 0) {
-				 ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
-			 }
+			if (fieldList != null && fieldList.size() > 0) {
+				ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
+			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -2407,8 +2404,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			ContentsAmendType c2 = null;
-			
-			
+
 			for (int i = 0; i < contentsList.size() && i < 12; i++) {
 
 				if (i == 0) {
@@ -2418,12 +2414,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				String bagInfo = contentsList.get(i);
 				String[] bagContents = bagInfo.split(".- ");
 				int countPerBag = bagContents.length;
+				String lastCategory = null;
+				
 				for (int j = 0; j < countPerBag && j < 12; j++) {
 					String contents = bagContents[j];
 					int index = contents.indexOf("/");
-	
+
 					ContentType c = c2.addNewContent();
-					c.setCategory(contents.substring(0, index));
+					if (lastCategory == null) {
+						lastCategory = contents.substring(0, index);
+					}
+					
+					c.setCategory(lastCategory);
 					c.setDescription(contents.substring(index + 1));
 				}
 			}
@@ -2589,7 +2591,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String bagDesc = bagFace.substring(4, 7);
 
 					DelayedBag t3 = t22.addNewDelayedBag();
-					t3.setSeq(i+1);
+					t3.setSeq(i + 1);
 					ContentsAmendType cx = t3.addNewBagContents();
 
 					if (tagList != null && i < tagList.size()) {
@@ -2630,6 +2632,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							String bagInfo = contentsList.get(i);
 							String[] bagContents = bagInfo.split(".- ");
 							int countPerBag = bagContents.length;
+							String lastCategory = null;
+							
 							for (int j = 0; j < countPerBag && j < 12; j++) {
 								String contents = bagContents[j];
 								if (j == 0)
@@ -2637,7 +2641,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								int index = contents.indexOf("/");
 
 								ContentType c = cx.addNewContent();
-								c.setCategory(contents.substring(0, index));
+								if (lastCategory == null) {
+									lastCategory = contents.substring(0, index);
+								}
+								
+								c.setCategory(lastCategory);
 								c.setDescription(contents.substring(index + 1));
 							}
 						}
@@ -2657,10 +2665,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = p11.addNewName();
 					nm.setStringValue(name);
-					nm.setSeq(j+1);
-					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS HERE
+					nm.setSeq(j + 1);
+					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS
+					// HERE
 					// if (fieldList2 != null && fieldList2.size() > j) {
-					// 	p1.addNewInitials().addNewIntial().setStringValue(fieldList2.get(j));
+					// p1.addNewInitials().addNewIntial().setStringValue(fieldList2.get(j));
 					// }
 				}
 			}
@@ -2670,13 +2679,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				p1.addNewFrequentFlyerID().setStringValue(fieldList.get(0));
 			}
 
-
-			
-			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PS);
 
-			
-			
 			if (fieldList != null && fieldList.size() > 0) {
 				String status = fieldList.get(0);
 				if (status.contains("/")) {
@@ -2703,10 +2707,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					p1.addNewStatus().setStringValue(status);
 					p1.addNewFareBasis().setStringValue(status);
 				}
-				
+
 			}
-			
-			
+
 			if (fieldList != null && fieldList.size() > 0) {
 				p1.addNewStatus().setStringValue(fieldList.get(0));
 				p1.addNewFareBasis().setStringValue(fieldList.get(0));
@@ -2780,7 +2783,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					StringLength0To58AmendType pa1 = pa.addNewAddressLine();
-					pa1.setSeq(i+1);
+					pa1.setSeq(i + 1);
 					pa1.setStringValue(address);
 				}
 			}
@@ -2806,7 +2809,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					StringLength0To58AmendType ta1 = ta.addNewAddressLine();
-					ta1.setSeq(i+1);
+					ta1.setSeq(i + 1);
 					ta1.setStringValue(address);
 				}
 			}
@@ -2831,10 +2834,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					p4.setDestination(itin.getArrivalCity().trim());
 				}
 			}
-			
-			
+
 			aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.BaggageItinerary iti = t2.addNewBaggageItinerary();
-						
+
 			int itinCountA = 0;
 
 			for (Itinerary itin : incident.getBagItinerary()) {
@@ -2848,8 +2850,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					p3.setDate(itin.getFlightDate());
 				}
 			}
-
-			
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AG);
 			d1.setAgentID(fieldList.get(0));
@@ -2908,11 +2908,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private String getDelayedEndpoint(WorldTracerActionDTO dto) {
 		return dto.getUser().getProfile().getParameters().get(ParameterType.DELAYED_ENDPOINT);
 	}
-	
+
 	private String getRushEndpoint(WorldTracerActionDTO dto) {
 		return dto.getUser().getProfile().getParameters().get(ParameterType.RUSH_ENDPOINT);
 	}
-	
+
 	private String getEnvironment(WorldTracerActionDTO dto) {
 		String retVal = dto.getUser().getProfile().getParameters().get(ParameterType.CLIENT_ENVIRONMENT);
 		if (retVal == null)
@@ -2921,17 +2921,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			return retVal;
 	}
 
-
 	public void sendQoh(WorldTracerActionDTO dto, Qoh qoh, WorldTracerResponse response) throws WorldTracerException {
-//		try {
-//			airtag = BagTagConversion.getTwoCharacterBagTag(airtag);
-//		} catch (BagtagException e) {
-//			logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
-//		}
-//
-//		BagTagType t3 = d2.addNewBagTag();
-//		t3.setAirlineCode(airtag.substring(0, 2));
-//		t3.setTagSequence(airtag.substring(2));
+		// try {
+		// airtag = BagTagConversion.getTwoCharacterBagTag(airtag);
+		// } catch (BagtagException e) {
+		// logger.debug("Unable to convert bagtag while creating fwd: " +
+		// airtag);
+		// }
+		//
+		// BagTagType t3 = d2.addNewBagTag();
+		// t3.setAirlineCode(airtag.substring(0, 2));
+		// t3.setTagSequence(airtag.substring(2));
 		try {
 
 			OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
@@ -2939,34 +2939,35 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			WTRQuickOnhandBagsCreateRQDocument d = WTRQuickOnhandBagsCreateRQDocument.Factory.newInstance();
 			WTRQuickOnhandBagsCreateRQ d1 = d.addNewWTRQuickOnhandBagsCreateRQ();
-			
+
 			d1.setVersion(VERSION_0_PT_1);
 			d1.addNewPOS().addNewSource().setAirlineVendorID(dto.getUser().getProfile().getAirline());
 			StationAirlineType station = d1.addNewRefStationAirline();
 			station.setAirlineCode(dto.getUser().getProfile().getAirline());
 			station.setStationCode(qoh.getStationCode());
-			
+
 			d1.setAgentID(PreProcessor.getAgentEntry(null));
-			
+
 			BagTags tags = d1.addNewBagTags();
-			
-			for (Tag t: qoh.getTags()) {
+
+			for (Tag t : qoh.getTags()) {
 				String airtag = null;
 				try {
-					// I have opted to ignore the airline code for our web services and am including the whole
+					// I have opted to ignore the airline code for our web
+					// services and am including the whole
 					// tag in the tag sequence field.
 					airtag = t.getTagSequence();
 					airtag = BagTagConversion.getTwoCharacterBagTag(airtag);
-					
+
 					BagTagType tag = tags.addNewBagTag();
 					tag.setAirlineCode(airtag.substring(0, 2));
 					tag.setTagSequence(airtag.substring(2));
-					
+
 				} catch (BagtagException e) {
 					logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
 				}
 			}
-			
+
 			WTRStatusRSDocument wsresponse = null;
 
 			try {
@@ -3012,8 +3013,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			throw e;
 		}
 
-		
 	}
 
-	
 }

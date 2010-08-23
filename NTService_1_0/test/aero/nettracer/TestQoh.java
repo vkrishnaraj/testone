@@ -110,7 +110,7 @@ public class TestQoh {
 		
 		try {
 			
-			OnhandBagServiceStub stub = new OnhandBagServiceStub("https://webservice.worldtracer.aero/OnhandBagService/0.1");
+			OnhandBagServiceStub stub = new OnhandBagServiceStub("https://webservice-qa.worldtracer.aero/OnhandBagService/0.1");
 			configureClient(stub);
 
 			WTRQuickOnhandBagsCreateRQDocument d = WTRQuickOnhandBagsCreateRQDocument.Factory.newInstance();

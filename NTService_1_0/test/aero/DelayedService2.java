@@ -68,7 +68,7 @@ public class DelayedService2 {
 	private static final String CLAIM_CURRENCY_CODE = "USD";
 	private static final BigDecimal CLAIM_AMOUNT = new BigDecimal(0);
 
-	 String endpoint = "https://webservice.worldtracer.aero/DelayedBagService/0.1";
+	 String endpoint = "https://webservice-qa.worldtracer.aero/DelayedBagService/0.1";
 
 	private static Policy loadPolicy(String xmlPath) throws Exception {
 		StAXOMBuilder builder = new StAXOMBuilder(DelayedService2.class.getResourceAsStream(xmlPath));

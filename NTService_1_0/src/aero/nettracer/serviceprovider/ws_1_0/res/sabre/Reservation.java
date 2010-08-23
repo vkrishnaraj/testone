@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.wsdl.Output;
+
 import org.apache.axis2.engine.AxisConfiguration;
+import org.apache.axis2.engine.Handler;
+import org.apache.axis2.engine.Phase;
 import org.apache.log4j.Logger;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument.MessageHeader;
@@ -70,6 +74,7 @@ import com.sabre.webservices.sabrexml._2003._07.ItemType.Air;
 import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryRSDocument.OTATravelItineraryRS.TravelItinerary;
 import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument.OTATravelItineraryReadRQ;
 import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument.OTATravelItineraryReadRQ.UniqueID;
+import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRQDocument.SabreCommandLLSRQ;
 import com.sabre.webservices.websvc.AddRemarkServiceStub;
 import com.sabre.webservices.websvc.EndTransactionServiceStub;
 import com.sabre.webservices.websvc.IgnoreTransactionServiceStub;
@@ -542,11 +547,15 @@ public class Reservation implements ReservationInterface {
 					ACTION_GENERIC_RQ);
 			SabreCommandLLSRQDocument rqDoc = SabreCommandLLSRQDocument.Factory
 					.newInstance();
+			
 			rqDoc.addNewSabreCommandLLSRQ().addNewRequest().setHostCommand(
 					command);
 			rqDoc.getSabreCommandLLSRQ().setVersion("2003A.TsabreXML1.6.1");
 			logger.info(NATIVE_COMMAND + connParams.getLoggingString()
 					+ " Command: " + command);
+			
+			rqDoc.getSabreCommandLLSRQ().getRequest().setOutput(SabreCommandLLSRQ.Request.Output.SCREEN);
+			
 
 			SabreCommandLLSRSDocument responseDocument = stub
 					.sabreCommandLLSRQ(rqDoc, mhDoc, securityDocument);
@@ -766,13 +775,34 @@ public class Reservation implements ReservationInterface {
 			AxisConfiguration ac = stub._getServiceClient()
 					.getAxisConfiguration();
 			
-			List al = ac.getInFlowPhases();
-			List al2 = ac.getInFaultFlowPhases();
-			if (al.size() > 0 && !(al.get(0) instanceof MustUnderstandHandler)) {
-				logger.info("Created MustUnderstandHandler");
-				MustUnderstandHandler mu = new MustUnderstandHandler();
-				al.add(0, mu);
-				al2.add(0, mu);
+			
+			
+			List<Phase> al = ac.getInFlowPhases();
+			List<Phase> al2 = ac.getInFaultFlowPhases();
+			
+			if (al.size() > 0) {
+				
+				Phase phase = al.get(0);
+				
+				List<Handler> handlers = phase.getHandlers();
+				boolean foundHandler = false;
+				for (Handler h: handlers) {
+					if (h instanceof MustUnderstandHandler) {
+						foundHandler = true;
+					}
+					
+				}
+				
+				if (!foundHandler) {
+					Phase phase2 = al2.get(0);
+					logger.info("Created MustUnderstandHandler");
+					MustUnderstandHandler mu = new MustUnderstandHandler();
+					
+					phase.addHandler(mu, 0);
+					phase2.addHandler(mu, 0);
+				}
+				
+				
 				ac.setInPhasesUptoAndIncludingPostDispatch(al);
 				ac.setInFaultPhases(al2);
 			}
