@@ -381,7 +381,7 @@ public class StationReportBMO {
 		} else {
 			mySubtitle += "   Status: All";
 		}
-		//mySubtitle += "              ";
+		mySubtitle += "\\r";
 		
 		if (parameters.get("ddate") != null) {
 			String myDepartDate = "" + parameters.get("ddate");
@@ -657,6 +657,42 @@ public class StationReportBMO {
 		} else {
 			mySubtitle += "   Status: All";
 		}
+		
+		if (parameters.get("ddate") != null) {
+			String myDepartDate = "" + parameters.get("ddate");
+			if (!myDepartDate.equalsIgnoreCase("Any Date")) {
+				mySubtitle += "   Depart Date: " + myDepartDate;
+			}
+		}	
+		if (parameters.get("adate") != null) {
+			String myArrivalDate = "" + parameters.get("adate");
+			if (!myArrivalDate.equalsIgnoreCase("Any Date")) {
+				mySubtitle += "   Arrival Date: " + myArrivalDate;
+			}
+		}
+		
+		if (parameters.get("b_station") != null) {
+			String myOriginStation = "" + parameters.get("b_station");
+			if (!myOriginStation.equals("")) {
+				mySubtitle += "   Origin Station: " + myOriginStation;
+			}
+		}
+		if (parameters.get("t_station") != null) {
+			String myTransferStation = "" + parameters.get("t_station");
+			if (!myTransferStation.equals("")) {
+				mySubtitle += "   Transfer Station: " + myTransferStation;
+			}
+		}
+		if (parameters.get("e_station") != null) {
+			String myTerminateStation = "" + parameters.get("e_station");
+			if (!myTerminateStation.equals("")) {
+				mySubtitle += "   Terminate Station: " + myTerminateStation;
+			}
+		}
+		
+		if (parameters.get("agent_username") != null) {
+			mySubtitle += "   Agent: " + parameters.get("agent_username");
+		}	
 		
         drb.setReportLocale(reportLocale);
 		
