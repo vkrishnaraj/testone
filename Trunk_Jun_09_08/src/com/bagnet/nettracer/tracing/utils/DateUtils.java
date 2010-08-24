@@ -244,4 +244,9 @@ public class DateUtils {
 		return result;
 	}	
 
+	// use negative for days
+	public static void adjustDays(Date d, int days)
+	{
+	    d.setTime( d.getTime() + days*1000*60*60*24 );
+	}
 }
