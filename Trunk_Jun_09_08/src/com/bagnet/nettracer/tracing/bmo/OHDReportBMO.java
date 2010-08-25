@@ -698,6 +698,7 @@ public class OHDReportBMO {
 			
 	        gb1 = new GroupBuilder();
 	        g1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
+	        .addVariable("myGroupStationCode", groupByColumn, DJCalculation.FIRST)
 	        .addFooterVariable(columnLastNameFirstName, mySubTotalExpression,groupVariablesLegend)
 	        .addFooterVariable(columnOnhandNumber, DJCalculation.COUNT, groupVariables)   //station-totals
 			.setGroupLayout(GroupLayout.DEFAULT)
@@ -706,6 +707,7 @@ public class OHDReportBMO {
 			.setHeaderVariablesHeight(new Integer(35))
 			.build();
 
+	        drb.addField("stationcode", String.class.getName());
 			drb.addGroup(g1);
 			
 			//deal with summary and detail options
@@ -723,8 +725,8 @@ public class OHDReportBMO {
 		return new CustomExpression() {
 
 			public Object evaluate(Map fields, Map variables, Map parameters) {
-				String stationCode = (String) fields.get("stationcode");
-				stationCode = "";
+				String stationCode = "";
+				stationCode += (String) variables.get("myGroupStationCode"); 
 				String subTotal = stationCode + " Station Total :   ";
 				return subTotal;
 			}
