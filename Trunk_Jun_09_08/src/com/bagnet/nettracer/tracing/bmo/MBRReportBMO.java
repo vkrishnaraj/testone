@@ -347,7 +347,9 @@ public class MBRReportBMO {
 		
 		Style oddRowStyle = new Style();
 		oddRowStyle.setBorder(Border.NO_BORDER);
-		oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		//oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		Color myRowColor = new Color(0xd3d3d3);
+		oddRowStyle.setBackgroundColor(myRowColor);
 		oddRowStyle.setTransparency(Transparency.OPAQUE);
 
 		DynamicReportBuilder drb = new DynamicReportBuilder();
@@ -376,7 +378,9 @@ public class MBRReportBMO {
 		}
 		if (parameters.get("agent_username") != null) {
 			mySubtitle += "   Agent: " + parameters.get("agent_username");
-		}		
+		} else {
+			mySubtitle += "   Agent: All Agents";
+		}			
 		
 		Integer margin = new Integer(20);
 		drb
@@ -481,7 +485,7 @@ public class MBRReportBMO {
 		//Style atStyle = new StyleBuilder(true).setFont(Font.COMIC_SANS_SMALL).setTextColor(Color.red).build();
 		Style atStyle2 = new StyleBuilder(true).setFont(new Font(9, Font._FONT_TIMES_NEW_ROMAN, false, true, false)).setTextColor(Color.DARK_GRAY).build();
 
-		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_RIGHT,60,30,atStyle2);
+		drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_RIGHT,60,30,atStyle2);
 		
 		DynamicReport dr = drb.build();
 		return dr;
@@ -669,6 +673,12 @@ public class MBRReportBMO {
 				mySubtitle += "   Status: " + parameters.get("mbr_subtitle_status");
 			}
 		}
+		if (parameters.get("agent_username") != null) {
+			mySubtitle += "   Agent: " + parameters.get("agent_username");
+		} else {
+			mySubtitle += "   Agent: All Agents";
+		}	
+		
 		
         drb.setReportLocale(reportLocale);
 		
@@ -741,31 +751,10 @@ public class MBRReportBMO {
 			drb.addColumn(columnStatus);
 			drb.addColumn(columnFaultStationCode);
 			drb.addColumn(columnLossCode);
-			
-			//TODO: test 2: trying a new way - not quite work either
-//			DJGroupLabel glabel1 = new DJGroupLabel(new StringExpression() {         
-//		        public Object evaluate(Map fields, Map variables, Map parameters) {
-//		        	String stationCode = "" + (String) fields.get("faultstationcode");
-//		        	return stationCode + "count: " + ExpressionHelper.getGroupCount("faultstationcode", variables);
-//		        }
-//		    },groupVariablesLegend, LabelPosition.TOP);
-//			
-//			DJGroupLabel glabel2 = new DJGroupLabel(new StringExpression() {         
-//		        public Object evaluate(Map fields, Map variables, Map parameters) {
-//		        	String stationCode = "" + (String) fields.get("stationcode");
-//		        	return stationCode + " count: " + ExpressionHelper.getGroupCount("stationcode", variables);
-//		        }
-//		    },groupVariablesLegend, LabelPosition.TOP);
-//			
-//	        gb1 = new GroupBuilder(invisibleFieldName);
-//	        if (invisibleFieldName.equals("faultstationcode")) {
-//	        	gb1.setFooterLabel(glabel1);
-//	        } else {
-//	        	gb1.setFooterLabel(glabel2);
-//	        }
 	        
 	        gb1 = new GroupBuilder();
 	        g1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
+	        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST)
 	        .addFooterVariable(columnLastNameFirstName, mySubTotalExpression,groupVariablesLegend)
 	        .addFooterVariable(columnClaimNumber, DJCalculation.COUNT, groupVariables)   //sub-totals
 			.setGroupLayout(GroupLayout.DEFAULT)
@@ -791,9 +780,9 @@ public class MBRReportBMO {
 		return new CustomExpression() {
 
 			public Object evaluate(Map fields, Map variables, Map parameters) {
-				String stationCode = (String) fields.get("faultstationcode");
-				stationCode = "";
-				String subTotal = stationCode + " Station Total :   ";
+				String myGroupLabel = "";
+				myGroupLabel += (String) variables.get("myGroupLabel"); 
+				String subTotal = myGroupLabel + " Total :   ";
 				return subTotal;
 			}
 

@@ -818,7 +818,7 @@ public class ReportBMO {
 				statusq = " and itinerary.incident.status.status_ID= :status_ID ";
 			}
 			
-			//TODO: new status multiple selection approach
+			// new status multiple selection approach
 			String multiStatusQ = "";
 			
 			String myMbrPerFlightSubtitleStatus = "";
@@ -932,7 +932,7 @@ public class ReportBMO {
 				if (srDTO.getStatus_ID() >= 1)
 					q.setInteger("status_ID", srDTO.getStatus_ID());
 				
-				//TODO: new approach to support multiple status selection
+				// new approach to support multiple status selection
 				if (srDTO.getStatus_id_combo() != null) {
 					if (srDTO.getStatus_id_combo()[0].intValue() >= 1) {
 						q.setParameterList("status_ID", srDTO.getStatus_id_combo());
@@ -1029,6 +1029,14 @@ public class ReportBMO {
 			} else {
 				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
+			
+			// get the incident type if any
+			String incidentType = "";
+			if (srDTO.getItemType_ID() >= 1) {
+				ItemType it = IncidentUtils.retrieveItemTypeWithId(srDTO.getItemType_ID(), user.getCurrentlocale());
+				incidentType = it.getDescription();
+			} 
+			parameters.put("incidentType", incidentType);
 
 			if (list.size() == 0) {
 				logger.debug("no data for report");
@@ -1036,7 +1044,7 @@ public class ReportBMO {
 			}
 			parameters.put("numtop", new Integer(srDTO.getNumtop()));
 			
-			//TODO: toggle between old and new implementations
+			// toggle between old and new implementations
 //			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
 			
 			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
@@ -2109,12 +2117,12 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				parameters.put("status", TracerUtils.getText("reports.all", user));
 			}
 
-			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
+//			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
 
-//			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
-//			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list2);
-//			
-//			return StationReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list2);
+			
+			return StationReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
 		} catch (Exception e) {
 			logger.error("unable to create station report " + e);
 			e.printStackTrace();
@@ -2230,9 +2238,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			Query q = sess.createQuery(sql);
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
-			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
-				q.setParameterList("station_ID", srDTO.getStation_ID());
-
+			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
+				//q.setParameterList("station_ID", srDTO.getStation_ID());
+				String sArray[] = srDTO.getStation_ID();
+				List<String> stationIdStringList = Arrays.asList(sArray);
+				List<Integer> stationIdIntegerList = StringUtils.convertStringArrayList2IntegerArrayList(stationIdStringList);
+				q.setParameterList("station_ID", stationIdIntegerList);
+			}
+			
 			if (sdate != null) {
 				q.setDate("startdate", sdate);
 				if (edate == null) q.setDate("startdate1", sdate1);
@@ -2255,9 +2268,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			q = sess.createQuery(sql);
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
-			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
-				q.setParameterList("station_ID", srDTO.getStation_ID());
-
+			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
+				//q.setParameterList("station_ID", srDTO.getStation_ID());
+				String sArray[] = srDTO.getStation_ID();
+				List<String> stationIdStringList = Arrays.asList(sArray);
+				List<Integer> stationIdIntegerList = StringUtils.convertStringArrayList2IntegerArrayList(stationIdStringList);
+				q.setParameterList("station_ID", stationIdIntegerList);
+			}
 			if (sdate != null) {
 				q.setDate("startdate", sdate);
 				if (edate == null) q.setDate("startdate1", sdate1);
@@ -2343,7 +2360,12 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			if (reporttype != null)
 				parameters.put("itemtype", reporttype);
-			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+//			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+			
+			return RecoveryReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -2467,8 +2489,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			Query q = sess.createQuery(sql);
 			if (srDTO.getItemType_ID() >= 1)
 				q.setInteger("itemType_ID", srDTO.getItemType_ID());
-			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
-				q.setParameterList("station_ID", srDTO.getStation_ID());
+			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
+				//q.setParameterList("station_ID", srDTO.getStation_ID());
+				String sArray[] = srDTO.getStation_ID();
+				List<String> stationIdStringList = Arrays.asList(sArray);
+				List<Integer> stationIdIntegerList = StringUtils.convertStringArrayList2IntegerArrayList(stationIdStringList);
+				q.setParameterList("station_ID", stationIdIntegerList);				
+			}
 
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0)
 				q.setString("agent_username", srDTO.getAgent());
@@ -2516,7 +2543,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				num = ((Long) o[1]).intValue();
 
 				if (breakdown.length() > 0) {
-					tempc = DateUtils.formatDate((String) o[2], TracingConstants.DB_DATETIMEFORMAT, TracingConstants.DB_DATEFORMAT, null, tz);
+					//tempc = DateUtils.formatDate((String) o[2], TracingConstants.DB_DATETIMEFORMAT, TracingConstants.DB_DATEFORMAT, null, tz);
+					tempc = DateUtils.formatDate((Date) o[2], TracingConstants.DB_DATEFORMAT, null, tz);
 					if (srDTO.getItemType_ID() >= 1)
 						reporttype = (String) o[3];
 				} else {
@@ -2574,7 +2602,12 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			if (reporttype != null)
 				parameters.put("itemtype", reporttype);
-			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+//			return getReportFile(list, parameters, reportname, rootpath, srDTO.getOutputtype());
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(list);
+			
+			return ClosedRecoveryReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -2784,7 +2817,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					sr.setFoundtime(rs.getTime("foundtime"));
 					sr.setStatusdesc(rs.getString("stdesc"));
 					
-					//TODO: new requirements: fault city & fault code
+					// new requirements: fault city & fault code
 					sr.setFaultstationcode(rs.getString("faultstationcode"));
 					sr.setLoss_code(rs.getInt("loss_code"));
 					
@@ -2887,7 +2920,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				parameters.put("reportStyle", "00");
 			}
 
-			//TODO: toggle between old and new implementations
+			// toggle between old and new implementations
 //			return getReportFile(list2, parameters, reportname, rootpath, srDTO.getOutputtype());
 
 			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));

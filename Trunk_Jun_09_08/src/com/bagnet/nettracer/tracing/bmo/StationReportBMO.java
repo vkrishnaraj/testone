@@ -348,7 +348,9 @@ public class StationReportBMO {
 		
 		Style oddRowStyle = new Style();
 		oddRowStyle.setBorder(Border.NO_BORDER);
-		oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		//oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		Color myRowColor = new Color(0xd3d3d3);
+		oddRowStyle.setBackgroundColor(myRowColor);
 		oddRowStyle.setTransparency(Transparency.OPAQUE);
 
 		DynamicReportBuilder drb = new DynamicReportBuilder();
@@ -414,14 +416,12 @@ public class StationReportBMO {
 				mySubtitle += "   Terminate Station: " + myTerminateStation;
 			}
 		}
-
 		
 		if (parameters.get("agent_username") != null) {
 			mySubtitle += "   Agent: " + parameters.get("agent_username");
-		}	
-		
-		
-		
+		} else {
+			mySubtitle += "   Agent: All Agents";
+		}
 		
 		Integer margin = new Integer(20);
 		drb
@@ -521,7 +521,7 @@ public class StationReportBMO {
 		//Style atStyle = new StyleBuilder(true).setFont(Font.COMIC_SANS_SMALL).setTextColor(Color.red).build();
 		Style atStyle2 = new StyleBuilder(true).setFont(new Font(9, Font._FONT_TIMES_NEW_ROMAN, false, true, false)).setTextColor(Color.DARK_GRAY).build();
 
-		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_RIGHT,60,30,atStyle2);
+		drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_RIGHT,60,30,atStyle2);
 		
 		DynamicReport dr = drb.build();
 		return dr;
@@ -692,7 +692,9 @@ public class StationReportBMO {
 		
 		if (parameters.get("agent_username") != null) {
 			mySubtitle += "   Agent: " + parameters.get("agent_username");
-		}	
+		} else {
+			mySubtitle += "   Agent: All Agents";
+		}
 		
         drb.setReportLocale(reportLocale);
 		
@@ -754,19 +756,19 @@ public class StationReportBMO {
 			drb.addColumn(columnFaultStationCode);
 			drb.addColumn(columnLossCode);
 			
-			//TODO: experimenting
+			//  experimenting
 //			drb.setPrintColumnNames(false);
 			
 	        gb1 = new GroupBuilder();
 	        
-	        //TODO: new
 	        PropertyColumn myExpressionColumn = (PropertyColumn) groupByColumn;
 //	        myExpressionColumn.setExpressionToGroupBy(mySubTotalExpression);
 	        
 	        g1 = gb1.setCriteriaColumn(myExpressionColumn)
+	        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST)
 	        .addFooterVariable(columnLastNameFirstName, mySubTotalExpression,groupVariablesLegend)
 	        .addFooterVariable(columnClaimNumber, DJCalculation.COUNT, groupVariables)   //sub-totals
-	        //TODO: experimenting
+	        //  experimenting
 			.setGroupLayout(GroupLayout.DEFAULT)
 //	        .setGroupLayout(GroupLayout.VALUE_IN_HEADER_WITH_HEADERS_AND_COLUMN_NAME)
 			.setFooterVariablesHeight(new Integer(20))
@@ -790,9 +792,9 @@ public class StationReportBMO {
 		return new CustomExpression() {
 
 			public Object evaluate(Map fields, Map variables, Map parameters) {
-				String typedesc = (String) fields.get("typedesc");
-				typedesc = "";
-				String subTotal = typedesc + " Sub Total :   ";
+				String myGroupLabel = "";
+				myGroupLabel += (String) variables.get("myGroupLabel"); 
+				String subTotal = myGroupLabel + " Sub Total :   ";
 				return subTotal;
 			}
 

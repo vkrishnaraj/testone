@@ -351,6 +351,13 @@ public class MBRPerFlightReportBMO {
 		} else {
 			mySubtitle += "   Status: All";
 		}
+		
+		if (parameters.get("incidentType") != null) {
+			if (!parameters.get("incidentType").equals("")) {
+				mySubtitle += "   Type: " + parameters.get("incidentType");
+			}
+		}			
+		
 		if (parameters.get("agent_username") != null) {
 			mySubtitle += "   Agent: " + parameters.get("agent_username");
 		}		
@@ -413,7 +420,7 @@ public class MBRPerFlightReportBMO {
 		//Style atStyle = new StyleBuilder(true).setFont(Font.COMIC_SANS_SMALL).setTextColor(Color.red).build();
 		Style atStyle2 = new StyleBuilder(true).setFont(new Font(9, Font._FONT_TIMES_NEW_ROMAN, false, true, false)).setTextColor(Color.DARK_GRAY).build();
 
-		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_RIGHT,60,30,atStyle2);
+		drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_RIGHT,60,30,atStyle2);
 		
 		DynamicReport dr = drb.build();
 		return dr;
@@ -514,6 +521,12 @@ public class MBRPerFlightReportBMO {
 			mySubtitle += "   Status: All";
 		}
 		
+		if (parameters.get("incidentType") != null) {
+			if (!parameters.get("incidentType").equals("")) {
+				mySubtitle += "   Type: " + parameters.get("incidentType");
+			}
+		}	
+		
         drb.setReportLocale(reportLocale);
 		
 		drb.setSubtitle(mySubtitle);
@@ -563,6 +576,7 @@ public class MBRPerFlightReportBMO {
 			
 	        gb1 = new GroupBuilder();
 	        g1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
+	        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST)
 	        .addFooterVariable(columnAirlineFlightNumber, mySubTotalExpression,groupVariablesLegend)
 	        .addFooterVariable(columnNumberOfIncidents, DJCalculation.SUM, groupVariables)   //station-totals
 	        .addFooterVariable(columnNumberOfBags, DJCalculation.SUM, groupVariables)   //station-totals
@@ -584,9 +598,9 @@ public class MBRPerFlightReportBMO {
 		return new CustomExpression() {
 
 			public Object evaluate(Map fields, Map variables, Map parameters) {
-				String stationCode = (String) fields.get("stationcode");
-				stationCode = "";
-				String subTotal = stationCode + " Station Total :   ";
+				String myGroupLabel = "";
+				myGroupLabel += (String) variables.get("myGroupLabel"); 
+				String subTotal = myGroupLabel + " Total :   ";
 				return subTotal;
 			}
 

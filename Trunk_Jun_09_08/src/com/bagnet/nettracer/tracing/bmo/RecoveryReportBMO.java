@@ -80,8 +80,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 //helper class to ReportBMO
 
-public class ClosedRecoveryReportBMO {
-	private static Logger logger = Logger.getLogger(ClosedRecoveryReportBMO.class);
+public class RecoveryReportBMO {
+	private static Logger logger = Logger.getLogger(RecoveryReportBMO.class);
 	public static String newline = System.getProperty("line.separator");
 	
 	public static String getReportFileDj(JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, ReportBMO rbmo) throws Exception {
@@ -247,29 +247,36 @@ public class ClosedRecoveryReportBMO {
 		
 		//getting report header title from resource bundle
 		String reportHeadingSortByCreateDate = "Create Date";
-		String reportHeadingSortByCloseDate = "Close Date";
 		
 		String reportHeadingAssignedStation = "Station Assigned";
+		String reportHeadingReportsTaken = "Reports Taken";
 		String reportHeadingReportsClosed = "Reports Closed";
+		String reportHeadingRecoveryRatio = "Recovery Ratio";
+		
 		
 		String myCreateDateFromResource = resourceBundle.getString("report.recovery.heading.create.date");
 		if (!( myCreateDateFromResource == null || myCreateDateFromResource.equalsIgnoreCase("") )) {
 			reportHeadingSortByCreateDate = myCreateDateFromResource;
-		}
-		
-		String myCloseDateFromResource = resourceBundle.getString("report.recovery.heading.close.date");
-		if (!( myCloseDateFromResource == null || myCloseDateFromResource.equalsIgnoreCase("") )) {
-			reportHeadingSortByCloseDate = myCloseDateFromResource;
 		}
 
 		String myStationAssigned = resourceBundle.getString("report.recovery.heading.station.assigned");
 		if (!( myStationAssigned == null || myStationAssigned.equalsIgnoreCase("") )) {
 			reportHeadingAssignedStation = myStationAssigned;
 		}
+		
+		String myReportsTaken = resourceBundle.getString("report.recovery.heading.reports.taken");
+		if (!( myReportsTaken == null || myReportsTaken.equalsIgnoreCase("") )) {
+			reportHeadingReportsTaken = myReportsTaken;
+		}
 
 		String myReportsClosed = resourceBundle.getString("report.recovery.heading.reports.closed");
 		if (!( myReportsClosed == null || myReportsClosed.equalsIgnoreCase("") )) {
 			reportHeadingReportsClosed = myReportsClosed;
+		}
+		
+		String myRecoveryRatio = resourceBundle.getString("report.recovery.heading.recovery.ratio");
+		if (!( myRecoveryRatio == null || myRecoveryRatio.equalsIgnoreCase("") )) {
+			reportHeadingRecoveryRatio = myRecoveryRatio;
 		}
 		
 		Style detailStyle = new Style("detail");
@@ -319,7 +326,10 @@ public class ClosedRecoveryReportBMO {
 		
 		Style oddRowStyle = new Style();
 		oddRowStyle.setBorder(Border.NO_BORDER);
-		oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		//oddRowStyle.setBackgroundColor(Color.LIGHT_GRAY);
+		//Color myRowColor = new Color(0xc0c0c0);
+		Color myRowColor = new Color(0xd3d3d3);
+		oddRowStyle.setBackgroundColor(myRowColor);
 		oddRowStyle.setTransparency(Transparency.OPAQUE);
 
 		DynamicReportBuilder drb = new DynamicReportBuilder();
@@ -332,8 +342,6 @@ public class ClosedRecoveryReportBMO {
 		}
 		
 		String mySubtitle = "";
-		
-		// handle Report Type here
 	
 		mySubtitle += "This report was generated on " + new Date();
 		mySubtitle += "\\r";
@@ -375,9 +383,9 @@ public class ClosedRecoveryReportBMO {
 			.setGrandTotalLegendStyle(headerVariables)
 			.setOddRowBackgroundStyle(oddRowStyle);
 		
-		AbstractColumn columnSortByCloseDate = ColumnBuilder.getNew()
-				.setColumnProperty("closedate", String.class.getName()).setTitle(
-				reportHeadingSortByCloseDate ).setWidth(new Integer(30))
+		AbstractColumn columnSortByCreateDate = ColumnBuilder.getNew()
+				.setColumnProperty("createdate", String.class.getName()).setTitle(
+				reportHeadingSortByCreateDate ).setWidth(new Integer(30))
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build();
 
 		AbstractColumn columnAssignedStationCode = ColumnBuilder.getNew()
@@ -385,25 +393,40 @@ public class ClosedRecoveryReportBMO {
 				.setTitle(reportHeadingAssignedStation).setWidth(new Integer(28)).setStyle(
 				detailStyle).setHeaderStyle(headerStyle).build();
 		
+		
+		AbstractColumn columnReportsTaken = ColumnBuilder.getNew()
+				.setColumnProperty("reportstaken", Integer.class.getName()).setTitle(
+				reportHeadingReportsTaken).setWidth(new Integer(30))
+				.setStyle(detailStyle2).setHeaderStyle(headerStyle2).build();
+		
 		AbstractColumn columnReportsClosed = ColumnBuilder.getNew()
 				.setColumnProperty("reportsclosed", Integer.class.getName()).setTitle(
 				reportHeadingReportsClosed).setWidth(new Integer(30))
+				.setStyle(detailStyle2).setHeaderStyle(headerStyle2).build();
+		
+		AbstractColumn columnRecoveryRatio = ColumnBuilder.getNew()
+				.setColumnProperty("displayRecoveryratio", String.class.getName())
+				.setTitle(reportHeadingRecoveryRatio).setWidth(new Integer(28))
 				.setStyle(detailStyle2).setHeaderStyle(headerStyle2).build();		
 			
 
 		CustomExpression myGrandTotalPercentageExpression = getGrandTotalPercentageCustomExpression();
 		
 		// grand total count
+		drb.addGlobalFooterVariable(columnReportsTaken, DJCalculation.SUM, headerVariables);
 		drb.addGlobalFooterVariable(columnReportsClosed, DJCalculation.SUM, headerVariables);
+		drb.addGlobalFooterVariable(columnRecoveryRatio, myGrandTotalPercentageExpression, headerVariables);
 		drb.setGlobalFooterVariableHeight(new Integer(45));
 		
 		
 		Map<String, AbstractColumn> reportColumns = new HashMap<String, AbstractColumn>();
 
-		reportColumns.put("columnSortByCloseDate", columnSortByCloseDate);
+		reportColumns.put("columnSortByCreateDate", columnSortByCreateDate);
 		
 		reportColumns.put("columnAssignedStationCode", columnAssignedStationCode);
+		reportColumns.put("columnReportsTaken", columnReportsTaken);
 		reportColumns.put("columnReportsClosed", columnReportsClosed);
+		reportColumns.put("columnRecoveryRatio", columnRecoveryRatio);
 		
 		if (parameters.get("showdetail") != null) {
 			String mySummaryDetailSwitch = "" + parameters.get("showdetail");
@@ -451,19 +474,27 @@ public class ClosedRecoveryReportBMO {
 		FastReportBuilder drb = new FastReportBuilder();
 		
 		//getting report header title from reource bundle
-		String reportHeadingSortByCloseDate = "Close Date";
+		String reportHeadingSortByCreateDate = "Create Date";
 		
 		String reportHeadingAssignedStation = "Station Assigned";
+		String reportHeadingReportsTaken = "Reports Taken";
 		String reportHeadingReportsClosed = "Reports Closed";
+		String reportHeadingRecoveryRatio = "Recovery Ratio";
 		
-		String myCloseDateFromResource = resourceBundle.getString("report.recovery.heading.close.date");
-		if (!( myCloseDateFromResource == null || myCloseDateFromResource.equalsIgnoreCase("") )) {
-			reportHeadingSortByCloseDate = myCloseDateFromResource;
+		
+		String myCreateDateFromResource = resourceBundle.getString("report.recovery.heading.create.date");
+		if (!( myCreateDateFromResource == null || myCreateDateFromResource.equalsIgnoreCase("") )) {
+			reportHeadingSortByCreateDate = myCreateDateFromResource;
 		}
 
 		String myStationAssigned = resourceBundle.getString("report.recovery.heading.station.assigned");
 		if (!( myStationAssigned == null || myStationAssigned.equalsIgnoreCase("") )) {
 			reportHeadingAssignedStation = myStationAssigned;
+		}
+		
+		String myReportsTaken = resourceBundle.getString("report.recovery.heading.reports.taken");
+		if (!( myReportsTaken == null || myReportsTaken.equalsIgnoreCase("") )) {
+			reportHeadingReportsTaken = myReportsTaken;
 		}
 
 		String myReportsClosed = resourceBundle.getString("report.recovery.heading.reports.closed");
@@ -471,16 +502,24 @@ public class ClosedRecoveryReportBMO {
 			reportHeadingReportsClosed = myReportsClosed;
 		}
 		
+		String myRecoveryRatio = resourceBundle.getString("report.recovery.heading.recovery.ratio");
+		if (!( myRecoveryRatio == null || myRecoveryRatio.equalsIgnoreCase("") )) {
+			reportHeadingRecoveryRatio = myRecoveryRatio;
+		}
+		
 		//sort out the report styles
 		if (parameters.get("showdetail") != null) {
 			String mySummaryDetailSwitch = "" + parameters.get("showdetail");
 			if (mySummaryDetailSwitch.equals("1")) {
-				drb = drb.addColumn(reportHeadingSortByCloseDate, "closedate", String.class.getName(), 30);
+				drb = drb.addColumn(reportHeadingSortByCreateDate, "createdate", String.class.getName(), 30);
 			}
 		}
 		
+//    	drb = drb.addColumn(reportHeadingSortByCreateDate, "createdate", String.class.getName(), 30);
 		drb = drb.addColumn(reportHeadingAssignedStation,"stationcode",String.class.getName(),54);
+		drb = drb.addColumn(reportHeadingReportsTaken,"reportstaken",Integer.class.getName(),40);
 		drb = drb.addColumn(reportHeadingReportsClosed,"reportsclosed",Integer.class.getName(),30);
+		drb = drb.addColumn(reportHeadingRecoveryRatio,"displayRecoveryratio",String.class.getName(),30);
         
 		//get the general information of the report, such as Report Title
 		String myReportTitle = "Recovery";
@@ -516,7 +555,7 @@ public class ClosedRecoveryReportBMO {
 		
 		if (parameters.get("csdate") != null && parameters.get("cedate") != null) {
 			mySubtitle += "   Close Date: " + parameters.get("csdate") + " - " + parameters.get("cedate");
-		}	
+		}		
 		
         drb.setReportLocale(reportLocale);
 		
@@ -546,18 +585,23 @@ public class ClosedRecoveryReportBMO {
 			groupVariables.setVerticalAlign(VerticalAlign.BOTTOM);
 			
 			//a style switch
-			AbstractColumn columnSortByCloseDate = reportColumns.get("columnSortByCloseDate");
+			AbstractColumn columnSortByCreateDate = reportColumns.get("columnSortByCreateDate");
 		
 			AbstractColumn columnAssignedStationCode = reportColumns.get("columnAssignedStationCode");
+			AbstractColumn columnReportsTaken = reportColumns.get("columnReportsTaken");
 			AbstractColumn columnReportsClosed = reportColumns.get("columnReportsClosed");
+			AbstractColumn columnRecoveryRatio = reportColumns.get("columnRecoveryRatio");
 			
 			DJGroup g1 = null;
 			GroupBuilder gb1 = null;
-			AbstractColumn groupByColumn = columnSortByCloseDate;  
+			AbstractColumn groupByColumn = columnSortByCreateDate;  
 			
 			//invisible field for subtotal
 			CustomExpression mySubTotalExpression = getSubTotalCustomExpression();
 			
+//			if (reportStyle == 10) {
+//				drb.addColumn(groupByColumn);
+//			}
 			GroupLayout myGroupLayout = GroupLayout.DEFAULT;
 			if (reportStyle == 00) {
 				myGroupLayout = GroupLayout.VALUE_IN_HEADER;	//in case of no breakdown hide this column
@@ -566,26 +610,39 @@ public class ClosedRecoveryReportBMO {
 			}
 			drb.addColumn(groupByColumn);			
 			drb.addColumn(columnAssignedStationCode);
+			drb.addColumn(columnReportsTaken);
 			drb.addColumn(columnReportsClosed);
+			drb.addColumn(columnRecoveryRatio);
 			
+			// experimenting
+//			drb.setPrintColumnNames(false);
 			
 	        gb1 = new GroupBuilder();
 	        
+	        // new
 	        PropertyColumn myExpressionColumn = (PropertyColumn) groupByColumn;
+//	        myExpressionColumn.setExpressionToGroupBy(mySubTotalExpression);
 	        
 	        if (reportStyle == 00) {
 		        g1 = gb1.setCriteriaColumn(myExpressionColumn)
 		        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST)
+		        .addVariable("reportsTakenSum", columnReportsTaken,DJCalculation.SUM)
+		        .addVariable("reportsClosedSum", columnReportsClosed,DJCalculation.SUM)	
 				.setGroupLayout(myGroupLayout)
 				.setFooterVariablesHeight(new Integer(20))
 				.setFooterHeight(new Integer(50))
 				.setHeaderVariablesHeight(new Integer(35))
-				.build();	        	
+				.build();
+	        	
 	        } else {
 		        g1 = gb1.setCriteriaColumn(myExpressionColumn)
 		        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST)
 		        .addFooterVariable(columnAssignedStationCode, mySubTotalExpression,groupVariablesLegend)
+		        .addFooterVariable(columnReportsTaken, DJCalculation.SUM, groupVariables)   //sub-totals
+		        .addVariable("reportsTakenSum", columnReportsTaken,DJCalculation.SUM)
 		        .addFooterVariable(columnReportsClosed, DJCalculation.SUM, groupVariables)   //sub-totals
+		        .addVariable("reportsClosedSum", columnReportsClosed,DJCalculation.SUM)
+		        .addFooterVariable(columnRecoveryRatio, getSubTotalPercentageCustomExpression(), groupVariables)	
 				.setGroupLayout(myGroupLayout)
 				.setFooterVariablesHeight(new Integer(20))
 				.setFooterHeight(new Integer(50))
@@ -593,8 +650,8 @@ public class ClosedRecoveryReportBMO {
 				.build();
 	        }
 
-			drb.addGroup(g1);
-		
+			drb.addGroup(g1);	        
+			
 		}
 		
 		return drb;
@@ -630,6 +687,32 @@ public class ClosedRecoveryReportBMO {
 				}	
 				
 				return totalPercentage;
+			}
+
+			public String getClassName() {
+				return String.class.getName();
+			}
+
+		};
+	}
+	
+	private static CustomExpression getSubTotalPercentageCustomExpression() {
+		return new CustomExpression() {
+
+			public Object evaluate(Map fields, Map variables, Map parameters) {
+				String result ="";
+				Integer totalReportsTaken = (Integer) variables.get("reportsTakenSum");
+				Integer totalReportsClosed = (Integer) variables.get("reportsClosedSum");
+
+				if (totalReportsTaken == 0) {
+					result = "100.00%";
+				} else {
+					Double myResult = new Double((totalReportsClosed.doubleValue() / totalReportsTaken.doubleValue()) * 100);
+					DecimalFormat df = new DecimalFormat("0.00");
+					result += df.format(myResult) + " %";
+				}
+				
+				return result;
 			}
 
 			public String getClassName() {
