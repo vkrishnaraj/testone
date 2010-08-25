@@ -46,7 +46,7 @@ public class PPLCReport {
 		parameters.put("membershipNum", theform.getMembership());
 		parameters.put("claimNum", theform.getIncident_ID());
 		
-		//TODO: weight
+		// weight
 		String myWeight = "";
 		Double myOverallWeight = theform.getOverall_weight();
 		String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);

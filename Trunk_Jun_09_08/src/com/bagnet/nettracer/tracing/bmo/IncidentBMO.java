@@ -932,7 +932,7 @@ public class IncidentBMO {
 				}
 			}
 			
-			//TODO: regarding station assignment date
+			// regarding station assignment date
 			Date sAssignedDate = null, eAssignedDate = null;
 			Date sAssignedDate1 = null, eAssignedDate1 = null; // add one for time zone
 			Date sAssignedTime = null; // time to compare (04:00 if eastern, for example)
@@ -1045,7 +1045,7 @@ public class IncidentBMO {
 				}
 			}
 			
-			//TODO: station assignment date related
+			// station assignment date related
 			if (sAssignedDate != null) {
 				if (eAssignedDate != null && sAssignedDate != eAssignedDate) {
 					q.setDate("startassigneddate", sAssignedDate);
@@ -1057,7 +1057,7 @@ public class IncidentBMO {
 					q.setDate("startassigneddate1", sAssignedDate1);
 				}
 			} else if (siDTO.getAssigned2StationWithin24hrs() == 1) {
-				//TODO: figure out the date we need here
+				// figure out the date we need here
 				//Date myLast24HoursFromNowDate = TracerDateTime.getGMTDate();
 				//myLast24HoursFromNowDate.setTime(myLast24HoursFromNowDate.getTime() - Timer.ONE_HOUR * 24);  
 				//q.setDate("startassigneddate", myLast24HoursFromNowDate);

@@ -237,7 +237,7 @@ public class TracerUtils {
 		i.setBagnumber(0);
 		i.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 
-		//TODO: default weight unit related code here
+		// default weight unit related code here
 		i.setBag_weight_unit(myDefaultWeightUnit);
 		
 		

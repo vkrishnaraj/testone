@@ -476,7 +476,7 @@ public class ClaimSettlementAction extends Action {
 		cs.setIncident(incident);
 		
 		//overall weight gets copied
-		//TODO: do a conversion from kg to lbs if in kg
+		// do a conversion from kg to lbs if in kg
 		Double myWeight = incident.getOverall_weight();
 		String myWeight_unit = incident.getOverall_weight_unit();
 		if (myWeight_unit.equalsIgnoreCase("kg")) {
