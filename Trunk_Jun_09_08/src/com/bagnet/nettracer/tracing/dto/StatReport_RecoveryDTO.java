@@ -6,6 +6,7 @@
 package com.bagnet.nettracer.tracing.dto;
 
 import java.util.TimeZone;
+import java.text.DecimalFormat;
 
 /**
  * @author Administrator
@@ -33,6 +34,13 @@ public class StatReport_RecoveryDTO {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
+	
+	public String getDisplayRecoveryratio() {
+		String result = "";
+		DecimalFormat df = new DecimalFormat("0.00");
+		result += df.format(recoveryratio) + " %";
+		return result;
+	}	
 	
 	/**
 	 * @return Returns the recoveryratio.
