@@ -17,6 +17,7 @@
 <%@page import="org.apache.struts.util.MessageResources"%>
 <%@page import="java.util.Locale"%>
 
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
@@ -250,21 +251,22 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
     var phonenumbers = [<%=myform.getPassengerlist().size() %>]; 
 
     function emailAlertNotice() {
-        <% if (myform != null && myform.getIncident() != null && myform.getIncident().getPassenger_list() != null ) { 
-        	if (myform.getIncident().getPassenger_list().size() > 0 && myform.getIncident().getPassenger_list().get(0) != null) {
-        		Passenger p = (Passenger) myform.getIncident().getPassenger_list().get(0);
-        		if (p.getAddresses() != null && p.getAddresses().size() > 0) {
-        			Address address = p.getAddress(0);
-        			if (address != null && address.getEmail() != null && address.getEmail().length() > 0) {
-        				%>
-        				alert('<bean:message key="bdo.cancel.email.notice" />');			
-        				<%
-        			}
-        		}
-        	}
+        <% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_BDO_CANCEL_EMAIL_ALERT)) {
+            if (myform != null && myform.getIncident() != null && myform.getIncident().getPassenger_list() != null ) { 
+            	if (myform.getIncident().getPassenger_list().size() > 0 && myform.getIncident().getPassenger_list().get(0) != null) {
+            		Passenger p = (Passenger) myform.getIncident().getPassenger_list().get(0);
+            		if (p.getAddresses() != null && p.getAddresses().size() > 0) {
+            			Address address = p.getAddress(0);
+            			if (address != null && address.getEmail() != null && address.getEmail().length() > 0) {
+            				%>
+            				alert('<bean:message key="bdo.cancel.email.notice" />');			
+            				<%
+            			}
+            		}
+            	}
+            }	
         }
         %>
-
 
     }
 
