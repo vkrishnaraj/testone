@@ -125,4 +125,8 @@ public class StatReport_TopFlightDTO {
 	public String getStationcode() {
 		return station.getStationcode();
 	}
+	
+	public String getAirlineAndFlightNumber() {
+		return airline + " " + flightnum;
+	}
 }
