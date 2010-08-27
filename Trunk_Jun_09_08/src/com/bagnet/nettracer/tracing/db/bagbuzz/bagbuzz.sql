@@ -27,6 +27,8 @@ drop table if exists task;
     insert into status (status_id,description,table_id) values (86,'new',14);
     insert into status (status_id,description,table_id) values (87,'published',14);
     insert into status (status_id,description,table_id) values (88,'deleted',14);
+    insert into status (status_id,description,table_id) values (89,'accepted',15);
+    insert into status (status_id,description,table_id) values (90,'denied',15);
 
 
 
