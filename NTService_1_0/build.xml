@@ -129,7 +129,10 @@
 		<ant target="build-war">
 		</ant>
 		<jar destfile="${dist.dir}/nt_mdb.jar" basedir="${build.dir}/services-war/WEB-INF/classes/" includes="**/MDB*.class">
-			
+			<include name="${build.dir}/services-war/WEB-INF/classes/" />
+			<include name="**/**/SendForward.class" />
+			<include name="**/**/Forward.class" />
+			<include name="**/**/Segment.class" />
 		</jar>
 
 		<ear destfile="${dist.dir}/NTServices_1_0.ear" appxml="${src.dir}/../metadata/application.xml">

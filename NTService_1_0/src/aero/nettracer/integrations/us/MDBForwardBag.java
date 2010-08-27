@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -19,14 +23,18 @@ import aero.nettracer.integrations.us.scanners.data.Forward;
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/testQueue") 
 })
+@TransactionManagement(value= TransactionManagementType.CONTAINER)
+@TransactionAttribute(value= TransactionAttributeType.REQUIRED)
 public class MDBForwardBag implements MessageListener {
-
+	
 	private static final String FORWARD_MESSAGE_RECEIVED = "Forward message received...";
 	Logger logger = Logger.getLogger(MDBForwardBag.class);
 	
+	
+	
 	@Override
 	public void onMessage(Message message) {
-
+		System.out.println(FORWARD_MESSAGE_RECEIVED);
 		logger.info(FORWARD_MESSAGE_RECEIVED);
 		
 		Connection conn = null;
@@ -63,5 +71,6 @@ public class MDBForwardBag implements MessageListener {
 				}
 			}
 		}
+		logger.info("Message processed...");
 	}
 }
