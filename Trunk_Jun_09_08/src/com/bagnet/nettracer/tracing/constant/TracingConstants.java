@@ -244,6 +244,8 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT = "Baggage Weight";
 	
+	public static final String SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE = "Dispute Fault Code";
+	
 	
 	// itinerary types
 	public final static int PASSENGER_ROUTING = 0;
