@@ -21,6 +21,7 @@ drop table if exists task;
 
     delete from status where table_id = 13;
     delete from status where table_id = 14;
+    delete from status where table_id = 15;
     insert into status (status_id,description,table_id) values (83,'open',13);
     insert into status (status_id,description,table_id) values (84,'processed',13);
     insert into status (status_id,description,table_id) values (85,'closed',13);
