@@ -135,6 +135,10 @@
 			<include name="**/**/SendForward.class" />
 			<include name="**/**/Forward.class" />
 			<include name="**/**/Segment.class" />
+			<include name="**/**/HibernateWrapper.class" />
+			<include name="**/**/UserDao.class" />
+			<include name="**/common/db/*.class" />
+			<include name="**/**/*.xml" />
 		</jar>
 
 		<ear destfile="${dist.dir}/NTServices_1_0.ear" appxml="${src.dir}/../metadata/application.xml">
@@ -146,12 +150,12 @@
 			<fileset file="${dist.dir}/NTServices_1_0.ear">
 			</fileset>
 		</copy>
-		<!--
+		
 		<copy todir="c:/upload" verbose="true">
 			<fileset file="${dist.dir}/NTServices_1_0.ear">
 			</fileset>
 		</copy>
-		-->
+		
 	</target>
 
 

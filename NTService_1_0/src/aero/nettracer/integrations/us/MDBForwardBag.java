@@ -36,15 +36,12 @@ public class MDBForwardBag implements MessageListener {
 	
 	@Override
 	public void onMessage(Message message) {
-		System.out.println(FORWARD_MESSAGE_RECEIVED);
 		logger.info(FORWARD_MESSAGE_RECEIVED);
 		
 		Connection conn = null;
 
-		long singleCallTime = 0;
-
+	
 		try {
-			long singleCallStart = System.currentTimeMillis();
 			if (message instanceof ObjectMessage) {
 
 				ObjectMessage objectMessage = (ObjectMessage) message;
@@ -57,15 +54,12 @@ public class MDBForwardBag implements MessageListener {
 				f.sendForwards(forwards);
 
 			}
-			long singleCallEnd = System.currentTimeMillis();
-			singleCallTime = singleCallEnd - singleCallStart;
-
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Exception encountered: ", e);
 		} finally {
 			
-			System.out.println("This single test took approximately: " + singleCallTime + " ms");
 			if (conn != null) {
 				try {
 					conn.close();

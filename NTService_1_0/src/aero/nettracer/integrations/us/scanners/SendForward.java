@@ -25,13 +25,19 @@ import com.usairways.www.scans.wsdl.PostForwardsDocument.PostForwards;
 
 public class SendForward {
 	private static Logger logger = Logger.getLogger(SendForward.class);
+	private static String endpoint = null;
 
 	public void sendForwards(List<Forward> forwards) {
 		try {
-			Session sess = HibernateWrapper.getSession().openSession();
-			User user = UserDao.getByUsername(sess, "usairways");
-			sess.close();
-			String endpoint = user.getProfile().getParameters().get(ParameterType.FWD_NOTIFICATION_ENDPOINT);
+			
+			if (endpoint == null) {
+				Session sess = HibernateWrapper.getSession().openSession();
+			
+				User user = UserDao.getByUsername(sess, "usairways");
+				sess.close();
+				endpoint = user.getProfile().getParameters().get(ParameterType.FWD_NOTIFICATION_ENDPOINT);
+			}
+			
 			NTForwardsStub stub = new NTForwardsStub(endpoint);
 
 			PostForwardsDocument d = PostForwardsDocument.Factory.newInstance();
