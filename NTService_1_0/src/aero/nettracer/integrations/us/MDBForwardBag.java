@@ -15,6 +15,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import org.apache.log4j.Logger;
+import org.jboss.ejb3.annotation.ResourceAdapter;
 
 import aero.nettracer.integrations.us.scanners.SendForward;
 import aero.nettracer.integrations.us.scanners.data.Forward;
@@ -25,6 +26,7 @@ import aero.nettracer.integrations.us.scanners.data.Forward;
 })
 @TransactionManagement(value= TransactionManagementType.CONTAINER)
 @TransactionAttribute(value= TransactionAttributeType.REQUIRED)
+@ResourceAdapter("hornetq-ra.rar")
 public class MDBForwardBag implements MessageListener {
 	
 	private static final String FORWARD_MESSAGE_RECEIVED = "Forward message received...";

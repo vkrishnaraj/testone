@@ -126,8 +126,10 @@
 	<target name="build-ear" id="build" description="Build WAR file">
 		<delete file="${build.dir}/myapp.zip" failonerror="false">
 		</delete>
+		
 		<ant target="build-war">
 		</ant>
+		
 		<jar destfile="${dist.dir}/nt_mdb.jar" basedir="${build.dir}/services-war/WEB-INF/classes/" includes="**/MDB*.class">
 			<include name="${build.dir}/services-war/WEB-INF/classes/" />
 			<include name="**/**/SendForward.class" />
@@ -139,15 +141,17 @@
 			<fileset dir="${dist.dir}" includes="*.jar,*.war"/>
 		</ear>
 		
+		
 		<copy todir="${app.deploy.dir}" verbose="true">
 			<fileset file="${dist.dir}/NTServices_1_0.ear">
 			</fileset>
 		</copy>
-
+		<!--
 		<copy todir="c:/upload" verbose="true">
 			<fileset file="${dist.dir}/NTServices_1_0.ear">
 			</fileset>
 		</copy>
+		-->
 	</target>
 
 
