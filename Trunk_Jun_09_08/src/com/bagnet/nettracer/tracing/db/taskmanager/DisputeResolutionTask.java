@@ -20,7 +20,6 @@ public class DisputeResolutionTask extends GeneralTask{
 	
 	@OneToOne(targetEntity = Dispute.class)
 	@JoinColumn(name = "dispute_res_id")
-	@Transient
 	public Dispute getDispute() {
 		return dispute;
 	}

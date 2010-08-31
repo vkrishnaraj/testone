@@ -292,6 +292,9 @@ public class LostDelayAction extends CheckedAction {
 				}
 
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
+					
+					//TODO: if locked and does not have lock permission then they get read only
+					
 					//if it is closed user can only edit it if they have the permission to edit closed files
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, user)) {
 						return mapping.findForward(TracingConstants.LD_CLOSE);
@@ -406,6 +409,10 @@ public class LostDelayAction extends CheckedAction {
 		}
 		//end of new image file save feature code - G
 
+		//TODO: handle dispute fault
+		if (request.getParameter("disputeFault") != null) {
+			handleDisputeFault(mapping, theform, request, response);
+		}
 
 		// save incident
 		if(request.getParameter("save") != null || request.getParameter("close") != null
@@ -1028,5 +1035,12 @@ public class LostDelayAction extends CheckedAction {
 			return "";
 		else
 			return input;
+	}
+	
+	private ActionForward handleDisputeFault(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		logger.error("handleDisputeFault here...");
+		return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 	}
 }

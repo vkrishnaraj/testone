@@ -725,6 +725,9 @@
 			<forward name="success" path="ajax_toggle"/>
 		</action>
 		
+		<!-- dispute resolution -->
+		<action path="/disbuteResolution" type="com.bagnet.nettracer.tracing.actions.DisputeResolutionAction" name="incidentForm" scope="request" validate="false"></action>
+		
 
 		
 
