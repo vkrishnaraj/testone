@@ -78,6 +78,17 @@
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <logic:equal name="disputeProcess" scope="request" value="true">
+            <dd>
+              <a href='disputeResolution.do?incident=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+            </dd>
+            </logic:equal>
           </dl>
         </div>
       </td>
@@ -143,9 +154,11 @@
                 <td align="center" valign="top">
                   <br>
                   <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ %>
-                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>";return false;'>
-                  <% } %>
+                      <logic:equal name="disputeProcess" scope="request" value="false">
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ %>
+		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>";return false;'>
+		                  <% } %>
+	                  </logic:equal>
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>
