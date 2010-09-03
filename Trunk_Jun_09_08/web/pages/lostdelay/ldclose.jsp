@@ -80,7 +80,7 @@
             </dd>
             <logic:equal name="disputeProcess" scope="request" value="true">
             <dd>
-              <a href='disputeResolution.do?incident=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
