@@ -1692,4 +1692,39 @@ public class OHDUtils {
 		return result;
 	}
 	
+	//manage fault dispute
+	public static int getDisputeCount(boolean dirtyRead) {
+		Session sess = null;
+		try {
+			if(dirtyRead) {
+				sess = HibernateWrapper.getDirtySession().openSession();
+			}
+			else {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			String sql = "select count(dispute.dispute_res_id)";
+			sql += " from com.bagnet.nettracer.tracing.db.dr.Dispute dispute where 1=1";
+			sql += " and dispute.status = :status";
+
+			Query q = sess.createQuery(sql);
+			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
+			List list = q.list();
+			if (list.size() > 0) {
+				return ((Long) list.get(0)).intValue();
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

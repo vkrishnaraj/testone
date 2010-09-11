@@ -71,6 +71,14 @@
         <put name="center"   value="/pages/others/insertsuccess.jsp"/>
     </definition>
     
+    <definition name="insert_dispute_success" extends="user_menu">
+        <put name="center"   value="/pages/others/insert_dispute_success.jsp"/>
+    </definition>
+    
+    <definition name="update_dispute_success" extends="user_menu">
+        <put name="center"   value="/pages/others/update_dispute_success.jsp"/>
+    </definition>
+    
     <definition name="update_file_success" extends="user_menu">
         <put name="center"   value="/pages/others/updatesuccess.jsp"/>
     </definition>
@@ -739,4 +747,23 @@
     <definition name="ajax_toggle" path="/pages/ajax_divs/blank.jsp">
     </definition>
 	
+	<definition name="dispute_resolution" extends="user_menu">
+        <put name="center"   value="/pages/dispute/dispute_resolution.jsp"/>
+    </definition>
+    
+	<definition name="dispute_resolution_ro" extends="user_menu">
+        <put name="center"   value="/pages/dispute/dispute_resolution_ro.jsp"/>
+    </definition>
+    
+    <definition name="view_disputes" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_disputes.jsp"/>
+    </definition>
+    
+    <definition name="view_only_dispute" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_only_dispute.jsp"/>
+    </definition>
+    
+	<definition name="manage_dispute" extends="user_menu">
+        <put name="center"   value="/pages/dispute/manage_dispute.jsp"/>
+    </definition>
  </tiles-definitions>

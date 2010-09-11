@@ -121,3 +121,8 @@ primary key (inboxxrole_id),
 inbox_id int(11),
 role_id int(11)
 );
+
+
+insert into status (status_id,description,table_id) values (91,'Open',15);
+insert into status (status_id,description,table_id) values (92,'Approved',15);
+insert into status (status_id,description,table_id) values (93,'Manual Change',15);

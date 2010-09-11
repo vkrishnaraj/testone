@@ -244,7 +244,9 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT = "Baggage Weight";
 	
-	public static final String SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE = "Dispute Fault Code";
+	//fault dispute
+	public static final String SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE = "Dispute Fault Code"; 
+	public final static String SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE = "Manage Fault Dispute";
 	
 	
 	// itinerary types
@@ -357,6 +359,12 @@ public class TracingConstants {
 	public final static int BAGBUZZ_NEW = 86;
 	public final static int BAGBUZZ_PUBLISHED = 87;
 	public final static int BAGBUZZ_DELETED = 88;
+	
+	// Dispute Resolution
+	public final static int DISPUTE_RESOLUTION_STATUS_DENIED = 90;
+	public final static int DISPUTE_RESOLUTION_STATUS_OPEN = 91;
+	public final static int DISPUTE_RESOLUTION_STATUS_APPROVED = 92;
+	public final static int DISPUTE_RESOLUTION_STATUS_MANUAL_CHANGE = 93;
 	
 	// item xdesc element type x
 	public final static int XDESC_TYPE_X = 7;
@@ -776,6 +784,17 @@ public class TracingConstants {
 	public static final String JSP_DELETE_PAX = "pax";
 	public static final String JSP_DELETE_ARTICLE = "article";
 	public static final String WEB_SERVICE_DTO = "web.service.dto";
+	
+	// dispute resolution page
+	public final static String DISPUTE_RESOLUTION = "dispute_resolution";
+	public static final String DISPUTE_RESOLUTION_READ_ONLY = "dispute_resolution_ro";
+	public static final String DISPUTE_RESOLUTION_INSERT_NEW_SUCCESS = "insert_dispute_success";
+	public static final String DISPUTE_RESOLUTION_UPDATE_SUCCESS = "update_dispute_success";
+	
+	public final static String VIEW_DISPUTES = "view_disputes";
+	public final static String VIEW_ONLY_DISPUTE = "view_only_dispute";
+	
+	public final static String MANAGE_DISPUTE = "manage_dispute";
 	
 	
 	public static String getDBDateFormat(Properties properties) {

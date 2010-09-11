@@ -28,13 +28,24 @@
     <jsp:include page="/pages/includes/ldclose.jsp" />
   </script>
   
+ <SCRIPT LANGUAGE="JavaScript">
+  function textCounter2(field, countfield, maxlimit) {
+    if (field.value.length > maxlimit) {
+      field.value = field.value.substring(0, maxlimit);
+    } else {
+      countfield.value = maxlimit - field.value.length;
+    }
+  }
+ </SCRIPT> 
+ 
   
-  <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
+  
+  <html:form action="disputeResolution.do?actionType=new" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
           <h1>
-            <bean:message key="header.close" />
+            <bean:message key="header.dispute" />
             (
             <bean:write name="incident" scope="request" />
             )
@@ -54,8 +65,7 @@
         </div>
       </td>
     </tr>
-    
-    
+    <input type='hidden' name='id' value='<bean:write name="incident" scope="request"/>'>
     <tr>
       <td colspan="3" id="navmenucell">
         <div class="menu">
@@ -70,25 +80,23 @@
                   &nbsp;</span></a>
             </dd>
             <dd>
-              <a href="lostDelay.do?close=1"><span class="aab">&nbsp;
+              <a href="lostDelay.do?close=1"><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
-                <span class="bbb"><bean:message key="menu.close" /></span>
-                <span class="ccb">&nbsp;
-                  <br />
-                  &nbsp;</span></a>
-            </dd>
-            <logic:equal name="disputeProcess" scope="request" value="true">
-            <dd>
-              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
-                  <br />
-                  &nbsp;</span>
-                <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
+                <span class="bb"><bean:message key="menu.close" /></span>
                 <span class="cc">&nbsp;
                   <br />
                   &nbsp;</span></a>
             </dd>
-            </logic:equal>
+            <dd>
+              <a href='disputeResolution.do?incident=<bean:write name="incident" scope="request"/>'><span class="aab">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bbb"><bean:message key="menu.dispute.resolution" /></span>
+                <span class="ccb">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+            </dd>
           </dl>
         </div>
       </td>
@@ -104,61 +112,30 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
-          <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
-            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-              <tr>
-                <td colspan=3>
-                  <a name='additem<%= i %>'></a>
-                  <b><bean:message key="colname.bag_number" />
-                  :
-                  <%= theitem.getBagnumber() + 1 %>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <bean:message key="colname.ldclose.arr_airline_id" />
-                  <br>
-                  
-                  <logic:empty name="theitem" property="arrivedonairline_ID">
-                    <jsp:setProperty name="theitem" property="arrivedonairline_ID" value="<%= a.getCompanycode_ID() %>"/>
-                  </logic:empty>
-                  <html:select name="theitem" property="arrivedonairline_ID" styleClass="dropdown" indexed="true">
-                    <html:option value="">
-                      <bean:message key="select.please_select" />
-                    </html:option>
-                    <html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
-                  </html:select>
-                </td>
-                <td>
-                  <bean:message key="colname.ldclose.arr_flight_num" />
-                  <br>
-                  <html:text name="theitem" property="arrivedonflightnum" size="10" maxlength="5" styleClass="textfield" indexed="true" />
-                </td>
-                <td>
-                  <bean:message key="colname.ldclose.arr_date" />
-                  (
-                  <%= a.getDateformat().getFormat() %>)
-                  <br>
-                  <html:text name="theitem" property="disarrivedondate" size="13" maxlength="13" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitem[" + i + "].disarrivedondate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-              </tr>
-            </table>
-          </logic:iterate>
+
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <input type="hidden" name="close" value="1">
-            <jsp:include page="/pages/includes/closereport_incl.jsp" />
+            <jsp:include page="/pages/includes/disputereport_incl.jsp" />
           </table>
-          <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
-        </div>
+          
+		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+			<tr>
+				<td valign="top" colspan=3>
+					<bean:message key="colname.dispute.resolution.explanation" /><br>
+                  	<textarea name="disputeRemark" cols="80" rows="10" onkeydown="textCounter2(this.form.elements['disputeRemark'], this.form.elements['remarkLimit'],1500);" onkeyup="textCounter2(this.form.elements['disputeRemark'], this.form.elements['remarkLimit'],1500);"></textarea>
+                  	<input name="remarkLimit" type="text" value="1500" size="4" maxlength="4" disabled="true" />
+		        </td>
+		    </tr>
+		</table>
+
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td align="center" valign="top">
                   <br>
                   <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-                      <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ %>
-		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
-		                  <% } %>
-	                  </logic:equal>
+                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ %>
+                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>";return false;'>
+                  <% } %>
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>
@@ -173,8 +150,8 @@
 
                   &nbsp;
                   
-                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;">
-                    <bean:message key="button.closereport" />
+                  <html:submit property="requestDispute" styleId="button" onclick="doCheck = 1;">
+                    <bean:message key="button.request.dispute.report" />
                   </html:submit>
                   </logic:notEqual>
                   &nbsp;
@@ -197,4 +174,5 @@
                 </td>
               </tr>
             </table>
+        </div>
     </html:form>

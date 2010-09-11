@@ -59,6 +59,8 @@
 		<form-bean name="listNewPaxCommunicationForm" type="com.bagnet.nettracer.tracing.forms.ListNewPaxCommunicationForm" />
 		<form-bean name="captchaForm" type="com.bagnet.nettracer.tracing.forms.CaptchaForm" />
 		
+		<form-bean name="searchDisputeForm" type="com.bagnet.nettracer.tracing.forms.SearchDisputeForm" />
+		
 		<form-bean name="OsiForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="id" type="java.lang.String" />
 			<form-property name="incident_id" type="java.lang.String" />
@@ -447,6 +449,17 @@
 		<forward name="ajax_statuses" path="ajax_statuses" />
 		<forward name="viewworldtracercount" path="view_worldtracer_count" />
 		<forward name="scannerData" path="scanner_data" />
+		
+		<forward name="dispute_resolution" path="dispute_resolution" />
+		<forward name="dispute_resolution_ro" path="dispute_resolution_ro" />
+		<forward name="insert_dispute_success" path="insert_dispute_success" />
+		<forward name="update_dispute_success" path="update_dispute_success" />
+		
+		<forward name="view_disputes" path="view_disputes" />
+		<forward name="view_only_dispute" path="view_only_dispute" />
+		
+		<forward name="manage_dispute" path="manage_dispute" />
+		
 	</global-forwards>
 
 	<!-- ========== Action Mapping Definitions ============================== -->
@@ -726,7 +739,9 @@
 		</action>
 		
 		<!-- dispute resolution -->
-		<action path="/disbuteResolution" type="com.bagnet.nettracer.tracing.actions.DisputeResolutionAction" name="incidentForm" scope="request" validate="false"></action>
+		<action path="/disputeResolution" type="com.bagnet.nettracer.tracing.actions.DisputeResolutionAction" name="incidentForm" scope="request" validate="false"></action>
+		<!-- search dispute -->
+		<action path="/searchDispute" type="com.bagnet.nettracer.tracing.actions.SearchDisputeAction" name="searchDisputeForm" scope="request" validate="false"></action>
 		
 
 		

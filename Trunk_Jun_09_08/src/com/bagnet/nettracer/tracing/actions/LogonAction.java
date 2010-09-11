@@ -424,6 +424,11 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																					
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE)) {														
+																					int x = OHDUtils.getDisputeCount(true);
+																					if (x != -1) {
+																						entries = x;
+																					} 																					
 																				}
 																				
 																			}

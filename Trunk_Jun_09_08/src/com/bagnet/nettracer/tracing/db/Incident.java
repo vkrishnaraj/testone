@@ -38,6 +38,7 @@ import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -111,6 +112,16 @@ public class Incident implements Serializable {
 	private String language;
 	
 	private IncidentControl incidentControl;
+	
+	private Dispute dispute;
+	
+	@OneToOne(mappedBy = "incident")
+	public Dispute getDispute() {
+		return dispute;
+	}
+	public void setDispute(Dispute dispute) {
+		this.dispute = dispute;
+	}
 	
 	public void setIncidentControl(IncidentControl value) {
 		this.incidentControl = value;

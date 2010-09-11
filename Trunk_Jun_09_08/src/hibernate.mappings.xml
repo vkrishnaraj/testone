@@ -207,7 +207,9 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCItinerary" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.IncidentControl" />
-		<mapping class="com.bagnet.nettracer.tracing.db.PaxMessageTrigger" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.PaxMessageTrigger" />
+		<mapping class="com.bagnet.nettracer.tracing.db.dr.Dispute" />	
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask" />	
 		
 		
 		

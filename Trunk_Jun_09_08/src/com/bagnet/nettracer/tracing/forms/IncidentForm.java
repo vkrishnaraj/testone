@@ -82,7 +82,35 @@ public final class IncidentForm extends ValidatorForm {
 	
 	private Double overall_weight;
 	private String overall_weight_unit;
+	
+	private String disputeRemark;
+	private String resolutionRemarks;
+	
+	private String btnUpdateDispute = "No button";  // to support multiple submit buttons in dispute resolution 
+	
+	
 
+	public String getResolutionRemarks() {
+		return resolutionRemarks;
+	}
+	public void setResolutionRemarks(String resolutionRemarks) {
+		this.resolutionRemarks = resolutionRemarks;
+	}
+	
+	public String getBtnUpdateDispute() {
+		return btnUpdateDispute;
+	}
+	public void setBtnUpdateDispute(String btnUpdateDispute) {
+		this.btnUpdateDispute = btnUpdateDispute;
+	}
+	
+	
+	public String getDisputeRemark() {
+		return disputeRemark;
+	}
+	public void setDisputeRemark(String disputeRemark) {
+		this.disputeRemark = disputeRemark;
+	}
 	public String getOverall_weight_unit() {
 		return overall_weight_unit;
 	}

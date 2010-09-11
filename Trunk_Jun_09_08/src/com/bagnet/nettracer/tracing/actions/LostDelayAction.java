@@ -57,6 +57,8 @@ import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.dr.Dispute;
+import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCreateAhl;
@@ -226,10 +228,17 @@ public class LostDelayAction extends CheckedAction {
 		List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
 		request.setAttribute("agentassignedlist", agentassignedlist);
 		String form_incident_id = null;
+		Dispute myDispute = null;
 		if(theform.getIncident_ID() != null) {
 			form_incident_id = theform.getIncident_ID();
 			request.setAttribute("incident", form_incident_id);
+			myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
 		}
+		
+		boolean disputeProcess = false;
+		if (myDispute != null) {
+			disputeProcess = true;
+		} 
 
 		ServletContext sc = getServlet().getServletContext();
 		String realpath = sc.getRealPath("/");
@@ -297,12 +306,16 @@ public class LostDelayAction extends CheckedAction {
 					
 					//if it is closed user can only edit it if they have the permission to edit closed files
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, user)) {
+						//check to see if there is a dispute on file for this incident
+						//if so, display Dispute Resolution Tab, and no Dispute Fault button
+						request.setAttribute("disputeProcess", disputeProcess);
 						return mapping.findForward(TracingConstants.LD_CLOSE);
 					}
 					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
 				}
 				//not closed
 				else {
+					request.setAttribute("disputeProcess", disputeProcess);
 					return (mapping.findForward(TracingConstants.LD_CLOSE));
 				}
 		}
@@ -533,6 +546,7 @@ public class LostDelayAction extends CheckedAction {
 					r.set_TIMEFORMAT(user.getTimeformat().getFormat());
 					r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 				}
+				request.setAttribute("disputeProcess", disputeProcess);
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
 			}
 			else {
