@@ -598,10 +598,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						int index = contents.indexOf("/");
 
 						ContentType c = c2.addNewContent();
-						if (lastCategory == null) {
+						if (index > -1){
 							lastCategory = contents.substring(0, index);
 						}
-						
 						c.setCategory(lastCategory);
 						c.setDescription(contents.substring(index + 1));
 					}
@@ -981,7 +980,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								int index = contents.indexOf("/");
 
 								ContentType c = cx.addNewContent();
-								if (lastCategory == null) {
+								if (index > -1){
 									lastCategory = contents.substring(0, index);
 								}
 								
@@ -2421,7 +2420,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					int index = contents.indexOf("/");
 
 					ContentType c = c2.addNewContent();
-					if (lastCategory == null) {
+					if (index > -1) {
 						lastCategory = contents.substring(0, index);
 					}
 					
@@ -2641,7 +2640,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								int index = contents.indexOf("/");
 
 								ContentType c = cx.addNewContent();
-								if (lastCategory == null) {
+								if (index > -1) {
 									lastCategory = contents.substring(0, index);
 								}
 								
