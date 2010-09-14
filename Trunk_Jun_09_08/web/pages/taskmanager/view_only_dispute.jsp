@@ -6,6 +6,7 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
@@ -140,10 +141,15 @@ function updatePagination() {
                   	<bean:define id="station" name="dispute" property="suggestedFaultStation" />
 					<bean:define id="disputeAgent" name="dispute" property="disputeAgent" />
 					<bean:define id="incident" name="dispute" property="incident" />
-               
+               		<bean:define id="status" name="dispute" property="status" />
                   <tr>
                     <td>
+                    <logic:equal name="status" property="status_ID" value='<%= "" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN %>'>
+                      <a href='disputeResolution.do?id=<bean:write name="incident" property="incident_ID"/>&actionType=viewToResolve'><bean:write name="incident" property="incident_ID" /></a>
+                    </logic:equal>
+                    <logic:notEqual name="status" property="status_ID" value='<%= "" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN %>'>
                       <bean:write name="incident" property="incident_ID" />
+                    </logic:notEqual>
                     </td>
                     <td>
                       <bean:write name="incident" property="typedesc" />

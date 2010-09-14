@@ -34,6 +34,7 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -114,6 +115,17 @@ public class Incident implements Serializable {
 	private IncidentControl incidentControl;
 	
 	private Dispute dispute;
+	
+	private boolean locked = false;	//for dispute resolution process
+	
+	
+	@Column(name="locked", nullable=false)
+	public boolean isLocked() {
+		return locked;
+	}
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
 	
 	@OneToOne(mappedBy = "incident")
 	public Dispute getDispute() {

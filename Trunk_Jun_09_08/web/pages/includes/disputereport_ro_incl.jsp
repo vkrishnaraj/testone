@@ -6,6 +6,7 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Status" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
@@ -60,12 +61,15 @@
 </script>
 		<bean:define id="station" name="dispute" property="suggestedFaultStation" scope="request" />
 		<bean:define id="disputeAgent" name="dispute" property="disputeAgent" scope="request" />
+		<bean:define id="resolutionAgent" name="dispute" property="resolutionAgent" scope="request" />
+		<bean:define id="determinedFaultStation" name="dispute" property="determinedFaultStation" scope="request" />
+		<bean:define id="status" name="dispute" property="status" scope="request" />
             	<tr>
-				  <td nowrap><bean:write name="dispute" property="dispTimestampCreated" /></td>
-				  <td nowrap>Agent: <bean:write name="disputeAgent" property="username" /></td>
+				  <td nowrap>Dispute Date: <bean:write name="dispute" property="dispTimestampCreated" /></td>
+				  <td nowrap>Dispute Agent: <bean:write name="disputeAgent" property="username" /></td>
 				</tr>
 				<tr>
-				  <td colspan="2" nowrap>
+				  <td colspan="2" nowrap>Dispute Explanation:<br />
 				    <bean:write name="dispute" property="disputeExplanation" scope="request" />
 				  </td>
 				</tr>
@@ -76,3 +80,22 @@
 				<tr>
 					<td colspan="2">&nbsp;</td>
 				</tr>  
+				
+				<logic:notEqual name="status" property="status_ID" value='<%="" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN%>'>
+            	<tr>
+				  <td nowrap>Dispute Resolution: <%="" + request.getAttribute("statusDesc") %></td>
+				  <td nowrap>Resolution Agent: <bean:write name="resolutionAgent" property="username" /></td>
+				</tr>
+				<tr>
+				  <td colspan="2" nowrap>Resolution Remarks:<br />
+				    <bean:write name="dispute" property="resolutionRemarks" scope="request" />
+				  </td>
+				</tr>
+				<tr>
+				  <td nowrap>Determined Fault Station: <bean:write name="determinedFaultStation" property="stationcode" /></td>
+				  <td nowrap>Determined Fault Code: <bean:write name="dispute" property="determinedLossCode" scope="request" /></td>
+				</tr> 
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr> 
+				</logic:notEqual>

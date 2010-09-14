@@ -13,6 +13,11 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
+
+
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass = "form2_ld";
@@ -34,6 +39,12 @@
   }
   request.setAttribute("lossCode", lc);
   
+  	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+	String disputeProcess = "false";
+	if (myDispute != null) {
+		disputeProcess = "true";
+	} 
+	request.setAttribute("disputeProcess", disputeProcess);
 %>
 
   
@@ -91,6 +102,17 @@
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <logic:equal name="disputeProcess" scope="request" value="true">
+            <dd>
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+            </dd>
+            </logic:equal>       
           </dl>
         </div>
       </td>
@@ -150,9 +172,18 @@
                   <c:out value="${faultStationCode}" default="Not Set" />
                 </div>
               </td>
+			  <td align="center" valign="bottom">
+			    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
+			    		  String incidentId = "" + request.getAttribute("incident");
+			    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
+			    	%>
+			    		<input type="submit" id="button" value='<bean:message key="button.unlock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=unlock";return false;'>
+			    	<%    } 
+			    	   } %>
+			  </td>              
             </tr>
             <tr>
-              <td nowrap colspan=2>
+              <td nowrap colspan=3>
 		      <b><bean:message key="colname.losscode" /></b>
                 <br>
                 <c:out value="${lossCode.loss_code}-${lossCode.description}" default="Not Set" />

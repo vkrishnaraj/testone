@@ -91,22 +91,9 @@
       </logic:present>
       </div>
     </td>
-    <td align="center" valign="baseline">
-    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
-    		  String incidentId = "" + request.getAttribute("incident");
-    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
-    	%>
-    		<input type="submit" id="button" value='<bean:message key="button.unlock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=unlock";return false;'>
-    	<%		  
-    		  } else {
-    	%>
-    		<input type="submit" id="button" value='<bean:message key="button.lock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=lock";return false;'>	    	
-    	<% 	  } 
-    	   }  %>
-    </td>
 </tr>
 <tr>
-  <td nowrap colspan="3">
+  <td nowrap colspan="2">
     <bean:message key="colname.closereport.losscode" />
     <br>
       <html:select property="loss_code" styleClass="dropdown">      

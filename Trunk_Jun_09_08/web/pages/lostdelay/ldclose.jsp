@@ -10,9 +10,19 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Incident" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
+
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass = "form2_ld";
+  
+  String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+  Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+  if (myDispute != null) {
+	  request.setAttribute("disputeProcess", "true");
+  }
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -155,9 +165,12 @@
                   <br>
                   <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ %>
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                   		String incidentId = "" + request.getAttribute("incident");
+    		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
-		                  <% } %>
+		                     <% } 
+		                    } %>
 	                  </logic:equal>
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />

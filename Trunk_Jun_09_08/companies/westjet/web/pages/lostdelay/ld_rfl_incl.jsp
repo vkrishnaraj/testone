@@ -4,6 +4,7 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 <%
@@ -46,7 +47,13 @@
 <span class="reqfield">*</span>
 <bean:message key="message.required" />
 <table class="<%=cssFormClass%>" cellspacing="0" cellpadding="0">
-	<jsp:include page="/pages/includes/closereport_incl.jsp" />
+		                    <%	String incidentId = "" + request.getAttribute("incident");
+    		  					if (DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
+    <jsp:include page="/pages/includes/closereport_no_lock_ro_incl.jsp" />
+    		  				<%  } else { %>	
+    <jsp:include page="/pages/includes/closereport_no_lock_incl.jsp" />
+    		  				<%  } %>
+	
 </table>
 <br>
 &nbsp;&nbsp;&uarr;

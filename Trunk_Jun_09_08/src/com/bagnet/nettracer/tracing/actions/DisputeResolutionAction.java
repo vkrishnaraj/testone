@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -66,7 +67,9 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		logger.error("actionType=" + actionType);
 		
-		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, user)) {
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user)) {
+			
+			
 			if (actionType.equalsIgnoreCase("start")) {
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION;
 			} else if (actionType.equalsIgnoreCase("new")) {
@@ -107,9 +110,59 @@ public class DisputeResolutionAction extends CheckedAction {
 				logger.error(whichButton + " is pushed.");
 				
 				//TODO: put lock on the incident here
+				DisputeResolutionUtils.lockIncident(incident);
+				
 				
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION_UPDATE_SUCCESS;
-			}
+			} else if (actionType.equalsIgnoreCase("lock")) {
+				//set incident lock attribute to true
+				DisputeResolutionUtils.lockIncident(incident);
+				
+				String form_incident_id = null;
+				Dispute myDispute = null;
+				if(theform.getIncident_ID() != null) {
+					form_incident_id = theform.getIncident_ID();
+					request.setAttribute("incident", form_incident_id);
+					myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
+				}
+				
+				boolean disputeProcess = false;
+				if (myDispute != null) {
+					disputeProcess = true;
+				} 
+//				request.setAttribute("disputeProcess", disputeProcess);
+				request.setAttribute("currentstatus", TracingConstants.MBR_STATUS_CLOSED);
+				
+				forwardTarget = TracingConstants.LD_CLOSE_READ_ONLY;
+			} else if (actionType.equalsIgnoreCase("unlock")) {
+				//set incident lock attribute to false
+				DisputeResolutionUtils.unlockIncident(incident);
+				
+				String form_incident_id = null;
+				Dispute myDispute = null;
+				if(theform.getIncident_ID() != null) {
+					form_incident_id = theform.getIncident_ID();
+					request.setAttribute("incident", form_incident_id);
+					myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
+				}
+				
+				boolean disputeProcess = false;
+				if (myDispute != null) {
+					disputeProcess = true;
+				} 
+//				request.setAttribute("disputeProcess", disputeProcess);
+				request.setAttribute("currentstatus", TracingConstants.MBR_STATUS_CLOSED);
+				
+				forwardTarget = TracingConstants.LD_CLOSE;
+			}			
+		} else if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, user)) {
+			if (actionType.equalsIgnoreCase("start")) {
+				forwardTarget = TracingConstants.DISPUTE_RESOLUTION;
+			} else if (actionType.equalsIgnoreCase("new")) {
+				forwardTarget = createNew(incident, theform, user);
+			} else if (actionType.equalsIgnoreCase("view")) {	// view only existing
+				forwardTarget = viewExisting(incident, request);
+			} 
 		}
 		
 		
@@ -193,7 +246,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		myDispute.setDisputeExplanation(theform.getDisputeRemark());
 		
-		myDispute.setResolutionAgent(user);
+		myDispute.setResolutionAgent(user);		//got better idea?
 		myDispute.setDeterminedFaultStation(iDTO.getFaultstation());
 		myDispute.setDeterminedLossCode(iDTO.getLoss_code());
 		
@@ -206,7 +259,12 @@ public class DisputeResolutionAction extends CheckedAction {
 		Dispute dispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		if (dispute != null) {
 			request.setAttribute("dispute", dispute);
+			
+			Status myStatus = dispute.getStatus();
+			String myStatusDesc = myStatus.getTextDescription(null);
+			request.setAttribute("statusDesc", myStatusDesc);
 		}
+		
 		
 		return TracingConstants.DISPUTE_RESOLUTION_READ_ONLY;
 	}
@@ -229,7 +287,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_APPROVED);
 		myDispute.setStatus(status);
 		
-		myDispute.setDisputeAgent(user);
+		myDispute.setResolutionAgent(user);
 		
 		Station determinedFaultStation = myDispute.getSuggestedFaultStation();
 		myDispute.setDeterminedFaultStation(determinedFaultStation);
@@ -246,7 +304,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_DENIED);
 		myDispute.setStatus(status);
 		
-		myDispute.setDisputeAgent(user);
+		myDispute.setResolutionAgent(user);
 		
 		Station determinedFaultStation = myDispute.getBeforeDisputeFaultStation();
 		myDispute.setDeterminedFaultStation(determinedFaultStation);
@@ -263,7 +321,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_MANUAL_CHANGE);
 		myDispute.setStatus(status);
 		
-		myDispute.setDisputeAgent(user);
+		myDispute.setResolutionAgent(user);
 		
 		Station determinedFaultStation = new Station();
 		determinedFaultStation.setStation_ID(theform.getFaultstation_id());

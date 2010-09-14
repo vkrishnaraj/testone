@@ -68,6 +68,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -229,10 +230,13 @@ public class LostDelayAction extends CheckedAction {
 		request.setAttribute("agentassignedlist", agentassignedlist);
 		String form_incident_id = null;
 		Dispute myDispute = null;
+		boolean isIncidentLocked = false;
+		
 		if(theform.getIncident_ID() != null) {
 			form_incident_id = theform.getIncident_ID();
 			request.setAttribute("incident", form_incident_id);
 			myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
+			isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
 		}
 		
 		boolean disputeProcess = false;
@@ -301,21 +305,27 @@ public class LostDelayAction extends CheckedAction {
 				}
 
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
-					
+//					request.setAttribute("disputeProcess", disputeProcess);
 					//TODO: if locked and does not have lock permission then they get read only
+					if (isIncidentLocked) {
+						return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
+					}
 					
 					//if it is closed user can only edit it if they have the permission to edit closed files
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, user)) {
 						//check to see if there is a dispute on file for this incident
 						//if so, display Dispute Resolution Tab, and no Dispute Fault button
-						request.setAttribute("disputeProcess", disputeProcess);
+//						request.setAttribute("disputeProcess", disputeProcess);
 						return mapping.findForward(TracingConstants.LD_CLOSE);
 					}
 					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
 				}
 				//not closed
 				else {
-					request.setAttribute("disputeProcess", disputeProcess);
+//					request.setAttribute("disputeProcess", disputeProcess);
+					if (isIncidentLocked) {
+						return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
+					}
 					return (mapping.findForward(TracingConstants.LD_CLOSE));
 				}
 		}
@@ -546,7 +556,11 @@ public class LostDelayAction extends CheckedAction {
 					r.set_TIMEFORMAT(user.getTimeformat().getFormat());
 					r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 				}
-				request.setAttribute("disputeProcess", disputeProcess);
+				
+//				request.setAttribute("disputeProcess", disputeProcess);
+				if (isIncidentLocked) {
+					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
+				}
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
 			}
 			else {
