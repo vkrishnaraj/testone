@@ -107,4 +107,14 @@ public class DisputeResolutionUtils {
 		return result;
 	}
 
+	public static int getIncidentType(String incident_ID) {
+		int myType = 1;
+		
+		Incident myIncident = IncidentUtils.findIncidentByID(incident_ID);
+		
+		if (myIncident != null) {
+			myType = myIncident.getItemtype_ID();
+		}
+		return myType;
+	}
 }

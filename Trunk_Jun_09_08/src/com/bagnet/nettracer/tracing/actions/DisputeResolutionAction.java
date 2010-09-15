@@ -65,7 +65,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		//add new dispute
 		String actionType = "" + request.getParameter("actionType");
 		
-		logger.error("actionType=" + actionType);
+		int incidentType = DisputeResolutionUtils.getIncidentType(incident);
 		
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user)) {
 			
@@ -107,9 +107,6 @@ public class DisputeResolutionAction extends CheckedAction {
 					manuallyModifyDispute(incident, theform, user);
 				} 
 				
-				logger.error(whichButton + " is pushed.");
-				
-				//TODO: put lock on the incident here
 				DisputeResolutionUtils.lockIncident(incident);
 				
 				
@@ -133,7 +130,15 @@ public class DisputeResolutionAction extends CheckedAction {
 //				request.setAttribute("disputeProcess", disputeProcess);
 				request.setAttribute("currentstatus", TracingConstants.MBR_STATUS_CLOSED);
 				
-				forwardTarget = TracingConstants.LD_CLOSE_READ_ONLY;
+				// to handle different types of incidents: ld, dam, ma
+				String appropriateForwardTarget = TracingConstants.LD_CLOSE_READ_ONLY;
+				if (incidentType == TracingConstants.MISSING_ARTICLES) {
+					appropriateForwardTarget = TracingConstants.MISSING_CLOSE_READ_ONLY;
+				} else if (incidentType == TracingConstants.DAMAGED_BAG) {
+					appropriateForwardTarget = TracingConstants.DAMAGED_CLOSE_READ_ONLY;
+				}
+				
+				forwardTarget = appropriateForwardTarget;
 			} else if (actionType.equalsIgnoreCase("unlock")) {
 				//set incident lock attribute to false
 				DisputeResolutionUtils.unlockIncident(incident);
@@ -153,7 +158,15 @@ public class DisputeResolutionAction extends CheckedAction {
 //				request.setAttribute("disputeProcess", disputeProcess);
 				request.setAttribute("currentstatus", TracingConstants.MBR_STATUS_CLOSED);
 				
-				forwardTarget = TracingConstants.LD_CLOSE;
+				// to handle different types of incidents: ld, dam, ma
+				String appropriateForwardTarget = TracingConstants.LD_CLOSE;
+				if (incidentType == TracingConstants.MISSING_ARTICLES) {
+					appropriateForwardTarget = TracingConstants.MISSING_CLOSE;
+				} else if (incidentType == TracingConstants.DAMAGED_BAG) {
+					appropriateForwardTarget = TracingConstants.DAMAGED_CLOSE;
+				}
+				
+				forwardTarget = appropriateForwardTarget;
 			}			
 		} else if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, user)) {
 			if (actionType.equalsIgnoreCase("start")) {
@@ -165,9 +178,9 @@ public class DisputeResolutionAction extends CheckedAction {
 			} 
 		}
 		
-		
 		//the company specific codes..
-		List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user);
+		//List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user);
+		List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, true, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
@@ -222,10 +235,10 @@ public class DisputeResolutionAction extends CheckedAction {
 		int idtoFaultStationId = iDTO.getFaultstation().getStation_ID();
 		int idtoLossCode = iDTO.getLoss_code();
 		
-		logger.error("idtoFaultStationId=" + idtoFaultStationId + " and ");
-		logger.error("idtoLossCode=" + idtoLossCode + " and ");
-		logger.error("theform.getFaultstation_id()=" + theform.getFaultstation_id() + " and ");
-		logger.error("theform.getLoss_code()=" + theform.getLoss_code());		
+//		logger.error("idtoFaultStationId=" + idtoFaultStationId + " and ");
+//		logger.error("idtoLossCode=" + idtoLossCode + " and ");
+//		logger.error("theform.getFaultstation_id()=" + theform.getFaultstation_id() + " and ");
+//		logger.error("theform.getLoss_code()=" + theform.getLoss_code());		
 		myDispute.setIncident(iDTO);
 		
 		myDispute.setBeforeDisputeFaultStation(iDTO.getFaultstation());

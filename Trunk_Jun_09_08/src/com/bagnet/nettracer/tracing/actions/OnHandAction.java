@@ -233,7 +233,7 @@ public class OnHandAction extends CheckedAction {
 		}		// save temporary.
 		else if((request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
 				|| request.getParameter("savetracing") != null || request.getParameter("savetowt") != null || request.getParameter("amendtowt") != null) {
-			//TODO: key to determine whether the action is add new, close, or update
+			// key to determine whether the action is add new, close, or update
 			int saveActionType = ADD_NEW_RECORD;
 			
 			OHD oDTO = null;

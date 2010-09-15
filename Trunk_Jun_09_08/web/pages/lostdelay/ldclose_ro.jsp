@@ -45,6 +45,11 @@
 		disputeProcess = "true";
 	} 
 	request.setAttribute("disputeProcess", disputeProcess);
+	
+	String disputeActionType = "view";
+	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)) { 
+			disputeActionType = "viewToResolve"; 
+	}
 %>
 
   
@@ -104,7 +109,7 @@
             </dd>
             <logic:equal name="disputeProcess" scope="request" value="true">
             <dd>
-              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=<%=disputeActionType %>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
@@ -173,6 +178,7 @@
                 </div>
               </td>
 			  <td align="center" valign="bottom">
+			    <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
 			    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
 			    		  String incidentId = "" + request.getAttribute("incident");
 			    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
@@ -180,6 +186,7 @@
 			    		<input type="submit" id="button" value='<bean:message key="button.unlock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=unlock";return false;'>
 			    	<%    } 
 			    	   } %>
+			    </logic:equal>
 			  </td>              
             </tr>
             <tr>

@@ -432,7 +432,7 @@ public class ManageMessage extends Action {
 				theForm.getRecp_list().clear();
 
 				Recipient r = new Recipient();
-				//TODO: default to Please select
+				// default to Please select
 				//r.setStation_id(-2);
 				r.setCompany_code(user.getCompanycode_ID());
 				theForm.getRecp_list().add(r);
@@ -461,7 +461,7 @@ public class ManageMessage extends Action {
 						}
 					}
 					if (!exists_station_id) {
-						//TODO: lines below removed to default to Please Select option
+						// lines below removed to default to Please Select option
 						//recpt.setStation((Station) recpt.getStationList().get(0));
 						//recpt.setStation_id(recpt.getStation().getStation_ID());
 					}

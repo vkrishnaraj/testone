@@ -10,9 +10,23 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 <%
-  Agent a = (Agent)session.getAttribute("user");
-  String cssFormClass = "form2_pil";
+  	Agent a = (Agent)session.getAttribute("user");
+  	String cssFormClass = "form2_pil";
+  
+	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+	if (myDispute != null) {
+	  	request.setAttribute("disputeProcess", "true");
+	}
+	
+	String disputeActionType = "view";
+	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)) { 
+		disputeActionType = "viewToResolve"; 
+	}
 %>
   
 <html:form action="missing.do" method="post" enctype="multipart/form-data">
@@ -64,6 +78,17 @@
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <logic:equal name="disputeProcess" scope="request" value="true">
+            <dd>
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=<%=disputeActionType %>'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+            </dd>
+            </logic:equal>             
           </dl>
         </div>
       </td>
@@ -90,6 +115,14 @@
                 <td align="center" valign="top">
                   <br>
                   <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+                      <logic:equal name="disputeProcess" scope="request" value="false">
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                   		String incidentId = "" + request.getAttribute("incident");
+    		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
+		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
+		                     <% } 
+		                    } %>
+	                  </logic:equal>  
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>

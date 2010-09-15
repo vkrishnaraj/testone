@@ -14,24 +14,39 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
 <%
-  Agent a = (Agent)session.getAttribute("user");
-int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
-String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
-Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
+  	Agent a = (Agent)session.getAttribute("user");
+	int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
+	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+	Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
 
-Company_specific_irregularity_code lc = null;
-if (lossCodeInt != 0 && inc != null) { 
-  int itemType = inc.getItemtype().getItemType_ID();
-  lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getStation().getCompany());
-} else {
-  lc = null;
-  }
+	Company_specific_irregularity_code lc = null;
+	if (lossCodeInt != 0 && inc != null) { 
+	  int itemType = inc.getItemtype().getItemType_ID();
+	  lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getStation().getCompany());
+	} else {
+	  lc = null;
+	}
 
-if(inc != null) {
-	request.setAttribute("faultStationCode", inc.getFaultstation().getStationcode());
-}
-request.setAttribute("lossCode", lc);
+	if(inc != null) {
+		request.setAttribute("faultStationCode", inc.getFaultstation().getStationcode());
+	}
+	request.setAttribute("lossCode", lc);
+
+	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+	String disputeProcess = "false";
+	if (myDispute != null) {
+		disputeProcess = "true";
+	} 
+	request.setAttribute("disputeProcess", disputeProcess);
+	
+	String disputeActionType = "view";
+	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)) { 
+		disputeActionType = "viewToResolve"; 
+	}
 %>
   <html:form action="damaged.do" method="post" enctype="multipart/form-data">
     <tr>
@@ -82,6 +97,17 @@ request.setAttribute("lossCode", lc);
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <logic:equal name="disputeProcess" scope="request" value="true">
+            <dd>
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=<%=disputeActionType %>'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+            </dd>
+            </logic:equal>              
           </dl>
         </div>
       </td>
@@ -109,9 +135,20 @@ request.setAttribute("lossCode", lc);
                   <c:out value="${faultStationCode}" default="Not Set" />
                 </div>
               </td>
+			  <td align="center" valign="bottom">
+			    <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+			    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
+			    		  String incidentId = "" + request.getAttribute("incident");
+			    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
+			    	%>
+			    		<input type="submit" id="button" value='<bean:message key="button.unlock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=unlock";return false;'>
+			    	<%    } 
+			    	   } %>
+			    </logic:equal>
+			  </td>               
             </tr>
             <tr>
-              <td nowrap colspan=2>
+              <td nowrap colspan=3>
 		      <b><bean:message key="colname.losscode" /></b>
                 <br>
                 <c:out value="${lossCode.loss_code}-${lossCode.description}" default="Not Set" />

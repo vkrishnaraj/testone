@@ -48,9 +48,12 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.dr.Dispute;
+import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
@@ -138,7 +141,7 @@ public class DamagedAction extends CheckedAction {
 
 		/** ****************** handle requests ******************** */
 		
-		//TODO: set default weight unit
+		//set default weight unit
 		String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
 		theform.setOverall_weight_unit(myDefaultWeightUnit);
 		
@@ -152,6 +155,24 @@ public class DamagedAction extends CheckedAction {
 
 		List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
 		request.setAttribute("agentassignedlist", agentassignedlist);
+		
+		//new code for dispute resolution
+		String form_incident_id = null;
+		Dispute myDispute = null;
+		boolean isIncidentLocked = false;
+		
+		if(theform.getIncident_ID() != null) {
+			form_incident_id = theform.getIncident_ID();
+			request.setAttribute("incident", form_incident_id);
+			myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
+			isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
+		}
+		
+		boolean disputeProcess = false;
+		if (myDispute != null) {
+			disputeProcess = true;
+		} 
+		
 		if (theform.getIncident_ID() != null) request.setAttribute("incident",theform.getIncident_ID());
 		
 		if (MBRActionUtils.actionClose(theform, request, user, errors)) {
@@ -170,14 +191,25 @@ public class DamagedAction extends CheckedAction {
 				}
 
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
+					//if locked and does not have lock permission then they get read only
+					if (isIncidentLocked) {
+						return mapping.findForward(TracingConstants.DAMAGED_CLOSE_READ_ONLY);
+					}
 					//if it is closed user can only edit it if they have the permission to edit closed files
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_DAMAGE_LOSS_CODES, user)) {
+						//check to see if there is a dispute on file for this incident
+						//if so, display Dispute Resolution Tab, and no Dispute Fault button
+						request.setAttribute("disputeProcess", disputeProcess);
 						return mapping.findForward(TracingConstants.DAMAGED_CLOSE);
 					}
 					return mapping.findForward(TracingConstants.DAMAGED_CLOSE_READ_ONLY);
 				}
 				//not closed
 				else {
+					if (isIncidentLocked) {
+						return mapping.findForward(TracingConstants.DAMAGED_CLOSE_READ_ONLY);
+					}
+					
 					return (mapping.findForward(TracingConstants.DAMAGED_CLOSE));
 				}
 			}
@@ -315,7 +347,7 @@ public class DamagedAction extends CheckedAction {
 			if (theform.getIncident_ID() == null || theform.getIncident_ID().length() == 0)
 				theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_OPEN);
 
-			//TODO: update the key saveActionType: if no incident id, then it is addnew
+			// update the key saveActionType: if no incident id, then it is addnew
 			String myIncidentId = theform.getIncident_ID();
 			if (!(myIncidentId == null || myIncidentId.equals(""))) {
 				if( request.getParameter("close") != null && request.getParameter("close").equals("1")) {

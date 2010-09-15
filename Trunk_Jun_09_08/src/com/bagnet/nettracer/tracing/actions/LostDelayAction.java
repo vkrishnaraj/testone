@@ -306,7 +306,7 @@ public class LostDelayAction extends CheckedAction {
 
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
 //					request.setAttribute("disputeProcess", disputeProcess);
-					//TODO: if locked and does not have lock permission then they get read only
+					// if locked and does not have lock permission then they get read only
 					if (isIncidentLocked) {
 						return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
 					}
@@ -432,7 +432,6 @@ public class LostDelayAction extends CheckedAction {
 		}
 		//end of new image file save feature code - G
 
-		//TODO: handle dispute fault
 		if (request.getParameter("disputeFault") != null) {
 			handleDisputeFault(mapping, theform, request, response);
 		}
@@ -462,7 +461,7 @@ public class LostDelayAction extends CheckedAction {
 				error = new ActionMessage("error.wt_save_closed");
 			}
 			else {
-				//TODO: update the key saveActionType: if no incident id, then it is addnew
+				// update the key saveActionType: if no incident id, then it is addnew
 				String myIncidentId = theform.getIncident_ID();
 				if (!(myIncidentId == null || myIncidentId.equals(""))) {
 					if( request.getParameter("close") != null && request.getParameter("doclose") != null) {

@@ -15,14 +15,19 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
 
 <%
-  Agent a = (Agent)session.getAttribute("user");
-  String cssFormClass = "form2_ld";
+	  Agent a = (Agent)session.getAttribute("user");
+	  String cssFormClass = "form2_ld";
+	  
+	  String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+	  Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+	  if (myDispute != null) {
+		  request.setAttribute("disputeProcess", "true");
+	  }
   
-  String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
-  Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
-  if (myDispute != null) {
-	  request.setAttribute("disputeProcess", "true");
-  }
+	  String disputeActionType = "view";
+	  if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)) { 
+			disputeActionType = "viewToResolve"; 
+	  }
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -90,7 +95,7 @@
             </dd>
             <logic:equal name="disputeProcess" scope="request" value="true">
             <dd>
-              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aa">&nbsp;
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=<%=disputeActionType %>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bb"><bean:message key="menu.dispute.resolution" /></span>
