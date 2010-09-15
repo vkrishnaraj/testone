@@ -315,7 +315,7 @@ public class LostDelayAction extends CheckedAction {
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, user)) {
 						//check to see if there is a dispute on file for this incident
 						//if so, display Dispute Resolution Tab, and no Dispute Fault button
-//						request.setAttribute("disputeProcess", disputeProcess);
+						request.setAttribute("disputeProcess", disputeProcess);
 						return mapping.findForward(TracingConstants.LD_CLOSE);
 					}
 					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
