@@ -88,8 +88,16 @@ public final class IncidentForm extends ValidatorForm {
 	
 	private String btnUpdateDispute = "No button";  // to support multiple submit buttons in dispute resolution 
 	
+	private boolean locked = false;	//for dispute resolution process
+	
 	
 
+	public boolean isLocked() {
+		return locked;
+	}
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
 	public String getResolutionRemarks() {
 		return resolutionRemarks;
 	}
