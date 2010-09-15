@@ -138,6 +138,7 @@
 			<include name="**/**/HibernateWrapper.class" />
 			<include name="**/**/UserDao.class" />
 			<include name="**/common/db/*.class" />
+			<include name="**/common/pojo/*.class" />
 			<include name="**/**/*.xml" />
 		</jar>
 
