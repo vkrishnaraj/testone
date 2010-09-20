@@ -113,17 +113,22 @@ function updatePagination() {
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.report_type" />
-                    </b>
-                  </td>
-                  <td>
-                    <b>
                       <bean:message key="colname.incident_create_date_short" />
                     </b>
+                  </td>                  
+                  <td>
+                    <b>
+                      <bean:message key="colname.fault.station" />
+                    </b>
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.agent.created" />
+                      <bean:message key="colname.loss.code" />
+                    </b>
+                  </td>                   
+                  <td>
+                    <b>
+                      <bean:message key="colname.disputing.agent" />
                     </b>
                   </td>
                   <td>
@@ -142,6 +147,7 @@ function updatePagination() {
 					<bean:define id="disputeAgent" name="dispute" property="disputeAgent" />
 					<bean:define id="incident" name="dispute" property="incident" />
                		<bean:define id="status" name="dispute" property="status" />
+               		<bean:define id="beforeDisputeFaultStation" name="dispute" property="beforeDisputeFaultStation" />
                   <tr>
                     <td>
                     <logic:equal name="status" property="status_ID" value='<%= "" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN %>'>
@@ -152,11 +158,14 @@ function updatePagination() {
                     </logic:notEqual>
                     </td>
                     <td>
-                      <bean:write name="incident" property="typedesc" />
+                      <bean:write name="dispute" property="dispTimestampCreated" />
+                    </td>                    
+                    <td>
+                      <bean:write name="beforeDisputeFaultStation" property="stationcode" />
                     </td>
                     <td>
-                      <bean:write name="dispute" property="dispTimestampCreated" />
-                    </td>
+                      <bean:write name="dispute" property="beforeDisputeLossCode" />
+                    </td>                      
                     <td>
                       <bean:write name="disputeAgent" property="username" />
                     </td>
