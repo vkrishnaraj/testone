@@ -92,6 +92,7 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_3_DTO;
@@ -2624,6 +2625,186 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	public String create_earlyBag_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
 		return this.create_onhand_rpt(srDTO, reportnum, reportname, reporttitle, true);
 	}
+	
+	public String create_dispute_resolution_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
+		//return this.create_onhand_rpt(srDTO, reportnum, reportname, reporttitle, true);
+		return this.create_dispute_resolution_rpt(srDTO, reportnum, reportname, reporttitle, true);
+	}
+	
+	//dispute resolution report begins
+	private String create_dispute_resolution_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle, boolean earlyBag) throws HibernateException {
+		Session sess = HibernateWrapper.getDirtySession().openSession();
+		try {
+			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
+			parameters.put("title", reporttitle);
+			//Criteria cri = sess.createCriteria(Incident.class);
+
+			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+
+
+			/*************** use direct jdbc sql statement **************/
+			Connection conn = sess.connection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = null;
+			String sql = "select * from dispute d where 1=1";   
+			
+			sql = "select d.created_timestamp,d.Incident_ID,d.status_ID,"
+				+ " dagent.username disputingagentusername,wagent.username workingagentusername,"
+				+ " d.typeOfChange,"
+				+ " d.beforeDisputeLossCode,prestation.stationcode beforedisputefaultstation,"
+				+ " d.suggestedLossCode,suggestedstation.stationcode suggestedfaultstation,"
+				+ " d.determinedLossCode,d.determined_station_ID,determinedfaultstation.stationcode newfaultstation"
+				+ " from dispute d,agent dagent,agent wagent,station prestation,station suggestedstation,station determinedfaultstation"
+				+ " where 1=1"
+				+ " and d.dispute_agent_ID = dagent.Agent_ID"
+				+ " and d.resolution_agent_ID = wagent.Agent_ID"
+				+ " and d.before_dispute_fault_station_ID = prestation.Station_ID"
+				+ " and d.suggested_station_ID = suggestedstation.Station_ID"
+				+ " and d.determined_station_ID = determinedfaultstation.Station_ID";
+				
+			String intc = "";
+			if (srDTO.getStation_ID() != null) {
+				for (int i = 0; i < srDTO.getStation_ID().length; i++) {
+					intc += srDTO.getStation_ID()[i] + ",";
+				}
+			}
+
+			if (intc.length() > 0 && srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
+				intc = intc.substring(0,intc.length() - 1);
+				sql += " and d.determined_station_ID in (" + intc + ") ";
+			}
+
+			Date sdate = null, edate = null;
+			Date sdate1 = null, edate1 = null; // add one for timezone
+			Date stime = null; // time to compare (04:00 if eastern, for example)
+			String dateq = "";
+			
+			ArrayList dateal = null;
+			if ((dateal = calculateDateDiff(srDTO,tz,user)) == null) {
+				return null;
+			} 
+			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
+			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
+			stime = (Date)dateal.get(4);
+			
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
+			if (sdate != null && edate != null) {
+				parameters.put("sdate", srDTO.getStarttime());
+				if (sdate.equals(edate)) {
+					// need to add the timezone diff here
+					dateq += " and ((d.created_timestamp = '" 
+							+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
+							+ "' and d.created_timestamp >= '" 
+							+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+							+ "') or (d.created_timestamp= '"
+							+ DateUtils.formatDate(sdate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+							+ "' and d.created_timestamp <= '"
+							+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+							+ "'))";
+
+				} else {
+
+					// first get the beginning and end dates using date and time, then get
+					// dates in between
+					dateq += " and ((d.created_timestamp = '" 
+						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
+						+ "' and d.created_timestamp >= '" 
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "') or (d.created_timestamp= '"
+						+ DateUtils.formatDate(edate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "' and d.created_timestamp <= '"
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "') or (d.created_timestamp > '"
+						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "' and d.created_timestamp <= '"
+						+ DateUtils.formatDate(edate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "'))";
+
+
+					parameters.put("edate", srDTO.getEndtime());
+				}
+			} else if (sdate != null) {
+				parameters.put("sdate", srDTO.getStarttime());
+				dateq += " and ((d.created_timestamp = '" 
+					+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
+					+ "' and d.created_timestamp >= '" 
+					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ "') or (d.created_timestamp= '"
+					+ DateUtils.formatDate(sdate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ "' and d.created_timestamp <= '"
+					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ "'))";
+
+				edate = null;
+			}
+			
+			sql += dateq;
+			
+			//sql += " order by d.determined_station_ID,d.created_timestamp";
+			
+			rs = stmt.executeQuery(sql);
+
+			
+			//		 put in date and timeformat and timezone of current user
+
+			Object[] o = null, o2 = null, o3 = null;
+			DisputeResolutionReportDTO sr = null;
+			List disputeList = new ArrayList();
+
+			while (rs.next()) {
+				sr = new DisputeResolutionReportDTO();
+
+				sr.setDate_created(rs.getDate("created_timestamp"));
+				sr.setIncident_id(rs.getString("Incident_ID"));
+				sr.setStatus(rs.getInt("status_ID"));
+				sr.setStatusDesc(TracerUtils.getText(Status.getKey((Integer) sr.getStatus()), user));
+				sr.setDisputeAgentName(rs.getString("disputingagentusername"));
+				sr.setWorkingAgentName(rs.getString("workingagentusername"));
+				sr.setTypeOfChange(rs.getString("typeOfChange"));
+				
+				sr.setPreviousFaultCode(rs.getInt("beforeDisputeLossCode"));
+				sr.setBeforeDisputeFaultStation(rs.getString("beforedisputefaultstation"));
+				
+				sr.setSuggestedFaultCode(rs.getInt("suggestedLossCode"));
+				sr.setSuggestedFaultStation(rs.getString("suggestedfaultstation"));
+				
+				sr.setNewFaultCode(rs.getInt("determinedLossCode"));
+				sr.setNewFaultStation(rs.getString("newfaultstation"));
+				
+				sr.set_DATEFORMAT(user.getDateformat().getFormat());
+				sr.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				sr.set_TIMEZONE(tz);
+				
+				disputeList.add(sr);
+			}
+			
+			stmt.close();
+			rs.close();
+			
+			if (sr == null) {
+				logger.debug("no data for report");
+				return "";
+			}
+
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(disputeList);
+			
+//			logger.error(">>>>>finished retrieving dispute data for reporting!!!");
+			return DisputeResolutionReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);			
+		} catch (Exception e) {
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	} // end of dispute resolution report
+	
+	
+	
 	
 	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle, boolean earlyBag) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();

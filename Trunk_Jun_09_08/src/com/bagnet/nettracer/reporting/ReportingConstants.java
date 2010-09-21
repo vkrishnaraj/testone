@@ -76,6 +76,8 @@ public class ReportingConstants {
 	public static final int RPT_20_CUSTOM_6 = 6;
 	
 	public static final int RPT_20_CUSTOM_77 = 77;
+	public static final int RPT_20_CUSTOM_55 = 55;
+	public final static String RPT_55_NAME = "stat_rpt_55";
 	
 	public static final int RPT_20_CUSTOM_MAX_ALLOWED_ROWS = 20000;
 
