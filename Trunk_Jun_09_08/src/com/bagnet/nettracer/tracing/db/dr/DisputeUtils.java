@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -156,6 +157,46 @@ public class DisputeUtils {
 			}
 			
 			HibernateUtils.save(dispute, sess);
+			return true;
+		}
+		catch (Exception e){
+			logger.error("Error Saving Dispute: ", e);
+			e.printStackTrace();
+			return false;
+		}
+		finally{
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static boolean saveDisputeAndUpdateIncident(Dispute dispute, String incidentId, Agent agent){
+
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+			//check to see if there is an entry with the same incident id
+			Incident myIncident = dispute.getIncident();
+			String myIncidentId = "" + myIncident.getIncident_ID();
+			Dispute myExistingDispute = getDisputeByIncidentId(myIncidentId);
+			if (myExistingDispute != null) {
+				dispute.setDispute_res_id(myExistingDispute.getDispute_res_id());
+			}
+			
+			HibernateUtils.save(dispute, sess);
+			
+			//update incident on the new fault station and fault code information
+			Incident incidentToUpdate = IncidentBMO.getIncidentByID(incidentId, sess);
+			if (incidentToUpdate != null) {
+				incidentToUpdate.setFaultstation(dispute.getDeterminedFaultStation());
+				incidentToUpdate.setLoss_code(dispute.getDeterminedLossCode());
+				IncidentBMO ibmo = new IncidentBMO();
+				ibmo.saveAndAuditIncident(incidentToUpdate, agent, sess);
+			}
 			return true;
 		}
 		catch (Exception e){

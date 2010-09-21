@@ -1549,7 +1549,7 @@ public class TracerUtils {
 
 	public static String getText(String key, String locale) {
 		String thisLocale = locale;
-		if (thisLocale == null) {
+		if (thisLocale == null & (!thisLocale.equals(""))) {
 			thisLocale = TracingConstants.DEFAULT_LOCALE;
 		}
 			

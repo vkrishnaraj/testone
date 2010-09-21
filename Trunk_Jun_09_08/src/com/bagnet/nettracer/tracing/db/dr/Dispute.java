@@ -52,7 +52,7 @@ public class Dispute {
 	private Station beforeDisputeFaultStation;	//new
 	private int beforeDisputeLossCode = 0;	//new
 	
-	private String typeOfChange;	//new
+	private String typeOfChange = "";	//new
 	
 	
 	@Id

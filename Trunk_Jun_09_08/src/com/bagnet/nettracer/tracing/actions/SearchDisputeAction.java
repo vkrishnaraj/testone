@@ -60,7 +60,6 @@ public class SearchDisputeAction extends CheckedAction {
 		//find out request type
 		String actionType = "" + request.getParameter("actionType");
 		
-		logger.error("actionType=" + actionType);
 		
 		if (actionType.equalsIgnoreCase("manage")) {	// list all disputes limited access
 			forwardTarget = TracingConstants.VIEW_DISPUTES;
@@ -79,12 +78,17 @@ public class SearchDisputeAction extends CheckedAction {
 		if (incidentIdFromSearchForm != null & (!incidentIdFromSearchForm.equals(""))) {
 			boolean viewOnlyWithNoUpdate = false;
 			Dispute searchByIncidentIdResult = DisputeUtils.getDisputeByIncidentId(incidentIdFromSearchForm);
+
 			if (searchByIncidentIdResult != null) {
 				resultList.add(searchByIncidentIdResult);
 				
-				if (searchByIncidentIdResult.getStatus().getStatus_ID() != TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) {
-					viewOnlyWithNoUpdate = true;
+				Status myStatus = searchByIncidentIdResult.getStatus();
+				if (myStatus != null) {
+					if (myStatus.getStatus_ID() != TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) {
+						viewOnlyWithNoUpdate = true;
+					}
 				}
+
 				request.setAttribute("viewOnlyWithNoUpdate", viewOnlyWithNoUpdate);
 			}
 			forwardTarget = TracingConstants.VIEW_ONLY_DISPUTE;

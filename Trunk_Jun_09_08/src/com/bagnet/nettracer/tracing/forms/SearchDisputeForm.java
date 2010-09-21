@@ -29,6 +29,23 @@ public final class SearchDisputeForm extends ValidatorForm {
 	
 	private String flightnum = ""; // also for custom query
 	
+	private ItemType itemtype;
+	
+	
+	
+	
+	public ItemType getItemtype() {
+		return itemtype;
+	}
+
+	public void setItemtype(ItemType itemtype) {
+		this.itemtype = itemtype;
+	}
+
+	public String getTypedesc() {
+		return itemtype.getDescription();
+	}
+	
 	public String getFlightnum() {
 		return flightnum;
 	}

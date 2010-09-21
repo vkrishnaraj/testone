@@ -107,13 +107,16 @@ public class DisputeResolutionAction extends CheckedAction {
 					manuallyModifyDispute(incident, theform, user);
 				} 
 				
-				DisputeResolutionUtils.lockIncident(incident);
-				
+				DisputeResolutionUtils.lockIncident(incident); 
+				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
+				//DisputeResolutionUtils.lockIncidentWithAudit(incident, user);
 				
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION_UPDATE_SUCCESS;
 			} else if (actionType.equalsIgnoreCase("lock")) {
 				//set incident lock attribute to true
 				DisputeResolutionUtils.lockIncident(incident);
+				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
+				//DisputeResolutionUtils.lockIncidentWithAudit(incident, user);
 				
 				String form_incident_id = null;
 				Dispute myDispute = null;
@@ -142,6 +145,8 @@ public class DisputeResolutionAction extends CheckedAction {
 			} else if (actionType.equalsIgnoreCase("unlock")) {
 				//set incident lock attribute to false
 				DisputeResolutionUtils.unlockIncident(incident);
+				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
+				//DisputeResolutionUtils.unlockIncidentWithAudit(incident, user);
 				
 				String form_incident_id = null;
 				Dispute myDispute = null;
@@ -274,7 +279,11 @@ public class DisputeResolutionAction extends CheckedAction {
 			request.setAttribute("dispute", dispute);
 			
 			Status myStatus = dispute.getStatus();
-			String myStatusDesc = myStatus.getTextDescription(null);
+			
+			String myStatusDesc = "";
+			if (myStatus != null) {
+				myStatusDesc += myStatus.getTextDescription(null);
+			}
 			request.setAttribute("statusDesc", myStatusDesc);
 		}
 		
@@ -307,7 +316,8 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		myDispute.setDeterminedLossCode(myDispute.getSuggestedLossCode());
 		
-		DisputeUtils.saveDispute(myDispute);
+//		DisputeUtils.saveDispute(myDispute);
+		DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
 	}
 	
 	private void denyDispute(String incidentId, Agent user) {
@@ -344,7 +354,8 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		myDispute.setResolutionRemarks(theform.getResolutionRemarks());
 		
-		DisputeUtils.saveDispute(myDispute);
+//		DisputeUtils.saveDispute(myDispute);
+		DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
 	}
 	
 	private String getTypeOfChangeInDispute(

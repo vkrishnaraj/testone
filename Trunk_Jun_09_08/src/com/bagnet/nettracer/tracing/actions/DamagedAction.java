@@ -202,14 +202,16 @@ public class DamagedAction extends CheckedAction {
 						request.setAttribute("disputeProcess", disputeProcess);
 						return mapping.findForward(TracingConstants.DAMAGED_CLOSE);
 					}
+					request.setAttribute("disputeProcess", disputeProcess);
 					return mapping.findForward(TracingConstants.DAMAGED_CLOSE_READ_ONLY);
 				}
 				//not closed
 				else {
 					if (isIncidentLocked) {
+						request.setAttribute("disputeProcess", disputeProcess);
 						return mapping.findForward(TracingConstants.DAMAGED_CLOSE_READ_ONLY);
 					}
-					
+					request.setAttribute("disputeProcess", disputeProcess);
 					return (mapping.findForward(TracingConstants.DAMAGED_CLOSE));
 				}
 			}
@@ -380,6 +382,7 @@ public class DamagedAction extends CheckedAction {
 			} else if (error.getKey().equals("error.unable_to_close_incident")) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
+				request.setAttribute("disputeProcess", disputeProcess);
 				return (mapping.findForward(TracingConstants.DAMAGED_CLOSE));
 			}	else {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
