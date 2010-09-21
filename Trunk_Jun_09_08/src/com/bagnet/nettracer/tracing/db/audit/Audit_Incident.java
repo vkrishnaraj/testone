@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javax.persistence.Column;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ItemType;
@@ -84,6 +86,16 @@ public class Audit_Incident implements Serializable {
 	private String modify_reason;
 	
 	private String language;
+	
+	private boolean locked = false;	//for dispute resolution process
+	
+	@Column(name="locked", nullable=false)
+	public boolean isLocked() {
+		return locked;
+	}
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
 	
 	/**
 	 * @return Returns the overall_weight.
