@@ -5,10 +5,13 @@ import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.AxisFault;
@@ -33,6 +36,7 @@ import aero.nettracer.serviceprovider.common.exceptions.BagtagException;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.common.utils.BagTagConversion;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFile;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
@@ -46,6 +50,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.Itinerary;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Passenger;
 import aero.nettracer.serviceprovider.wt_1_0.common.Pxf;
+import aero.nettracer.serviceprovider.wt_1_0.common.PxfDetails;
 import aero.nettracer.serviceprovider.wt_1_0.common.Qoh;
 import aero.nettracer.serviceprovider.wt_1_0.common.RequestOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Tag;
@@ -104,7 +109,9 @@ import aero.sita.www.bag.wtr._2009._01.RecordType;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType;
 import aero.sita.www.bag.wtr._2009._01.RushBagType;
 import aero.sita.www.bag.wtr._2009._01.StationAirlineType;
+import aero.sita.www.bag.wtr._2009._01.InboxMessageSearchType;
 import aero.sita.www.bag.wtr._2009._01.StringLength0To58AmendType;
+import org.iata.www.iata._2007._00.TTYAddress;
 import aero.sita.www.bag.wtr._2009._01.WTRBagsCreateRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument;
@@ -121,7 +128,17 @@ import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRStatusRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRSuspendRecordsRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRTracingStateChangeRQType;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRSDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRQDocument.WTRInboxMessageCountRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageEraseRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType.Enum;
+import aero.sita.www.bag.wtr._2009._01.InboxAreaType;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType.PermanentAddress;
 import aero.sita.www.bag.wtr._2009._01.ContactInfoType.TempAddress.Address;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.DelayedBags.DelayedBag;
@@ -140,6 +157,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument.WTRDelayed
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.OnHandBags;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.RushBagTags;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.TeletypeAddresses;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ;
@@ -147,12 +165,27 @@ import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBa
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument.WTROnhandBagRecUpdateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument.WTRQuickOnhandBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument.WTRQuickOnhandBagsCreateRQ.BagTags;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageEraseRQDocument.WTRInboxMessageEraseRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ.SupplimentalInfo;
 import aero.sita.www.bag.wtr.delayedbagservice.DelayedBagServiceStub;
 import aero.sita.www.bag.wtr.onhandbagservice.OnhandBagServiceStub;
 import aero.sita.www.bag.wtr.rushbagservice.RushBagServiceStub;
+import aero.sita.www.bag.wtr.inboxservice.InboxServiceStub;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRSDocument.WTRInboxMessageCountRS.MessageCounts.MessageCount;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ.Destination;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ.Destination.InboxAddress;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ.InboxMessageSearch;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMessageReadRS.Messages;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMessageReadRS.Messages.Message;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.OnhandBags;
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 
 public class WorldTracerServiceImpl implements WorldTracerService {
 
@@ -217,32 +250,568 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
 	}
 
-	public void eraseActionFile(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException {
+	public void eraseActionFile(WorldTracerActionDTO dto,
+			ActionFileRequestData data, WorldTracerResponse response)
+			throws WorldTracerException {
+		try {
+			InboxServiceStub stub = new InboxServiceStub(getInboxEndpoint(dto));
+			configureClient(stub, getEnvironment(dto));
+			WTRInboxMessageEraseRQDocument d = WTRInboxMessageEraseRQDocument.Factory
+					.newInstance();
+			WTRInboxMessageEraseRQ d1 = d.addNewWTRInboxMessageEraseRQ();
+
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+					dto.getUser().getProfile().getAirline());
+			d1.setAgentID("NTRACER");
+
+			InboxMessageSearchType ims = d1.addNewInboxMessageSearch();
+			ims.setAirlineCode(data.getAirline());
+			ims.setStationCode(data.getStation());
+			ims.setAreaType(InboxAreaType.Enum.forString(data.getType()));
+			ims.setDay(data.getDay());
+			InboxMessageSearchType.MessageRange.Range r = ims
+					.addNewMessageRange().addNewRange();
+			r.setStart(data.getNumber());
+			r.setEnd(data.getNumber());
+
+			// Send Message
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				String label = "INBOX ERASE";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				wsresponse = stub.eraseMessages(d);
+
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+					&& wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+						&& wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS()
+							.getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE
+								+ error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(
+					WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
+	}
+
+	public void requestOhd(WorldTracerActionDTO dto, RequestOhd data,
+			WorldTracerResponse response) throws WorldTracerException {
+		try {
+			Map<WorldTracerField, List<String>> fieldMap = PreProcessor
+					.requestOhd(dto, data, response);
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(
+					getDelayedEndpoint(dto));
+			configureClient(stub, getEnvironment(dto));
+
+			WTROnhandBagsRequestRQDocument d = WTROnhandBagsRequestRQDocument.Factory
+					.newInstance();
+			WTROnhandBagsRequestRQ d1 = d.addNewWTROnhandBagsRequestRQ();
+
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+					dto.getUser().getProfile().getAirline());
+			d1.setAgentID("NTRACER");
+
+			RecordReferenceType rrt = d1.addNewDelayedBag();
+			String ahlId = data.getAhl().getAhlId();
+			rrt.setAirlineCode(ahlId.substring(3, 5));
+			rrt.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
+			rrt.setStationCode(ahlId.substring(0, 3));
+
+			OnhandBags ohb = d1.addNewOnhandBags();
+			RecordReferenceType rrt2 = ohb.addNewOnhandBag();
+			String ohdId = data.getOhdId();
+			rrt2.setAirlineCode(ohdId.substring(3, 5));
+			rrt2.setReferenceNumber(Integer.parseInt(ohdId.substring(5)));
+			rrt2.setStationCode(ohdId.substring(0, 3));
+
+			String freeFormText = "NONE";
+			if ((List<String>) fieldMap.get(WorldTracerField.FI) != null
+					&& ((List<String>) fieldMap.get(WorldTracerField.FI))
+							.size() > 0) {
+				freeFormText = ((List<String>) fieldMap
+						.get(WorldTracerField.FI)).get(0);
+			}
+
+			d1.setFurtherInfo(freeFormText);
+			WTROnhandBagsRequestRQ.SupplimentalInfo si = d1
+					.addNewSupplimentalInfo();
+			si.addTextLine(freeFormText);
+
+			// TODO there is no teletype field in the wsdl
+			// String[] myTeletypes = data.getTeletype();
+			// if(myTeletypes != null) {
+			// WTRInboxMessageSendRQ.TeletypeAddresses ta =
+			// d1.addNewTeletypeAddresses();
+			// List<String> txs = Arrays.asList(myTeletypes);
+			// for(String tx: txs) {
+			// ta.addTeletypeAddress(tx);
+			// }
+			// }
+
+			if (data.getAhl().getPax() != null
+					&& data.getAhl().getPax().length > 0) {
+				WTROnhandBagsRequestRQ.Names n = d1.addNewNames();
+				for (int i = 0; i < data.getAhl().getPax().length && i < 3; i++) {
+					Passenger myPax = data.getAhl().getPax()[i];
+					n.addName(myPax.getLastname());
+				}
+			}
+
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				String label = "ONHAND REQUEST";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				wsresponse = stub.requestOnhand(d);
+
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+					&& wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+						&& wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS()
+							.getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE
+								+ error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(
+					WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
+	}
+
+	public void requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data,
+			WorldTracerResponse response) throws WorldTracerException {
 		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
 	}
 
-	public void requestOhd(WorldTracerActionDTO dto, RequestOhd data, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+	public void placeActionFile(WorldTracerActionDTO dto, Pxf pxf,
+			WorldTracerResponse response) throws WorldTracerException {
+		try {
+			InboxServiceStub stub = new InboxServiceStub(getInboxEndpoint(dto));
+			configureClient(stub, getEnvironment(dto));
+
+			WTRInboxMessageSendRQDocument d = WTRInboxMessageSendRQDocument.Factory
+					.newInstance();
+			WTRInboxMessageSendRQ d1 = d.addNewWTRInboxMessageSendRQ();
+
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+					dto.getUser().getProfile().getAirline());
+			d1.setAgentID("NTRACER");
+
+			Destination des = d1.addNewDestination();
+			PxfDetails[] myPxfDetails = pxf.getPxfDetails();
+			if (myPxfDetails != null) {
+				List<PxfDetails> targets = Arrays.asList(myPxfDetails);
+				for (PxfDetails target : targets) {
+					InboxAddress i = des.addNewInboxAddress();
+					i.setAirlineCode(target.getAirline());
+					i.setStationCode(target.getStation());
+					i.setAreaType(InboxAreaType.Enum
+							.forString(target.getArea()));
+				}
+			}
+
+			String[] myTeletypes = pxf.getTeletype();
+			if (myTeletypes != null && myTeletypes.length > 0) {
+				WTRInboxMessageSendRQ.TeletypeAddresses ta = d1
+						.addNewTeletypeAddresses();
+				List<String> txs = Arrays.asList(myTeletypes);
+				for (String tx : txs) {
+					ta.addTeletypeAddress(tx);
+				}
+			}
+
+			d1.setOriginStation(pxf.getSendingStation());
+			// TODO find character limit from wsdl //3000
+			d1.setMessage(pxf.getContent());
+
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				String label = "INBOX SEND";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				wsresponse = stub.sendMessage(d);
+
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+					&& wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+						&& wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS()
+							.getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE
+								+ error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(
+					WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
 	}
 
-	public void requestQuickOhd(WorldTracerActionDTO dto, RequestOhd data, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+	public void getActionFileDetails(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response)
+			throws WorldTracerException {throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
 	}
 
-	public void placeActionFile(WorldTracerActionDTO dto, Pxf pxf, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+	private static double parsePercentMatch(String content) {
+		Pattern PERCENT_PATT = Pattern
+				.compile("SCORE\\s*-\\s*(\\d+(\\.\\d{1,2})?)");
+		if (content == null)
+			return 0.0D;
+		Matcher m = PERCENT_PATT.matcher(content);
+		if (m.find()) {
+			return Double.parseDouble(m.group(1));
+		}
+		return 0.0D;
 	}
 
-	public void getActionFileDetails(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+	private static String parseAhlId(String content) {
+		Pattern AHL_PATT = Pattern.compile(
+				"(?:\\bAHL\\s+|A/|FILE\\s+)(\\w{5}\\d{5})\\b",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		if (content == null)
+			return null;
+		Matcher m = AHL_PATT.matcher(content);
+		if (m.find()) {
+			return m.group(1);
+		}
+		return "";
 	}
 
-	public void getActionFileSummary(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+	private static String parseOhdId(String content) {
+		Pattern OHD_PATT = Pattern.compile(
+				"(?:\\bOHD\\s+|O/|ON-HAND\\s+)(\\w{5}\\d{5})\\b",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		if (content == null)
+			return null;
+		Matcher m = OHD_PATT.matcher(content);
+		if (m.find()) {
+			return m.group(1);
+		}
+		return "";
 	}
 
-	public void getActionFileCounts(WorldTracerActionDTO dto, ActionFileRequestData data, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+	public void getActionFileSummary(WorldTracerActionDTO dto,
+			ActionFileRequestData data, WorldTracerResponse response)
+			throws WorldTracerException {
+
+		try {
+			InboxServiceStub stub = new InboxServiceStub(getInboxEndpoint(dto));
+			configureClient(stub, getEnvironment(dto));
+
+			WTRInboxMessageReadRQDocument d = WTRInboxMessageReadRQDocument.Factory
+					.newInstance();
+			WTRInboxMessageReadRQ d1 = d.addNewWTRInboxMessageReadRQ();
+
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+					dto.getUser().getProfile().getAirline());
+			d1.setAgentID("NTRACER");
+
+			InboxMessageSearch ims = d1.addNewInboxMessageSearch();
+			ims.setAirlineCode(data.getAirline());
+			ims.setStationCode(data.getStation());
+			ims.setAreaType(InboxAreaType.Enum.forString(data.getType()));
+			ims.setDay(data.getDay());
+
+			WTRInboxMessageReadRSDocument wsresponse = null;
+			try {
+				String label = "INBOX READ";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				wsresponse = stub.readMessages(d);
+
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+			if (wsresponse != null
+					&& wsresponse.getWTRInboxMessageReadRS() != null) {
+				response.setSuccess(true);
+				wsresponse.getWTRInboxMessageReadRS().getMessages()
+						.getMessageArray();
+				ArrayList<ActionFile> afal = new ArrayList<ActionFile>();
+				if (wsresponse.getWTRInboxMessageReadRS().getMessages() != null) {
+					for (Message m : wsresponse.getWTRInboxMessageReadRS()
+							.getMessages().getMessageArray()) {
+						ActionFile result = new ActionFile();
+						result.setItemNumber(m.getID());
+						result.setSummary(m.getStringValue());
+						result.setDetails(m.getStringValue());
+						result.setAhlId(parseAhlId(m.getStringValue()));
+						result.setOhdId(parseOhdId(m.getStringValue()));
+						result.setPercentMatch(parsePercentMatch(m
+								.getStringValue()));
+						afal.add(result);
+					}
+				}
+
+				response.setActionFiles(afal
+						.toArray(new ActionFile[afal.size()]));
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null
+						&& wsresponse.getWTRInboxMessageReadRS() != null
+						&& wsresponse.getWTRInboxMessageReadRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRInboxMessageReadRS()
+							.getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE
+								+ error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(
+					WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
+	}
+
+	public void getActionFileCounts(WorldTracerActionDTO dto,
+			ActionFileRequestData data, WorldTracerResponse response)
+			throws WorldTracerException {
+		try {
+			InboxServiceStub stub = new InboxServiceStub(getInboxEndpoint(dto));
+
+			configureClient(stub, getEnvironment(dto));
+
+			WTRInboxMessageCountRQDocument d = WTRInboxMessageCountRQDocument.Factory
+					.newInstance();
+			WTRInboxMessageCountRQ d1 = d.addNewWTRInboxMessageCountRQ();
+
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+					dto.getUser().getProfile().getAirline());
+			d1.setAgentID("NTRACER");
+
+			StationAirlineType sat = d1.addNewStationAirline();
+			sat.setAirlineCode(data.getAirline());
+			sat.setStationCode(data.getStation());
+
+			// Send Message
+			WTRInboxMessageCountRSDocument wsresponse = null;
+			try {
+				String label = "INBOX COUNT";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				wsresponse = stub.getMessageCount(d);
+
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null
+					&& wsresponse.getWTRInboxMessageCountRS() != null) {
+
+				ArrayList<ActionFileCount> afcal = new ArrayList<ActionFileCount>();
+				if (wsresponse.getWTRInboxMessageCountRS().getMessageCounts() != null) {
+
+					MessageCount[] mcarray = wsresponse
+							.getWTRInboxMessageCountRS().getMessageCounts()
+							.getMessageCountArray();
+					for (MessageCount mc : mcarray) {
+						if (mc.getDay1() > 0) {
+							ActionFileCount afc1 = new ActionFileCount();
+							afc1.setType(mc.getAreaType().toString());
+							afc1.setDay(1);
+							afc1.setCount(mc.getDay1());
+							afcal.add(afc1);
+						}
+						if (mc.getDay2() > 0) {
+							ActionFileCount afc2 = new ActionFileCount();
+							afc2.setType(mc.getAreaType().toString());
+							afc2.setDay(2);
+							afc2.setCount(mc.getDay2());
+							afcal.add(afc2);
+						}
+						if (mc.getDay3() > 0) {
+							ActionFileCount afc3 = new ActionFileCount();
+							afc3.setType(mc.getAreaType().toString());
+							afc3.setDay(3);
+							afc3.setCount(mc.getDay3());
+							afcal.add(afc3);
+						}
+						if (mc.getDay4() > 0) {
+							ActionFileCount afc4 = new ActionFileCount();
+							afc4.setType(mc.getAreaType().toString());
+							afc4.setDay(4);
+							afc4.setCount(mc.getDay4());
+							afcal.add(afc4);
+						}
+						if (mc.getDay5() > 0) {
+							ActionFileCount afc5 = new ActionFileCount();
+							afc5.setType(mc.getAreaType().toString());
+							afc5.setDay(5);
+							afc5.setCount(mc.getDay5());
+							afcal.add(afc5);
+						}
+						if (mc.getDay6() > 0) {
+							ActionFileCount afc6 = new ActionFileCount();
+							afc6.setType(mc.getAreaType().toString());
+							afc6.setDay(6);
+							afc6.setCount(mc.getDay6());
+							afcal.add(afc6);
+						}
+						if (mc.getDay7() > 0) {
+							ActionFileCount afc7 = new ActionFileCount();
+							afc7.setType(mc.getAreaType().toString());
+							afc7.setDay(7);
+							afc7.setCount(mc.getDay7());
+							afcal.add(afc7);
+						}
+					}
+				}
+				response.setCounts(afcal.toArray(new ActionFileCount[afcal
+						.size()]));
+
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null
+						&& wsresponse.getWTRInboxMessageCountRS() != null
+						&& wsresponse.getWTRInboxMessageCountRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRInboxMessageCountRS()
+							.getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE
+								+ error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(
+					WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
+
 	}
 
 	private static Policy loadPolicy(String xmlPath) throws Exception {
@@ -489,10 +1058,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 					String flightNum = PreProcessor.wtFlightNumber(itin.getFlightNumber());
 					String airlineCode = itin.getAirline();
-					if (flightNum == null || flightNum.equals("")) {
+					if (flightNum == null || flightNum.equals("")
+							|| flightNum.equals("00")) {
 						airlineCode = "YY";
+						// do not set the flightNum
+					} else {
+						p5.setFlightNumber(flightNum);
 					}
-					p5.setFlightNumber(flightNum);
 					p5.setAirlineCode(airlineCode);
 					p5.setDate(itin.getFlightDate());
 
@@ -2298,10 +2870,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 					String flightNum = PreProcessor.wtFlightNumber(itin.getFlightNumber());
 					String airlineCode = itin.getAirline();
-					if (flightNum == null || flightNum.equals("")) {
+					if (flightNum == null || flightNum.equals("")
+							|| flightNum.equals("00")) {
 						airlineCode = "YY";
+					} else {
+						p5.setFlightNumber(flightNum);
 					}
-					p5.setFlightNumber(flightNum);
 					p5.setAirlineCode(airlineCode);
 					p5.setDate(itin.getFlightDate());
 
@@ -2315,9 +2889,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			PassengerAmendType p1 = d1.addNewPassengers();
 
-			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
-			// List<String> fieldList2 =
-			// fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
+			fieldList = fieldMap
+					.get(DefaultWorldTracerService.WorldTracerField.NM);
+			 List<String> fieldList2 =
+			 fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names names = null;
 			if (fieldList != null) {
 				for (int j = 0; j < fieldList.size(); j++) {
@@ -2330,9 +2905,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					nm.setStringValue(name);
 					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS
 					// HERE
-					// if (fieldList2 != null && fieldList2.size() > j) {
-					// p1.addNewInitials().addNewIntial().setStringValue(fieldList2.get(j));
-					// }
+					// comment remove sept.22 loupas
+					if (fieldList2 != null && fieldList2.size() > j) {
+						p1.addNewInitials().addNewIntial().setStringValue(
+								fieldList2.get(j));
+					}
 				}
 			}
 
@@ -2667,9 +3244,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					nm.setSeq(j + 1);
 					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS
 					// HERE
-					// if (fieldList2 != null && fieldList2.size() > j) {
-					// p1.addNewInitials().addNewIntial().setStringValue(fieldList2.get(j));
-					// }
+					// comments removed sept.22,2010 loupas
+					if (fieldList2 != null && fieldList2.size() > j) {
+						p1.addNewInitials().addNewIntial().setStringValue(
+								fieldList2.get(j));
+					}
 				}
 			}
 
@@ -2910,6 +3489,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	private String getRushEndpoint(WorldTracerActionDTO dto) {
 		return dto.getUser().getProfile().getParameters().get(ParameterType.RUSH_ENDPOINT);
+	}
+
+	private String getInboxEndpoint(WorldTracerActionDTO dto) {
+		return dto.getUser().getProfile().getParameters().get(
+				ParameterType.INBOX_ENDPOINT);
 	}
 
 	private String getEnvironment(WorldTracerActionDTO dto) {
