@@ -244,6 +244,8 @@ public class PreProcessor {
 		Matcher m = FLIGHTNUM_FORMAT.matcher(flightnum);
 		if (m.find()) {
 			return m.group();
+		} else if (flightnum.equals("00")){
+			return "00";
 		}
 		return "";
 	}
