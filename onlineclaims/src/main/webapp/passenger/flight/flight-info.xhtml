@@ -24,9 +24,9 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.totalTravelBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.totalTravelBagState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<h:selectOneMenu value="#{passengerBean.bagsTravelWith}" tabindex="1" 
@@ -49,9 +49,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.noOfLostBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.noOfLostBagState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		<a4j:outputPanel id="lostBag" ajaxRendered="true">
 			<h:selectOneMenu id="lostBagMenu" value="#{passengerBean.lostBag}" tabindex="2"
@@ -76,9 +76,9 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.bagCheckedLocation}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.bagCheckedLocationState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		<h:selectOneMenu value="#{passengerBean.bagCheckLocation}"
 			required="#{passengerController.flightLabel.bagCheckedLocationState eq 2}"
@@ -100,9 +100,9 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.noOfPassenger}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.noOfPassengerState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		<h:selectOneMenu id="noOfPassenger" value="#{passengerBean.noOfPassenger}" tabindex="4"
 				required="#{passengerController.flightLabel.noOfPassengerState eq 2}"
@@ -127,9 +127,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.recheckBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.recheckBagState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -153,9 +153,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.inspectbag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.inspectbagState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -180,8 +180,8 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.chargeExcessBaggage}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -203,8 +203,8 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.bagNumber}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -226,8 +226,8 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.missingBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -252,9 +252,9 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.bagClaimCheck}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.bagClaimCheckState eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -280,8 +280,8 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.declarePayExcessValue}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -306,10 +306,10 @@
 			<t:outputText value="#{passengerController.flightLabel.declaredValue}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="declVal" ajaxRendered="true">
-			<h:outputLabel value="*" styleClass="requiredField" 
+			<h:graphicImage value="../_images/reqbullet.gif"  
 				rendered="#{passengerController.flightLabel.declaredValueState  eq 2}" />
 			</a4j:outputPanel>
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -337,9 +337,9 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.clearCustomBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="true and #{passengerController.readOnlyOnSubmitted}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -364,10 +364,10 @@
 			<t:outputText value="#{passengerController.flightLabel.bagWeight}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="weight" ajaxRendered="true">
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.bagWeightState  eq 2}" />
 			</a4j:outputPanel>
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -388,9 +388,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.rerouteBag}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField" 
+			<h:graphicImage value="../_images/reqbullet.gif"  
 				rendered="true and #{passengerController.readOnlyOnSubmitted}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -413,9 +413,9 @@
 			<t:outputText
 				value="#{passengerController.flightLabel.differentClaimCheck}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.differentClaimCheckState  eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
@@ -442,10 +442,10 @@
 			<t:outputText value="#{passengerController.flightLabel.reroutedCityAirline}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<a4j:outputPanel id="rerouteCity" ajaxRendered="true">
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2}" />
 			</a4j:outputPanel>
-			<t:outputText value=":" styleClass="formLabel"/> 
+			 
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
@@ -473,9 +473,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.reason}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.reasonState  eq 2}" /> 
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
@@ -491,9 +491,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"	rendered="true and 
+			<h:graphicImage value="../_images/reqbullet.gif" 	rendered="true and 
 				passengerController.readOnlyOnSubmitted" /> 
-			<t:outputText value=":" styleClass="formLabel"/> 
+			 
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
@@ -517,9 +517,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.whenBagSeen}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"	rendered="true
+			<h:graphicImage value="../_images/reqbullet.gif" 	rendered="true
 				and passengerController.readOnlyOnSubmitted" /> 
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
@@ -542,9 +542,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.fileReportCity}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.fileReportCityState  eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
@@ -568,9 +568,9 @@
 		<h:panelGroup>
 			<t:outputText value="#{passengerController.flightLabel.reportAnotherAirline}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:outputLabel value="*" styleClass="requiredField"
+			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}" />
-			<t:outputText value=":" styleClass="formLabel"/>
+			
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />

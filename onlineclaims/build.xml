@@ -1,0 +1,5 @@
+<project name="paxview deploy" default="copy-war" basedir=".">
+	<target name="copy-war">
+		<copy todir="c:/jboss-4.2.3.GA/server/default/deploy" file="target/onlineclaims.war" />
+	</target>
+</project>

@@ -214,4 +214,12 @@
 		<res-auth>Container</res-auth>
 		<res-sharing-scope>Unshareable</res-sharing-scope> </resource-ref>
 	-->
+	
+	<!-- 
+	 <error-page>
+	  <error-code>404</error-code>
+	  <location>/error404.html</location>
+  <error-page>
+   --> 
+	
 </web-app>

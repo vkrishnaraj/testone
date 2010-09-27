@@ -14,7 +14,7 @@
 					
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneHome}" />
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
+					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneHomeState eq 2}"/>
 					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi20" value="#{passengerBean.address[0].phoneHome}"  style="77%"
@@ -31,7 +31,7 @@
 					
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneMobile}" />
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
+					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneMobileState eq 2}"/>
 					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi21" value="#{passengerBean.address[0].phoneMobile}"  style="77%"
@@ -48,7 +48,7 @@
 					
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneFax}" />
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
+					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneFaxState eq 2}"/>
 					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi22" value="#{passengerBean.address[0].phoneFax}"  style="77%"
@@ -66,7 +66,7 @@
 					
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneBusiness}" />
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
+					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneBusinessState eq 2}"/>
 					<t:outputText styleClass="formLabel" value=":"/>
 					<t:inputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}"  style="77%"

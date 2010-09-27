@@ -28,7 +28,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
@@ -46,7 +46,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.nameonBagState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
@@ -64,7 +64,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
@@ -82,7 +82,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagColorState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
@@ -117,7 +117,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
@@ -135,7 +135,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagPurchaseDateState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<rich:calendar value="#{bagItem.bagPurchaseDate}" 
@@ -170,7 +170,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagTypeState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">

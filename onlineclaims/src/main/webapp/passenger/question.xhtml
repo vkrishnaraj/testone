@@ -21,7 +21,7 @@
 						<h:panelGroup>
 							<t:outputText value="#{passengerController.fraudQuestionLabel.anotherClaim}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 								rendered="#{passengerController.fraudQuestionLabel.anotherClaimState eq 2}"/>
 						</h:panelGroup>	
 					</h:panelGrid>
@@ -59,7 +59,7 @@
 							<t:outputText value="#{passengerController.fraudQuestionLabel.whichAirline}:" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 							<a4j:outputPanel id="which" ajaxRendered="true">
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 								rendered="#{passengerController.fraudQuestionLabel.whichAirlineState eq 2}"/>
 							</a4j:outputPanel>
 						</h:panelGroup>	
@@ -87,7 +87,7 @@
 						<h:outputText value="&#160;" />
 						
 						<a4j:outputPanel id="dateOfClaim" ajaxRendered="true">
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 									rendered="#{passengerController.fraudQuestionLabel.dateOfClaimState eq 2}"/>
 						</a4j:outputPanel>
 						</h:panelGroup>	
@@ -114,7 +114,7 @@
 						<t:outputText value="#{passengerController.fraudQuestionLabel.claimantName}:" styleClass="formLabel"/>
 						<h:outputText value="&#160;" />
 						<a4j:outputPanel id="claimantName" ajaxRendered="true">
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 									rendered="#{passengerController.fraudQuestionLabel.claimantNameState eq 2}"/>
 						</a4j:outputPanel>
 						</h:panelGroup>	
@@ -147,7 +147,7 @@
 					<h:panelGroup>	
 					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInspect}:" styleClass="formLabel"/>	
 					<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 									rendered="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
@@ -167,7 +167,7 @@
 					<h:panelGroup>
 					<t:outputText value="#{passengerController.fraudQuestionLabel.bagConfirmNote}:" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 									rendered="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 2}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>	
@@ -195,7 +195,7 @@
 					<h:panelGroup>	
 					<t:outputText value="#{passengerController.fraudQuestionLabel.inspectionPlace}:" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 									rendered="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
@@ -217,7 +217,7 @@
 					<h:panelGroup>	
 					<t:outputText value="#{passengerController.fraudQuestionLabel.additionalComments}:"  styleClass="subHeader"/>
 					<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 									rendered="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 2}"/>
 					</h:panelGroup>		
 				</div>

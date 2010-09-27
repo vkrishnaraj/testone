@@ -13,9 +13,9 @@
 				<div><rich:spacer width="100%" height="15" title="" /></div>
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine1}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
+					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}"/>
-					<t:outputText value=":" styleClass="formLabel"/>
+					
 					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"
 							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 3}"
@@ -30,9 +30,9 @@
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine2}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
+					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}"/>
-					<t:outputText value=":" styleClass="formLabel"/>
+					
 					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"
 							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 3}"
@@ -49,9 +49,9 @@
 						<h:panelGroup>
 							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 								rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
-							<t:outputText value=":" styleClass="formLabel"/>
+							
 						</h:panelGroup>
 						<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  size="8"
 							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"
@@ -68,9 +68,9 @@
 						<h:panelGroup>
 							<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 								rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
-							<t:outputText value=":" styleClass="formLabel"/>
+							
 						</h:panelGroup>
 						<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  size="8"
 							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"
@@ -87,9 +87,9 @@
 						<h:panelGroup>
 							<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 								rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
-							<t:outputText value=":" styleClass="formLabel"/>
+							
 						</h:panelGroup>
 						<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"   size="8"
 							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"
@@ -106,9 +106,9 @@
 						<h:panelGroup>
 							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
-							<h:outputLabel value="*" styleClass="requiredField" 
+							<h:graphicImage value="../_images/reqbullet.gif"  
 								rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
-							<t:outputText value=":" styleClass="formLabel"/>
+							
 						</h:panelGroup>
 						<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18"   
 								required="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"

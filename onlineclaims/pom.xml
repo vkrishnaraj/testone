@@ -8,6 +8,15 @@
 	<name>NetTracer Online Claims</name>
 	<!--Prepared, configured and Tested by Utpal  -->
 	
+	<!-- 
+	SPECIAL NOTES:
+	To install client JAR:
+	 	mvn install:install-file -DgroupId=OnlineClaimsService-client -DartifactId=OnlineClaimsService-client -Dversion=1.0 -Dpackaging=jar -Dfile=c:/workspace/onlineclaims/OnlineClaimsService-client.jar 
+	 
+	To initially build, uncomment the Axis libraries, then do a package install to download the libraries, then recomment, then package install again.
+	
+	 -->
+	
 	<repositories>
 	<!-- Ajax4Jsf Repository -->
 		<repository>
@@ -234,12 +243,34 @@
 				<version>1.4</version>
 				<configuration>
 					<hostName>localhost</hostName>
-					<port>8080</port>
-					<jbossHome>C:/Program Files/jboss-4.2.3.GA</jbossHome>
+					<port>8180</port>
+					<jbossHome>C:/jboss-4.2.3.GA</jbossHome>
 					<serverName>default</serverName>
 					<fileName>target/onlineclaims.war</fileName>
 				</configuration>
 			</plugin>
+      <plugin> 
+        <artifactId>maven-antrun-plugin</artifactId> 
+        <executions> 
+          <execution> 
+            <phase>package</phase> 
+            <configuration> 
+              <tasks> 
+ 				<copy todir="c:/jboss-4.2.3.GA/server/default/deploy" file="target/onlineclaims.war" />
+                <!-- 
+                  Place any Ant task here. You can add anything 
+                  you can add between <target> and </target> in a 
+                  build.xml. 
+                --> 
+ 
+              </tasks> 
+            </configuration> 
+            <goals> 
+              <goal>run</goal> 
+            </goals> 
+          </execution> 
+        </executions> 
+      </plugin> 
 
 
 		</plugins>

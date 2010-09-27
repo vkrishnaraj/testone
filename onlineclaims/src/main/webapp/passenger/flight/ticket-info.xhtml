@@ -16,7 +16,7 @@
 							<h:panelGrid columns="2">
 								<h:panelGroup > 
 									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket}" styleClass="formLabel"/>
-									<h:outputLabel value="*" styleClass="requiredField" 
+									<h:graphicImage value="../_images/reqbullet.gif"  
 										rendered="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"/>
 								</h:panelGroup>
 								
@@ -37,7 +37,7 @@
 		
 								<h:panelGroup > 
 									<t:outputText value="#{passengerController.flightLabel.ticketNumber}"  styleClass="formLabel"/>
-									<h:outputLabel value="*" styleClass="requiredField" 
+									<h:graphicImage value="../_images/reqbullet.gif"  
 										rendered="#{passengerController.flightLabel.ticketNumberState eq 2}"/>
 								</h:panelGroup>
 								
@@ -64,7 +64,7 @@
 									<f:facet name="header">
 										<h:panelGroup >
 											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers}"  styleClass="formLabel"/>
-											<h:outputLabel value="*" styleClass="requiredField" 
+											<h:graphicImage value="../_images/reqbullet.gif"  
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
@@ -81,7 +81,7 @@
 									<f:facet name="header">
 										<h:panelGroup >
 											<t:outputText value="#{passengerController.flightLabel.bagArrival}"  styleClass="formLabel"/>
-											<h:outputLabel value="*" styleClass="requiredField" 
+											<h:graphicImage value="../_images/reqbullet.gif"  
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>

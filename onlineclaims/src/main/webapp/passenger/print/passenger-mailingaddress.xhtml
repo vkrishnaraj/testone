@@ -15,7 +15,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"
 							readonly="true"
@@ -28,7 +28,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"   styleClass="passInput77" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"
 							readonly="true"
@@ -41,7 +41,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  styleClass="passInput12"
 							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"
 							readonly="true"
@@ -54,7 +54,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  styleClass="passInput12"
 							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"
 							readonly="true"
@@ -67,7 +67,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"  styleClass="passInput12" 
 							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"
 							readonly="true"
@@ -80,7 +80,7 @@
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
-					<t:outputText value=":"/>
+					
 					<t:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18"   styleClass="passInput15"
 								required="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"
 								readonly="true"

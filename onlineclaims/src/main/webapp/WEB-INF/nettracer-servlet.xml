@@ -32,9 +32,9 @@
      
      <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/nettracerdb" />
-		<property name="username" value="root" />
-		<property name="password" value="rootpw" />
+		<property name="url" value="jdbc:mysql://localhost:3306/onlineclaims" />
+		<property name="username" value="nettracer" />
+		<property name="password" value="nettracer" />
 	</bean> 
 	
 	

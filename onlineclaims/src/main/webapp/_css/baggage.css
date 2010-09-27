@@ -1,0 +1,27 @@
+/*
+	comments go here
+*/
+.headerlogin,.mainnav,.searchcontainer,.footer p.white,.footer a,.footer img{display:none;} /* over-riding the master.css */
+.back2mockups{font-size:1.1em;font-weight:bold;padding:25px 25px 0 0;float:right;}
+.back2mockups a{color:#c67f00;}
+.lineitems{clear:both;margin:0 0 10px 0;}
+.lineitems p{float:left;width:135px;margin:2px 0 10px 0;}
+.lineitems input{width:120px;}
+.lineitems .submsg{margin-left:135px;width:360px;}
+.btnadj{padding-top:70px;}
+.listitem{clear:both;}
+.listitem p{float:left;width:110px;}
+.listitem span{font-size:1.1em;line-height:12pt;}
+.listitem .submsg{padding-left:110px;}
+.statusitem{clear:both;padding-top:5px;}
+.statusitem p{float:left;width:110px;}
+.statusitem a.statuslink{font-size:1.4em;font-weight:normal;color:#c67f00;text-decoration:underline;}
+.twocol{clear:both;}
+.twocol .left{float:left;clear:left;width:354px;}
+.twocol .right{float:right;clear:right;width:354px;}
+.vertTop {
+        vertical-align:top;
+}
+.colMin {
+        width: 100px;
+}

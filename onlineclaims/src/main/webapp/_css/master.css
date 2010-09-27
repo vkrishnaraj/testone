@@ -829,12 +829,7 @@ td.dottedhr {
 	_background: url(../_images/footer_new.jpg) no-repeat
 }
 
-/* Composed by Olive Technology*/
-.loginAlign {
-	margin-left: auto;
-	margin-right: auto;
-	width: 408px;
-}
+
 
 .captchaerrormsg {
 	float: left;
@@ -1100,7 +1095,7 @@ td.dottedhr {
 	font-size: 1.0em;
 	color: #333;
 	padding: 0;
-	border: solid 1px #708090
+	border: none;
 }
 
 #step {
