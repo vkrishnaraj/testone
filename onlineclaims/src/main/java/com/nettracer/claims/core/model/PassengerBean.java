@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.nettracer.claims.faces.util.File;
 
 
@@ -90,6 +91,7 @@ public class PassengerBean {
 	//For Submit CLaim Page
 	private String typeAccept;
 	private String status;
+	private WSPVAdvancedIncident passengerData;
 	
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
@@ -444,8 +446,11 @@ public class PassengerBean {
 	}
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+	public void setPassengerData(WSPVAdvancedIncident passengerData) {
+		this.passengerData = passengerData; 
+	}
+	public WSPVAdvancedIncident getPassengerData() {
+		return passengerData;
 	}	
-	
-	
-	
 }

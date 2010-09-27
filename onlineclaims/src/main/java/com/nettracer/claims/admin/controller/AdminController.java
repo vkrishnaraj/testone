@@ -62,9 +62,10 @@ public class AdminController {
 		logger.debug("gotoLandingPage method is called");
 		try{
 
-			if (onlineClaimsWS.authAdminUser(loginBean.getUserName(), loginBean.getPassword())) {
+			if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+				if (onlineClaimsWS.authAdminUser(loginBean.getUserName(), loginBean.getPassword())) {
 
-				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+
 					FacesContext context = FacesUtil.getFacesContext();
 					HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 					SessionScopeBean sessionBean = (SessionScopeBean) session.getAttribute("sessionBean");
@@ -74,23 +75,24 @@ public class AdminController {
 					session.setAttribute("logged", "logged");
 					return "gotoLandingPage";
 				} else {
+					FacesUtil
+					.addError("Incorrect username and password combination. Please try again.");
+					logger.error("Username and Password are incorrect for admin for the IP Adress: "
+							+((HttpServletRequest)FacesUtil.getFacesContext()
+									.getExternalContext().getRequest()).getRemoteAddr());
+					if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+						captchaBean.setStatus("");
+					}
+					clearInputCache();
 					clearCaptchaCache();
 					return null;
 				}
 
 			} else {
-				FacesUtil
-				.addError("Incorrect username and password combination. Please try again.");
-				logger.error("Username and Password are incorrect for admin for the IP Adress: "
-						+((HttpServletRequest)FacesUtil.getFacesContext()
-								.getExternalContext().getRequest()).getRemoteAddr());
-				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-					captchaBean.setStatus("");
-				}
-				clearInputCache();
 				clearCaptchaCache();
 				return null;
 			}
+
 		}catch (AxisFault e) {
 			e.printStackTrace();
 			return null;

@@ -185,10 +185,14 @@ public class PassengerLoginController {
 					session.setAttribute("passengerDirectionList",passengerDirectionList);
 
 					WSPVAdvancedIncident passengerData = passengerView.getData();
-
+					
+					
 					Claim claim=onlineClaimsWS.getClaim(passengerData,loginBean.getLastName());
 					passengerBean = onlineClaimsWS.getPassengerData(passengerData,claim);
+					passengerBean.setPassengerData(passengerData);
 					passengerBean.setIncidentID(passengerData.getIncidentID());
+					
+
 
 					DataModel airportCodeList = new ListDataModel(passengerService.getAirportList());
 
@@ -218,7 +222,7 @@ public class PassengerLoginController {
 			}
 		} catch (AxisFault e) {
 			logger.error("AxisFault Error");
-			FacesUtil.addError("There is a Problem with the webservices, Please try again");
+			FacesUtil.addError("There is a problem communicating with our bag service.  Please try again later.");
 			// Codes for testing :hardcoded data.
 			/*if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 
