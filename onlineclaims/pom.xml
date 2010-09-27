@@ -13,7 +13,10 @@
 	To install client JAR:
 	 	mvn install:install-file -DgroupId=OnlineClaimsService-client -DartifactId=OnlineClaimsService-client -Dversion=1.0 -Dpackaging=jar -Dfile=c:/workspace/onlineclaims/OnlineClaimsService-client.jar 
 	 
-	To initially build, uncomment the Axis libraries, then do a package install to download the libraries, then recomment, then package install again.
+	To initially build, 
+	1.  uncomment the Axis libraries, 
+	2.  then do a package install to download the libraries
+	3.  then recomment, then package install again.
 	
 	 -->
 	
@@ -173,7 +176,8 @@
 			<artifactId>axis2</artifactId>
 			<version>1.5.1</version>
 		</dependency>
-		--><dependency>
+		-->
+		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
 			<version>2.4.0</version>
