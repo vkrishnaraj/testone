@@ -26,9 +26,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagTagNumber}"   styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" tabindex="0"
@@ -49,9 +49,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.nameonBagState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
@@ -72,9 +72,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings}" styleClass="wrapText"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
@@ -95,9 +95,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagColorState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
@@ -133,9 +133,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.brandOftheBag}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
@@ -156,9 +156,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagPurchaseDateState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<rich:calendar value="#{bagItem.bagPurchaseDate}" 
@@ -198,9 +198,9 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagType}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
+					<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.bagDetailsLabel.bagTypeState eq 2}"/>
-					
+					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">
@@ -320,9 +320,6 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.gender}" styleClass="subheadColumn"/>
-						</rich:column>
-						<rich:column>
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.article}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
@@ -334,6 +331,9 @@
 							<rich:column>
 							<h:outputLabel  value="#{passengerController.bagDetailsLabel.brandOrDescription}" styleClass="subheadColumn"/>
 						</rich:column>
+						<rich:column>
+							<h:outputLabel  value="#{passengerController.bagDetailsLabel.gender}" styleClass="subheadColumn"/>
+						</rich:column>						
 						<rich:column>
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.storePurchased}" styleClass="subheadColumn"/>
 						</rich:column>
@@ -350,13 +350,6 @@
 				</f:facet>
 				
 				<rich:column>
-					<h:selectOneMenu value="#{contentItem.male}" disabled="#{passengerController.readOnlyOnSubmitted}">
-						<f:selectItem itemValue="" itemLabel="--" />
-						<f:selectItem itemValue="true" itemLabel="Male" />
-						<f:selectItem itemValue="false" itemLabel="Female" />
-					</h:selectOneMenu>
-				</rich:column>
-				<rich:column>
 					<h:inputText value="#{contentItem.article}" size="6" 
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
@@ -371,6 +364,13 @@
 				<rich:column>
 					<h:inputText value="#{contentItem.brandOrDescription}"  size="6"
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
+				</rich:column>
+				<rich:column>
+					<h:selectOneMenu value="#{contentItem.male}" disabled="#{passengerController.readOnlyOnSubmitted}">
+						<f:selectItem itemValue="" itemLabel="--" />
+						<f:selectItem itemValue="true" itemLabel="Male" />
+						<f:selectItem itemValue="false" itemLabel="Female" />
+					</h:selectOneMenu>
 				</rich:column>
 				<rich:column>
 					<h:inputText value="#{contentItem.storePurchased}"  size="6"
