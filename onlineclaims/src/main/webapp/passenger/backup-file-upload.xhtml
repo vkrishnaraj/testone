@@ -48,7 +48,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.fileUploadLabel.fileUploadDescriptiveText}" styleClass="bodycopy"/>
+						<t:outputText value="#{passengerController.fileUploadLabel.fileUploadDescriptiveText}" />
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -67,11 +67,11 @@
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
 				<h1 class="dkblue">Passenger Property Form | File Upload
-				</h1>
 				<h:graphicImage url="../_images/helpButton.gif" id="helpButton5" alt="Help" 
 							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel5"  
 								attachTo="helpButton5" operation="show" event="onclick" /> 
+				</h1>
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -81,10 +81,10 @@
 						
 						<!-- Start body content -->
 				
-				<!--<div>
-					<t:outputText value="#{passengerController.fileUploadLabel.fileUploadRequiredFieldMessage}" styleClass="bodycopy"/>	
+				<div>
+					<t:outputText value="#{passengerController.fileUploadLabel.fileUploadRequiredFieldMessage}" />	
 				</div>	
-				--><div><h:outputText value="&#160;" /></div>
+				<div><h:outputText value="&#160;" /></div>
 				<div>
 					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
 				</div>
@@ -103,12 +103,10 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody" width="100%">
-							<t:outputText value="#{passengerController.fileUploadLabel.fileUploadHelp}" styleClass="bodycopy"/>
+							<t:outputText value="#{passengerController.fileUploadLabel.fileUploadHelp}"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
-				
-				
 				
 				<div>
 					<t:outputText value="#{passengerController.fileUploadLabel.fileUpload}" styleClass="subHeader"/>	
@@ -117,67 +115,45 @@
 					<rich:spacer width="100%" height="10" title=""/>
 				</div>
 				<div>
-				<h:panelGrid columns="1" width="49%"  columnClasses="width1">
-					<t:outputText value="#{passengerController.fileUploadLabel.fileInstruction}" styleClass="bodycopy"/>
+				<h:panelGrid columns="1" width="88%"  columnClasses="width1">
+					<t:outputText value="#{passengerController.fileUploadLabel.fileInstruction}"/>
 				</h:panelGrid>
 				</div>
 				<rich:spacer width="100%" height="30" title=""/>
 				<h:panelGrid columns="2" width="100%">
-					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection}" styleClass="formLabel"/>
-					<t:inputFileUpload id="fileupload" value="#{passengerController.upFile}" size="60" 
-						disabled="#{passengerController.readOnlyOnSubmitted}"/><p/>
+					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection}"/>
+					<rich:fileUpload  addControlLabel="#{passengerController.fileUploadLabel.browse}" 
+							clearControlLabel="#{passengerController.fileUploadLabel.remove}" 
+							
+							uploadControlLabel="#{passengerController.fileUploadLabel.fileUpload}" 
+							acceptedTypes="pdf,jpg,gif"  fileUploadListener="#{passengerController.fileUploadListener}"
+                			 id="upload"  noDuplicate="true"
+                			allowFlash="true" >
+                			 <f:facet name="progress" id="progressBar1">
+ 								<rich:progressBar style="width: 100%;"/>
+                			</f:facet>
+					</rich:fileUpload>
 				</h:panelGrid>
-				
-				<rich:spacer width="100%" height="20" title=""/>
-				<div>
-				<h:panelGrid columns="2" width="100%">
-				<rich:spacer width="145"  title=""/>
-				<h:panelGroup>
-				<h:commandButton value="#{passengerController.fileUploadLabel.addReceipts}" 
-						rendered="#{!passengerController.readOnlyOnSubmitted}"
-					 	action="#{passengerController.upload}" styleClass="button140pxred button140pxred2" >
-					 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
-				</h:commandButton>
-				<h:outputText value=""/>
-				</h:panelGroup>
-				</h:panelGrid>
-				</div>
-				<div>
-    				<!--<t:outputText value="File Uploaded Successfully." rendered="#{passengerController.rendSuccess}" 
-						style="color:green;font-weight:bold"/>
-    				<t:outputText value="Error in File Uploading." 	rendered="#{passengerController.rendFailure}" 
-						style="color:red;font-weight:bold"/>
-				--></div>
 				
 				<rich:spacer width="100%" height="30" title=""/>
 				
 				<div>
-					<t:outputText value="#{passengerController.fileUploadLabel.receiptsToBeUploaded}" styleClass="subHeader"/>	
+					<!--<t:outputText value="#{passengerController.fileUploadLabel.receiptsToBeUploaded}" styleClass="subHeader"/>-->	
 				</div>
 				<div>
 					<rich:spacer width="100%" height="10" title=""/>
 				</div>
-				<a4j:outputPanel id="filePanel" ajaxRendered="true">
-					<t:dataTable width="200" align="center" id="fileTable"
-						value="#{passengerController.fileDataModelList}" var="file">
-						
-						<h:column>
-							<h:outputText value="#{file.name}" styleClass="formLabel"/>
-						</h:column>
-						<h:column>
-							<rich:spacer width="50" title=""/>
-						</h:column>
-						<h:column>
-							<a4j:commandButton  value="#{passengerController.fileUploadLabel.remove}" 
-								disabled="#{passengerController.readOnlyOnSubmitted}"
-								reRender="filePanel" limitToList="true" immediate="true" styleClass="button140pxred button140pxred2" 
-								actionListener="#{passengerController.removeFileListener}"/>
-						</h:column>
-					
-					</t:dataTable>
-				
-				</a4j:outputPanel>
-				
+				<div>
+					 <t:inputFileUpload id="fileupload" value="#{passengerController.upFile}"
+			 size="20" /><p/>
+    <h:commandButton value="Load the file" action="#{passengerController.upload}" />
+    <t:outputText value="File Uploaded Successfully." 
+		rendered="#{passengerController.rendSuccess}" 
+		style="color:green;font-weight:bold"/>
+    <t:outputText value="Error in File Uploading." 
+		rendered="#{passengerController.rendFailure}" 
+		style="color:red;font-weight:bold"/>
+				</div>
 				
 					  	<!-- End body content -->
 				 	 </div>
@@ -201,23 +177,22 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<div>
 			
-				<rich:spacer width="290px"/>
+				<rich:spacer width="250px"/>
 			
 				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
-				 		tabindex="1" action="#{passengerController.saveFileInfo}"
-				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
+				 		tabindex="3" action="#"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.flightPrevious}"
-				 	tabindex="2" immediate="true" action="#{passengerController.goBackToBagDetails}"
+				 	tabindex="4" immediate="true" onclick="history.go(-1); return false"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
-				 	tabindex="3" action="#{passengerController.gotoFraudQuestion}"
+				 	tabindex="5" action="#{passengerController.gotoFraudQuestion}"
 					styleClass="button140pxred button140pxred2" />
 				
 			
