@@ -39,7 +39,7 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Instructions</h1>
+				<h1 class="dkblue">Descriptive Text</h1>
 			  	</div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -68,10 +68,10 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Application | Passenger Information
+				<h1 class="dkblue">Passenger Property Form | Passenger Information
 				</h1>
-				<h3 style="margin-top: 8px;"><h:outputText value="Help" id="helpButton" styleClass="helpButton dkblue"/></h3>
-							
+				<h:graphicImage url="../_images/helpButton.gif" id="helpButton" alt="Help" 
+							height="30" width="30" styleClass="helpButton"/>							
 							<rich:componentControl for="helpmodalpanel"  
 								attachTo="helpButton" operation="show" event="onclick" /> 
 			  </div>
@@ -84,8 +84,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" styleClass="bodycopy"/>
-					<br/>(<img src="../_images/reqbullet.gif" />Required )	
+					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" styleClass="bodycopy"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
