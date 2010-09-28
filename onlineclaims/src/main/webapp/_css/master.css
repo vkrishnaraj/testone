@@ -408,7 +408,7 @@ body {
 /* END INSIDE CONTAINERS */ /* BEGIN GLOBAL BUTTON STYLE */
 .button140pxredextended {
 	float: right;
-	background: url(../_images/button2.gif);
+	background: url(../_images/button2ext.gif);
 	height: 20px;
 	width: 280px;
 	font-family: Arial, Helvetica, sans-serif;
