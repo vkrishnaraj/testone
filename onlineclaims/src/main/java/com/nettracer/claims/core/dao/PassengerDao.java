@@ -3,6 +3,8 @@ package com.nettracer.claims.core.dao;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 import com.nettracer.claims.core.exception.SimplePersistenceException;
@@ -163,9 +165,15 @@ public class PassengerDao extends HibernateDaoSupport {
 
 	@SuppressWarnings("unchecked")
 	public List<CountryCode> getCountries()  throws SimplePersistenceException {
-		return (List<CountryCode>) getHibernateTemplate().loadAll(CountryCode.class);
+		//return (List<CountryCode>) getHibernateTemplate().loadAll(CountryCode.class);
+		logger.error(">>>>> getting countries with order by country name ...");
+		return (List<CountryCode>) getAllOfItWithOrderBy(CountryCode.class, "country");
 	}
 
+	@SuppressWarnings("unchecked")
+	protected List getAllOfItWithOrderBy(Class myclass, String orderBy) {
+		return getHibernateTemplate().findByCriteria(DetachedCriteria.forClass(myclass).addOrder(Order.asc(orderBy)));
+	}
 
 
 	@SuppressWarnings("unchecked")
