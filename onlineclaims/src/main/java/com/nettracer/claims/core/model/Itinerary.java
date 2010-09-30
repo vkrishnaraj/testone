@@ -13,6 +13,10 @@ public class Itinerary{
 	private String arrivalCity ;
 	private String flightNum ;
 	private Date journeyDate;
+
+	private String deptCityFormText;
+	private String arrvCityFormText;
+	
 	public String getAirline() {
 		return airline;
 	}
@@ -42,6 +46,19 @@ public class Itinerary{
 	}
 	public void setJourneyDate(Date journeyDate) {
 		this.journeyDate = journeyDate;
+	}
+	
+	public String getDeptCityFormText() {
+		return deptCityFormText;
+	}
+	public void setDeptCityFormText(String deptCityFormText) {
+		this.deptCityFormText = deptCityFormText;
+	}
+	public String getArrvCityFormText() {
+		return arrvCityFormText;
+	}
+	public void setArrvCityFormText(String arrvCityFormText) {
+		this.arrvCityFormText = arrvCityFormText;
 	}
 	
 	

@@ -594,9 +594,11 @@ public class PassengerController {
 			if (getItineraryList().isRowAvailable()) {
 				itineraryLocal = (Itinerary) getItineraryList().getRowData();
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
+				itineraryLocal.setDeptCityFormText(airport.getAirportCode() + "-" + airport.getAirportDesc());
 			} else {
 				itineraryLocal = passengerBean.getItineraryList().get(getItineraryTableIndex());
 				itineraryLocal.setDepartureCity(airport.getAirportCode());
+				itineraryLocal.setDeptCityFormText(airport.getAirportCode() + "-" + airport.getAirportDesc());
 			}
 			session.setAttribute("itinerary", itineraryLocal);
 			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
@@ -645,8 +647,10 @@ public class PassengerController {
 			if (getItineraryList().isRowAvailable()) {
 				itineraryLocal = (Itinerary) getItineraryList().getRowData();
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
+				itineraryLocal.setArrvCityFormText(airport.getAirportCode() + "-" + airport.getAirportDesc());
 			} else {
 				itineraryLocal.setArrivalCity(airport.getAirportCode());
+				itineraryLocal.setArrvCityFormText(airport.getAirportCode() + "-" + airport.getAirportDesc());
 			}
 			passengerBean.getItineraryList().set(getItineraryTableIndex(),itineraryLocal);
 			setItineraryList(new ListDataModel(passengerBean.getItineraryList()));
