@@ -1,8 +1,14 @@
 package aero.nettracer.serviceprovider.wt_1_0.services.ishares.connection;
 
+
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +23,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.serviceprovider.common.db.ParameterType;
 import aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
@@ -110,18 +117,69 @@ public class ISharesHttpClient extends WtHttpClient implements
 	public void setLastUsed(Calendar lastUsed) {
 		this.lastUsed = lastUsed;
 	}
+	
+	private static String getHex( byte [] raw ) {
+		String HEXES = "0123456789ABCDEF";
+		    if ( raw == null ) {
+		      return null;
+		    }
+		    final StringBuilder hex = new StringBuilder( 2 * raw.length );
+		    for ( final byte b : raw ) {
+		      hex.append(HEXES.charAt((b & 0xF0) >> 4))
+		         .append(HEXES.charAt((b & 0x0F)));
+		    }
+		    return hex.toString();
+	}
+	
+	  private static String sha1(String pass){
+		  try{
+			  MessageDigest md = MessageDigest.getInstance("SHA-1");
+			  byte [] h = md.digest(pass.getBytes());
+			  return ISharesHttpClient.getHex(h);
+		  } catch (Exception e){
+				e.printStackTrace();
+		  }
+		  return null;
+	  }
+	
+	  protected static String keyGen(){  
+		  Date d = new Date();
+		  SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		  df.setTimeZone(TimeZone.getTimeZone("GMT"));
+		  Random ran = new Random();
+		  int i = ran.nextInt(Integer.MAX_VALUE);
+		  return df.format(d) + String.format("%8s", Integer.toHexString(i)).replace(' ', '0').toUpperCase();
+	  }
+	  protected static String hmacHash(String key, String pass){
+		  try{
+			  return ISharesHttpClient.sha1(key + ISharesHttpClient.sha1(pass));
+		  } catch (Exception e){
+				e.printStackTrace();
+		  }
+		  return null;
+	  }
+	
 
 	public boolean performLogon() {
 		// Host: http://ishares.lcc.usairways.com
 		try {
 			// Login
 			String terminalAddress = null;
-			
 			PostMethod logonPage = new PostMethod("/cgi-bin/login.cgi");
 			logonPage.addParameter("ID", account.getUsername());
-			logonPage.addParameter("Password", account.getPassword());
+
 			logonPage.addParameter("SSU", account.getCompanyCode());
 			logonPage.addParameter("B1", "Login");
+			
+			if ("1".equals(account.getProfile().getParameters().get(ParameterType.USE_CLEAR_TEXT_PASS))){
+				logonPage.addParameter("Password", account.getPassword());
+			} else {
+				logonPage.addParameter("Password", "");
+			}
+			String hashKey = ISharesHttpClient.keyGen();
+			logonPage.addParameter("HMACval", 
+					hashKey + ISharesHttpClient.hmacHash(hashKey, account.getPassword()));
+			
 			this.executeMethod(logonPage, "Initial Login");
 			String responseString = logonPage.getResponseBodyAsString();
 			logonPage.releaseConnection();
