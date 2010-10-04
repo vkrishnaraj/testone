@@ -67,6 +67,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.UsWorldTrac
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerConnectionException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
 import aero.sita.www.bag.wtr._2009._01.AmountType;
 import aero.sita.www.bag.wtr._2009._01.BagDescType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType;
@@ -219,6 +220,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final boolean FORCE_FAILURE = false;
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
 
+	private static final int MAX_CONTENT_DESC_LENGTH = 90;
+	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
 	}
@@ -245,7 +248,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 		}
 	}
-
+	
 	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo, WorldTracerResponse response) throws WorldTracerException {
 		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
 	}
@@ -469,7 +472,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				List<PxfDetails> targets = Arrays.asList(myPxfDetails);
 				for (PxfDetails target : targets) {
 					InboxAddress i = des.addNewInboxAddress();
-					i.setAirlineCode(target.getAirline());
+					i.setAirlineCode(target.getAirline().toUpperCase());
 					i.setStationCode(target.getStation());
 					i.setAreaType(InboxAreaType.Enum
 							.forString(target.getArea()));
@@ -1149,35 +1152,27 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				ct.addNewFaxes().addFax(fieldList.get(0));
 			}
 
-			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
-			ContentsType c2 = null;
-			if (contentsList != null) {
-
-				for (int i = 0; i < contentsList.size() && i < 12; i++) {
-
-					if (i == 0) {
+			
+			if (ohd.getItem() != null && ohd.getItem().getContent() != null){
+				Content[] contentsList = ohd.getItem().getContent();
+				ContentsType c2 = null;
+				for (Content content:contentsList){
+					if(c2 == null){
 						c2 = d2.addNewBagContents();
 					}
-
-					String contentsX = contentsList.get(i);
-					String[] bagContents = contentsX.split(".- ");
-
-					int countPerBag = bagContents.length;
-					String lastCategory = null;
-
-					for (int j = 0; j < countPerBag && j < 12; j++) {
-						String contents = bagContents[j];
-						int index = contents.indexOf("/");
-
-						ContentType c = c2.addNewContent();
-						if (index > -1){
-							lastCategory = contents.substring(0, index);
-						}
-						c.setCategory(lastCategory);
-						c.setDescription(contents.substring(index + 1));
-					}
+					ContentType c = c2.addNewContent();
+					String desc = content.getDescription()
+						.trim()
+						.toUpperCase()
+						.substring(0,MAX_CONTENT_DESC_LENGTH)
+						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+						.replaceAll("\\s+", " ");
+					c.setCategory(content.getCategory());
+					c.setDescription(desc);
 				}
 			}
+			
+			
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.SL);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -1494,6 +1489,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			List<String> tagList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 
+			Item[] items = data.getItem();
+			
 			if (fieldList != null) {
 				for (int i = 0; i < fieldList.size() && i < 10; i++) {
 
@@ -1536,30 +1533,25 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							}
 						}
 					}
-
-					if (contentsList != null && contentsList.size() > 0) {
-
-						for (int k = 0; k < 1; k++) {
-							String bagInfo = contentsList.get(i);
-							String[] bagContents = bagInfo.split(".- ");
-							int countPerBag = bagContents.length;
-							String lastCategory = null;
-
-							for (int j = 0; j < countPerBag && j < 12; j++) {
-								String contents = bagContents[j];
-								if (j == 0)
-									contents = contents.substring(3);
-								int index = contents.indexOf("/");
-
+					
+					if (items.length > i ){
+						Item item = items[i];
+						if (item.getContent() != null){
+							Content[] cList = item.getContent();
+							for (Content content:cList){
 								ContentType c = cx.addNewContent();
-								if (index > -1){
-									lastCategory = contents.substring(0, index);
-								}
-								
-								c.setCategory(lastCategory);
-								c.setDescription(contents.substring(index + 1));
+								String desc = content.getDescription()
+								.trim()
+								.toUpperCase()
+								.substring(0,MAX_CONTENT_DESC_LENGTH)
+								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+								.replaceAll("\\s+", " ");
+							c.setCategory(content.getCategory());
+							c.setDescription(desc);
 							}
 						}
+					} else {
+						throw new WorldTracerConnectionException("Bag/Item mismatch");
 					}
 				}
 			}
@@ -2181,7 +2173,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			d1.addNewPOS().addNewSource().setAirlineVendorID(dto.getUser().getProfile().getAirline());
 
 			StationAirlineType s1 = d1.addNewRefStationAirline();
-			s1.setAirlineCode(msg.getFromAirline());
+			//to-do
+			
+			s1.setAirlineCode(msg.getFromAirline().toUpperCase());
 			s1.setStationCode(msg.getFromStation());
 
 			if (false) {
@@ -2200,7 +2194,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 				BagTagType btt = rbt.addNewOriginalBagTag();
 				String airtag = fieldList.get(0);
-				btt.setAirlineCode(airtag.substring(0, 2));
+				btt.setAirlineCode(airtag.substring(0, 2).toUpperCase());
 				btt.setTagSequence(airtag.substring(2));
 			}
 
@@ -2209,7 +2203,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 				BagTagType btt = rbt.addNewRushBagTag();
 				String airtag = fieldList.get(0);
-				btt.setAirlineCode(airtag.substring(0, 2));
+				btt.setAirlineCode(airtag.substring(0, 2).toUpperCase());
 				btt.setTagSequence(airtag.substring(2));
 			}
 
@@ -2225,11 +2219,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					} else {
 						itinCount++;
 						FlightDateType fdt = rf.addNewFlightDateOrARNK().addNewFlightDate();
-						fdt.setAirlineCode(itin.getAirline());
+						fdt.setAirlineCode(itin.getAirline().toUpperCase());
 						fdt.setDate(itin.getFlightDate());
 						fdt.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
 						StationAirlineType sat = rds.addNewDestination();
-						sat.setAirlineCode(itin.getAirline());
+						sat.setAirlineCode(itin.getAirline().toUpperCase());
 						sat.setStationCode(itin.getArrivalCity());
 					}
 				}
@@ -2401,7 +2395,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private void handleResponse(WorldTracerResponse response, String ahlId, WTRDelayedBagRecReadRSDocument wsresponse) {
 		try {
 			response.setSuccess(true);
-
+			
 			Ahl rahl = new Ahl();
 			response.setAhl(rahl);
 			// File Info (record reference, createdate, etc)
@@ -2457,9 +2451,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsp.getStatus() != null) {
 					status = wsp.getStatus();
 				}
-				if (wsp.getStatus() != null) {
+				if (wsp.getFareBasis() != null) {
 					if (status.length() > 0) {
-						status += " " + wsp.getStatus();
+						status += " " + wsp.getFareBasis();
 					} else {
 						status = wsp.getFareBasis();
 					}
@@ -2486,11 +2480,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					if (ci.getCountry() != null)
 						add.setCountryCode(ci.getCountry().getCountryCode());
 
-					if (ci.getCellPhones() != null)
+					if (ci.getPermPhones() != null)
 						add.setHomePhone(ci.getPermPhones().getPhoneArray(0));
 					if (ci.getCellPhones() != null)
 						add.setMobilePhone(ci.getCellPhones().getPhoneArray(0));
-					if (ci.getCellPhones() != null)
+					if (ci.getTempPhones() != null)
 						add.setAltPhone(ci.getTempPhones().getPhoneArray(0));
 
 				}
@@ -2674,7 +2668,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			// Process Response and/or Error Messages
-			if (wsresponse != null && wsresponse.getWTROnhandBagRecReadRS() != null && wsresponse.getWTROnhandBagRecReadRS().getSuccess() != null) {
+			// It seems that a success state from WT is not guaranteed, so we are going to look for the non-existance of an error message.  Is this the right approach...who knows...
+			if (wsresponse != null && wsresponse.getWTROnhandBagRecReadRS() != null && wsresponse.getWTROnhandBagRecReadRS().getErrors() == null) {
 				response.setSuccess(true);
 
 				Ohd rohd = new Ohd();
@@ -2978,31 +2973,23 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				ph1.setStringValue(fieldList.get(0));
 			}
 
-			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
+
 			ContentsAmendType c2 = null;
-
-			for (int i = 0; i < contentsList.size() && i < 12; i++) {
-
-				if (i == 0) {
-					c2 = d2.addNewBagContents();
-				}
-
-				String bagInfo = contentsList.get(i);
-				String[] bagContents = bagInfo.split(".- ");
-				int countPerBag = bagContents.length;
-				String lastCategory = null;
-				
-				for (int j = 0; j < countPerBag && j < 12; j++) {
-					String contents = bagContents[j];
-					int index = contents.indexOf("/");
-
-					ContentType c = c2.addNewContent();
-					if (index > -1) {
-						lastCategory = contents.substring(0, index);
+			if (ohd.getItem() != null && ohd.getItem().getContent() != null){
+				Content[] cList = ohd.getItem().getContent();
+				for (Content content:cList){
+					if(c2 == null){
+						c2 = d2.addNewBagContents();
 					}
-					
-					c.setCategory(lastCategory);
-					c.setDescription(contents.substring(index + 1));
+					ContentType c = c2.addNewContent();
+					String desc = content.getDescription()
+					.trim()
+					.toUpperCase()
+					.substring(0,MAX_CONTENT_DESC_LENGTH)
+					.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+					.replaceAll("\\s+", " ");
+				c.setCategory(content.getCategory());
+				c.setDescription(desc);
 				}
 			}
 
@@ -3158,6 +3145,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			List<String> tagList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 
+			Item[] items = data.getItem();
+			
 			if (fieldList != null) {
 				for (int i = 0; i < fieldList.size() && i < 10; i++) {
 
@@ -3202,29 +3191,24 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						}
 					}
 
-					if (contentsList != null && contentsList.size() > 0) {
-
-						for (int k = 0; k < 1; k++) {
-							String bagInfo = contentsList.get(i);
-							String[] bagContents = bagInfo.split(".- ");
-							int countPerBag = bagContents.length;
-							String lastCategory = null;
-							
-							for (int j = 0; j < countPerBag && j < 12; j++) {
-								String contents = bagContents[j];
-								if (j == 0)
-									contents = contents.substring(3);
-								int index = contents.indexOf("/");
-
+					if (items.length > i ){
+						Item item = items[i];
+						if (item.getContent() != null){
+							Content[] cList = item.getContent();
+							for (Content content:cList){
 								ContentType c = cx.addNewContent();
-								if (index > -1) {
-									lastCategory = contents.substring(0, index);
-								}
-								
-								c.setCategory(lastCategory);
-								c.setDescription(contents.substring(index + 1));
+								String desc = content.getDescription()
+								.trim()
+								.toUpperCase()
+								.substring(0,MAX_CONTENT_DESC_LENGTH)
+								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+								.replaceAll("\\s+", " ");
+							c.setCategory(content.getCategory());
+							c.setDescription(desc);
 							}
 						}
+					} else {
+						throw new WorldTracerConnectionException("Bag/Item mismatch");
 					}
 				}
 			}
