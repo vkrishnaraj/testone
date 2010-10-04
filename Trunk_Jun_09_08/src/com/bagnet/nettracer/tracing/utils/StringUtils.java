@@ -295,4 +295,14 @@ public class StringUtils {
 	  
 	  return result;
   }
+  
+  public boolean isNotNullAndEmpty(String str) {
+	  
+    if((null != str) && (str.length() == 0)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+  }
 }
