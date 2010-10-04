@@ -354,12 +354,18 @@ function CBG_check(obj) {
                 <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("2")) { %> checked <% } %> value="2">
                   <bean:message key="radio.xls" />
+                  <!-- REMOVED FROM OPTIONS -->
+                  <!-- 
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("3")) { %> checked <% } %> value="3">
                   <bean:message key="radio.csv" />
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("4")) { %> checked <% } %> value="4">
                   <bean:message key="radio.xml" />
+                   -->
+                  <!-- REMOVED FROM OPTIONS -->
                 <% } %>
-
+                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("5")) { %> checked <% } %> value="5">
+                <bean:message key="radio.teletype" />
+                <html:text property="teletypeAddress" size="10" maxlength="13" styleClass="textfield" />
               </td>
             </tr>
             <tr>
