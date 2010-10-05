@@ -297,10 +297,10 @@
 	<group name="baggage_itin">
 		<groupExpression><![CDATA[null]]></groupExpression>
 		<groupHeader>
-			<band height="58">
+			<band height="60">
 				<printWhenExpression><![CDATA[new Boolean($P{bagitinerary} != null ? true : false)]]></printWhenExpression>
 				<subreport isUsingCache="true">
-					<reportElement key="subreport-16" positionType="Float" mode="Opaque" x="16" y="26" width="476" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF">
+					<reportElement key="subreport-16" positionType="Float" mode="Opaque" x="16" y="28" width="476" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF">
 						<printWhenExpression><![CDATA[new Boolean($P{bagitinerary} != null ? true : false)]]></printWhenExpression>
 					</reportElement>
 					<subreportParameter name="REPORT_RESOURCE_BUNDLE">
@@ -310,19 +310,19 @@
 					<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{bagitineraryReport}]]></subreportExpression>
 				</subreport>
 				<line>
-					<reportElement key="line-17" positionType="Float" mode="Opaque" x="162" y="10" width="367" height="1" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-17" positionType="Float" mode="Opaque" x="218" y="12" width="311" height="1" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-19" mode="Opaque" x="3" y="10" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-19" mode="Opaque" x="3" y="12" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
 				</line>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
-					<reportElement key="textField-72" positionType="Float" mode="Opaque" x="40" y="3" width="122" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="textField-72" positionType="Float" mode="Opaque" x="40" y="5" width="164" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
@@ -626,11 +626,11 @@
 		<band/>
 	</background>
 	<title>
-		<band height="26">
+		<band height="21">
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-28" positionType="Float" mode="Opaque" x="133" y="2" width="239" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<reportElement key="textField-28" positionType="Float" mode="Opaque" x="115" y="1" width="274" height="18" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Arial" size="15" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{header.damaged.history}]]></textFieldExpression>
 			</textField>
