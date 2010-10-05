@@ -1164,11 +1164,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String desc = content.getDescription()
 						.trim()
 						.toUpperCase()
-						.substring(0,MAX_CONTENT_DESC_LENGTH)
 						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 						.replaceAll("\\s+", " ");
 					c.setCategory(content.getCategory());
-					c.setDescription(desc);
+					c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
 				}
 			}
 			
@@ -1543,11 +1542,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								String desc = content.getDescription()
 								.trim()
 								.toUpperCase()
-								.substring(0,MAX_CONTENT_DESC_LENGTH)
 								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 								.replaceAll("\\s+", " ");
 							c.setCategory(content.getCategory());
-							c.setDescription(desc);
+							c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
 							}
 						}
 					} else {
@@ -2376,7 +2374,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.indexOf("RECORD NOT FOUND") > -1){
+					returnError = "RECORD NOT FOUND";
+				}
+				else if (returnError.length() > 0) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2740,7 +2741,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.indexOf("RECORD NOT FOUND") > -1){
+					returnError = "RECORD NOT FOUND";
+				}
+				else if (returnError.length() > 0) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2985,11 +2989,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String desc = content.getDescription()
 					.trim()
 					.toUpperCase()
-					.substring(0,MAX_CONTENT_DESC_LENGTH)
 					.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 					.replaceAll("\\s+", " ");
 				c.setCategory(content.getCategory());
-				c.setDescription(desc);
+				c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
 				}
 			}
 
@@ -3200,11 +3203,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								String desc = content.getDescription()
 								.trim()
 								.toUpperCase()
-								.substring(0,MAX_CONTENT_DESC_LENGTH)
 								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 								.replaceAll("\\s+", " ");
 							c.setCategory(content.getCategory());
-							c.setDescription(desc);
+							c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
 							}
 						}
 					} else {
