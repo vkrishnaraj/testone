@@ -196,7 +196,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-4" mode="Opaque" x="4" y="15" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-4" positionType="Float" mode="Opaque" x="4" y="15" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -236,7 +236,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-29" mode="Opaque" x="4" y="11" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-29" positionType="Float" mode="Opaque" x="4" y="11" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -273,7 +273,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-14" mode="Opaque" x="4" y="12" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-14" positionType="Float" mode="Opaque" x="4" y="12" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -295,12 +295,12 @@
 		</groupHeader>
 	</group>
 	<group name="baggage_itin">
-		<groupExpression><![CDATA[null]]></groupExpression>
+		<groupExpression><![CDATA[$V{REPORT_COUNT}]]></groupExpression>
 		<groupHeader>
 			<band height="69">
 				<printWhenExpression><![CDATA[new Boolean($P{bagitinerary} != null ? true : false)]]></printWhenExpression>
 				<subreport isUsingCache="true">
-					<reportElement key="subreport-16" positionType="Float" mode="Opaque" x="16" y="28" width="476" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF">
+					<reportElement key="subreport-16" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="16" y="28" width="476" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF">
 						<printWhenExpression><![CDATA[new Boolean($P{bagitinerary} != null ? true : false)]]></printWhenExpression>
 					</reportElement>
 					<subreportParameter name="REPORT_RESOURCE_BUNDLE">
@@ -316,7 +316,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-19" mode="Opaque" x="3" y="12" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-19" positionType="Float" mode="Opaque" x="3" y="12" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -441,7 +441,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-9" mode="Opaque" x="4" y="14" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-9" positionType="Float" mode="Opaque" x="4" y="14" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -490,7 +490,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-24" mode="Opaque" x="5" y="14" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-24" positionType="Float" mode="Opaque" x="5" y="14" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -533,7 +533,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-34" mode="Opaque" x="4" y="10" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-34" positionType="Float" mode="Opaque" x="4" y="10" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -570,7 +570,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-39" mode="Opaque" x="4" y="11" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-39" positionType="Float" mode="Opaque" x="4" y="11" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
@@ -607,7 +607,7 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-44" mode="Opaque" x="4" y="11" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-44" positionType="Float" mode="Opaque" x="4" y="11" width="37" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
