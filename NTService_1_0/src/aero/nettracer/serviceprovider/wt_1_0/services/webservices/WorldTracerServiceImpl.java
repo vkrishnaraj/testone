@@ -59,6 +59,7 @@ import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService;
 import aero.nettracer.serviceprovider.wt_1_0.services.PreProcessor;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
+import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerRecordNotFoundException;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.BasicRule;
@@ -2370,14 +2371,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					for (ErrorType error : errors) {
 						errorMsg.append(error.getShortText());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
+						if (error.toString().indexOf("RECORD NOT FOUND") > -1){
+							logger.error("Record not found");
+							throw new WorldTracerRecordNotFoundException();
+						}
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.indexOf("RECORD NOT FOUND") > -1){
-					returnError = "RECORD NOT FOUND";
-				}
-				else if (returnError.length() > 0) {
+				if (returnError.length() > 0) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2728,7 +2730,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					}
 
 				}
-
 			} else {
 				StringBuffer errorMsg = new StringBuffer();
 
@@ -2737,14 +2738,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					for (ErrorType error : errors) {
 						errorMsg.append(error.getShortText());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
+						if (error.toString().indexOf("RECORD NOT FOUND") > -1){
+							logger.error("Record not found");
+							throw new WorldTracerRecordNotFoundException();
+						}
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.indexOf("RECORD NOT FOUND") > -1){
-					returnError = "RECORD NOT FOUND";
-				}
-				else if (returnError.length() > 0) {
+				if (returnError.length() > 0) {
 					returnError = UNKNOWN_FAILURE;
 				}
 

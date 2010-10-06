@@ -145,8 +145,14 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 					}
 				}
 			} catch (WorldTracerException e) {
+				if (e.getClass().equals(WorldTracerRecordNotFoundException.class)){
+					logger.error("AbstractServiceManager.WorldTracerRecordNotFoundException");
+					response.setError(new WebServiceError(ServiceConstants.RECORD_NOT_FOUND_EXCEPTION));
+				} else {
+					logger.error("AbstractServiceManager.WorldTracerException");
+					response.setError(new WebServiceError(ServiceConstants.UNEXPECTED_EXCEPTION));
+				}
 				logger.error(e, e);
-				response.setError(new WebServiceError(ServiceConstants.UNEXPECTED_EXCEPTION));
 				response.setSuccess(false);
 			} catch (NotLoggedIntoWorldTracerException e) {
 				logger.error(e);

@@ -11,6 +11,7 @@ public class ServiceConstants {
 	public static final String COMMAND_NOT_PROPERLY_FORMATTED = "COMMAND NOT PROPERLY FORMATTED";
 	public static final String COMMAND_TIMED_OUT = "COMMAND TIMED OUT - WT DID NOT RESPOND";
 	public static final String CAPTCHA_EXCEPTION = "MUST ENTER CAPTCHA";
+	public static final String RECORD_NOT_FOUND_EXCEPTION = "RECORD NOT FOUND";
 	
 	public final static String DB_DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public final static String DB_DATEFORMAT = "yyyy-MM-dd";
