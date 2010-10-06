@@ -1447,7 +1447,7 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append("-- " + resourceBundle.getString("header.matches") + " --");
 			historicalReport.append(newline);
 			JRBeanCollectionDataSource matchesDS = (JRBeanCollectionDataSource) parameters.get("matches");
-			if (requestsDS != null) {
+			if (matchesDS != null) {
 				List<Match> matches = (List<Match>) matchesDS.getData();
 				if (matches != null & matches.size() >= 1) {
 					for (Match match : matches) {
