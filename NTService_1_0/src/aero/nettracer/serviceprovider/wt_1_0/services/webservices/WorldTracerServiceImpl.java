@@ -221,7 +221,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final boolean FORCE_FAILURE = false;
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
 
-	private static final int MAX_CONTENT_DESC_LENGTH = 90;
+	private static final int MAX_CONTENT_DESC_LENGTH = 45;
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
@@ -474,7 +474,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				for (PxfDetails target : targets) {
 					InboxAddress i = des.addNewInboxAddress();
 					i.setAirlineCode(target.getAirline().toUpperCase());
-					i.setStationCode(target.getStation());
+					i.setStationCode(target.getStation().toUpperCase());
 					i.setAreaType(InboxAreaType.Enum
 							.forString(target.getArea()));
 				}
@@ -486,13 +486,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						.addNewTeletypeAddresses();
 				List<String> txs = Arrays.asList(myTeletypes);
 				for (String tx : txs) {
-					ta.addTeletypeAddress(tx);
+					ta.addTeletypeAddress(tx.toUpperCase());
 				}
 			}
 
 			d1.setOriginStation(pxf.getSendingStation());
 			// TODO find character limit from wsdl //3000
-			d1.setMessage(pxf.getContent());
+			d1.setMessage(pxf.getContent().toUpperCase());
 
 			WTRStatusRSDocument wsresponse = null;
 			try {
@@ -2560,7 +2560,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								logger.error("Parsing issue: " + e, e);
 							}
 						}
-
+						
 						if (bag.getBagContents() != null && bag.getBagContents().getContentArray().length > 0) {
 							ArrayList<Content> contents = new ArrayList<Content>();
 							for (ContentType bcont : bag.getBagContents().getContentArray()) {
@@ -2569,9 +2569,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								content.setCategory(bcont.getCategory());
 								content.setDescription(bcont.getDescription());
 							}
+							item.setContent(contents.toArray(new Content[0]));
 						}
 
-						item.setManufacturer(bag.getBrandInfo().getStringValue());
+						if(bag.getBrandInfo() != null){
+							item.setManufacturer(bag.getBrandInfo().getStringValue());
+						}
 						items.add(item);
 
 						if (bag.getBagTag() != null) {
