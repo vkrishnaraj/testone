@@ -1123,7 +1123,7 @@
 	<title>
 		<band height="26">
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-28" positionType="Float" mode="Opaque" x="116" y="2" width="334" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-28" positionType="Float" mode="Opaque" x="154" y="2" width="245" height="20" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
