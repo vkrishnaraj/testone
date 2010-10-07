@@ -239,7 +239,7 @@ public class StringUtils {
   	int endIndex = 0;
   	for (int i=0; i<srcWord.length();) {
   		endIndex = java.lang.Math.min(i + maxLength, srcWord.length());
-  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), " ", maxLength - 1);
+  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), " ", "/", maxLength - 1);
   		list.add(srcWord.trim().substring(i, i+divide).trim());
   		i += divide;
   	}
@@ -247,15 +247,20 @@ public class StringUtils {
   	return list;
   }
   
-  private static int getIndexToDivide(String srcStr, String delimiter, int maxLength) {
+  private static int getIndexToDivide(String srcStr, String delimiter, String delimeter2, int maxLength) {
   	if (srcStr.length() < maxLength) {
   		return srcStr.length();
   	}
   	int index = srcStr.lastIndexOf(delimiter);
-  	if (index > 0) {
+  	int index2 = srcStr.lastIndexOf(delimeter2);
+  	
+  	if (index > 0 || index2 > 0) {
+  		if (index < index2) {
+  			return index2;
+  		}
   		return index;
   	} else {
-  		return srcStr.length() - 1;
+  		return maxLength - 1;
   	}
   }
   
