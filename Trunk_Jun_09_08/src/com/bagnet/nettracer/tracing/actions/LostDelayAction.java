@@ -848,7 +848,8 @@ public class LostDelayAction extends CheckedAction {
 			//newly added fields
 			report_info.put("associatedFile", form.getAssoc_ID());
 			report_info.put("lossCode", form.getLoss_code());
-			report_info.put("faultStation", form.getFaultstation_id());
+			int faultStationId = form.getFaultstation_id();
+			report_info.put("faultStation", TracerUtils.getStationcode(faultStationId));
 			report_info.put("closingRemarks", form.getClosingRemark(2).getRemarktext());
 			
 			parameters.put("report_info", report_info);
@@ -1080,7 +1081,7 @@ public class LostDelayAction extends CheckedAction {
 				StringBuilder myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
 				SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 				String teletypeAddress = request.getParameter("teletypeAddress");
-				iw.sendTelex(myTeletypeHistoricalReport.toString(), teletypeAddress);
+//				iw.sendTelex(myTeletypeHistoricalReport.toString(), teletypeAddress);
 				
 				return null;
 			} else {
@@ -1473,15 +1474,21 @@ public class LostDelayAction extends CheckedAction {
 						if (matchDetails != null) {
 							List<Match_Detail> matcheDetails = (List<Match_Detail>) matchDetails;
 							if (matcheDetails != null & matcheDetails.size() >= 1) {
+								historicalReport
+									.append(resourceBundle.getString("colname.item") + tab + tab + tab)
+									.append(resourceBundle.getString("colname.percentage") + tab + tab)
+									.append(resourceBundle.getString("colname.mbr_info") + tab)
+									.append(resourceBundle.getString("colname.ohd_info") + newline);
+								
 								for (Match_Detail matchDetail : matcheDetails) {
 									historicalReport
-										.append(resourceBundle.getString("colname.item") + "   ")
-										.append(resourceBundle.getString("colname.percentage") + "   ")
-										.append(resourceBundle.getString("colname.mbr_info") + "   ")
-										.append(resourceBundle.getString("colname.ohd_info") + newline)
-										.append(matchDetail.getItem() + "   ")
-										.append(matchDetail.getReportPercentage() + "   ")
-										.append(matchDetail.getMbr_info() + "   ")
+//										.append(resourceBundle.getString("colname.item") + "   " + "   " + "   ")
+//										.append(resourceBundle.getString("colname.percentage") + "   ")
+//										.append(resourceBundle.getString("colname.mbr_info") + "   ")
+//										.append(resourceBundle.getString("colname.ohd_info") + newline)
+										.append(matchDetail.getItem() + tab + tab)
+										.append(matchDetail.getReportPercentage() + tab + tab + tab)
+										.append(matchDetail.getMbr_info() + tab + tab + tab)
 										.append(matchDetail.getOhd_info() + newline);
 									historicalReport.append(newline);	
 								}
