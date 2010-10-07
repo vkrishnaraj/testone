@@ -1158,17 +1158,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				Content[] contentsList = ohd.getItem().getContent();
 				ContentsType c2 = null;
 				for (Content content:contentsList){
-					if(c2 == null){
-						c2 = d2.addNewBagContents();
-					}
-					ContentType c = c2.addNewContent();
-					String desc = content.getDescription()
+					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
+						if(c2 == null){
+							c2 = d2.addNewBagContents();
+						}
+						ContentType c = c2.addNewContent();
+						String desc = content.getDescription()
 						.trim()
 						.toUpperCase()
 						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 						.replaceAll("\\s+", " ");
-					c.setCategory(content.getCategory());
-					c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
+						c.setCategory(content.getCategory());
+						c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
+					}
 				}
 			}
 			
@@ -2987,17 +2989,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (ohd.getItem() != null && ohd.getItem().getContent() != null){
 				Content[] cList = ohd.getItem().getContent();
 				for (Content content:cList){
-					if(c2 == null){
-						c2 = d2.addNewBagContents();
+					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
+						if(c2 == null){
+							c2 = d2.addNewBagContents();
+						}
+						ContentType c = c2.addNewContent();
+						String desc = content.getDescription()
+						.trim()
+						.toUpperCase()
+						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+						.replaceAll("\\s+", " ");
+						c.setCategory(content.getCategory());
+						c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
 					}
-					ContentType c = c2.addNewContent();
-					String desc = content.getDescription()
-					.trim()
-					.toUpperCase()
-					.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
-					.replaceAll("\\s+", " ");
-				c.setCategory(content.getCategory());
-				c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
 				}
 			}
 
