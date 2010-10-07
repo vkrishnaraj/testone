@@ -222,6 +222,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
 
 	private static final int MAX_CONTENT_DESC_LENGTH = 45;
+	private static final int MAX_CONTENT_SPLIT = 2;
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
@@ -472,11 +473,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (myPxfDetails != null) {
 				List<PxfDetails> targets = Arrays.asList(myPxfDetails);
 				for (PxfDetails target : targets) {
-					InboxAddress i = des.addNewInboxAddress();
-					i.setAirlineCode(target.getAirline().toUpperCase());
-					i.setStationCode(target.getStation().toUpperCase());
-					i.setAreaType(InboxAreaType.Enum
-							.forString(target.getArea()));
+					if(target.getAirline().length() > 0 && target.getStation().length() > 0){
+						InboxAddress i = des.addNewInboxAddress();
+						i.setAirlineCode(target.getAirline().toUpperCase());
+						i.setStationCode(target.getStation().toUpperCase());
+						i.setAreaType(InboxAreaType.Enum
+								.forString(target.getArea()));
+					}
 				}
 			}
 
@@ -1162,14 +1165,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						if(c2 == null){
 							c2 = d2.addNewBagContents();
 						}
-						ContentType c = c2.addNewContent();
 						String desc = content.getDescription()
 						.trim()
 						.toUpperCase()
 						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 						.replaceAll("\\s+", " ");
-						c.setCategory(content.getCategory());
-						c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
+						ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+						for(int i = 0; i < al.size() && i < MAX_CONTENT_SPLIT; i++){
+							if(al.get(i).length() > 0){
+								ContentType c = c2.addNewContent();
+								c.setCategory(content.getCategory());
+								c.setDescription(al.get(i));
+							}
+						}
 					}
 				}
 			}
@@ -1541,14 +1549,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
 							for (Content content:cList){
-								ContentType c = cx.addNewContent();
 								String desc = content.getDescription()
 								.trim()
 								.toUpperCase()
 								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 								.replaceAll("\\s+", " ");
-							c.setCategory(content.getCategory());
-							c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
+								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
+									if(al.get(j).length() > 0){
+										ContentType c = cx.addNewContent();
+										c.setCategory(content.getCategory());
+										c.setDescription(al.get(j));
+									}
+								}
 							}
 						}
 					} else {
@@ -2722,8 +2735,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						}
 					}
 
-					if (ores.getOnHandBag().getBagContents() != null) {
-						ores.getOnHandBag().getBagContents().getContentArray();
+					if (ores.getOnHandBag().getBagContents() != null
+							&& ores.getOnHandBag().getBagContents().getContentArray() != null) {
+						ArrayList<Content> contentList = new ArrayList<Content>();
+						for(ContentType ct:ores.getOnHandBag().getBagContents().getContentArray()){
+							Content c = new Content();
+							c.setCategory(ct.getCategory());
+							c.setDescription(ct.getDescription());
+							contentList.add(c);
+						}
+						if(contentList.size() > 0){
+							item.setContent(contentList.toArray(new Content[0]));
+						}
 					}
 
 					item.setManufacturer(ores.getOnHandBag().getBrandInfo().getStringValue());
@@ -2993,14 +3016,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						if(c2 == null){
 							c2 = d2.addNewBagContents();
 						}
-						ContentType c = c2.addNewContent();
 						String desc = content.getDescription()
 						.trim()
 						.toUpperCase()
 						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 						.replaceAll("\\s+", " ");
-						c.setCategory(content.getCategory());
-						c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
+						ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+						for(int i = 0; i < al.size() && i < MAX_CONTENT_SPLIT; i++){
+							if(al.get(i).length() > 0){
+								ContentType c = c2.addNewContent();
+								c.setCategory(content.getCategory());
+								c.setDescription(al.get(i));
+							}
+						}
 					}
 				}
 			}
@@ -3208,14 +3236,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
 							for (Content content:cList){
-								ContentType c = cx.addNewContent();
 								String desc = content.getDescription()
 								.trim()
 								.toUpperCase()
 								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 								.replaceAll("\\s+", " ");
-							c.setCategory(content.getCategory());
-							c.setDescription(StringUtils.substring(desc, 0, MAX_CONTENT_DESC_LENGTH));
+								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
+									if(al.get(j).length() > 0){
+										ContentType c = cx.addNewContent();
+										c.setCategory(content.getCategory());
+										c.setDescription(al.get(j));
+									}
+								}
 							}
 						}
 					} else {
