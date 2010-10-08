@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashMap;
 
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.AxisFault;
@@ -223,9 +224,39 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	private static final int MAX_CONTENT_DESC_LENGTH = 45;
 	private static final int MAX_CONTENT_SPLIT = 2;
+	private static final int LOSS_COMMENT_MAX = 58;
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
+	}
+
+	//TODO
+	protected static Map<String,String> combineContentFields(Content [] contents){
+		HashMap<String,String> m = new HashMap<String,String>();
+		for(Content content:contents){
+			if(content.getCategory() != null 
+					&& content.getDescription() != null
+					&& content.getCategory().trim().length() > 0 
+					&& content.getDescription().trim().length() > 0){
+				if(m.containsKey(content.getCategory())){
+					m.put(content.getCategory(), m.get(content.getCategory()) + " " + content.getDescription());
+				} else {
+					m.put(content.getCategory(), content.getDescription());
+				}
+			}
+		}
+		for(String key:m.keySet()){
+			String s = m.get(key)
+			.trim()
+			.toUpperCase()
+			.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+			.replaceAll("\\s+", " ");
+			ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(s, MAX_CONTENT_DESC_LENGTH);
+			if(al.get(0).length() > 0){
+				m.put(key, al.get(0));
+			}
+		}
+		return m;
 	}
 
 	public void writeToLog(String description) {
@@ -474,10 +505,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (myPxfDetails != null) {
 				List<PxfDetails> targets = Arrays.asList(myPxfDetails);
 				for (PxfDetails target : targets) {
-					if(target.getAirline().length() > 0 && target.getStation().length() > 0){
+					if(target.getAirline().trim().length() > 0 && target.getStation().trim().length() > 0){
 						InboxAddress i = des.addNewInboxAddress();
-						i.setAirlineCode(target.getAirline().toUpperCase());
-						i.setStationCode(target.getStation().toUpperCase());
+						i.setAirlineCode(target.getAirline().trim().toUpperCase());
+						i.setStationCode(target.getStation().trim().toUpperCase());
 						i.setAreaType(InboxAreaType.Enum
 								.forString(target.getArea()));
 					}
@@ -486,11 +517,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			String[] myTeletypes = pxf.getTeletype();
 			if (myTeletypes != null && myTeletypes.length > 0) {
-				WTRInboxMessageSendRQ.TeletypeAddresses ta = d1
-						.addNewTeletypeAddresses();
+				WTRInboxMessageSendRQ.TeletypeAddresses ta = null;
 				List<String> txs = Arrays.asList(myTeletypes);
 				for (String tx : txs) {
-					ta.addTeletypeAddress(tx.toUpperCase());
+					if(tx.trim().length() > 0){
+						if (ta == null){
+							ta = d1.addNewTeletypeAddresses();
+						}
+						ta.addTeletypeAddress(tx.trim().toUpperCase());
+					}
 				}
 			}
 
@@ -1161,26 +1196,38 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (ohd.getItem() != null && ohd.getItem().getContent() != null){
 				Content[] contentsList = ohd.getItem().getContent();
 				ContentsType c2 = null;
-				for (Content content:contentsList){
-					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
-						if(c2 == null){
-							c2 = d2.addNewBagContents();
-						}
-						String desc = content.getDescription()
-						.trim()
-						.toUpperCase()
-						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
-						.replaceAll("\\s+", " ");
-						ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
-						for(int i = 0; i < al.size() && i < MAX_CONTENT_SPLIT; i++){
-							if(al.get(i).length() > 0){
-								ContentType c = c2.addNewContent();
-								c.setCategory(content.getCategory());
-								c.setDescription(al.get(i));
-							}
-						}
+				
+				Map<String,String> cm = combineContentFields(contentsList);
+				
+				for(String key:cm.keySet()){
+					if(c2 == null){
+						c2 = d2.addNewBagContents();
 					}
+					ContentType c = c2.addNewContent();
+					c.setCategory(key);
+					c.setDescription(cm.get(key));
 				}
+				
+//				for (Content content:contentsList){
+//					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
+//						if(c2 == null){
+//							c2 = d2.addNewBagContents();
+//						}
+//						String desc = content.getDescription()
+//						.trim()
+//						.toUpperCase()
+//						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+//						.replaceAll("\\s+", " ");
+//						ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+//						for(int i = 0; i < al.size() && i < MAX_CONTENT_SPLIT; i++){
+//							if(al.get(i).length() > 0){
+//								ContentType c = c2.addNewContent();
+//								c.setCategory(content.getCategory());
+//								c.setDescription(al.get(i));
+//							}
+//						}
+//					}
+//				}
 			}
 			
 			
@@ -1419,7 +1466,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			if (incident.getFaultReason() != 0 || incident.getFaultReason() > 79) {
 				d2.setLossReasonCode(incident.getFaultReason());
-				d2.setLossComments(incident.getFaultReasonDescription());
+				d2.setLossComments(StringUtils.substring(incident.getFaultReasonDescription(), 0, LOSS_COMMENT_MAX));
 
 			} else {
 				d2.setLossReasonCode(79);
@@ -1511,7 +1558,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String bagDesc = bagFace.substring(4, 7);
 
 					DelayedBagType t3 = t22.addNewDelayedBag();
-					ContentsType cx = t3.addNewBagContents();
+					ContentsType cx = null;
+//					ContentsType cx = t3.addNewBagContents();
 
 					if (tagList != null && i < tagList.size()) {
 						BagTagType tag = t3.addNewBagTag();
@@ -1549,21 +1597,31 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						Item item = items[i];
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
-							for (Content content:cList){
-								String desc = content.getDescription()
-								.trim()
-								.toUpperCase()
-								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
-								.replaceAll("\\s+", " ");
-								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
-								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
-									if(al.get(j).length() > 0){
-										ContentType c = cx.addNewContent();
-										c.setCategory(content.getCategory());
-										c.setDescription(al.get(j));
-									}
+							
+							Map<String,String>cm = combineContentFields(cList);
+							for(String key:cm.keySet()){
+								if(cx == null){
+									cx = t3.addNewBagContents();
 								}
+								ContentType c = cx.addNewContent();
+								c.setCategory(key);
+								c.setDescription(cm.get(key));
 							}
+//							for (Content content:cList){
+//								String desc = content.getDescription()
+//								.trim()
+//								.toUpperCase()
+//								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+//								.replaceAll("\\s+", " ");
+//								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+//								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
+//									if(al.get(j).length() > 0){
+//										ContentType c = cx.addNewContent();
+//										c.setCategory(content.getCategory());
+//										c.setDescription(al.get(j));
+//									}
+//								}
+//							}
 						}
 					} else {
 						throw new WorldTracerConnectionException("Bag/Item mismatch");
@@ -2249,7 +2307,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			if (msg.getFaultReasonDescription() != null) {
-				d1.setLossComments(msg.getFaultReasonDescription());
+				d1.setLossComments(StringUtils.substring(msg.getFaultReasonDescription(), 0, LOSS_COMMENT_MAX));
 			}
 
 			if (msg.getFaultReason() != 0) {
@@ -2665,7 +2723,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			t1.setRecordType(RecordType.ON_HAND);
 
 			RecordReferenceType t2 = t1.addNewRecordReference();
-			String ohdId = ohd.getOhdId();
+			String ohdId = ohd.getOhdId().trim();
 
 			t2.setAirlineCode(ohdId.substring(3, 5));
 			t2.setReferenceNumber(Integer.parseInt(ohdId.substring(5)));
@@ -3014,26 +3072,37 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			ContentsAmendType c2 = null;
 			if (ohd.getItem() != null && ohd.getItem().getContent() != null){
 				Content[] cList = ohd.getItem().getContent();
-				for (Content content:cList){
-					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
-						if(c2 == null){
-							c2 = d2.addNewBagContents();
-						}
-						String desc = content.getDescription()
-						.trim()
-						.toUpperCase()
-						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
-						.replaceAll("\\s+", " ");
-						ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
-						for(int i = 0; i < al.size() && i < MAX_CONTENT_SPLIT; i++){
-							if(al.get(i).length() > 0){
-								ContentType c = c2.addNewContent();
-								c.setCategory(content.getCategory());
-								c.setDescription(al.get(i));
-							}
-						}
+				
+				Map<String,String> cm = combineContentFields(cList);
+				
+				for(String key:cm.keySet()){
+					if(c2 == null){
+						c2 = d2.addNewBagContents();
 					}
+					ContentType c = c2.addNewContent();
+					c.setCategory(key);
+					c.setDescription(cm.get(key));
 				}
+//				for (Content content:cList){
+//					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
+//						if(c2 == null){
+//							c2 = d2.addNewBagContents();
+//						}
+//						String desc = content.getDescription()
+//						.trim()
+//						.toUpperCase()
+//						.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+//						.replaceAll("\\s+", " ");
+//						ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+//						for(int i = 0; i < al.size() && i < MAX_CONTENT_SPLIT; i++){
+//							if(al.get(i).length() > 0){
+//								ContentType c = c2.addNewContent();
+//								c.setCategory(content.getCategory());
+//								c.setDescription(al.get(i));
+//							}
+//						}
+//					}
+//				}
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.SL);
@@ -3128,7 +3197,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			if (incident.getFaultReason() != 0 || incident.getFaultReason() > 79) {
 				d2.addNewLossReasonCode().setIntValue(incident.getFaultReason());
-				d2.addNewLossComments().setStringValue(incident.getFaultReasonDescription());
+				d2.addNewLossComments().setStringValue(StringUtils.substring(incident.getFaultReasonDescription(), 0, LOSS_COMMENT_MAX));
 
 			} else {
 				d2.addNewLossReasonCode().setIntValue(79);
@@ -3200,7 +3269,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 					DelayedBag t3 = t22.addNewDelayedBag();
 					t3.setSeq(i + 1);
-					ContentsAmendType cx = t3.addNewBagContents();
+					ContentsAmendType cx = null;
+//					ContentsAmendType cx = t3.addNewBagContents();
 
 					if (tagList != null && i < tagList.size()) {
 						BagTagAmendType tag = t3.addNewBagTag();
@@ -3238,21 +3308,32 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						Item item = items[i];
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
-							for (Content content:cList){
-								String desc = content.getDescription()
-								.trim()
-								.toUpperCase()
-								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
-								.replaceAll("\\s+", " ");
-								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
-								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
-									if(al.get(j).length() > 0){
-										ContentType c = cx.addNewContent();
-										c.setCategory(content.getCategory());
-										c.setDescription(al.get(j));
-									}
+							
+							Map<String,String>cm = combineContentFields(cList);
+							for(String key:cm.keySet()){
+								if(cx == null){
+									cx = t3.addNewBagContents();
 								}
+								ContentType c = cx.addNewContent();
+								c.setCategory(key);
+								c.setDescription(cm.get(key));
 							}
+							
+//							for (Content content:cList){
+//								String desc = content.getDescription()
+//								.trim()
+//								.toUpperCase()
+//								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
+//								.replaceAll("\\s+", " ");
+//								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
+//								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
+//									if(al.get(j).length() > 0){
+//										ContentType c = cx.addNewContent();
+//										c.setCategory(content.getCategory());
+//										c.setDescription(al.get(j));
+//									}
+//								}
+//							}
 						}
 					} else {
 						throw new WorldTracerConnectionException("Bag/Item mismatch");
