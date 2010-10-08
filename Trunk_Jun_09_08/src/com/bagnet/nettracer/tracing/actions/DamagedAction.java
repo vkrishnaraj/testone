@@ -581,7 +581,8 @@ public class DamagedAction extends CheckedAction {
 			//newly added fields
 			report_info.put("associatedFile", form.getAssoc_ID());
 			report_info.put("lossCode", form.getLoss_code());
-			report_info.put("faultStation", form.getFaultstation_id());
+			int faultStationId = form.getFaultstation_id();
+			report_info.put("faultStation", TracerUtils.getStationcode(faultStationId));
 			report_info.put("closingRemarks", form.getClosingRemark(2).getRemarktext());
 			
 			parameters.put("report_info", report_info);
@@ -1046,7 +1047,17 @@ public class DamagedAction extends CheckedAction {
 							.append(resourceBundle.getString("colname.x_desc") + ": ")
 							.append(resourceBundle.getString(bag.getXdescelement1Key()) + newline)
 							.append(resourceBundle.getString(bag.getXdescelement2Key()) + newline)
-							.append(resourceBundle.getString(bag.getXdescelement3Key()) + newline);
+							.append(resourceBundle.getString(bag.getXdescelement3Key()) + newline)
+							.append(resourceBundle.getString("colname.damagedesc") + ": ")
+							.append(bag.getDamage() + newline)
+							.append(resourceBundle.getString("colname.lvldamage") + ": ")
+							.append(bag.getDisplvlofdamage() + newline)
+							.append(resourceBundle.getString("colname.cost") + ": ")
+							.append(bag.getDispcost() + newline)
+							.append(resourceBundle.getString("colname.currency") + ": ")
+							.append(bag.getCurrency() + newline)
+							.append(resourceBundle.getString("colname.resolutiondesc") + ": ")
+							.append(bag.getResolutiondesc() + newline);
 						
 						//bag content section
 						historicalReport.append(newline);
