@@ -344,11 +344,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			WTROnhandBagsRequestRQDocument d = WTROnhandBagsRequestRQDocument.Factory
 					.newInstance();
 			WTROnhandBagsRequestRQ d1 = d.addNewWTROnhandBagsRequestRQ();
-
+			
 			d1.setVersion(VERSION_0_PT_1);
 			d1.addNewPOS().addNewSource().setAirlineVendorID(
 					dto.getUser().getProfile().getAirline());
-			d1.setAgentID("NTRACER");
+			d1.setAgentID(PreProcessor.getAgentEntry(data.getAgent()));
 
 			RecordReferenceType rrt = d1.addNewDelayedBag();
 			String ahlId = data.getAhl().getAhlId();
@@ -363,7 +363,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			rrt2.setReferenceNumber(Integer.parseInt(ohdId.substring(5)));
 			rrt2.setStationCode(ohdId.substring(0, 3));
 
-			String freeFormText = "NONE";
+			String freeFormText = null;
 			if ((List<String>) fieldMap.get(WorldTracerField.FI) != null
 					&& ((List<String>) fieldMap.get(WorldTracerField.FI))
 							.size() > 0) {
@@ -371,10 +371,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						.get(WorldTracerField.FI)).get(0);
 			}
 
-			d1.setFurtherInfo(freeFormText);
-			WTROnhandBagsRequestRQ.SupplimentalInfo si = d1
-					.addNewSupplimentalInfo();
-			si.addTextLine(freeFormText);
+			if (freeFormText != null) {
+				d1.setFurtherInfo(freeFormText);
+				WTROnhandBagsRequestRQ.SupplimentalInfo si = d1.addNewSupplimentalInfo();
+				si.addTextLine(freeFormText);
+			}
 
 			// TODO there is no teletype field in the wsdl
 			// String[] myTeletypes = data.getTeletype();
@@ -2700,6 +2701,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				rohd.setStationCode(ohdId.substring(0, 3));
 
 				WTROnhandBagRecReadRS ores = wsresponse.getWTROnhandBagRecReadRS();
+				
+				rohd.setCreateDate(ores.getDiaryInfo().getCreateDate());
 				Item item = new Item();
 				rohd.setItem(item);
 
