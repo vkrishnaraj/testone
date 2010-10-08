@@ -1176,80 +1176,83 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append("-- " + resourceBundle.getString("header.passenger_info") + " --");
 			historicalReport.append(newline);
 			JRBeanCollectionDataSource passengerDS = (JRBeanCollectionDataSource) parameters.get("passenger");
-			List<Passenger> myPassengers = (List<Passenger>) passengerDS.getData();
-			if (myPassengers != null & myPassengers.size() >= 1) {
-				for (Passenger pax : myPassengers) {
-					historicalReport
-						.append(resourceBundle.getString("colname.pass_name"))
-						.append(newline)
-						.append(resourceBundle.getString("colname.airline_membership") + ": ")
-						.append(pax.getAirlinememcompany() + newline)
-						.append(indent + resourceBundle.getString("colname.membership_status") + ": ")
-						.append(pax.getAirlinememstatus() + newline)
-						.append(indent + resourceBundle.getString("colname.membership_number") + ": ")
-						.append(pax.getAirlinememnumber() + newline)
-						.append(indent + resourceBundle.getString("colname.last_name") + ": ")
-						.append(pax.getLastname() + newline)
-						.append(indent + resourceBundle.getString("colname.first_name") + ": ")
-						.append(pax.getFirstname() + newline)
-						.append(indent + resourceBundle.getString("middle") + ": ")
-						.append(pax.getMiddlename() + newline)
-						.append(indent + resourceBundle.getString("colname.salutation") + ": ")
-						.append(pax.getDispsalutation() + newline)
-						.append(resourceBundle.getString("colname.job_title") + ": ")
-						.append(pax.getJobtitle() + newline)
-						.append(resourceBundle.getString("colname.dlstate") + ": ")
-						.append(pax.getDispdlstate() + newline)
-						.append(resourceBundle.getString("colname.drivers") + ": ")
-						.append(pax.getDriverslicense() + newline)
-						.append(resourceBundle.getString("colname.common_num") + ": ")
-						.append(pax.getCommonnum() + newline)
-						.append(resourceBundle.getString("colname.country_of_issue") + ": ")
-						.append(pax.getDispcountryofissue() + newline);
-					
-					//pax addresses
-					historicalReport.append(newline);
-					JRBeanCollectionDataSource addressDS = (JRBeanCollectionDataSource) pax.getAddressesForReport();
-					List<Address> myAddresses = (List<Address>) addressDS.getData();
-					if (myAddresses != null & myAddresses.size() >= 1) {
-						for (Address address : myAddresses) {
-							historicalReport
-								.append(resourceBundle.getString("colname.street_addr1") + ": ")
-								.append(address.getAddress1() + newline)
-								.append(resourceBundle.getString("colname.street_addr2") + ": ")
-								.append(address.getAddress2() + newline)
-								.append(resourceBundle.getString("colname.city") + ": ")
-								.append(address.getCity() + newline)
-								.append(resourceBundle.getString("colname.state") + ": ")
-								.append(address.getState() + newline)
-								.append(resourceBundle.getString("colname.province") + ": ")
-								.append(address.getProvince() + newline)
-								.append(resourceBundle.getString("colname.country") + ": ")
-								.append(address.getCountry() + newline)
-								.append(resourceBundle.getString("colname.zip") + ": ")
-								.append(address.getZip() + newline)
-								.append(resourceBundle.getString("colname.business_ph") + ": ")
-								.append(address.getWorkphone() + newline)
-								.append(resourceBundle.getString("colname.home_ph") + ": ")
-								.append(address.getHomephone() + newline)
-								.append(resourceBundle.getString("colname.alt_ph") + ": ")
-								.append(address.getAltphone() + newline)
-								.append(resourceBundle.getString("colname.mobile_ph") + ": ")
-								.append(address.getMobile() + newline)
-								.append(resourceBundle.getString("colname.pager_ph") + ": ")
-								.append(address.getPager() + newline)
-								.append(resourceBundle.getString("colname.hotel") + ": ")
-								.append(address.getHotel() + newline)
-								.append(resourceBundle.getString("colname.email") + ": ")
-								.append(address.getEmail() + newline)
-								.append(resourceBundle.getString("colname.valid_bdate") + ": ")
-								.append(address.getDispvalid_bdate() + newline)
-								.append(resourceBundle.getString("colname.valid_edate") + ": ")
-								.append(address.getDispvalid_edate() + newline);
+			if (passengerDS != null) {
+				List<Passenger> myPassengers = (List<Passenger>) passengerDS.getData();
+				if (myPassengers != null & myPassengers.size() >= 1) {
+					for (Passenger pax : myPassengers) {
+						historicalReport
+							.append(resourceBundle.getString("colname.pass_name"))
+							.append(newline)
+							.append(resourceBundle.getString("colname.airline_membership") + ": ")
+							.append(pax.getAirlinememcompany() + newline)
+							.append(indent + resourceBundle.getString("colname.membership_status") + ": ")
+							.append(pax.getAirlinememstatus() + newline)
+							.append(indent + resourceBundle.getString("colname.membership_number") + ": ")
+							.append(pax.getAirlinememnumber() + newline)
+							.append(indent + resourceBundle.getString("colname.last_name") + ": ")
+							.append(pax.getLastname() + newline)
+							.append(indent + resourceBundle.getString("colname.first_name") + ": ")
+							.append(pax.getFirstname() + newline)
+							.append(indent + resourceBundle.getString("middle") + ": ")
+							.append(pax.getMiddlename() + newline)
+							.append(indent + resourceBundle.getString("colname.salutation") + ": ")
+							.append(pax.getDispsalutation() + newline)
+							.append(resourceBundle.getString("colname.job_title") + ": ")
+							.append(pax.getJobtitle() + newline)
+							.append(resourceBundle.getString("colname.dlstate") + ": ")
+							.append(pax.getDispdlstate() + newline)
+							.append(resourceBundle.getString("colname.drivers") + ": ")
+							.append(pax.getDriverslicense() + newline)
+							.append(resourceBundle.getString("colname.common_num") + ": ")
+							.append(pax.getCommonnum() + newline)
+							.append(resourceBundle.getString("colname.country_of_issue") + ": ")
+							.append(pax.getDispcountryofissue() + newline);
+						
+						//pax addresses
+						historicalReport.append(newline);
+						JRBeanCollectionDataSource addressDS = (JRBeanCollectionDataSource) pax.getAddressesForReport();
+						List<Address> myAddresses = (List<Address>) addressDS.getData();
+						if (myAddresses != null & myAddresses.size() >= 1) {
+							for (Address address : myAddresses) {
+								historicalReport
+									.append(resourceBundle.getString("colname.street_addr1") + ": ")
+									.append(address.getAddress1() + newline)
+									.append(resourceBundle.getString("colname.street_addr2") + ": ")
+									.append(address.getAddress2() + newline)
+									.append(resourceBundle.getString("colname.city") + ": ")
+									.append(address.getCity() + newline)
+									.append(resourceBundle.getString("colname.state") + ": ")
+									.append(address.getState() + newline)
+									.append(resourceBundle.getString("colname.province") + ": ")
+									.append(address.getProvince() + newline)
+									.append(resourceBundle.getString("colname.country") + ": ")
+									.append(address.getCountry() + newline)
+									.append(resourceBundle.getString("colname.zip") + ": ")
+									.append(address.getZip() + newline)
+									.append(resourceBundle.getString("colname.business_ph") + ": ")
+									.append(address.getWorkphone() + newline)
+									.append(resourceBundle.getString("colname.home_ph") + ": ")
+									.append(address.getHomephone() + newline)
+									.append(resourceBundle.getString("colname.alt_ph") + ": ")
+									.append(address.getAltphone() + newline)
+									.append(resourceBundle.getString("colname.mobile_ph") + ": ")
+									.append(address.getMobile() + newline)
+									.append(resourceBundle.getString("colname.pager_ph") + ": ")
+									.append(address.getPager() + newline)
+									.append(resourceBundle.getString("colname.hotel") + ": ")
+									.append(address.getHotel() + newline)
+									.append(resourceBundle.getString("colname.email") + ": ")
+									.append(address.getEmail() + newline)
+									.append(resourceBundle.getString("colname.valid_bdate") + ": ")
+									.append(address.getDispvalid_bdate() + newline)
+									.append(resourceBundle.getString("colname.valid_edate") + ": ")
+									.append(address.getDispvalid_edate() + newline);
+							}
 						}
 					}
 				}
 			}
+			
 			
 			//pax itinerary section
 			historicalReport.append(newline);
