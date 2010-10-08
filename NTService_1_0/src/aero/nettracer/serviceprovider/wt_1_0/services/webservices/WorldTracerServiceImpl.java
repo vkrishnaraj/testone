@@ -2107,13 +2107,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			d1.addNewPOS().addNewSource().setAirlineVendorID(dto.getUser().getProfile().getAirline());
 
 			RecordReferenceType rrt = d1.addNewDelayedBag();
-			String ahlId = data.getAhlId();
+			String ahlId = data.getAhlId().trim().toUpperCase();
 			rrt.setAirlineCode(ahlId.substring(3, 5));
 			rrt.setStationCode(ahlId.substring(0, 3));
 			rrt.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
 
 			RecordReferenceType bags = d1.addNewOnHandBags().addNewRecordReference();
-			String ohdId = data.getOhdId();
+			String ohdId = data.getOhdId().trim().toUpperCase();
 			bags.setAirlineCode(ohdId.substring(3, 5));
 			bags.setStationCode(ohdId.substring(0, 3));
 			bags.setReferenceNumber(Integer.parseInt(ohdId.substring(5)));
@@ -2127,7 +2127,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					}
 
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-					names.addName(name);
+					names.addName(name.trim().toUpperCase());
 
 				}
 			}
@@ -2139,7 +2139,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (fieldList != null && fieldList.size() > 0) {
 
 				BagTagType btt = rbt.addNewBagTag();
-				String airtag = fieldList.get(0);
+				String airtag = fieldList.get(0).trim().toUpperCase();
 				btt.setAirlineCode(airtag.substring(0, 2));
 				btt.setTagSequence(airtag.substring(2));
 			}
@@ -2156,12 +2156,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					} else {
 						itinCount++;
 						FlightDateType fdt = rf.addNewFlightDateOrARNK().addNewFlightDate();
-						fdt.setAirlineCode(itin.getAirline());
+						fdt.setAirlineCode(itin.getAirline().trim().toUpperCase());
 						fdt.setDate(itin.getFlightDate());
-						fdt.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
+						fdt.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber().trim().toUpperCase()));
 						StationAirlineType sat = rds.addNewDestination();
-						sat.setAirlineCode(itin.getAirline());
-						sat.setStationCode(itin.getArrivalCity());
+						sat.setAirlineCode(itin.getAirline().trim().toUpperCase());
+						sat.setStationCode(itin.getArrivalCity().trim().toUpperCase());
 					}
 				}
 			}
@@ -2170,7 +2170,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (fieldList != null && fieldList.size() > 0) {
 				aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.SupplimentalInfo d2 = d1.addNewSupplimentalInfo();
 				String text = RULES.get(DefaultWorldTracerService.WorldTracerField.SI).formatEntry(fieldList.get(0));
-				d2.addTextLine(text);
+				d2.addTextLine(text.trim().toUpperCase());
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TX);
@@ -2178,11 +2178,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				TeletypeAddresses add = d1.addNewTeletypeAddresses();
 
 				for (int i = 0; i < fieldList.size() && i < 10; i++) {
-					add.addTeletypeAddress(fieldList.get(i));
+					add.addTeletypeAddress(fieldList.get(i).trim().toUpperCase());
 				}
 			}
 
-			d1.setAgentID(PreProcessor.getAgentEntry(data.getAgent()));
+			d1.setAgentID(PreProcessor.getAgentEntry(data.getAgent()).trim().toUpperCase());
 
 			// Send Message
 			WTRStatusRSDocument wsresponse = null;
