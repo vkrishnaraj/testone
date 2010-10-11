@@ -1260,27 +1260,29 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append(newline);
 			
 			JRBeanCollectionDataSource paxItineraryDS = (JRBeanCollectionDataSource) parameters.get("passitinerary");
-			List<Itinerary> myItineraries = (List<Itinerary>) paxItineraryDS.getData();
-			if (myItineraries != null & myItineraries.size() >= 1) {
-				for (Itinerary paxItinerary : myItineraries) {
-					historicalReport
-						.append(resourceBundle.getString("colname.fromto") + ": ")
-						.append(paxItinerary.getLegfrom() + " / " + paxItinerary.getLegto() + newline)
-						.append(indent + resourceBundle.getString("colname.flightnum") + ": ")
-						.append(paxItinerary.getFlightnum() + newline)
-						.append(indent + resourceBundle.getString("colname.departdate") + ": ")
-						.append(paxItinerary.getDisdepartdate() + newline)
-						.append(indent + resourceBundle.getString("colname.arrdate") + ": ")
-						.append(paxItinerary.getDisarrivedate() + newline)
-						.append(indent + resourceBundle.getString("colname.schdeptime") + ": ")
-						.append(paxItinerary.getDisschdeparttime() + newline)									
-						.append(indent + resourceBundle.getString("colname.actdeptime") + ": ")
-						.append(paxItinerary.getDisactdeparttime() + newline)					
-						.append(indent + resourceBundle.getString("colname.scharrtime") + ": ")
-						.append(paxItinerary.getDisscharrivetime() + newline)
-						.append(indent + resourceBundle.getString("colname.actarrtime") + ": ")
-						.append(paxItinerary.getDisactarrivetime() + newline)
-						.append(newline);
+			if (paxItineraryDS != null) {
+				List<Itinerary> myItineraries = (List<Itinerary>) paxItineraryDS.getData();
+				if (myItineraries != null & myItineraries.size() >= 1) {
+					for (Itinerary paxItinerary : myItineraries) {
+						historicalReport
+							.append(resourceBundle.getString("colname.fromto") + ": ")
+							.append(paxItinerary.getLegfrom() + " / " + paxItinerary.getLegto() + newline)
+							.append(indent + resourceBundle.getString("colname.flightnum") + ": ")
+							.append(paxItinerary.getFlightnum() + newline)
+							.append(indent + resourceBundle.getString("colname.departdate") + ": ")
+							.append(paxItinerary.getDisdepartdate() + newline)
+							.append(indent + resourceBundle.getString("colname.arrdate") + ": ")
+							.append(paxItinerary.getDisarrivedate() + newline)
+							.append(indent + resourceBundle.getString("colname.schdeptime") + ": ")
+							.append(paxItinerary.getDisschdeparttime() + newline)									
+							.append(indent + resourceBundle.getString("colname.actdeptime") + ": ")
+							.append(paxItinerary.getDisactdeparttime() + newline)					
+							.append(indent + resourceBundle.getString("colname.scharrtime") + ": ")
+							.append(paxItinerary.getDisscharrivetime() + newline)
+							.append(indent + resourceBundle.getString("colname.actarrtime") + ": ")
+							.append(paxItinerary.getDisactarrivetime() + newline)
+							.append(newline);
+					}
 				}
 			}
 			
@@ -1290,27 +1292,29 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append(newline);
 			
 			JRBeanCollectionDataSource bagItineraryDS = (JRBeanCollectionDataSource) parameters.get("bagitinerary");
-			List<Itinerary> myBagItineraries = (List<Itinerary>) bagItineraryDS.getData();
-			if (myBagItineraries != null & myBagItineraries.size() >= 1) {
-				for (Itinerary bagItinerary : myBagItineraries) {
-					historicalReport
-						.append(resourceBundle.getString("colname.fromto") + ": ")
-						.append(bagItinerary.getLegfrom() + "/" + bagItinerary.getLegto() + newline)
-						.append(indent + resourceBundle.getString("colname.flightnum") + ": ")
-						.append(bagItinerary.getFlightnum() + newline)
-						.append(indent + resourceBundle.getString("colname.departdate") + ": ")
-						.append(bagItinerary.getDisdepartdate() + newline)
-						.append(indent + resourceBundle.getString("colname.arrdate") + ": ")
-						.append(bagItinerary.getDisarrivedate() + newline)
-						.append(indent + resourceBundle.getString("colname.schdeptime") + ": ")
-						.append(bagItinerary.getDisschdeparttime() + newline)									
-						.append(indent + resourceBundle.getString("colname.actdeptime") + ": ")
-						.append(bagItinerary.getDisactdeparttime() + newline)					
-						.append(indent + resourceBundle.getString("colname.scharrtime") + ": ")
-						.append(bagItinerary.getDisscharrivetime() + newline)
-						.append(indent + resourceBundle.getString("colname.actarrtime") + ": ")
-						.append(bagItinerary.getDisactarrivetime() + newline)
-						.append(newline);
+			if (bagItineraryDS != null) {
+				List<Itinerary> myBagItineraries = (List<Itinerary>) bagItineraryDS.getData();
+				if (myBagItineraries != null & myBagItineraries.size() >= 1) {
+					for (Itinerary bagItinerary : myBagItineraries) {
+						historicalReport
+							.append(resourceBundle.getString("colname.fromto") + ": ")
+							.append(bagItinerary.getLegfrom() + "/" + bagItinerary.getLegto() + newline)
+							.append(indent + resourceBundle.getString("colname.flightnum") + ": ")
+							.append(bagItinerary.getFlightnum() + newline)
+							.append(indent + resourceBundle.getString("colname.departdate") + ": ")
+							.append(bagItinerary.getDisdepartdate() + newline)
+							.append(indent + resourceBundle.getString("colname.arrdate") + ": ")
+							.append(bagItinerary.getDisarrivedate() + newline)
+							.append(indent + resourceBundle.getString("colname.schdeptime") + ": ")
+							.append(bagItinerary.getDisschdeparttime() + newline)									
+							.append(indent + resourceBundle.getString("colname.actdeptime") + ": ")
+							.append(bagItinerary.getDisactdeparttime() + newline)					
+							.append(indent + resourceBundle.getString("colname.scharrtime") + ": ")
+							.append(bagItinerary.getDisscharrivetime() + newline)
+							.append(indent + resourceBundle.getString("colname.actarrtime") + ": ")
+							.append(bagItinerary.getDisactarrivetime() + newline)
+							.append(newline);
+					}
 				}
 			}
 			
