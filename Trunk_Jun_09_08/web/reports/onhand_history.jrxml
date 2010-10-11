@@ -316,13 +316,13 @@
 					</graphicElement>
 				</line>
 				<line>
-					<reportElement key="line-38" positionType="Float" mode="Opaque" x="97" y="13" width="399" height="1" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="line-38" positionType="Float" mode="Opaque" x="133" y="13" width="363" height="1" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<graphicElement fill="Solid">
 						<pen lineWidth="0.5" lineStyle="Solid"/>
 					</graphicElement>
 				</line>
 				<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-					<reportElement key="textField-50" positionType="Float" mode="Opaque" x="38" y="10" width="58" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement key="textField-50" positionType="Float" mode="Opaque" x="38" y="10" width="95" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
