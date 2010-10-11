@@ -2249,7 +2249,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			//to-do
 			
 			s1.setAirlineCode(msg.getFromAirline().toUpperCase());
-			s1.setStationCode(msg.getFromStation());
+			s1.setStationCode(msg.getFromStation().toUpperCase());
 
 			if (false) {
 				// RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
@@ -2297,16 +2297,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						fdt.setFlightNumber(PreProcessor.wtFlightNumber(itin.getFlightNumber()));
 						StationAirlineType sat = rds.addNewDestination();
 						sat.setAirlineCode(itin.getAirline().toUpperCase());
-						sat.setStationCode(itin.getArrivalCity());
+						sat.setStationCode(itin.getArrivalCity().trim().toUpperCase());
 					}
 				}
 			}
 
 			if (msg.getFaultStation() != null) {
-				d1.setFaultStationCode(msg.getFaultStation());
+				d1.setFaultStationCode(msg.getFaultStation().trim().toUpperCase());
 			}
 
-			if (msg.getFaultReasonDescription() != null) {
+			if (msg.getFaultReasonDescription() != null && msg.getFaultReasonDescription().trim().length() > 0) {
 				d1.setLossComments(StringUtils.substring(msg.getFaultReasonDescription(), 0, LOSS_COMMENT_MAX));
 			}
 
@@ -2318,7 +2318,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (fieldList != null && fieldList.size() > 0) {
 				SupplimentalInfo d2 = d1.addNewSupplimentalInfo();
 				String text = fwdRules.get(DefaultWorldTracerService.WorldTracerField.SI).formatEntry(fieldList.get(0));
-				d2.addTextLine(text);
+				d2.addTextLine(text.trim().toUpperCase());
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TX);
@@ -2326,11 +2326,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ.TeletypeAddresses add = d1.addNewTeletypeAddresses();
 
 				for (int i = 0; i < fieldList.size() && i < 10; i++) {
-					add.addTeletypeAddress(fieldList.get(i));
+					add.addTeletypeAddress(fieldList.get(i).trim().toUpperCase());
 				}
 			}
 
-			d1.setAgentID(PreProcessor.getAgentEntry(msg.getAgent()));
+			d1.setAgentID(PreProcessor.getAgentEntry(msg.getAgent()).trim().toUpperCase());
 
 			// Send Message
 			WTRBagsCreateRSDocument wsresponse = null;
