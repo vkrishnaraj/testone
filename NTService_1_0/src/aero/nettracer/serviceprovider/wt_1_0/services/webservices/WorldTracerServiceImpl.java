@@ -2409,7 +2409,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			t1.setRecordType(RecordType.DELAYED);
 
 			RecordReferenceType t2 = t1.addNewRecordReference();
-			String ahlId = ahl.getAhlId();
+			String ahlId = ahl.getAhlId().trim();
 
 			t2.setAirlineCode(ahlId.substring(3, 5));
 			t2.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
