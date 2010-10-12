@@ -29,4 +29,13 @@ public abstract class CheckedAction extends Action {
 	static String newline = "\n";
 	static String indent = " ";
 	static String tab = "      ";
+	
+	protected static String leftPad(String input, int size) {
+		return org.apache.commons.lang.StringUtils.leftPad(input, size);
+	}
+	
+	protected static String rightPad(String input, int size) {
+		return org.apache.commons.lang.StringUtils.rightPad(input, size);
+	}
+	
 }
