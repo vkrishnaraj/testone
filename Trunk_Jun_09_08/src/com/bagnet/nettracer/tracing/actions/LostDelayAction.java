@@ -1211,42 +1211,44 @@ public class LostDelayAction extends CheckedAction {
 						//pax addresses
 						historicalReport.append(newline);
 						JRBeanCollectionDataSource addressDS = (JRBeanCollectionDataSource) pax.getAddressesForReport();
-						List<Address> myAddresses = (List<Address>) addressDS.getData();
-						if (myAddresses != null & myAddresses.size() >= 1) {
-							for (Address address : myAddresses) {
-								historicalReport
-									.append(resourceBundle.getString("colname.street_addr1") + ": ")
-									.append(address.getAddress1() + newline)
-									.append(resourceBundle.getString("colname.street_addr2") + ": ")
-									.append(address.getAddress2() + newline)
-									.append(resourceBundle.getString("colname.city") + ": ")
-									.append(address.getCity() + newline)
-									.append(resourceBundle.getString("colname.state") + ": ")
-									.append(address.getState() + newline)
-									.append(resourceBundle.getString("colname.province") + ": ")
-									.append(address.getProvince() + newline)
-									.append(resourceBundle.getString("colname.country") + ": ")
-									.append(address.getCountry() + newline)
-									.append(resourceBundle.getString("colname.zip") + ": ")
-									.append(address.getZip() + newline)
-									.append(resourceBundle.getString("colname.business_ph") + ": ")
-									.append(address.getWorkphone() + newline)
-									.append(resourceBundle.getString("colname.home_ph") + ": ")
-									.append(address.getHomephone() + newline)
-									.append(resourceBundle.getString("colname.alt_ph") + ": ")
-									.append(address.getAltphone() + newline)
-									.append(resourceBundle.getString("colname.mobile_ph") + ": ")
-									.append(address.getMobile() + newline)
-									.append(resourceBundle.getString("colname.pager_ph") + ": ")
-									.append(address.getPager() + newline)
-									.append(resourceBundle.getString("colname.hotel") + ": ")
-									.append(address.getHotel() + newline)
-									.append(resourceBundle.getString("colname.email") + ": ")
-									.append(address.getEmail() + newline)
-									.append(resourceBundle.getString("colname.valid_bdate") + ": ")
-									.append(address.getDispvalid_bdate() + newline)
-									.append(resourceBundle.getString("colname.valid_edate") + ": ")
-									.append(address.getDispvalid_edate() + newline);
+						if (addressDS != null) {
+							List<Address> myAddresses = (List<Address>) addressDS.getData();
+							if (myAddresses != null & myAddresses.size() >= 1) {
+								for (Address address : myAddresses) {
+									historicalReport
+										.append(resourceBundle.getString("colname.street_addr1") + ": ")
+										.append(address.getAddress1() + newline)
+										.append(resourceBundle.getString("colname.street_addr2") + ": ")
+										.append(address.getAddress2() + newline)
+										.append(resourceBundle.getString("colname.city") + ": ")
+										.append(address.getCity() + newline)
+										.append(resourceBundle.getString("colname.state") + ": ")
+										.append(address.getState() + newline)
+										.append(resourceBundle.getString("colname.province") + ": ")
+										.append(address.getProvince() + newline)
+										.append(resourceBundle.getString("colname.country") + ": ")
+										.append(address.getCountry() + newline)
+										.append(resourceBundle.getString("colname.zip") + ": ")
+										.append(address.getZip() + newline)
+										.append(resourceBundle.getString("colname.business_ph") + ": ")
+										.append(address.getWorkphone() + newline)
+										.append(resourceBundle.getString("colname.home_ph") + ": ")
+										.append(address.getHomephone() + newline)
+										.append(resourceBundle.getString("colname.alt_ph") + ": ")
+										.append(address.getAltphone() + newline)
+										.append(resourceBundle.getString("colname.mobile_ph") + ": ")
+										.append(address.getMobile() + newline)
+										.append(resourceBundle.getString("colname.pager_ph") + ": ")
+										.append(address.getPager() + newline)
+										.append(resourceBundle.getString("colname.hotel") + ": ")
+										.append(address.getHotel() + newline)
+										.append(resourceBundle.getString("colname.email") + ": ")
+										.append(address.getEmail() + newline)
+										.append(resourceBundle.getString("colname.valid_bdate") + ": ")
+										.append(address.getDispvalid_bdate() + newline)
+										.append(resourceBundle.getString("colname.valid_edate") + ": ")
+										.append(address.getDispvalid_edate() + newline);
+								}
 							}
 						}
 					}
@@ -1348,12 +1350,14 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append(newline);
 			
 			JRBeanCollectionDataSource claimChecksDS = (JRBeanCollectionDataSource) parameters.get("claimchecks");
-			List<Incident_Claimcheck> myClaimChecks = (List<Incident_Claimcheck>) claimChecksDS.getData();
-			if (myClaimChecks != null & myClaimChecks.size() >= 1) {
-				for (Incident_Claimcheck claimCheck : myClaimChecks) {
-					historicalReport
-						.append(resourceBundle.getString("colname.claimnum") + ": ")
-						.append(claimCheck.getClaimchecknum() + newline);
+			if (claimChecksDS != null) {
+				List<Incident_Claimcheck> myClaimChecks = (List<Incident_Claimcheck>) claimChecksDS.getData();
+				if (myClaimChecks != null & myClaimChecks.size() >= 1) {
+					for (Incident_Claimcheck claimCheck : myClaimChecks) {
+						historicalReport
+							.append(resourceBundle.getString("colname.claimnum") + ": ")
+							.append(claimCheck.getClaimchecknum() + newline);
+					}
 				}
 			}
 			
@@ -1363,44 +1367,46 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append(newline);
 			
 			JRBeanCollectionDataSource bagInfoDS = (JRBeanCollectionDataSource) parameters.get("baginfo");
-			List<Item> bags = (List<Item>) bagInfoDS.getData();
-			if (bags != null & bags.size() >= 1) {
-				for (Item bag : bags) {
-					historicalReport
-						.append(resourceBundle.getString("colname.claimnum") + ": ")
-						.append(bag.getClaimchecknum() + newline)
-						.append(resourceBundle.getString("colname.last_name_onbag") + ": ")
-						.append(bag.getLnameonbag() + newline)
-						.append(resourceBundle.getString("colname.first_name_onbag") + ": ")
-						.append(bag.getFnameonbag() + newline)
-						.append(resourceBundle.getString("colname.mid_initial_onbag") + ": ")
-						.append(bag.getMnameonbag() + newline)
-						.append(resourceBundle.getString("colname.color") + ": ")
-						.append(bag.getColor() + newline)
-						.append(resourceBundle.getString("colname.bagtype") + ": ")
-						.append(bag.getBagtype() + newline)
-						.append(resourceBundle.getString("colname.manufacturer") + ": ")
-						.append(bag.getManufacturer() + newline)
-						.append(resourceBundle.getString("colname.bag_status") + ": ")
-						.append(resourceBundle.getString(bag.getDispstatus()) + newline)
-						.append(resourceBundle.getString("colname.x_desc") + ": ")
-						.append(resourceBundle.getString(bag.getXdescelement1Key()) + newline)
-						.append(resourceBundle.getString(bag.getXdescelement2Key()) + newline)
-						.append(resourceBundle.getString(bag.getXdescelement3Key()) + newline);
-					
-					//bag content section
-					historicalReport.append(newline);
-					historicalReport.append("-- " + resourceBundle.getString("colname.key_contents") + " --");
-					historicalReport.append(newline);
-					List<Item_Inventory> contents = (List<Item_Inventory>) bag.getInventorylist();
-					if (contents != null & contents.size() >= 1) {
-						//historicalReport.append("# of contents:" + contents.size() + newline);
-						for (Item_Inventory content : contents) {
-							historicalReport
-								.append(resourceBundle.getString("colname.category") + ": ")
-								.append(content.getCategory() + newline)
-								.append(resourceBundle.getString("colname.description") + ": ")
-								.append(content.getDescription() + newline);
+			if (bagInfoDS != null) {
+				List<Item> bags = (List<Item>) bagInfoDS.getData();
+				if (bags != null & bags.size() >= 1) {
+					for (Item bag : bags) {
+						historicalReport
+							.append(resourceBundle.getString("colname.claimnum") + ": ")
+							.append(bag.getClaimchecknum() + newline)
+							.append(resourceBundle.getString("colname.last_name_onbag") + ": ")
+							.append(bag.getLnameonbag() + newline)
+							.append(resourceBundle.getString("colname.first_name_onbag") + ": ")
+							.append(bag.getFnameonbag() + newline)
+							.append(resourceBundle.getString("colname.mid_initial_onbag") + ": ")
+							.append(bag.getMnameonbag() + newline)
+							.append(resourceBundle.getString("colname.color") + ": ")
+							.append(bag.getColor() + newline)
+							.append(resourceBundle.getString("colname.bagtype") + ": ")
+							.append(bag.getBagtype() + newline)
+							.append(resourceBundle.getString("colname.manufacturer") + ": ")
+							.append(bag.getManufacturer() + newline)
+							.append(resourceBundle.getString("colname.bag_status") + ": ")
+							.append(resourceBundle.getString(bag.getDispstatus()) + newline)
+							.append(resourceBundle.getString("colname.x_desc") + ": ")
+							.append(resourceBundle.getString(bag.getXdescelement1Key()) + newline)
+							.append(resourceBundle.getString(bag.getXdescelement2Key()) + newline)
+							.append(resourceBundle.getString(bag.getXdescelement3Key()) + newline);
+						
+						//bag content section
+						historicalReport.append(newline);
+						historicalReport.append("-- " + resourceBundle.getString("colname.key_contents") + " --");
+						historicalReport.append(newline);
+						List<Item_Inventory> contents = (List<Item_Inventory>) bag.getInventorylist();
+						if (contents != null & contents.size() >= 1) {
+							//historicalReport.append("# of contents:" + contents.size() + newline);
+							for (Item_Inventory content : contents) {
+								historicalReport
+									.append(resourceBundle.getString("colname.category") + ": ")
+									.append(content.getCategory() + newline)
+									.append(resourceBundle.getString("colname.description") + ": ")
+									.append(content.getDescription() + newline);
+							}
 						}
 					}
 				}
@@ -1411,18 +1417,20 @@ public class LostDelayAction extends CheckedAction {
 			historicalReport.append("-- " + resourceBundle.getString("header.remarks") + " --");
 			historicalReport.append(newline);
 			JRBeanCollectionDataSource remarksDS = (JRBeanCollectionDataSource) parameters.get("remarks");
-			List<Remark> remarks = (List<Remark>) remarksDS.getData();
-			if (remarks != null & remarks.size() >= 1) {
-				for (Remark remark : remarks) {
-					historicalReport
-						.append(resourceBundle.getString("colname.date_time") + ": ")
-						.append(remark.getDispcreatetime() + newline)
-						.append(resourceBundle.getString("colname.station") + ": ")
-						.append(remark.getAgentStation() + newline)
-						.append(resourceBundle.getString("colname.agent") + ": ")
-						.append(remark.getAgentUsername() + newline)
-						.append(remark.getRemarktext() + newline);
-					historicalReport.append(newline);
+			if (remarksDS != null) {
+				List<Remark> remarks = (List<Remark>) remarksDS.getData();
+				if (remarks != null & remarks.size() >= 1) {
+					for (Remark remark : remarks) {
+						historicalReport
+							.append(resourceBundle.getString("colname.date_time") + ": ")
+							.append(remark.getDispcreatetime() + newline)
+							.append(resourceBundle.getString("colname.station") + ": ")
+							.append(remark.getAgentStation() + newline)
+							.append(resourceBundle.getString("colname.agent") + ": ")
+							.append(remark.getAgentUsername() + newline)
+							.append(remark.getRemarktext() + newline);
+						historicalReport.append(newline);
+					}
 				}
 			}
 			
@@ -1489,10 +1497,6 @@ public class LostDelayAction extends CheckedAction {
 								
 								for (Match_Detail matchDetail : matcheDetails) {
 									historicalReport
-//										.append(resourceBundle.getString("colname.item") + "   " + "   " + "   ")
-//										.append(resourceBundle.getString("colname.percentage") + "   ")
-//										.append(resourceBundle.getString("colname.mbr_info") + "   ")
-//										.append(resourceBundle.getString("colname.ohd_info") + newline)
 										.append(matchDetail.getItem() + tab + tab)
 										.append(matchDetail.getReportPercentage() + tab + tab + tab)
 										.append(matchDetail.getMbr_info() + tab + tab + tab)
@@ -1584,7 +1588,7 @@ public class LostDelayAction extends CheckedAction {
 		String phraseToReplace = ": null" + newline;
 		String newPhrase = ": " + newline;
 		String result = org.apache.commons.lang.StringUtils.replace(historicalReport.toString(), phraseToReplace, newPhrase);
-		//logger.error("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		
 		logger.error(result);
 		
 		return historicalReport;

@@ -896,42 +896,44 @@ public class MissingAction extends CheckedAction {
 						//pax addresses
 						historicalReport.append(newline);
 						JRBeanCollectionDataSource addressDS = (JRBeanCollectionDataSource) pax.getAddressesForReport();
-						List<Address> myAddresses = (List<Address>) addressDS.getData();
-						if (myAddresses != null & myAddresses.size() >= 1) {
-							for (Address address : myAddresses) {
-								historicalReport
-									.append(resourceBundle.getString("colname.street_addr1") + ": ")
-									.append(address.getAddress1() + newline)
-									.append(resourceBundle.getString("colname.street_addr2") + ": ")
-									.append(address.getAddress2() + newline)
-									.append(resourceBundle.getString("colname.city") + ": ")
-									.append(address.getCity() + newline)
-									.append(resourceBundle.getString("colname.state") + ": ")
-									.append(address.getState() + newline)
-									.append(resourceBundle.getString("colname.province") + ": ")
-									.append(address.getProvince() + newline)
-									.append(resourceBundle.getString("colname.country") + ": ")
-									.append(address.getCountry() + newline)
-									.append(resourceBundle.getString("colname.zip") + ": ")
-									.append(address.getZip() + newline)
-									.append(resourceBundle.getString("colname.business_ph") + ": ")
-									.append(address.getWorkphone() + newline)
-									.append(resourceBundle.getString("colname.home_ph") + ": ")
-									.append(address.getHomephone() + newline)
-									.append(resourceBundle.getString("colname.alt_ph") + ": ")
-									.append(address.getAltphone() + newline)
-									.append(resourceBundle.getString("colname.mobile_ph") + ": ")
-									.append(address.getMobile() + newline)
-									.append(resourceBundle.getString("colname.pager_ph") + ": ")
-									.append(address.getPager() + newline)
-									.append(resourceBundle.getString("colname.hotel") + ": ")
-									.append(address.getHotel() + newline)
-									.append(resourceBundle.getString("colname.email") + ": ")
-									.append(address.getEmail() + newline)
-									.append(resourceBundle.getString("colname.valid_bdate") + ": ")
-									.append(address.getDispvalid_bdate() + newline)
-									.append(resourceBundle.getString("colname.valid_edate") + ": ")
-									.append(address.getDispvalid_edate() + newline);
+						if (addressDS != null) {
+							List<Address> myAddresses = (List<Address>) addressDS.getData();
+							if (myAddresses != null & myAddresses.size() >= 1) {
+								for (Address address : myAddresses) {
+									historicalReport
+										.append(resourceBundle.getString("colname.street_addr1") + ": ")
+										.append(address.getAddress1() + newline)
+										.append(resourceBundle.getString("colname.street_addr2") + ": ")
+										.append(address.getAddress2() + newline)
+										.append(resourceBundle.getString("colname.city") + ": ")
+										.append(address.getCity() + newline)
+										.append(resourceBundle.getString("colname.state") + ": ")
+										.append(address.getState() + newline)
+										.append(resourceBundle.getString("colname.province") + ": ")
+										.append(address.getProvince() + newline)
+										.append(resourceBundle.getString("colname.country") + ": ")
+										.append(address.getCountry() + newline)
+										.append(resourceBundle.getString("colname.zip") + ": ")
+										.append(address.getZip() + newline)
+										.append(resourceBundle.getString("colname.business_ph") + ": ")
+										.append(address.getWorkphone() + newline)
+										.append(resourceBundle.getString("colname.home_ph") + ": ")
+										.append(address.getHomephone() + newline)
+										.append(resourceBundle.getString("colname.alt_ph") + ": ")
+										.append(address.getAltphone() + newline)
+										.append(resourceBundle.getString("colname.mobile_ph") + ": ")
+										.append(address.getMobile() + newline)
+										.append(resourceBundle.getString("colname.pager_ph") + ": ")
+										.append(address.getPager() + newline)
+										.append(resourceBundle.getString("colname.hotel") + ": ")
+										.append(address.getHotel() + newline)
+										.append(resourceBundle.getString("colname.email") + ": ")
+										.append(address.getEmail() + newline)
+										.append(resourceBundle.getString("colname.valid_bdate") + ": ")
+										.append(address.getDispvalid_bdate() + newline)
+										.append(resourceBundle.getString("colname.valid_edate") + ": ")
+										.append(address.getDispvalid_edate() + newline);
+								}
 							}
 						}
 					}
@@ -1078,7 +1080,7 @@ public class MissingAction extends CheckedAction {
 				}
 			}
 			
-			//TODO: missing articles section 
+			//missing articles section 
 			historicalReport.append(newline);
 			historicalReport.append("-- " + resourceBundle.getString("header.ma") + " --");
 			historicalReport.append(newline);
