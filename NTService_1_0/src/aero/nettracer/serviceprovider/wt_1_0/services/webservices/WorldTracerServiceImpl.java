@@ -763,7 +763,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (wsresponse != null
 					&& wsresponse.getWTRInboxMessageCountRS() != null) {
 
-				ArrayList<ActionFileCount> afcal = new ArrayList<ActionFileCount>();
+				HashMap<String, ActionFileCount> hash = new HashMap<String, ActionFileCount>();
+//				ArrayList<ActionFileCount> afcal = new ArrayList<ActionFileCount>();
 				if (wsresponse.getWTRInboxMessageCountRS().getMessageCounts() != null) {
 
 					MessageCount[] mcarray = wsresponse
@@ -775,52 +776,107 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							afc1.setType(mc.getAreaType().toString());
 							afc1.setDay(1);
 							afc1.setCount(mc.getDay1());
-							afcal.add(afc1);
+//							afcal.add(afc1);
+							String key = mc.getAreaType().toString() + 1;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay1());
+							} else {
+								hash.put(key, afc1);
+							}
+							
 						}
 						if (mc.getDay2() > 0) {
 							ActionFileCount afc2 = new ActionFileCount();
 							afc2.setType(mc.getAreaType().toString());
 							afc2.setDay(2);
 							afc2.setCount(mc.getDay2());
-							afcal.add(afc2);
+//							afcal.add(afc2);
+							String key = mc.getAreaType().toString() + 2;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay2());
+							} else {
+								hash.put(key, afc2);
+							}
 						}
 						if (mc.getDay3() > 0) {
 							ActionFileCount afc3 = new ActionFileCount();
 							afc3.setType(mc.getAreaType().toString());
 							afc3.setDay(3);
 							afc3.setCount(mc.getDay3());
-							afcal.add(afc3);
+//							afcal.add(afc3);
+							String key = mc.getAreaType().toString() + 3;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay3());
+							} else {
+								hash.put(key, afc3);
+							}
 						}
 						if (mc.getDay4() > 0) {
 							ActionFileCount afc4 = new ActionFileCount();
 							afc4.setType(mc.getAreaType().toString());
 							afc4.setDay(4);
 							afc4.setCount(mc.getDay4());
-							afcal.add(afc4);
+//							afcal.add(afc4);
+							String key = mc.getAreaType().toString() + 4;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay4());
+							} else {
+								hash.put(key, afc4);
+							}
 						}
 						if (mc.getDay5() > 0) {
 							ActionFileCount afc5 = new ActionFileCount();
 							afc5.setType(mc.getAreaType().toString());
 							afc5.setDay(5);
 							afc5.setCount(mc.getDay5());
-							afcal.add(afc5);
+//							afcal.add(afc5);
+							String key = mc.getAreaType().toString() + 5;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay5());
+							} else {
+								hash.put(key, afc5);
+							}
 						}
 						if (mc.getDay6() > 0) {
 							ActionFileCount afc6 = new ActionFileCount();
 							afc6.setType(mc.getAreaType().toString());
 							afc6.setDay(6);
 							afc6.setCount(mc.getDay6());
-							afcal.add(afc6);
+//							afcal.add(afc6);
+							String key = mc.getAreaType().toString() + 6;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay6());
+							} else {
+								hash.put(key, afc6);
+							}
 						}
 						if (mc.getDay7() > 0) {
 							ActionFileCount afc7 = new ActionFileCount();
 							afc7.setType(mc.getAreaType().toString());
 							afc7.setDay(7);
 							afc7.setCount(mc.getDay7());
-							afcal.add(afc7);
+//							afcal.add(afc7);
+							String key = mc.getAreaType().toString() + 7;
+							if (hash.containsKey(key)) {
+								ActionFileCount cont = hash.get(key);
+								cont.setCount(cont.getCount() + mc.getDay7());
+							} else {
+								hash.put(key, afc7);
+							}
 						}
 					}
 				}
+				
+				
+				ArrayList<ActionFileCount> afcal = new ArrayList<ActionFileCount>();
+				afcal.addAll(hash.values());
+				
 				response.setCounts(afcal.toArray(new ActionFileCount[afcal
 						.size()]));
 
