@@ -2551,7 +2551,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				try {
 					rahl.setNumberPaxAffected(Integer.parseInt(wsp.getNoOfPassengers()));
 				} catch (Exception e) {
-					logger.error("Parsing issue: " + e, e);
+					//logger.error("Parsing issue: " + e, e);
 				}
 
 				ArrayList<Passenger> paxList = new ArrayList<Passenger>();
