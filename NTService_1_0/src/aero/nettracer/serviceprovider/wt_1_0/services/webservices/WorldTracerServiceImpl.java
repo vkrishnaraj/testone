@@ -1624,9 +1624,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						tag.setTagSequence(airtag.substring(2));
 					}
 
-					if (fieldList2 != null && i < fieldList2.size()) {
-						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
-					}
+//					if (fieldList2 != null && i < fieldList2.size()) {
+//						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
+//					}
+					
 					ColorTypeDescType t4 = t3.addNewColorTypeDesc();
 					t4.setColorCode(ColorCodeType.Enum.forString(colorType));
 					t4.setTypeCode(Integer.valueOf(bagType));
@@ -1651,6 +1652,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					
 					if (items.length > i ){
 						Item item = items[i];
+						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
+							t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer()));
+						}
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
 							
@@ -3335,9 +3339,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						tag.setTagSequence(airtag.substring(2));
 					}
 
-					if (fieldList2 != null && i < fieldList2.size()) {
-						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
-					}
+//					if (fieldList2 != null && i < fieldList2.size()) {
+//						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
+//					}
 					ColorTypeDescAmendType t4 = t3.addNewColorTypeDesc();
 					t4.setColorCode(ColorCodeType.Enum.forString(colorType));
 					t4.setTypeCode(Integer.valueOf(bagType));
@@ -3362,6 +3366,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 					if (items.length > i ){
 						Item item = items[i];
+						
+						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
+							t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer()));
+						}
+						
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
 							
