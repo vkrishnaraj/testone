@@ -7,69 +7,204 @@
 	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/passengertemplate.xhtml">
 
-	
-	<ui:define name="pageTitle">NetTracer: Application | Directions Screen</ui:define>
-	
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
 	<ui:define name="mainContent">
-	<script type="text/javascript" src="../_js/passengerFont.js"></script>
-	<h:form id="directionForm">
-		<div id="langSelect">
-			<h:outputText value="FontSize" />
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<a id="font1" style="font-size: 8pt;" href="javascript:decreaseFontSize();">A</a>
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<a id="font2" style="font-size: 10pt;" href="javascript:mediumFontSize();">A</a>
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<h:outputText value="&#160;" />
-			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
-		</div>
-	<div class="container containerfull">
-				<div class="containerTL"></div>
-				<div class="containerheader headerfull">
-				<h1 class="dkblue">Application | Directions Screen</h1>
-			  </div>
-				<div class="containerTR"></div>
-				<div class="containercontent gradientsmall">
-					<div class="contentbodyspacing"></div>
-					<div class="contentbody">
-						
-						
-						<!-- Start body content -->
-		
-			<h:outputText id="dirpass"  styleClass="bodycopy"
-			value="#{passengerDirectionList[0].displayText}"/>	
-		
-							
-					  	<!-- End body content -->
-				 	 </div>
-					<!-- ends contentbody -->
-				</div><!-- ends containercontent -->
-				<div id="divFooter">
-					<div class="containerBLgradient"></div>
-					<div class="containerfootergradient footerfull"></div>
-					<div class="containerBRgradient"></div>
-					<div class="clear"></div>
+		<script type="text/javascript" src="../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+			<div id="langSelect"><h:outputText value="FontSize" /> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font1" style="font-size: 8pt;"
+				href="javascript:decreaseFontSize();">A</a> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font2" style="font-size: 10pt;"
+				href="javascript:mediumFontSize();">A</a> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
+				href="javascript:increaseFontSize();">A</a></div>
+
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Bag tracking summary</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content -->
+
+
+			<div class="clear htxlg"></div>
+
+			<div class="twocol">
+
+<h:outputText
+				id="dirpass" styleClass="bodycopy"
+				value="#{passengerDirectionList[0].displayText}" /> 
+
+			<div class="clear htxlg"></div>
+			<div class="listitem">
+			<p>File number:</p>
+			<span><h:outputText
+				value="#{passengerBean.passengerData.incidentID}"
+				styleClass="formLabel" /></span></div>
+
+			<div class="listitem">
+			<p>Date received:</p>
+			<span><h:outputText
+				value="#{passengerBean.passengerData.dispcreatetime}"
+				styleClass="formLabel" /></span></div>
+
+			<div class="listitem">
+			<p>File status:</p>
+			<span><h:outputText
+				value="#{passengerBean.passengerData.incidentStatus}"
+				styleClass="formLabel" /></span></div>
+
+			<div class="clear htxlg"></div>
+			<a4j:repeat value="#{passengerBean.passengerData.passengersArray}"
+				var="passenger" rowKeyVar="rowIndex">
+				<h3><h:outputText value="#{passenger.firstname}"
+					styleClass="formLabel" />&nbsp;<h:outputText
+					value="#{passenger.lastname}" styleClass="formLabel" /></h3>
+
+
+				<div class="clear htxsm"></div>
+				<div class="listitem">
+				<p>Home phone:</p>
+				<span><h:outputText value="#{passenger.homephone}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Business phone:</p>
+				<span><h:outputText value="#{passenger.workphone}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Mobile phone:</p>
+				<span><h:outputText value="#{passenger.mobile}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Hotel:</p>
+				<span><h:outputText value="#{passenger.hotel}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Email:</p>
+				<span><h:outputText value="#{passenger.email}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="clear"></div>
+			</a4j:repeat>
+
+
+			<div class="clear htxlg"></div>
+
+
+			<div class="bodycopy">
+				 Comments:<br/>
+
+<span><h:outputText
+				value="#{passengerBean.passengerData.comments}"
+				styleClass="formLabel" /></span>
+                 
+			</div>
+			
+
+			<div class="clear htmd"></div>
+
+			<div class="clear"></div>
+
+			</div>
+			<!-- ends twocol --> <!-- End body content --></div>
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Baggage information</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content --> 
+				
+				<a4j:repeat value="#{passengerBean.passengerData.itemsArray}"
+				var="item" rowKeyVar="rowIndex">
+			<div class="listitem">
+				<p>Bag Tag:</p>
+				<span><h:outputText value="#{item.claimchecknum}"
+					styleClass="formLabel" /></span>
+			</div>
+			
+			
+			<div class="listitem">
+				<p>Status:</p>
+				<span><h:outputText value="#{item.bagstatus}"
+					styleClass="formLabel" /></span>
+			</div>
+			<div class="clear htxlg"></div>
+			</a4j:repeat>
+				
+				
+				<!-- End body content -->
+			</div>
+
+			
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle" />
+			<h:outputText value="&#160;" styleClass="passfontstyle" />
+			<div><h:commandButton id="dirforward" rendered="#{passengerBean.onlineAvailable}"
+				value="#{passengerDirectionList[1].displayText}" tabindex="0"
+				action="#{passengerController.gotoPassengerInfo}"
+				styleClass="button140pxredextended fright" />
+			<!--	<h:commandButton id="formforward" rendered="#{!passengerBean.onlineAvailable}"
+				value="Baggage Information and Passenger Property Form" tabindex="0"
+				action="forward to URL 'http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf'"
+				styleClass="button140pxredextended fright" />   -->
+				
+			 <h:outputLink value="http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf" target="_blank" rendered="#{!passengerBean.onlineAvailable}">
+				<h:outputText value="Passenger Property Form" style="text-align:center; line-height: 20px;" styleClass="button140pxredextended fright"/></h:outputLink>
+				
 				</div>
-			</div><!-- ends container -->
-			
-			<div>
-				<h:outputText styleClass="passfontstyle" value="&#160;" />
-			</div>
-			<div>
-				<h:outputText styleClass="passfontstyle" value="&#160;" />
-			</div>
-			<h:outputText value="&#160;" styleClass="passfontstyle"/>
-			<h:outputText value="&#160;" styleClass="passfontstyle"/>
-			<div><h:commandButton id="dirforward"
-				value="#{passengerDirectionList[1].displayText}"
-				 tabindex="0" action="#{passengerController.gotoPassengerInfo}"
-				styleClass="button140pxredextended fright" /></div>
-			
+
 		</h:form>
 	</ui:define>
 </ui:composition>

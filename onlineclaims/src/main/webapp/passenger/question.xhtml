@@ -33,7 +33,7 @@
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.anotherClaim}'" 
 							required="#{passengerController.fraudQuestionLabel.anotherClaimState eq 2}">
-										<f:selectItem itemLabel="Yes" itemValue="true"/>
+										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
 							<a4j:support event="onchange" 
 								reRender="which,whichInput,dateOfClaim,dateOfClaimInput,claimantName,claimantNameInput" 
@@ -156,7 +156,7 @@
 						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
 								'#{passengerController.fraudQuestionLabel.tsaInspect}'" 
 						required="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}">
-										<f:selectItem itemLabel="Yes" itemValue="true"/>
+										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
 					</h:selectOneRadio>
 					
@@ -179,7 +179,7 @@
 								'#{passengerController.fraudQuestionLabel.bagConfirmNote}'" 
 						readonly="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 3}"
 						required="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 2}">
-						<f:selectItem itemLabel="Yes" itemValue="true"/>
+						<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
 						<f:selectItem itemLabel="No" itemValue="false"/>
 					</h:selectOneRadio>
 					

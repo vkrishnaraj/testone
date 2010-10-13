@@ -1121,7 +1121,6 @@ td.dottedhr {
 	font-size: 1.0em;
 	color: #333;
 	padding: 0;
-	border: solid 1px #708090
 }
 
 #step {
@@ -1129,7 +1128,6 @@ td.dottedhr {
 	margin-top: 20px;
 	font-family: Arial, Helvetica, sans-serif;
 	padding: 0;
-	border: solid 1px #708090;
 	font-weight: bolder;
 	font-size: 1.1em;
 	color: #333333 ;

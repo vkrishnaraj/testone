@@ -38,6 +38,8 @@ public class File {
 				mime = "image/gif";
 			} else if ("pdf".equals(extension)) {
 				mime = "image/pdf";
+			} else if ("png".equals(extension)) {
+				mime = "image/png";
 			} else {
 				mime = "image/unknown";
 			}

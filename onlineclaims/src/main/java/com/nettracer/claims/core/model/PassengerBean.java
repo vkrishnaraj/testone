@@ -1,7 +1,9 @@
 package com.nettracer.claims.core.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
@@ -453,4 +455,18 @@ public class PassengerBean {
 	public WSPVAdvancedIncident getPassengerData() {
 		return passengerData;
 	}	
+	public boolean isOnlineAvailable() {
+		Calendar fortyFiveDays = Calendar.getInstance();
+		fortyFiveDays.add(Calendar.DATE, -45);
+		if (!passengerData.getCreatedate().before(fortyFiveDays)) {
+			if (passengerData.getItemType() == 1) {
+				return true;
+			} else if (passengerData.getItemType() != 1
+					&& passengerData.getIncidentStatus().equalsIgnoreCase(
+							"open")) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

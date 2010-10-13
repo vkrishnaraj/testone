@@ -968,27 +968,11 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		File file=null;
 
 		if(null != files && files.size() >0){
-			if(null != claim.getFileArray() && claim.getFileArray().length > 0){
-				wsFileArray = claim.getFileArray();
-				for (int i = 0; i < wsFileArray.length; i++) {
-					for (int j = 0; j < files.size(); j++) {
-						if(i==j){
-							file=files.get(j);
-							wsFile = wsFileArray[i];
-							wsFile.setId(file.getId());
-							wsFile.setFilename(file.getName());
-							wsFile.setPath(file.getPath());
-							wsFileArray[i]=wsFile;
-						}
-					}
-				}
-			}else{
-				wsFileArray = new com.bagnet.nettracer.ws.onlineclaims.xsd.File[files.size()];
-			}
+			wsFileArray = new com.bagnet.nettracer.ws.onlineclaims.xsd.File[files.size()];
 			for (int i = 0; i < files.size(); i++) {
 				file=files.get(i);
 				wsFile = com.bagnet.nettracer.ws.onlineclaims.xsd.File.Factory.newInstance();
-				wsFile.setId(file.getId());
+				//wsFile.setId(file.getId());
 				wsFile.setFilename(file.getName());
 				wsFile.setPath(file.getPath());
 				wsFileArray[i]=wsFile;

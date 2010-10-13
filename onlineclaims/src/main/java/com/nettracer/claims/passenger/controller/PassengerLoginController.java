@@ -186,7 +186,6 @@ public class PassengerLoginController {
 
 					WSPVAdvancedIncident passengerData = passengerView.getData();
 					
-					
 					Claim claim=onlineClaimsWS.getClaim(passengerData,loginBean.getLastName());
 					passengerBean = onlineClaimsWS.getPassengerData(passengerData,claim);
 					passengerBean.setPassengerData(passengerData);

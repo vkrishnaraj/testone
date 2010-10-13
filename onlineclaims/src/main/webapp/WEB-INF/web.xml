@@ -184,6 +184,10 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.faces</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
 	<!-- Jsf End -->
 
 	<!-- Spring start -->

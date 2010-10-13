@@ -8,10 +8,11 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.nettracer.claims.core.model.PassengerBean;
+import com.nettracer.claims.utils.ClaimsProperties;
 
 //@WebService()
 public interface OnlineClaimsWS {
-	public static final String ENDPOINT = "http://74.188.84.58:8080/tracer/services/OnlineClaimsService";
+	public static final String ENDPOINT = ClaimsProperties.get(ClaimsProperties.WS_LOCATION);
 	public static final String SYSTEM_USERNAME = "onlineclaims";
 	public static final String SYSTEM_PASSWORD = "B651kLN5";
 	//@WebMethod(operationName="authAdminUser")	

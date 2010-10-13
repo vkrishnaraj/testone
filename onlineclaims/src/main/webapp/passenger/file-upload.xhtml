@@ -68,9 +68,9 @@
 				<div class="containerheader headerfull">
 				<h1 class="dkblue">Passenger Property Form | File Upload
 				</h1>
-				<h3 style="margin-top: 8px;"><h:outputText value="Help" id="helpButton" styleClass="helpButton dkblue"/></h3>							
+		<!-- 	<h3 style="margin-top: 8px;"><h:outputText value="Help" id="helpButton" styleClass="helpButton dkblue"/></h3>							
 							<rich:componentControl for="helpmodalpanel5"  
-								attachTo="helpButton5" operation="show" event="onclick" /> 
+								attachTo="helpButton" operation="show" event="onclick" />  -->
 			  </div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -157,11 +157,11 @@
 					<rich:spacer width="100%" height="10" title=""/>
 				</div>
 				<a4j:outputPanel id="filePanel" ajaxRendered="true">
-					<t:dataTable width="200" align="center" id="fileTable"
+					<t:dataTable width="200" align="center" id="fileTable" 
 						value="#{passengerController.fileDataModelList}" var="file">
 						
 						<h:column>
-							<h:outputText value="#{file.name}" styleClass="formLabel"/>
+							<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
 						</h:column>
 						<h:column>
 							<rich:spacer width="50" title=""/>

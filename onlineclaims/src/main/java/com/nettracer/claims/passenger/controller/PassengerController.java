@@ -431,6 +431,7 @@ public class PassengerController {
 	 */
 	public String gotoFlightDetails() {
 		logger.debug("gotoFlightDetails method is called");
+		savePassengerInfo();
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
@@ -683,6 +684,7 @@ public class PassengerController {
 	 */
 	public String gotoBagDetails() {
 		logger.info("gotoBagDetails method is called");
+		saveFlightInfo();
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 		.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
@@ -798,6 +800,7 @@ public class PassengerController {
 	 */
 	public String gotoFileUpload() {
 		logger.info("gotoFileUpload method is called");
+		saveBagInfo();
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		//List<File> actualFiles=null;
@@ -847,7 +850,7 @@ public class PassengerController {
 				int extDot = upFile.getName().lastIndexOf('.');
 				if (extDot > 0) {
 					String extension = upFile.getName().substring(extDot + 1);
-					if (extension.equals("jpg") || extension.equals("gif") || extension.equals("pdf")) {
+					if (extension.equals("jpg") || extension.equals("gif") || extension.equals("pdf") || extension.equalsIgnoreCase("png")) {
 						//InputStream stream = upFile.getInputStream();
 						//long size = upFile.getSize();
 						//byte[] buffer = new byte[(int) size];
@@ -863,7 +866,7 @@ public class PassengerController {
 						file.setName(fileName);
 						file.setLength(upFile.getSize());
 						file.setData(data);
-						file.setId(fileId++);
+						//file.setId(fileId++);
 						if(passengerBean.getFiles() !=null){
 							List<File> existingFiles=passengerBean.getFiles();
 							for(File existingFile:existingFiles){
@@ -941,6 +944,7 @@ public class PassengerController {
 	 */
 	public String gotoFraudQuestion() {
 		logger.info("gotoFraudQuestion method is called");
+		saveFileInfo();
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
@@ -998,6 +1002,7 @@ public class PassengerController {
 	 */
 	public String gotoSubmitClaim() {
 		logger.info("gotoSubmitClaim method is called");
+		saveFraudQuestion();
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
