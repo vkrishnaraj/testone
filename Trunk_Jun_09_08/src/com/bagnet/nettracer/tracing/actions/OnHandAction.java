@@ -31,6 +31,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
+import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
@@ -38,10 +39,15 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Match;
+import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
+import com.bagnet.nettracer.tracing.db.OHD_Inventory;
+import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
@@ -119,9 +125,21 @@ public class OnHandAction extends CheckedAction {
 			String reportfile = getReportFile(theform, user, request);
 
 			if(reportfile == null || reportfile.equals("")) {
-				ActionMessage error = new ActionMessage("message.nodata");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
+				if(request.getParameter("outputtype").equalsIgnoreCase("5")) {	//Teletype
+					ActionMessage error = new ActionMessage("");
+					String teletypeAddress = request.getParameter("teletypeAddress");
+					if(teletypeAddress == null || teletypeAddress.equals("")) {
+						error = new ActionMessage("message.no.teletype.address.provided");
+					} else {
+						error = new ActionMessage("message.send.teletype.info");
+					}
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				} else {
+					ActionMessage error = new ActionMessage("message.nodata");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}
 			}
 			else {
 				request.setAttribute("reportfile", reportfile);
@@ -868,6 +886,9 @@ public class OnHandAction extends CheckedAction {
 			parameters.put("found_at_station", format("" + form.getFound_station()));
 			parameters.put("status", format("" + form.getStatus().getTextDescription(user)));
 			
+			form.getMatched_incident();
+			form.getClosingRemark(2);
+			
 			
 			if(form.getXDesc1() > 0) {
 				parameters.put("ede1", format("" + TracerUtils.getXdescelement(form.getXDesc1()).getTextDescription(user)));
@@ -938,7 +959,7 @@ public class OnHandAction extends CheckedAction {
 				parameters.put("itinerary", null);
 
 			if(selections.get("inventory") != null) {
-				List inventories = form.getItemlist();
+				List inventories = form.getItemlist();  //List<Item>
 				if(inventories != null && inventories.size() > 0) {
 					parameters
 							.put("inventoryReport", ReportBMO.getCompiledReport("ohd_inventory", sc.getRealPath("/")));
@@ -1092,10 +1113,19 @@ public class OnHandAction extends CheckedAction {
 			else
 				parameters.put("matches", null);
 
-			List t = new ArrayList();
-			t.add("");
-			ReportBMO bmo = new ReportBMO(request);
-			return bmo.getReportFile(t, parameters, "onhand_history", sc.getRealPath("/"), type);
+			if (type == 5) {	//Teletype so no regular reports
+				StringBuilder myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
+				SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
+				String teletypeAddress = request.getParameter("teletypeAddress");
+//				iw.sendTelex(myTeletypeHistoricalReport.toString(), teletypeAddress);
+				
+				return null;
+			} else {
+				List t = new ArrayList();
+				t.add("");
+				ReportBMO bmo = new ReportBMO(request);
+				return bmo.getReportFile(t, parameters, "onhand_history", sc.getRealPath("/"), type);
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -1109,4 +1139,425 @@ public class OnHandAction extends CheckedAction {
 		else
 			return input;
 	}
+	
+	private static StringBuilder buildTeletypeStyleHistoricalReport(Map parameters) {
+		StringBuilder historicalReport = new StringBuilder();
+		historicalReport.append(newline);
+		
+		ResourceBundle resourceBundle = (ResourceBundle) parameters.get("REPORT_RESOURCE_BUNDLE");
+		
+		historicalReport.append("-- " + resourceBundle.getString("header.bag_info") + " --");
+		historicalReport.append(newline);
+		
+		//general section
+		historicalReport
+			.append(resourceBundle.getString("header.file") + ": ")
+			.append(parameters.get("file_reference") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.status") + ": ")
+			.append(parameters.get("status") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.found.station") + ": ")
+			.append(parameters.get("found_at_company") + tab)
+			.append(parameters.get("found_at_station") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.holding.station") + ": ")
+			.append(parameters.get("holding_company") + tab)
+			.append(parameters.get("holding_station") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.found_date_time") + ": ")
+			.append(parameters.get("createdate") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.bag_arrived_date") + ": ")
+			.append(parameters.get("bag_arrive_date") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.bag_tag_number") + ": ")
+			.append(parameters.get("bag_tag_number") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.file_close_date") + ": ")
+			.append(parameters.get("date_closed") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.airline_membership") + ": ")
+			.append(parameters.get("airline_membership") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.membership_number") + ": ")
+			.append(parameters.get("membership_num") + newline);		
+		historicalReport
+			.append(resourceBundle.getString("colname.color") + ": ")
+			.append(parameters.get("color") + newline);	
+		historicalReport
+			.append(resourceBundle.getString("colname.membership_status") + ": ")
+			.append(parameters.get("membershipstatus") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.pnr") + ": ")
+			.append(parameters.get("record_locator") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.storage_location") + ": ")
+			.append(parameters.get("storage_location") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.x_desc") + ": ")
+			.append(parameters.get("ede1") + newline)
+			.append(parameters.get("ede2") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.x_desc") + ": ")
+			.append(parameters.get("ede3") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.bagtype") + ": ")
+			.append(parameters.get("type") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.agent_initials") + ": ")
+			.append(parameters.get("agent") + newline);
+		historicalReport
+			.append(resourceBundle.getString("colname.manufacturer") + ": ")
+			.append(parameters.get("manufacturer") + newline);
+		
+		//ma_passenger section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.passenger_info") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource passengerDS = (JRBeanCollectionDataSource) parameters.get("passenger");
+		if (passengerDS != null) {
+			List<OHD_Passenger> myPassengers = (List<OHD_Passenger>) passengerDS.getData();
+			if (myPassengers != null & myPassengers.size() >= 1) {
+				for (OHD_Passenger pax : myPassengers) {
+					historicalReport
+						.append(resourceBundle.getString("colname.pass_name"))
+						.append(newline)
+						.append(indent + resourceBundle.getString("colname.last_name") + ": ")
+						.append(pax.getLastname() + newline)
+						.append(indent + resourceBundle.getString("colname.first_name") + ": ")
+						.append(pax.getFirstname() + newline)
+						.append(indent + resourceBundle.getString("middle") + ": ")
+						.append(pax.getMiddlename() + newline);
+					
+					//pax addresses
+					historicalReport.append(newline);
+					JRBeanCollectionDataSource addressDS = (JRBeanCollectionDataSource) pax.getAddressesForReport();
+					List<OHD_Address> myAddresses = (List<OHD_Address>) addressDS.getData();
+					if (myAddresses != null & myAddresses.size() >= 1) {
+						for (OHD_Address address : myAddresses) {
+							historicalReport
+								.append(indent + resourceBundle.getString("colname.street_addr1") + ": ")
+								.append(address.getAddress1() + newline)
+								.append(indent + resourceBundle.getString("colname.street_addr2") + ": ")
+								.append(address.getAddress2() + newline)
+								.append(indent + resourceBundle.getString("colname.city") + ": ")
+								.append(address.getCity() + newline)
+								.append(indent + resourceBundle.getString("colname.state") + ": ")
+								.append(address.getState() + newline)
+								.append(indent + resourceBundle.getString("colname.province") + ": ")
+								.append(address.getProvince() + newline)
+								.append(indent + resourceBundle.getString("colname.country") + ": ")
+								.append(address.getCountry() + newline)
+								.append(indent + resourceBundle.getString("colname.zip") + ": ")
+								.append(address.getZip() + newline)
+								.append(indent + resourceBundle.getString("colname.business_ph") + ": ")
+								.append(address.getWorkphone() + newline)
+								.append(indent + resourceBundle.getString("colname.home_ph") + ": ")
+								.append(address.getHomephone() + newline)
+								.append(indent + resourceBundle.getString("colname.alt_ph") + ": ")
+								.append(address.getAltphone() + newline)
+								.append(indent + resourceBundle.getString("colname.mobile_ph") + ": ")
+								.append(address.getMobile() + newline)
+								.append(indent + resourceBundle.getString("colname.pager_ph") + ": ")
+								.append(address.getPager() + newline)
+								.append(indent + resourceBundle.getString("colname.email") + ": ")
+								.append(address.getEmail() + newline);
+						}
+					}
+				}
+			}
+		}
+		
+		//bag_itinerary section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.bag_itinerary") + " --");
+		historicalReport.append(newline);		
+		JRBeanCollectionDataSource bagItineraryDS = (JRBeanCollectionDataSource) parameters.get("itinerary");
+		if (bagItineraryDS != null) {
+			List<OHD_Itinerary> bagItineraries = (List<OHD_Itinerary>) bagItineraryDS.getData();
+			if (bagItineraries != null & bagItineraries.size() >= 1) {
+				for (OHD_Itinerary bagItinerary : bagItineraries) {
+					historicalReport
+						.append(resourceBundle.getString("colname.fromto") + ": ")
+						.append(bagItinerary.getLegfrom() + tab + "/" + bagItinerary.getLegto() + newline)
+						.append(resourceBundle.getString("colname.flightnum") + ": ")
+						.append(bagItinerary.getAirline() + tab + bagItinerary.getFlightnum() + newline)
+						.append(resourceBundle.getString("colname.departdate") + ": ")
+						.append(bagItinerary.getDisdepartdate() + newline)
+						.append(resourceBundle.getString("colname.arrdate") + ": ")
+						.append(bagItinerary.getDisarrivedate() + newline)
+						
+						
+						.append(resourceBundle.getString("colname.schdeptime") + ": ")	
+						.append(bagItinerary.getDisschdeparttime() + newline)
+						.append(resourceBundle.getString("colname.actdeptime") + ": ")
+						.append(bagItinerary.getDisscharrivetime() + newline)
+						.append(resourceBundle.getString("colname.scharrtime") + ": ") 
+						.append(bagItinerary.getDisactarrivetime() + newline)						
+						.append(resourceBundle.getString("colname.actarrtime") + ": ")
+						.append(bagItinerary.getDisactarrivetime() + newline);
+					
+					
+				}
+			}
+		}
+		
+		//central baggage inventory section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.central_baggage_inventory") + " --");
+		historicalReport.append(newline);		
+		JRBeanCollectionDataSource centralBagInventoryDS = (JRBeanCollectionDataSource) parameters.get("inventory");
+		if (centralBagInventoryDS != null) {
+			List<OHD_Inventory> items = (List<OHD_Inventory>) centralBagInventoryDS.getData();
+			if (items != null & items.size() >= 1) {
+				for (OHD_Inventory item : items) {
+					historicalReport					
+						.append(resourceBundle.getString("colname.category") + ": ")
+						.append(item.getCategory() + newline)
+						.append(resourceBundle.getString("colname.description") + ": ")
+						.append(item.getDescription() + newline);
+				}
+			}
+		}		
+		
+		//remarks section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.remarks") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource remarksDS = (JRBeanCollectionDataSource) parameters.get("remarks");
+		List<Remark> remarks = (List<Remark>) remarksDS.getData();
+		if (remarks != null & remarks.size() >= 1) {
+			for (Remark remark : remarks) {
+				historicalReport
+					.append(resourceBundle.getString("colname.date_time") + ": ")
+					.append(remark.getDispcreatetime() + newline)
+					.append(resourceBundle.getString("colname.station") + ": ")
+					.append(remark.getAgentStation() + newline)
+					.append(resourceBundle.getString("colname.agent") + ": ")
+					.append(remark.getAgentUsername() + newline)
+					.append(remark.getRemarktext() + newline);
+				historicalReport.append(newline);
+			}
+		}
+		
+		//photos section
+
+		//matches section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.matches") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource matchesDS = (JRBeanCollectionDataSource) parameters.get("matches");
+		if (matchesDS != null) {
+			List<Match> matches = (List<Match>) matchesDS.getData();
+			if (matches != null & matches.size() >= 1) {
+				for (Match match : matches) {
+					historicalReport
+						.append(resourceBundle.getString("header.match_category") + ": ")
+						.append(match.getReportCategory() + newline)
+						.append(resourceBundle.getString("header.file") + ": ")
+						.append(match.getReportNumber() + newline)
+						.append(resourceBundle.getString("header.match_date") + ": ")
+						.append(match.getDispdate() + newline)
+						.append(resourceBundle.getString("header.ohd") + ": ")
+						.append(match.getOhdNumber() + newline)
+						.append(resourceBundle.getString("header.match_percent") + ": ")
+						.append(match.getReportPercentage() + newline);
+					
+					historicalReport.append(newline);	
+					
+					//matching details section
+					historicalReport.append(indent + "-- " + resourceBundle.getString("header.match_elements") + " --");
+					historicalReport.append(newline);
+					List matchDetails = new ArrayList(match.getDetails());
+					
+					if (matchDetails != null) {
+						List<Match_Detail> matcheDetails = (List<Match_Detail>) matchDetails;
+						if (matcheDetails != null & matcheDetails.size() >= 1) {
+							historicalReport
+							.append(indent + rightPad(resourceBundle.getString("colname.item"), 20) + tab)
+							.append(indent + leftPad(resourceBundle.getString("colname.percentage"), 11) + tab)
+							.append(indent + leftPad(resourceBundle.getString("colname.mbr_info"), 25) + tab)
+							.append(indent + leftPad(resourceBundle.getString("colname.ohd_info"), 25) + newline);
+						
+							for (Match_Detail matchDetail : matcheDetails) {
+								historicalReport
+									.append(indent + rightPad(matchDetail.getItem(), 20) + tab)
+									.append(indent + leftPad(matchDetail.getReportPercentage(), 11) + tab)
+									.append(indent + leftPad(matchDetail.getMbr_info(), 25) + tab)
+									.append(indent + leftPad(matchDetail.getOhd_info(), 25) + newline);
+								historicalReport.append(newline);	
+							}
+						}				
+					} else {
+						historicalReport.append("N/A" + newline);
+					}
+				}
+			}				
+		} else {
+			historicalReport.append("N/A" + newline);
+		}	
+		
+		//request section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.requests") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource requestsDS = (JRBeanCollectionDataSource) parameters.get("request");
+		if (requestsDS != null) {
+			List<OHDRequest> requests = (List<OHDRequest>) requestsDS.getData();
+			if (requests != null & requests.size() >= 1) {
+				for (OHDRequest request : requests) {
+					historicalReport
+						.append(resourceBundle.getString("colname.requesting_agent") + ": ")
+						.append(request.getRequestee() + newline)
+						.append(resourceBundle.getString("header.company") + ": ")
+						.append(request.getRequestingCompany() + newline)
+						.append(resourceBundle.getString("header.station") + ": ")
+						.append(request.getRequestingStation() + newline)
+						.append(resourceBundle.getString("colname.date_time") + ": ")
+						.append(request.getTimeRequested() + newline)
+						.append(resourceBundle.getString("header.status") + ": ")
+						.append(request.getRequestStatus() + newline)
+						.append(resourceBundle.getString("colname.requestReason") + ": ")
+						.append(request.getReason() + newline);
+					
+					historicalReport.append(newline);				
+				}
+			}				
+		} else {
+			historicalReport.append("N/A" + newline);
+		}
+		
+		//forward section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.forward_log") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource forwardDS = (JRBeanCollectionDataSource) parameters.get("forward");
+		if (forwardDS != null) {
+			List<OHD_Log> forwards = (List<OHD_Log>) forwardDS.getData();
+			if (forwards != null & forwards.size() >= 1) {
+				for (OHD_Log forward : forwards) {
+					historicalReport
+						.append(resourceBundle.getString("colname.destination_company") + ": ")
+						.append(forward.getDestCompany() + newline)
+						.append(resourceBundle.getString("colname.station") + ": ")
+						.append(forward.getDestStation() + newline)
+						.append(resourceBundle.getString("colname.expedite_number") + ": ")
+						.append(forward.getExpeditenum() + newline)
+						.append(resourceBundle.getString("colname.date_time") + ": ")
+						.append(forward.getDispForwardTime() + newline);
+					
+					historicalReport.append(newline);	
+					
+					//forward - bag itinerary section
+					historicalReport.append(newline);
+					historicalReport.append(indent + "-- " + resourceBundle.getString("header.bag_itinerary") + " --");
+					historicalReport.append(newline);
+					Set<OHD_Log_Itinerary> ohdLogItineraries = (Set<OHD_Log_Itinerary>) forward.getItinerary();
+					if (ohdLogItineraries != null & ohdLogItineraries.size() >=1) {
+						for (OHD_Log_Itinerary ohdLogItinerary : ohdLogItineraries) {
+							historicalReport
+								.append(indent + resourceBundle.getString("colname.fromto") + ": ")
+								.append(ohdLogItinerary.getLegfrom() + tab + "/" + ohdLogItinerary.getLegto() + newline)
+								.append(indent + resourceBundle.getString("colname.flightnum") + ": ")
+								.append(ohdLogItinerary.getAirline() + tab + "/" + ohdLogItinerary.getFlightnum() + newline)
+								.append(indent + resourceBundle.getString("colname.departdate") + ": ")
+								.append(ohdLogItinerary.getDisdepartdate() + newline)
+								.append(indent + resourceBundle.getString("colname.arrdate") + ": ")
+								.append(ohdLogItinerary.getDisarrivedate() + newline)
+								.append(indent + resourceBundle.getString("colname.schdeptime") + ": ")
+								.append(ohdLogItinerary.getDisschdeparttime() + newline)
+								.append(indent + resourceBundle.getString("colname.actdeptime") + ": ")
+								.append(ohdLogItinerary.getDisscharrivetime() + newline);
+						}
+					}
+					
+					//forward - message section
+					historicalReport.append(newline);
+					historicalReport
+						.append(indent + resourceBundle.getString("colname.message") + ": " + newline)
+						.append(forward.getMessage() + newline);
+				}
+			}				
+		} else {
+			historicalReport.append("N/A" + newline);
+		}
+		
+		//tasks section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.tasks") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource tasksDS = (JRBeanCollectionDataSource) parameters.get("tasks");
+		if (tasksDS != null) {
+			List<Task> tasks = (List<Task>) tasksDS.getData();
+			if (tasks != null & tasks.size() >= 1) {
+				for (Task task : tasks) {
+					historicalReport
+						.append(resourceBundle.getString("header.tsk_desc") + ": ")
+						.append(task.getDescription() + newline)
+						.append(resourceBundle.getString("header.tsk_created_by") + ": ")
+						.append(task.getCreatedBy() + newline)
+						.append(resourceBundle.getString("header.tsk_status") + ": ")
+						.append(task.getStatusString() + newline)
+						.append(resourceBundle.getString("header.tsk_priority") + ": ")
+						.append(task.getPriorityString() + newline)
+						.append(resourceBundle.getString("header.tsk_station") + ": ")
+						.append(task.getStationString() + newline)
+						.append(resourceBundle.getString("header.tsk_due_date") + ": ")
+						.append(task.getDispduedate() + newline)
+						.append(resourceBundle.getString("header.tsk_due_time") + ": ")
+						.append(task.getDispduetime() + newline)
+						.append(resourceBundle.getString("header.tsk_reminder_date") + ": ")
+						.append(task.getDispreminderdate() + newline)
+						.append(resourceBundle.getString("header.tsk_reminder_time") + ": ")
+						.append(task.getDispremindertime() + newline)
+						.append(resourceBundle.getString("header.tsk_remarks") + ": ")
+						.append(task.getRemarks() + newline);
+				}
+			} else {
+				historicalReport.append("N/A" + newline);
+			}				
+		} else {
+			historicalReport.append("N/A" + newline);
+		}
+		
+		//messages section
+		historicalReport.append(newline);
+		historicalReport.append("-- " + resourceBundle.getString("header.messages") + " --");
+		historicalReport.append(newline);
+		JRBeanCollectionDataSource messagesDS = (JRBeanCollectionDataSource) parameters.get("messages");
+		if (messagesDS != null) {
+			List<Message> messages = (List<Message>) messagesDS.getData();
+			if (messages != null & messages.size() >= 1) {
+				for (Message message : messages) {
+					historicalReport
+					.append(resourceBundle.getString("header.subject") + ": ")
+					.append(message.getSubject() + newline)
+					.append(resourceBundle.getString("colname.agent") + ": ")
+					.append(message.getCreatedBy() + newline)
+					.append(resourceBundle.getString("colname.date") + ": ")
+					.append(message.getDisp_send_date() + newline)
+					.append(resourceBundle.getString("header.station") + ": ")
+					.append(message.getStationString() + newline)
+					.append(resourceBundle.getString("header.to") + ": ")
+					.append(message.getMessageTo() + newline)
+					.append(resourceBundle.getString("header.message") + ": ")
+					.append(message.getMessage() + newline);
+				}
+			} else {
+				historicalReport.append("N/A" + newline);
+			}
+		} else {
+			historicalReport.append("N/A" + newline);
+		}
+		
+		
+		String phraseToReplace = ": null" + newline;
+		String newPhrase = ": " + newline;
+		String result = org.apache.commons.lang.StringUtils.replace(historicalReport.toString(), phraseToReplace, newPhrase);
+		logger.error(result);
+		
+		return historicalReport;
+	}
+
 }

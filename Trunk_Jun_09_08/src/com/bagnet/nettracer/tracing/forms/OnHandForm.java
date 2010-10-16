@@ -87,6 +87,16 @@ public final class OnHandForm extends ValidatorForm {
 	private int lossCode = 0;
 	private boolean notifiedOfRequirements;
 	
+	private String teletypeAddress; //for the big Teletype String for historical reporting
+
+	
+	public String getTeletypeAddress() {
+		return teletypeAddress;
+	}
+	public void setTeletypeAddress(String teletypeAddress) {
+		this.teletypeAddress = teletypeAddress;
+	}
+	
 	public boolean isNotifiedOfRequirements() {
 		return notifiedOfRequirements;
 	}

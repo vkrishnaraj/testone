@@ -1490,14 +1490,14 @@ public class LostDelayAction extends CheckedAction {
 							List<Match_Detail> matcheDetails = (List<Match_Detail>) matchDetails;
 							if (matcheDetails != null & matcheDetails.size() >= 1) {
 								historicalReport
-								.append(rightPad(resourceBundle.getString("colname.item"), 18) + tab)
+								.append(rightPad(resourceBundle.getString("colname.item"), 20) + tab)
 								.append(leftPad(resourceBundle.getString("colname.percentage"), 11) + tab)
 								.append(leftPad(resourceBundle.getString("colname.mbr_info"), 25) + tab)
 								.append(leftPad(resourceBundle.getString("colname.ohd_info"), 25) + newline);
 							
 								for (Match_Detail matchDetail : matcheDetails) {
 									historicalReport
-										.append(rightPad(matchDetail.getItem(), 18) + tab)
+										.append(rightPad(matchDetail.getItem(), 20) + tab)
 										.append(leftPad(matchDetail.getReportPercentage(), 11) + tab)
 										.append(leftPad(matchDetail.getMbr_info(), 25) + tab)
 										.append(leftPad(matchDetail.getOhd_info(), 25) + newline);

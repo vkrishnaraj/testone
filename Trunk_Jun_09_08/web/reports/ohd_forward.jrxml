@@ -32,7 +32,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{destCompany}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-2" positionType="Float" mode="Opaque" x="393" y="3" width="74" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-2" positionType="Float" mode="Opaque" x="367" y="3" width="74" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -63,7 +63,7 @@
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{itineraryReport}]]></subreportExpression>
 			</subreport>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-5" positionType="Float" mode="Opaque" x="393" y="20" width="108" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-5" positionType="Float" mode="Opaque" x="367" y="20" width="108" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -91,14 +91,14 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{header.bag_itinerary} +":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-10" positionType="Float" mode="Opaque" x="246" y="3" width="145" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-10" positionType="Float" mode="Opaque" x="246" y="3" width="118" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.station} +":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-11" positionType="Float" mode="Opaque" x="246" y="20" width="145" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" positionType="Float" mode="Opaque" x="246" y="20" width="118" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>

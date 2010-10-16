@@ -258,7 +258,7 @@ function CBG_check(obj) {
               <a href="#"><span class="aab">&nbsp;
                   <br />
                   &nbsp;</span>
-                <span class="bbb"><bean:message key="menu.ohd_history" /></span>
+                <span class="bbb">Jack-in-the-box<bean:message key="menu.ohd_history" /></span>
                 <span class="ccb">&nbsp;
                   <br />
                   &nbsp;</span></a>
@@ -311,10 +311,11 @@ function CBG_check(obj) {
                 &nbsp;&nbsp;
                 <INPUT TYPE=CHECKBOX NAME="photos" <% if (request.getAttribute("photos") != null || (request.getAttribute("all") == null || (request.getAttribute("all") != null && ((String)request.getAttribute("all")).equals ("1")))) { %> CHECKED <% } %> onClick="sections.check(this);">
                 <bean:message key="header.photos" />
-                &nbsp;&nbsp;
+                &nbsp;&nbsp;          
                 <INPUT TYPE=CHECKBOX NAME="forward" <% if (request.getAttribute("forward") != null || (request.getAttribute("all") == null || (request.getAttribute("all") != null && ((String)request.getAttribute("all")).equals ("1")))) { %> CHECKED <% } %> onClick="sections.check(this);">
                 <bean:message key="header.forward_log" />
                 &nbsp;&nbsp;
+                <br>
                 <INPUT TYPE=CHECKBOX NAME="request" <% if (request.getAttribute("request") != null || (request.getAttribute("all") == null || (request.getAttribute("all") != null && ((String)request.getAttribute("all")).equals ("1")))) { %> CHECKED <% } %> onClick="sections.check(this);">
                 <bean:message key="header.requests" />
                 &nbsp;&nbsp;
@@ -348,11 +349,18 @@ function CBG_check(obj) {
                 <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>                
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("2")) { %> checked <% } %> value="2">
                   <bean:message key="radio.xls" />
+                  <!-- REMOVED FROM OPTIONS -->
+                  <!-- 
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("3")) { %> checked <% } %> value="3">
                   <bean:message key="radio.csv" />
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("4")) { %> checked <% } %> value="4">
                   <bean:message key="radio.xml" />
+                  -->
+                  <!-- REMOVED FROM OPTIONS -->
                 <% } %>
+                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("5")) { %> checked <% } %> value="5">
+                <bean:message key="radio.teletype" />
+                <html:text property="teletypeAddress" size="10" maxlength="13" styleClass="textfield" />
               </td>
             </tr>
             <tr>

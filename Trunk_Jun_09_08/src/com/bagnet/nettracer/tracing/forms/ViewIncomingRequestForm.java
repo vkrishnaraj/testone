@@ -13,6 +13,17 @@ public final class ViewIncomingRequestForm extends ValidatorForm {
 	private String ohd_num;
 	private String bag_tag;
 	private String expedite;
+	
+	private String teletypeAddress;
+	
+
+	public String getTeletypeAddress() {
+		return teletypeAddress;
+	}
+
+	public void setTeletypeAddress(String teletypeAddress) {
+		this.teletypeAddress = teletypeAddress;
+	}
 
 	/**
 	 * @return Returns the bag_tag.

@@ -9,19 +9,26 @@ package com.bagnet.nettracer.tracing.actions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sourceforge.jtds.util.Logger;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -33,8 +40,11 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
+import com.bagnet.nettracer.tracing.db.OHD_Address;
+import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -53,7 +63,9 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * 
  * @author Ankur Gupta
  */
-public class ViewIncomingBags extends Action {
+public class ViewIncomingBags extends CheckedAction {
+	private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ViewIncomingBags.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -292,6 +304,7 @@ public class ViewIncomingBags extends Action {
 		}
 
 		int requestListCount = OHDUtils.getIncomingBagsCount(agent_station.getStation_ID(), theform);
+		List bagsList = null;
 		if (requestListCount > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -319,6 +332,10 @@ public class ViewIncomingBags extends Action {
 
 			List requestList = OHDUtils.getIncomingBags(agent_station.getStation_ID(), theform, sort,
 					rowsperpage, currpage);
+			
+			List fullRequestList = OHDUtils.getIncomingBags(agent_station.getStation_ID(), theform, sort, requestListCount, 0);
+			bagsList = new ArrayList(fullRequestList);
+			//bagsList = new ArrayList(requestList);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
@@ -339,6 +356,84 @@ public class ViewIncomingBags extends Action {
 					.getParameter("currpage")) : 0;
 			request.setAttribute("currpage", Integer.toString(currpage));
 		}
+		
+		//TODO: handle teletype here
+		ActionMessages errors = new ActionMessages();
+		if (request.getParameter("teletype") != null) {   //this means the teletype button was pushed
+			ActionMessage error = new ActionMessage("");
+			
+			if(request.getParameter("outputtype").equalsIgnoreCase("5")) { //Teletype
+				String teletypeAddress = request.getParameter("teletypeAddress");
+				if(teletypeAddress == null || teletypeAddress.equals("")) {
+					error = new ActionMessage("message.no.teletype.address.provided");
+				} else {
+					error = new ActionMessage("message.send.teletype.info");
+					Map parameters = new HashMap();
+
+					ResourceBundle myResources = ResourceBundle.getBundle(
+							"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+
+					parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+					buildTeletypeStyleInboundExpediteBagsReport(parameters, bagsList);
+				}
+			} else if (request.getParameter("outputtype").equalsIgnoreCase("0")) {	//PDF
+				//TODO: generate PDF
+			} else {	//HTML
+				//TODO: generate HTML
+			}
+
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
+		} 
+		
 		return mapping.findForward(TracingConstants.VIEW_INCOMING_BAG_LIST);
+	}
+	
+	private static StringBuilder buildTeletypeStyleInboundExpediteBagsReport(Map parameters, List<OHD_Log> bagsList) {
+		StringBuilder inboundExpediteBagsReport = new StringBuilder();
+		inboundExpediteBagsReport.append(newline);
+		
+		ResourceBundle resourceBundle = (ResourceBundle) parameters.get("REPORT_RESOURCE_BUNDLE");
+		
+		inboundExpediteBagsReport.append("-- " + resourceBundle.getString("header.bag_info") + " --");
+		inboundExpediteBagsReport.append(newline);
+		
+		logger.error("bagsList has " + bagsList.size() + " elements ...");
+		
+		if (bagsList != null & bagsList.size() >= 1) {
+			inboundExpediteBagsReport
+				.append(rightPad(resourceBundle.getString("header.ohd"), 17))
+				.append(rightPad(resourceBundle.getString("colname.ld_report_num"), 29))
+				.append(rightPad(resourceBundle.getString("colname.color"), 9))
+				.append(rightPad(resourceBundle.getString("colname.bagtype"), 9))
+				.append(rightPad(resourceBundle.getString("colname.expedite_number"), 22))
+				.append(leftPad(resourceBundle.getString("colname.baggage_check"), 22) + newline);
+			for (OHD_Log ohdBag : bagsList) {
+				inboundExpediteBagsReport
+					.append(rightPad(ohdBag.getOhd().getOHD_ID(), 17))
+					.append(rightPad(format(ohdBag.getOhd().getMatched_incident()), 29))
+					.append(rightPad(ohdBag.getOhd().getColor(), 9))
+					.append(rightPad(ohdBag.getOhd().getType(), 9))
+					.append(rightPad(ohdBag.getExpeditenum(), 22))
+					.append(leftPad(ohdBag.getOhd().getClaimnum(), 22) + newline);
+				inboundExpediteBagsReport.append(newline);	
+
+			}
+		}
+		
+//		String phraseToReplace = "null" + newline;
+//		String newPhrase = "" + newline;
+//		String result = org.apache.commons.lang.StringUtils.replace(inboundExpediteBagsReport.toString(), phraseToReplace, newPhrase);
+		
+		logger.error(inboundExpediteBagsReport.toString());
+		
+		return inboundExpediteBagsReport;
+	}
+
+	private static String format(String input) {
+		if(input == null || ("null").equals(input))
+			return "";
+		else
+			return input;
 	}
 }

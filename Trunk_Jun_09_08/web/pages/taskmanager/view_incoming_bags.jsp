@@ -6,12 +6,17 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+  <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
-org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
-request.getAttribute("org.apache.struts.action.MESSAGE");
-java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
-"org.apache.struts.action.LOCALE");
+	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
+	request.getAttribute("org.apache.struts.action.MESSAGE");
+	java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
+	"org.apache.struts.action.LOCALE");
+  if (null == request.getAttribute("outputtype")) {
+	  request.setAttribute("outputtype", "0");
+  }
+
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.bmo.RequestOhdBMO"%>
@@ -161,6 +166,30 @@ function sortIncomingBags(sortOrder) {
           </font>
           <br>
           <table class="form2" cellspacing="0" cellpadding="0">
+            <tr>
+              <td colspan="11" width="100%" align="right">
+                <strong>
+                  <bean:message key="colname.report_output_type" />
+                </strong>
+              </td>
+            </tr> 
+            <tr>
+              <td colspan="11" align="right">
+                <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("0")) { %> checked <% } %> value="0">
+                  <bean:message key="radio.pdf" />
+                <% } %>
+                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1") || TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %> checked <% } %> value="1">
+                <bean:message key="radio.html" />
+                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("5")) { %> checked <% } %> value="5">
+                <bean:message key="radio.teletype" />
+                <html:text property="teletypeAddress" size="10" maxlength="13" styleClass="textfield" />
+                &nbsp;    
+                <html:submit styleId="button" property="teletype">
+                  <bean:message key="button.send.teletype" />
+                </html:submit>
+              </td>
+            </tr>                
             <tr>
               <logic:present name="cbroStationID" scope="session">
 <%
