@@ -516,7 +516,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			QuickOnhandBags ohb = d1.addNewQuickOnhandBags();
 			BagTagType bt = ohb.addNewBagTag();
 			bt.setAirlineCode(data.getFromAirline());
-			bt.setTagSequence(((List<String>)fieldMap.get(WorldTracerField.TN)).get(0));
+			bt.setTagSequence(((List<String>)fieldMap.get(WorldTracerField.TN)).get(0).substring(2));
 			
 
 			String freeFormText = null;
