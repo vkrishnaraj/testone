@@ -149,6 +149,7 @@ import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.BaggageItinerary;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.DelayedBags;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.BagAddress;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary.Routes;
+import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Initials.Intial;
 import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names.Name;
 import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType.Itinerary.FlightSegments;
 import aero.sita.www.bag.wtr._2009._01.PassengerType.Initials;
@@ -3529,8 +3530,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			PassengerItineraryAmendType p1 = d1.addNewPassengers();
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
-			// fieldList2 =
-			// fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
+		 fieldList2 =
+		 fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			if (fieldList != null && fieldList.size() > 0) {
 				aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names p11 = p1.addNewNames();
 				for (int j = 0; j < fieldList.size(); j++) {
@@ -3542,8 +3543,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					// HERE
 					// comments removed sept.22,2010 loupas
 					if (fieldList2 != null && fieldList2.size() > j) {
-						p1.addNewInitials().addNewIntial().setStringValue(
-								fieldList2.get(j));
+						Intial it = p1.addNewInitials().addNewIntial();
+						it.setStringValue(fieldList2.get(j));
+						it.setSeq(j+1);
 					}
 				}
 			}
