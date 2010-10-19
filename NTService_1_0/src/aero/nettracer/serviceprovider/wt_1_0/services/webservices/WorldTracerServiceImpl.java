@@ -514,6 +514,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 //			rrt2.setStationCode(ohdId.substring(0, 3));
 			
 			QuickOnhandBags ohb = d1.addNewQuickOnhandBags();
+			ohb.setAirlineCode(data.getFromAirline());
+			ohb.setStationCode(data.getFromStation());
 			BagTagType bt = ohb.addNewBagTag();
 			bt.setAirlineCode(data.getFromAirline());
 			bt.setTagSequence(((List<String>)fieldMap.get(WorldTracerField.TN)).get(0).substring(2));
