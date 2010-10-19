@@ -362,13 +362,20 @@ public class ViewIncomingBags extends CheckedAction {
 			request.setAttribute("currpage", Integer.toString(currpage));
 		}
 		
-		//TODO: handle teletype here
+		if (bagsList == null || bagsList.size() < 1) {
+			request.setAttribute("noInboundExpediteBags", "nodata");
+		}
+		// handle teletype here
 		ActionMessages errors = new ActionMessages();
 		if (request.getParameter("teletype") != null) {   //this means the teletype button was pushed
 			ActionMessage error = new ActionMessage("message.it.is.all.good");
 			int reportnum = ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS;
 			
+			StatReportDTO srDTO = new StatReportDTO();
+			srDTO.setOutputtype(TracingConstants.REPORT_OUTPUT_PDF);	//default
+			
 			if(request.getParameter("outputtype").equalsIgnoreCase("5")) { //Teletype
+				srDTO.setOutputtype(TracingConstants.REPORT_OUTPUT_TELETYPE);
 				String teletypeAddress = request.getParameter("teletypeAddress");
 				if(teletypeAddress == null || teletypeAddress.equals("")) {
 					error = new ActionMessage("message.no.teletype.address.provided");
@@ -386,17 +393,15 @@ public class ViewIncomingBags extends CheckedAction {
 				ReportBMO rBMO = new ReportBMO(request);
 				ServletContext sc = getServlet().getServletContext();
 				String reportpath = sc.getRealPath("/");
-				StatReportDTO srDTO = new StatReportDTO();
+//				StatReportDTO srDTO = new StatReportDTO();
 				
 				if (request.getParameter("outputtype").equalsIgnoreCase("0")) {	//PDF
-					//TODO: generate PDF
-					srDTO.setOutputtype(0);
+					srDTO.setOutputtype(TracingConstants.REPORT_OUTPUT_PDF);
 				} else {	//HTML
-					//TODO: generate HTML
-					srDTO.setOutputtype(1);
+					srDTO.setOutputtype(TracingConstants.REPORT_OUTPUT_HTML);
 				}
 				
-				//TODO: create datasource and put it in Dynamic Jasper friendly format
+				// create data source and put it in Dynamic Jasper friendly format
 				List<Map<String, String>> djBagsList = new ArrayList<Map<String, String>>(bagsList.size());
 				for (OHD_Log ohdBag : bagsList) {
 					OHD myOhd = ohdBag.getOhd();
@@ -423,12 +428,10 @@ public class ViewIncomingBags extends CheckedAction {
 					}
 				} else {
 					request.setAttribute("reportfile", reportfile);
-					if (request.getAttribute("outputtype") == null) {
-						request.setAttribute("outputtype", Integer.toString(srDTO.getOutputtype()));
-					}
 				}
 			}
 
+			request.setAttribute("outputtype", Integer.toString(srDTO.getOutputtype()));
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
 		} 

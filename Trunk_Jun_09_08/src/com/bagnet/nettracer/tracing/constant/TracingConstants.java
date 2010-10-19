@@ -382,6 +382,7 @@ public class TracingConstants {
 	public final static int REPORT_OUTPUT_XLS = 2;
 	public final static int REPORT_OUTPUT_CSV = 3;
 	public final static int REPORT_OUTPUT_XML = 4;
+	public final static int REPORT_OUTPUT_TELETYPE = 5;
 
 	public final static String COMPANY_PAGESTATE_INFO = "1";
 	public final static String COMPANY_PAGESTATE_SETTINGS = "2";

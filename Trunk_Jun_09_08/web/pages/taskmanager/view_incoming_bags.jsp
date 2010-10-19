@@ -162,9 +162,13 @@ function sortIncomingBags(sortOrder) {
             <bean:message key="header.search_result" />
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/incoming_bags.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
+          <!-- removed prior to testing -->
+          <!--
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
+          -->
+          <!-- removed prior to testing -->
           <br>
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
@@ -174,6 +178,7 @@ function sortIncomingBags(sortOrder) {
                 </strong>
               </td>
             </tr> 
+            <logic:notPresent name="noInboundExpediteBags" scope="request">
             <tr>
               <td colspan="11" align="right">
                 <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
@@ -187,10 +192,11 @@ function sortIncomingBags(sortOrder) {
                 <html:text property="teletypeAddress" size="10" maxlength="13" styleClass="textfield" />
                 &nbsp;    
                 <html:submit styleId="button" property="teletype">
-                  <bean:message key="button.send.teletype" />
+                  <bean:message key="button.createreport" />
                 </html:submit>
               </td>
-            </tr>                
+            </tr>  
+            </logic:notPresent>              
             <tr>
               <logic:present name="cbroStationID" scope="session">
 <%
