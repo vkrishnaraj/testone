@@ -6,7 +6,7 @@ package org.tempuri;
 
 import org.apache.log4j.Logger;
 
-public class BaggageDeliveryStatusTrackerServiceImpl {
+public class BaggageDeliveryStatusTrackerServiceImpl extends BaggageDeliveryStatusTrackerServiceSkeleton {
 	
 	private static Logger logger = Logger.getLogger(BaggageDeliveryStatusTrackerServiceImpl.class);
 
