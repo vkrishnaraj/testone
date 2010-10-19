@@ -90,7 +90,7 @@ public class StatReportAction extends Action {
 
 		if (customreportnum != null) request.setAttribute("customreportnum", customreportnum);
 		
-		BagService bs = new BagService();
+//		BagService bs = new BagService();
 
 		/** ****************** handle requests ******************** */
 
