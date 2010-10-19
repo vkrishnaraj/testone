@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,9 +32,11 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -45,9 +48,11 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -304,7 +309,7 @@ public class ViewIncomingBags extends CheckedAction {
 		}
 
 		int requestListCount = OHDUtils.getIncomingBagsCount(agent_station.getStation_ID(), theform);
-		List bagsList = null;
+		List<OHD_Log> bagsList = null;
 		if (requestListCount > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -333,8 +338,8 @@ public class ViewIncomingBags extends CheckedAction {
 			List requestList = OHDUtils.getIncomingBags(agent_station.getStation_ID(), theform, sort,
 					rowsperpage, currpage);
 			
-			List fullRequestList = OHDUtils.getIncomingBags(agent_station.getStation_ID(), theform, sort, requestListCount, 0);
-			bagsList = new ArrayList(fullRequestList);
+			List<OHD_Log> fullRequestList = OHDUtils.getIncomingBags(agent_station.getStation_ID(), theform, sort, requestListCount, 0);
+			bagsList = new ArrayList<OHD_Log>(fullRequestList);
 			//bagsList = new ArrayList(requestList);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
@@ -360,7 +365,8 @@ public class ViewIncomingBags extends CheckedAction {
 		//TODO: handle teletype here
 		ActionMessages errors = new ActionMessages();
 		if (request.getParameter("teletype") != null) {   //this means the teletype button was pushed
-			ActionMessage error = new ActionMessage("");
+			ActionMessage error = new ActionMessage("message.it.is.all.good");
+			int reportnum = ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS;
 			
 			if(request.getParameter("outputtype").equalsIgnoreCase("5")) { //Teletype
 				String teletypeAddress = request.getParameter("teletypeAddress");
@@ -376,10 +382,51 @@ public class ViewIncomingBags extends CheckedAction {
 					parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 					buildTeletypeStyleInboundExpediteBagsReport(parameters, bagsList);
 				}
-			} else if (request.getParameter("outputtype").equalsIgnoreCase("0")) {	//PDF
-				//TODO: generate PDF
-			} else {	//HTML
-				//TODO: generate HTML
+			} else {
+				ReportBMO rBMO = new ReportBMO(request);
+				ServletContext sc = getServlet().getServletContext();
+				String reportpath = sc.getRealPath("/");
+				StatReportDTO srDTO = new StatReportDTO();
+				
+				if (request.getParameter("outputtype").equalsIgnoreCase("0")) {	//PDF
+					//TODO: generate PDF
+					srDTO.setOutputtype(0);
+				} else {	//HTML
+					//TODO: generate HTML
+					srDTO.setOutputtype(1);
+				}
+				
+				//TODO: create datasource and put it in Dynamic Jasper friendly format
+				List<Map<String, String>> djBagsList = new ArrayList<Map<String, String>>(bagsList.size());
+				for (OHD_Log ohdBag : bagsList) {
+					OHD myOhd = ohdBag.getOhd();
+					Map<String, String> map1 = new HashMap<String, String>();
+					map1.put("onhandId", myOhd.getOHD_ID());
+					map1.put("matchingIncident", myOhd.getMatched_incident());
+					map1.put("color", myOhd.getColor());
+					map1.put("type", myOhd.getType());
+					map1.put("expediteNumber", ohdBag.getExpeditenum());
+					map1.put("claimNumber", ohdBag.getOhd().getClaimnum());
+					djBagsList.add(map1);
+				}
+				
+				String reportfile = rBMO.createInboundExpediteBagsReport(reportpath, djBagsList, user, srDTO);
+				
+				if (reportfile == null || "".equals(reportfile)) {
+					//no data to report
+					if (rBMO.getErrormsg() != null && rBMO.getErrormsg().length() > 0) {
+						error = new ActionMessage(rBMO.getErrormsg());
+						errors.add(ActionMessages.GLOBAL_MESSAGE,error);
+					} else {
+						error = new ActionMessage("message.nodata");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					}
+				} else {
+					request.setAttribute("reportfile", reportfile);
+					if (request.getAttribute("outputtype") == null) {
+						request.setAttribute("outputtype", Integer.toString(srDTO.getOutputtype()));
+					}
+				}
 			}
 
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);

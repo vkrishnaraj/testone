@@ -88,6 +88,7 @@ function sortIncomingBags(sortOrder) {
   </script>
   <html:form action="incomingBags.do" method="post" onsubmit="fillzero(this.ohd_num, 13); return true;">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
+  <html:hidden property="reportnum" value="30" />
 <%
     String sort = (String)request.getAttribute("sort");
 
@@ -340,5 +341,16 @@ function sortIncomingBags(sortOrder) {
                 </logic:notPresent>
               </td>
             </tr>
+            <tr>
+              <td colspan="11" align="center">
+                &nbsp;
+              </td>
+            </tr>
           </table>
+          
+          <logic:present name="reportfile" scope="request">
+              <script language="javascript">
+				openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+              </script>
+          </logic:present>
         </html:form>

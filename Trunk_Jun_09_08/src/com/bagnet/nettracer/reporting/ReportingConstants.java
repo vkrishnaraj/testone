@@ -64,6 +64,10 @@ public class ReportingConstants {
 	
 	public final static int RPT_20_CUSTOM_2 = 2;
 	
+	//custom reports for in-bound expedite baggage list
+	public final static int RPT_INBOUND_EXPEDITE_BAGS = 30;
+	public final static String RPT_INBOUND_EXPEDITE_BAGS_NAME = "stat_rpt_30";
+	
 	public final static int SEARCH_INCIDENT_RPT = 25;
 	public final static String SEARCH_INCIDENT_RPT_NAME = "search_incident";
 	public final static int SEARCH_OHD_RPT = 26;

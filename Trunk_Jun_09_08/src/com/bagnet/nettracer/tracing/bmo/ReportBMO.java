@@ -169,6 +169,10 @@ public class ReportBMO {
 						.getCurrentlocale()), "header.reportnum.10"));
 			case ReportingConstants.RPT_20:
 				return SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
+			case ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS:
+				return create_onhand_rpt(srDTO, ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS, 
+										ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS_NAME, messages.getMessage(new Locale(user
+						.getCurrentlocale()), "header.reportnum.30"));				
 			default:
 				return null;
 			}
@@ -4578,5 +4582,32 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			}
 		}
 		return locale;
+	}
+	
+	public String createInboundExpediteBagsReport(String rootpath, List bagsList, Agent user, StatReportDTO srDTO) {
+		String result = "";
+		
+		try {
+			logger.error("ready to print expedite baggage report in " + srDTO.getOutputtype());
+			Map parameters = new HashMap();
+			ResourceBundle resourceBundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", resourceBundle);
+			
+			String reporttitle = resourceBundle.getString("header.reportnum.30");
+			String reportname = ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS_NAME;
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+	
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(bagsList);
+			
+			result = InboundExpediteBagsReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);
+
+		} catch (Exception e) {
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+			result = null;
+		}		
+
+		return result;
 	}
 }
