@@ -196,7 +196,12 @@ function sortIncomingBags(sortOrder) {
                 </html:submit>
               </td>
             </tr>  
-            </logic:notPresent>              
+            </logic:notPresent>     
+            <tr>
+              <td colspan="11" align="center">
+                &nbsp;
+              </td>
+            </tr>                  
             <tr>
               <logic:present name="cbroStationID" scope="session">
 <%
@@ -347,11 +352,15 @@ function sortIncomingBags(sortOrder) {
                 </logic:notPresent>
               </td>
             </tr>
+          <!-- removed prior to testing -->
+          <!--
             <tr>
               <td colspan="11" align="center">
                 &nbsp;
               </td>
             </tr>
+          -->
+          <!-- removed prior to testing -->
           </table>
           
           <logic:present name="reportfile" scope="request">
