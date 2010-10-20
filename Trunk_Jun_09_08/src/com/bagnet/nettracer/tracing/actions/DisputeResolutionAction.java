@@ -197,6 +197,10 @@ public class DisputeResolutionAction extends CheckedAction {
 			faultStationList = UserPermissions.getLimitedSaveStations(user, incident);
 			faultCompanyList = new ArrayList<Company>();
 			faultCompanyList.add(user.getStation().getCompany());
+		} else if (UserPermissions.hasLimitedFaultAirlines(user, incident)) {
+			faultStationList = TracerUtils.getStationList(theform.getFaultcompany_id());
+			faultCompanyList = new ArrayList<Company>();
+			faultCompanyList.add(user.getStation().getCompany());
 		} else {
 			faultStationList = TracerUtils.getStationList(theform.getFaultcompany_id());
 			faultCompanyList = (List) request.getSession().getAttribute("companylistByName");

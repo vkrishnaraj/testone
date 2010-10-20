@@ -246,6 +246,12 @@ public class DamagedAction extends CheckedAction {
 				faultCompanyList.add(user.getStation().getCompany());
 				request.setAttribute("faultCompanyList", faultCompanyList);
 			}
+			else if (UserPermissions.hasLimitedFaultAirlinesByType(user, TracingConstants.DAMAGED_BAG)) {
+				request.setAttribute("faultstationlist", TracerUtils.getStationList(theform.getFaultcompany_id()));
+				ArrayList faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
+				request.setAttribute("faultCompanyList", faultCompanyList);
+			}
 			else {
 				request.setAttribute("faultstationlist", TracerUtils.getStationList(theform.getFaultcompany_id()));
 				request.setAttribute("faultCompanyList", (List) request.getSession().getAttribute("companylistByName"));

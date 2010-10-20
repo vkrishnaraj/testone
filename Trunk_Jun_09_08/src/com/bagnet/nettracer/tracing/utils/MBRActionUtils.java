@@ -334,6 +334,10 @@ public class MBRActionUtils {
 				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 				faultCompanyList = new ArrayList();
 				faultCompanyList.add(user.getStation().getCompany());
+			} else if (UserPermissions.hasLimitedFaultAirlinesByType(user, inc.getItemtype().getItemType_ID())) {
+				faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
+				faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
 			} else {
 				faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
 				faultCompanyList = (List) request.getSession().getAttribute("companylistByName");

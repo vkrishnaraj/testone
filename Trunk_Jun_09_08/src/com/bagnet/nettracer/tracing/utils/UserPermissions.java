@@ -362,6 +362,42 @@ public class UserPermissions {
 		return stationList;
 	}
 	
+	@Deprecated
+	public static boolean hasLimitedFaultAirlines(Agent a, String incident_ID) {
+		if (incident_ID == null) {
+			return true;
+		}
+		
+		Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
+		if (inc != null) {
+			int type = inc.getItemtype().getItemType_ID();
+			return hasLimitedFaultAirlinesByType(a, type);
+		} else {
+			return false;
+		}
+	}
+	
+	public static boolean hasLimitedFaultAirlinesByType(Agent a, int type) {
+
+		boolean limitedPermission = false;
+				
+		switch (type) {
+			case TracingConstants.LOST_DELAY:
+				limitedPermission = PropertyBMO.isTrue(PropertyBMO.PROPERTY_LIMIT_LD_FAULT_AIRLINE);
+				break;
+			case TracingConstants.DAMAGED_BAG:
+				limitedPermission = PropertyBMO.isTrue(PropertyBMO.PROPERTY_LIMIT_DAMAGED_FAULT_AIRLINE);
+				break;
+			case TracingConstants.MISSING_ARTICLES:
+				limitedPermission = PropertyBMO.isTrue(PropertyBMO.PROPERTY_LIMIT_MISSING_FAULT_AIRLINE);
+				break;
+			case TracingConstants.OHD:
+				limitedPermission = PropertyBMO.isTrue(PropertyBMO.PROPERTY_LIMIT_OHD_FAULT_AIRLINE);
+		}
+
+		return limitedPermission;
+	}
+	
 	
 	
 	public static boolean hasIncidentSavePermission(Agent a, String incident_ID) {

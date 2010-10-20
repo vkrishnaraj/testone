@@ -49,6 +49,7 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -231,6 +232,10 @@ public class LostDelayAction extends CheckedAction {
 					faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
 					faultCompanyList = new ArrayList();
 					faultCompanyList.add(user.getStation().getCompany());
+				} else if (UserPermissions.hasLimitedFaultAirlines(user, theform.getIncident_ID())) {
+					faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
+					faultCompanyList = new ArrayList();
+					faultCompanyList.add(user.getStation().getCompany());
 				} else {
 					faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
 					faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
@@ -273,6 +278,12 @@ public class LostDelayAction extends CheckedAction {
 		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
 			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
 				request.setAttribute("faultstationlist", UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY));
+				ArrayList faultCompanyList = new ArrayList();
+				faultCompanyList.add(user.getStation().getCompany());
+				request.setAttribute("faultCompanyList", faultCompanyList);
+			}
+			else if (UserPermissions.hasLimitedFaultAirlinesByType(user, TracingConstants.LOST_DELAY)) {
+				request.setAttribute("faultstationlist", TracerUtils.getStationList(theform.getFaultcompany_id()));
 				ArrayList faultCompanyList = new ArrayList();
 				faultCompanyList.add(user.getStation().getCompany());
 				request.setAttribute("faultCompanyList", faultCompanyList);
