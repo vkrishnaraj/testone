@@ -340,7 +340,17 @@
      <definition name="view_actionfile_detail" extends="user_menu">
     	<put name="center" value="/pages/worldtracer/actionfile_detail.jsp"/>
     </definition>
-
+    
+    
+    <definition name="view_bagbuzzeditor" path="/pages/bagbuzz/bagbuzzeditor.jsp">
+    </definition>
+    
+    <definition name="view_bagbuzzview" path="/pages/bagbuzz/bagbuzzview.jsp">
+    </definition>
+    
+    <definition name="view_bagbuzzsearch" extends="user_menu">
+    	<put name="center" value="/pages/bagbuzz/bagbuzzsearch.jsp"/>
+    </definition>
     
     <definition name="view_worldtracerafviewraw" path="/pages/worldtracer/worldtracer_viewaf_rawinc.jsp">
     </definition>

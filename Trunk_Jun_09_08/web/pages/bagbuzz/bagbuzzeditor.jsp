@@ -21,9 +21,20 @@ return true;
 }
 
 </script>
+<script type="text/javascript">
+window.onload = function()
+{
+var oFCKeditor = new FCKeditor( 'data' ) ;
+oFCKeditor.BasePath = 'deployment/main/js/fckeditor/' ;
+oFCKeditor.Height	= 450 ;
+oFCKeditor.Width    = 600 ;
+oFCKeditor.ReplaceTextarea() ;
+}
+</script>
 
-<html:form action="bagbuzzsearch.do" onsubmit="return displaymessage()">
-<input type="hidden" id="data" name="data"/>
+
+
+<html:form action="bagbuzzsearch.do">
 <!--    <tr>-->
 <!--      <td id="middlecolumn">-->
 <!--<div id="maincontent">-->
@@ -41,21 +52,7 @@ Description:
 </tr>
 <tr>
 <td>
-<script type="text/javascript">
-<!--
-// Automatically calculates the editor base path based on the _samples directory.
-// This is usefull only for these samples. A real application should use something like this:
-// oFCKeditor.BasePath = '/fckeditor/' ;	// '/fckeditor/' is the default value.
-var sBasePath = 'deployment/main/js/fckeditor/';
-
-oFCKeditor = new FCKeditor( 'FCKeditor1' ) ;
-oFCKeditor.BasePath	= sBasePath ;
-oFCKeditor.Height	= 450 ;
-oFCKeditor.Width    = 600 ;
-oFCKeditor.Value	= 'hello world' ;
-oFCKeditor.Create() ;
-//-->
-		</script>
+<textarea id="data" name="data"><bean:write name="bagbuzz" property="data" /></textarea>
 
 </td>
 </tr>

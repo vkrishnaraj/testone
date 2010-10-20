@@ -429,8 +429,12 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																					
-																				}
-																				
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ)){																			
+																					int x = com.bagnet.nettracer.tracing.db.bagbuzz.Utils.getBagBuzzCount(agent);																		
+																					if (x != -1) {
+																						entries = x;
+																					} 																
+																				} 																				
 																			}
 																		}
 																		

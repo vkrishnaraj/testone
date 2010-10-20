@@ -244,6 +244,9 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT = "Baggage Weight";
 	
+	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ = "BagBuzz";
+	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN = "BagBuzzAdmin";
+	
 	//fault dispute
 	public static final String SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE = "Dispute Fault Code"; 
 	public final static String SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE = "Manage Fault Dispute";
@@ -359,6 +362,7 @@ public class TracingConstants {
 	public final static int BAGBUZZ_NEW = 86;
 	public final static int BAGBUZZ_PUBLISHED = 87;
 	public final static int BAGBUZZ_DELETED = 88;
+	public final static int BAGBUZZ_UNPUBLISHED = 95;
 	
 	// Dispute Resolution
 	public final static int DISPUTE_RESOLUTION_STATUS_DENIED = 90;
@@ -530,6 +534,11 @@ public class TracingConstants {
 
 	public final static String VIEW_WORLDTRACER_SUSRIT = "viewworldtracersusrit";
 
+	
+	//bagbuzz
+	public final static String VIEW_BAGBUZZ_EDITOR = "viewbagbuzzeditor";
+	public final static String VIEW_BAGBUZZ_SEARCH = "viewbagbuzzsearch";
+	public final static String VIEW_BAGBUZZ_VIEW = "viewbagbuzzview";
 
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";

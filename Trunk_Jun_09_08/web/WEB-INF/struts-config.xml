@@ -233,6 +233,9 @@
 		<form-bean name="searchWtLogsForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerLogsForm" />
 		<form-bean name="incidentChecklistForm" type="com.bagnet.nettracer.tracing.forms.IncidentChecklistForm" />
 
+		<form-bean name="bagbuzzeditorForm" type="com.bagnet.nettracer.tracing.forms.BagBuzzEditorForm" />
+		<form-bean name="bagbuzzsearchForm" type="com.bagnet.nettracer.tracing.forms.BagBuzzSearchForm" />
+
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -323,7 +326,9 @@
 		<forward name="viewworldtracerreqqoh" path="view_worldtracerreqqoh" />
 		<forward name="viewworldtracerpxf" path="view_worldtracerpxf" />
 
-
+		<forward name="viewbagbuzzeditor" path="view_bagbuzzeditor" />
+		<forward name="viewbagbuzzsearch" path="view_bagbuzzsearch" />
+		<forward name="viewbagbuzzview" path="view_bagbuzzview" />
 
 		<forward name="viewworldtracersusrit" path="view_worldtracer_sus_rit" />
 
@@ -575,6 +580,10 @@
 
 		<!-- View World Tracer Integration functions -->
 		<action path="/worldtraceraf" type="com.bagnet.nettracer.tracing.actions.WorldTracerAFAction" name="worldtracerafForm" scope="request" validate="false"></action>
+
+		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
+
+		<action path="/bagbuzzsearch" type="com.bagnet.nettracer.tracing.actions.BagBuzzSearchAction" name="bagbuzzsearchForm" scope="request" validate="false"></action>"
 
 		<action path="/actionFileCount" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileCountAction" name="worldtracerafForm" scope="request" validate="false">
 			<forward name="success" path="view_actionfile_count"></forward>

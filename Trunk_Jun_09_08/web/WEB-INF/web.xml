@@ -154,6 +154,21 @@
   <servlet-name>ViewLog</servlet-name>
   <url-pattern>/ViewLog</url-pattern>
  </servlet-mapping>
+     <servlet>
+      <servlet-name>Connector</servlet-name>
+        <servlet-class>
+          net.fckeditor.connector.ConnectorServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>Connector</servlet-name>
+      <url-pattern>
+        /deployment/main/js/fckeditor/editor/filemanager/connectors/*
+      </url-pattern>
+    </servlet-mapping>
+ 
+ 
  <!-- currently the W3C havent settled on a media type for WSDL;
     http://www.w3.org/TR/2003/WD-wsdl12-20030303/#ietf-draft
     for now we go with the basic 'it's XML' response -->
