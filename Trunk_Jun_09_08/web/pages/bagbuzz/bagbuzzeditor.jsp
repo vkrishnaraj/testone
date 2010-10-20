@@ -11,13 +11,19 @@
 
 <script type="text/javascript" src="deployment/main/js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
+var oFCKeditor;
 function displaymessage()
 {
-alert("Hello World!");
+//form.data.value = form.FCKeditor1.value;
+alert(document.forms[0].FCKeditor1.value);
+alert(oFCKeditor.CreateHtml());
+return true;
 }
+
 </script>
 
-<html:form action="bagbuzzsearch.do">
+<html:form action="bagbuzzsearch.do" onsubmit="return displaymessage()">
+<input type="hidden" id="data" name="data"/>
 <!--    <tr>-->
 <!--      <td id="middlecolumn">-->
 <!--<div id="maincontent">-->
@@ -42,16 +48,12 @@ Description:
 // oFCKeditor.BasePath = '/fckeditor/' ;	// '/fckeditor/' is the default value.
 var sBasePath = 'deployment/main/js/fckeditor/';
 
-var oFCKeditor = new FCKeditor( 'FCKeditor1' ) ;
+oFCKeditor = new FCKeditor( 'FCKeditor1' ) ;
 oFCKeditor.BasePath	= sBasePath ;
 oFCKeditor.Height	= 450 ;
 oFCKeditor.Width    = 600 ;
-oFCKeditor.Value	= '<p>This is some <strong>sample text<\/strong>. You are using <a href="http://www.fckeditor.net/">FCKeditor<\/a>.<\/p>' ;
+oFCKeditor.Value	= 'hello world' ;
 oFCKeditor.Create() ;
-
-function save(){
-	request.data = oFCKeditor.Value;
-}
 //-->
 		</script>
 
@@ -60,7 +62,7 @@ function save(){
 <tr>
 <td align="left" valign="top" colspan="12">
 <input type="hidden" id="bb_id" name="bb_id" value="<bean:write name="bagbuzz" property="bagbuzz_id"/>"/>
-<html:submit property="save" styleId="button" onclick="displaymessage()">
+<html:submit property="save" styleId="button">
     <bean:message key="bagbuzz.save" />
 </html:submit>
 </td>
