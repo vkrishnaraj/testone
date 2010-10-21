@@ -125,7 +125,7 @@ public class PropertyBMO {
 	
 	public static boolean isTrue(String property) {
 		try {
-			return getValue(property).equals("1");
+			return ("1").equals(getValue(property));
 		} catch (Exception e) {
 			logger.warn("error checking boolean property " + property + ", returning false", e);
 			return false;
