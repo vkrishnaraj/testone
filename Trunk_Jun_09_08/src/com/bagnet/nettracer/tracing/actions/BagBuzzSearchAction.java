@@ -76,6 +76,9 @@ public class BagBuzzSearchAction extends Action{
 		if(request.getParameter("delete") != null){
 			Utils.deleteBagBuzz(BagBuzzSearchAction.getBagBuzz(request));
 		}
+		if(request.getParameter("copy") != null){
+			Utils.copyBagBuzz(Long.parseLong(request.getParameter("bb_id")));
+		}
 		
 		if(admin){
 			List <BagBuzz> bblist = Utils.getBagBuzzList(null);

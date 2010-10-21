@@ -56,7 +56,8 @@ public class Utils {
 	public static List <BagBuzzTask> getBagBuzzTaskList(Agent user){
 		String bbtsql = "from com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask bbt"
 			+ " where agent_ID = :agentID"
-			+ " and bbt.status != :bbtstatus";
+			+ " and bbt.status != :bbtstatus"
+			+ " order by opened_timestamp desc";
 		
 		String bbsql = "from com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb";
 		bbsql += " where status = :publish order by created_timestamp desc";
@@ -211,6 +212,13 @@ public class Utils {
 				}
 			}
 		}
+	}
+	
+	public static BagBuzz copyBagBuzz(long id){
+		BagBuzz bb = Utils.getBagBuzz(id);
+		bb.setBagbuzz_id(0);
+		Utils.saveBagBuzz(bb);
+		return bb;
 	}
 	
 	public static void publishBagBuzz(BagBuzz bb, List roles){
