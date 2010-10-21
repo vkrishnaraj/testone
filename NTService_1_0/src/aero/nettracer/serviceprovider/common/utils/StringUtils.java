@@ -237,9 +237,10 @@ public class StringUtils {
   	maxLength +=1;
   	int divide = 0;
   	int endIndex = 0;
+  	srcWord = srcWord.trim();
   	for (int i=0; i<srcWord.length();) {
   		endIndex = java.lang.Math.min(i + maxLength, srcWord.length());
-  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), " ", "/", maxLength - 1);
+  		divide = getIndexToDivide(srcWord.substring(i, endIndex), " ", "/", maxLength - 1);
   		list.add(srcWord.trim().substring(i, i+divide).trim());
   		i += divide;
   	}
