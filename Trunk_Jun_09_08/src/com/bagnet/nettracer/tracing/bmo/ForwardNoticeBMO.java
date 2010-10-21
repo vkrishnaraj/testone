@@ -95,6 +95,13 @@ public class ForwardNoticeBMO {
 				cri.add(Expression.eq("status", status));
 			}
 			//cri.addOrder(Order.asc("forward.forward_time"));
+			
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				cri.setFirstResult(startnum);
+				cri.setMaxResults(rowsperpage);
+			}
+			
 			return cri.list();
 
 		} catch (Exception e) {

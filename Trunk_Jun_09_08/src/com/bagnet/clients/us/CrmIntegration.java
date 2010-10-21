@@ -243,7 +243,7 @@ public class CrmIntegration {
 
 		HttpTransportProperties.Authenticator auth = new HttpTransportProperties.Authenticator();
 
-		auth.setHost("crmtest.lcc.usairways.com");
+		auth.setHost(PropertyBMO.getValue("crm.host"));
 		auth.setUsername("svc-ntracercrm");
 		auth.setPassword("s$qDa)u91u6Y");
 		auth.setDomain("lcc");
