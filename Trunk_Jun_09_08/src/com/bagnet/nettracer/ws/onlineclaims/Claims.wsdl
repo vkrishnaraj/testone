@@ -73,14 +73,18 @@
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
             <xs:complexType name="WS_PVAdvancedIncident">
                 <xs:sequence>
+                    <xs:element minOccurs="0" name="canCreateClaim" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="createdate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="dispcreatetime" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="incident_status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="itemType" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax23:WS_PVItem"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax23:WS_PVPassenger"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="scans" nillable="true" type="ax23:WS_ScanPoints"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="WS_PVItem">
@@ -104,6 +108,13 @@
                     <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="mobile" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="workphone" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_ScanPoints">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="location" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="timestamp" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
@@ -151,6 +162,7 @@
                     <xs:element minOccurs="0" name="reroutedReason" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="socialSecurity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ticketNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="ticketWithAnotherAirline" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="tsaInspected" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="tsaInspectionLocation" nillable="true" type="xs:string"/>

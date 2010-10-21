@@ -25,6 +25,9 @@ public class QuickSearchDTO {
 	private String scanError;
 	private Date startDate;
 	private Date endDate;
+	
+	private Date limitedStartDate;
+	private Date limitedEndDate;
 
 	public String getRedirect() {
 		return redirect;
@@ -144,6 +147,22 @@ public class QuickSearchDTO {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public Date getLimitedStartDate() {
+		return limitedStartDate;
+	}
+
+	public void setLimitedStartDate(Date limitedStartDate) {
+		this.limitedStartDate = limitedStartDate;
+	}
+
+	public Date getLimitedEndDate() {
+		return limitedEndDate;
+	}
+
+	public void setLimitedEndDate(Date limitedEndDate) {
+		this.limitedEndDate = limitedEndDate;
 	}
 
 }

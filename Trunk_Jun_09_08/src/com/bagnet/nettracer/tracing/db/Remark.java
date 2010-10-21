@@ -77,7 +77,7 @@ public class Remark implements Serializable {
 	 * @return Returns the agent.
 	 * 
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
-	 *                        column="agent_ID" 
+	 *                        column="agent_ID"
 	 */
 	public Agent getAgent() {
 		return agent;
@@ -151,7 +151,7 @@ public class Remark implements Serializable {
 	 * @return Returns the incident.
 	 * 
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Incident"
-	 *                        column="incident_ID" not-null="false"
+	 *                        column="incident_ID" not-null="false" fetch="select"
 	 */
 	public Incident getIncident() {
 		return incident;
@@ -167,7 +167,7 @@ public class Remark implements Serializable {
 	 * @return Returns the ohd.
 	 * 
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.OHD"
-	 *                        column="OHD_ID" not-null="false"
+	 *                        column="OHD_ID" not-null="false" fetch="select"
 	 */
 	public OHD getOhd() {
 		return ohd;

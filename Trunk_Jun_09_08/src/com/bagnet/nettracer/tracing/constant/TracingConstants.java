@@ -525,6 +525,9 @@ public class TracingConstants {
 	public final static String VIEW_WORLDTRACER_ACTION_FILES = "viewworldtraceractionfiles";
 	public final static String VIEW_WORLDTRACER_ACTION_FILES_COUNT = "viewworldtracercount";
 	public final static String VIEW_WORLDTRACER_AF_VIEW_RAW_INC = "viewworldtracerafviewraw";
+	public final static String VIEW_WORLDTRACER_SEARCH = "viewworldtracersearch";
+	public final static String VIEW_WORLDTRACER_AHL = "viewworldtracerahl";
+	public final static String VIEW_WORLDTRACER_OHD = "viewworldtracerohd";
 	public final static String VIEW_WORLDTRACER_FWD = "viewworldtracerfwd";
 	public final static String VIEW_WORLDTRACER_FOH = "viewworldtracerfoh";
 	public final static String VIEW_WORLDTRACER_ROH = "viewworldtracerroh";
@@ -540,11 +543,17 @@ public class TracingConstants {
 	public final static String VIEW_BAGBUZZ_SEARCH = "viewbagbuzzsearch";
 	public final static String VIEW_BAGBUZZ_VIEW = "viewbagbuzzview";
 
+
+	
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";
 	public final static String MASS_ON_HAND_SUCCESS = "massonhandsuccess";
 	public final static String UPDATE_ON_HAND_SUCCESS = "updateonhandsuccess";
 
+	public static final String FORWARD_OC_LIST = "forwardOcList";
+	public static final String FORWARD_DISPLAY_OC = "forwardDisplayOc";
+	public static final String FORWARD_CHANGE_OC_STATUS = "forwardChangeStatus";
+	
 	//success on forward
 	public final static String FORWARD_ON_HAND_SUCCESS = "forwardonhandsuccess";
 
@@ -794,6 +803,9 @@ public class TracingConstants {
 	public static final String JSP_DELETE_PAX = "pax";
 	public static final String JSP_DELETE_ARTICLE = "article";
 	public static final String WEB_SERVICE_DTO = "web.service.dto";
+	public static final String SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES = "Clerical Claims Features";
+	public static final String SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES = "Central Baggage Claims Features";
+
 	
 	// dispute resolution page
 	public final static String DISPUTE_RESOLUTION = "dispute_resolution";

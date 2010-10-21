@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.ws.core.pojo;
 
+import java.util.Calendar;
+
 
 
 /**
@@ -11,10 +13,14 @@ public class WS_PVAdvancedIncident {
 	private String Incident_ID;
 	private String dispcreatetime;
 	private String incident_status;
+	private int itemType;
+	private Calendar createdate;
+	private boolean canCreateClaim;
 	
 	private WS_PVPassenger[] passengers = null;
 	private WS_PVItem[] items = null;
-	
+	private WS_ScanPoints[] scans = null;
+
 	private String companycode_id;
 	private String errorcode;
 	private String comments;
@@ -132,5 +138,37 @@ public class WS_PVAdvancedIncident {
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public int getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(int itemType) {
+		this.itemType = itemType;
+	}
+
+	public Calendar getCreatedate() {
+		return createdate;
+	}
+
+	public void setCreatedate(Calendar createdate) {
+		this.createdate = createdate;
+	}
+
+	public boolean isCanCreateClaim() {
+		return canCreateClaim;
+	}
+
+	public void setCanCreateClaim(boolean canCreateClaim) {
+		this.canCreateClaim = canCreateClaim;
+	}
+	
+	public WS_ScanPoints[] getScans() {
+		return scans;
+	}
+
+	public void setScans(WS_ScanPoints[] scans) {
+		this.scans = scans;
 	}
 }

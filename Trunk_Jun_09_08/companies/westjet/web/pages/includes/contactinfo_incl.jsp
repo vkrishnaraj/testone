@@ -279,13 +279,13 @@
                 
                 <logic:equal name="incidentForm" property="incident_ID" value="">
                 <td colspan="2" width="33%">
-                  <bean:message key="colname.email" />
+                  <bean:message key="colname.email.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].email" %>' size="42" maxlength="100" styleClass="textfield" />
                   </logic:equal>
                  <logic:notEqual name="incidentForm" property="incident_ID" value="">
                 <td colspan="3" width="50%">
-                  <bean:message key="colname.email" />
+                  <bean:message key="colname.email.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].email" %>' size="45" maxlength="100" styleClass="textfield" />
                   </logic:notEqual>

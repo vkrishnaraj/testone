@@ -9,7 +9,6 @@ package com.bagnet.nettracer.tracing.actions;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,19 +22,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
-import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
-import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
-import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -64,7 +59,7 @@ public class BDOAction extends Action {
 
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
 				+ ".do", user))
-			return (mapping.findForward(TracingConstants.LOGON));
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
 		BDOForm theform = (BDOForm) form;
 

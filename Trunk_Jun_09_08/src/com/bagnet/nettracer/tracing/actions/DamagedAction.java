@@ -395,6 +395,8 @@ public class DamagedAction extends CheckedAction {
 			}
 			
 			if (error == null) {
+				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
+				theform.setNotifiedOfRequirements(false);
 				request.setAttribute("damaged", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
 				

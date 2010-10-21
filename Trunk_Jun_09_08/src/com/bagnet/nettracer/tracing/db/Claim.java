@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 /**
@@ -69,6 +71,7 @@ public class Claim implements Serializable {
 	 */
 	@OneToOne
 	@JoinColumn(name = "incident_id")
+	@Fetch(FetchMode.SELECT)
 	public Incident getIncident() {
 		return incident;
 	}

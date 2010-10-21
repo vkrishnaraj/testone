@@ -20,7 +20,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDataDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.usairways.cbro.baggage.scanning.history.ScanPointsServiceBeanServiceStub;
 import com.usairways.www.cbro.baggage_scanner.wsdl.BulkUnloadType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.FlightScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.FlightTaskType;
@@ -33,10 +32,12 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.LoadScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.LoadULDScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.NetTracerScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.QohScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPointsStub;
 import com.usairways.www.cbro.baggage_scanner.wsdl.ScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.TagType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TaskType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TrackingScanType;
-import com.usairways.www.cbro.baggage_scanner.wsdl.UldLoadScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.UldLoadBagScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldTaskType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldTransferType;
@@ -59,9 +60,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		String endpoint = PropertyBMO.getValue(PROPERTY_SCAN_HISTORY_ENDPOINT);
 		
 		
-		ScanPointsServiceBeanServiceStub stub = null;
+		ScanPointsStub stub = null;
 		try {
-			stub = new ScanPointsServiceBeanServiceStub(endpoint);
+			stub = new ScanPointsStub(endpoint);
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		}
@@ -85,7 +86,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			
 		sp.setStartTime(startCal);
 		sp.setEndTime(endCal);
-		sp.setTag(bagTagNumber.trim().toUpperCase());
+		TagType tag = sp.addNewTag();
+		tag.setType(TagType.Type.B);
+		tag.setStringValue(bagTagNumber.trim().toUpperCase());
 
 		GetScanPointsResponseDocument responseDoc = null;
 		try {
@@ -136,17 +139,20 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						String ohdId = null;
 						Calendar time = null;
 						String city = null;
+						String tag1 = "";
 						
 						if (obj instanceof ScanType) {
 							ScanType o = (ScanType) obj;
 							city = o.getCity();
 							time = o.getInstant();
+							tag1 = o.getTag();
 						}
 						
 						if (obj instanceof TaskType) {
 							TaskType o = (TaskType) obj;
 							city = o.getCity();
 							time = o.getInstant();
+							tag1 = o.getTag();
 						}
 						
 						if (obj instanceof NetTracerScanType) {
@@ -235,9 +241,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						} 
 						
 						
-						if (obj instanceof UldLoadScanType) {
+						if (obj instanceof UldLoadBagScanType) {
 							type = "ULD Load Scan Type";
-							UldLoadScanType o = (UldLoadScanType) obj;
+							UldLoadBagScanType o = (UldLoadBagScanType) obj;
 							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");
 							ohdId = o.getNetTracerId();
 							comment.append("ULD: " + o.getUld() + "<br />");
@@ -264,7 +270,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						DateFormat sdf = new SimpleDateFormat(TracingConstants.DISPLAY_DATETIMEFORMAT, Locale.US);
 						Date newdate = DateUtils.convertSystemCalendarToGMTDate(time); 
 						String dateString = sdf.format(newdate);
-						ScannerDataDTO dtoItem = new ScannerDataDTO(dateString, city, type, comment.toString(), ohdId, time);
+						ScannerDataDTO dtoItem = new ScannerDataDTO(tag1, dateString, city, type, comment.toString(), ohdId, time);
 						list.add(dtoItem);
 				}
 

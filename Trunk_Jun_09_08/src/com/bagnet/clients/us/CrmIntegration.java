@@ -15,11 +15,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.CrmFile;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.CrmFile.CRMStatus;
@@ -35,6 +37,7 @@ public class CrmIntegration {
 
 	public Incident sendIncident(String incidentId, Session sess) {
 		Incident i = null;
+		boolean doNotCreate = false;
 		boolean sessionNull = (sess == null);
 		try {
 			if (sessionNull) {
@@ -43,6 +46,20 @@ public class CrmIntegration {
 
 			i = (Incident) sess.load(Incident.class, incidentId);
 			if (i != null && (i.getCrmFile() == null || i.getCrmFile().getStatus() != CRMStatus.SUCCESS)) {
+
+				IncidentBMO bmo = new IncidentBMO();
+				List<Incident_Assoc> ai = bmo.getAssocReports(i.getIncident_ID());
+				
+				for (Incident_Assoc assoc_i: ai) {
+					if (assoc_i.getIncident_ID() != i.getIncident_ID()) {
+						Incident tmpI = (Incident) sess.load(Incident.class, assoc_i.getAssoc_ID());
+						if (tmpI.getCrmFile() != null && tmpI.getCrmFile().getStatus() == CRMStatus.SUCCESS) {
+							doNotCreate = true;
+						}
+					}
+				}
+				
+				
 				CrmFile f = i.getCrmFile();
 				if (i.getCrmFile() == null) {
 					f = new CrmFile();
@@ -50,9 +67,11 @@ public class CrmIntegration {
 				CRMStatus status = CRMStatus.FAILED;
 				String key = null;
 				try {
-					key = transmitToCrm(i, sess);
-					if (key != null) {
-						status = CRMStatus.SUCCESS;
+					if (!doNotCreate) {
+						key = transmitToCrm(i, sess);
+						if (key != null) {
+							status = CRMStatus.SUCCESS;
+						}
 					}
 				} catch (RemoteException e) {
 					logger.info("Web Service Failure: ", e);
@@ -64,6 +83,7 @@ public class CrmIntegration {
 					t = sess.beginTransaction();
 					sess.save(f);
 					t.commit();
+					i.setCrmFile(f);
 					logger.info("Updated incident: " + i.getIncident_ID() + "  Status: " + status.toString());
 
 					// Evict Incident once finished to keep it from consuming
@@ -128,8 +148,44 @@ public class CrmIntegration {
 			b.setSMembershipNumber(memNum);
 		}
 
-		// TODO: Update when we have dividend tiers.
+		
+		
+		/* 
+			1="Dividend Miles Member"
+			2="Silver"
+			3="Gold"
+			4="Platinum"
+			5="Million Mile Chairman"
+			6="Million Mile Gold"
+			7="Chairman"
+			8="Executive Member"
+		*/
+		
 		b.setIMembershipStatus(0);
+		
+		String mStatus = null;
+		
+		if (p.getAirlinememstatus() != null && p.getAirlinememstatus().trim().length() > 0) {
+			mStatus = p.getAirlinememstatus().toUpperCase();
+			
+			if (mStatus.contains("BASIC")) {
+				b.setIMembershipStatus(1);
+			} else if (mStatus.contains("MILLION MILE CHAIRMAN")) {
+				b.setIMembershipStatus(5);
+			} else if (mStatus.contains("MILLION MILE GOLD")) {
+				b.setIMembershipStatus(6);
+			} else if (mStatus.contains("EXECUTIVE")) {
+				b.setIMembershipStatus(8);
+			} else if (mStatus.contains("SILVER")) {
+				b.setIMembershipStatus(2);
+			} else if (mStatus.contains("GOLD")) {
+				b.setIMembershipStatus(3);
+			} else if (mStatus.contains("PLATINUM")) {
+				b.setIMembershipStatus(4);
+			} else if (mStatus.contains("CHAIRMAN")) {
+				b.setIMembershipStatus(7);
+			}
+		}
 
 		b.setSStreetAddress(a.getAddress1());
 		b.setSAptSuiteNumber(a.getAddress2());

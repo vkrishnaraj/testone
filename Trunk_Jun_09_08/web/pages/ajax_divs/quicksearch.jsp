@@ -58,9 +58,14 @@
 
 
 	<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.displayIncList == true}">
-		<h1>Matching Incidents</h1>
+		<span style="float:left"><h1>Matching Incidents</h1></span>
+		<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.limitedStartDate != null}">
+			<span style="float:right; vertical-align: top; font-size: .8em">
+				Automated Search Dates: <c:out  value="${quickSearchForm.dto.limitedStartDate}"/> - <c:out  value="${quickSearchForm.dto.limitedEndDate}"/>
+			</span>
+		</c:if>
 		<c:if test="${empty quickSearchForm.dto.IList}">
-			<div style="text-align:center; color:red; border-bottom:1px blue dashed;"><bean:message key="result.nomatches"/></div>
+		<br/><br/><div style="text-align:center; color:red; border-bottom:1px blue dashed;"><bean:message key="result.nomatches"/></div>
 		</c:if>
 		<c:if test="${!empty quickSearchForm.dto.IList}">
 
@@ -206,11 +211,17 @@
 
 <br />
 	<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.displayOhdList == true}">
-<h1>Matching On-Hands</h1>
+	<span style="float:left"><h1>Matching On-Hands</h1></span>
+		<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.limitedStartDate != null}">
+			<span style="float:right; vertical-align: top; font-size: .8em">
+				Automated Search Dates: <c:out  value="${quickSearchForm.dto.limitedStartDate}"/> - <c:out  value="${quickSearchForm.dto.limitedEndDate}"/>
+			</span>
+		</c:if>
 		<c:if test="${empty quickSearchForm.dto.OList}">
-			<div style="text-align:center; color:red; border-bottom:1px blue dashed;"><bean:message key="result.nomatches"/></div>
+		<br/><br/><div style="text-align:center; color:red; border-bottom:1px blue dashed;"><bean:message key="result.nomatches"/></div>
 		</c:if>
 		<c:if test="${!empty quickSearchForm.dto.OList}">
+		
 <table class="modaltable" cellspacing="2" cellpadding="2">
 
               <tr class="mh">
@@ -378,19 +389,18 @@
 
 
 	<c:if test="${!empty quickSearchForm.dto && quickSearchForm.dto.displayScanList == true}">
+		<span style="float: left"><h1>Scan Data</h1></span>
+<span style="float:right; vertical-align: top; font-size: .8em">
+Automated Search Dates: <c:out  value="${quickSearchForm.dto.startDate}"/> - <c:out  value="${quickSearchForm.dto.endDate}"/>
+</span>
 		<c:if test="${empty quickSearchForm.dto.SList}">
-			<h1>Scan Data</h1>
-			<div style="text-align:center; color:red; border-bottom:1px blue dashed;"><bean:message key="result.nomatches"/></div>
+		<br/><br/><div style="text-align:center; color:red; border-bottom:1px blue dashed;"><bean:message key="result.nomatches"/></div>
 		</c:if>
 		<c:if test="${!empty quickSearchForm.dto.SList}">
 		<script LANGUAGE="javascript">
 			var cal1xx = new CalendarPopup();
 		</script>
-			<span style="float:left"><h1>Scan Data</h1></span>
 		
-<span style="float:right; vertical-align: top; font-size: .8em">
-Automated Search Dates: <c:out  value="${quickSearchForm.dto.startDate}"/> - <c:out  value="${quickSearchForm.dto.endDate}"/>
-</span>
 <table class="modaltable" cellspacing="2" cellpadding="2">
 
 	<tr class="mh">

@@ -13,6 +13,7 @@ import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.CustomerViewableComment;
@@ -24,6 +25,7 @@ import com.bagnet.nettracer.tracing.db.PaxCommunication;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.PaxCommunication.PaxCommunicationStatus;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -285,7 +287,9 @@ public class PaxViewImplementation extends PaxViewSkeleton {
 		
 		//persist remarks by pax and associated incident and audit incident
 		Remark r = new Remark();
-		r.setAgent(null);
+		Agent ogadmin = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		r.setAgent(ogadmin);
+		r.setRemarktype(TracingConstants.REMARK_REGULAR);
 		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
 		
 

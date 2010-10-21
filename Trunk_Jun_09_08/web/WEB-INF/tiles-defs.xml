@@ -20,6 +20,13 @@
 
   <!-- Doc index page description  -->
   
+	
+ 	<definition name="forwardOcList" extends="user_menu">
+ 		<put name="center" value="/pages/onlineclaims/view_online_claims.jsp" />
+    </definition>
+    
+    
+
   	<definition name="manualQueue" path="/pages/worldtracerqueue/queue.jsp">
     </definition>
   
@@ -313,6 +320,8 @@
     	<put name="center" value="/pages/onhand/deny_request_center.jsp"/>
     </definition>
     
+    
+
     <definition name="view_incoming_bags" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/view_incoming_bags.jsp"/>
     </definition>
@@ -353,6 +362,18 @@
     </definition>
     
     <definition name="view_worldtracerafviewraw" path="/pages/worldtracer/worldtracer_viewaf_rawinc.jsp">
+    </definition>
+    
+    <definition name="view_worldtracerahl" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_viewahl.jsp"/>
+    </definition>
+    
+    <definition name="view_worldtracerohd" extends="user_menu">
+    	<put name="center" value="/pages/worldtracer/worldtracer_viewohd.jsp"/>
+    </definition>
+    
+    <definition name="view_worldtracersearch" extends="user_menu">
+        <put name="center"   value="/pages/worldtracer/worldtracer_search.jsp"/>
     </definition>
     
     <definition name="view_worldtracerfwd" extends="user_menu">
@@ -756,6 +777,11 @@
     
     <definition name="ajax_toggle" path="/pages/ajax_divs/blank.jsp">
     </definition>
+    
+    
+ 	<definition name="forwardDisplayOc" path="/pages/onlineclaims/view_online_claim.jsp" >
+    </definition>
+    
 	
 	<definition name="dispute_resolution" extends="user_menu">
         <put name="center"   value="/pages/dispute/dispute_resolution.jsp"/>

@@ -3,6 +3,7 @@ package com.bagnet.clients.us;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -49,7 +50,7 @@ public class ForwardIntegrationImpl {
 				ArrayList<Segment> s = new ArrayList<Segment>();
 				f.setSegments(s);
 
-				for (OHD_Log_Itinerary i : (List<OHD_Log_Itinerary>) log.getItinerary()) {
+				for (OHD_Log_Itinerary i : (Set<OHD_Log_Itinerary>) log.getItinerary()) {
 					Segment seg = new Segment();
 					s.add(seg);
 
@@ -153,7 +154,9 @@ public class ForwardIntegrationImpl {
 			ObjectMessage message = s.createObjectMessage(payload);
 
 			// Step 8. Send the Message
+			logger.info("About to send message...");
 			producer.send(message);
+			logger.info("Message sent...");
 
 			Thread.sleep(10 * 1000);
 		} catch (Exception e) {

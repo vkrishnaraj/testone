@@ -128,11 +128,11 @@ function updatePagination() {
 								<c:param name="incident_ID" value="${actionData.incident_id}" />
 							</c:url>
 							<bean:message key="nettracer.id" />:&nbsp;<a href="${incidentLink}">${actionData.incident_id}</a>
-							<br /><bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_incident_id}
+							<br /><bean:message key="worldtracer.id" />:&nbsp;<a href="worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}">${actionData.wt_incident_id}</a>
 						</c:when>
 						<c:when test="${!empty actionData.wt_incident_id}">
 						<bean:message key="worldtracer.id" />:&nbsp;
-						<a href="searchIncident.do?wt_id=${actionData.wt_incident_id}">${actionData.wt_incident_id}</a>
+						<a href="worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}">${actionData.wt_incident_id}</a>
             
 						</c:when>
 						<c:otherwise>
@@ -152,13 +152,13 @@ function updatePagination() {
 								</c:url>
 								<bean:message key="nettracer.id" />:&nbsp;<a href="${ohdLink}">${actionData.ohd_id}</a>
 								<br />
-								<bean:message key="worldtracer.id" />:&nbsp;${actionData.wt_ohd_id}
+								<bean:message key="worldtracer.id" />:&nbsp;<a href="worldtraceraf.do?rawtext=1&ohd_id=${actionData.wt_ohd_id}">${actionData.wt_ohd_id}</a>
 								<br />
 							<a href="worldtracerroh.do?wt_ohd_id=${actionData.wt_ohd_id}&wt_ahl_id=${actionData.wt_incident_id}"><bean:message key="wt.request.ohd"/></a>
 						</c:when>
 							<c:when test="${!empty actionData.wt_ohd_id}">
 								<bean:message key="worldtracer.id" />:&nbsp;
-						<a href="addOnHandBag.do?wt_id=${actionData.wt_ohd_id}">${actionData.wt_ohd_id}</a>
+						<a href="worldtraceraf.do?rawtext=1&ohd_id=${actionData.wt_ohd_id}">${actionData.wt_ohd_id}</a>
 						<br />
 						<a href="worldtracerroh.do?wt_ohd_id=${actionData.wt_ohd_id}&wt_ahl_id=${actionData.wt_incident_id}"><bean:message key="wt.request.ohd"/></a>
 							</c:when>

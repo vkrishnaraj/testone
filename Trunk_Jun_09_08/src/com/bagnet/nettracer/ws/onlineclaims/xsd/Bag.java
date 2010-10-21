@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Bag extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Bag.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s22E3371877B6C8D402820A2D564F0E64").resolveHandle("bagbf05type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Bag.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("bagbf05type");
     
     /**
      * Gets the "bagArrive" element

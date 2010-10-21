@@ -727,16 +727,16 @@ used with JMX monitors.
     <defaultCache
             maxElementsInMemory="20000"
             eternal="false"
-            timeToIdleSeconds="120"
-            timeToLiveSeconds="120"
+            timeToIdleSeconds="600"
+            timeToLiveSeconds="600"
             overflowToDisk="true"
             diskSpoolBufferSizeMB="30"
             maxElementsOnDisk="10000000"
             diskPersistent="false"
-            diskExpiryThreadIntervalSeconds="120"
+            diskExpiryThreadIntervalSeconds="600"
             memoryStoreEvictionPolicy="LRU"
             />
-
+<!-- 
 <cache
     name="com.bagnet.nettracer.tracing.db.UserGroup"
     maxElementsInMemory="50"
@@ -779,6 +779,7 @@ used with JMX monitors.
      timeToLiveSeconds="600"
      overflowToDisk="true"
  />
+  -->
     <!--
     Sample caches. Following are some example caches. Remove these before use.
     -->

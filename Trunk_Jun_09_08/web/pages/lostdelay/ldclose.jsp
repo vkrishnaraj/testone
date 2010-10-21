@@ -203,7 +203,7 @@
                 		   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)){
                   %>
                   
-                    <html:submit property="doclosewt" styleId="button">
+                    <html:submit property="doclosewt" styleId="wtbutton">
                       <bean:message key="button.closetoWT" />
                     </html:submit>
                   <%

@@ -6,7 +6,6 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="deliverco_station"
- * @hibernate.cache usage="read-write"
  */
 public class DeliverCo_Station implements Serializable {
 	private int deliverco_station_ID;

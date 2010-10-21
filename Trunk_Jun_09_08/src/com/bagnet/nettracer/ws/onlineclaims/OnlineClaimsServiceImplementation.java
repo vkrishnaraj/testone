@@ -12,8 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.transaction.Transaction;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
@@ -87,10 +85,12 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 				} 
 			} catch (Exception e) {
 				// Ignore Authorization Exception
+				e.printStackTrace();
 			} finally {
 				sess.close();
 			}
 		}
+		logger.info("Response: \n" + res);
 		return res;
 	}
 
@@ -110,6 +110,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 	 * @param authAdminUser
 	 */
 	public com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument authAdminUser(com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument authAdminUser) {
+		logger.info("Auth admin user: \n" + authAdminUser);
 		NtAuth auth = authAdminUser.getAuthAdminUser().getAuth();
 		authenticate(auth);
 
@@ -132,6 +133,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 
 		AuthAdminUserResponseDocument res = AuthAdminUserResponseDocument.Factory.newInstance();
 		res.addNewAuthAdminUserResponse().setReturn(value);
+		logger.info("Response: \n" + res);
 		return res;
 
 	}
@@ -142,6 +144,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 	 * @param authPassenger
 	 */
 	public com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument authPassenger(com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument authPassenger) {
+		logger.info("Auth passenger user: \n" + authPassenger);
 		NtAuth auth = authPassenger.getAuthPassenger().getAuth();
 		authenticate(auth);
 
@@ -182,7 +185,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 		pv.setClaimId(claimId);
 		pv.setData(pvData);
 		pv.setAuthenticationSuccess(authSuccess);
-
+		logger.info("Response: \n" + res);
 		return res;
 
 	}
@@ -193,6 +196,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 	 * @throws AuthorizationException 
 	 */
 	public com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument loadClaim(com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument loadClaim) {
+		logger.info("Load claim: \n" + loadClaim);
 		NtAuth auth = loadClaim.getLoadClaim().getAuth();
 		authenticate(auth);
 
@@ -241,7 +245,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 				sess.close();
 			}
 		}
-		
+		logger.info("Response: \n" + res);
 		return res;
 		
 	}

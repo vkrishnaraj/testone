@@ -55,6 +55,17 @@
         }
      	
     }
+
+     function confirmWt() {
+         <% if (!PropertyBMO.isTrue("confirm.wt.inc.action")) { %>
+         	return true;
+         <% } else { %>
+         	if (confirm("<bean:message key='confirm.wt.inc.action' />")) {
+             	return true;
+         	}
+         	return false;
+         <% } %>
+     }
     
     function enableButtons() {
      if(document.incidentForm.saveButton) {
@@ -632,8 +643,8 @@
 					<c:if test="${(incidentForm.wt_id == '') || (incidentForm.wt_id == null)}" > 
 					<% if (stationAss != null && stationAss.getWt_stationcode() != null && stationAss.getWt_stationcode().trim().length() > 0) { %>
 			<html:hidden property="savetowt" value="" disabled="true" />
-						<html:button styleId="button" property="savetowtButton"
-							onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.savetowt.disabled = false; this.form.submit();} else {enableButtons(); this.form.savetowt.disabled = true; return false;}">
+						<html:button styleId="wtbutton" property="savetowtButton"
+							onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false && confirmWt() != false) {this.form.savetowt.disabled = false; this.form.submit();} else {enableButtons(); this.form.savetowt.disabled = true; return false;}">
                         <bean:message key="button.savetoWT" />
                       	</html:button>
                       	<% } %>
@@ -644,7 +655,7 @@
                 %>
                     <c:if test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
 			<html:hidden property="amendWT" value="" disabled="true" />
-                      <html:button styleId="button" property="amendWTButton"
+                      <html:button styleId="wtbutton" property="amendWTButton"
 			      onclick="disableButtons(); if( validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.amendWT.disabled = false; this.form.submit();} else {enableButtons(); this.form.amendWT.disabled = true; return false;}">
                         <bean:message key="button.amendWT" />
                       </html:button>

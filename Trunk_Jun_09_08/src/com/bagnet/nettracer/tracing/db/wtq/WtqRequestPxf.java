@@ -47,7 +47,7 @@ public class WtqRequestPxf extends WtqIncidentAction {
 	private Set<String> teletypes;
 
 	
-	@Column(length=60)
+	@Column(length=3000)
 	public String getFurtherInfo() {
 		return furtherInfo;
 	}

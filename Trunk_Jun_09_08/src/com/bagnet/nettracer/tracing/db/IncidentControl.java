@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 //for westjet incidents assigned to station within
 //last 24 hours and related features
 @Entity
@@ -30,6 +33,7 @@ public class IncidentControl {
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class)
 	@JoinColumn(name = "Incident_ID", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	public Incident getIncident() {
 		return incident;
 	}

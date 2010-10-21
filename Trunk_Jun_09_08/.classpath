@@ -134,6 +134,16 @@
 	<classpathentry kind="lib" path="lib/jars/jboss-jms-api.jar"/>
 	<classpathentry kind="lib" path="lib/jars/netty.jar"/>
 	<classpathentry kind="lib" path="lib/client-us/us-crmclient.jar"/>
-		<classpathentry kind="lib" path="lib/jars/onlineclaims_schemas.jar"/>
+	<classpathentry kind="lib" path="lib/jars/onlineclaims_schemas.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/jnpserver.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/netty.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-bootstrap.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-core.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-jboss-as-integration.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-jms.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-logging.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-transports.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/jboss-jms-api.jar"/>
+	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/jboss-mc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

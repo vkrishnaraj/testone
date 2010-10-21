@@ -9,7 +9,7 @@ import java.util.Set;
  * @author Administrator
  * 
  * @hibernate.class table="UserGroup"
- * @hibernate.cache usage="read-write"
+ * 
 
  */
 public class UserGroup implements Serializable {
@@ -26,7 +26,7 @@ public class UserGroup implements Serializable {
 	 * @hibernate.set cascade="all-delete-orphan" order-by="policy_id"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.GroupComponentPolicy"
 	 * @hibernate.key column="group_id"
-	 * @hibernate.cache usage="read-write"
+	 * 
 	 * @return Returns the componentPolicies.
 	 */
 	public Set getComponentPolicies() {

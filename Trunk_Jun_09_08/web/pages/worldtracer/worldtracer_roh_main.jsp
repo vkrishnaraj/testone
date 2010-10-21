@@ -53,15 +53,15 @@
               <td><bean:message key="colname.wt_roh_ag" />:</td>
               <td><html:text property="ag" size="20" maxlength="12"/></td>
             </tr>
-            <tr>
-              <td><bean:message key="colname.wt_roh_tx" />:</td>
-              <td nowrap>
-              <html:text property="teletype_address1" size="10" maxlength="7"/>
-              <html:text property="teletype_address2" size="10" maxlength="7"/>
-              <html:text property="teletype_address3" size="10" maxlength="7"/>
-              <html:text property="teletype_address4" size="10" maxlength="7"/>
-              </td>
-            </tr>
+<!--            <tr>-->
+<!--              <td><bean:message key="colname.wt_roh_tx" />:</td>-->
+<!--              <td nowrap>-->
+<!--              <html:text property="teletype_address1" size="10" maxlength="7"/>-->
+<!--              <html:text property="teletype_address2" size="10" maxlength="7"/>-->
+<!--              <html:text property="teletype_address3" size="10" maxlength="7"/>-->
+<!--              <html:text property="teletype_address4" size="10" maxlength="7"/>-->
+<!--              </td>-->
+<!--            </tr>-->
             <tr>
               <td><bean:message key="colname.wt_roh_passname" />:</td>
               <td><html:text property="lname" size="40" readonly="readonly"/></td>
@@ -72,7 +72,7 @@
               <td colspan="2" align="center">
                 <INPUT id="button" type="button" value="Back" onClick="history.back()">
                 &nbsp;
-                <html:submit styleId="button" property="save" onclick="return validatereqOHDFields(this.form);">
+                <html:submit styleId="wtbutton" property="save" onclick="return validatereqOHDFields(this.form);">
                   <bean:message key="button.request" />
                    
                 </html:submit>

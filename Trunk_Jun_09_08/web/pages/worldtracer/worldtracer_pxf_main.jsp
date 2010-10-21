@@ -134,13 +134,13 @@
 			  <th colspan="4"><bean:message key="colname.wt_pxf_message" />:</th>
             </tr>
             <tr>
-              <td colspan="4"><html:text property="furtherInfo" size="60" maxlength="55" styleClass="textfield"/></td>
+              <td colspan="4"><html:text property="furtherInfo" size="60" maxlength="3000" styleClass="textfield"/></td>
             </tr>
             <tr>
               <td colspan="4" align="center">
                 <INPUT id="button" type="button" value="Back" onClick="history.back()">
                 &nbsp;
-                <html:submit styleId="button" property="save"  onclick="return validatereqPXFFields(this.form);" >
+                <html:submit styleId="wtbutton" property="save"  onclick="return validatereqPXFFields(this.form);" >
                   <bean:message key="button.send.message" />
                 </html:submit>
               </td>

@@ -21,6 +21,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
+
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -31,15 +34,17 @@ import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.wtq.WtqEraseActionFile;
-import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
+
+import com.bagnet.nettracer.tracing.actions.SearchIncidentAction;
 
 /**
  * @author matt
@@ -87,58 +92,52 @@ public class WorldTracerAFAction extends Action {
 		/** ********* view raw ahl / ohd text ************* */
 		if (request.getParameter("ahl_id") != null
 				&& request.getParameter("rawtext") != null) {
-			Incident foundinc = WorldTracerUtils.findIncidentByWTID(request
-					.getParameter("ahl_id"), true);
-			if (foundinc == null) {
-				WorldTracerConnector wtc;
-				String result = null;
-				wtc = WorldTracerWebService.getInstance();
-				try {
-					wtc.initialize();
-					result = wtc.findAHL(request.getParameter("ahl_id"), wtc.getDto(session));
-				} catch (RuntimeException e) {
+			WorldTracerConnector wtc;
+			Ahl result = null;
+			wtc = WorldTracerWebService.getInstance();
+			try {
+				WebServiceDto dto = new WebServiceDto();
+				dto.setCronUser(false);
+				dto.setUseAvailableConnectionsIfAvailable(true);
+				result = wtc.findAHL(request.getParameter("ahl_id"), dto);
+			} catch (WorldTracerRecordNotFoundException ex) {
+				logger.error("ahl not found");
+				request.setAttribute("file_not_found", "1");
+			} catch (RuntimeException e) {
 
-					e.printStackTrace();
-				} finally {
-					wtc.logout();
-				}
-				request.setAttribute("wt_raw", result);
-			} else {
-				request.setAttribute("wt_raw_hasinc", "1");
+				e.printStackTrace();
+			} finally {
+				wtc.logout();
 			}
+			request.setAttribute("wt_raw", result);
 			request.setAttribute("wt_raw_incident", request
 					.getParameter("ahl_id"));
 			return (mapping
-					.findForward(TracingConstants.VIEW_WORLDTRACER_AF_VIEW_RAW_INC));
+					.findForward(TracingConstants.VIEW_WORLDTRACER_AHL));
+
 
 		} else if (request.getParameter("ohd_id") != null
 				&& request.getParameter("rawtext") != null) {
-			OHD foundinc = WorldTracerUtils.findOHDByWTID(request
-					.getParameter("ohd_id"));
-			if (foundinc == null) {
-				WorldTracerConnector wtc = WorldTracerWebService.getInstance();
-				String result = null;
-				try {
-					wtc.initialize();
-					result = wtc.findOHD(request.getParameter("ohd_id"), wtc.getDto(session));
-					
-				} catch (WorldTracerRecordNotFoundException ex) {
-					logger.error("ohd not found");
-				}
-				catch (RuntimeException e) {
-					logger.error("error getting wt ohd", e);
-				} finally {
-					wtc.logout();
-				}
+			WorldTracerConnector wtc = WorldTracerWebService.getInstance();
+			Ohd result = null;
+			try {
+				wtc.initialize();
+				result = wtc.findOHD(request.getParameter("ohd_id"), wtc.getDto(session));
 
-				request.setAttribute("wt_raw", result);
-			} else {
-				request.setAttribute("wt_raw_hasinc", "1");
+			} catch (WorldTracerRecordNotFoundException ex) {
+				logger.error("ohd not found");
+				request.setAttribute("file_not_found", "1");
+			}
+			catch (RuntimeException e) {
+				logger.error("error getting wt ohd", e);
+			} finally {
+				wtc.logout();
 			}
 
+			request.setAttribute("wt_raw", result);
 			request.setAttribute("wt_raw_ohd", request.getParameter("ohd_id"));
 			return (mapping
-					.findForward(TracingConstants.VIEW_WORLDTRACER_AF_VIEW_RAW_INC));
+					.findForward(TracingConstants.VIEW_WORLDTRACER_OHD));
 		}
 
 		// if got here and still no action, default to viewaction

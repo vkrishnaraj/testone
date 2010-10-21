@@ -71,7 +71,8 @@ public class PropertyBMO {
 	public static final String CUSTOM_MISSING_RECEIPT_FILES = "custom.missing.receipt.files";
 	
 	public static final String PROPERTY_BDO_CANCEL_EMAIL_ALERT = "bdo.cancle.email.alert";
-	
+	public static final String PROPERTY_BAG_ITIN_NOT_REQUIRED = "bag.itin.not.required";
+
 	public static final String PROPERTY_LIMIT_DAMAGED_FAULT_AIRLINE = "limit.damaged.fault.airline";	
 	public static final String PROPERTY_LIMIT_LD_FAULT_AIRLINE = "limit.ld.fault.airline";	
 	public static final String PROPERTY_LIMIT_MISSING_FAULT_AIRLINE = "limit.missing.fault.airline";

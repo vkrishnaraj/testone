@@ -566,7 +566,7 @@ public class WSCoreOHDUtil {
    */
   public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQOHD(
       com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQOHD) {
-  	
+	logger.info("Start Web Service Response...");
   	String errorMsg = "Insert OHD Failed: ";
   	
   	InsertQuickOHDResponseDocument resDoc = InsertQuickOHDResponseDocument.Factory.newInstance();
@@ -654,6 +654,7 @@ public class WSCoreOHDUtil {
 
   	// Return Response
   	res.setReturn(si);
+  	logger.info("Stop Web Service Response...");
     return resDoc;
   }
   
@@ -757,7 +758,7 @@ public class WSCoreOHDUtil {
    */
   public com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHD(
       com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD) {
-  	
+  	logger.info("Start Web Service Response...");
   	String errorMsg = "BEORN Failed: ";
   	
   	BeornOHDResponseDocument resDoc = BeornOHDResponseDocument.Factory.newInstance();
@@ -1021,6 +1022,8 @@ public class WSCoreOHDUtil {
   	
   	// Return Response
   	res.setReturn(so);
+  	
+  	logger.info("Stop Web Service Response...");
     return resDoc;
   }
   

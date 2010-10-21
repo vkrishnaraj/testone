@@ -88,7 +88,7 @@ public class OnlineClaim {
 	/*
 	 * Persist method chosen so that the item will be persisted, but never deleted.
 	 */
-	@OneToMany(mappedBy = "claim", cascade=CascadeType.PERSIST, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "claim", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<OCFile> file;

@@ -136,3 +136,33 @@ div#buttons input {
 	cursor: hand;
 	cursor: pointer;
 }
+
+
+#wtbutton {
+	background-color: #1F43AE;
+	border: 0px none;
+	height: 20px;
+	margin: 0px;
+	display: inline;
+
+	font-size:11px;
+	font-weight:bold;
+	color: #FFFFFF;
+	cursor: hand;
+	cursor: pointer;
+}
+
+
+#wtbutton {
+	background-color: #FF00AA;
+	border: 0px none;
+	height: 20px;
+	margin: 0px;
+	display: inline;
+
+	font-size:11px;
+	font-weight:bold;
+	color: #FFFFFF;
+	cursor: hand;
+	cursor: pointer;
+}

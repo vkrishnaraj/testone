@@ -14,7 +14,13 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 
 
   
-  <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
+  
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%><jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
+ 
+ String.prototype.trim = function () {
+    return this.replace(/^\s*/, "").replace(/\s*$/, "");
+ }
+ 
  
  function  validatereqOHDFields(form) {
  
@@ -157,11 +163,11 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	        alert("<%= (String)bundle.getString( "colname.street_addr") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 	        currentElement.focus();
 	        return false;
+	      } else {
+	        var left = currentElementName.indexOf("[");
+	        var right = currentElementName.indexOf("]");
+	        addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));	      
 	      }
-	  } else if (currentElementName.indexOf("address1") != -1) {
-        var left = currentElementName.indexOf("[");
-        var right = currentElementName.indexOf("]");
-        addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
       } else if (currentElementName.indexOf("city") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
@@ -282,20 +288,17 @@ ResourceBundle bundle = ResourceBundle.getBundle(
           return false;
         }
       }
-      else if (currentElementName.indexOf("].remarktext") != -1) {  
-      	  isRemarkAbsent = false;
-          if (currentElement.value.length == 0 && form.remarkEnteredWhenNotifiedOfRequirements.value != 'false')
-          {
-            alert('<%= (String)bundle.getString("explanatory.remark") + " " + (String)bundle.getString("error.validation.isRequired") %>');
-            currentElement.focus();
-            return false;
-          }
+      
+      else if (currentElementName.indexOf("].remarktext") != -1 
+      && currentElementName.indexOf("].remarktext2") < 0
+      && currentElement.value.length > 0){
+        isRemarkAbsent = false;
       }
     } 
     
-    if (form.remarkEnteredWhenNotifiedOfRequirements.value != 'false' && isRemarkAbsent ) {
-	alert('<%= (String)bundle.getString("explanatory.remark") + " " + (String)bundle.getString("error.validation.isRequired") %>');
-	return false; 	
+    if (form.remarkEnteredWhenNotifiedOfRequirements.value != 'false' && isRemarkAbsent && checkContentCount(bagIndices) == false){
+    	alert('<%= (String)bundle.getString("explanatory.remark") + " " + (String)bundle.getString("error.validation.isRequired") %>');
+		return false; 
     }
     
     
@@ -325,6 +328,17 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   function validatereqOHDForm(form) {
     returnValue = true;
     var addressIndices = [];
+    
+    
+    for (var j=0;j < form.length; j++) {
+      currentElement = form.elements[j];
+      if (currentElement.name == "status.status_ID") {
+        statusId = currentElement.options[currentElement.selectedIndex].value;
+        if (statusId == <%= TracingConstants.OHD_STATUS_CLOSED %>) {
+          return true;
+        }
+      }
+    }
     
     returnValue = validatereqWtOHDForm(form);
     if (returnValue == false) { return returnValue; }
@@ -530,3 +544,21 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   function checkOhdDeleteCount() {
 	  return true;
 	}
+  function checkContentCount(bi){
+      
+      inputs = document.getElementsByTagName("input");
+	  var invCount = 0;
+	  var ret = true;
+	  for (var j = 0; j < bi.length; j++){
+	  	invCount = 0;
+	  	for(i = 0; i < inputs.length; i++) {
+	   	  if(inputs[i].name.indexOf("deleteinventory_" + bi[j]) == 0) {
+	      	invCount ++;
+	      } 
+	    }
+	    if(invCount < 3){
+	    	ret = false;
+	    }
+	  }
+	  return ret;
+  }

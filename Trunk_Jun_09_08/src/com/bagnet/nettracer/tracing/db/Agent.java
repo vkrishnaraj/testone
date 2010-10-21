@@ -15,7 +15,6 @@ import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
  * @author Administrator
  * 
  * @hibernate.class table="Agent"
- * @hibernate.cache usage="read-write"
  */
 public class Agent implements Serializable {
 
@@ -58,7 +57,7 @@ public class Agent implements Serializable {
 	
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Work_Shift"
-	 *                        column="shift_id"
+	 *                        column="shift_id" fetch="select"
 	 * @return Returns the shift.
 	 */
 	public Work_Shift getShift() {
@@ -76,7 +75,7 @@ public class Agent implements Serializable {
 	/**
 	 * @return Returns the dateformat.
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.NTDateFormat"
-	 *                        column="dateformat_ID"
+	 *                        column="dateformat_ID" fetch="select"
 	 *  
 	 */
 	public NTDateFormat getDateformat() {
@@ -95,7 +94,7 @@ public class Agent implements Serializable {
 	 * @return Returns the timeformat.
 	 * 
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.NTTimeFormat"
-	 *                        column="timeformat_ID"
+	 *                        column="timeformat_ID" fetch="select"
 	 */
 	public NTTimeFormat getTimeformat() {
 		return timeformat;

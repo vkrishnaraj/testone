@@ -6,7 +6,6 @@ import java.io.Serializable;
  * @author Administrator
  * 
  * @hibernate.class table="deliver_servicelevel"
- * @hibernate.cache usage="read-write"
  */
 public class Deliver_ServiceLevel implements Serializable {
 	private int servicelevel_ID;

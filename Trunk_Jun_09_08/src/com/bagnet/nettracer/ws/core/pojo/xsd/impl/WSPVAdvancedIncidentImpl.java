@@ -19,23 +19,123 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         super(sType);
     }
     
-    private static final javax.xml.namespace.QName COMMENTS$0 = 
+    private static final javax.xml.namespace.QName CANCREATECLAIM$0 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "canCreateClaim");
+    private static final javax.xml.namespace.QName COMMENTS$2 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "comments");
-    private static final javax.xml.namespace.QName COMPANYCODEID$2 = 
+    private static final javax.xml.namespace.QName COMPANYCODEID$4 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "companycode_id");
-    private static final javax.xml.namespace.QName DISPCREATETIME$4 = 
+    private static final javax.xml.namespace.QName CREATEDATE$6 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "createdate");
+    private static final javax.xml.namespace.QName DISPCREATETIME$8 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "dispcreatetime");
-    private static final javax.xml.namespace.QName ERRORCODE$6 = 
+    private static final javax.xml.namespace.QName ERRORCODE$10 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "errorcode");
-    private static final javax.xml.namespace.QName INCIDENTID$8 = 
+    private static final javax.xml.namespace.QName INCIDENTID$12 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "incident_ID");
-    private static final javax.xml.namespace.QName INCIDENTSTATUS$10 = 
+    private static final javax.xml.namespace.QName INCIDENTSTATUS$14 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "incident_status");
-    private static final javax.xml.namespace.QName ITEMS$12 = 
+    private static final javax.xml.namespace.QName ITEMTYPE$16 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "itemType");
+    private static final javax.xml.namespace.QName ITEMS$18 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "items");
-    private static final javax.xml.namespace.QName PASSENGERS$14 = 
+    private static final javax.xml.namespace.QName PASSENGERS$20 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "passengers");
+    private static final javax.xml.namespace.QName SCANS$22 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "scans");
     
+    
+    /**
+     * Gets the "canCreateClaim" element
+     */
+    public boolean getCanCreateClaim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CANCREATECLAIM$0, 0);
+            if (target == null)
+            {
+                return false;
+            }
+            return target.getBooleanValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "canCreateClaim" element
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetCanCreateClaim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(CANCREATECLAIM$0, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "canCreateClaim" element
+     */
+    public boolean isSetCanCreateClaim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(CANCREATECLAIM$0) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "canCreateClaim" element
+     */
+    public void setCanCreateClaim(boolean canCreateClaim)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CANCREATECLAIM$0, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CANCREATECLAIM$0);
+            }
+            target.setBooleanValue(canCreateClaim);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "canCreateClaim" element
+     */
+    public void xsetCanCreateClaim(org.apache.xmlbeans.XmlBoolean canCreateClaim)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(CANCREATECLAIM$0, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(CANCREATECLAIM$0);
+            }
+            target.set(canCreateClaim);
+        }
+    }
+    
+    /**
+     * Unsets the "canCreateClaim" element
+     */
+    public void unsetCanCreateClaim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(CANCREATECLAIM$0, 0);
+        }
+    }
     
     /**
      * Gets the "comments" element
@@ -46,7 +146,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMMENTS$0, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMMENTS$2, 0);
             if (target == null)
             {
                 return null;
@@ -64,7 +164,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$2, 0);
             return target;
         }
     }
@@ -78,7 +178,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$2, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -92,7 +192,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(COMMENTS$0) != 0;
+            return get_store().count_elements(COMMENTS$2) != 0;
         }
     }
     
@@ -105,10 +205,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMMENTS$0, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMMENTS$2, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(COMMENTS$0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(COMMENTS$2);
             }
             target.setStringValue(comments);
         }
@@ -123,10 +223,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$2, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMMENTS$0);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMMENTS$2);
             }
             target.set(comments);
         }
@@ -141,10 +241,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMMENTS$2, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMMENTS$0);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMMENTS$2);
             }
             target.setNil();
         }
@@ -158,7 +258,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(COMMENTS$0, 0);
+            get_store().remove_element(COMMENTS$2, 0);
         }
     }
     
@@ -171,7 +271,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMPANYCODEID$2, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMPANYCODEID$4, 0);
             if (target == null)
             {
                 return null;
@@ -189,7 +289,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$2, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$4, 0);
             return target;
         }
     }
@@ -203,7 +303,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$2, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$4, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -217,7 +317,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(COMPANYCODEID$2) != 0;
+            return get_store().count_elements(COMPANYCODEID$4) != 0;
         }
     }
     
@@ -230,10 +330,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMPANYCODEID$2, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(COMPANYCODEID$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(COMPANYCODEID$2);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(COMPANYCODEID$4);
             }
             target.setStringValue(companycodeId);
         }
@@ -248,10 +348,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$2, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMPANYCODEID$2);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMPANYCODEID$4);
             }
             target.set(companycodeId);
         }
@@ -266,10 +366,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$2, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(COMPANYCODEID$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMPANYCODEID$2);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(COMPANYCODEID$4);
             }
             target.setNil();
         }
@@ -283,7 +383,132 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(COMPANYCODEID$2, 0);
+            get_store().remove_element(COMPANYCODEID$4, 0);
+        }
+    }
+    
+    /**
+     * Gets the "createdate" element
+     */
+    public java.util.Calendar getCreatedate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CREATEDATE$6, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getCalendarValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "createdate" element
+     */
+    public org.apache.xmlbeans.XmlDateTime xgetCreatedate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(CREATEDATE$6, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "createdate" element
+     */
+    public boolean isNilCreatedate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(CREATEDATE$6, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "createdate" element
+     */
+    public boolean isSetCreatedate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(CREATEDATE$6) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "createdate" element
+     */
+    public void setCreatedate(java.util.Calendar createdate)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CREATEDATE$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CREATEDATE$6);
+            }
+            target.setCalendarValue(createdate);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "createdate" element
+     */
+    public void xsetCreatedate(org.apache.xmlbeans.XmlDateTime createdate)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(CREATEDATE$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(CREATEDATE$6);
+            }
+            target.set(createdate);
+        }
+    }
+    
+    /**
+     * Nils the "createdate" element
+     */
+    public void setNilCreatedate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(CREATEDATE$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(CREATEDATE$6);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "createdate" element
+     */
+    public void unsetCreatedate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(CREATEDATE$6, 0);
         }
     }
     
@@ -296,7 +521,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DISPCREATETIME$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DISPCREATETIME$8, 0);
             if (target == null)
             {
                 return null;
@@ -314,7 +539,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$8, 0);
             return target;
         }
     }
@@ -328,7 +553,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$8, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -342,7 +567,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(DISPCREATETIME$4) != 0;
+            return get_store().count_elements(DISPCREATETIME$8) != 0;
         }
     }
     
@@ -355,10 +580,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DISPCREATETIME$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DISPCREATETIME$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DISPCREATETIME$4);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DISPCREATETIME$8);
             }
             target.setStringValue(dispcreatetime);
         }
@@ -373,10 +598,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DISPCREATETIME$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DISPCREATETIME$8);
             }
             target.set(dispcreatetime);
         }
@@ -391,10 +616,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DISPCREATETIME$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DISPCREATETIME$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DISPCREATETIME$8);
             }
             target.setNil();
         }
@@ -408,7 +633,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(DISPCREATETIME$4, 0);
+            get_store().remove_element(DISPCREATETIME$8, 0);
         }
     }
     
@@ -421,7 +646,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ERRORCODE$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ERRORCODE$10, 0);
             if (target == null)
             {
                 return null;
@@ -439,7 +664,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$10, 0);
             return target;
         }
     }
@@ -453,7 +678,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$10, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -467,7 +692,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ERRORCODE$6) != 0;
+            return get_store().count_elements(ERRORCODE$10) != 0;
         }
     }
     
@@ -480,10 +705,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ERRORCODE$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ERRORCODE$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ERRORCODE$6);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ERRORCODE$10);
             }
             target.setStringValue(errorcode);
         }
@@ -498,10 +723,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ERRORCODE$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ERRORCODE$10);
             }
             target.set(errorcode);
         }
@@ -516,10 +741,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ERRORCODE$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ERRORCODE$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ERRORCODE$10);
             }
             target.setNil();
         }
@@ -533,7 +758,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ERRORCODE$6, 0);
+            get_store().remove_element(ERRORCODE$10, 0);
         }
     }
     
@@ -546,7 +771,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$8, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$12, 0);
             if (target == null)
             {
                 return null;
@@ -564,7 +789,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$8, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$12, 0);
             return target;
         }
     }
@@ -578,7 +803,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$8, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$12, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -592,7 +817,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(INCIDENTID$8) != 0;
+            return get_store().count_elements(INCIDENTID$12) != 0;
         }
     }
     
@@ -605,10 +830,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$8, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTID$8);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTID$12);
             }
             target.setStringValue(incidentID);
         }
@@ -623,10 +848,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$8, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$8);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$12);
             }
             target.set(incidentID);
         }
@@ -641,10 +866,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$8, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$8);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$12);
             }
             target.setNil();
         }
@@ -658,7 +883,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(INCIDENTID$8, 0);
+            get_store().remove_element(INCIDENTID$12, 0);
         }
     }
     
@@ -671,7 +896,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTSTATUS$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTSTATUS$14, 0);
             if (target == null)
             {
                 return null;
@@ -689,7 +914,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$14, 0);
             return target;
         }
     }
@@ -703,7 +928,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$14, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -717,7 +942,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(INCIDENTSTATUS$10) != 0;
+            return get_store().count_elements(INCIDENTSTATUS$14) != 0;
         }
     }
     
@@ -730,10 +955,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTSTATUS$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTSTATUS$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTSTATUS$10);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTSTATUS$14);
             }
             target.setStringValue(incidentStatus);
         }
@@ -748,10 +973,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTSTATUS$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTSTATUS$14);
             }
             target.set(incidentStatus);
         }
@@ -766,10 +991,10 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTSTATUS$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTSTATUS$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTSTATUS$14);
             }
             target.setNil();
         }
@@ -783,7 +1008,99 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(INCIDENTSTATUS$10, 0);
+            get_store().remove_element(INCIDENTSTATUS$14, 0);
+        }
+    }
+    
+    /**
+     * Gets the "itemType" element
+     */
+    public int getItemType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ITEMTYPE$16, 0);
+            if (target == null)
+            {
+                return 0;
+            }
+            return target.getIntValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "itemType" element
+     */
+    public org.apache.xmlbeans.XmlInt xgetItemType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(ITEMTYPE$16, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "itemType" element
+     */
+    public boolean isSetItemType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(ITEMTYPE$16) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "itemType" element
+     */
+    public void setItemType(int itemType)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ITEMTYPE$16, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ITEMTYPE$16);
+            }
+            target.setIntValue(itemType);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "itemType" element
+     */
+    public void xsetItemType(org.apache.xmlbeans.XmlInt itemType)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(ITEMTYPE$16, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(ITEMTYPE$16);
+            }
+            target.set(itemType);
+        }
+    }
+    
+    /**
+     * Unsets the "itemType" element
+     */
+    public void unsetItemType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(ITEMTYPE$16, 0);
         }
     }
     
@@ -796,7 +1113,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(ITEMS$12, targetList);
+            get_store().find_all_element_users(ITEMS$18, targetList);
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem[] result = new com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem[targetList.size()];
             targetList.toArray(result);
             return result;
@@ -812,7 +1129,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$12, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$18, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -830,7 +1147,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$12, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$18, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -847,7 +1164,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ITEMS$12);
+            return get_store().count_elements(ITEMS$18);
         }
     }
     
@@ -859,7 +1176,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(itemsArray, ITEMS$12);
+            arraySetterHelper(itemsArray, ITEMS$18);
         }
     }
     
@@ -872,7 +1189,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$12, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$18, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -890,7 +1207,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$12, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().find_element_user(ITEMS$18, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -908,7 +1225,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().insert_element_user(ITEMS$12, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().insert_element_user(ITEMS$18, i);
             return target;
         }
     }
@@ -922,7 +1239,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().add_element_user(ITEMS$12);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem)get_store().add_element_user(ITEMS$18);
             return target;
         }
     }
@@ -935,7 +1252,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ITEMS$12, i);
+            get_store().remove_element(ITEMS$18, i);
         }
     }
     
@@ -948,7 +1265,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(PASSENGERS$14, targetList);
+            get_store().find_all_element_users(PASSENGERS$20, targetList);
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger[] result = new com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger[targetList.size()];
             targetList.toArray(result);
             return result;
@@ -964,7 +1281,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$14, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$20, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -982,7 +1299,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$14, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$20, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -999,7 +1316,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PASSENGERS$14);
+            return get_store().count_elements(PASSENGERS$20);
         }
     }
     
@@ -1011,7 +1328,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(passengersArray, PASSENGERS$14);
+            arraySetterHelper(passengersArray, PASSENGERS$20);
         }
     }
     
@@ -1024,7 +1341,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$14, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$20, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -1042,7 +1359,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$14, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().find_element_user(PASSENGERS$20, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -1060,7 +1377,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().insert_element_user(PASSENGERS$14, i);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().insert_element_user(PASSENGERS$20, i);
             return target;
         }
     }
@@ -1074,7 +1391,7 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().add_element_user(PASSENGERS$14);
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger)get_store().add_element_user(PASSENGERS$20);
             return target;
         }
     }
@@ -1087,7 +1404,159 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PASSENGERS$14, i);
+            get_store().remove_element(PASSENGERS$20, i);
+        }
+    }
+    
+    /**
+     * Gets array of all "scans" elements
+     */
+    public com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] getScansArray()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            java.util.List targetList = new java.util.ArrayList();
+            get_store().find_all_element_users(SCANS$22, targetList);
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] result = new com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[targetList.size()];
+            targetList.toArray(result);
+            return result;
+        }
+    }
+    
+    /**
+     * Gets ith "scans" element
+     */
+    public com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints getScansArray(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints target = null;
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints)get_store().find_element_user(SCANS$22, i);
+            if (target == null)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil ith "scans" element
+     */
+    public boolean isNilScansArray(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints target = null;
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints)get_store().find_element_user(SCANS$22, i);
+            if (target == null)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * Returns number of "scans" element
+     */
+    public int sizeOfScansArray()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(SCANS$22);
+        }
+    }
+    
+    /**
+     * Sets array of all "scans" element
+     */
+    public void setScansArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] scansArray)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            arraySetterHelper(scansArray, SCANS$22);
+        }
+    }
+    
+    /**
+     * Sets ith "scans" element
+     */
+    public void setScansArray(int i, com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scans)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints target = null;
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints)get_store().find_element_user(SCANS$22, i);
+            if (target == null)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            target.set(scans);
+        }
+    }
+    
+    /**
+     * Nils the ith "scans" element
+     */
+    public void setNilScansArray(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints target = null;
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints)get_store().find_element_user(SCANS$22, i);
+            if (target == null)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "scans" element
+     */
+    public com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints insertNewScans(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints target = null;
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints)get_store().insert_element_user(SCANS$22, i);
+            return target;
+        }
+    }
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "scans" element
+     */
+    public com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints addNewScans()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints target = null;
+            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints)get_store().add_element_user(SCANS$22);
+            return target;
+        }
+    }
+    
+    /**
+     * Removes the ith "scans" element
+     */
+    public void removeScans(int i)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(SCANS$22, i);
         }
     }
 }

@@ -24,6 +24,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.wtq.WtqRequestOhd;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
@@ -80,7 +81,8 @@ public class WorldTracerROHAction extends Action {
 				String as = ahl_id.substring(0, 3).toUpperCase();
 				String aa = ahl_id.substring(3, 5).toUpperCase();
 				if (!aa.equals(user.getCompanycode_ID())
-				    || !as.equals(user.getStation().getWt_stationcode())) {
+//				    || !as.equals(user.getStation().getWt_stationcode())
+				    ) {
 					ActionMessage error = new ActionMessage(
 					    "error.wt_err_invalid_ahl_id_same_station");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -124,6 +126,22 @@ public class WorldTracerROHAction extends Action {
 					}
 				}
 			}
+			
+			if (request.getParameter("incident_id") != null && request.getParameter("incident_id").length() > 0){
+				Incident i = IncidentUtils.findIncidentByID(request.getParameter("incident_id"));
+				if (i != null && i.getWt_id() != null && i.getWt_id().length() == 10){
+					dForm.set("wt_ahl_id", i.getWt_id());
+					if (i.getPassenger_list() != null){
+						for (Passenger pax : i.getPassenger_list()) {
+							if (pax.getLastname() != null
+							    && pax.getLastname().trim().length() > 0) {
+								dForm.set("lname", pax.getLastname().trim());
+							}
+						}
+					}
+				}
+			}
+			
 			dForm.set("ag", user.getUsername() + "/" + user.getCompanycode_ID());
 		}
 

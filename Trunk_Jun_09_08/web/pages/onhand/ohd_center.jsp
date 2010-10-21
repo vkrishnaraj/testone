@@ -353,7 +353,13 @@ function gotoHistoricalReport() {
         %>
         <logic:notEqual name="OnHandForm" property="wt_id" value="">
                         &nbsp;|&nbsp;
-            <a href="worldtracerroh.do?wt_id=${OnHandForm.wt_id}"><bean:message key="wt.request.ohd"/></a>
+                        
+            <c:if test="${!empty OnHandForm.matched_incident}" >
+            <a href="worldtracerroh.do?wt_ohd_id=${OnHandForm.wt_id}&incident=${OnHandForm.matched_incident}"><bean:message key="wt.request.ohd"/></a>
+        	</c:if>
+        	<c:if test="${empty OnHandForm.matched_incident}" >
+        	   <a href="worldtracerroh.do?wt_ohd_id=${OnHandForm.wt_id}"><bean:message key="wt.request.ohd"/></a>
+        	</c:if>
         </logic:notEqual>
         <%
            }
@@ -377,7 +383,7 @@ function gotoHistoricalReport() {
       	if(a.getCompanycode_ID().equals(onHandForm.getHolding_company())) {
       		%>
       <br />
-        WorldTracer ID: <a href="worldtraceraf.do?ohd_id=${OnHandForm.wt_id}">
+        WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}">
         <c:out value="${OnHandForm.wt_id}" /></a>
 
 
@@ -459,9 +465,14 @@ function gotoHistoricalReport() {
       %>
    
 <c:if test="${!empty OnHandForm.wt_id }">
-        WorldTracer ID: <a href="worldtraceraf.do?ohd_id=${OnHandForm.wt_id}">
+        WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}">
         <c:out value="${OnHandForm.wt_id}" /></a>
+        <c:if test="${OnHandForm.wtFile.wt_status != 'SUSPENDED' && OnHandForm.wtFile.wt_status != 'ACTIVE'}">
+		<br/>
+		<bean:message key="wt.ohd.closed" />
+		</c:if>
 </c:if>
+
 <%} %>
 
       <%
@@ -1317,7 +1328,7 @@ function gotoHistoricalReport() {
 		%>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-	                  <html:submit property="savetowt" styleId="button" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
+	                  <html:submit property="savetowt" styleId="wtbutton" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
 	                    <bean:message key="button.savetoWT" />
 	                  </html:submit>
 	                </logic:notEqual>
@@ -1329,7 +1340,7 @@ function gotoHistoricalReport() {
 	            %>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-	                  <html:submit property="amendtowt" styleId="button" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
+	                  <html:submit property="amendtowt" styleId="wtbutton" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
 	                    <bean:message key="button.amendWT" />
 	                  </html:submit>
 	                </logic:notEqual>

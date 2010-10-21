@@ -17,6 +17,7 @@ public class ScannerDataDTO {
 	private String string4;
 	private String ohdId;
 	private Calendar timestamp;
+	private String tag;
 	
 	public Calendar getTimestamp() {
 		return timestamp;
@@ -28,7 +29,7 @@ public class ScannerDataDTO {
 
 	public ScannerDataDTO() {};
 	
-	public ScannerDataDTO (String timeStamp, String station, String scanType, String otherInfo, String ohdId) {
+	public ScannerDataDTO (String tag, String timeStamp, String station, String scanType, String otherInfo, String ohdId) {
 		this.setString1(timeStamp);
 		this.setString2(station);
 		this.setString3(scanType);
@@ -36,7 +37,8 @@ public class ScannerDataDTO {
 		this.setOhdId(ohdId);
 	}
 	
-	public ScannerDataDTO (String timeStamp, String station, String scanType, String otherInfo, String ohdId, Calendar time) {
+	public ScannerDataDTO (String tag, String timeStamp, String station, String scanType, String otherInfo, String ohdId, Calendar time) {
+		this.setTag(tag);
 		this.setString1(timeStamp);
 		this.setString2(station);
 		this.setString3(scanType);
@@ -113,6 +115,14 @@ public class ScannerDataDTO {
 	 */
 	public void setOhdId(String ohdId) {
 		this.ohdId = ohdId;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 	
 		

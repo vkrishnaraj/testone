@@ -155,6 +155,7 @@ width:expression(60 + "px");
           </logic:empty>
           <table class="form2" cellspacing="0" cellpadding="0" width="500">
             <tr>
+              <td width="60"><b><bean:message key="scanner.tag" /></b></td>
               <td width="120"><b><bean:message key="scanner.string1" /></b></td>
               <td width="60"><b><bean:message key="scanner.string2" /></b></td>
               <td width="60"><b><bean:message key="scanner.string3" /></b></td>
@@ -163,6 +164,14 @@ width:expression(60 + "px");
             </tr>
             <c:forEach var="scannerDTO" items="${resultList}">
               <tr>
+                <td id="str0">
+                  <c:if test='${scannerDTO.tag != null && scannerDTO.tag != ""}'>
+                    <c:out value="${scannerDTO.tag}" />
+                  </c:if>
+                  <c:if test='${scannerDTO.string1 == null && scannerDTO.string1 == ""}'>
+                    &nbsp;
+                  </c:if>
+                </td>
                 <td id="str1">
                   <c:if test='${scannerDTO.string1 != null && scannerDTO.string1 != ""}'>
                     <c:out value="${scannerDTO.string1}" />

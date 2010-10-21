@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 
 /**
@@ -216,7 +215,7 @@ public class Company implements Serializable {
 
 	/**
 	 * @hibernate.list cascade="save-update" inverse="true"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"  
 	 * @hibernate.index column="loss_code"
 	 * @hibernate.key column="companycode_ID"
 	 * @return Returns the irregularity_codes.

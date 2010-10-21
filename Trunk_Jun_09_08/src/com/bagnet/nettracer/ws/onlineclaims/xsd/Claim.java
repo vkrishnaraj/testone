@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s22E3371877B6C8D402820A2D564F0E64").resolveHandle("claimd979type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("claimd979type");
     
     /**
      * Gets the "accept" element
@@ -1497,6 +1497,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "status" element
      */
     void unsetStatus();
+    
+    /**
+     * Gets the "ticketNumber" element
+     */
+    java.lang.String getTicketNumber();
+    
+    /**
+     * Gets (as xml) the "ticketNumber" element
+     */
+    org.apache.xmlbeans.XmlString xgetTicketNumber();
+    
+    /**
+     * Tests for nil "ticketNumber" element
+     */
+    boolean isNilTicketNumber();
+    
+    /**
+     * True if has "ticketNumber" element
+     */
+    boolean isSetTicketNumber();
+    
+    /**
+     * Sets the "ticketNumber" element
+     */
+    void setTicketNumber(java.lang.String ticketNumber);
+    
+    /**
+     * Sets (as xml) the "ticketNumber" element
+     */
+    void xsetTicketNumber(org.apache.xmlbeans.XmlString ticketNumber);
+    
+    /**
+     * Nils the "ticketNumber" element
+     */
+    void setNilTicketNumber();
+    
+    /**
+     * Unsets the "ticketNumber" element
+     */
+    void unsetTicketNumber();
     
     /**
      * Gets the "ticketWithAnotherAirline" element

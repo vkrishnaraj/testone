@@ -190,24 +190,34 @@ public class IncidentUtils {
 	}
 	
 	public static ItemType retrieveItemTypeWithDesc(String desc) {
-		Session sess = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(ItemType.class);
-			cri.add(Expression.like("description", desc));
-			return (ItemType) cri.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		ItemType retVal = new ItemType();
+		
+		if (desc.equalsIgnoreCase("Delayed")) {
+			retVal.setItemType_ID(1);
+		} else if (desc.equalsIgnoreCase("Pilfered")) {
+			retVal.setItemType_ID(2);
+		} else if (desc.equalsIgnoreCase("Damaged")) {
+			retVal.setItemType_ID(3);
 		}
+		return retVal;
+//		Session sess = null;
+//		try {
+//			sess = HibernateWrapper.getSession().openSession();
+//			Criteria cri = sess.createCriteria(ItemType.class);
+//			cri.add(Expression.like("description", desc));
+//			return (ItemType) cri.list().get(0);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return null;
+//		} finally {
+//			if (sess != null) {
+//				try {
+//					sess.close();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 	}
 
 	/**

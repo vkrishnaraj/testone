@@ -13,7 +13,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils" %>
 <%@ page import="java.util.List" %>
 
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+
+<%@page import="com.bagnet.nettracer.tracing.db.audit.Audit_Incident"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -224,7 +225,8 @@ function updatePagination() {
                   :
                   <bean:write name="audit_incident" property="dispmodify_time" />
                   (
-                  <bean:write name="audit_incident" property="modify_agent.username" />
+<% if (((Audit_Incident)audit_incident).getModify_agent() != null) { out.println(((Audit_Incident)audit_incident).getModify_agent().getUsername()); } else {out.println("Customer");}%>
+                  
                   )
                 </strong>
               </td>

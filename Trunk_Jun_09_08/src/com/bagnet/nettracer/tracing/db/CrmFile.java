@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -41,6 +43,7 @@ public class CrmFile {
 
 	@OneToOne
 	@JoinColumn(name = "incident_id")
+	@Fetch(FetchMode.SELECT)
 	public Incident getIncident() {
 		return incident;
 	}

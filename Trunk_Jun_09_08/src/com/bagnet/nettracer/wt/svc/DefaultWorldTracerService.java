@@ -53,6 +53,7 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.wt.WTIncident;
 import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.connector.CaptchaException;
 import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
@@ -271,19 +272,27 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.IMPORT_AHL)
 	public Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
-		String result = wtConnector.findAHL(wt_id, dto);
-		//Incident foundinc = WTIncident.parseWTIncident(result, status, user);
-		Incident foundinc = WTIncident.parseWTIncident(result, status, user);
-		return foundinc;
+//		String result = wtConnector.findAHL(wt_id, dto);
+//		//Incident foundinc = WTIncident.parseWTIncident(result, status, user);
+//		Incident foundinc = WTIncident.parseWTIncident(result, status, user);
+//		return foundinc;
+		if(true){
+			throw new WorldTracerRecordNotFoundException();
+		}
+		return null;
 	}
 
 	@WorldTracerTx(type = TxType.IMPORT_OHD)
 	public OHD getOhdforOhd(String wt_id, WTStatus status, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
-		String result = wtConnector.findOHD(wt_id, dto);
-		// for now show all as active
-		//OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
-		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, user);
-		return foundohd;
+//		String result = wtConnector.findOHD(wt_id, dto);
+//		// for now show all as active
+//		//OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE);
+//		OHD foundohd = WTOHD.parseWTOHD(result, WTStatus.ACTIVE, user);
+		
+		if(true){
+			throw new WorldTracerRecordNotFoundException();
+		}
+		return null;
 	}
 
 	@WorldTracerTx(type = TxType.FWD_OHD)

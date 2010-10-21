@@ -2,7 +2,7 @@ function createShims() {
 	var ieULs = document.getElementById("menuList").getElementsByTagName('ul');
 	var footerDiv = document.getElementById("footer");
 	for (j=0; j<ieULs.length; j++) {
-		if (ieULs[j].id == "menubuilder0" || ieULs[j].id == "menubuilder7" || ieULs[j].id == "menubuilder8"  ) {
+		if (ieULs[j].id == "menubuilder0" || ieULs[j].id == "menubuilder4" || ieULs[j].id == "menubuilder6" || ieULs[j].id == "menubuilder7" || ieULs[j].id == "menubuilder8" || ieULs[j].id == "menubuilder9" || ieULs[j].id == "menubuilder10" ) {
 			var ieMat=document.createElement('iframe');
 			ieMat.src="javascript:false";
 

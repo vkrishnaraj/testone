@@ -389,6 +389,8 @@ public class MissingAction extends CheckedAction {
 			}
 
 			if (error == null) {
+				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
+				theform.setNotifiedOfRequirements(false);
 				request.setAttribute("missingarticles", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
 				

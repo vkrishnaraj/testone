@@ -229,13 +229,13 @@ function setReason(choose){
 					</tr>
 					<tr>
 						<td colspan=1 valign="top"><strong> <bean:message
-							key="colname.fromto" /> </strong>
+							key="colname.fromto" /><font color=red> * </font></strong>
 						</td>
 						<td colspan=1 valign="top"><strong> <bean:message
-							key="colname.flightnum" /> </strong>
+							key="colname.flightnum" /><font color=red> * </font> </strong>
 						</td>
 						<td colspan=1 nowrap><strong> <bean:message
-							key="colname.departdate" /><br>
+							key="colname.departdate" /><font color=red> * </font><br>
 						( <%=a.getDateformat().getFormat()%>) </strong>
 						</td>
 					</tr>
@@ -283,7 +283,7 @@ function setReason(choose){
 
             <tr>
 				<td colspan="1"><bean:message key="Tag_Number" />
-				:</td>
+				<font color=red> * </font>:</td>
 				<td colspan="3"><html:text name="worldTracerFWDForm"
 					property="bagtag" size="20" maxlength="10" /></td>
 			</tr>
@@ -334,7 +334,7 @@ function setReason(choose){
 					property="supplementary_information" size="57" maxlength="56" /></td>
 			</tr>
 			<tr>
-				<td colspan="4"><bean:message key="Teletype_Address" />:</td>
+				<td colspan="4"><bean:message key="Teletype_Address" /><font color=red> * </font>:</td>
 			</tr>
 			<tr>
 				<td><html:text name="worldTracerFWDForm"
@@ -349,7 +349,7 @@ function setReason(choose){
 			<tr>
 				<td colspan="4" align="center"><INPUT type="button" Id="button"
 					value="Back" onClick="history.back()"> &nbsp; <html:submit
-					styleId="button" property="save" onclick="return validateWtFwd(this.form);" >
+					styleId="wtbutton" property="save" onclick="return validateWtFwd(this.form);" >
 					<bean:message key="button.forward" />
 				</html:submit></td>
 			</tr>

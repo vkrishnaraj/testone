@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.ws.passengerview;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import com.bagnet.nettracer.tracing.bmo.CustomerViewableCommentBMO;
@@ -229,6 +231,10 @@ public class PassengerViewUtil {
 
 			si.setIncidentID(iDTO.getIncident_ID());
 			si.setDispcreatetime(iDTO.getDisplaydate());
+			Calendar createCal = new GregorianCalendar();
+			createCal.setTime(iDTO.getCreatedate());
+			si.setCreatedate(createCal);
+			si.setItemType(iDTO.getItemtype_ID());
 			si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
 
 			Item item = null;

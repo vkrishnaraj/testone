@@ -611,6 +611,7 @@ public class MBRActionUtils {
 					item.setOHD_ID("");
 					item.setPhotolist(new ArrayList());
 					item2 = new Item();
+					
 					BeanUtils.copyProperties(item2, item);
 					
 					//to fix a bug reported by USAIR - hibernate exception 
@@ -633,6 +634,7 @@ public class MBRActionUtils {
 
 				}
 			}
+
 			theform.setItemlist(al);
 
 			// clear remarks id

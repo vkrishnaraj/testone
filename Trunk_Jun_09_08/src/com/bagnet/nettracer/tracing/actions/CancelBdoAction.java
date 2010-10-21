@@ -40,9 +40,8 @@ public class CancelBdoAction extends Action {
 			return null;
 		}
 		Agent user = (Agent) session.getAttribute("user");
-
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
-				+ ".do", user))
+		
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_BDO, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
 		int bdo_id = 0;

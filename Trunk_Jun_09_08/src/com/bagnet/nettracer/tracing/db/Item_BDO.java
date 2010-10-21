@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -39,6 +41,7 @@ public class Item_BDO {
 
 	@ManyToOne(targetEntity = BDO.class)
 	@JoinColumn(name = "bdo_ID", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	public BDO getBdo() {
 		return bdo;
 	}

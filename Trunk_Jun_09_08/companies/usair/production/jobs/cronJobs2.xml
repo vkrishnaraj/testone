@@ -15,6 +15,7 @@
 				<ref bean="wtAlertTrigger" />
 				<ref bean="TwentyForHourEmailTrigger" />
 				<ref bean="CrmTrigger" />
+				<ref bean="BillingTrigger" />
 			</list>
 		</property>
 	</bean>

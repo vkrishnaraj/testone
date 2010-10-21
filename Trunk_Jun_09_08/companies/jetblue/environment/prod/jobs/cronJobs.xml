@@ -14,6 +14,7 @@
 				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronOldPassiveTracerTrigger" />
 				<ref bean="cronMoveToWtTrigger" />
+				<ref bean="BillingTrigger" />
 			</list>
 		</property>
 	</bean>

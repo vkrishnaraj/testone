@@ -120,10 +120,20 @@ public class IncidentBMO {
 		
 			// save incident
 			if (iDTO.getIncident_ID() != null) {
+				
+				IncidentControl myIncidentControl;
+				
 				iDTO.setLastupdated(TracerDateTime.getGMTDate());
-				if (isnew)
+				if (isnew) {
 					sess.save(iDTO);
-				else {
+				
+					myIncidentControl = new IncidentControl();
+					myIncidentControl.setAssignedDate(iDTO.getLastupdated());
+					myIncidentControl.setIncident(iDTO);
+					sess.save(myIncidentControl);
+
+				
+				} else {
 					if (iDTO.getChecklist_version() == 0) {
 						iDTO.setChecklist_version(oldinc.getChecklist_version());
 					}
@@ -137,7 +147,30 @@ public class IncidentBMO {
 					if (oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
 						iDTO.setWtFile(oldinc.getWtFile());
 					}
+					
+					//to persist language setting
+					if (oldinc.getLanguage() != null && iDTO.getLanguage() == null) {
+						iDTO.setLanguage(oldinc.getLanguage());
+					}
 		
+					
+					if (oldinc.getStationassigned().getStation_ID() != iDTO.getStationassigned().getStation_ID()) {
+						//get the id of the IncidentControl obj
+						myIncidentControl = oldinc.getIncidentControl();
+						
+						if (myIncidentControl == null) {
+							myIncidentControl = new IncidentControl();
+							myIncidentControl.setAssignedDate(iDTO.getLastupdated());
+							myIncidentControl.setIncident(iDTO);
+							sess.save(myIncidentControl);
+						} else {
+							myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
+							//sess.saveOrUpdate(myIncidentControl);
+							sess.update(myIncidentControl);	
+						}
+					}
+
+					
 					// delete first then insert
 					sess.delete(oldinc);
 					iDTO = clearIncidentIds(iDTO);
@@ -264,7 +297,6 @@ public class IncidentBMO {
 				if (isnew) {
 					sess.save(iDTO);
 					
-					// TODO: iDTO.getNewfANGLEDdATE TO GET CURRENT GMT DATE /LASTUPDATED DATE - Byron
 					myIncidentControl = new IncidentControl();
 					myIncidentControl.setAssignedDate(iDTO.getLastupdated());
 					myIncidentControl.setIncident(iDTO);
@@ -286,14 +318,26 @@ public class IncidentBMO {
 						iDTO.setWtFile(oldinc.getWtFile());
 					}
 
+					//to persist language setting
+					if (oldinc.getLanguage() != null && iDTO.getLanguage() == null) {
+						iDTO.setLanguage(oldinc.getLanguage());
+					}
 
 					// The purpose is to allow a user to identify specific incidents that were assigned to them in a given date range.
 					if (oldinc.getStationassigned().getStation_ID() != iDTO.getStationassigned().getStation_ID()) {
 						//get the id of the IncidentControl obj
 						myIncidentControl = oldinc.getIncidentControl();
-						myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
-						//sess.saveOrUpdate(myIncidentControl);
-						sess.update(myIncidentControl);
+						
+						if (myIncidentControl == null) {
+							myIncidentControl = new IncidentControl();
+							myIncidentControl.setAssignedDate(iDTO.getLastupdated());
+							myIncidentControl.setIncident(iDTO);
+							sess.save(myIncidentControl);
+						} else {
+							myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
+							//sess.saveOrUpdate(myIncidentControl);
+							sess.update(myIncidentControl);	
+						}
 					}
 					
 					// delete first then insert

@@ -24,10 +24,11 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
-import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
+import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
@@ -48,7 +49,6 @@ import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
-import com.bagnet.nettracer.tracing.utils.IncidentCount;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
@@ -136,7 +136,7 @@ public class LogonAction extends Action {
 			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.PASS_RESET);
 		}
-		
+
 		int expiredays = agent.getStation().getCompany().getVariable().getPass_expire_days();
 		if (expiredays > 0) {
 			Date lastreset = agent.getLast_pass_reset_date();
@@ -218,13 +218,12 @@ public class LogonAction extends Action {
 	private void taskManagerSetup(HttpSession session, HttpServletRequest request) {
 
 		Agent agent = (Agent) session.getAttribute("user");
-		
+
 		ArrayList<GroupComponentPolicy> taskList = (ArrayList<GroupComponentPolicy>) session.getAttribute("userTaskList");
 		if (taskList == null) {
 			taskList = UserPermissions.getTaskManagerComponents(agent);
 			session.setAttribute("userTaskList", taskList);
 		}
-		
 
 		//	check if the cbro agent
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_VIEW, agent)) {
@@ -232,7 +231,7 @@ public class LogonAction extends Action {
 				Station station = StationBMO.getStation((String) request.getParameter("cbroStation"));
 				if (station.getCompany().getCompanyCode_ID().equals(agent.getCompanycode_ID())) {
 					session.setAttribute("cbroStationID", request.getParameter("cbroStation"));
-					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_MGMT, agent)) {				
+					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_MGMT, agent)) {
 						agent.setStation(StationBMO.getStationById(Integer.parseInt(request.getParameter("cbroStation")), agent.getCompanycode_ID()));
 					}
 				}
@@ -241,14 +240,14 @@ public class LogonAction extends Action {
 
 		if (taskList != null && agent != null) {
 			ArrayList list = new ArrayList();
-			
+
 			Station s = null;
 			if (session.getAttribute("cbroStationID") != null) {
 				s = StationBMO.getStation((String) session.getAttribute("cbroStationID"));
 			} else {
 				s = agent.getStation();
 			}
-			for (int i=0; i<taskList.size(); ++i) {
+			for (int i = 0; i < taskList.size(); ++i) {
 				GroupComponentPolicy policy = (GroupComponentPolicy) taskList.get(i);
 				ActivityDTO dto = new ActivityDTO();
 
@@ -275,7 +274,7 @@ public class LogonAction extends Action {
 					int x = ForwardNoticeBMO.getForwardsForStationCount(s, ForwardNotice.OPEN_STATUS);
 					if (x != -1)
 						entries = x;
-				}	else {
+				} else {
 					if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_BAGS_TO_LZ)) {
 						if (!s.isThisOhdLz()) {
 							int x = OHDUtils.getBagsToLZedCount(s.getStation_ID(), true);
@@ -314,8 +313,8 @@ public class LogonAction extends Action {
 													entries = x;
 											} else {
 												if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TEMPORARY_ON_HAND)) {
-													int x = ((Long) OHDUtils.getOHDs(agent, "", new ViewTemporaryOnHandsForm(), "" + TracingConstants.OHD_STATUS_TEMP,
-															"" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
+													int x = ((Long) OHDUtils.getOHDs(agent, "", new ViewTemporaryOnHandsForm(), "" + TracingConstants.OHD_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true, true).get(0))
+													    .intValue();
 													if (x != -1)
 														entries = x;
 												} else {
@@ -342,47 +341,43 @@ public class LogonAction extends Action {
 																List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true, true);
 																if (resultlist != null && resultlist.size() > 0)
 																	entries = ((Long) resultlist.get(0)).intValue();
-	
+
 															} else {
 																if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TEMPORARY_REPORTS)) {
-																	int x = ((Long) IncidentUtils.getIncidents(agent, "", new ViewTemporaryReportsForm(),
-																			"" + TracingConstants.MBR_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
+																	int x = ((Long) IncidentUtils
+																	    .getIncidents(agent, "", new ViewTemporaryReportsForm(), "" + TracingConstants.MBR_STATUS_TEMP, "" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
 																	;
 																	if (x != -1)
 																		entries = x;
 																} else {
 																	if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MASS_ON_HANDS)) {
-																		int x = ((Long) OHDUtils.getOHDsByTypeStatus(agent, "", "" + TracingConstants.MASS_OHD_TYPE,
-																				new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true, true).get(0)).intValue();
+																		int x = ((Long) OHDUtils.getOHDsByTypeStatus(agent, "", "" + TracingConstants.MASS_OHD_TYPE, new ViewMassOnHandsForm(), "" + s.getStation_ID(), 0, 0, true, true)
+																		    .get(0)).intValue();
 																		;
 																		if (x != -1)
 																			entries = x;
 																	} else {
 																		if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INTERIM_EXPENSE_REQUESTS)) {
-																			int x = ((Long) ExpenseUtils.getPendingInterimExpenses(true,
-																					s.getCompany().getCompanyCode_ID(), new InterimExpenseRequestForm(), "", 0, 0, true).get(0))
-																					.intValue();
+																			int x = ((Long) ExpenseUtils.getPendingInterimExpenses(true, s.getCompany().getCompanyCode_ID(), new InterimExpenseRequestForm(), "", 0, 0, true).get(0))
+																			    .intValue();
 																			;
 																			if (x != -1)
 																				entries = x;
 																		} else {
 																			if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CREATED_INTERIM_EXPENSE_REQUESTS)) {
-																				int x = ((Long) ExpenseUtils.getCreateInterimExpenses(true,
-																						s.getStation_ID(), new CreatedInterimExpenseRequestForm(), "", 0, 0, true).get(
-																						0)).intValue();
+																				int x = ((Long) ExpenseUtils.getCreateInterimExpenses(true, s.getStation_ID(), new CreatedInterimExpenseRequestForm(), "", 0, 0, true).get(0)).intValue();
 																				;
 																				if (x != -1)
 																					entries = x;
-																			}
-																			else {
-																				if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVED_EXPENSES)) {
+																			} else {
+																				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVED_EXPENSES)) {
 																					SearchExpenseForm form = new SearchExpenseForm();
 																					form.setStatusId(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
 																					int x = ExpensePayoutBMO.countExpenses(form, agent);
-																					if(x != -1) {
+																					if (x != -1) {
 																						entries = x;
 																					}
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION)) {
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION)) {
 																					int x = PaxCommunicationBMO.getPaxMessagesCount("" + s.getStation_ID(), "NEW", null, null, null, null, null, null, true);
 																					int highPriority = PaxCommunicationBMO.getHighPriorityPaxMessagesCount("" + s.getStation_ID(), "NEW");
 																					if (highPriority > 0) {
@@ -390,35 +385,35 @@ public class LogonAction extends Action {
 																						dto.setHighPriorityNumber(highPriority);
 																					}
 																					if (x != -1) {
-																							entries = x;
+																						entries = x;
 																					} // end if
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CAPTCHAS)) {
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CAPTCHAS)) {
 																					int x = SpecialFlagBMO.getSpecialFlagCount("captcha", true);
 																					if (x > 0) {
 																						dto.setDisplayCaptcha(true);
 																					}
 																					if (x != -1) {
 																						entries = x;
-																					} 																					
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED)) {
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED)) {
 																					//itemized 1 for delayed
 																					int x = OHDUtils.getIncomingIncidentCount(s.getStation_ID(), 1, true);
 																					if (x != -1) {
 																						entries = x;
-																					} 																					
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_PILFERAGE)) {
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_PILFERAGE)) {
 																					//itemized 2 for pilferage
 																					int x = OHDUtils.getIncomingIncidentCount(s.getStation_ID(), 2, true);
 																					if (x != -1) {
 																						entries = x;
-																					} 																					
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DAMAGED)) {
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DAMAGED)) {
 																					//itemized 3 for damaged
 																					int x = OHDUtils.getIncomingIncidentCount(s.getStation_ID(), 3, true);
 																					if (x != -1) {
 																						entries = x;
-																					} 																					
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_LAST_24_HOURS)) {
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_LAST_24_HOURS)) {
 																					//itemized 3 for damaged
 																					int x = OHDUtils.getIncomingIncidentInLast24HoursCount(s.getStation_ID(), true);
 																					if (x != -1) {
@@ -434,10 +429,24 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																
-																				} 																				
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES)) {
+																					//itemized 3 for damaged
+																					OnlineClaimsDao d = new OnlineClaimsDao();
+																					
+																					int x = d.getSubmittedCount();
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES)) {
+																					OnlineClaimsDao d = new OnlineClaimsDao();
+																					
+																					int x = d.getReviewCount(agent.getStation().getLz_ID(), agent.getStation().getStation_ID());
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				}																				
 																			}
 																		}
-																		
 																	}
 																}
 															}

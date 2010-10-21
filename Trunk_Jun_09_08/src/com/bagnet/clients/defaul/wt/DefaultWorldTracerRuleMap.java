@@ -42,7 +42,7 @@ public class DefaultWorldTracerRuleMap implements RuleMapper {
 		INC_FIELD_RULES.put(WorldTracerField.FD, new SameLineRule(1, 14, 4, Format.ALPHA_NUMERIC));
 		INC_FIELD_RULES.put(WorldTracerField.IT, new SameLineRule(1, 4, 3, Format.ALPHA));
 		INC_FIELD_RULES.put(WorldTracerField.RT, new SameLineRule(3, 3, 5, Format.ALPHA_NUMERIC));
-		INC_FIELD_RULES.put(WorldTracerField.NM, new SameLineRule(2, 16, 3, Format.ALPHA));
+		INC_FIELD_RULES.put(WorldTracerField.NM, new SameLineRule(1, 16, 3, Format.ALPHA));
 		INC_FIELD_RULES.put(WorldTracerField.PT, new BasicRule(1, 25, 1, Format.ALPHA));
 		INC_FIELD_RULES.put(WorldTracerField.PS, new BasicRule(1, 25, 1, Format.FREE_FLOW));
 		INC_FIELD_RULES.put(WorldTracerField.FL, new BasicRule(1, 25, 1, Format.ALPHA_NUMERIC));
@@ -79,7 +79,7 @@ public class DefaultWorldTracerRuleMap implements RuleMapper {
 		OHD_FIELD_RULES.put(WorldTracerField.PN, new BasicRule(1, 20, 2, Format.NUMERIC));
 		OHD_FIELD_RULES.put(WorldTracerField.TP, new BasicRule(1, 20, 2, Format.NUMERIC));
 		OHD_FIELD_RULES.put(WorldTracerField.FX, new BasicRule(1, 20, 2, Format.NUMERIC));
-		OHD_FIELD_RULES.put(WorldTracerField.NM, new SameLineRule(2, 16, 3, Format.ALPHA));
+		OHD_FIELD_RULES.put(WorldTracerField.NM, new SameLineRule(1, 16, 3, Format.ALPHA));
 		OHD_FIELD_RULES.put(WorldTracerField.EA, new EmailRule(1, 44, 1, Format.FREE_FLOW));
 		OHD_FIELD_RULES.put(WorldTracerField.SL, new BasicRule(1, 32, 1, Format.ALPHA_NUMERIC));
 		OHD_FIELD_RULES.put(WorldTracerField.BI, new BasicRule(2, 57, 1, Format.ALPHA_NUMERIC));

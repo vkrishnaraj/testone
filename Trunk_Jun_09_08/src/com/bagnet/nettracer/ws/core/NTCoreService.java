@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.ws.core;
 
+import com.bagnet.nettracer.ws.core.pojo.BdoStatusUpdate;
 import com.bagnet.nettracer.ws.core.pojo.WS_BEORN;
 import com.bagnet.nettracer.ws.core.pojo.WS_Incident;
 import com.bagnet.nettracer.ws.core.pojo.WS_OHD;
@@ -130,5 +131,9 @@ public class NTCoreService {
 	
 	public UpdateIncidentResponse updateIncidentFaultCodes(String session_id, String incidentId, String faultStation, String companyCode, int faultCode, String comment) {
 		return null;
+	}
+	
+	public boolean UpdateBdoDelivery(String username, String password, BdoStatusUpdate updates) {
+		return false;
 	}
 }

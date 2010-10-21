@@ -16,7 +16,37 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s22E3371877B6C8D402820A2D564F0E64").resolveHandle("wspvadvancedincident350dtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("wspvadvancedincident350dtype");
+    
+    /**
+     * Gets the "canCreateClaim" element
+     */
+    boolean getCanCreateClaim();
+    
+    /**
+     * Gets (as xml) the "canCreateClaim" element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetCanCreateClaim();
+    
+    /**
+     * True if has "canCreateClaim" element
+     */
+    boolean isSetCanCreateClaim();
+    
+    /**
+     * Sets the "canCreateClaim" element
+     */
+    void setCanCreateClaim(boolean canCreateClaim);
+    
+    /**
+     * Sets (as xml) the "canCreateClaim" element
+     */
+    void xsetCanCreateClaim(org.apache.xmlbeans.XmlBoolean canCreateClaim);
+    
+    /**
+     * Unsets the "canCreateClaim" element
+     */
+    void unsetCanCreateClaim();
     
     /**
      * Gets the "comments" element
@@ -97,6 +127,46 @@ public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
      * Unsets the "companycode_id" element
      */
     void unsetCompanycodeId();
+    
+    /**
+     * Gets the "createdate" element
+     */
+    java.util.Calendar getCreatedate();
+    
+    /**
+     * Gets (as xml) the "createdate" element
+     */
+    org.apache.xmlbeans.XmlDateTime xgetCreatedate();
+    
+    /**
+     * Tests for nil "createdate" element
+     */
+    boolean isNilCreatedate();
+    
+    /**
+     * True if has "createdate" element
+     */
+    boolean isSetCreatedate();
+    
+    /**
+     * Sets the "createdate" element
+     */
+    void setCreatedate(java.util.Calendar createdate);
+    
+    /**
+     * Sets (as xml) the "createdate" element
+     */
+    void xsetCreatedate(org.apache.xmlbeans.XmlDateTime createdate);
+    
+    /**
+     * Nils the "createdate" element
+     */
+    void setNilCreatedate();
+    
+    /**
+     * Unsets the "createdate" element
+     */
+    void unsetCreatedate();
     
     /**
      * Gets the "dispcreatetime" element
@@ -259,6 +329,36 @@ public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
     void unsetIncidentStatus();
     
     /**
+     * Gets the "itemType" element
+     */
+    int getItemType();
+    
+    /**
+     * Gets (as xml) the "itemType" element
+     */
+    org.apache.xmlbeans.XmlInt xgetItemType();
+    
+    /**
+     * True if has "itemType" element
+     */
+    boolean isSetItemType();
+    
+    /**
+     * Sets the "itemType" element
+     */
+    void setItemType(int itemType);
+    
+    /**
+     * Sets (as xml) the "itemType" element
+     */
+    void xsetItemType(org.apache.xmlbeans.XmlInt itemType);
+    
+    /**
+     * Unsets the "itemType" element
+     */
+    void unsetItemType();
+    
+    /**
      * Gets array of all "items" elements
      */
     com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem[] getItemsArray();
@@ -357,6 +457,56 @@ public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
      * Removes the ith "passengers" element
      */
     void removePassengers(int i);
+    
+    /**
+     * Gets array of all "scans" elements
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] getScansArray();
+    
+    /**
+     * Gets ith "scans" element
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints getScansArray(int i);
+    
+    /**
+     * Tests for nil ith "scans" element
+     */
+    boolean isNilScansArray(int i);
+    
+    /**
+     * Returns number of "scans" element
+     */
+    int sizeOfScansArray();
+    
+    /**
+     * Sets array of all "scans" element
+     */
+    void setScansArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] scansArray);
+    
+    /**
+     * Sets ith "scans" element
+     */
+    void setScansArray(int i, com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scans);
+    
+    /**
+     * Nils the ith "scans" element
+     */
+    void setNilScansArray(int i);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "scans" element
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints insertNewScans(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "scans" element
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints addNewScans();
+    
+    /**
+     * Removes the ith "scans" element
+     */
+    void removeScans(int i);
     
     /**
      * A factory class with static methods for creating instances

@@ -11,8 +11,6 @@
 				<ref bean="cronMoveToLzTrigger" />
 				<ref bean="cronNewPassiveTracerTrigger" />
 				<ref bean="RemoveMassOhdTrigger" />
-				<ref bean="BillingTrigger" />
-				<ref bean="wtAlertTrigger" />
 			</list>
 		</property>
 	</bean>

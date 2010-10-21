@@ -16,6 +16,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.dsii.bdoservice.BdoServiceStub;
@@ -169,6 +170,7 @@ public class DSI implements BDOIntegration {
 						lug.setColor(item.getColor());
 					}
 					
+					logger.info(doc);
 					SubmitBdoUpdateResponseDocument resDoc = stub.SubmitBdoUpdate(doc);
 					
 					// Success or failure
@@ -312,17 +314,39 @@ public class DSI implements BDOIntegration {
 					
 					
 					// Items
-					for (Item item: (Set<Item>)bdo.getItems()) {
+					if (bdo.getItems() != null) {
+						for (Item item: (Set<Item>)bdo.getItems()) {
+							LuggageItemType lug = bdoType.addNewLuggageItem();
+							
+							if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+								lug.setTagNumber(item.getClaimchecknum());	
+							} else {
+								lug.setTagNumber("");
+							}
+							
+							StringBuffer sb = new StringBuffer();
+							sb.append(item.getBagtype());
+							sb.append(getElementDescriptor(item.getXdescelement_ID_1()));
+							sb.append(getElementDescriptor(item.getXdescelement_ID_2()));
+							sb.append(getElementDescriptor(item.getXdescelement_ID_3()));
+			
+							lug.setType(sb.toString());
+							lug.setColor(item.getColor());
+						}
+					} else if (bdo.getOhd() != null){
+						
+						OHD item = bdo.getOhd();
+						
 						LuggageItemType lug = bdoType.addNewLuggageItem();
 						
-						if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
-							lug.setTagNumber(item.getClaimchecknum());	
+						if (item.getClaimnum() != null && item.getClaimnum().trim().length() > 0) {
+							lug.setTagNumber(item.getClaimnum());	
 						} else {
 							lug.setTagNumber("");
 						}
 						
 						StringBuffer sb = new StringBuffer();
-						sb.append(item.getBagtype());
+						sb.append(item.getType());
 						sb.append(getElementDescriptor(item.getXdescelement_ID_1()));
 						sb.append(getElementDescriptor(item.getXdescelement_ID_2()));
 						sb.append(getElementDescriptor(item.getXdescelement_ID_3()));
@@ -354,6 +378,7 @@ public class DSI implements BDOIntegration {
 				}
 	
 			} catch (Exception e) {
+				logger.error("Failure for bdo: " + bdo.getBDO_ID_ref(), e);
 				e.printStackTrace();
 				success = false;
 				responseText = TracerUtils.getText("delivercompany.integration.dsi.failure", agent);

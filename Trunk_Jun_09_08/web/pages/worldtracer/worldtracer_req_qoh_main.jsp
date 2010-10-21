@@ -57,6 +57,7 @@
               <td><bean:message key="colname.wt_roh_fi" />:</td>
               <td colspan="3"><html:text property="furtherInfo" size="60" maxlength="55" styleClass="textfield"/></td>
             </tr>
+            <!-- not implemented yet in worldtracer webservice 
             <tr>
               <td><bean:message key="colname.wt_roh_tx" />:</td>
               <td nowrap="nowrap" colspan="3">
@@ -66,6 +67,7 @@
               </td>
             </tr>
             <tr>
+            -->
               <td><bean:message key="colname.wt_roh_passname" />:</td>
               <td colspan="3"><html:text property="paxName" size="40" maxlength="38" styleClass="textfield"/></td>
             </tr>

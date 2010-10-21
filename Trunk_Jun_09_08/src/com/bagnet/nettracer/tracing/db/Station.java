@@ -237,7 +237,7 @@ public class Station implements Serializable {
 
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Company"
-	 *                        column="companycode_ID"
+	 *                        column="companycode_ID"  fetch="select"
 	 * @return Returns the company
 	 */
 	public Company getCompany() {

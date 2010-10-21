@@ -511,7 +511,9 @@ public class LostDelayAction extends CheckedAction {
 				else {
 					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);
 				}
-				if(error == null) {
+				if(error == null || (request.getParameter("doclosewt") != null && error.getKey().equals("error.unable_to_close_incident"))) {
+					theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
+					theform.setNotifiedOfRequirements(false);
 					if (theform.getOtherSystemInformation() != null && theform.getOtherSystemInformation().trim().length() >0) {
 						// Assumes this is new and that we are saving OSI for first time.
 						OtherSystemInformation osi = new OtherSystemInformation();
@@ -535,6 +537,9 @@ public class LostDelayAction extends CheckedAction {
 							
 							&& (iDTO.getWtFile() != null && iDTO.getWtFile().getWt_status() != WTStatus.CLOSED)) {
 						wtq = new WtqCloseAhl();
+						if (error != null && error.getKey().equals("error.unable_to_close_incident")) {
+							error = null;
+						}
 					}
 					if(wtq != null) {
 						wtq.setAgent(user);

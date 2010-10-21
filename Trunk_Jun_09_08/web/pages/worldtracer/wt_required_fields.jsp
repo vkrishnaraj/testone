@@ -417,3 +417,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
       }
     %>
   }
+  
+  function  validatereqPXFFields(form) {
+	     return true;
+  }

@@ -327,7 +327,7 @@ public class Item implements Serializable {
 	 * @return Returns the status.
 	 * 
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Status"
-	 *                        column="status_ID"
+	 *                        column="status_ID"  fetch="select"
 	 */
 	public Status getStatus() {
 		return status;
@@ -439,7 +439,7 @@ public class Item implements Serializable {
 	 * @return Returns the resolution.
 	 * 
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Resolution"
-	 *                        column="resolution_ID" not-null="false"
+	 *                        column="resolution_ID" not-null="false" fetch="select"
 	 */
 	public Resolution getResolution() {
 		return resolution;

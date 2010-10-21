@@ -38,10 +38,10 @@
           <table id="pageheaderright">
             <tr>
               <td>
-                <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PRORATE_RPT" scope="request"/>','ProrateReport',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
+                <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PRORATE_RPT" scope="request"/>&outputtype=0','ProrateReport',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
               </td>
               <td>
-                <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PRORATE_RPT" scope="request"/>','ProrateReport',800,600);return false;"><bean:message key="link.claim_prorate" /></a>
+                <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PRORATE_RPT" scope="request"/>&outputtype=0','ProrateReport',800,600);return false;"><bean:message key="link.claim_prorate" /></a>
               </td>
               <jsp:include page="/pages/includes/mail_incl.jsp" />
               <td>

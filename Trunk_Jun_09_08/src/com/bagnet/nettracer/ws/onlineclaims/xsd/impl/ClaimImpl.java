@@ -99,19 +99,21 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "socialSecurity");
     private static final javax.xml.namespace.QName STATUS$78 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "status");
-    private static final javax.xml.namespace.QName TICKETWITHANOTHERAIRLINE$80 = 
+    private static final javax.xml.namespace.QName TICKETNUMBER$80 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "ticketNumber");
+    private static final javax.xml.namespace.QName TICKETWITHANOTHERAIRLINE$82 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "ticketWithAnotherAirline");
-    private static final javax.xml.namespace.QName TSAINSPECTED$82 = 
+    private static final javax.xml.namespace.QName TSAINSPECTED$84 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "tsaInspected");
-    private static final javax.xml.namespace.QName TSAINSPECTIONLOCATION$84 = 
+    private static final javax.xml.namespace.QName TSAINSPECTIONLOCATION$86 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "tsaInspectionLocation");
-    private static final javax.xml.namespace.QName TSANOTEPRESENT$86 = 
+    private static final javax.xml.namespace.QName TSANOTEPRESENT$88 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "tsaNotePresent");
-    private static final javax.xml.namespace.QName WASBAGINSPECTED$88 = 
+    private static final javax.xml.namespace.QName WASBAGINSPECTED$90 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "wasBagInspected");
-    private static final javax.xml.namespace.QName WHEREDIDYOUFILEREPORT$90 = 
+    private static final javax.xml.namespace.QName WHEREDIDYOUFILEREPORT$92 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "whereDidYouFileReport");
-    private static final javax.xml.namespace.QName WHEREWASBAGGAGECHECKED$92 = 
+    private static final javax.xml.namespace.QName WHEREWASBAGGAGECHECKED$94 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "whereWasBaggageChecked");
     
     
@@ -4693,6 +4695,131 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
     }
     
     /**
+     * Gets the "ticketNumber" element
+     */
+    public java.lang.String getTicketNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TICKETNUMBER$80, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "ticketNumber" element
+     */
+    public org.apache.xmlbeans.XmlString xgetTicketNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TICKETNUMBER$80, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "ticketNumber" element
+     */
+    public boolean isNilTicketNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TICKETNUMBER$80, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "ticketNumber" element
+     */
+    public boolean isSetTicketNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(TICKETNUMBER$80) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "ticketNumber" element
+     */
+    public void setTicketNumber(java.lang.String ticketNumber)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TICKETNUMBER$80, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TICKETNUMBER$80);
+            }
+            target.setStringValue(ticketNumber);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "ticketNumber" element
+     */
+    public void xsetTicketNumber(org.apache.xmlbeans.XmlString ticketNumber)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TICKETNUMBER$80, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TICKETNUMBER$80);
+            }
+            target.set(ticketNumber);
+        }
+    }
+    
+    /**
+     * Nils the "ticketNumber" element
+     */
+    public void setNilTicketNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TICKETNUMBER$80, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TICKETNUMBER$80);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "ticketNumber" element
+     */
+    public void unsetTicketNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(TICKETNUMBER$80, 0);
+        }
+    }
+    
+    /**
      * Gets the "ticketWithAnotherAirline" element
      */
     public boolean getTicketWithAnotherAirline()
@@ -4701,7 +4828,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$80, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$82, 0);
             if (target == null)
             {
                 return false;
@@ -4719,7 +4846,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$80, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$82, 0);
             return target;
         }
     }
@@ -4732,7 +4859,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TICKETWITHANOTHERAIRLINE$80) != 0;
+            return get_store().count_elements(TICKETWITHANOTHERAIRLINE$82) != 0;
         }
     }
     
@@ -4745,10 +4872,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$80, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$82, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TICKETWITHANOTHERAIRLINE$80);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TICKETWITHANOTHERAIRLINE$82);
             }
             target.setBooleanValue(ticketWithAnotherAirline);
         }
@@ -4763,10 +4890,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$80, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TICKETWITHANOTHERAIRLINE$82, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TICKETWITHANOTHERAIRLINE$80);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TICKETWITHANOTHERAIRLINE$82);
             }
             target.set(ticketWithAnotherAirline);
         }
@@ -4780,7 +4907,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TICKETWITHANOTHERAIRLINE$80, 0);
+            get_store().remove_element(TICKETWITHANOTHERAIRLINE$82, 0);
         }
     }
     
@@ -4793,7 +4920,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTED$82, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTED$84, 0);
             if (target == null)
             {
                 return false;
@@ -4811,7 +4938,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSAINSPECTED$82, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSAINSPECTED$84, 0);
             return target;
         }
     }
@@ -4824,7 +4951,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TSAINSPECTED$82) != 0;
+            return get_store().count_elements(TSAINSPECTED$84) != 0;
         }
     }
     
@@ -4837,10 +4964,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTED$82, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTED$84, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TSAINSPECTED$82);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TSAINSPECTED$84);
             }
             target.setBooleanValue(tsaInspected);
         }
@@ -4855,10 +4982,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSAINSPECTED$82, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSAINSPECTED$84, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TSAINSPECTED$82);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TSAINSPECTED$84);
             }
             target.set(tsaInspected);
         }
@@ -4872,7 +4999,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TSAINSPECTED$82, 0);
+            get_store().remove_element(TSAINSPECTED$84, 0);
         }
     }
     
@@ -4885,7 +5012,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTIONLOCATION$84, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTIONLOCATION$86, 0);
             if (target == null)
             {
                 return null;
@@ -4903,7 +5030,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$84, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$86, 0);
             return target;
         }
     }
@@ -4917,7 +5044,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$84, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$86, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -4931,7 +5058,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TSAINSPECTIONLOCATION$84) != 0;
+            return get_store().count_elements(TSAINSPECTIONLOCATION$86) != 0;
         }
     }
     
@@ -4944,10 +5071,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTIONLOCATION$84, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSAINSPECTIONLOCATION$86, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TSAINSPECTIONLOCATION$84);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TSAINSPECTIONLOCATION$86);
             }
             target.setStringValue(tsaInspectionLocation);
         }
@@ -4962,10 +5089,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$84, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$86, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TSAINSPECTIONLOCATION$84);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TSAINSPECTIONLOCATION$86);
             }
             target.set(tsaInspectionLocation);
         }
@@ -4980,10 +5107,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$84, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TSAINSPECTIONLOCATION$86, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TSAINSPECTIONLOCATION$84);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TSAINSPECTIONLOCATION$86);
             }
             target.setNil();
         }
@@ -4997,7 +5124,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TSAINSPECTIONLOCATION$84, 0);
+            get_store().remove_element(TSAINSPECTIONLOCATION$86, 0);
         }
     }
     
@@ -5010,7 +5137,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSANOTEPRESENT$86, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSANOTEPRESENT$88, 0);
             if (target == null)
             {
                 return false;
@@ -5028,7 +5155,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSANOTEPRESENT$86, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSANOTEPRESENT$88, 0);
             return target;
         }
     }
@@ -5041,7 +5168,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TSANOTEPRESENT$86) != 0;
+            return get_store().count_elements(TSANOTEPRESENT$88) != 0;
         }
     }
     
@@ -5054,10 +5181,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSANOTEPRESENT$86, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TSANOTEPRESENT$88, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TSANOTEPRESENT$86);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TSANOTEPRESENT$88);
             }
             target.setBooleanValue(tsaNotePresent);
         }
@@ -5072,10 +5199,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSANOTEPRESENT$86, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TSANOTEPRESENT$88, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TSANOTEPRESENT$86);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TSANOTEPRESENT$88);
             }
             target.set(tsaNotePresent);
         }
@@ -5089,7 +5216,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TSANOTEPRESENT$86, 0);
+            get_store().remove_element(TSANOTEPRESENT$88, 0);
         }
     }
     
@@ -5102,7 +5229,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WASBAGINSPECTED$88, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WASBAGINSPECTED$90, 0);
             if (target == null)
             {
                 return false;
@@ -5120,7 +5247,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WASBAGINSPECTED$88, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WASBAGINSPECTED$90, 0);
             return target;
         }
     }
@@ -5133,7 +5260,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(WASBAGINSPECTED$88) != 0;
+            return get_store().count_elements(WASBAGINSPECTED$90) != 0;
         }
     }
     
@@ -5146,10 +5273,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WASBAGINSPECTED$88, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WASBAGINSPECTED$90, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WASBAGINSPECTED$88);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WASBAGINSPECTED$90);
             }
             target.setBooleanValue(wasBagInspected);
         }
@@ -5164,10 +5291,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WASBAGINSPECTED$88, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WASBAGINSPECTED$90, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(WASBAGINSPECTED$88);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(WASBAGINSPECTED$90);
             }
             target.set(wasBagInspected);
         }
@@ -5181,7 +5308,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(WASBAGINSPECTED$88, 0);
+            get_store().remove_element(WASBAGINSPECTED$90, 0);
         }
     }
     
@@ -5194,7 +5321,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREDIDYOUFILEREPORT$90, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREDIDYOUFILEREPORT$92, 0);
             if (target == null)
             {
                 return null;
@@ -5212,7 +5339,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$90, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$92, 0);
             return target;
         }
     }
@@ -5226,7 +5353,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$90, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$92, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -5240,7 +5367,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(WHEREDIDYOUFILEREPORT$90) != 0;
+            return get_store().count_elements(WHEREDIDYOUFILEREPORT$92) != 0;
         }
     }
     
@@ -5253,10 +5380,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREDIDYOUFILEREPORT$90, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREDIDYOUFILEREPORT$92, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WHEREDIDYOUFILEREPORT$90);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WHEREDIDYOUFILEREPORT$92);
             }
             target.setStringValue(whereDidYouFileReport);
         }
@@ -5271,10 +5398,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$90, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$92, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREDIDYOUFILEREPORT$90);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREDIDYOUFILEREPORT$92);
             }
             target.set(whereDidYouFileReport);
         }
@@ -5289,10 +5416,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$90, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREDIDYOUFILEREPORT$92, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREDIDYOUFILEREPORT$90);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREDIDYOUFILEREPORT$92);
             }
             target.setNil();
         }
@@ -5306,7 +5433,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(WHEREDIDYOUFILEREPORT$90, 0);
+            get_store().remove_element(WHEREDIDYOUFILEREPORT$92, 0);
         }
     }
     
@@ -5319,7 +5446,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREWASBAGGAGECHECKED$92, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREWASBAGGAGECHECKED$94, 0);
             if (target == null)
             {
                 return null;
@@ -5337,7 +5464,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$92, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$94, 0);
             return target;
         }
     }
@@ -5351,7 +5478,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$92, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$94, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -5365,7 +5492,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(WHEREWASBAGGAGECHECKED$92) != 0;
+            return get_store().count_elements(WHEREWASBAGGAGECHECKED$94) != 0;
         }
     }
     
@@ -5378,10 +5505,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREWASBAGGAGECHECKED$92, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEREWASBAGGAGECHECKED$94, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WHEREWASBAGGAGECHECKED$92);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WHEREWASBAGGAGECHECKED$94);
             }
             target.setStringValue(whereWasBaggageChecked);
         }
@@ -5396,10 +5523,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$92, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$94, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREWASBAGGAGECHECKED$92);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREWASBAGGAGECHECKED$94);
             }
             target.set(whereWasBaggageChecked);
         }
@@ -5414,10 +5541,10 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$92, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WHEREWASBAGGAGECHECKED$94, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREWASBAGGAGECHECKED$92);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WHEREWASBAGGAGECHECKED$94);
             }
             target.setNil();
         }
@@ -5431,7 +5558,7 @@ public class ClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContent
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(WHEREWASBAGGAGECHECKED$92, 0);
+            get_store().remove_element(WHEREWASBAGGAGECHECKED$94, 0);
         }
     }
 }

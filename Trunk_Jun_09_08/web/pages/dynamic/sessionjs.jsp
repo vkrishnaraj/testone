@@ -12,7 +12,7 @@
 	Agent a = (Agent)session.getAttribute("user");
 	LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
    int total_menu = 0;
-		long expireTime = new Date().getTime() + (60 * 60 * 1000);
+		long expireTime = new Date().getTime() + (90 * 60 * 1000);
 		SimpleDateFormat sdf = new SimpleDateFormat("E, d MMM yyyy HH:mm:ss z");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String expireStr = sdf.format(new Date(expireTime));

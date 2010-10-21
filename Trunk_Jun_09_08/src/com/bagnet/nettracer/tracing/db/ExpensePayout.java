@@ -74,6 +74,7 @@ public class ExpensePayout implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "incident_ID", nullable = true)
+	@Fetch(FetchMode.SELECT)
 	public Incident getIncident() {
 		return incident;
 	}
@@ -98,6 +99,7 @@ public class ExpensePayout implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "expenseType_ID", nullable = false)
+	@Fetch(FetchMode.SELECT)
 	public ExpenseType getExpensetype() {
 		return expensetype;
 	}
@@ -334,6 +336,7 @@ public class ExpensePayout implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "status_ID")
+	@Fetch(FetchMode.SELECT)
 	public Status getStatus() {
 		return status;
 	}
@@ -381,6 +384,7 @@ public class ExpensePayout implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "bdo_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
 	public BDO getBdo() {
 		return bdo;
 	}
@@ -391,6 +395,7 @@ public class ExpensePayout implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "ohd_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
 	public OHD getOhd() {
 		return ohd;
 	}

@@ -29,7 +29,9 @@ import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.QuickSearchForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -174,6 +176,7 @@ public class QuickSearchAction extends Action {
 	}
 
 	private void netTracerTagSearch(Agent user, String s, QuickSearchDTO dto, int type, boolean scanSearch) {
+		logger.info("Step 1: Tag Number Search Begin");
 		dto.setDisplayIncList(true);
 		dto.setDisplayOhdList(true);
 		dto.setDisplayScanList(false);
@@ -185,23 +188,51 @@ public class QuickSearchAction extends Action {
 		siDTO.setIntelligentTagSearch(true);
 		siDTO.setIntelligentTagSearchType(type);
 		siDTO.setClaimchecknum(s);
+		
+		Calendar tagSearchRangeStart = new GregorianCalendar();
+		tagSearchRangeStart.add(Calendar.DAY_OF_MONTH, -60);
+		dto.setLimitedStartDate(tagSearchRangeStart.getTime());
+		
+		Calendar tagSearchRangeEnd = new GregorianCalendar();
+		tagSearchRangeEnd.add(Calendar.DAY_OF_MONTH, 1);
+		dto.setLimitedEndDate(tagSearchRangeEnd.getTime());
+		
+		TracerDateTime.getGMTDate();
+		
+		String sDate = DateUtils.formatDate(tagSearchRangeStart.getTime(), user.getDateformat().getFormat(), null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+				.getTimezone()));
+		String eDate = DateUtils.formatDate(tagSearchRangeEnd.getTime(), user.getDateformat().getFormat(), null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone())
+				.getTimezone()));
+		
+		logger.info(sDate);
+		logger.info(eDate);
+		
+		siDTO.setS_createtime(sDate);
+		siDTO.setE_createtime(eDate);
+
 
 		OhdBMO oBMO = new OhdBMO();
 		SearchIncidentForm oDTO = new SearchIncidentForm();
 		oDTO.setIntelligentTagSearch(true);
 		oDTO.setIntelligentTagSearchType(type);
 		oDTO.setClaimchecknum(s);
+		oDTO.setS_createtime(sDate);
+		
+		oDTO.setE_createtime(eDate);
+		
 		
 		
 
 		// Search Incidents for ID or WT ID
+		logger.info("Step 2: Query Incidents");
 		queryIncidents(user, dto, iBMO, siDTO);
 
 		// Search On-hands for ID or WT ID
+		logger.info("Step 3: Query OHDs");
 		queryOhds(user, dto, oBMO, oDTO);
 		
-		
 		if (scanSearch) {
+			logger.info("Step 4a: Query Scanners");
 			dto.setDisplayScanList(true);
 			try {
 				ScannerDataSource sds = (ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
@@ -223,6 +254,7 @@ public class QuickSearchAction extends Action {
 			} catch (Exception e) {
 				dto.setScanError("Unknown scanning error...");
 			}
+			logger.info("Step 4b: Complete Scanner Query");
 		}
 	}
 
@@ -251,6 +283,7 @@ public class QuickSearchAction extends Action {
 	}
 
 	private void queryOhds(Agent user, QuickSearchDTO dto, OhdBMO oBMO, SearchIncidentForm oDTO) {
+		logger.info("  Query OHD: Start");
 		dto.setDisplayOhdList(true);
 
 		List resultlist = oBMO.customQuery(oDTO, user, MAX_RESULTS + 1, 0, false, true);
@@ -269,9 +302,11 @@ public class QuickSearchAction extends Action {
 				ic.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 			}
 		}
+		logger.info("  Query OHD: Stop");
 	}
 
 	private void queryIncidents(Agent user, QuickSearchDTO dto, IncidentBMO iBMO, SearchIncident_DTO siDTO) {
+		logger.info("  Query Incident: Start");
 		dto.setDisplayIncList(true);
 
 		List resultlist = iBMO.findIncident(siDTO, user, MAX_RESULTS + 1, 0, false, true);
@@ -290,5 +325,6 @@ public class QuickSearchAction extends Action {
 				ic.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 			}
 		}
+		logger.info("  Query Incident: Stop");
 	}
 }

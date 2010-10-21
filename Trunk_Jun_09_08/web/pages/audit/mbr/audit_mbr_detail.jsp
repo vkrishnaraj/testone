@@ -11,7 +11,8 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
-  <script language="javascript">
+  
+<%@page import="com.bagnet.nettracer.tracing.db.audit.Audit_Incident"%><script language="javascript">
     
 function goprev() {
   o = document.auditMBRForm;
@@ -248,7 +249,7 @@ function updatePagination() {
                   <bean:write name="aincident" property="dispmodify_time" />
                 </td>
                 <td>
-                  <bean:write name="aincident" property="modify_agent.username" />
+<% if (((Audit_Incident)aincident).getModify_agent() != null) { out.println(((Audit_Incident)aincident).getModify_agent().getUsername()); } else {out.println("Customer");}%>
                 </td>
               </tr>
             </logic:iterate>

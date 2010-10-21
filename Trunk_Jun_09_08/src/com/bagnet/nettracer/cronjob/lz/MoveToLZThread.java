@@ -363,8 +363,18 @@ public class MoveToLZThread {
 				// TODO: Update incident newFangledAssignedDate - Byron
 				//get the id of the IncidentControl obj
 				IncidentControl myIncidentControl = inc.getIncidentControl();
-				myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
-				sess.update(myIncidentControl);
+				
+				if (myIncidentControl == null) {
+					myIncidentControl = new IncidentControl();
+					myIncidentControl.setAssignedDate(inc.getLastupdated());
+					myIncidentControl.setIncident(inc);
+					sess.save(myIncidentControl);
+				} else {
+					myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
+					//sess.saveOrUpdate(myIncidentControl);
+					sess.update(myIncidentControl);	
+				}
+				
 				
 				// Save the incident
 				t = sess.beginTransaction();

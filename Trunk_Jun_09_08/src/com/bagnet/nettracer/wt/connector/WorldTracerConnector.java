@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
+
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -42,9 +45,9 @@ public interface WorldTracerConnector {
 	void eraseActionFile(String station_id, String companyCode, ActionFileType area, int day, int itemNum, WebServiceDto dto)
 			throws WorldTracerException, CaptchaException;
 
-	String findAHL(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	Ahl findAHL(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String findOHD(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	Ohd findOHD(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
 	void suspendOHD(String wt_id, String agent, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	

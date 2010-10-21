@@ -225,8 +225,9 @@ public class TracerUtils {
 		}
 		// create new itinerary
 		theform.getItinerary(0, TracingConstants.PASSENGER_ROUTING); // passenger
-		theform.getItinerary(1, TracingConstants.BAGGAGE_ROUTING); // bag route
-
+		if(!PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_ITIN_NOT_REQUIRED)){
+			theform.getItinerary(1, TracingConstants.BAGGAGE_ROUTING); // bag route
+		}
 		// set new item
 		Item i = theform.getItem(0, itemtype);
 		i.set_DATEFORMAT(user.getDateformat().getFormat());

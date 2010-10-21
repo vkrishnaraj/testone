@@ -12,6 +12,7 @@
 				<ref bean="cronMoveToLzTrigger" />
 				<ref bean="cronNewPassiveTracerTrigger" />
 				<ref bean="cronOldPassiveTracerTrigger" />
+				<ref bean="BillingTrigger" />
 			</list>
 		</property>
 	</bean>

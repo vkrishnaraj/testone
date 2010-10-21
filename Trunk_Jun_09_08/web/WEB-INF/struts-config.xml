@@ -10,6 +10,20 @@
 			<form-property name="username" type="java.lang.String" />
 			<form-property name="password" type="java.lang.String" />
 		</form-bean>
+		<form-bean name="displayClaimsListForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="claimStatus" type="java.lang.String" />
+			<form-property name="startDate" type="java.lang.String" />
+			<form-property name="endDate" type="java.lang.String" />
+		</form-bean>
+		<form-bean name="displayClaimForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="claimId" type="java.lang.Long" />
+		</form-bean>
+		<form-bean name="changeStatusForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="claimId" type="java.lang.Long" />
+			<form-property name="newStatus" type="java.lang.String" />
+		</form-bean>
+		
+		
 		<form-bean name="toggleForm" type="org.apache.struts.action.DynaActionForm">
 			<form-property name="toggleType" type="java.lang.Integer" />
 			<form-property name="fontSize" type="java.lang.String" />
@@ -39,6 +53,7 @@
 		<form-bean name="expensePayoutForm" type="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm" />
 		<form-bean name="searchExpenseForm" type="com.bagnet.nettracer.tracing.forms.SearchExpenseForm" />
 		
+		
 		<form-bean name="searchForwardNoticeForm" type="com.bagnet.nettracer.tracing.forms.SearchForwardNoticeForm" />
 		<form-bean name="pcnSearchForm" type="com.bagnet.nettracer.tracing.forms.PcnSearchForm" />
 		
@@ -54,6 +69,7 @@
 		<form-bean name="searchLostAndFoundForm" type="com.bagnet.nettracer.tracing.forms.SearchLostFoundForm" />
 		<form-bean name="UserActivityForm" type="com.bagnet.nettracer.tracing.forms.UserActivityForm" />
 		<form-bean name="BDOForm" type="com.bagnet.nettracer.tracing.forms.BDOForm" />
+		<form-bean name="WorldTracerSearchForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerSearchForm" />
 		<form-bean name="MaintainDeliveryCompanyForm" type="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm" />
 		<form-bean name="companyForm" type="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm" />
 		<form-bean name="listNewPaxCommunicationForm" type="com.bagnet.nettracer.tracing.forms.ListNewPaxCommunicationForm" />
@@ -318,6 +334,9 @@
 
 		<forward name="viewworldtraceractionfiles" path="view_worldtraceractionfiles" />
 		<forward name="viewworldtracerafviewraw" path="view_worldtracerafviewraw" />
+		<forward name="viewworldtracerahl" path="view_worldtracerahl" />
+		<forward name="viewworldtracerohd" path="view_worldtracerohd" />
+		<forward name="viewworldtracersearch" path="view_worldtracersearch" />
 		<forward name="viewworldtracerfwd" path="view_worldtracerfwd" />
 		<forward name="viewworldtracerfoh" path="view_worldtracerfoh" />
 		<forward name="viewworldtracerroh" path="view_worldtracerroh" />
@@ -329,6 +348,7 @@
 		<forward name="viewbagbuzzeditor" path="view_bagbuzzeditor" />
 		<forward name="viewbagbuzzsearch" path="view_bagbuzzsearch" />
 		<forward name="viewbagbuzzview" path="view_bagbuzzview" />
+
 
 		<forward name="viewworldtracersusrit" path="view_worldtracer_sus_rit" />
 
@@ -529,6 +549,21 @@
 			<forward name="save_success" path="claim_resolution.do" redirect="true"></forward>
 		</action>
 		
+		<action path="/displayClaimsList" type="com.bagnet.nettracer.tracing.actions.onlineclaims.DisplayClaimsListAction"
+			name="displayClaimsListForm" scope="request" validate="false" >
+			<forward name="forwardOcList" path="forwardOcList"></forward>
+		</action>		
+		
+		<action path="/displayClaim" type="com.bagnet.nettracer.tracing.actions.onlineclaims.DisplayOnlineClaimAction"
+			name="displayClaimForm" scope="request" validate="false" >
+			<forward name="forwardDisplayOc" path="forwardDisplayOc"></forward>
+		</action>		
+		
+		<action path="/changeClaimStatus" type="com.bagnet.nettracer.tracing.actions.onlineclaims.ChangeOnlineClaimStatusAction"
+			name="changeStatusForm" scope="request" validate="false" >
+			<forward name="forwardOcList" path="forwardOcList"></forward>
+		</action>		
+
 		
 		<action path="/cancelBdo" type="com.bagnet.nettracer.tracing.actions.CancelBdoAction" scope="request" validate="false" ></action>
 		
@@ -580,6 +615,8 @@
 
 		<!-- View World Tracer Integration functions -->
 		<action path="/worldtraceraf" type="com.bagnet.nettracer.tracing.actions.WorldTracerAFAction" name="worldtracerafForm" scope="request" validate="false"></action>
+
+		<action path="/worldtracersearch" type="com.bagnet.nettracer.tracing.actions.WorldTracerSearchAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
 

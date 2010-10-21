@@ -44,6 +44,10 @@ import aero.nettracer.serviceprovider.wt_1_0.GetActionFileCountsDocument;
 import aero.nettracer.serviceprovider.wt_1_0.GetActionFileCountsResponseDocument;
 import aero.nettracer.serviceprovider.wt_1_0.GetActionFileSummaryDocument;
 import aero.nettracer.serviceprovider.wt_1_0.GetActionFileSummaryResponseDocument;
+import aero.nettracer.serviceprovider.wt_1_0.GetAhlDocument;
+import aero.nettracer.serviceprovider.wt_1_0.GetAhlResponseDocument;
+import aero.nettracer.serviceprovider.wt_1_0.GetOhdDocument;
+import aero.nettracer.serviceprovider.wt_1_0.GetOhdResponseDocument;
 import aero.nettracer.serviceprovider.wt_1_0.PlaceActionFileDocument;
 import aero.nettracer.serviceprovider.wt_1_0.PlaceActionFileResponseDocument;
 import aero.nettracer.serviceprovider.wt_1_0.ReinstateAhlDocument;
@@ -74,6 +78,8 @@ import aero.nettracer.serviceprovider.wt_1_0.EraseActionFileDocument.EraseAction
 import aero.nettracer.serviceprovider.wt_1_0.EstablishWtrConnectionDocument.EstablishWtrConnection;
 import aero.nettracer.serviceprovider.wt_1_0.GetActionFileCountsDocument.GetActionFileCounts;
 import aero.nettracer.serviceprovider.wt_1_0.GetActionFileSummaryDocument.GetActionFileSummary;
+import aero.nettracer.serviceprovider.wt_1_0.GetAhlDocument.GetAhl;
+import aero.nettracer.serviceprovider.wt_1_0.GetOhdDocument.GetOhd;
 import aero.nettracer.serviceprovider.wt_1_0.PlaceActionFileDocument.PlaceActionFile;
 import aero.nettracer.serviceprovider.wt_1_0.ReinstateAhlDocument.ReinstateAhl;
 import aero.nettracer.serviceprovider.wt_1_0.ReinstateOhdDocument.ReinstateOhd;
@@ -103,6 +109,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.Tag;
 import aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFile;
 import aero.nettracer.serviceprovider.wt_1_0.common.xsd.ActionFileCount;
 import aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse;
+
 
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -135,6 +142,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.svc.BasicRule;
 import com.bagnet.nettracer.wt.svc.WorldTracerRule;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.WorldTracerField;
@@ -155,6 +163,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 	public static final String UNEXPECTED_EXCEPTION = "UNEXPECTED EXCEPTION ENCOUNTERED";
 	public static final String COMMAND_NOT_PROPERLY_FORMATTED = "COMMAND NOT PROPERLY FORMATTED";
 	public static final String CAPTCHA_EXCEPTION = "MUST ENTER CAPTCHA";
+	public static final String RECORD_NOT_FOUND_EXCEPTION = "RECORD NOT FOUND";
 
 	public static final String CAPTCHA_TEXT = "CAPTCHA_TEXT";
 	public static final String CAPTCHA_TIMESTAMP = "CAPTCHA_TIMESTAMP";
@@ -643,15 +652,104 @@ public class WorldTracerWebService implements WorldTracerConnector {
 	}
 
 	@Override
-	public String findAHL(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException {
-		// TODO Auto-generated method stub
-		return null;
+	public Ahl findAHL(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		try {
+			WorldTracerServiceStub stub = getConfiguredServiceStub();
+
+			RequestHeader header = generateHeader(dto);
+			
+			Ahl ahl = new Ahl();
+			ahl.setAhlId(wt_id);
+			
+			GetAhlDocument d = GetAhlDocument.Factory.newInstance();
+			GetAhl c = d.addNewGetAhl();
+			
+			c.setHeader(mapper.map(header, aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader.class));
+			c.setAhl(mapper.map(ahl, aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ahl.class));
+			
+			GetAhlResponseDocument r = stub.getAhl(d);
+			WorldTracerResponse response = r.getGetAhlResponse().getReturn();
+			
+			if (response.getSuccess()) {
+				processResponseAndUpdateDto(dto, response);
+				return mapper.map(response.getAhl(), aero.nettracer.serviceprovider.wt_1_0.common.Ahl.class);
+
+			} else {
+				logger.info("Unable to forward to get AHL from WT: " + wt_id);
+				if (response.getError() != null) {
+					WebServiceError error = response.getError();
+					if (error.getDescription().contains(CAPTCHA_EXCEPTION)) {
+						dto.setCaptcha(response.getCaptcha());
+						dto.setCaptchaTimestamp(response.getCaptchaTimestamp());
+						throw new CaptchaException();
+					} else if (error.getDescription().contains(RECORD_NOT_FOUND_EXCEPTION)) {
+						throw new WorldTracerRecordNotFoundException();
+					} else {
+						throw new WorldTracerException(error.getDescription());
+					}
+				} else {
+					throw new WorldTracerException("Unable to forward to get AHL from WT: " + wt_id);
+				}
+			}
+			
+		} catch (AxisFault e) {
+			logger.error("Unable to erase action file", e);
+			throw new WorldTracerException(CONNECTION_ERROR_UNABLE_TO_PERFORM_ACTION, e);
+		} catch (RemoteException e) {
+			logger.error("Unable to erase action file", e);
+			throw new WorldTracerException(CONNECTION_ERROR_UNABLE_TO_PERFORM_ACTION, e);
+		}
 	}
 
 	@Override
-	public String findOHD(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException {
-		// TODO Auto-generated method stub
-		return null;
+	public Ohd findOHD(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		try {
+			WorldTracerServiceStub stub = getConfiguredServiceStub();
+
+			RequestHeader header = generateHeader(dto);
+			
+			Ohd ohd = new Ohd();
+			ohd.setOhdId(wt_id);
+
+			GetOhdDocument d = GetOhdDocument.Factory.newInstance();
+			GetOhd c = d.addNewGetOhd();
+			
+			
+			c.setHeader(mapper.map(header, aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader.class));
+			c.setOhd(mapper.map(ohd, aero.nettracer.serviceprovider.wt_1_0.common.xsd.Ohd.class));
+			
+			GetOhdResponseDocument r = stub.getOhd(d);
+			WorldTracerResponse response = r.getGetOhdResponse().getReturn();
+			System.out.print(response.toString());
+			if (response.getSuccess()) {
+				processResponseAndUpdateDto(dto, response);
+				return mapper.map(response.getOhd(), aero.nettracer.serviceprovider.wt_1_0.common.Ohd.class);
+
+			} else {
+				logger.info("Unable to forward to get OHD from WT: " + wt_id);
+				if (response.getError() != null) {
+					WebServiceError error = response.getError();
+					if (error.getDescription().contains(CAPTCHA_EXCEPTION)) {
+						dto.setCaptcha(response.getCaptcha());
+						dto.setCaptchaTimestamp(response.getCaptchaTimestamp());
+						throw new CaptchaException();
+					} else if (error.getDescription().contains(RECORD_NOT_FOUND_EXCEPTION)) {
+						throw new WorldTracerRecordNotFoundException();
+					} else {
+						throw new WorldTracerException(error.getDescription());
+					}
+				} else {
+					throw new WorldTracerException("Unable to forward to get OHD from WT: " + wt_id);
+				}
+			}
+
+		} catch (AxisFault e) {
+			logger.error("Unable to erase action file", e);
+			throw new WorldTracerException(CONNECTION_ERROR_UNABLE_TO_PERFORM_ACTION, e);
+		} catch (RemoteException e) {
+			logger.error("Unable to erase action file", e);
+			throw new WorldTracerException(CONNECTION_ERROR_UNABLE_TO_PERFORM_ACTION, e);
+		}
 	}
 
 	
@@ -1268,33 +1366,33 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			
 			PxfDetails a2 = new PxfDetails();
 			if (p.getStation_2() != null && p.getStation_2().length() > 0) {
-				a1.setAirline(p.getAirline_2());
-				a1.setStation(p.getStation_2());
-				a1.setArea(p.getArea_2());
+				a2.setAirline(p.getAirline_2());
+				a2.setStation(p.getStation_2());
+				a2.setArea(p.getArea_2());
 				details.add(a2);
 			}
 			
 			PxfDetails a3 = new PxfDetails();
 			if (p.getStation_3() != null && p.getStation_3().length() > 0) {
-				a1.setAirline(p.getAirline_3());
-				a1.setStation(p.getStation_3());
-				a1.setArea(p.getArea_3());
+				a3.setAirline(p.getAirline_3());
+				a3.setStation(p.getStation_3());
+				a3.setArea(p.getArea_3());
 				details.add(a3);
 			}
 			
 			PxfDetails a4 = new PxfDetails();
 			if (p.getStation_4() != null && p.getStation_4().length() > 0) {
-				a1.setAirline(p.getAirline_4());
-				a1.setStation(p.getStation_4());
-				a1.setArea(p.getArea_4());
+				a4.setAirline(p.getAirline_4());
+				a4.setStation(p.getStation_4());
+				a4.setArea(p.getArea_4());
 				details.add(a4);
 			}
 			
 			PxfDetails a5 = new PxfDetails();
 			if (p.getStation_5() != null && p.getStation_5().length() > 0) {
-				a1.setAirline(p.getAirline_5());
-				a1.setStation(p.getStation_5());
-				a1.setArea(p.getArea_5());
+				a5.setAirline(p.getAirline_5());
+				a5.setStation(p.getStation_5());
+				a5.setArea(p.getArea_5());
 				details.add(a5);
 			}
 			
@@ -1476,6 +1574,12 @@ public class WorldTracerWebService implements WorldTracerConnector {
 				}
 			}
 		}
+		
+		if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_ITIN_NOT_REQUIRED)
+			&& aliBag.size() == 0){
+			aliBag = aliPax;
+		}
+
 		
 		a.setBagItinerary(aliBag.toArray(new Itinerary[aliBag.size()]));
 		a.setPaxItinerary(aliPax.toArray(new Itinerary[aliPax.size()]));
