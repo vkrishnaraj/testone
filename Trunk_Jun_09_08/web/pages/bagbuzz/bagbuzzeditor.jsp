@@ -12,12 +12,27 @@
 <script type="text/javascript" src="deployment/main/js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 var oFCKeditor;
+
+String.prototype.trim = function () {
+    return this.replace(/^\s*/, "").replace(/\s*$/, "");
+}
+
+
 function displaymessage()
 {
 //form.data.value = form.FCKeditor1.value;
-alert(document.forms[0].FCKeditor1.value);
+alert(document.forms[0].FCKeditor1.value.trim());
 alert(oFCKeditor.CreateHtml());
 return true;
+}
+
+function validate(){
+	if(document.forms[0].description.value.trim().length > 0){
+		return true;
+	} else {
+		alert("Title is required");
+		return false;
+	}
 }
 
 </script>
@@ -46,7 +61,7 @@ oFCKeditor.ReplaceTextarea() ;
 </tr>
 <tr>
 <td>
-Description:  
+<bean:message key="bagbuzz.colname.description"/>  
 <textarea style="overflow:hidden;" rows="1" cols="20" name="description"> <bean:write name="bagbuzz" property="description" /></textarea>
 </td>
 </tr>
@@ -59,7 +74,7 @@ Description:
 <tr>
 <td align="left" valign="top" colspan="12">
 <input type="hidden" id="bb_id" name="bb_id" value="<bean:write name="bagbuzz" property="bagbuzz_id"/>"/>
-<html:submit property="save" styleId="button">
+<html:submit property="save" styleId="button" onclick="return validate()">
     <bean:message key="bagbuzz.save" />
 </html:submit>
 </td>

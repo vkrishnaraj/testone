@@ -102,6 +102,9 @@ function writeConsole(content) {
               <td>
                 <b><bean:message key="bagbuzz.colname.delete" /></b>
               </td>
+              <td>
+                <b><bean:message key="bagbuzz.colname.copy" /></b>
+              </td>
             </tr>
         
         <logic:iterate id="bb" name="bb_list" scope="request" type="com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz">
@@ -134,13 +137,13 @@ function writeConsole(content) {
                 </td>
                 <td nowrap>
                 &nbsp;
-                <%if (bb.getStatus().getStatus_ID() == 86){ %>
-                  <a href="bagbuzzeditor.do?bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=540,width=650,scrollbars'); return false"><bean:message key="bagbuzz.colname.edit" /></a><br />
+                <%if (bb.getStatus().getStatus_ID() == 86 || bb.getStatus().getStatus_ID() == 95){ %>
+                  <a href="bagbuzzeditor.do?bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=650,width=650,scrollbars'); return false"><bean:message key="bagbuzz.colname.edit" /></a><br />
                 <%}%>
                 </td>
                 <td nowrap>
                 &nbsp;
-                <%if (bb.getStatus().getStatus_ID() == 86){ %>
+                <%if (bb.getStatus().getStatus_ID() == 86 || bb.getStatus().getStatus_ID() == 95){ %>
                   <a href="bagbuzzsearch.do?publish=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.publish" /></a><br />
                 <%} %>
                 </td>
@@ -156,12 +159,20 @@ function writeConsole(content) {
                   <a href="bagbuzzsearch.do?delete=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.delete" /></a><br />
                 <%} %>
                 </td>
+                <td nowrap>
+                &nbsp;
+                <%if (bb.getStatus().getStatus_ID() == 86 
+                		|| bb.getStatus().getStatus_ID() == 95
+                		|| bb.getStatus().getStatus_ID() == 87){ %>
+                  <a href="bagbuzzsearch.do?copy=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.copy" /></a><br />
+                <%} %>
+                </td>
             </tr>
         	
         </logic:iterate>
         	  <tr>
                 <td align="center" valign="top" colspan="12">
-                  <html:submit styleId="button" onclick="window.open('bagbuzzeditor.do', 'child', 'height=540,width=650,scrollbars'); return false">
+                  <html:submit styleId="button" onclick="window.open('bagbuzzeditor.do', 'child', 'height=650,width=650,scrollbars'); return false">
                     <bean:message key="bagbuzz.neweditor" />
                   </html:submit>
                 </td>
@@ -171,16 +182,13 @@ function writeConsole(content) {
         <logic:notPresent name="admin" scope="request">
                   <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
-              <td>
-                <b><bean:message key="bagbuzz.colname.id" /></b>
-              </td>
-              <td>
-                <b><bean:message key="taskmanager.colname.date" /></b>
-              </td>
-              <td>
+              <td width="40%">
                 <b><bean:message key="bagbuzz.colname.description" /></b>
               </td>
-              <td>
+              <td width="30%">
+                <b><bean:message key="taskmanager.colname.date" /></b>
+              </td>
+              <td width="30%">
                 <b><bean:message key="bagbuzz.colname.status" /></b>
               </td>
             </tr>
@@ -188,14 +196,16 @@ function writeConsole(content) {
         <logic:iterate id="bbt" name="bbt_list" scope="request" type="com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask">
         	<tr>
         	    <td nowrap>
-                  <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bbt" property="bagBuzz.bagbuzz_id"/>&bbt_id=<bean:write name="bbt" property="task_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=610,scrollbars'); return false"><bean:write name="bbt" property="bagBuzz.bagbuzz_id" /></a><br />
+                  <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bbt" property="bagBuzz.bagbuzz_id"/>&bbt_id=<bean:write name="bbt" property="task_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=610,scrollbars'); return false">
+                  <%if (bbt.getBagBuzz().getDescription() != null && bbt.getBagBuzz().getDescription().trim().length() > 0){ %>
+                  <bean:write name="bbt" property="bagBuzz.description" />
+                  <%} else { %>
+                  <bean:message key="bagbuzz.description.empty"/>
+                  <%} %>
+                  </a><br />
                 </td>
 				<td nowrap>
                   <bean:write name="bbt" property="opened_timestamp" />
-                  &nbsp;
-                </td>
-				<td nowrap>
-                  <bean:write name="bbt" property="bagBuzz.description" />
                   &nbsp;
                 </td>
 				<td nowrap>
