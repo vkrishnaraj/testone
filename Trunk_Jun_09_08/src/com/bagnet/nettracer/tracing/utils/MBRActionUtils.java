@@ -38,6 +38,7 @@ import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -314,7 +315,7 @@ public class MBRActionUtils {
 
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
 		String incident = request.getParameter("incident_ID");
-
+		
 		Incident inc = null;
 		if(incident != null && incident.length() > 0 && request.getParameter("close") != null) {
 			BagService bs = new BagService();
@@ -330,18 +331,21 @@ public class MBRActionUtils {
 				theform.setFaultcompany_id(user.getCompanycode_ID());
 			}
 			// If the user has limited permission, 
-			if (UserPermissions.hasLimitedSavePermission(user, inc)) {
-				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
-				faultCompanyList = new ArrayList();
-				faultCompanyList.add(user.getStation().getCompany());
-			} else if (UserPermissions.hasLimitedFaultAirlinesByType(user, inc.getItemtype().getItemType_ID())) {
-				faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
-				faultCompanyList = new ArrayList();
-				faultCompanyList.add(user.getStation().getCompany());
-			} else {
-				faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
-				faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+			if (inc != null) {
+				if (UserPermissions.hasLimitedSavePermission(user, inc)) {
+					faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
+					faultCompanyList = new ArrayList();
+					faultCompanyList.add(user.getStation().getCompany());
+				} else if (UserPermissions.hasLimitedFaultAirlinesByType(user, inc.getItemtype().getItemType_ID())) {
+					faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
+					faultCompanyList = new ArrayList();
+					faultCompanyList.add(user.getStation().getCompany());
+				} else {
+					faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
+					faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+				}
 			}
+
 			request.setAttribute("faultstationlist", faultstationlist);
 			request.setAttribute("faultCompanyList", faultCompanyList);
 		} 
