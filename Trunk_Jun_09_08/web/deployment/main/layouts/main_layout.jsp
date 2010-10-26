@@ -70,7 +70,12 @@ response.addDateHeader("Expires", -1);
 <script language="javascript" src="<%=request.getContextPath()%>/pages/dynamic/sessionjs.jsp?<%=session.getId() %><%=agent.getUsername() %><%=myLocale.getDisplayLanguage() %>"></script>
 <link href="<%=request.getContextPath()%>/deployment/main/css/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
 <link href="<%=request.getContextPath()%>/pages/dynamic/sessionscss.jsp?<%=session.getId() %><%=agent.getUsername() %><%=myLocale.getDisplayLanguage() %>" rel="stylesheet" type="text/css" />
-<!--[if lt IE 7]><script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script><![endif]-->
+
+
+<!--[if lt IE 7]>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/fixed.js"></script>
+<![endif]-->
 </logic:present>
 <style type="text/css">
  body{
@@ -334,6 +339,27 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <div id="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></div>
 
 <logic:present name="user" scope="session">
+
+<script language="javascript">
+
+jQuery(document).ready(function () {
+	jQuery("#closeLink").click(function(event) {handleEvent(event)});
+	jQuery("#openLink").click(function(event) {handleEvent(event)});
+	jQuery("#switchLink").click(function(event) {switchLocation(event)});
+	});
+
+</script>
+
+<div id="slideUpContainer">
+	<div id="sliderInner">
+	<div style="float: right; margin-right: 10px;">
+		<a id="switchLink" href="#">Switch Location</a>&nbsp;&nbsp;
+		<a id="closeLink" href="#">Close</a>
+	</div><br/>
+	<div id="sliderContentFrame" style="float: none"></div>
+</div>
+</div>
+
 <html:form action="quickSearch.do" method="post"><input id="quickSearchQuery2" type="hidden" name="quickSearch" value=""/></html:form>
 <iframe id="DivShim" src="javascript:false" scrolling="no" frameborder="0" style="position:absolute; z-index:-1; top:0px; left:0px; display:none;"></iframe>
 </logic:present>

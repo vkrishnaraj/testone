@@ -78,6 +78,7 @@ public class BDO implements Serializable {
 	public void setLastDeliveryUpdate(Date lastDeliveryUpdate) {
   	this.lastDeliveryUpdate = lastDeliveryUpdate;
   }
+	
 
 	/**
 	 * @return Returns the passengers.

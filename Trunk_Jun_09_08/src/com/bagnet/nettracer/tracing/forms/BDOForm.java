@@ -10,6 +10,7 @@ import org.apache.struts.validator.ValidatorForm;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.DeliveryStatusType;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -56,7 +57,9 @@ public final class BDOForm extends ValidatorForm {
 	private String cost;
 	private boolean canceled;
 	private Date lastDeliveryUpdate;
-	private Status deliveryStatus;
+	private DeliveryStatusType deliveryStatus;
+	
+
 	
 	
     private String wt_id;
@@ -448,13 +451,23 @@ public final class BDOForm extends ValidatorForm {
   	this.lastDeliveryUpdate = lastDeliveryUpdate;
   }
 
-	public Status getDeliveryStatus() {
-  	return deliveryStatus;
-  }
+	public void setDeliveryStatus(DeliveryStatusType deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
+	}
 
-	public void setDeliveryStatus(Status deliveryStatus) {
-  	this.deliveryStatus = deliveryStatus;
-  }
+	public DeliveryStatusType getDeliveryStatus() {
+		return deliveryStatus;
+	}
+	
+	public String getDeliveryStatusKey() {
+		return "status.delivery." + deliveryStatus;
+	}
 
-
+	public String getDispLastDeliveryUpdate() {
+		if (getLastDeliveryUpdate() == null) {
+			return "";
+		} else {
+			return DateUtils.formatDate(getLastDeliveryUpdate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		}
+	}
 }

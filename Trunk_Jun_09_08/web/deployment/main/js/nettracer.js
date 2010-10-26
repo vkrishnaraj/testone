@@ -272,3 +272,42 @@ function getSavingContent() {
 	return h;
 }
 
+var slideUpContainerState = 0; 
+
+
+function loadSlideupContainer(url) {
+	event.preventDefault();
+	var slideUpContainer = jQuery("#slideUpContainer");
+	
+	
+	if (slideUpContainer.is( ":visible" )){
+		slideUpContainer.slideUp( 500 );
+		jQuery("#sliderContentFrame").load(url);
+	} else {
+		slideUpContainer.slideDown( 500 );
+	}
+}
+
+function handleEvent(event) {
+	event.preventDefault();
+	var slideUpContainer = jQuery("#slideUpContainer");
+	if (slideUpContainer.is( ":visible" )){
+		slideUpContainer.slideUp( 500 );
+	} else {
+		slideUpContainer.slideDown( 500 );
+	}
+}
+
+function switchLocation(event) {
+	event.preventDefault();
+	var slideUpContainer = jQuery("#slideUpContainer");
+	if (slideUpContainerState == 0) {
+		slideUpContainer.style.bottom="";
+		slideUpContainer.style.top="0px";
+		slideUpContainerState = 1;
+	} else {
+		slideUpContainer.style.top="";
+		slideUpContainer.style.bottom="0px";
+		slideUpContainerState = 0;
+	}
+}

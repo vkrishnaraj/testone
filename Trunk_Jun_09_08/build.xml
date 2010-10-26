@@ -85,7 +85,9 @@
 
 	<!-- This is used  -->
 	<target name="compile-web" depends="init">
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on">
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="off"
+			memoryinitialsize="256m"       memorymaximumsize="256m"
+			>
 			<classpath refid="project.classpath" />
 			<exclude name="com/bagnet/nettracer/cronjob/**" />
 			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />

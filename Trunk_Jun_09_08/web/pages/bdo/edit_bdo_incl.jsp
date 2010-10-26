@@ -188,17 +188,18 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             </td>
           </tr>
 
-          <logic:notEmpty property="deliveryStatus"> 
+          <logic:notEmpty property="deliveryStatus" name="BDOForm"> 
           <tr>
           	<td colspan="1">
           		<bean:message key="label.bdo.currentDeliveryStatus" />: 
           		<br />
-          		<html:text property="deliveryStatus" size="20" styleClass="textfield" readonly="true" />
+          		<input type="text" class="textfield" readonly="readonly" size="20" value='<bean:message name="BDOForm" property="deliveryStatusKey" />' />
+          		
           	</td>
           	<td colspan="1">
           		<bean:message key="label.bdo.lastDeliveryUpdateDate" />: 
           		<br />
-          		<html:text property="lastDeliveryUpdate" size="20" styleClass="textfield" readonly="true" />
+          		<html:text property="dispLastDeliveryUpdate" size="20" styleClass="textfield" readonly="true" />
           	</td>
           	<td colspan="3">
           		&nbsp;

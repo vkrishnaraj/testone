@@ -1027,6 +1027,7 @@ public class WSCoreIncidentUtil {
 					t = sess.beginTransaction();
 					bdo.setDeliveryStatus(DeliveryStatusType.valueOf(status));
 					bdo.setLastDeliveryUpdate(statusDateTime.getTime());
+					sess.saveOrUpdate(bdo);
 					t.commit();
 				}
 			} catch (Exception e) {
