@@ -276,7 +276,7 @@ var slideUpContainerState = 0;
 
 
 function loadSlideupContainer(url) {
-	event.preventDefault();
+	
 	var slideUpContainer = jQuery("#slideUpContainer");
 	
 	

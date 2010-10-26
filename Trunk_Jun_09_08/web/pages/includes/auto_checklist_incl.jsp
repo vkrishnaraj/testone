@@ -45,12 +45,12 @@
       <div id="pax_0">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-		 
+		 <td align="center"> 
 		  <%
 		  if (bIncidentChecklist || bIncidentChecklistReadOnly) {
 		  %>
           <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.bgiframe.min.js"></script>
-            <td align="center"> 
+            
               
               &nbsp;<br />
               <script type="text/javascript">
@@ -85,10 +85,6 @@
 					jQuery('#crmContent').load("pushToCrm.do?incident_id=<bean:write name='incidentForm' property='incident_ID'/>");
 				}
           	 </script>
-
-              
-              
-              
               <div id="crmContent">
               
               <jsp:include page="/pages/includes/push_to_crm.jsp" />
@@ -96,18 +92,20 @@
 			  </div>
 
               <br />&nbsp;
-              
-            </td>
+                   <hr width="50%"/>
+            
 		   <% 			  
 		  }
 		  IncidentForm form = (IncidentForm)session.getAttribute("incidentForm"); 
 		  if (form.getOc_claim_id() != 0) {
 		  	String url = "displayClaim.do?ajax=1&claimId=" + form.getOc_claim_id();
 		  %>
-		  	<input type="button" value="View Online Claim" onclick="loadSlideupContainer(<%=url %>)" id="button" />
+		  	<input type="button" value="View Online Claim" onclick="loadSlideupContainer('<%=url %>')" id="button" />
+		  	<br />&nbsp;
 		  <% 
 		  } 
 		  %>
+		  </td>
           </tr>
         </table>
         </div>
