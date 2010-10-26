@@ -91,7 +91,7 @@
               
 			  </div>
 
-              <br />&nbsp;
+            
                    <hr width="50%"/>
             
 		   <% 			  
