@@ -19,7 +19,7 @@
       boolean ldCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_LD, a);
       boolean damCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_DAM, a);
       boolean pilCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_PIL, a);
-	
+      
       if (bIncidentChecklist || bIncidentChecklistReadOnly || ldCrmIntegration || damCrmIntegration || pilCrmIntegration) {
 
   
@@ -70,7 +70,8 @@
               <br />&nbsp;
             
            <% 			  
-		  } if (
+		  } 
+		  if (
 				  (report_type == 0 && damCrmIntegration) || 
 				  (report_type == 1 && ldCrmIntegration) || 
 				  (report_type == 2 && pilCrmIntegration)) {
@@ -93,9 +94,18 @@
               <jsp:include page="/pages/includes/push_to_crm.jsp" />
               
 			  </div>
+
+              <br />&nbsp;
               
             </td>
 		   <% 			  
+		  }
+		  IncidentForm form = (IncidentForm)session.getAttribute("incidentForm"); 
+		  if (form.getOc_claim_id() != 0) {
+		  	String url = "displayClaim.do?ajax=1&claimId=" + form.getOc_claim_id();
+		  %>
+		  	<input type="button" value="View Online Claim" onclick="loadSlideupContainer(<%=url %>)" id="button" />
+		  <% 
 		  } 
 		  %>
           </tr>

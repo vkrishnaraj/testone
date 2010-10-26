@@ -313,7 +313,7 @@ public class OnlineClaimsDao {
 			if (!isNew && !contactUpdateOnly) {
 
 				mapSubObjToParentObjects(existingDbClaim);
-
+				
 				sess.saveOrUpdate(existingDbClaim);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
 				// TODO: SAVE AC
@@ -329,6 +329,10 @@ public class OnlineClaimsDao {
 				mapSubObjToParentObjects(claim);
 				claim.setStatus("NEW");
 				sess.save(claim);
+				long claimId = claim.getClaimId();
+				Incident i = claim.getIncident();
+				i.setOc_claim_id(claimId);
+				sess.saveOrUpdate(i);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
 				// TODO: SAVE AC
 				//				sess.save(ac);

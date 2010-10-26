@@ -93,6 +93,7 @@ public class Incident implements Serializable {
 	private Set<Articles> articles;
 	private Set<Remark> remarks;
 	private Set<Itinerary> itinerary;
+	private long oc_claim_id;
 	private Claim claim = new Claim();
 
 	private Set<Incident_Claimcheck> claimchecks;
@@ -1177,4 +1178,12 @@ public class Incident implements Serializable {
     	DecimalFormat twoDForm = new DecimalFormat("#.##");
     	return Double.valueOf(twoDForm.format(d));
 	}
+	
+	@Basic
+	public long getOc_claim_id() {
+  	return oc_claim_id;
+  }
+	public void setOc_claim_id(long oc_claim_id) {
+  	this.oc_claim_id = oc_claim_id;
+  }
 }

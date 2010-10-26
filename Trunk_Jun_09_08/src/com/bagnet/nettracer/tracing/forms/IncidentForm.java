@@ -91,8 +91,15 @@ public final class IncidentForm extends ValidatorForm {
 	private boolean locked = false;	//for dispute resolution process
 	
 	private String teletypeAddress; //for the big Teletype String for historical reporting
+	private long oc_claim_id;
 
 	
+	public long getOc_claim_id() {
+  	return oc_claim_id;
+  }
+	public void setOc_claim_id(long oc_claim_id) {
+  	this.oc_claim_id = oc_claim_id;
+  }
 	public String getTeletypeAddress() {
 		return teletypeAddress;
 	}
