@@ -162,8 +162,8 @@ function updatePagination() {
 						<bean:write name="results" property="incident.incident_ID" />&nbsp;</a>
                     </td>
                     <td>
-                      <!--a href='displayClaim.do?claimId=<bean:write name="results" property="claimId" />'-->
-                      <a href='#' onClick='testFrame(<bean:write name="results" property="claimId" />);' >
+                      <a href='displayClaim.do?claimId=<bean:write name="results" property="claimId" />' >
+                      <!--a href='#' onClick='testFrame(<bean:write name="results" property="claimId" />);' -->
                         <bean:message key="action.oc.viewClaim" /></a>
                       <br/>
                       <logic:equal name="results" property="status" value="SUBMITTED">
@@ -172,7 +172,7 @@ function updatePagination() {
                       </logic:equal>
 					  <logic:equal name="results" property="status" value="REVIEW">
 	                      <a href='changeClaimStatus.do?claimId=<bean:write name="results" property="claimId" />&newStatus=ONRECORD'>
-	                        <bean:message key="action.oc.send_to_review" /></a>
+	                        <bean:message key="action.oc.send_to_onrecord" /></a>
                       </logic:equal>
                     </td>
                   </tr>

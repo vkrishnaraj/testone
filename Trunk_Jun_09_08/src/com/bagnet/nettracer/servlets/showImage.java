@@ -58,11 +58,17 @@ public class showImage extends HttpServlet {
 		HttpSession session = req.getSession(true);
 
 		String imageID = req.getParameter("ID");
+		boolean useOCPath = req.getParameter("useOCPath") != null;
+		String imageStore = TracerProperties.get("image_store");
+		if (useOCPath) {
+			imageID = imageID.replaceAll("c:/nettracer_claims_files/", "");
+			imageStore = TracerProperties.get("oc_image_store");
+		}
 		
-		File file = new File(TracerProperties.get("image_store") + imageID);
+		File file = new File(imageStore + imageID);
 		
 		if (! file.exists()) {
-			file = new File(TracerProperties.get("image_store") + "image-file-icon.png");
+			file = new File(imageStore + "image-file-icon.png");
 		}
 
 		InputStream is = new FileInputStream(file);

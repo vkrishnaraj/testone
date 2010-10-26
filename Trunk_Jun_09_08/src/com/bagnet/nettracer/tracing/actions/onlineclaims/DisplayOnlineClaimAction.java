@@ -40,6 +40,9 @@ public class DisplayOnlineClaimAction extends Action {
 		OnlineClaim c = d.getOnlineClaim(claimId);
 		request.setAttribute("claim", c);
 		
+		if (request.getParameter("ajax") != null) {
+			return mapping.findForward(TracingConstants.FORWARD_DISPLAY_OC_AJAX);
+		}
 		return mapping.findForward(TracingConstants.FORWARD_DISPLAY_OC);
 	}
 }

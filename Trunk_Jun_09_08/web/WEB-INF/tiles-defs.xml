@@ -779,7 +779,11 @@
     </definition>
     
     
- 	<definition name="forwardDisplayOc" path="/pages/onlineclaims/view_online_claim.jsp" >
+ 	<definition name="forwardDisplayOc" extends="homepage" >
+ 		<put name="center" value="/pages/onlineclaims/view_online_claim.jsp" />
+    </definition>
+    
+ 	<definition name="forwardDisplayOcAjax" path="/pages/onlineclaims/online_claim_data.jsp" >
     </definition>
     
 	

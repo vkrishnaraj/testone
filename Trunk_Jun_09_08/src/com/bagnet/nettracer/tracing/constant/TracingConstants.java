@@ -552,6 +552,7 @@ public class TracingConstants {
 
 	public static final String FORWARD_OC_LIST = "forwardOcList";
 	public static final String FORWARD_DISPLAY_OC = "forwardDisplayOc";
+	public static final String FORWARD_DISPLAY_OC_AJAX = "forwardDisplayOcAjax";
 	public static final String FORWARD_CHANGE_OC_STATUS = "forwardChangeStatus";
 	
 	//success on forward

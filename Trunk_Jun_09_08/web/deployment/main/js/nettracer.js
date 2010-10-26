@@ -279,10 +279,10 @@ function loadSlideupContainer(url) {
 	
 	var slideUpContainer = jQuery("#slideUpContainer");
 	
-	
+
+	jQuery("#sliderContentFrame").load(url);
 	if (slideUpContainer.is( ":visible" )){
 		slideUpContainer.slideUp( 500 );
-		jQuery("#sliderContentFrame").load(url);
 	} else {
 		slideUpContainer.slideDown( 500 );
 	}
