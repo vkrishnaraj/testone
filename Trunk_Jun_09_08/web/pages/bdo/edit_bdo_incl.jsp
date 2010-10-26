@@ -187,6 +187,25 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
               <html:text property="agentinit" size="10" styleClass="textfield" readonly="true" />
             </td>
           </tr>
+
+          <logic:notEmpty property="deliveryStatus"> 
+          <tr>
+          	<td colspan="1">
+          		<bean:message key="label.bdo.currentDeliveryStatus" />: 
+          		<br />
+          		<html:text property="deliveryStatus" size="20" styleClass="textfield" readonly="true" />
+          	</td>
+          	<td colspan="1">
+          		<bean:message key="label.bdo.lastDeliveryUpdateDate" />: 
+          		<br />
+          		<html:text property="lastDeliveryUpdate" size="20" styleClass="textfield" readonly="true" />
+          	</td>
+          	<td colspan="3">
+          		&nbsp;
+          	</td>
+          </tr>
+          </logic:notEmpty>
+          
           <tr>
             <td nowrap>
               <bean:message key="colname.delivercompany_nobr" />

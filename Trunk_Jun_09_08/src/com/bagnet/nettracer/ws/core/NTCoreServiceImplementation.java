@@ -6,6 +6,8 @@
  */
 package com.bagnet.nettracer.ws.core;
 
+import com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse;
+
 /**
  *  NTCoreServiceSkeleton java skeleton for the axisService
  */
@@ -100,4 +102,9 @@ public class NTCoreServiceImplementation extends NTCoreServiceSkeleton{
         com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode) {
     	return new WSCoreIncidentUtil().queryForFaultCode(queryForFaultCode);   	
     }
+    
+  	public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument updateBdoDelivery(com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery) {
+  		return new WSCoreIncidentUtil().createBdo(updateBdoDelivery);
+  	}
+
 }

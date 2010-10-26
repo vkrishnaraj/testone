@@ -133,7 +133,7 @@ public class NTCoreService {
 		return null;
 	}
 	
-	public boolean UpdateBdoDelivery(String username, String password, BdoStatusUpdate updates) {
+	public boolean UpdateBdoDelivery(String username, String password, String companycode, BdoStatusUpdate updates) {
 		return false;
 	}
 }

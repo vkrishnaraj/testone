@@ -2,13 +2,23 @@ package com.bagnet.nettracer.ws.core;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.MessageResources;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
@@ -19,7 +29,9 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.DeliveryStatusType;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -34,11 +46,15 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument.QueryForFaultCodeResponse;
+import com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery;
+import com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse;
 import com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument.UpdateIncidentFaultCodesResponse;
+import com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSArticle;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncident;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncidentClaimCheck;
@@ -51,7 +67,8 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.xsd.UpdateIncidentResponse;
 
 public class WSCoreIncidentUtil {
 
-
+	private static Logger logger = Logger.getLogger(WSCoreIncidentUtil.class);
+	private static MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 	/**
 	 * this method modularize the method in service skeleton
 	 * @param getOHD
@@ -959,5 +976,74 @@ public class WSCoreIncidentUtil {
 		res.setReturn(xreturn);
 		return resDoc;
 	}
+
+
+	public UpdateBdoDeliveryResponseDocument createBdo(UpdateBdoDeliveryDocument updateBdoDelivery) {
+		boolean finalResponse = false;
+		
+		UpdateBdoDeliveryResponseDocument res = UpdateBdoDeliveryResponseDocument.Factory.newInstance();
+		UpdateBdoDelivery del = updateBdoDelivery.getUpdateBdoDelivery();
+		
+		
+		String password = del.getPassword();
+		String username = del.getUsername();
+		String companycode = del.getCompanycode();
+		
+		
+		
+		ActionMessages errors = new ActionMessages();
+		Agent agent = SecurityUtils.authUser(username, password, companycode, 1, errors);
+
+		String errorStr = null;
+		if (!errors.isEmpty()) {
+			// has errors return errors
+			StringBuffer sb = new StringBuffer();
+			sb.append("ERROR: ");
+			for (Iterator i = errors.get(); i.hasNext();) {
+				ActionMessage am = (ActionMessage) i.next();
+				sb.append(messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), am.getKey()) + ". ");
+			}
+			errorStr = sb.toString();
+		} else if (agent == null) {
+			errorStr = "ERROR: no agent found";
+		}
+		
+		if (errorStr != null) {
+			logger.error (errorStr);
+		} else {
+			BdoStatusUpdate ud = del.getUpdates();
+			int bdo_id = ud.getBdo();
+			String status = ud.getStatus();
+			Calendar statusDateTime = ud.getStatusDateTime();
+			
+			Session sess = null;
+			Transaction t = null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+			
+				BDO bdo = (BDO) sess.load(BDO.class, bdo_id);
+			
+				if (bdo != null) {
+					t = sess.beginTransaction();
+					bdo.setDeliveryStatus(DeliveryStatusType.valueOf(status));
+					bdo.setLastDeliveryUpdate(statusDateTime.getTime());
+					t.commit();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			} finally {
+				sess.close();
+				if (t != null ) {
+					t.rollback();
+				}
+			}
+		}
+
+		UpdateBdoDeliveryResponse r1 = res.addNewUpdateBdoDeliveryResponse();
+		r1.setReturn(finalResponse);
+		
+		return res;
+  }
  	
 }

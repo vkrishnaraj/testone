@@ -1,5 +1,9 @@
 package com.bagnet.nettracer.ws.core.pojo;
 
+import java.util.Calendar;
+
+import com.bagnet.nettracer.tracing.db.Status;
+
 public class WS_PVItem {
 	private String claimchecknum;
 	private String bagstatus;
@@ -10,6 +14,21 @@ public class WS_PVItem {
 	private String city;
 	private String state_ID;
 	private String zip;
+	private Calendar lastDeliveryUpdate;
+	private Status deliveryStatus;
+	
+	public Calendar getLastDeliveryUpdate() {
+  	return lastDeliveryUpdate;
+  }
+	public void setLastDeliveryUpdate(Calendar lastDeliveryUpdate) {
+  	this.lastDeliveryUpdate = lastDeliveryUpdate;
+  }
+	public Status getDeliveryStatus() {
+  	return deliveryStatus;
+  }
+	public void setDeliveryStatus(Status deliveryStatus) {
+  	this.deliveryStatus = deliveryStatus;
+  }
 	/**
 	 * @return the claimchecknum
 	 */

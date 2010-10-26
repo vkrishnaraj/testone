@@ -14,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -54,6 +55,8 @@ public final class BDOForm extends ValidatorForm {
 	private String currency;
 	private String cost;
 	private boolean canceled;
+	private Date lastDeliveryUpdate;
+	private Status deliveryStatus;
 	
 	
     private String wt_id;
@@ -436,6 +439,22 @@ public final class BDOForm extends ValidatorForm {
 	public void setCanceled(boolean canceled) {
 		this.canceled = canceled;
 	}
+
+	public Date getLastDeliveryUpdate() {
+  	return lastDeliveryUpdate;
+  }
+
+	public void setLastDeliveryUpdate(Date lastDeliveryUpdate) {
+  	this.lastDeliveryUpdate = lastDeliveryUpdate;
+  }
+
+	public Status getDeliveryStatus() {
+  	return deliveryStatus;
+  }
+
+	public void setDeliveryStatus(Status deliveryStatus) {
+  	this.deliveryStatus = deliveryStatus;
+  }
 
 
 }

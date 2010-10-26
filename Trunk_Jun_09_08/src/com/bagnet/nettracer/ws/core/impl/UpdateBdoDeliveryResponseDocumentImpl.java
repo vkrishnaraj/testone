@@ -1,39 +1,39 @@
 /*
  * An XML document type.
- * Localname: logoffResponse
+ * Localname: UpdateBdoDeliveryResponse
  * Namespace: http://core.ws.nettracer.bagnet.com
- * Java type: com.bagnet.nettracer.ws.core.LogoffResponseDocument
+ * Java type: com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument
  *
  * Automatically generated - do not modify.
  */
 package com.bagnet.nettracer.ws.core.impl;
 /**
- * A document containing one logoffResponse(@http://core.ws.nettracer.bagnet.com) element.
+ * A document containing one UpdateBdoDeliveryResponse(@http://core.ws.nettracer.bagnet.com) element.
  *
  * This is a complex type.
  */
-public class LogoffResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.LogoffResponseDocument
+public class UpdateBdoDeliveryResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument
 {
     
-    public LogoffResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
+    public UpdateBdoDeliveryResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
         super(sType);
     }
     
-    private static final javax.xml.namespace.QName LOGOFFRESPONSE$0 = 
-        new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "logoffResponse");
+    private static final javax.xml.namespace.QName UPDATEBDODELIVERYRESPONSE$0 = 
+        new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "UpdateBdoDeliveryResponse");
     
     
     /**
-     * Gets the "logoffResponse" element
+     * Gets the "UpdateBdoDeliveryResponse" element
      */
-    public com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse getLogoffResponse()
+    public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse getUpdateBdoDeliveryResponse()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse target = null;
-            target = (com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse)get_store().find_element_user(LOGOFFRESPONSE$0, 0);
+            com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse target = null;
+            target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse)get_store().find_element_user(UPDATEBDODELIVERYRESPONSE$0, 0);
             if (target == null)
             {
                 return null;
@@ -43,45 +43,45 @@ public class LogoffResponseDocumentImpl extends org.apache.xmlbeans.impl.values.
     }
     
     /**
-     * Sets the "logoffResponse" element
+     * Sets the "UpdateBdoDeliveryResponse" element
      */
-    public void setLogoffResponse(com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse logoffResponse)
+    public void setUpdateBdoDeliveryResponse(com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse updateBdoDeliveryResponse)
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse target = null;
-            target = (com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse)get_store().find_element_user(LOGOFFRESPONSE$0, 0);
+            com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse target = null;
+            target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse)get_store().find_element_user(UPDATEBDODELIVERYRESPONSE$0, 0);
             if (target == null)
             {
-                target = (com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse)get_store().add_element_user(LOGOFFRESPONSE$0);
+                target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse)get_store().add_element_user(UPDATEBDODELIVERYRESPONSE$0);
             }
-            target.set(logoffResponse);
+            target.set(updateBdoDeliveryResponse);
         }
     }
     
     /**
-     * Appends and returns a new empty "logoffResponse" element
+     * Appends and returns a new empty "UpdateBdoDeliveryResponse" element
      */
-    public com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse addNewLogoffResponse()
+    public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse addNewUpdateBdoDeliveryResponse()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse target = null;
-            target = (com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse)get_store().add_element_user(LOGOFFRESPONSE$0);
+            com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse target = null;
+            target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse)get_store().add_element_user(UPDATEBDODELIVERYRESPONSE$0);
             return target;
         }
     }
     /**
-     * An XML logoffResponse(@http://core.ws.nettracer.bagnet.com).
+     * An XML UpdateBdoDeliveryResponse(@http://core.ws.nettracer.bagnet.com).
      *
      * This is a complex type.
      */
-    public static class LogoffResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.LogoffResponseDocument.LogoffResponse
+    public static class UpdateBdoDeliveryResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument.UpdateBdoDeliveryResponse
     {
         
-        public LogoffResponseImpl(org.apache.xmlbeans.SchemaType sType)
+        public UpdateBdoDeliveryResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {
             super(sType);
         }

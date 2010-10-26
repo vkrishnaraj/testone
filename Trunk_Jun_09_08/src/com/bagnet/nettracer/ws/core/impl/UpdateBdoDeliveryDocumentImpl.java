@@ -1,39 +1,39 @@
 /*
  * An XML document type.
- * Localname: authenticate
+ * Localname: UpdateBdoDelivery
  * Namespace: http://core.ws.nettracer.bagnet.com
- * Java type: com.bagnet.nettracer.ws.core.AuthenticateDocument
+ * Java type: com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument
  *
  * Automatically generated - do not modify.
  */
 package com.bagnet.nettracer.ws.core.impl;
 /**
- * A document containing one authenticate(@http://core.ws.nettracer.bagnet.com) element.
+ * A document containing one UpdateBdoDelivery(@http://core.ws.nettracer.bagnet.com) element.
  *
  * This is a complex type.
  */
-public class AuthenticateDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.AuthenticateDocument
+public class UpdateBdoDeliveryDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument
 {
     
-    public AuthenticateDocumentImpl(org.apache.xmlbeans.SchemaType sType)
+    public UpdateBdoDeliveryDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
         super(sType);
     }
     
-    private static final javax.xml.namespace.QName AUTHENTICATE$0 = 
-        new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "authenticate");
+    private static final javax.xml.namespace.QName UPDATEBDODELIVERY$0 = 
+        new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "UpdateBdoDelivery");
     
     
     /**
-     * Gets the "authenticate" element
+     * Gets the "UpdateBdoDelivery" element
      */
-    public com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate getAuthenticate()
+    public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery getUpdateBdoDelivery()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate target = null;
-            target = (com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate)get_store().find_element_user(AUTHENTICATE$0, 0);
+            com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery target = null;
+            target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery)get_store().find_element_user(UPDATEBDODELIVERY$0, 0);
             if (target == null)
             {
                 return null;
@@ -43,45 +43,45 @@ public class AuthenticateDocumentImpl extends org.apache.xmlbeans.impl.values.Xm
     }
     
     /**
-     * Sets the "authenticate" element
+     * Sets the "UpdateBdoDelivery" element
      */
-    public void setAuthenticate(com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate authenticate)
+    public void setUpdateBdoDelivery(com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery updateBdoDelivery)
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate target = null;
-            target = (com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate)get_store().find_element_user(AUTHENTICATE$0, 0);
+            com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery target = null;
+            target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery)get_store().find_element_user(UPDATEBDODELIVERY$0, 0);
             if (target == null)
             {
-                target = (com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate)get_store().add_element_user(AUTHENTICATE$0);
+                target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery)get_store().add_element_user(UPDATEBDODELIVERY$0);
             }
-            target.set(authenticate);
+            target.set(updateBdoDelivery);
         }
     }
     
     /**
-     * Appends and returns a new empty "authenticate" element
+     * Appends and returns a new empty "UpdateBdoDelivery" element
      */
-    public com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate addNewAuthenticate()
+    public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery addNewUpdateBdoDelivery()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate target = null;
-            target = (com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate)get_store().add_element_user(AUTHENTICATE$0);
+            com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery target = null;
+            target = (com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery)get_store().add_element_user(UPDATEBDODELIVERY$0);
             return target;
         }
     }
     /**
-     * An XML authenticate(@http://core.ws.nettracer.bagnet.com).
+     * An XML UpdateBdoDelivery(@http://core.ws.nettracer.bagnet.com).
      *
      * This is a complex type.
      */
-    public static class AuthenticateImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate
+    public static class UpdateBdoDeliveryImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument.UpdateBdoDelivery
     {
         
-        public AuthenticateImpl(org.apache.xmlbeans.SchemaType sType)
+        public UpdateBdoDeliveryImpl(org.apache.xmlbeans.SchemaType sType)
         {
             super(sType);
         }
@@ -92,6 +92,8 @@ public class AuthenticateDocumentImpl extends org.apache.xmlbeans.impl.values.Xm
             new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "password");
         private static final javax.xml.namespace.QName COMPANYCODE$4 = 
             new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "companycode");
+        private static final javax.xml.namespace.QName UPDATES$6 = 
+            new javax.xml.namespace.QName("http://core.ws.nettracer.bagnet.com", "updates");
         
         
         /**
@@ -466,6 +468,113 @@ public class AuthenticateDocumentImpl extends org.apache.xmlbeans.impl.values.Xm
             {
                 check_orphaned();
                 get_store().remove_element(COMPANYCODE$4, 0);
+            }
+        }
+        
+        /**
+         * Gets the "updates" element
+         */
+        public com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate getUpdates()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().find_element_user(UPDATES$6, 0);
+                if (target == null)
+                {
+                    return null;
+                }
+                return target;
+            }
+        }
+        
+        /**
+         * Tests for nil "updates" element
+         */
+        public boolean isNilUpdates()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().find_element_user(UPDATES$6, 0);
+                if (target == null) return false;
+                return target.isNil();
+            }
+        }
+        
+        /**
+         * True if has "updates" element
+         */
+        public boolean isSetUpdates()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                return get_store().count_elements(UPDATES$6) != 0;
+            }
+        }
+        
+        /**
+         * Sets the "updates" element
+         */
+        public void setUpdates(com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate updates)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().find_element_user(UPDATES$6, 0);
+                if (target == null)
+                {
+                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().add_element_user(UPDATES$6);
+                }
+                target.set(updates);
+            }
+        }
+        
+        /**
+         * Appends and returns a new empty "updates" element
+         */
+        public com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate addNewUpdates()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().add_element_user(UPDATES$6);
+                return target;
+            }
+        }
+        
+        /**
+         * Nils the "updates" element
+         */
+        public void setNilUpdates()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate target = null;
+                target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().find_element_user(UPDATES$6, 0);
+                if (target == null)
+                {
+                    target = (com.bagnet.nettracer.ws.core.pojo.xsd.BdoStatusUpdate)get_store().add_element_user(UPDATES$6);
+                }
+                target.setNil();
+            }
+        }
+        
+        /**
+         * Unsets the "updates" element
+         */
+        public void unsetUpdates()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                get_store().remove_element(UPDATES$6, 0);
             }
         }
     }

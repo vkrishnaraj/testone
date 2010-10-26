@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file was auto-generated from WSDL -->
-<!-- by the Apache Axis2 version: 1.3  Built on : Aug 10, 2007 (04:45:47 LKT) -->
+<!-- by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT) -->
 <serviceGroup>
     <service name="NTCoreService">
         <messageReceivers>
@@ -9,45 +9,49 @@
         <parameter name="ServiceClass">com.bagnet.nettracer.ws.core.NTCoreServiceImplementation</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
-        <operation name="insertIncident" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:insertIncident</actionMapping>
-            <outputActionMapping>urn:insertIncidentResponse</outputActionMapping>
-        </operation>
-        <operation name="queryForFaultCode" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:queryForFaultCode</actionMapping>
-            <outputActionMapping>urn:queryForFaultCodeResponse</outputActionMapping>
-        </operation>
-        <operation name="insertQuickOHD" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:insertQuickOHD</actionMapping>
-            <outputActionMapping>urn:insertQuickOHDResponse</outputActionMapping>
-        </operation>
-        <operation name="getIncident" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getIncident</actionMapping>
-            <outputActionMapping>urn:getIncidentResponse</outputActionMapping>
-        </operation>
-        <operation name="getOHD" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:getOHD</actionMapping>
-            <outputActionMapping>urn:getOHDResponse</outputActionMapping>
-        </operation>
-        <operation name="logoff" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:logoff</actionMapping>
-            <outputActionMapping>urn:logoffResponse</outputActionMapping>
-        </operation>
-        <operation name="authenticate" mep="http://www.w3.org/ns/wsdl/in-out">
+        <operation name="authenticate" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
             <actionMapping>urn:authenticate</actionMapping>
             <outputActionMapping>urn:authenticateResponse</outputActionMapping>
         </operation>
-        <operation name="updateIncidentFaultCodes" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:updateIncidentFaultCodes</actionMapping>
-            <outputActionMapping>urn:updateIncidentFaultCodesResponse</outputActionMapping>
+        <operation name="beornOHD" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:beornOHD</actionMapping>
+            <outputActionMapping>urn:beornOHDResponse</outputActionMapping>
         </operation>
-        <operation name="insertOHD" mep="http://www.w3.org/ns/wsdl/in-out">
+        <operation name="getOHD" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:getOHD</actionMapping>
+            <outputActionMapping>urn:getOHDResponse</outputActionMapping>
+        </operation>
+        <operation name="insertIncident" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:insertIncident</actionMapping>
+            <outputActionMapping>urn:insertIncidentResponse</outputActionMapping>
+        </operation>
+        <operation name="insertOHD" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
             <actionMapping>urn:insertOHD</actionMapping>
             <outputActionMapping>urn:insertOHDResponse</outputActionMapping>
         </operation>
-        <operation name="beornOHD" mep="http://www.w3.org/ns/wsdl/in-out">
-            <actionMapping>urn:beornOHD</actionMapping>
-            <outputActionMapping>urn:beornOHDResponse</outputActionMapping>
+        <operation name="UpdateBdoDelivery" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:UpdateBdoDelivery</actionMapping>
+            <outputActionMapping>urn:UpdateBdoDeliveryResponse</outputActionMapping>
+        </operation>
+        <operation name="getIncident" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:getIncident</actionMapping>
+            <outputActionMapping>urn:getIncidentResponse</outputActionMapping>
+        </operation>
+        <operation name="queryForFaultCode" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:queryForFaultCode</actionMapping>
+            <outputActionMapping>urn:queryForFaultCodeResponse</outputActionMapping>
+        </operation>
+        <operation name="logoff" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:logoff</actionMapping>
+            <outputActionMapping>urn:logoffResponse</outputActionMapping>
+        </operation>
+        <operation name="updateIncidentFaultCodes" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:updateIncidentFaultCodes</actionMapping>
+            <outputActionMapping>urn:updateIncidentFaultCodesResponse</outputActionMapping>
+        </operation>
+        <operation name="insertQuickOHD" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://core.ws.nettracer.bagnet.com">
+            <actionMapping>urn:insertQuickOHD</actionMapping>
+            <outputActionMapping>urn:insertQuickOHDResponse</outputActionMapping>
         </operation>
     </service>
 </serviceGroup>

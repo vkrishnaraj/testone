@@ -25,9 +25,13 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
  * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
  * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
+ * @hibernate.typedef name="deliveryStatusType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
+ * @hibernate.typedef-param typedef-name="deliveryStatusType" name="enumClassname"
+ * 			value="com.bagnet.nettracer.tracing.db.DeliveryStatusType"
  */
 public class BDO implements Serializable {
 
+	
 	private int BDO_ID;
 	private DeliverCompany delivercompany;
 	private Deliver_ServiceLevel servicelevel;
@@ -60,7 +64,21 @@ public class BDO implements Serializable {
 	private Set expensePayouts;
 	private boolean canceled;
 	
+	private Date lastDeliveryUpdate;
+	private DeliveryStatusType deliveryStatus;
 	
+	/**
+	 * 
+	 * @hibernate.property type="timestamp"
+	 */
+	public Date getLastDeliveryUpdate() {
+  	return lastDeliveryUpdate;
+  }
+
+	public void setLastDeliveryUpdate(Date lastDeliveryUpdate) {
+  	this.lastDeliveryUpdate = lastDeliveryUpdate;
+  }
+
 	/**
 	 * @return Returns the passengers.
 	 * 
@@ -514,5 +532,17 @@ public class BDO implements Serializable {
 	public void setItem_bdo(Set<Item_BDO> item_bdo) {
 		this.item_bdo = item_bdo;
 	}
+
+	/**
+	 * @return the delivery_integration_type
+	 * @hibernate.property type="deliveryStatusType"
+	 */
+	public DeliveryStatusType getDeliveryStatus() {
+  	return deliveryStatus;
+  }
+
+	public void setDeliveryStatus(DeliveryStatusType deliveryStatus) {
+  	this.deliveryStatus = deliveryStatus;
+  }
 
 }
