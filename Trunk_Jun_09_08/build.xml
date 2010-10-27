@@ -81,11 +81,13 @@
 
 	</target>
 
-	<target name="build" depends="init,compile-web" />
+	<target name="build" depends="init,compile-web"  />
 
 	<!-- This is used  -->
 	<target name="compile-web" depends="init">
 		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on"
+			
+			memoryinitialsize="256m"       memorymaximumsize="256m"
 			>
 			<classpath refid="project.classpath" />
 			<exclude name="com/bagnet/nettracer/cronjob/**" />
