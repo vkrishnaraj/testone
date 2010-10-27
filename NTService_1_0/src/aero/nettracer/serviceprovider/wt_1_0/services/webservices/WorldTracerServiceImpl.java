@@ -25,6 +25,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.neethi.Policy;
 import org.apache.neethi.PolicyEngine;
+import org.apache.xmlbeans.XmlError;
+import org.apache.xmlbeans.XmlOptions;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -247,6 +249,26 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	}
 
+	protected static boolean validate(org.apache.xmlbeans.XmlObject xml){
+		org.apache.xmlbeans.XmlOptions options = new XmlOptions();
+		ArrayList<XmlError> errors = new ArrayList<XmlError>();
+		options.setErrorListener(errors);
+		try{
+			boolean valid = xml.validate(options);
+			if(!valid){
+				for(XmlError error:errors){
+					String errorStr = "Message: " + error.getMessage() + "\n";
+					errorStr += "Location of invalid XML: " + error.getCursorLocation().xmlText() + "\n";
+					logger.error(errorStr);
+				}
+			}
+			return valid;
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	//TODO
 	protected static Map<String,String> combineContentFields(Content [] contents){
 		HashMap<String,String> m = new HashMap<String,String>();
@@ -337,6 +359,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.eraseMessages(d);
 
 				logger.info(wsresponse);
@@ -453,6 +476,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.requestOnhand(d);
 
 				logger.info(wsresponse);
@@ -578,6 +602,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.requestOnhand(d);
 
 				logger.info(wsresponse);
@@ -678,6 +703,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.sendMessage(d);
 
 				logger.info(wsresponse);
@@ -795,6 +821,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.readMessages(d);
 
 				logger.info(wsresponse);
@@ -888,6 +915,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.getMessageCount(d);
 
 				logger.info(wsresponse);
@@ -1175,6 +1203,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.close(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -1466,6 +1495,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.create(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -1541,6 +1571,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.reinstate(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -1612,6 +1643,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.suspend(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2021,6 +2053,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.create(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2095,6 +2128,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.suspend(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2163,6 +2197,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.reinstate(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2257,6 +2292,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return false;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.close(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2411,6 +2447,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.forwardOnhandBags(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2559,6 +2596,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.create(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2643,6 +2681,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.read(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -2957,6 +2996,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.read(d);
 				logger.info(wsresponse);
 
@@ -3339,6 +3379,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.update(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -3777,6 +3818,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.update(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
@@ -3896,6 +3938,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					return;
 				}
 				writeToLog(label);
+				validate(d);
 				wsresponse = stub.quickCreate(d);
 				logger.info(wsresponse);
 			} catch (Exception e) {
