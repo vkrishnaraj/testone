@@ -251,6 +251,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE = "Dispute Fault Code"; 
 	public final static String SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE = "Manage Fault Dispute";
 	
+	//teletype print
+	public static final String SYSTEM_COMPONENT_NAME_TELETYPE_PRINT = "Teletype Report";
 	
 	// itinerary types
 	public final static int PASSENGER_ROUTING = 0;
