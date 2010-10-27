@@ -7,8 +7,10 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean canTeletype = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_TELETYPE_PRINT, a);
 %>
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <script language="javascript">
@@ -358,9 +360,16 @@ function CBG_check(obj) {
                   -->
                   <!-- REMOVED FROM OPTIONS -->
                 <% } %>
+                
+                <% 
+				if (canTeletype) {
+				%>
                 <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("5")) { %> checked <% } %> value="5">
                 <bean:message key="radio.teletype" />
                 <html:text property="teletypeAddress" size="10" maxlength="13" styleClass="textfield" />
+                <% 
+				}
+				%>
               </td>
             </tr>
             <tr>
