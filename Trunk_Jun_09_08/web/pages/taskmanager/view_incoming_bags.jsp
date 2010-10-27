@@ -6,7 +6,9 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
-  <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
@@ -17,6 +19,7 @@
 	  request.setAttribute("outputtype", "0");
   }
 
+  boolean canTeletype = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_TELETYPE_PRINT, a);
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.bmo.RequestOhdBMO"%>
@@ -187,9 +190,15 @@ function sortIncomingBags(sortOrder) {
                 <% } %>
                 <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1") || TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %> checked <% } %> value="1">
                 <bean:message key="radio.html" />
+                <% 
+				if (canTeletype) {
+				%>
                 <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("5")) { %> checked <% } %> value="5">
                 <bean:message key="radio.teletype" />
                 <html:text property="teletypeAddress" size="10" maxlength="13" styleClass="textfield" />
+				<% 
+				}
+				%>                
                 &nbsp;    
                 <html:submit styleId="button" property="teletype">
                   <bean:message key="button.createreport" />
