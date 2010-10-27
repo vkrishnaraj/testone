@@ -258,7 +258,7 @@ function CBG_check(obj) {
               <a href="#"><span class="aab">&nbsp;
                   <br />
                   &nbsp;</span>
-                <span class="bbb">Jack-in-the-box<bean:message key="menu.ohd_history" /></span>
+                <span class="bbb"><bean:message key="menu.ohd_history" /></span>
                 <span class="ccb">&nbsp;
                   <br />
                   &nbsp;</span></a>
