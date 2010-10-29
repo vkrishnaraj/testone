@@ -18,6 +18,8 @@
       } else {
         countfield.value = maxlimit - field.value.length;
       }
+      var hiddenInfo = document.getElementById('furtherInfoHidden');
+      hiddenInfo.value = field.value;
     }
 
   </SCRIPT>
@@ -140,8 +142,9 @@
             String infoText2       = "this.form.elements['" + infoDescription + "2']";
 %>
               <td colspan="4">
-              <html:textarea name="<%= infoDescription %>" cols="80" rows="10" onkeydown="textCounter(<%= infoText %>, <%= infoText2 %>,3000);"
-              onkeyup="textCounter(<%= infoText %>, <%= infoText2 %>,3000);" property="furtherInfo"/>
+              <textarea name="<%= infoDescription %>" cols="80" rows="10" onkeydown="textCounter(<%= infoText %>, <%= infoText2 %>,3000);"
+              onkeyup="textCounter(<%= infoText %>, <%= infoText2 %>,3000);" />
+              <html:hidden property="furtherInfo" styleId="furtherInfoHidden"/>
               <input name="<%= infoDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
               <!--  html:text property="furtherInfo" size="60" maxlength="3000" styleClass="textfield"/ --></td>
             </tr>
