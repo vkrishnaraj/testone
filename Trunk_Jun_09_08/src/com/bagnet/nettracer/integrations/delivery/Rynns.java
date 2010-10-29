@@ -94,7 +94,7 @@ public class Rynns implements BDOIntegration {
 			
 			ArrayOfItemData array = ws.addNewItemsData();
 			
-			if (bdo.getItems() != null) {
+			if (bdo.getItems() != null &&  bdo.getIncident() != null) {
 				for (Item item: (Set<Item>)bdo.getItems()) {
 					ItemData id = array.addNewItemData();
 					id.setColor(item.getColor());

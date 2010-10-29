@@ -150,18 +150,40 @@ public class DSI implements BDOIntegration {
 					del.setState(pax.getState_ID());
 					del.setZip(pax.getZip());
 					
-					
-					for (Item item: (Set<Item>)bdo.getItems()) {
+					// Items
+					if (bdo.getItems() != null && bdo.getIncident() != null) {
+						for (Item item: (Set<Item>)bdo.getItems()) {
+							LuggageItemUpdateType lug = bdoType.addNewLuggageItem();
+							
+							if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+								lug.setTagNumber(item.getClaimchecknum());	
+							} else {
+								lug.setTagNumber("");
+							}
+							
+							StringBuffer sb = new StringBuffer();
+							sb.append(item.getBagtype());
+							sb.append(getElementDescriptor(item.getXdescelement_ID_1()));
+							sb.append(getElementDescriptor(item.getXdescelement_ID_2()));
+							sb.append(getElementDescriptor(item.getXdescelement_ID_3()));
+			
+							lug.setType(sb.toString());
+							lug.setColor(item.getColor());
+						}
+					} else if (bdo.getOhd() != null){
+						
+						OHD item = bdo.getOhd();
+						
 						LuggageItemUpdateType lug = bdoType.addNewLuggageItem();
 						
-						if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
-							lug.setTagNumber(item.getClaimchecknum());	
+						if (item.getClaimnum() != null && item.getClaimnum().trim().length() > 0) {
+							lug.setTagNumber(item.getClaimnum());	
 						} else {
 							lug.setTagNumber("");
 						}
 						
 						StringBuffer sb = new StringBuffer();
-						sb.append(item.getBagtype());
+						sb.append(item.getType());
 						sb.append(getElementDescriptor(item.getXdescelement_ID_1()));
 						sb.append(getElementDescriptor(item.getXdescelement_ID_2()));
 						sb.append(getElementDescriptor(item.getXdescelement_ID_3()));
