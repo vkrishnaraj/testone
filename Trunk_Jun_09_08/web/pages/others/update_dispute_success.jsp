@@ -13,7 +13,7 @@
       	<tr>
         	<td>
           		<h1 class="green">
-					update dispute success
+					Dispute Updated Successfully
             </td>
     	</tr>
     </table>
