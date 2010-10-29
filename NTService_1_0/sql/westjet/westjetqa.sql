@@ -1,7 +1,7 @@
 ## INSTANCE ENTRIES ##
 
-insert into properties (keyStr, valueStr) values ('nt.central.endpoint', 'http://75.126.190.160/NTServices_1_0/services/WorldTracerService');
-insert into properties (keyStr, valueStr)values ('nt.central.username', 'westjet_qa');
+insert into properties (keyStr, valueStr) values ('nt.central.endpoint', 'https://75.126.190.163/NTServices_1_0/services/WorldTracerService');
+insert into properties (keyStr, valueStr)values ('nt.central.username', 'westjet_prod');
 insert into properties (keyStr, valueStr)values ('nt.central.password', 'password');
 
 ## SERVICE ENTRIES ##
