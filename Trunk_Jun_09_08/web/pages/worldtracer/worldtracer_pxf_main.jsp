@@ -134,7 +134,16 @@
 			  <th colspan="4"><bean:message key="colname.wt_pxf_message" />:</th>
             </tr>
             <tr>
-              <td colspan="4"><html:text property="furtherInfo" size="60" maxlength="3000" styleClass="textfield"/></td>
+<%
+            String infoDescription = "furtherInfo";
+            String infoText        = "this.form.elements['" + infoDescription + "']";
+            String infoText2       = "this.form.elements['" + infoDescription + "2']";
+%>
+              <td colspan="4">
+              <html:textarea name="<%= infoDescription %>" cols="80" rows="10" onkeydown="textCounter(<%= infoText %>, <%= infoText2 %>,3000);"
+              onkeyup="textCounter(<%= infoText %>, <%= infoText2 %>,3000);" property="furtherInfo"/>
+              <input name="<%= infoDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
+              <!--  html:text property="furtherInfo" size="60" maxlength="3000" styleClass="textfield"/ --></td>
             </tr>
             <tr>
               <td colspan="4" align="center">
