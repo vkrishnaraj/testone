@@ -314,7 +314,7 @@ public class DSI implements BDOIntegration {
 					
 					
 					// Items
-					if (bdo.getItems() != null) {
+					if (bdo.getItems() != null && bdo.getIncident() != null) {
 						for (Item item: (Set<Item>)bdo.getItems()) {
 							LuggageItemType lug = bdoType.addNewLuggageItem();
 							
