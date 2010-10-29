@@ -1117,7 +1117,7 @@ public class OnHandAction extends CheckedAction {
 				StringBuilder myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
 				SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 				String teletypeAddress = request.getParameter("teletypeAddress");
-//				iw.sendTelex(myTeletypeHistoricalReport.toString(), teletypeAddress);
+				iw.sendTelex(myTeletypeHistoricalReport.toString(), teletypeAddress);
 				
 				return null;
 			} else {
