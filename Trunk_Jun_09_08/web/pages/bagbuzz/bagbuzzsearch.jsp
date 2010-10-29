@@ -79,13 +79,10 @@ function writeConsole(content) {
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td>
-                <b><bean:message key="bagbuzz.colname.id" /></b>
+                <b><bean:message key="bagbuzz.colname.description" /></b>
               </td>
               <td>
                 <b><bean:message key="bagbuzz.colname.date" /></b>
-              </td>
-              <td>
-                <b><bean:message key="bagbuzz.colname.description" /></b>
               </td>
               <td>
                 <b><bean:message key="bagbuzz.colname.status" /></b>
@@ -109,15 +106,12 @@ function writeConsole(content) {
         
         <logic:iterate id="bb" name="bb_list" scope="request" type="com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz">
         	<tr>
-        	    <td nowrap>
-                  <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=610,scrollbars'); return false"><bean:write name="bb" property="bagbuzz_id" /></a><br />
-                </td>
-				<td nowrap>
-                  <bean:write name="bb" property="created_timestamp" />
+                <td nowrap>
+                <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=610,scrollbars'); return false"><bean:write name="bb" property="description" /></a><br />
                   &nbsp;
                 </td>
 				<td nowrap>
-                  <bean:write name="bb" property="description" />
+                  <bean:write name="bb" property="created_timestamp" />
                   &nbsp;
                 </td>
 				<td nowrap>

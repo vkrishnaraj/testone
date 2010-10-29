@@ -32,7 +32,9 @@ public class BagBuzzSearchAction extends Action{
 		bb.setBagbuzz_id(Long.parseLong(request.getParameter("bb_id")));
 		System.out.println(request.getParameter("data"));
 		bb.setData(request.getParameter("data"));
-		bb.setDescription(request.getParameter("description"));
+		if(request.getParameter("description") != null){
+			bb.setDescription(request.getParameter("description").trim());
+		}
 		return bb;
 	}
 	
