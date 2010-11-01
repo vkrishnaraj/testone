@@ -16,7 +16,7 @@
    <tr>
      <td colspan=2>
        <strong>
-         <bean:message key="header.report_options" />
+         <bean:message key="header.report_options" />Jack-In-The-Box
        </strong>
      </td>
    </tr>
