@@ -65,10 +65,20 @@ public class CustomReportBMO implements
 				} else {
 					return creportdata2;
 				}
+				
+			case ReportingConstants.RPT_20_CUSTOM_55:
+				creportdata = createDisputeResolutionReport(srDTO, ReportBMO.getCustomReport(55).getResource_key(), request, user);
+				break;
 		}
 		return null;
 	}
 
+	private String createDisputeResolutionReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
+		// TODO Auto-generated method stub
+		ReportBMO rbmo= new ReportBMO(request);
+		rbmo.setUser(user);
+		return rbmo.create_dispute_resolution_rpt(srDTO, 0, ReportingConstants.RPT_55_NAME, "Dispute Resolution Report");
+	}
 
 	private String createPerformanceReport(StatReportDTO srDTO,
 			String resource_key,HttpServletRequest request) {

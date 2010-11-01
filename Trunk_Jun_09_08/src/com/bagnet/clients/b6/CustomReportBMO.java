@@ -58,6 +58,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			creportdata = createPawobReport(srDTO, ReportBMO.getCustomReport(77).getResource_key(), request, user,
 					rootpath);
 			break;
+		case ReportingConstants.RPT_20_CUSTOM_55:
+			creportdata = createDisputeResolutionReport(srDTO, ReportBMO.getCustomReport(55).getResource_key(), request, user);
+			break;
 		default:
 			break;
 
@@ -65,6 +68,12 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		return creportdata;
 	}
 
+	private String createDisputeResolutionReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
+		ReportBMO rbmo= new ReportBMO(request);
+		rbmo.setUser(user);
+		return rbmo.create_dispute_resolution_rpt(srDTO, 0, ReportingConstants.RPT_55_NAME, "Dispute Resolution Report");
+	}
+	
 	private String createPPLCReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user,
 			String rootpath) {
 
