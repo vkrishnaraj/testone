@@ -395,70 +395,73 @@ public class DisputeResolutionReportBMO {
 			.setDetailHeight(new Integer(15)).setLeftMargin(margin)
 			.setRightMargin(margin).setTopMargin(margin).setBottomMargin(margin)
 			.setPrintBackgroundOnOddRows(true)
-			.setOddRowBackgroundStyle(oddRowStyle);
+			.setOddRowBackgroundStyle(oddRowStyle)
+			.setColumnsPerPage(new Integer(1))
+			.setUseFullPageWidth(true)
+			.setColumnSpace(new Integer(5));
 
 		
 		AbstractColumn columnDisputeDate = ColumnBuilder.getNew()
 				.setColumnProperty("reportDateCreated", String.class.getName()).setTitle(
-				reportHeadingDisputeDate).setWidth(new Integer(30))
-				.setStyle(detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingDisputeDate).setWidth(new Integer(40))	
+				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
 
 		AbstractColumn columnReportNumber = ColumnBuilder.getNew()
 				.setColumnProperty("incident_id", String.class.getName()).setTitle(
-				reportHeadingIncidentNumber).setWidth(new Integer(50)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingIncidentNumber).setWidth(new Integer(84)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //50
 		
 		AbstractColumn columnStatus = ColumnBuilder.getNew()
 				.setColumnProperty("statusDesc", String.class.getName()).setTitle(
-				reportHeadingStatus).setWidth(new Integer(24)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingStatus).setWidth(new Integer(60)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build();  //24
 		
 		AbstractColumn columnDisputingAgent = ColumnBuilder.getNew()
 				.setColumnProperty("disputeAgentName", String.class.getName()).setTitle(
-				reportHeadingDisputingAgent).setWidth(new Integer(20)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingDisputingAgent).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //20
 		
 		AbstractColumn columnWorkingAgent = ColumnBuilder.getNew()
 				.setColumnProperty("workingAgentName", String.class.getName()).setTitle(
-				reportHeadingWorkingAgent).setWidth(new Integer(20)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingWorkingAgent).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //20
 		
 		AbstractColumn columnTypeOfChange = ColumnBuilder.getNew()
 				.setColumnProperty("typeOfChange", String.class.getName()).setTitle(
-				reportHeadingTypeOfChange).setWidth(new Integer(24)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingTypeOfChange).setWidth(new Integer(60)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //24
 	
 		
 		AbstractColumn columnPreviousFaultStation = ColumnBuilder.getNew()
 				.setColumnProperty("beforeDisputeFaultStation", String.class.getName()).setTitle(
-				reportHeadingPreviousFaultStation).setWidth(new Integer(24)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingPreviousFaultStation).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build();  //24
 		
 		AbstractColumn columnPreviousFaultCode = ColumnBuilder.getNew()
 				.setColumnProperty("previousFaultCode", Integer.class.getName()).setTitle(
-				reportHeadingPreviousLossCode).setWidth(new Integer(20)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingPreviousLossCode).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //20
 		
 		
 		AbstractColumn columnSuggestedFaultStation = ColumnBuilder.getNew()
 				.setColumnProperty("suggestedFaultStation", String.class.getName()).setTitle(
-				reportHeadingSuggestedFaultStation).setWidth(new Integer(24)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingSuggestedFaultStation).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //24
 		
 		AbstractColumn columnSuggestedFaultCode = ColumnBuilder.getNew()
 				.setColumnProperty("suggestedFaultCode", Integer.class.getName()).setTitle(
-				reportHeadingSuggestedLossCode).setWidth(new Integer(20)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingSuggestedLossCode).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //20
 		
 		AbstractColumn columnNewFaultStation = ColumnBuilder.getNew()
 				.setColumnProperty("newFaultStation", String.class.getName()).setTitle(
-				reportHeadingNewFaultStation).setWidth(new Integer(24)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingNewFaultStation).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //24
 
 		AbstractColumn columnNewFaultCode = ColumnBuilder.getNew()
 				.setColumnProperty("newFaultCode", Integer.class.getName()).setTitle(
-				reportHeadingNewLossCode).setWidth(new Integer(20)).setStyle(
-				detailStyle).setHeaderStyle(headerStyle).build();
+				reportHeadingNewLossCode).setWidth(new Integer(30)).setStyle(
+				detailStyle).setHeaderStyle(headerStyle).build(); //20
 
 
 		
@@ -598,7 +601,7 @@ public class DisputeResolutionReportBMO {
 		drb = drb.addColumn(reportHeadingNewLossCode,"newFaultCode",Integer.class.getName(),24);
         
 		//get the general information of the report, such as Report Title
-		String myReportTitle = "On-hand Baggage Report";
+		String myReportTitle = "Dispute Resolution Report";
 		if (parameters.get("title") != null) {
 			myReportTitle = (String) parameters.get("title");
 		}
