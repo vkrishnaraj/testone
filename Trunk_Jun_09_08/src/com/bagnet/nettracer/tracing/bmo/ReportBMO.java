@@ -2684,7 +2684,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
+
+			String simpleDateQ = "";
 			
 			ArrayList dateal = null;
 			if ((dateal = calculateDateDiff(srDTO,tz,user)) == null) {
@@ -2699,53 +2700,35 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
 					// need to add the timezone diff here
-					dateq += " and ((d.created_timestamp = '" 
-							+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
-							+ "' and d.created_timestamp >= '" 
-							+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (d.created_timestamp= '"
-							+ DateUtils.formatDate(sdate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "' and d.created_timestamp <= '"
-							+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "'))";
 
 				} else {
 
 					// first get the beginning and end dates using date and time, then get
 					// dates in between
-					dateq += " and ((d.created_timestamp = '" 
-						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
-						+ "' and d.created_timestamp >= '" 
-						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "') or (d.created_timestamp= '"
-						+ DateUtils.formatDate(edate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "' and d.created_timestamp <= '"
-						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "') or (d.created_timestamp > '"
-						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "' and d.created_timestamp <= '"
-						+ DateUtils.formatDate(edate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "'))";
-
-
 					parameters.put("edate", srDTO.getEndtime());
 				}
+				simpleDateQ += " and d.created_timestamp >= '"
+						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ " "
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "' and d.created_timestamp <= '"
+						+ DateUtils.formatDate(edate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ " "
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "'";
+				
 			} else if (sdate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
-				dateq += " and ((d.created_timestamp = '" 
-					+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
-					+ "' and d.created_timestamp >= '" 
-					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-					+ "') or (d.created_timestamp= '"
-					+ DateUtils.formatDate(sdate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-					+ "' and d.created_timestamp <= '"
-					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-					+ "'))";
-
 				edate = null;
+				
+				simpleDateQ += " and d.created_timestamp >= '"
+					+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ " "
+					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ "'";
 			}
-			
-			sql += dateq;
+
+			sql += simpleDateQ;
 			
 			//sql += " order by d.determined_station_ID,d.created_timestamp";
 			
