@@ -1343,7 +1343,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			// STEP 1: BEGINNING OF FUNCTION SPECIFIC LOGIC
 			Pxf data = new Pxf();
 			
-			WorldTracerRule RULE = new BasicRule(1, 2000, 3, WorldTracerRule.Format.FREE_FLOW);
+			WorldTracerRule RULE = new BasicRule(1, 3000, 3, WorldTracerRule.Format.FREE_FLOW);
 			data.setContent(RULE.formatEntry(pxf.getFurtherInfo()));
 			
 			// data.setDestination(pxf.get); // No longer used
