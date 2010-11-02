@@ -55,7 +55,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.claim.num}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-21" x="480" y="734" width="59" height="12"/>
+				<reportElement key="textField-21" x="474" y="734" width="71" height="12"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -183,7 +183,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.prev.claim}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-53" x="403" y="340" width="31" height="13"/>
+				<reportElement key="textField-53" x="416" y="340" width="26" height="13"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.yes}]]></textFieldExpression>
 			</textField>
@@ -213,12 +213,12 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.tsa.yesno}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-59" x="243" y="421" width="31" height="13"/>
+				<reportElement key="textField-59" x="250" y="421" width="26" height="13"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.yes}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-60" x="474" y="340" width="23" height="13"/>
+				<reportElement key="textField-60" x="475" y="340" width="23" height="13"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.no}]]></textFieldExpression>
 			</textField>
@@ -245,7 +245,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.tsa.note}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-65" x="229" y="489" width="30" height="13"/>
+				<reportElement key="textField-65" x="235" y="489" width="24" height="13"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.yes}]]></textFieldExpression>
 			</textField>
@@ -260,7 +260,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.other.airline.yesno}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-68" x="8" y="505" width="223" height="27"/>
+				<reportElement key="textField-68" x="8" y="508" width="301" height="13"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.other.airline}]]></textFieldExpression>
 			</textField>
@@ -270,12 +270,12 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.num.bags}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-70" x="353" y="487" width="78" height="13"/>
+				<reportElement key="textField-70" x="353" y="487" width="78" height="27"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.weight}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-72" x="7" y="547" width="97" height="14"/>
+				<reportElement key="textField-72" x="7" y="547" width="103" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.name.on.bag}]]></textFieldExpression>
 			</textField>
@@ -453,7 +453,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.notice4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-8" x="353" y="502" width="77" height="14"/>
+				<reportElement key="textField-8" x="353" y="513" width="77" height="13"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{weight}]]></textFieldExpression>
 			</textField>
