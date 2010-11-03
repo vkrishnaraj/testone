@@ -142,11 +142,11 @@
             String infoText2       = "this.form.elements['" + infoDescription + "2']";
 %>
               <td colspan="4">
-              <textarea name="<%= infoDescription %>" cols="80" rows="10" onkeydown="textCounter(<%= infoText %>, <%= infoText2 %>,3000);"
-              onkeyup="textCounter(<%= infoText %>, <%= infoText2 %>,3000);"></textarea>
+              <textarea name="<%= infoDescription %>" cols="80" rows="10" onkeydown="textCounter(<%= infoText %>, <%= infoText2 %>,2800);"
+              onkeyup="textCounter(<%= infoText %>, <%= infoText2 %>,2800);"></textarea>
               <html:hidden property="furtherInfo" styleId="furtherInfoHidden"/>
-              <input name="<%= infoDescription + "2" %>" type="text" value="3000" size="4" maxlength="4" disabled="true" />
-              <!--  html:text property="furtherInfo" size="60" maxlength="3000" styleClass="textfield"/ --></td>
+              <input name="<%= infoDescription + "2" %>" type="text" value="2800" size="4" maxlength="4" disabled="true" />
+              <!--  html:text property="furtherInfo" size="60" maxlength="2800" styleClass="textfield"/ --></td>
             </tr>
             <tr>
               <td colspan="4" align="center">
