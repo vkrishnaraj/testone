@@ -95,7 +95,6 @@ public class ReportOutputServlet extends HttpServlet {
 			if (request.getParameter("language") != null && !request.getParameter("language").equals("")) {
 				language = (String) request.getParameter("language");
 			}
-			logger.error("language is set to : " + language);
 			
 			if (request.getParameter("outputtype") != null) {
 				try {
