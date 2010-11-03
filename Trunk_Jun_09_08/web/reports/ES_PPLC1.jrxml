@@ -285,7 +285,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.type.of.bag}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-74" x="229" y="547" width="60" height="14"/>
+				<reportElement key="textField-74" x="229" y="547" width="60" height="27"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.color.of.bag}]]></textFieldExpression>
 			</textField>
@@ -295,7 +295,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.brand}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-76" x="378" y="547" width="78" height="14"/>
+				<reportElement key="textField-76" x="377" y="547" width="83" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.date.purchased}]]></textFieldExpression>
 			</textField>
