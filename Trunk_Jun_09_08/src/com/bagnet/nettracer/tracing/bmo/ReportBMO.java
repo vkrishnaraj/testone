@@ -3221,10 +3221,21 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	
 				Map imagesMap = new HashMap();
 				
-				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
+				//special case for BDO Receipt only
+				String myBetweenPagesHtml = "";
+				String myBdoReceiptCode = Integer.toString(ReportingConstants.BDO_RECEIPT_RPT);
+				if (myBdoReceiptCode.equals(request.getParameter("print"))) {
+					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
+				} 
+				
+				//exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
+				
+				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
+				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, myBetweenPagesHtml);
+				exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
 	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
@@ -3356,10 +3367,22 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	
 				Map imagesMap = new HashMap();
 				
-				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
+				//special case for BDO Receipt only
+				String myBetweenPagesHtml = "";
+				String myBdoReceiptCode = Integer.toString(ReportingConstants.BDO_RECEIPT_RPT);
+				if (myBdoReceiptCode.equals(request.getParameter("print"))) {
+					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
+				} 
+				
+				//exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
+				
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
+				
+				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
+				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, myBetweenPagesHtml);
+				exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
 	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
