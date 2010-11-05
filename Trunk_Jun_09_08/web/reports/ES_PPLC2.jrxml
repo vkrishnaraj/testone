@@ -7,12 +7,12 @@
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
-	<parameter name="grid3" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="es_grid3" class="java.lang.String" isForPrompting="false"/>
 	<background>
 		<band height="750">
 			<image scaleImage="FillFrame" hyperlinkType="None">
 				<reportElement key="image-1" stretchType="RelativeToTallestObject" x="0" y="57" width="552" height="441"/>
-				<imageExpression class="java.lang.String"><![CDATA[$P{grid3}]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{es_grid3}]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -26,53 +26,54 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["ES " + $R{pplc.desc.title}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.desc.title}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-41" mode="Transparent" x="0" y="19" width="552" height="14"/>
-				<textElement textAlignment="Center"/>
+				<reportElement key="textField-41" mode="Transparent" x="0" y="27" width="552" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.desc.note}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-42" x="0" y="35" width="552" height="14"/>
-				<textElement textAlignment="Center"/>
+				<reportElement key="textField-42" x="0" y="40" width="552" height="14"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.desc.genders}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-43" x="-1" y="504" width="552" height="15"/>
+				<reportElement key="textField-43" x="0" y="504" width="552" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.cert.understand}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-44" x="-1" y="522" width="552" height="27"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement key="textField-44" x="0" y="522" width="545" height="41"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.cert1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-45" x="-1" y="555" width="552" height="73"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement key="textField-45" x="0" y="566" width="545" height="74"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.cert2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-46" x="0" y="628" width="552" height="42"/>
+				<reportElement key="textField-46" x="0" y="644" width="552" height="42"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.cert3}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-47" x="-1" y="671" width="552" height="24"/>
+				<reportElement key="textField-47" x="0" y="687" width="552" height="24"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.cert4}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-48" x="-1" y="701" width="552" height="15"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.cert5}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement key="line-1" x="18" y="735" width="365" height="1"/>
@@ -120,14 +121,14 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.header.color}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-55" x="172" y="64" width="29" height="19"/>
+				<reportElement key="textField-55" x="180" y="64" width="36" height="19"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.header.size}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-56" x="214" y="64" width="145" height="19"/>
+				<reportElement key="textField-56" x="224" y="64" width="134" height="19"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
@@ -162,8 +163,10 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.add.space}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-61" x="387" y="466" width="95" height="27"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement key="textField-61" x="387" y="458" width="95" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.total.value}]]></textFieldExpression>
 			</textField>
 		</band>
