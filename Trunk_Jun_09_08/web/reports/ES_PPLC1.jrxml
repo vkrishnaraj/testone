@@ -84,7 +84,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{pplc.notice.liability}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-29" x="7" y="671" width="529" height="45"/>
+				<reportElement key="textField-29" x="7" y="671" width="534" height="45"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>

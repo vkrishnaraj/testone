@@ -120,6 +120,11 @@ public class PPLCReport {
 			parameters.put("es_grid1", es_grid1.getAbsolutePath());
 		}
 		
+		File es_grid3 = new File(sc.getRealPath("/") + "reports/images/es_grid3.gif");
+		if (es_grid1.exists()) {
+			parameters.put("es_grid3", es_grid3.getAbsolutePath());
+		}
+		
 		List<JasperPrint> jPrints = new ArrayList<JasperPrint>();
 		
 		ReportBMO rbmo = new ReportBMO(request);
