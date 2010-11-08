@@ -84,11 +84,12 @@
 	<target name="build" depends="init,compile-web"  />
 
 	<!-- This is used  -->
-	<target name="compile-web" >
+	<target name="compile-web" depends="init">
 		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on"
 			
 			memoryinitialsize="256m"       memorymaximumsize="256m"
 			>
+			<classpath refid="project.classpath" />
 			<exclude name="com/bagnet/nettracer/cronjob/**" />
 			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
 			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
@@ -557,7 +558,7 @@
 	</target>
 
 
-	<target name="build-jetblue-dev" depends="init,delete">
+	<target name="build-jetblue-dev" depends="delete">
 		<property name="ant_project_name" value="jetblue" />
 		<property name="include.demo" value="1" />
 		<property name="include.us" value="1" />
