@@ -8,6 +8,16 @@ public class ActionFileCount {
 	private String station;
 
 	private String type;
+	
+	private String seq;
+
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
 
 	public int getCount() {
 		return count;

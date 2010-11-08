@@ -157,6 +157,7 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="count" type="xs:int"/>
                     <xs:element minOccurs="0" name="day" type="xs:int"/>
+                    <xs:element minOccurs="0" name="seq" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
                 </xs:sequence>
@@ -224,6 +225,7 @@
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="day" type="xs:int"/>
                     <xs:element minOccurs="0" name="number" type="xs:int"/>
+                    <xs:element minOccurs="0" name="seq" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
                 </xs:sequence>

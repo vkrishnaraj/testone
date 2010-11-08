@@ -6,6 +6,15 @@ public class ActionFileRequestData {
 	private int day;
 	private String type;
 	private int number;
+	private String seq;
+
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
 
 	public String getAirline() {
 		return airline;
