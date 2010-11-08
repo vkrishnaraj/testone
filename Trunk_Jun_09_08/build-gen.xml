@@ -165,6 +165,7 @@
 
 	<target name="combineResourceFilesOld">
 		<java classname="CombineResources" classpath="${basedir}/utils">
+			<path refid="project.classpath" />
 			<arg line="${defaultResource} ${overrideResource} ${destinationResource}" />
 		</java>
 	</target>
