@@ -8,6 +8,13 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  if (request.getAttribute("rowsperpage") == null) {
+	  request.setAttribute("rowsperpage", "0");
+  }
+  if (request.getAttribute("currpage") == null) {
+	  request.setAttribute("currpage", "0");
+  }
+  
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
