@@ -837,12 +837,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
 			}
 			if (wsresponse != null
-					&& wsresponse.getWTRInboxMessageReadRS() != null) {
+					&& wsresponse.getWTRInboxMessageReadRS() != null
+					&& wsresponse.getWTRInboxMessageReadRS().getMessages() != null) {
 				response.setSuccess(true);
-				wsresponse.getWTRInboxMessageReadRS().getMessages()
-						.getMessageArray();
+				
 				ArrayList<ActionFile> afal = new ArrayList<ActionFile>();
-				if (wsresponse.getWTRInboxMessageReadRS().getMessages() != null) {
+				if (wsresponse.getWTRInboxMessageReadRS().getMessages().getMessageArray() != null) {
 					for (Message m : wsresponse.getWTRInboxMessageReadRS()
 							.getMessages().getMessageArray()) {
 						ActionFile result = new ActionFile();
@@ -871,6 +871,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						errorMsg.append(error.getShortText());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
+						if (error.toString().indexOf("NO MESSAGES ON FILE") > -1){
+							logger.error("NO MESSAGES ON FILE");
+							throw new WorldTracerRecordNotFoundException();
+						}
 					}
 				}
 
