@@ -177,6 +177,7 @@
             <xs:complexType name="ForwardMessage">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
+                    <xs:element minOccurs="0" name="crossReferenceId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="destinationAirline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="expediteTag" nillable="true" type="xs:string"/>

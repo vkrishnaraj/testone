@@ -2482,12 +2482,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			s1.setAirlineCode(msg.getFromAirline().toUpperCase());
 			s1.setStationCode(msg.getFromStation().toUpperCase());
 
-			if (false) {
-				// RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
-				// RecordReferenceType d4 = d3.addNewRecordReference();
-				// d4.setAirlineCode(arg0);
-				// d4.setReferenceNumber(arg0);
-				// d4.setStationCode(arg0);
+			
+			//example: YYCWS10042
+			String crid = msg.getCrossReferenceId();
+			if(crid != null){
+				crid = crid.trim().toUpperCase();
+				if(crid.matches("^[A-Z]{5}[0-9]+$")){
+					RecordIdentifierType d3 = d1.addNewCrossReferenceRecord();
+					RecordReferenceType d4 = d3.addNewRecordReference();
+					d3.setRecordType(RecordType.DELAYED);
+					d4.setAirlineCode(crid.substring(3, 5));
+					d4.setReferenceNumber(Integer.parseInt(crid.substring(5)));
+					d4.setStationCode(crid.substring(0, 3));
+				}
 			}
 
 			RushBagGroupType rb = d1.addNewRushBagGroup();
