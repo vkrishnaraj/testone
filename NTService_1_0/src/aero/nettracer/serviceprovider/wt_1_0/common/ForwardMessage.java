@@ -15,6 +15,7 @@ public class ForwardMessage {
 	private String faultReasonDescription;
 	private String faultStation;
 	private int faultReason;
+	private String crossReferenceId;
 
 	public String getFromStation() {
 		return fromStation;
@@ -126,6 +127,14 @@ public class ForwardMessage {
 
 	public void setItinerary(Itinerary[] itinerary) {
 		this.itinerary = itinerary;
+	}
+
+	public void setCrossReferenceId(String crossReferenceId) {
+		this.crossReferenceId = crossReferenceId;
+	}
+
+	public String getCrossReferenceId() {
+		return crossReferenceId;
 	}
 
 }
