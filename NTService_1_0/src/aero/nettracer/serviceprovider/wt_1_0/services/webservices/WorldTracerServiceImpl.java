@@ -2497,8 +2497,25 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 
+			
+			
 			RushBagGroupType rb = d1.addNewRushBagGroup();
 			RushBagType rbt = rb.addNewRushBags().addNewRushBag();
+			
+			if(msg.getName() != null){
+				aero.sita.www.bag.wtr._2009._01.RushBagGroupType.Names rbn = null;
+				for(String name:msg.getName()){
+					if(name.length()>1){
+						if(name.length() > 16){
+							name = name.substring(0, 16);
+						}
+						if(rbn == null){
+							rbn = rb.addNewNames();
+						}
+						rbn.addName(name);
+					}
+				}
+			}
 
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 			if (fieldList != null && fieldList.size() > 0) {
