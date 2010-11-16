@@ -17,16 +17,8 @@ public class CreateNewLD extends DefaultSeleneseTestCase {
 		selenium.type("addresses[0].city", "Test");
 		selenium.select("addresses[0].state_ID", "label=Georgia");
 		selenium.type("addresses[0].zip", "30339");
-		selenium.click("//table[@id='hidexItinerary0']/tbody/tr[1]/td[1]/a[1]/img");
-		selenium.waitForPopUp("airportcode", "30000");
-		selenium.selectWindow("name=airportcode");
-		selenium.click("//a[contains(text(),'Aberdeen, SD\n                                          -\n                                          ABR')]");
-		selenium.selectWindow("null");
-		selenium.click("//table[@id='hidexItinerary0']/tbody/tr[1]/td[1]/a[2]/img");
-		selenium.waitForPopUp("airportcode", "30000");
-		selenium.selectWindow("name=airportcode");
-		selenium.click("//a[contains(text(),'Albany, NY\n                                          -\n                                          ALB')]");
-		selenium.selectWindow("null");
+		selenium.type("theitinerary[0].legfrom", "ABR");
+		selenium.type("theitinerary[0].legto", "ALB");
 		selenium.type("theitinerary[0].flightnum", "123");
 		selenium.type("theitinerary[0].disarrivedate", "11/04/2010");
 		selenium.type("theitinerary[0].disdepartdate", "11/04/2010");

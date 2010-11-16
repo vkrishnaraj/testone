@@ -2,6 +2,7 @@ package aero.nettracer.web.defaul.testing;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import aero.nettracer.web.defaul.testing.actions.CreateNewLD;
 import aero.nettracer.web.defaul.testing.actions.Login;
 
 public class TestCreateNewIncident extends SeleniumTestSuite {
@@ -12,6 +13,7 @@ public class TestCreateNewIncident extends SeleniumTestSuite {
 
 		// Add Tests to run in the order you want to run them here.
 		suite.addTestSuite(Login.class);
+		suite.addTestSuite(CreateNewLD.class);
 
 		return wrapSuite(suite);
 	}
