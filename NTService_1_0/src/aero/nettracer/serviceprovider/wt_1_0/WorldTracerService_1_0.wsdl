@@ -189,6 +189,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="name" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="suplementaryInfo" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tagNum" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="teletype" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="textInfo" nillable="true" type="xs:string"/>
                 </xs:sequence>

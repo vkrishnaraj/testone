@@ -7,6 +7,7 @@ public class ForwardMessage {
 	private String destinationAirline;
 	private Agent agent;
 	private String expediteTag;
+	private String tagNum;
 	private String[] name;
 	private String[] teletype;
 	private String suplementaryInfo;
@@ -135,6 +136,14 @@ public class ForwardMessage {
 
 	public String getCrossReferenceId() {
 		return crossReferenceId;
+	}
+
+	public void setTagNum(String tagNum) {
+		this.tagNum = tagNum;
+	}
+
+	public String getTagNum() {
+		return tagNum;
 	}
 
 }

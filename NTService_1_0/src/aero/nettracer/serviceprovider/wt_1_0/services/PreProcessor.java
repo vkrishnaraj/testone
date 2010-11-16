@@ -858,6 +858,9 @@ public class PreProcessor {
 		PreProcessor.addIncidentFieldEntry(WorldTracerField.AG, PreProcessor.getAgentEntry(fwd.getAgent()), result);
 
 		PreProcessor.addConvertedTag(fwd.getExpediteTag(), WorldTracerField.XT, result, fwd.getFromAirline());
+		
+		PreProcessor.addConvertedTag(fwd.getTagNum(), WorldTracerField.TN, result, fwd.getFromAirline());
+		
 
 		if (fwd.getName() != null) {
 			for (String name : fwd.getName()) {
