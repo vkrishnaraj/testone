@@ -552,7 +552,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
       } 
     }
   
-  var bag0 = document.getElementById("theitem["+firstItemIndex+"].lnameonbag");
+  var bag0 = document.getElementsByName("theitem["+firstItemIndex+"].lnameonbag");
   
   if(bag0 == null) {
     alert("<%=(String) bundle.getString(
@@ -570,13 +570,15 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     
     for (var j=0; j < bagIndices.length; j++) {
       var index = bagIndices[j] * 20;
-      var contents = document.getElementById("inventoryList[" + index + "].description");
-            
+      var contents = document.getElementsByName("inventorylist[" + index + "].description");
+      alert("Index = " + index);
+      alert("inventorylist[" + index + "].description");
+      alert(contents);      
       if (!contents && reqContentFields) {
         alert("<%=(String) bundle.getString(
           "colname.key_contents")%>" + " <%=(String) bundle.getString(
           "error.validation.isRequired")%>");
-        document.getElementById("theitem[" + j + "].lnameonbag").focus();
+        document.getElementsByName("theitem[" + j + "].lnameonbag")[0].focus();
         return false;
       }
     }
