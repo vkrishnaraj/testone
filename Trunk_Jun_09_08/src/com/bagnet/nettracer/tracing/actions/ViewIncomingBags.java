@@ -459,6 +459,7 @@ public class ViewIncomingBags extends CheckedAction {
 				.append(rightPad(resourceBundle.getString("colname.expedite_number"), 22))
 				.append(leftPad(resourceBundle.getString("colname.baggage_check"), 22) + newline);
 			for (OHD_Log ohdBag : bagsList) {
+				
 				inboundExpediteBagsReport
 					.append(rightPad(ohdBag.getOhd().getOHD_ID(), 17))
 					.append(rightPad(format(ohdBag.getOhd().getMatched_incident()), 29))
@@ -475,7 +476,7 @@ public class ViewIncomingBags extends CheckedAction {
 //		String newPhrase = "" + newline;
 //		String result = org.apache.commons.lang.StringUtils.replace(inboundExpediteBagsReport.toString(), phraseToReplace, newPhrase);
 		
-		logger.error(inboundExpediteBagsReport.toString());
+		logger.info(inboundExpediteBagsReport.toString());
 		
 		return inboundExpediteBagsReport;
 	}
