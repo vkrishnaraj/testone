@@ -31,10 +31,16 @@ public abstract class CheckedAction extends Action {
 	static String tab = "      ";
 	
 	protected static String leftPad(String input, int size) {
+		if (input == null) {
+			input = "";
+		}
 		return org.apache.commons.lang.StringUtils.leftPad(input, size);
 	}
 	
 	protected static String rightPad(String input, int size) {
+		if (input == null) {
+			input = "";
+		}
 		return org.apache.commons.lang.StringUtils.rightPad(input, size);
 	}
 	
