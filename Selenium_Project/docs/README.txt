@@ -21,27 +21,28 @@ You will see a lot of choices but you want the one under Java, most likely Java,
 Click New
 Put in a name and description (This is what you will see in the autoComplete dialog)
 Under pattern paste the following:
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-${line_selection} extends SeleniumTestSuite {
+import aero.nettracer.web.defaul.testing.actions.Login;
 
-	public static Test suite() {
+@RunWith(Suite.class)
+@SuiteClasses({Login.class${cursor} /* Add more test cases here */})
+${line_selection}
+public class TestCreateNewIncident {
 
-		TestSuite suite = prepareSuite();
-
-		// Add Tests to run in the order you want to run them here.
-		suite.addTestSuite(Login.class);
-		${cursor}
-		
-		return wrapSuite(suite);
+	@BeforeClass
+	public static void oneTimeSetUp() {
+		SeleniumTestBrowserDefault.initBrowser();
 	}
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(suite());
+	@AfterClass
+	public static void oneTimeTearDown() {
+		SeleniumTestBrowserDefault.stopBrowser();
 	}
-
-}
 **************************************
 Now when you create a new TestSuite just highlight the line with public class ClassName and press Ctrl+Space
 select your template name and everything is done for you.

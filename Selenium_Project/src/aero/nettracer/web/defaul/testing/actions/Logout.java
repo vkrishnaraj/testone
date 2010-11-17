@@ -1,9 +1,12 @@
 package aero.nettracer.web.defaul.testing.actions;
 
+import org.junit.Test;
+
 import aero.nettracer.web.defaul.testing.DefaultSeleneseTestCase;
 
 public class Logout extends DefaultSeleneseTestCase {
 	
+	@Test
 	public void testLogout() throws Exception {
 		//FIRST CAPTURE
 		selenium.click("link=[ Logout ]");

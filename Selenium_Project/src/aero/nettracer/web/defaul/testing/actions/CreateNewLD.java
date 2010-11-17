@@ -1,9 +1,13 @@
 package aero.nettracer.web.defaul.testing.actions;
 
+import org.junit.Test;
+
 import aero.nettracer.web.defaul.testing.DefaultSeleneseTestCase;
+import aero.nettracer.web.defaul.testing.Settings;
 
 public class CreateNewLD extends DefaultSeleneseTestCase {
-	
+
+	@Test
 	public void testCreate_New_LD() throws Exception {
 		selenium.click("menucol_1.1");
 		selenium.waitForPageToLoad("30000");
@@ -49,7 +53,11 @@ public class CreateNewLD extends DefaultSeleneseTestCase {
 		selenium.type("inventorylist[2].description", "Test");
 		selenium.type("addresses[0].mobile", "1231231234");
 		selenium.type("theitem[0].mnameonbag", "W");
-		selenium.selectWindow("null");
 		selenium.click("savetracingButton");
+		selenium.waitForPageToLoad("180000");
+		String pawob = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+		Settings.PAWOB = pawob;
+		System.out.println("PAWOB # Set: " + Settings.PAWOB);
+		
 	}
 }

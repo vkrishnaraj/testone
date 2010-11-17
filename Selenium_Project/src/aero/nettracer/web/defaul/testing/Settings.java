@@ -36,4 +36,12 @@ public class Settings {
 	public static final String USERNAME = "ntadmin";
 	public static final String PASSWORD = "Rhood5@rr";
 	
+	//VARIABLE SETTINGS / GLOBALS
+	public static String PAWOB = "";
+	public static int SEARCH_ALL = 0;
+	public static int SEARCH_LD = 1;
+	public static int SEARCH_DAM = 2;
+	public static int SEARCH_PILF = 3;
+	public static int SEARCH_CURRENT = SEARCH_ALL;
+	
 }

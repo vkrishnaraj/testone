@@ -1,25 +1,26 @@
 package aero.nettracer.web.defaul.testing;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
 import aero.nettracer.web.defaul.testing.actions.CreateNewLD;
 import aero.nettracer.web.defaul.testing.actions.Login;
 
-public class TestCreateNewIncident extends SeleniumTestSuite {
+@RunWith(Suite.class)
+@SuiteClasses({Login.class, CreateNewLD.class})
+public class TestCreateNewIncident {
 
-	public static Test suite() {
-
-		TestSuite suite = prepareSuite();
-
-		// Add Tests to run in the order you want to run them here.
-		suite.addTestSuite(Login.class);
-		suite.addTestSuite(CreateNewLD.class);
-
-		return wrapSuite(suite);
+	@BeforeClass
+	public static void oneTimeSetUp() {
+		SeleniumTestBrowserDefault.initBrowser();
 	}
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(suite());
+	@AfterClass
+	public static void oneTimeTearDown() {
+		SeleniumTestBrowserDefault.stopBrowser();
 	}
 
 }

@@ -1,9 +1,12 @@
 package aero.nettracer.web.defaul.testing.actions;
 
+import org.junit.Test;
+
 import aero.nettracer.web.defaul.testing.DefaultSeleneseTestCase;
 
 public class CloseIncident extends DefaultSeleneseTestCase {
 	
+	@Test
 	public void testClose_Incident() throws Exception {
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[6]/a/span[2]");
 		selenium.waitForPageToLoad("30000");

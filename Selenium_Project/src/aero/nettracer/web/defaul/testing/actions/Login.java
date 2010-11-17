@@ -1,10 +1,13 @@
 package aero.nettracer.web.defaul.testing.actions;
 
+import org.junit.Test;
+
 import aero.nettracer.web.defaul.testing.DefaultSeleneseTestCase;
 import aero.nettracer.web.defaul.testing.Settings;
 
 public class Login extends DefaultSeleneseTestCase {
 	
+	@Test
 	public void testLogin() throws Exception {
 		selenium.open("/tracer/logoff.do");
 		System.out.println("Logging In Using " + Settings.USERNAME + " " + Settings.PASSWORD);
