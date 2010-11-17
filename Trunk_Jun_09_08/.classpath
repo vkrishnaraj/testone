@@ -145,5 +145,7 @@
 	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/hornetq-transports.jar"/>
 	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/jboss-jms-api.jar"/>
 	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/jboss-mc.jar"/>
+	<classpathentry kind="lib" path="lib/jars/libphonenumber-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/jars/java-core-2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
