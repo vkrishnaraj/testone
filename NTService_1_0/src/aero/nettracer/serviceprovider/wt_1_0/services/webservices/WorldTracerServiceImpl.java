@@ -242,7 +242,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	  validTypes.add("CM");
 	  validTypes.add("LM");
 	  validTypes.add("PR");
-	  validTypes.add("XX");
 	}
   
 	
