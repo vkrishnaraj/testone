@@ -110,7 +110,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Si vous avez besoin d’assistance durant les trois (3) premiers jours suivant la création de votre dossier,  contactez le bureau des bagages de votre aéroport local au 1-866-666-6224. Pour les invités qui sont en voyage aux États-Unis ou dans une destination internationale, veuillez composer le numéro de téléphone qui vous a été donné lorsque votre dossier a été créé.]]></text>
+				<text><![CDATA[Si vous avez besoin d’assistance durant les cinq (5) premiers jours suivant la création de votre dossier,  contactez le bureau des bagages de votre aéroport local au 1-866-666-6224. Pour les invités qui sont en voyage aux États-Unis ou dans une destination internationale, veuillez composer le numéro de téléphone qui vous a été donné lorsque votre dossier a été créé.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-34" mode="Opaque" x="42" y="329" width="469" height="61" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>

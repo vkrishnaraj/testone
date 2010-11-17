@@ -1,8 +1,6 @@
 package com.bagnet.nettracer.wt.svc;
 
 import java.util.List;
-import java.util.Map;
-
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -104,9 +102,9 @@ public interface WorldTracerService {
 	
 	String amendOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user, WebServiceDto dto) throws CaptchaException;
+	public List<ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user, WebServiceDto dto) throws CaptchaException;
 	
-	List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode, String wtStation, ActionFileType afType, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode, String wtStation, ActionFileType afType, String afSeq, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
 	String getActionFileDetail(String companyCode, String wtStation, ActionFileType afType, int day, int itemNum, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 

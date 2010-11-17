@@ -20,6 +20,7 @@ import org.hibernate.Session;
 public class Worldtracer_Actionfiles implements Serializable {
 	private int id;
 	private ActionFileType action_file_type;
+	private String seq;
 	private String action_file_summary;
 	private String action_file_text;
 	private int day;
@@ -31,7 +32,7 @@ public class Worldtracer_Actionfiles implements Serializable {
 	private int item_number;
 	private boolean deleted;
 	
-	private static final String id_pattern = "^\\w{2}-\\w{3}-[A-Z]{2}-\\d+-\\d+$";
+	private static final String id_pattern = "^\\w{2}-\\w{3}-[A-Z]{2}-[0-9A-Z]{0,3}-\\d+-\\d+$";
 
 	public Worldtracer_Actionfiles() {}
 	
@@ -41,13 +42,17 @@ public class Worldtracer_Actionfiles implements Serializable {
 	 * @throws Exception 
 	 */
 	public Worldtracer_Actionfiles(String type_id) throws Exception {
+		
+		
+		
 		if (Pattern.matches(id_pattern, type_id)) {
-			StringTokenizer strTok = new StringTokenizer(type_id, "-");
-			this.airline = strTok.nextToken();
-			this.wt_station = strTok.nextToken();
-			this.action_file_type = ActionFileType.valueOf(strTok.nextToken());
-			this.day = Integer.parseInt(strTok.nextToken());
-			this.item_number = Integer.parseInt(strTok.nextToken());
+			String [] strList = type_id.split("-");
+			this.airline = strList[0];
+			this.wt_station = strList[1];
+			this.action_file_type = ActionFileType.valueOf(strList[2]);
+			this.seq = strList[3];
+			this.day = Integer.parseInt(strList[4]);
+			this.item_number = Integer.parseInt(strList[5]);
 		}
 		else {
 			throw new Exception("invalid action file id");
@@ -86,6 +91,20 @@ public class Worldtracer_Actionfiles implements Serializable {
 	public void setAction_file_type(ActionFileType action_file_type) {
 		this.action_file_type = action_file_type;
 	}
+	
+	/**
+	 * @return the seq
+	 * 
+	 * @hibernate.property type="string"
+	 */	
+	public String getSeq() {
+		return seq;
+	}
+
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
+	
 	/**
 	 * @return the action_file_text
 	 * 
@@ -197,7 +216,7 @@ public class Worldtracer_Actionfiles implements Serializable {
 
 
 	public String generateId() {
-		return String.format("%s-%s-%s-%d-%d", airline, this.wt_station, this.action_file_type.name(), this.day, this.item_number);
+		return String.format("%s-%s-%s-%s-%d-%d", airline, this.wt_station, this.action_file_type.name(), this.seq, this.day, this.item_number);
 	}
 
 	/**
@@ -229,7 +248,7 @@ public class Worldtracer_Actionfiles implements Serializable {
 	
 	//these have to be down here or they muss up the xdoclet hibernate mapping generator.
 	public static enum ActionFileType {
-		FW("fm", "FORWARD_AREA"), AA("am", "ACTION_AREA"), WM("sm", "SYSTEM_MATCH_AREA"), EM("em", "EXTENDED_MATCH_AREA"), SP("sp", "SYSTEM_PROMPT_AREA"), AP("ap", "ADDITIONAL_PROMPT_AREA"), CM("cm", "CLAIMS_MATCH_AREA"), LM("lm", "LOCAL_MESSAGE_AREA"), PR("pr", "RETIRED_AREA");
+		FW("fm", "FORWARD_AREA"), AA("am", "ACTION_AREA"), WM("sm", "SYSTEM_MATCH_AREA"), EM("em", "EXTENDED_MATCH_AREA"), SP("sp", "SYSTEM_PROMPT_AREA"), AP("ap", "ADDITIONAL_PROMPT_AREA"), CM("cm", "CLAIMS_MATCH_AREA"), LM("lm", "LOCAL_MESSAGE_AREA"), PR("pr", "RETIRED_AREA"), XX("xx","ADMIN_MESSAGES");
 		
 		private String htmlId;
 		private String areaId;

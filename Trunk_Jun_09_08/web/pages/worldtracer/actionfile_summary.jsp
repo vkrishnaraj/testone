@@ -62,6 +62,7 @@ function updatePagination() {
 		<div id="maincontent">
 		<h1 class="green">
 		<bean:message key="<%= headerKey %>" />
+		&nbsp;<bean:write name="seq" scope="request"/>
  	&nbsp;<bean:message key="header.wt_day"/>&nbsp;<c:out value="${day}" default="1" />
   <a href="#"
 			onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img
@@ -83,25 +84,25 @@ function updatePagination() {
 			<table class="form2" cellspacing="0" cellpadding="0">
 				<tr>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=1">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=1&seq=<bean:write name="seq" scope="request"/>">Day
 					1:</a></td>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=2">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=2&seq=<bean:write name="seq" scope="request"/>">Day
 					2:</a></td>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=3">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=3&seq=<bean:write name="seq" scope="request"/>">Day
 					3:</a></td>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=4">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=4&seq=<bean:write name="seq" scope="request"/>">Day
 					4:</a></td>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=5">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=5&seq=<bean:write name="seq" scope="request"/>">Day
 					5:</a></td>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=6">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=6&seq=<bean:write name="seq" scope="request"/>">Day
 					6:</a></td>
 					<td><a
-						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=7">Day
+						href="actionFileSummary.do?category=<c:out value='${afType}'/>&day=7&seq=<bean:write name="seq" scope="request"/>">Day
 					7:</a></td>
 				</tr>
 			</table>
@@ -181,7 +182,7 @@ function updatePagination() {
 							</c:otherwise>
 						</c:choose></td>
 						<td><a
-							href="actionFileDelete.do?category=${afType}&day=${day}&itemNum=${actionData.item_number}&currpage=${currpage}&rowsperpage=${rowsperpage}"><bean:message key="wt.af.delete" /></a>
+							href="actionFileDelete.do?category=${afType}&day=${day}&itemNum=${actionData.item_number}&currpage=${currpage}&rowsperpage=${rowsperpage}&seq=<bean:write name="seq" scope="request"/>"><bean:message key="wt.af.delete" /></a>
 					</td>
 					</tr>
 				</c:forEach>
@@ -194,5 +195,6 @@ function updatePagination() {
 		</logic:present>
 		<input type="hidden" name="category" value='<%=request.getParameter("category") %>' />
 		<input type="hidden" name="day" value='<%=request.getParameter("day") %>' />
+		<input type="hidden" name="seq" value='<%=request.getParameter("seq") %>'/>
 
 </html:form>

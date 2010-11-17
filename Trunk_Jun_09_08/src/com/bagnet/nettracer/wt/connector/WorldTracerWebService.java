@@ -3,7 +3,6 @@ package com.bagnet.nettracer.wt.connector;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -284,8 +283,8 @@ public class WorldTracerWebService implements WorldTracerConnector {
 	
 
 	@Override
-	public EnumMap<ActionFileType, int[]> getActionFileCounts(String companyCode, String wtStation, WebServiceDto dto) throws WorldTracerException, CaptchaException {
-		EnumMap<ActionFileType, int[]> result = new EnumMap<ActionFileType, int[]>(ActionFileType.class);
+	public List<aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount> getActionFileCounts(String companyCode, String wtStation, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+		ArrayList<aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount> result = new ArrayList<aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount>();
 		try {
 			WorldTracerServiceStub stub = getConfiguredServiceStub();
 
@@ -305,25 +304,21 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			// STEP 2: SEND REQUEST
 			GetActionFileCountsResponseDocument r = stub.getActionFileCounts(d);
 			WorldTracerResponse response = r.getGetActionFileCountsResponse().getReturn();
-
+			
 			// STEP 3: BASIC PROCESS OF RESPONSE
 			processResponseAndUpdateDto(dto, response);
 
 			// STEP 4: CASE-SEPECIFIC PROCESSING
 			if (response.getCountsArray() != null) {
 				ActionFileCount[] counts = response.getCountsArray();
-
 				for (ActionFileCount count : counts) {
-					String strType = count.getType();
-					ActionFileType type = ActionFileType.valueOf(strType);
-					int[] intArr = null;
-					if (result.containsKey(type)) {
-						intArr = result.get(type);
-					} else {
-						intArr = new int[7];
-						result.put(type, intArr);
-					}
-					intArr[count.getDay() - 1] = count.getCount();
+					aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount toAdd = new aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount();
+					toAdd.setType(count.getType());
+					toAdd.setStation(count.getStation());
+					toAdd.setSeq(count.getSeq());
+					toAdd.setDay(count.getDay());
+					toAdd.setCount(count.getCount());
+					result.add(toAdd);
 				}
 			}
 
@@ -613,7 +608,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 	}
 
 	@Override
-	public void eraseActionFile(String station_id, String companyCode, ActionFileType area, int day, int itemNum, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+	public void eraseActionFile(String station_id, String companyCode, ActionFileType area, String seq, int day, int itemNum, WebServiceDto dto) throws WorldTracerException, CaptchaException {
 
 		try {
 			WorldTracerServiceStub stub = getConfiguredServiceStub();
@@ -627,6 +622,8 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			data.setType(area.name());
 			data.setNumber(itemNum);
 			data.setDay(day);
+			data.setSeq(seq);
+			data.setSeq(seq);
 
 			EraseActionFileDocument d = EraseActionFileDocument.Factory.newInstance();
 			EraseActionFile c = d.addNewEraseActionFile();
@@ -860,8 +857,8 @@ public class WorldTracerWebService implements WorldTracerConnector {
 	}
 
 	@Override
-	public List<ActionFileDto> getActionFileSummary(String companyCode, String stationCode, ActionFileType afType, int day, WebServiceDto dto) throws WorldTracerException,
-			CaptchaException {
+	public List<ActionFileDto> getActionFileSummary(String companyCode, String stationCode, ActionFileType afType, String seq, int day, WebServiceDto dto) throws WorldTracerException,
+			CaptchaException,WorldTracerRecordNotFoundException {
 		ArrayList<ActionFileDto> result = new ArrayList<ActionFileDto>();
 		try {
 			
@@ -875,6 +872,10 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			data.setStation(stationCode);
 			data.setDay(day);
 			data.setType(afType.name());
+			data.setSeq(seq);
+			data.setSeq(seq);
+			
+			
 			
 			GetActionFileSummaryDocument d = GetActionFileSummaryDocument.Factory.newInstance();
 			GetActionFileSummary c = d.addNewGetActionFileSummary();
@@ -889,7 +890,11 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			processResponseAndUpdateDto(dto, response);
 
 			// STEP 4: CASE-SEPECIFIC PROCESSING
-			if (response.getActionFilesArray() != null) {
+			if (response.getError() != null 
+					&& response.getError().getDescription() != null
+					&& response.getError().getDescription().contains(RECORD_NOT_FOUND_EXCEPTION)) {
+				throw new WorldTracerRecordNotFoundException();
+			} else if (response.getActionFilesArray() != null) {
 				ActionFile[] afs = response.getActionFilesArray();
 				for (ActionFile af: afs) {
 					if (af != null) {
@@ -906,6 +911,8 @@ public class WorldTracerWebService implements WorldTracerConnector {
 						afd.setPercentMatch(af.getPercentMatch());
 						afd.setDetails(af.getDetails());
 						result.add(afd);
+						
+						
 					}
 				}
 			}
@@ -1231,9 +1238,13 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			fw.setTextInfo(fwd.getSupInfo());
 			fw.setSuplementaryInfo(fwd.getSupInfo());
 			fw.setExpediteTag(fwd.getFwdExpediteNum());
+			fw.setTagNum(fwd.getFwdTagNum());
+			fw.setTagNum(fwd.getFwdTagNum());
 			fw.setDestinationAirline(fwd.getFwdDestinationAirline());
 			fw.setDestinationStation(fwd.getFwdDestinationStation());
 			fw.setFromAirline(fwd.getAgent().getCompanycode_ID());
+			fw.setCrossReferenceId(fwd.getMatchingAhl());
+			fw.setCrossReferenceId(fwd.getMatchingAhl());
 			if (fwd.getLossCode() != 0) {
 				fw.setFaultReason(fwd.getLossCode());
 			}
@@ -1343,7 +1354,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			// STEP 1: BEGINNING OF FUNCTION SPECIFIC LOGIC
 			Pxf data = new Pxf();
 			
-			WorldTracerRule RULE = new BasicRule(1, 3000, 3, WorldTracerRule.Format.FREE_FLOW);
+			WorldTracerRule RULE = new BasicRule(1, 2800, 3, WorldTracerRule.Format.FREE_FLOW);
 			data.setContent(RULE.formatEntry(pxf.getFurtherInfo()));
 			
 			// data.setDestination(pxf.get); // No longer used

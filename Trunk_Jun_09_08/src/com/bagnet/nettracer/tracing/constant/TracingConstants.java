@@ -821,6 +821,7 @@ public class TracingConstants {
 	
 	public final static String MANAGE_DISPUTE = "manage_dispute";
 	
+	public static final String WT_AFC_DEFAULT_SEQ = "";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

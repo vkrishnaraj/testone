@@ -1,11 +1,11 @@
 package com.bagnet.nettracer.wt.connector;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 
@@ -42,7 +42,7 @@ public interface WorldTracerConnector {
 
 	String sendFwd(WtqFwdGeneral fwd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	void eraseActionFile(String station_id, String companyCode, ActionFileType area, int day, int itemNum, WebServiceDto dto)
+	void eraseActionFile(String station_id, String companyCode, ActionFileType area, String seq, int day, int itemNum, WebServiceDto dto)
 			throws WorldTracerException, CaptchaException;
 
 	Ahl findAHL(String wt_id, WebServiceDto dto) throws WorldTracerException, CaptchaException;
@@ -71,12 +71,12 @@ public interface WorldTracerConnector {
 	String requestQoh(String fromStation, String fromAirline,
 			String wt_ahl_id, Map<WorldTracerField, List<String>> fieldMap, WebServiceDto dto, WtqRequestQoh wtq) throws WorldTracerException, CaptchaException;
 	
-	EnumMap<ActionFileType, int[]> getActionFileCounts(String companyCode, String wtStation, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	List<ActionFileCount> getActionFileCounts(String companyCode, String wtStation, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
 
 	List<Worldtracer_Actionfiles> getActionFiles(String companyCode, String stationCode, ActionFileType afType, int day, int count, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	List<ActionFileDto> getActionFileSummary(String companyCode, String stationCode, ActionFileType afType, int day, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	List<ActionFileDto> getActionFileSummary(String companyCode, String stationCode, ActionFileType afType, String seq, int day, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
 	String getActionFileDetails(String companyCode, String stationCode, ActionFileType afType, int day, int itemNum, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 

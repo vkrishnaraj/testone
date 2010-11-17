@@ -101,8 +101,9 @@ public class ActionFileDetailAction extends Action {
 		int day = Integer.parseInt(request.getParameter("day"));
 		int itemNum = Integer.parseInt(request.getParameter("itemNum"));
 		ActionFileType aft = ActionFileType.valueOf(catName);
+		String seq = request.getParameter("seq");
 		try {
-			afm.updateDetails(companyCode, wtStation, aft, day, itemNum, user, WorldTracerWebService.getBasicDto(session));
+			afm.updateDetails(companyCode, wtStation, aft, seq, day, itemNum, user, WorldTracerWebService.getBasicDto(session));
 		} catch (CaptchaException e) {
 			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
 			response.sendRedirect("wtCaptcha.do");

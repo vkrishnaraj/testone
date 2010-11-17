@@ -92,10 +92,11 @@ public class ActionFileDeleteAction extends Action {
 		int itemNum = Integer.parseInt(request.getParameter("itemNum"));
 		ActionFileType aft = ActionFileType.valueOf(catName);
 		String wtStation = agentStation.getWt_stationcode();
+		String seq = request.getParameter("seq");
 		
 		ActionFileManager afm = SpringUtils.getActionFileManager();
 		try {
-			afm.eraseActionFile(companyCode, wtStation, aft, day, itemNum, user, WorldTracerWebService.getBasicDto(session));
+			afm.eraseActionFile(companyCode, wtStation, aft, seq, day, itemNum, user, WorldTracerWebService.getBasicDto(session));
 		} catch (CaptchaException e) {
 			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
 			response.sendRedirect("wtCaptcha.do");
@@ -104,6 +105,7 @@ public class ActionFileDeleteAction extends Action {
 
 		ActionRedirect redirect = new ActionRedirect(mapping.findForward("success"));
 		redirect.addParameter("category", catName);
+		redirect.addParameter("seq", seq);
 		redirect.addParameter("day", Integer.toString(day));
 		redirect.addParameter("deleted", 1);
 		redirect.addParameter("currpage", request.getParameter("currpage"));

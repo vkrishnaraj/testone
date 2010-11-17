@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.actions.wt;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.db.wt.ActionFileCount;
 import com.bagnet.nettracer.tracing.db.wt.ActionFileStation;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -28,7 +30,6 @@ import com.bagnet.nettracer.wt.WorldTracerLockException;
 import com.bagnet.nettracer.wt.connector.CaptchaException;
 import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
-import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
 public class ActionFileCountAction extends Action {
 
@@ -107,12 +108,31 @@ public class ActionFileCountAction extends Action {
 		try {
 			afStation = afm.getCounts(companyCode, wtStation, user, WorldTracerWebService.getBasicDto(session));
 			request.setAttribute("afStation", afStation);
-			if (afStation == null || afStation.getCountMap() == null) {
+			if(afStation == null || afStation.getCountList() == null){
 				request.setAttribute("afCounts", null);
 			} else {
-				request.setAttribute("afCounts", afStation.getCountMap());
+				if(afStation.getCountList().size() == 0){
+					request.setAttribute("countListEmpty",1);
+				}
+				
+				java.util.Collection<ActionFileCount> countCollection = afStation.getCountList();
+				ArrayList <ActionFileCount> countList = new ArrayList<ActionFileCount>(countCollection);
+				
+				HashMap <ActionFileType, ActionFileCount> temp = new HashMap<ActionFileType, ActionFileCount>();
+				for(ActionFileType type:ActionFileType.values()){
+					ActionFileCount afc = new ActionFileCount(type);
+					temp.put(type, afc);
+				}
+				
+				for(ActionFileCount afc:countList){
+					temp.remove(afc.getAf_type());
+				}
+				
+				countList.addAll(temp.values());
+				java.util.Collections.sort(countList);
+				
+				request.setAttribute("afCounts", countList);
 			}
-			request.setAttribute("afTypes", ActionFileType.values());
 		} catch (CaptchaException e) {
 			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
 			response.sendRedirect("wtCaptcha.do");

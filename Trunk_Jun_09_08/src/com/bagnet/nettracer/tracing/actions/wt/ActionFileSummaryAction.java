@@ -30,6 +30,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.WorldTracerLockException;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.connector.CaptchaException;
 import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
@@ -107,9 +108,10 @@ public class ActionFileSummaryAction extends Action {
 		String catName = request.getParameter("category");
 		int day = Integer.parseInt(request.getParameter("day"));
 		ActionFileType aft = ActionFileType.valueOf(catName);
+		String seq = request.getParameter("seq");
 		List<Worldtracer_Actionfiles> result = null;
 		try {
-			result= afm.getSummary(companyCode, wtStation, aft, day, user, WorldTracerWebService.getBasicDto(session));
+			result= afm.getSummary(companyCode, wtStation, aft, seq, day, user, WorldTracerWebService.getBasicDto(session));
 		} catch (CaptchaException e) {
 			session.setAttribute("REDIRECT_REQUEST_URL", request.getRequestURL().toString());
 			response.sendRedirect("wtCaptcha.do");
@@ -124,7 +126,10 @@ public class ActionFileSummaryAction extends Action {
 			ActionMessage error = new ActionMessage("message.wt.af.nofiles.error");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
-			mapping.findForward("success");
+			request.setAttribute("afType", aft);
+			request.setAttribute("day", day);
+			request.setAttribute("seq", seq);
+			return mapping.findForward("success");
 		}
 		int rowcount = result.size();
 
@@ -172,6 +177,7 @@ public class ActionFileSummaryAction extends Action {
 		request.setAttribute("afList", displayList);
 		request.setAttribute("afType", aft);
 		request.setAttribute("day", day);
+		request.setAttribute("seq", seq);
 		
 		if(request.getParameter("deleted") != null) {
 			request.setAttribute("deleted", 1);

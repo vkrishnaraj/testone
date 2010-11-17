@@ -933,15 +933,16 @@ public class WorldTracerQueueWorker implements Runnable {
 					wtqBmo.updateQueue(queue);
 				}
 				else if(queue instanceof WtqEraseActionFile) {
+					//TODO loupas update me
 					WtqEraseActionFile eraseTask = (WtqEraseActionFile) queue;
 					Worldtracer_Actionfiles waf;
 					try {
 						waf = new Worldtracer_Actionfiles(eraseTask.getAf_id());
 						waf.setAction_file_text(wafBmo.findTextForAf(waf));
 						if(waf.getAction_file_text() == null) {
-							logger.warn(String.format("tried to delete action file %s but not found in db %s %s %s %d %d",
+							logger.warn(String.format("tried to delete action file %s but not found in db %s %s %s %s %d %d",
 									eraseTask.getAf_id(), waf.getAirline(), waf.getStation(), waf.getAction_file_type()
-											.name(), waf.getDay(), waf.getItem_number()));
+											.name(), waf.getSeq(), waf.getDay(), waf.getItem_number()));
 							eraseTask.setStatus(WtqStatus.FAIL);
 						}
 						else {

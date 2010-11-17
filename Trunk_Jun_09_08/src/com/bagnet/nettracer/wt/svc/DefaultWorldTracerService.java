@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,8 +49,6 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqRequestQoh;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSegment;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
-import com.bagnet.nettracer.wt.WTIncident;
-import com.bagnet.nettracer.wt.WTOHD;
 import com.bagnet.nettracer.wt.WorldTracerException;
 import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
 import com.bagnet.nettracer.wt.connector.CaptchaException;
@@ -266,7 +263,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 	@WorldTracerTx(type = TxType.ERASE_AF)
 	public void eraseActionFile(Worldtracer_Actionfiles waf, WebServiceDto dto) throws WorldTracerException, CaptchaException {
-		wtConnector.eraseActionFile(waf.getStation(), waf.getAirline(), waf.getAction_file_type(),
+		wtConnector.eraseActionFile(waf.getStation(), waf.getAirline(), waf.getAction_file_type(), waf.getSeq(),
 				waf.getDay(), waf.getItem_number(), dto);
 	}
 
@@ -904,35 +901,54 @@ public class DefaultWorldTracerService implements WorldTracerService {
 	}
 
 	@WorldTracerTx(type = TxType.AF_COUNT)
-	public Map<ActionFileType, ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user, WebServiceDto dto) throws CaptchaException {
-		EnumMap<ActionFileType, int[]> result;
+	public List<ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user, WebServiceDto dto) throws CaptchaException {
+		List<aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount> result;
 		try {
 			result = this.wtConnector.getActionFileCounts(companyCode, wtStation, dto);
 		} catch (WorldTracerException e) {
 			return null;
 		}
-		Map<ActionFileType, ActionFileCount> countMap = new EnumMap<ActionFileType, ActionFileCount>(ActionFileType.class);
+		ArrayList<ActionFileCount> countList = new ArrayList<ActionFileCount>();
 		if (result != null) {
-			for (Entry<ActionFileType, int[]> entry : result.entrySet()) {
-				ActionFileCount afCount = new ActionFileCount();
-				afCount.setDayOne(entry.getValue()[0]);
-				afCount.setDayTwo(entry.getValue()[1]);
-				afCount.setDayThree(entry.getValue()[2]);
-				afCount.setDayFour(entry.getValue()[3]);
-				afCount.setDayFive(entry.getValue()[4]);
-				afCount.setDaySix(entry.getValue()[5]);
-				afCount.setDaySeven(entry.getValue()[6]);
-				countMap.put(entry.getKey(), afCount);
+			Map<String, ActionFileCount>countMap = new HashMap<String, ActionFileCount>();
+			for(aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount count:result){
+				String type = count.getType();
+				String seq = count.getSeq();
+				if(count.getSeq() == null || count.getSeq().trim().length() == 0){
+					seq = TracingConstants.WT_AFC_DEFAULT_SEQ;
+				}
+				
+				ActionFileCount afc;
+				if(countMap.containsKey(type+seq)){
+					afc = countMap.get(type+seq);
+				} else {
+					afc = new ActionFileCount();
+				}
+				afc.setAf_type(ActionFileType.valueOf(type));
+				afc.setAf_seq(seq);
+				switch(count.getDay()){
+				case 1: afc.setDayOne(count.getCount()); break;
+				case 2: afc.setDayTwo(count.getCount()); break;
+				case 3: afc.setDayThree(count.getCount()); break;
+				case 4: afc.setDayFour(count.getCount()); break;
+				case 5: afc.setDayFive(count.getCount()); break;
+				case 6: afc.setDaySix(count.getCount()); break;
+				case 7: afc.setDaySeven(count.getCount()); break;
+				}
+				countMap.put(type + seq, afc);
+			}
+			for(String key:countMap.keySet()){
+				countList.add(countMap.get(key));
 			}
 		}
-		return countMap;
+		return countList;
 	}
 	
 	@WorldTracerTx(type = TxType.AF_SUMMARY)
 	public List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode,
-			String wtStation, ActionFileType afType, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException {
+			String wtStation, ActionFileType afType, String afSeq, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerRecordNotFoundException {
 		List<ActionFileDto> stuff;
-		stuff = wtConnector.getActionFileSummary(companyCode, wtStation, afType, day, dto);
+		stuff = wtConnector.getActionFileSummary(companyCode, wtStation, afType, afSeq, day, dto);
 		
 		if(stuff == null || stuff.size() < 1) return null;
 		
@@ -942,6 +958,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			wa.setAction_file_summary(afd.getSummary());
 			wa.setAction_file_text(afd.getDetails());
 			wa.setAction_file_type(afType);
+			wa.setSeq(afSeq);
 			wa.setAirline(companyCode);
 			wa.setDay(day);
 			wa.setDeleted(false);

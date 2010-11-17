@@ -88,10 +88,10 @@ public class ActionFileManagerImpl implements ActionFileManager {
 
 
 	public List<Worldtracer_Actionfiles> getSummary(String companyCode,
-			String wtStation, ActionFileType category, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerDisabledException {
+			String wtStation, ActionFileType category, String seq, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerDisabledException {
 		ActionFileStation afs = this.getCounts(companyCode, wtStation, user, dto);
-		if(afs.summaryLoaded(category, day)) {
-			return wafBmo.findActionFileSummary(companyCode, wtStation, category, day);
+		if(afs.summaryLoaded(category, day, seq)) {
+			return wafBmo.findActionFileSummary(companyCode, wtStation, category, seq, day);
 		}
 		Lock lock = null;
 		int i = 0;
@@ -99,7 +99,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			do {
 				i++;
 				try {
-					lock = lockBmo.createLock(LockType.AF_SUMMARY, companyCode+ wtStation + category.name() + day, 10000L);
+					lock = lockBmo.createLock(LockType.AF_SUMMARY, companyCode+ wtStation + category.name() + seq + day, 10000L);
 				} catch (Exception ex) {
 					logger.info("counts for " + companyCode + wtStation
 							+ " alreaedy locked, waiting..");
@@ -114,7 +114,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			if(lock == null) {
 				throw new WorldTracerLockException("unable to load counts");
 			}
-			return afsBmo.updateSummary(companyCode, wtStation, category, day, user, dto);
+			return afsBmo.updateSummary(companyCode, wtStation, category, seq, day, user, dto);
 		} catch (CaptchaException e) {
 			throw new CaptchaException();
 		} catch (Exception e) {
@@ -127,7 +127,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 	}
 
 	public void updateDetails(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum, Agent user, WebServiceDto dto)
+			ActionFileType category, String seq, int day, int fileNum, Agent user, WebServiceDto dto)
 			throws WorldTracerException {
 		WorldTracerService wtService = SpringUtils.getWorldTracerService();
 		try {
@@ -139,7 +139,7 @@ public class ActionFileManagerImpl implements ActionFileManager {
 			String ohd_id = ParsingUtils.parseOhdId(result);
 			double percent = ParsingUtils.parsePercentMatch(result);
 			if (result != null && result.trim().length() > 0) {
-				wafBmo.updateDetails(companyCode, wtStation, category, day,
+				wafBmo.updateDetails(companyCode, wtStation, category, seq, day,
 						fileNum, result, ahl_id, ohd_id, percent);
 			}
 		} catch (Exception e) {
@@ -154,9 +154,9 @@ public class ActionFileManagerImpl implements ActionFileManager {
 	}
 
 	public boolean eraseActionFile(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum, Agent user, WebServiceDto dto) throws CaptchaException, WorldTracerDisabledException, WorldTracerException {
+			ActionFileType category, String seq, int day, int fileNum, Agent user, WebServiceDto dto) throws CaptchaException, WorldTracerDisabledException, WorldTracerException {
 		ActionFileStation afs = this.getCounts(companyCode, wtStation, user, dto);
-		Worldtracer_Actionfiles waf = afsBmo.eraseActionFile(companyCode, wtStation, category, day, fileNum, afs);
+		Worldtracer_Actionfiles waf = afsBmo.eraseActionFile(companyCode, wtStation, category, seq, day, fileNum, afs);
 		WtqEraseActionFile wq = new WtqEraseActionFile();
 		wq.setAgent(user);
 		wq.setCreatedate(TracerDateTime.getGMTDate());

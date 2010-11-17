@@ -7,6 +7,7 @@ public class ForwardMessage {
 	private String destinationAirline;
 	private Agent agent;
 	private String expediteTag;
+	private String tagNum;
 	private String[] name;
 	private String[] teletype;
 	private String suplementaryInfo;
@@ -15,6 +16,7 @@ public class ForwardMessage {
 	private String faultReasonDescription;
 	private String faultStation;
 	private int faultReason;
+	private String crossReferenceId;
 
 	public String getFromStation() {
 		return fromStation;
@@ -126,6 +128,22 @@ public class ForwardMessage {
 
 	public void setItinerary(Itinerary[] itinerary) {
 		this.itinerary = itinerary;
+	}
+
+	public void setCrossReferenceId(String crossReferenceId) {
+		this.crossReferenceId = crossReferenceId;
+	}
+
+	public String getCrossReferenceId() {
+		return crossReferenceId;
+	}
+
+	public void setTagNum(String tagNum) {
+		this.tagNum = tagNum;
+	}
+
+	public String getTagNum() {
+		return tagNum;
 	}
 
 }

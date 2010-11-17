@@ -16,13 +16,13 @@ public interface ActionFileManager {
 
 	ActionFileStation getCounts(String companyCode, String wtStation, Agent user, WebServiceDto dto) throws WorldTracerDisabledException, CaptchaException, WorldTracerLockException, WorldTracerException;
 	
-	List<Worldtracer_Actionfiles> getSummary(String companyCode, String wtStation, ActionFileType category, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerDisabledException;
+	List<Worldtracer_Actionfiles> getSummary(String companyCode, String wtStation, ActionFileType category, String seq, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerDisabledException;
 
 	boolean eraseActionFile(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum, Agent user, WebServiceDto dto)
+			ActionFileType category, String seq, int day, int fileNum, Agent user, WebServiceDto dto)
 			throws WorldTracerException, CaptchaException, WorldTracerDisabledException;
 
 	void updateDetails(String companyCode, String wtStation,
-			ActionFileType category, int day, int fileNum, Agent user, WebServiceDto dto)
+			ActionFileType category, String seq, int day, int fileNum, Agent user, WebServiceDto dto)
 			throws WorldTracerException, CaptchaException;
 }

@@ -88,39 +88,42 @@ public class WorldTracerFWDAction extends Action {
 		// add to the loss codes
 		request.setAttribute("losscodes", codes);
 
+		
 		OHD ohd = OHDUtils.getOHD(theform.getOhd_ID());
-		if (ohd != null) {
-			theform.setWt_id("");
-			theform.setBagtag("");
-			theform.setPassenger1("");
-			theform.setPassenger2("");
-			theform.setPassenger3("");
-			if (ohd.getWt_id() != null)
-				theform.setWt_id(ohd.getWt_id());
-			if (ohd.getClaimnum() != null)
-				theform.setBagtag(ohd.getClaimnum());
-			Set passengers = ohd.getPassengers();
-
-			OHD_Passenger op = null;
-
-			for (Iterator it = passengers.iterator(); it.hasNext();) {
-				// if (it.hasNext()) {
-				op = (OHD_Passenger) it.next();
-				int i = 0;
-				if (op != null && op.getLastname() != null) {
-					if (i == 0)
-						theform.setPassenger1(op.getLastname());
-					if (i == 1)
-						theform.setPassenger2(op.getLastname());
-					if (i == 2)
-						theform.setPassenger3(op.getLastname());
-					i++;
-					if (i == 3)
-						break;
-				}
-				// }
-			}
-		}
+		
+//		
+//		if (ohd != null) {
+//			
+//			theform.setWt_id("");
+//			theform.setBagtag("");
+//			theform.setPassenger1("");
+//			theform.setPassenger2("");
+//			theform.setPassenger3("");
+//			if (ohd.getWt_id() != null)
+//				theform.setWt_id(ohd.getWt_id());
+//			if (ohd.getClaimnum() != null)
+//				theform.setBagtag(ohd.getClaimnum());
+//			Set passengers = ohd.getPassengers();
+//
+//			OHD_Passenger op = null;
+//
+//			int i = 0;
+//			for (Iterator it = passengers.iterator(); it.hasNext();) {
+//				op = (OHD_Passenger) it.next();
+//				
+//				if (op != null && op.getLastname() != null) {
+//					if (i == 0)
+//						theform.setPassenger1(op.getLastname());
+//					if (i == 1)
+//						theform.setPassenger2(op.getLastname());
+//					if (i == 2)
+//						theform.setPassenger3(op.getLastname());
+//					i++;
+//					if (i == 3)
+//						break;
+//				}
+//			}
+//		}
 
 		if (theform == null || request.getParameter("clear") != null) {
 			this.clear(mapping, user, session, request);
@@ -144,6 +147,7 @@ public class WorldTracerFWDAction extends Action {
 					from_station = user.getStation().getWt_stationcode();
 				}
 				if (this.InsertWtFwd(theform, user, from_station)) {
+					
 					return (mapping.findForward(TracingConstants.FORWARD_WT_BAG_SUCCESS));
 				}
 				else {
@@ -171,16 +175,16 @@ public class WorldTracerFWDAction extends Action {
 		
 		if (request.getParameter("ohd_id") != null && request.getParameter("ohd_id").trim().length() > 0) {
 			OHD ohd = OHDUtils.getOHD(request.getParameter("ohd_id"));
-			if(ohd != null) {
-				
-			theform.setOhd_ID(ohd.getOHD_ID());
-			if (ohd.getWt_id() != null)
-				theform.setWt_id(ohd.getWt_id());
-			if (ohd.getClaimnum() != null)
-				theform.setBagtag(ohd.getClaimnum());
+			if (ohd != null) {
 
-			if(ohd.getLastname() !=null)
-				theform.setPassenger1(ohd.getLastname());
+				theform.setOhd_ID(ohd.getOHD_ID());
+				if (ohd.getWt_id() != null)
+					theform.setWt_id(ohd.getWt_id());
+				if (ohd.getClaimnum() != null)
+					theform.setBagtag(ohd.getClaimnum());
+
+				if (ohd.getLastname() != null)
+					theform.setPassenger1(ohd.getLastname());
 			}
 
 		}
@@ -200,6 +204,8 @@ public class WorldTracerFWDAction extends Action {
 		fwd.setFwdDestinationAirline(theform.getDestinationAirline());
 		fwd.setFwdDestinationStation(theform.getDestinationStation());
 		fwd.setFrom_station(from_station);
+		fwd.setFwdTagNum(theform.getBagtag());
+		
 		for(FwdFormSegment seg : theform.getItinerarylist()) {
 			WtqSegment wtqSeg = new WtqSegment();
 			wtqSeg.setAirline(seg.getAirline());

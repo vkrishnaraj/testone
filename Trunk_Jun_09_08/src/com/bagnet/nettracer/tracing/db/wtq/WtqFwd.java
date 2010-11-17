@@ -27,6 +27,8 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	private Collection<WtqSegment> itinerary = new ArrayList<WtqSegment>();
 	
 	private String fwdExpediteNum = null;
+	
+	private String fwdTagNum = null;
 
 	private String fwdDestinationAirline;
 	private String fwdDestinationStation;
@@ -137,6 +139,15 @@ public abstract class WtqFwd extends WorldTracerQueue {
 	@Transient
 	public String getExistsQuery() {
 		return "from WtqFwd fwd where fwd.fwdExpediteNum = ? and fwd.status = ?";
+	}
+
+	public void setFwdTagNum(String fwdTagNum) {
+		this.fwdTagNum = fwdTagNum;
+	}
+	
+	@Column(length = 20)
+	public String getFwdTagNum() {
+		return fwdTagNum;
 	}
 
 }
