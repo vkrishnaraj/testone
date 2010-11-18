@@ -1382,7 +1382,7 @@ public class OnHandAction extends CheckedAction {
 						
 							for (Match_Detail matchDetail : matcheDetails) {
 								historicalReport
-									.append(indent + rightPad(matchDetail.getItem(), 20) + tab)
+									.append(indent + rightPad(resourceBundle.getString(matchDetail.getItem()), 20) + tab)
 									.append(indent + leftPad(matchDetail.getReportPercentage(), 11) + tab)
 									.append(indent + leftPad(matchDetail.getMbr_info(), 25) + tab)
 									.append(indent + leftPad(matchDetail.getOhd_info(), 25) + newline);
