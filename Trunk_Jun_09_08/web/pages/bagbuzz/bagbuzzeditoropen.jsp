@@ -12,25 +12,20 @@
 
 
 
-		<!-- 
-			Include the WYSIWYG javascript files
-		-->
 		<script type="text/javascript" src="deployment/main/js/openwysiwyg_v1.4.7/scripts/wysiwyg.js"></script>
 		<script type="text/javascript" src="deployment/main/js/openwysiwyg_v1.4.7/scripts/wysiwyg-settings.js"></script>
-<!--		<link href="/tracer/deployment/main/js/openwysiwyg_v1.4.7/styles/wysiwyg.css" rel="stylesheet" type="text/css" />-->
+
 
 
 <script language="javascript1.2">
   
-   // attach the editor to the textarea with the identifier 'textarea1'.
+
    WYSIWYG.attach('textarea1');
 </script>
 
 
 <html:form action="bagbuzzsearch.do">
-<!--    <tr>-->
-<!--      <td id="middlecolumn">-->
-<!--<div id="maincontent">-->
+
 <table>
 <tr>
 <td>
@@ -64,7 +59,5 @@ Description:
 </td>
 </tr>
 </table>
-<!--</div>-->
-<!--</td>-->
-<!--</tr>-->
+
 </html:form>

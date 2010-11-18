@@ -20,7 +20,7 @@ String.prototype.trim = function () {
 
 function displaymessage()
 {
-//form.data.value = form.FCKeditor1.value;
+
 alert(document.forms[0].FCKeditor1.value.trim());
 alert(oFCKeditor.CreateHtml());
 return true;
@@ -51,9 +51,7 @@ oFCKeditor.ReplaceTextarea() ;
 
 
 <html:form action="bagbuzzsearch.do">
-<!--    <tr>-->
-<!--      <td id="middlecolumn">-->
-<!--<div id="maincontent">-->
+
 <table>
 <tr>
 <td>
@@ -81,7 +79,5 @@ oFCKeditor.ReplaceTextarea() ;
 </td>
 </tr>
 </table>
-<!--</div>-->
-<!--</td>-->
-<!--</tr>-->
+
 </html:form>
