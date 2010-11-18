@@ -1094,10 +1094,10 @@ public class LostDelayAction extends CheckedAction {
 			}
 			
 			if (type == 5) {	//Teletype so no regular reports
-				StringBuilder myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
+				String myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
 				SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 				String teletypeAddress = request.getParameter("teletypeAddress");
-				iw.sendTelex(myTeletypeHistoricalReport.toString(), teletypeAddress);
+				iw.sendTelex(myTeletypeHistoricalReport, teletypeAddress);
 				
 				return null;
 			} else {
@@ -1114,7 +1114,7 @@ public class LostDelayAction extends CheckedAction {
 		}
 	}
 
-	private static StringBuilder buildTeletypeStyleHistoricalReport(Map parameters) {
+	private static String buildTeletypeStyleHistoricalReport(Map parameters) {
 		//logger.error("printing the teletype style historical report below:");
 		StringBuilder historicalReport = new StringBuilder();
 		historicalReport.append(newline);
@@ -1604,10 +1604,14 @@ public class LostDelayAction extends CheckedAction {
 		String phraseToReplace = ": null" + newline;
 		String newPhrase = ": " + newline;
 		String result = org.apache.commons.lang.StringUtils.replace(historicalReport.toString(), phraseToReplace, newPhrase);
+		//Strip out asterisks
+		result = org.apache.commons.lang.StringUtils.replace(result, "*", " ");
 		
+		logger.error(">>>>capacity : " + historicalReport.capacity());
 		logger.info(result);
-		
-		return historicalReport;
+
+		//return historicalReport;
+		return result;
 	
 	}
 	private static String format(String input) {

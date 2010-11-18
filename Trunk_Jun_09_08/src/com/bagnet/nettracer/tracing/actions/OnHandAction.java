@@ -1555,6 +1555,9 @@ public class OnHandAction extends CheckedAction {
 		String phraseToReplace = ": null" + newline;
 		String newPhrase = ": " + newline;
 		String result = org.apache.commons.lang.StringUtils.replace(historicalReport.toString(), phraseToReplace, newPhrase);
+		//Strip out asterisks
+		result = org.apache.commons.lang.StringUtils.replace(result, "*", " ");
+		
 		logger.error(">>>>capacity : " + historicalReport.capacity());
 		logger.info(result);
 		
