@@ -32,7 +32,6 @@ import aero.nettracer.web.defaul.testing.actions.Login;
 @RunWith(Suite.class)
 @SuiteClasses({Login.class${cursor} /* Add more test cases here */})
 ${line_selection}
-public class TestCreateNewIncident {
 
 	@BeforeClass
 	public static void oneTimeSetUp() {
