@@ -13,7 +13,7 @@
       	<tr>
         	<td>
           		<h1 class="green">
-					Dispute Created Successfully
+					<bean:message key="dispute_created" />
             </td>
     	</tr>
     </table>
