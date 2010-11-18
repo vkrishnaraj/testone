@@ -26,7 +26,7 @@ public abstract class CheckedAction extends Action {
 	
 	static String newline1 = "+";
 	static String newline2 = System.getProperty("line.separator");
-	static String newline = "\n";
+	static String newline = "+";
 	static String indent = " ";
 	static String tab = "      ";
 	
