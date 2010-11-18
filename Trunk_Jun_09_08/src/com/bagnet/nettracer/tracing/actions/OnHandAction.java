@@ -1558,7 +1558,7 @@ public class OnHandAction extends CheckedAction {
 		//Strip out asterisks
 		result = org.apache.commons.lang.StringUtils.replace(result, "*", " ");
 		
-		logger.error(">>>>capacity : " + historicalReport.capacity());
+		logger.info(">>>>capacity : " + historicalReport.capacity());
 		logger.info(result);
 		
 		return result;
