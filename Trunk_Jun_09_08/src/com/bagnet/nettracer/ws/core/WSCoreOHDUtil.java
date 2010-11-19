@@ -566,7 +566,7 @@ public class WSCoreOHDUtil {
    */
   public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQOHD(
       com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQOHD) {
-	logger.info("Start Web Service Response...");
+	logger.info("Start Web Service Response... " + insertQOHD);
   	String errorMsg = "Insert OHD Failed: ";
   	
   	InsertQuickOHDResponseDocument resDoc = InsertQuickOHDResponseDocument.Factory.newInstance();
@@ -758,7 +758,7 @@ public class WSCoreOHDUtil {
    */
   public com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHD(
       com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD) {
-  	logger.info("Start Web Service Response...");
+  	logger.info("Start Web Service Response... " + beornOHD);
   	String errorMsg = "BEORN Failed: ";
   	
   	BeornOHDResponseDocument resDoc = BeornOHDResponseDocument.Factory.newInstance();

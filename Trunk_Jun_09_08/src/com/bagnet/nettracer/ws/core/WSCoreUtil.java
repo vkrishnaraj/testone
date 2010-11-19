@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
-
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -36,6 +36,8 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  */
 public class WSCoreUtil {
 
+	private static Logger logger = Logger.getLogger(WSCoreUtil.class);
+	
 	// webservice standard date and time format for nettracer
 	public final static String WS_DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public final static String WS_DATEFORMAT = "yyyy-MM-dd";
@@ -62,6 +64,7 @@ public class WSCoreUtil {
 	 */
 	public com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticate(com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate) {
 
+		logger.info("Start Web Service Response...");
 		String username = authenticate.getAuthenticate().getUsername();
 		String password = authenticate.getAuthenticate().getPassword();
 		String companycode_id = authenticate.getAuthenticate().getCompanycode();
@@ -152,6 +155,8 @@ public class WSCoreUtil {
 		} else {
 			returnstr = "ERROR: WEBSERVICE DISABLED";
 		}
+		logger.info("Stop Web Service Response...");
+		
 		res.setReturn(returnstr);
 		return resDoc;
 
