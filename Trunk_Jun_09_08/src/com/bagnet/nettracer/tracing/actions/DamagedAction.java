@@ -760,7 +760,7 @@ public class DamagedAction extends CheckedAction {
 				String myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
 				SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 				String teletypeAddress = request.getParameter("teletypeAddress");
-				iw.sendTelex(myTeletypeHistoricalReport, teletypeAddress);
+				iw.sendTelexBySlice(myTeletypeHistoricalReport, teletypeAddress, form.getIncident_ID());
 				
 				return null;
 			} else {
