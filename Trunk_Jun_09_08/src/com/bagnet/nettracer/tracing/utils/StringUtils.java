@@ -255,15 +255,16 @@ public class StringUtils {
   }
   
   private static int getIndexToDivide(String srcStr, String delimiter, int maxLength) {
-  	if (srcStr.length() < maxLength) {
-  		return srcStr.length();
-  	}
-  	int index = srcStr.lastIndexOf(delimiter);
-  	if (index > 0) {
-  		return index;
-  	} else {
-  		return srcStr.length() - 1;
-  	}
+//  	if (srcStr.length() < maxLength) {
+//  		return srcStr.length();
+//  	}
+//  	int index = srcStr.lastIndexOf(delimiter);
+//  	if (index > 0) {
+//  		return index;
+//  	} else {
+//  		return srcStr.length() - 1;
+//  	}
+	  return getIndexToDivide(srcStr, delimiter, maxLength, false, 0);
   }
   
   public static void appendIfNotNull(StringBuilder sb, String x) {
@@ -306,26 +307,19 @@ public class StringUtils {
     }
   }
   
-  public static ArrayList<String> divideUpBigString(String srcWord, int maxLength, String delimiter, String pageLabel) {
+  public static ArrayList<String> divideUpBigString(String srcWord, int maxLength, String delimiter) {
 	  	ArrayList<String> list = new ArrayList<String>();
 	  	
-	  	
-	  	int totalPageCount = srcWord.length() / (maxLength - (pageLabel.length() + 10)) + 1;
-	  	
 	  	maxLength +=1;
-	  	int pageCounter = 1;
 	  		
 	  	int divide = 0;
 	  	int endIndex = 0;
 	  	for (int i=0; i<srcWord.length();) {
-	  		String myPageLabel = pageLabel + pageCounter + " of " + totalPageCount + " ";  // example 10 of 20
-	  		maxLength = maxLength - myPageLabel.length();  //new code buggy
 	  		endIndex = java.lang.Math.min(i + maxLength, srcWord.length());
 	  		
 	  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), delimiter, maxLength - 1, true, 88);
 	  		list.add(srcWord.trim().substring(i, i+divide).trim());
 	  		i += divide;
-	  		pageCounter++;
 	  	}
 	  	
 	  	return list;
