@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.axis2.client.Options;
+import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
@@ -115,6 +116,9 @@ public class CrmIntegration {
 		NetTracerStub stub = new NetTracerStub(PropertyBMO.getValue(PropertyBMO.CRM_INTEGRATION_ENDPOINT));
 
 		Options x = stub._getServiceClient().getOptions();
+		x.setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
+		x.setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+		x.setTimeOutInMilliSeconds(60*1000);
 
 		CreateCRMFileDocument d = CreateCRMFileDocument.Factory.newInstance();
 		CreateCRMFile b = d.addNewCreateCRMFile();
