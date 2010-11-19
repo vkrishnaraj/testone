@@ -229,21 +229,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final int MAX_CONTENT_DESC_LENGTH = 45;
 	private static final int MAX_CONTENT_SPLIT = 2;
 	private static final int LOSS_COMMENT_MAX = 58;
-	
-	private static ArrayList<String> validTypes = new ArrayList<String>();
   
-	static { 
-		validTypes.add("FW");
-		validTypes.add("AA");
-	  validTypes.add("WM");
-	  validTypes.add("EM");
-	  validTypes.add("SP");
-	  validTypes.add("AP");
-	  validTypes.add("CM");
-	  validTypes.add("LM");
-	  validTypes.add("PR");
+	private boolean restrictedAreaType(WorldTracerActionDTO dto, String areaType) {
+		String types = dto.getUser().getProfile().getParameters().get(ParameterType.RESTRICTED_AREA_TYPE);
+		if(types != null){
+			return types.contains(areaType) ;
+		} else {
+			//by default we allow all area types
+			return false;
+		}
 	}
-  
+	
 	
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
@@ -943,8 +939,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 					MessageCount[] mcarray = wsresponse.getWTRInboxMessageCountRS().getMessageCounts().getMessageCountArray();
 					for (MessageCount mc : mcarray) {
-
-						if (isValidAreaType(mc.getAreaType())) {
+						if(!restrictedAreaType(dto,mc.getAreaType().toString())){
 							if (mc.getDay1() > 0) {
 								ActionFileCount afc1 = new ActionFileCount();
 								afc1.setType(mc.getAreaType().toString());
@@ -1054,25 +1049,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	}
 
-	private boolean isValidAreaType(aero.sita.www.bag.wtr._2009._01.InboxAreaType.Enum areaType) {
-	  // TODO Auto-generated method stub
-	  
-	  if (validTypes.contains(areaType.toString())) {
-			return true;
-		}
-	  
-//		FW("fm", "FORWARD_AREA"), 
-//		AA("am", "ACTION_AREA"), 
-//		WM("sm", "SYSTEM_MATCH_AREA"), 
-//		EM("em", "EXTENDED_MATCH_AREA"), 
-//		SP("sp", "SYSTEM_PROMPT_AREA"), 
-//		AP("ap", "ADDITIONAL_PROMPT_AREA"), 
-//		CM("cm", "CLAIMS_MATCH_AREA"), 
-//		LM("lm", "LOCAL_MESSAGE_AREA"), 
-//		PR("pr", "RETIRED_AREA");
-
-		return false;
-  }
 
 	private static Policy loadPolicy(String xmlPath) throws Exception {
 		StAXOMBuilder builder = new StAXOMBuilder(WorldTracerServiceImpl.class.getResourceAsStream(xmlPath));
