@@ -309,7 +309,8 @@ public class StringUtils {
   public static ArrayList<String> divideUpBigString(String srcWord, int maxLength, String delimiter, String pageLabel) {
 	  	ArrayList<String> list = new ArrayList<String>();
 	  	
-	  	int totalPageCount = srcWord.length() / maxLength + 2;
+	  	
+	  	int totalPageCount = srcWord.length() / (maxLength - (pageLabel.length() + 10)) + 1;
 	  	
 	  	maxLength +=1;
 	  	int pageCounter = 1;
@@ -321,12 +322,33 @@ public class StringUtils {
 	  		maxLength = maxLength - myPageLabel.length();  //new code buggy
 	  		endIndex = java.lang.Math.min(i + maxLength, srcWord.length());
 	  		
-	  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), delimiter, maxLength - 1);
-	  		list.add(myPageLabel + srcWord.trim().substring(i, i+divide).trim());
+	  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), delimiter, maxLength - 1, true, 88);
+	  		list.add(srcWord.trim().substring(i, i+divide).trim());
 	  		i += divide;
 	  		pageCounter++;
 	  	}
 	  	
 	  	return list;
+  }
+  
+  private static int getIndexToDivide(String srcStr, String delimiter, int maxLength, boolean useSpace, int minimumPercentage) {
+	  	if (srcStr.length() < maxLength) {
+	  		return srcStr.length();
+	  	}
+	  	int myMinimum = maxLength * minimumPercentage / 100;
+	  	
+	  	int index = srcStr.lastIndexOf(delimiter);
+	  	if (index > myMinimum) {
+	  		return index;
+	  	} else {
+	  		if (useSpace) {
+	  			index = srcStr.lastIndexOf(" ");
+	  			if (index > myMinimum) {
+	  				return index;
+	  			}
+	  			
+	  		}
+	  		return srcStr.length() - 1;
+	  	}
   }
 }
