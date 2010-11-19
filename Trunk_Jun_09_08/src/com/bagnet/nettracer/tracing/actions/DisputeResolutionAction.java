@@ -34,6 +34,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
+import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -61,6 +62,11 @@ public class DisputeResolutionAction extends CheckedAction {
 		//get all the request parameters to determine the appropriate action
 		String incident = request.getParameter("id");
 		request.setAttribute("incident", incident);
+		
+		Incident myIncident = IncidentUtils.findIncidentByID(incident);
+		if(theform.getFaultcompany_id() == null && myIncident != null && myIncident.getFaultstation() != null){
+			theform.setFaultcompany_id(myIncident.getFaultstation().getCompany().getCompanyCode_ID());
+		}
 		
 		//add new dispute
 		String actionType = "" + request.getParameter("actionType");
