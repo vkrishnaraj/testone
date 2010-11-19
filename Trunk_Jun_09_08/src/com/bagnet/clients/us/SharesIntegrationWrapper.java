@@ -1,9 +1,12 @@
 package com.bagnet.clients.us;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.usairways.lcc.aat_sharesws.services_asmx.AddBookingCommentsDocument;
@@ -185,4 +188,28 @@ public class SharesIntegrationWrapper {
 		this.pnrContents = pnrContents;
 	}
 
+	
+	public void sendTelexBySlice(String message, String address, String label) {
+		int telexMaxLengthPerTransmission = 1000;
+		
+		String myPageLabel = " ";  
+		
+		int myMaxLength = telexMaxLengthPerTransmission - (label.length() + 8);
+		
+		if (message.length() < telexMaxLengthPerTransmission) {
+			sendTelex(message, address);
+		} else {
+			ArrayList<String> list = StringUtils.divideUpBigString(message, myMaxLength, "+");
+			
+			int counter = 1;
+			
+			for (String j: list) {
+				myPageLabel = label + counter + " of " + list.size() + " ";
+				counter++;
+				j = myPageLabel + j;
+				
+				sendTelex(j, address);
+			}
+		}
+	}
 }
