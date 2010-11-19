@@ -169,6 +169,7 @@
 					<bean:write name="passenger" property="middlename" />
 					<bean:write name="passenger" property="lastname" />
 					<br/>
+					<logic:notEmpty name="passenger" property="address">
 				<bean:write name="passenger" property="address.address1" />
 <!--				<bean:write name="passenger" property="address.address2" />-->
 <!--				<br/>-->
@@ -187,6 +188,7 @@
 				
 				
 				%>
+				</logic:notEmpty>
 				
 				
 				</td>
