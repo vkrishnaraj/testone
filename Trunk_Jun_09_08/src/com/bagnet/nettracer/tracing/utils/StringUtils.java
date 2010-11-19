@@ -305,4 +305,28 @@ public class StringUtils {
         return false;
     }
   }
+  
+  public static ArrayList<String> divideUpBigString(String srcWord, int maxLength, String delimiter, String pageLabel) {
+	  	ArrayList<String> list = new ArrayList<String>();
+	  	
+	  	int totalPageCount = srcWord.length() / maxLength + 2;
+	  	
+	  	maxLength +=1;
+	  	int pageCounter = 1;
+	  		
+	  	int divide = 0;
+	  	int endIndex = 0;
+	  	for (int i=0; i<srcWord.length();) {
+	  		String myPageLabel = pageLabel + pageCounter + " of " + totalPageCount + " ";  // example 10 of 20
+	  		maxLength = maxLength - myPageLabel.length();  //new code buggy
+	  		endIndex = java.lang.Math.min(i + maxLength, srcWord.length());
+	  		
+	  		divide = getIndexToDivide(srcWord.trim().substring(i, endIndex), delimiter, maxLength - 1);
+	  		list.add(myPageLabel + srcWord.trim().substring(i, i+divide).trim());
+	  		i += divide;
+	  		pageCounter++;
+	  	}
+	  	
+	  	return list;
+  }
 }
