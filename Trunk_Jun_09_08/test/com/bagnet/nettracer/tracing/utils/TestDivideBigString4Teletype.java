@@ -28,7 +28,7 @@ public class TestDivideBigString4Teletype {
 		if (BIG.length() < telexMaxLengthPerTransmission) {
 			System.out.println(BIG);
 		} else {
-			ArrayList<String> list = StringUtils.divideUpBigString(BIG, myMaxLength, "+", telexReportName);
+			ArrayList<String> list = StringUtils.divideUpBigString(BIG, myMaxLength, "+");
 			System.out.println("TestDivideBigString4Teletype >>> number of characters in BIG : " + myBigBuilder.capacity());
 			System.out.println("size : " + list.size());
 			
