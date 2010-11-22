@@ -623,7 +623,6 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			data.setNumber(itemNum);
 			data.setDay(day);
 			data.setSeq(seq);
-			data.setSeq(seq);
 
 			EraseActionFileDocument d = EraseActionFileDocument.Factory.newInstance();
 			EraseActionFile c = d.addNewEraseActionFile();
@@ -873,8 +872,6 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			data.setDay(day);
 			data.setType(afType.name());
 			data.setSeq(seq);
-			data.setSeq(seq);
-			
 			
 			
 			GetActionFileSummaryDocument d = GetActionFileSummaryDocument.Factory.newInstance();
@@ -911,8 +908,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 						afd.setPercentMatch(af.getPercentMatch());
 						afd.setDetails(af.getDetails());
 						result.add(afd);
-						
-						
+											
 					}
 				}
 			}
@@ -1239,11 +1235,9 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			fw.setSuplementaryInfo(fwd.getSupInfo());
 			fw.setExpediteTag(fwd.getFwdExpediteNum());
 			fw.setTagNum(fwd.getFwdTagNum());
-			fw.setTagNum(fwd.getFwdTagNum());
 			fw.setDestinationAirline(fwd.getFwdDestinationAirline());
 			fw.setDestinationStation(fwd.getFwdDestinationStation());
 			fw.setFromAirline(fwd.getAgent().getCompanycode_ID());
-			fw.setCrossReferenceId(fwd.getMatchingAhl());
 			fw.setCrossReferenceId(fwd.getMatchingAhl());
 			if (fwd.getLossCode() != 0) {
 				fw.setFaultReason(fwd.getLossCode());
