@@ -189,8 +189,7 @@
 				
 				%>
 				</logic:notEmpty>
-				
-				
+							
 				</td>
 				</tr>
 		</logic:iterate>
