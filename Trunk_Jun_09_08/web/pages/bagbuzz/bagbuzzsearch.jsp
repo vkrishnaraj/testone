@@ -23,7 +23,7 @@
 %>
 <script type="text/javascript">
 function newWindow(content){
-	var window_dimensions = "toolbars=no,menubar=no,location=no,scrollbars=yes,resizable=yes,status=yes"
+	var window_dimensions = "toolbars=no,menubar=no,location=no,scrollbars=yes,resizable=yes,status=yes";
 	var	newwindow2=window.open('','name',window_dimensions);
 	var tmp = newwindow2.document;
 		tmp.write(content);
@@ -37,14 +37,14 @@ function writeConsole(content) {
    +',toolbar=1'
    +',status=0'
    +',scrollbars=1'
-   +',resizable=1')
+   +',resizable=1');
  top.consoleRef.document.writeln(
   '<html><head><title>Console</title></head>'
    +'<body bgcolor=white onLoad="self.focus()">'
    +content
    +'</body></html>'
- )
- top.consoleRef.document.close()
+ );
+ top.consoleRef.document.close();
 }
 
 </script>

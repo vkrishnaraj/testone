@@ -15,7 +15,7 @@ var oFCKeditor;
 
 String.prototype.trim = function () {
     return this.replace(/^\s*/, "").replace(/\s*$/, "");
-}
+};
 
 
 function displaymessage()
@@ -45,7 +45,7 @@ oFCKeditor.ToolbarSet = 'bagbuzz';
 oFCKeditor.Height	= 450 ;
 oFCKeditor.Width    = 600 ;
 oFCKeditor.ReplaceTextarea() ;
-}
+};
 </script>
 
 
