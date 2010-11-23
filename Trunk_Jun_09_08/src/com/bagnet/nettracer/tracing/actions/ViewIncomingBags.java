@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -387,7 +388,11 @@ public class ViewIncomingBags extends CheckedAction {
 							"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 
 					parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
-					buildTeletypeStyleInboundExpediteBagsReport(parameters, bagsList);
+					StringBuilder sbTelexInboundExpediteBags = buildTeletypeStyleInboundExpediteBagsReport(parameters, bagsList);
+					SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
+					String myLabel = "Inbound Expedite Bags  ";
+					iw.sendTelexBySlice(sbTelexInboundExpediteBags.toString(), teletypeAddress, myLabel);
+					
 				}
 			} else {
 				ReportBMO rBMO = new ReportBMO(request);
