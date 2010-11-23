@@ -46,9 +46,11 @@
 	request.setAttribute("disputeProcess", disputeProcess);
 	
 	String disputeActionType = "view";
-	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)) { 
-		disputeActionType = "viewToResolve"; 
-	}
+	  if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)
+			  && myDispute != null
+			  && myDispute.getStatus().getStatus_ID() == TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) { 
+			disputeActionType = "viewToResolve"; 
+	  }
 %>
   <html:form action="missing.do" method="post" enctype="multipart/form-data">
     <tr>
