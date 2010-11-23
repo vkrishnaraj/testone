@@ -1606,7 +1606,7 @@ public class LostDelayAction extends CheckedAction {
 		String newPhrase = ": " + newline;
 		String result = org.apache.commons.lang.StringUtils.replace(historicalReport.toString(), phraseToReplace, newPhrase);
 		//Strip out asterisks
-		result = org.apache.commons.lang.StringUtils.replace(result, "*", " ");
+		//result = org.apache.commons.lang.StringUtils.replace(result, "*", " ");
 		
 		logger.info(">>>>capacity : " + historicalReport.capacity());
 		logger.info(result);
