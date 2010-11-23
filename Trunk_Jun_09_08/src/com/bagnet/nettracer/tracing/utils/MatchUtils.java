@@ -215,7 +215,7 @@ public class MatchUtils {
 			}
 
 			if (sort == null || sort.equals("")) {
-				sortq = " order by match.category asc, match.match_percent desc";
+				sortq = " order by match.match_percent desc";
 			}
 
 			String sql = "from " + "com.bagnet.nettracer.tracing.db.Match match where 1=1 " + percentq
