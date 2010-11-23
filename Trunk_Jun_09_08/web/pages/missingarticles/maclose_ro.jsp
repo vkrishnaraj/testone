@@ -209,6 +209,17 @@
               <tr>
                 <td align="center" valign="top">
                   <br>
+                                 <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+                      <logic:equal name="disputeProcess" scope="request" value="false">
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                   		String incidentId = "" + request.getAttribute("incident");
+    		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
+		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
+		                     <% } 
+		                    } %>
+	                  </logic:equal>
+	                  </logic:equal>
+	                  
                   <INPUT id="button" type="button" value="Back" onClick="history.back()">
                   </td>
                   </tr>

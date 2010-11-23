@@ -18,10 +18,12 @@
   	String cssFormClass = "form2_pil";
   
 	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
-	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+  	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
+	String disputeProcess = "false";
 	if (myDispute != null) {
-	  	request.setAttribute("disputeProcess", "true");
-	}
+		disputeProcess = "true";
+	} 
+	request.setAttribute("disputeProcess", disputeProcess);
 	
 	String disputeActionType = "view";
 	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)) { 
