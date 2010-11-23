@@ -49,28 +49,19 @@ public class CustomReportBMO implements
 	public String createCustomReport(StatReportDTO srDTO,
 			HttpServletRequest request, Agent user, String rootpath) {
 		this.rootpath = rootpath;
+		String creportdata = null;
 		switch (srDTO.getCustomreportnum()) {
 			case ReportingConstants.RPT_20_CUSTOM_2:
-				String creportdata = createLzReport(srDTO, ReportBMO.getCustomReport(2).getResource_key(), request);
-				if (creportdata == null) {
-					return null;
-				} else {
-					return creportdata;
-				}
-				
+				creportdata = createLzReport(srDTO, ReportBMO.getCustomReport(2).getResource_key(), request);
+				break;
 			case ReportingConstants.RPT_20_CUSTOM_3:
-				String creportdata2 = createPerformanceReport(srDTO, ReportBMO.getCustomReport(3).getResource_key(), request);
-				if (creportdata2 == null) {
-					return null;
-				} else {
-					return creportdata2;
-				}
-				
+				creportdata = createPerformanceReport(srDTO, ReportBMO.getCustomReport(3).getResource_key(), request);
+				break;
 			case ReportingConstants.RPT_20_CUSTOM_55:
 				creportdata = createDisputeResolutionReport(srDTO, ReportBMO.getCustomReport(55).getResource_key(), request, user);
 				break;
 		}
-		return null;
+		return creportdata;
 	}
 
 	private String createDisputeResolutionReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
