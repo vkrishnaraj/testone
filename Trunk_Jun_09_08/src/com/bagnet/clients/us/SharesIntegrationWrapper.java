@@ -204,7 +204,7 @@ public class SharesIntegrationWrapper {
 			int counter = 1;
 			
 			for (String j: list) {
-				myPageLabel = label + " " + counter + " of " + list.size() + "+";
+				myPageLabel = label + " " + counter + " of " + list.size() + "*";
 				counter++;
 				j = myPageLabel + j;
 				

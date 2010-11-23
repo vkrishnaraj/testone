@@ -24,9 +24,9 @@ public abstract class CheckedAction extends Action {
 	public static final int CLOSE_RECORD = 2;
 	public static final int UPDATE_RECORD = 3;
 	
-	static String newline1 = "+";
-	static String newline2 = System.getProperty("line.separator");
-	static String newline = "+";
+	//static String newline1 = "+";
+	//static String newline2 = System.getProperty("line.separator");
+	static String newline = "*";
 	static String indent = " ";
 	static String tab = "      ";
 	

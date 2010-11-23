@@ -1608,8 +1608,8 @@ public class LostDelayAction extends CheckedAction {
 		//Strip out asterisks
 		//result = org.apache.commons.lang.StringUtils.replace(result, "*", " ");
 		
-		logger.info(">>>>capacity : " + historicalReport.capacity());
-		logger.info(result);
+		//logger.info(">>>>capacity : " + historicalReport.capacity());
+		//logger.info(result);
 
 		//return historicalReport;
 		return result;
