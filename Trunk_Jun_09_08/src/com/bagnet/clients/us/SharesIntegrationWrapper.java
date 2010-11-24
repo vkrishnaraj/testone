@@ -190,7 +190,7 @@ public class SharesIntegrationWrapper {
 
 	
 	public void sendTelexBySlice(String message, String address, String label) {
-		int telexMaxLengthPerTransmission = 1000;
+		int telexMaxLengthPerTransmission = 900;    // max allowed
 		
 		String myPageLabel = " ";  
 		
