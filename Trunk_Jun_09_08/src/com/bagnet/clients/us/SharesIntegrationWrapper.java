@@ -199,7 +199,7 @@ public class SharesIntegrationWrapper {
 		if (message.length() < telexMaxLengthPerTransmission) {
 			sendTelex(message, address);
 		} else {
-			ArrayList<String> list = StringUtils.divideUpBigString(message, myMaxLength, "+");
+			ArrayList<String> list = StringUtils.divideUpBigString(message, myMaxLength, "*");
 			
 			int counter = 1;
 			
