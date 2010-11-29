@@ -199,7 +199,12 @@ public class DisputeResolutionAction extends CheckedAction {
 		List<Company> faultCompanyList = null;
 		
 		// If the user has limited permission, 
-		if (UserPermissions.hasLimitedSavePermission(user, incident)) {
+		if (forwardTarget == TracingConstants.DISPUTE_RESOLUTION){
+			//we do not restrict assigned fault stations during a dispute
+			//the other cases are probably never used since ld, dam, pil uses their own actions
+			faultStationList = TracerUtils.getStationList(theform.getFaultcompany_id());
+			faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+		} else if (UserPermissions.hasLimitedSavePermission(user, incident)) {
 			faultStationList = UserPermissions.getLimitedSaveStations(user, incident);
 			faultCompanyList = new ArrayList<Company>();
 			faultCompanyList.add(user.getStation().getCompany());
