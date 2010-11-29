@@ -1422,18 +1422,9 @@ public class OhdBMO {
 			}
 
 			// get the last record with this companycode_ID;
-			Query q = sess
-					.createQuery("select count(ohd_range.current_num) from com.bagnet.nettracer.tracing.db.OHD_Range ohd_range "
-							+ "where ohd_range.companycode_ID = :companycode_ID group by ohd_range.companycode_ID");
-			q.setString("companycode_ID", companycode);
-			List list = q.list();
+			Query q = null;
+			List list = null;
 
-			if (list == null || list.size() == 0) {
-				// starts off at 1
-				newnum = 1;
-			} else {
-				newnum = ((Long) list.get(0)).intValue();
-			}
 
 			StringBuffer s = new StringBuffer();
 			s.append(stationcode);

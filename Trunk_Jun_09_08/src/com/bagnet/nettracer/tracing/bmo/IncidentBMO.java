@@ -1385,25 +1385,9 @@ public class IncidentBMO {
 			}
 
 			// get the last record with this companycode_ID;
-			Query q = sess
-					.createQuery("select count(incident_range.current_num) from com.bagnet.nettracer.tracing.db.Incident_Range incident_range "
-							+ "where incident_range.companycode_ID = :companycode_ID group by incident_range.companycode_ID");
-
-			q.setString("companycode_ID", companycode);
-
-			List list = q.list();
-
-			if (list == null || list.size() == 0) {
-				// starts off at 1
-				newnum = 1;
-			} else {
-				newnum = ((Long) list.get(0)).intValue();
-				// get the next incident_ID number (-1 because not counting this
-				// newly
-				// inserted one)
-				// newnum = ((Long) o[0]).longValue() - 1;
-			}
-
+			Query q = null;
+			List list = null;
+			
 			StringBuffer s = new StringBuffer();
 			s.append(stationcode);
 			s.append(companycode);
