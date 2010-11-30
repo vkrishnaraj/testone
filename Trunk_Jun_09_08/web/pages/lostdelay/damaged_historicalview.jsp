@@ -366,9 +366,7 @@ function CBG_check(obj) {
             <tr>
               <td colspan="2" align="center" valign="top" bgcolor=white>
                 <br>
-                <html:submit property="create" onclick="generateHistoricalView('outputtype')" styleId="button">
-                  <bean:message key="button.createreport" />
-                </html:submit>
+                <input type="button" name="create" onclick="generateHistoricalView('outputtype')" class="button" value="<bean:message key="button.createreport" />" />
               </td>
             </tr>
             <logic:present name="reportfile" scope="request">

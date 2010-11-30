@@ -448,9 +448,7 @@ function gotoHistoricalReport() {
             <tr>
               <td colspan="2" align="center" valign="top" bgcolor=white>
                 <br>
-                <html:submit property="create" onclick="generateHistoricalView('history_type')" styleId="button">
-                  <bean:message key="button.createreport" />
-                </html:submit>
+                <input type="button" name="create" onclick="generateHistoricalView('history_type')" class="button" value="<bean:message key="button.createreport" />" />
               </td>
             </tr>
           </table>
