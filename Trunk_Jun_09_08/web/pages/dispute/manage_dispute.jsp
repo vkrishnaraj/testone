@@ -10,9 +10,21 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Incident" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass = "form2_ld";
+  
+	String incident = "" + request.getAttribute("incident");
+  	int incidentType = DisputeResolutionUtils.getIncidentType(incident);
+  
+	String targetAction = "lostDelay.do";
+	if (incidentType == TracingConstants.MISSING_ARTICLES) {
+		targetAction = "missing.do";
+	} else if (incidentType == TracingConstants.DAMAGED_BAG) {
+		targetAction = "damaged.do";
+	}
+  
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -69,10 +81,19 @@
         <div class="menu">
           <dl>
             <dd>
-              <a href='logon.do?taskmanager=1'><span class="aa">&nbsp;
+              <a href='searchIncident.do?incident=<bean:write name="incident" scope="request"/>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
-                <span class="bb"><bean:message key="menu.taskmanagerhome" /></span>
+                <span class="bb"><bean:message key="menu.incident_info" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+            </dd>
+            <dd>
+              <a href="<%=targetAction %>?close=1"><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.close" /></span>
                 <span class="cc">&nbsp;
                   <br />
                   &nbsp;</span></a>
