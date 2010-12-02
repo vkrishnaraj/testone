@@ -107,7 +107,7 @@ function writeConsole(content) {
         <logic:iterate id="bb" name="bb_list" scope="request" type="com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz">
         	<tr>
                 <td nowrap>
-                <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=610,scrollbars,resizable=yes'); return false"><bean:write name="bb" property="description" /></a><br />
+                <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=800,scrollbars,resizable=yes'); return false"><bean:write name="bb" property="description" /></a><br />
                   &nbsp;
                 </td>
 				<td nowrap>
@@ -132,7 +132,7 @@ function writeConsole(content) {
                 <td nowrap>
                 &nbsp;
                 <%if (bb.getStatus().getStatus_ID() == 86 || bb.getStatus().getStatus_ID() == 95){ %>
-                  <a href="bagbuzzeditor.do?bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=650,width=650,scrollbars'); return false"><bean:message key="bagbuzz.colname.edit" /></a><br />
+                  <a href="bagbuzzeditor.do?bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=650,width=850,scrollbars'); return false"><bean:message key="bagbuzz.colname.edit" /></a><br />
                 <%}%>
                 </td>
                 <td nowrap>
@@ -166,7 +166,7 @@ function writeConsole(content) {
         </logic:iterate>
         	  <tr>
                 <td align="center" valign="top" colspan="12">
-                  <html:submit styleId="button" onclick="window.open('bagbuzzeditor.do', 'child', 'height=650,width=650,scrollbars'); return false">
+                  <html:submit styleId="button" onclick="window.open('bagbuzzeditor.do', 'child', 'height=650,width=850,scrollbars'); return false">
                     <bean:message key="bagbuzz.neweditor" />
                   </html:submit>
                 </td>
@@ -190,7 +190,7 @@ function writeConsole(content) {
         <logic:iterate id="bbt" name="bbt_list" scope="request" type="com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask">
         	<tr>
         	    <td nowrap>
-                  <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bbt" property="bagBuzz.bagbuzz_id"/>&bbt_id=<bean:write name="bbt" property="task_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=610,scrollbars'); return false">
+                  <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bbt" property="bagBuzz.bagbuzz_id"/>&bbt_id=<bean:write name="bbt" property="task_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=800,scrollbars,resizable=yes'); return false">
                   <%if (bbt.getBagBuzz().getDescription() != null && bbt.getBagBuzz().getDescription().trim().length() > 0){ %>
                   <bean:write name="bbt" property="bagBuzz.description" />
                   <%} else { %>

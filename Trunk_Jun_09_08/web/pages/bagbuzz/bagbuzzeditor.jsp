@@ -43,7 +43,7 @@ var oFCKeditor = new FCKeditor( 'data' ) ;
 oFCKeditor.BasePath = 'deployment/main/js/fckeditor/' ;
 oFCKeditor.ToolbarSet = 'bagbuzz';
 oFCKeditor.Height	= 450 ;
-oFCKeditor.Width    = 600 ;
+oFCKeditor.Width    = 800 ;
 oFCKeditor.ReplaceTextarea() ;
 };
 </script>
