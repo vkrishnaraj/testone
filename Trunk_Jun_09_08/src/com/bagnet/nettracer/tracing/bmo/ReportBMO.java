@@ -3233,9 +3233,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
 				
-				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
+//				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
 				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, myBetweenPagesHtml);
-				exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
+//				exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
 	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
@@ -3380,9 +3380,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
 				
-				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
+//				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
 				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, myBetweenPagesHtml);
-				exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
+//				exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
 	
 				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 				exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);
