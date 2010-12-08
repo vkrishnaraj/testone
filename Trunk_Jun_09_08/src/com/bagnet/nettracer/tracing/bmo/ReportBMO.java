@@ -3230,9 +3230,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				} 
 				
 				String myDailyFileReportByLZTeamCode = Integer.toString(ReportingConstants.RPT_20_CUSTOM_2); //USAIR Daily File Repor by LZ
-				if (myBdoReceiptCode.equals(request.getParameter("customreportnum")) && "20".equals(request.getParameter("reportnum"))) {
+				if (myDailyFileReportByLZTeamCode.equals(request.getParameter("customreportnum")) && "20".equals(request.getParameter("reportnum"))) {
 					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
 				} 				
+				
+				String myPPLCAgingReportCode = Integer.toString(ReportingConstants.RPT_20_CUSTOM_6); //USAIR Daily File Repor by LZ
+				if (myPPLCAgingReportCode.equals(request.getParameter("customreportnum")) && "20".equals(request.getParameter("reportnum"))) {
+					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
+				} 	
 				
 				//exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
