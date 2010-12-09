@@ -3366,12 +3366,11 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	
 				Map imagesMap = new HashMap();
 				
-				//special case for BDO Receipt only
-				String myBetweenPagesHtml = "";
-				String myBdoReceiptCode = Integer.toString(ReportingConstants.BDO_RECEIPT_RPT);
-				if (myBdoReceiptCode.equals(request.getParameter("print"))) {
-					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
-				} 
+				String myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
+				String myHistoryReportLongKey = "" + parameters.get("history_report_long");
+				if ("Yes".equalsIgnoreCase(myHistoryReportLongKey)) {	//for history report only: removing large space between pages
+					myBetweenPagesHtml = "";
+				}
 				
 				//exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				
