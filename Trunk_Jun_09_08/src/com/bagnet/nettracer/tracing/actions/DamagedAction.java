@@ -561,6 +561,9 @@ public class DamagedAction extends CheckedAction {
 					.getCurrentlocale()));
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			
+			//assuming this is history report: set special parameter to signal long report with no page break for HTML
+			parameters.put("history_report_long", "Yes");
 
 			HashMap report_info = new HashMap();
 			report_info.put("incident_ID", form.getIncident_ID());

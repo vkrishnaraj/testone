@@ -3220,24 +3220,12 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				exporter = new JRHtmlExporter();
 	
 				Map imagesMap = new HashMap();
-				
-				//special case for BDO Receipt and for Daily File Report by LZ Team (USAIR) only
-				String myBetweenPagesHtml = "";
-				String myBdoReceiptCode = Integer.toString(ReportingConstants.BDO_RECEIPT_RPT);
-				
-				if (myBdoReceiptCode.equals(request.getParameter("print"))) {
-					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
-				} 
-				
-				String myDailyFileReportByLZTeamCode = Integer.toString(ReportingConstants.RPT_20_CUSTOM_2); //USAIR Daily File Repor by LZ
-				if (myDailyFileReportByLZTeamCode.equals(request.getParameter("customreportnum")) && "20".equals(request.getParameter("reportnum"))) {
-					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
-				} 				
-				
-				String myPPLCAgingReportCode = Integer.toString(ReportingConstants.RPT_20_CUSTOM_6); //USAIR Daily File Repor by LZ
-				if (myPPLCAgingReportCode.equals(request.getParameter("customreportnum")) && "20".equals(request.getParameter("reportnum"))) {
-					myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
-				} 	
+					
+				String myBetweenPagesHtml = "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>";
+				String myHistoryReportLongKey = "" + parameters.get("history_report_long");
+				if ("Yes".equalsIgnoreCase(myHistoryReportLongKey)) {	//for history report only: removing large space between pages
+					myBetweenPagesHtml = "";
+				}
 				
 				//exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);

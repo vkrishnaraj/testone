@@ -879,6 +879,10 @@ public class OnHandAction extends CheckedAction {
 					"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			
+			//assuming this is history report: set special parameter to signal long report with no page break for HTML
+			parameters.put("history_report_long", "Yes");
+			
 			parameters.put("airline", format("" + form.getAgent().getCompanycode_ID()));
 			parameters.put("createdate", format("" + form.getDispFoundTime()));
 			parameters.put("file_reference", format("" + form.getOhd_id()));
