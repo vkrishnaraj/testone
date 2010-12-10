@@ -357,7 +357,7 @@ public class MBRReportBMO {
 		//testing for USAIR issue
 //		drb.setPageSizeAndOrientation(Page.Page_A4_Landscape());
 		drb.setPageSizeAndOrientation(Page.Page_A4_Portrait());
-		drb.setMargins(10, 10, 5, 5);
+//		drb.setMargins(10, 10, 5, 5);
 		drb.setUseFullPageWidth(true);
 		
 		//get the general information of the report, such as Report Title
@@ -422,12 +422,12 @@ public class MBRReportBMO {
 
 		AbstractColumn columnClaimNumber = ColumnBuilder.getNew()
 				.setColumnProperty("incident_ID", String.class.getName()).setTitle(
-				reportHeadingIncidentNumber).setWidth(new Integer(84)).setStyle(
+				reportHeadingIncidentNumber).setWidth(new Integer(81)).setStyle(
 				detailStyle).setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnDate = ColumnBuilder.getNew()
 				.setColumnProperty("rcreatedate", String.class.getName()).setTitle(
-				reportHeadingDate).setWidth(new Integer(40)).setStyle(detailStyle)
+				reportHeadingDate).setWidth(new Integer(43)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnTime = ColumnBuilder.getNew()
