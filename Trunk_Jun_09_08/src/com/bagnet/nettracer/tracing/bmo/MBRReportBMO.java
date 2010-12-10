@@ -321,7 +321,7 @@ public class MBRReportBMO {
 		
 		Style detailStyle = new Style("detail");
 		detailStyle.setVerticalAlign(VerticalAlign.TOP);
-		detailStyle.setFont(new Font(11, Font._FONT_ARIAL, false));
+		detailStyle.setFont(new Font(8, Font._FONT_ARIAL, false));
 
 		Style headerStyle = new Style("header");
 		headerStyle.setBackgroundColor(Color.LIGHT_GRAY);
@@ -331,7 +331,7 @@ public class MBRReportBMO {
 		Style headerVariables = new Style("headerVariables");
 		headerVariables.setHorizontalAlign(HorizontalAlign.RIGHT);
 		headerVariables.setVerticalAlign(VerticalAlign.TOP);
-		headerVariables.setFont(new Font(12, Font._FONT_TIMES_NEW_ROMAN, true));
+		headerVariables.setFont(new Font(10, Font._FONT_TIMES_NEW_ROMAN, true));
 
 		Style groupVariables = new Style("groupVariables");
 		groupVariables.setHorizontalAlign(HorizontalAlign.LEFT);
@@ -353,7 +353,12 @@ public class MBRReportBMO {
 		oddRowStyle.setTransparency(Transparency.OPAQUE);
 
 		DynamicReportBuilder drb = new DynamicReportBuilder();
-		drb.setPageSizeAndOrientation(Page.Page_A4_Landscape());
+		
+		//testing for USAIR issue
+//		drb.setPageSizeAndOrientation(Page.Page_A4_Landscape());
+		drb.setPageSizeAndOrientation(Page.Page_A4_Portrait());
+		drb.setMargins(10, 10, 5, 5);
+		drb.setUseFullPageWidth(true);
 		
 		//get the general information of the report, such as Report Title
 		String myReportTitle = "MBR Report";
@@ -437,7 +442,7 @@ public class MBRReportBMO {
 		
 		AbstractColumn columnFinal = ColumnBuilder.getNew()
 				.setColumnProperty("final_destination", String.class.getName())
-				.setTitle(reportHeadingFinal).setWidth(new Integer(40)).setStyle(
+				.setTitle(reportHeadingFinal).setWidth(new Integer(50)).setStyle(
 				detailStyle).setHeaderStyle(headerStyle).build();
 
 		AbstractColumn columnStatus = ColumnBuilder.getNew()
