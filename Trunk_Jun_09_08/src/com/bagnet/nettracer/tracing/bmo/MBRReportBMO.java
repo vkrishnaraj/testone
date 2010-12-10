@@ -357,7 +357,6 @@ public class MBRReportBMO {
 		//testing for USAIR issue
 //		drb.setPageSizeAndOrientation(Page.Page_A4_Landscape());
 		drb.setPageSizeAndOrientation(Page.Page_A4_Portrait());
-//		drb.setMargins(10, 10, 5, 5);
 		drb.setUseFullPageWidth(true);
 		
 		//get the general information of the report, such as Report Title
