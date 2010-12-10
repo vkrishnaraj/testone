@@ -880,7 +880,7 @@ public class OnHandAction extends CheckedAction {
 
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			
-			//assuming this is history report: set special parameter to signal long report with no page break for HTML
+			//history report: set special parameter to signal long report with no page break for HTML
 			parameters.put("history_report_long", "Yes");
 			
 			parameters.put("airline", format("" + form.getAgent().getCompanycode_ID()));
