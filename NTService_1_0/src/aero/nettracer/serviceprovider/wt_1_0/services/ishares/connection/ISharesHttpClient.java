@@ -169,7 +169,6 @@ public class ISharesHttpClient extends WtHttpClient implements
 			logonPage.addParameter("ID", account.getUsername());
 
 			logonPage.addParameter("SSU", account.getCompanyCode());
-			logonPage.addParameter("B1", "Login");
 			
 			if ("1".equals(account.getProfile().getParameters().get(ParameterType.USE_CLEAR_TEXT_PASS))){
 				logonPage.addParameter("Password", account.getPassword());
@@ -179,7 +178,7 @@ public class ISharesHttpClient extends WtHttpClient implements
 			String hashKey = ISharesHttpClient.keyGen();
 			logonPage.addParameter("HMACval", 
 					hashKey + ISharesHttpClient.hmacHash(hashKey, account.getPassword()));
-			
+			logonPage.addParameter("B1", "Login");
 			this.executeMethod(logonPage, "Initial Login");
 			String responseString = logonPage.getResponseBodyAsString();
 			logonPage.releaseConnection();
