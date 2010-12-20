@@ -703,9 +703,19 @@ public class PreProcessor {
 			getOhdItineraryInfo(itin, result);
 		}
 
-		addIncidentFieldEntry(WorldTracerField.NM, ohd.getItem().getLastNameOnBag(), result);
-
-		addIncidentFieldEntry(WorldTracerField.PT, ohd.getItem().getFirstNameOnBag(), result);
+		
+		if(ohd.getItem().getLastNameOnBag() != null && ohd.getItem().getLastNameOnBag().trim().length() > 0){
+			String initials;
+			addIncidentFieldEntry(WorldTracerField.NM, ohd.getItem().getLastNameOnBag(), result);
+			if (ohd.getItem().getFirstNameOnBag() != null && ohd.getItem().getFirstNameOnBag().trim().length() > 0) {
+				addIncidentFieldEntry(WorldTracerField.PT, ohd.getItem().getFirstNameOnBag(), result);
+				initials = ohd.getItem().getFirstNameOnBag().trim().substring(0, 1) 
+				+ ohd.getItem().getLastNameOnBag().trim().substring(0, 1);
+			} else {
+				initials = ohd.getItem().getLastNameOnBag().trim().substring(0, 1);
+			}
+			addIncidentFieldEntry(WorldTracerField.IT, initials, result);
+		}
 
 		for (Passenger p :  ohd.getPax()) {
 			getOhdPaxInfo(p, result);

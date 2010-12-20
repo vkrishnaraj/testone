@@ -244,7 +244,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	public WorldTracerServiceImpl(WorldTracerActionDTO dto) {
 
 	}
-
+	
 	protected static boolean validate(org.apache.xmlbeans.XmlObject xml){
 		org.apache.xmlbeans.XmlOptions options = new XmlOptions();
 		ArrayList<XmlError> errors = new ArrayList<XmlError>();
@@ -1314,19 +1314,23 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			PassengerType p1 = d1.addNewPassengers();
-
+			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
 			List<String> fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			Names names = null;
+			Initials initials = null;
 			if (fieldList != null) {
 				for (int j = 0; j < fieldList.size(); j++) {
-					if (j == 0) {
+					if (names == null) {
 						names = p1.addNewNames();
 					}
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					names.addName(name);
 					if (fieldList2 != null && fieldList2.size() > j) {
-						p1.addNewInitials().addNewIntial().setStringValue(fieldList2.get(j));
+						if(initials == null){
+							initials = p1.addNewInitials();
+						}
+						initials.addNewIntial().setStringValue(fieldList2.get(j));
 					}
 				}
 			}
@@ -1836,13 +1840,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			if (fieldList != null && fieldList.size() > 0) {
 				Names pp1 = p1.addNewNames();
-				Initials pi1 = p1.addNewInitials();
+				Initials pi1 = null;
 				for (int j = 0; j < fieldList.size(); j++) {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 
 					pp1.addName(name);
 
 					if (fieldList2 != null && fieldList2.size() > j) {
+						if(pi1 == null){
+							pi1 = p1.addNewInitials();
+						}
 						pi1.addNewIntial().setStringValue(fieldList2.get(j));
 					}
 				}
@@ -3217,21 +3224,21 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			 List<String> fieldList2 =
 			 fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names names = null;
+			aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Initials initials = p1.addNewInitials();
 			if (fieldList != null) {
 				for (int j = 0; j < fieldList.size(); j++) {
-					if (j == 0) {
+					if (names == null) {
 						names = p1.addNewNames();
 					}
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = names.addNewName();
-					nm.setSeq(j + 1);
+					//nm.setSeq(j + 1);
 					nm.setStringValue(name);
-					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS
-					// HERE
-					// comment remove sept.22 loupas
 					if (fieldList2 != null && fieldList2.size() > j) {
-						p1.addNewInitials().addNewIntial().setStringValue(
-								fieldList2.get(j));
+						if(initials == null){
+							initials = p1.addNewInitials();
+						}
+						initials.addNewIntial().setStringValue(fieldList2.get(j));
 					}
 				}
 			}
@@ -3588,18 +3595,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		 fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			if (fieldList != null && fieldList.size() > 0) {
 				aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names p11 = p1.addNewNames();
+				aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Initials initials = null;
 				for (int j = 0; j < fieldList.size(); j++) {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = p11.addNewName();
 					nm.setStringValue(name);
-					nm.setSeq(j + 1);
-					// EXCEPTION CAUSED WITHIN AXIS ATTEMPTING TO ADD INITIALS
-					// HERE
-					// comments removed sept.22,2010 loupas
+					//nm.setSeq(j + 1);
 					if (fieldList2 != null && fieldList2.size() > j) {
-						Intial it = p1.addNewInitials().addNewIntial();
+						if(initials == null){
+							initials = p1.addNewInitials();
+						}
+						Intial it = initials.addNewIntial();
 						it.setStringValue(fieldList2.get(j));
-						it.setSeq(j+1);
+						//it.setSeq(j+1);
 					}
 				}
 			}
