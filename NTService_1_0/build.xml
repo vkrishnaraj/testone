@@ -77,7 +77,7 @@
 		<copy todir="${basedir}/web/WEB-INF/services/NTService/META-INF" file="${build.dir}/webservices/NTService/resources/services.xml" />
 		-->
 		<!-- copy java files to src -->
-		<!--
+		<!--		
 		<copy todir="${basedir}/src">
 			<fileset dir="${build.dir}/webservices/NTService/src">
 				<include name="**/**/*.java" />
@@ -99,13 +99,13 @@
 		</jar>
 
 		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/NTService/ReservationService_1_0.jar" />
-		-->
+-->
 		<!-- clean up -->
-		<!--
+		<!--		
 		<delete dir="${build.dir}/webservices/NTService/temp" />
 		<delete dir="${build.dir}/webservices/NTService/resources" />
 		<delete dir="${build.dir}/webservices/NTService/src" />
-		-->
+-->
 	</target>
 
 	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.classpath" />
@@ -345,6 +345,46 @@
 			outputLocation="src/aero/nettracer/vendor/delivery/" 
 			outputFileName="DeliveryVendorService.wsdl">
 		</Java2WSDLTask>
+	</target>
+	
+	<target name="buildEscrowUSAir">
+		<property name="ant_project_name" value="services"/>
+
+		<delete dir="${build.dir}/${ant_project_name}/escrow"/>
+		<mkdir dir="${build.dir}/${ant_project_name}/escrow" />
+		
+		<mkdir dir="${build.dir}/${ant_project_name}/escrow/src" />
+		<mkdir dir="${build.dir}/${ant_project_name}/escrow/lib" />
+		
+		<copy todir="${build.dir}/${ant_project_name}/escrow/src" >
+			<fileset dir="./src">
+				<include name="**/*.java"/>
+				<exclude name="**/spirit/*.*/"/>
+				<include name="**/databases/usair*/hibernate_main.cfg.xml"/>
+				<include name="dozerBeanMapping.xml"/>
+				<include name="log4j.properties"/>
+				<include name="US_PROD_policy.xml"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${build.dir}/${ant_project_name}/escrow/web" >
+			<fileset dir="./web" />
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/escrow/metadata" >
+			<fileset dir="./metadata" />
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/escrow/lib" >
+			<fileset dir="./lib" />
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/escrow/providedJars" >
+			<fileset dir="./providedJars" />
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/escrow/" file="./build.xml" />
+		
 	</target>
 
 
