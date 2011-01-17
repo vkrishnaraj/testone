@@ -286,15 +286,21 @@
 					<xs:documentation>FT - Terminal  responsible for the mishandling of the bag</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Insurance" type="EmptyType" minOccurs="0">
+			<xs:element name="Insurance" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>IN - Indicates whether the passenger has baggage insurance</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="Value" type="YesNoType"/>
+				</xs:complexType>
 			</xs:element>
-			<xs:element name="LiabilityTag" type="EmptyType" minOccurs="0">
+			<xs:element name="LiabilityTag" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>LT - Liability tag</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="Value" type="YesNoType"/>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="MissingBags" type="NumericLength2" minOccurs="0">
 				<xs:annotation>
@@ -427,11 +433,8 @@
 					<xs:documentation>IN - Indicates whether the passenger has baggage insurance</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="EmptyType">
-							<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
-						</xs:extension>
-					</xs:complexContent>
+					<xs:attribute name="Value" type="YesNoType"/>
+					<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="LiabilityTag" minOccurs="0">
@@ -441,6 +444,7 @@
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="EmptyType">
+							<xs:attribute name="Value" type="YesNoType"/>
 							<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
 						</xs:extension>
 					</xs:complexContent>
@@ -596,6 +600,11 @@
 					<xs:documentation>XR - Contians reference to a related record</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="DisposalDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>DO - Date the onhand bag is disposed</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="FlightDateType">
@@ -666,7 +675,7 @@
 			<xs:documentation>Contains information about the delivery of a particular bag</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="DeliveredTime" type="xs:date" minOccurs="0">
+			<xs:element name="DeliveredTime" type="xs:dateTime" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>DD - Date and time a bag is delivered</xs:documentation>
 				</xs:annotation>
@@ -697,7 +706,7 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="BagReceivedDate" type="xs:date" minOccurs="0">
+			<xs:element name="BagReceivedDate" type="xs:dateTime" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>DR - Date and time the bag was received at the tracing station for forwarding to the passenger</xs:documentation>
 				</xs:annotation>
@@ -739,7 +748,7 @@
 					<xs:union memberTypes="StandardCategoryType AlphaLength1to12"/>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="Description" type="StringLength1to45" minOccurs="0"/>
+			<xs:element name="Description" type="StringLength1to91" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="PhoneAmendType">
@@ -764,12 +773,12 @@
 			<xs:documentation>Contians history about the Worldtracer bag record history</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="History" type="StringLength1to58" maxOccurs="unbounded">
+			<xs:element name="History" type="StringLength1to2000" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>History text for the record</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="MatchHistory" type="StringLength1to58" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="MatchHistory" type="StringLength1to2000" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Match history for the record</xs:documentation>
 				</xs:annotation>
@@ -799,6 +808,16 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="Initials" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>IT - Initials on the bag or passengers full initials</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Intial" type="InitialType" maxOccurs="3"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="OriginalBags" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
@@ -820,8 +839,25 @@
 			<xs:documentation>Contians summary of a bag</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="BagTag" type="BagTagType" minOccurs="0"/>
-			<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0"/>
+			<xs:element name="BagTag" type="BagTagType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>TN</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ColorType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CT</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="ColorCode" type="ColorCodeType"/>
+					<xs:attribute name="TypeCode" type="BagTypeCodeType"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>FD</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="FrequentFlyerType">
@@ -842,25 +878,140 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="AddressType">
+	<xs:complexType name="WTR_AddressType">
 		<xs:annotation>
 			<xs:documentation>Contains Address fields</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="HouseNumber" type="StringLength1to8" minOccurs="0"/>
-			<xs:element name="StreetName" type="StringLength1to58" minOccurs="0"/>
-			<xs:element name="Apartment" type="StringLength1to8" minOccurs="0"/>
-			<xs:element name="City" type="StringLength1to58" minOccurs="0"/>
-			<xs:element name="State" type="StringLength1to58" minOccurs="0"/>
-			<xs:element name="PostalCode" type="StringLength1to12" minOccurs="0"/>
-			<xs:element name="Country" type="iata:CountryNameType"/>
+			<xs:element name="AddressLine" type="StringLength1to58" minOccurs="0" maxOccurs="2">
+				<xs:annotation>
+					<xs:documentation>This element is used by WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HouseNumber" type="StringLength1to8" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StreetName" type="StringLength1to58" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Apartment" type="StringLength1to8" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="City" type="StringLength1to58" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="State" type="iata:StateProvType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ST, TS - State
+Note: WTR only accepts state code (StateCode attribute) of length 2 alpha charcters</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostalCode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ZP, TZ - Zip/Postal Code</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="StringLength1to12"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Country" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CO, TC - Country
+Note: WTR accepts only country name of length upto 30 characters</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="iata:CountryNameType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WTR_AddressAmendType">
+		<xs:annotation>
+			<xs:documentation>Contains Address fields</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AddressLine" type="StringLength0to58AmendType" minOccurs="0" maxOccurs="2">
+				<xs:annotation>
+					<xs:documentation>This element is used by WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HouseNumber" type="StringLength1to8" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StreetName" type="StringLength1to58" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Apartment" type="StringLength1to8" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="City" type="StringLength1to58" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element is not currently supported in WTR open</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="State" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ST, TS - State
+Note: WTR only accepts state code (StateCode attribute) of length 2 alpha charcters</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="iata:StateProvType">
+							<xs:attribute name="Delete" type="xs:boolean" default="false"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PostalCode" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ZP, TZ - Zip/Postal Code</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="StringLength0to12">
+							<xs:attribute name="Delete" type="xs:boolean" default="false"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Country" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CO, TC - Country
+Note: WTR accepts only country name of length upto 30 characters</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="iata:CountryNameType">
+							<xs:attribute name="Delete" type="xs:boolean" default="false"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="BusinessAddressType">
 		<xs:complexContent>
-			<xs:extension base="AddressType">
+			<xs:extension base="WTR_AddressType">
 				<xs:sequence>
-					<xs:element name="CompanyName" type="StringLength1to58"/>
+					<xs:element name="CompanyName" type="StringLength1to58" minOccurs="0"/>
 					<xs:element name="Suite" type="StringLength1to12" minOccurs="0"/>
 				</xs:sequence>
 			</xs:extension>
@@ -990,20 +1141,21 @@
 		<xs:annotation>
 			<xs:documentation>Defines seuqnce number and if a delete of an elment is required</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="Seq" type="xs:int" use="optional" default="0"/>
+		<xs:attribute name="Seq" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
 	</xs:attributeGroup>
 	<xs:complexType name="ContactInfoType">
 		<xs:sequence>
-			<xs:element name="PermanentAddress" minOccurs="0">
+			<xs:element name="PermanentAddress" type="WTR_AddressType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>PA - Permanent address of the passenger</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
-					</xs:sequence>
-				</xs:complexType>
 			</xs:element>
 			<xs:element name="TempAddress" minOccurs="0">
 				<xs:annotation>
@@ -1011,13 +1163,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="Address">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="AddressLine" type="StringLength1to58" maxOccurs="2"/>
-								</xs:sequence>
-							</xs:complexType>
-						</xs:element>
+						<xs:element name="Address" type="WTR_AddressType"/>
 						<xs:element name="ValidityDate" type="xs:date" minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>DV - Date till the temp address is valid.</xs:documentation>
@@ -1078,7 +1224,8 @@
 			</xs:element>
 			<xs:element name="Country" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>CO - ISO country code or the country name of the passenger</xs:documentation>
+					<xs:documentation>CO - ISO country code or the country name of the passenger
+Depricated - Use Country in Permanent Address PA</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:choice>
@@ -1089,27 +1236,24 @@
 			</xs:element>
 			<xs:element name="State" type="AlphaStringLength2" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>ST - Two letter state code.</xs:documentation>
+					<xs:documentation>ST - Two letter state code.
+Depricated - Use State in Permanent Address PA</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="ZipCode" type="StringLength1to12" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>ZP - Zip code of the passenger</xs:documentation>
+					<xs:documentation>ZP - Zip code of the passenger
+Depricated - Use PostalCode in Permanent Address PA</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ContactInfoAmendType">
 		<xs:sequence>
-			<xs:element name="PermanentAddress" minOccurs="0">
+			<xs:element name="PermanentAddress" type="WTR_AddressAmendType" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>PA - Permanent address of the passenger</xs:documentation>
 				</xs:annotation>
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="AddressLine" type="StringLength0to58AmendType" maxOccurs="2"/>
-					</xs:sequence>
-				</xs:complexType>
 			</xs:element>
 			<xs:element name="TempAddress" minOccurs="0">
 				<xs:annotation>
@@ -1117,13 +1261,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="Address" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="AddressLine" type="StringLength0to58AmendType" maxOccurs="2"/>
-								</xs:sequence>
-							</xs:complexType>
-						</xs:element>
+						<xs:element name="Address" type="WTR_AddressAmendType" minOccurs="0"/>
 						<xs:element name="ValidityDate" minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>DV - Date till the temp address is valid.</xs:documentation>
@@ -1483,4 +1621,78 @@
 	<xs:complexType name="AmountType">
 		<xs:attributeGroup ref="iata:CurrencyAmountGroup"/>
 	</xs:complexType>
+	<xs:attribute name="TransactionTime" type="xs:dateTime"/>
+	<xs:attributeGroup name="BIR_CreateAttributes">
+		<xs:attribute name="Type" type="CreateActionType" use="optional" default="CREATE"/>
+		<xs:attribute name="Closed" type="xs:boolean" use="optional"/>
+		<xs:attribute name="Suspended" type="xs:boolean" use="optional"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="InboxAreaNameAttributes">
+		<xs:attribute name="AreaType" type="InboxAreaType" use="required"/>
+		<xs:attribute name="Seq" use="optional">
+			<xs:simpleType>
+				<xs:union>
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="1" fixed="false"/>
+							<xs:maxInclusive value="10"/>
+						</xs:restriction>
+					</xs:simpleType>
+					<xs:simpleType>
+						<xs:restriction base="xs:NMTOKEN">
+							<xs:pattern value="[A-E]"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:union>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="InboxAreaAddressAttributes">
+		<xs:attribute name="StationCode" type="iata:StationType" use="required"/>
+		<xs:attribute name="AirlineCode" type="iata:AirlineType" use="required"/>
+		<xs:attributeGroup ref="InboxAreaNameAttributes"/>
+	</xs:attributeGroup>
+	<xs:complexType name="InboxMessageSearchType">
+		<xs:sequence minOccurs="0">
+			<xs:element name="MessageRange" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Messages to read:
+
+If only one Range specified:
+  1. Only Start - Returns 100 messages starting "Start"
+  2. Start and End - Returns messgaes between "Start" to "End", range cannot be more than 10.
+  3. To read a single message, use "Start"="End"
+
+When range is more then one:
+  1. If only Start in the range - Message with id "Start" is returned. Examples, 1/3-20/22/25.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Range" maxOccurs="10">
+							<xs:complexType>
+								<xs:attribute name="Start" type="xs:int" use="required"/>
+								<xs:attribute name="End" type="xs:int"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DelayedBagRef" type="RecordReferenceType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="InboxAreaAddressAttributes"/>
+		<xs:attribute name="Day">
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="1"/>
+					<xs:maxInclusive value="7"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="CustomerCodeType">
+		<xs:annotation>
+			<xs:documentation>WorldTracer Customer code - Airline or 2-3 numric handler</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="iata:AirlineType xs:string"/>
+	</xs:simpleType>
 </xs:schema>

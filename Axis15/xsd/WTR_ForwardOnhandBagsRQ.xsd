@@ -61,7 +61,7 @@
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="Destination" type="StationAirlineType"/>
+							<xs:element name="Destination" type="StationAirlineType" maxOccurs="5"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>

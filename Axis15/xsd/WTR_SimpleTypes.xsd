@@ -547,7 +547,9 @@
 		<xs:restriction base="xs:NMTOKEN">
 			<xs:enumeration value="AA"/>
 			<xs:enumeration value="AP"/>
+			<xs:enumeration value="BC"/>
 			<xs:enumeration value="CM"/>
+			<xs:enumeration value="EC"/>
 			<xs:enumeration value="EM"/>
 			<xs:enumeration value="FW"/>
 			<xs:enumeration value="HQ"/>
@@ -689,6 +691,33 @@
 			<xs:minLength value="0"/>
 			<xs:maxLength value="2"/>
 			<xs:pattern value="[a-zA-Z]{0,2}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="YesNoType">
+		<xs:annotation>
+			<xs:documentation>Yes/No value enumiration</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="Yes"/>
+			<xs:enumeration value="No"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to91">
+		<xs:annotation>
+			<xs:documentation>String of length 1 to 91 chars</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="91"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StringLength1to3000">
+		<xs:annotation>
+			<xs:documentation>Strings of length 1 to 3000</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="3000"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

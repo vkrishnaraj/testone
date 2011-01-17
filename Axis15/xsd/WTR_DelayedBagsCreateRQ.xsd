@@ -35,6 +35,16 @@
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="AdditionalInfo" type="AdditionalInfoType" minOccurs="0"/>
+				<xs:element name="MatchInfo" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>MR - Matching information</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Text" type="StringLength1to2000" maxOccurs="20"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="Claim" type="DelayedClaimType" minOccurs="0"/>
 				<xs:element name="TeletypeAddresses" minOccurs="0">
 					<xs:annotation>

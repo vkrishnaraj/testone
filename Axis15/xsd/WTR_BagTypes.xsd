@@ -133,7 +133,7 @@
 					</xs:element>
 					<xs:element name="BagTagDestinations" minOccurs="0">
 						<xs:annotation>
-							<xs:documentation>DB - Destination on BaggateTag</xs:documentation>
+							<xs:documentation>DB - Destination on Baggage Tag</xs:documentation>
 						</xs:annotation>
 						<xs:complexType>
 							<xs:sequence>
@@ -177,7 +177,7 @@
 									<xs:complexType>
 										<xs:complexContent>
 											<xs:extension base="DelayedBagAmendType">
-												<xs:attribute name="Seq" type="xs:int" use="optional" default="0"/>
+												<xs:attribute name="Seq" type="xs:int" use="required"/>
 											</xs:extension>
 										</xs:complexContent>
 									</xs:complexType>
@@ -340,7 +340,7 @@
 							</xs:annotation>
 							<xs:complexType>
 								<xs:simpleContent>
-									<xs:extension base="xs:date">
+									<xs:extension base="xs:dateTime">
 										<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
 									</xs:extension>
 								</xs:simpleContent>
@@ -406,7 +406,7 @@
 							</xs:annotation>
 							<xs:complexType>
 								<xs:simpleContent>
-									<xs:extension base="xs:date">
+									<xs:extension base="xs:dateTime">
 										<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
 									</xs:extension>
 								</xs:simpleContent>
@@ -622,6 +622,34 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="OnHandBagTracingType">
+		<xs:complexContent>
+			<xs:extension base="OnHandBagType">
+				<xs:sequence>
+					<xs:element name="NewFlights" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>NF - Flights to which the bags are being forwarded to.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="NewRouting" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>NR - New routing</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Route" type="iata:StationType" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="OnHandBagAmendType">
 		<xs:complexContent>
 			<xs:extension base="BagAmendType">
@@ -767,6 +795,41 @@
 							<xs:documentation>XD - Bag delivered indicator</xs:documentation>
 						</xs:annotation>
 					</xs:element>
+					<xs:element name="DisposalDate" type="xs:date" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>DO - Date the onhand bag is diposed</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OnHandBagTracingAmendType">
+		<xs:complexContent>
+			<xs:extension base="OnHandBagAmendType">
+				<xs:sequence>
+					<xs:element name="NewFlights" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>NF - Flights to which the bags are being forwarded to.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0" maxOccurs="5"/>
+							</xs:sequence>
+							<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="NewRouting" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>NR - New routing</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Route" type="iata:StationType" maxOccurs="5"/>
+							</xs:sequence>
+							<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
+						</xs:complexType>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -807,7 +870,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="FlightDateOrARNK" maxOccurs="4">
+						<xs:element name="FlightDateOrARNK" maxOccurs="5">
 							<xs:complexType>
 								<xs:annotation>
 									<xs:documentation>FD - Contians Flight date or ARNK</xs:documentation>
@@ -834,7 +897,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0" maxOccurs="4"/>
+						<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0" maxOccurs="5"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -860,6 +923,44 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RushBagGroupTypeTracing">
+		<xs:complexContent>
+			<xs:extension base="RushBagGroupType">
+				<xs:sequence>
+					<xs:element name="OriginalRouting" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>RT - Original routing</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Route" type="iata:StationType" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="NewFlights" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>NF - Flights to which the bags are being forwarded to.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="FlightDateOrARNK" type="FlightDateOrARNKType" minOccurs="0" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="NewRouting" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>NR - New routing</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Route" type="iata:StationType" maxOccurs="5"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="RushBagType">
 		<xs:sequence>
@@ -918,10 +1019,15 @@
 							<xs:documentation>NW - Total weight of the missing baggage</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="LostContents" type="StringLength1to58" minOccurs="0">
+					<xs:element name="LostContents" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>LP - Contains the conents that are missing from the damaged or pilfered bags</xs:documentation>
 						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Content" type="StringLength1to58" maxOccurs="2"/>
+							</xs:sequence>
+						</xs:complexType>
 					</xs:element>
 					<xs:element name="ContentsDamageDesc" type="StringLength1to58" minOccurs="0">
 						<xs:annotation>
@@ -946,7 +1052,7 @@
 									<xs:complexType>
 										<xs:complexContent>
 											<xs:extension base="DamagedBagAmendType">
-												<xs:attribute name="Seq" type="xs:int" use="optional" default="0"/>
+												<xs:attribute name="Seq" type="xs:int" use="required"/>
 											</xs:extension>
 										</xs:complexContent>
 									</xs:complexType>
@@ -998,11 +1104,9 @@
 							<xs:documentation>LP - Contains the conents that are missing from the damaged or pilfered bags</xs:documentation>
 						</xs:annotation>
 						<xs:complexType>
-							<xs:simpleContent>
-								<xs:extension base="StringLength0to58">
-									<xs:attribute name="Delete" type="xs:boolean" use="optional" default="false"/>
-								</xs:extension>
-							</xs:simpleContent>
+							<xs:sequence>
+								<xs:element name="Content" type="StringLength0to58AmendType" maxOccurs="2"/>
+							</xs:sequence>
 						</xs:complexType>
 					</xs:element>
 					<xs:element name="ContentsDamageDesc" minOccurs="0">
