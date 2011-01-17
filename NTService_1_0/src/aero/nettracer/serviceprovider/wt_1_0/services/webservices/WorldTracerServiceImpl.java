@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +66,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerRecordNotFoundException;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
+import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.BasicRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.RuleMapper;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.UsWorldTracerRuleMap;
@@ -72,6 +74,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracer
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
+import aero.sita.www.bag.wtr._2009._01.AlphaLength2To16;
 import aero.sita.www.bag.wtr._2009._01.AmountType;
 import aero.sita.www.bag.wtr._2009._01.BagDescType;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType;
@@ -116,6 +119,8 @@ import aero.sita.www.bag.wtr._2009._01.RushBagType;
 import aero.sita.www.bag.wtr._2009._01.StationAirlineType;
 import aero.sita.www.bag.wtr._2009._01.InboxMessageSearchType;
 import aero.sita.www.bag.wtr._2009._01.StringLength0To58AmendType;
+import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType;
+
 import org.iata.www.iata._2007._00.TTYAddress;
 import aero.sita.www.bag.wtr._2009._01.WTRBagsCreateRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument;
@@ -144,8 +149,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType.Enum;
 import aero.sita.www.bag.wtr._2009._01.InboxAreaType;
-import aero.sita.www.bag.wtr._2009._01.ContactInfoType.PermanentAddress;
-import aero.sita.www.bag.wtr._2009._01.ContactInfoType.TempAddress.Address;
+import aero.sita.www.bag.wtr._2009._01.WTRAddressType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.DelayedBags.DelayedBag;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.BaggageItinerary;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.DelayedBags;
@@ -162,6 +166,13 @@ import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecords
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument.WTRDelayedBagRecReadRS;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryCompany;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryInfo;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags.Bag;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags.Bag.ColorType;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.OnHandBags;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.RushBagTags;
@@ -177,6 +188,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMes
 import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ.SupplimentalInfo;
@@ -318,7 +330,164 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	}
 	
 	public void insertBdo(WorldTracerActionDTO dto, Bdo bdo, WorldTracerResponse response) throws WorldTracerException {
-		throw new WorldTracerException(METHOD_NOT_AVAILABLE_VIA_WEB_SERVICES);
+		try{
+			//which one to use?
+			//OnhandBagServiceStub stub = new OnhandBagServiceStub(getOnhandEndpoint(dto));
+			DelayedBagServiceStub stub = new DelayedBagServiceStub(getDelayedEndpoint(dto));
+			configureClient(stub, getEnvironment(dto));
+
+			WTRDeliveryOrderCreateRQDocument d = WTRDeliveryOrderCreateRQDocument.Factory.newInstance();
+			WTRDeliveryOrderCreateRQ d1 = d.addNewWTRDeliveryOrderCreateRQ();
+			
+			d1.setVersion(VERSION_0_PT_1);
+			d1.addNewPOS().addNewSource().setAirlineVendorID(
+					dto.getUser().getProfile().getAirline());
+			d1.setAgentID("NTRACER");
+			
+			RecordIdentifierType r = d1.addNewRecordID();
+			//ishares has AHL, were as the examples for ws has DELAYED
+			r.setRecordType(RecordType.DELAYED);
+			RecordReferenceType r1 = r.addNewRecordReference();
+			
+			String ahlId = bdo.getAhlId();
+			if(ahlId != null && ahlId.trim().length() > 0){
+				r1.setAirlineCode(ahlId.substring(3, 5));
+				r1.setReferenceNumber(Integer.parseInt(ahlId.substring(5)));
+				r1.setStationCode(ahlId.substring(0, 3));
+			}
+			
+			DeliveryOrder dOrder = d1.addNewDeliveryOrder();
+			
+			//delivery company - station, customer code, id
+			
+			DeliveryCompany dc = dOrder.addNewDeliveryCompany();
+			dc.setID("01");//?
+			dc.setCustomerCode("DS");//?
+			dc.setStation(bdo.getStationCode());
+			
+			//delivery info - need delivery date 
+			
+			DeliveryInfo di = dOrder.addNewDeliveryInfo();
+			if (bdo.getDeliveryDate() != null) {
+				di.setDeliveryDate(bdo.getDeliveryDate());
+			}
+			
+			//bags--need bag
+			Bags bags = dOrder.addNewBags();
+			int i = 0;
+			for(Item item:bdo.getItems()){
+				Bag b = bags.addNewBag();
+				b.setSeq(++i);
+				
+				ColorType ct = b.addNewColorType();
+				ct.setColorCode(ColorCodeType.Enum.forString(item.getColor()));
+				if(item.getType() != null){
+					//type is required
+					ct.setTypeCode(new Integer(item.getType()));
+				}
+			}
+			
+			
+			/*
+			
+			DeliveryInfo di = dOrder.addNewDeliveryInfo();
+			aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryInfo.Names n = null;
+			int paxCount = 0;
+			for (Passenger pax:bdo.getPassengers()){
+				if(n == null){
+					n = di.addNewNames();
+				}
+				aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryInfo.Names.Name name = n.addNewName();
+				name.setStringValue(pax.getLastname());
+			}
+			*/
+
+			
+			
+			
+//			String specificCommandType = "BDO";
+//			Date DelivDate = new Date();
+//			// Make sure we have a valid delivery date - need to consider if we do
+//			// not have a DD
+//			// should we just use todays date
+//			if (bdo.getDeliveryDate() != null) {
+//				DelivDate = bdo.getDeliveryDate().getTime();
+//			} else {
+//				throw new CommandNotProperlyFormedException();
+//			}
+//
+//			HashMap<String, String> map = new HashMap<String, String>();
+//			map.put("COMMAND_TYPE", connectionType);
+//			map.put("FILE_TYPE", "AHL");
+//			map.put("WT_AHL_ID", bdo.getAhlId());
+//			map.put("DELIVERY_SERVICE", "DS");
+//			map.put("STATION_CODE", bdo.getStationCode());
+//			map.put("AIRLINE_CODE", bdo.getAirlineCode());
+//			map.put("DELIVERY_SERVICE_ID", "01"); // Assume that we will always use
+//													// the first delivery company in
+//													// the predefined WT list
+//			map.put("COLOR_TYPE", "01"); // Assume we will always deliver the first
+//											// bag since we do not keep track of WT
+//											// bags
+//
+//			// TODO see if there is a way to determine which bag we should deliver
+//			// instead of defaulting to CT01
+//
+//			String command = "{COMMAND_TYPE} BDO {FILE_TYPE} {WT_AHL_ID}\r{DELIVERY_SERVICE} {STATION_CODE}{AIRLINE_CODE}{DELIVERY_SERVICE_ID}/CT{COLOR_TYPE}";
+//
+//			command = inputValuesIntoCommand(map, command);
+			
+			
+			WTRStatusRSDocument wsresponse = null;
+			try {
+				String label = "INSERT BDO";
+				logger.info(ACTION_BEING_PERFORMED + label + NEWLINE + d);
+				if (FORCE_FAILURE) {
+					return;
+				}
+				writeToLog(label);
+				validate(d);
+				wsresponse = stub.createDeliveryOrder(d);
+
+				logger.info(wsresponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(EXCEPTION_FOUND_RESPONSE + wsresponse, e);
+			}
+
+			// Process Response and/or Error Messages
+			if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+					&& wsresponse.getWTRStatusRS().getSuccess() != null) {
+				response.setSuccess(true);
+			} else {
+				StringBuffer errorMsg = new StringBuffer();
+
+				if (wsresponse != null && wsresponse.getWTRStatusRS() != null
+						&& wsresponse.getWTRStatusRS().getErrors() != null) {
+					ErrorType[] errors = wsresponse.getWTRStatusRS()
+							.getErrors().getErrorArray();
+					for (ErrorType error : errors) {
+						errorMsg.append(error.getShortText());
+						logger.error(WEB_SERVICE_ERROR_MESSAGE
+								+ error.toString());
+					}
+				}
+
+				String returnError = errorMsg.toString();
+				if (returnError.length() > 0) {
+					returnError = UNKNOWN_FAILURE;
+				}
+
+				WorldTracerException e = new WorldTracerException(returnError);
+				throw e;
+
+			}
+		} catch (AxisFault axisFault) {
+			logger.error("Connection Issue: ", axisFault);
+			WorldTracerException e = new WorldTracerException(
+					WEB_SERVICE_CONNECTION_ISSUE, axisFault);
+			throw e;
+		}
 	}
 
 	public void eraseActionFile(WorldTracerActionDTO dto,
@@ -1842,8 +2011,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				Names pp1 = p1.addNewNames();
 				Initials pi1 = null;
 				for (int j = 0; j < fieldList.size(); j++) {
-					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-
+					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));			
 					pp1.addName(name);
 
 					if (fieldList2 != null && fieldList2.size() > j) {
@@ -1946,7 +2114,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PA);
 			if (fieldList != null && fieldList.size() > 0) {
-				PermanentAddress pa = ct.addNewPermanentAddress();
+				WTRAddressType pa = ct.addNewPermanentAddress();
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					pa.addAddressLine(address);
@@ -1969,8 +2137,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
 			if (fieldList != null && fieldList.size() > 0) {
-				Address ta = ct.addNewTempAddress().addNewAddress();
-
+				WTRAddressType ta = ct.addNewTempAddress().addNewAddress();			
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					ta.addAddressLine(address);
@@ -3232,13 +3399,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					}
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = names.addNewName();
-					//nm.setSeq(j + 1);
+					nm.setSeq(j + 1);
 					nm.setStringValue(name);
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(initials == null){
 							initials = p1.addNewInitials();
 						}
-						initials.addNewIntial().setStringValue(fieldList2.get(j));
+						Intial it = initials.addNewIntial();
+						it.setStringValue(fieldList2.get(j));
+						it.setSeq(j+1);
 					}
 				}
 			}
@@ -3600,14 +3769,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = p11.addNewName();
 					nm.setStringValue(name);
-					//nm.setSeq(j + 1);
+					nm.setSeq(j + 1);
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(initials == null){
 							initials = p1.addNewInitials();
 						}
 						Intial it = initials.addNewIntial();
 						it.setStringValue(fieldList2.get(j));
-						//it.setSeq(j+1);
+						it.setSeq(j+1);
 					}
 				}
 			}
@@ -3717,7 +3886,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PA);
 			if (fieldList != null && fieldList.size() > 0) {
-				aero.sita.www.bag.wtr._2009._01.ContactInfoAmendType.PermanentAddress pa = ct.addNewPermanentAddress();
+				WTRAddressAmendType pa = ct.addNewPermanentAddress();
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					StringLength0To58AmendType pa1 = pa.addNewAddressLine();
@@ -3742,7 +3911,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
 			if (fieldList != null && fieldList.size() > 0) {
-				aero.sita.www.bag.wtr._2009._01.ContactInfoAmendType.TempAddress.Address ta = ct.addNewTempAddress().addNewAddress();
+				WTRAddressAmendType ta = ct.addNewTempAddress().addNewAddress();
 
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
