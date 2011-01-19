@@ -591,6 +591,7 @@ public class TracerUtils {
 					}
 					cpform.setItinerarylist(al);
 				}
+				cpform.setHasClaim(true);
 			} else {
 				createnewprorate = true;
 			}

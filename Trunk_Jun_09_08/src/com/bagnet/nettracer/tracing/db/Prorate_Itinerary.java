@@ -312,7 +312,7 @@ public class Prorate_Itinerary implements Serializable {
 		return TracingConstants.DECIMALFORMAT.format(getShare());
 	}
 
-	public void getDisshare(String s) {
+	public void setDisshare(String s) {
 		setShare(TracerUtils.convertToDouble(s));
 	}
 

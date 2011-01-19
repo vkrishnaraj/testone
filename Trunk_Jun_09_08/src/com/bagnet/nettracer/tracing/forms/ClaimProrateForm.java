@@ -48,6 +48,15 @@ public class ClaimProrateForm extends ActionForm {
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
 	private java.util.TimeZone _TIMEZONE;
+	private boolean hasClaim;
+
+	public boolean getHasClaim() {
+		return hasClaim;
+	}
+
+	public void setHasClaim(boolean hasClaim) {
+		this.hasClaim = hasClaim;
+	}
 
 	/**
 	 * @return Returns the itinerarylist.

@@ -356,12 +356,12 @@ function updatePagination() {
               <td>
                 <logic:present name="audit_claims" property="audit_claimprorate">
                   <logic:iterate id="it_list" indexId="k" name="audit_claims" property="audit_claimprorate.pi_list">
-                    <bean:message key="colname.airlineflightdate" />
+                    <bean:message key="colname.airlineflight" />
                     :
                     <bean:write name="it_list" property="airline" />
                     /
                     <bean:write name="it_list" property="flightnum" />
-                    /
+                    <bean:message key="colname.date" />
                     <bean:write name="it_list" property="disdepartdate" />
                     <br>
                     <bean:message key="colname.from" />

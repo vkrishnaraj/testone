@@ -115,6 +115,10 @@
             </logic:present>
           </font>
           <br>
+          <logic:match name="claimProrateForm" property="hasClaim" value="false">
+          	<center><font color="red"><bean:message key="message.claim_prorate.noClaimSaved" /></font></center>
+          </logic:match>
+          <logic:match name="claimProrateForm" property="hasClaim" value="true">
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td width=30%>
@@ -203,7 +207,12 @@
                   <tr>
                     <td>
                       <strong>
-                        <bean:message key="colname.airlineflightdate" />
+                        <bean:message key="colname.airlineflight" />
+                      </strong>
+                    </td>
+                    <td>
+                      <strong>
+                        <bean:message key="colname.date" />
                       </strong>
                     </td>
                     <td>
@@ -248,7 +257,10 @@
                         </html:select>
                         &nbsp;
                         <html:text name="itinerarylist" property="flightnum" size="8" maxlength="7" styleClass="textfield" indexed="true" />
+                        </td>
+                        <td>
                         <html:text name="itinerarylist" property="disdepartdate" size="10" maxlength="10" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar<%= k %>" name="calendar<%= k %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.claimProrateForm, '<%= "itinerarylist[" + k + "].disdepartdate" %>','calendar<%= k %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                        </td>
                       <td align="left" nowrap>
                         <html:text name="itinerarylist" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
                         <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=itinerarylist[<%= k %>].legfrom','airportcode',500,600);"><img src="deployment/main/images/nettracer/airport_codes.gif" border=0></a>
@@ -278,7 +290,7 @@
                     <td align="center">
                       <b><bean:message key="column.total" />
                     </td>
-                    <td colspan="3" align="left">
+                    <td colspan="4" align="left">
                       &nbsp;
                     </td>
                     <td align="left">
@@ -361,6 +373,7 @@
               </td>
             </tr>
           </table>
+          </logic:match>
         </html:form>
         <script language="javascript">
           
