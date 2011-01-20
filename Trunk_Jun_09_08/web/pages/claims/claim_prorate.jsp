@@ -116,7 +116,7 @@
           </font>
           <br>
           <logic:match name="claimProrateForm" property="hasClaim" value="false">
-          	<center><font color="red"><bean:message key="message.claim_prorate.noClaimSaved" /></font></center>
+          	<p class="warning"><bean:message key="message.claim_prorate.noClaimSaved" /></p>
           </logic:match>
           <logic:match name="claimProrateForm" property="hasClaim" value="true">
           <table class="form2" cellspacing="0" cellpadding="0">
