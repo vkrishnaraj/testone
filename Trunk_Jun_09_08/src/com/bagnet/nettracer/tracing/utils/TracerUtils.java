@@ -573,9 +573,7 @@ public class TracerUtils {
 						while (al.size() < 4 && i < claimItinList.size()) {
 							Itinerary itin = claimItinList.get(i);
 							if (itin.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
-								pi = new Prorate_Itinerary();
-								pi.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
-								pi.set_DATEFORMAT(user.getDateformat().getFormat());
+								pi = getNewProrateItinerary();
 								pi.setAirline(itin.getAirline());
 								pi.setFlightnum(itin.getFlightnum());
 								pi.setDepartdate(itin.getDepartdate());
@@ -587,10 +585,9 @@ public class TracerUtils {
 						}
 					}
 					
+					// MJS: fill in the itinerary list with blanks if there aren't 4 rows.
 					while (al.size() < 4) {
-						pi = new Prorate_Itinerary();
-						pi.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
-						pi.set_DATEFORMAT(user.getDateformat().getFormat());
+						pi = getNewProrateItinerary();
 						pi.setAirline(user.getStation().getCompany().getCompanyCode_ID());
 						al.add(pi);					
 					}
@@ -621,7 +618,7 @@ public class TracerUtils {
 				cpform.setCreatedate(TracerDateTime.getGMTDate());
 
 			}
-
+			
 			/** do the following regardless if prorate is new or not * */
 
 			cpform.set_DATEFORMAT(user.getDateformat().getFormat());
@@ -671,6 +668,13 @@ public class TracerUtils {
 							+ e);
 			e.printStackTrace();
 		}
+	}
+	
+	// MJS: helper function to create a new Prorate_Itinerary and set default values.
+	private static Prorate_Itinerary getNewProrateItinerary() {
+		Prorate_Itinerary toReturn = new Prorate_Itinerary();
+		toReturn.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
+		return toReturn;
 	}
 
 	public static ArrayList getStationList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
