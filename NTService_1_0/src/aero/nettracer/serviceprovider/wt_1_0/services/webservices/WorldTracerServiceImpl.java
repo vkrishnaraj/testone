@@ -165,7 +165,8 @@ import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushFlights;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument.WTRDelayedBagRecReadRS;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
+//import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQType;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags;
@@ -3589,7 +3590,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			configureClient(stub, getEnvironment(dto));
 
 			WTRDelayedBagsRecUpdateRQDocument d = WTRDelayedBagsRecUpdateRQDocument.Factory.newInstance();
-			WTRDelayedBagsRecUpdateRQ d1 = d.addNewWTRDelayedBagsRecUpdateRQ();
+			WTRDelayedBagsRecUpdateRQType d1 = d.addNewWTRDelayedBagsRecUpdateRQ();
 
 			// Set version & POS
 			d1.setVersion(VERSION_0_PT_1);
