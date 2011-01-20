@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,6 +53,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
+import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
@@ -565,20 +565,38 @@ public class TracerUtils {
 				if (cp == null) { // no previous prorate
 					cpform = new ClaimProrateForm();
 					// create new itinerary list
-					ArrayList al = new ArrayList();
-					for (int i = 0; i < 4; i++) {
-						Prorate_Itinerary pi = new Prorate_Itinerary();
-						pi
-								.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
-						pi.set_DATEFORMAT(user.getDateformat().getFormat());
-						pi.setAirline(user.getStation().getCompany()
-								.getCompanyCode_ID());
-						al.add(pi);
-
+					List<Itinerary>	claimItinList = claim.getIncident().getItinerary_list();
+					ArrayList al = new ArrayList();					
+					Prorate_Itinerary pi = null;
+					if (claimItinList != null) {
+						int i = 0;
+						while (al.size() < 4 && i < claimItinList.size()) {
+							Itinerary itin = claimItinList.get(i);
+							if (itin.getItinerarytype() == TracingConstants.PASSENGER_ROUTING) {
+								pi = new Prorate_Itinerary();
+								pi.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
+								pi.set_DATEFORMAT(user.getDateformat().getFormat());
+								pi.setAirline(itin.getAirline());
+								pi.setFlightnum(itin.getFlightnum());
+								pi.setDepartdate(itin.getDepartdate());
+								pi.setLegfrom(itin.getLegfrom());
+								pi.setLegto(itin.getLegto());
+								al.add(pi);
+							}
+							i++;
+						}
 					}
+					
+					while (al.size() < 4) {
+						pi = new Prorate_Itinerary();
+						pi.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
+						pi.set_DATEFORMAT(user.getDateformat().getFormat());
+						pi.setAirline(user.getStation().getCompany().getCompanyCode_ID());
+						al.add(pi);					
+					}
+					
 					cpform.setItinerarylist(al);
-					cpform
-							.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
+					cpform.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
 					createnewprorate = true;
 				} else {
 					// copy itinerarylist from existing prorate
