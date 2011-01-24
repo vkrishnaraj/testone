@@ -537,6 +537,24 @@ public class MBRActionUtils {
 			theform.setStationcreated(user.getStation());
 			theform.setStationassigned_ID(user.getStation().getStation_ID());
 			//theform.setFaultstation(new Station());
+			
+			// MJS: set the fault station
+			theform.setFaultstation(new Station());
+			int defaultStationCode = theform.getAgent().getStation().getCompany().getVariable().getDefault_station_code();
+			if (defaultStationCode > 0) {
+				theform.getFaultstation().setStation_ID(defaultStationCode);
+			} else {
+				theform.getFaultstation().setStation_ID(theform.getStationassigned().getStation_ID());
+			}
+			
+			// MJS: set the loss code
+			int defaultLossCode = theform.getAgent().getStation().getCompany().getVariable().getDefault_loss_code();
+			if (defaultLossCode > 0) {
+				theform.setLoss_code(defaultLossCode);
+			} else {
+				theform.setLoss_code(0);
+			}
+			
 			// set agent
 			theform.setAgent(user);
 			// set status as temp to start off
