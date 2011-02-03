@@ -77,6 +77,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_LIMIT_LD_FAULT_AIRLINE = "limit.ld.fault.airline";	
 	public static final String PROPERTY_LIMIT_MISSING_FAULT_AIRLINE = "limit.missing.fault.airline";
 	public static final String PROPERTY_LIMIT_OHD_FAULT_AIRLINE = "limit.ohd.fault.airline";
+	public static final String DISPLAY_NON_REVENUE_CODES = "display.non.revenue.codes";
 
 	/**
 	 * Retrieves the value of the property from the database.

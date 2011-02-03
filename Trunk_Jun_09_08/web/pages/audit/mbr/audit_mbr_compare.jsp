@@ -283,7 +283,12 @@ function updatePagination() {
             </td>
             <logic:iterate id="audit_incident" name="compareList" scope="request">
               <td>
-                <bean:write name="audit_incident" property="nonrevenue" />
+                <logic:match name="audit_incident" property="nonrevenue" value="1">
+                	<bean:message key="select.yes" /> - <bean:write name="audit_incident" property="revenueCode" />
+                </logic:match>
+                <logic:match name="audit_incident" property="nonrevenue" value="0">
+                	<bean:message key="select.no" />
+                </logic:match>
               </td>
             </logic:iterate>
           </tr>

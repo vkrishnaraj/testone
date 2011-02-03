@@ -38,7 +38,6 @@ import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -506,8 +505,6 @@ public class MBRActionUtils {
 		String loc = null;
 		int type = 0; 
 		
-		HttpSession session = request.getSession();
-
 		if (request.getParameter("add_assoc_report") != null) {
 			if (Integer.parseInt(request.getParameter("add_assoc_report")) == TracingConstants.LOST_DELAY) {
 				loc = TracingConstants.LD_MAIN;

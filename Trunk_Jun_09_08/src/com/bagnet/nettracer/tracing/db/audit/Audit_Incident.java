@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import javax.persistence.Column;
-
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ItemType;
@@ -30,6 +28,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  */
 public class Audit_Incident implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int audit_incident_id;
 
 	private String Incident_ID;
@@ -89,7 +88,22 @@ public class Audit_Incident implements Serializable {
 	
 	private boolean locked = false;	//for dispute resolution process
 	
-	@Column(name="locked", nullable=false)
+	private String revenueCode;
+	
+	/**
+	 * @hibernate.property column="revenue_code" type="string"
+	 */
+	public String getRevenueCode() {
+		return revenueCode;
+	}
+	
+	public void setRevenueCode(String revenueCode) {
+		this.revenueCode = revenueCode;
+	}
+	
+	/**
+	 * @hibernate.property type="boolean" column="locked"
+	 */
 	public boolean isLocked() {
 		return locked;
 	}

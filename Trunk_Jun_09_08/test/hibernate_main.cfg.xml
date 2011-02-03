@@ -17,7 +17,7 @@
 	<property name="jdbc.use_scrollable_resultset">false</property>
 	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 	<property name="company.code">B6</property>
-	<property name="hibernate.show_sql">true</property>
+	<!--<property name="hibernate.show_sql">true</property>-->
 			
 	<!-- c3p0 -->
 	<property name="hibernate.c3p0.acquire_increment">1</property> 
@@ -91,10 +91,14 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Agent.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Agent_Logger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TracePassenger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Address.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceAddress.hbm.xml"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.Incident"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.TraceIncident"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Station.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItem.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Resolution.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/AirlineMembership.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Articles.hbm.xml"/>
@@ -107,15 +111,19 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/XDescElement.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Remark.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_CategoryType.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_ItemType.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Passenger.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Address.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Address.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Assoc.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
@@ -137,9 +145,12 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Match_Detail.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHDRequest.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Itinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Photo.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItem_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Claimcheck.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident_Claimcheck.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/DbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ReceiptDbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log_Itinerary.hbm.xml"/>

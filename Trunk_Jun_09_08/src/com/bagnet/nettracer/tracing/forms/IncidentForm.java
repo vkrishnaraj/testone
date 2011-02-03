@@ -92,7 +92,16 @@ public final class IncidentForm extends ValidatorForm {
 	
 	private String teletypeAddress; //for the big Teletype String for historical reporting
 	private long oc_claim_id;
+	
+	private String revenueCode;
 
+	
+	public String getRevenueCode() {
+		return revenueCode;
+	}
+	public void setRevenueCode(String revenueCode) {
+		this.revenueCode = revenueCode;
+	}
 	
 	public long getOc_claim_id() {
   	return oc_claim_id;

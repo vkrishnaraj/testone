@@ -312,6 +312,14 @@ public class ReservationIntegrationImpl extends
 		
 		if (pnrContents != null) {
 			form.setOtherSystemInformation(pnrContents);
+			
+			// MJS: non-revenue code logic
+			String lastName = form.getPassenger(0).getLastname();
+			String revCode = RevenueCodesUtilImpl.getInstance().getNonRevenueCodeFromPnr(pnrContents, lastName);
+			if (revCode != null) {
+				form.setNonrevenue(1);
+				form.setRevenueCode(revCode);
+			}
 		}
 		int bagIndex = 0;
 		
@@ -567,5 +575,7 @@ public class ReservationIntegrationImpl extends
 		}
 		return highestClassService;
 	}
+	
+	
 	
 }

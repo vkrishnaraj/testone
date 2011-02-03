@@ -823,6 +823,8 @@ public class TracingConstants {
 	
 	public static final String WT_AFC_DEFAULT_SEQ = "";
 	
+	public static final String NON_REVENUE_CODES_KEY = "non.revenue.codes";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

@@ -9,6 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass;
@@ -23,6 +24,9 @@
     }
   }
   IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
+  
+  boolean displayNonRevenueCodes = PropertyBMO.isTrue(PropertyBMO.DISPLAY_NON_REVENUE_CODES);
+  
 %>
   
 <%@page import="com.bagnet.nettracer.tracing.utils.IncidentUtils"%>
@@ -39,8 +43,6 @@
     
 	var cal1xx = new CalendarPopup();	
 
-	
-
 	function getagentassigned() {
 		o = document.incidentForm;
 		o.changeassignedstation.value="1";
@@ -56,6 +58,19 @@
 	theform.wtq_pending_cancel.value = wtq_id;
 	theform.submit();
 	}
+	
+	function toggleRevenueCodesVisible() {
+		<% if (displayNonRevenueCodes) { %> 
+			var revSelected = document.getElementById("isNonRevenue").value;
+			if (revSelected == "1") {
+				document.getElementById("nonRevCodes").style.display = 'inline';
+			} else {
+				document.getElementById("nonRevCodes").style.display = 'none';
+			}
+		<% } %>
+	}
+	
+	window.onload = toggleRevenueCodesVisible;
 
   </SCRIPT>
   
@@ -339,8 +354,8 @@
               
               <td nowrap="nowrap">
                 <bean:message key="colname.non_revenue" /><br>
-                <div id="tohide2">
-	                <html:select property="nonrevenue" styleClass="dropdown">
+                <div id="tohide2" <% if (displayNonRevenueCodes) { %>style="width:105px;"<% } %>>
+	                <html:select property="nonrevenue" styleClass="dropdown" onchange="toggleRevenueCodesVisible();" styleId="isNonRevenue" >
 	                  <html:option value="0">
 	                    <bean:message key="select.no" />
 	                  </html:option>
@@ -348,6 +363,12 @@
 	                    <bean:message key="select.yes" />
 	                  </html:option>
 	                </html:select>
+	                <% if (displayNonRevenueCodes) { %>
+	                <html:select property="revenueCode" styleClass="dropdown" styleId="nonRevCodes" >
+	                	<html:option value="" />
+	                	<html:options collection="nonRevenueCodesList" property="revenueCode" labelProperty="revenueCode" />
+	                </html:select>
+	                <% } %>
 	            </div>
               </td>
               <td>

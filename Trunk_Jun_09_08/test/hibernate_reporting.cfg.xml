@@ -89,6 +89,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.Incident"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Station.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItem.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Resolution.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/AirlineMembership.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Articles.hbm.xml"/>
@@ -101,6 +102,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/XDescElement.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Remark.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident.hbm.xml"/>
@@ -134,6 +136,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Photo.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Claimcheck.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident_Claimcheck.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/DbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ReceiptDbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log_Itinerary.hbm.xml"/>

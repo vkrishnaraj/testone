@@ -79,6 +79,7 @@ public class Incident implements Serializable {
 	private Status status;
 	private int loss_code;
 	
+	
 	private Date printedreceipt;
 	
 	private Date lastupdated;
@@ -119,6 +120,16 @@ public class Incident implements Serializable {
 	
 	private boolean locked = false;	//for dispute resolution process
 	
+	private String revenueCode;
+	
+	@Column(name="revenue_code", length=4)
+	public String getRevenueCode() {
+		return revenueCode;
+	}
+	
+	public void setRevenueCode(String revenueCode) {
+		this.revenueCode = revenueCode;
+	}
 	
 	@Column(name="locked", nullable=false)
 	public boolean isLocked() {

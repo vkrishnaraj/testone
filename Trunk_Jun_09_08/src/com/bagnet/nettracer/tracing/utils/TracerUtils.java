@@ -68,6 +68,7 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.XDescElement;
 import com.bagnet.nettracer.tracing.db.i8n.KeyValueBean;
 import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
+import com.bagnet.nettracer.tracing.dto.RevenueCode;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
@@ -469,6 +470,12 @@ public class TracerUtils {
 				.getAttribute("prioritylist") :  retrieveLocaleBasedRecords(
 						"com.bagnet.nettracer.tracing.db.Priority", "priority",
 						"priority_ID", locale));
+		
+		// MJS: set non-revenue codes list
+		session.setAttribute("nonRevenueCodesList",
+				session.getAttribute("nonRevenueCodesList") != null ? 
+						session.getAttribute("nonRevenueCodesList") :
+						getNonRevenueCodesList());
 	}
 
 	private static List<LabelValueBean> getPaymentList(String locale) {
@@ -1629,6 +1636,27 @@ public class TracerUtils {
 		}
 		return rowsperpage;
 	}
-
+	
+	/**
+	 * getNonRevenueCodesList - pulls the list of non-revenue codes from the
+	 * database and adds them to an ArrayList.
+	 * @return - an ArrayList of RevenueCode objects to display on the page.
+	 */
+	public static ArrayList<RevenueCode> getNonRevenueCodesList() {
+		ArrayList<RevenueCode> nonRevenueCodes = null;
+		try {
+			String revCodeString = PropertyBMO.getValue(TracingConstants.NON_REVENUE_CODES_KEY);
+			if (revCodeString != null) {
+				nonRevenueCodes = new ArrayList<RevenueCode>();
+				String[] codes = revCodeString.split(",");
+				for (int i = 0; i < codes.length; ++i) {
+					nonRevenueCodes.add(new RevenueCode(codes[i]));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nonRevenueCodes;
+	}
 
 }

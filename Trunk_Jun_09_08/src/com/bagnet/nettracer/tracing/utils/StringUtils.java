@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
@@ -345,4 +345,19 @@ public class StringUtils {
 	  		return srcStr.length() - 1;
 	  	}
   }
+  
+  public static String convertToRegexSafe(String str) {
+		if (str == null) {
+			return null;
+		}
+		
+		String[] regexChars = {".", "{", "}", "[", "]", "&", "|", "^", "?", "*", "+", "(", ")"};
+		str = Matcher.quoteReplacement(str);
+		for (int i = 0; i < regexChars.length; ++i) {
+			if (str.contains(regexChars[i])) {
+				str = str.replace(regexChars[i], ("\\" + regexChars[i]));
+			}
+		}
+		return str;
+	}
 }
