@@ -2647,8 +2647,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 
-			
-			
 			RushBagGroupType rb = d1.addNewRushBagGroup();
 			RushBagType rbt = rb.addNewRushBags().addNewRushBag();
 			
