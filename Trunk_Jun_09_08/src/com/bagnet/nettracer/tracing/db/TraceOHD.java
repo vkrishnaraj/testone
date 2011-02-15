@@ -3,7 +3,6 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -16,10 +15,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  */
 public class TraceOHD implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String OHD_ID;
-//	private Station foundAtStation;
-//	private Station holdingStation;
-//  private String storage_location;
 	private Date foundtime;
 	private Date founddate;
 	private Date bagarrivedate;
@@ -38,26 +35,12 @@ public class TraceOHD implements Serializable {
 	private int manufacturer_ID;
 	private String manufacturer_other;
 	private Status status;
-//	private Status disposal_status;
 
 	private Set items;
 	private Set passengers;
 	private Set itinerary;
 	private Date close_date;
 	private Date lastupdated;
-	
-	private String _DATEFORMAT; // current login agent's date format
-	private String _TIMEFORMAT; // current login agent's time format
-	private TimeZone _TIMEZONE;
-
-	
-	
-
-	public String getDisplaydate() {
-		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
-				+ this.getFoundtime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
-		return DateUtils.formatDate(completedate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
-	}
 	
 	public Date getFullFoundDate() {
 		return DateUtils.convertToDate(getFounddate().toString() + " " + getFoundtime().toString(), TracingConstants.DB_DATETIMEFORMAT,
@@ -117,7 +100,7 @@ public class TraceOHD implements Serializable {
 	 * @hibernate.set cascade="all" inverse="true"
 	 *                order-by="itinerarytype,departdate,schdeparttime,itinerary_ID"
 	 * @hibernate.key column="ohd_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.OHD_Itinerary"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TraceOHD_Itinerary"
 	 * 
 	 * @return Returns the itinerary.
 	 */
@@ -253,7 +236,7 @@ public class TraceOHD implements Serializable {
 	/**
 	 * @hibernate.set cascade="all" inverse="true" order-by="OHD_Inventory_ID"
 	 * @hibernate.key column="OHD_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.OHD_Inventory"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TraceOHD_Inventory"
 	 * 
 	 * @return Returns the items.
 	 */
@@ -425,7 +408,7 @@ public class TraceOHD implements Serializable {
 	/**
 	 * @hibernate.set cascade="all" inverse="true" order-by="passenger_id"
 	 * @hibernate.key column="OHD_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.OHD_Passenger"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TraceOHD_Passenger"
 	 * @return Returns the passengers.
 	 */
 	public Set getPassengers() {
@@ -455,53 +438,6 @@ public class TraceOHD implements Serializable {
 	 */
 	public void setFounddate(Date founddate) {
 		this.founddate = founddate;
-	}
-
-
-
-	/**
-	 * @return Returns the _DATEFORMAT.
-	 */
-	public String get_DATEFORMAT() {
-		return _DATEFORMAT;
-	}
-
-	/**
-	 * @param _dateformat
-	 *          The _DATEFORMAT to set.
-	 */
-	public void set_DATEFORMAT(String _dateformat) {
-		_DATEFORMAT = _dateformat;
-	}
-
-	/**
-	 * @return Returns the _TIMEFORMAT.
-	 */
-	public String get_TIMEFORMAT() {
-		return _TIMEFORMAT;
-	}
-
-	/**
-	 * @param _timeformat
-	 *          The _TIMEFORMAT to set.
-	 */
-	public void set_TIMEFORMAT(String _timeformat) {
-		_TIMEFORMAT = _timeformat;
-	}
-
-	/**
-	 * @return Returns the _TIMEZONE.
-	 */
-	public TimeZone get_TIMEZONE() {
-		return _TIMEZONE;
-	}
-
-	/**
-	 * @param _timezone
-	 *          The _TIMEZONE to set.
-	 */
-	public void set_TIMEZONE(TimeZone _timezone) {
-		_TIMEZONE = _timezone;
 	}
 
 	/**

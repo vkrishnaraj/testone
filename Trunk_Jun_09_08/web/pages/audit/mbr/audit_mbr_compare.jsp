@@ -298,7 +298,24 @@ function updatePagination() {
             </td>
             <logic:iterate id="audit_incident" name="compareList" scope="request">
               <td>
-                <bean:write name="audit_incident" property="reportmethod" />
+                <logic:match name="audit_incident" property="reportmethod" value="0">
+                	<bean:message key="select.in_person" />
+                </logic:match>
+                <logic:match name="audit_incident" property="reportmethod" value="1">
+                	<bean:message key="select.bsophone" />
+                </logic:match>
+                <logic:match name="audit_incident" property="reportmethod" value="2">
+                	<bean:message key="select.callcenter" />
+                </logic:match>
+                <logic:match name="audit_incident" property="reportmethod" value="3">
+                	<bean:message key="select.online" />
+                </logic:match>
+                <logic:match name="audit_incident" property="reportmethod" value="4">
+                	<bean:message key="select.kiosk" />
+                </logic:match>
+                <logic:greaterThan value="4">
+                	<bean:write name="audit_incident" property="reportmethod" />
+                </logic:greaterThan>
               </td>
             </logic:iterate>
           </tr>

@@ -285,13 +285,16 @@
                         <bean:message key="colname.x_desc" />
                         :
                         <br>
-                        <input type="text" size="30" value="<bean:write name="items" property="xdescelement_ID_1"/>,<bean:write name="items" property="xdescelement_ID_2"/>,<bean:write name="items" property="xdescelement_ID_3"/>" disabled>
+                        <!-- <input type="text" size="30" value="<bean:write name="items" property="xdescelement_ID_1"/>,<bean:write name="items" property="xdescelement_ID_2"/>,<bean:write name="items" property="xdescelement_ID_3"/>" disabled>-->
+                        <input type="text" size="30" value="<bean:write name="items" property="xdescelement1"/>" disabled><br>
+                        <input type="text" size="30" value="<bean:write name="items" property="xdescelement2"/>" disabled><br>
+                        <input type="text" size="30" value="<bean:write name="items" property="xdescelement3"/>" disabled><br>
                       </td>
                       <td>
                         <bean:message key="colname.manufacturer" />
                         :
                         <br>
-                        <html:text name="items" property="manufacturer_ID" size="30" disabled="true" />
+                        <html:text name="items" property="manufacturer" size="30" disabled="true" />
                       </td>
                     </tr>
                     <tr>

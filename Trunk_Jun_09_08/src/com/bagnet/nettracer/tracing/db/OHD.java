@@ -427,7 +427,7 @@ public class OHD implements Serializable {
 	public void setManufacturer_ID(int manufacturer_ID) {
 		this.manufacturer_ID = manufacturer_ID;
 	}
-
+	
 	/**
 	 * @return Returns the manufacturer_other.
 	 * 
@@ -865,7 +865,7 @@ public class OHD implements Serializable {
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getKey();
 	}
-
+	
 	/**
 	 * @hibernate.property type="boolean"
 	 * @return

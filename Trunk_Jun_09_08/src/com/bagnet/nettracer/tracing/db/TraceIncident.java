@@ -64,7 +64,7 @@ public class TraceIncident implements Serializable {
 	 * 
 	 * @hibernate.set cascade="all" inverse="true" order-by="claimcheck_ID"
 	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Incident_Claimcheck"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TraceIncident_Claimcheck"
 	 */
 	public Set getClaimchecks() {
 		return claimchecks;
@@ -81,7 +81,7 @@ public class TraceIncident implements Serializable {
 	/**
 	 * @return Returns the itemlist.
 	 * @hibernate.list cascade="all" inverse="true"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TraceItem" 
 	 * @hibernate.index column="bagnumber"
 	 * @hibernate.key column="incident_ID"
 	 * 
@@ -102,7 +102,7 @@ public class TraceIncident implements Serializable {
 	/**
 	 * @hibernate.set cascade="all" inverse="true" order-by="passenger_id"
 	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Passenger"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TracePassenger"
 	 * @return Returns the passengers.
 	 */
 	public Set getPassengers() {
@@ -123,7 +123,7 @@ public class TraceIncident implements Serializable {
 	 * @hibernate.set cascade="all" inverse="true"
 	 *                order-by="departdate,schdeparttime,itinerary_ID"
 	 * @hibernate.key column="incident_ID"
-	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Itinerary"
+	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.TraceItinerary"
 	 * 
 	 */
 	public Set getItinerary() {
