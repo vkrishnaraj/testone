@@ -429,6 +429,8 @@
           <br>
           <br>
           
+          <jsp:include page="/pages/includes/general_task_incl.jsp" />
+          
           <jsp:include page="/pages/includes/auto_checklist_incl.jsp" />
           
           <jsp:include page="/pages/includes/contactinfo_incl.jsp" />

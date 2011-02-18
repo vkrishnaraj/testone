@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -91,10 +92,12 @@ public abstract class GeneralTask {
 		this.activities = activities;
 	}
 	
+	@Transient
 	public String getDescription() {
 		return null;
 	}
 	
+	@Transient
 	public String getLabel() {
 		return null;
 	}
