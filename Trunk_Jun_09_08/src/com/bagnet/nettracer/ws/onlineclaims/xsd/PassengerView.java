@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface PassengerView extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(PassengerView.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("passengerview5e9ctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(PassengerView.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("passengerview5e9ctype");
     
     /**
      * Gets the "authenticationSuccess" element

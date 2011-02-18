@@ -11,6 +11,7 @@ import com.bagnet.nettracer.integrations.delivery.BDOIntegration;
 import com.bagnet.nettracer.integrations.delivery.DSI;
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.integrations.delivery.Rynns;
+import com.bagnet.nettracer.integrations.delivery.SERV;
 import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -45,6 +46,10 @@ public class DeliveryIntegrationTypeUtils {
 		
 		else if (type.equals(DeliveryIntegrationType.DSI)) {
 			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.dsi");
+		}
+
+		else if (type.equals(DeliveryIntegrationType.SERV)) {
+			return messages.getMessage(new Locale(TracingConstants.DEFAULT_LOCALE), "delivercompany.integration.serv");
 		}
 		/*
 		else if (type.equals(DeliveryIntegrationType.FEDEX)) {
@@ -127,6 +132,8 @@ public class DeliveryIntegrationTypeUtils {
 						integration = new Rynns();
 					} else if (type.equals(DeliveryIntegrationType.DSI)) {
 						integration = new DSI();
+					} else if (type.equals(DeliveryIntegrationType.SERV)) {
+						integration = new SERV();
 					}
 				}
 				

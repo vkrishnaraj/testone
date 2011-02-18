@@ -72,40 +72,76 @@
                                         envelope = toEnvelope(getSOAPFactory(msgContext), saveClaimResponse3, false);
                                     } else 
 
+            if("authIncident".equals(methodName)){
+                
+                com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument authIncidentResponse5 = null;
+	                        com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument wrappedParam =
+                                                             (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument)fromOM(
+                                    msgContext.getEnvelope().getBody().getFirstElement(),
+                                    com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.class,
+                                    getEnvelopeNamespaces(msgContext.getEnvelope()));
+                                                
+                                               authIncidentResponse5 =
+                                                   
+                                                   
+                                                         skel.authIncident(wrappedParam)
+                                                    ;
+                                            
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), authIncidentResponse5, false);
+                                    } else 
+
             if("authAdminUser".equals(methodName)){
                 
-                com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument authAdminUserResponse5 = null;
+                com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument authAdminUserResponse7 = null;
 	                        com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument wrappedParam =
                                                              (com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               authAdminUserResponse5 =
+                                               authAdminUserResponse7 =
                                                    
                                                    
                                                          skel.authAdminUser(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), authAdminUserResponse5, false);
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), authAdminUserResponse7, false);
                                     } else 
 
             if("authPassenger".equals(methodName)){
                 
-                com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument authPassengerResponse7 = null;
+                com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument authPassengerResponse9 = null;
 	                        com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument wrappedParam =
                                                              (com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument)fromOM(
                                     msgContext.getEnvelope().getBody().getFirstElement(),
                                     com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument.class,
                                     getEnvelopeNamespaces(msgContext.getEnvelope()));
                                                 
-                                               authPassengerResponse7 =
+                                               authPassengerResponse9 =
                                                    
                                                    
                                                          skel.authPassenger(wrappedParam)
                                                     ;
                                             
-                                        envelope = toEnvelope(getSOAPFactory(msgContext), authPassengerResponse7, false);
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), authPassengerResponse9, false);
+                                    } else 
+
+            if("saveNewIncident".equals(methodName)){
+                
+                com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument saveNewIncidentResponse11 = null;
+	                        com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument wrappedParam =
+                                                             (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument)fromOM(
+                                    msgContext.getEnvelope().getBody().getFirstElement(),
+                                    com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.class,
+                                    getEnvelopeNamespaces(msgContext.getEnvelope()));
+                                                
+                                               saveNewIncidentResponse11 =
+                                                   
+                                                   
+                                                         skel.saveNewIncident(wrappedParam)
+                                                    ;
+                                            
+                                        envelope = toEnvelope(getSOAPFactory(msgContext), saveNewIncidentResponse11, false);
                                     
             } else {
               throw new java.lang.RuntimeException("method not found");
@@ -336,6 +372,142 @@
             }
 
             private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument param)
                     throws org.apache.axis2.AxisFault {
 
                 final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
@@ -665,6 +837,142 @@
                         omDataSource);
             }
         
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
                             private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument param, boolean optimizeContent)
                             throws org.apache.axis2.AxisFault {
                             org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
@@ -683,6 +991,15 @@
                             return envelope;
                             }
                         
+                            private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument param, boolean optimizeContent)
+                            throws org.apache.axis2.AxisFault {
+                            org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+                            if (param != null){
+                            envelope.getBody().addChild(toOM(param, optimizeContent));
+                            }
+                            return envelope;
+                            }
+                        
                             private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument param, boolean optimizeContent)
                             throws org.apache.axis2.AxisFault {
                             org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
@@ -693,6 +1010,15 @@
                             }
                         
                             private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument param, boolean optimizeContent)
+                            throws org.apache.axis2.AxisFault {
+                            org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+                            if (param != null){
+                            envelope.getBody().addChild(toOM(param, optimizeContent));
+                            }
+                            return envelope;
+                            }
+                        
+                            private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument param, boolean optimizeContent)
                             throws org.apache.axis2.AxisFault {
                             org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
                             if (param != null){
@@ -769,6 +1095,32 @@
 
         
 
+            if (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
+            if (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
             if (com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.class.equals(type)){
             if (extraNamespaces!=null){
             return com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.Factory.parse(
@@ -815,6 +1167,32 @@
             new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
             }else{
             return com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
+            if (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
+            if (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.Factory.parse(
             param.getXMLStreamReaderWithoutCaching());
             }
             }

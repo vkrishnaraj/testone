@@ -47,6 +47,22 @@
         /**
          * Auto generated method signature
          * 
+                                     * @param authIncident
+         */
+        
+                 public com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument authIncident
+                  (
+                  com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument authIncident
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#authIncident");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
                                      * @param authAdminUser
          */
         
@@ -73,6 +89,22 @@
             {
                 //TODO : fill this with the necessary business logic
                 throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#authPassenger");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
+                                     * @param saveNewIncident
+         */
+        
+                 public com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument saveNewIncident
+                  (
+                  com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument saveNewIncident
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#saveNewIncident");
         }
      
     }

@@ -16,5 +16,5 @@ package com.bagnet.nettracer.tracing.db;
  */
 
 public enum DeliveryIntegrationType {
-	NONE, RYNNS, DSI//,  DSI,  FEDEX
+	NONE, RYNNS, DSI, SERV//,  DSI,  FEDEX
 }

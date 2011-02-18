@@ -31,4 +31,18 @@ public class OnlineClaimsService {
 	public boolean saveClaim(String name, String incidentId, Claim claim, NtAuth auth) {
 		return true;
 	}
+	
+	/*
+	 * Authenticate Incident
+	 */
+	public Incident authIncident(String firstName, String lastName, String pnr, NtAuth auth) {
+		return null;
+	}
+	
+	/*
+	 * Save New Incident
+	 */
+	public String saveNewIncident(String firstName, String lastName, String pnr, Incident incident, NtAuth auth) {
+		return null;
+	}
 }

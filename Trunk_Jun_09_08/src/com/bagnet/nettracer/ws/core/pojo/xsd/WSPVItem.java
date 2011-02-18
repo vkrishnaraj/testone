@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSPVItem extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVItem.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("wspvitem0b6etype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVItem.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("wspvitem0b6etype");
     
     /**
      * Gets the "address1" element
@@ -217,6 +217,81 @@ public interface WSPVItem extends org.apache.xmlbeans.XmlObject
      * Unsets the "claimchecknum" element
      */
     void unsetClaimchecknum();
+    
+    /**
+     * Gets the "deliveryStatus" element
+     */
+    com.bagnet.nettracer.tracing.db.xsd.Status getDeliveryStatus();
+    
+    /**
+     * Tests for nil "deliveryStatus" element
+     */
+    boolean isNilDeliveryStatus();
+    
+    /**
+     * True if has "deliveryStatus" element
+     */
+    boolean isSetDeliveryStatus();
+    
+    /**
+     * Sets the "deliveryStatus" element
+     */
+    void setDeliveryStatus(com.bagnet.nettracer.tracing.db.xsd.Status deliveryStatus);
+    
+    /**
+     * Appends and returns a new empty "deliveryStatus" element
+     */
+    com.bagnet.nettracer.tracing.db.xsd.Status addNewDeliveryStatus();
+    
+    /**
+     * Nils the "deliveryStatus" element
+     */
+    void setNilDeliveryStatus();
+    
+    /**
+     * Unsets the "deliveryStatus" element
+     */
+    void unsetDeliveryStatus();
+    
+    /**
+     * Gets the "lastDeliveryUpdate" element
+     */
+    java.util.Calendar getLastDeliveryUpdate();
+    
+    /**
+     * Gets (as xml) the "lastDeliveryUpdate" element
+     */
+    org.apache.xmlbeans.XmlDateTime xgetLastDeliveryUpdate();
+    
+    /**
+     * Tests for nil "lastDeliveryUpdate" element
+     */
+    boolean isNilLastDeliveryUpdate();
+    
+    /**
+     * True if has "lastDeliveryUpdate" element
+     */
+    boolean isSetLastDeliveryUpdate();
+    
+    /**
+     * Sets the "lastDeliveryUpdate" element
+     */
+    void setLastDeliveryUpdate(java.util.Calendar lastDeliveryUpdate);
+    
+    /**
+     * Sets (as xml) the "lastDeliveryUpdate" element
+     */
+    void xsetLastDeliveryUpdate(org.apache.xmlbeans.XmlDateTime lastDeliveryUpdate);
+    
+    /**
+     * Nils the "lastDeliveryUpdate" element
+     */
+    void setNilLastDeliveryUpdate();
+    
+    /**
+     * Unsets the "lastDeliveryUpdate" element
+     */
+    void unsetLastDeliveryUpdate();
     
     /**
      * Gets the "state_ID" element

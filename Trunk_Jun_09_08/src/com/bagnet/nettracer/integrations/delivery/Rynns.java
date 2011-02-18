@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.integrations.delivery;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -9,7 +11,7 @@ import org.tempuri.BDOAddDocument;
 import org.tempuri.BDOAddResponseDocument;
 import org.tempuri.ErrorCode;
 import org.tempuri.ItemData;
-import org.tempuri.NetTracerStub;
+import org.tempuri.AirlineServicesStub;
 import org.tempuri.BDOAddDocument.BDOAdd;
 
 import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
@@ -41,7 +43,7 @@ public class Rynns implements BDOIntegration {
 	
 		try {
 			String endpoint= PropertyBMO.getValue(PROPERTY_RYNNS_ENDPOINT);
-			NetTracerStub stub = new NetTracerStub(null, endpoint);
+			AirlineServicesStub stub = new AirlineServicesStub(null, endpoint);
 			BDOAddDocument doc = BDOAddDocument.Factory.newInstance();
 			BDOAdd ws = doc.addNewBDOAdd();
 			/********* MAPPING FIELDS *******************/
@@ -70,17 +72,28 @@ public class Rynns implements BDOIntegration {
 			ws.setCity(pax.getCity());
 			ws.setState(pax.getState_ID());
 			
+			ws.setFlightNumber("");
+			ws.setFlightDate(null);
+			ws.setFlightDateSpecified(false);
+			ws.setRoute("");
+			
 			if (bdo.getIncident() != null) {
 				ws.setClaimReferenceNumber(bdo.getIncident().getIncident_ID());
 			} else if (bdo.getOhd() != null){
 				ws.setClaimReferenceNumber(bdo.getOhd().getOHD_ID());
 			}
+
+			Calendar deliveryCal = new GregorianCalendar();
+			if (bdo.getDeliverydate() != null) {
+				deliveryCal.setTime(bdo.getDeliverydate());
+				ws.setDeliveryDate(deliveryCal);
+				ws.setDeliveryDateSpecified(true);
+			} else {
+				ws.setDeliveryDate(null);
+				ws.setDeliveryDateSpecified(false);
+			}
 			
 			StringBuffer remarks = new StringBuffer();
-			if (bdo.getDeliverydate() != null) {
-				String date = DateUtils.formatDate(bdo.getDeliverydate(), TracingConstants.DISPLAY_DATEFORMAT, null, null);
-				remarks.append("Please deliver on: " + date + "\n");
-			}
 			remarks.append(bdo.getDelivery_comments());
 			
 			ws.setDeliveryRemarks(remarks.toString());
@@ -89,8 +102,10 @@ public class Rynns implements BDOIntegration {
 			bdo.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
 			bdo.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getCurrenttimezone())
 					.getTimezone()));
-			ws.setCreatedDate(bdo.getDispcreatetime());
-			ws.setPickUpDate(bdo.getDispcreatetime());
+			Calendar createCal = new GregorianCalendar(bdo.get_TIMEZONE());
+			createCal.setTime(bdo.getCreatedate());
+			ws.setCreatedDate(createCal);
+			ws.setPickUpDate(createCal);
 			
 			ArrayOfItemData array = ws.addNewItemsData();
 			

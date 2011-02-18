@@ -1595,7 +1595,7 @@
 		<copy todir="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF" file="${build.dir}/webservices/onlineclaims/resources/services.xml" />
 
 		<!-- copy java files to src -->
-		<copy todir="${basedir}/src">
+		<copy todir="${basedir}/src" overwrite="true">
 			<fileset dir="${build.dir}/webservices/onlineclaims/src">
 				<include name="**/**/*.java" />
 				<exclude name="**/org/**" />

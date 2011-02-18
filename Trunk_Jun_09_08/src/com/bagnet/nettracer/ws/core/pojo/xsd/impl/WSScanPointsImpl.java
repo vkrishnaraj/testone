@@ -21,9 +21,11 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
     
     private static final javax.xml.namespace.QName LOCATION$0 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "location");
-    private static final javax.xml.namespace.QName TIMESTAMP$2 = 
+    private static final javax.xml.namespace.QName TAG$2 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "tag");
+    private static final javax.xml.namespace.QName TIMESTAMP$4 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "timestamp");
-    private static final javax.xml.namespace.QName TYPE$4 = 
+    private static final javax.xml.namespace.QName TYPE$6 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "type");
     
     
@@ -153,33 +155,158 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
     }
     
     /**
-     * Gets the "timestamp" element
+     * Gets the "tag" element
      */
-    public java.util.Calendar getTimestamp()
+    public java.lang.String getTag()
     {
         synchronized (monitor())
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TIMESTAMP$2, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TAG$2, 0);
             if (target == null)
             {
                 return null;
             }
-            return target.getCalendarValue();
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "tag" element
+     */
+    public org.apache.xmlbeans.XmlString xgetTag()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$2, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "tag" element
+     */
+    public boolean isNilTag()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$2, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "tag" element
+     */
+    public boolean isSetTag()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(TAG$2) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "tag" element
+     */
+    public void setTag(java.lang.String tag)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TAG$2, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TAG$2);
+            }
+            target.setStringValue(tag);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "tag" element
+     */
+    public void xsetTag(org.apache.xmlbeans.XmlString tag)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$2, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TAG$2);
+            }
+            target.set(tag);
+        }
+    }
+    
+    /**
+     * Nils the "tag" element
+     */
+    public void setNilTag()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$2, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TAG$2);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "tag" element
+     */
+    public void unsetTag()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(TAG$2, 0);
+        }
+    }
+    
+    /**
+     * Gets the "timestamp" element
+     */
+    public java.lang.String getTimestamp()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TIMESTAMP$4, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
         }
     }
     
     /**
      * Gets (as xml) the "timestamp" element
      */
-    public org.apache.xmlbeans.XmlDateTime xgetTimestamp()
+    public org.apache.xmlbeans.XmlString xgetTimestamp()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            org.apache.xmlbeans.XmlDateTime target = null;
-            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(TIMESTAMP$2, 0);
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TIMESTAMP$4, 0);
             return target;
         }
     }
@@ -192,8 +319,8 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            org.apache.xmlbeans.XmlDateTime target = null;
-            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(TIMESTAMP$2, 0);
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TIMESTAMP$4, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -207,41 +334,41 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TIMESTAMP$2) != 0;
+            return get_store().count_elements(TIMESTAMP$4) != 0;
         }
     }
     
     /**
      * Sets the "timestamp" element
      */
-    public void setTimestamp(java.util.Calendar timestamp)
+    public void setTimestamp(java.lang.String timestamp)
     {
         synchronized (monitor())
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TIMESTAMP$2, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TIMESTAMP$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TIMESTAMP$2);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TIMESTAMP$4);
             }
-            target.setCalendarValue(timestamp);
+            target.setStringValue(timestamp);
         }
     }
     
     /**
      * Sets (as xml) the "timestamp" element
      */
-    public void xsetTimestamp(org.apache.xmlbeans.XmlDateTime timestamp)
+    public void xsetTimestamp(org.apache.xmlbeans.XmlString timestamp)
     {
         synchronized (monitor())
         {
             check_orphaned();
-            org.apache.xmlbeans.XmlDateTime target = null;
-            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(TIMESTAMP$2, 0);
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TIMESTAMP$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(TIMESTAMP$2);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TIMESTAMP$4);
             }
             target.set(timestamp);
         }
@@ -255,11 +382,11 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            org.apache.xmlbeans.XmlDateTime target = null;
-            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(TIMESTAMP$2, 0);
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TIMESTAMP$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(TIMESTAMP$2);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TIMESTAMP$4);
             }
             target.setNil();
         }
@@ -273,7 +400,7 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TIMESTAMP$2, 0);
+            get_store().remove_element(TIMESTAMP$4, 0);
         }
     }
     
@@ -286,7 +413,7 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TYPE$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TYPE$6, 0);
             if (target == null)
             {
                 return null;
@@ -304,7 +431,7 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$6, 0);
             return target;
         }
     }
@@ -318,7 +445,7 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$6, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -332,7 +459,7 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TYPE$4) != 0;
+            return get_store().count_elements(TYPE$6) != 0;
         }
     }
     
@@ -345,10 +472,10 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TYPE$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TYPE$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TYPE$4);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TYPE$6);
             }
             target.setStringValue(type);
         }
@@ -363,10 +490,10 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TYPE$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TYPE$6);
             }
             target.set(type);
         }
@@ -381,10 +508,10 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TYPE$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TYPE$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TYPE$6);
             }
             target.setNil();
         }
@@ -398,7 +525,7 @@ public class WSScanPointsImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TYPE$4, 0);
+            get_store().remove_element(TYPE$6, 0);
         }
     }
 }

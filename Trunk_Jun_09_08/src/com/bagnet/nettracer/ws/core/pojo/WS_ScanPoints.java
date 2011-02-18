@@ -1,18 +1,18 @@
 package com.bagnet.nettracer.ws.core.pojo;
 
-import java.util.Calendar;
 
 public class WS_ScanPoints {
 
-	private Calendar timestamp;
+	private String timestamp;
 	private String location;
 	private String type;
+	private String tag;
 
-	public Calendar getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Calendar timestamp) {
+	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -32,4 +32,11 @@ public class WS_ScanPoints {
 		this.type = type;
 	}
 
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
 }

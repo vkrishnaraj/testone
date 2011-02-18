@@ -19,7 +19,7 @@ public class WS_PVAdvancedIncident {
 	
 	private WS_PVPassenger[] passengers = null;
 	private WS_PVItem[] items = null;
-	private WS_ScanPoints[] scans = null;
+	private WS_ClaimCheck[] checks = null;
 
 	private String companycode_id;
 	private String errorcode;
@@ -164,11 +164,11 @@ public class WS_PVAdvancedIncident {
 		this.canCreateClaim = canCreateClaim;
 	}
 	
-	public WS_ScanPoints[] getScans() {
-		return scans;
+	public WS_ClaimCheck[] getClaimChecks() {
+		return checks;
 	}
 
-	public void setScans(WS_ScanPoints[] scans) {
-		this.scans = scans;
+	public void setClaimChecks(WS_ClaimCheck[] checks) {
+		this.checks = checks;
 	}
 }

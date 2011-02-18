@@ -77,6 +77,22 @@
             }
                 
            /**
+            * auto generated Axis2 call back method for authIncident method
+            * override this method for handling normal response from authIncident operation
+            */
+           public void receiveResultauthIncident(
+                    com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument result
+                        ) {
+           }
+
+          /**
+           * auto generated Axis2 Error handler
+           * override this method for handling error response from authIncident operation
+           */
+            public void receiveErrorauthIncident(java.lang.Exception e) {
+            }
+                
+           /**
             * auto generated Axis2 call back method for authAdminUser method
             * override this method for handling normal response from authAdminUser operation
             */
@@ -106,6 +122,22 @@
            * override this method for handling error response from authPassenger operation
            */
             public void receiveErrorauthPassenger(java.lang.Exception e) {
+            }
+                
+           /**
+            * auto generated Axis2 call back method for saveNewIncident method
+            * override this method for handling normal response from saveNewIncident operation
+            */
+           public void receiveResultsaveNewIncident(
+                    com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument result
+                        ) {
+           }
+
+          /**
+           * auto generated Axis2 Error handler
+           * override this method for handling error response from saveNewIncident operation
+           */
+            public void receiveErrorsaveNewIncident(java.lang.Exception e) {
             }
                 
 

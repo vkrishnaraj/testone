@@ -1,9 +1,11 @@
 package com.bagnet.nettracer.ws.passengerview;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
+import com.bagnet.nettracer.datasources.ScannerDataSource;
 import com.bagnet.nettracer.tracing.bmo.CustomerViewableCommentBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -11,8 +13,12 @@ import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.CustomerViewableComment;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.dto.ScannerDTO;
+import com.bagnet.nettracer.tracing.dto.ScannerDataDTO;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger;
 
@@ -236,6 +242,37 @@ public class PassengerViewUtil {
 			si.setCreatedate(createCal);
 			si.setItemType(iDTO.getItemtype_ID());
 			si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
+			
+			Calendar cal = new GregorianCalendar();
+			cal.setTime(iDTO.getCreatedate());
+			cal.add(Calendar.DAY_OF_MONTH, -4);
+			Date startDate = cal.getTime();
+			cal.setTime(iDTO.getCreatedate());
+			cal.add(Calendar.DAY_OF_MONTH, 2);
+			Date endDate = cal.getTime();
+			ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
+			int index = 0;
+			for (Incident_Claimcheck claimCheck : iDTO.getClaimchecks()) {
+				com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck check = null;
+				check = si.addNewClaimChecks();
+				check.setTag(claimCheck.getClaimchecknum());
+				ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, claimCheck.getClaimchecknum());
+				if (dto.getScannerDataDTOs() != null) {
+					int scanIndex = 0;
+					for (ScannerDataDTO sdd : dto.getScannerDataDTOs()) {
+						com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scan = null;
+						scan = check.addNewScans();
+						scan.setLocation(sdd.getString2()); //USAirways implementation sets String2 to station
+						scan.setType(sdd.getString3());     //USAirways implementation sets String3 to type
+						scan.setTag(claimCheck.getClaimchecknum());
+						scan.setTimestamp(sdd.getString1());//USAirways implementation sets String1 to human readable timestamp
+						check.setScansArray(scanIndex, scan);
+						scanIndex++;
+					}
+				}
+				si.setClaimChecksArray(index, check);
+				index++;
+			}
 
 			Item item = null;
 			if (iDTO.getItemlist() != null) {
@@ -246,8 +283,7 @@ public class PassengerViewUtil {
 					bdo = null;
 					bdo_p = null;
 					siarr = si.addNewItems();
-
-					item = (Item) iDTO.getItemlist().get(i);
+					item = (Item) iDTO.getItemlist().get(i);// Obtain the appropriate scannerDataSource
 					siarr.setBagstatus(item.getStatus().getTextDescription(null));
 					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0)
 						siarr.setClaimchecknum(item.getClaimchecknum());

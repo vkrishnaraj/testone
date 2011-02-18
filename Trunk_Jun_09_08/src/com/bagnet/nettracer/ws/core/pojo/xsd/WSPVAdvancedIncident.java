@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("wspvadvancedincident350dtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("wspvadvancedincident350dtype");
     
     /**
      * Gets the "canCreateClaim" element
@@ -47,6 +47,56 @@ public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
      * Unsets the "canCreateClaim" element
      */
     void unsetCanCreateClaim();
+    
+    /**
+     * Gets array of all "claimChecks" elements
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck[] getClaimChecksArray();
+    
+    /**
+     * Gets ith "claimChecks" element
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck getClaimChecksArray(int i);
+    
+    /**
+     * Tests for nil ith "claimChecks" element
+     */
+    boolean isNilClaimChecksArray(int i);
+    
+    /**
+     * Returns number of "claimChecks" element
+     */
+    int sizeOfClaimChecksArray();
+    
+    /**
+     * Sets array of all "claimChecks" element
+     */
+    void setClaimChecksArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck[] claimChecksArray);
+    
+    /**
+     * Sets ith "claimChecks" element
+     */
+    void setClaimChecksArray(int i, com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck claimChecks);
+    
+    /**
+     * Nils the ith "claimChecks" element
+     */
+    void setNilClaimChecksArray(int i);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "claimChecks" element
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck insertNewClaimChecks(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "claimChecks" element
+     */
+    com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck addNewClaimChecks();
+    
+    /**
+     * Removes the ith "claimChecks" element
+     */
+    void removeClaimChecks(int i);
     
     /**
      * Gets the "comments" element
@@ -457,56 +507,6 @@ public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
      * Removes the ith "passengers" element
      */
     void removePassengers(int i);
-    
-    /**
-     * Gets array of all "scans" elements
-     */
-    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] getScansArray();
-    
-    /**
-     * Gets ith "scans" element
-     */
-    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints getScansArray(int i);
-    
-    /**
-     * Tests for nil ith "scans" element
-     */
-    boolean isNilScansArray(int i);
-    
-    /**
-     * Returns number of "scans" element
-     */
-    int sizeOfScansArray();
-    
-    /**
-     * Sets array of all "scans" element
-     */
-    void setScansArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] scansArray);
-    
-    /**
-     * Sets ith "scans" element
-     */
-    void setScansArray(int i, com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scans);
-    
-    /**
-     * Nils the ith "scans" element
-     */
-    void setNilScansArray(int i);
-    
-    /**
-     * Inserts and returns a new empty value (as xml) as the ith "scans" element
-     */
-    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints insertNewScans(int i);
-    
-    /**
-     * Appends and returns a new empty value (as xml) as the last "scans" element
-     */
-    com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints addNewScans();
-    
-    /**
-     * Removes the ith "scans" element
-     */
-    void removeScans(int i);
     
     /**
      * A factory class with static methods for creating instances

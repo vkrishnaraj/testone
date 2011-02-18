@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSScanPoints extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSScanPoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("wsscanpoints2827type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSScanPoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("wsscanpoints2827type");
     
     /**
      * Gets the "location" element
@@ -59,14 +59,54 @@ public interface WSScanPoints extends org.apache.xmlbeans.XmlObject
     void unsetLocation();
     
     /**
+     * Gets the "tag" element
+     */
+    java.lang.String getTag();
+    
+    /**
+     * Gets (as xml) the "tag" element
+     */
+    org.apache.xmlbeans.XmlString xgetTag();
+    
+    /**
+     * Tests for nil "tag" element
+     */
+    boolean isNilTag();
+    
+    /**
+     * True if has "tag" element
+     */
+    boolean isSetTag();
+    
+    /**
+     * Sets the "tag" element
+     */
+    void setTag(java.lang.String tag);
+    
+    /**
+     * Sets (as xml) the "tag" element
+     */
+    void xsetTag(org.apache.xmlbeans.XmlString tag);
+    
+    /**
+     * Nils the "tag" element
+     */
+    void setNilTag();
+    
+    /**
+     * Unsets the "tag" element
+     */
+    void unsetTag();
+    
+    /**
      * Gets the "timestamp" element
      */
-    java.util.Calendar getTimestamp();
+    java.lang.String getTimestamp();
     
     /**
      * Gets (as xml) the "timestamp" element
      */
-    org.apache.xmlbeans.XmlDateTime xgetTimestamp();
+    org.apache.xmlbeans.XmlString xgetTimestamp();
     
     /**
      * Tests for nil "timestamp" element
@@ -81,12 +121,12 @@ public interface WSScanPoints extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "timestamp" element
      */
-    void setTimestamp(java.util.Calendar timestamp);
+    void setTimestamp(java.lang.String timestamp);
     
     /**
      * Sets (as xml) the "timestamp" element
      */
-    void xsetTimestamp(org.apache.xmlbeans.XmlDateTime timestamp);
+    void xsetTimestamp(org.apache.xmlbeans.XmlString timestamp);
     
     /**
      * Nils the "timestamp" element

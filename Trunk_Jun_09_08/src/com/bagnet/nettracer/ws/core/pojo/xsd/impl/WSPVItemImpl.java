@@ -29,9 +29,13 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "city");
     private static final javax.xml.namespace.QName CLAIMCHECKNUM$8 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "claimchecknum");
-    private static final javax.xml.namespace.QName STATEID$10 = 
+    private static final javax.xml.namespace.QName DELIVERYSTATUS$10 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "deliveryStatus");
+    private static final javax.xml.namespace.QName LASTDELIVERYUPDATE$12 = 
+        new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "lastDeliveryUpdate");
+    private static final javax.xml.namespace.QName STATEID$14 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "state_ID");
-    private static final javax.xml.namespace.QName ZIP$12 = 
+    private static final javax.xml.namespace.QName ZIP$16 = 
         new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd", "zip");
     
     
@@ -661,6 +665,238 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
+     * Gets the "deliveryStatus" element
+     */
+    public com.bagnet.nettracer.tracing.db.xsd.Status getDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
+            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "deliveryStatus" element
+     */
+    public boolean isNilDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
+            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "deliveryStatus" element
+     */
+    public boolean isSetDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(DELIVERYSTATUS$10) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "deliveryStatus" element
+     */
+    public void setDeliveryStatus(com.bagnet.nettracer.tracing.db.xsd.Status deliveryStatus)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
+            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            if (target == null)
+            {
+                target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().add_element_user(DELIVERYSTATUS$10);
+            }
+            target.set(deliveryStatus);
+        }
+    }
+    
+    /**
+     * Appends and returns a new empty "deliveryStatus" element
+     */
+    public com.bagnet.nettracer.tracing.db.xsd.Status addNewDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
+            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().add_element_user(DELIVERYSTATUS$10);
+            return target;
+        }
+    }
+    
+    /**
+     * Nils the "deliveryStatus" element
+     */
+    public void setNilDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
+            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            if (target == null)
+            {
+                target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().add_element_user(DELIVERYSTATUS$10);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "deliveryStatus" element
+     */
+    public void unsetDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(DELIVERYSTATUS$10, 0);
+        }
+    }
+    
+    /**
+     * Gets the "lastDeliveryUpdate" element
+     */
+    public java.util.Calendar getLastDeliveryUpdate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LASTDELIVERYUPDATE$12, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getCalendarValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "lastDeliveryUpdate" element
+     */
+    public org.apache.xmlbeans.XmlDateTime xgetLastDeliveryUpdate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(LASTDELIVERYUPDATE$12, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "lastDeliveryUpdate" element
+     */
+    public boolean isNilLastDeliveryUpdate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(LASTDELIVERYUPDATE$12, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "lastDeliveryUpdate" element
+     */
+    public boolean isSetLastDeliveryUpdate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(LASTDELIVERYUPDATE$12) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "lastDeliveryUpdate" element
+     */
+    public void setLastDeliveryUpdate(java.util.Calendar lastDeliveryUpdate)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LASTDELIVERYUPDATE$12, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(LASTDELIVERYUPDATE$12);
+            }
+            target.setCalendarValue(lastDeliveryUpdate);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "lastDeliveryUpdate" element
+     */
+    public void xsetLastDeliveryUpdate(org.apache.xmlbeans.XmlDateTime lastDeliveryUpdate)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(LASTDELIVERYUPDATE$12, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(LASTDELIVERYUPDATE$12);
+            }
+            target.set(lastDeliveryUpdate);
+        }
+    }
+    
+    /**
+     * Nils the "lastDeliveryUpdate" element
+     */
+    public void setNilLastDeliveryUpdate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(LASTDELIVERYUPDATE$12, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(LASTDELIVERYUPDATE$12);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "lastDeliveryUpdate" element
+     */
+    public void unsetLastDeliveryUpdate()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(LASTDELIVERYUPDATE$12, 0);
+        }
+    }
+    
+    /**
      * Gets the "state_ID" element
      */
     public java.lang.String getStateID()
@@ -669,7 +905,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$14, 0);
             if (target == null)
             {
                 return null;
@@ -687,7 +923,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$14, 0);
             return target;
         }
     }
@@ -701,7 +937,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$14, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -715,7 +951,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATEID$10) != 0;
+            return get_store().count_elements(STATEID$14) != 0;
         }
     }
     
@@ -728,10 +964,10 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATEID$10);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATEID$14);
             }
             target.setStringValue(stateID);
         }
@@ -746,10 +982,10 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$14);
             }
             target.set(stateID);
         }
@@ -764,10 +1000,10 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$14);
             }
             target.setNil();
         }
@@ -781,7 +1017,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATEID$10, 0);
+            get_store().remove_element(STATEID$14, 0);
         }
     }
     
@@ -794,7 +1030,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$12, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$16, 0);
             if (target == null)
             {
                 return null;
@@ -812,7 +1048,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$16, 0);
             return target;
         }
     }
@@ -826,7 +1062,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$16, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -840,7 +1076,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ZIP$12) != 0;
+            return get_store().count_elements(ZIP$16) != 0;
         }
     }
     
@@ -853,10 +1089,10 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$12, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ZIP$12);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ZIP$16);
             }
             target.setStringValue(zip);
         }
@@ -871,10 +1107,10 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$12);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$16);
             }
             target.set(zip);
         }
@@ -889,10 +1125,10 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$12);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$16);
             }
             target.setNil();
         }
@@ -906,7 +1142,7 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ZIP$12, 0);
+            get_store().remove_element(ZIP$16, 0);
         }
     }
 }

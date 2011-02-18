@@ -44,7 +44,7 @@
         //creating the operations
         org.apache.axis2.description.AxisOperation __operation;
 
-        _operations = new org.apache.axis2.description.AxisOperation[4];
+        _operations = new org.apache.axis2.description.AxisOperation[6];
         
                    __operation = new org.apache.axis2.description.OutInAxisOperation();
                 
@@ -73,7 +73,7 @@
                    __operation = new org.apache.axis2.description.OutInAxisOperation();
                 
 
-            __operation.setName(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "authAdminUser"));
+            __operation.setName(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "authIncident"));
 	    _service.addOperation(__operation);
 	    
 
@@ -85,13 +85,37 @@
                    __operation = new org.apache.axis2.description.OutInAxisOperation();
                 
 
-            __operation.setName(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "authPassenger"));
+            __operation.setName(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "authAdminUser"));
 	    _service.addOperation(__operation);
 	    
 
 	    
 	    
             _operations[3]=__operation;
+            
+        
+                   __operation = new org.apache.axis2.description.OutInAxisOperation();
+                
+
+            __operation.setName(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "authPassenger"));
+	    _service.addOperation(__operation);
+	    
+
+	    
+	    
+            _operations[4]=__operation;
+            
+        
+                   __operation = new org.apache.axis2.description.OutInAxisOperation();
+                
+
+            __operation.setName(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "saveNewIncident"));
+	    _service.addOperation(__operation);
+	    
+
+	    
+	    
+            _operations[5]=__operation;
             
         
         }
@@ -169,7 +193,7 @@
                      * Auto generated method signature
                      * 
                      * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#loadClaim
-                     * @param loadClaim48
+                     * @param loadClaim72
                     
                      */
 
@@ -177,7 +201,7 @@
 
                             public  com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument loadClaim(
 
-                            com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument loadClaim48)
+                            com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument loadClaim72)
                         
 
                     throws java.rmi.RemoteException
@@ -204,7 +228,7 @@
                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    loadClaim48,
+                                                    loadClaim72,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "loadClaim")));
                                                 
@@ -288,12 +312,12 @@
                 * Auto generated method signature for Asynchronous Invocations
                 * 
                 * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#startloadClaim
-                    * @param loadClaim48
+                    * @param loadClaim72
                 
                 */
                 public  void startloadClaim(
 
-                 com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument loadClaim48,
+                 com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument loadClaim72,
 
                   final com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceCallbackHandler callback)
 
@@ -318,7 +342,7 @@
                                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    loadClaim48,
+                                                    loadClaim72,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "loadClaim")));
                                                 
@@ -434,7 +458,7 @@
                      * Auto generated method signature
                      * 
                      * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#saveClaim
-                     * @param saveClaim50
+                     * @param saveClaim74
                     
                      */
 
@@ -442,7 +466,7 @@
 
                             public  com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument saveClaim(
 
-                            com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument saveClaim50)
+                            com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument saveClaim74)
                         
 
                     throws java.rmi.RemoteException
@@ -469,7 +493,7 @@
                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    saveClaim50,
+                                                    saveClaim74,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "saveClaim")));
                                                 
@@ -553,12 +577,12 @@
                 * Auto generated method signature for Asynchronous Invocations
                 * 
                 * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#startsaveClaim
-                    * @param saveClaim50
+                    * @param saveClaim74
                 
                 */
                 public  void startsaveClaim(
 
-                 com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument saveClaim50,
+                 com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument saveClaim74,
 
                   final com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceCallbackHandler callback)
 
@@ -583,7 +607,7 @@
                                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    saveClaim50,
+                                                    saveClaim74,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "saveClaim")));
                                                 
@@ -698,16 +722,16 @@
                     /**
                      * Auto generated method signature
                      * 
-                     * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#authAdminUser
-                     * @param authAdminUser52
+                     * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#authIncident
+                     * @param authIncident76
                     
                      */
 
                     
 
-                            public  com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument authAdminUser(
+                            public  com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument authIncident(
 
-                            com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument authAdminUser52)
+                            com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument authIncident76)
                         
 
                     throws java.rmi.RemoteException
@@ -716,6 +740,271 @@
               org.apache.axis2.context.MessageContext _messageContext = null;
               try{
                org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+              _operationClient.getOptions().setAction("urn:authIncident");
+              _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+              
+              
+                  addPropertyToOperationClient(_operationClient,org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,"&");
+              
+
+              // create a message context
+              _messageContext = new org.apache.axis2.context.MessageContext();
+
+              
+
+              // create SOAP envelope with that payload
+              org.apache.axiom.soap.SOAPEnvelope env = null;
+                    
+                                                    
+                                                    env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
+                                                    authIncident76,
+                                                    optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
+                                                    "authIncident")));
+                                                
+        //adding SOAP soap_headers
+         _serviceClient.addHeadersToEnvelope(env);
+        // set the message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message contxt to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        //execute the operation client
+        _operationClient.execute(true);
+
+         
+               org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(
+                                           org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+                org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+                
+                
+                                java.lang.Object object = fromOM(
+                                             _returnEnv.getBody().getFirstElement() ,
+                                             com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.class,
+                                              getEnvelopeNamespaces(_returnEnv));
+
+                               
+                                        return (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument)object;
+                                   
+         }catch(org.apache.axis2.AxisFault f){
+
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+            if (faultElt!=null){
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())){
+                    //make the fault by reflection
+                    try{
+                        java.lang.String exceptionClassName = (java.lang.String)faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex=
+                                (java.lang.Exception) exceptionClass.newInstance();
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String)faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,messageClass,null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                   new java.lang.Class[]{messageClass});
+                        m.invoke(ex,new java.lang.Object[]{messageObject});
+                        
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    }catch(java.lang.ClassCastException e){
+                       // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }  catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }   catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                }else{
+                    throw f;
+                }
+            }else{
+                throw f;
+            }
+            } finally {
+                _messageContext.getTransportOut().getSender().cleanup(_messageContext);
+            }
+        }
+            
+                /**
+                * Auto generated method signature for Asynchronous Invocations
+                * 
+                * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#startauthIncident
+                    * @param authIncident76
+                
+                */
+                public  void startauthIncident(
+
+                 com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument authIncident76,
+
+                  final com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceCallbackHandler callback)
+
+                throws java.rmi.RemoteException{
+
+              org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+             _operationClient.getOptions().setAction("urn:authIncident");
+             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+              
+              
+                  addPropertyToOperationClient(_operationClient,org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,"&");
+              
+
+
+              // create SOAP envelope with that payload
+              org.apache.axiom.soap.SOAPEnvelope env=null;
+              final org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+                    
+                                    //Style is Doc.
+                                    
+                                                    
+                                                    env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
+                                                    authIncident76,
+                                                    optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
+                                                    "authIncident")));
+                                                
+        // adding SOAP soap_headers
+         _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+
+                    
+                        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                            public void onMessage(org.apache.axis2.context.MessageContext resultContext) {
+                            try {
+                                org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+                                
+                                        java.lang.Object object = fromOM(resultEnv.getBody().getFirstElement(),
+                                                                         com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.class,
+                                                                         getEnvelopeNamespaces(resultEnv));
+                                        callback.receiveResultauthIncident(
+                                        (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument)object);
+                                        
+                            } catch (org.apache.axis2.AxisFault e) {
+                                callback.receiveErrorauthIncident(e);
+                            }
+                            }
+
+                            public void onError(java.lang.Exception error) {
+								if (error instanceof org.apache.axis2.AxisFault) {
+									org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+									org.apache.axiom.om.OMElement faultElt = f.getDetail();
+									if (faultElt!=null){
+										if (faultExceptionNameMap.containsKey(faultElt.getQName())){
+											//make the fault by reflection
+											try{
+													java.lang.String exceptionClassName = (java.lang.String)faultExceptionClassNameMap.get(faultElt.getQName());
+													java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+													java.lang.Exception ex=
+														(java.lang.Exception) exceptionClass.newInstance();
+													//message class
+													java.lang.String messageClassName = (java.lang.String)faultMessageMap.get(faultElt.getQName());
+														java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+													java.lang.Object messageObject = fromOM(faultElt,messageClass,null);
+													java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+															new java.lang.Class[]{messageClass});
+													m.invoke(ex,new java.lang.Object[]{messageObject});
+													
+					
+										            callback.receiveErrorauthIncident(new java.rmi.RemoteException(ex.getMessage(), ex));
+                                            } catch(java.lang.ClassCastException e){
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            } catch (java.lang.ClassNotFoundException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            } catch (java.lang.NoSuchMethodException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            } catch (java.lang.reflect.InvocationTargetException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            } catch (java.lang.IllegalAccessException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            } catch (java.lang.InstantiationException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            } catch (org.apache.axis2.AxisFault e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorauthIncident(f);
+                                            }
+									    } else {
+										    callback.receiveErrorauthIncident(f);
+									    }
+									} else {
+									    callback.receiveErrorauthIncident(f);
+									}
+								} else {
+								    callback.receiveErrorauthIncident(error);
+								}
+                            }
+
+                            public void onFault(org.apache.axis2.context.MessageContext faultContext) {
+                                org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                                onError(fault);
+                            }
+
+                            public void onComplete() {
+                                try {
+                                    _messageContext.getTransportOut().getSender().cleanup(_messageContext);
+                                } catch (org.apache.axis2.AxisFault axisFault) {
+                                    callback.receiveErrorauthIncident(axisFault);
+                                }
+                            }
+                });
+                        
+
+          org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+        if ( _operations[2].getMessageReceiver()==null &&  _operationClient.getOptions().isUseSeparateListener()) {
+           _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+          _operations[2].setMessageReceiver(
+                    _callbackReceiver);
+        }
+
+           //execute the operation client
+           _operationClient.execute(false);
+
+                    }
+                
+                    /**
+                     * Auto generated method signature
+                     * 
+                     * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#authAdminUser
+                     * @param authAdminUser78
+                    
+                     */
+
+                    
+
+                            public  com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument authAdminUser(
+
+                            com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument authAdminUser78)
+                        
+
+                    throws java.rmi.RemoteException
+                    
+                    {
+              org.apache.axis2.context.MessageContext _messageContext = null;
+              try{
+               org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
               _operationClient.getOptions().setAction("urn:authAdminUser");
               _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -734,7 +1023,7 @@
                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    authAdminUser52,
+                                                    authAdminUser78,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "authAdminUser")));
                                                 
@@ -818,18 +1107,18 @@
                 * Auto generated method signature for Asynchronous Invocations
                 * 
                 * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#startauthAdminUser
-                    * @param authAdminUser52
+                    * @param authAdminUser78
                 
                 */
                 public  void startauthAdminUser(
 
-                 com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument authAdminUser52,
+                 com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument authAdminUser78,
 
                   final com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
-              org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+              org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
              _operationClient.getOptions().setAction("urn:authAdminUser");
              _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -848,7 +1137,7 @@
                                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    authAdminUser52,
+                                                    authAdminUser78,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "authAdminUser")));
                                                 
@@ -949,9 +1238,9 @@
                         
 
           org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-        if ( _operations[2].getMessageReceiver()==null &&  _operationClient.getOptions().isUseSeparateListener()) {
+        if ( _operations[3].getMessageReceiver()==null &&  _operationClient.getOptions().isUseSeparateListener()) {
            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-          _operations[2].setMessageReceiver(
+          _operations[3].setMessageReceiver(
                     _callbackReceiver);
         }
 
@@ -964,7 +1253,7 @@
                      * Auto generated method signature
                      * 
                      * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#authPassenger
-                     * @param authPassenger54
+                     * @param authPassenger80
                     
                      */
 
@@ -972,7 +1261,7 @@
 
                             public  com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument authPassenger(
 
-                            com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument authPassenger54)
+                            com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument authPassenger80)
                         
 
                     throws java.rmi.RemoteException
@@ -980,7 +1269,7 @@
                     {
               org.apache.axis2.context.MessageContext _messageContext = null;
               try{
-               org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
+               org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
               _operationClient.getOptions().setAction("urn:authPassenger");
               _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -999,7 +1288,7 @@
                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    authPassenger54,
+                                                    authPassenger80,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "authPassenger")));
                                                 
@@ -1083,18 +1372,18 @@
                 * Auto generated method signature for Asynchronous Invocations
                 * 
                 * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#startauthPassenger
-                    * @param authPassenger54
+                    * @param authPassenger80
                 
                 */
                 public  void startauthPassenger(
 
-                 com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument authPassenger54,
+                 com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument authPassenger80,
 
                   final com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
-              org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
+              org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
              _operationClient.getOptions().setAction("urn:authPassenger");
              _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1113,7 +1402,7 @@
                                     
                                                     
                                                     env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
-                                                    authPassenger54,
+                                                    authPassenger80,
                                                     optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
                                                     "authPassenger")));
                                                 
@@ -1214,9 +1503,274 @@
                         
 
           org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
-        if ( _operations[3].getMessageReceiver()==null &&  _operationClient.getOptions().isUseSeparateListener()) {
+        if ( _operations[4].getMessageReceiver()==null &&  _operationClient.getOptions().isUseSeparateListener()) {
            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-          _operations[3].setMessageReceiver(
+          _operations[4].setMessageReceiver(
+                    _callbackReceiver);
+        }
+
+           //execute the operation client
+           _operationClient.execute(false);
+
+                    }
+                
+                    /**
+                     * Auto generated method signature
+                     * 
+                     * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#saveNewIncident
+                     * @param saveNewIncident82
+                    
+                     */
+
+                    
+
+                            public  com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument saveNewIncident(
+
+                            com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument saveNewIncident82)
+                        
+
+                    throws java.rmi.RemoteException
+                    
+                    {
+              org.apache.axis2.context.MessageContext _messageContext = null;
+              try{
+               org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
+              _operationClient.getOptions().setAction("urn:saveNewIncident");
+              _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+              
+              
+                  addPropertyToOperationClient(_operationClient,org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,"&");
+              
+
+              // create a message context
+              _messageContext = new org.apache.axis2.context.MessageContext();
+
+              
+
+              // create SOAP envelope with that payload
+              org.apache.axiom.soap.SOAPEnvelope env = null;
+                    
+                                                    
+                                                    env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
+                                                    saveNewIncident82,
+                                                    optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
+                                                    "saveNewIncident")));
+                                                
+        //adding SOAP soap_headers
+         _serviceClient.addHeadersToEnvelope(env);
+        // set the message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message contxt to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        //execute the operation client
+        _operationClient.execute(true);
+
+         
+               org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(
+                                           org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+                org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+                
+                
+                                java.lang.Object object = fromOM(
+                                             _returnEnv.getBody().getFirstElement() ,
+                                             com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.class,
+                                              getEnvelopeNamespaces(_returnEnv));
+
+                               
+                                        return (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument)object;
+                                   
+         }catch(org.apache.axis2.AxisFault f){
+
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+            if (faultElt!=null){
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())){
+                    //make the fault by reflection
+                    try{
+                        java.lang.String exceptionClassName = (java.lang.String)faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex=
+                                (java.lang.Exception) exceptionClass.newInstance();
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String)faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,messageClass,null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                   new java.lang.Class[]{messageClass});
+                        m.invoke(ex,new java.lang.Object[]{messageObject});
+                        
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    }catch(java.lang.ClassCastException e){
+                       // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }  catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }   catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                }else{
+                    throw f;
+                }
+            }else{
+                throw f;
+            }
+            } finally {
+                _messageContext.getTransportOut().getSender().cleanup(_messageContext);
+            }
+        }
+            
+                /**
+                * Auto generated method signature for Asynchronous Invocations
+                * 
+                * @see com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService#startsaveNewIncident
+                    * @param saveNewIncident82
+                
+                */
+                public  void startsaveNewIncident(
+
+                 com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument saveNewIncident82,
+
+                  final com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceCallbackHandler callback)
+
+                throws java.rmi.RemoteException{
+
+              org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
+             _operationClient.getOptions().setAction("urn:saveNewIncident");
+             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+              
+              
+                  addPropertyToOperationClient(_operationClient,org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,"&");
+              
+
+
+              // create SOAP envelope with that payload
+              org.apache.axiom.soap.SOAPEnvelope env=null;
+              final org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+                    
+                                    //Style is Doc.
+                                    
+                                                    
+                                                    env = toEnvelope(getFactory(_operationClient.getOptions().getSoapVersionURI()),
+                                                    saveNewIncident82,
+                                                    optimizeContent(new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com",
+                                                    "saveNewIncident")));
+                                                
+        // adding SOAP soap_headers
+         _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+
+                    
+                        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                            public void onMessage(org.apache.axis2.context.MessageContext resultContext) {
+                            try {
+                                org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+                                
+                                        java.lang.Object object = fromOM(resultEnv.getBody().getFirstElement(),
+                                                                         com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.class,
+                                                                         getEnvelopeNamespaces(resultEnv));
+                                        callback.receiveResultsaveNewIncident(
+                                        (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument)object);
+                                        
+                            } catch (org.apache.axis2.AxisFault e) {
+                                callback.receiveErrorsaveNewIncident(e);
+                            }
+                            }
+
+                            public void onError(java.lang.Exception error) {
+								if (error instanceof org.apache.axis2.AxisFault) {
+									org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+									org.apache.axiom.om.OMElement faultElt = f.getDetail();
+									if (faultElt!=null){
+										if (faultExceptionNameMap.containsKey(faultElt.getQName())){
+											//make the fault by reflection
+											try{
+													java.lang.String exceptionClassName = (java.lang.String)faultExceptionClassNameMap.get(faultElt.getQName());
+													java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+													java.lang.Exception ex=
+														(java.lang.Exception) exceptionClass.newInstance();
+													//message class
+													java.lang.String messageClassName = (java.lang.String)faultMessageMap.get(faultElt.getQName());
+														java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+													java.lang.Object messageObject = fromOM(faultElt,messageClass,null);
+													java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+															new java.lang.Class[]{messageClass});
+													m.invoke(ex,new java.lang.Object[]{messageObject});
+													
+					
+										            callback.receiveErrorsaveNewIncident(new java.rmi.RemoteException(ex.getMessage(), ex));
+                                            } catch(java.lang.ClassCastException e){
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            } catch (java.lang.ClassNotFoundException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            } catch (java.lang.NoSuchMethodException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            } catch (java.lang.reflect.InvocationTargetException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            } catch (java.lang.IllegalAccessException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            } catch (java.lang.InstantiationException e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            } catch (org.apache.axis2.AxisFault e) {
+                                                // we cannot intantiate the class - throw the original Axis fault
+                                                callback.receiveErrorsaveNewIncident(f);
+                                            }
+									    } else {
+										    callback.receiveErrorsaveNewIncident(f);
+									    }
+									} else {
+									    callback.receiveErrorsaveNewIncident(f);
+									}
+								} else {
+								    callback.receiveErrorsaveNewIncident(error);
+								}
+                            }
+
+                            public void onFault(org.apache.axis2.context.MessageContext faultContext) {
+                                org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                                onError(fault);
+                            }
+
+                            public void onComplete() {
+                                try {
+                                    _messageContext.getTransportOut().getSender().cleanup(_messageContext);
+                                } catch (org.apache.axis2.AxisFault axisFault) {
+                                    callback.receiveErrorsaveNewIncident(axisFault);
+                                }
+                            }
+                });
+                        
+
+          org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+        if ( _operations[5].getMessageReceiver()==null &&  _operationClient.getOptions().isUseSeparateListener()) {
+           _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+          _operations[5].setMessageReceiver(
                     _callbackReceiver);
         }
 
@@ -1472,6 +2026,142 @@
             }
 
             private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument param)
                     throws org.apache.axis2.AxisFault {
 
                 final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
@@ -1801,6 +2491,142 @@
                         omDataSource);
             }
         
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
+
+            private  org.apache.axiom.om.OMElement  toOM(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument param, boolean optimizeContent)
+            throws org.apache.axis2.AxisFault{
+
+            
+                    return toOM(param);
+                
+
+            }
+
+            private org.apache.axiom.om.OMElement toOM(final com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument param)
+                    throws org.apache.axis2.AxisFault {
+
+                final javax.xml.stream.XMLStreamReader xmlReader = param.newXMLStreamReader();
+                while (!xmlReader.isStartElement()) {
+                    try {
+                        xmlReader.next();
+                    } catch (javax.xml.stream.XMLStreamException e) {
+                        throw org.apache.axis2.AxisFault.makeFault(e);
+                    }
+                }
+
+                org.apache.axiom.om.OMDataSource omDataSource = new org.apache.axiom.om.OMDataSource() {
+
+                    public void serialize(java.io.OutputStream outputStream, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(outputStream,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(java.io.Writer writer, org.apache.axiom.om.OMOutputFormat omOutputFormat)
+                            throws javax.xml.stream.XMLStreamException {
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(writer,xmlOptions.setSaveNoXmlDecl());
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document",e);
+                        }
+                    }
+
+                    public void serialize(javax.xml.stream.XMLStreamWriter xmlStreamWriter)
+                            throws javax.xml.stream.XMLStreamException {
+                        org.apache.axiom.om.impl.MTOMXMLStreamWriter mtomxmlStreamWriter =
+                                                        (org.apache.axiom.om.impl.MTOMXMLStreamWriter) xmlStreamWriter;
+                        try {
+                            org.apache.xmlbeans.XmlOptions xmlOptions = new org.apache.xmlbeans.XmlOptions();
+                            param.save(mtomxmlStreamWriter.getOutputStream(),xmlOptions.setSaveNoXmlDecl());
+                            mtomxmlStreamWriter.getOutputStream().flush();
+                        } catch (java.io.IOException e) {
+                            throw new javax.xml.stream.XMLStreamException("Problem with saving document", e);
+                        }
+                    }
+
+                    public javax.xml.stream.XMLStreamReader getReader()
+                            throws javax.xml.stream.XMLStreamException {
+                        return param.newXMLStreamReader();
+                    }
+                };
+            
+                return  new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(xmlReader.getName(),
+                        org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                        omDataSource);
+            }
+        
                                 
                                 private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument param, boolean optimizeContent)
                                 throws org.apache.axis2.AxisFault{
@@ -1822,6 +2648,16 @@
                                 }
                             
                                 
+                                private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument param, boolean optimizeContent)
+                                throws org.apache.axis2.AxisFault{
+                                org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+                                if (param != null){
+                                envelope.getBody().addChild(toOM(param, optimizeContent));
+                                }
+                                return envelope;
+                                }
+                            
+                                
                                 private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument param, boolean optimizeContent)
                                 throws org.apache.axis2.AxisFault{
                                 org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
@@ -1833,6 +2669,16 @@
                             
                                 
                                 private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument param, boolean optimizeContent)
+                                throws org.apache.axis2.AxisFault{
+                                org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+                                if (param != null){
+                                envelope.getBody().addChild(toOM(param, optimizeContent));
+                                }
+                                return envelope;
+                                }
+                            
+                                
+                                private org.apache.axiom.soap.SOAPEnvelope toEnvelope(org.apache.axiom.soap.SOAPFactory factory, com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument param, boolean optimizeContent)
                                 throws org.apache.axis2.AxisFault{
                                 org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
                                 if (param != null){
@@ -1909,6 +2755,32 @@
 
         
 
+            if (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
+            if (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
             if (com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.class.equals(type)){
             if (extraNamespaces!=null){
             return com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.Factory.parse(
@@ -1955,6 +2827,32 @@
             new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
             }else{
             return com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
+            if (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching());
+            }
+            }
+
+        
+
+            if (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.class.equals(type)){
+            if (extraNamespaces!=null){
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.Factory.parse(
+            param.getXMLStreamReaderWithoutCaching(),
+            new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(extraNamespaces));
+            }else{
+            return com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.Factory.parse(
             param.getXMLStreamReaderWithoutCaching());
             }
             }

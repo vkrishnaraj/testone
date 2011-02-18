@@ -17,6 +17,10 @@
             <actionMapping>urn:saveClaim</actionMapping>
             <outputActionMapping>urn:saveClaimResponse</outputActionMapping>
         </operation>
+        <operation name="authIncident" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onlineclaims.ws.nettracer.bagnet.com">
+            <actionMapping>urn:authIncident</actionMapping>
+            <outputActionMapping>urn:authIncidentResponse</outputActionMapping>
+        </operation>
         <operation name="authAdminUser" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onlineclaims.ws.nettracer.bagnet.com">
             <actionMapping>urn:authAdminUser</actionMapping>
             <outputActionMapping>urn:authAdminUserResponse</outputActionMapping>
@@ -24,6 +28,10 @@
         <operation name="authPassenger" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onlineclaims.ws.nettracer.bagnet.com">
             <actionMapping>urn:authPassenger</actionMapping>
             <outputActionMapping>urn:authPassengerResponse</outputActionMapping>
+        </operation>
+        <operation name="saveNewIncident" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onlineclaims.ws.nettracer.bagnet.com">
+            <actionMapping>urn:saveNewIncident</actionMapping>
+            <outputActionMapping>urn:saveNewIncidentResponse</outputActionMapping>
         </operation>
     </service>
 </serviceGroup>

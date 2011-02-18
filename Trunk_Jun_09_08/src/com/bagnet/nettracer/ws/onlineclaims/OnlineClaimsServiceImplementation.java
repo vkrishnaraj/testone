@@ -31,9 +31,11 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse;
 import com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse;
+import com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse;
 import com.bagnet.nettracer.ws.onlineclaims.UploadFileDocument.UploadFile;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.File;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentItinerary;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.bagnet.nettracer.ws.passengerview.PassengerViewUtil;
@@ -43,13 +45,100 @@ import com.bagnet.nettracer.ws.passengerview.PassengerViewUtil;
  */
 public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkeleton {
 	private static final String UNABLE_TO_CREATE_DIRECTORY = "Unable to create directory";
+	Logger logger = Logger.getLogger(OnlineClaimsServiceImplementation.class);
+	
+	public com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument saveNewIncident(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument saveIncident) {
+		logger.info("Save new incident request: \n" + saveIncident);
+		NtAuth auth = saveIncident.getSaveNewIncident().getAuth();
+		authenticate(auth);
+		
+		
+		SaveNewIncidentResponseDocument res = SaveNewIncidentResponseDocument.Factory.newInstance();
+		SaveNewIncidentResponse res2 = res.addNewSaveNewIncidentResponse();
+		
+		/**
+		 *  PLACE SAVE NEW INCIDENT TO DB CODE HERE!!!!!
+		 */
+		
+		String incidentID = "TESTY00000010"; //REPLACE THIS WITH GENERATED INCIDENT ID FROM INCIDENT CREATION
+		res2.setReturn(incidentID);
+
+		logger.info("Response: \n" + res);
+		return res;
+	}
+
+
+	/**
+	 * Auto generated method signature
+	 * @param authIncident
+	 */
+	public com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument authIncident(com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument authIncident) {
+		logger.info("Auth incident user: \n" + authIncident);
+		NtAuth auth = authIncident.getAuthIncident().getAuth();
+		authenticate(auth);
+
+		AuthIncidentResponseDocument res = AuthIncidentResponseDocument.Factory.newInstance();
+		com.bagnet.nettracer.ws.onlineclaims.xsd.Incident incident = res.addNewAuthIncidentResponse().addNewReturn();
+
+		incident.setAuthStatus(com.bagnet.nettracer.ws.onlineclaims.Incident.AUTH_FAILURE);
+
+		incident.setPnr(authIncident.getAuthIncident().getPnr());
+		incident.setFirstName(authIncident.getAuthIncident().getFirstName());
+		incident.setLastName(authIncident.getAuthIncident().getLastName());
+		
+		/**
+		 * RETRIEVE ROW FROM TO BE CREATED AUTHENTICATION TABLE HERE!!!
+		 */
+		
+		if (true) { // MAKE SURE ROW EXISTS HERE
+			
+			incident.setAuthID(0);
+			/**
+			 * DO TESTING FOR ALREADY COMPLETED AND EXPIRED HERE!!!
+			 */
+			
+			if (false) { //CHECK FOR ALREADY COMPLETED
+				incident.setAuthStatus(com.bagnet.nettracer.ws.onlineclaims.Incident.AUTH_COMPLETE);
+				incident.setPnr("TESTY00000012"); // SETTING PNR TO INCIDENT ID BECAUSE THAT IS THE ONLY INFO WE WILL NEED
+			} else if (false) { //CHECK FOR EXPIRED
+				incident.setAuthStatus(com.bagnet.nettracer.ws.onlineclaims.Incident.AUTH_EXPIRED);
+			} else { // FULL SUCCESS
+				incident.setAuthStatus(com.bagnet.nettracer.ws.onlineclaims.Incident.AUTH_SUCCESS);
+				Session sess = null;
+
+				try {
+					sess = HibernateWrapper.getSession().openSession();
+
+					/**
+					 * GET PNR AND DO SOME LOADING OF INCIDENT STUFF HERE!!!
+					 */
+					incident.addClaimCheck("US112233");
+					incident.addClaimCheck("US332211");
+					IncidentItinerary itin;
+					itin = incident.addNewItinerary();
+					itin.setAirline("US");
+					itin.setFlightNum("111");
+					itin.setArrivalCity("ATL");
+					itin.setDepartureCity("JFK");
+					itin.setArrivalDate(new GregorianCalendar());
+					itin.setDepartureDate(new GregorianCalendar());
+					
+				} finally {
+					sess.close();
+				}
+			}
+		}
+		
+		logger.info("Response: \n" + res);
+		return res;
+
+	}
+
 	/**
 	 * Auto generated method signature
 	 * @param saveClaim
 	 * @throws AuthorizationException 
 	 */
-	Logger logger = Logger.getLogger(OnlineClaimsServiceImplementation.class);
-	
 	public com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument saveClaim(com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument saveClaim) {
 		logger.info("Save claim request: \n" + saveClaim);
 		NtAuth auth = saveClaim.getSaveClaim().getAuth();

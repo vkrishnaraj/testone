@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface LoadClaimResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaimResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("loadclaimresponse54eadoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaimResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("loadclaimresponse54eadoctype");
     
     /**
      * Gets the "loadClaimResponse" element
@@ -42,7 +42,7 @@ public interface LoadClaimResponseDocument extends org.apache.xmlbeans.XmlObject
     public interface LoadClaimResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaimResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4B1762F3F799DE6A83EA16B54BFEB8EF").resolveHandle("loadclaimresponse2cadelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaimResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("loadclaimresponse2cadelemtype");
         
         /**
          * Gets the "return" element
