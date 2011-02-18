@@ -27,7 +27,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 @Table(name="task")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="task_type", discriminatorType = DiscriminatorType.STRING, length=16)
-public class GeneralTask {
+public abstract class GeneralTask {
 	@Id
 	@GeneratedValue
 	public long getTask_id() {
@@ -91,4 +91,11 @@ public class GeneralTask {
 		this.activities = activities;
 	}
 	
+	public String getDescription() {
+		return null;
+	}
+	
+	public String getLabel() {
+		return null;
+	}
 }
